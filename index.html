@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PadForge &mdash; Turn Any Input Device into Any Virtual Controller</title>
+    <meta name="description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox 360, DualShock 4, DirectInput, MIDI, or Keyboard+Mouse output. Free and open source.">
+    <meta name="keywords" content="PadForge, virtual controller, gamepad mapper, Xbox 360, DualShock 4, vJoy, DirectInput, MIDI, x360ce alternative, controller emulation, input remapper">
+    <meta property="og:title" content="PadForge &mdash; Turn Any Input Device into Any Virtual Controller">
+    <meta property="og:description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox 360, DualShock 4, DirectInput, MIDI, or Keyboard+Mouse output.">
+    <meta property="og:image" content="https://padforge.org/assets/logo.png">
+    <meta property="og:url" content="https://padforge.org">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container nav-container">
+        <a href="#" class="nav-logo">
+            <img src="assets/icon.png" alt="PadForge" width="36" height="36">
+            <span>PadForge</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="#download">Download</a></li>
+            <li><a href="https://github.com/hifihedgehog/PadForge" class="nav-github" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="container hero-content">
+        <img src="assets/logo.png" alt="PadForge Logo" class="hero-logo">
+        <h1>Turn any input device into any virtual controller.</h1>
+        <p class="hero-sub">Gamepads, joysticks, keyboards, mice, and touchscreens &mdash; mapped to Xbox 360, DualShock 4, DirectInput, MIDI, or Keyboard+Mouse output that games treat as real hardware.</p>
+        <div class="hero-buttons">
+            <a href="#download" class="btn btn-primary">Download</a>
+            <a href="https://github.com/hifihedgehog/PadForge" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+    </div>
+</header>
+
+<!-- Features -->
+<section id="features" class="features">
+    <div class="container">
+        <h2>Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#127918;</div>
+                <h3>Any Input, Any Output</h3>
+                <p>Route any physical device to up to 16 stacked virtual controllers. Xbox 360, DualShock 4, vJoy DirectInput, MIDI, or Keyboard+Mouse output.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128270;</div>
+                <h3>3D Controller Visualization</h3>
+                <p>Interactive 3D and 2D controller models with live input feedback. See every button, stick, and trigger in real time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9881;</div>
+                <h3>Intuitive Mapping</h3>
+                <p>Record-by-press assignment, auto-mapping for standard gamepads, and Copy From translation between controller types.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128200;</div>
+                <h3>Sensitivity &amp; Deadzone</h3>
+                <p>Per-axis sensitivity curves, 6 deadzone algorithms, and independent axis range boundaries for fine-tuned control.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128171;</div>
+                <h3>Force Feedback &amp; Rumble</h3>
+                <p>Full force feedback and rumble passthrough. Audio-to-bass rumble synthesis for games without native support.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Macros &amp; Combos</h3>
+                <p>Trigger action sequences with button combos. Axis-to-keyboard, mouse movement output, and conditional triggers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128100;</div>
+                <h3>Per-App Profiles</h3>
+                <p>Automatic profile switching based on the active application. Save and restore complete configurations per game.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128225;</div>
+                <h3>1000 Hz Polling</h3>
+                <p>High-resolution waitable timer with spin-wait tail for minimal input latency. Built on SDL3 for broad device support.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127760;</div>
+                <h3>Web Controller</h3>
+                <p>Serve a gamepad UI to any browser on your local network. Turn phones and tablets into wireless controllers via WebSocket.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128256;</div>
+                <h3>Motion &amp; DSU Server</h3>
+                <p>Broadcast gyro and accelerometer data over DSU/Cemuhook to emulators like Cemu, Dolphin, and Yuzu.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127925;</div>
+                <h3>MIDI Output</h3>
+                <p>Create virtual MIDI devices. Map any controller input to MIDI notes and control change messages for music production.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128683;</div>
+                <h3>Controller Hiding</h3>
+                <p>Driver-level physical controller hiding via HidHide integration. Games only see your virtual controllers.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Screenshots -->
+<section id="screenshots" class="screenshots">
+    <div class="container">
+        <h2>Screenshots</h2>
+        <div class="screenshot-gallery">
+            <div class="screenshot-nav">
+                <button class="screenshot-prev" aria-label="Previous screenshot">&larr;</button>
+                <button class="screenshot-next" aria-label="Next screenshot">&rarr;</button>
+            </div>
+            <div class="screenshot-viewport">
+                <div class="screenshot-track">
+                    <figure class="screenshot-item active">
+                        <img src="assets/screenshot-dashboard.jpg" alt="PadForge Dashboard" loading="lazy">
+                        <figcaption>Dashboard &mdash; overview of all virtual controllers, motion server, and web controller</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-controller.jpg" alt="3D Controller View" loading="lazy">
+                        <figcaption>3D Controller &mdash; interactive 3D visualization with live input feedback</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-mappings.jpg" alt="Mappings Page" loading="lazy">
+                        <figcaption>Mappings &mdash; record-by-press assignment with per-mapping deadzone</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-sticks.jpg" alt="Sticks Configuration" loading="lazy">
+                        <figcaption>Sticks &mdash; sensitivity curves and deadzone algorithms</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-force-feedback.jpg" alt="Force Feedback" loading="lazy">
+                        <figcaption>Force Feedback &mdash; rumble passthrough and directional FFB</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-macros.jpg" alt="Macros Page" loading="lazy">
+                        <figcaption>Macros &mdash; button combos, action sequences, and conditional triggers</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-profiles.jpg" alt="Profiles Page" loading="lazy">
+                        <figcaption>Profiles &mdash; per-application automatic profile switching</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-devices.jpg" alt="Devices Page" loading="lazy">
+                        <figcaption>Devices &mdash; card-based device list with live input visualization</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-vjoy.jpg" alt="vJoy Configuration" loading="lazy">
+                        <figcaption>vJoy &mdash; DirectInput virtual controller with custom HID descriptors</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-web-controller.jpg" alt="Web Controller" loading="lazy">
+                        <figcaption>Web Controller &mdash; browser-based gamepad on any device</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="screenshot-dots"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Download -->
+<section id="download" class="download">
+    <div class="container download-content">
+        <h2>Download</h2>
+        <p>PadForge is free and open source. Windows 10 or 11 (x64) required.</p>
+        <div class="download-buttons">
+            <a href="https://github.com/hifihedgehog/PadForge/releases/latest" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Download Latest Release</a>
+        </div>
+        <div class="download-info">
+            <p>Optional drivers (installable from Settings):</p>
+            <ul>
+                <li><strong>ViGEmBus</strong> &mdash; Xbox 360 and DualShock 4 virtual controllers</li>
+                <li><strong>vJoy</strong> &mdash; DirectInput virtual controllers</li>
+                <li><strong>HidHide</strong> &mdash; physical controller hiding</li>
+                <li><strong>Windows MIDI Services</strong> &mdash; MIDI virtual devices</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-left">
+            <img src="assets/icon.png" alt="PadForge" width="24" height="24">
+            <span>PadForge</span>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/hifihedgehog/PadForge" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://github.com/hifihedgehog/PadForge/issues" target="_blank" rel="noopener">Issues</a>
+            <a href="https://github.com/hifihedgehog/PadForge/wiki" target="_blank" rel="noopener">Wiki</a>
+            <a href="https://github.com/hifihedgehog/PadForge/discussions" target="_blank" rel="noopener">Discussions</a>
+        </div>
+        <div class="footer-right">
+            <p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function() {
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+        links.classList.toggle('open');
+        toggle.classList.toggle('active');
+    });
+
+    // Screenshot gallery
+    const items = document.querySelectorAll('.screenshot-item');
+    const dotsContainer = document.querySelector('.screenshot-dots');
+    let current = 0;
+
+    // Create dots
+    items.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.classList.add('dot');
+        if (i === 0) dot.classList.add('active');
+        dot.setAttribute('aria-label', `Screenshot ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function goTo(index) {
+        items[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (index + items.length) % items.length;
+        items[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    document.querySelector('.screenshot-prev').addEventListener('click', () => goTo(current - 1));
+    document.querySelector('.screenshot-next').addEventListener('click', () => goTo(current + 1));
+
+    // Keyboard nav for gallery
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goTo(current - 1);
+        if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                links.classList.remove('open');
+                toggle.classList.remove('active');
+            }
+        });
+    });
+
+    // Navbar background on scroll
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+})();
+</script>
+
+</body>
+</html>
