@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PadForge: Turn Any Input Device into Any Virtual Controller</title>
-    <meta name="description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox 360, DualShock 4, DirectInput, MIDI, or Keyboard+Mouse output. Free and open source.">
-    <meta name="keywords" content="PadForge, virtual controller, gamepad mapper, Xbox 360, DualShock 4, vJoy, DirectInput, MIDI, x360ce alternative, controller emulation, input remapper">
+    <meta name="description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox, PlayStation, flight stick, wheel, MIDI, or Keyboard+Mouse virtual controllers. Free and open source. Built on HIDMaestro and SDL3.">
+    <meta name="keywords" content="PadForge, virtual controller, gamepad mapper, Xbox, PlayStation, DualShock, DualSense, HIDMaestro, MIDI, x360ce alternative, controller emulation, input remapper, flight stick, racing wheel">
     <meta property="og:title" content="PadForge: Turn Any Input Device into Any Virtual Controller">
-    <meta property="og:description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox 360, DualShock 4, DirectInput, MIDI, or Keyboard+Mouse output.">
+    <meta property="og:description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox, PlayStation, flight stick, wheel, MIDI, or Keyboard+Mouse virtual controllers. Built on HIDMaestro.">
+
     <meta property="og:image" content="https://padforge.org/assets/logo.png">
     <meta property="og:url" content="https://padforge.org">
     <meta property="og:type" content="website">
@@ -40,7 +41,7 @@
     <div class="container hero-content">
         <img src="assets/logo.png" alt="PadForge Logo" class="hero-logo">
         <h1>Turn any input device into any virtual controller.</h1>
-        <p class="hero-sub">Gamepads, joysticks, keyboards, mice, and touchscreens: mapped to Xbox 360, DualShock 4, DirectInput, MIDI, or Keyboard+Mouse output that games treat as real hardware.</p>
+        <p class="hero-sub">Gamepads, joysticks, keyboards, mice, and touchscreens: mapped to Xbox, PlayStation, flight stick, wheel, MIDI, or Keyboard+Mouse virtual controllers that games treat as real hardware. Powered by HIDMaestro with 225+ device profiles.</p>
         <div class="hero-buttons">
             <a href="#download" class="btn btn-primary">Download</a>
             <a href="https://github.com/hifihedgehog/PadForge" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
@@ -56,7 +57,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#127918;</div>
                 <h3>Any Input, Any Output</h3>
-                <p>Route any physical device to up to 16 stacked virtual controllers. Xbox 360, DualShock 4, vJoy DirectInput, MIDI, or Keyboard+Mouse output.</p>
+                <p>Route any physical device to up to 16 stacked virtual controllers. Xbox, PlayStation, Extended (flight sticks, wheels, third-party gamepads), MIDI, or Keyboard+Mouse output.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128270;</div>
@@ -161,8 +162,16 @@
                         <figcaption>Devices: card-based device list with live input visualization</figcaption>
                     </figure>
                     <figure class="screenshot-item">
-                        <img src="assets/screenshot-vjoy.jpg" alt="vJoy Configuration" loading="lazy">
-                        <figcaption>vJoy: DirectInput virtual controller with custom HID descriptors</figcaption>
+                        <img src="assets/screenshot-extended.jpg" alt="Extended Virtual Controller" loading="lazy">
+                        <figcaption>Extended: HIDMaestro virtual controller with 225+ profiles and custom HID descriptors</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-midi.jpg" alt="MIDI Virtual Controller" loading="lazy">
+                        <figcaption>MIDI: channel, CC and note mapping for music production</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-kbm-preview.jpg" alt="Keyboard + Mouse Preview" loading="lazy">
+                        <figcaption>Keyboard + Mouse: live preview of every mapped key and button</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-web-controller.jpg" alt="Web Controller" loading="lazy">
@@ -186,8 +195,7 @@
         <div class="download-info">
             <p>Optional drivers (installable from Settings):</p>
             <ul>
-                <li><strong>ViGEmBus</strong>: Xbox 360 and DualShock 4 virtual controllers</li>
-                <li><strong>vJoy</strong>: DirectInput virtual controllers</li>
+                <li><strong>HIDMaestro</strong>: user-mode virtual HID controller engine with 225+ device profiles (replaces ViGEmBus and vJoy)</li>
                 <li><strong>HidHide</strong>: physical controller hiding</li>
                 <li><strong>Windows MIDI Services</strong>: MIDI virtual devices</li>
             </ul>
