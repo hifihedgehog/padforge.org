@@ -28,10 +28,11 @@
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
-            <li><a href="#what-you-can-do">What you can do</a></li>
+            <li><a href="#what-you-can-do">What it does</a></li>
             <li><a href="#compare">Compare</a></li>
-            <li><a href="#features">Features</a></li>
+            <li><a href="#features">Details</a></li>
             <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="#faq">FAQ</a></li>
             <li><a href="#download">Download</a></li>
             <li><a href="https://github.com/hifihedgehog/PadForge" class="nav-github" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
@@ -43,7 +44,7 @@
     <div class="container hero-content">
         <img src="assets/logo.png" alt="PadForge Logo" class="hero-logo">
         <h1>Make any input look like any controller.</h1>
-        <p class="hero-sub">PadForge stands between your controller and the game. It tells the game whatever shape the game expects to see. A steering wheel can show up as a DualShock 4. Your DualSense can show up as an Xbox 360, lightbar and adaptive triggers and gyro and all. A phone opened in a browser becomes a real gamepad over Wi-Fi. The game never knows the difference. Free, open source, and no paywall standing in the way.</p>
+        <p class="hero-sub">PadForge sits between your controller and the game and shows the game whatever shape it wants to see. Free. Open source. No paywall.</p>
         <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-powered" target="_blank" rel="noopener">
             <img src="assets/hidmaestro-logo-dark.png" alt="HIDMaestro" class="hero-powered-logo">
             <span class="hero-powered-text">Powered by HIDMaestro. One driver, 225+ device profiles.</span>
@@ -54,6 +55,30 @@
         </div>
     </div>
 </header>
+
+<!-- How it works -->
+<section id="how-it-works" class="how-it-works">
+    <div class="container">
+        <h2 class="how-header">Three steps from download to playing</h2>
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="how-num">1</div>
+                <h3>Download and run</h3>
+                <p>Single EXE, no installer. First launch installs HIDMaestro — the driver that creates virtual controllers — with one UAC prompt.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-num">2</div>
+                <h3>Add a virtual controller</h3>
+                <p>Click <strong>Add Controller</strong> on the Dashboard. Pick Xbox, PlayStation, Extended (flight stick / wheel / HOTAS), MIDI, or Keyboard + Mouse. Up to 16 at once.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-num">3</div>
+                <h3>Assign your real controller</h3>
+                <p>Open the Devices page, click the slot badge on your physical pad. Press <strong>Map All</strong> and walk through each button once. Done.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Feature stories -->
 <section id="what-you-can-do" class="stories">
@@ -370,6 +395,93 @@
                 <li><strong>Windows MIDI Services.</strong> Required only for the MIDI virtual controller type. Needs Windows 11 24H2 or later.</li>
             </ul>
             <p class="download-promise"><strong>Free means free.</strong> PadForge will never become paid, freemium, or Patreon early-access paywalled.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq">
+    <div class="container">
+        <h2 class="faq-header">Questions people ask</h2>
+        <div class="faq-list">
+
+            <details class="faq-item">
+                <summary>Will PadForge get my account banned in online games?</summary>
+                <div class="faq-body">
+                    <p>PadForge is a user-mode driver running outside the game process. Games see PadForge's virtual controller as a real HID device, the same way they see any commercial gamepad. Nothing is injected into the game, no game memory is read or written, no anti-cheat hook is touched.</p>
+                    <p>Anti-cheat policies still vary per game. The same caveat that applies to any third-party input remapper (Steam Input, reWASD, x360ce, controller-companion software) applies to PadForge. Check the game's specific anti-cheat policy if you play competitively.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Is PadForge actually free, or is the free version crippled?</summary>
+                <div class="faq-body">
+                    <p>PadForge is fully free. No tiered version, no feature paywall, no time-limited trial. The entire feature set ships in one EXE.</p>
+                    <p>It's licensed CC BY-NC-SA 4.0. Source is on GitHub. Anyone can build it from source. The only thing PadForge asks for is that you donate to a charity if you feel like donating.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Which controllers work as a source device?</summary>
+                <div class="faq-body">
+                    <p>Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (with DsHidMini), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads.</p>
+                    <p>For unrecognised gamepads, the Devices page has a one-click "Submit Mapping" button that opens a pre-filled GitHub issue with the device's VID:PID and SDL GUID. Once merged, the mapping ships to everyone on the next release.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Does PadForge run when PadForge isn't running?</summary>
+                <div class="faq-body">
+                    <p>HIDMaestro (the virtual-controller driver) stays loaded by Windows even when PadForge is closed, so already-created virtual controllers keep their device identity across launches. But the input pipeline — reading your physical pad and forwarding it — only runs while PadForge is open. Close PadForge and the virtual controllers stop receiving input.</p>
+                    <p>Enable <strong>Start at login</strong>, <strong>Start minimized</strong>, and <strong>Minimize to system tray</strong> in Settings to make PadForge a persistent background service. Combined, those three give a fully silent setup that wakes when you sign in.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>The game still sees my physical controller alongside the virtual one. What now?</summary>
+                <div class="faq-body">
+                    <p>Install HidHide from Settings → Drivers. It's a driver-level cloak that hides the physical device from every non-whitelisted process while leaving PadForge able to read it. The per-device toggle on the Devices page enables it for that controller.</p>
+                    <p>HidHide is optional because not everyone needs it. Some games handle duplicate controllers fine. Some apps you want to keep seeing the physical pad (streaming overlays, controller-test tools). Install when you need the cloak.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Do I need an internet connection?</summary>
+                <div class="faq-body">
+                    <p>No. PadForge is local-only. It does not phone home, does not sync to a cloud, does not require an account, and never talks to a license server. Your settings live in <code>PadForge.xml</code> next to the EXE; back that file up to keep your profiles.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I use a phone or tablet as a controller?</summary>
+                <div class="faq-body">
+                    <p>Yes. Enable the Web Controller on the Dashboard, open the URL it shows from any browser on the same Wi-Fi network (no app to install), pick an Xbox 360 or DualShock 4 layout, and start playing. The browser sends input, PadForge feeds it into the slot you assign it to, and rumble feeds back to the phone through the browser's Vibration API where supported.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>What does PadForge need to run?</summary>
+                <div class="faq-body">
+                    <p>Windows 10 or 11, 64-bit. The .NET 10 Desktop Runtime is bundled in the single-file release so there is nothing else to install. HIDMaestro auto-installs on first launch. HidHide and Windows MIDI Services are optional and install from Settings when you need them.</p>
+                    <p>For best results: a recent Windows 11 build (24H2 or newer). The MIDI virtual controller type specifically needs Windows MIDI Services, which is Windows 11 24H2 (build 26100) and later.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>I have a controller PadForge doesn't recognise. Can I add it?</summary>
+                <div class="faq-body">
+                    <p>Yes, in two ways. The fast way: turn on <strong>Force Raw Joystick Mode</strong> on the device card. PadForge stops trying to interpret it as a known gamepad layout and exposes every raw button and axis directly. Map them by hand on the Mappings tab.</p>
+                    <p>The better way: click the <strong>Submit Mapping</strong> button on the device's card. Your browser opens a GitHub issue pre-filled with everything PadForge can read about the device. You fill in which raw input is which named button, and once merged the mapping ships in <code>gamepadcontrollerdb_padforge.txt</code> for every PadForge user.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>How does PadForge compare to reWASD, Steam Input, or DS4Windows?</summary>
+                <div class="faq-body">
+                    <p>See the comparison table above. The short version: PadForge is the only free tool in this space that supports DualSense virtual output, Extended virtual joysticks via 225+ HIDMaestro profiles, MIDI virtual output, a built-in phone-as-controller server, and gyro at Steam Input parity (Local / Player / World reference frames, real-world calibration, cross-device Aim Engage). reWASD's coverage is comparable at $9.99+; the other free tools are missing major features each.</p>
+                </div>
+            </details>
+
         </div>
     </div>
 </section>

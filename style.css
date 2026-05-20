@@ -240,6 +240,134 @@ a:hover {
     vertical-align: middle;
 }
 
+/* ===== How it works (3-step) ===== */
+.how-it-works {
+    padding: 90px 0 60px;
+    background: var(--bg);
+}
+
+.how-header {
+    text-align: center;
+    margin-bottom: 56px;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    counter-reset: step;
+}
+
+.how-step {
+    text-align: center;
+    padding: 32px 24px;
+}
+
+.how-num {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.how-step h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: var(--text);
+}
+
+.how-step p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ===== FAQ (accordion) ===== */
+.faq {
+    padding: 90px 0;
+    background: var(--bg-alt);
+}
+
+.faq-header {
+    text-align: center;
+    margin-bottom: 48px;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.faq-list {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.faq-item summary {
+    padding: 20px 24px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 56px;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+}
+
+.faq-item[open] summary::after {
+    content: "−";
+}
+
+.faq-item summary:hover {
+    color: var(--accent);
+}
+
+.faq-item .faq-body {
+    padding: 0 24px 22px 24px;
+    color: var(--text-muted);
+    font-size: 0.98rem;
+    line-height: 1.65;
+}
+
+.faq-item .faq-body p {
+    margin: 0 0 12px 0;
+}
+
+.faq-item .faq-body p:last-child {
+    margin-bottom: 0;
+}
+
 /* ===== Feature stories (alternating image + copy rows) ===== */
 .stories {
     padding: 100px 0;
@@ -660,11 +788,11 @@ a:hover {
         margin-bottom: 32px;
     }
 
-    .stories, .compare {
+    .stories, .compare, .how-it-works, .faq {
         padding: 60px 0;
     }
 
-    .stories-header {
+    .stories-header, .how-header, .faq-header {
         font-size: 1.6rem;
         margin-bottom: 32px;
     }
@@ -681,6 +809,21 @@ a:hover {
 
     .story-copy p {
         font-size: 0.98rem;
+    }
+
+    .how-steps {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .how-step {
+        padding: 24px 16px;
+    }
+
+    .faq-item summary {
+        padding: 16px 20px;
+        padding-right: 48px;
+        font-size: 1rem;
     }
 
     .compare-table {
