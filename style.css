@@ -240,6 +240,122 @@ a:hover {
     vertical-align: middle;
 }
 
+/* ===== What you can do (use cases) ===== */
+.what-you-can-do {
+    padding: 100px 0;
+    background: var(--bg-alt);
+}
+
+.usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.usecase {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: border-color 0.2s;
+}
+
+.usecase:hover {
+    border-color: var(--accent);
+}
+
+.usecase h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+}
+
+.usecase p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ===== Compare table ===== */
+.compare {
+    padding: 100px 0;
+}
+
+.compare-intro {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 720px;
+    margin: 0 auto 32px;
+    text-align: center;
+}
+
+.compare-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+}
+
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.compare-table thead th {
+    background: var(--bg-alt);
+    color: var(--text);
+    font-weight: 600;
+    padding: 14px 12px;
+    text-align: center;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+}
+
+.compare-table thead th:first-child {
+    text-align: left;
+    min-width: 280px;
+}
+
+.compare-table tbody td {
+    padding: 11px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+}
+
+.compare-table tbody td:first-child {
+    text-align: left;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.compare-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.compare-table tbody tr:hover {
+    background: var(--bg-alt);
+}
+
+.compare-footer {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 16px;
+    text-align: center;
+    font-style: italic;
+}
+
+.download-promise {
+    margin-top: 16px;
+    color: var(--accent);
+    font-size: 0.95rem;
+    text-align: center;
+}
+
 /* ===== Features ===== */
 .features {
     padding: 100px 0;
@@ -497,6 +613,32 @@ a:hover {
     h2 {
         font-size: 1.5rem;
         margin-bottom: 32px;
+    }
+
+    .what-you-can-do, .compare {
+        padding: 60px 0;
+    }
+
+    .usecase-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .usecase {
+        padding: 22px;
+    }
+
+    .compare-table {
+        font-size: 0.82rem;
+    }
+
+    .compare-table thead th,
+    .compare-table tbody td {
+        padding: 8px 6px;
+    }
+
+    .compare-table thead th:first-child {
+        min-width: 180px;
     }
 
     .features, .screenshots, .download {

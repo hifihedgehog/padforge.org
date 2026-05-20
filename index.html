@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PadForge: Turn Any Input Device into Any Virtual Controller</title>
-    <meta name="description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox, PlayStation, flight stick, wheel, MIDI, or Keyboard+Mouse virtual controllers. Free and open source. Built on HIDMaestro and SDL3.">
-    <meta name="keywords" content="PadForge, virtual controller, gamepad mapper, Xbox, PlayStation, DualShock, DualSense, HIDMaestro, MIDI, x360ce alternative, controller emulation, input remapper, flight stick, racing wheel">
-    <meta property="og:title" content="PadForge: Turn Any Input Device into Any Virtual Controller">
-    <meta property="og:description" content="Map gamepads, joysticks, keyboards, mice, and touchscreens to Xbox, PlayStation, flight stick, wheel, MIDI, or Keyboard+Mouse virtual controllers. Built on HIDMaestro.">
+    <title>PadForge — Make any input look like any controller</title>
+    <meta name="description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
+    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller">
+    <meta property="og:title" content="PadForge — Make any input look like any controller">
+    <meta property="og:description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
 
     <meta property="og:image" content="https://padforge.org/assets/logo.png">
     <meta property="og:url" content="https://padforge.org">
     <meta property="og:type" content="website">
     <link rel="icon" type="image/png" href="assets/icon.png">
-    <link rel="stylesheet" href="style.css?v=v3">
+    <link rel="stylesheet" href="style.css?v=v4">
 </head>
 <body>
 
@@ -28,6 +28,8 @@
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
+            <li><a href="#what-you-can-do">What you can do</a></li>
+            <li><a href="#compare">Compare</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#screenshots">Screenshots</a></li>
             <li><a href="#download">Download</a></li>
@@ -40,8 +42,8 @@
 <header class="hero">
     <div class="container hero-content">
         <img src="assets/logo.png" alt="PadForge Logo" class="hero-logo">
-        <h1>Turn any input device into any virtual controller.</h1>
-        <p class="hero-sub">Gamepads, joysticks, keyboards, mice, and touchscreens: mapped to Xbox, PlayStation, flight stick, wheel, MIDI, or Keyboard+Mouse virtual controllers that games treat as real hardware.</p>
+        <h1>Make any input look like any controller.</h1>
+        <p class="hero-sub">Plug in a steering wheel. The game sees a PlayStation pad. Use a DualSense. The game sees an Xbox 360. Map your keyboard. The game sees a flight stick. Free, open source, no paywall.</p>
         <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-powered" target="_blank" rel="noopener">
             <img src="assets/hidmaestro-logo-dark.png" alt="HIDMaestro" class="hero-powered-logo">
             <span class="hero-powered-text">Powered by HIDMaestro &mdash; one driver, 225+ device profiles</span>
@@ -53,6 +55,83 @@
     </div>
 </header>
 
+<!-- What you can do -->
+<section id="what-you-can-do" class="what-you-can-do">
+    <div class="container">
+        <h2>What you can do with PadForge</h2>
+        <div class="usecase-grid">
+            <div class="usecase">
+                <h3>Use any controller in any game</h3>
+                <p>Plug a PS5 DualSense into a Steam game that only accepts Xbox pads. Plug a Logitech G29 wheel into a racing game that ignores wheels. Plug a Saitek HOTAS into a flight game that wants gamepads. The game sees whatever shape PadForge is set to.</p>
+            </div>
+            <div class="usecase">
+                <h3>Keep what's special about your controller</h3>
+                <p>Adaptive triggers in racing games. DualSense lightbar that pulses to game audio. Gyro routed to mouse aim. Touchpad fingers forwarded. Even if the game doesn't know what a DualSense is.</p>
+            </div>
+            <div class="usecase">
+                <h3>Play with whatever's in front of you</h3>
+                <p>Phone in the room? Open a browser tab on it. The tab becomes a controller with sticks, D-pad, triggers, and rumble. Keyboard handy? Map WASD plus mouse to a virtual Xbox pad.</p>
+            </div>
+            <div class="usecase">
+                <h3>Run up to 16 controllers at once</h3>
+                <p>Local co-op with mixed pad types. Two sim racers on two wheels. A flight stick plus throttle plus rudder pedals together as one virtual HOTAS. Each slot can merge input from several physical devices.</p>
+            </div>
+            <div class="usecase">
+                <h3>Map motion to emulators</h3>
+                <p>Stream gyro and accelerometer to Cemu, Dolphin, Yuzu, and Ryujinx through the DSU/Cemuhook protocol on UDP port 26760. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources all supported.</p>
+            </div>
+            <div class="usecase">
+                <h3>Make MIDI from a gamepad</h3>
+                <p>Map sticks to Control Change. Map buttons to notes. Send velocity. Build a 16-channel MIDI controller from a gamepad and play music in any DAW.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison -->
+<section id="compare" class="compare">
+    <div class="container">
+        <h2>How PadForge stacks up</h2>
+        <p class="compare-intro">Honest feature comparison against the other Windows controller mappers. PadForge is free, open source, and covers more device territory than the other free options. Reflects each tool's shipping release as of May 2026.</p>
+        <div class="compare-table-wrapper">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>PadForge</th>
+                        <th>x360ce</th>
+                        <th>XOutput</th>
+                        <th>reWASD</th>
+                        <th>DS4Windows</th>
+                        <th>Steam Input</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Free</td><td>✅</td><td>✅</td><td>✅</td><td>❌ paid</td><td>✅</td><td>✅ Steam-only</td></tr>
+                    <tr><td>Open source</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
+                    <tr><td>Works outside Steam</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+                    <tr><td>Xbox 360 / One / Series virtual output</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>PlayStation virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>⚠️ basic</td><td>❌</td></tr>
+                    <tr><td>Flight stick / wheel / HOTAS virtual output</td><td>✅ 225+ profiles</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>MIDI virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Keyboard + Mouse virtual output</td><td>✅</td><td>❌</td><td>⚠️ basic</td><td>✅</td><td>❌</td><td>✅</td></tr>
+                    <tr><td>DualSense Adaptive Triggers</td><td>✅ 7 modes + GameCube preset</td><td>❌</td><td>❌</td><td>✅</td><td>⚠️ basic</td><td>✅</td></tr>
+                    <tr><td>DualSense lightbar</td><td>✅ 13 modes + audio-reactive</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>❌</td></tr>
+                    <tr><td>Force feedback for wheels &amp; joysticks</td><td>✅ HID PID 1.0</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>DSU motion server (Cemu, Dolphin, Yuzu)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
+                    <tr><td>Phone-as-controller (browser, Wi-Fi)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Per-app profile switching</td><td>✅</td><td>⚠️ basic</td><td>❌</td><td>✅</td><td>❌</td><td>✅</td></tr>
+                    <tr><td>Up to 16 simultaneous virtual controllers</td><td>✅</td><td>≤4</td><td>≤4</td><td>≤4</td><td>≤4</td><td>≤4</td></tr>
+                    <tr><td>1000 Hz polling</td><td>✅</td><td>❌</td><td>❌</td><td>⚠️</td><td>⚠️</td><td>⚠️</td></tr>
+                    <tr><td>3D + 2D controller visualization</td><td>✅</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>❌</td><td>⚠️ basic</td></tr>
+                    <tr><td>Custom sensitivity curves with draggable points</td><td>✅</td><td>⚠️ basic</td><td>⚠️ basic</td><td>✅</td><td>⚠️ basic</td><td>✅</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="compare-footer">⚠️ basic means the feature exists but is limited compared to PadForge's implementation. ❌ means the feature is absent.</p>
+    </div>
+</section>
+
 <!-- Features -->
 <section id="features" class="features">
     <div class="container">
@@ -60,68 +139,68 @@
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">&#127918;</div>
-                <h3>Any Input, Any Output</h3>
-                <p>Route any physical device to up to 16 stacked virtual controllers. Xbox, PlayStation, Extended (flight sticks, wheels, third-party gamepads), MIDI, or Keyboard+Mouse output.</p>
+                <h3>Any input, any output</h3>
+                <p>Route any physical device to up to 16 stacked virtual controllers. Xbox, PlayStation, Extended (flight sticks, wheels, third-party gamepads), MIDI, or Keyboard+Mouse output. Mix types in one session.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128270;</div>
-                <h3>3D Controller Visualization</h3>
-                <p>Per-profile 3D and 2D models with live input feedback. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, and DualSense each have their own native artwork. Xbox Series profiles include a clickable Share button.</p>
+                <h3>3D and 2D visualization</h3>
+                <p>Per-profile models with live input feedback. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, and DualSense each have their own native art. Click any button in 3D to record its mapping.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#9881;</div>
-                <h3>Intuitive Mapping</h3>
-                <p>Record-by-press assignment, auto-mapping for standard gamepads, and Copy From translation between controller types.</p>
+                <h3>Mapping that works the first time</h3>
+                <p>Record by pressing a button, pick from a dropdown of every available input (including raw HID buttons past the standard 11), or run Map All for a one-pass setup. Copy bindings between controller types.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128200;</div>
-                <h3>Sensitivity &amp; Deadzone</h3>
-                <p>Per-axis sensitivity curves, 6 deadzone algorithms, and independent axis range boundaries for fine-tuned control.</p>
+                <h3>Six deadzone shapes</h3>
+                <p>Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis deadzone and anti-deadzone. Center calibration. Custom sensitivity curves with draggable points.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128171;</div>
-                <h3>Force Feedback &amp; Rumble</h3>
-                <p>Full force feedback and rumble passthrough. Audio-to-bass rumble synthesis for games without native support.</p>
+                <h3>Force feedback both ways</h3>
+                <p>Full rumble passthrough. HID PID 1.0 force feedback for wheels and joysticks (constant, ramp, periodic, condition). Audio bass rumble that captures system audio and routes the bass to vibration motors.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128268;</div>
-                <h3>Adaptive Triggers &amp; Lighting</h3>
-                <p>Seven DualSense trigger effect modes with a live profile preview, plus thirteen lightbar modes including audio-driven, palette-cycle, and input-reactive.</p>
+                <h3>Adaptive triggers and lightbar</h3>
+                <p>Seven DualSense trigger modes including a one-click GameCube preset. Thirteen lightbar modes including audio-pulse and audio-band variants that react to game audio in real time.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#9889;</div>
-                <h3>Macros &amp; Combos</h3>
-                <p>Trigger action sequences with button combos. Axis-to-keyboard, mouse movement output, and conditional triggers.</p>
+                <h3>Macros with action sequences</h3>
+                <p>Combo triggers from up to 8 buttons, axes, or POV directions. Action sequences with key presses, mouse moves, scroll, system volume, app volume, lightbar overrides, and rumble overrides. Four fire modes.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128100;</div>
-                <h3>Per-App Profiles</h3>
-                <p>Automatic profile switching based on the active application. Save and restore complete configurations per game.</p>
+                <h3>Per-app profiles</h3>
+                <p>PadForge watches the foreground window and switches profiles when a matching app gains focus. A Win11-style flyout shows the active profile, initialization progress, and offline-controller warnings.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128225;</div>
-                <h3>1000 Hz Polling</h3>
-                <p>High-resolution waitable timer with spin-wait tail for minimal input latency. Built on SDL3 for broad device support.</p>
+                <h3>1000 Hz polling</h3>
+                <p>Sub-millisecond input jitter via high-resolution waitable timers. Bit-perfect axis passthrough at default settings. Built on SDL3 for broad device support.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#127760;</div>
-                <h3>Web Controller</h3>
-                <p>Serve a gamepad UI to any browser on your local network. Turn phones and tablets into wireless controllers via WebSocket.</p>
+                <h3>Phone as a controller</h3>
+                <p>Built-in web server. Open a browser tab on any phone or tablet over Wi-Fi. Touch buttons, dual analog sticks, 8-way D-pad, rumble. Xbox 360 or DualShock 4 layouts.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128256;</div>
-                <h3>Motion &amp; DSU Server</h3>
-                <p>Broadcast gyro and accelerometer data over DSU/Cemuhook to emulators like Cemu, Dolphin, and Yuzu.</p>
+                <h3>Motion server for emulators</h3>
+                <p>Broadcast gyro and accelerometer over DSU/Cemuhook to Cemu, Dolphin, Yuzu, and Ryujinx. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#127925;</div>
-                <h3>MIDI Output</h3>
-                <p>Create virtual MIDI devices. Map any controller input to MIDI notes and control change messages for music production.</p>
+                <h3>MIDI output</h3>
+                <p>Virtual MIDI endpoint. Axes send Control Change. Buttons send Note On / Off. Channel 1-16. PadForge creates its own system endpoint via Windows MIDI Services. No loopMIDI needed.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128683;</div>
-                <h3>Controller Hiding</h3>
-                <p>Driver-level physical controller hiding via HidHide integration. Games only see your virtual controllers.</p>
+                <h3>Hide physical controllers</h3>
+                <p>HidHide driver-level hiding so games only see the virtual controllers. Per-device toggles auto-enable for gamepads. Optional cloak-between-launches for setups where Steam scans while PadForge is closed.</p>
             </div>
         </div>
     </div>
@@ -140,59 +219,59 @@
                 <div class="screenshot-track">
                     <figure class="screenshot-item active">
                         <img src="assets/screenshot-dashboard.jpg" alt="PadForge Dashboard" loading="lazy">
-                        <figcaption>Dashboard: overview of all virtual controllers, motion server, and web controller</figcaption>
+                        <figcaption>Dashboard: all virtual controllers, motion server, web controller, and driver status on one screen.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-controller.jpg" alt="3D Controller View" loading="lazy">
-                        <figcaption>3D Controller: per-profile 3D visualization with live input feedback (Xbox 360, Xbox One / Elite / Adaptive, Xbox Series with Share button, DualShock 4, DualSense)</figcaption>
+                        <figcaption>3D model per profile. Buttons, sticks, and triggers highlight live. Xbox Series profiles add a clickable Share button.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-mappings.jpg" alt="Mappings Page" loading="lazy">
-                        <figcaption>Mappings: record-by-press assignment with per-mapping deadzone</figcaption>
+                        <figcaption>Record-by-press mapping. Per-mapping invert, half-axis, and threshold options.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-sticks.jpg" alt="Sticks Configuration" loading="lazy">
-                        <figcaption>Sticks: sensitivity curves and deadzone algorithms</figcaption>
+                        <figcaption>Six deadzone shapes. Per-axis sensitivity curves with draggable points.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-force-feedback.jpg" alt="Force Feedback" loading="lazy">
-                        <figcaption>Force Feedback: rumble passthrough and directional FFB</figcaption>
-                    </figure>
-                    <figure class="screenshot-item">
-                        <img src="assets/screenshot-macros.jpg" alt="Macros Page" loading="lazy">
-                        <figcaption>Macros: button combos, action sequences, and conditional triggers</figcaption>
-                    </figure>
-                    <figure class="screenshot-item">
-                        <img src="assets/screenshot-profiles.jpg" alt="Profiles Page" loading="lazy">
-                        <figcaption>Profiles: per-application automatic profile switching</figcaption>
-                    </figure>
-                    <figure class="screenshot-item">
-                        <img src="assets/screenshot-devices.jpg" alt="Devices Page" loading="lazy">
-                        <figcaption>Devices: card-based device list with live input visualization</figcaption>
+                        <figcaption>Rumble pass-through plus directional FFB for wheels. Audio bass rumble synthesized from system audio.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive Triggers" loading="lazy">
-                        <figcaption>Adaptive Triggers: seven DualSense effect modes with a live preview that draws the resistance / amplitude shape across the trigger pull</figcaption>
+                        <figcaption>Seven DualSense trigger modes. Live preview draws the resistance and amplitude curve while you drag the sliders.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-lighting.jpg" alt="Lighting" loading="lazy">
-                        <figcaption>Lighting: thirteen lightbar modes including audio-driven, palette-cycle, and input-reactive effects, plus the player-indicator and mute LED card</figcaption>
+                        <figcaption>Thirteen lightbar modes including audio-pulse, audio-band, and input-reactive. Player indicator and mute LED controls.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-macros.jpg" alt="Macros Page" loading="lazy">
+                        <figcaption>Combo triggers fire action sequences across four fire modes.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-profiles.jpg" alt="Profiles Page" loading="lazy">
+                        <figcaption>Per-app profiles switch automatically when a matching window gains focus.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-devices.jpg" alt="Devices Page" loading="lazy">
+                        <figcaption>Every detected device as a card with live raw input, slot assignment, and per-device hiding toggles.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-extended.jpg" alt="Extended Virtual Controller" loading="lazy">
-                        <figcaption>Extended: HIDMaestro virtual controller with 225+ profiles and custom HID descriptors</figcaption>
+                        <figcaption>Extended: flight sticks, wheels, HOTAS, and third-party gamepads through 225+ HIDMaestro profiles.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-midi.jpg" alt="MIDI Virtual Controller" loading="lazy">
-                        <figcaption>MIDI: channel, CC and note mapping for music production</figcaption>
+                        <figcaption>Channel, velocity, CC and note mapping. Axes as Control Change. Buttons as Note On / Off.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-kbm-preview.jpg" alt="Keyboard + Mouse Preview" loading="lazy">
-                        <figcaption>Keyboard + Mouse: live preview of every mapped key and button</figcaption>
+                        <figcaption>Keyboard + Mouse virtual controller with live preview of every mapped key and button.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-web-controller.jpg" alt="Web Controller" loading="lazy">
-                        <figcaption>Web Controller: browser-based gamepad on any device</figcaption>
+                        <figcaption>Web controller: any phone browser becomes a gamepad over Wi-Fi.</figcaption>
                     </figure>
                 </div>
             </div>
@@ -205,17 +284,18 @@
 <section id="download" class="download">
     <div class="container download-content">
         <h2>Download</h2>
-        <p>PadForge is free and open source. Windows 10 or 11 (x64) required.</p>
+        <p>Free. Open source. No installer. Single EXE. Windows 10 or 11, 64-bit.</p>
         <div class="download-buttons">
-            <a href="https://github.com/hifihedgehog/PadForge/releases/latest" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Download Latest Release</a>
+            <a href="https://github.com/hifihedgehog/PadForge/releases/latest" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Download latest release</a>
         </div>
         <div class="download-info">
-            <p>PadForge ships with the <strong>HIDMaestro</strong> engine built in. When you create a virtual controller, HIDMaestro instantiates a real HID device on the fly that matches the controller "shape" you picked &mdash; an Xbox Series gamepad, a DualSense, a Logitech wheel, or any of 225+ profiles. No separate driver install. No manual configuration. The device disappears when you delete the slot.</p>
-            <p>Two optional add-ons are installable from Settings if you need them:</p>
+            <p>PadForge installs <strong>HIDMaestro</strong> on first run. HIDMaestro is the driver that creates virtual controllers. When you add a slot, HIDMaestro spins up a real HID device matching the controller shape you picked. The device disappears when you delete the slot.</p>
+            <p>Two more drivers are optional. PadForge offers to install each only when you need its feature:</p>
             <ul>
-                <li><strong>HidHide</strong>: hide physical controllers from games so they only see the virtual ones (prevents double input)</li>
-                <li><strong>Windows MIDI Services</strong>: required only for the MIDI virtual controller type</li>
+                <li><strong>HidHide</strong> — hide your physical controller so games only see the virtual one (when a game sees both at once)</li>
+                <li><strong>Windows MIDI Services</strong> — only if you want the MIDI virtual controller type (Windows 11 24H2 or later)</li>
             </ul>
+            <p class="download-promise"><strong>Free means free.</strong> PadForge will never become paid, freemium, or Patreon early-access paywalled.</p>
         </div>
     </div>
 </section>
@@ -254,7 +334,6 @@
     const dotsContainer = document.querySelector('.screenshot-dots');
     let current = 0;
 
-    // Create dots
     items.forEach((_, i) => {
         const dot = document.createElement('button');
         dot.classList.add('dot');
@@ -277,13 +356,11 @@
     document.querySelector('.screenshot-prev').addEventListener('click', () => goTo(current - 1));
     document.querySelector('.screenshot-next').addEventListener('click', () => goTo(current + 1));
 
-    // Keyboard nav for gallery
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') goTo(current - 1);
         if (e.key === 'ArrowRight') goTo(current + 1);
     });
 
-    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
             e.preventDefault();
@@ -296,7 +373,6 @@
         });
     });
 
-    // Navbar background on scroll
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 50);
