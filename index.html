@@ -46,7 +46,7 @@
         <p class="hero-sub">Plug in a steering wheel. The game sees a PlayStation pad. Use a DualSense. The game sees an Xbox 360. Map your keyboard. The game sees a flight stick. Free, open source, no paywall.</p>
         <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-powered" target="_blank" rel="noopener">
             <img src="assets/hidmaestro-logo-dark.png" alt="HIDMaestro" class="hero-powered-logo">
-            <span class="hero-powered-text">Powered by HIDMaestro &mdash; one driver, 225+ device profiles</span>
+            <span class="hero-powered-text">Powered by HIDMaestro. One driver, 225+ device profiles.</span>
         </a>
         <div class="hero-buttons">
             <a href="#download" class="btn btn-primary">Download</a>
@@ -230,7 +230,32 @@
             <div class="feature-card">
                 <div class="feature-icon">&#128683;</div>
                 <h3>Hide physical controllers</h3>
-                <p>HidHide driver-level hiding so games only see the virtual controllers. Per-device toggles auto-enable for gamepads. Optional cloak-between-launches for setups where Steam scans while PadForge is closed.</p>
+                <p>HidHide driver-level hiding so games only see the virtual controllers. Per-device toggles auto-enable for gamepads. The cloak stays in place between launches so Steam scans only see the virtuals.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128279;</div>
+                <h3>Combine many devices into one</h3>
+                <p>Pedals plus wheel plus HOTAS throttle as one virtual stick. Multi-source rows with Strongest, Combined, Average, Either, Both, Only one, or Custom-formula combine modes. Cross-device chords. One row can read from any number of devices.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#11096;</div>
+                <h3>Shift layers for your controller</h3>
+                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Hold, Toggle, Sticky, Cycle, or Custom jump-to modes. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128302;</div>
+                <h3>Gyro at Steam Input parity</h3>
+                <p>Reference frames (Local, Player, World), real-world calibration, cross-device Aim Engage button, per-axis invert. Per-(device, slot) tuning persistence. Bind Gyro Pitch, Yaw, and Roll as first-class sources in the mapping table.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127919;</div>
+                <h3>Trigger motor effects</h3>
+                <p>Xbox Impulse Trigger passthrough so Forza, Gears, and Halo reach the trigger motors on the assigned physical pad. The same trigger data routes to DualSense as Adaptive Trigger Vibration. Audio-bass-driven trigger rumble. Constant trigger force with override-and-resume.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#129518;</div>
+                <h3>Custom Expression macros</h3>
+                <p>Macros can fire when a formula crosses 0.5. Variables a, b, c bound to physical inputs or to the slot's combined virtual output. Same chip palette and starter recipes as the mapping formula editor.</p>
             </div>
         </div>
     </div>
@@ -322,8 +347,8 @@
             <p>PadForge installs <strong>HIDMaestro</strong> on first run. HIDMaestro is the driver that creates virtual controllers. When you add a slot, HIDMaestro spins up a real HID device matching the controller shape you picked. The device disappears when you delete the slot.</p>
             <p>Two more drivers are optional. PadForge offers to install each only when you need its feature:</p>
             <ul>
-                <li><strong>HidHide</strong> — hide your physical controller so games only see the virtual one (when a game sees both at once)</li>
-                <li><strong>Windows MIDI Services</strong> — only if you want the MIDI virtual controller type (Windows 11 24H2 or later)</li>
+                <li><strong>HidHide.</strong> Hides your physical controller so games only see the virtual one. Install it when a game sees both at once.</li>
+                <li><strong>Windows MIDI Services.</strong> Required only for the MIDI virtual controller type. Needs Windows 11 24H2 or later.</li>
             </ul>
             <p class="download-promise"><strong>Free means free.</strong> PadForge will never become paid, freemium, or Patreon early-access paywalled.</p>
         </div>
