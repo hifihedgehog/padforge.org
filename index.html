@@ -259,47 +259,82 @@
 <section id="features" class="features">
     <div class="container">
         <h2>Technical details</h2>
-        <p class="compare-intro">The use-case grid above covers what PadForge does for you. This section is the technical depth behind each scenario.</p>
+        <p class="compare-intro">Short punch list. Each card is one feature, end to end.</p>
         <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#129513;</div>
+                <h3>Multi-source mappings</h3>
+                <p>One row, any number of inputs, any number of devices. Six combine modes plus a chip-based formula editor. Cross-device chords for free.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#8679;</div>
+                <h3>Shift layers</h3>
+                <p>Caps Lock for your controller. Hold, Toggle, Sticky, Cycle, or Custom. Per-layer color and emoji. Cross-device activators.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127760;</div>
+                <h3>Phone-as-controller</h3>
+                <p>Browser-based gamepad over Wi-Fi. Xbox 360 or DualShock 4 layout, dual sticks, 8-way D-pad. Vibration API rumble back to the phone. No app install.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9995;</div>
+                <h3>Gyro at Steam Input parity</h3>
+                <p>Local, Player, and World reference frames. Real-world calibration. Cross-device Aim Engage. Per-(device, slot) tuning.</p>
+            </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128065;</div>
                 <h3>3D and 2D visualization</h3>
-                <p>Per-profile models with live input feedback. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, and DualSense each have their own native art. Click any button in 3D to record its mapping.</p>
+                <p>Native art per profile. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense. Click any button in 3D to record its mapping.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128200;</div>
                 <h3>Six deadzone shapes</h3>
-                <p>Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis deadzone and anti-deadzone. Center calibration. Custom sensitivity curves with draggable points.</p>
+                <p>Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis anti-deadzone. Custom sensitivity curves with draggable points.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128243;</div>
                 <h3>Force feedback both ways</h3>
-                <p>Full rumble passthrough. HID PID 1.0 force feedback for wheels and joysticks (constant, ramp, periodic, condition). Audio bass rumble that captures system audio and routes the bass to vibration motors.</p>
+                <p>Full rumble passthrough. HID PID 1.0 for wheels and joysticks. Audio bass rumble synthesized from system audio. Constant force vector.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128161;</div>
                 <h3>Adaptive triggers and lightbar</h3>
-                <p>Seven DualSense trigger modes including a one-click GameCube preset. Thirteen lightbar modes including audio-pulse and audio-band variants that react to game audio in real time, plus Strobe and Battery (new in 3.2).</p>
+                <p>Seven DualSense trigger modes plus a one-click GameCube preset. Thirteen lightbar modes including audio-pulse, audio-band, Strobe, and Battery.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128293;</div>
+                <h3>Impulse triggers</h3>
+                <p>Xbox impulse trigger passthrough on the assigned physical pad. Same data routes to DualSense as Adaptive Trigger Vibration. Audio-bass trigger rumble.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#9889;</div>
                 <h3>Macros with action sequences</h3>
-                <p>Combo triggers from up to 8 buttons, axes, or POV directions. Action sequences with key presses, mouse moves, scroll, system volume, app volume, lightbar overrides, and rumble overrides. Four fire modes. New 3.2 Custom Expression trigger mode fires on a formula.</p>
+                <p>Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble. Four fire modes.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128100;</div>
                 <h3>Per-app profiles</h3>
-                <p>PadForge watches the foreground window and switches profiles when a matching app gains focus. A Win11-style flyout shows the active profile, initialization progress, and offline-controller warnings.</p>
+                <p>Watches the foreground window. Switches when a matching app takes focus. Win11-style flyout confirms.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128640;</div>
+                <h3>DSU motion server</h3>
+                <p>Gyro and accel on UDP 26760. Cemu, Dolphin, Yuzu, Ryujinx all read it. Plug-and-play for any emulator that speaks Cemuhook.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127925;</div>
+                <h3>MIDI virtual output</h3>
+                <p>Channel 1-16. CC for axes, Note On/Off for buttons. Real Windows MIDI Services endpoint. No loopMIDI bridge.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128225;</div>
                 <h3>1000 Hz polling</h3>
-                <p>Sub-millisecond input jitter via high-resolution waitable timers. Bit-perfect axis passthrough at default settings. Built on SDL3 for broad device support.</p>
+                <p>Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128683;</div>
                 <h3>Hide physical controllers</h3>
-                <p>HidHide driver-level hiding so games only see the virtual controllers. Per-device toggles auto-enable for gamepads. The cloak stays in place between launches so Steam scans only see the virtuals.</p>
+                <p>HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches.</p>
             </div>
         </div>
     </div>
