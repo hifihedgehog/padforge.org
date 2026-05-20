@@ -65,20 +65,36 @@
                 <p>Plug a PS5 DualSense into a Steam game that only accepts Xbox pads. Plug a Logitech G29 wheel into a racing game that ignores wheels. Plug a Saitek HOTAS into a flight game that wants gamepads. The game sees whatever shape PadForge is set to.</p>
             </div>
             <div class="usecase">
+                <h3>Combine many devices into one virtual controller</h3>
+                <p>Pedals plus a wheel plus a HOTAS throttle as one virtual stick. Left hand on a pad, right hand on a flight stick, both feeding the same output. Strongest / Combined / Average / Either / Both / Custom-formula combine modes. Cross-device chords. One row can read from any number of devices.</p>
+            </div>
+            <div class="usecase">
+                <h3>Layer your mappings with Shift keys</h3>
+                <p>Each slot can carry extra mapping tables that activate while a button, chord, or axis is held. Five activation modes (Hold, Toggle, Sticky, Cycle, Custom jump-to). Per-layer color and emoji icon. A Win11-style flyout confirms which layer is engaged.</p>
+            </div>
+            <div class="usecase">
+                <h3>Aim with gyro at Steam Input parity</h3>
+                <p>Reference frames (Local, Player, World), dual-threshold smoothing, real-world calibration, cross-device Aim Engage button. Per-(device, slot) tuning. Bind Gyro Pitch / Yaw / Roll as first-class sources in the Mappings table.</p>
+            </div>
+            <div class="usecase">
+                <h3>Drive triggers from games, audio, or constant force</h3>
+                <p>Xbox Impulse Trigger passthrough so Forza, Gears, and Halo reach the trigger motors on the assigned physical pad. The same trigger data routes to DualSense as Adaptive Trigger Vibration. Plus audio-bass-driven trigger rumble and a constant-force override that resumes after game-driven force ends.</p>
+            </div>
+            <div class="usecase">
                 <h3>Keep what's special about your controller</h3>
-                <p>Adaptive triggers in racing games. DualSense lightbar that pulses to game audio. Gyro routed to mouse aim. Touchpad fingers forwarded. Even if the game doesn't know what a DualSense is.</p>
+                <p>Adaptive triggers in racing games. DualSense lightbar that pulses to game audio. Touchpad fingers forwarded. Strobe and Battery lightbar modes. Even if the game doesn't know what a DualSense is.</p>
             </div>
             <div class="usecase">
                 <h3>Play with whatever's in front of you</h3>
-                <p>Phone in the room? Open a browser tab on it. The tab becomes a controller with sticks, D-pad, triggers, and rumble. Keyboard handy? Map WASD plus mouse to a virtual Xbox pad.</p>
+                <p>Phone in the room? Open a browser tab on it. The tab becomes a controller with sticks, D-pad, triggers, and rumble. Keyboard handy? Map WASD plus mouse to a virtual Xbox pad with sub-pixel mouse delta accumulation.</p>
             </div>
             <div class="usecase">
                 <h3>Run up to 16 controllers at once</h3>
-                <p>Local co-op with mixed pad types. Two sim racers on two wheels. A flight stick plus throttle plus rudder pedals together as one virtual HOTAS. Each slot can merge input from several physical devices.</p>
+                <p>Local co-op with mixed pad types. Two sim racers on two wheels. A flight stick plus throttle plus rudder pedals together as one virtual HOTAS. One combo press toggles every virtual controller on or off.</p>
             </div>
             <div class="usecase">
                 <h3>Map motion to emulators</h3>
-                <p>Stream gyro and accelerometer to Cemu, Dolphin, Yuzu, and Ryujinx through the DSU/Cemuhook protocol on UDP port 26760. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources all supported.</p>
+                <p>Stream gyroscope and accelerometer to Cemu, Dolphin, Yuzu, and Ryujinx through the DSU / Cemuhook protocol on UDP port 26760. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources all supported.</p>
             </div>
             <div class="usecase">
                 <h3>Make MIDI from a gamepad</h3>
@@ -115,6 +131,13 @@
                     <tr><td>Flight stick / wheel / HOTAS virtual output</td><td>✅ 225+ profiles</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>MIDI virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Keyboard + Mouse virtual output</td><td>✅</td><td>❌</td><td>⚠️ basic</td><td>✅</td><td>❌</td><td>✅</td></tr>
+                    <tr><td>Multi-source per row (one output, many inputs)</td><td>✅ 6 combine modes + custom formula</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>❌</td><td>✅</td></tr>
+                    <tr><td>Shift layers (Hold / Toggle / Sticky / Cycle / Custom)</td><td>✅ + chord + axis activators</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>⚠️ basic</td></tr>
+                    <tr><td>Cross-device chords (button on pad A + button on pad B)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Formula editor with chips (arithmetic, logic, if-then-else)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>⚠️ basic</td></tr>
+                    <tr><td>Gyro Steam Input parity (Local / Player / World, RWC)</td><td>✅</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>✅</td></tr>
+                    <tr><td>Xbox Impulse Triggers passthrough</td><td>✅ + DualSense auto-route</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>⚠️ Xbox-only</td></tr>
+                    <tr><td>Constant trigger force + audio-driven trigger rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>DualSense Adaptive Triggers</td><td>✅ 7 modes + GameCube preset</td><td>❌</td><td>❌</td><td>✅</td><td>⚠️ basic</td><td>✅</td></tr>
                     <tr><td>DualSense lightbar</td><td>✅ 13 modes + audio-reactive</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>❌</td></tr>
                     <tr><td>Force feedback for wheels &amp; joysticks</td><td>✅ HID PID 1.0</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
