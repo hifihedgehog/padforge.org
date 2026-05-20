@@ -240,41 +240,86 @@ a:hover {
     vertical-align: middle;
 }
 
-/* ===== What you can do (use cases) ===== */
-.what-you-can-do {
+/* ===== Feature stories (alternating image + copy rows) ===== */
+.stories {
     padding: 100px 0;
     background: var(--bg-alt);
 }
 
-.usecase-grid {
+.stories-header {
+    text-align: center;
+    margin-bottom: 64px;
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.story {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 56px;
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-.usecase {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px;
-    transition: border-color 0.2s;
+.story:last-child {
+    border-bottom: none;
 }
 
-.usecase:hover {
-    border-color: var(--accent);
+.story-reverse {
+    direction: rtl;
 }
 
-.usecase h3 {
-    font-size: 1.2rem;
+.story-reverse > * {
+    direction: ltr;
+}
+
+.story-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.story-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
     font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--text);
 }
 
-.usecase p {
+.story-copy h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+    line-height: 1.18;
+}
+
+.story-copy p {
     color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.story-shot {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.story-shot:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.35);
+}
+
+.story-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 /* ===== Compare table ===== */
@@ -615,17 +660,27 @@ a:hover {
         margin-bottom: 32px;
     }
 
-    .what-you-can-do, .compare {
+    .stories, .compare {
         padding: 60px 0;
     }
 
-    .usecase-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    .stories-header {
+        font-size: 1.6rem;
+        margin-bottom: 32px;
     }
 
-    .usecase {
-        padding: 22px;
+    .story {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 36px 0;
+    }
+
+    .story-copy h3 {
+        font-size: 1.4rem;
+    }
+
+    .story-copy p {
+        font-size: 0.98rem;
     }
 
     .compare-table {

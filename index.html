@@ -55,52 +55,120 @@
     </div>
 </header>
 
-<!-- What you can do -->
-<section id="what-you-can-do" class="what-you-can-do">
+<!-- Feature stories -->
+<section id="what-you-can-do" class="stories">
     <div class="container">
-        <h2>What you can do with PadForge</h2>
-        <div class="usecase-grid">
-            <div class="usecase">
-                <h3>Use any controller in any game</h3>
-                <p>Plug a PS5 DualSense into a Steam game that only accepts Xbox pads. Plug a Logitech G29 wheel into a racing game that ignores wheels. Plug a Saitek HOTAS into a flight game that wants gamepads. The game sees whatever shape PadForge is set to.</p>
+        <h2 class="stories-header">What PadForge does for you</h2>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Any controller, any game</span>
+                <h3>That game that won't read your wheel? It will now.</h3>
+                <p>PadForge translates a PS5 DualSense into the Xbox pad a Steam game expects. A Logitech G29 wheel into the gamepad a racing game accepts. A Saitek HOTAS into the gamepad a flight game stubbornly insists on. The game never knows the difference.</p>
             </div>
-            <div class="usecase">
-                <h3>Combine many devices into one virtual controller</h3>
-                <p>Pedals plus a wheel plus a HOTAS throttle as one virtual stick. Left hand on a pad, right hand on a flight stick, both feeding the same output. Strongest / Combined / Average / Either / Both / Custom-formula combine modes. Cross-device chords. One row can read from any number of devices.</p>
+            <div class="story-shot">
+                <img src="assets/screenshot-mappings.jpg" alt="Mapping table with Source, Value, and Options columns" loading="lazy">
             </div>
-            <div class="usecase">
-                <h3>Layer your mappings with Shift keys</h3>
-                <p>Each slot can carry extra mapping tables that activate while a button, chord, or axis is held. Five activation modes (Hold, Toggle, Sticky, Cycle, Custom jump-to). Per-layer color and emoji icon. A Win11-style flyout confirms which layer is engaged.</p>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Multi-source mapping</span>
+                <h3>Pedals, wheel, and HOTAS throttle. One virtual stick.</h3>
+                <p>One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes plus a chip-based custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press.</p>
             </div>
-            <div class="usecase">
-                <h3>Aim with gyro at Steam Input parity</h3>
-                <p>Reference frames (Local, Player, World), dual-threshold smoothing, real-world calibration, cross-device Aim Engage button. Per-(device, slot) tuning. Bind Gyro Pitch / Yaw / Roll as first-class sources in the Mappings table.</p>
+            <div class="story-shot">
+                <img src="assets/screenshot-mappings.jpg" alt="Multi-source mapping row with combine mode and formula editor" loading="lazy">
             </div>
-            <div class="usecase">
-                <h3>Drive triggers from games, audio, or constant force</h3>
-                <p>Xbox Impulse Trigger passthrough so Forza, Gears, and Halo reach the trigger motors on the assigned physical pad. The same trigger data routes to DualSense as Adaptive Trigger Vibration. Plus audio-bass-driven trigger rumble and a constant-force override that resumes after game-driven force ends.</p>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Shift layers</span>
+                <h3>Caps Lock for your controller.</h3>
+                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Five activation modes. Per-layer color and emoji icon. A Win11-style flyout pops to confirm the active layer the moment it engages.</p>
             </div>
-            <div class="usecase">
-                <h3>Keep what's special about your controller</h3>
-                <p>Adaptive triggers in racing games. DualSense lightbar that pulses to game audio. Touchpad fingers forwarded. Strobe and Battery lightbar modes. Even if the game doesn't know what a DualSense is.</p>
+            <div class="story-shot">
+                <img src="assets/screenshot-mappings.jpg" alt="Shift layer tab strip above the mapping grid" loading="lazy">
             </div>
-            <div class="usecase">
-                <h3>Play with whatever's in front of you</h3>
-                <p>Phone in the room? Open a browser tab on it. The tab becomes a controller with sticks, D-pad, triggers, and rumble. Keyboard handy? Map WASD plus mouse to a virtual Xbox pad with sub-pixel mouse delta accumulation.</p>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Gyro at Steam Input parity</span>
+                <h3>Aim with the controller, not the stick.</h3>
+                <p>Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. Per-(device, slot) tuning so the same pad on two slots can feel two different ways.</p>
             </div>
-            <div class="usecase">
-                <h3>Run up to 16 controllers at once</h3>
-                <p>Local co-op with mixed pad types. Two sim racers on two wheels. A flight stick plus throttle plus rudder pedals together as one virtual HOTAS. One combo press toggles every virtual controller on or off.</p>
+            <div class="story-shot">
+                <img src="assets/screenshot-gyro.jpg" alt="Gyro tab with Calibration, Sensitivity, Response Shaping, and Engage cards" loading="lazy">
             </div>
-            <div class="usecase">
-                <h3>Map motion to emulators</h3>
-                <p>Stream gyroscope and accelerometer to Cemu, Dolphin, Yuzu, and Ryujinx through the DSU / Cemuhook protocol on UDP port 26760. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources all supported.</p>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Trigger motors that feel the game</span>
+                <h3>Forza, Gears, and Halo on your real Xbox pad.</h3>
+                <p>PadForge passes Xbox impulse trigger data straight to the assigned physical Xbox One, Elite, or Series pad. The same data routes to DualSense as Adaptive Trigger Vibration so a DualSense playing Forza buzzes the triggers in step with an Xbox One pad doing the same. Plus audio-bass-driven trigger rumble and a constant trigger force that resumes when the game stops.</p>
             </div>
-            <div class="usecase">
-                <h3>Make MIDI from a gamepad</h3>
-                <p>Map sticks to Control Change. Map buttons to notes. Send velocity. Build a 16-channel MIDI controller from a gamepad and play music in any DAW.</p>
+            <div class="story-shot">
+                <img src="assets/screenshot-force-feedback.jpg" alt="Force Feedback tab with per-motor strength sliders, Constant Force, and Audio Bass Rumble" loading="lazy">
             </div>
-        </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">DualSense effects in any game</span>
+                <h3>Adaptive triggers and lightbar that don't need the game's blessing.</h3>
+                <p>Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Thirteen lightbar modes, three of them tied to your system audio. The DualSense lights and triggers light up in games that have never heard of a DualSense.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive Triggers tab with mode dropdown and per-trigger sliders" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Phone as a controller</span>
+                <h3>Open a browser. Press buttons.</h3>
+                <p>PadForge runs a tiny web server. Any device with a browser on your Wi-Fi can load it, pick a layout (Xbox 360 or DualShock 4), and play. Touch buttons, dual analog sticks, an 8-way D-pad, real rumble feedback through the Vibration API. No app to install on the phone.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-web-controller.jpg" alt="Web controller showing analog sticks, D-pad, triggers, and ABXY buttons" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Up to 16 controllers</span>
+                <h3>Local co-op without limits.</h3>
+                <p>Run two sim racers on two wheels at once. A flight stick plus throttle plus rudder pedals as one virtual HOTAS. Mixed gamepad types in one session. One combo press toggles every virtual controller on or off when you need to step away.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-dashboard.jpg" alt="Dashboard with multiple virtual controllers active at once" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Motion to emulators</span>
+                <h3>Gyro into Cemu, Dolphin, Yuzu, and Ryujinx.</h3>
+                <p>The built-in DSU / Cemuhook server broadcasts gyroscope and accelerometer on UDP port 26760 so emulators can use real motion for Splatoon, Wii titles, 3DS games, and anything else that asks for it. DualSense, DualShock 4, Switch Pro, and 2026 Steam Controller sources work out of the box.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-dashboard.jpg" alt="Dashboard Motion Server section with port and enable toggle" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">MIDI from a gamepad</span>
+                <h3>A 16-channel MIDI controller, no extra hardware.</h3>
+                <p>Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. PadForge creates a real Windows MIDI endpoint through Windows MIDI Services that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-midi.jpg" alt="MIDI virtual controller with CC count, Note count, channel, and velocity" loading="lazy">
+            </div>
+        </article>
     </div>
 </section>
 
@@ -162,25 +230,16 @@
     </div>
 </section>
 
-<!-- Features -->
+<!-- Technical details -->
 <section id="features" class="features">
     <div class="container">
-        <h2>Features</h2>
+        <h2>Technical details</h2>
+        <p class="compare-intro">The use-case grid above covers what PadForge does for you. This section is the technical depth behind each scenario.</p>
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">&#127918;</div>
-                <h3>Any input, any output</h3>
-                <p>Route any physical device to up to 16 stacked virtual controllers. Xbox, PlayStation, Extended (flight sticks, wheels, third-party gamepads), MIDI, or Keyboard+Mouse output. Mix types in one session.</p>
-            </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128065;</div>
                 <h3>3D and 2D visualization</h3>
                 <p>Per-profile models with live input feedback. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, and DualSense each have their own native art. Click any button in 3D to record its mapping.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#129668;</div>
-                <h3>Mapping that works the first time</h3>
-                <p>Record by pressing a button, pick from a dropdown of every available input (including raw HID buttons past the standard 11), or run Map All for a one-pass setup. Copy bindings between controller types.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128200;</div>
@@ -195,12 +254,12 @@
             <div class="feature-card">
                 <div class="feature-icon">&#128161;</div>
                 <h3>Adaptive triggers and lightbar</h3>
-                <p>Seven DualSense trigger modes including a one-click GameCube preset. Thirteen lightbar modes including audio-pulse and audio-band variants that react to game audio in real time.</p>
+                <p>Seven DualSense trigger modes including a one-click GameCube preset. Thirteen lightbar modes including audio-pulse and audio-band variants that react to game audio in real time, plus Strobe and Battery (new in 3.2).</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#9889;</div>
                 <h3>Macros with action sequences</h3>
-                <p>Combo triggers from up to 8 buttons, axes, or POV directions. Action sequences with key presses, mouse moves, scroll, system volume, app volume, lightbar overrides, and rumble overrides. Four fire modes.</p>
+                <p>Combo triggers from up to 8 buttons, axes, or POV directions. Action sequences with key presses, mouse moves, scroll, system volume, app volume, lightbar overrides, and rumble overrides. Four fire modes. New 3.2 Custom Expression trigger mode fires on a formula.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128100;</div>
@@ -213,49 +272,9 @@
                 <p>Sub-millisecond input jitter via high-resolution waitable timers. Bit-perfect axis passthrough at default settings. Built on SDL3 for broad device support.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128241;</div>
-                <h3>Phone as a controller</h3>
-                <p>Built-in web server. Open a browser tab on any phone or tablet over Wi-Fi. Touch buttons, dual analog sticks, 8-way D-pad, rumble. Xbox 360 or DualShock 4 layouts.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128075;</div>
-                <h3>Motion server for emulators</h3>
-                <p>Broadcast gyro and accelerometer over DSU/Cemuhook to Cemu, Dolphin, Yuzu, and Ryujinx. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#127925;</div>
-                <h3>MIDI output</h3>
-                <p>Virtual MIDI endpoint. Axes send Control Change. Buttons send Note On / Off. Channel 1-16. PadForge creates its own system endpoint via Windows MIDI Services. No loopMIDI needed.</p>
-            </div>
-            <div class="feature-card">
                 <div class="feature-icon">&#128683;</div>
                 <h3>Hide physical controllers</h3>
                 <p>HidHide driver-level hiding so games only see the virtual controllers. Per-device toggles auto-enable for gamepads. The cloak stays in place between launches so Steam scans only see the virtuals.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128256;</div>
-                <h3>Combine many devices into one</h3>
-                <p>Pedals plus wheel plus HOTAS throttle as one virtual stick. Multi-source rows with Strongest, Combined, Average, Either, Both, Only one, or Custom-formula combine modes. Cross-device chords. One row can read from any number of devices.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#8679;</div>
-                <h3>Shift layers for your controller</h3>
-                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Hold, Toggle, Sticky, Cycle, or Custom jump-to modes. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#127744;</div>
-                <h3>Gyro at Steam Input parity</h3>
-                <p>Reference frames (Local, Player, World), real-world calibration, cross-device Aim Engage button, per-axis invert. Per-(device, slot) tuning persistence. Bind Gyro Pitch, Yaw, and Roll as first-class sources in the mapping table.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#127919;</div>
-                <h3>Trigger motor effects</h3>
-                <p>Xbox Impulse Trigger passthrough so Forza, Gears, and Halo reach the trigger motors on the assigned physical pad. The same trigger data routes to DualSense as Adaptive Trigger Vibration. Audio-bass-driven trigger rumble. Constant trigger force with override-and-resume.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#129518;</div>
-                <h3>Custom Expression macros</h3>
-                <p>Macros can fire when a formula crosses 0.5. Define as many variables as you want; each one binds to a physical input or to a channel on the slot's combined virtual output. Same chip palette and starter recipes as the mapping formula editor.</p>
             </div>
         </div>
     </div>
