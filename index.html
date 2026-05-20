@@ -150,7 +150,7 @@
                     <tr><td>DSU / Cemuhook motion server (Cemu, Dolphin, Yuzu)</td><td>✅</td><td>❌</td><td>❌</td><td>✅ port 26760</td><td>✅</td><td>❌</td></tr>
                     <tr><td>Phone as controller</td><td>✅ in-browser, no app install</td><td>❌</td><td>❌</td><td>reWASD Mobile app</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Per-app profile switching</td><td>✅</td><td>✅ since v4.17.12 (Nov 2020)</td><td>❌</td><td>✅ Autodetect</td><td>✅</td><td>✅ per-game by design</td></tr>
-                    <tr><td>Max simultaneous virtual controllers</td><td>16</td><td>4</td><td>4 (ViGEm cap)</td><td>4 (UDP cap)</td><td>4 (ViGEm cap)</td><td>1 per physical pad</td></tr>
+                    <tr><td>Max simultaneous virtual controllers</td><td>16</td><td>4 (hard-coded PAD1-4 in UI)</td><td>4 (UI matches XInput slot indices)</td><td>4 (Slot UI cap)</td><td>4 (Output Slots UI cap)</td><td>1 per physical pad</td></tr>
                     <tr><td>1000 Hz polling</td><td>✅</td><td>⚠️ unverified</td><td>⚠️ unverified</td><td>✅ user-selectable 500 / 1000 Hz</td><td>✅ on USB DS4</td><td>⚠️ unverified</td></tr>
                     <tr><td>3D + 2D controller visualization</td><td>✅</td><td>❌</td><td>❌</td><td>⚠️ 2D only</td><td>⚠️ basic</td><td>⚠️ configurator preview</td></tr>
                     <tr><td>Multi-point sensitivity curve editor</td><td>✅ draggable points</td><td>⚠️ single slider</td><td>⚠️ deadzone only</td><td>✅ custom 4-point</td><td>⚠️ preset curves</td><td>✅ response curves</td></tr>
@@ -173,12 +173,12 @@
                 <p>Route any physical device to up to 16 stacked virtual controllers. Xbox, PlayStation, Extended (flight sticks, wheels, third-party gamepads), MIDI, or Keyboard+Mouse output. Mix types in one session.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128270;</div>
+                <div class="feature-icon">&#128065;</div>
                 <h3>3D and 2D visualization</h3>
                 <p>Per-profile models with live input feedback. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, and DualSense each have their own native art. Click any button in 3D to record its mapping.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#9881;</div>
+                <div class="feature-icon">&#129668;</div>
                 <h3>Mapping that works the first time</h3>
                 <p>Record by pressing a button, pick from a dropdown of every available input (including raw HID buttons past the standard 11), or run Map All for a one-pass setup. Copy bindings between controller types.</p>
             </div>
@@ -188,12 +188,12 @@
                 <p>Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis deadzone and anti-deadzone. Center calibration. Custom sensitivity curves with draggable points.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128171;</div>
+                <div class="feature-icon">&#128243;</div>
                 <h3>Force feedback both ways</h3>
                 <p>Full rumble passthrough. HID PID 1.0 force feedback for wheels and joysticks (constant, ramp, periodic, condition). Audio bass rumble that captures system audio and routes the bass to vibration motors.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128268;</div>
+                <div class="feature-icon">&#128161;</div>
                 <h3>Adaptive triggers and lightbar</h3>
                 <p>Seven DualSense trigger modes including a one-click GameCube preset. Thirteen lightbar modes including audio-pulse and audio-band variants that react to game audio in real time.</p>
             </div>
@@ -213,12 +213,12 @@
                 <p>Sub-millisecond input jitter via high-resolution waitable timers. Bit-perfect axis passthrough at default settings. Built on SDL3 for broad device support.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127760;</div>
+                <div class="feature-icon">&#128241;</div>
                 <h3>Phone as a controller</h3>
                 <p>Built-in web server. Open a browser tab on any phone or tablet over Wi-Fi. Touch buttons, dual analog sticks, 8-way D-pad, rumble. Xbox 360 or DualShock 4 layouts.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128256;</div>
+                <div class="feature-icon">&#128075;</div>
                 <h3>Motion server for emulators</h3>
                 <p>Broadcast gyro and accelerometer over DSU/Cemuhook to Cemu, Dolphin, Yuzu, and Ryujinx. DualSense, DualShock 4, Switch Pro, and Switch 2 Pro sources.</p>
             </div>
@@ -233,17 +233,17 @@
                 <p>HidHide driver-level hiding so games only see the virtual controllers. Per-device toggles auto-enable for gamepads. The cloak stays in place between launches so Steam scans only see the virtuals.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128279;</div>
+                <div class="feature-icon">&#128256;</div>
                 <h3>Combine many devices into one</h3>
                 <p>Pedals plus wheel plus HOTAS throttle as one virtual stick. Multi-source rows with Strongest, Combined, Average, Either, Both, Only one, or Custom-formula combine modes. Cross-device chords. One row can read from any number of devices.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#11096;</div>
+                <div class="feature-icon">&#8679;</div>
                 <h3>Shift layers for your controller</h3>
                 <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Hold, Toggle, Sticky, Cycle, or Custom jump-to modes. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128302;</div>
+                <div class="feature-icon">&#127744;</div>
                 <h3>Gyro at Steam Input parity</h3>
                 <p>Reference frames (Local, Player, World), real-world calibration, cross-device Aim Engage button, per-axis invert. Per-(device, slot) tuning persistence. Bind Gyro Pitch, Yaw, and Roll as first-class sources in the mapping table.</p>
             </div>
