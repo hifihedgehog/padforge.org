@@ -108,7 +108,7 @@
 <section id="compare" class="compare">
     <div class="container">
         <h2>How PadForge stacks up</h2>
-        <p class="compare-intro">Honest feature comparison against the other Windows controller mappers. PadForge is free, open source, and covers more device territory than the other free options. Reflects each tool's shipping release as of May 2026.</p>
+        <p class="compare-intro">Feature comparison against the other Windows controller mappers. Each cell is verified against the project's own docs or source: x360ce v4.17.15.0 changelog; XOutput README + source; reWASD help.rewasd.com (v9.4); ds4windowsapp/DS4Windows v3.5; Steamworks Documentation. Cells marked ⚠️ mean the feature exists but is limited or unverified at the level of detail PadForge implements it.</p>
         <div class="compare-table-wrapper">
             <table class="compare-table">
                 <thead>
@@ -123,35 +123,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>Free</td><td>✅</td><td>✅</td><td>✅</td><td>❌ paid</td><td>✅</td><td>✅ Steam-only</td></tr>
-                    <tr><td>Open source</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
-                    <tr><td>Works outside Steam</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
-                    <tr><td>Xbox 360 / One / Series virtual output</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-                    <tr><td>PlayStation virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>⚠️ basic</td><td>❌</td></tr>
-                    <tr><td>Flight stick / wheel / HOTAS virtual output</td><td>✅ 225+ profiles</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Free</td><td>✅</td><td>✅</td><td>✅</td><td>$9.99+</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Open source</td><td>✅</td><td>✅</td><td>✅ archived</td><td>❌</td><td>✅</td><td>❌</td></tr>
+                    <tr><td>Works outside Steam</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>only via Add Non-Steam Game</td></tr>
+                    <tr><td>Actively developed</td><td>✅ 2026</td><td>no release since Nov 2020</td><td>deprecated 2024</td><td>✅ v9.4 (2026)</td><td>✅ v3.5 (Feb 2026)</td><td>✅</td></tr>
+                    <tr><td>Xbox 360 virtual output</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Xbox One / Series virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅ Xbox One</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>DualShock 4 virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>✅</td><td>❌</td></tr>
+                    <tr><td>DualSense virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>❌ input only</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Switch Pro virtual output</td><td>✅ via HIDMaestro</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Flight stick / wheel / HOTAS virtual output (DirectInput)</td><td>✅ 225+ HM profiles</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>MIDI virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>Keyboard + Mouse virtual output</td><td>✅</td><td>❌</td><td>⚠️ basic</td><td>✅</td><td>❌</td><td>✅</td></tr>
-                    <tr><td>Multi-source per row (one output, many inputs)</td><td>✅ 6 combine modes + custom formula</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>❌</td><td>✅</td></tr>
-                    <tr><td>Shift layers (Hold / Toggle / Sticky / Cycle / Custom)</td><td>✅ + chord + axis activators</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>⚠️ basic</td></tr>
-                    <tr><td>Cross-device chords (button on pad A + button on pad B)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>Formula editor with chips (arithmetic, logic, if-then-else)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>⚠️ basic</td></tr>
-                    <tr><td>Gyro Steam Input parity (Local / Player / World, RWC)</td><td>✅</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>✅</td></tr>
-                    <tr><td>Xbox Impulse Triggers passthrough</td><td>✅ + DualSense auto-route</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>⚠️ Xbox-only</td></tr>
-                    <tr><td>Constant trigger force + audio-driven trigger rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>DualSense Adaptive Triggers</td><td>✅ 7 modes + GameCube preset</td><td>❌</td><td>❌</td><td>✅</td><td>⚠️ basic</td><td>✅</td></tr>
-                    <tr><td>DualSense lightbar</td><td>✅ 13 modes + audio-reactive</td><td>❌</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>❌</td></tr>
-                    <tr><td>Force feedback for wheels &amp; joysticks</td><td>✅ HID PID 1.0</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>DSU motion server (Cemu, Dolphin, Yuzu)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
-                    <tr><td>Phone-as-controller (browser, Wi-Fi)</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>Per-app profile switching</td><td>✅</td><td>⚠️ basic</td><td>❌</td><td>✅</td><td>❌</td><td>✅</td></tr>
-                    <tr><td>Up to 16 simultaneous virtual controllers</td><td>✅</td><td>≤4</td><td>≤4</td><td>≤4</td><td>≤4</td><td>≤4</td></tr>
-                    <tr><td>1000 Hz polling</td><td>✅</td><td>❌</td><td>❌</td><td>⚠️</td><td>⚠️</td><td>⚠️</td></tr>
-                    <tr><td>3D + 2D controller visualization</td><td>✅</td><td>❌</td><td>⚠️ basic</td><td>⚠️ basic</td><td>❌</td><td>⚠️ basic</td></tr>
-                    <tr><td>Custom sensitivity curves with draggable points</td><td>✅</td><td>⚠️ basic</td><td>⚠️ basic</td><td>✅</td><td>⚠️ basic</td><td>✅</td></tr>
+                    <tr><td>Keyboard + Mouse virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                    <tr><td>Multi-source per row (one output, many inputs)</td><td>✅ 6 combine modes + formula</td><td>⚠️ "Combine Into" merges pads</td><td>⚠️ MapperDataCollection (basic)</td><td>❌ uses per-input Activators</td><td>❌</td><td>⚠️ per-input Activators</td></tr>
+                    <tr><td>Custom formula editor (arithmetic, logic, if-then-else)</td><td>✅ chip palette + 9 recipes</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Shift layers / modifier overlays</td><td>✅ Hold / Toggle / Sticky / Cycle / Custom</td><td>❌</td><td>❌</td><td>✅ up to 10 (Hold / Toggle / Custom)</td><td>✅ Mode Shifts</td><td>✅ Action Set Layers (stackable)</td></tr>
+                    <tr><td>Cross-device chords (input on pad A + input on pad B)</td><td>✅</td><td>❌</td><td>❌</td><td>✅ via Group of devices</td><td>❌</td><td>❌ same controller only</td></tr>
+                    <tr><td>Gyro mapping</td><td>✅ Local / Player / World, RWC, Aim Engage</td><td>❌</td><td>❌</td><td>✅ since v5.3 (curves, Flick Stick)</td><td>✅ gyro-to-mouse, gyro-to-RS</td><td>✅</td></tr>
+                    <tr><td>Xbox Impulse Trigger passthrough</td><td>✅ + DualSense AT Vibration auto-route</td><td>❌</td><td>❌</td><td>✅ Xbox One output only</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Constant trigger force</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Audio-bass trigger rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Audio-bass body rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>DualSense Adaptive Triggers</td><td>✅ 7 modes + GameCube preset</td><td>❌</td><td>❌</td><td>✅ 11 presets</td><td>⚠️ limited</td><td>❌</td></tr>
+                    <tr><td>DualSense lightbar</td><td>✅ 13 modes inc. Strobe + Battery</td><td>❌</td><td>❌</td><td>✅ 6 modes + Player LED + Mic LED</td><td>⚠️ basic, no audio</td><td>⚠️ unverified</td></tr>
+                    <tr><td>HID PID 1.0 force feedback (wheels)</td><td>✅</td><td>✅ constant + periodic (DirectInput)</td><td>⚠️ basic passthrough only</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>DSU / Cemuhook motion server (Cemu, Dolphin, Yuzu)</td><td>✅</td><td>❌</td><td>❌</td><td>✅ port 26760</td><td>✅</td><td>❌</td></tr>
+                    <tr><td>Phone as controller</td><td>✅ in-browser, no app install</td><td>❌</td><td>❌</td><td>reWASD Mobile app</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Per-app profile switching</td><td>✅</td><td>✅ since v4.17.12 (Nov 2020)</td><td>❌</td><td>✅ Autodetect</td><td>✅</td><td>✅ per-game by design</td></tr>
+                    <tr><td>Max simultaneous virtual controllers</td><td>16</td><td>4</td><td>4 (ViGEm cap)</td><td>4 (UDP cap)</td><td>4 (ViGEm cap)</td><td>1 per physical pad</td></tr>
+                    <tr><td>1000 Hz polling</td><td>✅</td><td>⚠️ unverified</td><td>⚠️ unverified</td><td>✅ user-selectable 500 / 1000 Hz</td><td>✅ on USB DS4</td><td>⚠️ unverified</td></tr>
+                    <tr><td>3D + 2D controller visualization</td><td>✅</td><td>❌</td><td>❌</td><td>⚠️ 2D only</td><td>⚠️ basic</td><td>⚠️ configurator preview</td></tr>
+                    <tr><td>Multi-point sensitivity curve editor</td><td>✅ draggable points</td><td>⚠️ single slider</td><td>⚠️ deadzone only</td><td>✅ custom 4-point</td><td>⚠️ preset curves</td><td>✅ response curves</td></tr>
+                    <tr><td>2026 Steam Controller support</td><td>✅ via SDL3 fork (NEW!)</td><td>❌</td><td>❌</td><td>⚠️ unverified</td><td>❌</td><td>✅</td></tr>
                 </tbody>
             </table>
         </div>
-        <p class="compare-footer">⚠️ basic means the feature exists but is limited compared to PadForge's implementation. ❌ means the feature is absent.</p>
+        <p class="compare-footer">❌ means the feature is absent. Tools without recent shipping releases (XOutput 2021, x360ce 2020) reflect their last public binary, not unreleased master commits.</p>
     </div>
 </section>
 
