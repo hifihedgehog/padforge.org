@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PadForge — Make any input look like any controller</title>
     <meta name="description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
-    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller">
+    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller, Remote Link, share controller between PCs, controller speaker audio, wheel force feedback, MIDI input">
     <meta property="og:title" content="PadForge — Make any input look like any controller">
     <meta property="og:description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
 
@@ -97,6 +97,50 @@
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-mappings.jpg" alt="Mapping table with Source, Value, and Options columns" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Native wheel force feedback</span>
+                <h3>Your wheel fights back.</h3>
+                <p>Plug a Logitech, Fanatec, or Thrustmaster wheel into a slot and PadForge drives its force feedback in the wheel's own native protocol: constant force plus spring, damper, and friction straight from the game. A dedicated Wheel tab sets rotation range in degrees, auto-center strength, and the RPM shift LEDs. A racing game that only knows how to talk to an Xbox pad now loads your wheel up with real road feel.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-wheel.jpg" alt="Wheel tab with rotation range, auto-center, and RPM shift LED controls" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Share a controller between two PCs</span>
+                <h3>The controller is on the other PC. The game doesn't care.</h3>
+                <p>Remote Link shares devices between two PadForge PCs on your network. A controller, wheel, or HOTAS plugged into one PC drives a game on the other, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Pair once by matching a six-digit code on both screens. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-remote-link.jpg" alt="Remote Link section on the Dashboard with paired and nearby PCs" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Audio through the controller speaker</span>
+                <h3>Sound from the speaker in your hands.</h3>
+                <p>The DualSense and DualShock 4 have a speaker built into the pad, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. The DualSense plays over USB or Bluetooth. The DualShock 4 plays over Bluetooth. Each speaker-capable pad gets its own per-slot Audio tab, with a source picker and a master volume.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-audio.jpg" alt="Audio tab with mirror source picker and master volume" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">A MIDI keyboard as a controller</span>
+                <h3>MIDI in, gamepad out.</h3>
+                <p>PadForge reads MIDI input devices as mapping sources. Notes, Control Change knobs, pitch bend, and encoder dials from a MIDI keyboard or pad controller bind like any button or axis, so a piano key can press A and a mod wheel can pull a trigger. It rides the same Windows MIDI Services stack the MIDI virtual controller uses. No bridge software.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-midi-input.jpg" alt="A MIDI device on the Devices page with the live note and CC preview" loading="lazy">
             </div>
         </article>
 
@@ -242,6 +286,7 @@
                     <tr><td>Switch Pro virtual output</td><td>✅ via HIDMaestro</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Flight stick / wheel / HOTAS virtual output (DirectInput)</td><td>✅ 225+ HM profiles</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>MIDI virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>MIDI input as a mapping source</td><td>✅ notes / CC / pitch bend / encoders</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Keyboard + Mouse virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Multi-source per row (one output, many inputs)</td><td>✅ 6 combine modes + formula</td><td>⚠️ "Combine Into" merges pads</td><td>⚠️ MapperDataCollection (basic)</td><td>❌ uses per-input Activators</td><td>❌</td><td>⚠️ per-input Activators</td></tr>
                     <tr><td>Custom formula editor (arithmetic, logic, if-then-else)</td><td>✅ drag-and-drop operators + 10 starter recipes</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
@@ -254,10 +299,13 @@
                     <tr><td>Audio-bass body rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>DualSense Adaptive Triggers</td><td>✅ 7 modes + GameCube preset</td><td>❌</td><td>❌</td><td>✅ 11 presets</td><td>⚠️ limited</td><td>❌</td></tr>
                     <tr><td>DualSense lightbar</td><td>✅ 15 modes inc. Strobe + Battery</td><td>❌</td><td>❌</td><td>✅ 6 modes + Player LED + Mic LED</td><td>⚠️ basic, no audio</td><td>⚠️ unverified</td></tr>
+                    <tr><td>Controller speaker audio (DualSense / DualShock 4)</td><td>✅ mirror Windows audio + macro sounds, USB / BT</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Touchpad: joystick / D-pad / mouse + gesture engine</td><td>✅ joystick (anchor-relative), wedge D-pad, per-axis mouse (sensitivity + invert), in-box gestures (4-way / 8-way swipes, taps, longpress, pinch, rotate, two- to five-finger), shape templates (Circle in either direction, Square, Triangle, Z, Checkmark), custom recorded shapes</td><td>❌</td><td>❌</td><td>⚠️ touchpad-as-mouse / -as-stick + click, no gesture engine</td><td>⚠️ touchpad-as-mouse + four-direction Touchpad Swipe bindings</td><td>⚠️ joystick / D-pad / mouse / touch menu, no multi-finger or shape recognition</td></tr>
                     <tr><td>HID PID 1.0 force feedback (wheels)</td><td>✅</td><td>✅ constant + periodic (DirectInput)</td><td>⚠️ basic passthrough only</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Native wheel FFB protocol (Logitech / Fanatec / Thrustmaster)</td><td>✅ + rotation range, auto-center, RPM LEDs</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>DSU / Cemuhook motion server (Cemu, Dolphin, Yuzu, Ryujinx)</td><td>✅</td><td>❌</td><td>❌</td><td>✅ port 26760</td><td>✅</td><td>❌</td></tr>
                     <tr><td>Phone as controller</td><td>✅ in-browser, no app install, up to 16 phones at once, touchpad layout included</td><td>❌</td><td>❌</td><td>⚠️ reWASD Mobile app (one phone, no touchpad layout)</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Share a controller with another PC's games over a network</td><td>✅ Remote Link, both directions, feedback returns</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Per-app profile switching</td><td>✅</td><td>✅ since v4.17.12 (Nov 2020)</td><td>❌</td><td>✅ Autodetect</td><td>✅</td><td>✅ per-game by design</td></tr>
                     <tr><td>Max simultaneous virtual controllers</td><td>16</td><td>4 (hard-coded PAD1-4 in UI)</td><td>4 (UI matches XInput slot indices)</td><td>4 (Slot UI cap)</td><td>4 (Output Slots UI cap)</td><td>1 per physical pad</td></tr>
                     <tr><td>1000 Hz polling</td><td>✅</td><td>⚠️ unverified</td><td>⚠️ unverified</td><td>✅ user-selectable 500 / 1000 Hz</td><td>✅ on USB DS4</td><td>⚠️ unverified</td></tr>
@@ -277,6 +325,26 @@
         <h2>Technical details</h2>
         <p class="compare-intro">Short punch list. Each card is one feature, end to end.</p>
         <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128279;</div>
+                <h3>Remote Link</h3>
+                <p>Share a controller, wheel, or HOTAS with another PC on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, and speaker audio return to the real hardware. Pair once with a six-digit code. Local network only.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127950;</div>
+                <h3>Native wheel force feedback</h3>
+                <p>Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128266;</div>
+                <h3>Controller speaker audio</h3>
+                <p>Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127929;</div>
+                <h3>MIDI input</h3>
+                <p>Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output.</p>
+            </div>
             <div class="feature-card">
                 <div class="feature-icon">&#129513;</div>
                 <h3>Multi-source mappings</h3>
@@ -398,12 +466,20 @@
                         <figcaption>Rumble pass-through plus directional FFB for wheels. Audio bass rumble synthesized from system audio.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
+                        <img src="assets/screenshot-wheel.jpg" alt="Wheel" loading="lazy">
+                        <figcaption>Native force feedback for Logitech, Fanatec, and Thrustmaster wheels. Rotation range, auto-center, and RPM shift LEDs.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
                         <img src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive Triggers" loading="lazy">
                         <figcaption>Seven DualSense trigger modes. Live preview draws the resistance and amplitude curve while you drag the sliders.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-lighting.jpg" alt="Lighting" loading="lazy">
                         <figcaption>Fifteen lightbar modes including audio-pulse, audio-band, input-reactive, Strobe, and Battery. Player indicator and mute LED controls.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-audio.jpg" alt="Controller Audio" loading="lazy">
+                        <figcaption>Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. USB and Bluetooth.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-touchpad.jpg" alt="Touchpad" loading="lazy">
@@ -430,12 +506,20 @@
                         <figcaption>Channel, velocity, CC and note mapping. Axes as Control Change. Buttons as Note On / Off.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
+                        <img src="assets/screenshot-midi-input.jpg" alt="MIDI Input" loading="lazy">
+                        <figcaption>A MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
                         <img src="assets/screenshot-kbm-preview.jpg" alt="Keyboard + Mouse Preview" loading="lazy">
                         <figcaption>Keyboard + Mouse virtual controller with live preview of every mapped key and button.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-web-controller.jpg" alt="Web Controller" loading="lazy">
                         <figcaption>Web controller: any phone browser becomes a gamepad over Wi-Fi.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-remote-link.jpg" alt="Remote Link" loading="lazy">
+                        <figcaption>Remote Link: share a controller between two PCs on your network, with rumble and force feedback returning to the real hardware.</figcaption>
                     </figure>
                 </div>
             </div>
@@ -457,7 +541,7 @@
             <p>Two more drivers are optional. PadForge offers to install each only when you need its feature:</p>
             <ul>
                 <li><strong>HidHide.</strong> Hides your physical controller so games only see the virtual one. Install it when a game sees both at once.</li>
-                <li><strong>Windows MIDI Services.</strong> Required only for the MIDI virtual controller type. Needs Windows 11 24H2 or later.</li>
+                <li><strong>Windows MIDI Services.</strong> Required for MIDI input and the MIDI virtual controller type. Needs Windows 11 24H2 or later.</li>
             </ul>
             <p class="download-promise"><strong>Free means free.</strong> PadForge will never become paid, freemium, or Patreon early-access paywalled.</p>
         </div>
@@ -528,7 +612,7 @@
                 <summary>What does PadForge need to run?</summary>
                 <div class="faq-body">
                     <p>Windows 10 or 11, 64-bit. The .NET 10 Desktop Runtime is bundled in the single-file release so there is nothing else to install. HIDMaestro auto-installs on first launch. HidHide and Windows MIDI Services are optional and install from Settings when you need them.</p>
-                    <p>For best results: a recent Windows 11 build (24H2 or newer). The MIDI virtual controller type specifically needs Windows MIDI Services, which is Windows 11 24H2 (build 26100) and later.</p>
+                    <p>For best results: a recent Windows 11 build (24H2 or newer). MIDI input and the MIDI virtual controller type need Windows MIDI Services, which is Windows 11 24H2 (build 26100) and later.</p>
                 </div>
             </details>
 
@@ -537,6 +621,14 @@
                 <div class="faq-body">
                     <p>Yes, in two ways. The fast way: turn on <strong>Force Raw Joystick Mode</strong> on the device card. PadForge stops trying to interpret it as a known gamepad layout and exposes every raw button and axis directly. Map them by hand on the Mappings tab.</p>
                     <p>The better way: click the <strong>Submit Mapping</strong> button on the device's card. Your browser opens a GitHub issue pre-filled with everything PadForge can read about the device. You fill in which raw input is which named button, and once merged the mapping ships in <code>gamecontrollerdb_padforge.txt</code> for every PadForge user.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I share a controller between two PCs?</summary>
+                <div class="faq-body">
+                    <p>Yes. Remote Link pairs two PCs running PadForge on the same local network. A controller, wheel, or HOTAS plugged into one PC shows up in the other's Devices list, ready to assign to a slot and map like any local controller. It works both directions at once, and the feedback returns to the real hardware: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it is plugged in.</p>
+                    <p>Pairing is a one-time six-digit code you match on both screens. After that, trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC from reaching your keyboard, mouse, and macros. Remote Link runs on your local network. There is no built-in internet play.</p>
                 </div>
             </details>
 
