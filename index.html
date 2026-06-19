@@ -258,7 +258,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Wii controllers, paired in-app</span>
                 <h3>Pair a Wii Remote without leaving PadForge.</h3>
-                <p>Windows can't pair a Wii controller from its own Bluetooth screen, because the PIN is six raw bytes that change with the sync button you press, not text you can type. So PadForge runs the pairing itself: click Pair on the Devices page, press the red SYNC button under the battery cover, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, a Remote plus Nunchuk, a Classic Controller, and a Wii U Pro Controller all map as normal pads, with the accelerometer and Wii Motion Plus gyro feeding the same motion pipeline as a DualSense.</p>
+                <p>Windows' own Bluetooth prompt asks for a PIN you type, but a Wii controller's PIN is six raw bytes set by the sync button you press, not text. So PadForge runs the pairing itself: click Pair on the Devices page, press the red SYNC button under the battery cover, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, a Remote plus Nunchuk, a Classic Controller, and a Wii U Pro Controller all map as normal pads, with the accelerometer and Wii Motion Plus gyro feeding the same motion pipeline as a DualSense.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-wii.jpg" alt="Pair a Controller dialog with Wii sync instructions and found-controllers list" loading="lazy">
@@ -324,7 +324,7 @@
                     <tr><td>3D + 2D controller visualization</td><td>✅</td><td>⚠️ 2D Xbox 360 only</td><td>❌</td><td>⚠️ 2D only</td><td>⚠️ basic</td><td>⚠️ configurator preview</td></tr>
                     <tr><td>Multi-point sensitivity curve editor</td><td>✅ draggable points</td><td>⚠️ single slider</td><td>⚠️ deadzone only</td><td>✅ custom 4-point</td><td>⚠️ preset curves</td><td>✅ response curves</td></tr>
                     <tr><td>2026 Steam Controller support</td><td>✅ via SDL3 fork</td><td>❌</td><td>❌</td><td>⚠️ unverified</td><td>❌</td><td>✅</td></tr>
-                    <tr><td>Wii Remote / Nunchuk / Classic / Wii U Pro as a source</td><td>✅ in-app Bluetooth pairing</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Wii Remote / Nunchuk / Classic / Wii U Pro as a source</td><td>✅ all four forms, in-app pairing</td><td>❌</td><td>❌</td><td>✅ in-app pairing (v9.4+)</td><td>❌</td><td>❌</td></tr>
                 </tbody>
             </table>
         </div>
@@ -451,7 +451,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#127918;</div>
                 <h3>Wii controllers</h3>
-                <p>In-app Bluetooth pairing, because Windows can't do it. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies.</p>
+                <p>In-app Bluetooth pairing. A Wii controller's PIN is raw bytes set by the sync button, not text you can type into the Windows prompt. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies.</p>
             </div>
         </div>
     </div>
@@ -613,7 +613,7 @@
                 <summary>How do I pair a Wii controller?</summary>
                 <div class="faq-body">
                     <p>Open the Devices page and click <strong>Pair</strong>, next to Refresh. Pick Nintendo Wii in the dialog, then press the red <strong>SYNC</strong> button under the battery cover. PadForge finds the controller and bonds it, so it reconnects on its own the next time you press a button. To pair for one session without bonding, tick <strong>Temporary Pairing</strong> and hold <strong>1 and 2</strong> instead.</p>
-                    <p>PadForge runs this itself because Windows' own Bluetooth screen can't pair a Wii controller. The pairing PIN is six raw bytes that depend on which sync button you press, not text you can type. You need a Bluetooth radio. The Bluetooth stack writes the link key, so nothing touches the registry.</p>
+                    <p>PadForge runs this itself because a Wii controller's pairing PIN is six raw bytes that depend on which sync button you press, not text you can type into the Windows prompt. You need a Bluetooth radio. The Bluetooth stack writes the link key, so nothing touches the registry.</p>
                 </div>
             </details>
 
