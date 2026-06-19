@@ -148,7 +148,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Multi-source mapping</span>
                 <h3>Pedals, wheel, and HOTAS throttle. One virtual stick.</h3>
-                <p>One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press.</p>
+                <p>One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Invert On Hold, or Ramp. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-mappings.jpg" alt="Multi-source mapping row with combine mode and formula editor" loading="lazy">
@@ -159,7 +159,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Shift layers</span>
                 <h3>Caps Lock for your controller.</h3>
-                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Five activation modes. Per-layer color and emoji icon. A Win11-style flyout pops to confirm the active layer the moment it engages.</p>
+                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose. The activator steps Next, and a second Previous button steps backward from another device if you like. Wrap Around loops past the last layer, and Include Base keeps Base in the rotation or leaves it as the resting state. A No Button layer has no activator of its own and shows up only inside a Cycle queue. Per-layer color and emoji icon. A Win11-style flyout pops to confirm the active layer the moment it engages.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-mappings.jpg" alt="Shift layer tab strip above the mapping grid" loading="lazy">
@@ -170,7 +170,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Gyro at Steam Input parity</span>
                 <h3>Aim with the controller, not the stick.</h3>
-                <p>Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. Tuning saves per pad per slot, so the same pad on two slots can feel two different ways.</p>
+                <p>Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. Tuning saves per pad per slot, so the same pad on two slots can feel two different ways. Or aim with the desktop mouse: two Mouse Position sources read the cursor and drive a virtual stick from it, each with a Sensitivity dial of its own.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-gyro.jpg" alt="Gyro tab with Motion Passthrough, Calibration, Sensitivity, Response Shaping, and Engage cards" loading="lazy">
@@ -181,7 +181,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Trigger motors that feel the game</span>
                 <h3>Forza, Gears, and Halo on your real Xbox pad.</h3>
-                <p>PadForge passes Xbox impulse trigger data straight to the assigned physical Xbox One, Elite, or Series pad. The same data routes to DualSense as Adaptive Trigger Vibration so a DualSense playing Forza buzzes the triggers in step with an Xbox One pad doing the same. Plus audio-bass-driven trigger rumble and a constant trigger force that resumes when the game stops.</p>
+                <p>PadForge passes Xbox impulse trigger data straight to the assigned physical Xbox One, Elite, or Series pad. The same data routes to DualSense as Adaptive Trigger Vibration so a DualSense playing Forza buzzes the triggers in step with an Xbox One pad doing the same. Plus audio-bass-driven trigger rumble and a constant trigger force that resumes when the game stops. A Trigger Routing card on the Force Feedback tab feeds the main rumble motor into the trigger motors, one trigger at a time, with per-trigger source, scale, and activator settings that reach both Xbox impulse triggers and DualSense Adaptive Trigger Vibration.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-impulse-triggers.jpg" alt="Impulse Triggers tab with per-trigger gain, Constant Trigger Force, and Audio Bass Trigger Rumble" loading="lazy">
@@ -253,6 +253,17 @@
                 <img src="assets/screenshot-midi.jpg" alt="MIDI virtual controller with CC count, Note count, channel, and velocity" loading="lazy">
             </div>
         </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Wii controllers, paired in-app</span>
+                <h3>Pair a Wii Remote without leaving PadForge.</h3>
+                <p>Windows can't pair a Wii controller from its own Bluetooth screen, because the PIN is six raw bytes that change with the sync button you press, not text you can type. So PadForge runs the pairing itself: click Pair on the Devices page, press the red SYNC button under the battery cover, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, a Remote plus Nunchuk, a Classic Controller, and a Wii U Pro Controller all map as normal pads, with the accelerometer and Wii Motion Plus gyro feeding the same motion pipeline as a DualSense.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-wii.jpg" alt="Pair a Controller dialog with Wii sync instructions and found-controllers list" loading="lazy">
+            </div>
+        </article>
     </div>
 </section>
 
@@ -290,9 +301,10 @@
                     <tr><td>Keyboard + Mouse virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Multi-source per row (one output, many inputs)</td><td>✅ 6 combine modes + formula</td><td>⚠️ "Combine Into" merges pads</td><td>⚠️ MapperDataCollection (basic)</td><td>❌ uses per-input Activators</td><td>❌</td><td>⚠️ per-input Activators</td></tr>
                     <tr><td>Custom formula editor (arithmetic, logic, if-then-else)</td><td>✅ drag-and-drop operators + 10 starter recipes</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>Shift layers / modifier overlays</td><td>✅ Hold / Toggle / Sticky / Cycle / Custom</td><td>❌</td><td>❌</td><td>✅ up to 10 (Hold / Toggle / Custom)</td><td>✅ Mode Shifts</td><td>✅ Action Set Layers (stackable)</td></tr>
+                    <tr><td>Shift layers / modifier overlays</td><td>✅ Hold / Toggle / Latch / Cycle / Sticky / No Button</td><td>❌</td><td>❌</td><td>✅ up to 10 (Hold / Toggle / Custom)</td><td>✅ Mode Shifts</td><td>✅ Action Set Layers (stackable)</td></tr>
                     <tr><td>Cross-device chords (input on pad A + input on pad B)</td><td>✅</td><td>❌</td><td>❌</td><td>✅ via Group of devices</td><td>❌</td><td>❌ same controller only</td></tr>
                     <tr><td>Gyro mapping</td><td>✅ Local / Player / World, RWC, Aim Engage</td><td>❌</td><td>❌</td><td>✅ since v5.3 (curves, Flick Stick)</td><td>✅ gyro-to-mouse, gyro-to-RS</td><td>✅</td></tr>
+                    <tr><td>Mouse cursor position as a mapping source</td><td>✅ Mouse Position X / Y, per-row Sensitivity</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Xbox Impulse Trigger passthrough</td><td>✅ + DualSense AT Vibration auto-route</td><td>❌</td><td>❌</td><td>✅ Xbox One output only</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Constant trigger force</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Audio-bass trigger rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
@@ -312,6 +324,7 @@
                     <tr><td>3D + 2D controller visualization</td><td>✅</td><td>⚠️ 2D Xbox 360 only</td><td>❌</td><td>⚠️ 2D only</td><td>⚠️ basic</td><td>⚠️ configurator preview</td></tr>
                     <tr><td>Multi-point sensitivity curve editor</td><td>✅ draggable points</td><td>⚠️ single slider</td><td>⚠️ deadzone only</td><td>✅ custom 4-point</td><td>⚠️ preset curves</td><td>✅ response curves</td></tr>
                     <tr><td>2026 Steam Controller support</td><td>✅ via SDL3 fork</td><td>❌</td><td>❌</td><td>⚠️ unverified</td><td>❌</td><td>✅</td></tr>
+                    <tr><td>Wii Remote / Nunchuk / Classic / Wii U Pro as a source</td><td>✅ in-app Bluetooth pairing</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                 </tbody>
             </table>
         </div>
@@ -353,7 +366,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#8679;</div>
                 <h3>Shift layers</h3>
-                <p>Caps Lock for your controller. Hold, Toggle, Sticky, Cycle, or Custom. Per-layer color and emoji. Cross-device activators.</p>
+                <p>Caps Lock for your controller. Hold, Toggle, Latch, Cycle, Sticky, or No Button. Cycle steps a queue of layers with Next and Previous buttons. Per-layer color and emoji. Cross-device activators.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#127760;</div>
@@ -374,6 +387,11 @@
                 <div class="feature-icon">&#9995;</div>
                 <h3>Gyro at Steam Input parity</h3>
                 <p>Local, Player, and World reference frames. Real-world calibration. Cross-device Aim Engage. Tuning saves per pad per slot.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128433;</div>
+                <h3>Mouse as a source</h3>
+                <p>Two Mouse Position sources read where the desktop cursor sits and push a stick, trigger, or button toward it. A per-row Sensitivity dial (0.1 to 5.0) sets the cursor travel for full deflection. Separate from the Mouse Speed sources that read movement. Primary monitor only.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128065;</div>
@@ -403,7 +421,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#9889;</div>
                 <h3>Macros with action sequences</h3>
-                <p>Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble. Five fire modes.</p>
+                <p>Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble. Five fire modes. Cursor actions to recenter the mouse, pin it at a point, or fence it inside a rectangle. Duplicate a macro in place, copy and paste between virtual controllers, or pull every macro from another in one step.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128100;</div>
@@ -429,6 +447,11 @@
                 <div class="feature-icon">&#128683;</div>
                 <h3>Hide physical controllers</h3>
                 <p>HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127918;</div>
+                <h3>Wii controllers</h3>
+                <p>In-app Bluetooth pairing, because Windows can't do it. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies.</p>
             </div>
         </div>
     </div>
@@ -496,6 +519,10 @@
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-devices.jpg" alt="Devices Page" loading="lazy">
                         <figcaption>Every detected device as a card with live raw input, slot assignment, and per-device hiding toggles.</figcaption>
+                    </figure>
+                    <figure class="screenshot-item">
+                        <img src="assets/screenshot-wii.jpg" alt="Wii Pairing Dialog" loading="lazy">
+                        <figcaption>Pair a Wii controller in-app. Press SYNC, watch the progress ring, and pick it from the found-controllers list.</figcaption>
                     </figure>
                     <figure class="screenshot-item">
                         <img src="assets/screenshot-extended.jpg" alt="Extended Virtual Controller" loading="lazy">
@@ -573,8 +600,16 @@
             <details class="faq-item">
                 <summary>Which controllers work as a source device?</summary>
                 <div class="faq-body">
-                    <p>Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (with DsHidMini), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads.</p>
+                    <p>Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (with DsHidMini), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, the Wii Remote and its Nunchuk, Classic Controller, and Wii U Pro Controller (paired in-app), any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads.</p>
                     <p>For unrecognised gamepads, the Devices page has a one-click "Submit Mapping" button that opens a pre-filled GitHub issue with the device's VID:PID and SDL GUID. Once merged, the mapping ships to everyone on the next release.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>How do I pair a Wii controller?</summary>
+                <div class="faq-body">
+                    <p>Open the Devices page and click <strong>Pair</strong>, next to Refresh. Pick Nintendo Wii in the dialog, then press the red <strong>SYNC</strong> button under the battery cover. PadForge finds the controller and bonds it, so it reconnects on its own the next time you press a button. To pair for one session without bonding, tick <strong>Temporary Pairing</strong> and hold <strong>1 and 2</strong> instead.</p>
+                    <p>PadForge runs this itself because Windows' own Bluetooth screen can't pair a Wii controller. The pairing PIN is six raw bytes that depend on which sync button you press, not text you can type. You need a Bluetooth radio. The Bluetooth stack writes the link key, so nothing touches the registry.</p>
                 </div>
             </details>
 
