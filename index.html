@@ -126,7 +126,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Audio through the controller speaker</span>
                 <h3>Sound from the speaker in your hands.</h3>
-                <p>The DualSense and DualShock 4 have a speaker built into the pad, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. The DualSense plays over USB or Bluetooth. The DualShock 4 plays over Bluetooth. Each speaker-capable pad gets its own per-slot Audio tab, with a source picker and a master volume.</p>
+                <p>The DualSense and DualShock 4 have a speaker built into the pad, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. The DualSense plays over USB or Bluetooth. The DualShock 4 plays over Bluetooth. Each speaker-capable pad gets its own per-slot Audio tab, with a source picker and a master volume. Controllers with one haptic actuator instead of a speaker, like a Joy-Con, Switch Pro, the Steam Controller, or the Steam Deck, play the same macro sounds as a vibrating tone, so beeps and cues come through the grip. A Wii Remote plays them through its own speaker.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-audio.jpg" alt="Audio tab with mirror source picker and master volume" loading="lazy">
@@ -170,7 +170,7 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Gyro at Steam Input parity</span>
                 <h3>Aim with the controller, not the stick.</h3>
-                <p>Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. Tuning saves per pad per slot, so the same pad on two slots can feel two different ways. Or aim with the desktop mouse: two Mouse Position sources read the cursor and drive a virtual stick from it, each with a Sensitivity dial of its own.</p>
+                <p>Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. A stick gate wakes the gyro from any stick and any direction, read before the stick's own deadzone. Tuning saves per pad per slot, so the same pad on two slots can feel two different ways. Or aim with the desktop mouse: two Mouse Position sources read the cursor and drive a virtual stick from it, each with a Sensitivity dial of its own.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-gyro.jpg" alt="Gyro tab with Motion Passthrough, Calibration, Sensitivity, Response Shaping, and Engage cards" loading="lazy">
@@ -258,10 +258,54 @@
             <div class="story-copy">
                 <span class="story-eyebrow">Wii controllers, paired in-app</span>
                 <h3>Pair a Wii Remote without leaving PadForge.</h3>
-                <p>Windows' own Bluetooth prompt asks for a PIN you type, but a Wii controller's PIN is six raw bytes set by the sync button you press, not text. So PadForge runs the pairing itself: click Pair on the Devices page, press the red SYNC button under the battery cover, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, a Remote plus Nunchuk, a Classic Controller, and a Wii U Pro Controller all map as normal pads, with the accelerometer and Wii Motion Plus gyro feeding the same motion pipeline as a DualSense.</p>
+                <p>Windows' own Bluetooth prompt asks for a PIN you type, but a Wii controller's PIN is six raw bytes set by the sync button you press, not text. So PadForge runs the pairing itself: click Pair on the Devices page, press the red SYNC button under the battery cover, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, a Remote plus Nunchuk, a Classic Controller, and a Wii U Pro Controller all map as normal pads, with the accelerometer and Wii Motion Plus gyro feeding the same motion pipeline as a DualSense. A new Pointer tab turns the Wii Remote's IR camera into an on-screen pointer you can map to a stick or the mouse, and a Balance Board reports weight and lean as mapping sources.</p>
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-wii.jpg" alt="Pair a Controller dialog with Wii sync instructions and found-controllers list" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">NFC tag triggers</span>
+                <h3>Tap a tag. Fire a macro.</h3>
+                <p>Plug in an NFC reader, any PC/SC contactless reader like an ACR122U, and a tag tap runs a macro. Register a tag from the Devices page: hold it on the reader, give it a name, and it is saved for good. Each tag becomes its own trigger, next to an Any NFC Tag trigger that any tag fires. Map an amiibo, a sticker, or a card to a button combo, a profile switch, or a whole action sequence.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-devices.jpg" alt="NFC reader and registered tags on the Devices page" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Joy-Con 2 optical mouse</span>
+                <h3>The Joy-Con 2 is a mouse. So use it like one.</h3>
+                <p>A Nintendo Switch 2 Joy-Con has an optical sensor on its face. Set it on a desk and slide it. Two new sources, Mouse Motion X and Mouse Motion Y, drive a stick for mouse-look, a button, or the scroll wheel, each with its own Sensitivity dial. The right Joy-Con's IR camera also reports a brightness value you can map, so covering the sensor works like a button.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-mappings.jpg" alt="Mouse Motion source in the mapping grid" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Media keys as inputs</span>
+                <h3>Your keyboard's media keys, mapped.</h3>
+                <p>The media row on a keyboard, a media remote, a headset's transport buttons: PadForge reads them as their own device with named button chips. Map Play/Pause, Mute, Volume, or Next and Previous Track to a virtual button or a macro trigger, same as any other input.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-devices.jpg" alt="Consumer Control device with named media chips" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Battery and idle disconnect</span>
+                <h3>See the charge. Sleep it when idle.</h3>
+                <p>Every wireless pad that reports a battery shows its charge on the Devices page, with a charging glyph while it tops up. Set an Idle Disconnect timer and a Bluetooth controller drops its link after a few quiet minutes, so it sleeps instead of draining on the coffee table. A Disconnect Controller macro turns one off on command, from a chord or a button.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-devices.jpg" alt="Battery indicator and the Power section on the Devices page" loading="lazy">
             </div>
         </article>
     </div>
@@ -351,7 +395,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#128266;</div>
                 <h3>Controller speaker audio</h3>
-                <p>Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth.</p>
+                <p>Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Single-actuator pads (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#127929;</div>
@@ -451,7 +495,12 @@
             <div class="feature-card">
                 <div class="feature-icon">&#127918;</div>
                 <h3>Wii controllers</h3>
-                <p>In-app Bluetooth pairing. A Wii controller's PIN is raw bytes set by the sync button, not text you can type into the Windows prompt. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies.</p>
+                <p>In-app Bluetooth pairing. A Wii controller's PIN is raw bytes set by the sync button, not text you can type into the Windows prompt. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies. The IR camera drives an on-screen pointer, and a Balance Board reports weight and lean.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127991;</div>
+                <h3>NFC tag triggers</h3>
+                <p>Read NFC tags through a PC/SC contactless reader and fire a macro on a tap. Register and name each tag from the Devices page. Every tag is its own trigger, next to an Any NFC Tag trigger. Media keys map too: a keyboard's media row appears as its own device with named button chips, and wireless pads show a battery charge indicator with an optional idle-disconnect timer.</p>
             </div>
         </div>
     </div>
