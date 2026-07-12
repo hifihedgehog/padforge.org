@@ -223,6 +223,72 @@
 
         <article class="story">
             <div class="story-copy">
+                <span class="story-eyebrow">DualShock 3, paired in-app</span>
+                <h3>The PS3 pad on PC, without the driver hunt.</h3>
+                <p>A DualShock 3 works two ways. Plug it in over USB and PadForge binds it through WinUSB on its own. Or pair it over Bluetooth from the Devices page, which installs the signed BthPS3 driver only when you pair one. Either way you get the sixaxis motion, ten pressure-sensitive face buttons, rumble, the player LED, and the battery reading. No DsHidMini, no ScpToolkit. Remove the controller and PadForge cleans up the pairing after it.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-ds3-pair.jpg" alt="Pair a Controller dialog set to DualShock 3 with USB and Bluetooth options" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Wii pointer modes</span>
+                <h3>Point the Wii Remote like a light gun, or a mouse.</h3>
+                <p>The Pointer tab reads the Wii Remote's IR camera, and now it reads it several ways. FPS Mouse drives the desktop mouse for shooters. The border modes keep the aimed area square, corrected for your screen's aspect ratio, so a wide monitor doesn't stretch the aim. When the camera loses the sensor bar, IR-offscreen freeze holds the last position instead of snapping to a corner. Cycle the modes live, or drop a Set Pointer Mode step into a macro to jump straight to one.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-pointer.jpg" alt="Pointer tab with FPS Mouse and border pointer modes for the Wii Remote IR camera" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">Mouse gestures</span>
+                <h3>Hold a mouse button. Flick. Fire.</h3>
+                <p>Hold any button on the mouse and flick the cursor. Up, down, left, right, or a plain click while held, five gestures off one button. Each fires its own action, so a single side button turns into five bindings. Send a flick to a shift layer, a macro, or a virtual button.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-mouse-gestures.jpg" alt="Mouse gesture configuration with flick directions bound to actions" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Stick-assisted triggers</span>
+                <h3>A digital trigger that pulls like an analog one.</h3>
+                <p>Some pads only give you a digital trigger, on or off. Stick Trim changes that. Set a trigger's combine mode to Stick Trim and a stick axis ramps the pull while you hold the button, so a bumper press plus a nudge of the stick reads as a partial squeeze in the game. Each mapping sets its own deadzone, ramp rate, and whether the pull resets the moment you let go.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-mappings.jpg" alt="Stick Trim combine mode on a trigger mapping row" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
+                <span class="story-eyebrow">SOCD cleaning</span>
+                <h3>Left and right at once, resolved your way.</h3>
+                <p>Press left and right together and something has to give. The Keyboard + Mouse controller cleans those opposing pairs across every key you map. Last-wins takes the newest press, the Snap Tap behavior. First-wins keeps the key you were already holding. Neutral cancels both to center. Pick one and it applies to every mapped pair at once.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-kbm-socd.jpg" alt="SOCD cleaning modes on the Keyboard + Mouse controller" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
+                <span class="story-eyebrow">Guide LED brightness</span>
+                <h3>Dim the glowing button, or let it follow the battery.</h3>
+                <p>Set how bright the Guide button glows on an Xbox One, Elite, or Series pad over USB, and the home LED on the 2015 Steam Controller. Hold it at a fixed level, or let it track the battery so a full charge shines and a low one dims. A macro action changes it on demand. It rides the same Xbox GIP lane the pad already uses, so there is nothing extra to install.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-guide-led.jpg" alt="Guide button LED brightness control with fixed and battery-following options" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story">
+            <div class="story-copy">
                 <span class="story-eyebrow">Up to 16 controllers</span>
                 <h3>Local co-op without limits.</h3>
                 <p>Run two sim racers on two wheels at once. A flight stick plus throttle plus rudder pedals as one virtual HOTAS. Mixed gamepad types in one session. One combo press toggles every virtual controller on or off when you need to step away.</p>
@@ -315,7 +381,7 @@
 <section id="compare" class="compare">
     <div class="container">
         <h2>How PadForge stacks up</h2>
-        <p class="compare-intro">Feature comparison against the other Windows controller mappers. Each cell is verified against the project's own docs or source: x360ce v4.17.15.0 changelog; XOutput README + source; reWASD help.rewasd.com (v9.4); ds4windowsapp/DS4Windows v3.5; Steamworks Documentation. Cells marked ⚠️ mean the feature exists but is limited or unverified at the level of detail PadForge implements it.</p>
+        <p class="compare-intro">Feature comparison against the other Windows controller mappers. Each cell is verified against the tool's own docs, source, or release notes: x360ce v4.17.15.0 (last public release Nov 2020); XOutput 3.32 (deprecated and archived Dec 2024); reWASD 9.4.0 (May 2026); ds4windowsapp/DS4Windows v3.5 (Feb 2026); Steam Input (rolling Steam client updates). Cells marked ⚠️ mean the feature exists but is limited or unverified at the level of detail PadForge implements it.</p>
         <div class="compare-table-wrapper">
             <table class="compare-table">
                 <thead>
@@ -333,7 +399,7 @@
                     <tr><td>Free</td><td>✅</td><td>✅</td><td>✅</td><td>$9.99+</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Open source</td><td>✅</td><td>✅</td><td>✅ archived</td><td>❌</td><td>✅</td><td>❌</td></tr>
                     <tr><td>Works outside Steam</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>only via Add Non-Steam Game</td></tr>
-                    <tr><td>Actively developed</td><td>✅ 2026</td><td>no release since Nov 2020</td><td>deprecated 2024</td><td>✅ v9.4 (2026)</td><td>✅ v3.5 (Feb 2026)</td><td>✅</td></tr>
+                    <tr><td>Actively developed</td><td>✅ 2026</td><td>no release since Nov 2020</td><td>archived Dec 2024</td><td>✅ v9.4.0 (2026)</td><td>✅ v3.5 (Feb 2026)</td><td>✅</td></tr>
                     <tr><td>Xbox 360 virtual output</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
                     <tr><td>Xbox One / Series virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅ Xbox One</td><td>❌</td><td>❌</td></tr>
                     <tr><td>DualShock 4 virtual output</td><td>✅</td><td>❌</td><td>❌</td><td>✅</td><td>✅</td><td>❌</td></tr>
@@ -349,12 +415,16 @@
                     <tr><td>Cross-device chords (input on pad A + input on pad B)</td><td>✅</td><td>❌</td><td>❌</td><td>✅ via Group of devices</td><td>❌</td><td>❌ same controller only</td></tr>
                     <tr><td>Gyro mapping</td><td>✅ Local / Player / World, RWC, Aim Engage</td><td>❌</td><td>❌</td><td>✅ since v5.3 (curves, Flick Stick)</td><td>✅ gyro-to-mouse, gyro-to-RS</td><td>✅</td></tr>
                     <tr><td>Mouse cursor position as a mapping source</td><td>✅ Mouse Position X / Y, per-row Sensitivity</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>SOCD cleaning (Snap Tap, last-wins / first-wins / neutral)</td><td>✅ across all mapped keys</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌ (Valve bans it in CS2)</td></tr>
+                    <tr><td>Mouse gestures (flick from a held button)</td><td>✅ up / down / left / right / click</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Xbox Impulse Trigger passthrough</td><td>✅ + DualSense AT Vibration auto-route</td><td>❌</td><td>❌</td><td>✅ Xbox One output only</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>Stick-assisted analog triggers (digital hold ramped by a stick)</td><td>✅ Stick Trim, per-mapping deadzone / rate</td><td>❌</td><td>❌</td><td>⚠️ 3-zone actuation, graded curve unverified</td><td>❌</td><td>⚠️ unverified</td></tr>
                     <tr><td>Constant trigger force</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Audio-bass trigger rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Audio-bass body rumble</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>DualSense Adaptive Triggers</td><td>✅ 7 modes + GameCube preset</td><td>❌</td><td>❌</td><td>✅ 11 presets</td><td>⚠️ limited</td><td>❌</td></tr>
                     <tr><td>DualSense lightbar</td><td>✅ 15 modes inc. Strobe + Battery</td><td>❌</td><td>❌</td><td>✅ 6 modes + Player LED + Mic LED</td><td>⚠️ basic, no audio</td><td>⚠️ unverified</td></tr>
+                    <tr><td>Guide / home LED brightness</td><td>✅ Xbox One / Elite / Series + 2015 Steam Controller</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>⚠️ unverified</td></tr>
                     <tr><td>Controller speaker audio (DualSense / DualShock 4)</td><td>✅ mirror Windows audio + macro sounds, USB / BT</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
                     <tr><td>Touchpad: joystick / D-pad / mouse + gesture engine</td><td>✅ joystick (anchor-relative), wedge D-pad, per-axis mouse (sensitivity + invert), in-box gestures (4-way / 8-way swipes, taps, longpress, pinch, rotate, two- to five-finger), shape templates (Circle in either direction, Square, Triangle, Z, Checkmark), custom recorded shapes</td><td>❌</td><td>❌</td><td>⚠️ touchpad-as-mouse / -as-stick + click, no gesture engine</td><td>⚠️ touchpad-as-mouse + four-direction Touchpad Swipe bindings</td><td>⚠️ joystick / D-pad / mouse / touch menu, no multi-finger or shape recognition</td></tr>
                     <tr><td>HID PID 1.0 force feedback (wheels)</td><td>✅</td><td>✅ constant + periodic (DirectInput)</td><td>⚠️ basic passthrough only</td><td>❌</td><td>❌</td><td>❌</td></tr>
@@ -368,11 +438,12 @@
                     <tr><td>3D + 2D controller visualization</td><td>✅</td><td>⚠️ 2D Xbox 360 only</td><td>❌</td><td>⚠️ 2D only</td><td>⚠️ basic</td><td>⚠️ configurator preview</td></tr>
                     <tr><td>Multi-point sensitivity curve editor</td><td>✅ unlimited points</td><td>⚠️ single slider</td><td>⚠️ deadzone only</td><td>✅ custom 4-point</td><td>⚠️ preset curves</td><td>✅ response curves</td></tr>
                     <tr><td>2026 Steam Controller support</td><td>✅ via SDL3 fork</td><td>❌</td><td>❌</td><td>⚠️ unverified</td><td>❌</td><td>✅</td></tr>
-                    <tr><td>Wii Remote / Nunchuk / Classic / Wii U Pro as a source</td><td>✅ all four forms, in-app pairing</td><td>❌</td><td>❌</td><td>✅ in-app pairing (v9.4+)</td><td>❌</td><td>❌</td></tr>
+                    <tr><td>DualShock 3 as a source</td><td>✅ USB + in-app BT pairing, no DsHidMini</td><td>⚠️ unverified</td><td>⚠️ unverified</td><td>✅ + gyro (9.3.0)</td><td>✅</td><td>✅ native (no gyro)</td></tr>
+                    <tr><td>Wii Remote / Nunchuk / Classic / Wii U Pro as a source</td><td>✅ all four forms, in-app pairing, IR pointer</td><td>❌</td><td>❌</td><td>✅ in-app pairing (v9.4+), no IR pointer</td><td>❌</td><td>❌</td></tr>
                 </tbody>
             </table>
         </div>
-        <p class="compare-footer">❌ means the feature is absent. Tools without recent shipping releases (XOutput 2021, x360ce 2020) reflect their last public binary, not unreleased master commits.</p>
+        <p class="compare-footer">❌ means the feature is absent. Tools without recent shipping releases (XOutput 2024, x360ce 2020) reflect their last public binary, not unreleased master commits.</p>
     </div>
 </section>
 
@@ -669,7 +740,7 @@
             <details class="faq-item">
                 <summary>Which controllers work as a source device?</summary>
                 <div class="faq-body">
-                    <p>Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (with DsHidMini), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, the Wii Remote and its Nunchuk, Classic Controller, and Wii U Pro Controller (paired in-app), any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads.</p>
+                    <p>Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (USB or in-app Bluetooth pairing), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, the Wii Remote and its Nunchuk, Classic Controller, and Wii U Pro Controller (paired in-app), any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads.</p>
                     <p>For unrecognised gamepads, the Devices page has a one-click "Submit Mapping" button that opens a pre-filled GitHub issue with the device's VID:PID and SDL GUID. Once merged, the mapping ships to everyone on the next release.</p>
                 </div>
             </details>
