@@ -49,14 +49,20 @@
         <img src="assets/logo.png" alt="PadForge Logo" class="hero-logo">
         <h1>Make any input look like any controller.</h1>
         <p class="hero-sub">PadForge sits between your controller and the game and shows the game whatever shape it wants to see. Free. Open source. No paywall.</p>
-        <a href="https://www.softpedia.com/get/Gaming-Related/PadForge.shtml" class="hero-powered" target="_blank" rel="noopener">
-            <img src="assets/softpedia-excellent-editors-review-award.png" alt="Softpedia Editor's Pick: rated 5 out of 5, Excellent" style="height:104px;border-radius:8px;">
-            <span class="hero-powered-text">Softpedia Editor's Pick. Rated 5/5, Excellent.</span>
-        </a>
-        <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-powered" target="_blank" rel="noopener">
-            <img src="assets/hidmaestro-logo-dark.png" alt="HIDMaestro" class="hero-powered-logo">
-            <span class="hero-powered-text">Powered by HIDMaestro. One driver, 225+ device profiles.</span>
-        </a>
+        <div class="hero-trust">
+            <a href="https://www.softpedia.com/get/Gaming-Related/PadForge.shtml" class="hero-trust-item hero-trust-award" target="_blank" rel="noopener">
+                <img src="assets/softpedia-excellent-editors-review-award.png" alt="Softpedia Editor's Pick: rated 5 out of 5, Excellent" class="hero-award-img">
+                <span class="hero-trust-text"><strong>Softpedia Editor's Pick.</strong> Rated 5/5, Excellent.</span>
+            </a>
+            <span class="hero-trust-divider" aria-hidden="true"></span>
+            <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-trust-item hero-trust-credit" target="_blank" rel="noopener">
+                <span class="hero-lockup">
+                    <img src="assets/hidmaestro-logo-dark.png" alt="" class="hero-powered-logo">
+                    <span class="hero-lockup-name">HIDMaestro</span>
+                </span>
+                <span class="hero-trust-text"><strong>Powered by HIDMaestro.</strong> One driver, 225+ device profiles.</span>
+            </a>
+        </div>
         <div class="hero-buttons">
             <a href="#download" class="btn btn-primary">Download</a>
             <a href="https://github.com/hifihedgehog/PadForge" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
@@ -95,6 +101,17 @@
 
         <article class="story">
             <div class="story-copy">
+                <span class="story-eyebrow">Phone as a controller</span>
+                <h3>Open a browser. Press buttons.</h3>
+                <p>PadForge runs a tiny web server. Any device with a browser on your Wi-Fi can load it, pick a layout (Xbox 360, DualShock 4, or multi-touch touchpad), and play. Up to 16 phones connect at once, each a separate virtual pad. Touch buttons, dual analog sticks, an 8-way D-pad. Real rumble feedback through the Vibration API. No app to install on the phone.</p>
+            </div>
+            <div class="story-shot">
+                <img src="assets/screenshot-web-controller.jpg" alt="Web controller showing analog sticks, D-pad, triggers, and ABXY buttons" loading="lazy">
+            </div>
+        </article>
+
+        <article class="story story-reverse">
+            <div class="story-copy">
                 <span class="story-eyebrow">Any controller, any game</span>
                 <h3>That game that won't read your wheel? It will now.</h3>
                 <p>PadForge translates a PS5 DualSense into the Xbox pad a Steam game expects. A Logitech G29 wheel into the gamepad a racing game accepts. A Saitek HOTAS into the gamepad a flight game stubbornly insists on. The game never knows the difference.</p>
@@ -104,7 +121,7 @@
             </div>
         </article>
 
-        <article class="story story-reverse">
+        <article class="story">
             <div class="story-copy">
                 <span class="story-eyebrow">Native wheel force feedback</span>
                 <h3>Your wheel fights back.</h3>
@@ -115,7 +132,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">Share controllers across your PCs</span>
                 <h3>The controller is on the other PC. The game doesn't care.</h3>
@@ -126,7 +143,7 @@
             </div>
         </article>
 
-        <article class="story story-reverse">
+        <article class="story">
             <div class="story-copy">
                 <span class="story-eyebrow">Audio through the controller speaker</span>
                 <h3>Sound from the speaker in your hands.</h3>
@@ -137,7 +154,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">A MIDI keyboard as a controller</span>
                 <h3>MIDI in, gamepad out.</h3>
@@ -148,7 +165,7 @@
             </div>
         </article>
 
-        <article class="story story-reverse">
+        <article class="story">
             <div class="story-copy">
                 <span class="story-eyebrow">Multi-source mapping</span>
                 <h3>Pedals, wheel, and HOTAS throttle. One virtual stick.</h3>
@@ -159,7 +176,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">Shift layers</span>
                 <h3>Caps Lock for your controller.</h3>
@@ -170,7 +187,7 @@
             </div>
         </article>
 
-        <article class="story story-reverse">
+        <article class="story">
             <div class="story-copy">
                 <span class="story-eyebrow">Gyro at Steam Input parity</span>
                 <h3>Aim with the controller, not the stick.</h3>
@@ -181,7 +198,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">Trigger motors that feel the game</span>
                 <h3>Forza, Gears, and Halo on your real Xbox pad.</h3>
@@ -192,7 +209,7 @@
             </div>
         </article>
 
-        <article class="story story-reverse">
+        <article class="story">
             <div class="story-copy">
                 <span class="story-eyebrow">DualSense effects in any game</span>
                 <h3>Adaptive triggers and lightbar that don't need the game's blessing.</h3>
@@ -203,7 +220,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">Touchpad as more than a touchpad</span>
                 <h3>Turn the DualSense pad into a mouse, a stick, or a D-pad.</h3>
@@ -211,17 +228,6 @@
             </div>
             <div class="story-shot">
                 <img src="assets/screenshot-touchpad.jpg" alt="Touchpad tab with Stick / D-Pad Output, Mouse Output, Gesture Detection, In-Box Gestures, and Custom Gestures cards" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Phone as a controller</span>
-                <h3>Open a browser. Press buttons.</h3>
-                <p>PadForge runs a tiny web server. Any device with a browser on your Wi-Fi can load it, pick a layout (Xbox 360, DualShock 4, or multi-touch touchpad), and play. Up to 16 phones connect at once, each a separate virtual pad. Touch buttons, dual analog sticks, an 8-way D-pad. Real rumble feedback through the Vibration API. No app to install on the phone.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-web-controller.jpg" alt="Web controller showing analog sticks, D-pad, triggers, and ABXY buttons" loading="lazy">
             </div>
         </article>
 
@@ -346,7 +352,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">Joy-Con 2 optical mouse</span>
                 <h3>The Joy-Con 2 is a mouse. So use it like one.</h3>
@@ -368,7 +374,7 @@
             </div>
         </article>
 
-        <article class="story">
+        <article class="story story-reverse">
             <div class="story-copy">
                 <span class="story-eyebrow">Battery and idle disconnect</span>
                 <h3>See the charge. Sleep it when idle.</h3>
@@ -388,6 +394,15 @@
         <p class="compare-intro">Feature comparison against the other Windows controller mappers. Each cell is verified against the tool's own docs, source, or release notes: x360ce v4.17.15.0 (last public release Nov 2020); XOutput 3.32 (deprecated and archived Dec 2024); reWASD 9.4.0 (May 2026); ds4windowsapp/DS4Windows v3.5 (Feb 2026); Steam Input (rolling Steam client updates). Cells marked ⚠️ mean the feature exists but is limited or unverified at the level of detail PadForge implements it.</p>
         <div class="compare-table-wrapper">
             <table class="compare-table">
+                <colgroup>
+                    <col class="col-feature">
+                    <col class="col-padforge">
+                    <col class="col-rival">
+                    <col class="col-rival">
+                    <col class="col-rival">
+                    <col class="col-rival">
+                    <col class="col-rival">
+                </colgroup>
                 <thead>
                     <tr>
                         <th></th>
@@ -458,122 +473,122 @@
         <p class="compare-intro">Short punch list. Each card is one feature, end to end.</p>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">&#128279;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6" class="e"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6" class="e"/><path d="M8.3 10.8 15.7 6.2"/><path d="M8.3 13.2 15.7 17.8"/></svg></div>
                 <h3>Remote Link</h3>
                 <p>Share a controller, wheel, or HOTAS with the other PCs on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, player LEDs, and speaker audio return to the real hardware. Pair once with a six-digit code. Works on your home network, or across the internet through a VPN like ZeroTier.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127950;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" class="e"/><path d="M12 9.6V3.1"/><path d="M10 13.6 4.9 16.7"/><path d="M14 13.6 19.1 16.7"/></svg></div>
                 <h3>Native wheel force feedback</h3>
                 <p>Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128266;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3l4.5 3.5v-12L7 9.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6" class="e"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11" class="e"/></svg></div>
                 <h3>Controller speaker audio</h3>
                 <p>Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127929;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="1.6"/><path d="M8 6.4V18"/><path d="M13 6.4V18"/><path d="M18 6.4V18"/><path d="M10 6.4v5.4" class="e"/><path d="M15 6.4v5.4" class="e"/></svg></div>
                 <h3>MIDI input</h3>
                 <p>Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#129513;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.9"/><circle cx="5" cy="12" r="1.9"/><circle cx="5" cy="19" r="1.9"/><circle cx="19" cy="12" r="2.3" class="e"/><path d="M6.9 5.4C12 7 12 12 16.7 12"/><path d="M7 12h9.7"/><path d="M6.9 18.6C12 17 12 12 16.7 12"/></svg></div>
                 <h3>Multi-source mappings</h3>
                 <p>One row, any number of inputs, any number of devices. Six combine modes plus a drag-and-drop formula editor. Cross-device chords for free.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#8679;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2 4 7.6l8 4.2 8-4.2-8-4.4z" class="e"/><path d="M4 12.2l8 4.2 8-4.2"/><path d="M4 16.6l8 4.2 8-4.2"/></svg></div>
                 <h3>Shift layers</h3>
                 <p>Caps Lock for your controller. Hold, Toggle, Latch, Cycle, Sticky, or No Button. Cycle steps a queue of layers with Next and Previous buttons. Per-layer color and emoji. Cross-device activators.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127760;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.8" width="11" height="18.4" rx="2.2"/><path d="M10.4 5.6h3.2"/><path d="M10.2 18.4h3.6" class="e"/></svg></div>
                 <h3>Phone-as-controller</h3>
                 <p>Browser-based gamepad over Wi-Fi. Xbox 360, DualShock 4, or multi-touch touchpad layout. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#9999;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.8" width="18" height="14.4" rx="2"/><path d="M3 9h18"/><circle cx="5.6" cy="6.9" r="0.55"/><circle cx="12.5" cy="14" r="2.6" class="e"/></svg></div>
                 <h3>On-screen touchpad overlay</h3>
                 <p>Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128074;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.4"/><path d="M9.6 8.6l5.4 5.2-3 .5 1.6 3.3-1.7.8-1.6-3.3-2.3 2z" class="e"/></svg></div>
                 <h3>Touchpad outputs</h3>
                 <p>Map any touchpad (DualSense, DS4, laptop trackpad, phone web touchpad, overlay) to mouse X/Y with per-axis sensitivity and invert, to a virtual analog stick anchored where your finger lands, or to a wedge-thresholded D-pad. Plus the gesture stack: swipes, taps, longpress, pinch, rotate, custom shape templates. Every toggle is per slot.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#9995;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="9" ry="3.4" transform="rotate(58 12 12)" class="e"/><circle cx="12" cy="12" r="1.8" class="e"/></svg></div>
                 <h3>Gyro at Steam Input parity</h3>
                 <p>Local, Player, and World reference frames. Real-world calibration. Cross-device Aim Engage. Tuning saves per pad per slot.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128433;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3.4" width="10" height="17.2" rx="5"/><path d="M12 7v3.2" class="e"/></svg></div>
                 <h3>Mouse as a source</h3>
                 <p>Two Mouse Position sources read where the desktop cursor sits and push a stick, trigger, or button toward it. A per-row Sensitivity dial (0.1 to 5.0) sets the cursor travel for full deflection. Separate from the Mouse Speed sources that read movement. Primary monitor only.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128065;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 3.8 7.2v9.6L12 21.2l8.2-4.4V7.2L12 2.8z"/><path d="M3.9 7.3 12 11.6l8.1-4.3" class="e"/><path d="M12 21.2V11.6" class="e"/></svg></div>
                 <h3>3D and 2D visualization</h3>
                 <p>Native art per profile. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense. Click any button in 3D to record its mapping.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128200;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="3.2" class="e"/><path d="M12 1.6V5"/><path d="M12 19v3.4"/><path d="M1.6 12H5"/><path d="M19 12h3.4"/></svg></div>
                 <h3>Six deadzone shapes</h3>
                 <p>Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis anti-deadzone. Custom sensitivity curves with unlimited draggable points.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128243;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7.5 3.5 12 8 16.5"/><path d="M16 7.5 20.5 12 16 16.5"/><path d="M3.5 12h17" class="e"/></svg></div>
                 <h3>Force feedback both ways</h3>
                 <p>Full rumble passthrough. HID PID 1.0 for wheels and joysticks. Audio bass rumble synthesized from system audio. Constant force vector.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128161;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0-3.8 10.7c.7.6.9 1.1.9 1.9h5.8c0-.8.2-1.3.9-1.9A6 6 0 0 0 12 3z"/><path d="M9.6 18.2h4.8"/><path d="M10.6 20.8h2.8"/><path d="M12 8.6v4.2M10 10.6h4" class="e"/></svg></div>
                 <h3>Adaptive triggers and lightbar</h3>
                 <p>Seven DualSense trigger modes plus a one-click GameCube preset. Fifteen lightbar modes including audio-pulse, audio-band, Strobe, and Battery.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128293;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5h3.6l2.4 6 3.4-13 2.4 9.4 1.6-2.4h3.6" class="e"/></svg></div>
                 <h3>Impulse triggers</h3>
                 <p>Xbox impulse trigger passthrough on the assigned physical pad. Same data routes to DualSense as Adaptive Trigger Vibration. Audio-bass trigger rumble.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#9889;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5 4.5 13.8H11l-1 7.7 8.5-11.3H12l1-7.7z" class="e"/></svg></div>
                 <h3>Macros with action sequences</h3>
                 <p>Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble. Five fire modes. Cursor actions to recenter the mouse, pin it at a point, or fence it inside a rectangle. Duplicate a macro in place, copy and paste between virtual controllers, or pull every macro from another in one step.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128100;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8.6h18"/><circle cx="5.8" cy="6.3" r="0.55"/><circle cx="8" cy="6.3" r="0.55"/><path d="M8.5 14.4h6l-1.7-1.7" class="e"/><path d="M15.5 16.6h-6l1.7 1.7" class="e"/></svg></div>
                 <h3>Per-app profiles</h3>
                 <p>Watches the foreground window. Switches when a matching app takes focus. Win11-style flyout confirms.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128640;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="14.5" r="2" class="e"/><path d="M8.6 11a5 5 0 0 1 6.8 0"/><path d="M6.1 8.4a8.6 8.6 0 0 1 11.8 0"/></svg></div>
                 <h3>DSU motion server</h3>
                 <p>Gyro and accel on UDP 26760. Cemu, Dolphin, Yuzu, Ryujinx all read it. Plug-and-play for any emulator that speaks Cemuhook.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127925;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.6l10-2v11.2"/><circle cx="6.4" cy="18" r="2.5" class="e"/><circle cx="16.4" cy="14.8" r="2.5" class="e"/></svg></div>
                 <h3>MIDI virtual output</h3>
                 <p>Channel 1-16. CC for axes, Note On/Off for buttons. Real Windows MIDI Services endpoint. No loopMIDI bridge.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128225;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.7" r="7.4"/><path d="M12 13.7V9.2" class="e"/><path d="M9.6 2.6h4.8"/><path d="M12 2.6v2.6"/><path d="M18.7 6.9l1.3-1.3"/></svg></div>
                 <h3>1000 Hz polling</h3>
                 <p>Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#128683;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18" class="e"/><path d="M10.6 6.2A9.6 9.6 0 0 1 12 6c5.5 0 9 6 9 6a15 15 0 0 1-2.9 3.4"/><path d="M6.6 7.7A15 15 0 0 0 3 12s3.5 6 9 6a9 9 0 0 0 3.4-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></div>
                 <h3>Hide physical controllers</h3>
                 <p>HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127918;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8.2h8a5 5 0 0 1 4.9 6c-.5 2.6-3.4 3.2-4.8 1.6L14.2 14H9.8l-1.9 1.8c-1.4 1.6-4.3 1-4.8-1.6a5 5 0 0 1 4.9-6z"/><path d="M7 11.4v2.6M5.7 12.7h2.6" class="e"/><circle cx="15.8" cy="11.8" r="0.9" class="e"/><circle cx="17.4" cy="13.8" r="0.9" class="e"/></svg></div>
                 <h3>Wii controllers</h3>
                 <p>In-app Bluetooth pairing. A Wii controller's PIN is raw bytes set by the sync button, not text you can type into the Windows prompt. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies. The IR camera drives an on-screen pointer, and a Balance Board reports weight and lean.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">&#127991;</div>
+                <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.7 12.6 12.3 4h5.6a2 2 0 0 1 2 2v5.6l-8.6 8.6a2 2 0 0 1-2.8 0l-4.8-4.8a2 2 0 0 1 0-2.8z"/><circle cx="16.4" cy="7.6" r="1.3" class="e"/></svg></div>
                 <h3>NFC tag triggers</h3>
                 <p>Read NFC tags through a PC/SC contactless reader and fire a macro on a tap. Register and name each tag from the Devices page. Every tag is its own trigger, next to an Any NFC Tag trigger. Media keys map too: a keyboard's media row appears as its own device with named button chips, and wireless pads show a battery charge indicator with an optional idle-disconnect timer.</p>
             </div>
