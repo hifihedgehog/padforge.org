@@ -76,6 +76,7 @@ nav:
   - Guides:
       - guides/index.md
       - Import a Steam config: guides/steam-workshop-import.md
+      - Start from a starter profile: guides/starter-profiles.md
       - Phone as a controller: guides/web-controller.md
       - Motion aiming (Gyro): guides/gyro.md
       - Macros: guides/macros.md
