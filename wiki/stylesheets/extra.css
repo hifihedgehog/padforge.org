@@ -20,6 +20,7 @@
   --pf-border: #e3e6ea;
   --pf-kicker: #3a7f92;   /* telemetry cyan, darkened for white ground */
   --pf-steel: #0a0d12;    /* header steel, both schemes */
+  --pf-h1: #14171c;       /* full-strength display ink */
 }
 
 [data-md-color-scheme="slate"] {
@@ -35,6 +36,7 @@
   --pf-panel: #12171f;
   --pf-border: #212a36;
   --pf-kicker: #6fc3d6;
+  --pf-h1: #f5f7fb;
 }
 
 /* ---- Header and tabs: steel in both schemes, like the landing nav ---- */
@@ -81,7 +83,7 @@
 
 .md-typeset h1 {
   font-weight: 800;
-  color: var(--md-default-fg-color);
+  color: var(--pf-h1);
 }
 
 .md-typeset h2 { font-weight: 700; }

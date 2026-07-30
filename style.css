@@ -224,7 +224,7 @@ a:hover { color: var(--text-hi); }
 .hero-content { position: relative; }
 
 .hero-title {
-    font-size: clamp(3rem, 9.5vw, 6.6rem);
+    font-size: clamp(2.25rem, 11.2vw, 6.6rem);
     font-weight: 900;
     letter-spacing: -0.03em;
     line-height: 0.98;
@@ -429,6 +429,12 @@ a:hover { color: var(--text-hi); }
     box-shadow: 0 24px 70px -24px rgba(0, 0, 0, 0.75);
 }
 
+/* Alternate chapters mirror the hero: shot left, copy right. */
+@media (min-width: 901px) {
+    .chapter-alt .chapter-hero { grid-template-columns: 7fr minmax(280px, 5fr); }
+    .chapter-alt .chapter-hero-shot { order: -1; }
+}
+
 /* The rail: horizontal scroll-snap card row. The page never scrolls
    sideways; the rail does. */
 .rail {
@@ -452,7 +458,9 @@ a:hover { color: var(--text-hi); }
 .rail::-webkit-scrollbar-thumb:hover { background: var(--ember-deep); }
 
 .rail-card {
-    flex: 0 0 clamp(280px, 34vw, 400px);
+    /* Three cards fit the content width whole; a fourth clips as the
+       scroll affordance. */
+    flex: 0 0 clamp(280px, 30vw, 348px);
     scroll-snap-align: start;
     background: var(--panel);
     border: 1px solid var(--border-soft);
