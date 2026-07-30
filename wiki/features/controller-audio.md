@@ -21,7 +21,7 @@ Switch 2 controllers are not included: no known method plays an audible tone on 
 Inside the tab, the mirror controls appear for any device with a reachable speaker or actuator:
 
 - **DualSense and DualSense Edge:** USB or Bluetooth.
-- **DualShock 4:** Bluetooth, or the Sony USB wireless adaptor. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab shows a "no speaker on this device" note.
+- **DualShock 4:** Bluetooth, or the Sony USB wireless adaptor. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
 - **Wii Remote:** mirrors into its built-in speaker at the same low rate as its macro sounds.
 - **Haptic-tone pads:** mirror the captured audio as a tracking haptic tone, the same reduction a macro sound gets. Expect a pitch-following buzz, not the source audio.
 
@@ -31,13 +31,13 @@ Macro sounds do not depend on the mirror toggle. They play on whatever the slot'
 
 ## Mirror a Windows audio output
 
-Turn on **Mirror system audio** and pick a source. PadForge captures that Windows output with a loopback and streams it to the pad speaker.
+Turn on **Mirror system audio to the controller speaker** and pick a source. PadForge captures that Windows output with a loopback and streams it to the pad speaker.
 
 | Control | What it does |
 |---|---|
 | Mirror system audio | Per-device toggle. Off by default. |
 | Mirror source | "System default" or any active output device on the PC. |
-| Master volume | 0–100. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. |
+| Master volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. |
 
 Picking "System default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. Pick a specific output instead when you want one particular device's sound on the pad.
 
@@ -133,6 +133,7 @@ Every setting row has its own reset button that returns just that setting to its
 ## Related pages
 
 - [Macros](../guides/macros.md): the Play Sound action and sound packages that feed the speaker.
+- [Force Feedback](force-feedback.md): the rumble the slot receives from games. The slot's **Bass Shakers** tab runs the opposite direction of this page: it routes that rumble to an audio output as low-frequency tones for a bass shaker or subwoofer.
 - [Lighting](lighting.md): the other DualSense and DualShock 4 output feature.
 - [Adaptive Triggers](adaptive-triggers.md): trigger feedback on the same pads.
 - [Controller Slots](controller-slots.md): assign a DualSense or DualShock 4 to a slot.
@@ -141,4 +142,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

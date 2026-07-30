@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -1911,6 +1941,17 @@
     <span class="md-ellipsis">
       
         Speaker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#left-joy-con-motion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Left Joy-Con motion
       
     </span>
   </a>
@@ -2863,6 +2904,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#left-joy-con-motion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Left Joy-Con motion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#joy-con-ir-brightness" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3018,6 +3070,44 @@
 <h2 id="speaker">Speaker<a class="headerlink" href="#speaker" title="Permanent link">&para;</a></h2>
 <p>A Wii Remote can play macro sounds through its built-in speaker. The speaker is low-rate audio, so it handles beeps and short cues rather than music. It appears on the <a href="../../features/controller-audio/">Audio</a> tab like other speaker-capable controllers.</p>
 <hr />
+<h2 id="left-joy-con-motion">Left Joy-Con motion<a class="headerlink" href="#left-joy-con-motion" title="Permanent link">&para;</a></h2>
+<p>A combined Joy-Con pair carries a full motion sensor in each half. The primary gyro and motion sources read the right Joy-Con. Since 4.1.0, the left half's sensors appear as their own sources in the mapping picker:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Reads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Left Joy-Con Gyro Pitch</strong>, <strong>Left Joy-Con Gyro Yaw</strong>, <strong>Left Joy-Con Gyro Roll</strong></td>
+<td>The left half's rotation rate, one axis per row. Bind them to mouse or stick axes like the primary gyro axes.</td>
+</tr>
+<tr>
+<td><strong>Left Joy-Con Motion Gyro</strong></td>
+<td>The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's.</td>
+</tr>
+<tr>
+<td><strong>Left Joy-Con Accelerometer</strong></td>
+<td>The left half's full accelerometer stream to the virtual controller's motion accelerometer output.</td>
+</tr>
+<tr>
+<td><strong>Left Joy-Con Lean</strong></td>
+<td>The left half's tilt, for motion steering or any axis row.</td>
+</tr>
+</tbody>
+</table>
+<p>The two hands read independently, so the left half can drive the cursor while the right half's gyro aims a stick.</p>
+<p><strong>Left Joy-Con Accelerometer</strong> and <strong>Left Joy-Con Lean</strong> are the same two sources that show as <strong>Nunchuk Accelerometer</strong> and <strong>Nunchuk Lean</strong> on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.</p>
+<ul>
+<li>Joy-Con 2 pairs expose the same left-side sources.</li>
+<li>The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the <a href="../../guides/gyro/">Gyro</a> tab all apply, and those device-level sliders tune both halves at once. The per-row <strong>Sensitivity</strong> dial is the independent knob.</li>
+<li>Gyro calibration samples both halves in one run and stores a separate bias for each, so hold both halves still.</li>
+<li>The <a href="../../features/devices/">Devices</a> page shows the left half's readings as <strong>Aux Gyroscope</strong> and <strong>Aux Accelerometer</strong> telemetry blocks.</li>
+<li>The left-side sources work over <a href="../../guides/remote-link/">Remote Link</a>, like the Nunchuk pair.</li>
+</ul>
+<hr />
 <h2 id="joy-con-ir-brightness">Joy-Con IR brightness<a class="headerlink" href="#joy-con-ir-brightness" title="Permanent link">&para;</a></h2>
 <p>The right Joy-Con's IR camera reports a single brightness value, exposed as a source called <strong>IR Brightness</strong>. Cover the sensor and it reads bright. Uncover it and it reads dark. Only the standalone right Joy-Con has it. The left Joy-Con and the combined pair do not.</p>
 <p>Map it three ways:</p>
@@ -3052,7 +3142,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0.</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

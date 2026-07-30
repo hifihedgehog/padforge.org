@@ -8,6 +8,8 @@
 
 > **v4.0.0 additions.** The per-(slot, device) config bag was renamed from `PlayStationSlotConfigData` to `DeviceSlotConfigData`, and its on-disk element names changed to `<DeviceSlotConfigs><Config/>` (AppSettings) and `<ProfileDeviceSlotConfigs><Config/>` (Profiles). The old `PlayStationConfigs` / `ProfilePlayStationConfigs` spellings are read-only legacy aliases migrated forward on load (`ShouldSerialize` false), so one load-save cycle rewrites an old file. `AppSettingsData` and `ProfileData` gain the Keyboard+Mouse SOCD / Snap-Tap config (`KbmConfigs` of `KbmSlotConfigData`, #205), `SoundPackages` (#83), `SlotSoundVolumes`, the default-profile custom touchpad gestures, and `FirstRunTourCompleted` (which retires the `PadForge.firstrun` marker file). `PadSetting` gains the stick boundary-calibration pair (#174), the 12-field trigger rumble routing block (#102), and the Wii pointer-mode fields (#203), all in the checksum and clone list. `ShiftActivator` gains `AutoCancelMs` (Toggle-mode inactivity auto-cancel, #206). `MappingRow` gains the stick-trim trio (#155) and the `StickTrim` combine. `ActionData` grows the sound, rumble-detail, cursor, run-program, text-block, pointer-mode, and Guide-LED action fields.
 
+> **v4.1.0 additions.** The raw-surface key grammar renamed from `Extended*` to `Raw*` (`RawAxis0`, `RawBtn0`, `RawPov0Up`). On-disk element names stay pinned and legacy keys normalize on load (see [Raw-Surface Custom Mappings](#raw-surface-custom-mappings)). `VirtualControllerType` gains `Nintendo` (5, the virtual Switch Pro, #215), with `NintendoSlotOrder`, `MaxNintendoSlots`, and its own positional raw auto-map. `MappingSet` gains the Base-layer appearance trio, `<RumbleAudio>` (bass shakers, #236), button SOCD (`SocdMode` / `SocdPairs`), the `Authoritative` flag, and the Workshop provenance stamps, all gated by `HasAuthoredContent`. `MacroData` gains seven activation modes (`MacroTriggerMode` 5–11, #253) plus `TriggerHoldMs`, `TriggerDoublePressMs`, the shift-layer `LayerMask` gate (#253/#254), `PairId`, and `ReleaseLingerMs`. `MacroActionType` runs through `AxisScale` (51, #251). `MappingSource` and `ShiftActivator` grow the per-source shaping / gating fields and the release / double-press activator fields listed in their tables. `DeviceSlotConfigData` gains the Guide Button LED pair and the synthetic touchpad pressure pair. `TouchpadGestureSettings` gains the Pointer Response block (libinput port) and the mouse-feel fields.
+
 ---
 
 This page is a developer reference for PadForge's settings persistence.
@@ -274,7 +276,7 @@ public class SettingsFileData
       <AxisToButtonThreshold>50</AxisToButtonThreshold>
       <!-- Dictionary-based mappings (only present when non-empty) -->
       <ExtendedMappings>
-        <Map Key="ExtendedAxis0" Value="Axis 0" />
+        <Map Key="RawAxis0" Value="Axis 0" />
         <Map Key="ExtendedBtn0" Value="Button 0" />
       </ExtendedMappings>
       <MidiMappings>
@@ -305,7 +307,7 @@ public class SettingsFileData
     <EnableAutoProfileSwitching>false</EnableAutoProfileSwitching>
     <ActiveProfileId />
     <SlotControllerTypes>
-      <Type>0</Type>    <!-- VirtualControllerType enum: 0=Microsoft, 1=PlayStation (XmlEnum="Sony" on disk), 2=Extended, 3=Midi, 4=KeyboardMouse -->
+      <Type>0</Type>    <!-- VirtualControllerType enum: 0=Microsoft, 1=PlayStation (XmlEnum="Sony" on disk), 2=Extended, 3=Midi, 4=KeyboardMouse, 5=Nintendo -->
       <Type>1</Type>
     </SlotControllerTypes>
     <SlotCreated>
@@ -894,22 +896,24 @@ All `[XmlElement]`, all `string`, all in `ComputeChecksum()` and `CopyableProper
 
 ### Dictionary-Based Mapping Systems
 
-Extended, MIDI, and KB+M use dictionary-based storage for arbitrary key counts. All three share `ExtendedMappingEntry` as the serialization type and follow the same pattern: in-memory `Dictionary<string, string>` backed by a serializable `ExtendedMappingEntry[]`. Dictionary is lazily populated on first access and flushed to the array before serialization.
+Extended, MIDI, and KB+M use dictionary-based storage for arbitrary key counts. All three share `RawMappingEntry` as the serialization type and follow the same pattern: in-memory `Dictionary<string, string>` backed by a serializable `RawMappingEntry[]`. Dictionary is lazily populated on first access and flushed to the array before serialization.
 
-#### Extended Custom Mappings
+#### Raw-Surface Custom Mappings
 
-Extended (HIDMaestro custom-HID) slot with arbitrary axis/button/POV counts. Keys:
-- `ExtendedAxis0`, `ExtendedAxis0Neg`. Axis mappings (positive and negative directions)
-- `ExtendedBtn0`, `ExtendedBtn5`. Button mappings
-- `ExtendedPov0Up`, `ExtendedPov0Down`, `ExtendedPov0Left`, `ExtendedPov0Right`. POV directions
-- `ExtendedStick{N}DzX`, `ExtendedStick{N}DzY`, `ExtendedStick{N}AdzX`, etc.. Per-stick deadzone/calibration settings
+Extended (HIDMaestro custom-HID) and Nintendo slots with arbitrary axis/button/POV counts. The raw-surface grammar renamed from `Extended*` to `Raw*` in 4.1.0 (commit 4fed2c2e). Keys:
+- `RawAxis0`, `RawAxis0Neg`. Axis mappings (positive and negative directions)
+- `RawBtn0`, `RawBtn5`. Button mappings
+- `RawPov0Up`, `RawPov0Down`, `RawPov0Left`, `RawPov0Right`. POV directions
+- `RawStick{N}DzX`, `RawStick{N}DzY`, `RawStick{N}AdzX`, etc.. Per-stick deadzone/calibration settings
+
+Legacy `Extended*` tokens in older settings files are rewritten at load by `MappingSetMigrator.NormalizeRawToken` (idempotent, applied to row targets and dictionary keys alike), so pre-4.1.0 files keep loading. The XML ELEMENT names stay pinned (`<ExtendedMappings><Map>`), so the on-disk container shape never changed.
 
 The same dictionary carries the Flick Stick card's per-device tuning (#225, v4.1), regardless of slot type. Eight keys per device: `FlickStickDots` (default 14400), `FlickStickTime` (0.1), `FlickStickThreshold` (0.9), `FlickStickSnapMode` (`"None"`), `FlickStickSnapStrength` (1.0), `FlickStickForwardDz` (0), `FlickStickSmoothing` (-1), `FlickStickOnEngage` (`"1"` / `"0"`, default off). `SaveFlickStickCard` writes them (invariant-culture numbers, snap mode as a plain string) and `LoadFlickStickCard` reads them (both in `PadForge.App/Services/SettingsService.cs`). The save path also re-stamps the stored values onto every `"Flick Stick ..."` source's `ParamFlick*` fields via `ApplyFlickStickParamsToRow`. An absent `FlickStickDots` means the card was never stored for that device. The load path then seeds the card from the slot's flick source, so a Workshop import's translator-carried tuning survives until the user tunes the card. The keys ride the normal sorted Extended fold in the checksum (item 18 above) and survive `ClearMappingDescriptors()` through `IsPerDeviceTuningKey`'s `StartsWith("FlickStick")` clause, the same per-device-tuning carve-out the `MotionSteer*` and steering keys use.
 
 ```csharp
 [XmlArray("ExtendedMappings")]
 [XmlArrayItem("Map")]
-public ExtendedMappingEntry[] ExtendedMappingEntries { get; set; }
+public RawMappingEntry[] RawMappingEntries { get; set; }
 ```
 
 #### MIDI Mappings
@@ -921,7 +925,7 @@ MIDI output. Keys:
 ```csharp
 [XmlArray("MidiMappings")]
 [XmlArrayItem("Map")]
-public ExtendedMappingEntry[] MidiMappingEntries { get; set; }
+public RawMappingEntry[] MidiMappingEntries { get; set; }
 ```
 
 #### KBM (Keyboard+Mouse) Mappings
@@ -935,7 +939,7 @@ Keyboard+Mouse output. Keys:
 ```csharp
 [XmlArray("KbmMappings")]
 [XmlArrayItem("Map")]
-public ExtendedMappingEntry[] KbmMappingEntries { get; set; }
+public RawMappingEntry[] KbmMappingEntries { get; set; }
 ```
 
 #### Mapping Deadzones
@@ -958,7 +962,7 @@ Values are deadzone percentages 0–100. Entries at the default value (50) are *
 ```csharp
 [XmlArray("MappingDeadZones")]
 [XmlArrayItem("Map")]
-public ExtendedMappingEntry[] MappingDeadZoneEntries { get; set; }
+public RawMappingEntry[] MappingDeadZoneEntries { get; set; }
 ```
 
 | Method | Description |
@@ -976,7 +980,7 @@ Per-mapping "fire on either side of center" flag, parallel to `MappingDeadZones`
 ```csharp
 [XmlArray("MappingBidirectional")]
 [XmlArrayItem("Map")]
-public ExtendedMappingEntry[] MappingBidirectionalEntries { get; set; }
+public RawMappingEntry[] MappingBidirectionalEntries { get; set; }
 ```
 
 | Method | Description |
@@ -990,7 +994,7 @@ Lazily initialized via `EnsureMappingBidirectionalDict()` (double-checked lockin
 #### Shared Entry Type
 
 ```csharp
-public class ExtendedMappingEntry
+public class RawMappingEntry
 {
     [XmlAttribute] public string Key { get; set; } = "";
     [XmlAttribute] public string Value { get; set; } = "";
@@ -1094,7 +1098,7 @@ The `Gyro tuning` block carries a code comment flagging it as the historical clo
 
 **Excluded:**
 - `PadSettingChecksum`. Recomputed after copy.
-- `ExtendedMappingEntries`, `MidiMappingEntries`, `KbmMappingEntries`, `MappingDeadZoneEntries`, `MappingBidirectionalEntries`. Deep-copied separately in `CopyFrom()` and serialized separately in `ToJson()` / `FromJson()`.
+- `RawMappingEntries`, `MidiMappingEntries`, `KbmMappingEntries`, `MappingDeadZoneEntries`, `MappingBidirectionalEntries`. Deep-copied separately in `CopyFrom()` and serialized separately in `ToJson()` / `FromJson()`.
 - `TouchpadSettings`. The v3.3 per-(device, padIdx) typed sub-tree. Deep-copied separately in `CopyFrom()`, serialized as `__TouchpadSettings` in `ToJson()` / `FromJson()`.
 - `MouseGestureSettings`. The v4 per-device typed sub-tree (#200). Deep-copied separately in `CopyFrom()`, serialized as `__MouseGestureSettings`.
 - `SlotMultiSourceRows`, `DeviceScopedMultiSourceRows`, `SlotPerDeviceSettingsJson`, `SlotDeviceConfigsJson`, `SlotExtendedConfigJson`, `SlotMidiConfigJson`, `SlotKbmConfigJson`, `SlotShiftActivatorsJson`, `SlotMenusJson` (v4.1, #9: the slot's `MappingSet.Menus`, so Copy / Paste carries the Menus-tab state like the shift authoring). Clipboard-only payloads populated by the Copy path on the source side. `[XmlIgnore]` + `[JsonIgnore]` so they never reach the on-disk XML.
@@ -1134,6 +1138,10 @@ Per-virtual-controller mapping store. One `MappingSet` per slot, persisted under
 
 | Element | Type | Description |
 |---|---|---|
+| `BaseLayerName` / `BaseColor` / `BaseIcon` | attributes | (4.1.0) Base layer display name, color, and emoji icon, the Base half of the shift-layer appearance model. |
+| `<RumbleAudio>` | `RumbleAudioConfig` | (4.1.0, #236) Bass Shakers: `Enabled`, `EndpointId`, `MasterGainPercent` (50), `ChannelMode`, and four `<Voice>` entries (enable, frequency, gain per feedback channel). |
+| `SocdMode` / `<SocdPairs>` | attribute + list | (4.1.0, #245) Controller-button SOCD cleaning: resolution mode plus the opposing button pairs, applied to the combined output right before submit. |
+| `Authoritative` | attribute | (4.1.0) Marks a mapping set the grid writer owns; guards the domain-swap window. |
 | `<Row>` | `MappingRow[]` | Every row across every layer, tagged by `MappingRow.LayerMask`. Base rows tag `Base`; shift-layer rows tag the activator's mask. A single target can have multiple rows when more than one layer is configured. |
 | `<ShiftActivator>` | `ShiftActivator[]` | One entry per non-Base shift layer. Names the layer (`LayerMask`), the input that engages it, the mode, color, emoji, and debounce. Empty list = Base-only slot. |
 | `<Menu>` | `List<MenuDefinitionEntry>` | (v4.1, #9) Radial / touch menus authored for or imported onto this slot (`PadForge.Engine/Menus/MenuDefinitionEntry.cs`). Every scalar field serializes as an `[XmlAttribute]`: per-entry `DeviceGuid` (`""` = any device on the slot, the Workshop-import form), `MenuId`, `Kind` (`Radial` / `Grid`), `HostDescriptor` (an abstract stick or `"Touchpad N"`), `HostHalf`, `LayerMask`, `FireType`, `CellCount`, `HasCenter`, `ShowLabels`, the overlay geometry (`PosXPercent` / `PosYPercent` / `ScalePercent` / `OpacityPercent`), `EngageDeadzonePercent`, `Enabled`. Cells serialize as `<Item>` child elements (`MenuItemDefinition`: `Index`, `Label`, and the optional direct bindings `VirtualKey` / `XboxButtons`, all attributes). Items without a direct binding deliver through rows / macros keyed on the fired descriptor `"Menu {MenuId} Item {k}"`. Empty list = no menus. |
@@ -1269,7 +1277,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `SlotCreated` | `bool[]` | `[XmlArray][XmlArrayItem("Created")]` | `null` | Which slots are created |
 | `SlotEnabled` | `bool[]` | `[XmlArray][XmlArrayItem("Enabled")]` | `null` | Which slots are enabled |
 | `XboxSlotOrder` | `int[]` | `[XmlArray("MicrosoftSlotOrder")][XmlArrayItem("PadIndex")]` | `null` | (v3.1) Visual order for Xbox-family slots. XML name kept as `MicrosoftSlotOrder` for v2 back-compat. |
-| `PlayStationSlotOrder` / `ExtendedSlotOrder` / `KeyboardMouseSlotOrder` / `MidiSlotOrder` | `int[]` | `[XmlArray][XmlArrayItem("PadIndex")]` | `null` | (v3.1) Per-group visual order. |
+| `PlayStationSlotOrder` / `NintendoSlotOrder` / `ExtendedSlotOrder` / `KeyboardMouseSlotOrder` / `MidiSlotOrder` | `int[]` | `[XmlArray][XmlArrayItem("PadIndex")]` | `null` | (v3.1; Nintendo added in 4.1.0) Per-group visual order. |
 | `EnableDsuMotionServer` | `bool` | `[XmlElement]` | `false` | DSU/Cemuhook motion server |
 | `DsuMotionServerPort` | `int` | `[XmlElement]` | `26760` | DSU server port |
 | `EnableWebController` | `bool` | `[XmlElement]` | `false` | Embedded web controller server |
@@ -1484,7 +1492,10 @@ public class MacroData
 | `TriggerAxisThreshold` | `int` | Axis threshold (1–100%, default 50). Normalized value must exceed to match. |
 | `TriggerPovs` | `string[]` | POV directions as `"povIndex:centidegrees"` (e.g., "0:0" = POV 0 Up). |
 | `TriggerSource` | `MacroTriggerSource` | `InputDevice` or `OutputController` |
-| `TriggerMode` | `MacroTriggerMode` | `OnPress`, `OnRelease`, `WhileHeld`, `Always`, or `CustomExpression` (v3.2) |
+| `TriggerMode` | `MacroTriggerMode` | `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8, deferred single), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253). `ShortPress` and `HoldForMs` share `TriggerHoldMs` to compose tap-vs-hold on one button. |
+| `TriggerHoldMs` | `int` | (#244) Hold threshold for `HoldForMs` / `ShortPress`, reset default 500. |
+| `TriggerDoublePressMs` | `int` | (#244) Multi-press window for `SinglePress` / `DoublePress` / `TriplePress`, reset default 442. |
+| `LayerMask` | `string` | (#253/#254) Per-macro shift-layer scope. Empty = any layer. Stamped at the add funnel; migrator pins legacy macros to Base semantics via Any. |
 | `ConsumeTriggerButtons` | `bool` | Remove trigger buttons from output. Default `true`. |
 | `RepeatMode` | `MacroRepeatMode` | `Once`, `FixedCount`, or `UntilRelease` |
 | `RepeatCount` | `int` | Number of repeats for `FixedCount`. Default `1`. |
@@ -1584,7 +1595,7 @@ public class ActionData
 
 **`MacroActionType`** is **APPEND-ONLY** (`PadForge.App/ViewModels/MacroItem.cs`): the macro clipboard leg writes the enum numerically via `System.Text.Json` defaults, so inserting a member re-meanings every previously copied clipboard payload. The settings XML writes names and is insertion-safe, the clipboard is not. New members go at the end. The full ordered set (index in parentheses):
 
-`ButtonPress` (0), `ButtonRelease` (1), `KeyPress` (2), `KeyRelease` (3), `Delay` (4), `AxisSet` (5), `SystemVolume` (6), `AppVolume` (7), `MouseMove` (8), `MouseButtonPress` (9), `MouseButtonRelease` (10), `MouseScroll` (11), `ToggleTouchpadOverlay` (12, v3.2), `LightbarColor` (13), `LightbarColorClear` (14), `LightbarModeSet` (15), `LightbarModeCycle` (16), `SetGyroEngaged` (17), `Rumble` (18), `RumbleStop` (19), `RumbleTrigger` (20, #102), `RumbleTriggerStop` (21, #102), `PlaySound` (22, #83), `SoundStop` (23, #83), `MouseRecenter` (24, #108), `MouseFixPosition` (25, #109), `MouseLimitRegion` (26, #110), `DisconnectController` (27, #162), `RunProgram` (28), `TextBlock` (29, #201), `PointerModeCycle` (30, #203), `PointerModeSet` (31, #203), `GuideLedBrightness` (32, #209).
+`ButtonPress` (0), `ButtonRelease` (1), `KeyPress` (2), `KeyRelease` (3), `Delay` (4), `AxisSet` (5), `SystemVolume` (6), `AppVolume` (7), `MouseMove` (8), `MouseButtonPress` (9), `MouseButtonRelease` (10), `MouseScroll` (11), `ToggleTouchpadOverlay` (12, v3.2), `LightbarColor` (13), `LightbarColorClear` (14), `LightbarModeSet` (15), `LightbarModeCycle` (16), `SetGyroEngaged` (17), `Rumble` (18), `RumbleStop` (19), `RumbleTrigger` (20, #102), `RumbleTriggerStop` (21, #102), `PlaySound` (22, #83), `SoundStop` (23, #83), `MouseRecenter` (24, #108), `MouseFixPosition` (25, #109), `MouseLimitRegion` (26, #110), `DisconnectController` (27, #162), `RunProgram` (28), `TextBlock` (29, #201), `PointerModeCycle` (30, #203), `PointerModeSet` (31, #203), `GuideLedBrightness` (32, #209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40, translator v15), `MouseNudge` (41, translator v16), `CycleTapList` (42, translator v16), `ToggleMouseButton` (43, translator v18), `ToggleVcAxis` (44, translator v18), `RepeatVcAxisWhileHeld` (45, translator v18), `ToggleWheel` (46, translator v18), `AxisAdd` (47, #237 relative deflection), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251).
 
 The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (`RumbleHoldMode`, `RumbleStrengthLeft`, `RumbleStrengthRight`, `RumbleHoldMs`, `RumbleFadeMs`) are `[XmlElement]` on `ActionData` and round-trip through disk. Both macro converters (`BuildActionData` save, `BuildMacroAction` load) carry them, and the runtime applies them via `MacroRumbleOverride.Fire*`.
 
@@ -1955,6 +1966,7 @@ lock (SettingsManager.UserDevices.SyncRoot)
 | `MaxPlayStationSlots` | `MaxPads` (16) | Maximum PlayStation category virtual controllers |
 | `MaxExtendedSlots` | 16 | Maximum Extended virtual controllers |
 | `MaxMidiSlots` | `MaxPads` (16) | Maximum MIDI virtual controllers |
+| `MaxNintendoSlots` | `MaxPads` (16) | (4.1.0, #246) Maximum Nintendo virtual controllers |
 | `MaxKeyboardMouseSlots` | `MaxPads` (16) | Maximum Keyboard+Mouse virtual controllers |
 
 All types share a global 16-slot limit. "Add Controller" disappears when all 16 are in use.
@@ -2088,7 +2100,7 @@ Timer fires -> Save() -> SaveToFile(filePath)
     |
     v  Step 2: Flush dictionaries and recompute checksums
     |  For each UserSetting's PadSetting:
-    |    - FlushExtendedMappings() -- dict -> ExtendedMappingEntries[]
+    |    - FlushRawMappings() -- dict -> RawMappingEntries[]
     |    - FlushMidiMappings() -- dict -> MidiMappingEntries[]
     |    - FlushKbmMappings() -- dict -> KbmMappingEntries[]
     |    - UpdateChecksum() -- recompute MD5 from all properties

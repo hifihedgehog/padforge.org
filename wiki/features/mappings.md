@@ -1,6 +1,6 @@
 # Button and Axis Mappings
 
-*The Mappings tab is per virtual controller. One table per slot, no matter how many physical devices are assigned. Cross-device input combines naturally inside a single row.*
+*One mapping table per virtual controller: every physical device assigned to the slot feeds the same grid, so inputs from different devices combine inside a single row.*
 
 ![Button and axis mapping grid with source, value, and record columns](../images/pad-mappings.png)
 
@@ -13,15 +13,19 @@
 | **Output** | The virtual output this row controls ("A", "Left Stick X", "D-Pad Up"). What the game sees. |
 | **Source** | One or more physical inputs that drive this output. Pick by hand, use Record, or click **+ Add source** to add another. Sources get letter tags **a**, **b**, **c**, … in the order you add them. |
 | **Value** | Live readout of the row's combined output. Updates in real time so you can verify on the spot. |
-| **Combine** | How multiple sources merge into the row's output. Hidden until a row has two or more sources. See [Combine modes](#combine-modes). |
 | **Record** | Press a button or move an axis on any assigned physical controller. PadForge fills in the source automatically. |
-| **Clear** | Removes every source on the row, resets per-source options to defaults, and blanks the dropdowns. |
-| **Options** | Per-source toggles: **Kind**, **Inv** (Invert), **Half** (Half-axis), **Bidirectional**, **Deadzone**. Axes-only options stay hidden for button-only sources. |
-| **Axis-to-Button Deadzone** | Slider (0-100%) for how far an axis must move before a discrete output fires. Per source. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
+| **Clear** | Resets the row's primary source: descriptor, **Invert** / **Half** / **Bidirectional**, deadzone back to 50%, the device tag, and **Primary Mode** back to Direct. Extra sources keep their own remove buttons, and the combine mode and custom formula stay until you remove them or run **Clear All**. |
+| **Options** | Per-source controls: **Invert**, **Half**, **Bidirectional**, plus **Flip Output**, **Do not inherit**, **Acceleration**, and **Sensitivity** where they apply. Toggles that cannot act on the current source gray out. See [Per-source options](#per-source-options). |
+| **Axis-to-Button Deadzone** | Slider (0–100%) for how far an axis must move before a discrete output fires. Per source. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
+
+Two more controls live in the strip beneath each row rather than in a column:
+
+- **Primary Mode** picks how the primary source is read (Direct, Incremental, Invert On Hold, Ramp). See [Source kinds](#source-kinds).
+- **Combine** appears once a row has two or more sources. See [Combine modes](#combine-modes).
 
 > **Tip:** The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets.
 
-Rows group by category: **Buttons** (face, shoulder, stick clicks, system), **Left Stick / Right Stick** (X and Y axes), **Triggers** (left and right), **D-Pad** (four directions).
+Rows group by category: **Buttons** (face, shoulder, stick clicks, system), **Left Stick / Right Stick** (X and Y axes), **Triggers** (left and right), **D-Pad** (four directions). Nintendo and Extended slots arrange their own row sets. See [Nintendo virtual controllers](#nintendo-virtual-controllers) and [Custom DirectInput mappings](#custom-directinput-mappings).
 
 ---
 
@@ -105,18 +109,23 @@ A row can drive its output from any number of physical inputs, across any combin
 
 Click **+ Add source** on any existing source to add another. The new source gets the next letter tag (**a** is the first, **b** the second, **c** the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.
 
+Each extra source renders as its own chip with the same controls the primary carries: a mode dropdown, the input picker, Record and Clear buttons, the option checkboxes, the sliders that apply to it, and a remove button that deletes the source outright.
+
 ### Per-source options
 
 Each source carries its own settings:
 
 | Option | What it does |
 |--------|--------------|
-| **Kind** | How the source is read. Direct, Incremental, Invert On Hold, or Ramp. See [Source kinds](#source-kinds). |
-| **Inv** | Flips the source's value sign before the combine step. |
+| **Mode** | How the source is read. Direct, Incremental, Invert On Hold, or Ramp. The primary source's picker is the **Primary Mode** dropdown in the row's detail strip. Each extra source has its own dropdown at the front of its chip. See [Source kinds](#source-kinds). |
+| **Invert** | Flips the source's value sign before the combine step. On a half-axis read of a centered axis it instead selects which half is read. See **Flip Output**. |
 | **Half** | Treats a bipolar axis source as half-range (one side of center only). |
 | **Bidirectional** | Half-axis only. Fires the axis-to-button gate when the input moves past the deadzone in either direction from center. Renamed from "Either" in 3.2. |
+| **Flip Output** | Appears when **Half** is on for a centered axis, where the **Invert** box is consumed as the half selector. Reverses the source's result, so a row can select a half and still invert the output. |
 | **Deadzone** | Per-source axis-to-button activation threshold. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
-| **Sensitivity** | A per-source multiplier with a reset button, 0.1–5.0, default 1.0. Above 1.0 = more sensitive, below 1.0 = less. On a plain axis or slider source, including the [Gamepad sources](#gamepad-sources), it scales the read directly: values above 1.0 reach full deflection with less travel, and the same scaling applies when the axis feeds a button through the Axis-to-Button Deadzone. On a gyro source, 1.0 is the engine default (500°/s reaches full deflection). On a Mouse Position source, 1.0 reaches full stick deflection at 10% of screen width from center. On IR Pointer and Mouse Motion sources, it scales that family's read. Each source shows exactly one Sensitivity slider. |
+| **Acceleration** | Slider 0–5 with a reset button, shown on continuous sources (the same family that can take **Half**). Fast motion is amplified: the value scales by 1 + acceleration × \|value\|, then re-clamps to range. 0 (the default) keeps the response flat. [Steam Workshop imports](../guides/steam-workshop-import.md) land Steam's mouse acceleration here on stick-hosted rows. |
+| **Sensitivity** | A per-source multiplier with a reset button, shown on four source families only: Gyro axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view), and Mouse Motion (0.1–5.0). Plain axis, slider, and Gamepad stick or trigger sources have no grid slider. Shape those on the [Sticks tab](stick-deadzones.md): gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier. |
+| **Do not inherit** | Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See [Shift layers](#shift-layers). |
 
 ### Direction badges
 
@@ -125,13 +134,15 @@ When a button, a D-pad direction, or a touchpad click feeds a stick axis, the ro
 - **→ +** the press pushes the stick toward the positive side.
 - **← −** the press pushes the stick toward the negative side.
 
-Toggling **Inv** on the source flips the badge, so it always matches what the press does at runtime. Axis and slider sources carry their own sign and get no badge. Trigger rows get no badge either.
+Toggling **Invert** on the source flips the badge, so it always matches what the press does at runtime. Axis and slider sources carry their own sign and get no badge. Trigger rows get no badge either.
+
+On a stick-axis row where only the positive direction is mapped from a button-class source, an italic **+ opposite direction** link appears in the Source cell. One click adds a mirrored second source with **Invert** on, covering the negative direction. The link disappears once the row has a second source.
 
 ---
 
 ## Combine modes
 
-The Combine picker is hidden on rows with one source (there is nothing to combine). It appears as soon as you add a second source.
+The **Combine** picker appears in the row's detail strip as soon as a row has two or more sources. With one source there is nothing to combine.
 
 | Mode | What it does |
 |------|--------------|
@@ -164,7 +175,7 @@ Each setting has its own reset button.
 
 ## Custom formula editor
 
-Pick **Custom** in the Combine column to open the formula editor under the row.
+Pick **Custom** in the Combine picker to open the formula editor under the row.
 
 ### Variables
 
@@ -172,19 +183,19 @@ Pick **Custom** in the Combine column to open the formula editor under the row.
 |------|-----------|
 | **a**, **b**, **c**, … | The row's sources in order. **a** is the first source, **b** the second, and so on. |
 | **s[0]**, **s[1]**, … | Index-based alias for the same sources. **s[0]** is **a**, **s[1]** is **b**, … |
+| **aD**, **bD**, **cD**, **dD** | Touchpad rows only. 1 while the paired finger is touching, 0 when lifted. Lets a formula gate out a stale finger position. |
 
 ### Operator palette
 
-The operator palette sits next to the formula box. Drag an operator into the formula or click **Insert** to drop it at the cursor.
+The operator palette is a row of chips beneath the formula box. Click a chip to insert it at the cursor. Variable chips show up to the row's source count.
 
-| Group | Operators |
-|-------|-----------|
-| Arithmetic | `+`, `−`, `×`, `÷`, `(`, `)`, `-a` |
+| Group | Chips |
+|-------|-------|
+| Operators | `+`, `−`, `×`, `÷`, `−A` (negate `a`), `(`, `)` |
+| Numbers | `0`, `½` (0.5), `1`, `2` |
 | Comparisons | `<`, `>`, `≤`, `≥`, `=`, `≠` |
-| Logic | `&&`, `\|\|`, `!` |
-| Branch | `if ? : else` |
-| Math | `abs`, `min`, `max`, `clamp`, `sign`, `lerp`, `round`, `sqrt` |
-| Constants | `0.5` |
+| Logic and branch | `and`, `or`, `not`, `if?`, `else:` |
+| Functions | `abs`, `min`, `max`, `clamp`, `sign`, `lerp`, `round`, `sqrt`, `pow`, `hypot`, `deadzone`, `floor`, `ceil`, `sin`, `cos`, `tan`, `atan2`, plus a comma chip for argument lists |
 
 ### Live preview
 
@@ -220,7 +231,7 @@ The **Starter recipes** section lists ready-made formulas you can drop into the 
 
 ## Source kinds
 
-The **Kind** dropdown on a source picks how PadForge evaluates that source per frame.
+The **Primary Mode** dropdown in the row's detail strip picks how PadForge evaluates the primary source per frame. Each extra source carries the same choice in the dropdown at the front of its chip.
 
 | Kind | What it reads |
 |------|---------------|
@@ -233,11 +244,19 @@ Direct sources read the descriptor you assigned. Incremental sources ignore the 
 
 ---
 
+## Activation modes
+
+A mapping row is stateless: the output follows the source every frame, and nothing latches. Press-pattern behaviors like toggle and turbo belong to [Macros](../guides/macros.md), through each macro's **Fire** picker: **On Press**, **On Release**, **While Held**, **Always**, **On Long Press**, **On Short Press**, **On Double Press**, **Toggle** (the first press latches the actions on, the next press releases), and **Turbo** (the actions repeat at an interval while the trigger is held).
+
+To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid.
+
+---
+
 ## Modifiers
 
 The per-source toggles in the Options column. These are per source, not per row.
 
-### Inv (Invert)
+### Invert
 
 Flips the source's value sign. Push a stick up and the source reports "down". Use this when a controller reports an axis opposite to what the virtual output expects.
 
@@ -245,16 +264,20 @@ Flips the source's value sign. Push a stick up and the source reports "down". Us
 
 Treats a bipolar axis source as half-range (0 to max) instead of full-range (-max to +max). Use this when:
 
-- Mapping a trigger (0-100%) to a full stick axis (-100% to +100%).
+- Mapping a trigger (0–100%) to a full stick axis (-100% to +100%).
 - Mapping a stick axis to a trigger where only positive deflection should register.
 
 ### Bidirectional
 
-Half-axis only. The axis-to-button gate fires on absolute deflection past the deadzone, so either side of center counts. Renamed from "Either" in 3.2. Inv has no effect in this mode (mirroring around center already covers both directions).
+Half-axis only. The axis-to-button gate fires on absolute deflection past the deadzone, so either side of center counts. Renamed from "Either" in 3.2. Invert has no effect in this mode (mirroring around center already covers both directions).
+
+### Flip Output
+
+When **Half** is on for a centered axis, the **Invert** box is consumed as the side selector (upper half vs. lower half), which leaves nothing to reverse the result with. The **Flip Output** checkbox appears in exactly that case and flips the output direction, so one source can select a half and still invert. It rides extra-source chips the same way.
 
 ### Descriptor prefixes
 
-On raw or unrecognized devices, the Inv and Half toggles also surface as prefixes on the descriptor itself.
+On raw or unrecognized devices, the Invert and Half toggles also surface as prefixes on the descriptor itself.
 
 | Prefix | Meaning | Example |
 |--------|---------|---------|
@@ -270,7 +293,13 @@ Recognized gamepads show friendly names instead. You only see these prefixes on 
 
 A shift layer is a second mapping table on the same slot, active only while a button is held, a chord is engaged, or an axis is past a threshold. Same outputs, different bindings. Useful for double-duty controllers (driving / on-foot, weapon swap, menu nav) without juggling profiles.
 
-Each slot can carry any number of shift layers, each with its own activator and its own row set. Unmapped targets on a layer fall through to the Base layer by default (toggleable per layer).
+Each slot can carry any number of shift layers, each with its own activator and its own row set.
+
+By default a layer **replaces** Base: targets without a row on the layer output nothing while the layer is active. Check **Inherit Unmapped Targets From Base** in the activator dialog to overlay instead, so unmapped targets fall through to Base. While you are editing an inheriting layer, a **Do not inherit** checkbox appears in each row's Options column to keep that one target off rather than falling through.
+
+Activators can also wait for the release edge: the **Fire on Release** option flips the layer when the button is let go instead of when it is pressed (Toggle, Latch, Cycle, and Sticky modes).
+
+Right-click a layer pill for **Configure activator…**, **Rename layer…**, **Copy layer rows**, **Paste rows into layer**, **Clear layer rows**, and **Delete layer**. Copy and Paste move a whole layer's row set between layers, including across slots, and work on the Base pill too.
 
 See [Shift Layers](../guides/shift-layers.md) for the full activator reference, mode list (Hold, Toggle, Latch, Cycle, Sticky, No Button), and per-layer options.
 
@@ -280,7 +309,7 @@ See [Shift Layers](../guides/shift-layers.md) for the full activator reference, 
 
 When a source feeds a discrete output (button, D-pad direction, keyboard key, MIDI note, or Extended HID button), the **Axis-to-Button Deadzone** column controls how far the source must travel before the output fires. This stops small joystick movement from triggering button presses by accident.
 
-- Each source has its own slider (0-100%) with an editable text field and a reset button.
+- Each source has its own slider (0–100%) with an editable text field and a reset button.
 - The default is **50%**. The source must pass the halfway point to fire.
 - The column is only enabled when the source is an axis or slider and the target is a discrete output. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md) tabs for those.
 - A higher value (80%) means a firmer push before the button fires. A lower value (20%) makes it more sensitive.
@@ -290,20 +319,41 @@ When a source feeds a discrete output (button, D-pad direction, keyboard key, MI
 
 Flight sticks, racing wheels, and other devices with a centered axis (resting at 50%) need a special setup when mapped to two opposing buttons (left and right). Two rows, one source each.
 
-| Direction | Source | Inv | Half | Deadzone |
-|-----------|--------|-----|------|----------|
+| Direction | Source | Invert | Half | Deadzone |
+|-----------|--------|--------|------|----------|
 | **Left** | Axis 0 | Yes | Yes | 50% |
 | **Right** | Axis 0 | No | Yes | 50% |
 
 **Why this works:**
 
 1. **Half** tells PadForge to use only one side of the axis range (center to edge) instead of the full swing.
-2. **Inv** on the left direction flips the active half. "Left of center" fires "Left". "Right of center" fires "Right".
+2. **Invert** on the left direction flips the active half. "Left of center" fires "Left". "Right of center" fires "Right".
 3. **Deadzone at 50%** means the source must travel 50% of the half range (25% of the full range) before the button fires. That gives a comfortable deadzone around the center rest position.
 
 Without **Half**, a 50% deadzone would reference the full axis range, requiring 75% total travel to fire. Much less intuitive. With **Half** on, the deadzone percentage applies only within the active half, so the numbers behave the way you expect.
 
 > **Tip:** Start with 50% deadzone and adjust up or down depending on how much stick travel you want before the button fires. A higher value gives a wider neutral zone around center. A lower value makes the button respond sooner.
+
+---
+
+## SOCD cleaning
+
+The **Simultaneous Opposite Cardinal Directions (SOCD)** card sits directly below the mapping grid. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.
+
+| Mode | What it does |
+|------|--------------|
+| **Off** | Both buttons pass through unchanged. The default. |
+| **Last Wins (Snap Tap)** | The most recent press wins. Releasing it re-presses the still-held partner button. |
+| **Neutral** | Holding both buttons releases both until one is let go. |
+| **First Wins** | The earlier press keeps winning until it is released. |
+
+- Build the pair list with **Add Pair**. Each pair is tracked on its own, and each has a remove button.
+- Xbox and PlayStation slots pick each pair from the 15 named buttons: the four face buttons, shoulders, Back / Start / Guide (Share / Options / PS on PlayStation), stick clicks, and the four D-pad directions.
+- Nintendo slots pick from the same lettered buttons the mapping grid shows. Extended slots type raw button indices, 0–127. Index 0 is Button 1 in the mapping grid.
+- The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.
+- The card's Reset All turns the mode off and removes every pair.
+
+Keyboard + Mouse slots show a twin card that cleans opposing key pairs on the virtual keyboard output instead. See [Controller Slots](controller-slots.md). MIDI slots have neither card.
 
 ---
 
@@ -322,6 +372,7 @@ For unrecognized devices or Force Raw Joystick Mode, the source picker shows num
 | **Mouse Motion X**, **Mouse Motion Y** | Optical mouse motion on a Switch 2 Joy-Con. Map it to sticks, buttons, or scroll. Mouse Motion X can drive horizontal scroll. |
 | **Gyro Pitch**, **Gyro Yaw**, **Gyro Roll** | Calibrated gyro rate axes on devices with motion |
 | **Gyro Horizontal (Yaw + Roll)** | Blended horizontal-turn axis that combines yaw and roll, so aiming works the same whether the pad is held flat or upright |
+| **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll** | The left half's own gyro on a combined Joy-Con pair. The plain Gyro axes read the right half. Offered only when the pair reports the second sensor. |
 | **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar |
 | **IR Offscreen** | Fires when a Wii Remote's camera loses sight of the sensor bar. The lightgun reload input. |
 | **IR Brightness** | Right Joy-Con IR camera. Rises as an object covers or nears the camera window. |
@@ -359,7 +410,7 @@ Twenty-five sources in all. Gyro and touchpad inputs already resolve per device 
 
 The source dropdown leads with an **(Any device)** group carrying the Gamepad family plus the device-portable gyro, touchpad, and flick stick entries. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an **(Any device)** chip until a device is assigned.
 
-Profiles imported from the [Steam Workshop](../guides/steam-workshop-import.md) are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Stick and trigger Gamepad sources take the per-source **Sensitivity** slider like any plain axis.
+Profiles imported from the [Steam Workshop](../guides/steam-workshop-import.md) are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source **Acceleration** slider.
 
 ---
 
@@ -374,37 +425,40 @@ Both also work as [Macros](../guides/macros.md) Input Device triggers.
 
 ---
 
-## Motion passthrough sources
+## Motion sources
 
-Pads with a motion sensor add whole-sensor sources to the picker. Each binds the device's full three-axis stream to the virtual controller's motion output in one row, separate from the individual **Gyro Pitch / Yaw / Roll** axes.
+Pads with a motion sensor add whole-sensor and tilt sources to the picker, separate from the individual **Gyro Pitch / Yaw / Roll** axes.
 
 | Source | What it feeds |
 |--------|---------------|
 | **Motion Gyro** | The device's full gyro stream to the virtual controller's motion gyro output. |
 | **Motion Accelerometer** | The device's full accelerometer stream to the virtual controller's motion accelerometer output. |
+| **Left Joy-Con Motion Gyro** | The left half's full rate vector on a combined Joy-Con pair, instead of the right half's. Offered only when the pair reports the second gyro. |
 | **Nunchuk Accelerometer** / **Left Joy-Con Accelerometer** | The accelerometer on an attached Nunchuk or left Joy-Con instead of the main body. Shows as **Aux Motion Accelerometer** on other devices. |
+| **Motion Lean** | Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the Gyro tab's Motion Steering card, per assigned device. |
+| **Nunchuk Lean** / **Left Joy-Con Lean** | The aux sensor's tilt: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Lean** on other devices. |
 
-Auto-mapping adds the motion rows for pads that report a sensor. Delete a motion row and you can re-add it from the source dropdown. See [Gyro](../guides/gyro.md) for calibration and tuning, and [DSU Motion Server](../reference/dsu-motion-server.md) for broadcasting the feed to emulators.
+Auto-mapping adds the motion passthrough rows for pads that report a sensor. Delete a motion row and you can re-add it from the source dropdown. See [Gyro](../guides/gyro.md) for calibration and tuning, and [DSU Motion Server](../reference/dsu-motion-server.md) for broadcasting the feed to emulators.
 
 ---
 
 ## Copy, Paste, Copy From
 
-The toolbar above the mapping grid has bulk operations.
+The toolbar above the mapping grid has bulk operations. **Clear All** sits apart at the far end in warning colors.
 
 | Button | Action |
 |--------|--------|
-| **Clear All** | Removes every source and resets every Axis-to-Button Deadzone to 50% for this slot. |
 | **Copy** | Copies the current mapping table and every assigned device's tuning (gyro, touchpad, FFB, impulse triggers, adaptive triggers, lighting) to the clipboard. |
 | **Paste** | Applies a copied table. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit. |
-| **Copy From** | Same as Paste, sourced from another slot instead of the clipboard. |
+| **Copy From...** | Same as Paste, sourced from another slot instead of the clipboard. |
 | **Map All** | Starts the [Map All wizard](#3-map-all). |
+| **Clear All** | Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, **Acceleration**, every **Sensitivity**, **Do not inherit**, **Primary Mode** back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping. |
 
-Multi-source rows round-trip whole. Every source on a row, its kind, every per-source option, the combine mode, and the custom formula all copy together.
+Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together.
 
-The per-device payload covers every assigned device on the source slot, not just the one selected at the time of Copy. Target-side devices that don't match any source entry are left alone.
+The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.
 
-Per-row Copy and Paste are available from the row's context menu. Same round-trip rules apply.
+There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click **Copy layer rows** and **Paste rows into layer** (see [Shift layers](#shift-layers)).
 
 ### Cross-type translation
 
@@ -414,11 +468,25 @@ Copy From and Paste translate mappings between controller types automatically.
 |-------------|---------|
 | **Xbox to PlayStation** | A → Cross, B → Circle, X → Square, Y → Triangle, LB → L1, RB → R1, etc. |
 | **PlayStation to Xbox** | Cross → A, Circle → B, Square → X, Triangle → Y, etc. |
-| **To or from DirectInput** | Translated via the standardized gamepad mapping |
+| **To or from Nintendo or Extended** | Translated via the standardized gamepad mapping. Nintendo and Extended layouts are raw surfaces, so their rows carry over by role. |
 
 Both buttons and axes translate. Pasting to the same controller type applies mappings unchanged.
 
 > **Tip:** Copy From saves time with multiple controllers. Set up the first, then Copy From on the rest.
+
+---
+
+## Nintendo virtual controllers
+
+A Nintendo slot's grid mirrors the Xbox and PlayStation arrangement: analogous controls in analogous positions.
+
+- Face buttons in positional order: **B**, **A**, **Y**, **X** (south, east, west, north, which is also raw index order).
+- **L** and **R**, then **Minus** and **Plus** where Back and Start sit, **Home** where Guide sits, and **Capture**.
+- Stick clicks, the four D-pad directions, and **ZL** / **ZR** in the trigger rows' position. ZL and ZR are digital buttons on this controller, not analog triggers.
+- Left and right stick axes with the same labels the other gamepad grids use.
+- **Motion Gyro** and **Motion Accelerometer** passthrough rows at the tail, same as the PlayStation grid.
+
+Copy, Paste, and Copy From translate to and from Nintendo through the standard mapping. See [Controller Slots](controller-slots.md#nintendo) for what the slot deploys as.
 
 ---
 
@@ -428,10 +496,10 @@ For Extended (HIDMaestro) slots, the mapping grid adjusts to match the active HI
 
 | Category | Rows shown | Axis pool |
 |----------|------------|-----------|
-| **Sticks** | X and Y per stick (0-4 sticks) | 2 axes per stick |
-| **Triggers** | One per trigger (0-8 triggers) | 1 axis per trigger |
-| **Buttons** | One per button (0-128 buttons) | . |
-| **POVs** | Four directions per POV hat (0-4 hats) | . |
+| **Sticks** | X and Y per stick (0–4 sticks) | 2 axes per stick |
+| **Triggers** | One per trigger (0–8 triggers) | 1 axis per trigger |
+| **Buttons** | One per button (0–128 buttons) | . |
+| **POVs** | Four directions per POV hat (0–4 hats) | . |
 
 Sticks and triggers share a pool of 8 axes. Example: 2 sticks (4 axes) + 2 triggers (2 axes) = 6 of 8 used. Changing the DirectInput config rebuilds the mapping grid automatically.
 
@@ -452,13 +520,14 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ## Troubleshooting
 
-- **An axis moves the wrong direction.** Turn on **Inv** on that source.
+- **An axis moves the wrong direction.** Turn on **Invert** on that source. If **Half** is on and Invert is picking the side, use **Flip Output**.
 - **A trigger mapped to a stick only reaches 50%.** Turn on **Half** to expand half-range input to full-range output.
 - **Recording keeps catching the wrong input.** Use the [source dropdown](#2-source-dropdown) to pick the exact input by hand.
 - **Buttons or axes are missing or numbered wrong.** Try Force Raw Joystick Mode on the [Devices](devices.md) page to bypass gamepad remapping.
 - **A joystick axis fires a button on the slightest touch.** Raise the [Axis-to-Button Deadzone](#axis-to-button-deadzone) on that source.
-- **A centered axis mapped to two buttons fires both at rest.** Turn on **Half** on both sources, **Inv** on one direction, set deadzone to 50%. See [Mapping a centered axis to two buttons](#mapping-a-centered-axis-to-two-buttons).
+- **A centered axis mapped to two buttons fires both at rest.** Turn on **Half** on both sources, **Invert** on one direction, set deadzone to 50%. See [Mapping a centered axis to two buttons](#mapping-a-centered-axis-to-two-buttons).
 - **Two sources on the same row fight each other.** Switch the row to **Either** (buttons) or **Strongest** (axes), or pick **Custom** and write a rule that resolves the conflict.
+- **Opposite directions register together and the game rejects the input.** Add the pair to the [SOCD card](#socd-cleaning) and pick a rule.
 - **A custom formula shows "parse error".** The status line points at the bad token. Common causes: a stray operator, a missing close paren, `=` used for equality instead of `==`.
 
 ---
@@ -466,15 +535,15 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 ## Related pages
 
 - [Shift Layers](../guides/shift-layers.md): per-slot second mapping table activated by a button, chord, or axis.
+- [Macros](../guides/macros.md): Fire modes (Toggle, Turbo, tap-vs-hold) and action sequences from button combos.
 - [3D and 2D Visualization](visualization.md): click-to-map from the controller model.
 - [Controller Slots](controller-slots.md): create and configure virtual controllers.
 - [Stick Deadzones](stick-deadzones.md): adjust response after mapping stick axes.
 - [Trigger Deadzones](trigger-deadzones.md): adjust range after mapping triggers.
 - [Force Feedback](force-feedback.md): rumble and vibration settings.
-- [Macros](../guides/macros.md): trigger action sequences from button combos.
 - [Devices](devices.md): assign physical devices to slots before mapping.
 - [Steam Workshop Config Import](../guides/steam-workshop-import.md): imported community configs are built from Gamepad sources.
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

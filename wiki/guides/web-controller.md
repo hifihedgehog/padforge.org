@@ -80,7 +80,14 @@ The two gamepad layouts share their buttons, sticks, and triggers. DualShock 4 a
 
 A multi-touch surface that maps straight to the DualShock 4 / DualSense touchpad on the assigned PlayStation slot. Use it as a second input device when a phone or tablet is already in another player's hands and the DS4 / DS5 touchpad is the missing piece. No buttons or sticks, touchpad input only.
 
-The same surface also drives every [Touchpad](../features/touchpad.md)-tab feature on the slot it's assigned to: virtual mouse (Mouse Output), virtual analog stick or D-pad (Stick / D-Pad Output), and the gesture stack. Each slot the phone is assigned to carries its own toggles and tuning.
+The same surface also drives every [Touchpad](../features/touchpad.md)-tab feature on the slot it's assigned to:
+
+- **Mouse Output**: relative cursor control. The **Response** row's **Trackpad** mode (new in 4.1.0) slows fine positioning and speeds up fast drags, an acceleration curve ported from libinput.
+- **Absolute Pointer** (new in 4.1.0): the Touchpad Pointer sources warp the cursor to where your finger sits on the pad.
+- **Stick / D-Pad Output**: a virtual analog stick or D-pad.
+- The gesture stack: swipes, taps, shapes, and the rest.
+
+Each slot the phone is assigned to carries its own toggles and tuning.
 
 ![Web controller in use](../images/web-controller.png)
 
@@ -149,4 +156,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

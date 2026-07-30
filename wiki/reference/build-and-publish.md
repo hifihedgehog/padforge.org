@@ -1,6 +1,6 @@
 # Build and Publish
 
-Build, publish, and release reference for PadForge.
+*Build, publish, and release reference for PadForge.*
 
 ---
 
@@ -28,17 +28,28 @@ PadForge.sln
 │   ├── Resources/            Icons, SDL3 DLL, embedded driver installers, localization
 │   └── Properties/           AssemblyInfo.cs
 │
+├── PadForge.SteamWorkshop/   Steam Workshop import client (net10.0-windows)
+│   ├── Api/                  SteamKit2 anonymous CM session + direct Steam HTTPS clients
+│   ├── Vdf/                  Steam Input VDF parser
+│   ├── Model/                Typed config model
+│   ├── Translation/          VDF-to-PadForge config translator
+│   ├── Cache/, Local/        File-system cache, local Steam discovery
+│   └── Properties/           AssemblyInfo.cs
+│
+├── PadForge.Tests/           xunit suite for App + Engine (net10.0-windows10.0.26100.0)
+├── PadForge.SteamWorkshop.Tests/  xunit suite for the Workshop client (offline fixtures + golden translation snapshots)
+│
 ├── nuget-local/              Local NuGet source (MIDI Services SDK)
 ├── nuget.config               Registers nuget.org + nuget-local/ as package sources
 │
-└── tools/
+└── tools/                    Standalone utilities, NOT part of PadForge.sln
     ├── DsuDiag/              DSU/Cemuhook diagnostic client
     ├── Ds4InputDump/         DS4 raw HID input dump (Sony Report 0x01 passthrough debug)
-    ├── vJoy/                 Legacy v2 vJoy SDK / test utilities (kept for reference, unused by v4)
-    ├── deploy.ps1            Build + deploy to C:\PadForge
-    ├── deploy_and_restart.ps1  Deploy + restart running instance
-    ├── capture_*.ps1         Wiki screenshot capture (~20 scripts, one per surface)
-    └── (~50 ad-hoc diagnostic / UI-automation scripts, mostly v2 vJoy holdovers)
+    ├── SteamWorkshopSmoke/   Manually-run smoke harness for the live Steam network paths
+    ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
+    ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
+    ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
+    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, asset generation (see Development Scripts)
 ```
 
 ## Prerequisites
@@ -96,6 +107,21 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 The custom gamepad mapping database ships embedded in the assembly, not as a loose file. See [gamecontrollerdb_padforge.txt](#gamecontrollerdb_padforgetxt) under Embedded Resources.
 
 > **Critical:** Always use `dotnet publish` for deployment, never `dotnet build`. The project is configured for single-file self-contained publish. `dotnet build` produces non-functional multi-file output.
+
+### Run Tests
+
+```bash
+dotnet test -c Release
+```
+
+Runs both xunit suites in the solution:
+
+| Project | Covers | Notes |
+|---------|--------|-------|
+| `PadForge.Tests` | App + Engine | References the same pre-built `HIDMaestro.Core.dll` the App uses (the FFB decoder tests construct SDK types) |
+| `PadForge.SteamWorkshop.Tests` | Workshop client | Offline only: VDF fixtures under `Fixtures/`, hand-reviewed translation snapshots under `Golden/`. No test touches the live Steam network |
+
+The live Steam network paths are exercised by the manually-run `tools/SteamWorkshopSmoke` harness instead.
 
 ## Single-File Publish Configuration
 
@@ -183,7 +209,7 @@ The Engine targets `net10.0-windows` (no specific SDK version needed). SDL3 and 
 
 ### Assembly Versioning
 
-App and Engine share one version via `SharedVersion.cs` at the repo root. Both csproj files link it in:
+App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the repo root. All three csproj files link it in:
 
 ```xml
 <Compile Include="..\SharedVersion.cs">
@@ -191,9 +217,9 @@ App and Engine share one version via `SharedVersion.cs` at the repo root. Both c
 </Compile>
 ```
 
-`SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The two assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. Both projects set `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
+`SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. All three projects set `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
 
-**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.0.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.0.0.0`.
+**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.1.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.1.0.0`.
 
 ## NuGet Dependencies
 
@@ -209,7 +235,17 @@ App and Engine share one version via `SharedVersion.cs` at the repo root. Both c
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Windows MIDI Services SDK for virtual MIDI device creation |
 
-`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. It is currently v1.3.17.
+`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. It is currently v1.3.22 (the DLL's file version is the authority), which carries the v4.1 fixes: the dead-input-worker freeze and the virtual Switch Pro controller.
+
+The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
+
+### PadForge.SteamWorkshop
+
+| Package | Version | Purpose |
+|---|---|---|
+| **SteamKit2** | 3.4.0 | Steam protocol client (LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases |
+
+The Workshop client is the #9 community config import feature. Every client constructor checks `ISteamWorkshopGate` and throws when the user has not opted in, so no network work can happen until the "Enable Community Configs" toggle in Settings (backed by `EnableCommunityConfigLookup`) is on.
 
 ### PadForge.Engine
 
@@ -219,6 +255,10 @@ App and Engine share one version via `SharedVersion.cs` at the repo root. Both c
 | **System.Security.Cryptography.ProtectedData** | 10.0.9 | DPAPI at-rest protection for Remote Link peer identity keys |
 
 All SDL3 and system interop still uses raw `[DllImport]` P/Invoke.
+
+### Test Projects
+
+`PadForge.Tests` and `PadForge.SteamWorkshop.Tests` both reference xunit 2.9.3, xunit.runner.visualstudio 3.1.4, Microsoft.NET.Test.Sdk 17.14.1, and coverlet.collector 6.0.4.
 
 ### Local NuGet Source (`nuget-local/`)
 
@@ -459,7 +499,7 @@ env:
 
 ### Formal Releases
 
-Created manually via `gh release create` with a version tag (e.g., `v4.0.0`, `v4.0.0-beta1`). See [Release Workflow](#release-workflow) below.
+Created manually via `gh release create` with a version tag (e.g., `v4.1.0`, `v4.1.0-beta1`). See [Release Workflow](#release-workflow) below.
 
 ## Deployment
 
@@ -482,12 +522,13 @@ Required companion files (placed automatically by `dotnet publish`):
 
 The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe. All three DLLs are folded into the single-file bundle on publish, so a single-file deploy is one `PadForge.exe`.
 
-### Development Deploy Scripts
+### Development Deploy Script
 
 ```bash
-tools/deploy.ps1              # Build, publish, copy to C:\PadForge
-tools/deploy_and_restart.ps1  # Deploy + kill running instance + restart
+tools/deploy.ps1   # Kill running instance, copy the published exe to C:\PadForge, relaunch
 ```
+
+The script does not build. Run `dotnet publish -c Release` first. It checks for the published exe before stopping anything, so a missing build never leaves the machine without a running PadForge.
 
 ### First Run
 
@@ -541,24 +582,31 @@ Use `--prerelease` for beta/RC releases. Use `--latest` for the default download
 
 ## Diagnostic Tools (`tools/`)
 
-Standalone diagnostic utilities and development scripts.
+Standalone diagnostic utilities and development scripts. None of the tool projects are in `PadForge.sln`. Build and run each from its own folder.
 
 | Tool | Command | Framework | Dependencies | Purpose |
 |------|---------|-----------|--------------|---------|
 | **DsuDiag** | `cd tools/DsuDiag && dotnet run` | net8.0 | None | Real-time DSU/Cemuhook UDP client for verifying gyro/accel axis mapping |
 | **Ds4InputDump** | `cd tools/Ds4InputDump && dotnet run` | net10.0-windows | None (raw HID) | Dumps DS4 raw HID input frames. Used to validate Sony Report 0x01 passthrough on PlayStation virtual controllers |
+| **SteamWorkshopSmoke** | `cd tools/SteamWorkshopSmoke && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Manually-run smoke harness for the live Steam network paths. The test suite has no live-network tests, so this is the end-to-end check against real Steam endpoints |
+| **SteamWorkshopSweep** | `cd tools/SteamWorkshopSweep && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Mass wild-corpus regression sweep for the Workshop config translator: harvests top-by-vote configs for every game in `games.csv`, caches the VDFs, translates everything, and reports reason keys outside the lockdown-approved set |
+| **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option per locale for the Indicator LEDs card combos |
 
-The v2 `vJoy/Test` and `vJoy/FfbTest` utilities are still in the repo under `tools/vJoy/` for historical reference. They target the deprecated vJoy stack and are not part of the v4 toolchain.
+The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16). Nothing in `tools/` targets the deprecated vJoy stack anymore.
 
 ### Development Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `deploy.ps1` | Build + publish + copy to `C:\PadForge` |
-| `deploy_and_restart.ps1` | Deploy + kill running instance + restart |
-| `capture_*.ps1` | ~20 per-surface wiki screenshot scripts (e.g. `capture_all.ps1`, `capture_pads*.ps1`, `capture_macros.ps1`, `capture_3d_2d.ps1`, `capture_3d_web.ps1`, `capture_extra_slots.ps1`). One per major UI surface. `capture_all_wrapper.ps1` runs them in sequence. |
-
-A handful of `*vjoy*` scripts (`cleanup_vjoy.ps1`, `check_vjoy_state.ps1`, etc.) are v2 holdovers kept for diagnosing legacy installs the cleanup dialog encounters. The remaining ~50 scripts are ad-hoc UI automation and screenshot utilities.
+| `deploy.ps1` | Kill running instance, copy the published exe to `C:\PadForge`, relaunch |
+| `kill_padforge.ps1` | Elevated kill of a running PadForge instance |
+| `diag-sweep.ps1` | Runtime self-diagnostics harvest: deploys the fresh build, launches with `PADFORGE_DIAG` armed, walks every page via UI Automation so lazily realized templates evaluate their bindings. Must run elevated or UIA sees zero elements |
+| `capture_all.ps1` | Captures all wiki/README screenshots in one run: backs up `PadForge.xml`, injects test data, drives the UI. `capture_all_wrapper.ps1` runs it elevated with logging |
+| `prep_xml_for_capture.ps1` | Preps `PadForge.xml` with 5 slot types and sample macros for screenshot runs. `prep_xml_for_capture_wrapper.ps1` adds logging |
+| `convert_screenshots.ps1` | Converts and renames captured wiki images into `screenshots/` |
+| `add_slots_via_ui.ps1` | Restores a `PadForge.xml` backup, then adds slot types via UI Automation |
+| `overlay_positions.py` | Generates 2D overlay positions from labeled Gamepad-Asset-Pack SVGs. Positions are generated, never placed by eye |
+| `gen_mouse_art.py` | Renders the vendored mouse SVG into the layers the KBM preview composites |
 
 ## Troubleshooting Build Issues
 
@@ -587,4 +635,4 @@ A handful of `*vjoy*` scripts (`cleanup_vjoy.ps1`, `check_vjoy_state.ps1`, etc.)
 
 ---
 
-Last updated for PadForge 4.0.0
+*Last updated for PadForge 4.1.0.*

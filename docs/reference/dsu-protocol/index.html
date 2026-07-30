@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2331,6 +2361,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#recountsubscribers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecountSubscribers()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#events" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2435,6 +2476,17 @@
     <span class="md-ellipsis">
       
         BroadcastMotion()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshot-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Snapshot Source
       
     </span>
   </a>
@@ -3108,6 +3160,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#recountsubscribers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecountSubscribers()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#events" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3212,6 +3275,17 @@
     <span class="md-ellipsis">
       
         BroadcastMotion()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshot-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Snapshot Source
       
     </span>
   </a>
@@ -3546,7 +3620,8 @@
 
 
 <h1 id="dsu-protocol-implementation">DSU Protocol Implementation<a class="headerlink" href="#dsu-protocol-implementation" title="Permanent link">&para;</a></h1>
-<p>PadForge implements the cemuhook DSU (DualShock UDP) protocol to stream motion data (gyroscope and accelerometer) to emulators. Compatible with Cemu, Dolphin, Yuzu, Ryujinx, and any cemuhook client.</p>
+<p><em>PadForge streams gyroscope and accelerometer data to emulators over the cemuhook DSU (DualShock UDP) protocol.</em></p>
+<p>Compatible with Cemu, Dolphin, Yuzu, Ryujinx, and any cemuhook client.</p>
 <p><strong>File:</strong> <code>PadForge.App/Services/DsuMotionServer.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Services</code>
 <strong>Protocol Spec:</strong> <a href="https://github.com/v1993/cemuhook-protocol">https://github.com/v1993/cemuhook-protocol</a></p>
@@ -3738,6 +3813,36 @@
 <td>All-slot client subscriptions with timestamp</td>
 </tr>
 <tr>
+<td><code>_subCount</code></td>
+<td><code>volatile int</code></td>
+<td>Lock-free mirror of <code>_subscriptions.Count + _allSlotSubscriptions.Count</code>. First <code>BroadcastMotion</code> early-out</td>
+</tr>
+<tr>
+<td><code>_slotSubMask</code></td>
+<td><code>int</code></td>
+<td>Per-slot subscription bitmask (bit N set = slot N has a per-slot subscriber). Read and written via <code>Volatile</code></td>
+</tr>
+<tr>
+<td><code>_anyAllSlotSubs</code></td>
+<td><code>volatile bool</code></td>
+<td>True while <code>_allSlotSubscriptions</code> is non-empty</td>
+</tr>
+<tr>
+<td><code>_padPacketScratch</code></td>
+<td><code>byte[]</code></td>
+<td>Reused 100-byte pad data packet buffer, allocated on first send</td>
+</tr>
+<tr>
+<td><code>_subScratch</code></td>
+<td><code>List&lt;EndPoint&gt;</code></td>
+<td>Reused <code>GetSubscribers</code> result list (polling thread only)</td>
+</tr>
+<tr>
+<td><code>_subSeenScratch</code></td>
+<td><code>HashSet&lt;EndPoint&gt;</code></td>
+<td>Reused <code>GetSubscribers</code> dedup set (polling thread only)</td>
+</tr>
+<tr>
 <td><code>_slotConnected</code></td>
 <td><code>bool[4]</code></td>
 <td>Per-slot connection state reported to clients</td>
@@ -3754,6 +3859,8 @@
 </tr>
 </tbody>
 </table>
+<h3 id="recountsubscribers">RecountSubscribers()<a class="headerlink" href="#recountsubscribers" title="Permanent link">&para;</a></h3>
+<p>Refreshes the three lock-free mirrors (<code>_subCount</code>, <code>_slotSubMask</code>, <code>_anyAllSlotSubs</code>) from the two dictionaries. Must be called inside <code>lock(_subscriptions)</code> after any mutation of either dictionary. Two call sites: <code>HandlePadDataRequest</code> after a subscribe, and <code>GetSubscribers</code> after its expiry prune. A stale-high mask bit self-heals on that slot's next <code>GetSubscribers</code> prune. A bit is never stale-low for a live subscriber because the subscribe path recounts before the next poll tick.</p>
 <h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">StatusChanged</span><span class="p">;</span>
 </code></pre></div>
@@ -3884,13 +3991,20 @@
 <p>Called from the InputManager polling thread at ~1000 Hz. Primary data path.</p>
 <ol>
 <li>Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).</li>
-<li>Updates <code>_slotConnected[slot]</code> and <code>_slotHasMotion[slot]</code>.</li>
-<li>Calls <code>GetSubscribers(slot)</code>.</li>
-<li>Returns immediately if no subscribers (no packet allocation).</li>
-<li>Builds pad data packet via <code>BuildPadDataPacket(slot, snapshot, connected)</code>.</li>
-<li>Sends packet to each subscriber via <code>_socket.SendTo()</code>. Exceptions caught silently (client may be gone).</li>
+<li>Updates <code>_slotConnected[slot]</code> and <code>_slotHasMotion[slot]</code>. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.</li>
+<li>Returns if <code>_subCount == 0</code>. A volatile int read, no lock taken.</li>
+<li>Returns if <code>_anyAllSlotSubs</code> is false and this slot's bit is clear in <code>_slotSubMask</code> (<code>Volatile.Read</code>). With one client subscribed to one slot, the other slots' calls stop here instead of taking the lock.</li>
+<li>Calls <code>GetSubscribers(slot)</code>. Returns if the result is empty.</li>
+<li>Builds the pad data packet via <code>BuildPadDataPacket(slot, snapshot, connected)</code>, which reuses the <code>_padPacketScratch</code> buffer.</li>
+<li>Sends the packet to each subscriber via <code>_socket.SendTo()</code>. Exceptions caught silently (client may be gone).</li>
 </ol>
-<p><strong>Performance</strong>: Packet allocation only occurs when subscribers exist. At 1000 Hz with no subscribers, the method returns after a dictionary lookup.</p>
+<p><strong>Performance</strong>: at 1000 Hz with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the <code>GetSubscribers</code> collections are reused scratch, so the steady state allocates nothing either.</p>
+<h3 id="snapshot-source">Snapshot Source<a class="headerlink" href="#snapshot-source" title="Permanent link">&para;</a></h3>
+<p><code>InputManager.UpdateMotionSnapshots()</code> fills <code>MotionSnapshots[padIndex]</code> each poll cycle, immediately before <code>BroadcastDsuMotion()</code> fans the values out to <code>BroadcastMotion()</code>. Two gates decide whether a broadcast ever carries <code>HasMotion = true</code>:</p>
+<ul>
+<li><strong>Slot type</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows only on PlayStation and Nintendo slot types. Every other slot type has no motion rows, resolves no motion source, and broadcasts <code>HasMotion = false</code>.</li>
+<li><strong>Row source</strong>: the row's source descriptor picks the sensor stream. <code>Motion Gyro</code> and <code>Motion Accel</code> read the body IMU. The aux variants <code>Motion Gyro L</code> (#252) and <code>Motion Accel L</code> (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".</li>
+</ul>
 <hr />
 <h2 id="packet-format">Packet Format<a class="headerlink" href="#packet-format" title="Permanent link">&para;</a></h2>
 <h3 id="header-16-bytes-all-messages">Header (16 bytes, all messages)<a class="headerlink" href="#header-16-bytes-all-messages" title="Permanent link">&para;</a></h3>
@@ -4096,7 +4210,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <h2 id="subscription-management">Subscription Management<a class="headerlink" href="#subscription-management" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EndPoint</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetSubscribers</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">)</span>
 </code></pre></div>
-<p>Returns endpoints subscribed to the given slot. Called from <code>BroadcastMotion()</code> at ~1000 Hz per active slot.</p>
+<p>Returns endpoints subscribed to the given slot. Called from <code>BroadcastMotion()</code> on the polling thread, its single caller by contract. The lock-free early-outs in <code>BroadcastMotion</code> mean it only runs when at least one subscription plausibly covers the slot.</p>
 <h3 id="data-structures">Data Structures<a class="headerlink" href="#data-structures" title="Permanent link">&para;</a></h3>
 <p>Two subscription dictionaries, both protected by <code>lock(_subscriptions)</code>:</p>
 <table>
@@ -4125,13 +4239,15 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 </table>
 <h3 id="subscriber-resolution-algorithm">Subscriber Resolution Algorithm<a class="headerlink" href="#subscriber-resolution-algorithm" title="Permanent link">&para;</a></h3>
 <ol>
+<li>Clear and reuse the poll-thread scratch collections: <code>_subScratch</code> (result list) and <code>_subSeenScratch</code> (dedup set). No per-call allocation.</li>
 <li>Acquire <code>lock(_subscriptions)</code>.</li>
 <li>Compute <code>timeoutTicks</code> from <code>Stopwatch.Frequency * ClientTimeoutMs / 1000</code> (5 s in high-resolution ticks).</li>
-<li><strong>Per-slot subscribers</strong>: iterate <code>_subscriptions</code> for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and a <code>seen</code> HashSet.</li>
-<li><strong>All-slot subscribers</strong>: iterate <code>_allSlotSubscriptions</code>. Expired entries go to a removal list. Active ones go to the result if not already in <code>seen</code> (prevents duplicates).</li>
-<li><strong>Prune expired</strong>: remove all expired entries from both dictionaries.</li>
-<li>Release lock and return result list.</li>
+<li><strong>Per-slot subscribers</strong>: iterate <code>_subscriptions</code> for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and the seen set.</li>
+<li><strong>All-slot subscribers</strong>: iterate <code>_allSlotSubscriptions</code>. Expired entries go to a removal list. Active ones go to the result if not already in the seen set (prevents duplicates).</li>
+<li><strong>Prune expired</strong>: remove all expired entries from both dictionaries. If anything was pruned, call <code>RecountSubscribers()</code> so <code>_subCount</code> and the slot mask stay exact.</li>
+<li>Release lock and return the scratch list.</li>
 </ol>
+<p><strong>Returned-list contract</strong>: the result is the reused <code>_subScratch</code> instance. It is valid only until the next <code>GetSubscribers</code> call. <code>BroadcastMotion</code> finishes its <code>SendTo</code> loop before calling again, so the reuse is safe under the single-caller contract.</p>
 <h3 id="expiration">Expiration<a class="headerlink" href="#expiration" title="Permanent link">&para;</a></h3>
 <p>Subscriptions expire after <code>ClientTimeoutMs</code> (5000 ms). Clients must re-send pad data requests to stay subscribed. Expired entries are pruned lazily during <code>GetSubscribers()</code>. No background cleanup thread.</p>
 <p>Timestamps use <code>Stopwatch.GetTimestamp()</code> (high-resolution performance counter) for sub-millisecond precision.</p>
@@ -4303,6 +4419,14 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <td>Protected by <code>lock(_subscriptions)</code>. Both read (GetSubscribers) and write (HandlePadDataRequest) acquire the same lock</td>
 </tr>
 <tr>
+<td><code>_subCount</code>, <code>_slotSubMask</code>, <code>_anyAllSlotSubs</code></td>
+<td>Written only by <code>RecountSubscribers()</code> under <code>lock(_subscriptions)</code> (from either thread). Read lock-free by BroadcastMotion via <code>volatile</code> fields and <code>Volatile.Read</code></td>
+</tr>
+<tr>
+<td><code>_padPacketScratch</code>, <code>_subScratch</code>, <code>_subSeenScratch</code></td>
+<td>Polling thread only (BroadcastMotion call chain). No lock needed</td>
+</tr>
+<tr>
 <td><code>_running</code> flag</td>
 <td><code>volatile bool</code>. No lock needed, provides happens-before ordering</td>
 </tr>
@@ -4321,13 +4445,15 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <p>The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (<code>InputManager.MaxPads = 16</code>), but only slots 0–3 participate in DSU broadcasts. <code>InputManager.BroadcastDsuMotion()</code> loops over all 16 pads each frame and calls <code>BroadcastMotion(padIndex, ...)</code>. The server drops slots 4–15 through its <code>slot &gt;= MaxSlots</code> guard, so those 12 calls return after a single range check with no lock and no allocation.</p>
 <hr />
 <h2 id="polling-optimization">Polling Optimization<a class="headerlink" href="#polling-optimization" title="Permanent link">&para;</a></h2>
-<p><code>BroadcastMotion()</code> runs at ~1000 Hz per active slot. Optimizations for zero-subscriber overhead:</p>
+<p><code>BroadcastMotion()</code> runs at ~1000 Hz per slot. Overhead shrinks in tiers, cheapest check first:</p>
 <ol>
 <li><strong>Guard clause</strong>: returns immediately on <code>!_running</code>, null socket, or out-of-range slot (no lock).</li>
-<li><strong>Subscriber check before build</strong>: <code>GetSubscribers(slot)</code> runs first. Empty result skips <code>BuildPadDataPacket()</code> (no 100-byte allocation).</li>
+<li><strong>Subscriber-count early-out</strong>: <code>_subCount == 0</code> returns after a volatile int read, before any lock. <code>RecountSubscribers()</code> keeps the mirror exact at every subscription mutation.</li>
+<li><strong>Slot-mask early-out</strong>: no all-slot subscribers plus a clear bit for this slot in <code>_slotSubMask</code> returns on a volatile mask read. With one client subscribed to one slot, the other slots skip the lock and the dictionary walk entirely.</li>
+<li><strong>Scratch reuse</strong>: <code>GetSubscribers</code> fills reused collections and <code>BuildPadDataPacket</code> reuses the single <code>_padPacketScratch</code> buffer (<code>Array.Clear</code> per call, every byte rewritten). Even the sending steady state allocates nothing.</li>
 <li><strong>Lazy expiration</strong>: expired subscriptions pruned during <code>GetSubscribers()</code>, not via a separate timer.</li>
 </ol>
-<p>At 1000 Hz with 4 active slots and no subscribers: ~4000 dictionary lookups/s (under <code>lock</code>), zero allocation.</p>
+<p>At 1000 Hz with 4 active slots and no subscribers: zero lock acquisitions, zero dictionary lookups, zero allocation. Each call costs one volatile int read.</p>
 <hr />
 <h2 id="dsudiag-tool">DsuDiag Tool<a class="headerlink" href="#dsudiag-tool" title="Permanent link">&para;</a></h2>
 <p><strong>Location:</strong> <code>tools/DsuDiag/</code></p>
@@ -4348,7 +4474,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

@@ -61,7 +61,7 @@ Three-row `Grid`:
 
     <Grid x:Name="AppBrandingBar" Grid.Row="0" Height="48"> <!-- Hamburger Button + ui:TitleBar --> </Grid>
 
-    <ui:NavigationView x:Name="NavView" Grid.Row="1" PaneDisplayMode="Left" OpenPaneLength="223"
+    <ui:NavigationView x:Name="NavView" Grid.Row="1" PaneDisplayMode="Left" OpenPaneLength="244"
                        IsBackButtonVisible="Collapsed" IsPaneToggleVisible="False"
                        AlwaysShowHeader="False" CompactPaneLength="48">
         <ui:NavigationView.FooterMenuItems>
@@ -109,7 +109,7 @@ NavigationView items use 48px height and 14px font size. Dashboard, Profiles, an
 | `About` | About | `E946` FontIcon (info) | XAML footer (`NavAbout`) |
 
 Dynamic controller cards are appended after "Devices" (index 3 onward) via `RebuildControllerSection()`. Each `NavigationViewItem` contains:
-- Power/type glyph (Xbox / PlayStation / Extended / KB+M / MIDI icon)
+- Power/type glyph plus a mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI tiles in `VirtualControllerGroups.InOrder`, active type lit, plus a fixed-width "#N" instance token
 - Slot label ("Controller 1", etc.)
 - Device name subtitle
 - Delete button (visible on hover)
@@ -133,7 +133,18 @@ Drag devices from the Devices page to a sidebar controller card:
 
 ### Add Controller Popup
 
-`Popup` with buttons for Xbox, PlayStation, Extended, MIDI, and Keyboard+Mouse, built in `ShowControllerTypePopup`. That method counts each type from `Pads[].OutputType` and disables a button (opacity 0.35, "(max N)" tooltip) when the global slot total reaches 16 or that type hits its own per-type cap. `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`).
+`Popup` with one button per output type, built in `ShowControllerTypePopup`. The six buttons follow `VirtualControllerGroups.InOrder`:
+
+| Button | AutomationId | Icon | Per-type cap |
+|--------|--------------|------|--------------|
+| Xbox | `AddXbox360Btn` | Xbox SVG | `SettingsManager.MaxXbox360Slots` |
+| PlayStation | `AddDS4Btn` | DS4 SVG | `SettingsManager.MaxPlayStationSlots` |
+| Nintendo | `AddNintendoBtn` | Switch logo SVG | `SettingsManager.MaxNintendoSlots` |
+| Extended | `AddRawBtn` | Joystick SVG | `SettingsManager.MaxExtendedSlots` |
+| Keyboard+Mouse | `AddKeyboardMouseBtn` | `E961` glyph | `SettingsManager.MaxKeyboardMouseSlots` |
+| MIDI | `AddMidiBtn` | `E8D6` glyph | `SettingsManager.MaxMidiSlots` |
+
+The method counts each type from `Pads[].OutputType` and disables a button (opacity 0.35, "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})") when the global slot total reaches 16 or that type hits its own per-type cap. MIDI additionally requires Windows MIDI Services. `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same six types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
 
 ### Status Bar
 
@@ -209,14 +220,26 @@ ScrollViewer (Padding="24,0")
        ├─ "Virtual Controllers" section header
        ├─ ItemsControl (WrapPanel) → SlotSummaries
        │   └─ DataTemplate: slot card Border (252px wide)
-       │       ├─ Row 0: Power btn + Gamepad icon + Slot # + Type buttons (Xbox / PlayStation / Extended / KB+M / MIDI) + Instance label
+       │       ├─ Row 0: Power btn + Gamepad icon + Slot # + Type buttons (Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI) + Instance label
        │       ├─ Row 1: DeviceName (marquee overflow)
        │       └─ Row 2: StatusText + mapped/connected counts
        ├─ "Add Controller" card (MouseLeftButtonUp → AddControllerRequested)
+       ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
        ├─ "Motion Server" section (DSU)
        │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
        ├─ "Web Controller" section
        │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+       ├─ "Remote Link" section (#138)
+       │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
+       │      port NumberBox + reset, status dot + RemoteLinkStatus text,
+       │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
+       │      per peer, Revoke All), nearby-unpaired list, connect-by-address box, footer
+       ├─ "Overlays" section
+       │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
+       │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
+       ├─ "Touchpad Overlay" section
+       │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider,
+       │      reset-position button
        └─ "Drivers" section
            └─ CardBorder (Grid, 2 rows × 2 cols)
                ├─ Row 0: HidHide status
@@ -238,6 +261,11 @@ ScrollViewer (Padding="24,0")
 | `DsuServerStatus` | `DashboardViewModel` | DSU status text |
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
 | `WebControllerPort` | `DashboardViewModel` | Web controller port |
+| `EnableRemoteLink` / `RemoteLinkPort` / `RemoteLinkConnectHost` | `DashboardViewModel` | Remote Link enable, port, and connect-by-address host (#138) |
+| `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status dot and text |
+| `RemoteLink` | `DashboardViewModel` | Sub-ViewModel: identity-protection modes, trusted peers, nearby-unpaired list, revoke commands |
+| `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
+| `EnableTouchpadOverlay` | `DashboardViewModel` | Touchpad overlay enable |
 | `HidHideStatusText` / `MidiServicesStatusText` | `DashboardViewModel` | Driver status text shown on the Dashboard. HIDMaestro is embedded, with status shown on the Settings page only |
 
 ### Slot Card DataTemplate Bindings (SlotSummary)
@@ -312,7 +340,7 @@ Drag to reorder (same adorner system as sidebar):
 
 **Files:** `PadPage.xaml`, `PadPage.xaml.cs`
 
-Per-slot configuration: two-tier tab strip, optional config bars, and 16 tab panels (Tags 0-15). Tier 1 (slot scope) holds Preview, Mappings, Macros, Menus. Tier 2 (device scope) holds the device selector and the capability tabs, most gated on source-device capability.
+Per-slot configuration: two-tier tab strip, optional config bars, and 17 tab panels (Tags 0-16). Tier 1 (slot scope) holds Preview, Mappings, Macros, Menus, and Bass Shakers. Tier 2 (device scope) holds the device selector and the capability tabs, most gated on source-device capability.
 
 ### Layout Structure
 
@@ -391,7 +419,7 @@ Tabs hidden by output type and by source-device capability:
 | Audio | Visible if `hasAudio` | **Hidden** | **Hidden** | source has a speaker (DualSense / DS4 / Wii Remote) or plays HD haptic tones (Joy-Con, Switch Pro, Steam Controller / Deck, SC 2026) (#147) |
 | Mouse | Visible if source is a mouse | **Hidden** | **Hidden** | source device is a mouse (per-device mouse-gesture settings, #200) |
 
-Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (`LightbarModeCard`, `LightingLightbarSubtitle`, `LightingPlayerIdleHint`) collapse and the `GuideLedCard` brightness control takes their place.
+Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15, Bass Shakers 16. Bass Shakers (4.1.0, #236, AutomationId `BassShakersTab`) is slot-tier and gates on SLOT TYPE, not device capability: visible via `RumbleAudioTabVisible` for Xbox, PlayStation, and Nintendo slots plus Extended slots with a force-feedback surface. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (`LightbarModeCard`, `LightingLightbarSubtitle`, `LightingPlayerIdleHint`) collapse and the `GuideLedCard` brightness control takes their place.
 
 If the selected tab is hidden, the view auto-switches to Preview (index 0). `SyncTabVisibility()` toggles the device-tier capability tabs from the selected device's capabilities, and also drives the motor activity bars (`MotorBarsGrid`).
 
@@ -1804,7 +1832,7 @@ private void CustomizeToggle_Changed(object sender, RoutedEventArgs e)
 - [2D Overlay System](2d-overlay-system.md): `ControllerModel2DView`, `ControllerSchematicView`, `KBMPreviewView`, `MidiPreviewView`
 - [3D Model System](3d-model-system.md): `ControllerModelView` (HelixToolkit 3D viewport)
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` descriptors driving mapping grid UI
-- [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Extended, MIDI, KB+M (all HM-backed types are produced by `HMaestroVirtualController`)
+- [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M (all HM-backed types are produced by `HMaestroVirtualController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, the `VirtualControllerGroups.InOrder` visual order.
 - [Driver Installation Internals](driver-installation-internals.md): HidHide and Windows MIDI Services install/uninstall triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput is unpacked next to `PadForge.exe` from the single-file bundle)
 
 ---

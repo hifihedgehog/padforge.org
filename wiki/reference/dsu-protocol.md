@@ -1,6 +1,8 @@
 # DSU Protocol Implementation
 
-PadForge implements the cemuhook DSU (DualShock UDP) protocol to stream motion data (gyroscope and accelerometer) to emulators. Compatible with Cemu, Dolphin, Yuzu, Ryujinx, and any cemuhook client.
+*PadForge streams gyroscope and accelerometer data to emulators over the cemuhook DSU (DualShock UDP) protocol.*
+
+Compatible with Cemu, Dolphin, Yuzu, Ryujinx, and any cemuhook client.
 
 **File:** `PadForge.App/Services/DsuMotionServer.cs`
 **Namespace:** `PadForge.Services`
@@ -77,9 +79,19 @@ public sealed class DsuMotionServer : IDisposable
 | `_packetCounters` | `uint[4]` | Per-slot packet counter (incremented each broadcast) |
 | `_subscriptions` | `Dictionary<(EndPoint, int), long>` | Per-slot client subscriptions with `Stopwatch.GetTimestamp()` |
 | `_allSlotSubscriptions` | `Dictionary<EndPoint, long>` | All-slot client subscriptions with timestamp |
+| `_subCount` | `volatile int` | Lock-free mirror of `_subscriptions.Count + _allSlotSubscriptions.Count`. First `BroadcastMotion` early-out |
+| `_slotSubMask` | `int` | Per-slot subscription bitmask (bit N set = slot N has a per-slot subscriber). Read and written via `Volatile` |
+| `_anyAllSlotSubs` | `volatile bool` | True while `_allSlotSubscriptions` is non-empty |
+| `_padPacketScratch` | `byte[]` | Reused 100-byte pad data packet buffer, allocated on first send |
+| `_subScratch` | `List<EndPoint>` | Reused `GetSubscribers` result list (polling thread only) |
+| `_subSeenScratch` | `HashSet<EndPoint>` | Reused `GetSubscribers` dedup set (polling thread only) |
 | `_slotConnected` | `bool[4]` | Per-slot connection state reported to clients |
 | `_slotHasMotion` | `bool[4]` | Per-slot motion capability (device has gyro/accel sensors) |
 | `_disposed` | `bool` | Dispose guard |
+
+### RecountSubscribers()
+
+Refreshes the three lock-free mirrors (`_subCount`, `_slotSubMask`, `_anyAllSlotSubs`) from the two dictionaries. Must be called inside `lock(_subscriptions)` after any mutation of either dictionary. Two call sites: `HandlePadDataRequest` after a subscribe, and `GetSubscribers` after its expiry prune. A stale-high mask bit self-heals on that slot's next `GetSubscribers` prune. A bit is never stale-low for a live subscriber because the subscribe path recounts before the next poll tick.
 
 ### Events
 
@@ -207,13 +219,21 @@ public void BroadcastMotion(int slot, MotionSnapshot snapshot, bool connected)
 Called from the InputManager polling thread at ~1000 Hz. Primary data path.
 
 1. Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).
-2. Updates `_slotConnected[slot]` and `_slotHasMotion[slot]`.
-3. Calls `GetSubscribers(slot)`.
-4. Returns immediately if no subscribers (no packet allocation).
-5. Builds pad data packet via `BuildPadDataPacket(slot, snapshot, connected)`.
-6. Sends packet to each subscriber via `_socket.SendTo()`. Exceptions caught silently (client may be gone).
+2. Updates `_slotConnected[slot]` and `_slotHasMotion[slot]`. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.
+3. Returns if `_subCount == 0`. A volatile int read, no lock taken.
+4. Returns if `_anyAllSlotSubs` is false and this slot's bit is clear in `_slotSubMask` (`Volatile.Read`). With one client subscribed to one slot, the other slots' calls stop here instead of taking the lock.
+5. Calls `GetSubscribers(slot)`. Returns if the result is empty.
+6. Builds the pad data packet via `BuildPadDataPacket(slot, snapshot, connected)`, which reuses the `_padPacketScratch` buffer.
+7. Sends the packet to each subscriber via `_socket.SendTo()`. Exceptions caught silently (client may be gone).
 
-**Performance**: Packet allocation only occurs when subscribers exist. At 1000 Hz with no subscribers, the method returns after a dictionary lookup.
+**Performance**: at 1000 Hz with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the `GetSubscribers` collections are reused scratch, so the steady state allocates nothing either.
+
+### Snapshot Source
+
+`InputManager.UpdateMotionSnapshots()` fills `MotionSnapshots[padIndex]` each poll cycle, immediately before `BroadcastDsuMotion()` fans the values out to `BroadcastMotion()`. Two gates decide whether a broadcast ever carries `HasMotion = true`:
+
+- **Slot type**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows only on PlayStation and Nintendo slot types. Every other slot type has no motion rows, resolves no motion source, and broadcasts `HasMotion = false`.
+- **Row source**: the row's source descriptor picks the sensor stream. `Motion Gyro` and `Motion Accel` read the body IMU. The aux variants `Motion Gyro L` (#252) and `Motion Accel L` (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".
 
 ---
 
@@ -389,7 +409,7 @@ Payload: 4 bytes message type + 80 bytes data.
 private List<EndPoint> GetSubscribers(int slot)
 ```
 
-Returns endpoints subscribed to the given slot. Called from `BroadcastMotion()` at ~1000 Hz per active slot.
+Returns endpoints subscribed to the given slot. Called from `BroadcastMotion()` on the polling thread, its single caller by contract. The lock-free early-outs in `BroadcastMotion` mean it only runs when at least one subscription plausibly covers the slot.
 
 ### Data Structures
 
@@ -402,12 +422,15 @@ Two subscription dictionaries, both protected by `lock(_subscriptions)`:
 
 ### Subscriber Resolution Algorithm
 
-1. Acquire `lock(_subscriptions)`.
-2. Compute `timeoutTicks` from `Stopwatch.Frequency * ClientTimeoutMs / 1000` (5 s in high-resolution ticks).
-3. **Per-slot subscribers**: iterate `_subscriptions` for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and a `seen` HashSet.
-4. **All-slot subscribers**: iterate `_allSlotSubscriptions`. Expired entries go to a removal list. Active ones go to the result if not already in `seen` (prevents duplicates).
-5. **Prune expired**: remove all expired entries from both dictionaries.
-6. Release lock and return result list.
+1. Clear and reuse the poll-thread scratch collections: `_subScratch` (result list) and `_subSeenScratch` (dedup set). No per-call allocation.
+2. Acquire `lock(_subscriptions)`.
+3. Compute `timeoutTicks` from `Stopwatch.Frequency * ClientTimeoutMs / 1000` (5 s in high-resolution ticks).
+4. **Per-slot subscribers**: iterate `_subscriptions` for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and the seen set.
+5. **All-slot subscribers**: iterate `_allSlotSubscriptions`. Expired entries go to a removal list. Active ones go to the result if not already in the seen set (prevents duplicates).
+6. **Prune expired**: remove all expired entries from both dictionaries. If anything was pruned, call `RecountSubscribers()` so `_subCount` and the slot mask stay exact.
+7. Release lock and return the scratch list.
+
+**Returned-list contract**: the result is the reused `_subScratch` instance. It is valid only until the next `GetSubscribers` call. `BroadcastMotion` finishes its `SendTo` loop before calling again, so the reuse is safe under the single-caller contract.
 
 ### Expiration
 
@@ -531,6 +554,8 @@ graph LR
 | Aspect | Mechanism |
 |---|---|
 | `_subscriptions` dictionary | Protected by `lock(_subscriptions)`. Both read (GetSubscribers) and write (HandlePadDataRequest) acquire the same lock |
+| `_subCount`, `_slotSubMask`, `_anyAllSlotSubs` | Written only by `RecountSubscribers()` under `lock(_subscriptions)` (from either thread). Read lock-free by BroadcastMotion via `volatile` fields and `Volatile.Read` |
+| `_padPacketScratch`, `_subScratch`, `_subSeenScratch` | Polling thread only (BroadcastMotion call chain). No lock needed |
 | `_running` flag | `volatile bool`. No lock needed, provides happens-before ordering |
 | `_slotConnected`, `_slotHasMotion` | Written by polling thread (BroadcastMotion), read by receive thread (SendControllerInfo). No lock. Benign race (stale value at worst) |
 | `_packetCounters` | Accessed only from BroadcastMotion (single caller per slot). No lock needed. |
@@ -545,13 +570,15 @@ The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual co
 
 ## Polling Optimization
 
-`BroadcastMotion()` runs at ~1000 Hz per active slot. Optimizations for zero-subscriber overhead:
+`BroadcastMotion()` runs at ~1000 Hz per slot. Overhead shrinks in tiers, cheapest check first:
 
 1. **Guard clause**: returns immediately on `!_running`, null socket, or out-of-range slot (no lock).
-2. **Subscriber check before build**: `GetSubscribers(slot)` runs first. Empty result skips `BuildPadDataPacket()` (no 100-byte allocation).
-3. **Lazy expiration**: expired subscriptions pruned during `GetSubscribers()`, not via a separate timer.
+2. **Subscriber-count early-out**: `_subCount == 0` returns after a volatile int read, before any lock. `RecountSubscribers()` keeps the mirror exact at every subscription mutation.
+3. **Slot-mask early-out**: no all-slot subscribers plus a clear bit for this slot in `_slotSubMask` returns on a volatile mask read. With one client subscribed to one slot, the other slots skip the lock and the dictionary walk entirely.
+4. **Scratch reuse**: `GetSubscribers` fills reused collections and `BuildPadDataPacket` reuses the single `_padPacketScratch` buffer (`Array.Clear` per call, every byte rewritten). Even the sending steady state allocates nothing.
+5. **Lazy expiration**: expired subscriptions pruned during `GetSubscribers()`, not via a separate timer.
 
-At 1000 Hz with 4 active slots and no subscribers: ~4000 dictionary lookups/s (under `lock`), zero allocation.
+At 1000 Hz with 4 active slots and no subscribers: zero lock acquisitions, zero dictionary lookups, zero allocation. Each call costs one volatile int read.
 
 ---
 
@@ -578,4 +605,4 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

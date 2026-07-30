@@ -9,7 +9,7 @@
 
 ## When the tab shows
 
-The Adaptive Triggers tab appears only when the active slot has a DualSense or DualSense Edge assigned as a physical device. Slots without a DualSense don't see the tab.
+The Adaptive Triggers tab follows the device picked in the assigned-devices dropdown, the same way the [Lighting](lighting.md) tab does. It appears when that device is a DualSense or DualSense Edge and hides for anything else. On a slot with a DualSense plus another pad, the tab hides while the other pad is selected. Switch the dropdown back to the DualSense and the tab reappears.
 
 These settings drive the trigger when no game is writing to it. Game-driven effects (Returnal, Astro, Gran Turismo 7) pass through a separate path and override these settings while the game runs.
 
@@ -111,4 +111,4 @@ The sliders stay editable after loading. It's a one-click loader, not a lock.
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

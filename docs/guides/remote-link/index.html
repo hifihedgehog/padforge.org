@@ -965,6 +965,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#nfc-tag-taps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NFC tag taps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#set-it-up" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1157,6 +1168,8 @@
       
         
           
+        
+      
         
       
         
@@ -1604,6 +1617,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2723,6 +2764,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#nfc-tag-taps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NFC tag taps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#set-it-up" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2888,7 +2940,7 @@
 <ul>
 <li>Rumble (both body motors)</li>
 <li>Xbox trigger rumble (the impulse-trigger motors on Xbox One and later pads)</li>
-<li>Wheel force feedback (native on Logitech, Fanatec, and Thrustmaster, with other wheels falling back to rumble)</li>
+<li>Wheel force feedback (native on Logitech, Fanatec, and Thrustmaster, with other wheels and FFB joysticks driven through their DirectInput haptic effects, and rumble as the last fallback)</li>
 <li>DualSense adaptive triggers</li>
 <li>Lightbar color</li>
 <li>Player-number LEDs</li>
@@ -2897,6 +2949,17 @@
 <li>HD haptic tones (pads with no speaker that play macro sounds through their actuators: Joy-Con, Switch Pro, Steam Controller, Steam Deck)</li>
 </ul>
 <p>So a wheel shared from the den shakes in the den while the race runs on the PC in the office, and a DualSense lights its bar and buzzes its triggers on the couch while the game plays upstairs.</p>
+<hr />
+<h2 id="nfc-tag-taps">NFC tag taps<a class="headerlink" href="#nfc-tag-taps" title="Permanent link">&para;</a></h2>
+<p>Tag reads travel with the input. Tap a tag on a shared Switch controller that has an NFC reader (a right Joy-Con, a Joy-Con pair, or a Pro Controller) and the tap fires <a href="../../features/nfc-tags/">NFC tag</a> triggers on the PC using the device, so a tag can start a macro there just like on a local controller.</p>
+<ul>
+<li>Binding a tag trigger is all it takes. The PC using the device reports the demand across the link, and the owner powers up the controller's reader.</li>
+<li><strong>Any NFC Tag</strong> fires with no registration on either PC.</li>
+<li>A named-tag trigger matches by the tag's button number, and each PC numbers its own registered tags. Register the same tags in the same order on both PCs so the numbers line up.</li>
+<li>A standalone NFC reader shares across the link like any other device and brings its tag names with it, so its tags only need registering on the PC it is plugged into.</li>
+<li>The Switch controller must be on Bluetooth. A USB-linked Switch controller cannot read tags, shared or not.</li>
+<li>Tag taps trigger macros, so a gamepad-only pairing blocks them.</li>
+</ul>
 <hr />
 <h2 id="set-it-up">Set it up<a class="headerlink" href="#set-it-up" title="Permanent link">&para;</a></h2>
 <h3 id="1-turn-on-remote-link-on-each-pc">1. Turn on Remote Link on each PC<a class="headerlink" href="#1-turn-on-remote-link-on-each-pc" title="Permanent link">&para;</a></h3>
@@ -2989,7 +3052,7 @@
 <h2 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Discovery is automatic on your local network.</strong> For internet play, put the PCs on one virtual network with a VPN like ZeroTier and use <strong>Or Connect by Address (Advanced)</strong>.</li>
-<li><strong>Gamepad-style devices.</strong> Remote Link shares controllers, wheels, and HOTAS hardware, not arbitrary USB devices.</li>
+<li><strong>Input devices only.</strong> Remote Link shares what shows on the <a href="../../features/devices/">Devices</a> page (controllers, wheels, HOTAS, keyboards, mice, MIDI, NFC readers), not arbitrary USB hardware.</li>
 <li><strong>Every PC runs PadForge.</strong> Remote Link is PadForge-to-PadForge.</li>
 </ul>
 <hr />
@@ -3003,10 +3066,11 @@
 <li><a href="../../features/wheel/">Wheel</a>: native wheel force feedback, including over Remote Link.</li>
 <li><a href="../../features/lighting/">Lighting</a>: the lightbar, player LEDs, and Guide button LED that return over the link.</li>
 <li><a href="../../features/controller-audio/">Controller Audio</a>: the speaker audio that returns over the link.</li>
+<li><a href="../../features/nfc-tags/">NFC Tags</a>: the tag triggers a shared Switch controller or reader fires over the link.</li>
 <li><a href="../../troubleshooting/">Troubleshooting</a>: help when a PC does not appear or pairing fails.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

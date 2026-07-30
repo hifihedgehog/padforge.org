@@ -1,10 +1,10 @@
 # NFC Tags
 
-*Tap an NFC tag on a contactless reader to fire a macro. Amiibo-style figures, tag stickers, and cards all work.*
+*Tap an NFC tag on a contactless reader or on a Switch controller to fire a macro or press a mapped button.*
 
 ![Register / Manage NFC Tags dialog](../images/nfc-register.png)
 
-PadForge reads NFC tags through a contactless smart-card reader (PC/SC class, such as an ACR122U). Tapping a tag can run a [macro](../guides/macros.md). Register a tag once, give it a name, and bind it like any other button.
+PadForge reads NFC tags from two kinds of hardware: a contactless smart-card reader (PC/SC class, such as an ACR122U) and the tag reader built into Switch controllers. Amiibo-style figures, tag stickers, and cards all work. Register a tag once, give it a name, and bind it like any other button. Both paths share one tag registry, so a tag registered on either binds on either.
 
 ---
 
@@ -21,17 +21,40 @@ A single tap fires the button once.
 
 ---
 
+## Switch controllers as readers
+
+Since PadForge 4.1.0, the tag reader built into a Switch controller works too:
+
+| Controller | Notes |
+| --- | --- |
+| Right Joy-Con | Standalone or as half of a pair |
+| Joy-Con pair | The right Joy-Con carries the reader |
+| Pro Controller | Original Switch model |
+
+The controller's card shows an **NFC** chip in its capabilities line. The controller exposes the same sources the PC/SC reader does: **Any NFC Tag** plus one source per named tag.
+
+The reader powers on only while an NFC source is bound or the **Register / Manage NFC Tags** dialog is open. Unused, it costs nothing.
+
+Limitations, stated plainly:
+
+- Bluetooth only. Over USB the controller's reader never activates.
+- Original Switch controllers only. Switch 2 controllers cannot read tags in PadForge.
+
+---
+
 ## Registering a tag
 
-1. On the [Devices](devices.md) page, select the NFC reader.
+1. On the [Devices](devices.md) page, select the NFC reader or the Switch controller.
 2. Click **Register / Manage NFC Tags**.
-3. In the dialog, tap a tag on the reader. Its UID is captured.
+3. Tap a tag on the reader or on the controller. Its UID is captured.
 4. Type a name for the tag.
 5. Click **Register**.
 
+The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. In that case its status line reads "Tap a tag on your Switch controller…".
+
 The dialog lists your registered tags. Each row shows its name and UID with a **Remove** button. Tap another tag to add more.
 
-Tags are keyed by UID, not by reader, so they carry over when you swap readers. They persist across restarts.
+Tags are keyed by UID, not by reader. They carry over when you swap readers, from a reader to a controller, and across restarts.
 
 ---
 
@@ -44,13 +67,15 @@ With the NFC reader selected, the Devices page lists your named tags, plus an **
 
 ---
 
-## Using a tag in a macro
+## Binding a tag
 
-1. Add the NFC reader as an input device on the same [slot](controller-slots.md) as the macro.
-2. In the macro trigger, pick the NFC reader as the input device.
-3. Pick **Any NFC Tag** or a specific named tag.
+1. Add the device that reads the tag (the PC/SC reader or the Switch controller) as an input device on the same [slot](controller-slots.md) as the mapping or macro.
+2. Pick that device in the mapping row's source picker or in the macro trigger.
+3. Pick **Any NFC Tag** or a specific named tag. A named tag shows as **NFC Tag:** followed by its name.
 
-Tapping that tag runs the macro. See [Macros](../guides/macros.md) for building the action sequence.
+Tags work as ordinary mapping-row sources, so a tap can press a virtual button directly. In a [macro](../guides/macros.md) trigger, the tap runs the action sequence instead.
+
+Bindings follow the tag itself, not its name. Rename a tag and its bindings stay put.
 
 ---
 
@@ -61,4 +86,4 @@ Tapping that tag runs the macro. See [Macros](../guides/macros.md) for building 
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

@@ -1,6 +1,8 @@
 # SDL3 Integration
 
-PadForge uses SDL3 as its sole input backend for all controller types, including Xbox/XInput. This page covers the P/Invoke layer, device enumeration, state reading, sensors, haptic force feedback, virtual joysticks, and the custom SDL3 fork (HIDMaestro filter, Switch 2 controllers over USB and BLE, Wii and Joy-Con support, DualShock 3 motion, 16-XInput, and XInput Share).
+*How PadForge talks to every physical controller: the SDL3 P/Invoke layer, the custom fork, and the code that turns SDL devices into mappable inputs.*
+
+PadForge uses SDL3 as its sole input backend for all controller types, including Xbox/XInput. This page covers the P/Invoke layer, device enumeration, state reading, sensors, haptic force feedback, virtual joysticks, and the custom SDL3 fork (HIDMaestro filter, Switch 2 controllers over USB and BLE, Wii and Joy-Con support, the Switch NFC reader, DualShock 3 motion, 16-XInput, and XInput Share).
 
 ```mermaid
 flowchart TD
@@ -218,6 +220,12 @@ public static bool SDL_RumbleGamepadTriggers(IntPtr gamepad, ushort left, ushort
 // Vendor effect output (DualSense adaptive triggers / lightbar / audio, PadForge owns the byte layout)
 public static bool SDL_SendGamepadEffect(IntPtr gamepad, byte[] data, int offset, int length);
 
+// Switch NFC tag UID (fork export SDL#15. On stock SDL the wrapper probes once and permanently returns false)
+public static bool SDL_TryGetGamepadNfcTagUid(IntPtr gamepad, out string uid);
+
+// Joystick LED (Switch-family HOME LED brightness via equal-RGB writes, #226)
+public static bool SDL_SetJoystickLED(IntPtr joystick, byte red, byte green, byte blue);
+
 // Gamepad touchpad
 public static int SDL_GetNumGamepadTouchpads(IntPtr gamepad);
 public static int SDL_GetNumGamepadTouchpadFingers(IntPtr gamepad, int touchpad);
@@ -365,22 +373,40 @@ private static void LoadEmbeddedGamepadMappings()
 
 ### SDL Hints (Complete Reference)
 
-All hints are set before `SDL_Init()`. Order matters. SDL reads hints during subsystem startup.
+`InitializeSdl` sets these before `SDL_Init()`. SDL reads them during subsystem startup. Two fork HIDAPI hints are deliberately absent from this table and toggled at runtime instead, covered in [Runtime-Managed Hints](#runtime-managed-hints-mcu-demand-latch) below.
 
 | Hint | Value | Rationale |
 |------|-------|-----------|
 | `SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS` | `"1"` | **Required.** Without this, SDL stops reading input when PadForge loses focus. A remapper must read input while games have focus. |
 | `SDL_HINT_JOYSTICK_XINPUT` | `"1"` | Enables SDL's XInput backend for Xbox controller enumeration. Without this, Xbox controllers (USB or wireless adapter) do not appear in `SDL_GetJoysticks()`. Was `SDL_HINT_XINPUT_ENABLED` in SDL2. |
+| `SDL_HINT_HIDAPI_IGNORE_DEVICES` | `"0x146b/0x0603"` | Devices SDL's hidapi layer must never enumerate or probe. Connecting a Nacon PS4 Compact (146B:0603) froze the app until unplug (#235). The leading explanation, refined by the fork SDL#19 audit, is a Sony third-party capabilities feature-report probe that never returns, on the UI thread that runs enumeration. PID-scoped seatbelt: other Nacon PIDs stay untouched. The value is the `InputManager.HidapiIgnoreDevices` constant. |
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH2` | `"1"` | Activates the HIDAPI driver for the wired Switch 2 Pro Controller (PadForge's custom fork). Gates `SDL_hidapi_switch2.c`. Without it, the controller is ignored even though the driver code is compiled in. |
 | `SDL_HINT_JOYSTICK_HIDAPI_WII` | `"1"` | Enables SDL's Wii HIDAPI driver (#116). Surfaces the Bluetooth-paired Wii Remote / Nunchuk / Classic / Wii U Pro and lights the player LED. Relies on the fork's `hid_write` fix (`hifihedgehog/SDL#2`). |
 | `SDL_HINT_JOYSTICK_BLE_SWITCH2` | `"1"` | Enables the fork's Bluetooth-LE Switch 2 driver (`hifihedgehog/SDL#5`, #153). Switch 2 controllers speak a custom BLE GATT service, not HID-over-Bluetooth, so hidapi can't see them. Runs a BLE advertisement scan while PadForge is open. |
-| `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR` | `"1"` | Enables the fork's right Joy-Con NIR camera scalar (`hifihedgehog/SDL#7`, #151). A standalone right Joy-Con posts its MCU average-intensity byte on joystick axis 6 when sensors are enabled, read as an "IR Brightness" cover/proximity source. |
 | `SDL_HINT_JOYSTICK_BLE_SWITCH2_MOUSE` | `"1"` | Enables the fork's Joy-Con 2 optical-mouse axes (`hifihedgehog/SDL#8`, #154). The BLE driver posts absolute 16-bit mouse counters on joystick axes 6/7 (raw axis count 8), read as "Mouse Motion X/Y" sources. |
 | `SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER` | `"1"` | Enables SDL's Sony-sixaxis PS3 driver (#194). Claims a DualShock 3 in DsHidMini SXS mode, the only mode that serves motion, and reads its accelerometer, yaw gyro, and 10 pressure axes. Do **not** also set `SDL_HINT_JOYSTICK_HIDAPI_PS3` (the regular PS3 driver outranks sixaxis and writes at the device). |
 | `SDL_HINT_VIDEO_ALLOW_SCREENSAVER` | `"1"` | Counteracts `SDL_INIT_VIDEO`'s default screensaver suppression. PadForge only needs VIDEO for keyboard/mouse enumeration. |
 | `SDL_HINT_JOYSTICK_RAWINPUT` | **NOT SET** | **Must not be "1".** SDL3's raw input backend conflicts with XInput. Raw input claims Xbox controllers first, leaving XInput with no unclaimed devices. Discovered via Cemu comparison. Omitted (not "0" either) so SDL defaults to XInput for Xbox and HIDAPI for others. |
 
-> **Hint timing:** `SDL_SetHint()` must precede `SDL_Init()`. Post-init hints have no effect on already-initialized subsystems.
+> **Hint timing:** subsystem-init hints (`SDL_HINT_JOYSTICK_XINPUT`, `SDL_HINT_JOYSTICK_RAWINPUT`, background events) must precede `SDL_Init()` because SDL reads them during subsystem startup. HIDAPI driver hints stay live after init. SDL re-evaluates them when a hint change enables or disables a driver (`SDL_HIDAPIDriverHintChanged`), and the fork applies the two MCU hints below on the sensors-enable edge. The [Wii rescan](#sdl-hint-sdl_hint_joystick_hidapi_wii) and the runtime-managed hints both depend on that.
+
+### Runtime-Managed Hints (MCU Demand Latch)
+
+Two fork HIDAPI hints are toggled at runtime by `InputService.RefreshSwitchNfcArming()` (on the auto-idle cadence), never set at init:
+
+| Hint | ON while | OFF effect |
+|------|----------|------------|
+| `SDL_HINT_JOYSTICK_HIDAPI_SWITCH_NFC` | An NFC tag registration capture is running, or a Bluetooth-linked reader-capable pad (right Joy-Con `0x2007`, combined pair `0x2008`, Pro Controller `0x2009`) is online and a configured NFC consumer (local or Remote Link peer) polled an NFC descriptor within the demand window | MCU powers down. `ReadNfcTag` reports "no tag" |
+| `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR` | An "IR Brightness" consumer (`hifihedgehog/SDL#7`, #151: a standalone right Joy-Con posts its NIR MCU average-intensity byte on joystick axis 6) polled within the demand window, no NFC registration capture is active, and a standalone right Joy-Con is online | Camera stops, freeing the MCU for NFC |
+
+How the latch works:
+
+- **Demand comes from reads.** `SourceCoercion` stamps `LastNfcReadRequestTick` / `LastJoyConIrReadRequestTick` whenever a configured, enabled mapping evaluates an NFC or IR descriptor. Configured inputs are read every tick, so an active binding keeps the latch continuously fresh. A deleted or disabled one lapses after `McuDemandWindowMs` (10 s).
+- **Why not init-time.** The right Joy-Con camera and the NFC reader share the one MCU (camera = mode 5, NFC = mode 4, and the fork's `UpdateNfc` abandons while the camera streams). A globally-on IR hint silently killed standalone right Joy-Con NFC (#248 audit). Do not move either hint back into the init table.
+- **Registration preempts the camera.** A tag-registration capture with the camera streaming would wait forever for a UID, so `RegistrationCaptureActive` forces IR off. The camera resumes when the dialog closes and IR demand re-latches.
+- **The sensors-enable edge.** The fork decides the camera's fate only at `SetSensorsEnabled`, so after an IR flip the service drives every open standalone right Joy-Con through `SdlDeviceWrapper.BounceMotionSensors()` (all four sensor streams off, then on) on a worker thread. Without the bounce, a runtime flip would only take effect on reconnect.
+- **Latch only on success.** The managed flag updates only when `SDL_SetHint` accepts the value. A rejected write retries on the next cadence instead of leaving the flag and the MCU disagreeing.
+- When both the camera and NFC are configured for one standalone right Joy-Con, the camera wins by fork arbitration. That conflict is the mapping author's own choice.
 
 ---
 
@@ -499,7 +525,7 @@ All lookups use manual `for` loops (not LINQ) to avoid closure allocations in th
 
 ## Device Filtering (HIDMaestro)
 
-HIDMaestro virtual controllers (Xbox / PlayStation / Extended) appear as real input devices to SDL3 by default. Without filtering, SDL would enumerate PadForge's own outputs as inputs, the engine would map them back to themselves, and a feedback loop would create controllers exponentially.
+HIDMaestro virtual controllers (Xbox / PlayStation / Nintendo / Extended) appear as real input devices to SDL3 by default. The Nintendo family is the virtual Switch Pro added in 4.1.0 (#215, #246) and rides the same filter as the other three. Without filtering, SDL would enumerate PadForge's own outputs as inputs, the engine would map them back to themselves, and a feedback loop would create controllers exponentially.
 
 PadForge filters them at the SDL3 fork level. The fork's patched enumeration walks each device's PnP parent chain looking for `HIDMAESTRO` in the Hardware ID list, with a substring fast path against the interface symlink before falling back to the parent walk. Any device that matches is dropped before `SDL_GetJoysticks` returns. HM virtuals never appear in the enumeration the engine consumes.
 
@@ -535,6 +561,8 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `HapticStrategy` | `HapticEffectStrategy` | Best strategy: LeftRight > Sine > Constant |
 | `HasGyro` / `HasAccel` | `bool` | Device has motion sensors |
 | `HasAccelAux` | `bool` | Auxiliary/left accelerometer (`SDL_SENSOR_ACCEL_L`): Nunchuk on a Nunchuk-attached remote, left half of a combined Joy-Con pair (#199) |
+| `HasGyroAux` | `bool` | Auxiliary/left gyroscope (`SDL_SENSOR_GYRO_L`): left half of a combined Joy-Con pair, gen 1 or gen 2 (#252). Never a Nunchuk, which has no gyro |
+| `HasNfcReader` | `bool` | Switch NFC reader the fork can drive (#241): right Joy-Con, Pro Controller, or a combined pair whose right child carries the MCU |
 | `HasRumbleTriggers` | `bool` | Xbox One+ impulse-trigger motors. SDL trigger-rumble cap OR the Xbox-impulse VID/PID list |
 | `HasTouchpad` | `bool` | Device has one or more touchpad surfaces |
 | `NumTouchpads` | `int` | Touchpad surface count (Steam Controller 2026 / Deck = 2, DualSense / DS4 = 1) |
@@ -593,7 +621,7 @@ public bool Open(uint instanceId)
 5. **Gamepad layout override:** NumAxes=6, NumButtons=22, NumHats=1. Parse `_mappedRawButtonIndices` and compute `SupportedButtonIndices`
 6. **HID name fallback:** if Name is raw VID/PID (e.g., `"0x16c0/0x05e1"`), query `HidD_GetProductString`
 7. **Check rumble** via `SDL_GetJoystickProperties()` + `SDL_GetBooleanProperty()`. Set `HasRumbleTriggers` (SDL trigger-rumble cap OR the Xbox-impulse VID/PID list)
-8. **Enable sensors:** gyro, accel, and the aux accel (`SDL_SENSOR_ACCEL_L`, sets `HasAccelAux`) via `SDL_GamepadHasSensor()` -> `SDL_SetGamepadSensorEnabled(true)` (gamepad only)
+8. **Enable sensors:** gyro, accel, the aux accel (`SDL_SENSOR_ACCEL_L`, sets `HasAccelAux`), and the aux gyro (`SDL_SENSOR_GYRO_L`, sets `HasGyroAux`) via `SDL_GamepadHasSensor()` -> `SDL_SetGamepadSensorEnabled(true)` (gamepad only)
 9. **Detect v4 capabilities:** touchpads (`HasTouchpad` / `NumTouchpads` / `TouchpadFingerCounts`), Wii IR camera and Balance Board (`HasIrCamera` / `IsBalanceBoard`, #146), right Joy-Con NIR (`HasJoyConIr`, #151), Joy-Con 2 optical mouse (`HasJoyCon2Mouse`, #154), and extra generic axes (`HasExtraGenericAxes`, #193), keyed off the raw joystick axis count
 10. **Open haptic:** `OpenHaptic()` for FFB devices
 11. **Build GUIDs:** `BuildProductGuid()` + `BuildInstanceGuid()`
@@ -815,13 +843,19 @@ if (HasAccel) SDL_SetGamepadSensorEnabled(GameController, SDL_SENSOR_ACCEL, true
 // on a Nunchuk-attached Wii Remote, or the left half of a combined Joy-Con pair.
 HasAccelAux = SDL_GamepadHasSensor(GameController, SDL_SENSOR_ACCEL_L);
 if (HasAccelAux) SDL_SetGamepadSensorEnabled(GameController, SDL_SENSOR_ACCEL_L, true);
+
+// Auxiliary (left-side) gyroscope, SDL_SENSOR_GYRO_L (#252): the left half of
+// a combined Joy-Con pair. Only the Switch drivers register it, and on a pair
+// the primary gyro is the right half, so this is a second physical sensor.
+HasGyroAux = SDL_GamepadHasSensor(GameController, SDL_SENSOR_GYRO_L);
+if (HasGyroAux) SDL_SetGamepadSensorEnabled(GameController, SDL_SENSOR_GYRO_L, true);
 ```
 
-Sensors must be explicitly enabled before data can be read. `GetGamepadState()` reads gyro into `state.Gyro`, accel into `state.Accel`, and the aux accel into `state.AccelAux`. The aux stream is what backs the "Motion Accel L" mapping target (#199), letting a slot source its single IMU feed from the Nunchuk or left Joy-Con instead of the body sensor.
+Sensors must be explicitly enabled before data can be read. `GetGamepadState()` reads gyro into `state.Gyro`, accel into `state.Accel`, the aux accel into `state.AccelAux`, and the aux gyro into `state.GyroAux`. The aux streams back the "Motion Accel L" (#199) and "Motion Gyro L" (#252) mapping sources, letting a slot source its IMU feed from the Nunchuk or the left Joy-Con of a pair instead of the body sensor. "Motion Gyro L" is Switch-only: the Nunchuk has no gyro.
 
 ### Motion Frame and the DSU Sign Transform
 
-`InputManager.UpdateMotionSnapshots()` keeps the snapshot in SDL's native sensor frame. It scales units (rad/s -> deg/s, m/s^2 -> g) and applies the per-row mapping-source Invert, but it does **not** flip axis signs. This keeps `MotionSnapshot` faithful to a real controller so the Sony HID report packers stay correct.
+`InputManager.UpdateMotionSnapshots()` keeps the snapshot in SDL's native sensor frame. It scales units (rad/s -> deg/s, m/s^2 -> g) and applies the per-row mapping-source Invert, but it does **not** flip axis signs. This keeps `MotionSnapshot` faithful to a real controller, so the Sony HID report packers stay correct and the virtual Switch Pro's IMU channel (#215, HM v1.3.18) submits the g and deg/s values verbatim, with the per-profile packer owning the wire frame and scale.
 
 ```csharp
 const float RadToDeg = 180f / MathF.PI;
@@ -1132,6 +1166,7 @@ public interface ISdlInputDevice : IDisposable
     bool HasGyro { get; }
     bool HasAccel { get; }
     bool HasAccelAux { get; }              // auxiliary/left accel, SDL_SENSOR_ACCEL_L (#199)
+    bool HasGyroAux { get; }               // auxiliary/left gyro, SDL_SENSOR_GYRO_L (#252)
     bool HasTouchpad { get; }
     int NumTouchpads { get; }              // touchpad surface count
     int[] TouchpadFingerCounts { get; }    // per-pad simultaneous-finger count
@@ -1156,7 +1191,7 @@ public interface ISdlInputDevice : IDisposable
 }
 ```
 
-`RawAxisCount`, `HasExtraGenericAxes`, `HasAccelAux`, `NumTouchpads`, and `TouchpadFingerCounts` have default interface implementations. Keyboard and mouse wrappers inherit those defaults. `SdlDeviceWrapper` overrides all five with live per-device values, and the Remote Link peer (`RemotePeerDevice`) mirrors the owner's `HasAccelAux`, `NumTouchpads`, and `TouchpadFingerCounts` off the device list so a shared Nunchuk's "Motion Accel L" source and a shared touchpad stay pickable on the consumer (#199).
+`RawAxisCount`, `HasExtraGenericAxes`, `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, and `TouchpadFingerCounts` have default interface implementations. Keyboard and mouse wrappers inherit those defaults. `SdlDeviceWrapper` overrides all six with live per-device values, and the Remote Link peer (`RemotePeerDevice`) mirrors the owner's `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, and `TouchpadFingerCounts` off the device list so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252).
 
 ### Implementations
 

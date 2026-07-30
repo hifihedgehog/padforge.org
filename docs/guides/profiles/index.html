@@ -1322,6 +1322,8 @@
       
         
       
+        
+      
     
     
     
@@ -1727,6 +1729,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -3140,7 +3170,7 @@
 <tbody>
 <tr>
 <td>Virtual controller topology</td>
-<td>Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Extended, MIDI, Keyboard+Mouse).</td>
+<td>Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Nintendo, Extended, MIDI, Keyboard+Mouse).</td>
 </tr>
 <tr>
 <td>Button and axis mappings</td>
@@ -3151,8 +3181,16 @@
 <td>Per-axis <a href="../../features/stick-deadzones/">Stick Deadzones</a> and per-trigger <a href="../../features/trigger-deadzones/">Trigger Deadzones</a>.</td>
 </tr>
 <tr>
+<td>SOCD cleaning</td>
+<td>Per-slot Simultaneous Opposite Cardinal Directions (SOCD) mode and button pairs, applied to the slot's final combined output.</td>
+</tr>
+<tr>
 <td>Force feedback</td>
 <td>Per-slot <a href="../../features/force-feedback/">Force Feedback</a> settings.</td>
+</tr>
+<tr>
+<td>Bass Shakers</td>
+<td>Per-slot Rumble to Audio routing. Output device, gain, speaker placement, and the tone tuning for each of the four rumble voices.</td>
 </tr>
 <tr>
 <td>Impulse triggers</td>
@@ -3164,11 +3202,15 @@
 </tr>
 <tr>
 <td>Lighting</td>
-<td><a href="../../features/lighting/">Lighting</a> modes for DualSense and DualShock 4 lightbars.</td>
+<td><a href="../../features/lighting/">Lighting</a> modes for DualSense and DualShock 4 lightbars, plus Guide Button LED brightness for Xbox One and later controllers, Steam Controllers, Switch Pro Controllers, and right Joy-Cons.</td>
 </tr>
 <tr>
 <td>Gyro</td>
 <td>Per-pad-per-slot <a href="../gyro/">Gyro</a> tuning. Reference frame, sensitivity, smoothing, real-world calibration, Aim Engage button.</td>
+</tr>
+<tr>
+<td>Flick Stick</td>
+<td>Per-pad-per-slot <a href="../../features/stick-deadzones/#flick-stick">Flick Stick</a> tuning. Dots Per 360°, Flick Time, Flick Threshold, Snap Angle, Snap Strength, Front Angle Deadzone, Sweep Smoothing.</td>
 </tr>
 <tr>
 <td>Macros</td>
@@ -3277,6 +3319,10 @@
 <tr>
 <td>KB+M</td>
 <td>Keyboard+Mouse slots.</td>
+</tr>
+<tr>
+<td>Nintendo</td>
+<td>Nintendo slots.</td>
 </tr>
 </tbody>
 </table>
@@ -3451,6 +3497,10 @@
 <td>Make an "MSFS" profile that uses an Extended slot instead of Xbox. Map axes to flight-stick axes. Add <code>FlightSimulator.exe</code>. Other games keep the Default Xbox profile.</td>
 </tr>
 <tr>
+<td>Switch emulator with a Nintendo pad</td>
+<td>Make a profile that uses a Nintendo slot instead of Xbox. The emulator sees a Switch Pro Controller and shows Nintendo button prompts. Add the emulator's executable.</td>
+</tr>
+<tr>
 <td>Several emulators, one profile</td>
 <td>Make an "Emulators" profile and add <code>Dolphin.exe</code>, <code>Cemu.exe</code>, and <code>Ryujinx.exe</code>. All three load the same setup.</td>
 </tr>
@@ -3494,7 +3544,7 @@
 <li><a href="../steam-workshop-import/">Steam Workshop Config Import</a>: import community configs as profiles.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

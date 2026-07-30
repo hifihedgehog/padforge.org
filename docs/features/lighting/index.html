@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1532,6 +1534,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#battery-colors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery colors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#color-cycle-palette" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1660,6 +1673,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2868,6 +2909,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#battery-colors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery colors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#color-cycle-palette" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3056,7 +3108,7 @@
 </tr>
 <tr>
 <td>Battery — Gradient by Charge Level</td>
-<td>Color reflects current battery level (red → yellow → green). DualSense and DualShock 4 battery reads.</td>
+<td>A linear blend between the configured Low Battery and Full Battery colors, driven by the pad's reported battery percent. Defaults red at 0 % and green at 100 %. DualSense and DualShock 4 battery reads.</td>
 </tr>
 <tr>
 <td>Audio Pulse — Static Color</td>
@@ -3154,14 +3206,18 @@
 <h2 id="rainbow-brightness">Rainbow brightness<a class="headerlink" href="#rainbow-brightness" title="Permanent link">&para;</a></h2>
 <p>Visible for Rainbow Cycle only. Range 0–100. Default 100. Scales the hue rotation's brightness so you can dim Rainbow without touching any other mode's colors. Separate from Period, which sets the rotation speed.</p>
 <hr />
+<h2 id="battery-colors">Battery colors<a class="headerlink" href="#battery-colors" title="Permanent link">&para;</a></h2>
+<p>Visible for Battery — Gradient by Charge Level only. Two bordered cards side-by-side: Low Battery and Full Battery, laid out like the audio-band cards. Each has a color picker, a swatch preview, and R/G/B sliders with per-channel reset buttons. These cards have no hex input.</p>
+<p>The lightbar blends linearly from the Low Battery color at 0 % charge to the Full Battery color at 100 %, following the pad's reported battery level. Defaults are red at empty and green at full. The blend is a straight linear mix with no separately configurable midpoint.</p>
+<hr />
 <h2 id="color-cycle-palette">Color cycle palette<a class="headerlink" href="#color-cycle-palette" title="Permanent link">&para;</a></h2>
 <p>The Color Cycle base mode and the Cycle Through Palette overlay each keep their own palette. The Color Cycle palette shows below the mode dropdown when Color Cycle is the base mode. The overlay palette shows below the Input Reactive dropdown when the overlay is set to Cycle Through Palette. Editing one leaves the other untouched.</p>
 <p>Each palette is a wrapping list of swatches. Each entry has an in-place color picker with hex and RGB sliders, plus a remove button.</p>
 <ul>
-<li><strong>Add Color</strong> appends a new swatch with a hue rolled to be distinct from the last entry.</li>
+<li><strong>Add Color</strong> appends a new swatch picked to differ from the last entry. It steps through the four primaries: a red last entry adds green, green adds blue, blue adds yellow, anything else adds red.</li>
 <li><strong>Reset Palette</strong> restores the four default colors (red, green, blue, yellow).</li>
 </ul>
-<p>A palette can hold any number of entries. No fixed cap.</p>
+<p>A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.</p>
 <p>Color Cycle exposes a "Blend smoothly between palette colors" checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.</p>
 <hr />
 <h2 id="audio-driven-settings">Audio-driven settings<a class="headerlink" href="#audio-driven-settings" title="Permanent link">&para;</a></h2>
@@ -3244,7 +3300,7 @@
 <ul>
 <li>Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.</li>
 <li>For Color Cycle, "Blend smoothly" looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.</li>
-<li>For the Input Reactive Cycle variant, a non-empty palette is required. The Random and Base Color variants don't use the palette.</li>
+<li>Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.</li>
 <li>The Audio Bands modes assume the Quiet-to-Medium and Medium-to-Loud thresholds are in ascending order. Reversing them produces the wrong band selection.</li>
 </ul>
 <hr />

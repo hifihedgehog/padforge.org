@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1408,6 +1410,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -3266,7 +3296,7 @@
 
 
 <h1 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h1>
-<p><em>PadForge needs one driver (HIDMaestro) and offers two more (HidHide, Windows MIDI Services). HIDMaestro auto-installs the first time you create a virtual controller and has no uninstall path. Install or uninstall the optional two from </em><em>Settings</em><em>.</em></p>
+<p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers two optional ones (HidHide and Windows MIDI Services) that install and uninstall from </em><em>Settings</em><em>.</em></p>
 <!-- SCREENSHOT: settings-drivers -->
 <p><img alt="Driver management cards" src="../../images/settings-drivers.png" /></p>
 <hr />
@@ -3282,8 +3312,8 @@
 <tbody>
 <tr>
 <td><strong>HIDMaestro</strong></td>
-<td>Required for any virtual controller other than Keyboard+Mouse. Auto-installs on first use.</td>
-<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Logitech wheel, and so on). 225+ device profiles.</td>
+<td>Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use.</td>
+<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). 225+ device profiles.</td>
 </tr>
 <tr>
 <td><strong>Keyboard+Mouse</strong></td>
@@ -3307,7 +3337,7 @@
 </blockquote>
 <hr />
 <h2 id="first-run-auto-install">First-run auto-install<a class="headerlink" href="#first-run-auto-install" title="Permanent link">&para;</a></h2>
-<p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The HIDMaestro card on the <strong>Settings</strong> page lights up and the Xbox, PlayStation, and Extended slot types turn on.</p>
+<p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The HIDMaestro card on the <strong>Settings</strong> page lights up and the Xbox, PlayStation, Nintendo, and Extended slot types turn on.</p>
 <p>HidHide and Windows MIDI Services do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>.</p>
 <hr />
 <h2 id="status-indicators">Status indicators<a class="headerlink" href="#status-indicators" title="Permanent link">&para;</a></h2>
@@ -3346,7 +3376,7 @@
 <tbody>
 <tr>
 <td><strong>HIDMaestro</strong></td>
-<td>It auto-installs on first use, so it isn't normally missing. If that install fails, Xbox, PlayStation, and Extended slots can't create a virtual controller. Keyboard+Mouse and MIDI still work.</td>
+<td>It auto-installs on first use, so it isn't normally missing. If that install fails, Xbox, PlayStation, Nintendo, and Extended slots can't create a virtual controller. Keyboard+Mouse and MIDI still work.</td>
 </tr>
 <tr>
 <td><strong>HidHide</strong></td>
@@ -3354,7 +3384,7 @@
 </tr>
 <tr>
 <td><strong>MIDI Services</strong></td>
-<td>The MIDI slot type won't switch on. Its button stays visible and shows a "requires MIDI Services" tooltip. Every other slot type works.</td>
+<td>The MIDI slot type won't switch on. Its button stays visible and shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works.</td>
 </tr>
 </tbody>
 </table>
@@ -3364,10 +3394,12 @@
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>One driver that publishes the virtual controllers. Each non-MIDI, non-Keyboard+Mouse slot uses one HIDMaestro <strong>device profile</strong>. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.</p>
+<p>New in 4.1.0: the <strong>Nintendo</strong> slot type. It always deploys the Switch Pro profile as-is (no customizing), with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The other Nintendo profiles (Switch 2 Pro, Joy-Cons, GameCube adapter, NSO retro pads) live in the <strong>Extended</strong> category.</p>
 <h3 id="the-225-profiles-cover">The 225+ profiles cover<a class="headerlink" href="#the-225-profiles-cover" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Xbox 360, Xbox One, Xbox Series, Elite, Adaptive</li>
 <li>DualShock 3, DualShock 4, DualSense, DualSense Edge</li>
+<li>Switch Pro, Switch 2 Pro, Joy-Cons (both generations), GameCube adapter, NSO retro pads (N64, SNES, Genesis)</li>
 <li>Logitech G-series wheels (G29, G920, G923, G27)</li>
 <li>Thrustmaster and Fanatec wheels and pedals</li>
 <li>HOTAS and flight sticks (Thrustmaster T-Flight HOTAS, Logitech X52, VKB, VIRPIL, Winwing)</li>
@@ -3376,12 +3408,12 @@
 </ul>
 <h3 id="install-when-you-want">Install when you want<a class="headerlink" href="#install-when-you-want" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Any Xbox, PlayStation, or Extended virtual controller</li>
+<li>Any Xbox, PlayStation, Nintendo, or Extended virtual controller</li>
 <li>Force feedback in racing wheels and sticks</li>
 <li>A custom controller shape for niche games</li>
 </ul>
 <h3 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the <strong>Settings</strong> page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The flame lights up once install finishes, and Xbox, PlayStation, and Extended slots become available.</p>
+<p>HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the <strong>Settings</strong> page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The flame lights up once install finishes, and Xbox, PlayStation, Nintendo, and Extended slots become available.</p>
 <h3 id="uninstall">Uninstall<a class="headerlink" href="#uninstall" title="Permanent link">&para;</a></h3>
 <p>There is no in-app Uninstall button for HIDMaestro. Removing it through Device Manager is not supported. If you stop using PadForge, deleting the program leaves HIDMaestro installed but idle. It only acts when PadForge asks it to create a virtual controller.</p>
 <p>For the contract between PadForge and HIDMaestro, see <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
@@ -3413,7 +3445,7 @@
 </tr>
 <tr>
 <td><strong>Automatic whitelist</strong></td>
-<td>PadForge adds itself so it can still read hidden controllers, then drops the entry on exit.</td>
+<td>PadForge adds itself so it can still read hidden controllers. The entry stays in the driver's whitelist between sessions. Harmless, and it keeps hidden controllers readable when <strong>Keep devices cloaked between launches</strong> is on.</td>
 </tr>
 <tr>
 <td><strong>Engine-aware</strong></td>
@@ -3586,7 +3618,7 @@
 <tbody>
 <tr>
 <td>Click <strong>Install</strong> and nothing happens</td>
-<td>The UAC prompt may be hidden behind another window. Check the taskbar and click <strong>Yes</strong>.</td>
+<td>An earlier installer run may still be in progress, or the launch failed quietly. No UAC prompt is involved (PadForge already runs as administrator). Wait a few seconds and retry. If it still does nothing, restart PadForge and try again.</td>
 </tr>
 <tr>
 <td>Flame stays unlit after install</td>
@@ -3616,11 +3648,11 @@
 </thead>
 <tbody>
 <tr>
-<td>Xbox / PlayStation / Extended slot picked but no virtual controller appears</td>
+<td>Xbox / PlayStation / Nintendo / Extended slot picked but no virtual controller appears</td>
 <td>HIDMaestro auto-installs on first use. If that install failed, see "HIDMaestro fails to install" under <strong>Install issues</strong> above.</td>
 </tr>
 <tr>
-<td>Clicking the MIDI slot type does nothing (shows a "requires MIDI Services" tooltip)</td>
+<td>Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)"</td>
 <td>Install MIDI Services (needs Windows 11 24H2+).</td>
 </tr>
 <tr>
@@ -3676,7 +3708,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0.</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

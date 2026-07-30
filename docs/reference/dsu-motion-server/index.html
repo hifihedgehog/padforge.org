@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2302,6 +2332,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#the-mappings-grid-picks-the-source-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Mappings grid picks the source device
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2807,6 +2848,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#the-mappings-grid-picks-the-source-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Mappings grid picks the source device
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3011,15 +3063,23 @@
 <td>Xbox One</td>
 </tr>
 <tr>
-<td>Switch Pro Controller</td>
+<td>DualShock 3 (PS3)</td>
 <td>Xbox Series</td>
 </tr>
 <tr>
-<td>Switch 2 Pro Controller</td>
+<td>Switch Pro Controller</td>
 <td>Most third-party USB gamepads</td>
 </tr>
 <tr>
+<td>Switch 2 Pro Controller</td>
+<td></td>
+</tr>
+<tr>
 <td>Joy-Con (left and right)</td>
+<td></td>
+</tr>
+<tr>
+<td>Wii Remote (gyro needs MotionPlus)</td>
 <td></td>
 </tr>
 <tr>
@@ -3037,6 +3097,7 @@
 <h2 id="turn-it-on">Turn it on<a class="headerlink" href="#turn-it-on" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Plug in a controller that reports motion.</li>
+<li>Assign it to one of slots 1–4. The slot's virtual controller type has to be <strong>PlayStation</strong> or <strong>Nintendo</strong>. Only those two types carry a motion channel, so an Xbox, Extended, Keyboard + Mouse, or MIDI slot broadcasts no motion.</li>
 <li>On the <a href="../../features/dashboard/">Dashboard</a>, tick <strong>Enable DSU motion server (CemuHook Motion Provider protocol)</strong>.</li>
 <li>Leave the <strong>Port</strong> box at <strong>26760</strong>, or type a different number. The reset button next to it returns the port to 26760.</li>
 <li>Start the input engine with the play button.</li>
@@ -3044,9 +3105,17 @@
 </ol>
 <p>Motion data flows the moment both ends are running.</p>
 <h3 id="per-slot-tuning-lives-on-the-gyro-tab">Per-slot tuning lives on the Gyro tab<a class="headerlink" href="#per-slot-tuning-lives-on-the-gyro-tab" title="Permanent link">&para;</a></h3>
-<p>The DSU broadcast starts from the calibrated gyro stream. The <a href="../../guides/gyro/">Gyro</a> tab holds the per-pad, per-slot controls: calibration, sensitivity (horizontal and vertical), reference frame (Local / Player / World), and the Aim Engage button picker. The Aim Engage button gates gyro output on a held button.</p>
-<p>Whether those controls reach the broadcast depends on one switch. The Gyro tab's <strong>Apply Gyro Tuning to Motion Passthrough</strong> toggle, under the <strong>Motion Passthrough</strong> header, is off by default. Left off, the broadcast sends the calibrated reading straight through. Sensitivity, smoothing, and the Aim Engage gate stay out of it, so emulators see motion whether or not the engage button is held. Turn it on and the broadcast follows the full tab tuning, the gate included. With an engage button set and the toggle on, the DSU gyro reads zero while the button is not held, the same as a Gyro mapping row. Calibration drift correction applies either way.</p>
-<p>The Dashboard switch is the global on / off. There is no per-slot DSU enable toggle. Slots 1-4 broadcast when DSU is on. Slots 5-16 are above the protocol cap and never broadcast.</p>
+<p>The DSU broadcast starts from the calibrated gyro stream. The <a href="../../guides/gyro/">Gyro</a> tab holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the <strong>Easy Aim Threshold</strong> stick gate, and the <strong>Aim Engage Button</strong> picker. Both gates zero gyro output while their condition is not met.</p>
+<p>Whether those controls reach the broadcast depends on one switch. The Gyro tab's <strong>Apply Gyro Tuning to Motion Passthrough</strong> toggle, under the <strong>Motion Passthrough</strong> header, is off by default. Left off, the broadcast sends the calibrated reading straight through. Sensitivity, smoothing, and both gates stay out of it, so emulators see motion whether or not the engage button is held. Turn it on and the broadcast follows the full tab tuning, the Easy Aim and Aim Engage gates included. With a gate configured and the toggle on, the DSU gyro reads zero while the gate is not satisfied, the same as a Gyro mapping row. Calibration drift correction applies either way.</p>
+<p>The accelerometer stream skips all of this. The Gyro tab knobs are gyro-only, so the broadcast always carries the raw scaled accelerometer reading.</p>
+<h3 id="the-mappings-grid-picks-the-source-device">The Mappings grid picks the source device<a class="headerlink" href="#the-mappings-grid-picks-the-source-device" title="Permanent link">&para;</a></h3>
+<p>Motion is not implicit in the device assignment. Each PlayStation or Nintendo slot carries a <strong>Motion Gyro</strong> row and a <strong>Motion Accelerometer</strong> row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.</p>
+<ul>
+<li>Several motion devices on one slot stack as sources on the same row. The first source whose device is online wins, and the walk falls through to the next source when that device goes offline.</li>
+<li>The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.</li>
+<li>On a Joy-Con pair, the source picker also offers <strong>Left Joy-Con Motion Gyro</strong> and <strong>Left Joy-Con Accelerometer</strong> to stream the left half's sensors instead of the pair's primary stream. A Wii Remote with a Nunchuk attached offers <strong>Nunchuk Accelerometer</strong> the same way.</li>
+</ul>
+<p>The Dashboard switch is the global on / off. There is no per-slot DSU enable toggle. Slots 1–4 broadcast when DSU is on. Slots 5–16 are above the protocol cap and never broadcast.</p>
 <hr />
 <h2 id="emulator-setup">Emulator setup<a class="headerlink" href="#emulator-setup" title="Permanent link">&para;</a></h2>
 <p>All four guides assume the default port <code>26760</code>. To move it, change the <strong>Port</strong> box on the Dashboard and the port in the emulator so both match.</p>
@@ -3082,11 +3151,12 @@
 </ol>
 <hr />
 <h2 id="the-4-slot-cap">The 4-slot cap<a class="headerlink" href="#the-4-slot-cap" title="Permanent link">&para;</a></h2>
-<p>The DSU format only carries 4 slots. PadForge supports 16. Slots 5-16 do not appear in the broadcast.</p>
+<p>The DSU format only carries 4 slots. PadForge supports 16. Slots 5–16 do not appear in the broadcast.</p>
 <ul>
 <li>Single player: put the motion controller in slot 1.</li>
 <li>Local multiplayer with motion: up to 4 controllers.</li>
-<li>Motion controller in slot 5 or later does not show up in the emulator. Move it to slots 1-4.</li>
+<li>Motion controller in slot 5 or later does not show up in the emulator. Move it to slots 1–4.</li>
+<li>The cap sits on top of the slot-type rule: the slot still has to be a PlayStation or Nintendo virtual controller.</li>
 </ul>
 <hr />
 <h2 id="port">Port<a class="headerlink" href="#port" title="Permanent link">&para;</a></h2>
@@ -3127,7 +3197,7 @@
 </tr>
 <tr>
 <td>Only one controller has motion</td>
-<td>DSU caps at 4 slots. Move the motion device to slots 1-4.</td>
+<td>DSU caps at 4 slots. Move the motion device to slots 1–4.</td>
 </tr>
 <tr>
 <td>Device has no motion sensors</td>
@@ -3136,6 +3206,10 @@
 <tr>
 <td>Emulator says "connected" but no values</td>
 <td>The physical controller has to be assigned to a slot, not only detected on the Devices page.</td>
+</tr>
+<tr>
+<td>Emulator connected, controller assigned, still no motion</td>
+<td>The slot's virtual controller type has to be <strong>PlayStation</strong> or <strong>Nintendo</strong>. Xbox, Extended, Keyboard + Mouse, and MIDI slots send no motion.</td>
 </tr>
 </tbody>
 </table>
@@ -3149,7 +3223,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

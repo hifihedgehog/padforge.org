@@ -13,14 +13,17 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 
 | Setting | What is captured |
 |---|---|
-| Virtual controller topology | Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Extended, MIDI, Keyboard+Mouse). |
+| Virtual controller topology | Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Nintendo, Extended, MIDI, Keyboard+Mouse). |
 | Button and axis mappings | Every per-device mapping for every slot. See [Button and Axis Mappings](../features/mappings.md). |
 | Deadzones | Per-axis [Stick Deadzones](../features/stick-deadzones.md) and per-trigger [Trigger Deadzones](../features/trigger-deadzones.md). |
+| SOCD cleaning | Per-slot Simultaneous Opposite Cardinal Directions (SOCD) mode and button pairs, applied to the slot's final combined output. |
 | Force feedback | Per-slot [Force Feedback](../features/force-feedback.md) settings. |
+| Bass Shakers | Per-slot Rumble to Audio routing. Output device, gain, speaker placement, and the tone tuning for each of the four rumble voices. |
 | Impulse triggers | Per-slot [Impulse Triggers](../features/impulse-triggers.md) gain, swap, Constant Trigger Force, and Audio Bass Trigger Rumble. |
 | Adaptive triggers | DualSense [Adaptive Triggers](../features/adaptive-triggers.md) modes and curves. |
-| Lighting | [Lighting](../features/lighting.md) modes for DualSense and DualShock 4 lightbars. |
+| Lighting | [Lighting](../features/lighting.md) modes for DualSense and DualShock 4 lightbars, plus Guide Button LED brightness for Xbox One and later controllers, Steam Controllers, Switch Pro Controllers, and right Joy-Cons. |
 | Gyro | Per-pad-per-slot [Gyro](gyro.md) tuning. Reference frame, sensitivity, smoothing, real-world calibration, Aim Engage button. |
+| Flick Stick | Per-pad-per-slot [Flick Stick](../features/stick-deadzones.md#flick-stick) tuning. Dots Per 360°, Flick Time, Flick Threshold, Snap Angle, Snap Strength, Front Angle Deadzone, Sweep Smoothing. |
 | Macros | All [Macros](macros.md). Triggers, actions, repeat modes. |
 | Menus | Per-slot radial and touch [Menus](menus.md): cells, host input, fire mode, and overlay placement. |
 | Touchpad outputs and gestures | Per-slot [Touchpad](../features/touchpad.md) toggles (Stick / D-Pad, Mouse, absolute pointer, swipe haptics, gesture detection) plus custom shape templates recorded with the recorder dialog. Different games can carry different gesture catalogs. |
@@ -116,6 +119,7 @@ The active profile's card carries a lit flame and an ember-tinted edge, so you c
 | Extended | Extended (HIDMaestro) slots. |
 | MIDI | MIDI slots. |
 | KB+M | Keyboard+Mouse slots. |
+| Nintendo | Nintendo slots. |
 
 A badge hides when its count is zero. The strip gives you a quick read of the profile's shape without loading it.
 
@@ -226,6 +230,7 @@ The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled o
 |---|---|
 | Racing game with custom deadzones | Make a "Forza" profile with wider trigger deadzones and a steeper stick curve. Add `ForzaHorizon5.exe`. It loads on launch and reverts on Alt+Tab. |
 | Flight sim on Extended (HIDMaestro) | Make an "MSFS" profile that uses an Extended slot instead of Xbox. Map axes to flight-stick axes. Add `FlightSimulator.exe`. Other games keep the Default Xbox profile. |
+| Switch emulator with a Nintendo pad | Make a profile that uses a Nintendo slot instead of Xbox. The emulator sees a Switch Pro Controller and shows Nintendo button prompts. Add the emulator's executable. |
 | Several emulators, one profile | Make an "Emulators" profile and add `Dolphin.exe`, `Cemu.exe`, and `Ryujinx.exe`. All three load the same setup. |
 | Macros for one game only | Make a profile with D-pad-to-keyboard macros for an MMO. Add the MMO executable. Default has no macros, so they only run when the MMO is in front. |
 | Quick on/off from the couch | Bind **Toggle Virtual Controllers Disabled** to LS + RS. Press it to make every virtual pad go away (for keyboard play), press again to bring them all back. |
@@ -264,4 +269,4 @@ The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled o
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

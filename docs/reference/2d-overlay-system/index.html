@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -4321,7 +4351,7 @@
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>MidiPreviewView.xaml.cs         (piano + CC slider view)
 </code></pre></div>
 <h3 id="when-each-view-is-used">When Each View Is Used<a class="headerlink" href="#when-each-view-is-used" title="Permanent link">&para;</a></h3>
-<p><code>PadPage.ApplyViewMode()</code> selects the view. Priority: KeyboardMouse &gt; Midi &gt; Custom Extended &gt; standard gamepad (2D/3D toggle).</p>
+<p><code>PadPage.ApplyViewMode()</code> selects the view. Priority: KeyboardMouse &gt; Midi &gt; Custom Extended &gt; Nintendo &gt; standard gamepad (2D/3D toggle). The Nintendo branch (4.1.0, <code>OutputType == VirtualControllerType.Nintendo</code>) pins <code>ControllerModel2DView</code> to the SWITCHPRO layout with the 2D/3D toggle hidden.</p>
 <table>
 <thead>
 <tr>
@@ -5288,19 +5318,19 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <tbody>
 <tr>
 <td><code>\|dx\| &gt; \|dy\|</code>, <code>dx &gt; 0</code></td>
-<td><code>ExtendedAxis{axisXIdx}</code> (positive X)</td>
+<td><code>RawAxis{axisXIdx}</code> (positive X)</td>
 </tr>
 <tr>
 <td><code>\|dx\| &gt; \|dy\|</code>, <code>dx &lt;= 0</code></td>
-<td><code>ExtendedAxis{axisXIdx}Neg</code> (negative X)</td>
+<td><code>RawAxis{axisXIdx}Neg</code> (negative X)</td>
 </tr>
 <tr>
 <td><code>\|dy\| &gt; \|dx\|</code>, <code>dy &gt; 0</code></td>
-<td><code>ExtendedAxis{axisYIdx}</code> (positive Y = down)</td>
+<td><code>RawAxis{axisYIdx}</code> (positive Y = down)</td>
 </tr>
 <tr>
 <td><code>\|dy\| &gt; \|dx\|</code>, <code>dy &lt;= 0</code></td>
-<td><code>ExtendedAxis{axisYIdx}Neg</code> (negative Y = up)</td>
+<td><code>RawAxis{axisYIdx}Neg</code> (negative Y = up)</td>
 </tr>
 </tbody>
 </table>
@@ -5311,7 +5341,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 1. <strong>Background</strong> (<code>Rectangle</code>). Dim stroke, dark fill, rounded corners, hand cursor
 2. <strong>Fill bar</strong> (<code>Rectangle</code>). Accent-colored, height 0 initially, grows from bottom
 3. <strong>Label</strong>. "TN" above the bar</p>
-<p><strong>Click-to-record:</strong> fires <code>ExtendedAxis{axisIdx}</code>.</p>
+<p><strong>Click-to-record:</strong> fires <code>RawAxis{axisIdx}</code>.</p>
 <h4 id="createpovwidget">CreatePovWidget<a class="headerlink" href="#createpovwidget" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">private</span><span class="w"> </span><span class="n">PovWidget</span><span class="w"> </span><span class="nf">CreatePovWidget</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">)</span>
 </code></pre></div>
@@ -5320,14 +5350,14 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 2. <strong>Arrow</strong> (<code>Polygon</code> inside <code>Canvas</code>). Triangular, rotated around POV center, initially hidden
 3. <strong>Label</strong>. "D-Pad" (1 POV) or "POV N" (multiple)</p>
 <p><strong>Hover:</strong> direction arrow rotated to mouse quadrant (0/90/180/270 degrees).</p>
-<p><strong>Click-to-record:</strong> quadrant detection fires <code>ExtendedPov{index}Up</code>, <code>Down</code>, <code>Left</code>, or <code>Right</code>.</p>
+<p><strong>Click-to-record:</strong> quadrant detection fires <code>RawPov{index}Up</code>, <code>Down</code>, <code>Left</code>, or <code>Right</code>.</p>
 <h4 id="createbuttonwidget">CreateButtonWidget<a class="headerlink" href="#createbuttonwidget" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">private</span><span class="w"> </span><span class="n">ButtonWidget</span><span class="w"> </span><span class="nf">CreateButtonWidget</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">)</span>
 </code></pre></div>
 <p>Creates:
 1. <strong>Circle</strong> (<code>Ellipse</code>). Dim stroke, dark background, hand cursor
 2. <strong>Label</strong> (<code>TextBlock</code>). Button number (1-indexed) centered in circle</p>
-<p><strong>Click-to-record:</strong> fires <code>ExtendedBtn{index}</code>.</p>
+<p><strong>Click-to-record:</strong> fires <code>RawBtn{index}</code>.</p>
 <h3 id="click-to-record-target-names">Click-to-Record Target Names<a class="headerlink" href="#click-to-record-target-names" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5340,22 +5370,22 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <tbody>
 <tr>
 <td>Stick</td>
-<td><code>ExtendedAxis{X}</code> / <code>ExtendedAxis{X}Neg</code></td>
+<td><code>RawAxis{X}</code> / <code>RawAxis{X}Neg</code></td>
 <td>Yes (X vs Y, positive vs negative)</td>
 </tr>
 <tr>
 <td>Trigger</td>
-<td><code>ExtendedAxis{N}</code></td>
+<td><code>RawAxis{N}</code></td>
 <td>No</td>
 </tr>
 <tr>
 <td>POV</td>
-<td><code>ExtendedPov{N}Up</code> / <code>Down</code> / <code>Left</code> / <code>Right</code></td>
+<td><code>RawPov{N}Up</code> / <code>Down</code> / <code>Left</code> / <code>Right</code></td>
 <td>Yes (4 cardinal directions)</td>
 </tr>
 <tr>
 <td>Button</td>
-<td><code>ExtendedBtn{N}</code></td>
+<td><code>RawBtn{N}</code></td>
 <td>No</td>
 </tr>
 </tbody>
@@ -5426,7 +5456,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 </table>
 <p>The trigger flash colors the background rect's border, not the inner fill bar. A resting trigger's fill has zero height, so recoloring it would show nothing.</p>
 <p><strong>POV direction mapping:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">string</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="s">$&quot;ExtendedPov{w.PovIndex}&quot;</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span><span class="w">  </span><span class="c1">// &quot;Up&quot;, &quot;Down&quot;, &quot;Left&quot;, &quot;Right&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">string</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="s">$&quot;RawPov{w.PovIndex}&quot;</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span><span class="w">  </span><span class="c1">// &quot;Up&quot;, &quot;Down&quot;, &quot;Left&quot;, &quot;Right&quot;</span>
 <a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="kt">double</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="k">switch</span>
 <a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="p">{</span>
 <a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="w">    </span><span class="s">&quot;Up&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>

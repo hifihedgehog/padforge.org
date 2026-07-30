@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2691,10 +2721,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#extended-custom-hid-mapping" class="md-nav__link">
+  <a href="#raw-hid-mapping-extended-nintendo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Extended Custom HID Mapping
+        Raw-HID Mapping (Extended / Nintendo)
       
     </span>
   </a>
@@ -3227,17 +3257,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#xinput-slot-mask" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XInput Slot Mask
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -3328,10 +3347,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#extendedrawstate-struct" class="md-nav__link">
+  <a href="#rawhidstate-struct" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ExtendedRawState Struct
+        RawHidState Struct
       
     </span>
   </a>
@@ -4664,10 +4683,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#extended-custom-hid-mapping" class="md-nav__link">
+  <a href="#raw-hid-mapping-extended-nintendo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Extended Custom HID Mapping
+        Raw-HID Mapping (Extended / Nintendo)
       
     </span>
   </a>
@@ -5200,17 +5219,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#xinput-slot-mask" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        XInput Slot Mask
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -5301,10 +5309,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#extendedrawstate-struct" class="md-nav__link">
+  <a href="#rawhidstate-struct" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ExtendedRawState Struct
+        RawHidState Struct
       
     </span>
   </a>
@@ -5396,46 +5404,48 @@
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        S5[Step 5: UpdateVirtualDevices&lt;br/&gt;HIDMaestro lifecycle on thread pool&lt;br/&gt;Per-slot create/destroy/reorder&lt;br/&gt;Inactivity timeout + bubble-up cascade]
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        S6[Step 6: RetrieveOutputStates&lt;br/&gt;Copy for UI display]
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        DS3[UpdateDs3PlayerNumber&lt;br/&gt;#191 bridged-DS3 player LED]
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        SDL --&gt; S1
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        S1 --&gt;|every 2s or first cycle| S2
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        SDL --&gt;|skip if not due| S2
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        S2 --&gt; RL
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        RL --&gt; ENG
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        ENG --&gt; MS
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        MS --&gt; DSU
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        DSU --&gt; S3
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        S3 --&gt; S4
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        S4 --&gt; S4b
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        S4b --&gt; S5
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        S5 --&gt; S6
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        S6 --&gt; DS3
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        DS3 --&gt; WAIT
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        WAIT --&gt;|next cycle| SDL
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    end
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    subgraph &quot;UI Thread (30Hz)&quot;
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        UI_READ[Read RetrievedOutputStates]
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotExtended*]
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    end
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        VIB[OutputReceived&lt;br/&gt;writes VibrationStates]
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    end
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    S6 -.-&gt;|struct copy| UI_READ
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    UI_WRITE -.-&gt;|atomic ref/value| S5
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    VIB -.-&gt;|motor values| S2
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    style S1 fill:#e1f5fe
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    style S2 fill:#e1f5fe
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    style S3 fill:#f3e5f5
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    style S4 fill:#f3e5f5
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    style S4b fill:#fff3e0
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    style S5 fill:#e8f5e9
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    style S6 fill:#e8f5e9
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        RA[UpdateRumbleAudioLane&lt;br/&gt;#236 rumble-to-audio publish]
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        SDL --&gt; S1
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        S1 --&gt;|every 2s or first cycle| S2
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        SDL --&gt;|skip if not due| S2
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        S2 --&gt; RL
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        RL --&gt; ENG
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        ENG --&gt; MS
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        MS --&gt; DSU
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        DSU --&gt; S3
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        S3 --&gt; S4
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        S4 --&gt; S4b
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        S4b --&gt; S5
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        S5 --&gt; S6
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        S6 --&gt; DS3
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        DS3 --&gt; RA
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        RA --&gt; WAIT
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        WAIT --&gt;|next cycle| SDL
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    end
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    subgraph &quot;UI Thread (30Hz)&quot;
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        UI_READ[Read RetrievedOutputStates]
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    end
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        VIB[OutputReceived&lt;br/&gt;writes VibrationStates]
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    end
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    S6 -.-&gt;|struct copy| UI_READ
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    UI_WRITE -.-&gt;|atomic ref/value| S5
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    VIB -.-&gt;|motor values| S2
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    style S1 fill:#e1f5fe
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    style S2 fill:#e1f5fe
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    style S3 fill:#f3e5f5
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    style S4 fill:#f3e5f5
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    style S4b fill:#fff3e0
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    style S5 fill:#e8f5e9
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    style S6 fill:#e8f5e9
 </code></pre></div>
 <p>The pipeline is a <code>partial class InputManager</code> split across eleven files:</p>
 <table>
@@ -5651,11 +5661,11 @@
 <td>Combined gamepad state per slot</td>
 </tr>
 <tr>
-<td><code>CombinedExtendedRawStates</code></td>
-<td><code>ExtendedRawState[MaxPads]</code></td>
+<td><code>CombinedRawHidStates</code></td>
+<td><code>RawHidState[MaxPads]</code></td>
 <td>Step 4 (engine)</td>
 <td>Step 5</td>
-<td>Combined raw HID state for Extended Custom-profile slots</td>
+<td>Combined raw HID state for Extended / Nintendo raw-surface slots</td>
 </tr>
 <tr>
 <td><code>CombinedMidiRawStates</code></td>
@@ -5886,13 +5896,16 @@
 <a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>UpdateDs3PlayerNumber()       -- rate-limited player-LED refresh for the bridged Bluetooth DS3 (#191)
 <a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>  |
 <a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>  v
-<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>Frequency measurement (~1/second)
-<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>  |
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>  |                              slot destroyed this tick publishes zeros the same tick
 <a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>  v
-<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>Drift-compensated hybrid sleep/spin-wait
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>Frequency measurement (~1/second)
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>  |
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>  v
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>Drift-compensated hybrid sleep/spin-wait
 </code></pre></div>
 <p><strong>Poll-frame gate:</strong></p>
-<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 427) is called once per cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 1192). It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
+<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 564) is called once per cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 1422). It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
 <p><strong>3-Tier Polling Sleep Strategy:</strong></p>
 <p>The polling loop uses a tiered sleep strategy, falling through to the next tier if the preferred timer is unavailable:</p>
 <table>
@@ -5944,23 +5957,27 @@
 - <code>adjustedTarget</code> floors at <code>targetTicks / 4</code> to prevent negative or near-zero waits</p>
 <p><strong>Idle mode:</strong></p>
 <p>When no VC slots exist (<code>IsIdle == true</code>), the loop enters low-power mode:
+- Calls <code>RumbleAudioService.SilenceAll()</code> every iteration. The #236 feedback lane does not run in idle, so idle entry is an explicit silence edge and every iteration republishes it
 - Pumps <code>SDL_UpdateJoysticks()</code>
 - Runs <code>UpdateDevices()</code> every 5 seconds (instead of 2) so new controllers still appear on the Devices page
 - Runs <code>UpdateInputStates()</code> for Devices page raw input preview
 - Fires <code>RemoteLinkPollTick?.Invoke()</code> so shared devices keep streaming their #138 delta accumulation while no slot is active on this end
 - Runs <code>EvaluateGlobalMacros()</code> so profile shortcuts still work from an empty profile
+- Calls <code>ReleaseAllLatchedMacroKeys()</code>. The slot macro evaluator's latched-key reconcile does not run in idle, so any <code>ToggleKey</code> latch is released rather than left stuck down. Latch bits stay set on the actions and re-assert when the pipeline wakes
 - Skips Steps 3–6
 - Sleeps at ~20 Hz (<code>Thread.Sleep(50)</code>)
 - Reports <code>CurrentFrequency = 0</code>
 - On transition back to active: sets <code>firstCycle = true</code> for immediate enumeration, resets drift state to prevent burst cycles</p>
+<p><strong>Focus suspend:</strong></p>
+<p>The engine half of the "continue polling when window loses focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
 <p><strong>Sleep guard:</strong> Every 5 seconds, calls <code>SetThreadExecutionState(ES_CONTINUOUS)</code> to clear execution-state flags SDL may re-assert, so the PC can still sleep.</p>
 <h3 id="slot-reorder">Slot Reorder<a class="headerlink" href="#slot-reorder" title="Permanent link">&para;</a></h3>
 <p>Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in <code>InputManager</code> swaps <code>SlotControllerTypes[]</code>, <code>VibrationStates[]</code>, or the <code>Combined*States</code> arrays between pad indices, and there is no <code>SwapSlots</code> / <code>SwapSlotData</code> method on <code>InputManager</code>.</p>
-<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 11289), <code>MoveSlot(int, int)</code> (line 11322), and <code>MoveSlotToGroupTail(int)</code> (line 11369). Each mutates <code>SettingsManager.SlotOrders</code> for the new visual order, then routes through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point:</p>
+<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 13921), <code>MoveSlot(int, int)</code> (line 13954), and <code>MoveSlotToGroupTail(int)</code> (line 14001). Each mutates <code>SettingsManager.SlotOrders</code> for the new visual order, then routes through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RerouteVirtualControllersForReorder</span><span class="p">(</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">groupType</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">oldOrder</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newOrder</span><span class="p">)</span>
 </code></pre></div>
-<p><code>InputManager.Step5.VirtualDevices.cs</code> line 1766. Intra-group only, and only for the three HM-backed groups (Xbox / PlayStation / Extended); it early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
+<p><code>InputManager.Step5.VirtualDevices.cs</code> line 2379. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
 <ul>
 <li><strong>Same profile at V</strong>: reuse the kernel VC in place. The pad-index pointer in <code>_virtualControllers[]</code> moves so the new pad-at-position-V feeds V's kernel slot, and <code>FeedbackPadIndex</code> is updated on the surviving VC so the rumble callback writes the right <code>VibrationStates[]</code> entry. No teardown.</li>
 <li><strong>Different profile at V</strong>: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus <code>ApplyAscendingIndexPreemption</code> recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.</li>
@@ -5970,11 +5987,12 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateMotionSnapshots</span><span class="p">()</span>
 </code></pre></div>
 <p>Called after Step 2 (<code>InputManager.cs</code> line 1215). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion.</p>
-<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ResolveMotionSource</code> (<code>InputManager.cs</code> ~2233-2261) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">gyroSrc</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveMotionSource</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionGyroTarget</span><span class="p">,</span><span class="w">  </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">accelSrc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveMotionSource</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionAccelTarget</span><span class="p">,</span><span class="w"> </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ResolveMotionSource</code> (<code>InputManager.cs</code> ~2814) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">gyroSrc</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveMotionSource</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionGyroTarget</span><span class="p">,</span><span class="w">  </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w">  </span><span class="n">padIndex</span><span class="p">);</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">accelSrc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveMotionSource</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionAccelTarget</span><span class="p">,</span><span class="w"> </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">);</span>
 </code></pre></div>
-<p>The two sub-channels can land on different devices. Non-Sony slots have no motion rows, so both resolve to null and the snapshot is written <code>HasMotion = false</code>. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A <code>"Motion Accel L"</code> source reads the aux (Nunchuk / left Joy-Con) accelerometer via <code>s.AccelAux</code> instead of the body IMU (#199 follow-up).</p>
+<p>The two sub-channels can land on different devices. A 250 ms row-presence gate caches whether the slot's <code>MappingSet</code> has any motion rows at all, so slots without them skip both per-tick row walks (a set-reference change re-scans immediately). Motion rows exist only on motion-capable slot families: <code>MappingSetMigrator.EnsureMotionRows</code> (<code>MappingSetMigrator.cs</code> ~647-666) backfills them on load and on device assignment for <strong>PlayStation and Nintendo</strong> slots (the virtual Switch Pro gained a real IMU surface in HIDMaestro v1.3.18). Other slot types have no motion rows, so both resolves return null and the snapshot is written <code>HasMotion = false</code>. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A <code>"Motion Accel L"</code> source reads the aux (Nunchuk / left Joy-Con) accelerometer via <code>s.AccelAux</code> instead of the body IMU (#199 follow-up).</p>
+<p><strong>Delivery.</strong> The DSU server reads <code>MotionSnapshots</code> after Step 2 (below). Step 5 additionally delivers <code>MotionSnapshots[padIndex]</code> to HIDMaestro through <code>SubmitRawHidState</code>'s IMU channel on Nintendo / Extended raw-surface slots, and through the extended <code>SubmitGamepadState</code> overload on PlayStation slots. <code>HasMotion = false</code> submits zeroes.</p>
 <p><strong>No sign transform here.</strong> The native SDL sensor frame is preserved. Accel is a raw scaled read. Gyro passes through the per-(device, slot) Gyro tab tuning chain first:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Accel — MsToG = 1/9.80665, no negation:</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">   </span><span class="n">ay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">   </span><span class="n">az</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
@@ -6562,7 +6580,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <hr />
 <h2 id="step-3-updateoutputstates">Step 3: UpdateOutputStates<a class="headerlink" href="#step-3-updateoutputstates" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>InputManager.Step3.UpdateOutputStates.cs</code></p>
-<p>Maps each device's <code>CustomInputState</code> to a <code>Gamepad</code> struct (and optionally <code>ExtendedRawState</code>, <code>MidiRawState</code>, or <code>KbmRawState</code>) via <code>PadSetting</code> mapping descriptors. Contains the mapping engine, deadzone processing, sensitivity curves, and center offset corrections.</p>
+<p>Maps each device's <code>CustomInputState</code> to a <code>Gamepad</code> struct (and optionally <code>RawHidState</code>, <code>MidiRawState</code>, or <code>KbmRawState</code>) via <code>PadSetting</code> mapping descriptors. Contains the mapping engine, deadzone processing, sensitivity curves, and center offset corrections.</p>
 <p><strong>Companion file (v3.2):</strong> <code>InputManager.Step3.MappingSetEval.cs</code> runs ahead of the per-device pass on slots that carry a <code>MappingSet</code>. It resolves each row's multiple sources against the active shift layer, applies the selected combine mode, and writes a synthesized <code>PadSetting</code> snapshot that the per-device pass below then consumes through the same <code>MapInputToGamepad</code> path. The mode is <code>row.CombineMode</code>, one of <code>MaxAbs</code> (UI label "Strongest"), <code>Sum</code> ("Combined"), <code>Average</code>, <code>OR</code> ("Either"), <code>AND</code> ("Both"), <code>XOR</code> ("Only one"), <code>StickTrim</code> ("Stick Trim", #155), or <code>Custom</code> (formula editor). Slots without a MappingSet skip the evaluator and fall straight into the per-device pass.</p>
 <h3 id="method-signature_2">Method Signature<a class="headerlink" href="#method-signature_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateOutputStates</span><span class="p">()</span>
@@ -6583,9 +6601,9 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
    f. Save <code>us.RawMappedState = rawMapped</code> (pre-deadzone snapshot for UI preview)
    g. <strong>Type-specific raw mapping</strong> based on <code>SlotControllerTypes[slot]</code>:</p>
 <ul>
-<li>Extended Custom HID: <code>MapInputToExtendedRaw(ud.InputState, ps, SlotCustomLayouts[slot], mappingSet, deviceGuid, slot)</code> using dictionary-based descriptor mappings</li>
-<li>MIDI: <code>MapInputToMidiRaw(ud.InputState, ps, ccCount, noteCount, mappingSet, deviceGuid, slot)</code> for MIDI CC/note output</li>
-<li>KeyboardMouse: <code>MapInputToKbmRaw(ud.InputState, ps, mappingSet, deviceGuid, slot)</code> for keyboard/mouse output</li>
+<li>Extended / Nintendo raw surface (<code>SlotControllerTypes[slot] is Extended or Nintendo &amp;&amp; SlotRawHidSurface[slot]</code>): <code>EnsureRawShape(ref us.RawHidScratch, cfg)</code> then <code>MapInputToExtendedRaw(ref us.RawHidScratch, ud.InputState, ps, cfg, ms, deviceGuid, slot)</code>. The map builds into the poll-owned scratch, and a fresh copy is published to <code>us.RawHidOutputState</code> only on content change (<code>RawContentEquals</code> / <code>RawCopyOf</code>), because published arrays are read cross-thread by the UI and must stay immutable after publish</li>
+<li>MIDI: same scratch/publish-on-change contract via <code>EnsureMidiShape</code> + <code>MapInputToMidiRaw(ref us.MidiRawScratch, ud.InputState, ps, ccCount, noteCount, ms, deviceGuid, slot)</code></li>
+<li>KeyboardMouse: <code>us.KbmRawOutputState = MapInputToKbmRaw(ud.InputState, ps, ms, deviceGuid, slot)</code>. <code>KbmRawState</code> is all value fields, so a struct assign is already a copy</li>
 </ul>
 <p>All three carry the <code>MappingSet</code> context so their per-target evaluators resolve rows shift-layer aware (#221, see <a href="#shift-layer-activators-and-the-cycle-cursor">Shift Layer Activators</a>).</p>
 </li>
@@ -7024,12 +7042,13 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 </tbody>
 </table>
-<h3 id="extended-custom-hid-mapping">Extended Custom HID Mapping<a class="headerlink" href="#extended-custom-hid-mapping" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">ExtendedRawState</span><span class="w"> </span><span class="nf">MapInputToExtendedRaw</span><span class="p">(</span><span class="n">CustomInputState</span><span class="w"> </span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">PadSetting</span><span class="w"> </span><span class="n">ps</span><span class="p">,</span>
-<a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="w">    </span><span class="n">CustomControllerLayout</span><span class="w"> </span><span class="n">cfg</span><span class="p">,</span>
-<a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="w">    </span><span class="n">MappingSet</span><span class="w"> </span><span class="n">mappingSet</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">thisDeviceGuid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slotIndex</span><span class="p">)</span>
+<h3 id="raw-hid-mapping-extended-nintendo">Raw-HID Mapping (Extended / Nintendo)<a class="headerlink" href="#raw-hid-mapping-extended-nintendo" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">MapInputToExtendedRaw</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">RawHidState</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">PadSetting</span><span class="w"> </span><span class="n">ps</span><span class="p">,</span>
+<a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="w">    </span><span class="n">CustomControllerLayout</span><span class="w"> </span><span class="n">cfg</span><span class="p">,</span>
+<a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a><span class="w">    </span><span class="n">MappingSet</span><span class="w"> </span><span class="n">mappingSet</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">thisDeviceGuid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slotIndex</span><span class="p">)</span>
 </code></pre></div>
-<p>Uses dictionary-based mappings (<code>ps.GetExtendedMapping("ExtendedAxis0")</code>, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from <code>CustomControllerLayout</code>. The trailing <code>mappingSet</code> / <code>thisDeviceGuid</code> / <code>slotIndex</code> arguments hand the v3.2 <code>MappingSet</code> evaluator the context it needs to resolve multi-source rows that target Extended channels.</p>
+<p><code>InputManager.Step3.UpdateOutputStates.cs</code> line 2174. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned <code>raw</code> (the per-setting <code>us.RawHidScratch</code>), starting with <code>raw.Clear()</code> so POVs begin centered. The caller republishes into <code>us.RawHidOutputState</code> only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (<code>ps.GetExtendedMapping("ExtendedAxis0")</code>, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from <code>CustomControllerLayout</code>. The trailing <code>mappingSet</code> / <code>thisDeviceGuid</code> / <code>slotIndex</code> arguments hand the v3.2 <code>MappingSet</code> evaluator the context it needs to resolve multi-source rows that target Extended channels.</p>
 <ul>
 <li><strong>Axes</strong>: Uses <code>MapToThumbAxisWithNeg</code> for each axis (signed short range). No <code>NegateAxis</code> needed. Unlike the gamepad path, the raw path has no second inversion in <code>SubmitRawState</code>.</li>
 <li><strong>Buttons</strong>: Uses <code>MapToButtonPressed</code> for each button, sets via <code>raw.SetButton(i, true)</code></li>
@@ -7470,7 +7489,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <hr />
 <h2 id="step-4-combineoutputstates">Step 4: CombineOutputStates<a class="headerlink" href="#step-4-combineoutputstates" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>InputManager.Step4.CombineOutputStates.cs</code></p>
-<p>Merges mapped <code>Gamepad</code> states from all devices assigned to each VC slot into a single combined state. Handles four output types (Gamepad, ExtendedRawState, MidiRawState, KbmRawState) plus per-slot touchpad state (<code>CombinedTouchpadStates</code>) for PlayStation slots.</p>
+<p>Merges mapped <code>Gamepad</code> states from all devices assigned to each VC slot into a single combined state. Handles four output types (Gamepad, RawHidState, MidiRawState, KbmRawState) plus per-slot touchpad state (<code>CombinedTouchpadStates</code>) for PlayStation slots.</p>
 <h3 id="method-signature_3">Method Signature<a class="headerlink" href="#method-signature_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CombineOutputStates</span><span class="p">()</span>
 </code></pre></div>
@@ -7485,7 +7504,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <li><strong>0 devices</strong>: clear all applicable state arrays for this slot</li>
 <li><strong>1 device</strong>: direct struct copy. No merge needed (optimization for the common case)</li>
 <li><strong>N devices</strong>: iterate and call <code>MergeGamepad()</code> for each. Also merge type-specific raw states:</li>
-<li>Extended Custom HID: <code>MergeExtendedRaw()</code> (first populated device seeds the combine, subsequent are merged). Takes the slot's <code>CustomControllerLayout</code> so trigger axes use pressed-wins and stick axes use magnitude-wins.</li>
+<li>Extended Custom HID: <code>MergeRawHid()</code> (first populated device seeds the combine, subsequent are merged). Takes the slot's <code>CustomControllerLayout</code> so trigger axes use pressed-wins and stick axes use magnitude-wins.</li>
 <li>MIDI: <code>MidiRawState.Combine()</code> (static method)</li>
 <li>KBM: <code>KbmRawState.Combine()</code> (static method)</li>
 <li><strong>Touchpad (PlayStation slots only)</strong>: write <code>CombinedTouchpadStates[slot]</code>. The first assigned device with an active finger or click wins (single-source, so if one device drops out the next takes over). When that state carries <code>Click</code>, OR <code>Gamepad.TOUCHPAD</code> into the combined <code>Buttons</code> bitmap so every downstream consumer (Step 5 submit, Step 6 copy, dispatcher click detection) sees the press.</li>
@@ -7539,7 +7558,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">MergeExtendedRaw</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">ExtendedRawState</span><span class="w"> </span><span class="n">dest</span><span class="p">,</span><span class="w"> </span><span class="k">ref</span><span class="w"> </span><span class="n">ExtendedRawState</span><span class="w"> </span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">CustomControllerLayout</span><span class="w"> </span><span class="n">layout</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">MergeRawHid</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">RawHidState</span><span class="w"> </span><span class="n">dest</span><span class="p">,</span><span class="w"> </span><span class="k">ref</span><span class="w"> </span><span class="n">RawHidState</span><span class="w"> </span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">CustomControllerLayout</span><span class="w"> </span><span class="n">layout</span><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -7578,7 +7597,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 1. Read <code>MacroSnapshots[i]</code>. If null or empty, skip
 2. Delegate to type-specific evaluator:
    - <code>EvaluateSlotMacros(ref Gamepad, MacroItem[])</code> for standard slots (Xbox / PlayStation / Gamepad-preset Extended / KBM)
-   - <code>EvaluateSlotMacrosCustomExtended(ref ExtendedRawState, MacroItem[])</code> for custom Extended slots (operates on <code>uint[]</code> button words instead of <code>ushort</code> Gamepad.Buttons)</p>
+   - <code>EvaluateSlotMacrosCustomExtended(ref RawHidState, MacroItem[])</code> for custom Extended slots (operates on <code>uint[]</code> button words instead of <code>ushort</code> Gamepad.Buttons)</p>
 <p>After the per-slot pass, <code>CollectMenuDirectOutputs()</code> delivers menu direct bindings, then <code>ReconcileLatchedKeys()</code> settles the frame's latched-key set once for all slots (both below).</p>
 <h3 id="menu-direct-outputs-and-the-latched-key-reconcile">Menu Direct Outputs and the Latched-Key Reconcile<a class="headerlink" href="#menu-direct-outputs-and-the-latched-key-reconcile" title="Permanent link">&para;</a></h3>
 <p><code>EvaluateMacros()</code> opens each frame by clearing <code>_desiredLatchedKeys</code>, the set of virtual keys the frame wants held down. The per-slot evaluators add every enabled macro's latched <code>ToggleKey</code> action (#9 wave 1b), then <code>CollectMenuDirectOutputs()</code> adds fired menu items (#9 B-17): a hand-authored menu cell can carry one direct binding, either a virtual key that joins the desired set (held while the item is fired, released the frame the fire ends) or a VC button mask OR'd into <code>CombinedOutputStates[slot].Buttons</code> like a macro ButtonPress (skipped for custom Extended slots). Imported Workshop menus carry no direct bindings. Their items deliver through mapping rows and macro descriptor triggers keyed on the item's fired descriptor.</p>
@@ -7588,7 +7607,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <ol>
 <li><strong>Button flags</strong>: Three sub-types (checked via priority):</li>
 <li><strong>Raw device buttons</strong> (<code>UsesRawTrigger</code>): Reads <code>FindOnlineDeviceByInstanceGuid(macro.TriggerDeviceGuid).InputState.Buttons[rawIndices[i]]</code>. Bypasses the mapping pipeline. Reads directly from the physical device's raw button state.</li>
-<li><strong>Extended Custom HID button words</strong> (<code>UsesCustomTrigger</code>): Checks <code>(raw.Buttons[w] &amp; tw[w]) == tw[w]</code> against the combined ExtendedRawState.</li>
+<li><strong>Extended Custom HID button words</strong> (<code>UsesCustomTrigger</code>): Checks <code>(raw.Buttons[w] &amp; tw[w]) == tw[w]</code> against the combined RawHidState.</li>
 <li>
 <p><strong>Xbox bitmask</strong> (default): <code>(gp.Buttons &amp; triggerButtons) == triggerButtons</code> against the combined Gamepad.</p>
 </li>
@@ -7618,8 +7637,17 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-74-4" name="__codelineno-74-4" href="#__codelineno-74-4"></a><span class="w">    </span><span class="n">OnRelease</span><span class="p">,</span><span class="w">        </span><span class="c1">// Fire once when trigger transitions active -&gt; inactive</span>
 <a id="__codelineno-74-5" name="__codelineno-74-5" href="#__codelineno-74-5"></a><span class="w">    </span><span class="n">WhileHeld</span><span class="p">,</span><span class="w">        </span><span class="c1">// Fire continuously while trigger is active</span>
 <a id="__codelineno-74-6" name="__codelineno-74-6" href="#__codelineno-74-6"></a><span class="w">    </span><span class="n">Always</span><span class="p">,</span><span class="w">           </span><span class="c1">// Skips trigger check, runs every frame until stopped</span>
-<a id="__codelineno-74-7" name="__codelineno-74-7" href="#__codelineno-74-7"></a><span class="w">    </span><span class="n">CustomExpression</span><span class="w">  </span><span class="c1">// Rising edge of a user formula over a/b/c inputs, active when result &gt;= 0.5</span>
-<a id="__codelineno-74-8" name="__codelineno-74-8" href="#__codelineno-74-8"></a><span class="p">}</span>
+<a id="__codelineno-74-7" name="__codelineno-74-7" href="#__codelineno-74-7"></a><span class="w">    </span><span class="n">CustomExpression</span><span class="p">,</span><span class="w"> </span><span class="c1">// Rising edge of a user formula over a/b/c inputs, active when result &gt;= 0.5</span>
+<a id="__codelineno-74-8" name="__codelineno-74-8" href="#__codelineno-74-8"></a><span class="w">    </span><span class="c1">// Activation modes appended for #238/#244 and #253 (ordinals pinned)</span>
+<a id="__codelineno-74-9" name="__codelineno-74-9" href="#__codelineno-74-9"></a><span class="w">    </span><span class="n">HoldForMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">    </span><span class="c1">// On Long Press: fires once the hold crosses TriggerHoldMs</span>
+<a id="__codelineno-74-10" name="__codelineno-74-10" href="#__codelineno-74-10"></a><span class="w">    </span><span class="n">DoublePress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">  </span><span class="c1">// Fires on the second press inside TriggerDoublePressMs</span>
+<a id="__codelineno-74-11" name="__codelineno-74-11" href="#__codelineno-74-11"></a><span class="w">    </span><span class="n">TriplePress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">  </span><span class="c1">// Fires on the third press inside the window</span>
+<a id="__codelineno-74-12" name="__codelineno-74-12" href="#__codelineno-74-12"></a><span class="w">    </span><span class="n">SinglePress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">  </span><span class="c1">// Deferred single: fires only when no second press follows</span>
+<a id="__codelineno-74-13" name="__codelineno-74-13" href="#__codelineno-74-13"></a><span class="w">    </span><span class="n">Toggle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">       </span><span class="c1">// Each press flips the macro between running and stopped</span>
+<a id="__codelineno-74-14" name="__codelineno-74-14" href="#__codelineno-74-14"></a><span class="w">    </span><span class="n">Turbo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">       </span><span class="c1">// Refires on an interval while the trigger is held</span>
+<a id="__codelineno-74-15" name="__codelineno-74-15" href="#__codelineno-74-15"></a><span class="w">    </span><span class="n">ShortPress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="w">   </span><span class="c1">// On Short Press: fires on release BEFORE TriggerHoldMs,</span>
+<a id="__codelineno-74-16" name="__codelineno-74-16" href="#__codelineno-74-16"></a><span class="w">                      </span><span class="c1">// the tap half of tap-vs-hold with HoldForMs (#253)</span>
+<a id="__codelineno-74-17" name="__codelineno-74-17" href="#__codelineno-74-17"></a><span class="p">}</span>
 </code></pre></div>
 <p>State tracking via <code>macro.WasTriggerActive</code> (set to <code>triggerActive</code> at end of each evaluation cycle).</p>
 <h3 id="repeat-modes">Repeat Modes<a class="headerlink" href="#repeat-modes" title="Permanent link">&para;</a></h3>
@@ -7679,8 +7707,22 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-76-45" name="__codelineno-76-45" href="#__codelineno-76-45"></a><span class="w">    </span><span class="n">RepeatVcButtonWhileHeld</span><span class="p">,</span><span class="w"> </span><span class="c1">// VC-button turbo: 50% duty-cycle square wave on the target buttons</span>
 <a id="__codelineno-76-46" name="__codelineno-76-46" href="#__codelineno-76-46"></a><span class="w">    </span><span class="n">ToggleVcButton</span><span class="p">,</span><span class="w">        </span><span class="c1">// Latch/unlatch VC buttons, OR&#39;d into the combined output every frame</span>
 <a id="__codelineno-76-47" name="__codelineno-76-47" href="#__codelineno-76-47"></a><span class="w">    </span><span class="n">ToggleKey</span><span class="p">,</span><span class="w">             </span><span class="c1">// Latch/unlatch keyboard keys via the per-frame latched-key reconcile</span>
-<a id="__codelineno-76-48" name="__codelineno-76-48" href="#__codelineno-76-48"></a><span class="w">    </span><span class="n">GyroRecenter</span><span class="w">           </span><span class="c1">// Re-reference the slot&#39;s gyro-aim state to the current pose (B-18)</span>
-<a id="__codelineno-76-49" name="__codelineno-76-49" href="#__codelineno-76-49"></a><span class="p">}</span>
+<a id="__codelineno-76-48" name="__codelineno-76-48" href="#__codelineno-76-48"></a><span class="w">    </span><span class="n">GyroRecenter</span><span class="p">,</span><span class="w">          </span><span class="c1">// Re-reference the slot&#39;s gyro-aim state to the current pose (B-18)</span>
+<a id="__codelineno-76-49" name="__codelineno-76-49" href="#__codelineno-76-49"></a><span class="w">    </span><span class="c1">// Appended for the translator v15-v18 waves and #237/#251 (ordinals pinned)</span>
+<a id="__codelineno-76-50" name="__codelineno-76-50" href="#__codelineno-76-50"></a><span class="w">    </span><span class="n">AxisHold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">39</span><span class="p">,</span><span class="w">         </span><span class="c1">// Assert a VC axis value for a duration (hold-until-release via RepeatMode)</span>
+<a id="__codelineno-76-51" name="__codelineno-76-51" href="#__codelineno-76-51"></a><span class="w">    </span><span class="n">MouseWheelTap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">    </span><span class="c1">// One discrete wheel detent per fire, signed tick count, horizontal lane option</span>
+<a id="__codelineno-76-52" name="__codelineno-76-52" href="#__codelineno-76-52"></a><span class="w">    </span><span class="n">MouseNudge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">41</span><span class="p">,</span><span class="w">       </span><span class="c1">// One fixed-pixel cursor nudge per fire, batched through the injector lane</span>
+<a id="__codelineno-76-53" name="__codelineno-76-53" href="#__codelineno-76-53"></a><span class="w">    </span><span class="n">CycleTapList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w">     </span><span class="c1">// Each fire executes the NEXT step of a CSV tap list, with optional wrap</span>
+<a id="__codelineno-76-54" name="__codelineno-76-54" href="#__codelineno-76-54"></a><span class="w">    </span><span class="n">ToggleMouseButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">43</span><span class="p">,</span><span class="c1">// Latch/unlatch a mouse button, per-frame reconcile like ToggleKey</span>
+<a id="__codelineno-76-55" name="__codelineno-76-55" href="#__codelineno-76-55"></a><span class="w">    </span><span class="n">ToggleVcAxis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">44</span><span class="p">,</span><span class="w">     </span><span class="c1">// Latch a VC axis at a value (AxisHold shape driven by a latch)</span>
+<a id="__codelineno-76-56" name="__codelineno-76-56" href="#__codelineno-76-56"></a><span class="w">    </span><span class="n">RepeatVcAxisWhileHeld</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="c1">// Axis turbo on the 50% duty square wave while the trigger is held</span>
+<a id="__codelineno-76-57" name="__codelineno-76-57" href="#__codelineno-76-57"></a><span class="w">    </span><span class="n">ToggleWheel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">46</span><span class="p">,</span><span class="w">      </span><span class="c1">// Latch/unlatch a continuous wheel scroll</span>
+<a id="__codelineno-76-58" name="__codelineno-76-58" href="#__codelineno-76-58"></a><span class="w">    </span><span class="n">AxisAdd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w">          </span><span class="c1">// Add a signed delta to a VC axis each fire (#237 relative deflection)</span>
+<a id="__codelineno-76-59" name="__codelineno-76-59" href="#__codelineno-76-59"></a><span class="w">    </span><span class="n">ComboBreak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">       </span><span class="c1">// Cancel the containing combo&#39;s remaining actions (#237)</span>
+<a id="__codelineno-76-60" name="__codelineno-76-60" href="#__codelineno-76-60"></a><span class="w">    </span><span class="n">AxisSetLatched</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">49</span><span class="p">,</span><span class="w">   </span><span class="c1">// Latched value ladder: set-and-hold an axis value (#251)</span>
+<a id="__codelineno-76-61" name="__codelineno-76-61" href="#__codelineno-76-61"></a><span class="w">    </span><span class="n">AxisLatchRelease</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="c1">// Release an AxisSetLatched hold (#251)</span>
+<a id="__codelineno-76-62" name="__codelineno-76-62" href="#__codelineno-76-62"></a><span class="w">    </span><span class="n">AxisScale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">51</span><span class="w">         </span><span class="c1">// Proportional scale on a VC axis while engaged (#251)</span>
+<a id="__codelineno-76-63" name="__codelineno-76-63" href="#__codelineno-76-63"></a><span class="p">}</span>
 </code></pre></div>
 <p>The three cursor actions, the rumble/trigger overrides, the sound actions, and the lightbar / pointer / gyro-engage actions each have their own execution path documented in the sections above and in <a href="../../features/mappings/">Button and Axis Mappings</a>.</p>
 <h3 id="action-execution-architecture">Action Execution Architecture<a class="headerlink" href="#action-execution-architecture" title="Permanent link">&para;</a></h3>
@@ -8059,38 +8101,48 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-86-2" name="__codelineno-86-2" href="#__codelineno-86-2"></a><span class="w">    </span><span class="n">midiVc</span><span class="p">.</span><span class="n">SubmitMidiRawState</span><span class="p">(</span><span class="n">CombinedMidiRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
 <a id="__codelineno-86-3" name="__codelineno-86-3" href="#__codelineno-86-3"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">KeyboardMouseVirtualController</span><span class="w"> </span><span class="n">kbmVc</span><span class="p">)</span>
 <a id="__codelineno-86-4" name="__codelineno-86-4" href="#__codelineno-86-4"></a><span class="w">    </span><span class="n">kbmVc</span><span class="p">.</span><span class="n">SubmitKbmState</span><span class="p">(</span><span class="n">CombinedKbmRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
-<a id="__codelineno-86-5" name="__codelineno-86-5" href="#__codelineno-86-5"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">SlotControllerTypes</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Extended</span>
-<a id="__codelineno-86-6" name="__codelineno-86-6" href="#__codelineno-86-6"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">SlotExtendedIsCustom</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
-<a id="__codelineno-86-7" name="__codelineno-86-7" href="#__codelineno-86-7"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVirtualController</span><span class="w"> </span><span class="n">hmExt</span><span class="p">)</span>
-<a id="__codelineno-86-8" name="__codelineno-86-8" href="#__codelineno-86-8"></a><span class="p">{</span>
-<a id="__codelineno-86-9" name="__codelineno-86-9" href="#__codelineno-86-9"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SlotCustomLayouts</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
-<a id="__codelineno-86-10" name="__codelineno-86-10" href="#__codelineno-86-10"></a><span class="w">    </span><span class="n">hmExt</span><span class="p">.</span><span class="n">SubmitExtendedRawState</span><span class="p">(</span>
-<a id="__codelineno-86-11" name="__codelineno-86-11" href="#__codelineno-86-11"></a><span class="w">        </span><span class="n">CombinedExtendedRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">],</span>
-<a id="__codelineno-86-12" name="__codelineno-86-12" href="#__codelineno-86-12"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Sticks</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">.</span><span class="n">Triggers</span><span class="p">);</span>
-<a id="__codelineno-86-13" name="__codelineno-86-13" href="#__codelineno-86-13"></a><span class="p">}</span>
-<a id="__codelineno-86-14" name="__codelineno-86-14" href="#__codelineno-86-14"></a><span class="k">else</span>
-<a id="__codelineno-86-15" name="__codelineno-86-15" href="#__codelineno-86-15"></a><span class="p">{</span>
-<a id="__codelineno-86-16" name="__codelineno-86-16" href="#__codelineno-86-16"></a><span class="w">    </span><span class="c1">// Xbox / PlayStation / Extended-non-custom slots take the</span>
-<a id="__codelineno-86-17" name="__codelineno-86-17" href="#__codelineno-86-17"></a><span class="w">    </span><span class="c1">// standard XInput-shaped path. PlayStation slots additionally</span>
-<a id="__codelineno-86-18" name="__codelineno-86-18" href="#__codelineno-86-18"></a><span class="w">    </span><span class="c1">// submit Sony Report 0x01 (touchpad / gyro / accel / battery)</span>
-<a id="__codelineno-86-19" name="__codelineno-86-19" href="#__codelineno-86-19"></a><span class="w">    </span><span class="c1">// via SubmitRawReport after SubmitGamepadState in the same poll.</span>
-<a id="__codelineno-86-20" name="__codelineno-86-20" href="#__codelineno-86-20"></a><span class="w">    </span><span class="n">vc</span><span class="p">.</span><span class="n">SubmitGamepadState</span><span class="p">(</span><span class="n">CombinedOutputStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
-<a id="__codelineno-86-21" name="__codelineno-86-21" href="#__codelineno-86-21"></a><span class="p">}</span>
+<a id="__codelineno-86-5" name="__codelineno-86-5" href="#__codelineno-86-5"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">SlotControllerTypes</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Extended</span>
+<a id="__codelineno-86-6" name="__codelineno-86-6" href="#__codelineno-86-6"></a><span class="w">             </span><span class="k">or</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Nintendo</span>
+<a id="__codelineno-86-7" name="__codelineno-86-7" href="#__codelineno-86-7"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">SlotRawHidSurface</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
+<a id="__codelineno-86-8" name="__codelineno-86-8" href="#__codelineno-86-8"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVirtualController</span><span class="w"> </span><span class="n">hmExt</span><span class="p">)</span>
+<a id="__codelineno-86-9" name="__codelineno-86-9" href="#__codelineno-86-9"></a><span class="p">{</span>
+<a id="__codelineno-86-10" name="__codelineno-86-10" href="#__codelineno-86-10"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SlotCustomLayouts</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
+<a id="__codelineno-86-11" name="__codelineno-86-11" href="#__codelineno-86-11"></a><span class="w">    </span><span class="c1">// Button SOCD (#240): clean the final combined raw buttons</span>
+<a id="__codelineno-86-12" name="__codelineno-86-12" href="#__codelineno-86-12"></a><span class="w">    </span><span class="c1">// right before submit, flat-index grammar on the word array.</span>
+<a id="__codelineno-86-13" name="__codelineno-86-13" href="#__codelineno-86-13"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">socdExt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveSlotSocd</span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">extendedIndices</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-86-14" name="__codelineno-86-14" href="#__codelineno-86-14"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">socdExt</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<a id="__codelineno-86-15" name="__codelineno-86-15" href="#__codelineno-86-15"></a><span class="w">        </span><span class="n">socdExt</span><span class="p">.</span><span class="n">ApplyExtended</span><span class="p">(</span><span class="n">CombinedRawHidStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">Buttons</span><span class="p">);</span>
+<a id="__codelineno-86-16" name="__codelineno-86-16" href="#__codelineno-86-16"></a><span class="w">    </span><span class="n">hmExt</span><span class="p">.</span><span class="n">SubmitRawHidState</span><span class="p">(</span>
+<a id="__codelineno-86-17" name="__codelineno-86-17" href="#__codelineno-86-17"></a><span class="w">        </span><span class="n">CombinedRawHidStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">],</span>
+<a id="__codelineno-86-18" name="__codelineno-86-18" href="#__codelineno-86-18"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Sticks</span><span class="p">,</span>
+<a id="__codelineno-86-19" name="__codelineno-86-19" href="#__codelineno-86-19"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Triggers</span><span class="p">,</span>
+<a id="__codelineno-86-20" name="__codelineno-86-20" href="#__codelineno-86-20"></a><span class="w">        </span><span class="c1">// IMU channel (HM v1.3.18): the slot&#39;s aggregated motion</span>
+<a id="__codelineno-86-21" name="__codelineno-86-21" href="#__codelineno-86-21"></a><span class="w">        </span><span class="c1">// snapshot rides beside the raw surface.</span>
+<a id="__codelineno-86-22" name="__codelineno-86-22" href="#__codelineno-86-22"></a><span class="w">        </span><span class="n">MotionSnapshots</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
+<a id="__codelineno-86-23" name="__codelineno-86-23" href="#__codelineno-86-23"></a><span class="p">}</span>
+<a id="__codelineno-86-24" name="__codelineno-86-24" href="#__codelineno-86-24"></a><span class="k">else</span>
+<a id="__codelineno-86-25" name="__codelineno-86-25" href="#__codelineno-86-25"></a><span class="p">{</span>
+<a id="__codelineno-86-26" name="__codelineno-86-26" href="#__codelineno-86-26"></a><span class="w">    </span><span class="c1">// Xbox / PlayStation / non-raw slots take the standard</span>
+<a id="__codelineno-86-27" name="__codelineno-86-27" href="#__codelineno-86-27"></a><span class="w">    </span><span class="c1">// XInput-shaped path, with the same slot SOCD cleaning applied</span>
+<a id="__codelineno-86-28" name="__codelineno-86-28" href="#__codelineno-86-28"></a><span class="w">    </span><span class="c1">// to the Gamepad button bitmap before submit. PlayStation slots</span>
+<a id="__codelineno-86-29" name="__codelineno-86-29" href="#__codelineno-86-29"></a><span class="w">    </span><span class="c1">// additionally submit Sony Report 0x01 (touchpad / gyro / accel</span>
+<a id="__codelineno-86-30" name="__codelineno-86-30" href="#__codelineno-86-30"></a><span class="w">    </span><span class="c1">// / battery) via SubmitRawReport after SubmitGamepadState in</span>
+<a id="__codelineno-86-31" name="__codelineno-86-31" href="#__codelineno-86-31"></a><span class="w">    </span><span class="c1">// the same poll.</span>
+<a id="__codelineno-86-32" name="__codelineno-86-32" href="#__codelineno-86-32"></a><span class="w">    </span><span class="n">vc</span><span class="p">.</span><span class="n">SubmitGamepadState</span><span class="p">(</span><span class="n">CombinedOutputStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
+<a id="__codelineno-86-33" name="__codelineno-86-33" href="#__codelineno-86-33"></a><span class="p">}</span>
 </code></pre></div></p>
 <h3 id="virtual-controller-creation">Virtual Controller Creation<a class="headerlink" href="#virtual-controller-creation" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="k">private</span><span class="w"> </span><span class="n">IVirtualController</span><span class="w"> </span><span class="nf">CreateVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">)</span>
 </code></pre></div>
 <ol>
-<li>Check prerequisites: HIDMaestro client required for Xbox, PlayStation, and Extended (not for MIDI / KBM)</li>
-<li><strong>For Xbox</strong>: Snapshot XInput slot mask BEFORE connecting via <code>GetXInputConnectedSlotMask()</code></li>
+<li>Check prerequisites: HIDMaestro client required for Xbox, PlayStation, Nintendo, and Extended (not for MIDI / KBM)</li>
 <li>Create concrete controller instance based on <code>SlotControllerTypes[padIndex]</code>:</li>
 <li><code>CreateHMaestroController(VirtualControllerType.Xbox, profileId, padIndex)</code> for Xbox slots</li>
 <li><code>CreateHMaestroController(VirtualControllerType.PlayStation, profileId, padIndex)</code> for PlayStation slots</li>
 <li><code>CreateHMaestroController(VirtualControllerType.Extended, profileId, padIndex)</code> for Extended slots. Resolves the slot's HIDMaestro profile slug via <code>_hmaestroContext.GetProfile(profileId)</code> (falling back to <code>HMaestroProfileCatalog.GetProfileById</code> for synthetic entries like <code>padforge-custom</code>), applies per-slot product-string / layout / FFB overrides through <code>HMProfileBuilder</code> + <code>HidDescriptorBuilder</code> for customized Extended slots, then returns <code>new HMaestroVirtualController(_hmaestroContext, effectiveProfile, type)</code></li>
 <li><code>CreateMidiController(padIndex)</code>. Creates virtual MIDI endpoint with computed instance number</li>
 <li><code>KeyboardMouseVirtualController(padIndex)</code></li>
-<li>Call <code>vc.Connect()</code></li>
-<li><strong>For Xbox</strong>: Spin-wait up to 50 ms for XInput slot to appear (mask delta)</li>
+<li>Call <code>vc.Connect()</code>. XInput slot claim for Xbox slots waits inside HIDMaestro's <code>CreateController</code> (<code>WaitForHidChild</code> / <code>WaitForDeviceStarted</code> / <code>WaitForXInputSlotClaim</code>), so there is no consumer-side mask snapshot or spin-wait.</li>
 <li>Increment active counters</li>
 <li>Register feedback callback: <code>vc.RegisterFeedbackCallback(padIndex, VibrationStates)</code>. Wires HIDMaestro's <code>HMController.OutputReceived</code> to <code>VibrationStates[padIndex]</code></li>
 </ol>
@@ -8098,9 +8150,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <div class="highlight"><pre><span></span><code><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">DestroyVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">)</span>
 </code></pre></div>
 <ol>
-<li><strong>For Xbox</strong>: Snapshot XInput slot mask</li>
 <li><code>vc.Disconnect()</code></li>
-<li><strong>For Xbox</strong>: Wait up to 50 ms for slot to disappear from XInput</li>
 <li><code>vc.Dispose()</code>. Releases the HIDMaestro device through <code>HMController.Dispose()</code>. Without this, devices leak as phantom HID nodes until the next launch.</li>
 <li><strong>In <code>finally</code></strong>: Clear <code>_virtualControllers[padIndex]</code> and <code>_slotInitializing[padIndex]</code> even if Disconnect/Dispose throws, so the next Pass 2 can re-create the slot cleanly.</li>
 </ol>
@@ -8113,19 +8163,12 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <div class="highlight"><pre><span></span><code><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">HasAnyDeviceMapped</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns true if any UserSetting (online or offline) has <code>MapTo == padIndex</code>. Distinguishes "user unassigned all devices" (destroy immediately) from "device temporarily offline" (grace period).</p>
-<h3 id="xinput-slot-mask">XInput Slot Mask<a class="headerlink" href="#xinput-slot-mask" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="na">[DllImport(&quot;xinput1_4.dll&quot;, EntryPoint = &quot;#100&quot;)]</span>
-<a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nf">XInputGetStateEx</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">dwUserIndex</span><span class="p">,</span><span class="w"> </span><span class="k">ref</span><span class="w"> </span><span class="n">XInputStateInternal</span><span class="w"> </span><span class="n">pState</span><span class="p">);</span>
-<a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a>
-<a id="__codelineno-91-4" name="__codelineno-91-4" href="#__codelineno-91-4"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nf">GetXInputConnectedSlotMask</span><span class="p">()</span>
-</code></pre></div>
-<p>Probes XInput slots 0–3 (API limit) via undocumented ordinal #100 (<code>XInputGetStateEx</code>, which reports Guide button unlike the public API). Returns a 4-bit mask. Used only to detect HIDMaestro Xbox virtual controller appear/disappear for slot assignment sync.</p>
 <hr />
 <h2 id="step-6-retrieveoutputstates">Step 6: RetrieveOutputStates<a class="headerlink" href="#step-6-retrieveoutputstates" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>InputManager.Step6.RetrieveOutputStates.cs</code></p>
 <p>Copies combined gamepad states for UI display. The simplest pipeline step.</p>
 <h3 id="method-signature_6">Method Signature<a class="headerlink" href="#method-signature_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RetrieveOutputStates</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RetrieveOutputStates</span><span class="p">()</span>
 </code></pre></div>
 <p><strong>Called by:</strong> <code>PollingLoop()</code> (every active cycle)</p>
 <p><strong>Thread safety:</strong> Writes <code>RetrievedOutputStates[]</code>, <code>RetrievedKbmRawStates[]</code>, and <code>RetrievedTouchpadStates[]</code> (struct copies). UI reads at 30 Hz. Individual field reads are atomic on x64; a full struct read could see mixed old/new fields during a concurrent write, but visual impact is negligible (one frame at worst).</p>
@@ -8181,144 +8224,145 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 - Struct value copies for <code>Gamepad</code> and small value types (word-aligned, atomic on x64)</p>
 <hr />
 <h2 id="data-flow-summary">Data Flow Summary<a class="headerlink" href="#data-flow-summary" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a>Physical Device (SDL3 / Raw Input / WebController)
-<a id="__codelineno-93-2" name="__codelineno-93-2" href="#__codelineno-93-2"></a>    |
-<a id="__codelineno-93-3" name="__codelineno-93-3" href="#__codelineno-93-3"></a>    v  [Step 2: GetCurrentState]
-<a id="__codelineno-93-4" name="__codelineno-93-4" href="#__codelineno-93-4"></a>CustomInputState (unsigned axes 0–65535, bool[] buttons, centidegree POVs, gyro/accel)
-<a id="__codelineno-93-5" name="__codelineno-93-5" href="#__codelineno-93-5"></a>    |
-<a id="__codelineno-93-6" name="__codelineno-93-6" href="#__codelineno-93-6"></a>    v  [Step 3: MapInputToGamepad / MapInputToExtendedRaw / MapInputToMidiRaw / MapInputToKbmRaw]
-<a id="__codelineno-93-7" name="__codelineno-93-7" href="#__codelineno-93-7"></a>    |     Parse mapping descriptors, apply axis conversions, apply deadzones + curves
-<a id="__codelineno-93-8" name="__codelineno-93-8" href="#__codelineno-93-8"></a>    |
-<a id="__codelineno-93-9" name="__codelineno-93-9" href="#__codelineno-93-9"></a>    v  per-UserSetting OutputState
-<a id="__codelineno-93-10" name="__codelineno-93-10" href="#__codelineno-93-10"></a>Gamepad struct (signed axes, XInput button bitmask, ushort triggers)
-<a id="__codelineno-93-11" name="__codelineno-93-11" href="#__codelineno-93-11"></a>  -- or --
-<a id="__codelineno-93-12" name="__codelineno-93-12" href="#__codelineno-93-12"></a>ExtendedRawState (signed short[] axes, uint[] button words, int[] POVs)
-<a id="__codelineno-93-13" name="__codelineno-93-13" href="#__codelineno-93-13"></a>  -- or --
-<a id="__codelineno-93-14" name="__codelineno-93-14" href="#__codelineno-93-14"></a>MidiRawState (byte[] cc values, bool[] note states)
-<a id="__codelineno-93-15" name="__codelineno-93-15" href="#__codelineno-93-15"></a>  -- or --
-<a id="__codelineno-93-16" name="__codelineno-93-16" href="#__codelineno-93-16"></a>KbmRawState (VK codes, mouse delta/buttons)
-<a id="__codelineno-93-17" name="__codelineno-93-17" href="#__codelineno-93-17"></a>    |
-<a id="__codelineno-93-18" name="__codelineno-93-18" href="#__codelineno-93-18"></a>    v  [Step 4: CombineOutputStates]
-<a id="__codelineno-93-19" name="__codelineno-93-19" href="#__codelineno-93-19"></a>    |     Merge multiple devices per slot (OR/MAX/magnitude rules)
-<a id="__codelineno-93-20" name="__codelineno-93-20" href="#__codelineno-93-20"></a>    |
-<a id="__codelineno-93-21" name="__codelineno-93-21" href="#__codelineno-93-21"></a>    v  per-slot combined state
-<a id="__codelineno-93-22" name="__codelineno-93-22" href="#__codelineno-93-22"></a>CombinedOutputStates[slot]  /  CombinedExtendedRawStates[slot]  /  etc.
-<a id="__codelineno-93-23" name="__codelineno-93-23" href="#__codelineno-93-23"></a>    |
-<a id="__codelineno-93-24" name="__codelineno-93-24" href="#__codelineno-93-24"></a>    v  [Step 4b: EvaluateMacros]
-<a id="__codelineno-93-25" name="__codelineno-93-25" href="#__codelineno-93-25"></a>    |     Trigger state machine, inject button/axis/volume/mouse actions (in-place modification)
-<a id="__codelineno-93-26" name="__codelineno-93-26" href="#__codelineno-93-26"></a>    |
-<a id="__codelineno-93-27" name="__codelineno-93-27" href="#__codelineno-93-27"></a>    v  [Step 5: UpdateVirtualDevices]
-<a id="__codelineno-93-28" name="__codelineno-93-28" href="#__codelineno-93-28"></a>    |     Create/destroy VCs, submit reports
-<a id="__codelineno-93-29" name="__codelineno-93-29" href="#__codelineno-93-29"></a>    |
-<a id="__codelineno-93-30" name="__codelineno-93-30" href="#__codelineno-93-30"></a>IVirtualController.SubmitGamepadState()  /  SubmitExtendedRawState()  /  SubmitMidiRawState()  /  SubmitKbmState()
-<a id="__codelineno-93-31" name="__codelineno-93-31" href="#__codelineno-93-31"></a>    |                                               |                        |                       |
-<a id="__codelineno-93-32" name="__codelineno-93-32" href="#__codelineno-93-32"></a>    v                                               v                        v                       v
-<a id="__codelineno-93-33" name="__codelineno-93-33" href="#__codelineno-93-33"></a>HIDMaestro Xbox / PlayStation / Extended            MIDI (Windows MIDI Services)    Win32 SendInput
-<a id="__codelineno-93-34" name="__codelineno-93-34" href="#__codelineno-93-34"></a>(XInput / DirectInput)                              (MIDI endpoint)                 (keyboard + mouse)
-<a id="__codelineno-93-35" name="__codelineno-93-35" href="#__codelineno-93-35"></a>    |
-<a id="__codelineno-93-36" name="__codelineno-93-36" href="#__codelineno-93-36"></a>    v  [Step 6: RetrieveOutputStates]
-<a id="__codelineno-93-37" name="__codelineno-93-37" href="#__codelineno-93-37"></a>RetrievedOutputStates[slot]  -&gt;  UI Display (dashboard gauges, axis bars, button indicators)
-<a id="__codelineno-93-38" name="__codelineno-93-38" href="#__codelineno-93-38"></a>
-<a id="__codelineno-93-39" name="__codelineno-93-39" href="#__codelineno-93-39"></a>    &lt;--- Feedback path (game -&gt; controller -&gt; PadForge -&gt; physical device) ---&gt;
-<a id="__codelineno-93-40" name="__codelineno-93-40" href="#__codelineno-93-40"></a>Game calls XInputSetState()  -&gt;  HMController.OutputReceived  -&gt;  VibrationStates[slot]
-<a id="__codelineno-93-41" name="__codelineno-93-41" href="#__codelineno-93-41"></a>    -&gt;  Step 2: ApplyForceFeedback()  -&gt;  per-pad-family output:
-<a id="__codelineno-93-42" name="__codelineno-93-42" href="#__codelineno-93-42"></a>            - Sony (DS4/DualSense): UserEffectsDispatcher (sole writer, SDL skipped)
-<a id="__codelineno-93-43" name="__codelineno-93-43" href="#__codelineno-93-43"></a>            - Xbox One+ (One/Elite/Series): XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
-<a id="__codelineno-93-44" name="__codelineno-93-44" href="#__codelineno-93-44"></a>            - Everything else: SDL_RumbleJoystick / SDL haptic effects
+<div class="highlight"><pre><span></span><code><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a>Physical Device (SDL3 / Raw Input / WebController)
+<a id="__codelineno-92-2" name="__codelineno-92-2" href="#__codelineno-92-2"></a>    |
+<a id="__codelineno-92-3" name="__codelineno-92-3" href="#__codelineno-92-3"></a>    v  [Step 2: GetCurrentState]
+<a id="__codelineno-92-4" name="__codelineno-92-4" href="#__codelineno-92-4"></a>CustomInputState (unsigned axes 0–65535, bool[] buttons, centidegree POVs, gyro/accel)
+<a id="__codelineno-92-5" name="__codelineno-92-5" href="#__codelineno-92-5"></a>    |
+<a id="__codelineno-92-6" name="__codelineno-92-6" href="#__codelineno-92-6"></a>    v  [Step 3: MapInputToGamepad / MapInputToExtendedRaw / MapInputToMidiRaw / MapInputToKbmRaw]
+<a id="__codelineno-92-7" name="__codelineno-92-7" href="#__codelineno-92-7"></a>    |     Parse mapping descriptors, apply axis conversions, apply deadzones + curves
+<a id="__codelineno-92-8" name="__codelineno-92-8" href="#__codelineno-92-8"></a>    |
+<a id="__codelineno-92-9" name="__codelineno-92-9" href="#__codelineno-92-9"></a>    v  per-UserSetting OutputState
+<a id="__codelineno-92-10" name="__codelineno-92-10" href="#__codelineno-92-10"></a>Gamepad struct (signed axes, XInput button bitmask, ushort triggers)
+<a id="__codelineno-92-11" name="__codelineno-92-11" href="#__codelineno-92-11"></a>  -- or --
+<a id="__codelineno-92-12" name="__codelineno-92-12" href="#__codelineno-92-12"></a>RawHidState (signed short[] axes, uint[] button words, int[] POVs)
+<a id="__codelineno-92-13" name="__codelineno-92-13" href="#__codelineno-92-13"></a>  -- or --
+<a id="__codelineno-92-14" name="__codelineno-92-14" href="#__codelineno-92-14"></a>MidiRawState (byte[] cc values, bool[] note states)
+<a id="__codelineno-92-15" name="__codelineno-92-15" href="#__codelineno-92-15"></a>  -- or --
+<a id="__codelineno-92-16" name="__codelineno-92-16" href="#__codelineno-92-16"></a>KbmRawState (VK codes, mouse delta/buttons)
+<a id="__codelineno-92-17" name="__codelineno-92-17" href="#__codelineno-92-17"></a>    |
+<a id="__codelineno-92-18" name="__codelineno-92-18" href="#__codelineno-92-18"></a>    v  [Step 4: CombineOutputStates]
+<a id="__codelineno-92-19" name="__codelineno-92-19" href="#__codelineno-92-19"></a>    |     Merge multiple devices per slot (OR/MAX/magnitude rules)
+<a id="__codelineno-92-20" name="__codelineno-92-20" href="#__codelineno-92-20"></a>    |
+<a id="__codelineno-92-21" name="__codelineno-92-21" href="#__codelineno-92-21"></a>    v  per-slot combined state
+<a id="__codelineno-92-22" name="__codelineno-92-22" href="#__codelineno-92-22"></a>CombinedOutputStates[slot]  /  CombinedRawHidStates[slot]  /  etc.
+<a id="__codelineno-92-23" name="__codelineno-92-23" href="#__codelineno-92-23"></a>    |
+<a id="__codelineno-92-24" name="__codelineno-92-24" href="#__codelineno-92-24"></a>    v  [Step 4b: EvaluateMacros]
+<a id="__codelineno-92-25" name="__codelineno-92-25" href="#__codelineno-92-25"></a>    |     Trigger state machine, inject button/axis/volume/mouse actions (in-place modification)
+<a id="__codelineno-92-26" name="__codelineno-92-26" href="#__codelineno-92-26"></a>    |
+<a id="__codelineno-92-27" name="__codelineno-92-27" href="#__codelineno-92-27"></a>    v  [Step 5: UpdateVirtualDevices]
+<a id="__codelineno-92-28" name="__codelineno-92-28" href="#__codelineno-92-28"></a>    |     Create/destroy VCs, submit reports
+<a id="__codelineno-92-29" name="__codelineno-92-29" href="#__codelineno-92-29"></a>    |
+<a id="__codelineno-92-30" name="__codelineno-92-30" href="#__codelineno-92-30"></a>IVirtualController.SubmitGamepadState()  /  SubmitRawHidState()  /  SubmitMidiRawState()  /  SubmitKbmState()
+<a id="__codelineno-92-31" name="__codelineno-92-31" href="#__codelineno-92-31"></a>    |                                               |                        |                       |
+<a id="__codelineno-92-32" name="__codelineno-92-32" href="#__codelineno-92-32"></a>    v                                               v                        v                       v
+<a id="__codelineno-92-33" name="__codelineno-92-33" href="#__codelineno-92-33"></a>HIDMaestro Xbox / PlayStation / Extended            MIDI (Windows MIDI Services)    Win32 SendInput
+<a id="__codelineno-92-34" name="__codelineno-92-34" href="#__codelineno-92-34"></a>(XInput / DirectInput)                              (MIDI endpoint)                 (keyboard + mouse)
+<a id="__codelineno-92-35" name="__codelineno-92-35" href="#__codelineno-92-35"></a>    |
+<a id="__codelineno-92-36" name="__codelineno-92-36" href="#__codelineno-92-36"></a>    v  [Step 6: RetrieveOutputStates]
+<a id="__codelineno-92-37" name="__codelineno-92-37" href="#__codelineno-92-37"></a>RetrievedOutputStates[slot]  -&gt;  UI Display (dashboard gauges, axis bars, button indicators)
+<a id="__codelineno-92-38" name="__codelineno-92-38" href="#__codelineno-92-38"></a>
+<a id="__codelineno-92-39" name="__codelineno-92-39" href="#__codelineno-92-39"></a>    &lt;--- Feedback path (game -&gt; controller -&gt; PadForge -&gt; physical device) ---&gt;
+<a id="__codelineno-92-40" name="__codelineno-92-40" href="#__codelineno-92-40"></a>Game calls XInputSetState()  -&gt;  HMController.OutputReceived  -&gt;  VibrationStates[slot]
+<a id="__codelineno-92-41" name="__codelineno-92-41" href="#__codelineno-92-41"></a>    -&gt;  Step 2: ApplyForceFeedback()  -&gt;  per-pad-family output:
+<a id="__codelineno-92-42" name="__codelineno-92-42" href="#__codelineno-92-42"></a>            - Sony (DS4/DualSense): UserEffectsDispatcher (sole writer, SDL skipped)
+<a id="__codelineno-92-43" name="__codelineno-92-43" href="#__codelineno-92-43"></a>            - Xbox One+ (One/Elite/Series): XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
+<a id="__codelineno-92-44" name="__codelineno-92-44" href="#__codelineno-92-44"></a>            - Everything else: SDL_RumbleJoystick / SDL haptic effects
 </code></pre></div>
 <hr />
 <h2 id="key-types-reference">Key Types Reference<a class="headerlink" href="#key-types-reference" title="Permanent link">&para;</a></h2>
 <h3 id="gamepad-struct">Gamepad Struct<a class="headerlink" href="#gamepad-struct" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Gamepad</span>
-<a id="__codelineno-94-2" name="__codelineno-94-2" href="#__codelineno-94-2"></a><span class="p">{</span>
-<a id="__codelineno-94-3" name="__codelineno-94-3" href="#__codelineno-94-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span>
-<a id="__codelineno-94-4" name="__codelineno-94-4" href="#__codelineno-94-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LeftTrigger</span><span class="p">;</span><span class="w">     </span><span class="c1">// 0-65535</span>
-<a id="__codelineno-94-5" name="__codelineno-94-5" href="#__codelineno-94-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RightTrigger</span><span class="p">;</span><span class="w">    </span><span class="c1">// 0-65535</span>
-<a id="__codelineno-94-6" name="__codelineno-94-6" href="#__codelineno-94-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbLX</span><span class="p">;</span><span class="w">          </span><span class="c1">// -32768 to 32767</span>
-<a id="__codelineno-94-7" name="__codelineno-94-7" href="#__codelineno-94-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbLY</span><span class="p">;</span>
-<a id="__codelineno-94-8" name="__codelineno-94-8" href="#__codelineno-94-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbRX</span><span class="p">;</span>
-<a id="__codelineno-94-9" name="__codelineno-94-9" href="#__codelineno-94-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbRY</span><span class="p">;</span>
-<a id="__codelineno-94-10" name="__codelineno-94-10" href="#__codelineno-94-10"></a>
-<a id="__codelineno-94-11" name="__codelineno-94-11" href="#__codelineno-94-11"></a><span class="w">    </span><span class="c1">// Xbox Series Share button. Outside the 16-bit Buttons mask because</span>
-<a id="__codelineno-94-12" name="__codelineno-94-12" href="#__codelineno-94-12"></a><span class="w">    </span><span class="c1">// all 16 XInput-equivalent bits are taken. HM exposes it as HMButton.Share.</span>
-<a id="__codelineno-94-13" name="__codelineno-94-13" href="#__codelineno-94-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Share</span><span class="p">;</span>
-<a id="__codelineno-94-14" name="__codelineno-94-14" href="#__codelineno-94-14"></a>
-<a id="__codelineno-94-15" name="__codelineno-94-15" href="#__codelineno-94-15"></a><span class="w">    </span><span class="c1">// Button flag constants</span>
-<a id="__codelineno-94-16" name="__codelineno-94-16" href="#__codelineno-94-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_UP</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0001</span><span class="p">;</span>
-<a id="__codelineno-94-17" name="__codelineno-94-17" href="#__codelineno-94-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_DOWN</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0002</span><span class="p">;</span>
-<a id="__codelineno-94-18" name="__codelineno-94-18" href="#__codelineno-94-18"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_LEFT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0004</span><span class="p">;</span>
-<a id="__codelineno-94-19" name="__codelineno-94-19" href="#__codelineno-94-19"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_RIGHT</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0008</span><span class="p">;</span>
-<a id="__codelineno-94-20" name="__codelineno-94-20" href="#__codelineno-94-20"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">START</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0010</span><span class="p">;</span>
-<a id="__codelineno-94-21" name="__codelineno-94-21" href="#__codelineno-94-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">BACK</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0020</span><span class="p">;</span>
-<a id="__codelineno-94-22" name="__codelineno-94-22" href="#__codelineno-94-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_THUMB</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0040</span><span class="p">;</span>
-<a id="__codelineno-94-23" name="__codelineno-94-23" href="#__codelineno-94-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_THUMB</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0080</span><span class="p">;</span>
-<a id="__codelineno-94-24" name="__codelineno-94-24" href="#__codelineno-94-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_SHOULDER</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0100</span><span class="p">;</span>
-<a id="__codelineno-94-25" name="__codelineno-94-25" href="#__codelineno-94-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_SHOULDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0200</span><span class="p">;</span>
-<a id="__codelineno-94-26" name="__codelineno-94-26" href="#__codelineno-94-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">GUIDE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0400</span><span class="p">;</span>
-<a id="__codelineno-94-27" name="__codelineno-94-27" href="#__codelineno-94-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">TOUCHPAD</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0800</span><span class="p">;</span><span class="w">  </span><span class="c1">// PlayStation slots only, used by macros</span>
-<a id="__codelineno-94-28" name="__codelineno-94-28" href="#__codelineno-94-28"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">A</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x1000</span><span class="p">;</span>
-<a id="__codelineno-94-29" name="__codelineno-94-29" href="#__codelineno-94-29"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">B</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x2000</span><span class="p">;</span>
-<a id="__codelineno-94-30" name="__codelineno-94-30" href="#__codelineno-94-30"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">X</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4000</span><span class="p">;</span>
-<a id="__codelineno-94-31" name="__codelineno-94-31" href="#__codelineno-94-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">Y</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">;</span>
-<a id="__codelineno-94-32" name="__codelineno-94-32" href="#__codelineno-94-32"></a>
-<a id="__codelineno-94-33" name="__codelineno-94-33" href="#__codelineno-94-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">);</span>
-<a id="__codelineno-94-34" name="__codelineno-94-34" href="#__codelineno-94-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
-<a id="__codelineno-94-35" name="__codelineno-94-35" href="#__codelineno-94-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
-<a id="__codelineno-94-36" name="__codelineno-94-36" href="#__codelineno-94-36"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Gamepad</span>
+<a id="__codelineno-93-2" name="__codelineno-93-2" href="#__codelineno-93-2"></a><span class="p">{</span>
+<a id="__codelineno-93-3" name="__codelineno-93-3" href="#__codelineno-93-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span>
+<a id="__codelineno-93-4" name="__codelineno-93-4" href="#__codelineno-93-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LeftTrigger</span><span class="p">;</span><span class="w">     </span><span class="c1">// 0-65535</span>
+<a id="__codelineno-93-5" name="__codelineno-93-5" href="#__codelineno-93-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RightTrigger</span><span class="p">;</span><span class="w">    </span><span class="c1">// 0-65535</span>
+<a id="__codelineno-93-6" name="__codelineno-93-6" href="#__codelineno-93-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbLX</span><span class="p">;</span><span class="w">          </span><span class="c1">// -32768 to 32767</span>
+<a id="__codelineno-93-7" name="__codelineno-93-7" href="#__codelineno-93-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbLY</span><span class="p">;</span>
+<a id="__codelineno-93-8" name="__codelineno-93-8" href="#__codelineno-93-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbRX</span><span class="p">;</span>
+<a id="__codelineno-93-9" name="__codelineno-93-9" href="#__codelineno-93-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbRY</span><span class="p">;</span>
+<a id="__codelineno-93-10" name="__codelineno-93-10" href="#__codelineno-93-10"></a>
+<a id="__codelineno-93-11" name="__codelineno-93-11" href="#__codelineno-93-11"></a><span class="w">    </span><span class="c1">// Xbox Series Share button. Outside the 16-bit Buttons mask because</span>
+<a id="__codelineno-93-12" name="__codelineno-93-12" href="#__codelineno-93-12"></a><span class="w">    </span><span class="c1">// all 16 XInput-equivalent bits are taken. HM exposes it as HMButton.Share.</span>
+<a id="__codelineno-93-13" name="__codelineno-93-13" href="#__codelineno-93-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Share</span><span class="p">;</span>
+<a id="__codelineno-93-14" name="__codelineno-93-14" href="#__codelineno-93-14"></a>
+<a id="__codelineno-93-15" name="__codelineno-93-15" href="#__codelineno-93-15"></a><span class="w">    </span><span class="c1">// Button flag constants</span>
+<a id="__codelineno-93-16" name="__codelineno-93-16" href="#__codelineno-93-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_UP</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0001</span><span class="p">;</span>
+<a id="__codelineno-93-17" name="__codelineno-93-17" href="#__codelineno-93-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_DOWN</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0002</span><span class="p">;</span>
+<a id="__codelineno-93-18" name="__codelineno-93-18" href="#__codelineno-93-18"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_LEFT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0004</span><span class="p">;</span>
+<a id="__codelineno-93-19" name="__codelineno-93-19" href="#__codelineno-93-19"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_RIGHT</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0008</span><span class="p">;</span>
+<a id="__codelineno-93-20" name="__codelineno-93-20" href="#__codelineno-93-20"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">START</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0010</span><span class="p">;</span>
+<a id="__codelineno-93-21" name="__codelineno-93-21" href="#__codelineno-93-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">BACK</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0020</span><span class="p">;</span>
+<a id="__codelineno-93-22" name="__codelineno-93-22" href="#__codelineno-93-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_THUMB</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0040</span><span class="p">;</span>
+<a id="__codelineno-93-23" name="__codelineno-93-23" href="#__codelineno-93-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_THUMB</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0080</span><span class="p">;</span>
+<a id="__codelineno-93-24" name="__codelineno-93-24" href="#__codelineno-93-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_SHOULDER</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0100</span><span class="p">;</span>
+<a id="__codelineno-93-25" name="__codelineno-93-25" href="#__codelineno-93-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_SHOULDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0200</span><span class="p">;</span>
+<a id="__codelineno-93-26" name="__codelineno-93-26" href="#__codelineno-93-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">GUIDE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0400</span><span class="p">;</span>
+<a id="__codelineno-93-27" name="__codelineno-93-27" href="#__codelineno-93-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">TOUCHPAD</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0800</span><span class="p">;</span><span class="w">  </span><span class="c1">// PlayStation slots only, used by macros</span>
+<a id="__codelineno-93-28" name="__codelineno-93-28" href="#__codelineno-93-28"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">A</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x1000</span><span class="p">;</span>
+<a id="__codelineno-93-29" name="__codelineno-93-29" href="#__codelineno-93-29"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">B</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x2000</span><span class="p">;</span>
+<a id="__codelineno-93-30" name="__codelineno-93-30" href="#__codelineno-93-30"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">X</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4000</span><span class="p">;</span>
+<a id="__codelineno-93-31" name="__codelineno-93-31" href="#__codelineno-93-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">Y</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">;</span>
+<a id="__codelineno-93-32" name="__codelineno-93-32" href="#__codelineno-93-32"></a>
+<a id="__codelineno-93-33" name="__codelineno-93-33" href="#__codelineno-93-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">);</span>
+<a id="__codelineno-93-34" name="__codelineno-93-34" href="#__codelineno-93-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
+<a id="__codelineno-93-35" name="__codelineno-93-35" href="#__codelineno-93-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
+<a id="__codelineno-93-36" name="__codelineno-93-36" href="#__codelineno-93-36"></a><span class="p">}</span>
 </code></pre></div>
-<h3 id="extendedrawstate-struct">ExtendedRawState Struct<a class="headerlink" href="#extendedrawstate-struct" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">ExtendedRawState</span>
-<a id="__codelineno-95-2" name="__codelineno-95-2" href="#__codelineno-95-2"></a><span class="p">{</span>
-<a id="__codelineno-95-3" name="__codelineno-95-3" href="#__codelineno-95-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="p">[]</span><span class="w"> </span><span class="n">Axes</span><span class="p">;</span><span class="w">     </span><span class="c1">// Signed short range, up to 8 axes</span>
-<a id="__codelineno-95-4" name="__codelineno-95-4" href="#__codelineno-95-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span><span class="w">   </span><span class="c1">// 4 x 32-bit words = 128 buttons max</span>
-<a id="__codelineno-95-5" name="__codelineno-95-5" href="#__codelineno-95-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Povs</span><span class="p">;</span><span class="w">       </span><span class="c1">// Up to 4, -1=centered, 0-35900=direction (centidegrees)</span>
-<a id="__codelineno-95-6" name="__codelineno-95-6" href="#__codelineno-95-6"></a>
-<a id="__codelineno-95-7" name="__codelineno-95-7" href="#__codelineno-95-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">ExtendedRawState</span><span class="w"> </span><span class="nf">Create</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nAxes</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nButtons</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nPovs</span><span class="p">);</span>
-<a id="__codelineno-95-8" name="__codelineno-95-8" href="#__codelineno-95-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
-<a id="__codelineno-95-9" name="__codelineno-95-9" href="#__codelineno-95-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
-<a id="__codelineno-95-10" name="__codelineno-95-10" href="#__codelineno-95-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span><span class="w">     </span><span class="c1">// Zeros axes, clears buttons, sets POVs to -1 (centered)</span>
-<a id="__codelineno-95-11" name="__codelineno-95-11" href="#__codelineno-95-11"></a><span class="p">}</span>
+<h3 id="rawhidstate-struct">RawHidState Struct<a class="headerlink" href="#rawhidstate-struct" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">RawHidState</span>
+<a id="__codelineno-94-2" name="__codelineno-94-2" href="#__codelineno-94-2"></a><span class="p">{</span>
+<a id="__codelineno-94-3" name="__codelineno-94-3" href="#__codelineno-94-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="p">[]</span><span class="w"> </span><span class="n">Axes</span><span class="p">;</span><span class="w">     </span><span class="c1">// Signed short range, up to 8 axes</span>
+<a id="__codelineno-94-4" name="__codelineno-94-4" href="#__codelineno-94-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span><span class="w">   </span><span class="c1">// 4 x 32-bit words = 128 buttons max</span>
+<a id="__codelineno-94-5" name="__codelineno-94-5" href="#__codelineno-94-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Povs</span><span class="p">;</span><span class="w">       </span><span class="c1">// Up to 4, -1=centered, 0-35900=direction (centidegrees)</span>
+<a id="__codelineno-94-6" name="__codelineno-94-6" href="#__codelineno-94-6"></a>
+<a id="__codelineno-94-7" name="__codelineno-94-7" href="#__codelineno-94-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">RawHidState</span><span class="w"> </span><span class="nf">Create</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nAxes</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nButtons</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nPovs</span><span class="p">);</span>
+<a id="__codelineno-94-8" name="__codelineno-94-8" href="#__codelineno-94-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
+<a id="__codelineno-94-9" name="__codelineno-94-9" href="#__codelineno-94-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
+<a id="__codelineno-94-10" name="__codelineno-94-10" href="#__codelineno-94-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span><span class="w">     </span><span class="c1">// Zeros axes, clears buttons, sets POVs to -1 (centered)</span>
+<a id="__codelineno-94-11" name="__codelineno-94-11" href="#__codelineno-94-11"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="custominputstate-class">CustomInputState Class<a class="headerlink" href="#custominputstate-class" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CustomInputState</span>
-<a id="__codelineno-96-2" name="__codelineno-96-2" href="#__codelineno-96-2"></a><span class="p">{</span>
-<a id="__codelineno-96-3" name="__codelineno-96-3" href="#__codelineno-96-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxAxis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="p">;</span>
-<a id="__codelineno-96-4" name="__codelineno-96-4" href="#__codelineno-96-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxSliders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
-<a id="__codelineno-96-5" name="__codelineno-96-5" href="#__codelineno-96-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxPovs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
-<a id="__codelineno-96-6" name="__codelineno-96-6" href="#__codelineno-96-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxButtons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">;</span>
-<a id="__codelineno-96-7" name="__codelineno-96-7" href="#__codelineno-96-7"></a>
-<a id="__codelineno-96-8" name="__codelineno-96-8" href="#__codelineno-96-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Axis</span><span class="p">;</span><span class="w">      </span><span class="c1">// Unsigned 0-65535</span>
-<a id="__codelineno-96-9" name="__codelineno-96-9" href="#__codelineno-96-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Sliders</span><span class="p">;</span><span class="w">   </span><span class="c1">// Unsigned 0-65535</span>
-<a id="__codelineno-96-10" name="__codelineno-96-10" href="#__codelineno-96-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Povs</span><span class="p">;</span><span class="w">      </span><span class="c1">// Centidegrees, -1=centered</span>
-<a id="__codelineno-96-11" name="__codelineno-96-11" href="#__codelineno-96-11"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span><span class="w">  </span><span class="c1">// true=pressed</span>
-<a id="__codelineno-96-12" name="__codelineno-96-12" href="#__codelineno-96-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">Gyro</span><span class="p">;</span><span class="w">    </span><span class="c1">// [X,Y,Z] rad/s (SDL standard)</span>
-<a id="__codelineno-96-13" name="__codelineno-96-13" href="#__codelineno-96-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">Accel</span><span class="p">;</span><span class="w">   </span><span class="c1">// [X,Y,Z] m/s^2 (SDL standard, Y=up has gravity)</span>
-<a id="__codelineno-96-14" name="__codelineno-96-14" href="#__codelineno-96-14"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CustomInputState</span>
+<a id="__codelineno-95-2" name="__codelineno-95-2" href="#__codelineno-95-2"></a><span class="p">{</span>
+<a id="__codelineno-95-3" name="__codelineno-95-3" href="#__codelineno-95-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxAxis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="p">;</span>
+<a id="__codelineno-95-4" name="__codelineno-95-4" href="#__codelineno-95-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxSliders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<a id="__codelineno-95-5" name="__codelineno-95-5" href="#__codelineno-95-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxPovs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<a id="__codelineno-95-6" name="__codelineno-95-6" href="#__codelineno-95-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxButtons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">;</span>
+<a id="__codelineno-95-7" name="__codelineno-95-7" href="#__codelineno-95-7"></a>
+<a id="__codelineno-95-8" name="__codelineno-95-8" href="#__codelineno-95-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Axis</span><span class="p">;</span><span class="w">      </span><span class="c1">// Unsigned 0-65535</span>
+<a id="__codelineno-95-9" name="__codelineno-95-9" href="#__codelineno-95-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Sliders</span><span class="p">;</span><span class="w">   </span><span class="c1">// Unsigned 0-65535</span>
+<a id="__codelineno-95-10" name="__codelineno-95-10" href="#__codelineno-95-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Povs</span><span class="p">;</span><span class="w">      </span><span class="c1">// Centidegrees, -1=centered</span>
+<a id="__codelineno-95-11" name="__codelineno-95-11" href="#__codelineno-95-11"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span><span class="w">  </span><span class="c1">// true=pressed</span>
+<a id="__codelineno-95-12" name="__codelineno-95-12" href="#__codelineno-95-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">Gyro</span><span class="p">;</span><span class="w">    </span><span class="c1">// [X,Y,Z] rad/s (SDL standard)</span>
+<a id="__codelineno-95-13" name="__codelineno-95-13" href="#__codelineno-95-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">Accel</span><span class="p">;</span><span class="w">   </span><span class="c1">// [X,Y,Z] m/s^2 (SDL standard, Y=up has gravity)</span>
+<a id="__codelineno-95-14" name="__codelineno-95-14" href="#__codelineno-95-14"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="ivirtualcontroller-interface">IVirtualController Interface<a class="headerlink" href="#ivirtualcontroller-interface" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IVirtualController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
-<a id="__codelineno-97-2" name="__codelineno-97-2" href="#__codelineno-97-2"></a><span class="p">{</span>
-<a id="__codelineno-97-3" name="__codelineno-97-3" href="#__codelineno-97-3"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-97-4" name="__codelineno-97-4" href="#__codelineno-97-4"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsConnected</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-97-5" name="__codelineno-97-5" href="#__codelineno-97-5"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">FeedbackPadIndex</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-97-6" name="__codelineno-97-6" href="#__codelineno-97-6"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">Connect</span><span class="p">();</span>
-<a id="__codelineno-97-7" name="__codelineno-97-7" href="#__codelineno-97-7"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">Disconnect</span><span class="p">();</span>
-<a id="__codelineno-97-8" name="__codelineno-97-8" href="#__codelineno-97-8"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">SubmitGamepadState</span><span class="p">(</span><span class="n">Gamepad</span><span class="w"> </span><span class="n">gp</span><span class="p">);</span>
-<a id="__codelineno-97-9" name="__codelineno-97-9" href="#__codelineno-97-9"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">RegisterFeedbackCallback</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="p">[]</span><span class="w"> </span><span class="n">vibrationStates</span><span class="p">);</span>
-<a id="__codelineno-97-10" name="__codelineno-97-10" href="#__codelineno-97-10"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IVirtualController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
+<a id="__codelineno-96-2" name="__codelineno-96-2" href="#__codelineno-96-2"></a><span class="p">{</span>
+<a id="__codelineno-96-3" name="__codelineno-96-3" href="#__codelineno-96-3"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-96-4" name="__codelineno-96-4" href="#__codelineno-96-4"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsConnected</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-96-5" name="__codelineno-96-5" href="#__codelineno-96-5"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">FeedbackPadIndex</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-96-6" name="__codelineno-96-6" href="#__codelineno-96-6"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">Connect</span><span class="p">();</span>
+<a id="__codelineno-96-7" name="__codelineno-96-7" href="#__codelineno-96-7"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">Disconnect</span><span class="p">();</span>
+<a id="__codelineno-96-8" name="__codelineno-96-8" href="#__codelineno-96-8"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">SubmitGamepadState</span><span class="p">(</span><span class="n">Gamepad</span><span class="w"> </span><span class="n">gp</span><span class="p">);</span>
+<a id="__codelineno-96-9" name="__codelineno-96-9" href="#__codelineno-96-9"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">RegisterFeedbackCallback</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="p">[]</span><span class="w"> </span><span class="n">vibrationStates</span><span class="p">);</span>
+<a id="__codelineno-96-10" name="__codelineno-96-10" href="#__codelineno-96-10"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="virtualcontrollertype-enum">VirtualControllerType Enum<a class="headerlink" href="#virtualcontrollertype-enum" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-98-1" name="__codelineno-98-1" href="#__codelineno-98-1"></a><span class="k">public</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">VirtualControllerType</span>
-<a id="__codelineno-98-2" name="__codelineno-98-2" href="#__codelineno-98-2"></a><span class="p">{</span>
-<a id="__codelineno-98-3" name="__codelineno-98-3" href="#__codelineno-98-3"></a><span class="w">    </span><span class="c1">// XmlEnum preserves the v2 on-disk names (&quot;Microsoft&quot;/&quot;Sony&quot;) so old</span>
-<a id="__codelineno-98-4" name="__codelineno-98-4" href="#__codelineno-98-4"></a><span class="w">    </span><span class="c1">// PadForge.xml still deserializes. The in-code identifiers are Xbox /</span>
-<a id="__codelineno-98-5" name="__codelineno-98-5" href="#__codelineno-98-5"></a><span class="w">    </span><span class="c1">// PlayStation to match the Xbox / PlayStation / Extended family naming.</span>
-<a id="__codelineno-98-6" name="__codelineno-98-6" href="#__codelineno-98-6"></a><span class="w">    </span><span class="na">[XmlEnum(&quot;Microsoft&quot;)]</span><span class="w"> </span><span class="n">Xbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">        </span><span class="c1">// Xbox family (360, One, Series, Elite, Adaptive)</span>
-<a id="__codelineno-98-7" name="__codelineno-98-7" href="#__codelineno-98-7"></a><span class="w">    </span><span class="na">[XmlEnum(&quot;Sony&quot;)]</span><span class="w">      </span><span class="n">PlayStation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// PlayStation family (DS3/DS4, DualSense, PS Move)</span>
-<a id="__codelineno-98-8" name="__codelineno-98-8" href="#__codelineno-98-8"></a><span class="w">    </span><span class="n">Extended</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">      </span><span class="c1">// Any other HIDMaestro profile, or a custom HID descriptor</span>
-<a id="__codelineno-98-9" name="__codelineno-98-9" href="#__codelineno-98-9"></a><span class="w">    </span><span class="n">Midi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">          </span><span class="c1">// Windows MIDI Services virtual endpoint</span>
-<a id="__codelineno-98-10" name="__codelineno-98-10" href="#__codelineno-98-10"></a><span class="w">    </span><span class="n">KeyboardMouse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w">  </span><span class="c1">// Win32 SendInput keyboard + mouse</span>
-<a id="__codelineno-98-11" name="__codelineno-98-11" href="#__codelineno-98-11"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a><span class="k">public</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">VirtualControllerType</span>
+<a id="__codelineno-97-2" name="__codelineno-97-2" href="#__codelineno-97-2"></a><span class="p">{</span>
+<a id="__codelineno-97-3" name="__codelineno-97-3" href="#__codelineno-97-3"></a><span class="w">    </span><span class="c1">// XmlEnum preserves the v2 on-disk names (&quot;Microsoft&quot;/&quot;Sony&quot;) so old</span>
+<a id="__codelineno-97-4" name="__codelineno-97-4" href="#__codelineno-97-4"></a><span class="w">    </span><span class="c1">// PadForge.xml still deserializes. The in-code identifiers are Xbox /</span>
+<a id="__codelineno-97-5" name="__codelineno-97-5" href="#__codelineno-97-5"></a><span class="w">    </span><span class="c1">// PlayStation to match the Xbox / PlayStation / Extended family naming.</span>
+<a id="__codelineno-97-6" name="__codelineno-97-6" href="#__codelineno-97-6"></a><span class="w">    </span><span class="na">[XmlEnum(&quot;Microsoft&quot;)]</span><span class="w"> </span><span class="n">Xbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">        </span><span class="c1">// Xbox family (360, One, Series, Elite, Adaptive)</span>
+<a id="__codelineno-97-7" name="__codelineno-97-7" href="#__codelineno-97-7"></a><span class="w">    </span><span class="na">[XmlEnum(&quot;Sony&quot;)]</span><span class="w">      </span><span class="n">PlayStation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// PlayStation family (DS3/DS4, DualSense, PS Move)</span>
+<a id="__codelineno-97-8" name="__codelineno-97-8" href="#__codelineno-97-8"></a><span class="w">    </span><span class="n">Extended</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">      </span><span class="c1">// Any other HIDMaestro profile, or a custom HID descriptor</span>
+<a id="__codelineno-97-9" name="__codelineno-97-9" href="#__codelineno-97-9"></a><span class="w">    </span><span class="n">Midi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">          </span><span class="c1">// Windows MIDI Services virtual endpoint</span>
+<a id="__codelineno-97-10" name="__codelineno-97-10" href="#__codelineno-97-10"></a><span class="w">    </span><span class="n">KeyboardMouse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="c1">// Win32 SendInput keyboard + mouse</span>
+<a id="__codelineno-97-11" name="__codelineno-97-11" href="#__codelineno-97-11"></a><span class="w">    </span><span class="n">Nintendo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w">       </span><span class="c1">// Virtual Switch Pro via HM, rides the raw-HID path</span>
+<a id="__codelineno-97-12" name="__codelineno-97-12" href="#__codelineno-97-12"></a><span class="p">}</span>
 </code></pre></div>
 <p>The concrete device identity (Xbox 360 Wired, DualSense, Logitech G920, ...) is picked within each category by a per-slot preset config or, for Extended, a custom HID descriptor.</p>
 <hr />

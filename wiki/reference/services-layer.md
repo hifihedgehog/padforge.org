@@ -1,10 +1,25 @@
 # Services Layer
 
-Five service classes bridge **PadForge.Engine** with the **WPF UI layer**. All live in `PadForge.App/Services/` and run on the WPF dispatcher thread unless noted otherwise.
+*Five ViewModel-bridge services carry engine state to the WPF UI and back, with a bench of smaller workers beside them.*
+
+Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds ten more residents:
+
+| Resident | Role |
+|----------|------|
+| `DsuMotionServer` | DSU motion server on its own UDP thread. Lifecycle [below](#dsu-server-lifecycle), protocol on [DSU Protocol Implementation](dsu-protocol.md) |
+| `WebControllerServer` | Phone-as-controller HTTP/WebSocket server. Lifecycle [below](#web-controller-server-lifecycle) |
+| `NfcReaderService` | PC/SC monitor for NFC macro triggers (#150). [Below](#nfcreaderservice) |
+| `WorkshopProfileMaterializer` | Workshop import to `ProfileData` bridge (#9). [Below](#workshopprofilematerializer-v41-9) |
+| `WorkshopTuningApplier` | Folds a Workshop import's parked tuning stamps into the assigned device's own settings (#9). [Below](#workshoptuningapplier-v41-9) |
+| `WiiPairingService` | In-app Bluetooth pairing ceremony for Wii controllers (#116), following the sequence Dolphin documents, over the Win32 Bluetooth API |
+| `Ds3PairingService` | DualShock 3 guided USB pairing ceremony (#116): sixpair over WinUSB plus the radio-side device record BthPS3 needs |
+| `Ds3DriverInstaller` | Installs and arms the embedded BthPS3 / BthPS3PSM drivers and binds a docked DS3 to WinUSB, reboot-free |
+| `GyroCalibratorService` | Samples an at-rest controller and writes the per-(device, slot) gyro bias onto its `PadSetting` |
+| `CursorControlService` | Owns the 200 Hz desktop-cursor timeline feeding the "Mouse Position X" / "Mouse Position Y" sources (#107) |
 
 > **Engine-side subsystems (3.4).** Two more runtime subsystems sit alongside these services. `AudioPassthroughService` drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through `InputService` and documented on their own pages: [Controller Audio Internals](controller-audio-internals.md) and [Remote Link Internals](remote-link-internals.md).
 
-> **App-side helpers (3.6.0).** Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as `static` P/Invoke surfaces. `HapticToneService` and `WiiSpeakerService` turn macro sounds into HD-haptic tones and Wii-speaker PCM. `NfcReaderService` (with `WinScard`) owns the PC/SC monitor for NFC macro triggers. `BluetoothLinkHelper` performs per-family Bluetooth disconnect. They live in `PadForge.Common.Input` (and `PadForge.Services` for `NfcReaderService`), and are documented in [App-Side Services and Helpers (3.6.0)](#app-side-services-and-helpers-360) below.
+> **App-side helpers (3.6.0).** Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as `static` P/Invoke surfaces. `HapticToneService` and `WiiSpeakerService` turn macro sounds into HD-haptic tones and Wii-speaker PCM. `NfcReaderService` (with `WinScard`) owns the PC/SC monitor for NFC macro triggers. `BluetoothLinkHelper` performs per-family Bluetooth disconnect. They live in `PadForge.Common.Input` (and `PadForge.Services` for `NfcReaderService`), and are documented in [App-Side Services and Helpers (3.6.0)](#app-side-services-and-helpers-360) below. 4.1.0 added three more to the same section: `TouchpadPulseService` (#219), `SwitchHomeLedSetter` (#226), and `RumbleAudioService` (#236, the Bass Shakers renderer).
 
 ```mermaid
 graph TB
@@ -103,11 +118,15 @@ graph TB
   - [All Events](#foregroundmonitorservice-all-events)
 - [App-Side Services and Helpers (3.6.0)](#app-side-services-and-helpers-360)
   - [HapticToneService](#haptictoneservice)
+  - [TouchpadPulseService](#touchpadpulseservice)
+  - [SwitchHomeLedSetter](#switchhomeledsetter)
   - [WiiSpeakerService](#wiispeakerservice)
+  - [RumbleAudioService](#rumbleaudioservice)
   - [NfcReaderService](#nfcreaderservice)
   - [WinScard](#winscard)
   - [BluetoothLinkHelper](#bluetoothlinkhelper)
 - [WorkshopProfileMaterializer (v4.1, #9)](#workshopprofilematerializer-v41-9)
+- [WorkshopTuningApplier (v4.1, #9)](#workshoptuningapplier-v41-9)
 
 ---
 
@@ -145,6 +164,8 @@ graph TB
 | Engine event -> UI | `DevicesUpdated`, `FrequencyUpdated`, `ErrorOccurred` marshalled via `Dispatcher.BeginInvoke` | On engine event |
 | Settings file -> Memory | SettingsService deserializes XML into SettingsManager collections | On load |
 | Memory -> Settings file | SettingsService serializes SettingsManager + ViewModel state to XML | On MarkDirty (250ms debounce) |
+
+> **Button SOCD (4.1.0, discussion #240).** KB+M slots get keyboard SOCD (#205) through the `_kbmConfigs[]` sync above. Controller slots (Xbox / PlayStation / Nintendo / Extended) have their own SOCD lane that bypasses the 30 Hz sync entirely: `MappingSet.SocdMode` / `SocdPairs` on the slot's MappingSet, read directly by the engine from `SettingsManager.SlotMappingSets` and applied to the slot's final combined output right before the Step 5 submit (`SlotButtonSocd`). Gamepad-surface slots pair buttons by mapping target name ("ButtonA:ButtonB"). Raw-surface slots (Extended, Nintendo) pair flat button indices ("12:13"). Pair semantics are the #205 `SocdCleaner` state machine: LastWins, Neutral, or FirstWins, with the winner's release re-pressing the still-held partner the same frame.
 
 ---
 
@@ -206,7 +227,7 @@ Startup sequence:
 8. **Capture default profile snapshot**. Uses `PendingDefaultSnapshot` (from prior XML) or creates one via `SnapshotCurrentProfile()`.
 9. **Async Raw Input enumeration**. Keyboard and mouse devices are discovered on a background thread via `Task.Run`, preventing UI thread stalls from slow HID enumeration. Results are merged into the device list when the task completes.
 10. **Start engine**. `_inputManager.Start()` launches the polling thread.
-11. **Start subsystems**. DSU, web controller, audio bass detector (each conditional on settings).
+11. **Start subsystems**. DSU, web controller, audio bass detector (each conditional on settings), plus the self-healing sink reconcilers, which start unconditionally: `RumbleAudioService.EnsureStarted()` (#236), `WiiSpeakerService.EnsureStarted()`, and `HapticToneService.EnsureStarted()`.
 12. **Clear stale HidHide state**. `HidHideController.ClearAll()` removes leftover entries.
 13. **Apply device hiding**. HidHide blacklist + input hooks.
 14. **Start UI timer**. 30 Hz `DispatcherTimer` at `DispatcherPriority.Render`.
@@ -261,6 +282,8 @@ For each of the 16 slots:
 | KB+M | `CombinedKbmRawStates[i]` | Sets `padVm.KbmOutputSnapshot` |
 
 Per-device stick/trigger previews read either KBM pre-deadzone values (synthesized into a `Gamepad` struct) or the selected device's `RawMappedState`.
+
+KB+M cursor and scroll outputs are time-based rates, not per-poll displacements (4.1.0): full stick deflection moves the cursor at 1,200 px/s (`KeyboardMouseVirtualController.MouseFullScalePxPerSec`, the DS4Windows stick-as-mouse scale) and turns the wheel at ~33 notches/s, independent of the polling-rate setting. The per-stick KBM speed knob scales from those constants.
 
 #### Visibility gating
 
@@ -575,8 +598,8 @@ Captures current runtime state:
 #### `ApplyProfile(ProfileData profile)` (public)
 
 Restores a profile:
-1. **Topology**. Sets `SlotCreated[]`, `SlotEnabled[]`, `OutputType`, `ProfileId` (per-slot HM profile slug), and unassigns devices from destroyed slots. The HM slug update gates Step 5's per-slot diff at `InputManager.Step5.VirtualDevices.cs:620-633`. Slots whose new slug matches the live `HMaestroVirtualController.ProfileId` stay live untouched. Slots whose slug differs are destroyed and recreated with the new identity.
-2. **Device assignments (single-pass transition)**. Builds the desired final assignment map from `profile.Entries` first, then transitions each `UserSetting` directly old → new `MapTo` (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe `HasAnyDeviceMapped == false` for surviving slots and fall into the immediate-destroy path at `InputManager.Step5.VirtualDevices.cs:704-718`. Slots whose mapping is unchanged across profiles transition with zero teardown.
+1. **Topology**. Sets `SlotCreated[]`, `SlotEnabled[]`, `OutputType`, `ProfileId` (per-slot HM profile slug), and unassigns devices from destroyed slots. The HM slug update gates Step 5's per-slot diff: `UpdateVirtualDevices()` Pass 1 in `InputManager.Step5.VirtualDevices.cs` compares each slot's `SlotProfileIds[]` against the live `HMaestroVirtualController.ProfileId`. Slots whose new slug matches stay live untouched. Slots whose slug differs are destroyed and recreated with the new identity.
+2. **Device assignments (single-pass transition)**. Builds the desired final assignment map from `profile.Entries` first, then transitions each `UserSetting` directly old → new `MapTo` (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe `HasAnyDeviceMapped == false` for surviving slots and fall into the `!HasAnyDeviceMapped` immediate-destroy branch of `UpdateVirtualDevices()` in `InputManager.Step5.VirtualDevices.cs`. Slots whose mapping is unchanged across profiles transition with zero teardown.
 3. **Extended/MIDI configs**. Restores per-slot Extended config (`Customize` toggle, axis/trigger/POV/button counts, OEM-name override, product string) and MIDI config (channel, CC/note ranges, velocity).
 4. **Server settings**. Sets DSU and web controller enable/port.
 5. **Macros**. When `profile.Macros` is non-null, replaces the live macro set via `LoadMacros(profile.Macros)`. A null value leaves the current macros in place (pre-macro-era profile).
@@ -603,7 +626,7 @@ Applies `_defaultProfileSnapshot` to revert to the pre-profile state.
 The reorder model rests on five rules:
 
 - **Pad indices are data identity.** A pad's mappings, profile, devices, settings, and dirty flags live at its pad index and never move on reorder.
-- **Visual position is the kernel-slot anchor.** Within an HM-backed group (Xbox / PlayStation / Extended), the VC at visual position V holds kernel slot V. `SlotOrders[group][V] = padIndex` says which pad's data the VC at slot V is serving.
+- **Visual position is the kernel-slot anchor.** Within an HM-backed group (Xbox / PlayStation / Nintendo / Extended), the VC at visual position V holds kernel slot V. `SlotOrders[group][V] = padIndex` says which pad's data the VC at slot V is serving.
 - **Reorder repoints, not rebuilds.** `SwapSlots` / `MoveSlot` mutate `SlotOrders` (visual order). The kernel VC at each visual position stays put. The pad-index pointer in `_virtualControllers[]` moves so the data at the new pad-at-position-V feeds into V's kernel slot.
 - **Same-profile reorders are zero-flicker.** Pointer swap in `_virtualControllers[]` plus `FeedbackPadIndex` update on the moved VC. Per-VC state arrays move with the VC.
 - **Different-profile positions destroy + recreate.** Only the specific positions whose profile changed. Matching positions in the same reorder still pointer-swap.
@@ -913,7 +936,7 @@ Called during Save. If a named profile is active, updates its stored snapshot fr
 
 #### `UpdateTopologyCounts(ProfileListItem, bool[], int[])` (internal, static)
 
-Counts Xbox/PlayStation/Extended/MIDI/KBM slots and sets topology label (e.g., "2x Xbox, 1x PlayStation").
+Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM slots and sets topology label (e.g., "2x Xbox, 1x PlayStation").
 
 ### SettingsService All Public Methods
 
@@ -1009,8 +1032,10 @@ Removes all slot assignments for a device.
 
 Creates the next available slot:
 1. Sets `OutputType` before `SlotCreated` (order matters for sidebar rebuild).
-2. Sets `ProfileId = GetDefaultProfileId(type)` so the profile picker shows a selection immediately. For Xbox slots the default comes from `InputManager.DefaultXboxProfileId`. For Extended this is the Custom "PadForge Game Controller" profile.
+2. Sets `ProfileId = GetDefaultProfileId(type)` so the profile picker shows a selection immediately. Per-category defaults (`InputManager.Step5.VirtualDevices.cs`): Xbox gets `DefaultXboxProfileId` (`xbox-series-xs-bt`), PlayStation gets `dualshock-4-v2`, Nintendo gets `DefaultNintendoProfileId` (`switch-pro`, the category's only profile), Extended gets the Custom "PadForge Game Controller" profile (`padforge-custom`). MIDI and Keyboard + Mouse have no HIDMaestro profile (null).
 3. Returns slot index (0–15) or -1 if full.
+
+The `Nintendo` type (4.1.0, #246) is `VirtualControllerType.Nintendo = 5`: a console-family bucket like Xbox / PlayStation (own sidebar group, icon, fixed catalog profile) riding the Extended raw-HID data path. It has no Customize surface. The fixed group order across the sidebar and dashboard is Xbox / PlayStation / Nintendo / Extended / Keyboard + Mouse / MIDI (`VirtualControllerGroups.InOrder`), and Nintendo slots cap at `SettingsManager.MaxNintendoSlots` (all 16 pads, like the other HM groups).
 
 #### `DeleteSlot(int slotIndex)` (public) -> `SlotDeletionInfo`
 
@@ -1226,7 +1251,7 @@ Turns macro sounds into HD-haptic tones on controllers whose haptics are LRAs (i
 
 Structurally the Valve/Nintendo analogue of the Sony speaker path: a controller assigned to a slot becomes an output sink whose `MacroMixer` is returned to `SoundMacroService`, so a macro `PlaySound` fans out to it with no macro-layer change. Family detection (`FamilyOf`) mirrors the bundled SDL's `controller_list.h` VID/PID table rather than a hand-picked PID list. Switch 2 is deliberately excluded (no reference plays an audible tone on its actuator).
 
-Reconciled from `InputService`: `EnsureStarted()` (~line 1429) starts a 3 s self-healing reconcile timer that builds and tears down sinks off the current slot assignments. `InputService.Start()` also calls `Reconcile()` once (~line 1422) to resume any persisted mirror toggle on launch. Also carries a Remote Link lane (#138 x #147): `ApplyRemoteTone()` drives a device's tone from a paired peer's shipped `(freq, amp)` frame.
+Reconciled from `InputService.Start()`: `EnsureStarted()` starts a 3 s self-healing reconcile timer that builds and tears down sinks off the current slot assignments, and `Reconcile()` runs once at start to resume any persisted mirror toggle on launch. Also carries a Remote Link lane (#138 x #147): `ApplyRemoteTone()` drives a device's tone from a paired peer's shipped `(freq, amp)` frame.
 
 | Member | Signature | Description |
 |--------|-----------|-------------|
@@ -1283,7 +1308,7 @@ The Switch driver's subcommand path waits for the controller's ACK (~30 ms typic
 
 Plays macro sounds through a Wii Remote's built-in speaker as low-rate PCM (issue #146, sub-feature 2). The 48 kHz macro mix is resampled to signed 8-bit PCM at 2000 Hz mono and written as one `0x18` speaker report (20 samples) per 10 ms tick. PCM is used over 4-bit ADPCM because it is memoryless: a dropped or late report on the SDL-shared Bluetooth link is a single click, not a cascading decoder desync. The wire protocol (I2C register map, `0x14`/`0x16`/`0x18`/`0x19` reports) is grounded in dolphin's `Speaker.cpp`. Write path is chosen per device by a `BuildSink` probe: overlapped `WriteFile` when the BT stack accepts it, else synchronous `HidD_SetOutputReport`.
 
-Same sink shape as `HapticToneService`: a Wii Remote assigned to a slot exposes its `MacroMixer` to `SoundMacroService`, and a per-slot system-audio loopback mirror is available (same option DualSense exposes). Wired from `InputService`: `EnsureStarted()` (~line 1427) starts the 3 s reconcile timer, and `Start()` calls `Reconcile()` once (~line 1421) to resume a persisted mirror on launch.
+Same sink shape as `HapticToneService`: a Wii Remote assigned to a slot exposes its `MacroMixer` to `SoundMacroService`, and a per-slot system-audio loopback mirror is available (same option DualSense exposes). Wired from `InputService.Start()`: `EnsureStarted()` starts the 3 s reconcile timer, and `Reconcile()` runs once at start to resume a persisted mirror on launch.
 
 | Member | Signature | Description |
 |--------|-----------|-------------|
@@ -1292,6 +1317,29 @@ Same sink shape as `HapticToneService`: a Wii Remote assigned to a slot exposes 
 | `Reconcile` | `void Reconcile()` | Rebuilds the sink set from current slot assignments |
 | `GetSlotSinkMixers` | `List<MixingSampleProvider> GetSlotSinkMixers(int slot, Guid? deviceFilter = null)` | Live macro-sink mixers for `SoundMacroService` |
 | `Shutdown` | `void Shutdown()` | Tears down every speaker sink |
+
+### RumbleAudioService
+
+**File:** `PadForge.App/Common/Input/RumbleAudioService.cs`
+**Namespace:** `PadForge.Common.Input`
+**Type:** `internal static`
+
+Rumble-to-audio renderer for bass shakers and LFE channels (4.1.0, issue #236), surfaced in the UI as the Pad page's "Bass Shakers" tab. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones, four fixed voices per slot.
+
+Data path: VC output callbacks fill a controller-local pack, the poll thread's feedback lane evaluates the slot's voice bindings once per tick and publishes the result (`PublishIfCurrent`), and the render thread reads the published packs as its only input. The class never reads `VibrationStates`, `FinalVibrationStates`, macro rumble, test rumble, or any per-physical-device projection, which makes the feedback loop (shaker tone to loopback to `AudioBassDetector` to audio rumble to louder tone) impossible by construction. Players are keyed by endpoint, not slot: all slots routed to one endpoint share a single `WasapiOut`, one sample clock, and one composite limiter.
+
+Lifecycle: `EnsureStarted()` is called unconditionally from `InputService.Start()` (cheap when no slot has a config). Silence is an explicit edge, never an inference from callback inactivity: idle entry and engine stop (`InputManager`), panic quiesce (`InputService.PanicQuiesceOutputs`), and slot delete all call `SilenceSlot` / `SilenceAll`, and a per-slot generation makes a stale in-flight poll publish lose against a newer silence edge. A configured-but-unresolved endpoint fails closed, with no fallback device. The renderer dies with the engine (`StopAll` in `InputManager.Stop`), deliberately not with `SoundMacroService.StopAll`, which runs on every profile apply.
+
+| Member | Signature | Description |
+|--------|-----------|-------------|
+| `EnsureStarted` | `void EnsureStarted()` | Starts the 5 s reconcile worker. Idempotent |
+| `RequestReconcile` | `void RequestReconcile()` | Nudges the worker after a config edit. Never touches WASAPI on the calling thread |
+| `PublishIfCurrent` | `void PublishIfCurrent(int slot, int generation, long packed)` | Poll-thread publish, discarded if a silence edge advanced the slot's generation since `GetGeneration` was read |
+| `SilenceSlot` / `SilenceAll` | `void SilenceSlot(int slot)` / `void SilenceAll()` | Explicit per-slot / all-slot silence edges |
+| `PulseTestVoice` | `void PulseTestVoice(int slot, int voice, int durationMs)` | Bass Shakers tab test button: plays one voice at full authored gain |
+| `StartSweep` / `StopTest` | `void StartSweep(int slot, int durationMs)` / `void StopTest(int slot)` | 20–120 Hz resonance-finding sweep on the LOW voice, and its stop |
+| `GetSlotStatus` | `string GetSlotStatus(int slot)` | Per-slot endpoint status for the UI: null = inactive, "!" prefix = fail-closed error marker |
+| `StopAll` | `void StopAll()` | Fades and disposes every endpoint player, stops the worker. Engine stop / app exit |
 
 ### NfcReaderService
 
@@ -1343,7 +1391,7 @@ Per-family Bluetooth disconnect / power-off (issue #162). `TryDisconnectDevice()
 | Valve | Steam `0x9F` (`ID_TURN_OFF_CONTROLLER`) feature report on the device's own HID handle |
 | Switch 2 | SDL fork effect passthrough (`SDL_SendGamepadEffect`), with a direct GATT write fallback |
 
-`IsDisconnectTarget()` gates the four #162 UI surfaces (macro candidates, idle countdown, Devices-page control, Specific-device picker) so all four agree. The device-aware overload excludes `peer://` (Remote Link) devices and adds the Switch 2 family (which the SDL BLE driver leaves without a `DevicePath` or serial) plus the combined gen-1 Joy-Con pair (PID 0x2008), whose synthetic path the plain-path predicate cannot see. Powers the idle-disconnect countdown and the Disconnect Controller macro action. `ReEnablePendingDevNodes()` is called from `InputService` shutdown (~line 1640) to re-enable any devnode still inside its 30 s disable window.
+`IsDisconnectTarget()` gates the four #162 UI surfaces (macro candidates, idle countdown, Devices-page control, Specific-device picker) so all four agree. The device-aware overload excludes `peer://` (Remote Link) devices and adds the Switch 2 family (which the SDL BLE driver leaves without a `DevicePath` or serial) plus the combined gen-1 Joy-Con pair (PID 0x2008), whose synthetic path the plain-path predicate cannot see. Powers the idle-disconnect countdown and the Disconnect Controller macro action. `ReEnablePendingDevNodes()` is called at the top of `InputService.Stop()` to re-enable any devnode still inside its 30 s disable window.
 
 | Member | Signature | Description |
 |--------|-----------|-------------|
@@ -1362,6 +1410,23 @@ Per-family Bluetooth disconnect / power-off (issue #162). `TryDisconnectDevice()
 **File:** `PadForge.App/Services/WorkshopProfileMaterializer.cs`
 
 Static bridge between the `PadForge.SteamWorkshop` translator and the app's profile model. `Materialize(TranslatedProfile, SteamWorkshopSource)` builds a `ProfileData` that carries only the slots the translation demands (`NeedsXboxSlot` / `NeedsKbmSlot`), packed from slot 0 with the Xbox VC first when present, so a split config lands Xbox at slot 0 and Keyboard + Mouse at slot 1 while a keyboard-only config imports as a single KbM VC at slot 0 (each created slot enabled, default HIDMaestro profile id per type, device assignments deliberately empty). It attaches the translated `MappingSet`s, clones each translated menu (`MenuDefinitionEntry`, #9 B-17) onto every created slot's `MappingSet.Menus` (the menu runtime and the fired-set provider are slot-keyed, so a split config's two slots each carry their own copy, and the overlay publisher dedupes at display time), converts translated macros to `MacroData` on pad 0 with `OutputController` triggers (a macro carrying a device-free descriptor trigger converts instead through the exact picker path, `MacroItem.TryBuildTriggerEntry`, and is dropped when any descriptor fails to convert), converts Steam's normalized 0..65535 cursor coordinates to primary-monitor pixels for `MoveMouseToScreenPosition`, and stamps the provenance block. MainWindow's `AddWorkshopProfile` sink then mirrors the `.pfprofile` import path (name dedup, `Profiles` append, `MarkDirty`, optional `LoadProfile`). Full detail on [Steam Workshop Config Import Internals](steam-workshop-import-internals.md).
+
+---
+
+## WorkshopTuningApplier (v4.1, #9)
+
+**File:** `PadForge.App/Services/WorkshopTuningApplier.cs`
+
+Static companion to the materializer. A Steam config assumes one controller, so its tuning is per physical input, but the import runs before any device is assigned and device tuning is keyed by device GUID. The import therefore parks the values on the slot as `MappingSet.Workshop*` stamps. `ApplyToAssignedDevice(slotIndex, ps, deviceGuid)` folds those stamps into the assigned device's own `PadSetting` at assignment time, then clears them, so from then on the values live in the user's settings and the existing cards show and edit them.
+
+Rules:
+
+- **Applied only where the user has not already chosen something.** Re-assigning a device cannot silently overwrite hand-set tuning.
+- **Cleared unconditionally.** A stamp offered once has done its job. Leaving it would re-apply after the user deliberately changed the value back.
+- **Called from every assignment funnel.** Both `DeviceService.OnAssignToSlot` (the device list's assign command) and `DeviceService.AssignDeviceToSlot` (drag-and-drop and programmatic). Idempotent and cheap, so over-calling is free and under-calling is a silent regression.
+- **Also folds per-source response shaping** the import writes onto its rows (`FoldSourceShaping`), which had the same live-in-the-engine, absent-from-the-cards defect one level down.
+
+Two stamps stay runtime overlays because no user-facing card exists to fold them into: `WorkshopGyroRatchetDescriptors` (no ratchet field on `PadSetting`) and `ParamFlickRotationOffsetDeg` (no rotation-offset control). The second is a known gap, not a deliberate exclusion.
 
 ---
 
@@ -1484,4 +1549,4 @@ User clicks Record button
 
 ---
 
-_Last updated for PadForge 4.1.0._
+*Last updated for PadForge 4.1.0.*

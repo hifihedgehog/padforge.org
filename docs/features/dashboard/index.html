@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1285,10 +1287,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#menu-overlay" class="md-nav__link">
+  <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Menu Overlay
+        Overlays
       
     </span>
   </a>
@@ -1660,6 +1662,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2929,10 +2959,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#menu-overlay" class="md-nav__link">
+  <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Menu Overlay
+        Overlays
       
     </span>
   </a>
@@ -3025,8 +3055,8 @@
 <td><a href="../../guides/remote-link/">Share controllers</a> with a paired PadForge on another PC.</td>
 </tr>
 <tr>
-<td><strong>Menu Overlay</strong></td>
-<td>The on-screen ring or grid for <a href="../../guides/menus/">radial and touch menus</a>.</td>
+<td><strong>Overlays</strong></td>
+<td>On-screen indicators: the <a href="../../guides/menus/">menu</a> ring or grid, the shift layer flyout, and profile switch announcements.</td>
 </tr>
 <tr>
 <td><strong>Touchpad Overlay</strong></td>
@@ -3034,7 +3064,7 @@
 </tr>
 <tr>
 <td><strong>Drivers</strong></td>
-<td>Install status for <a href="../driver-management/">HidHide and Windows MIDI Services</a>.</td>
+<td>Install status for <a href="../driver-management/">HidHide and MIDI Services</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -3056,7 +3086,7 @@
 </tr>
 <tr>
 <td><strong>Status text</strong></td>
-<td>"Forging", "Idle", "Stopping", or "Stopped".</td>
+<td>"Forging", "Idle", "Stopping…", or "Stopped".</td>
 </tr>
 <tr>
 <td><strong>Polling frequency</strong></td>
@@ -3127,7 +3157,7 @@
 <tr>
 <td><strong>Type track</strong></td>
 <td>Second row</td>
-<td>A recessed segmented strip of type icons: Xbox, PlayStation, Extended, Keyboard+Mouse, MIDI. The active type is lit ember. The others are dim. Click a dim icon to switch type. When Windows MIDI Services is missing, the MIDI icon alone shows a no-entry cursor and a tooltip saying it's required. The other types have no such gate.</td>
+<td>A recessed segmented strip of six type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI. The active type is lit ember. The others are dim. Click a dim icon to switch type. When Windows MIDI Services is missing, the MIDI icon alone shows a no-entry cursor and a tooltip saying it's required. The other types have no such gate.</td>
 </tr>
 <tr>
 <td><strong>Per-type instance number</strong></td>
@@ -3183,6 +3213,11 @@
 <td>Enabled and mapped, but nothing is connected and the controller is down, or the engine is stopped.</td>
 </tr>
 <tr>
+<td><strong>Virtual controller failed</strong></td>
+<td>Gold. Steel outline if nothing is mapped</td>
+<td>The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return.</td>
+</tr>
+<tr>
 <td><strong>Cold</strong></td>
 <td>Steel outline</td>
 <td>Enabled with no devices mapped.</td>
@@ -3201,7 +3236,7 @@
 </table>
 <p>Click anywhere on a card (except the delete or power flame) to open the slot's configuration: <a href="../mappings/">Button and Axis Mappings</a>, <a href="../stick-deadzones/">Stick Deadzones</a>, <a href="../trigger-deadzones/">Trigger Deadzones</a>, <a href="../force-feedback/">Force Feedback</a>, <a href="../adaptive-triggers/">Adaptive Triggers</a>, <a href="../lighting/">Lighting</a>, and <a href="../../guides/macros/">Macros</a>.</p>
 <h3 id="reordering-slots">Reordering slots<a class="headerlink" href="#reordering-slots" title="Permanent link">&para;</a></h3>
-<p>Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Extended, Keyboard+Mouse, and MIDI each reorder on their own. Cross-type drops are ignored. The per-type instance number (the <code>#2</code> on the second Xbox slot) updates as soon as you drop.</p>
+<p>Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, and MIDI each reorder on their own. Cross-type drops are ignored. The per-type instance number (the <code>#2</code> on the second Xbox slot) updates as soon as you drop.</p>
 <p>Same-profile reorders are a pointer swap. No kernel rebuild, no game disconnection. Different-profile reorders rebuild only the positions whose profile changed. See <a href="../controller-slots/#what-happens-on-reorder">Controller Slots</a>.</p>
 <h3 id="add-controller">Add Controller<a class="headerlink" href="#add-controller" title="Permanent link">&para;</a></h3>
 <p>An <strong>Add Controller</strong> card sits at the bottom when at least one type still has room. Click it to pick a type. The card disappears when every type is at capacity. See <a href="../controller-slots/">Controller Slots</a> for limits.</p>
@@ -3217,7 +3252,7 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Enable DSU motion server</strong></td>
+<td><strong>Enable DSU motion server (CemuHook Motion Provider protocol)</strong></td>
 <td>Starts and stops the server.</td>
 </tr>
 <tr>
@@ -3244,7 +3279,7 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Enable web controller</strong></td>
+<td><strong>Enable web controller server</strong></td>
 <td>Starts and stops the web server.</td>
 </tr>
 <tr>
@@ -3293,8 +3328,30 @@
 <p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, and revoke, plus a revoke-all. <strong>Nearby PCs</strong> lists peers discovered on the network. <strong>Connect by address</strong> reaches a peer by IP when discovery can't find it.</p>
 <p>See <a href="../../guides/remote-link/">Remote Link</a> for full details.</p>
 <hr />
-<h2 id="menu-overlay">Menu Overlay<a class="headerlink" href="#menu-overlay" title="Permanent link">&para;</a></h2>
-<p>One checkbox, <strong>Menu Overlay</strong>, on by default. It shows the on-screen ring or grid while a radial or touch <a href="../../guides/menus/">menu</a> is engaged. Menus still fire with the overlay off, so layouts you know by muscle memory can run without the picture. Per-menu position, size, and opacity live on each menu's own settings on the <a href="../../guides/menus/">Menus</a> tab.</p>
+<h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
+<p>The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.</p>
+<table>
+<thead>
+<tr>
+<th>Checkbox</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Menu Overlay</strong></td>
+<td>The on-screen ring or grid while a radial or touch <a href="../../guides/menus/">menu</a> is engaged. Menus still fire with the overlay off, so layouts you know by muscle memory can run without the picture. Per-menu position, size, and opacity live on each menu's own settings on the <a href="../../guides/menus/">Menus</a> tab.</td>
+</tr>
+<tr>
+<td><strong>Shift layer flyout</strong></td>
+<td>A flyout with the engaged shift layer's name and color while any slot holds a non-Base layer, whichever page is open. When several slots hold one at once, the selected pad wins, then the lowest-numbered slot.</td>
+</tr>
+<tr>
+<td><strong>Profile switch overlay</strong></td>
+<td>The new profile's name when a macro switches the active profile. Automatic per-app switches don't show it. They flare the profile pill in the status bar instead.</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="touchpad-overlay">Touchpad Overlay<a class="headerlink" href="#touchpad-overlay" title="Permanent link">&para;</a></h2>
 <p>An on-screen, transparent touch surface you can pin to any monitor. Drives the touchpad on the assigned DualShock 4 or DualSense slot. Useful when no physical touchpad or phone is handy.</p>
@@ -3343,8 +3400,8 @@
 <td>Games see both the physical and the virtual controller.</td>
 </tr>
 <tr>
-<td><strong>Windows MIDI Services</strong></td>
-<td>MIDI virtual controller output. Requires Windows 11 24H2 or later.</td>
+<td><strong>MIDI Services</strong></td>
+<td>MIDI virtual controller output through Windows MIDI Services. Requires Windows 11 24H2 (build 26100) or later.</td>
 <td>You want to send MIDI to DAWs, synths, or VJ tools.</td>
 </tr>
 </tbody>
@@ -3363,7 +3420,7 @@
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

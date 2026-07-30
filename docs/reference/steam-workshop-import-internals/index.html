@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -3604,7 +3634,7 @@
 <p><code>Translate(config, options)</code> produces a <code>TranslatedProfile</code>: two <code>MappingSet</code>s (<code>XboxMappingSet</code>, <code>KbmMappingSet</code>), a macro list, a menu list (<code>Menus</code>, <code>MenuDefinitionEntry</code> objects from <code>PadForge.Engine.Menus</code>), a name and description, slot-demand flags (<code>NeedsXboxSlot</code>, <code>NeedsKbmSlot</code>), and a <code>TranslationReport</code>. It never touches <code>ProfileData</code>. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros whose triggers read the Xbox slot's combined output. A macro riding a device-free <code>InputDevice</code> trigger (paddle, touchpad, gyro) demands no Xbox slot on its own. An <code>Identities.Count</code> clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for menus when no Xbox slot is demanded, so every import with a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps <code>MappingSet.Authoritative</code> on both sets it places and clones each menu onto every created slot's <code>MappingSet.Menus</code>.</p>
 <p><code>TranslationOptions</code> has exactly four fields: <code>FileId</code> (feeds deterministic layer names), <code>PreferredLanguage</code> (default <code>"english"</code>, for localized title fallback), <code>ProfileNameOverride</code>, and <code>IncludedPresetIds</code>, the preset filter the dialog's chips re-run translation with (null means all).</p>
 <h3 id="translator-version-history">Translator version history<a class="headerlink" href="#translator-version-history" title="Permanent link">&para;</a></h3>
-<p><code>TranslationReport.CurrentTranslatorVersion</code> is <strong>7</strong>. Each report stamps the version it was produced under, and the summary digest leads with it. The bumps:</p>
+<p><code>TranslationReport.CurrentTranslatorVersion</code> is <strong>26</strong>. Each report stamps the version it was produced under, and the summary digest leads with it. Every bump is summarized in the doc comment above the constant in <code>TranslationReport.cs</code>, which is the authoritative changelog. The bumps:</p>
 <table>
 <thead>
 <tr>
@@ -3649,8 +3679,104 @@
 <td><code>b006ee7e</code> (wave 4c)</td>
 <td><code>radial_menu</code> and <code>touch_menu</code> as first-class <code>MenuDefinitionEntry</code> menus with the on-screen overlay. Retired the <code>RadialMenuNeedsOverlay</code> / <code>TouchMenuNeedsOverlay</code> skips and the two-cell touch-spot approximation.</td>
 </tr>
+<tr>
+<td>8</td>
+<td></td>
+<td>Group axis inversion: <code>invert_x</code> / <code>invert_y</code> flip the emitted mouse-axis source's Invert flag on every mode whose engine read honors it.</td>
+</tr>
+<tr>
+<td>9</td>
+<td></td>
+<td><code>mouse_joystick</code> emits right-stick axis rows instead of KbM mouse. Unmerged <code>CHANGE_PRESET</code> lowers to a Latch of the target layer.</td>
+</tr>
+<tr>
+<td>10</td>
+<td></td>
+<td>Gap closure G1-G15: activator <code>haptic_intensity</code> as RumblePulse macros, <code>button_capture</code> to the raw SDL MISC1 source, <code>2dscroll</code> onto one-shot swipe gestures.</td>
+</tr>
+<tr>
+<td>11</td>
+<td></td>
+<td>Response-curve channel: Steam's curve cluster (<code>curve_exponent</code> preset and friends) lands on emitted stick axis pairs as per-source params.</td>
+</tr>
+<tr>
+<td>12</td>
+<td></td>
+<td>Stick-hosted swipe and wheel: <code>2dscroll</code> on a stick lowers each <code>dpad_*</code> member's one-shot bindings onto tap macros on the member's wedge read.</td>
+</tr>
+<tr>
+<td>13</td>
+<td></td>
+<td>Vocabulary census against Steam's own serializer: <code>LSTICK_</code>/<code>RSTICK_</code> direction params lower to bipolar thumb-axis rows.</td>
+</tr>
+<tr>
+<td>14</td>
+<td></td>
+<td>Self-arming gesture reads: <code>TrackpadFeatureRequired</code> retires whole, authoritative slots' mapped gesture descriptors self-enable the gesture gate.</td>
+</tr>
+<tr>
+<td>15</td>
+<td></td>
+<td>The swipe / flick skip family closes: gyro-hosted <code>2dscroll</code> lowers onto one-shot tap macros on signed gyro-rate halves. <code>MouseWheelTap</code> action lands.</td>
+</tr>
+<tr>
+<td>16</td>
+<td></td>
+<td><code>mouse_delta</code> builds on the new one-shot <code>MouseNudge</code> macro through the engine's accumulate-and-flush mouse lane. <code>CycleTapList</code> lands.</td>
+</tr>
+<tr>
+<td>17</td>
+<td></td>
+<td><code>Double_Press</code> activators on any host lower to macros on the engine's new DoublePress trigger. Stick <code>mouse_region</code> engages on a deflection ring.</td>
+</tr>
+<tr>
+<td>18</td>
+<td></td>
+<td>The response-cluster and gate/latch waves: the curve/range shaping seam widens to every analog lane, click gates ride <code>GateDescriptor</code>, and the latch/turbo family completes (<code>ToggleMouseButton</code> / <code>ToggleVcAxis</code> / <code>RepeatVcAxisWhileHeld</code> / <code>ToggleWheel</code>).</td>
+</tr>
+<tr>
+<td>19</td>
+<td></td>
+<td>Audit-2 semantics: the gyro-hosted <code>mouse_joystick</code> rotation matrix stays orthogonal against the yaw-frame flip, <code>mouse_wheel</code> <code>hold_repeats</code> lowers to repeats.</td>
+</tr>
+<tr>
+<td>20</td>
+<td></td>
+<td><code>CHANGE_PRESET</code> sentinel ids (32766 next / 32765 previous) lower as one Cycle activator through every action set in authored order.</td>
+</tr>
+<tr>
+<td>21</td>
+<td></td>
+<td>Menu cell icons carry: authored icon names ride <code>MenuItemDefinition.Icon</code>, resolved against the local Steam client's binding-icon art.</td>
+</tr>
+<tr>
+<td>22</td>
+<td></td>
+<td>The Skyrim notes: <code>gyro_ratchet_button_mask</code> lowers onto a slot-level clutch lane grounded per bit against Steam's <code>k_eGamepadButtonBitMask</code>.</td>
+</tr>
+<tr>
+<td>23</td>
+<td></td>
+<td><code>gyro_button</code> engage arm gains the full bitmask enum, indexing the same table as the ratchet grounding.</td>
+</tr>
+<tr>
+<td>24</td>
+<td></td>
+<td>The mass-sweep top four: <code>button_macro0..4</code> resolve as the device's extra buttons (bits 32-39, capability-gated).</td>
+</tr>
+<tr>
+<td>25</td>
+<td></td>
+<td>Wild-corpus round 2: serializer-vocabulary switch members resolve, <code>always_on_action</code> lowers onto the constant-true source with <code>LayerMask</code> scoping, radial menus host on the physical dpad / face diamond, <code>deadzone_shape</code> lands per source.</td>
+</tr>
+<tr>
+<td>26</td>
+<td></td>
+<td>Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise <code>MobileTouchSurfaceOnly</code> / <code>ChordWithoutPartner</code> classes.</td>
+</tr>
 </tbody>
 </table>
+<p>Versions 8 through 26 land across the 4.1.0 cycle. Commit hashes for each ride the doc comment in <code>TranslationReport.cs</code>, one block per bump.</p>
 <p>The Nintendo face-button folding (<code>7cfc8be3</code>, labels folded to positions for Switch-authored configs via <code>PhysicalSlotResolver.UsesNintendoLabels</code>) did not bump the version: it changed slot resolution, not report shape.</p>
 <h3 id="split-config-routing">Split-config routing<a class="headerlink" href="#split-config-routing" title="Permanent link">&para;</a></h3>
 <p>Every binding lands by nature, not by a user-chosen slot. <code>xinput_button</code> targets go to the Xbox set (<code>ButtonA</code>, <code>DPadUp</code>, <code>LeftTrigger</code>, <code>LeftThumbAxisX</code>...). Key, mouse-button, mouse-move, and scroll targets go to the KbM set (<code>KbmKey##</code>, <code>KbmMBtn0-4</code>, <code>KbmMouseX/Y</code>, <code>KbmScroll</code>, <code>KbmScrollH</code>). One config routinely fills both.</p>
@@ -3702,6 +3828,9 @@
 </table>
 <p>Activators duplicate onto whichever mapping set(s) actually contain the layer's rows. <code>Kind</code> is always <code>"Button"</code> (trigger pulls gate at <code>AxisThreshold = 0.5</code>). Since wave 4c, activators evaluate with their true slot index, so an activator descriptor can read slot-scoped families such as menu-item fires.</p>
 <h3 id="group-and-activator-settings-honored">Group and activator settings honored<a class="headerlink" href="#group-and-activator-settings-honored" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Currency note (4.1.0).</strong> This table records the v7-era state. Waves v18 through v26 consumed most of the drops listed below: click gates now ride <code>MappingSource.GateDescriptor</code> on every source, the latch/turbo family completed, response curves land on every analog lane, and the haptic / double-press / ratchet clusters all build. The authoritative per-setting status is the version changelog above plus <code>ConfigTranslator.cs</code> at HEAD.</p>
+</blockquote>
 <p>The v1 translator read six setting keys. The waves widened that considerably:</p>
 <table>
 <thead>
@@ -3765,7 +3894,7 @@
 <hr />
 <h2 id="translationreport">TranslationReport<a class="headerlink" href="#translationreport" title="Permanent link">&para;</a></h2>
 <p><code>TranslationStatus</code>: <code>Clean = 0</code>, <code>Partial = 1</code>, <code>Skipped = 2</code>, <code>Error = 3</code>. Entries carry <code>Status</code>, <code>ReasonKey</code>, <code>ReasonArgs</code>, <code>SourcePath</code>, <code>Binding</code> (raw binding text), and <code>Emitted</code> (an unlocalized diagnostic trace like <code>KbmKey57 &lt;- Touchpad 0 DPadUp</code>). The report also counts rows, macros, menus (<code>MenuCount</code>), and activators per set, and <code>ToSummaryString()</code> renders the provenance digest (<code>v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0</code>).</p>
-<p>Reason keys are resx keys in the <code>Workshop_Tr_*</code> namespace, resolved at display time so the manifest localizes. The vocabulary is append-only: keys a wave retires stay defined and localized so reports serialized under older translator versions render forever. The full vocabulary at v7, by family:</p>
+<p>Reason keys are resx keys in the <code>Workshop_Tr_*</code> namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v15 onward a wave that retires a key DELETES the key and its locale strings (each deletion is named in the version changelog above), so the live vocabulary is exactly the <code>Workshop_Tr_*</code> set in <code>Strings.resx</code> at HEAD. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list:</p>
 <h3 id="emission-clean">Emission (Clean)<a class="headerlink" href="#emission-clean" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

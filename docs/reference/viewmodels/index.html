@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -3110,6 +3140,28 @@
     <span class="md-ellipsis">
       
         Macros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bass-shakers-236" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bass Shakers (#236)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slot-socd-245" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slot SOCD (#245)
       
     </span>
   </a>
@@ -5882,6 +5934,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#bass-shakers-236" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bass Shakers (#236)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slot-socd-245" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slot SOCD (#245)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#menus-9" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7133,6 +7207,7 @@
 <p><em>Every ViewModel class in PadForge: what it backs, what it exposes, and how state flows between the UI and the services layer.</em></p>
 <blockquote>
 <p><strong>v4 (2026-07-12):</strong> Refreshed for v4. Remote Link (<code>DashboardViewModel</code> + <code>SettingsViewModel</code>, and the <code>RemoteLinkTrustedPeer</code> / <code>RemoteLinkNearbyPeer</code> rows), the per-(slot, device) <code>DeviceSlotConfig</code> (renamed from <code>PlayStationSlotConfig</code>), <code>KbmSlotConfig</code> (SOCD / Snap Tap), multi-source mapping rows (<code>MappingSourceItem</code>), the mouse-gesture partial, and the Ember dashboard vocabulary all landed since the v3 rewrite. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>. If anything here drifts from the live source, the live source wins.</p>
+<p><strong>v4.1 (2026-07-30):</strong> The Nintendo output type (#215) joins the family. <code>PadViewModel</code> gains the Bass Shakers tab (#236), the slot SOCD card (#240), the flick rotation offset, gyro Acceleration, and the macro Layer dropdown. <code>MacroItem</code> carries the #238 / #253 fire-mode wave and per-macro layer scope (#254). Mapping rows and sources gain Flip Output, per-source Acceleration, and the #251 axis-latch macro actions. The Touchpad partial grows the libinput pointer Response, momentum, and pointer-region cards. <code>DeviceSlotConfig</code> adds synthetic touch pressure (#239) and the Switch home-LED lane (#226).</p>
 </blockquote>
 <hr />
 <p>All ViewModels live in <code>PadForge.App/ViewModels/</code> (<code>PadForge.ViewModels</code> namespace). Built on <a href="https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/">CommunityToolkit.Mvvm</a> (<code>ObservableObject</code>, <code>RelayCommand</code>).</p>
@@ -7213,7 +7288,7 @@
 <tr>
 <td><code>IconKey</code></td>
 <td><code>string</code></td>
-<td>Resource key for controller type icon (e.g., <code>"XboxControllerIcon"</code>, <code>"DS4ControllerIcon"</code>, <code>"ExtendedControllerIcon"</code>, <code>"MidiControllerIcon"</code>, <code>"KeyboardMouseControllerIcon"</code>).</td>
+<td>Resource key for controller type icon (e.g., <code>"XboxControllerIcon"</code>, <code>"DS4ControllerIcon"</code>, <code>"NintendoControllerIcon"</code>, <code>"ExtendedControllerIcon"</code>, <code>"MidiControllerIcon"</code>, <code>"KeyboardMouseControllerIcon"</code>).</td>
 </tr>
 <tr>
 <td><code>IsEnabled</code></td>
@@ -9009,6 +9084,11 @@
 <td>Number of PlayStation slots.</td>
 </tr>
 <tr>
+<td><code>NintendoCount</code></td>
+<td><code>int</code></td>
+<td>Number of Nintendo slots (#215).</td>
+</tr>
+<tr>
 <td><code>ExtendedCount</code></td>
 <td><code>int</code></td>
 <td>Number of Extended slots.</td>
@@ -9332,6 +9412,26 @@
 <td><code>AccelAuxZ</code></td>
 <td><code>double</code></td>
 <td>Aux accelerometer Z value.</td>
+</tr>
+<tr>
+<td><code>HasGyroAuxData</code></td>
+<td><code>bool</code></td>
+<td>Aux (left-side) gyro data available (#252): the left Joy-Con of a combined pair. Paired with the aux accel readout so the user can see which half a reading comes from before binding it. Cleared by <code>ClearRawState()</code>.</td>
+</tr>
+<tr>
+<td><code>GyroAuxX</code></td>
+<td><code>double</code></td>
+<td>Aux gyro X value.</td>
+</tr>
+<tr>
+<td><code>GyroAuxY</code></td>
+<td><code>double</code></td>
+<td>Aux gyro Y value.</td>
+</tr>
+<tr>
+<td><code>GyroAuxZ</code></td>
+<td><code>double</code></td>
+<td>Aux gyro Z value.</td>
 </tr>
 </tbody>
 </table>
@@ -12045,6 +12145,10 @@
 </tr>
 </tbody>
 </table>
+<h3 id="bass-shakers-236">Bass Shakers (#236)<a class="headerlink" href="#bass-shakers-236" title="Permanent link">&para;</a></h3>
+<p>The per-slot Bass Shakers tab surface, MappingSet-backed like Menus and persisted through the same dirty callback. <code>RumbleAudioTabVisible</code> gates the tab on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback (Customize on: the ForceFeedbackEnabled checkbox decides; Customize off: the catalog profile descriptor must carry a PID FFB block). The card binds <code>RumbleAudioEnabled</code>, <code>RumbleAudioEndpointId</code> (output device picker), <code>RumbleAudioChannelMode</code> (Mono / Controller Stereo), <code>RumbleAudioMasterGain</code>, and <code>RumbleAudioVoices</code>, an <code>ObservableCollection</code> of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into <code>MappingSet.RumbleAudio</code> (<code>RumbleAudioConfig</code>), so the routing travels with profiles and Copy / Paste.</p>
+<h3 id="slot-socd-245">Slot SOCD (#245)<a class="headerlink" href="#slot-socd-245" title="Permanent link">&para;</a></h3>
+<p>Controller-button SOCD, distinct from <code>KbmSlotConfig</code>'s key SOCD (#205). <code>SocdCardVisible</code> and <code>KbmSocdCardVisible</code> are mutually exclusive by slot type. The card binds <code>SocdMode</code> over <code>MappingSet.SocdMode</code> (<code>AvailableSlotSocdModes</code>: Off / Last Wins / First Wins / Neutral), and <code>SocdPairItems</code> (<code>SlotSocdPairItem</code>) edits the opposing button pairs from <code>SocdButtonOptions</code>. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.</p>
 <h3 id="menus-9">Menus (#9)<a class="headerlink" href="#menus-9" title="Permanent link">&para;</a></h3>
 <p>Radial / touch menus for this slot. Slot-level like Macros: the collection wraps the LIVE <code>MenuDefinitionEntry</code> list on the slot's <code>MappingSet</code> (write-through), and every edit fires <code>ConfigItemDirtyCallback</code> so the autosave path persists the set. Rows are <a href="#menueditoritem">MenuEditorItem</a> instances.</p>
 <table>
@@ -13455,7 +13559,25 @@
 <td><code>TriggerMode</code></td>
 <td><code>MacroTriggerMode</code></td>
 <td><code>OnPress</code></td>
-<td><code>OnPress</code>, <code>OnRelease</code>, <code>WhileHeld</code>, <code>Always</code>, or <code>CustomExpression</code> (v3.2).</td>
+<td>Twelve modes, ordinals pinned: <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253).</td>
+</tr>
+<tr>
+<td><code>TriggerHoldMs</code></td>
+<td><code>int</code></td>
+<td><code>500</code></td>
+<td>(#244) Hold threshold shared by <code>HoldForMs</code> and <code>ShortPress</code>, the tap-vs-hold pair. Has its own Reset command.</td>
+</tr>
+<tr>
+<td><code>TriggerDoublePressMs</code></td>
+<td><code>int</code></td>
+<td><code>442</code></td>
+<td>(#244) Multi-press window for the Single / Double / Triple modes. Has its own Reset command.</td>
+</tr>
+<tr>
+<td><code>LayerMask</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>(#253/#254) Per-macro shift-layer scope. Empty = fires on any layer; a layer name limits the macro to that layer, Base included. Bound to the Layer dropdown (<code>Macro_Layer</code> / <code>Macro_Layer_Any</code> strings), gated like mapping rows.</td>
 </tr>
 <tr>
 <td><code>IsNotAlwaysMode</code></td>
@@ -14000,10 +14122,10 @@
 </table>
 <hr />
 <h3 id="supporting-enums-macroitemcs">Supporting Enums (MacroItem.cs)<a class="headerlink" href="#supporting-enums-macroitemcs" title="Permanent link">&para;</a></h3>
-<p><strong>MacroTriggerMode:</strong> <code>OnPress</code>, <code>OnRelease</code>, <code>WhileHeld</code>, <code>Always</code>, <code>CustomExpression</code> (v3.2)</p>
+<p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253; shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
 <p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code></p>
 <p><strong>MacroRepeatMode:</strong> <code>Once</code>, <code>FixedCount</code>, <code>UntilRelease</code></p>
-<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209)</p>
+<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251). The append-only rule is stated in code beside the enum.</p>
 <p><strong>MacroDisconnectTarget</strong> (#162): <code>TriggeringDevice</code> (0), <code>SpecificDevice</code> (1), <code>SlotDevices</code> (2), <code>AllDevices</code> (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.</p>
 <p><strong>MacroLightbarHoldMode:</strong> <code>Reactive</code>, <code>Sticky</code> (v3.1)</p>
 <p><strong>MacroLightbarColorSource:</strong> <code>Fixed</code>, <code>RandomHue</code>, <code>PaletteStep</code> (v3.1)</p>

@@ -1221,6 +1221,8 @@
       
         
       
+        
+      
     
     
     
@@ -1626,6 +1628,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2973,16 +3003,20 @@
 <td>Full color picker. Tints the tab and the flyout. Reset to clear.</td>
 </tr>
 <tr>
-<td><strong>Emoji Icon</strong></td>
-<td>Single grapheme shown on the flyout. Defaults to ⇧.</td>
+<td>Emoji icon</td>
+<td>Not a labeled field. The square button to the left of the <strong>Layer Name</strong> box shows the layer's emoji and opens a picker when clicked. The emoji appears on the flyout when the layer engages. Defaults to ⇧.</td>
 </tr>
 <tr>
-<td><strong>Delay (ms)</strong></td>
+<td><strong>Delay</strong></td>
 <td>Milliseconds the activator must stay held before the layer reacts. For <strong>Hold</strong>, a debounce. For <strong>Toggle</strong>, <strong>Latch</strong>, and <strong>Sticky</strong>, a long-press threshold: the layer flips once when the hold crosses this time, and a shorter tap does nothing. <code>0</code> reacts instantly.</td>
 </tr>
 <tr>
-<td><strong>Auto-Cancel After Inactivity (ms)</strong></td>
+<td><strong>Auto-Cancel After Inactivity</strong></td>
 <td><strong>Toggle</strong> mode only. While the layer is toggled on, it switches itself off after this many milliseconds with none of the layer's own mapped inputs active. The timer starts when the layer engages and restarts on every layer input. <code>0</code> keeps the layer on until you toggle it off yourself.</td>
+</tr>
+<tr>
+<td><strong>Fire on Release</strong></td>
+<td>Waits until the button is let go before the activator fires. With a <strong>Delay</strong> set, the press must last that long for the release to count. Appears only for <strong>Toggle</strong>, <strong>Latch</strong>, <strong>Cycle</strong>, and <strong>Sticky (one-shot)</strong>. Hold reacts on both edges by nature and No Button has no input, so neither shows it.</td>
 </tr>
 <tr>
 <td><strong>Also Fire Activator's Own Mapping</strong></td>
@@ -3054,6 +3088,7 @@
 </tr>
 </tbody>
 </table>
+<p>Toggle, Latch, Cycle, and Sticky normally fire on the press. Check <strong>Fire on Release</strong> in the activator dialog to move that to the release edge instead, so the layer flips when you let go of the button.</p>
 <p>Toggle, Latch, Cycle, and Sticky engagement state does <strong>not</strong> persist across an app restart. Hold is stateless, so it survives by definition. A No Button layer has no engagement state of its own.</p>
 <h3 id="cycle-queue">Cycle queue<a class="headerlink" href="#cycle-queue" title="Permanent link">&para;</a></h3>
 <p>A Cycle activator holds a queue of layers and two buttons that walk it.</p>
@@ -3067,7 +3102,7 @@
 <p>Next and Previous drive one shared cursor, so they read as forward and backward through the same queue.</p>
 <hr />
 <h2 id="the-layer-tab-strip">The layer tab strip<a class="headerlink" href="#the-layer-tab-strip" title="Permanent link">&para;</a></h2>
-<p>A horizontal strip sits above the mapping grid on the <strong>Mappings</strong> tab. <strong>Base</strong> is always the leftmost tab. Shift layers fill the rest in creation order. The strip wraps to a second row when there are more layers than fit.</p>
+<p>A horizontal strip sits above the mapping grid on the <strong>Mappings</strong> tab. It appears once the slot has its first shift layer. A slot with only Base shows the plain grid with no strip. <strong>Base</strong> is always the leftmost tab. Shift layers fill the rest in creation order. The strip wraps to a second row when there are more layers than fit.</p>
 <p>Each tab carries the layer's color. The active tab is the layer you're editing, not the layer currently engaged on the controller.</p>
 <p>Right-click a tab for per-layer operations:</p>
 <ul>
@@ -3093,6 +3128,7 @@
 <ul>
 <li><strong>Any output type.</strong> Layer rows drive every virtual output the slot has: Xbox and PlayStation outputs, Extended buttons, MIDI notes, keyboard keys, mouse moves, and touchpad outputs all follow the active layer.</li>
 <li><strong>Flick stick.</strong> A <a href="../../features/stick-deadzones/#flick-stick">flick stick</a> row hosted on a layer arms when the layer engages and goes quiet when it drops, with no half-finished turn left running.</li>
+<li><strong>Macros.</strong> Every <a href="../macros/">macro</a> has a <strong>Layer</strong> picker. <strong>Any layer</strong> fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row.</li>
 <li><strong>Menus.</strong> An on-screen <a href="../menus/">menu</a> imported from a Steam action layer engages only while that layer is held, and releasing the layer commits an On Touch Release menu's hovered cell.</li>
 </ul>
 <hr />
@@ -3135,7 +3171,7 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../features/mappings/">Button and Axis Mappings</a>: the layer tab strip sits above the mapping grid. Base rows are bound there too.</li>
-<li><a href="../macros/">Macros</a>: Macros and shift layers stack. A macro can fire on a shift layer's input and the layer change still happens.</li>
+<li><a href="../macros/">Macros</a>: every macro carries a <strong>Layer</strong> scope. Leave it on <strong>Any layer</strong>, or pin the macro to one layer so it fires only while that layer is engaged.</li>
 <li><a href="../profiles/">Profiles</a>: shift layers save per profile, so each game can run its own layer set.</li>
 <li><a href="../../features/controller-slots/">Controller Slots</a>: every slot keeps its own layers.</li>
 </ul>

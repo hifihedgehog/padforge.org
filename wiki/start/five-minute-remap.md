@@ -1,6 +1,6 @@
 # A Five-Minute Remap
 
-*Change what a button does. The walkthrough swaps A and B, and the same
+*Change what a button does: the walkthrough swaps A and B, and the same
 moves cover any rebind you will ever make.*
 
 You need a virtual controller with a physical pad assigned to it. That is
@@ -12,16 +12,18 @@ You need a virtual controller with a physical pad assigned to it. That is
 
 On the [Dashboard](../features/dashboard.md), click the slot's card to
 open its configuration, then open the **Mappings** tab. One table drives
-the whole slot: each row is one output the game sees, grouped into
-Buttons, Left Stick, Right Stick, Triggers, and D-Pad.
+the whole slot: each row is one output the game sees. Rows run in order:
+buttons, D-Pad, triggers, left stick, right stick. PlayStation slots add
+touchpad and motion rows at the end, and Nintendo slots add the motion
+pair.
 
 ![Button and axis mapping grid with source, value, and record columns](../images/pad-mappings.png)
 
 ## 2. Record the first swap
 
-1. Find the **A** row under Buttons.
-2. Click **Record** on that row. The button changes to "Recording..." and
-   the row pulses blue.
+1. Find the **A** row. Button rows sit at the top, A first.
+2. Click the record icon on that row. The icon switches to a stop
+   glyph, its tooltip reads "Recording...", and the row pulses orange.
 3. Press **B** on your physical pad.
 
 PadForge captures the press, fills in the source, and stops recording.
@@ -32,8 +34,8 @@ The A output is now driven by the physical B button.
 
 ## 3. Record the other half
 
-Do the same on the **B** row: click **Record**, press **A** on the pad.
-The swap is complete.
+Do the same on the **B** row: click its record icon, press **A** on the
+pad. The swap is complete.
 
 ## 4. Verify on the spot
 
@@ -46,15 +48,22 @@ game gets. No save step, no apply step. Your mapping persists in
 
 ## When recording grabs the wrong input
 
-Use the source dropdown instead. Each source has a cascading dropdown:
-pick the device, then the exact input ("B", "Axis 3", "POV 0 Up").
-Picking an input assigns it on the spot, same result as recording. The
-blank entry at the top clears the source, and the row's **Clear** button
-resets the whole row.
+Use the source dropdown instead. It is one list of every input the slot
+can see, grouped under device-name headers, with the **(Any device)**
+group first. Pick an entry ("B", "Axis 3", "POV 0 Up") and it assigns on
+the spot, same result as recording.
+
+Clearing has three scopes:
+
+| Control | Where | What it resets |
+| --- | --- | --- |
+| **Clear** | on the row | the primary source and its options (invert, half-axis, deadzone) |
+| **Clear** | on an extra source | that source only, the emptied slot stays on the row |
+| **Clear All** | Mappings tab toolbar | every row completely, tuning included, after a confirmation |
 
 ## When you want to remap everything
 
-**Map All**, on the Controller tab or the Mappings tab toolbar, walks
+**Map All**, on the Preview tab or the Mappings tab toolbar, walks
 every row in order: it highlights a row, prompts for the matching input,
 captures it, and moves on. The fastest way to set up an unrecognized
 device (a generic joystick, an arcade encoder) from scratch.
@@ -68,3 +77,5 @@ device (a generic joystick, an arcade encoder) from scratch.
 - A second binding set on the same pad, held or toggled:
   [Shift Layers](../guides/shift-layers.md).
 - Timed sequences on one press: [Macros](../guides/macros.md).
+
+*Last updated for PadForge 4.1.0.*

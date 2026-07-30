@@ -17,13 +17,14 @@ card at the bottom of the controller list. The same popup opens from the
 Pick **Xbox**. Almost every PC game with controller support reads
 Xbox-style input natively, so it is what to pick when you do not know what
 to pick. The other types are there when you need them: PlayStation for
-ports with Circle and Cross prompts, Extended for sim titles that read
-DirectInput, Keyboard+Mouse, and MIDI.
+ports with Circle and Cross prompts, Nintendo for games with Switch
+prompts (a virtual Switch Pro Controller), Extended for sim titles that
+read DirectInput, Keyboard + Mouse, and MIDI.
 
 ![The Add Controller popup](../images/add-controller-popup.png)
 
-The first Xbox, PlayStation, or Extended controller you add installs the
-HIDMaestro driver automatically. There is no button to click, and the
+The first Xbox, PlayStation, Nintendo, or Extended controller you add
+installs the HIDMaestro driver automatically. There is no button to click, and the
 startup UAC prompt already covered it.
 
 ## 2. Plug in your pad
@@ -49,8 +50,6 @@ then open the **Mappings** tab. Press buttons and move sticks on your pad.
 The **Value** column updates in real time, and what you see there is
 exactly what the game gets.
 
-![Button and axis mapping grid with source, value, and record columns](../images/pad-mappings.png)
-
 ## 5. Launch a game
 
 Start any game with controller support. It sees a standard Xbox pad.
@@ -69,3 +68,7 @@ from games. If you do not see double input, you do not need it.
   gyro aiming to using your phone as a controller.
 - The [Features](../features/index.md) pages document every control on
   every tab.
+
+---
+
+*Last updated for PadForge 4.1.0.*

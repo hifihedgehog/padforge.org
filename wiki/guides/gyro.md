@@ -11,7 +11,7 @@ The Gyro tab appears when the slot's assigned physical device exposes a gyroscop
 
 ## When the tab shows
 
-The tab is visible only when the selected mapped device reports a gyro sensor. DualSense, DualShock 4, Joy-Con, Switch Pro, Steam Controller, Steam Deck, and any Extended profile that wires gyro axes all qualify. Pads with no gyro never see the tab.
+The tab is visible only when the selected mapped device reports a gyro sensor. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, and any Extended profile that wires gyro axes all qualify. Pads with no gyro never see the tab.
 
 ---
 
@@ -22,6 +22,8 @@ The first card carries one checkbox: **Apply Gyro Tuning to Motion Passthrough**
 Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.
 
 Check the box to route the rest of the Gyro tab's tuning (deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert) through the motion the virtual controller reports. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.
+
+The virtual controller types that carry motion to the game are DualShock 4, DualSense, and, since 4.1.0, the Nintendo (virtual Switch Pro) type. Xbox types have no motion channel.
 
 Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.
 
@@ -44,9 +46,11 @@ Zero the at-rest reading so gyro mappings don't drift the mouse or stick while y
 3. PadForge samples for about 1.5 seconds. The averaged reading becomes the device bias.
 4. The bias is subtracted from every raw sample going forward.
 
-The timestamp under the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g.
+The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g.
 
-**Reset Calibration** clears the bias and the timestamp. The next polling cycle re-runs the auto-calibration.
+On a combined Joy-Con pair, the left half's gyro keeps its own bias. **Calibrate Gyro** samples both halves in the same pass, and a profile calibrated before 4.1.0 gets an automatic aux-only pass on connect that measures the left sensor without touching the stored primary bias.
+
+**Reset Calibration** clears the bias (both halves on a pair) and the timestamp. The next polling cycle re-runs the auto-calibration.
 
 ---
 
@@ -56,12 +60,7 @@ Top-level scaling, axis inversion, and the reference frame the gyro is interpret
 
 ### Units
 
-| Mode | What the slider means |
-|---|---|
-| Multiplier | Internal × scale. 1.00 is the engine baseline. The default. |
-| Degrees per screen turn | Steam-style. Slider reads as physical controller degrees needed for one full in-game camera turn. |
-
-The sensitivity sliders share the same underlying value. Picking a different unit changes the label and live "≈ N°/turn" hint without resetting the tuning.
+The **Units** dropdown offers **Multiplier** (the default) and **Degrees per screen turn**. It is a saved preference only: in 4.1.0 neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.
 
 ### Horizontal and Vertical
 
@@ -70,11 +69,11 @@ The sensitivity sliders share the same underlying value. Picking a different uni
 | Horizontal Sensitivity | Yaw and Roll gyro contribution |
 | Vertical Sensitivity | Pitch gyro contribution |
 
-The two axes are independent. Set Horizontal to 2.5× and Vertical to 1.0× for fast turning with conservative tilt aim.
+Both range 0.1×–10×. The two axes are independent. Set Horizontal to 2.5× and Vertical to 1.0× for fast turning with conservative tilt aim.
 
-### Invert Pitch / Invert Yaw
+### Invert Pitch (Y) and Invert Yaw / Roll (X)
 
-Per-axis flip applied after the reference-frame projection. The Yaw checkbox also covers the Roll and horizontal-blend gyro sources. These run independently from any Invert flags on the mapping table.
+Per-axis flip applied after the reference-frame projection. **Invert Yaw / Roll (X)** covers the Yaw, Roll, and horizontal-blend gyro sources. These run independently from any Invert flags on the mapping table.
 
 ### Real-World Calibration
 
@@ -122,9 +121,11 @@ Between Tightening and Smoothing Threshold a linear ramp blends raw and averaged
 
 Rate-dependent gain. 0 is off (plain linear scaling). Higher values pass slow rates through unchanged while amplifying fast rates. Lets precision aim and fast turns share one sensitivity setting.
 
+Gyro-source mapping rows carry their own **Acceleration** control that composes with this one. See [Per-mapping tuning](#per-mapping-tuning).
+
 ### Output Curve
 
-Reshape applied after smoothing and acceleration.
+Reshape applied after smoothing, before either Acceleration stage.
 
 | Curve | Feel |
 |---|---|
@@ -134,7 +135,7 @@ Reshape applied after smoothing and acceleration.
 | Wide | x^1.5. Sits between Linear and Aggressive. Milder than Aggressive. |
 | Extra wide | x^2.5. Stronger than Aggressive. |
 
-Output Curve composes with Acceleration. Both feed the same output stage.
+The stages run in a fixed order: curve first, then this tab's Acceleration, then the per-row Acceleration from the mapping table.
 
 ---
 
@@ -142,7 +143,7 @@ Output Curve composes with Acceleration. Both feed the same output stage.
 
 The Engage card limits when the gyro is active. Gates are optional. Gyro fires only while every configured gate is active.
 
-Two gates ship: stick deflection (**Easy Aim**) and a held button (**Aim Engage**). Leave both at their disabled values for always-on gyro.
+Two gates ship: stick deflection (**Easy Aim**) and a button gate (**Aim Engage Button**). Whether the button engages while held, toggles, or engages while released is set by **Engage Mode** below. Leave both gates at their disabled values for always-on gyro. Macros can also drive the engage state, covered in [Macro control](#macro-control).
 
 ### Easy Aim Threshold
 
@@ -204,8 +205,20 @@ Sets how the Aim Engage button behaves.
 |---|---|
 | Hold | Gyro fires while the button is held. The default. Leave the button unset for always-on gyro. |
 | Toggle | Each press flips gyro on or off. Release does nothing. The state sticks until the next press. |
+| Release to Aim | Gyro fires while the button is not held. Holding the button pauses gyro. New in 4.1.0. |
+
+Release to Aim is Steam's inverted engage button. A [Steam Workshop import](steam-workshop-import.md) whose config sets `gyro_button_invert` arrives in this mode. With no button set, Release to Aim behaves like always-on.
 
 Toggle state resets to off on a profile switch or app restart. It isn't saved between sessions.
+
+---
+
+## Macro control
+
+Two actions in the [macro editor](macros.md) drive gyro directly.
+
+- **Set Gyro Engaged** sets the slot's engage state, with a Toggle / On / Off mode. It OR-combines with the Aim Engage button at the evaluator, so either source can engage and both must release to disengage. Details on [Set Gyro Engaged](macros.md#set-gyro-engaged).
+- **Gyro Recenter** (new in 4.1.0) zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Details on [Gyro Recenter](macros.md#gyro-recenter).
 
 ---
 
@@ -223,11 +236,40 @@ See [Button and Axis Mappings](../features/mappings.md) for the full source/dest
 
 ---
 
-## Per-mapping sensitivity multiplier
+## Left Joy-Con aux gyro
 
-Every mapping row whose source is a Gyro axis carries its own **Gyro Sensitivity** dial. 1.0 is the engine's default 500°/s → ±1 deflection scale. The per-row multiplier composes with the device-level Horizontal and Vertical sensitivities on this tab.
+On a combined Joy-Con pair, the primary gyro sources read the right Joy-Con. The left half is a second physical sensor, and since 4.1.0 the mapping table's input dropdown exposes it as its own sources.
+
+| Source | Reads |
+|---|---|
+| Left Joy-Con Gyro Pitch / Yaw / Roll | The left half's rotation rate, one axis per row. |
+| Left Joy-Con Motion Gyro | Bundled passthrough. Streams the left half's full rate vector to the virtual controller's motion channel and the DSU server instead of the right half's. |
+| Left Joy-Con Lean | Tilt steering from the left half's accelerometer. |
+| Left Joy-Con Accelerometer | Bundled accelerometer passthrough from the left half. |
+
+The aux sources appear only when the paired device reports the second sensor. They run through the same pipeline as the primary sources: this tab's sensitivity, response shaping, and engage gates all apply. Player and World space project against the left half's own gravity, and [Calibration](#calibration) keeps a separate bias for the left sensor.
+
+On a Wii Remote with a Nunchuk, the lean and accelerometer rows carry Nunchuk names instead. The Nunchuk has no gyro, so the three rate sources stay Joy-Con only.
+
+---
+
+## Pairing with Flick Stick
+
+Flick stick turns a thumbstick into a compass for mouse-driven camera control. It turns horizontally only, so gyro is its natural partner for vertical aim.
+
+- On a Keyboard + Mouse slot, map **Flick Stick (Right Stick)** to Mouse X, and bind **Gyro Pitch** to Mouse Y for the vertical.
+- The **Flick Stick** card on the Sticks tab tunes it. 4.1.0 adds **Rotation Offset**, which turns the whole flick map by up to ±180°. Positive is clockwise, and snapping applies after the offset.
+- Full settings and starting values are on [Flick Stick](../features/stick-deadzones.md#flick-stick).
+
+---
+
+## Per-mapping tuning
+
+Every mapping row whose source is a Gyro axis carries its own **Sensitivity** dial (0.1×–10×, shown only on gyro-source rows). 1.0 is the engine's default 500°/s → ±1 deflection scale. The per-row multiplier composes with the device-level Horizontal and Vertical sensitivities on this tab.
 
 Use the per-row dial when one mapping needs to feel different from the rest. A camera bind at 1.0× alongside a steering bind at 0.3× lets you keep the camera fast while taming the wheel.
+
+Since 4.1.0, rows with a continuous source also carry an **Acceleration** control (0–5). Fast motion on that row's input is amplified, slow motion passes through unchanged, and 0 keeps the response flat. On a gyro row it applies after this tab's Acceleration, so the two compose. Steam Workshop imports carry Steam's mouse acceleration here on stick-hosted rows.
 
 ---
 
@@ -248,7 +290,7 @@ Every row has a reset button (circular arrow icon). Each card has a **Reset All*
 | Reset Calibration | Auto-cal bias + timestamp |
 | Reset Sensitivity | Units, Space, Horizontal, Vertical, both Invert flags, Real-World Calibration |
 | Reset Response Shaping | Deadzone, Tightening, Smoothing Threshold, Smoothing Window, Acceleration, Output Curve |
-| Reset Engage | Easy Aim Threshold, Engage Stick, Engage Direction, Aim Engage Button, Aim Engage Mode |
+| Reset Engage | Easy Aim Threshold, Engage Stick, Engage Direction, Aim Engage Button, Engage Mode |
 | Reset Engage Stick | Engage Stick back to default |
 | Reset Engage Direction | Engage Direction back to default |
 
@@ -263,9 +305,8 @@ Starting values only. Tune against the live rate readout and in-game feel.
 | Setting | Value |
 |---|---|
 | Space | Player |
-| Units | Degrees per screen turn |
-| Horizontal Sensitivity | 360° per screen turn |
-| Vertical Sensitivity | 360° per screen turn |
+| Horizontal Sensitivity | 1.0× (the hint reads ≈ 360°/turn) |
+| Vertical Sensitivity | 1.0× |
 | Deadzone | 3°/s |
 | Tightening | 3°/s |
 | Smoothing Threshold | 8°/s |
@@ -280,7 +321,6 @@ Starting values only. Tune against the live rate readout and in-game feel.
 | Setting | Value |
 |---|---|
 | Space | Player |
-| Units | Multiplier |
 | Horizontal Sensitivity | 2.5× |
 | Vertical Sensitivity | 1.5× |
 | Deadzone | 5°/s |
@@ -296,7 +336,6 @@ Starting values only. Tune against the live rate readout and in-game feel.
 | Setting | Value |
 |---|---|
 | Space | Local |
-| Units | Multiplier |
 | Horizontal Sensitivity | 1.0× |
 | Vertical Sensitivity | 0.5× |
 | Deadzone | 8°/s |
@@ -312,10 +351,12 @@ Starting values only. Tune against the live rate readout and in-game feel.
 ## Related pages
 
 - [Button and Axis Mappings](../features/mappings.md): bind Gyro Pitch / Yaw / Roll to virtual destinations and set per-row multipliers.
+- [Flick Stick](../features/stick-deadzones.md#flick-stick): stick-driven horizontal flick turns that pair with gyro for vertical aim.
 - [Stick Deadzones](../features/stick-deadzones.md): sets the stick's in-game deadzone. Easy Aim reads raw deflection before that deadzone, so the gyro-engage threshold can sit lower.
+- [Macros](macros.md): the Set Gyro Engaged and Gyro Recenter actions.
 - [DSU Motion Server](../reference/dsu-motion-server.md): broadcast the calibrated gyro and accelerometer feed to Cemu, Dolphin, Yuzu, and Ryujinx over UDP.
 - [Steering](steering.md): tune the Motion Lean tilt-steering input whose card lives on this tab.
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

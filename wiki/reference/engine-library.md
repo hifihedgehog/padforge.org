@@ -18,7 +18,7 @@ graph TB
 
     subgraph "Output State Types. PadForge.Engine"
         GP[Gamepad<br/>XInput-layout struct]
-        VRS[ExtendedRawState<br/>arbitrary axes · 128 buttons · 4 POVs]
+        VRS[RawHidState<br/>arbitrary axes · 128 buttons · 4 POVs]
         KRS[KbmRawState<br/>256 VK codes · mouse deltas]
         MRS[MidiRawState<br/>128 notes · 128 CCs]
     end
@@ -84,7 +84,7 @@ graph TB
 
 - [Gamepad](#gamepad) (GamepadTypes.cs)
 - [TouchpadState](#touchpadstate) (GamepadTypes.cs)
-- [ExtendedRawState](#extendedrawstate) (GamepadTypes.cs)
+- [RawHidState](#rawhidstate) (GamepadTypes.cs)
 - [CustomControllerLayout](#customcontrollerlayout) (CustomControllerLayout.cs)
 - [KbmRawState](#kbmrawstate) (GamepadTypes.cs)
 - [MidiRawState](#midirawstate) (GamepadTypes.cs)
@@ -225,22 +225,22 @@ X / Y coordinates are normalized [0, 1] across the active touch surface. `Packet
 
 ---
 
-## ExtendedRawState
+## RawHidState
 
 **File:** `PadForge.Engine/Common/GamepadTypes.cs`
 **Namespace:** `PadForge.Engine`
 
-Raw output state for Extended-category virtual controllers and custom HID descriptors. Bypasses the fixed `Gamepad` struct to support arbitrary axis, button, and POV counts. Step 5 forwards this directly to HIDMaestro via `HMaestroVirtualController.SubmitExtendedRawState`.
+Raw output state for Extended-category and Nintendo virtual controllers and custom HID descriptors. Bypasses the fixed `Gamepad` struct to support arbitrary axis, button, and POV counts. Step 5 forwards this directly to HIDMaestro via `HMaestroVirtualController.SubmitRawHidState`, which since 4.1.0 also carries a `MotionSnapshot` argument for the gyro-passthrough IMU channel (HM v1.3.18). The struct was named `ExtendedRawState` before the 4.1.0 raw-surface grammar rename.
 
 ```csharp
-public struct ExtendedRawState
+public struct RawHidState
 {
     public short[] Axes;      // Up to 8 axes (signed short range -32768..32767)
     public uint[] Buttons;    // Button state as 4 x 32-bit words = 128 buttons max
     public int[] Povs;        // Up to 4 POV hat switches (-1=centered, 0-35900=direction)
     public short[] HardwareAxes; // Pre-tuning snapshot of Axes (#174). Runtime-only, null unless populated
 
-    public static ExtendedRawState Create(int nAxes, int nButtons, int nPovs);
+    public static RawHidState Create(int nAxes, int nButtons, int nPovs);
     public void SetButton(int index, bool pressed);
     public bool IsButtonPressed(int index);
     public void Clear();
@@ -251,7 +251,7 @@ public struct ExtendedRawState
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `Create` | `static ExtendedRawState Create(int nAxes, int nButtons, int nPovs)` | Factory. Clamps axes to 8, buttons to 128 (stored as `(N+31)/32` uint words), POVs to 4. All zeroed. |
+| `Create` | `static RawHidState Create(int nAxes, int nButtons, int nPovs)` | Factory. Clamps axes to 8, buttons to 128 (stored as `(N+31)/32` uint words), POVs to 4. All zeroed. |
 | `SetButton` | `void SetButton(int index, bool pressed)` | Sets button by 0-based index (`word = index/32`, `bit = index%32`). No-op if out of range. |
 | `IsButtonPressed` | `bool IsButtonPressed(int index)` | `true` if button at index is set. `false` if out of range. |
 | `Clear` | `void Clear()` | Resets axes to 0, buttons to 0, POVs to &minus;1 (centered). |
@@ -396,7 +396,8 @@ public enum VirtualControllerType
     [XmlEnum("Sony")]      PlayStation = 1,
     Extended = 2,
     Midi = 3,
-    KeyboardMouse = 4
+    KeyboardMouse = 4,
+    Nintendo = 5
 }
 ```
 
@@ -1816,7 +1817,7 @@ Links a physical device to a virtual controller slot and mapping. One per device
 |----------|------|---------------|-------------|
 | `OutputState` | `Gamepad` | `[XmlIgnore]` | Mapped output from Step 3. Written by background thread. |
 | `RawMappedState` | `Gamepad` | `[XmlIgnore]` | Pre-processing state (axis-selected, Y-negated, before DZ/ADZ/linear/range). For UI preview. |
-| `ExtendedRawOutputState` | `ExtendedRawState` | `[XmlIgnore]` | Mapped raw output for Extended slots. Forwarded to HIDMaestro via `HMaestroVirtualController.SubmitExtendedRawState`. |
+| `RawHidOutputState` | `RawHidState` | `[XmlIgnore]` | Mapped raw output for Extended slots. Forwarded to HIDMaestro via `HMaestroVirtualController.SubmitRawHidState`. |
 | `MidiRawOutputState` | `MidiRawState` | `[XmlIgnore]` | Mapped MIDI raw output for MIDI slots. |
 | `KbmRawOutputState` | `KbmRawState` | `[XmlIgnore]` | Mapped KBM raw output for KeyboardMouse slots. |
 | `TouchpadOutputState` | `TouchpadState` | `[XmlIgnore]` | PlayStation touchpad output for this device. Written by the background thread (Step 3), read by Step 4. |
@@ -2688,7 +2689,7 @@ The App-side runtime (`InputManager.MenuRuntime.cs`) ticks these contexts from S
 - [Architecture Overview](architecture-overview.md): Solution structure, how Engine and App assemblies relate
 - [Input Pipeline](input-pipeline.md): 6-step pipeline consuming `CustomInputState`, `Gamepad`, `PadSetting`
 - [SDL3 Integration](sdl3-integration.md): SDL3 P/Invoke details, `SdlDeviceWrapper` usage, haptic strategies
-- [Virtual Controllers](../features/virtual-controllers.md): `IVirtualController` implementations consuming `Gamepad`, `ExtendedRawState`, `KbmRawState`, `MidiRawState`
+- [Virtual Controllers](../features/virtual-controllers.md): `IVirtualController` implementations consuming `Gamepad`, `RawHidState`, `KbmRawState`, `MidiRawState`
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` XML persistence, `UserDevice`/`UserSetting` serialization, v3.2 `MappingSet` / `MappingRow` / `MappingSource` / `ShiftActivator` / `MappingSetMigrator` DTOs
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): `HMaestroVirtualController` lifecycle, FFB through HM PID descriptors, OpenXInput shim
 

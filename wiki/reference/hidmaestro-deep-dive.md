@@ -15,11 +15,11 @@ HIDMaestro (HM) is a UMDF2 (User-Mode Driver Framework 2) bus driver that publis
 - A pre-recorded HID report descriptor (input + output + feature reports)
 - Optional FFB PID descriptor pages
 
-PadForge ships with HM 1.3.17, which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.
+PadForge ships with HM 1.3.22, which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch. The interim milestones a successor should know: v1.3.18 added the virtual Switch Pro profile and the IMU submission channel (HM#33), v1.3.21 corrected the Switch Pro Bluetooth descriptor to the real pad's wire shape (HM#37), and v1.3.22 made the input worker survive foreign stop signals, the structural fix for the frozen-output bug (HM#38).
 
-### One driver, five categories
+### One driver, six categories
 
-The five `VirtualControllerType` values map to HM as follows:
+The six `VirtualControllerType` values map to HM as follows:
 
 | Category | Backend | Description |
 |---|---|---|
@@ -28,6 +28,7 @@ The five `VirtualControllerType` values map to HM as follows:
 | Extended (`Extended = 2`) | HM | Any of the remaining HM profiles plus user-defined custom HID descriptors. Up to 8 axes, 128 buttons, 4 POV hats. |
 | MIDI (`Midi = 3`) | Windows MIDI Services | NOT HM. Virtual MIDI endpoint via the Windows MIDI Services SDK. |
 | KeyboardMouse (`KeyboardMouse = 4`) | Win32 SendInput | NOT HM. No driver. Pumps `INPUT` structures into the OS input queue. |
+| Nintendo (`Nintendo = 5`) | HM | A virtual Switch Pro Controller (VID 057E, PID 2009, the Bluetooth wire shape) on a fixed catalog profile, no Customize. Rides the same raw-HID data path as Extended, with gyro passthrough over the HM v1.3.18 IMU channel and HOME LED control. |
 
 Numeric values are preserved across the rename so legacy PadForge.xml files keep loading. `Xbox` carries `[XmlEnum("Microsoft")]` and `PlayStation` carries `[XmlEnum("Sony")]` purely as a back-compat accept-list for older settings files. This is the exception path, not the canonical naming.
 

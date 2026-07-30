@@ -9,7 +9,7 @@
 
 ## When the tab shows
 
-The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (Wireless Adapter and Bluetooth). Pick any of those in the Pad page's source picker and the tab appears.
+The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (Wireless Adapter and Bluetooth). Any other pad that reports trigger-rumble capability surfaces the tab too. Pick any of those in the Pad page's source picker and the tab appears.
 
 DualSense and DualSense Edge do not surface this tab. Their trigger motors are written through DualSense's own effects channel, the **Vibration** mode on the [Adaptive Triggers](adaptive-triggers.md) tab, not Microsoft's impulse-trigger protocol. The same Xbox impulse data that a game sends gets routed there automatically, so a DualSense playing Forza still buzzes both triggers.
 
@@ -94,6 +94,8 @@ On Xbox One, Elite, and Series pads, PadForge drives the trigger motors directly
 
 When the physical pad is plugged into another PC and shared over [Remote Link](../guides/remote-link.md), the same trigger output crosses the link. Game passthrough, constant trigger force, and audio bass trigger rumble all reach the remote pad's trigger motors.
 
+The slot-tier **Bass Shakers** tab ([Controller Slots](controller-slots.md)) can also play game trigger feedback as audio tones: its **Left Trigger** and **Right Trigger** voices each get a tone, and **Controller Stereo** mode splits them to the left and right speaker channels.
+
 ---
 
 ## Reset controls
@@ -127,4 +129,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

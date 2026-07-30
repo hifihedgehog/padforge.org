@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2883,7 +2913,7 @@
 </tr>
 <tr>
 <td><strong>Pressure buttons</strong></td>
-<td>Ten buttons report analog pressure, each as its own source: the four face buttons, both top shoulder buttons, and the four D-pad directions.</td>
+<td>Ten buttons report analog pressure, each as its own source. They appear as <strong>Axis 6</strong> through <strong>Axis 15</strong>. The legend is <a href="#pressure-sensitive-buttons">below</a>.</td>
 </tr>
 <tr>
 <td><strong>Motion</strong></td>
@@ -2910,13 +2940,65 @@
 <p><img alt="The Gyro tab for a DualShock 3 with reference frame and sensitivity controls" src="../../images/pad-ds3-gyro.png" /></p>
 <hr />
 <h2 id="pressure-sensitive-buttons">Pressure-sensitive buttons<a class="headerlink" href="#pressure-sensitive-buttons" title="Permanent link">&para;</a></h2>
-<p>Ten of the controller's buttons sense how hard you press. Each one appears in the mapping picker as its own analog source, so you can map it to a trigger, a stick axis, or a button with a threshold. The four face buttons, the two top shoulder buttons, and the four D-pad directions all report pressure.</p>
+<p>Ten of the controller's buttons sense how hard you press. Each one is its own analog source, so you can map it to a trigger, a stick axis, or a button with a threshold. In the mapping picker they carry generic names, <strong>Axis 6</strong> through <strong>Axis 15</strong>, without the button printed on them. This legend tells them apart:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Button</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Axis 6</td>
+<td>Cross</td>
+</tr>
+<tr>
+<td>Axis 7</td>
+<td>Circle</td>
+</tr>
+<tr>
+<td>Axis 8</td>
+<td>Square</td>
+</tr>
+<tr>
+<td>Axis 9</td>
+<td>Triangle</td>
+</tr>
+<tr>
+<td>Axis 10</td>
+<td>L1</td>
+</tr>
+<tr>
+<td>Axis 11</td>
+<td>R1</td>
+</tr>
+<tr>
+<td>Axis 12</td>
+<td>D-pad Up</td>
+</tr>
+<tr>
+<td>Axis 13</td>
+<td>D-pad Down</td>
+</tr>
+<tr>
+<td>Axis 14</td>
+<td>D-pad Left</td>
+</tr>
+<tr>
+<td>Axis 15</td>
+<td>D-pad Right</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>Record</strong> button won't find these for you. Pressing a face button during a recording captures the digital press, which wins over the slower-rising pressure axis. Pick the axis from the picker by the legend above.</p>
 <hr />
 <h2 id="removing-the-controller">Removing the controller<a class="headerlink" href="#removing-the-controller" title="Permanent link">&para;</a></h2>
 <p>Remove the controller from the <a href="../../features/devices/">Devices</a> list and its Bluetooth pairing clears too, so it won't reconnect on its own later. To use it again, run the pairing above once more.</p>
 <hr />
 <h2 id="coexisting-with-other-bluetooth-devices">Coexisting with other Bluetooth devices<a class="headerlink" href="#coexisting-with-other-bluetooth-devices" title="Permanent link">&para;</a></h2>
 <p>The PlayStation Bluetooth driver only steps in while a DualShock 3 is paired. With no PlayStation controller paired, it stays dormant and leaves your other Bluetooth devices alone. Pairing a controller arms it, removing every controller stands it back down.</p>
+<p>One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.</p>
 <hr />
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2939,7 +3021,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0.</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

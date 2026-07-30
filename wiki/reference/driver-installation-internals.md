@@ -1,8 +1,10 @@
 # Driver Installation Internals
 
+*How PadForge installs, detects, and removes the drivers behind its virtual controllers: HIDMaestro, HidHide, Windows MIDI Services, and the legacy v2 leftovers.*
+
 PadForge v4 deals with three drivers/services and a legacy v2 cleanup path:
 
-1. **HIDMaestro** is the user-mode UMDF2 driver that publishes every virtual gamepad except Keyboard+Mouse. It is **not** installed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll`. `HMContext.InstallDriver()` (called lazily the first time an Xbox / PlayStation / Extended slot activates) registers them with Windows.
+1. **HIDMaestro** is the user-mode UMDF2 driver that publishes every virtual controller except the MIDI and Keyboard+Mouse targets. It is **not** installed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll`. `HMContext.InstallDriver()` (called lazily the first time an Xbox / PlayStation / Nintendo / Extended slot activates) registers them with Windows.
 2. **HidHide** is the kernel-mode driver that hides physical controllers from games. Embedded as a WiX Burn bootstrapper EXE, install/uninstall via `msiexec`.
 3. **Windows MIDI Services** is downloaded on demand from GitHub releases (the installer is ~210 MB, too large to embed) and run with `/install /quiet /norestart`.
 4. **Legacy v2 driver cleanup** offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.
@@ -83,7 +85,7 @@ Declared in `PadForge.App.csproj`:
 <Content Include="Resources\OpenXInput\x64\xinput1_4.dll" Link="xinput1_4.dll" />
 ```
 
-`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge currently ships HIDMaestro 1.3.17.
+`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge currently ships HIDMaestro 1.3.22, the HM#38 build whose input worker survives foreign stop signals.
 
 ---
 
@@ -161,7 +163,7 @@ private static string GetEmbeddedHidMaestroVersion()
 }
 ```
 
-There are no Install or Uninstall buttons. The card is informational only because the SDK assembly is always present in the publish output, so the Xbox / PlayStation / Extended categories are always enabled. MIDI still depends on Windows MIDI Services.
+There are no Install or Uninstall buttons. The card is informational only because the SDK assembly is always present in the publish output, so the Xbox / PlayStation / Nintendo / Extended categories are always enabled. MIDI still depends on Windows MIDI Services.
 
 ### Cleanup
 
@@ -171,7 +173,11 @@ There are no Install or Uninstall buttons. The card is informational only becaus
 |---|---|---|
 | `EnsureHMaestroContext` preflight | Before each `InstallDriver()` | Purge stragglers from a prior crash so the install can succeed. |
 | `ProcessExit` hook (Step5) | Process teardown | Safety net for ungraceful exits where the normal Stop path did not run. Skipped when `_cleanShutdownPerformed` is set by `DisposeHMaestroContextOnShutdown()`. |
-| `App.xaml.cs` startup orphan sweep (`OrphanSweepTask`) | App launch, on a background `Task` in `OnStartup` | Purge HM virtuals left by a prior crashed or force-killed session. Runs off the UI thread so `OnStartup` returns at once. `UpdateDevices` does **not** block on it. The SDL3 fork filters HM HIDs out of SDL enumeration whether or not the prior session's kernel cleanup has finished, so enumeration is safe immediately (blocking the poll thread on the sweep once pinned startup past 90 seconds). `MainWindow` shows a "cleaning up previous session" overlay while the sweep runs. Same role as the row-1 preflight, not a shutdown mirror. |
+| `App.xaml.cs` startup orphan sweep (`OrphanSweepTask`) | App launch, on a background `Task` in `OnStartup` | Purge HM virtuals left by a prior crashed or force-killed session, then wait (bounded) for the devnodes to actually vanish (the HM#38 ordering barrier below). Runs off the UI thread so `OnStartup` returns at once. `UpdateDevices` does **not** block on it. The SDL3 fork filters HM HIDs out of SDL enumeration whether or not the prior session's kernel cleanup has finished, so enumeration is safe immediately (blocking the poll thread on the sweep once pinned startup past 90 seconds). `MainWindow` shows the startup overlay ("Cleaning up virtual controllers left from a previous session.") while the sweep runs. Same role as the row-1 preflight, not a shutdown mirror. |
+
+**Startup sweep ordering barrier (HM#38).** `RemoveAllVirtualControllers()` returns when the call completes, not when PnP removal completes, and a virtual-controller create racing an in-flight removal was one of the trigger windows for the frozen-output bug that HIDMaestro 1.3.22 fixes structurally. So after the sweep, `OrphanSweepTask` polls `SetupApiInterop.AnyPresentHidMaestroDevice()` up to 25 times at 200 ms intervals (about 5 s) until the HIDMaestro devnodes are genuinely absent, so a same-session create cannot adopt a dying devnode. A devnode that lingers past the bound logs `ORPHANSWEEP devnodes still present after 5 s; proceeding` rather than block startup. The wait is consumer-side ordering hygiene, not the fix itself.
+
+**OEM-name orphan recovery.** Before any virtuals are created, `App.xaml.cs` calls `HIDMaestro.HMOemNameOverride.RecoverOrphans()` to replay OEM-name overrides left by a prior session that never ran its cleanup `Clear` (crash, force-kill, power loss). This restores the DirectInput OEM-name table in HKLM to its pre-override state. Idempotent (a no-op when no orphan records exist) and best-effort (a swallow-all `try/catch`).
 
 Graceful shutdown does not call `RemoveAllVirtualControllers()`. `InputManager.Stop()` tears each virtual down with `DestroyAllVirtualControllers()`, then `DisposeHMaestroContextOnShutdown()` disposes the static `HMContext` and sets `_cleanShutdownPerformed`. That flag is why the Step5 `ProcessExit` sweep (row 2) no-ops on a clean exit.
 
@@ -283,7 +289,7 @@ The dialog only fires when both:
 1. `_viewModel.Settings.LegacyDriverCleanupOffered` is `false` (per-user once-only flag persisted in `PadForge.xml`), and
 2. At least one of `DriverInstaller.IsExtendedInstalled()` (vJoy) or `DriverInstaller.GetViGEmVersion() != null` (ViGEmBus) returns truthy.
 
-If neither legacy driver is detected, the flag is flipped to `true` and the offer is silently skipped. Otherwise PadForge raises a `Wpf.Ui.Controls.MessageBox` titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, `UninstallViGEmBus()` then `UninstallVJoy()` run inline inside a single `try/catch`. Because both calls share one try block, a throw from `UninstallViGEmBus()` skips `UninstallVJoy()`, and the catch surfaces a follow-up "encountered an error" dialog. The flag is flipped to `true` afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.
+If neither legacy driver is detected, the flag is flipped to `true` and the offer is silently skipped. Otherwise PadForge raises a `Wpf.Ui.Controls.MessageBox` titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, `UninstallViGEmBus()` and `UninstallVJoy()` run on a worker thread through `RunDriverOperationAsync` (the "Removing legacy drivers..." overlay), each gated on its own detection result (`if (hasViGEm)` / `if (hasExtended)`), inside a single `try/catch`. They used to run inline on the dispatcher, which froze the window for the whole removal. Because both calls share one try block, a throw from `UninstallViGEmBus()` skips `UninstallVJoy()`, and the captured exception feeds a follow-up "Cleanup encountered an error" dialog. The flag is flipped to `true` afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.
 
 The whole entry point is wrapped in a top-level `try/catch` that swallows everything because it runs as `async void` from the dispatcher. An unhandled exception there would surface as a generic "unexpected error" dialog at startup. On detection failure, the flag is **not** flipped, so the next launch retries.
 
@@ -401,7 +407,7 @@ Enumerates subkeys under `HKLM\SYSTEM\ControlSet001\Control\Class\{781ef630-72b2
 private static string[] FindExtendedOemInfs()
 ```
 
-Runs `pnputil.exe /enum-drivers` (30s timeout, output captured), then walks the output line-by-line tracking the most recent `Published Name : oemXX.inf` and watching each block for `"shaul"` or `"vjoy"` (case-insensitive). Returns matching `oem*.inf` names. Returns an empty array on any error. Used by `UninstallVJoy()` to know which `pnputil /delete-driver` lines to emit.
+Runs `pnputil.exe /enum-drivers` (30s timeout, output captured), then walks the output line-by-line tracking the most recent `oemNN.inf` value and flagging each block that mentions `"shaul"` or `"vjoy"` (case-insensitive). The parser keys on the `oemNN.inf` value with a regex, never on the `Published Name` label. pnputil localizes that label, and the old label-keyed parse returned nothing on German or Japanese Windows, so legacy drivers went undetected there. Returns matching `oem*.inf` names. Returns an empty array on any error. Used by `UninstallVJoy()` to know which `pnputil /delete-driver` lines to emit.
 
 ---
 
@@ -450,6 +456,8 @@ static string ToDosDevicePathPublic(string filePath)        // C:\... -> \Device
 ### Managed Device Tracking
 
 `_managedDeviceIds` (`HashSet<string>`) tracks device IDs PadForge added to the blacklist. `RemoveManagedDevices()` removes only these entries, leaving entries from other tools untouched.
+
+**Startup clear and cloak persistence**: `_managedDeviceIds` is in-memory, so a crashed or force-killed session leaves stale blacklist entries that `RemoveManagedDevices()` can no longer identify. `InputService.Start` resets the driver state with `ClearAll()` at engine start. The clear is conditional: when the Settings toggle "Keep devices cloaked between launches" (`KeepHidHideCloaksBetweenLaunches`, off by default) is on, startup skips `ClearAll()` so persisted cloaks survive into the new session with no visible decloak window, and `ApplyDeviceHiding`'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as `RemoveDeviceHiding(keepCloaks: ...)`.
 
 **Removed methods**: `AddToBlacklist(string)` and `RemoveFromBlacklist(string)` were removed. All blacklist management now goes through `SyncManagedDevices(HashSet<string>)`, which performs an atomic diff-based sync (add missing, remove excess) in a single operation.
 
@@ -564,7 +572,7 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ## See Also
 
-- [Virtual Controllers](../features/virtual-controllers.md): `HMaestroVirtualController` (Xbox / PlayStation / Extended), `MidiVirtualController`, `KeyboardMouseVirtualController` consuming installed drivers
+- [Virtual Controllers](../features/virtual-controllers.md): `HMaestroVirtualController` (Xbox / PlayStation / Nintendo / Extended), `MidiVirtualController`, `KeyboardMouseVirtualController` consuming installed drivers
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface (`HMContext`, `HMProfile`, `HMController`), thread-pool lifecycle, OpenXInput shim, bubble-up cascade, inactivity timeout
 - [Architecture Overview](architecture-overview.md): Elevation strategy (`requireAdministrator` in `app.manifest`)
 - [Build and Publish](build-and-publish.md): Embedded driver resources (HidHide installer; HIDMaestro is referenced as a managed assembly)
@@ -573,4 +581,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-_Last updated for PadForge 4.0.0._
+*Last updated for PadForge 4.1.0.*

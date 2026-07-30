@@ -14,13 +14,12 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 
 1. Try a different USB port. Use one directly on the computer, not a hub.
 2. Try a different cable. Some cables are charge-only.
-3. Confirm `SDL3.dll` is in the PadForge folder. Re-extract the zip if missing.
-4. Restart PadForge. Some devices need a fresh launch.
-5. Check Windows Device Manager. If the device does not appear under "Human Interface Devices" or "Sound, video and game controllers," the issue is the device or its driver.
-6. For Bluetooth controllers, pair and connect in Windows Bluetooth settings before starting PadForge.
-7. If HidHide is installed, open the HidHide Client and add PadForge to the whitelist. Or disable **"Hide devices from games"** on the [Settings](features/settings.md) page to test.
-8. Close other controller tools (DS4Windows, BetterJoy, reWASD, x360ce). They may intercept access.
-9. A DualShock 3 pairs through PadForge itself, with no separate driver tool to install. Connect it by USB, click **Pair** on the [Devices](features/devices.md) page, and follow the dialog. When it finishes, unplug the pad and press the PS button to connect over Bluetooth. It then streams with rumble and the player-number LED.
+3. Restart PadForge. Some devices need a fresh launch.
+4. Check Windows Device Manager. If the device does not appear under "Human Interface Devices" or "Sound, video and game controllers," the issue is the device or its driver.
+5. For Bluetooth controllers, pair and connect in Windows Bluetooth settings before starting PadForge.
+6. If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while **"Hide devices from games"** is on in [Settings](features/settings.md). With that toggle off, decloak the device in the HidHide Configuration Client, or turn the toggle on and let PadForge manage hiding.
+7. Close other controller tools (DS4Windows, BetterJoy, reWASD, x360ce). They may intercept access.
+8. A DualShock 3 pairs through PadForge itself, with no separate driver tool to install. Connect it by USB, click **Pair** on the [Devices](features/devices.md) page, and follow the dialog. When it finishes, unplug the pad and press the PS button to connect over Bluetooth. It then streams with rumble and the player-number LED.
 
 ---
 
@@ -30,8 +29,8 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 
 1. Unknown or unusual controllers may need manual mapping.
 2. Assign the device to a slot. Select at least one numbered toggle on the [Devices](features/devices.md) page.
-3. Map inputs manually via **Record** on the [Button and Axis Mappings](features/mappings.md) tab for each button and axis.
-4. Enable **Force raw joystick mode** on the [Devices](features/devices.md) page if SDL3's remapping produces wrong outputs. Re-record all mappings afterward.
+3. Map inputs manually via **Record** on the [Mappings](features/mappings.md) tab for each button and axis.
+4. Enable **"Force raw joystick mode (bypass gamepad remapping)"** on the [Devices](features/devices.md) page if SDL3's remapping produces wrong outputs. Re-record all mappings afterward.
 5. Check live input on the Devices page. If axes and buttons do not respond there, the issue is at the driver or HID level.
 6. Check the source dropdown on each mapping row. Confirm it points to the correct input device.
 
@@ -41,13 +40,26 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 
 **A slot is created and a device assigned, but games do not detect the virtual controller.**
 
-1. Install **HIDMaestro** from [Settings](features/settings.md) for Xbox, PlayStation, or Extended output.
+1. Install **HIDMaestro** from [Settings](features/settings.md) for Xbox, PlayStation, Nintendo, or Extended output.
 2. Install **Windows MIDI Services** from [Settings](features/settings.md) for MIDI output.
 3. Confirm the slot is enabled. The power icon on the Dashboard card should be green.
 4. Confirm the engine is running. The Dashboard should show "Running" with a green icon.
 5. Restart the game. Some games only scan for controllers at startup.
 6. Check the game's input settings. Some games require manual controller selection.
 7. For Extended controllers, verify in `joy.cpl` (Win+R > `joy.cpl`). If controllers are not listed, see "Extended Controllers Not Working" below.
+
+---
+
+## Nintendo Slot Not Seen by a Game
+
+**A Nintendo virtual controller is active but the game does not react to it.**
+
+1. Install **HIDMaestro** from [Settings](features/settings.md). The Nintendo output rides the same driver as Xbox, PlayStation, and Extended.
+2. Games see the slot as a **Nintendo Switch Pro Controller**. XInput-only games never read a Pro Controller. Use an Xbox slot for those.
+3. Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.
+4. Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.
+5. Face buttons follow Nintendo lettering, so A sits on the right and B on the bottom. Prompts that look swapped against an Xbox pad are the Switch layout working as intended.
+6. The Nintendo slot has no Customize surface. It always deploys the Switch Pro catalog profile as-is.
 
 ---
 
@@ -59,13 +71,12 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 1. Install **HidHide** from [Settings](features/settings.md).
 2. Enable **"Hide devices from games"** on the [Settings](features/settings.md) page.
-3. On the [Devices](features/devices.md) page, enable **"Hide from games"** per device.
-4. If PadForge stops seeing a hidden device, check the HidHide whitelist on [Settings](features/settings.md): PadForge's path must be listed.
-5. Add other apps (emulators, tools) to the whitelist if they also need the hidden device.
-6. Restart the game after changing HidHide settings.
-7. Check the game's controller settings. Disable the physical controller and keep the virtual one.
-8. If using Steam, disable Steam Input for the game or close Steam entirely.
-9. BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device "Hide from games" toggle is on and that **"Hide devices from games"** is enabled in the HidHide section of [Settings](features/settings.md).
+3. On the [Devices](features/devices.md) page, enable **"Hide from games (HidHide)"** per device.
+4. PadForge always whitelists itself, so it keeps seeing hidden devices. Add other apps (emulators, tools) that need a hidden device under **Whitelisted Applications** on [Settings](features/settings.md).
+5. Restart the game after changing HidHide settings.
+6. Check the game's controller settings. Disable the physical controller and keep the virtual one.
+7. If using Steam, disable Steam Input for the game or close Steam entirely.
+8. BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device **"Hide from games (HidHide)"** toggle is on and that **"Hide devices from games"** is enabled in the HidHide section of [Settings](features/settings.md).
 
 ---
 
@@ -98,6 +109,19 @@ The game is reading both the physical controller and PadForge's virtual controll
 7. Click **Test Rumble**. No vibration means the device lacks rumble motors.
 8. Some apps (DAWs, certain games) open audio in exclusive mode, blocking WASAPI loopback.
 9. At least one audio output device must be active in Windows Sound settings.
+
+---
+
+## Bass Shakers Output Silent
+
+**"Route rumble to an audio output" is on but nothing plays on the shaker or subwoofer.**
+
+1. Check the status line on the **Bass Shakers** tab. "Audio output is not running." means the routing is off or the engine is stopped. "The selected output device is unavailable. Audio stays off until it returns." means the chosen **Output Device** disappeared. Pick another or reconnect it.
+2. The feature works with Xbox, DualShock 4 / DualSense, and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers with force feedback, such as racing wheels. Other slot types have no game feedback to route.
+3. Only game feedback plays through the audio output. **Test Rumble** on the Force Feedback tab and macro rumble stay on the controller by design. To test the audio path, use the per-voice **Test** buttons or **Frequency Sweep** on the Bass Shakers tab instead.
+4. Set **Master Gain** above zero and enable at least one voice with its own gain above zero.
+5. Run **Frequency Sweep** (20 to 120 Hz over eight seconds) and note where the shaker responds strongest, then set the voice frequencies there.
+6. Bluetooth audio devices add noticeable latency. Use a wired output if the thump lags the game.
 
 ---
 
@@ -157,10 +181,16 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 1. All trigger components must be active **simultaneously**. Partial presses do not fire.
 2. For axis triggers, the input must exceed the configured **threshold percentage**.
-3. Confirm the macro's enable checkbox is checked.
-4. Confirm the engine is running and the slot is enabled.
-5. If the trigger source is "Input Device" but no device is assigned, there is nothing to read. Switch to "Output Controller" or assign a device.
-6. Check for conflicting macros with overlapping triggers on the same slot.
+3. Check the macro's **Layer**. "Any layer" fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row. A macro scoped to a shift layer is inert the whole time that layer is off.
+4. Check the trigger mode. Several fire by design only on a specific press shape:
+   - **On Long Press** fires after the trigger is held for the **Hold Time**. A quick tap does nothing.
+   - **On Short Press** fires on release before the Hold Time elapses. Holding past it fires nothing.
+   - **On Single Press**, **On Double Press**, and **On Triple Press** wait out the **Press Window** and fire only on the matching press count.
+   - **Turbo** repeats only while the trigger is held.
+5. Confirm the macro's enable checkbox is checked.
+6. Confirm the engine is running and the slot is enabled.
+7. If the trigger source is "Input Device" but no device is assigned, there is nothing to read. Switch to "Output Controller" or assign a device.
+8. Check for conflicting macros with overlapping triggers on the same slot.
 
 ---
 
@@ -175,14 +205,15 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 ---
 
-## Always-Mode Macro Won't Stop
+## Macro Won't Stop Running
 
-**A macro set to "Always" runs continuously regardless of button state.**
+**A macro keeps firing after the trigger is released, or runs with no trigger at all.**
 
-1. Expected behavior. Always-mode macros fire every frame while the slot is active. No trigger required.
-2. Uncheck the macro's enable checkbox to stop it.
-3. Delete the macro if it is no longer needed.
-4. Disable the slot (power icon on the Dashboard card) to stop all its macros.
+1. A macro set to **Always** fires every frame while the slot is active. No trigger required. That is its design.
+2. A macro set to **Toggle** latches: the first press turns the actions on, and holds and repeats stay active until the second press. Tap the trigger again to release it.
+3. Uncheck the macro's enable checkbox to stop it.
+4. Delete the macro if it is no longer needed.
+5. Disable the slot (power icon on the Dashboard card) to stop all its macros.
 
 ---
 
@@ -219,8 +250,8 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. UAC is expected. PadForge always runs as administrator. HIDMaestro driver registration, HidHide whitelist edits, and the polling loop all run in that one elevated process.
 2. Clicking "No" on UAC blocks startup. Windows does not start an administrator-required app when the user declines the prompt. Run PadForge again and accept the prompt.
 3. PadForge allows only one instance. Check Task Manager for existing PadForge processes.
-4. PadForge requires the **.NET 10 Desktop Runtime**. Download it from Microsoft if missing.
-5. If `SDL3.dll` is missing, PadForge crashes on startup. Re-extract from the release zip.
+4. Check for `crash.log` next to `PadForge.exe`. It appears only after a crash and records the error. Attach it to a bug report.
+5. PadForge ships as a single self-contained `PadForge.exe` with the .NET runtime and SDL3 embedded. Nothing needs installing separately. If startup still fails with no `crash.log`, the download may be truncated or corrupt. Re-download `PadForge.exe` from the [release page](https://github.com/hifihedgehog/PadForge/releases).
 
 ---
 
@@ -239,8 +270,8 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **The emulator does not receive gyroscope or accelerometer data.**
 
-1. Enable **"Enable DSU motion server (CemuHook Motion Provider protocol)"** on the [Dashboard](features/dashboard.md): Status should show "Listening."
-2. Match the port (default 26760) between PadForge and the emulator. "Port already in use" means another app (BetterJoy, DS4Windows) is on that port.
+1. Enable **"Enable DSU motion server (CemuHook Motion Provider protocol)"** on the [Dashboard](features/dashboard.md): Status should show "Listening on :26760".
+2. Match the port (default 26760) between PadForge and the emulator. "Port 26760 in use" means another app (BetterJoy, DS4Windows) is on that port.
 3. Use `127.0.0.1` as the server address. PadForge binds to loopback only.
 4. Confirm the controller has motion sensors on the [Devices](features/devices.md) page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion.
 5. DSU protocol supports slots 1-4 only. Assign the motion device to one of those slots.
@@ -382,10 +413,22 @@ See [Steam Workshop Config Import](guides/steam-workshop-import.md) for the full
 
 **Buttons do not match expected positions, trigger two inputs, or produce no input.**
 
-1. Enable **Force raw joystick mode** on the [Devices](features/devices.md) page to bypass SDL3's remapping.
-2. Re-record all mappings manually with **Record** on the [Button and Axis Mappings](features/mappings.md) tab.
+1. Enable **"Force raw joystick mode (bypass gamepad remapping)"** on the [Devices](features/devices.md) page to bypass SDL3's remapping.
+2. Re-record all mappings manually with **Record** on the [Mappings](features/mappings.md) tab.
 3. Verify in `joy.cpl` that buttons work correctly at the Windows level.
 4. Known affected devices: certain third-party controllers with non-standard HID layouts.
+
+---
+
+## Opposite Buttons Cancel Each Other
+
+**Two opposite directions held together and one, or both, vanish from the game.**
+
+1. That is SOCD cleaning doing its job. The **Simultaneous Opposite Cardinal Directions (SOCD)** card on the [Mappings](features/mappings.md) tab resolves paired buttons held at once.
+2. The **Mode** decides the outcome. **Last Wins (Snap Tap)**: the most recent press wins, and releasing it re-presses the still-held partner. **Neutral**: holding both releases both until one is let go. **First Wins**: the earlier press keeps winning until it is released.
+3. The rule applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned.
+4. To turn it off, set the Mode to **Off** or remove the pair under **Button Pairs**.
+5. Keyboard+Mouse slots have their own SOCD card with **Key Pairs**, applied to the slot's virtual keyboard output.
 
 ---
 
@@ -397,7 +440,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 1. Go to the **Devices** page.
 2. Select the problematic device.
-3. Enable **Force raw joystick mode** in the Input Mode section.
+3. Enable **"Force raw joystick mode (bypass gamepad remapping)"** in the Input Mode section.
 4. Go to the **Mappings** tab and manually record each button.
 5. Auto-mapping is unavailable in raw mode, but raw indices will be correct.
 
@@ -410,7 +453,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 1. Mouse buttons map like any other input. On the Mappings tab, click **Record** on a row and press the mouse button.
 2. Mouse axes show relative deltas, not absolute positions. Fast movements produce larger values.
 3. When recording a mouse axis mapping, move the mouse in the desired direction. Detection is instant.
-4. PadForge does not automatically consume mouse or keyboard inputs. Enable "Consume mapped inputs" or "Hide from games" manually if needed (a warning appears before enabling).
+4. PadForge does not automatically consume mouse or keyboard inputs. Enable **"Consume mapped inputs (hooks)"** or **"Hide from games (HidHide)"** manually if needed (a warning appears before enabling).
 
 ---
 
@@ -422,6 +465,17 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 2. Leave the stick at rest. Do not touch it.
 3. Click **Calibrate Center**.
 4. PadForge measures the actual rest position and applies an offset so the deadzone centers correctly.
+
+---
+
+## Flick Stick Doesn't Turn the Camera
+
+**A Flick Stick source is selected but sweeping the stick does not rotate the view.**
+
+1. Map **"Flick Stick (Right Stick)"** to **Mouse X** from the input dropdown in Mappings, on any layer. Flick Stick produces mouse movement, so it needs a Mouse X row to land on.
+2. Point the stick and the camera turns to match. Sweep the rim to fine-turn.
+3. The game's camera must follow the mouse. Flick Stick drives the camera through mouse input, not a stick axis.
+4. Tune it on the **Sticks** tab under **Flick Stick**. "Flick Stick (Left Stick)" and per-touchpad variants are available from the same dropdown.
 
 ---
 
@@ -441,11 +495,12 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 1. Check the **Mode**. Hold keeps the layer on only while the activator is held. Toggle and Latch flip the layer on a press and keep it on until you press again. Sticky (one-shot) turns the layer on with a tap, then drops it the moment you use a mapped input on the layer and release. Cycle steps through an ordered list of layers, one per press.
 2. Check the **Delay**. In Hold mode it is a debounce: the activator must stay held that long before the layer changes. In Toggle, Latch, or Sticky mode a non-zero Delay turns the activator into a long press, so the layer flips only when the hold crosses that time and a quick tap does nothing. Lower the Delay to 0 if a tap should register.
-3. For an **Axis** activator, the input must cross the threshold. Default is 0.5 of full deflection.
-4. For a **Chord** activator, both inputs must hold at the same time.
-5. The activator can live on a different physical device than the slot it shifts. Confirm that device is online.
-6. Last engaged wins on conflicts. If a different slot's activator fired more recently, that layer is active instead.
-7. Look at the engaged-layer flyout at the bottom of the screen. If it never appears, the activator never registered the input.
+3. Check **Fire on Release**. With it on, the activator waits until the button is let go before firing, so it looks dead the whole time the button is held. If a hold delay is set, the press must last that long for the release to count.
+4. For an **Axis** activator, the input must cross the threshold. Default is 0.5 of full deflection.
+5. For a **Chord** activator, both inputs must hold at the same time.
+6. The activator can live on a different physical device than the slot it shifts. Confirm that device is online.
+7. Last engaged wins on conflicts. If a different slot's activator fired more recently, that layer is active instead.
+8. Look at the engaged-layer flyout at the bottom of the screen. If it never appears, the activator never registered the input.
 
 **A toggled layer won't turn off.**
 
@@ -483,6 +538,16 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 1. The overlay drives the touchpad on the assigned **PlayStation** slot only. Confirm the slot type is PlayStation, not Xbox or Extended.
 2. The slot needs at least one mapped device. The overlay forwards finger contacts. The slot needs to exist for them to land somewhere.
 3. If the slot's source is a real DualSense or DS4, that pad passes its own touchpad through to the game, and that takes priority over the overlay. Remove or hide the physical pad from the slot to let the overlay drive the touchpad instead.
+
+---
+
+## Touchpad Pressure Reads in Steps
+
+**A touchpad's Pressure source jumps between 0%, one fixed level, and 100% instead of reading smoothly.**
+
+1. That is **Synthetic Pressure**. On pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015), it shapes the Pressure sources into three steps: no touch reads 0%, a resting touch reads the Touch Pressure Level, and a pad click reads 100%.
+2. Turn off **"Enable Synthetic Pressure"** in the device's touchpad settings to return to raw readings.
+3. A pad without a true pressure sensor reports touch as full pressure by hardware. Synthetic Pressure is the only way to get graded values out of it. Smooth analog pressure needs a pad that actually senses it.
 
 ---
 
@@ -526,10 +591,9 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 **A Joy-Con 2 is connected but its optical mouse sensor produces no Mouse Motion output.**
 
-1. The Joy-Con 2 mouse needs PadForge's **bundled `SDL3.dll`**. The sensor rides on the custom SDL fork's BLE Switch 2 driver. A stock or mismatched `SDL3.dll` never exposes it, so the source stays silent with no error.
-2. Re-extract `SDL3.dll` from the release zip if you replaced it. Confirm it sits next to `PadForge.exe`.
-3. Connect the Joy-Con 2 over Bluetooth. The mouse data comes through the wireless Switch 2 path.
-4. Map **Mouse Motion X** and **Mouse Motion Y** to stick axes or scroll. Adjust the per-source Sensitivity if the cursor moves too fast or slow.
+1. The sensor rides the custom SDL fork's BLE Switch 2 driver, which is embedded inside `PadForge.exe`. Release builds always carry it. Only a source build running against a stock `SDL3.dll` lacks the driver, and there the source stays silent with no error.
+2. Connect the Joy-Con 2 over Bluetooth. The mouse data comes through the wireless Switch 2 path.
+3. Map **Mouse Motion X** and **Mouse Motion Y** to stick axes or scroll. Adjust the per-source Sensitivity if the cursor moves too fast or slow.
 
 ---
 
@@ -588,11 +652,14 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 | No devices | Check USB, cable, Device Manager |
 | Detected but no mapping | Assign to slot, check source dropdown |
 | No virtual controller in game | Install HIDMaestro / MIDI Services |
+| Nintendo slot not in game | Install HIDMaestro. XInput-only games need an Xbox slot |
 | Double input | Install HidHide, enable "Hide devices from games" |
 | BLE controller not hidden | Enable per-device "Hide from games" and "Hide devices from games" in Settings |
 | Wrong button mapping | Force raw joystick mode, re-record |
+| Opposite buttons vanish | SOCD cleaning. Set Mode to Off or remove the pair |
 | No rumble | Overall Gain > 0%, motor strength > 0%, Test Rumble |
 | Audio bass rumble flat | Check audio playing, raise sensitivity |
+| Bass shakers silent | Check the Bass Shakers status line. Only game feedback routes to audio |
 | Extended controller not in joy.cpl | Install HIDMaestro, verify driver status, restart PadForge |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
 | No MIDI button | Install Windows MIDI Services (Win 11 only) |
@@ -608,7 +675,7 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 | No NFC reader detected | Start the Smart Card service, use a PC/SC (CCID) reader |
 | Media keys not mapping | Keyboard needs a media-key device, input only, no suppress |
 | Wii IR pointer centered | Aim at a sensor bar or IR source, map IR Pointer X/Y |
-| Joy-Con 2 mouse silent | Use the bundled SDL3.dll, map Mouse Motion X/Y |
+| Joy-Con 2 mouse silent | Connect over Bluetooth, map Mouse Motion X/Y |
 | Battery not showing | Wired/unsupported devices report none, refreshes every 5 s |
 | Won't auto-disconnect when idle | Bluetooth only, off by default, set timeout in minutes |
 | Haptic tone garbled on speech/music | Single actuator plays one tone, only beeps and cues survive |
@@ -616,22 +683,24 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 | Sensitivity curve no effect | Check axis (X vs Y), preset not Linear |
 | Settings lost | Wait for autosave, check file permissions |
 | UAC prompt every launch | Expected. PadForge always runs as administrator. |
-| App crashes on start | Check SDL3.dll present, .NET 10 installed |
+| App crashes on start | Check `crash.log` next to PadForge.exe, re-download the exe |
 | High CPU | Increase polling interval in Settings |
 | Steam conflict | Disable Steam Input or close Steam |
-| Macro doesn't fire | All triggers simultaneous, check threshold |
+| Macro doesn't fire | All triggers simultaneous, check threshold, mode, and Layer |
 | Mouse macro not working | Check axis source, adjust sensitivity |
-| Always-mode macro won't stop | Disable macro or disable slot |
+| Macro won't stop | A Toggle macro releases on the second press. Otherwise disable the macro or slot |
 | Keyboard+Mouse not working | Check slot type, add mappings |
 | Mouse buttons not registering | Record the button on a mapping row |
 | Stick drift after deadzone | Calibrate Center on Sticks tab |
+| Flick Stick not turning camera | Map Flick Stick (Right Stick) to Mouse X |
 | Volume macro wrong direction | Enable Invert axis |
 | Volume OSD unwanted | Disable Show volume OSD |
 | DualShock 3 not connecting | Pair through PadForge, unplug, press PS over Bluetooth |
-| Shift layer stuck or won't engage | Check mode and Delay, axis threshold, activator online. A Toggle layer releases on a second tap or via Auto-Cancel |
+| Shift layer stuck or won't engage | Check mode, Delay, Fire on Release, axis threshold, activator online. A Toggle layer releases on a second tap or via Auto-Cancel |
 | Impulse Triggers tab missing | Slot needs an Xbox One/Elite/Series pad. DualSense uses the Adaptive Triggers tab |
 | Custom Expression macro silent | Watch live preview value. Rising-edge means it must cross 0.5 |
 | Touchpad Overlay no input in game | Slot must be PlayStation type. A real DualSense or DS4 in the slot overrides the overlay |
+| Touchpad pressure in steps | Synthetic Pressure is on. Turn it off for raw readings |
 
 ---
 
@@ -655,4 +724,4 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

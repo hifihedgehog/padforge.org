@@ -113,6 +113,29 @@ A Wii Remote can play macro sounds through its built-in speaker. The speaker is 
 
 ---
 
+## Left Joy-Con motion
+
+A combined Joy-Con pair carries a full motion sensor in each half. The primary gyro and motion sources read the right Joy-Con. Since 4.1.0, the left half's sensors appear as their own sources in the mapping picker:
+
+| Source | Reads |
+|---|---|
+| **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll** | The left half's rotation rate, one axis per row. Bind them to mouse or stick axes like the primary gyro axes. |
+| **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. |
+| **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. |
+| **Left Joy-Con Lean** | The left half's tilt, for motion steering or any axis row. |
+
+The two hands read independently, so the left half can drive the cursor while the right half's gyro aims a stick.
+
+**Left Joy-Con Accelerometer** and **Left Joy-Con Lean** are the same two sources that show as **Nunchuk Accelerometer** and **Nunchuk Lean** on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.
+
+- Joy-Con 2 pairs expose the same left-side sources.
+- The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the [Gyro](../guides/gyro.md) tab all apply, and those device-level sliders tune both halves at once. The per-row **Sensitivity** dial is the independent knob.
+- Gyro calibration samples both halves in one run and stores a separate bias for each, so hold both halves still.
+- The [Devices](../features/devices.md) page shows the left half's readings as **Aux Gyroscope** and **Aux Accelerometer** telemetry blocks.
+- The left-side sources work over [Remote Link](../guides/remote-link.md), like the Nunchuk pair.
+
+---
+
 ## Joy-Con IR brightness
 
 The right Joy-Con's IR camera reports a single brightness value, exposed as a source called **IR Brightness**. Cover the sensor and it reads bright. Uncover it and it reads dark. Only the standalone right Joy-Con has it. The left Joy-Con and the combined pair do not.
@@ -158,4 +181,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 4.0.0.*
+*Last updated for PadForge 4.1.0.*

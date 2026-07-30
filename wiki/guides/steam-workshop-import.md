@@ -72,8 +72,8 @@ Below the stats, one row per binding, grouped by the physical control it came fr
 Real examples of each status:
 
 - **Clean**: "Touchpad 1 Click → Left Mouse Button · translated". The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own. A radial or touch menu reports "on-screen menu created (8 bound cells)", and a macro riding a paddle, touchpad, or gyro trigger reports "translated as a macro". Imports from older PadForge versions may still show the retired one-line summary "14 bindings covered by the default automap".
-- **Partial**: "Soft_Press approximated as a press threshold" (Steam's partial-pull activator becomes a plain threshold), "long press taps T at the threshold (Steam holds it until release)", or "fires from the Xbox slot's combined output" (a cursor warp or key autofire on a standard pad button arrives as a macro triggered by the virtual pad).
-- **Skipped**: "12 in-game actions, Steam-only, no game-side hook" (bindings that call the game's own action API, which only Steam can deliver), "double-press activator not supported here", or "menu host surface not supported".
+- **Partial**: "circular scroll wheel approximated as a vertical drag" (a touchpad scratch wheel becomes a linear finger drag), or "camera reset approximated as a gyro recenter" (PadForge re-references its own gyro aim state, the equivalent state it owns).
+- **Skipped**: "12 in-game actions, Steam-only, no game-side hook" (bindings that call the game's own action API, which only Steam can deliver), or "player-number change is a Steam-client action, no equivalent".
 
 ### Preset chips
 
@@ -110,8 +110,8 @@ Where everything lands:
 - **Mappings** go into each pad's [Button and Axis Mappings](../features/mappings.md) table. They use device-portable **Gamepad** sources ("Gamepad A", "Gamepad Left Stick X"), so they work on any recognized controller without rework. Secondary sources on imported rows show **(Any device)** until you assign a controller.
 - **Action sets and layers** become [Shift Layers](shift-layers.md): hold-style mode shifts become Hold layers, add-layer commands become Toggle layers, and set-switch buttons become layer jumps or cycles.
 - **Radial and touch menus** become on-screen [Menus](menus.md) with the config's cell labels, fire mode, and screen placement.
-- **Cursor warps, key autofire, turbo, toggles, long presses, and lighting commands** become [Macros](macros.md). A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.
-- **Flick stick** groups become the [flick stick](../features/stick-deadzones.md#flick-stick) source on the Keyboard + Mouse pad, with the config's Dots Per 360° carried over.
+- **Cursor warps, key autofire, turbo, toggles, long presses, double presses, haptic pulses, and lighting commands** become [Macros](macros.md). A double-press activator rides the macro's **On Double Press** fire mode with the config's press window. A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.
+- **Flick stick** groups, hosted on a stick or a touchpad, become the [flick stick](../features/stick-deadzones.md#flick-stick) source on the Keyboard + Mouse pad, with the config's Dots Per 360° carried over.
 - **Mouse regions on a touchpad** become the absolute [Touchpad Pointer](../features/touchpad.md#absolute-pointer) sources, so the cursor warps to your finger inside the config's region.
 - **PlayStation touchpad halves** map onto the left and right halves of the single DS4 or DualSense pad.
 - **Per-group sensitivity** from the config carries over as per-source Sensitivity on the affected rows, including per-row touchpad mouse sensitivity.
@@ -169,17 +169,16 @@ Steam Input has a few features PadForge does not reproduce, and a few it reprodu
 | Steam Input feature | What happens |
 |---|---|
 | In-game actions | Skipped. These bindings call the game's own action API, which only Steam can deliver. |
-| Steam client actions (screenshot, system key, keyboard popup, player number, lizard mode) | Skipped. They drive the Steam client, which is not running the pad here. |
-| Double Press activators | Skipped. |
-| Long Press on a key | Translates, marked Partial: the key taps once at the hold threshold, where Steam holds it until release. Long-press layer switches translate whole. |
-| Turbo on pad buttons | Translates as an auto-repeat macro. The exception is a passthrough button or a trigger pull, where the row translates and the repeat drops. |
-| Circular scrolling and directional swipes (the scroll-wheel touchpad modes) | Skipped. Plain scroll bindings still translate. |
+| Steam client actions (system key, player number, lizard mode, and the Steam-overlay verbs) | Skipped, with the action named. Two translate instead: screenshot taps PrintScreen, and the keyboard popup opens the on-screen keyboard. |
+| Circular scrolling (the scroll-wheel touchpad mode) | Partial: the circular scratch becomes a vertical finger drag. Directional swipes and scroll-wheel lists translate whole. |
 | Mouse regions on a stick or gyro | Partial: a cursor-clamp macro holds the region while the input is engaged. On a touchpad the region translates Clean as the absolute pointer instead. |
-| Menu cell icons | Dropped, with the cell count. Cells render their text labels. |
-| Menus hosted on anything but a stick or touchpad | Skipped, with the host named. |
-| Flick stick on a touchpad | Skipped. PadForge flick stick reads a physical stick. |
-| Haptic feedback settings | Dropped, with a count. Response curve and range settings drop the same way. |
-| Keys with no Windows equivalent (F13 and up, and a few others) | Skipped, named per key. |
+| Menu cell icons | Render when your local Steam client has the icon art. An unrecognized icon reference is named per cell and the cell keeps its text label. App-provided icons (Steam-internal) fall back to text silently. |
+| Menus hosted on a surface with no direction read | Skipped, with the host named. Sticks, touchpads, the D-pad, the face diamond, and the gyro all host menus, so only a hand-edited config lands here. |
+| Flick stick on a surface with no analog pair | Skipped, with the host named. Sticks and touchpads both carry flick stick. |
+| Response curve settings on mouse outputs | Partial: deadzone_shape (mouse rows evaluate per axis, no pair read) and output_curve drop, named. Every other curve, range, and sensitivity setting carries onto its rows. |
+| Unknown key names | Skipped, named per key. |
+
+Features that skipped in older PadForge versions and translate whole now: double-press activators, long presses on keys (down at the threshold, up on release, matching Steam), turbo on any target including trigger pulls, haptic feedback (a rumble pulse per activation), directional swipes, flick stick on touchpads, and the F13–F24 keys. Re-import a config to pick them up.
 
 ---
 
@@ -204,4 +203,4 @@ Steam Input has a few features PadForge does not reproduce, and a few it reprodu
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

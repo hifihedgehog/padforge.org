@@ -15,6 +15,14 @@ Two force pipelines converge on the same vendor writers:
 
 Both write the single aggregation buffer `_combinedVibration` in `InputManager.Step2.UpdateInputStates.cs`. Everything downstream reads from it.
 
+A third destination joined in 4.1.0: the Bass Shakers lane (#236) turns the same game force into low-frequency audio. It bypasses `_combinedVibration` and the writers:
+
+- `HMaestroFfbDecoder.Apply` stores the game-authored motor pair in `LastComputedMotors`, computed purely from the uploaded PID effect set. Test and macro rumble stay out by construction.
+- `TickFfb` packs the pair into the virtual controller's inbound rumble pack via `LfeOutputState.Pack`.
+- `UpdateRumbleAudioLane` in `InputManager.Step5.VirtualDevices.cs` publishes each slot's pack once per poll tick through `RumbleAudioService.PublishIfCurrent`.
+
+So game force feedback reaches vendor wheels, scalar rumble devices, and bass-shaker audio endpoints. The slot's **Bass Shakers** tab configures the endpoint. See [Force Feedback](../features/force-feedback.md#bass-shakers) for the user-facing side.
+
 ---
 
 ## Files
@@ -48,7 +56,7 @@ The `Vibration` carrier lives in `PadForge.Engine/Common/ForceFeedbackState.cs` 
 
 `ApplyForceFeedback(UserDevice ud)` in Step 2 combines every slot the device is mapped to (motors max-combined, the first slot with directional or condition data becomes the directional source) into `_combinedVibration`, then dispatches by device identity:
 
-- Sony pads (DualSense, DualShock 4) return early. They are written by `UserEffectsDispatcher` and `SonyEffectWriter`.
+- Sony pads (DualSense, DualShock 4) return early. They are written by `UserEffectsDispatcher` and `PlayStationEffectWriter`.
 - Xbox One and later take the `XboxImpulseHidWriter` path.
 - Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by `IsLogitechWheel` / `IsFanatecWheel` / `IsThrustmasterWheel` / `IsFanatecPedal`) take the vendor-writer block.
 - Everything else falls to `ForceFeedbackState.SetDeviceForces` (the SDL path).
@@ -135,4 +143,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

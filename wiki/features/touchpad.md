@@ -1,28 +1,31 @@
 # Touchpad
 
-*Per-slot touchpad tuning: continuous output modes (relative mouse, absolute pointer, virtual analog stick, D-pad), swipe haptics, and the gesture stack (swipes, taps, longpress, pinch, rotate, shape templates). One physical touchpad in two slots carries two independent configurations.*
+*Per-slot touchpad tuning: continuous output modes (relative mouse, absolute pointer, virtual analog stick, D-pad), synthetic pressure, swipe haptics, and the gesture stack (swipes, taps, longpress, pinch, rotate, shape templates). One physical touchpad in two slots carries two independent configurations.*
 
 ![Touchpad tab](../images/pad-touchpad.png)
 
-The **Touchpad** tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, a [Web Controller](../guides/web-controller.md) client in DS4 or touchpad-only mode, the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay), or a Windows Precision Touchpad enumerated through the [Devices](devices.md) page.
+The **Touchpad** tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a [Web Controller](../guides/web-controller.md) client in DS4 or touchpad-only mode, the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay), or a Windows Precision Touchpad enumerated through the [Devices](devices.md) page.
 
 ---
 
 ## What lives on this tab
 
-Seven cards, top to bottom:
+Eight cards, top to bottom:
 
 1. **Stick / D-Pad Output.** Turn a touchpad finger into a virtual analog stick (anchor-relative) and/or a wedge-thresholded D-pad.
-2. **Mouse Output.** Per-axis sensitivity and invert for touchpad-finger → mouse X/Y on a Keyboard / Mouse virtual controller.
-3. **Absolute Pointer.** Stretch tuning for the Touchpad Pointer sources, which warp the cursor to where your finger sits on the pad.
-4. **Swipe Haptics.** A haptic tick each time the finger travels a set distance, like Steam Input's trackpad ticks. Shown only for pads PadForge can pulse.
-5. **Gesture Detection.** Master enable, recognize mode (in-box / custom / both), and cooldown between fires.
-6. **In-Box Gestures.** Swipes (4-way / 8-way), radial zones, taps, longpress, two-finger swipes, pinch / spread, rotate, three / four / five finger gestures, in-box shape templates.
-7. **Custom Gestures.** The profile's saved custom shape templates plus a recorder dialog to capture new ones.
+2. **Mouse Output.** Sensitivity, invert, jitter reduction, momentum, and the pointer response curve for touchpad-finger → mouse X/Y on a Keyboard / Mouse virtual controller.
+3. **Absolute Pointer.** The screen region the Touchpad Pointer sources map onto, which warp the cursor to where your finger sits on the pad.
+4. **Synthetic Pressure.** DualShock 2 / DualShock 3-style pressure simulation for pads that report a touch as full pressure.
+5. **Swipe Haptics.** A haptic tick each time the finger travels a set distance, like Steam Input's trackpad ticks. Shown only for pads PadForge can pulse.
+6. **Gesture Detection.** Master enable, recognize mode (in-box / custom / both), and cooldown between fires.
+7. **In-Box Gestures.** Swipes (4-way / 8-way), radial zones, taps, longpress, two-finger swipes, pinch / spread, rotate, three / four / five finger gestures, in-box shape templates.
+8. **Custom Gestures.** The profile's saved custom shape templates plus a recorder dialog to capture new ones.
 
-The first three are continuous output modes you bind in the [Button and Axis Mappings](mappings.md) table. The last three drive a per-tick gesture engine whose fires you bind the same way.
+The first three are continuous output modes you bind in the [Button and Axis Mappings](mappings.md) table. Synthetic Pressure reshapes the device's existing Pressure sources rather than adding new ones, and Swipe Haptics is feedback with nothing to bind. The last three drive a per-tick gesture engine whose fires you bind the same way.
 
-> **Defaults are off.** Every feature toggle starts disabled. Open the tab, flip the master switch, then enable each gesture or output you actually want. Numeric thresholds (cooldown, swipe distance, tap time window, longpress duration, deadzones) keep tuned defaults so a feature works correctly the moment it's turned on.
+On a multi-pad device (Steam Controller, Steam Deck) a **Touchpad Number** selector sits at the top of the tab. Every setting here is kept per touchpad, so each pad carries its own gestures, mouse feel and pointer region, and the selector picks which pad the cards edit. Single-pad devices skip the selector. Synthetic Pressure is the one exception: it is stored per device and ignores the selector.
+
+> **Defaults are off.** Every output mode and gesture toggle starts disabled. Open the tab, flip the master switch, then enable each gesture or output you actually want. Numeric thresholds (cooldown, swipe distance, tap time window, longpress duration, deadzones) keep tuned defaults so a feature works correctly the moment it's turned on. The one on-by-default checkbox is Jitter Reduction on the Mouse Output card, which only shapes motion you've already mapped.
 
 ---
 
@@ -33,10 +36,10 @@ Anchors where your finger first lands. Current position relative to that anchor 
 | Knob | Default | Effect |
 |---|---|---|
 | Enable Stick / D-Pad Output | off | Adds **Touchpad Stick X**, **Touchpad Stick Y**, and the four **Touchpad D-Pad Up / Down / Left / Right** entries to the mapping picker. |
-| Max Radius (0..1) | 0.30 | Distance from anchor at which stick output saturates to ±1. Smaller means twitchier, larger means more travel. 0.30 means half the pad sweep in either direction gives full deflection. |
-| Inner Deadzone (0..1) | 0.02 | Magnitude below this maps stick output to (0, 0). Prevents sub-millimeter finger drift from registering as slow stick input. |
+| Max Radius | 30% | Distance from anchor (as a fraction of the pad) at which stick output saturates to ±1, 5–50%. Smaller means twitchier, larger means more travel. At 30%, half the pad sweep in either direction gives full deflection. |
+| Inner Deadzone | 2% | Magnitude below this maps stick output to (0, 0), 0–10%. Prevents sub-millimeter finger drift from registering as slow stick input. |
 | D-Pad Mode | 4-Way | `Off` skips D-pad output. `4-Way` emits one cardinal at a time (90° wedges). `8-Way` emits two cardinals on diagonals (matches physical D-pads reporting NE / NW / SE / SW). |
-| D-Pad Activation (0..1) | 0.15 | Minimum distance from anchor for any D-pad direction to fire. Independent of the stick inner deadzone so the tactile D-pad snap dials separately from analog feel. |
+| D-Pad Activation | 15% | Minimum distance from anchor for any D-pad direction to fire, 5–50%. Independent of the stick inner deadzone so the tactile D-pad snap dials separately from analog feel. |
 
 Bind **Touchpad Stick X** to a virtual stick X axis to use the surface as a thumbstick. Bind **Touchpad D-Pad Up** to a face button to use it as a tap-pad.
 
@@ -46,14 +49,25 @@ On single-pad controllers (DualSense, DualShock 4) the picker shows these labels
 
 ## Mouse Output
 
-Tunes cursor speed when a touchpad finger is mapped to mouse X/Y on a Keyboard + Mouse virtual controller.
+Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a Keyboard / Mouse virtual controller.
 
 | Knob | Default | Effect |
 |---|---|---|
-| Mouse Sensitivity X | 1.0 | Multiplier on horizontal touchpad → mouse delta. 1.0 is the calibrated baseline (a full horizontal pad sweep moves the cursor ~1920 pixels). Below 1.0 = slower cursor, above 1.0 = faster. Range 0.05..10.0. |
-| Mouse Sensitivity Y | 1.0 | Same for vertical motion. |
+| Mouse Sensitivity X | 1.00 | Multiplier on horizontal touchpad → mouse delta, 0.05–10. 1.0 is the calibrated baseline (a full horizontal pad sweep moves the cursor ~1920 pixels). Below 1.0 = slower cursor, above 1.0 = faster. |
+| Mouse Sensitivity Y | 1.00 | Same for vertical motion. |
 | Invert Mouse X | off | Finger right moves the cursor left. |
 | Invert Mouse Y | off | Finger down moves the cursor up. |
+| Jitter Reduction | on | Bends motion below a threshold down a power curve instead of cutting it off, so resting-hand tremor is damped while tiny deliberate movements still register. A deadzone would delete the small motion outright. |
+| Momentum | off | The cursor keeps travelling after you lift your finger and coasts to a stop, like a trackball. Flicking across the pad covers ground a finger-length swipe cannot. |
+| Response | Simple | How finger speed becomes cursor speed. `Simple` is a flat gain plus the Acceleration knob below. `Trackpad` is the pointer-acceleration curve ported from libinput's touchpad profile, and it also moves the cursor slower than the finger at low speed, which is where a laptop trackpad's fine positioning comes from. |
+| Speed threshold | 130 | Trackpad response only. Finger speed in mm/s where the cursor starts speeding up, 20–600. Lower accelerates sooner. libinput's own default and its single exposed tunable. |
+| Pad width | 69 | Trackpad response only. Physical width of this touchpad in mm, 20–150. Decides whether slow movement can reach the fine-control range at all, so set it near the real size of the pad. |
+| Acceleration | 0.00 | Simple response only. Fast drags cover more screen than slow ones over the same distance, 0–5. 0 keeps the cursor speed flat. |
+| Momentum Glide | 0.90 | How far the cursor coasts, 0.80–1.00. At 1.00 the coast is frictionless: the cursor keeps its speed until you touch the pad again, like a spun trackball. Time-based, so the glide lasts the same at any polling rate. Editable only while Momentum is on. |
+
+The Speed threshold and Pad width rows appear only in `Trackpad` response, the Acceleration row only in `Simple`. They are competing models of the same thing, so the card never shows both at once.
+
+Two plain limitations. First, at the default 69 mm Pad width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.
 
 Bind **Touchpad 1 Finger 1 X** to KBM Mouse X (and **Touchpad 1 Finger 1 Y** to Mouse Y) to use the surface as a trackpad. Finger entries stay 1-based in the picker, so the first contact is Finger 1. The KBM virtual controller produces real Windows mouse input. The cursor moves in whatever app has focus, games and desktop apps alike.
 
@@ -61,21 +75,36 @@ Bind **Touchpad 1 Finger 1 X** to KBM Mouse X (and **Touchpad 1 Finger 1 Y** to 
 
 ## Absolute Pointer
 
-The Mouse Output sources above move the cursor relatively, like a laptop touchpad. The **Touchpad 1 Pointer X** and **Touchpad 1 Pointer Y** sources are the absolute alternative: the cursor warps to wherever your finger sits on the pad, the way Steam Input's absolute pointer works. Bind them to Mouse X and Y on a Keyboard + Mouse virtual controller the same way.
+The Mouse Output sources above move the cursor relatively, like a laptop touchpad. The **Touchpad 1 Pointer X** and **Touchpad 1 Pointer Y** sources are the absolute alternative: the cursor warps to wherever your finger sits on the pad, the way Steam Input's absolute pointer works. Bind them to Mouse X and Y on a Keyboard / Mouse virtual controller the same way.
 
 - Touch the pad and the cursor jumps to the matching spot on the primary monitor. Slide and it follows 1:1.
 - Lift the finger and the cursor stays where it was.
 - On a single-pad controller the picker also offers **Left Half** and **Right Half** variants that read one half of the pad as the whole surface.
 - A row that mixes a pointer source with relative sources (gyro, stick) keeps the relative aim live while no finger is down. The moment a finger lands, the pointer takes over.
 
-The card tunes the mapping:
+The card tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.
 
 | Knob | Default | Effect |
 |---|---|---|
-| Pointer Stretch X | 1.0 | Horizontal margin stretch around the pad center, 1.0–3.0. At 1.0 the pad maps 1:1 to the screen. At 1.5 the cursor reaches the screen edges at two thirds of the physical travel. |
-| Pointer Stretch Y | 1.0 | The same for vertical motion. |
+| Region Width | 1.00 | Width of the screen area this pad maps onto, as a fraction of screen width, 0.05–3.00. 1.00 covers the full width. 0.50 confines the cursor to half the screen. Above 1.00 the region runs wider than the screen, so the cursor reaches the edges before your finger reaches the pad bezel. |
+| Region Height | 1.00 | Height of the screen area, as a fraction of screen height. |
+| Region Center X | 0.50 | Horizontal placement of that area, 0.00–1.00. 0.00 is the left edge, 0.50 the middle, 1.00 the right edge. |
+| Region Center Y | 0.50 | Vertical placement, 0.00–1.00. 0.00 is the top edge, 1.00 the bottom edge. |
 
-Steam Workshop configs that use mouse regions arrive on these sources, with the region's position and size carried over. See [Steam Workshop Config Import](../guides/steam-workshop-import.md).
+Steam Workshop configs that use mouse regions arrive on these sources with the region's position and size carried over, so an imported corner region (a pad mapped to a minimap or a menu strip) shows up here and stays editable. The first edit on this card hands the region to this pad's own settings for good: from then on, Reset restores the full-screen defaults instead of silently bringing the imported rectangle back. See [Steam Workshop Config Import](../guides/steam-workshop-import.md).
+
+---
+
+## Synthetic Pressure
+
+Simulates DualShock 2 / DualShock 3 pressure buttons on pads whose hardware reports a touch as full pressure: DualShock 4, DualSense, and the 2015 Steam Controller.
+
+| Knob | Default | Effect |
+|---|---|---|
+| Enable Synthetic Pressure | off | Shapes this device's Pressure mapping sources into three steps: no touch reads 0%, a resting touch reads the Touch Pressure Level, and clicking the pad reads 100%. Off keeps raw readings on pads with true analog pressure. |
+| Touch Pressure Level | 50% | How much pressure a resting (unclicked) touch reports, 0–100%. 50% leaves an even step up to a full pad click. |
+
+The card is stored per device, not per pad, so the Touchpad Number selector on multi-pad devices does not pivot it. Like every per-device setting, it follows the (slot, device) pair: the same DualSense in two slots carries two independent Synthetic Pressure configurations.
 
 ---
 
@@ -102,7 +131,7 @@ Master controls for the per-tick gesture recognizer.
 |---|---|---|
 | Enable Gestures on This Touchpad | off | Master switch. Off skips the recognizer entirely for this slot. |
 | Recognize | Both | `In-Box Only` runs the built-in catalog (swipes / taps / longpress / pinch / rotate / in-box shapes). `Custom Only` runs only the profile's saved custom shape templates. `Both` runs everything. |
-| Cooldown (ms) | 100 | Minimum time between consecutive gesture fires from this pad. Prevents bounce-fire when a quick reverse motion would otherwise re-fire the opposite-direction swipe immediately. |
+| Cooldown | 100 ms | Minimum time between consecutive gesture fires from this pad. Prevents bounce-fire when a quick reverse motion would otherwise re-fire the opposite-direction swipe immediately. |
 
 ---
 
@@ -128,7 +157,7 @@ Each gesture appears as an entry in the mapping picker. Bind **Swipe Up** to a b
 
 Profile-scoped: captured custom gestures travel with whichever profile is active when they're recorded. Each gesture has a name, finger count, and the recorded finger path(s).
 
-Click **Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace your gesture, click **Save**, give it a name. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
+Click **+ Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the **Samples to capture** control defaults to 3 and adjusts from 1 to 5. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
 
 A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn't currently selected as the active mapping device still drives the recorder, so you can capture a gesture on the touchpad while the slot's primary device is something else.
 
@@ -152,7 +181,7 @@ Every setting row carries a per-field **Reset** button (the small reset arrow on
 
 ## Credits
 
-Shape matching runs two open-source gesture recognizers on every single-finger shape and keeps whichever one recognizes the stroke. Full credits, copyright, and license text (both BSD 3-Clause) are on the in-app **About** page and in the project README.
+Shape matching runs two open-source gesture recognizers on every single-finger shape and keeps whichever one recognizes the stroke (both BSD 3-Clause). The Mouse Output card's Trackpad response is an original C# re-derivation of libinput's touchpad acceleration profile (MIT). Full credits, copyright, and license text are on the in-app **About** page and in the project README.
 
 ---
 

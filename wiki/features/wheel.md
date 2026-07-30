@@ -90,6 +90,18 @@ The **T150** uses a separate protocol and runs through the generic path.
 
 ---
 
+## Over Remote Link
+
+A supported wheel plugged into another PC and shared over [Remote Link](../guides/remote-link.md) keeps the whole native pipeline. The PC running the game decodes the game's force-feedback effects exactly as it does for a local wheel. Instead of writing to the wheel, it ships the steering parameters across the link: constant force, the condition effects, the periodic waveform, rotation range, auto centering, and the RPM LED state. The wheel's PC re-encodes them with its own vendor writer, so the wheel firmware receives the same commands a local wheel would.
+
+- The Wheel tab appears on the PC running the game, as it does for a local wheel, and all three settings apply across the link.
+- Telemetry for the RPM shift LEDs is read on the game PC, where the sim runs. Only the resolved LED pattern crosses the link.
+- Fanatec pedal rumble crosses the link too.
+- The Thrustmaster driver requirement follows the wheel: install it on the PC the wheel is plugged into.
+- A wheel outside the supported list is driven through its DirectInput haptic effects over the link, with rumble as the last fallback.
+
+---
+
 ## Setup
 
 1. Plug in the wheel and create an **Extended** output [slot](controller-slots.md) so the game can send DirectInput force feedback.
@@ -111,6 +123,7 @@ The **T150** uses a separate protocol and runs through the generic path.
 ## Related pages
 
 - [Force Feedback](force-feedback.md): where the force-feedback effects, gain, and the generic-wheel path are documented.
+- [Remote Link](../guides/remote-link.md): drive a wheel plugged into another PC.
 - [Steering](../guides/steering.md): turn a stick or controller tilt into a steering axis. A different feature from a real wheel.
 - [Controller Slots](controller-slots.md): create the Extended slot a wheel needs for force feedback.
 - [Devices](devices.md): assign the wheel and check that PadForge recognizes the model.
@@ -119,4 +132,4 @@ The **T150** uses a separate protocol and runs through the generic path.
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

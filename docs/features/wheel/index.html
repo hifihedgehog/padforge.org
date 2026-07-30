@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://padforge.org/docs/features/wheel/">
       
       
-        <link rel="prev" href="../controller-audio/">
+        <link rel="prev" href="../bass-shakers/">
       
       
         <link rel="next" href="../nfc-tags/">
@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1425,6 +1427,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1595,6 +1625,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#over-remote-link" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Over Remote Link
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2818,6 +2859,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#over-remote-link" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Over Remote Link
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2989,6 +3041,16 @@
 <p>T300RS (PS3, PS4, and GT variants, plus the advanced and Ferrari F1 modes), T-GT II, T248, TX, TS-XW, TS-PC Racer.</p>
 <p>The <strong>T150</strong> uses a separate protocol and runs through the generic path.</p>
 <hr />
+<h2 id="over-remote-link">Over Remote Link<a class="headerlink" href="#over-remote-link" title="Permanent link">&para;</a></h2>
+<p>A supported wheel plugged into another PC and shared over <a href="../../guides/remote-link/">Remote Link</a> keeps the whole native pipeline. The PC running the game decodes the game's force-feedback effects exactly as it does for a local wheel. Instead of writing to the wheel, it ships the steering parameters across the link: constant force, the condition effects, the periodic waveform, rotation range, auto centering, and the RPM LED state. The wheel's PC re-encodes them with its own vendor writer, so the wheel firmware receives the same commands a local wheel would.</p>
+<ul>
+<li>The Wheel tab appears on the PC running the game, as it does for a local wheel, and all three settings apply across the link.</li>
+<li>Telemetry for the RPM shift LEDs is read on the game PC, where the sim runs. Only the resolved LED pattern crosses the link.</li>
+<li>Fanatec pedal rumble crosses the link too.</li>
+<li>The Thrustmaster driver requirement follows the wheel: install it on the PC the wheel is plugged into.</li>
+<li>A wheel outside the supported list is driven through its DirectInput haptic effects over the link, with rumble as the last fallback.</li>
+</ul>
+<hr />
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Plug in the wheel and create an <strong>Extended</strong> output <a href="../controller-slots/">slot</a> so the game can send DirectInput force feedback.</li>
@@ -3008,6 +3070,7 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../force-feedback/">Force Feedback</a>: where the force-feedback effects, gain, and the generic-wheel path are documented.</li>
+<li><a href="../../guides/remote-link/">Remote Link</a>: drive a wheel plugged into another PC.</li>
 <li><a href="../../guides/steering/">Steering</a>: turn a stick or controller tilt into a steering axis. A different feature from a real wheel.</li>
 <li><a href="../controller-slots/">Controller Slots</a>: create the Extended slot a wheel needs for force feedback.</li>
 <li><a href="../devices/">Devices</a>: assign the wheel and check that PadForge recognizes the model.</li>
@@ -3015,7 +3078,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: help when a wheel has no force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 
@@ -3053,7 +3116,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../controller-audio/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Controller Audio">
+          <a href="../bass-shakers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Bass Shakers">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3063,7 +3126,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Controller Audio
+                Bass Shakers
               </div>
             </div>
           </a>

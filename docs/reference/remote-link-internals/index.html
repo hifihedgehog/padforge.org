@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2331,6 +2361,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#the-source-demand-lane-241" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The source-demand lane (#241)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#device-list-metadata-extension" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2385,6 +2426,17 @@
     <span class="md-ellipsis">
       
         Present-block table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-0xe6-extension-tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 0xE6 extension tail
       
     </span>
   </a>
@@ -2752,6 +2804,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#the-source-demand-lane-241" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The source-demand lane (#241)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#device-list-metadata-extension" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2806,6 +2869,17 @@
     <span class="md-ellipsis">
       
         Present-block table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-0xe6-extension-tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 0xE6 extension tail
       
     </span>
   </a>
@@ -2929,7 +3003,7 @@
 </tr>
 <tr>
 <td>Capture taps</td>
-<td><code>InputManager.Step2/Step4b/Step5/Step1.*.cs</code>, <code>SonyEffectWriter.cs</code>, <code>AudioPassthroughService.cs</code></td>
+<td><code>InputManager.Step2/Step4b/Step5/Step1.*.cs</code>, <code>PlayStationEffectWriter.cs</code>, <code>HapticToneService.cs</code>, <code>AudioPassthroughService.cs</code></td>
 </tr>
 </tbody>
 </table>
@@ -2942,12 +3016,47 @@
 <p><code>LinkServer</code> runs a <code>TcpListener</code> for the pairing handshake and a UDP socket for data, both on the link port (default 27500). It caps pending handshakes, times them out after three minutes, sends keepalives, and reaps idle connections. A reconnecting peer replaces its prior connection.</p>
 <p>It holds a <code>List&lt;LinkPeerConnection&gt;</code>, so one PC can be linked to many peers at once. The mesh is many-to-many: pairing is pairwise (one handshake and one six-digit code per pair), but <code>PushLocalFrame</code> fans a shared device's input out to every consuming peer, and <code>PushOutputEffect</code> and <code>PushAudio</code> address the reverse frame by the owning peer's fingerprint so each device's feedback routes back to the right owner. There is no two-PC cap.</p>
 <p><code>LinkConnection</code> runs the handshake (initiator or responder) and then owns a <code>LinkSession</code>. <code>LinkSession</code> seals every datagram: a 14-byte authenticated header (message type and epoch, slot, a 32-bit sequence, a microsecond timestamp) plus ChaCha20-Poly1305 ciphertext and a 16-byte tag. The sequence doubles as the nonce counter, and the two directions use disjoint salts so both peers share one key without a nonce collision. Receive is verify-then-window: check the tag, then run <code>AntiReplayWindow</code>, so a forged sequence never advances the replay state. The session hard-stops before the 32-bit sequence wraps and forces a rekey.</p>
-<p><code>LinkMessageType</code> values: <code>Input</code> (an absolute device-state frame, owner to consumer), <code>Keepalive</code>, <code>Output</code> (a tagged effect frame, consumer to owner), <code>Audio</code> (a speaker PCM block), and <code>DeviceList</code> (the owner's exposed-device set, resent on change and every two seconds for hot-plug sync). A legacy <code>Haptic</code> type is superseded by <code>Output</code> and unused. The initial device lists are also exchanged during the handshake under a separate control key. Each V1 device entry carries the stable slot, a stable id, the name, VID and PID, capability counts, a capability bitmask, and the input-device type. The capability bitmask packs eight flags into one byte: <code>HasRumble</code> (value 1), <code>HasRumbleTriggers</code> (2), <code>HasGyro</code> (4), <code>HasAccel</code> (8), <code>HasTouchpad</code> (16), <code>HasHaptic</code> (32) so a remote wheel or FFB stick's force-feedback pipeline runs, <code>Online</code> (64) so active/inactive propagates, and <code>HasAccelAux</code> (128) so an aux/left-side accelerometer (Nunchuk, left Joy-Con, #199) exposes. <code>HasAccelAux</code> (value 128) exhausts the caps byte. The next capability needs a wire-format extension, not another bit.</p>
+<p><code>LinkMessageType</code> values: <code>Input</code> (an absolute device-state frame, owner to consumer), <code>Keepalive</code>, <code>Output</code> (a tagged effect frame, consumer to owner), <code>Audio</code> (a speaker PCM block), <code>DeviceList</code> (the owner's exposed-device set, resent on change and every two seconds for hot-plug sync), and <code>SourceDemand</code> (a consumer-to-owner report that a live mapping on the consumer polls a demand-gated source on this device, #241, see below). A legacy <code>Haptic</code> type is superseded by <code>Output</code> and unused. The initial device lists are also exchanged during the handshake under a separate control key. Each V1 device entry carries the stable slot, a stable id, the name, VID and PID, capability counts, a capability bitmask, and the input-device type. The capability bitmask packs eight flags into one byte: <code>HasRumble</code> (value 1), <code>HasRumbleTriggers</code> (2), <code>HasGyro</code> (4), <code>HasAccel</code> (8), <code>HasTouchpad</code> (16), <code>HasHaptic</code> (32) so a remote wheel or FFB stick's force-feedback pipeline runs, <code>Online</code> (64) so active/inactive propagates, and <code>HasAccelAux</code> (128) so an aux/left-side accelerometer (Nunchuk, left Joy-Con, #199) exposes. <code>HasAccelAux</code> (value 128) exhausts the caps byte, so the capabilities that arrived later ride a second capability byte in the <code>0xE4</code> device-list tail below rather than another bit.</p>
+<h3 id="the-source-demand-lane-241">The source-demand lane (#241)<a class="headerlink" href="#the-source-demand-lane-241" title="Permanent link">&para;</a></h3>
+<p>Demand latches are machine-local. <code>SourceCoercion</code> stamps them where the mapping evaluates, so a consumer's NFC binding could never arm the owner's reader on its own. The <code>SourceDemand</code> datagram closes that gap. Payload byte 0 is the demand kind, and 1 means NFC reader.</p>
+<ul>
+<li>The consumer ships demand (<code>RemoteLinkOutputRouter.ShipNfcDemand</code>) for every online reader-capable <code>peer://</code> device while its own NFC demand latch is fresh or tag registration is capturing. The router rate-bounds it to one datagram per device per second, since the owner treats each arrival as a fresh stamp.</li>
+<li>The owner (<code>InputService.OnRemoteSourceDemandReceived</code>) resolves the link slot to the shared device and stamps a per-device wall-clock mark. The arming cadence reads that mark exactly like the local latch, inside the same ten-second demand window, so the same teardown and Bluetooth gate apply.</li>
+<li>There is no off message. A lapsed demand is the off signal, matching the local latch's own expiry contract.</li>
+</ul>
 <h3 id="device-list-metadata-extension">Device-list metadata extension<a class="headerlink" href="#device-list-metadata-extension" title="Permanent link">&para;</a></h3>
 <p>After the V1 records, <code>EncodeDeviceList</code> appends a metadata extension marked by a magic byte (<code>0xE2</code>), one section per V1 record in the same order. It carries the serial number, the touchpad shape (<code>NumTouchpads</code> plus a finger count per pad), and the forwarded <code>DeviceObjects</code> (the owner's named inputs: <code>Name</code>, <code>InputIndex</code>, <code>Offset</code>, an <code>ObjectType</code> flags word, and the <code>ObjectTypeGuid</code>). So serial, touchpad shape, and named inputs now cross the link, and a remote device lists on the Devices page and in the mapping picker identically to a local one.</p>
 <p>The extension uses the same appended-tail compatibility as the input codec. An old decoder reads its <code>count</code> V1 records and never looks at the tail. A new decoder facing an old sender finds no magic byte. A malformed extension tail falls back to the V1 result: any parse failure resets every extension-carried field on every record, so a mid-record throw leaves no half-applied garbage, and the consumer synthesizes generic names as before.</p>
-<p>Objects are forwarded only for device types whose names the consumer cannot synthesize locally: Consumer Control and NFC. The push travels as one UDP datagram into a 4 KB receive buffer on old peers, so the encoder budgets the payload (a 3800-byte floor). Once it nears that floor the remaining devices get empty object sections and the consumer falls back to synthesized names for them, rather than the whole list becoming undeliverable.</p>
-<p>A second tail follows the <code>0xE2</code> extension, marked by its own magic byte (<code>DeviceListExtV2Magic</code>, <code>0xE3</code>): one clamped byte per device carrying <code>RawButtonCount</code>. It has its own magic and its own decode <code>try</code>/<code>catch</code>, and it decodes only once the V1 tail parsed cleanly. So an old peer that stops after the <code>0xE2</code> tail ignores it, and a malformed v2 tail costs only the button counts, never the already-decoded V1 metadata. The count lets the consumer offer the device's native buttons past the 22 standardized gamepad slots in its mapping picker. <code>RemotePeerDeviceInfo.RawButtonCount</code> and <code>RemotePeerDevice.SupportedButtonIndices</code> carry it through the pipeline.</p>
+<p>Objects are forwarded only for device types whose names the consumer cannot synthesize locally: Consumer Control and NFC. The push travels as one UDP datagram into a 4 KB receive buffer on old peers, so the encoder budgets the payload (a 3800-byte floor). Once it nears that floor the remaining devices get empty object sections and the consumer falls back to synthesized names for them, rather than the whole list becoming undeliverable. The budget targets old peers only: the current receive loop (<code>LinkServer.UdpLoopAsync</code>) takes datagrams into a 64 KB buffer, the UDP maximum, so an oversized frame can no longer vanish into a receive error.</p>
+<p>Three more tails follow the <code>0xE2</code> extension, each marked by its own magic byte and appended in order:</p>
+<table>
+<thead>
+<tr>
+<th>Magic</th>
+<th>Tail</th>
+<th>Carries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0xE3</code> (<code>DeviceListExtV2Magic</code>)</td>
+<td>Raw button count</td>
+<td>One clamped byte per device: <code>RawButtonCount</code>, so the consumer's mapping picker offers the device's native buttons past the 22 standardized gamepad slots. <code>RemotePeerDeviceInfo.RawButtonCount</code> and <code>RemotePeerDevice.SupportedButtonIndices</code> carry it through the pipeline.</td>
+</tr>
+<tr>
+<td><code>0xE4</code> (<code>DeviceListExtV3Magic</code>)</td>
+<td>Second capability byte</td>
+<td>The post-exhaustion capability flags: <code>HasNfcReader</code> (value 1, #241), <code>HasGyroAux</code> (2, #252), and <code>HasExtraGenericAxes</code> (4, #193 over the wire).</td>
+</tr>
+<tr>
+<td><code>0xE5</code> (<code>DeviceListExtV4Magic</code>)</td>
+<td>Raw axis count</td>
+<td>One clamped byte per device: <code>RawAxisCount</code>, the axis twin of <code>RawButtonCount</code>, so a remote fight stick's or DS3's extra analog axes list in the picker.</td>
+</tr>
+</tbody>
+</table>
+<p>Each tail decodes only after everything before it parsed cleanly, under its own <code>try</code>/<code>catch</code>. A malformed tail costs only its own fields and marks the cursor unreliable, so later tails are skipped rather than misread. An old peer that stops earlier simply leaves the fields at their defaults (flags false, counts zero).</p>
+<p>The periodic push also refreshes an already-registered device in place. <code>ReconcileRemoteDevices</code> keys by the stable device id and copies the relayed metadata (serial, touchpad shape, <code>DeviceObjects</code>) and every capability flag onto the existing record, so a capability that appears after connect (a Joy-Con pair joining, a reader arming rule flipping) reaches the consumer without a re-register.</p>
 <hr />
 <h2 id="pairing-handshake">Pairing handshake<a class="headerlink" href="#pairing-handshake" title="Permanent link">&para;</a></h2>
 <p><code>LinkHandshake</code> is an authenticated key exchange over TCP, in four messages: commit, reveal from the responder, reveal from the initiator, confirm.</p>
@@ -2970,7 +3079,7 @@
 <p>On the owner, a stream timer running near 125 Hz calls <code>LinkServer.PushLocalFrame</code> per exposed device, which encodes the state through <code>CustomInputStateCodec</code> and seals an <code>Input</code> datagram. The codec is absolute: every frame is the full state through a present-block bitmask with neutral-omit, so packet loss self-heals and a centered idle pad is three bytes.</p>
 <p>On the consumer, the device list yields a <code>RemotePeerDevice</code> per exposed device. The link server's <code>DeviceConnected</code> event calls <code>InputManager.RegisterPeerDevice</code>, which runs it through <code>FindOrCreateUserDevice</code> and <code>LoadFromExternalDevice</code>. A <code>RemotePeerDevice</code> is an <code>ISdlInputDevice</code>, so it flows through the normal six-step pipeline like any local source. Inbound <code>Input</code> datagrams decode into a back buffer that swaps under a lock, newest-wins by timestamp. After a three-second stale window the device reads as offline and releases any held inputs. The device identity is salted by the peer fingerprint, but not through the path. <code>DevicePath</code> uses an eight-character short form (<code>peer://{Short(fingerprint)}/{deviceId}</code>), which alone would collide across peers whose fingerprints share a first eight hex chars. The full fingerprint salts the collision-safe identity: <code>InstanceGuid</code> is an MD5 over <code>pflink-dev:{fingerprint}:{deviceId}</code> and <code>ProductGuid</code> an MD5 over <code>pflink-prod:{fingerprint}:{VID}:{PID}:{type}</code>. So two peers sharing the same controller model never alias through the non-peer-namespaced <code>ProductGuid</code> reconnect fallback.</p>
 <h3 id="present-block-table">Present-block table<a class="headerlink" href="#present-block-table" title="Permanent link">&para;</a></h3>
-<p>A 16-bit present-block bitmask (<code>Block</code>, a <code>[Flags]</code> enum in <code>CustomInputStateCodec</code>) leads the payload. A block appears only when its data is non-neutral, and the decoder resets to neutral first and applies only the blocks the frame carries. Fourteen blocks are defined:</p>
+<p>A 16-bit present-block bitmask (<code>Block</code>, a <code>[Flags]</code> enum in <code>CustomInputStateCodec</code>) leads the payload. A block appears only when its data is non-neutral, and the decoder resets to neutral first and applies only the blocks the frame carries. Sixteen blocks are defined, and <code>Nfc</code> at bit 15 exhausts the u16 mask:</p>
 <table>
 <thead>
 <tr>
@@ -3050,33 +3159,48 @@
 <td><code>MouseRaw</code></td>
 <td>Unclamped Raw Input mouse counts DX/DY (#200)</td>
 </tr>
+<tr>
+<td>14</td>
+<td><code>CapSense</code></td>
+<td>Capsense touch channels (stick tops and grips, SDL fork API): one byte, one bit per channel</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>Nfc</code></td>
+<td>NFC tag buttons (#241): a span byte plus a button bitmask</td>
+</tr>
 </tbody>
 </table>
 <p><code>Battery</code> sends when the percent is known or the pad reports charging, and always carries both the percent byte and the charging flag, so a "charging, percent unknown" pad keeps its flag on the wire. Battery crosses the link.</p>
-<p>Bits 9-13 are the post-3.5.0 additions, appended strictly after every older block. That ordering is what keeps mixed-version peers compatible without a <code>Version</code> bump: an old decoder reads its known blocks in order, never reaches the new bits, and its final <code>o &lt;= payload.Length</code> check tolerates the trailing bytes. A new decoder facing an old sender simply finds those bits clear.</p>
+<p><code>CapSense</code> carries four wire channels (<code>CapSenseWireSlots</code>, low bit = channel 0) and sends only when something is touched, so an all-untouched frame omits the block. <code>Nfc</code> is variable-length: a span byte (stored as span minus one, so a tag on button 255 still fits) then <code>ceil(span/8)</code> bitmask bytes. Button 0 is "Any NFC Tag" and is registry-independent, so it is always meaningful remotely. Per-tag buttons resolve against the consumer's own <code>NfcTagRegistry</code>, the shared-config assumption every remote binding already makes. The demand that arms the owner's reader travels the other way, on the source-demand lane above.</p>
+<p>Bits 9–15 are the post-3.5.0 additions, appended strictly after every older block. That ordering is what keeps mixed-version peers compatible without a <code>Version</code> bump: an old decoder reads its known blocks in order, never reaches the new bits, and its final <code>o &lt;= payload.Length</code> check tolerates the trailing bytes. A new decoder facing an old sender simply finds those bits clear.</p>
+<h3 id="the-0xe6-extension-tail">The <code>0xE6</code> extension tail<a class="headerlink" href="#the-0xe6-extension-tail" title="Permanent link">&para;</a></h3>
+<p>Bit 15 fills the present mask, so post-<code>Nfc</code> blocks ride an appended extension rather than a widened mask (widening would move the payload start and break every peer): the <code>ExtMagic</code> byte (<code>0xE6</code>), a u16 extension mask, then the payloads in <code>BlockExt</code> order. The read is positional, a "maybe" read, never a required one. The tail exists only when the magic byte is the next thing in the frame, so a peer that predates it never writes one, and a frame that ends before it is complete. It is the same appended-tail compatibility rule the device-list tails use.</p>
+<p>The first extension block is <code>BlockExt.GyroAux</code> (#252): the gyro triple of a combined pair's left Joy-Con, capability-gated like <code>Gyro</code>, <code>Accel</code>, and <code>AccelAux</code> because a zeroed reading is a still controller, not an absent sensor. Decode fails closed on a non-finite float, resetting the frame to neutral so a hostile NaN never reaches the tuning chain. On the consumer the block feeds the aux gyro sources and <code>SourceCoercion.GravityProviderAux</code> on the tuning path, and the <code>HasGyroAux</code> capability (the <code>0xE4</code> device-list tail) gates discoverability, mirroring a local left Joy-Con.</p>
 <hr />
 <h2 id="reverse-output-relay-consumer-game-to-owner-hardware">Reverse output relay (consumer game to owner hardware)<a class="headerlink" href="#reverse-output-relay-consumer-game-to-owner-hardware" title="Permanent link">&para;</a></h2>
 <p>The consumer runs the full config-applied output pipeline for a <code>peer://</code> device. The final hardware write fails (the handle is zero), so each write chokepoint hands its config-baked payload to <code>RemoteLinkOutputRouter</code> instead:</p>
 <ul>
-<li><code>ShipSonyEffect</code> (in <code>SonyEffectWriter</code>) strips the report id and encodes the DualSense or DualShock 4 effect body.</li>
+<li><code>ShipSonyEffect</code> (in <code>PlayStationEffectWriter</code>) strips the report id and encodes the DualSense or DualShock 4 effect body.</li>
 <li><code>ShipVibration</code> (Step 2) encodes the full <code>Vibration</code> (motors, impulse triggers, directional and condition force).</li>
 <li><code>ShipWheel</code> (Step 2) encodes a semantic wheel frame (force, condition, periodic, range, auto-center, RPM-LED mask).</li>
-<li><code>ShipHapticTone</code> encodes the HD haptic tone (#147): one (dominant frequency Hz, amplitude 0..1) pair per rumble tick, slot volume already applied.</li>
+<li><code>ShipHapticTone</code> (in <code>HapticToneService</code>) encodes the HD haptic tone (#147): one (dominant frequency Hz, amplitude 0..1) pair per rumble tick, slot volume already applied.</li>
 <li><code>ShipPlayerIndex</code> encodes the consumer's winning 1-based player number (the smallest displayed number across the slots the pad feeds) for non-Sony shared pads (Nintendo, BT DS3, #191). A DualSense or DualShock 4 peer carries its player LED in the Sony effect body, so it never ships this kind.</li>
 <li><code>ShipGuideLed</code> encodes the consumer's configured Guide/Home LED brightness (0-100 percent) for a shared Xbox GIP pad, 2015 Steam Controller (#209), or Switch HOME-LED pad (Pro Controller, right Joy-Con, pair, charging grip, #226). It has <code>ShipPlayerIndex</code>'s shape, dedups per path, and addresses one peer device by its path.</li>
 <li><code>ShipAudio</code> (in <code>AudioPassthroughService</code>) ships the speaker PCM block on the <code>Audio</code> datagram.</li>
 </ul>
 <p><code>OutputEffectCodec.Kind</code> has six values: <code>SonyEffect = 1</code>, <code>Vibration = 2</code>, <code>Wheel = 3</code>, <code>HapticTone = 4</code>, <code>PlayerIndex = 5</code>, <code>GuideLed = 6</code>.</p>
-<p>The router maps the <code>peer://</code> path to a target (owner fingerprint and link slot, fixed at connect), dedups exact repeats per channel, and sends through <code>PushOutputEffect</code> or <code>PushAudio</code>.</p>
+<p>The router maps the <code>peer://</code> path to a target (owner fingerprint and link slot, fixed at connect) and sends through <code>PushOutputEffect</code> or <code>PushAudio</code>. Dedup varies per channel. Sony effects, scalar vibration, wheel frames, player index, and Guide LED dedup exact repeats. A vibration frame with directional or condition data always ships. The haptic tone dedups only the silent steady state, because an active tone must ship every rumble tick to keep refreshing the owner's hangover expiry.</p>
 <p>On the owner, the <code>OutputReceived</code> handler <code>OnRemoteOutputReceived</code> decodes the frame, resolves the link slot to the physical source device, takes the sole-writer lease (except for a <code>PlayerIndex</code> or <code>GuideLed</code> frame, see below), and applies by kind: a Sony effect through <code>SDL_SendGamepadEffect</code>, a vibration through <code>ForceFeedbackState.SetDeviceForces</code>, a wheel frame through <code>ApplyRemoteWheel</code> (which re-encodes with the owner's own vendor writers, see <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>), a haptic tone (<code>HapticToneHz</code>/<code>HapticToneAmp</code>) re-encoded by the owner's own per-family writer (Joy-Con HD Rumble, Steam 0x8f, Triton 0x83, Deck), a player index through <code>SetPlayerIndex</code> (0-based) for a Nintendo pad (VID <code>0x057E</code>) or <code>Ds3DirectService.TrySetPlayerNumber</code> for a Bluetooth DS3 (<code>0x054C</code>/<code>0x0268</code>), a Guide/Home LED brightness through <code>XboxGipGuideLedWriter.TrySetBrightness</code> for an Xbox GIP pad, <code>SteamHomeLedSetter.TrySet</code> for a 2015 Steam Controller, or <code>SwitchHomeLedSetter.TrySet</code> for a Switch HOME-LED pad (the same writers and gate order as the local apply path), and audio through <code>AudioPassthroughService.FeedRemoteAudio</code> (see <a href="../controller-audio-internals/">Controller Audio Internals</a>). The vibration apply has two special cases. A Fanatec pedal re-routes to its raw-HID pedal-rumble writer. An Xbox One+ impulse-trigger pad, gated by <code>XboxControllerIdentity.IsImpulseTriggerDevice</code>, records through <code>TryRecordXboxImpulseSnapshot</code> and writes all four channels (large and small plus LT and RT) via <code>XboxImpulseHidWriter.Write</code>, with SDL rumble suppressed so the impulse triggers fire. The owner synthesizes nothing here: for the wheel and the haptic tone it is a transport transcoder that re-frames the semantic payload with the writer that owns the real hardware.</p>
 <p><strong>Sole-writer guard.</strong> A device can be both shared out and mapped locally, and output cannot merge. An inbound relay frame stamps the local path with a three-second lease, and the owner's local chokepoints skip their own writes while the lease is fresh. A device that is only lent out (not also mapped locally) has no local writer, so there is no contention. A <code>PlayerIndex</code> or <code>GuideLed</code> frame is exempt from the lease. Both are cosmetic LED updates, not effect claims, so neither blanks a locally-mapped device's rumble or lightbar for the lease window.</p>
 <hr />
 <h2 id="gamepad-only-enforcement">Gamepad-only enforcement<a class="headerlink" href="#gamepad-only-enforcement" title="Permanent link">&para;</a></h2>
-<p><code>InputManager.SetDeviceRestricted</code> populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. <code>IsSlotRestricted(slot)</code> is true when any online restricted device maps to that slot, and it early-outs when no peer is restricted. Three chokepoints honor it:</p>
+<p><code>InputManager.SetDeviceRestricted</code> populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. <code>IsSlotRestricted(slot)</code> is true when any online restricted device maps to that slot, and it early-outs when no peer is restricted. Four chokepoints honor it:</p>
 <ul>
 <li>The KBM virtual controller (Step 5) submits a neutral state for a restricted slot, releasing anything held.</li>
 <li>Macros (Step 4b) are restricted when the slot is restricted or a restricted device is a macro trigger.</li>
 <li>The five Win32 <code>SendInput</code> emitters (key, text, mouse move, mouse button, scroll, in Step 4b) early-return while the macro slot is restricted.</li>
+<li>The menu overlay's key lane (<code>CollectMenuDirectOutputs</code>) suppresses key cells per restricted device via <code>RestrictedSnapshot()</code>. It deliberately gates per device, not per slot, so a restricted peer sharing a slot does not mute a local controller's key cells.</li>
 </ul>
 <p>So a gamepad-only peer can drive gamepad slots but never reach the keyboard, mouse, or scroll.</p>
 <hr />
@@ -3097,7 +3221,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: the persisted Remote Link fields.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

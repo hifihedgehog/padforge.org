@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1428,6 +1430,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel/" class="md-nav__link">
         
   
@@ -1751,10 +1781,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hm-inactivity-timeout" class="md-nav__link">
+  <a href="#inactivity-timeout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HM Inactivity Timeout
+        Inactivity Timeout
       
     </span>
   </a>
@@ -3035,10 +3065,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hm-inactivity-timeout" class="md-nav__link">
+  <a href="#inactivity-timeout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HM Inactivity Timeout
+        Inactivity Timeout
       
     </span>
   </a>
@@ -3452,10 +3482,10 @@
 </table>
 <p>Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most users should leave the default. Raise it when CPU is tight or the machine runs on battery.</p>
 <p>A number field with up / down arrows. Range: 1-16 ms.</p>
-<h3 id="hm-inactivity-timeout">HM Inactivity Timeout<a class="headerlink" href="#hm-inactivity-timeout" title="Permanent link">&para;</a></h3>
-<p>Seconds an HIDMaestro virtual controller stays alive after all its mapped physical devices go offline. Default: <strong>60 s</strong>. Set to <strong>0</strong> to disable (the controller stays around indefinitely).</p>
-<p>When a slot's mapped pads disconnect (laptop sleeps, USB hub unplugged, battery dies), PadForge holds the virtual controller open for this many seconds. If the devices come back, the controller stays in place. If not, PadForge tears it down to free its XInput slot. Slot configuration is kept either way. Plug the devices back in and the virtual controller reappears in the same place.</p>
-<p>Range: 0-3600 seconds.</p>
+<h3 id="inactivity-timeout">Inactivity Timeout<a class="headerlink" href="#inactivity-timeout" title="Permanent link">&para;</a></h3>
+<p>Seconds a virtual controller stays alive after all of its mapped physical devices go offline. Default: <strong>60 s</strong>. Set to <strong>0</strong> to disable (the controller stays around indefinitely). One timeout governs every virtual controller type: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, and MIDI.</p>
+<p>When a slot's mapped pads disconnect (laptop sleeps, USB hub unplugged, battery dies), PadForge holds the virtual controller open for this many seconds. If the devices come back, the controller stays in place. If not, PadForge tears it down to free its kernel slot (the XInput slot, for Xbox types). Surviving controllers of the same type then re-bind to lower kernel slots so the order stays contiguous, and shift back as slots reactivate. Slot configuration is kept either way. Plug the devices back in and the virtual controller comes back on its own.</p>
+<p>Range: 0–3600 seconds.</p>
 <hr />
 <h2 id="window">Window<a class="headerlink" href="#window" title="Permanent link">&para;</a></h2>
 <p>Controls how PadForge acts as a Windows app. Three switches here. Combine them with <strong>Auto-start engine</strong> (in the Input Engine card above) for a fully background install.</p>
@@ -3464,7 +3494,7 @@
 <h3 id="start-minimized">Start Minimized<a class="headerlink" href="#start-minimized" title="Permanent link">&para;</a></h3>
 <p>Opens PadForge with the window hidden. Combine with <strong>Minimize to system tray</strong> for a launch with only a tray icon.</p>
 <h3 id="start-at-login">Start at Login<a class="headerlink" href="#start-at-login" title="Permanent link">&para;</a></h3>
-<p>Adds a Startup-folder shortcut so PadForge runs when you log into Windows.</p>
+<p>Registers a logon scheduled task so PadForge runs when you log into Windows. PadForge is elevated, and Windows will not launch an elevated app from a Startup-folder shortcut, so the task runs it at highest privileges with no UAC prompt.</p>
 <blockquote>
 <p><strong>Hands-off setup:</strong> turn on <strong>Auto-start engine</strong>, <strong>Start minimized</strong>, <strong>Minimize to system tray</strong>, and <strong>Start at login</strong>. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.</p>
 </blockquote>
@@ -3473,7 +3503,7 @@
 <p>Three driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.</p>
 <ul>
 <li><strong>HidHide</strong> card: Install and Uninstall buttons.</li>
-<li><strong>HIDMaestro</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Extended slot.</li>
+<li><strong>HIDMaestro</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.</li>
 <li><strong>Windows MIDI Services</strong> card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).</li>
 </ul>
 <p>PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.</p>
@@ -3494,8 +3524,8 @@
 </tr>
 <tr>
 <td><strong>HIDMaestro</strong></td>
-<td>Single user-mode driver that creates Xbox, PlayStation, and Extended (DirectInput) virtual controllers. 225+ device profiles. Replaces ViGEmBus and vJoy in v3.</td>
-<td>Installs itself the first time you create an Xbox, PlayStation, or Extended slot. Required for those three slot types.</td>
+<td>Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 225+ device profiles. Replaces ViGEmBus and vJoy in v3.</td>
+<td>Installs itself the first time you create an Xbox, PlayStation, Nintendo, or Extended slot. Required for those four slot types.</td>
 </tr>
 <tr>
 <td><strong>Windows MIDI Services</strong></td>
@@ -3712,7 +3742,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

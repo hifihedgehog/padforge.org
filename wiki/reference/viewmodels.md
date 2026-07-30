@@ -3,6 +3,8 @@
 *Every ViewModel class in PadForge: what it backs, what it exposes, and how state flows between the UI and the services layer.*
 
 > **v4 (2026-07-12):** Refreshed for v4. Remote Link (`DashboardViewModel` + `SettingsViewModel`, and the `RemoteLinkTrustedPeer` / `RemoteLinkNearbyPeer` rows), the per-(slot, device) `DeviceSlotConfig` (renamed from `PlayStationSlotConfig`), `KbmSlotConfig` (SOCD / Snap Tap), multi-source mapping rows (`MappingSourceItem`), the mouse-gesture partial, and the Ember dashboard vocabulary all landed since the v3 rewrite. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on [HIDMaestro Deep Dive](hidmaestro-deep-dive.md). If anything here drifts from the live source, the live source wins.
+>
+> **v4.1 (2026-07-30):** The Nintendo output type (#215) joins the family. `PadViewModel` gains the Bass Shakers tab (#236), the slot SOCD card (#240), the flick rotation offset, gyro Acceleration, and the macro Layer dropdown. `MacroItem` carries the #238 / #253 fire-mode wave and per-macro layer scope (#254). Mapping rows and sources gain Flip Output, per-source Acceleration, and the #251 axis-latch macro actions. The Touchpad partial grows the libinput pointer Response, momentum, and pointer-region cards. `DeviceSlotConfig` adds synthetic touch pressure (#239) and the Switch home-LED lane (#226).
 
 ---
 
@@ -62,7 +64,7 @@ Sidebar entry for one virtual controller. Shows controller type icon, slot numbe
 | `Tag` | `string` | Navigation tag (`"Pad1"`–`"Pad16"`). Computed as `$"Pad{PadIndex + 1}"`. |
 | `SlotNumber` | `int` | 1-based controller number among active slots. |
 | `InstanceLabel` | `string` | Per-type instance label (e.g., `"1"`, `"2"`). |
-| `IconKey` | `string` | Resource key for controller type icon (e.g., `"XboxControllerIcon"`, `"DS4ControllerIcon"`, `"ExtendedControllerIcon"`, `"MidiControllerIcon"`, `"KeyboardMouseControllerIcon"`). |
+| `IconKey` | `string` | Resource key for controller type icon (e.g., `"XboxControllerIcon"`, `"DS4ControllerIcon"`, `"NintendoControllerIcon"`, `"ExtendedControllerIcon"`, `"MidiControllerIcon"`, `"KeyboardMouseControllerIcon"`). |
 | `IsEnabled` | `bool` | Virtual controller enabled. |
 | `ConnectedDeviceCount` | `int` | Mapped physical devices connected. |
 | `MappedDeviceCount` | `int` | Physical devices assigned to this slot in config, connected or not. Lets the mini card split "assigned but awaiting" (idle) from "nothing assigned" (cold), the same split the Dashboard card makes. Added by commit `2006ac6b`. |
@@ -567,6 +569,7 @@ Display item for a profile in the Settings list.
 | `HasNoSlots` | `bool` | Computed: all type counts are zero. |
 | `XboxCount` | `int` | Number of Xbox slots in this profile. |
 | `PlayStationCount` | `int` | Number of PlayStation slots. |
+| `NintendoCount` | `int` | Number of Nintendo slots (#215). |
 | `ExtendedCount` | `int` | Number of Extended slots. |
 | `MidiCount` | `int` | Number of MIDI slots. |
 | `KbmCount` | `int` | Number of Keyboard+Mouse slots. |
@@ -657,6 +660,10 @@ The ALL chip binds `TotalCount`. `RefreshCounts()` recomputes every facet count 
 | `AccelAuxX` | `double` | Aux accelerometer X value. |
 | `AccelAuxY` | `double` | Aux accelerometer Y value. |
 | `AccelAuxZ` | `double` | Aux accelerometer Z value. |
+| `HasGyroAuxData` | `bool` | Aux (left-side) gyro data available (#252): the left Joy-Con of a combined pair. Paired with the aux accel readout so the user can see which half a reading comes from before binding it. Cleared by `ClearRawState()`. |
+| `GyroAuxX` | `double` | Aux gyro X value. |
+| `GyroAuxY` | `double` | Aux gyro Y value. |
+| `GyroAuxZ` | `double` | Aux gyro Z value. |
 
 ### Dynamic Slot Assignment Buttons
 
@@ -1417,6 +1424,14 @@ Drive the `ItemsControl`-based Sticks and Triggers tabs. Gamepad presets: 2 stic
 | `AddMacroCommand` | always | Adds a new macro with auto-numbered name. |
 | `RemoveMacroCommand` | `HasSelectedMacro` | Removes the selected macro. |
 
+### Bass Shakers (#236)
+
+The per-slot Bass Shakers tab surface, MappingSet-backed like Menus and persisted through the same dirty callback. `RumbleAudioTabVisible` gates the tab on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback (Customize on: the ForceFeedbackEnabled checkbox decides; Customize off: the catalog profile descriptor must carry a PID FFB block). The card binds `RumbleAudioEnabled`, `RumbleAudioEndpointId` (output device picker), `RumbleAudioChannelMode` (Mono / Controller Stereo), `RumbleAudioMasterGain`, and `RumbleAudioVoices`, an `ObservableCollection` of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into `MappingSet.RumbleAudio` (`RumbleAudioConfig`), so the routing travels with profiles and Copy / Paste.
+
+### Slot SOCD (#245)
+
+Controller-button SOCD, distinct from `KbmSlotConfig`'s key SOCD (#205). `SocdCardVisible` and `KbmSocdCardVisible` are mutually exclusive by slot type. The card binds `SocdMode` over `MappingSet.SocdMode` (`AvailableSlotSocdModes`: Off / Last Wins / First Wins / Neutral), and `SocdPairItems` (`SlotSocdPairItem`) edits the opposing button pairs from `SocdButtonOptions`. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.
+
 ### Menus (#9)
 
 Radial / touch menus for this slot. Slot-level like Macros: the collection wraps the LIVE `MenuDefinitionEntry` list on the slot's `MappingSet` (write-through), and every edit fires `ConfigItemDirtyCallback` so the autosave path persists the set. Rows are [MenuEditorItem](#menueditoritem) instances.
@@ -1820,7 +1835,10 @@ An entry with `DeviceGuid == Guid.Empty` is device-free: the evaluator resolves 
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `TriggerMode` | `MacroTriggerMode` | `OnPress` | `OnPress`, `OnRelease`, `WhileHeld`, `Always`, or `CustomExpression` (v3.2). |
+| `TriggerMode` | `MacroTriggerMode` | `OnPress` | Twelve modes, ordinals pinned: `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253). |
+| `TriggerHoldMs` | `int` | `500` | (#244) Hold threshold shared by `HoldForMs` and `ShortPress`, the tap-vs-hold pair. Has its own Reset command. |
+| `TriggerDoublePressMs` | `int` | `442` | (#244) Multi-press window for the Single / Double / Triple modes. Has its own Reset command. |
+| `LayerMask` | `string` | `""` | (#253/#254) Per-macro shift-layer scope. Empty = fires on any layer; a layer name limits the macro to that layer, Base included. Bound to the Layer dropdown (`Macro_Layer` / `Macro_Layer_Any` strings), gated like mapping rows. |
 | `IsNotAlwaysMode` | `bool` | - | Computed: `TriggerMode != Always`. Controls trigger UI visibility. |
 | `ConsumeTriggerButtons` | `bool` | `true` | Remove trigger buttons from Gamepad state on fire. |
 
@@ -1978,13 +1996,13 @@ For `MacroActionType.DisconnectController`. The target is set on the action, not
 
 ### Supporting Enums (MacroItem.cs)
 
-**MacroTriggerMode:** `OnPress`, `OnRelease`, `WhileHeld`, `Always`, `CustomExpression` (v3.2)
+**MacroTriggerMode** (ordinals pinned): `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8, deferred single), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253; shares `TriggerHoldMs` with `HoldForMs` to compose tap-vs-hold on one button)
 
 **MacroTriggerSource:** `InputDevice`, `OutputController`
 
 **MacroRepeatMode:** `Once`, `FixedCount`, `UntilRelease`
 
-**MacroActionType** (append-only, since the clipboard serializes these as ints, so members are never reordered): `ButtonPress`, `ButtonRelease`, `KeyPress`, `KeyRelease`, `Delay`, `AxisSet`, `SystemVolume`, `AppVolume`, `MouseMove`, `MouseButtonPress`, `MouseButtonRelease`, `MouseScroll`, `ToggleTouchpadOverlay` (v3.2), `LightbarColor` / `LightbarColorClear` / `LightbarModeSet` / `LightbarModeCycle` (v3.1+), `SetGyroEngaged` (#120), `Rumble` / `RumbleStop` (v3.1+), `RumbleTrigger` / `RumbleTriggerStop` (#102), `PlaySound` / `SoundStop` (#83), `MouseRecenter` (#108), `MouseFixPosition` (#109), `MouseLimitRegion` (#110), `DisconnectController` (#162), `RunProgram` (launch an external program/file), `TextBlock` (#201, Unicode text injection), `PointerModeCycle` / `PointerModeSet` (#203, Wii pointer mode), `GuideLedBrightness` (#209)
+**MacroActionType** (append-only, since the clipboard serializes these as ints, so members are never reordered): `ButtonPress`, `ButtonRelease`, `KeyPress`, `KeyRelease`, `Delay`, `AxisSet`, `SystemVolume`, `AppVolume`, `MouseMove`, `MouseButtonPress`, `MouseButtonRelease`, `MouseScroll`, `ToggleTouchpadOverlay` (v3.2), `LightbarColor` / `LightbarColorClear` / `LightbarModeSet` / `LightbarModeCycle` (v3.1+), `SetGyroEngaged` (#120), `Rumble` / `RumbleStop` (v3.1+), `RumbleTrigger` / `RumbleTriggerStop` (#102), `PlaySound` / `SoundStop` (#83), `MouseRecenter` (#108), `MouseFixPosition` (#109), `MouseLimitRegion` (#110), `DisconnectController` (#162), `RunProgram` (launch an external program/file), `TextBlock` (#201, Unicode text injection), `PointerModeCycle` / `PointerModeSet` (#203, Wii pointer mode), `GuideLedBrightness` (#209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40), `MouseNudge` (41), `CycleTapList` (42), `ToggleMouseButton` (43), `ToggleVcAxis` (44), `RepeatVcAxisWhileHeld` (45), `ToggleWheel` (46), `AxisAdd` (47, #237), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251). The append-only rule is stated in code beside the enum.
 
 **MacroDisconnectTarget** (#162): `TriggeringDevice` (0), `SpecificDevice` (1), `SlotDevices` (2), `AllDevices` (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.
 

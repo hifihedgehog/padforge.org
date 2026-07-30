@@ -16,7 +16,7 @@ Feedback travels the other way too. When the game on the consumer drives the sha
 
 - Rumble (both body motors)
 - Xbox trigger rumble (the impulse-trigger motors on Xbox One and later pads)
-- Wheel force feedback (native on Logitech, Fanatec, and Thrustmaster, with other wheels falling back to rumble)
+- Wheel force feedback (native on Logitech, Fanatec, and Thrustmaster, with other wheels and FFB joysticks driven through their DirectInput haptic effects, and rumble as the last fallback)
 - DualSense adaptive triggers
 - Lightbar color
 - Player-number LEDs
@@ -25,6 +25,19 @@ Feedback travels the other way too. When the game on the consumer drives the sha
 - HD haptic tones (pads with no speaker that play macro sounds through their actuators: Joy-Con, Switch Pro, Steam Controller, Steam Deck)
 
 So a wheel shared from the den shakes in the den while the race runs on the PC in the office, and a DualSense lights its bar and buzzes its triggers on the couch while the game plays upstairs.
+
+---
+
+## NFC tag taps
+
+Tag reads travel with the input. Tap a tag on a shared Switch controller that has an NFC reader (a right Joy-Con, a Joy-Con pair, or a Pro Controller) and the tap fires [NFC tag](../features/nfc-tags.md) triggers on the PC using the device, so a tag can start a macro there just like on a local controller.
+
+- Binding a tag trigger is all it takes. The PC using the device reports the demand across the link, and the owner powers up the controller's reader.
+- **Any NFC Tag** fires with no registration on either PC.
+- A named-tag trigger matches by the tag's button number, and each PC numbers its own registered tags. Register the same tags in the same order on both PCs so the numbers line up.
+- A standalone NFC reader shares across the link like any other device and brings its tag names with it, so its tags only need registering on the PC it is plugged into.
+- The Switch controller must be on Bluetooth. A USB-linked Switch controller cannot read tags, shared or not.
+- Tag taps trigger macros, so a gamepad-only pairing blocks them.
 
 ---
 
@@ -109,7 +122,7 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 ## Limits
 
 - **Discovery is automatic on your local network.** For internet play, put the PCs on one virtual network with a VPN like ZeroTier and use **Or Connect by Address (Advanced)**.
-- **Gamepad-style devices.** Remote Link shares controllers, wheels, and HOTAS hardware, not arbitrary USB devices.
+- **Input devices only.** Remote Link shares what shows on the [Devices](../features/devices.md) page (controllers, wheels, HOTAS, keyboards, mice, MIDI, NFC readers), not arbitrary USB hardware.
 - **Every PC runs PadForge.** Remote Link is PadForge-to-PadForge.
 
 ---
@@ -124,8 +137,9 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 - [Wheel](../features/wheel.md): native wheel force feedback, including over Remote Link.
 - [Lighting](../features/lighting.md): the lightbar, player LEDs, and Guide button LED that return over the link.
 - [Controller Audio](../features/controller-audio.md): the speaker audio that returns over the link.
+- [NFC Tags](../features/nfc-tags.md): the tag triggers a shared Switch controller or reader fires over the link.
 - [Troubleshooting](../troubleshooting.md): help when a PC does not appear or pairing fails.
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

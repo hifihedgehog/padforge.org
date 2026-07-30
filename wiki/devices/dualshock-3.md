@@ -47,7 +47,7 @@ The controller carries the same identity over USB and Bluetooth. A mapping you s
 | **USB** | Plug in with a cable and play. No pairing. |
 | **Bluetooth** | Connects after the one-time pairing above. Press **PS** to wake it. |
 | **Buttons and sticks** | The full pad maps like any other gamepad on the [Mappings](../features/mappings.md) tab. |
-| **Pressure buttons** | Ten buttons report analog pressure, each as its own source: the four face buttons, both top shoulder buttons, and the four D-pad directions. |
+| **Pressure buttons** | Ten buttons report analog pressure, each as its own source. They appear as **Axis 6** through **Axis 15**. The legend is [below](#pressure-sensitive-buttons). |
 | **Motion** | The gyro and accelerometer drive gyro aiming and the motion server. The DS3's gyro senses turning left and right only. |
 | **Rumble** | Both motors, over USB and Bluetooth. |
 | **Player light** | Lights the controller's number, 1 through 4. |
@@ -66,7 +66,22 @@ The DualShock 3's built-in motion sensors flow through the same pipeline as any 
 
 ## Pressure-sensitive buttons
 
-Ten of the controller's buttons sense how hard you press. Each one appears in the mapping picker as its own analog source, so you can map it to a trigger, a stick axis, or a button with a threshold. The four face buttons, the two top shoulder buttons, and the four D-pad directions all report pressure.
+Ten of the controller's buttons sense how hard you press. Each one is its own analog source, so you can map it to a trigger, a stick axis, or a button with a threshold. In the mapping picker they carry generic names, **Axis 6** through **Axis 15**, without the button printed on them. This legend tells them apart:
+
+| Source | Button |
+|---|---|
+| Axis 6 | Cross |
+| Axis 7 | Circle |
+| Axis 8 | Square |
+| Axis 9 | Triangle |
+| Axis 10 | L1 |
+| Axis 11 | R1 |
+| Axis 12 | D-pad Up |
+| Axis 13 | D-pad Down |
+| Axis 14 | D-pad Left |
+| Axis 15 | D-pad Right |
+
+The **Record** button won't find these for you. Pressing a face button during a recording captures the digital press, which wins over the slower-rising pressure axis. Pick the axis from the picker by the legend above.
 
 ---
 
@@ -79,6 +94,8 @@ Remove the controller from the [Devices](../features/devices.md) list and its Bl
 ## Coexisting with other Bluetooth devices
 
 The PlayStation Bluetooth driver only steps in while a DualShock 3 is paired. With no PlayStation controller paired, it stays dormant and leaves your other Bluetooth devices alone. Pairing a controller arms it, removing every controller stands it back down.
+
+One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.
 
 ---
 
@@ -106,4 +123,4 @@ The PlayStation Bluetooth driver only steps in while a DualShock 3 is paired. Wi
 
 ---
 
-*Last updated for PadForge 4.0.0.*
+*Last updated for PadForge 4.1.0.*

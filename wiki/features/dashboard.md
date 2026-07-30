@@ -18,9 +18,9 @@ Eight sections, stacked top to bottom.
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Web Controller** | [Browser-based controller](../guides/web-controller.md) for phones, tablets, and other PCs. |
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
-| **Menu Overlay** | The on-screen ring or grid for [radial and touch menus](../guides/menus.md). |
+| **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
-| **Drivers** | Install status for [HidHide and Windows MIDI Services](driver-management.md). |
+| **Drivers** | Install status for [HidHide and MIDI Services](driver-management.md). |
 
 Missing drivers, disconnected controllers, and a stopped engine all surface here.
 
@@ -33,7 +33,7 @@ The engine card sits at the top with four elements in a row.
 | Element | Description |
 |---------|-------------|
 | **Power flame** | Starts and stops the engine. The flame's look shows state (see below). |
-| **Status text** | "Forging", "Idle", "Stopping", or "Stopped". |
+| **Status text** | "Forging", "Idle", "Stopping…", or "Stopped". |
 | **Polling frequency** | Live polling rate in Hz, e.g. `987.3 Hz`. Dash when stopped. |
 | **Device count** | Online vs. total, e.g. `2/3 devices online`. Online means plugged in right now. Total includes remembered devices. |
 
@@ -65,7 +65,7 @@ Each [virtual controller slot](controller-slots.md) gets a card under the engine
 |---------|----------|-------------|
 | **Power flame** | Top-left | Slot status, shown as a flame (see below). Click to enable or disable. |
 | **Slot number** | Next to the flame | Global controller number (1, 2, 3, ...). |
-| **Type track** | Second row | A recessed segmented strip of type icons: Xbox, PlayStation, Extended, Keyboard+Mouse, MIDI. The active type is lit ember. The others are dim. Click a dim icon to switch type. When Windows MIDI Services is missing, the MIDI icon alone shows a no-entry cursor and a tooltip saying it's required. The other types have no such gate. |
+| **Type track** | Second row | A recessed segmented strip of six type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI. The active type is lit ember. The others are dim. Click a dim icon to switch type. When Windows MIDI Services is missing, the MIDI icon alone shows a no-entry cursor and a tooltip saying it's required. The other types have no such gate. |
 | **Per-type instance number** | After the type track | Position within the type, e.g. `#2` for the second Xbox slot. |
 | **Device roster** | Third row | Every mapped device, each with a device-class icon, a Bluetooth icon on wireless links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty. |
 | **Status text + counts** | Fourth row | The slot state in words (see below), then `2 mapped, 1 connected`. |
@@ -81,6 +81,7 @@ The power flame and the status text both track the slot's state. Hovering the fl
 | **Forging** | Ember, with a glow | Enabled, a device is connected, output is live. Holds through the HIDMaestro inactivity grace period (default 60 s). |
 | **Idle** | Ember, with a glow | A mapped device dropped offline. The controller holds through its grace period, so the flame stays the same as Forging until the timeout tears it down. |
 | **Awaiting devices** | Gold | Enabled and mapped, but nothing is connected and the controller is down, or the engine is stopped. |
+| **Virtual controller failed** | Gold. Steel outline if nothing is mapped | The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return. |
 | **Cold** | Steel outline | Enabled with no devices mapped. |
 | **Initializing** | Flashing ember | The controller is coming up. |
 | **Disabled** | Steel outline | Turned off with the power flame. |
@@ -89,7 +90,7 @@ Click anywhere on a card (except the delete or power flame) to open the slot's c
 
 ### Reordering slots
 
-Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Extended, Keyboard+Mouse, and MIDI each reorder on their own. Cross-type drops are ignored. The per-type instance number (the `#2` on the second Xbox slot) updates as soon as you drop.
+Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, and MIDI each reorder on their own. Cross-type drops are ignored. The per-type instance number (the `#2` on the second Xbox slot) updates as soon as you drop.
 
 Same-profile reorders are a pointer swap. No kernel rebuild, no game disconnection. Different-profile reorders rebuild only the positions whose profile changed. See [Controller Slots](controller-slots.md#what-happens-on-reorder).
 
@@ -105,7 +106,7 @@ Broadcasts gyroscope and accelerometer data over UDP using the DSU/Cemuhook prot
 
 | Control | Description |
 |---------|-------------|
-| **Enable DSU motion server** | Starts and stops the server. |
+| **Enable DSU motion server (CemuHook Motion Provider protocol)** | Starts and stops the server. |
 | **Port** | UDP port. Default `26760`. Change only on conflict. Range `1024-65535`. |
 | **Status indicator** | A flame beside the status text. Ember when running, a steel outline when stopped. |
 
@@ -121,7 +122,7 @@ A browser-based controller you can open from any device on the same network.
 
 | Control | Description |
 |---------|-------------|
-| **Enable web controller** | Starts and stops the web server. |
+| **Enable web controller server** | Starts and stops the web server. |
 | **Port** | HTTP/WebSocket port. Default `8080`. Range `1024-65535`. |
 | **Status indicator** | A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on `<url>`". |
 
@@ -152,9 +153,15 @@ See [Remote Link](../guides/remote-link.md) for full details.
 
 ---
 
-## Menu Overlay
+## Overlays
 
-One checkbox, **Menu Overlay**, on by default. It shows the on-screen ring or grid while a radial or touch [menu](../guides/menus.md) is engaged. Menus still fire with the overlay off, so layouts you know by muscle memory can run without the picture. Per-menu position, size, and opacity live on each menu's own settings on the [Menus](../guides/menus.md) tab.
+The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.
+
+| Checkbox | What it shows |
+|----------|---------------|
+| **Menu Overlay** | The on-screen ring or grid while a radial or touch [menu](../guides/menus.md) is engaged. Menus still fire with the overlay off, so layouts you know by muscle memory can run without the picture. Per-menu position, size, and opacity live on each menu's own settings on the [Menus](../guides/menus.md) tab. |
+| **Shift layer flyout** | A flyout with the engaged shift layer's name and color while any slot holds a non-Base layer, whichever page is open. When several slots hold one at once, the selected pad wins, then the lowest-numbered slot. |
+| **Profile switch overlay** | The new profile's name when a macro switches the active profile. Automatic per-app switches don't show it. They flare the profile pill in the status bar instead. |
 
 ---
 
@@ -180,7 +187,7 @@ Install status for each driver. Name on the left, status on the right.
 | Driver / Service | Purpose | When to install |
 |-----------------|---------|-----------------|
 | **HidHide** | Hides physical controllers from games to prevent double input. | Games see both the physical and the virtual controller. |
-| **Windows MIDI Services** | MIDI virtual controller output. Requires Windows 11 24H2 or later. | You want to send MIDI to DAWs, synths, or VJ tools. |
+| **MIDI Services** | MIDI virtual controller output through Windows MIDI Services. Requires Windows 11 24H2 (build 26100) or later. | You want to send MIDI to DAWs, synths, or VJ tools. |
 
 When Windows MIDI Services is missing, the MIDI type icon on a slot card shows a no-entry cursor and a tooltip saying it's required. Install or remove drivers from [Settings](settings.md). HIDMaestro and the full driver list live on the [Driver Management](driver-management.md) page.
 
@@ -199,4 +206,4 @@ When Windows MIDI Services is missing, the MIDI type icon on a slot card shows a
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

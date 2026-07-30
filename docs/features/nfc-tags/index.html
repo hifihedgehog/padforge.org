@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1428,6 +1430,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel/" class="md-nav__link">
         
   
@@ -1527,6 +1557,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#switch-controllers-as-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switch controllers as readers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#registering-a-tag" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1549,10 +1590,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-a-tag-in-a-macro" class="md-nav__link">
+  <a href="#binding-a-tag" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Using a tag in a macro
+        Binding a tag
       
     </span>
   </a>
@@ -2629,6 +2670,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#switch-controllers-as-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switch controllers as readers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#registering-a-tag" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2651,10 +2703,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-a-tag-in-a-macro" class="md-nav__link">
+  <a href="#binding-a-tag" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Using a tag in a macro
+        Binding a tag
       
     </span>
   </a>
@@ -2690,9 +2742,9 @@
 
 
 <h1 id="nfc-tags">NFC Tags<a class="headerlink" href="#nfc-tags" title="Permanent link">&para;</a></h1>
-<p><em>Tap an NFC tag on a contactless reader to fire a macro. Amiibo-style figures, tag stickers, and cards all work.</em></p>
+<p><em>Tap an NFC tag on a contactless reader or on a Switch controller to fire a macro or press a mapped button.</em></p>
 <p><img alt="Register / Manage NFC Tags dialog" src="../../images/nfc-register.png" /></p>
-<p>PadForge reads NFC tags through a contactless smart-card reader (PC/SC class, such as an ACR122U). Tapping a tag can run a <a href="../../guides/macros/">macro</a>. Register a tag once, give it a name, and bind it like any other button.</p>
+<p>PadForge reads NFC tags from two kinds of hardware: a contactless smart-card reader (PC/SC class, such as an ACR122U) and the tag reader built into Switch controllers. Amiibo-style figures, tag stickers, and cards all work. Register a tag once, give it a name, and bind it like any other button. Both paths share one tag registry, so a tag registered on either binds on either.</p>
 <hr />
 <h2 id="the-reader-as-a-device">The reader as a device<a class="headerlink" href="#the-reader-as-a-device" title="Permanent link">&para;</a></h2>
 <p>Plug in a PC/SC reader and it shows up on the <a href="../devices/">Devices</a> page as a device typed <strong>NFC Reader</strong>. Select its card to manage tags and to watch taps live.</p>
@@ -2703,29 +2755,63 @@
 </ul>
 <p>A single tap fires the button once.</p>
 <hr />
+<h2 id="switch-controllers-as-readers">Switch controllers as readers<a class="headerlink" href="#switch-controllers-as-readers" title="Permanent link">&para;</a></h2>
+<p>Since PadForge 4.1.0, the tag reader built into a Switch controller works too:</p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Right Joy-Con</td>
+<td>Standalone or as half of a pair</td>
+</tr>
+<tr>
+<td>Joy-Con pair</td>
+<td>The right Joy-Con carries the reader</td>
+</tr>
+<tr>
+<td>Pro Controller</td>
+<td>Original Switch model</td>
+</tr>
+</tbody>
+</table>
+<p>The controller's card shows an <strong>NFC</strong> chip in its capabilities line. The controller exposes the same sources the PC/SC reader does: <strong>Any NFC Tag</strong> plus one source per named tag.</p>
+<p>The reader powers on only while an NFC source is bound or the <strong>Register / Manage NFC Tags</strong> dialog is open. Unused, it costs nothing.</p>
+<p>Limitations, stated plainly:</p>
+<ul>
+<li>Bluetooth only. Over USB the controller's reader never activates.</li>
+<li>Original Switch controllers only. Switch 2 controllers cannot read tags in PadForge.</li>
+</ul>
+<hr />
 <h2 id="registering-a-tag">Registering a tag<a class="headerlink" href="#registering-a-tag" title="Permanent link">&para;</a></h2>
 <ol>
-<li>On the <a href="../devices/">Devices</a> page, select the NFC reader.</li>
+<li>On the <a href="../devices/">Devices</a> page, select the NFC reader or the Switch controller.</li>
 <li>Click <strong>Register / Manage NFC Tags</strong>.</li>
-<li>In the dialog, tap a tag on the reader. Its UID is captured.</li>
+<li>Tap a tag on the reader or on the controller. Its UID is captured.</li>
 <li>Type a name for the tag.</li>
 <li>Click <strong>Register</strong>.</li>
 </ol>
+<p>The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. In that case its status line reads "Tap a tag on your Switch controller…".</p>
 <p>The dialog lists your registered tags. Each row shows its name and UID with a <strong>Remove</strong> button. Tap another tag to add more.</p>
-<p>Tags are keyed by UID, not by reader, so they carry over when you swap readers. They persist across restarts.</p>
+<p>Tags are keyed by UID, not by reader. They carry over when you swap readers, from a reader to a controller, and across restarts.</p>
 <hr />
 <h2 id="live-tag-preview">Live tag preview<a class="headerlink" href="#live-tag-preview" title="Permanent link">&para;</a></h2>
 <p>With the NFC reader selected, the Devices page lists your named tags, plus an <strong>Any NFC Tag</strong> row. Tap a tag and its row highlights, so you can confirm the reader sees it and check which tag you just touched.</p>
 <!-- SCREENSHOT: nfc-live-preview -->
 <p><img alt="NFC reader named-tag list with a tapped tag row highlighted" src="../../images/nfc-live-preview.png" /></p>
 <hr />
-<h2 id="using-a-tag-in-a-macro">Using a tag in a macro<a class="headerlink" href="#using-a-tag-in-a-macro" title="Permanent link">&para;</a></h2>
+<h2 id="binding-a-tag">Binding a tag<a class="headerlink" href="#binding-a-tag" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Add the NFC reader as an input device on the same <a href="../controller-slots/">slot</a> as the macro.</li>
-<li>In the macro trigger, pick the NFC reader as the input device.</li>
-<li>Pick <strong>Any NFC Tag</strong> or a specific named tag.</li>
+<li>Add the device that reads the tag (the PC/SC reader or the Switch controller) as an input device on the same <a href="../controller-slots/">slot</a> as the mapping or macro.</li>
+<li>Pick that device in the mapping row's source picker or in the macro trigger.</li>
+<li>Pick <strong>Any NFC Tag</strong> or a specific named tag. A named tag shows as <strong>NFC Tag:</strong> followed by its name.</li>
 </ol>
-<p>Tapping that tag runs the macro. See <a href="../../guides/macros/">Macros</a> for building the action sequence.</p>
+<p>Tags work as ordinary mapping-row sources, so a tap can press a virtual button directly. In a <a href="../../guides/macros/">macro</a> trigger, the tap runs the action sequence instead.</p>
+<p>Bindings follow the tag itself, not its name. Rename a tag and its bindings stay put.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2733,7 +2819,7 @@
 <li><a href="../../guides/macros/">Macros</a>: bind a tag tap to an action sequence.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

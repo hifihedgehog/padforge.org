@@ -48,7 +48,7 @@ A single dropdown selects the active base mode. Fourteen entries. Player Number 
 | Strobe — Square-Wave Flash | Hard on/off square-wave flash at the configured period. |
 | Rainbow Cycle | Smooth hue rotation through the full color wheel. |
 | Color Cycle | Steps through the configured palette. Smooth blend is a toggle. |
-| Battery — Gradient by Charge Level | Color reflects current battery level (red → yellow → green). DualSense and DualShock 4 battery reads. |
+| Battery — Gradient by Charge Level | A linear blend between the configured Low Battery and Full Battery colors, driven by the pad's reported battery percent. Defaults red at 0 % and green at 100 %. DualSense and DualShock 4 battery reads. |
 | Audio Pulse — Static Color | Modulates the configured base color by the system audio peak. |
 | Audio Pulse — Random Color per Beat | A new random hue on each detected onset. |
 | Audio Pulse — Rainbow Cycle | Hue rotation modulated by audio peak. |
@@ -108,16 +108,24 @@ Visible for Rainbow Cycle only. Range 0–100. Default 100. Scales the hue rotat
 
 ---
 
+## Battery colors
+
+Visible for Battery — Gradient by Charge Level only. Two bordered cards side-by-side: Low Battery and Full Battery, laid out like the audio-band cards. Each has a color picker, a swatch preview, and R/G/B sliders with per-channel reset buttons. These cards have no hex input.
+
+The lightbar blends linearly from the Low Battery color at 0 % charge to the Full Battery color at 100 %, following the pad's reported battery level. Defaults are red at empty and green at full. The blend is a straight linear mix with no separately configurable midpoint.
+
+---
+
 ## Color cycle palette
 
 The Color Cycle base mode and the Cycle Through Palette overlay each keep their own palette. The Color Cycle palette shows below the mode dropdown when Color Cycle is the base mode. The overlay palette shows below the Input Reactive dropdown when the overlay is set to Cycle Through Palette. Editing one leaves the other untouched.
 
 Each palette is a wrapping list of swatches. Each entry has an in-place color picker with hex and RGB sliders, plus a remove button.
 
-- **Add Color** appends a new swatch with a hue rolled to be distinct from the last entry.
+- **Add Color** appends a new swatch picked to differ from the last entry. It steps through the four primaries: a red last entry adds green, green adds blue, blue adds yellow, anything else adds red.
 - **Reset Palette** restores the four default colors (red, green, blue, yellow).
 
-A palette can hold any number of entries. No fixed cap.
+A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.
 
 Color Cycle exposes a "Blend smoothly between palette colors" checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.
 
@@ -197,7 +205,7 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
 - For Color Cycle, "Blend smoothly" looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.
-- For the Input Reactive Cycle variant, a non-empty palette is required. The Random and Base Color variants don't use the palette.
+- Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.
 - The Audio Bands modes assume the Quiet-to-Medium and Medium-to-Loud thresholds are in ascending order. Reversing them produces the wrong band selection.
 
 ---

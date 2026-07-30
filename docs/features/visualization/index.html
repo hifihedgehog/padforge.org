@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1428,6 +1430,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel/" class="md-nav__link">
         
   
@@ -1670,6 +1700,17 @@
     <span class="md-ellipsis">
       
         PlayStation touchpad preview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nintendo-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nintendo preview
       
     </span>
   </a>
@@ -2817,6 +2858,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#nintendo-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nintendo preview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#extended-schematic" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2904,6 +2956,11 @@
 <td>Yes</td>
 </tr>
 <tr>
+<td><strong>Nintendo</strong></td>
+<td>2D Switch Pro overlay</td>
+<td>No (2D only, no 3D mesh)</td>
+</tr>
+<tr>
 <td><strong>Extended</strong></td>
 <td>Procedural schematic</td>
 <td>No</td>
@@ -2923,7 +2980,7 @@
 <p>On Xbox and PlayStation slots a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads <strong>Switch to 2D view</strong> or <strong>Switch to 3D view</strong> depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.</p>
 <hr />
 <h2 id="3d-model">3D model<a class="headerlink" href="#3d-model" title="Permanent link">&para;</a></h2>
-<p>The active model swaps with the assigned profile. Four meshes cover every controller: Xbox 360, a shared Xbox One body used for Xbox One, Elite, Series, and Adaptive profiles, DualShock 4, and DualSense. Xbox Series profiles add a clickable Share button on the shared Xbox One body. The other Xbox profiles use the same body with the Share region inert, so it doesn't respond to hover or clicks. There is no separate Series 3D mesh. The distinct Series artwork lives only in the 2D overlay.</p>
+<p>The active model swaps with the assigned profile. Four meshes cover the Xbox and PlayStation slots: Xbox 360, a shared Xbox One body used for Xbox One, Elite, Series, and Adaptive profiles, DualShock 4, and DualSense. Xbox Series profiles add a clickable Share button on the shared Xbox One body. The other Xbox profiles use the same body with the Share region inert, so it doesn't respond to hover or clicks. There is no separate Series 3D mesh. The distinct Series artwork lives only in the 2D overlay. Nintendo slots have no 3D mesh at all. Like the Series artwork, the Switch Pro art exists only in 2D.</p>
 <p>Each model registers hit regions for every button, stick, trigger, and the touchpad. Click anywhere on the model to target that control.</p>
 <h3 id="camera-controls">Camera controls<a class="headerlink" href="#camera-controls" title="Permanent link">&para;</a></h3>
 <table>
@@ -3095,16 +3152,22 @@
 <tbody>
 <tr>
 <td>3D model</td>
-<td>Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the active touches reported by the source controller.</td>
+<td>Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the slot's combined touchpad output.</td>
 </tr>
 <tr>
 <td>2D overlay</td>
-<td>Finger dots drawn on a flat representation of the touchpad area. Same source data as the 3D view.</td>
+<td>Finger dots drawn on a flat representation of the touchpad area. Same data as the 3D view.</td>
 </tr>
 </tbody>
 </table>
 <p>The touchpad surface is a click target for mapping. Click anywhere on the touchpad in either view to start recording a Touchpad Click mapping. During Map All on PlayStation outputs, Touchpad Click comes after the buttons and axes, then the Motion Gyro and Motion Accelerometer rows finish the sequence.</p>
-<p>The spheres and dots render only when a DualShock 4 or DualSense feeds the slot. They follow the finger positions reported by that controller.</p>
+<p>The spheres and dots follow the slot's Touchpad mapping rows (<strong>Touchpad 1 Finger 1 X</strong> through <strong>Touchpad 1 Finger 2 Touch</strong>). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.</p>
+<hr />
+<h2 id="nintendo-preview">Nintendo preview<a class="headerlink" href="#nintendo-preview" title="Permanent link">&para;</a></h2>
+<p>Nintendo slots always show a flat 2D Switch Pro diagram. No 3D mesh exists for the Switch Pro, so the 2D/3D toggle is hidden.</p>
+<p><img alt="Nintendo slot preview" src="../../images/pad-nintendo-configbar.png" /></p>
+<p>The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.</p>
+<p>A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.</p>
 <hr />
 <h2 id="extended-schematic">Extended schematic<a class="headerlink" href="#extended-schematic" title="Permanent link">&para;</a></h2>
 <p>Extended slots show a procedurally generated schematic instead of a controller model, regardless of which HIDMaestro profile is active. The layout rebuilds when the active profile or count overrides change.</p>
@@ -3214,7 +3277,7 @@
 <li><a href="../../guides/macros/">Macros</a>: trigger and action authoring that uses the same recording flow.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

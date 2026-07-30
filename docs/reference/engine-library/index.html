@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2078,15 +2108,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#extendedrawstate" class="md-nav__link">
+  <a href="#rawhidstate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ExtendedRawState
+        RawHidState
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ExtendedRawState">
+    <nav class="md-nav" aria-label="RawHidState">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4934,15 +4964,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#extendedrawstate" class="md-nav__link">
+  <a href="#rawhidstate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ExtendedRawState
+        RawHidState
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ExtendedRawState">
+    <nav class="md-nav" aria-label="RawHidState">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -7216,7 +7246,7 @@
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    subgraph &quot;Output State Types. PadForge.Engine&quot;
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        GP[Gamepad&lt;br/&gt;XInput-layout struct]
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        VRS[ExtendedRawState&lt;br/&gt;arbitrary axes · 128 buttons · 4 POVs]
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        VRS[RawHidState&lt;br/&gt;arbitrary axes · 128 buttons · 4 POVs]
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        KRS[KbmRawState&lt;br/&gt;256 VK codes · mouse deltas]
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        MRS[MidiRawState&lt;br/&gt;128 notes · 128 CCs]
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    end
@@ -7313,7 +7343,7 @@
 <ul>
 <li><a href="#gamepad">Gamepad</a> (GamepadTypes.cs)</li>
 <li><a href="#touchpadstate">TouchpadState</a> (GamepadTypes.cs)</li>
-<li><a href="#extendedrawstate">ExtendedRawState</a> (GamepadTypes.cs)</li>
+<li><a href="#rawhidstate">RawHidState</a> (GamepadTypes.cs)</li>
 <li><a href="#customcontrollerlayout">CustomControllerLayout</a> (CustomControllerLayout.cs)</li>
 <li><a href="#kbmrawstate">KbmRawState</a> (GamepadTypes.cs)</li>
 <li><a href="#midirawstate">MidiRawState</a> (GamepadTypes.cs)</li>
@@ -7529,18 +7559,18 @@
 </code></pre></div>
 <p>X / Y coordinates are normalized [0, 1] across the active touch surface. <code>PacketCounter</code> increments only on finger-state transitions (not every frame) so the DS4 / DualSense touch encoder can fire its own internal touch-event accounting.</p>
 <hr />
-<h2 id="extendedrawstate">ExtendedRawState<a class="headerlink" href="#extendedrawstate" title="Permanent link">&para;</a></h2>
+<h2 id="rawhidstate">RawHidState<a class="headerlink" href="#rawhidstate" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/GamepadTypes.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine</code></p>
-<p>Raw output state for Extended-category virtual controllers and custom HID descriptors. Bypasses the fixed <code>Gamepad</code> struct to support arbitrary axis, button, and POV counts. Step 5 forwards this directly to HIDMaestro via <code>HMaestroVirtualController.SubmitExtendedRawState</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">ExtendedRawState</span>
+<p>Raw output state for Extended-category and Nintendo virtual controllers and custom HID descriptors. Bypasses the fixed <code>Gamepad</code> struct to support arbitrary axis, button, and POV counts. Step 5 forwards this directly to HIDMaestro via <code>HMaestroVirtualController.SubmitRawHidState</code>, which since 4.1.0 also carries a <code>MotionSnapshot</code> argument for the gyro-passthrough IMU channel (HM v1.3.18). The struct was named <code>ExtendedRawState</code> before the 4.1.0 raw-surface grammar rename.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">RawHidState</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="p">[]</span><span class="w"> </span><span class="n">Axes</span><span class="p">;</span><span class="w">      </span><span class="c1">// Up to 8 axes (signed short range -32768..32767)</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="n">Buttons</span><span class="p">;</span><span class="w">    </span><span class="c1">// Button state as 4 x 32-bit words = 128 buttons max</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">Povs</span><span class="p">;</span><span class="w">        </span><span class="c1">// Up to 4 POV hat switches (-1=centered, 0-35900=direction)</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="p">[]</span><span class="w"> </span><span class="n">HardwareAxes</span><span class="p">;</span><span class="w"> </span><span class="c1">// Pre-tuning snapshot of Axes (#174). Runtime-only, null unless populated</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">ExtendedRawState</span><span class="w"> </span><span class="nf">Create</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nAxes</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nButtons</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nPovs</span><span class="p">);</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">RawHidState</span><span class="w"> </span><span class="nf">Create</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nAxes</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nButtons</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nPovs</span><span class="p">);</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
@@ -7558,7 +7588,7 @@
 <tbody>
 <tr>
 <td><code>Create</code></td>
-<td><code>static ExtendedRawState Create(int nAxes, int nButtons, int nPovs)</code></td>
+<td><code>static RawHidState Create(int nAxes, int nButtons, int nPovs)</code></td>
 <td>Factory. Clamps axes to 8, buttons to 128 (stored as <code>(N+31)/32</code> uint words), POVs to 4. All zeroed.</td>
 </tr>
 <tr>
@@ -7739,8 +7769,9 @@
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="na">[XmlEnum(&quot;Sony&quot;)]</span><span class="w">      </span><span class="n">PlayStation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="n">Extended</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="n">Midi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="n">KeyboardMouse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">}</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="n">KeyboardMouse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="n">Nintendo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="p">}</span>
 </code></pre></div>
 <p>Numeric values are preserved across the rename so legacy PadForge.xml files keep loading. The <code>[XmlEnum]</code> attributes on <code>Xbox</code> and <code>PlayStation</code> are a back-compat accept-list for older settings files written with the prior identifiers. This is the exception path, not the canonical naming.</p>
 <hr />
@@ -11395,10 +11426,10 @@
 <td>Pre-processing state (axis-selected, Y-negated, before DZ/ADZ/linear/range). For UI preview.</td>
 </tr>
 <tr>
-<td><code>ExtendedRawOutputState</code></td>
-<td><code>ExtendedRawState</code></td>
+<td><code>RawHidOutputState</code></td>
+<td><code>RawHidState</code></td>
 <td><code>[XmlIgnore]</code></td>
-<td>Mapped raw output for Extended slots. Forwarded to HIDMaestro via <code>HMaestroVirtualController.SubmitExtendedRawState</code>.</td>
+<td>Mapped raw output for Extended slots. Forwarded to HIDMaestro via <code>HMaestroVirtualController.SubmitRawHidState</code>.</td>
 </tr>
 <tr>
 <td><code>MidiRawOutputState</code></td>
@@ -13462,7 +13493,7 @@
 <li><a href="../architecture-overview/">Architecture Overview</a>: Solution structure, how Engine and App assemblies relate</li>
 <li><a href="../input-pipeline/">Input Pipeline</a>: 6-step pipeline consuming <code>CustomInputState</code>, <code>Gamepad</code>, <code>PadSetting</code></li>
 <li><a href="../sdl3-integration/">SDL3 Integration</a>: SDL3 P/Invoke details, <code>SdlDeviceWrapper</code> usage, haptic strategies</li>
-<li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: <code>IVirtualController</code> implementations consuming <code>Gamepad</code>, <code>ExtendedRawState</code>, <code>KbmRawState</code>, <code>MidiRawState</code></li>
+<li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: <code>IVirtualController</code> implementations consuming <code>Gamepad</code>, <code>RawHidState</code>, <code>KbmRawState</code>, <code>MidiRawState</code></li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>PadSetting</code> XML persistence, <code>UserDevice</code>/<code>UserSetting</code> serialization, v3.2 <code>MappingSet</code> / <code>MappingRow</code> / <code>MappingSource</code> / <code>ShiftActivator</code> / <code>MappingSetMigrator</code> DTOs</li>
 <li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: <code>HMaestroVirtualController</code> lifecycle, FFB through HM PID descriptors, OpenXInput shim</li>
 </ul>

@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2888,6 +2918,13 @@
 <li><strong>XInput rumble</strong> (Xbox-target games): the two motor bytes become scalar <code>Vibration</code> fields, which wheels translate into an oscillating constant force.</li>
 </ul>
 <p>Both write the single aggregation buffer <code>_combinedVibration</code> in <code>InputManager.Step2.UpdateInputStates.cs</code>. Everything downstream reads from it.</p>
+<p>A third destination joined in 4.1.0: the Bass Shakers lane (#236) turns the same game force into low-frequency audio. It bypasses <code>_combinedVibration</code> and the writers:</p>
+<ul>
+<li><code>HMaestroFfbDecoder.Apply</code> stores the game-authored motor pair in <code>LastComputedMotors</code>, computed purely from the uploaded PID effect set. Test and macro rumble stay out by construction.</li>
+<li><code>TickFfb</code> packs the pair into the virtual controller's inbound rumble pack via <code>LfeOutputState.Pack</code>.</li>
+<li><code>UpdateRumbleAudioLane</code> in <code>InputManager.Step5.VirtualDevices.cs</code> publishes each slot's pack once per poll tick through <code>RumbleAudioService.PublishIfCurrent</code>.</li>
+</ul>
+<p>So game force feedback reaches vendor wheels, scalar rumble devices, and bass-shaker audio endpoints. The slot's <strong>Bass Shakers</strong> tab configures the endpoint. See <a href="../../features/force-feedback/#bass-shakers">Force Feedback</a> for the user-facing side.</p>
 <hr />
 <h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
 <table>
@@ -2942,7 +2979,7 @@
 <h2 id="aggregation-and-dispatch">Aggregation and dispatch<a class="headerlink" href="#aggregation-and-dispatch" title="Permanent link">&para;</a></h2>
 <p><code>ApplyForceFeedback(UserDevice ud)</code> in Step 2 combines every slot the device is mapped to (motors max-combined, the first slot with directional or condition data becomes the directional source) into <code>_combinedVibration</code>, then dispatches by device identity:</p>
 <ul>
-<li>Sony pads (DualSense, DualShock 4) return early. They are written by <code>UserEffectsDispatcher</code> and <code>SonyEffectWriter</code>.</li>
+<li>Sony pads (DualSense, DualShock 4) return early. They are written by <code>UserEffectsDispatcher</code> and <code>PlayStationEffectWriter</code>.</li>
 <li>Xbox One and later take the <code>XboxImpulseHidWriter</code> path.</li>
 <li>Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by <code>IsLogitechWheel</code> / <code>IsFanatecWheel</code> / <code>IsThrustmasterWheel</code> / <code>IsFanatecPedal</code>) take the vendor-writer block.</li>
 <li>Everything else falls to <code>ForceFeedbackState.SetDeviceForces</code> (the SDL path).</li>
@@ -3050,7 +3087,7 @@
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: relaying a shared wheel's force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

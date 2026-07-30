@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -5625,7 +5655,7 @@
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">&lt;Grid</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AppBrandingBar&quot;</span><span class="w"> </span><span class="na">Grid.Row=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">Height=</span><span class="s">&quot;48&quot;</span><span class="nt">&gt;</span><span class="w"> </span><span class="cm">&lt;!-- Hamburger Button + ui:TitleBar --&gt;</span><span class="w"> </span><span class="nt">&lt;/Grid&gt;</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">&lt;ui:NavigationView</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;NavView&quot;</span><span class="w"> </span><span class="na">Grid.Row=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">PaneDisplayMode=</span><span class="s">&quot;Left&quot;</span><span class="w"> </span><span class="na">OpenPaneLength=</span><span class="s">&quot;223&quot;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">&lt;ui:NavigationView</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;NavView&quot;</span><span class="w"> </span><span class="na">Grid.Row=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">PaneDisplayMode=</span><span class="s">&quot;Left&quot;</span><span class="w"> </span><span class="na">OpenPaneLength=</span><span class="s">&quot;244&quot;</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">                       </span><span class="na">IsBackButtonVisible=</span><span class="s">&quot;Collapsed&quot;</span><span class="w"> </span><span class="na">IsPaneToggleVisible=</span><span class="s">&quot;False&quot;</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">                       </span><span class="na">AlwaysShowHeader=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">CompactPaneLength=</span><span class="s">&quot;48&quot;</span><span class="nt">&gt;</span>
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">        </span><span class="nt">&lt;ui:NavigationView.FooterMenuItems&gt;</span>
@@ -5702,7 +5732,7 @@
 </tbody>
 </table>
 <p>Dynamic controller cards are appended after "Devices" (index 3 onward) via <code>RebuildControllerSection()</code>. Each <code>NavigationViewItem</code> contains:
-- Power/type glyph (Xbox / PlayStation / Extended / KB+M / MIDI icon)
+- Power/type glyph plus a mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI tiles in <code>VirtualControllerGroups.InOrder</code>, active type lit, plus a fixed-width "#N" instance token
 - Slot label ("Controller 1", etc.)
 - Device name subtitle
 - Delete button (visible on hover)</p>
@@ -5720,7 +5750,56 @@
 - <code>DevicesPage</code> initiates <code>DragDrop.DoDragDrop()</code> with a <code>DataObject</code> keyed <code>"DeviceInstanceGuid"</code> carrying the device's <code>InstanceGuid</code> (a <code>Guid</code>).
 - Sidebar <code>NavigationViewItem</code> handlers (<code>DragOver</code>, <code>Drop</code>) accept the drop and assign the device.</p>
 <h3 id="add-controller-popup">Add Controller Popup<a class="headerlink" href="#add-controller-popup" title="Permanent link">&para;</a></h3>
-<p><code>Popup</code> with buttons for Xbox, PlayStation, Extended, MIDI, and Keyboard+Mouse, built in <code>ShowControllerTypePopup</code>. That method counts each type from <code>Pads[].OutputType</code> and disables a button (opacity 0.35, "(max N)" tooltip) when the global slot total reaches 16 or that type hits its own per-type cap. <code>HasAnyControllerTypeCapacity()</code> is a separate check: it tallies created slots from <code>SettingsManager.SlotCreated</code> and returns true while the total stays under 16 (<code>MaxPads</code>).</p>
+<p><code>Popup</code> with one button per output type, built in <code>ShowControllerTypePopup</code>. The six buttons follow <code>VirtualControllerGroups.InOrder</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>AutomationId</th>
+<th>Icon</th>
+<th>Per-type cap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xbox</td>
+<td><code>AddXbox360Btn</code></td>
+<td>Xbox SVG</td>
+<td><code>SettingsManager.MaxXbox360Slots</code></td>
+</tr>
+<tr>
+<td>PlayStation</td>
+<td><code>AddDS4Btn</code></td>
+<td>DS4 SVG</td>
+<td><code>SettingsManager.MaxPlayStationSlots</code></td>
+</tr>
+<tr>
+<td>Nintendo</td>
+<td><code>AddNintendoBtn</code></td>
+<td>Switch logo SVG</td>
+<td><code>SettingsManager.MaxNintendoSlots</code></td>
+</tr>
+<tr>
+<td>Extended</td>
+<td><code>AddRawBtn</code></td>
+<td>Joystick SVG</td>
+<td><code>SettingsManager.MaxExtendedSlots</code></td>
+</tr>
+<tr>
+<td>Keyboard+Mouse</td>
+<td><code>AddKeyboardMouseBtn</code></td>
+<td><code>E961</code> glyph</td>
+<td><code>SettingsManager.MaxKeyboardMouseSlots</code></td>
+</tr>
+<tr>
+<td>MIDI</td>
+<td><code>AddMidiBtn</code></td>
+<td><code>E8D6</code> glyph</td>
+<td><code>SettingsManager.MaxMidiSlots</code></td>
+</tr>
+</tbody>
+</table>
+<p>The method counts each type from <code>Pads[].OutputType</code> and disables a button (opacity 0.35, "(max N)" tooltip, e.g. <code>Main_Nintendo_Max_Format</code> = "Nintendo (max {0})") when the global slot total reaches 16 or that type hits its own per-type cap. MIDI additionally requires Windows MIDI Services. <code>HasAnyControllerTypeCapacity()</code> is a separate check: it tallies created slots from <code>SettingsManager.SlotCreated</code> and returns true while the total stays under 16 (<code>MaxPads</code>). The same six types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.</p>
 <h3 id="status-bar">Status Bar<a class="headerlink" href="#status-bar" title="Permanent link">&para;</a></h3>
 <p>Bottom <code>Border</code> (<code>StatusBarBorder</code>), five columns:
 1. <strong>Status text</strong>. <code>StatusText</code> binding (<code>StatusMessageText</code>), trimmed with <code>CharacterEllipsis</code>. A #175 decay sweep fades it out before clearing (code-behind <code>BeginAnimation</code>).
@@ -5830,18 +5909,30 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>       ├─ &quot;Virtual Controllers&quot; section header
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>       ├─ ItemsControl (WrapPanel) → SlotSummaries
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>       │   └─ DataTemplate: slot card Border (252px wide)
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>       │       ├─ Row 0: Power btn + Gamepad icon + Slot # + Type buttons (Xbox / PlayStation / Extended / KB+M / MIDI) + Instance label
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>       │       ├─ Row 0: Power btn + Gamepad icon + Slot # + Type buttons (Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI) + Instance label
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>       │       ├─ Row 1: DeviceName (marquee overflow)
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>       │       └─ Row 2: StatusText + mapped/connected counts
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>       ├─ &quot;Add Controller&quot; card (MouseLeftButtonUp → AddControllerRequested)
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>       ├─ &quot;Motion Server&quot; section (DSU)
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>       ├─ &quot;Web Controller&quot; section
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>       └─ &quot;Drivers&quot; section
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>           └─ CardBorder (Grid, 2 rows × 2 cols)
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>               ├─ Row 0: HidHide status
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>               └─ Row 1: MIDI Services status
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>       ├─ &quot;Services&quot; divider (ServicesHeader, ember tick + hairline rule)
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>       ├─ &quot;Motion Server&quot; section (DSU)
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>       ├─ &quot;Web Controller&quot; section
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>       ├─ &quot;Remote Link&quot; section (#138)
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>       │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>       │      port NumberBox + reset, status dot + RemoteLinkStatus text,
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>       │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>       │      per peer, Revoke All), nearby-unpaired list, connect-by-address box, footer
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>       ├─ &quot;Overlays&quot; section
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>       │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>       │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>       ├─ &quot;Touchpad Overlay&quot; section
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>       │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider,
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>       │      reset-position button
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>       └─ &quot;Drivers&quot; section
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>           └─ CardBorder (Grid, 2 rows × 2 cols)
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>               ├─ Row 0: HidHide status
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>               └─ Row 1: MIDI Services status
 </code></pre></div>
 <h3 id="key-bindings">Key Bindings<a class="headerlink" href="#key-bindings" title="Permanent link">&para;</a></h3>
 <table>
@@ -5907,6 +5998,31 @@
 <td><code>WebControllerPort</code></td>
 <td><code>DashboardViewModel</code></td>
 <td>Web controller port</td>
+</tr>
+<tr>
+<td><code>EnableRemoteLink</code> / <code>RemoteLinkPort</code> / <code>RemoteLinkConnectHost</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Remote Link enable, port, and connect-by-address host (#138)</td>
+</tr>
+<tr>
+<td><code>IsRemoteLinkRunning</code> / <code>RemoteLinkStatus</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Remote Link status dot and text</td>
+</tr>
+<tr>
+<td><code>RemoteLink</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Sub-ViewModel: identity-protection modes, trusted peers, nearby-unpaired list, revoke commands</td>
+</tr>
+<tr>
+<td><code>EnableMenuOverlay</code> / <code>EnableShiftLayerFlyout</code> / <code>EnableProfileOverlay</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Overlays-section toggles</td>
+</tr>
+<tr>
+<td><code>EnableTouchpadOverlay</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Touchpad overlay enable</td>
 </tr>
 <tr>
 <td><code>HidHideStatusText</code> / <code>MidiServicesStatusText</code></td>
@@ -6127,7 +6243,7 @@
 <hr />
 <h2 id="padpage">PadPage<a class="headerlink" href="#padpage" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>PadPage.xaml</code>, <code>PadPage.xaml.cs</code></p>
-<p>Per-slot configuration: two-tier tab strip, optional config bars, and 16 tab panels (Tags 0-15). Tier 1 (slot scope) holds Preview, Mappings, Macros, Menus. Tier 2 (device scope) holds the device selector and the capability tabs, most gated on source-device capability.</p>
+<p>Per-slot configuration: two-tier tab strip, optional config bars, and 17 tab panels (Tags 0-16). Tier 1 (slot scope) holds Preview, Mappings, Macros, Menus, and Bass Shakers. Tier 2 (device scope) holds the device selector and the capability tabs, most gated on source-device capability.</p>
 <h3 id="layout-structure_1">Layout Structure<a class="headerlink" href="#layout-structure_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Grid (3 rows)
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├─ Row 0 (Auto): Two-tier tab strip (StackPanel of two gradient-bordered Borders)
@@ -6350,7 +6466,7 @@
 </tr>
 </tbody>
 </table>
-<p>Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (<code>LightbarModeCard</code>, <code>LightingLightbarSubtitle</code>, <code>LightingPlayerIdleHint</code>) collapse and the <code>GuideLedCard</code> brightness control takes their place.</p>
+<p>Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15, Bass Shakers 16. Bass Shakers (4.1.0, #236, AutomationId <code>BassShakersTab</code>) is slot-tier and gates on SLOT TYPE, not device capability: visible via <code>RumbleAudioTabVisible</code> for Xbox, PlayStation, and Nintendo slots plus Extended slots with a force-feedback surface. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (<code>LightbarModeCard</code>, <code>LightingLightbarSubtitle</code>, <code>LightingPlayerIdleHint</code>) collapse and the <code>GuideLedCard</code> brightness control takes their place.</p>
 <p>If the selected tab is hidden, the view auto-switches to Preview (index 0). <code>SyncTabVisibility()</code> toggles the device-tier capability tabs from the selected device's capabilities, and also drives the motor activity bars (<code>MotorBarsGrid</code>).</p>
 <h3 id="preview-tab-type-icon">Preview Tab Type Icon<a class="headerlink" href="#preview-tab-type-icon" title="Permanent link">&para;</a></h3>
 <p>The Preview tab (Tag 0, <code>x:Name="TabController"</code>, header text <code>Pad_Tab_Preview</code>) shows a dynamic type icon via nested DataTriggers on <code>OutputType</code>:
@@ -8591,7 +8707,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li><a href="../2d-overlay-system/">2D Overlay System</a>: <code>ControllerModel2DView</code>, <code>ControllerSchematicView</code>, <code>KBMPreviewView</code>, <code>MidiPreviewView</code></li>
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> (HelixToolkit 3D viewport)</li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>PadSetting</code> descriptors driving mapping grid UI</li>
-<li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Output type selection UI for Xbox, PlayStation, Extended, MIDI, KB+M (all HM-backed types are produced by <code>HMaestroVirtualController</code>)</li>
+<li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Output type selection UI for Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M (all HM-backed types are produced by <code>HMaestroVirtualController</code>). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId <code>AddNintendoBtn</code>, capacity via <code>MaxNintendoSlots</code>) between PlayStation and Extended, the <code>VirtualControllerGroups.InOrder</code> visual order.</li>
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide and Windows MIDI Services install/uninstall triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput is unpacked next to <code>PadForge.exe</code> from the single-file bundle)</li>
 </ul>
 <hr />

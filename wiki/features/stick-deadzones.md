@@ -4,7 +4,7 @@
 
 ![Stick deadzone settings with circular preview and sliders](../images/pad-sticks.png)
 
-The Sticks tab runs each thumbstick through a fixed chain of processing stages. Every slider has a row reset, and every section has a Reset All. Each stick keeps its own values. On a Keyboard + Mouse slot the tab also carries the [Flick Stick](#flick-stick) card.
+The Sticks tab runs each thumbstick through a fixed chain of processing stages. Every slider has a row reset, and every section has a Reset All. Each stick keeps its own values. On a Keyboard + Mouse slot the tab also carries a per-stick [speed multiplier](#mouse-and-scroll-speed) and the [Flick Stick](#flick-stick) card.
 
 ---
 
@@ -161,7 +161,7 @@ Two charts appear side by side, one per axis. Input runs across, output runs up.
 
 - **Double-click** to add a control point. There is no limit on how many you add.
 - **Drag** a control point to reshape the curve.
-- **Right-click** a control point to remove it.
+- **Right-click** a control point to remove it. The two endpoints stay put. Only points you add in between can be removed.
 
 Editing any point switches the preset to Custom. The reset button restores Linear.
 
@@ -270,7 +270,7 @@ Every slider has 0.1% precision. Three ways to set a value:
 - Type a percentage into the number field.
 - Type a raw hardware value into the digit field for finer precision. Offset fields accept negative values.
 
-Changes apply immediately.
+Sliders apply as you drag. A typed value in either field applies once you leave the field, by tabbing away or clicking elsewhere.
 
 ---
 
@@ -351,6 +351,18 @@ Axial isolates each axis for clean cardinal movement without diagonals. Higher d
 
 ---
 
+## Mouse and scroll speed
+
+On a Keyboard + Mouse slot the two sticks are **Mouse Movement** and **Scroll Wheel**, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a **Sensitivity** row that multiplies that speed.
+
+| Setting | Range | Default |
+|---|---|---|
+| Sensitivity | 0.1–5.0× | 1.0× |
+
+The row has its own reset button. Gamepad sticks do not get it. There the deadzone stage already maps full deflection to full scale, and the response curves own the shaping.
+
+---
+
 ## Flick Stick
 
 *Point the stick and the camera turns to match. Sweep the rim to fine-turn.*
@@ -359,7 +371,7 @@ Flick stick turns a thumbstick into a compass for mouse-driven camera control. D
 
 Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:
 
-1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it.
+1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. A split pad adds **Left Half** and **Right Half** variants.
 2. Tune the **Flick Stick** card, which appears on the Sticks tab of a Keyboard + Mouse slot.
 
 | Setting | Default | What it does |
@@ -371,6 +383,7 @@ Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two 
 | **Snap Strength** | 1.0 | How strongly a flick pulls toward the snapped angle. 1 snaps fully, 0 disables snapping, values between blend. |
 | **Front Angle Deadzone** | 0° | A flick within this angle of dead ahead turns nothing, so you can start a rim sweep without a flick-turn. |
 | **Sweep Smoothing** | Automatic (-1) | Smooths rim-sweep noise. -1 uses the automatic tiered window, 0 turns smoothing off, larger values smooth bigger per-tick rotations. |
+| **Rotation Offset** | 0° | Turns the whole flick map by this many degrees, from -180° to 180°. Positive is clockwise. Snapping applies after the offset. |
 | **Allow Flick on Engage** | Off | When the shift layer hosting flick stick engages with the stick already deflected, fire the flick immediately. Off keeps the camera still and tracks rotation from the current stick angle. |
 
 Every row has a reset button, and the card header's Reset All restores the whole card.

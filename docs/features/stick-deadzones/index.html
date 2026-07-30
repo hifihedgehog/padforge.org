@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1691,6 +1693,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mouse-and-scroll-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse and scroll speed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#flick-stick" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1915,6 +1928,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -3450,6 +3491,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mouse-and-scroll-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse and scroll speed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#flick-stick" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3502,7 +3554,7 @@
 <h1 id="stick-deadzones">Stick Deadzones<a class="headerlink" href="#stick-deadzones" title="Permanent link">&para;</a></h1>
 <p><em>Stop drift, defeat in-game deadzones, and reshape stick response per axis.</em></p>
 <p><img alt="Stick deadzone settings with circular preview and sliders" src="../../images/pad-sticks.png" /></p>
-<p>The Sticks tab runs each thumbstick through a fixed chain of processing stages. Every slider has a row reset, and every section has a Reset All. Each stick keeps its own values. On a Keyboard + Mouse slot the tab also carries the <a href="#flick-stick">Flick Stick</a> card.</p>
+<p>The Sticks tab runs each thumbstick through a fixed chain of processing stages. Every slider has a row reset, and every section has a Reset All. Each stick keeps its own values. On a Keyboard + Mouse slot the tab also carries a per-stick <a href="#mouse-and-scroll-speed">speed multiplier</a> and the <a href="#flick-stick">Flick Stick</a> card.</p>
 <hr />
 <h2 id="parameter-reference">Parameter reference<a class="headerlink" href="#parameter-reference" title="Permanent link">&para;</a></h2>
 <table>
@@ -3778,7 +3830,7 @@
 <ul>
 <li><strong>Double-click</strong> to add a control point. There is no limit on how many you add.</li>
 <li><strong>Drag</strong> a control point to reshape the curve.</li>
-<li><strong>Right-click</strong> a control point to remove it.</li>
+<li><strong>Right-click</strong> a control point to remove it. The two endpoints stay put. Only points you add in between can be removed.</li>
 </ul>
 <p>Editing any point switches the preset to Custom. The reset button restores Linear.</p>
 <p>A live indicator dot tracks your stick's current position on the curve, so you can see the exact output as you move.</p>
@@ -3937,7 +3989,7 @@
 <li>Type a percentage into the number field.</li>
 <li>Type a raw hardware value into the digit field for finer precision. Offset fields accept negative values.</li>
 </ul>
-<p>Changes apply immediately.</p>
+<p>Sliders apply as you drag. A typed value in either field applies once you leave the field, by tabbing away or clicking elsewhere.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
 <p>Every row has a reset button (circular arrow icon) that restores the default. Reset All at the top of each stick section resets everything for that stick in one click.</p>
@@ -4153,12 +4205,32 @@
 </table>
 <p>Axial isolates each axis for clean cardinal movement without diagonals. Higher deadzone prevents accidental inputs. Linear keeps cursor speed predictable.</p>
 <hr />
+<h2 id="mouse-and-scroll-speed">Mouse and scroll speed<a class="headerlink" href="#mouse-and-scroll-speed" title="Permanent link">&para;</a></h2>
+<p>On a Keyboard + Mouse slot the two sticks are <strong>Mouse Movement</strong> and <strong>Scroll Wheel</strong>, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a <strong>Sensitivity</strong> row that multiplies that speed.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Range</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sensitivity</td>
+<td>0.1–5.0×</td>
+<td>1.0×</td>
+</tr>
+</tbody>
+</table>
+<p>The row has its own reset button. Gamepad sticks do not get it. There the deadzone stage already maps full deflection to full scale, and the response curves own the shaping.</p>
+<hr />
 <h2 id="flick-stick">Flick Stick<a class="headerlink" href="#flick-stick" title="Permanent link">&para;</a></h2>
 <p><em>Point the stick and the camera turns to match. Sweep the rim to fine-turn.</em></p>
 <p>Flick stick turns a thumbstick into a compass for mouse-driven camera control. Deflect the stick past the threshold and the camera snaps to the direction you point, easing over the flick time. Hold the stick at the rim and sweep it to keep turning 1:1. Release and the camera stays put. Horizontal turns only, so most players pair it with <a href="../../guides/gyro/">Gyro</a> aiming for the vertical.</p>
 <p>Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:</p>
 <ol>
-<li>On the <strong>Mappings</strong> tab, map <strong>Flick Stick (Right Stick)</strong> (or <strong>Flick Stick (Left Stick)</strong>) to Mouse X. The source works on any layer, so a shift layer can carry it.</li>
+<li>On the <strong>Mappings</strong> tab, map <strong>Flick Stick (Right Stick)</strong> (or <strong>Flick Stick (Left Stick)</strong>) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, <strong>Flick Stick (Touchpad 1)</strong> works the same way: the finger's position plays the stick's role, and lifting the finger releases. A split pad adds <strong>Left Half</strong> and <strong>Right Half</strong> variants.</li>
 <li>Tune the <strong>Flick Stick</strong> card, which appears on the Sticks tab of a Keyboard + Mouse slot.</li>
 </ol>
 <table>
@@ -4204,6 +4276,11 @@
 <td><strong>Sweep Smoothing</strong></td>
 <td>Automatic (-1)</td>
 <td>Smooths rim-sweep noise. -1 uses the automatic tiered window, 0 turns smoothing off, larger values smooth bigger per-tick rotations.</td>
+</tr>
+<tr>
+<td><strong>Rotation Offset</strong></td>
+<td>0°</td>
+<td>Turns the whole flick map by this many degrees, from -180° to 180°. Positive is clockwise. Snapping applies after the offset.</td>
 </tr>
 <tr>
 <td><strong>Allow Flick on Engage</strong></td>

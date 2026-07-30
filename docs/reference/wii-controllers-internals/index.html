@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2983,15 +3013,15 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/InputManager.cs</code></td>
-<td>The SDL Wii hint at <code>InitializeSdl</code> (line 601) and <code>RescanWiiControllers</code> (line 906).</td>
+<td>The SDL Wii hint in <code>InitializeSdl</code> and the <code>RescanWiiControllers</code> hint toggle.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/MainWindow.xaml.cs</code></td>
-<td>The <code>PairRequested</code> handler (~712) that opens the dialog then runs the rescan, and the 100 ms <code>_sdlPumpTimer</code>.</td>
+<td>The <code>PairRequested</code> handler that opens the dialog then runs the rescan, and the 100 ms <code>_sdlPumpTimer</code>.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.cs</code></td>
-<td><code>RescanWiiControllers</code> passthrough to the input manager (line 8703).</td>
+<td><code>RescanWiiControllers</code> passthrough to the input manager.</td>
 </tr>
 <tr>
 <td><code>PadForge.Engine/Common/SdlDeviceWrapper.cs</code></td>
@@ -3223,14 +3253,14 @@
 <hr />
 <h2 id="the-reading-side-the-sdl-wii-hint">The reading side: the SDL Wii hint<a class="headerlink" href="#the-reading-side-the-sdl-wii-hint" title="Permanent link">&para;</a></h2>
 <p><em>The single hint that turns on SDL's Wii driver and what it does at enumeration time.</em></p>
-<p><code>InitializeSdl</code> sets <code>SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_WII, "1")</code> at line 601, before <code>SDL_Init</code>. That enables SDL's <code>hidapi_wii</code> driver. It surfaces the Bluetooth-paired controller, parses all four forms (Wii Remote / Plus, Remote plus Nunchuk, Classic / Pro, Wii U Pro), and lights the player LED, which stops the idle flashing the controller does while unassigned. From there the standard buttons, sticks, and D-pad are an ordinary SDL gamepad. The only Wii-aware reads on top of that are the IR pointer and the Balance Board corners, both covered below.</p>
+<p><code>InitializeSdl</code> sets <code>SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_WII, "1")</code> before <code>SDL_Init</code>. That enables SDL's <code>hidapi_wii</code> driver. It surfaces the Bluetooth-paired controller, parses all four forms (Wii Remote / Plus, Remote plus Nunchuk, Classic / Pro, Wii U Pro), and lights the player LED, which stops the idle flashing the controller does while unassigned. From there the standard buttons, sticks, and D-pad are an ordinary SDL gamepad. The only Wii-aware reads on top of that are the IR pointer and the Balance Board corners, both covered below.</p>
 <p>One enumeration detail matters for the stickless Wii Remote. <code>SdlDeviceWrapper.GetDeviceObjects</code> gates each standard axis on <code>SDL_GamepadHasAxis</code> (the axis path mirrors the existing button gate on <code>SDL_GamepadHasButton</code>). A Wii Remote with no Nunchuk has no sticks, so it must not advertise phantom Left or Right Stick axes. A phantom axis reads as a dead center, and <code>CreateDefaultPadSetting</code>'s auto-map trusts the <code>DeviceObjects</code> capability list, so without the gate it would pin both virtual sticks to a corner. See <a href="../sdl3-integration/">SDL3 Integration</a> for the wrapper detail.</p>
 <hr />
 <h2 id="wii-remote-ir-pointer-146">Wii Remote IR pointer (#146)<a class="headerlink" href="#wii-remote-ir-pointer-146" title="Permanent link">&para;</a></h2>
 <p><em>The two sensor-bar dots, where SDL posts them, and how <code>ReadIrPointer</code> turns them into an aim point.</em></p>
-<p>The IR camera path rides the same <code>SdlDeviceWrapper</code> read that surfaces the pad. It is gated by <code>HasIrCamera</code>, set at enumeration (<code>~377</code>): the device is the Wii VID <code>0x057E</code>, it is not a Balance Board, and its raw joystick axis count is 10 or more. Reading the raw axis count (<code>SDL_GetNumJoystickAxes</code>), not the gamepad-pinned <code>NumAxes</code> of 6, is the stable signal, and it is the same idiom the right Joy-Con NIR and Joy-Con 2 mouse detections use.</p>
+<p>The IR camera path rides the same <code>SdlDeviceWrapper</code> read that surfaces the pad. It is gated by <code>HasIrCamera</code>, set at enumeration: the device is the Wii VID <code>0x057E</code>, it is not a Balance Board, and its raw joystick axis count is 10 or more. Reading the raw axis count (<code>SDL_GetNumJoystickAxes</code>), not the gamepad-pinned <code>NumAxes</code> of 6, is the stable signal, and it is the same idiom the right Joy-Con NIR and Joy-Con 2 mouse detections use.</p>
 <p>The SDL fork's <code>hidapi_wii</code> driver posts the two IR dots on dedicated joystick axes 6-9 (SDL#6 follow-up <code>41909fdc4e</code>), separate from the gamepad sticks so a Nunchuk or Classic extension keeps axes 0-3. Axis 6 is dot 0 X (<code>0..1023</code>), axis 7 is dot 0 Y (<code>0..767</code>), axis 8 and 9 are dot 1. A value of <code>-1</code> means the dot is not detected.</p>
-<p><code>ReadIrPointer</code> (<code>SdlDeviceWrapper.cs</code>, <code>~662-685</code>) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four values through <code>ComputeIrAim</code> into <code>CustomInputState.Ir</code> (a <code>WiiIrState</code> with <code>X</code>, <code>Y</code>, <code>Detected</code>):</p>
+<p><code>ReadIrPointer</code> (<code>SdlDeviceWrapper.cs</code>) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four values through <code>ComputeIrAim</code> into <code>CustomInputState.Ir</code> (a <code>WiiIrState</code> with <code>X</code>, <code>Y</code>, <code>Detected</code>):</p>
 <ul>
 <li>All four at exactly 0 means no report has arrived yet (two dots on one pixel is physically impossible), so <code>Detected</code> is set false rather than yanking the pointer to a corner on connect.</li>
 <li>The aim exists only when BOTH sensor-bar dots are visible. <code>ComputeIrAim</code> returns <code>Detected = false</code> if any of the four dot slots reads negative (fewer than two dots: out of reach). There is no single-dot fallback. Snapping the midpoint to the surviving dot would sit half a dot-separation away, and a steady sweep would re-walk that span of the screen (the #203 bench "double walk"). Every proven reference (Touchmote, Ryochan7-lightgun, Suegrini-4IR, WiimoteLib) computes the aim as a dot-pair midpoint and treats fewer than two dots as out of reach.</li>
@@ -3246,15 +3276,15 @@
 <hr />
 <h2 id="wii-balance-board-146">Wii Balance Board (#146)<a class="headerlink" href="#wii-balance-board-146" title="Permanent link">&para;</a></h2>
 <p><em>How the board is told apart, how the corner loads reach the mapping grid, and the calibration source.</em></p>
-<p><code>IsBalanceBoard</code> is set at enumeration (<code>~370</code>): the Wii VID plus an SDL name that contains "Balance Board". The board enumerates as a Wii Remote (PID <code>0x0306</code>), so the name is the only reliable discriminator, and it is what keeps the board out of the <code>HasIrCamera</code> gate.</p>
-<p>The four corner load cells ride the gamepad stick axes: <code>ReadTunedBalanceBoard</code> (<code>SourceCoercion.cs</code>, <code>~1050-1101</code>) reads <code>Axis[0]</code>, <code>Axis[1]</code>, <code>Axis[3]</code>, <code>Axis[4]</code> as top-left, bottom-left, top-right, bottom-right, undoing the unsigned <code>+32768</code> shift and clamping negatives to 0. It coerces three sources by descriptor suffix:</p>
+<p><code>IsBalanceBoard</code> is set at enumeration: the Wii VID plus an SDL name that contains "Balance Board". The board enumerates as a Wii Remote (PID <code>0x0306</code>), so the name is the only reliable discriminator, and it is what keeps the board out of the <code>HasIrCamera</code> gate.</p>
+<p>The four corner load cells ride the gamepad stick axes: <code>ReadTunedBalanceBoard</code> (<code>SourceCoercion.cs</code>) reads <code>Axis[0]</code>, <code>Axis[1]</code>, <code>Axis[3]</code>, <code>Axis[4]</code> as top-left, bottom-left, top-right, bottom-right, undoing the unsigned <code>+32768</code> shift and clamping negatives to 0. It coerces three sources by descriptor suffix:</p>
 <ul>
 <li><strong>Lean X</strong>: <code>(right - left) / total</code>, clamped to <code>[-1..+1]</code>.</li>
 <li><strong>Lean Y</strong>: <code>(top - bottom) / total</code>.</li>
 <li><strong>Total Weight</strong>: each corner converted to kilograms and summed, minus the tare, scaled against <code>BalanceMaxKg</code>.</li>
 </ul>
 <p>Calibration is auto-parsed, not user-entered. The SDL fork exposes the board's 24-byte calibration block as the hex property <code>SDL.joystick.wii.balance_board_calibration</code>, which <code>InputService.ParseBalanceCalibrationHex</code> reads once and re-lays into the 12-float <code>[corner × {Kg0, Kg17, Kg34}]</code> shape the coercion interpolates. Without calibration, Total Weight falls back to a coarse raw-sum approximation so the source stays monotonic.</p>
-<p><code>SetBalanceTare</code> (<code>InputService.cs</code>, <code>~9109</code>) captures the current total weight as the zero-point so Total Weight reads 0 with whatever is on the board. It is code-reachable only. No UI element calls it today.</p>
+<p><code>SetBalanceTare</code> (<code>InputService.cs</code>) captures the current total weight as the zero-point so Total Weight reads 0 with whatever is on the board. It is code-reachable only. No UI element calls it today.</p>
 <hr />
 <h2 id="wii-remote-speaker-146">Wii Remote speaker (#146)<a class="headerlink" href="#wii-remote-speaker-146" title="Permanent link">&para;</a></h2>
 <p><em>The output side: macro sounds through the Wii Remote's built-in speaker, and why the live path is PCM, not ADPCM.</em></p>
@@ -3264,7 +3294,7 @@
 <hr />
 <h2 id="rescanwiicontrollers-post-pair-recovery">RescanWiiControllers: post-pair recovery<a class="headerlink" href="#rescanwiicontrollers-post-pair-recovery" title="Permanent link">&para;</a></h2>
 <p><em>Why a freshly-paired controller needs a forced re-open, and the hint-toggle that delivers it.</em></p>
-<p>During the pairing ceremony SDL grabs the Wii Remote mid-pairing. Then <code>BluetoothSetServiceState</code> and the rest of the pairing churn invalidate that handle, so the SDL joystick drops and SDL keeps a stale device that only a full app restart clears. <code>RescanWiiControllers</code> (line 906) replicates the restart for just that one driver:</p>
+<p>During the pairing ceremony SDL grabs the Wii Remote mid-pairing. Then <code>BluetoothSetServiceState</code> and the rest of the pairing churn invalidate that handle, so the SDL joystick drops and SDL keeps a stale device that only a full app restart clears. <code>RescanWiiControllers</code> (<code>InputManager.cs</code>) replicates the restart for just that one driver:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">_disposed</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">SDL_SetHint</span><span class="p">(</span><span class="n">SDL_HINT_JOYSTICK_HIDAPI_WII</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="p">);</span>
@@ -3298,7 +3328,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0.</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

@@ -1,6 +1,6 @@
 # Steering
 
-Two per-stick steering modes make a thumbstick act like a steering wheel, plus a Motion Lean input that steers from controller tilt.
+*Two per-stick steering modes make a thumbstick act like a steering wheel, plus a Motion Lean input that steers from controller tilt.*
 
 Winding and Angle to Axis live on the **Sticks** tab, one mode per stick, and write to the stick's virtual axis. Motion Lean is a separate input you map like a gyro source, tuned on the **Gyro** tab. The math follows JoyShockMapper's steering stick modes. The at-lock haptic feedback is PadForge's addition.
 
@@ -51,14 +51,34 @@ Motion Lean needs a controller with a motion sensor. Without one it produces no 
 
 ## At-lock feedback
 
-When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The channels are per-slot and off by default:
+When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The **Steering Lock Feedback** card sits at the bottom of the **Sticks** tab. Every channel is per-slot and off by default, and rows the selected device can't play are hidden.
 
-- **Rumble**: a pulse on lock entry.
-- **Trigger vibration**: the same pulse on the trigger motors, on Xbox One and later impulse triggers and on DualSense adaptive triggers.
-- **Lightbar** pulses to a chosen color on lock entry, then fades on its own timer (DualSense / DualShock 4).
-- **Adaptive-trigger resistance**: DualSense trigger resistance ramps up as the wheel approaches lock, so you feel it coming. It only engages on triggers you haven't already configured on the Adaptive Triggers tab, so it never overrides your own trigger effects.
+| Toggle | What it does | Hardware |
+| --- | --- | --- |
+| **Rumble Pulse on Lock** | Grip-motor pulse on lock entry | Any pad with rumble |
+| **Trigger Vibration on Lock** | The same pulse on the trigger actuators | Xbox One and later impulse triggers, DualSense adaptive triggers |
+| **Lightbar Pulse on Lock** | Lightbar flashes a color on lock entry | DualSense / DualShock 4 |
+| **Trigger Resistance near Lock** | DualSense trigger resistance ramps up as the wheel approaches lock, so you feel it coming | DualSense |
 
-A controller-speaker tone on lock entry is planned alongside the speaker output work.
+**Trigger Resistance near Lock** only engages on triggers you haven't already configured on the Adaptive Triggers tab, so it never overrides your own trigger effects.
+
+**Pulse Length** sets how long the rumble and trigger pulses last. The lightbar pulse has its own timing: it jumps to the chosen color on lock entry, holds at full strength for **Hold**, then fades back out over **Decay**.
+
+| Setting | Default | Range |
+| --- | --- | --- |
+| Pulse Length | 80 ms | 0–2000 |
+| Hold | 80 ms | 0–2000 |
+| Decay | 250 ms | 0–5000 |
+
+The **Color** dropdown picks where the lightbar color comes from:
+
+- **Fixed**: one color, chosen in a full picker under **Lightbar Color** with an HSV field, swatch, **HEX** box, and RGB sliders. The default is red.
+- **Random Hue**: a random full-brightness hue on every lock entry.
+- **Palette Step**: a dedicated palette editor. Add colors to step through, one per lock. The palette belongs to this card alone. Leave it empty and the pulse goes dark instead of borrowing colors from another feature, and the step position restarts at the first color when PadForge restarts.
+
+At-lock feedback fires for every steering source on the slot, including a **Nunchuk Lean** or **Left Joy-Con Lean** row. Steer from the second sensor and all four channels still work.
+
+A controller-speaker tone on lock entry is still planned. The speaker output it will ride on shipped with [Controller Audio](../features/controller-audio.md), but the tone itself is not implemented yet.
 
 Physical feedback honors the per-slot test target: when you're testing one assigned device, only it reacts.
 
@@ -70,4 +90,4 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

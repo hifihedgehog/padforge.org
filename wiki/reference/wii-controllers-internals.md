@@ -26,9 +26,9 @@ So the data flow is: PadForge pairs over Bluetooth, the Microsoft Bluetooth stac
 |---|---|
 | `PadForge.App/Services/WiiPairingService.cs` | The pairing ceremony. `public sealed class`, P/Invoke over `bthprops.cpl`. Original C# over the Win32 Bluetooth API, following the sequence Dolphin's `Source/Core/Core/HW/WiimoteReal/IOWin.cpp` documents (no Dolphin GPL code). |
 | `PadForge.App/Views/PairDeviceDialog.xaml.cs` | The Fluent dialog, family-selectable via a Controller Family combo (Nintendo Wii / Sony DualShock 3). The Wii branch loops `RunPairingPass` on a background thread until a controller pairs or the user cancels. Picking DualShock 3 hides the temporary-pairing checkbox and routes `Pair_Click` to `PairDs3` / `Ds3PairingService` instead (out of scope here). |
-| `PadForge.App/Common/Input/InputManager.cs` | The SDL Wii hint at `InitializeSdl` (line 601) and `RescanWiiControllers` (line 906). |
-| `PadForge.App/MainWindow.xaml.cs` | The `PairRequested` handler (~712) that opens the dialog then runs the rescan, and the 100 ms `_sdlPumpTimer`. |
-| `PadForge.App/Services/InputService.cs` | `RescanWiiControllers` passthrough to the input manager (line 8703). |
+| `PadForge.App/Common/Input/InputManager.cs` | The SDL Wii hint in `InitializeSdl` and the `RescanWiiControllers` hint toggle. |
+| `PadForge.App/MainWindow.xaml.cs` | The `PairRequested` handler that opens the dialog then runs the rescan, and the 100 ms `_sdlPumpTimer`. |
+| `PadForge.App/Services/InputService.cs` | `RescanWiiControllers` passthrough to the input manager. |
 | `PadForge.Engine/Common/SdlDeviceWrapper.cs` | The capability gate that stops a stickless Wii Remote from advertising phantom stick axes, the `HasIrCamera` / `IsBalanceBoard` detection, and the IR-pointer read (`ReadIrPointer`). |
 | `PadForge.Engine/Common/Mapping/SourceCoercion.cs` | `ReadTunedBalanceBoard`: the Lean X / Lean Y / Total Weight coercions from the four corner load cells. |
 | `PadForge.App/Common/Input/WiiSpeakerService.cs` | The Wii Remote speaker output sink. `internal static class`, 8-bit PCM at 2 kHz over the raw HID handle. |
@@ -179,7 +179,7 @@ PadForge writes no pairing log file. The private `Log` helper is a one-line dele
 
 *The single hint that turns on SDL's Wii driver and what it does at enumeration time.*
 
-`InitializeSdl` sets `SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_WII, "1")` at line 601, before `SDL_Init`. That enables SDL's `hidapi_wii` driver. It surfaces the Bluetooth-paired controller, parses all four forms (Wii Remote / Plus, Remote plus Nunchuk, Classic / Pro, Wii U Pro), and lights the player LED, which stops the idle flashing the controller does while unassigned. From there the standard buttons, sticks, and D-pad are an ordinary SDL gamepad. The only Wii-aware reads on top of that are the IR pointer and the Balance Board corners, both covered below.
+`InitializeSdl` sets `SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_WII, "1")` before `SDL_Init`. That enables SDL's `hidapi_wii` driver. It surfaces the Bluetooth-paired controller, parses all four forms (Wii Remote / Plus, Remote plus Nunchuk, Classic / Pro, Wii U Pro), and lights the player LED, which stops the idle flashing the controller does while unassigned. From there the standard buttons, sticks, and D-pad are an ordinary SDL gamepad. The only Wii-aware reads on top of that are the IR pointer and the Balance Board corners, both covered below.
 
 One enumeration detail matters for the stickless Wii Remote. `SdlDeviceWrapper.GetDeviceObjects` gates each standard axis on `SDL_GamepadHasAxis` (the axis path mirrors the existing button gate on `SDL_GamepadHasButton`). A Wii Remote with no Nunchuk has no sticks, so it must not advertise phantom Left or Right Stick axes. A phantom axis reads as a dead center, and `CreateDefaultPadSetting`'s auto-map trusts the `DeviceObjects` capability list, so without the gate it would pin both virtual sticks to a corner. See [SDL3 Integration](sdl3-integration.md) for the wrapper detail.
 
@@ -189,11 +189,11 @@ One enumeration detail matters for the stickless Wii Remote. `SdlDeviceWrapper.G
 
 *The two sensor-bar dots, where SDL posts them, and how `ReadIrPointer` turns them into an aim point.*
 
-The IR camera path rides the same `SdlDeviceWrapper` read that surfaces the pad. It is gated by `HasIrCamera`, set at enumeration (`~377`): the device is the Wii VID `0x057E`, it is not a Balance Board, and its raw joystick axis count is 10 or more. Reading the raw axis count (`SDL_GetNumJoystickAxes`), not the gamepad-pinned `NumAxes` of 6, is the stable signal, and it is the same idiom the right Joy-Con NIR and Joy-Con 2 mouse detections use.
+The IR camera path rides the same `SdlDeviceWrapper` read that surfaces the pad. It is gated by `HasIrCamera`, set at enumeration: the device is the Wii VID `0x057E`, it is not a Balance Board, and its raw joystick axis count is 10 or more. Reading the raw axis count (`SDL_GetNumJoystickAxes`), not the gamepad-pinned `NumAxes` of 6, is the stable signal, and it is the same idiom the right Joy-Con NIR and Joy-Con 2 mouse detections use.
 
 The SDL fork's `hidapi_wii` driver posts the two IR dots on dedicated joystick axes 6-9 (SDL#6 follow-up `41909fdc4e`), separate from the gamepad sticks so a Nunchuk or Classic extension keeps axes 0-3. Axis 6 is dot 0 X (`0..1023`), axis 7 is dot 0 Y (`0..767`), axis 8 and 9 are dot 1. A value of `-1` means the dot is not detected.
 
-`ReadIrPointer` (`SdlDeviceWrapper.cs`, `~662-685`) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four values through `ComputeIrAim` into `CustomInputState.Ir` (a `WiiIrState` with `X`, `Y`, `Detected`):
+`ReadIrPointer` (`SdlDeviceWrapper.cs`) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four values through `ComputeIrAim` into `CustomInputState.Ir` (a `WiiIrState` with `X`, `Y`, `Detected`):
 
 - All four at exactly 0 means no report has arrived yet (two dots on one pixel is physically impossible), so `Detected` is set false rather than yanking the pointer to a corner on connect.
 - The aim exists only when BOTH sensor-bar dots are visible. `ComputeIrAim` returns `Detected = false` if any of the four dot slots reads negative (fewer than two dots: out of reach). There is no single-dot fallback. Snapping the midpoint to the surviving dot would sit half a dot-separation away, and a steady sweep would re-walk that span of the screen (the #203 bench "double walk"). Every proven reference (Touchmote, Ryochan7-lightgun, Suegrini-4IR, WiimoteLib) computes the aim as a dot-pair midpoint and treats fewer than two dots as out of reach.
@@ -212,9 +212,9 @@ The wrapper stores only the raw screen-aligned aim. All tuning is applied later 
 
 *How the board is told apart, how the corner loads reach the mapping grid, and the calibration source.*
 
-`IsBalanceBoard` is set at enumeration (`~370`): the Wii VID plus an SDL name that contains "Balance Board". The board enumerates as a Wii Remote (PID `0x0306`), so the name is the only reliable discriminator, and it is what keeps the board out of the `HasIrCamera` gate.
+`IsBalanceBoard` is set at enumeration: the Wii VID plus an SDL name that contains "Balance Board". The board enumerates as a Wii Remote (PID `0x0306`), so the name is the only reliable discriminator, and it is what keeps the board out of the `HasIrCamera` gate.
 
-The four corner load cells ride the gamepad stick axes: `ReadTunedBalanceBoard` (`SourceCoercion.cs`, `~1050-1101`) reads `Axis[0]`, `Axis[1]`, `Axis[3]`, `Axis[4]` as top-left, bottom-left, top-right, bottom-right, undoing the unsigned `+32768` shift and clamping negatives to 0. It coerces three sources by descriptor suffix:
+The four corner load cells ride the gamepad stick axes: `ReadTunedBalanceBoard` (`SourceCoercion.cs`) reads `Axis[0]`, `Axis[1]`, `Axis[3]`, `Axis[4]` as top-left, bottom-left, top-right, bottom-right, undoing the unsigned `+32768` shift and clamping negatives to 0. It coerces three sources by descriptor suffix:
 
 - **Lean X**: `(right - left) / total`, clamped to `[-1..+1]`.
 - **Lean Y**: `(top - bottom) / total`.
@@ -222,7 +222,7 @@ The four corner load cells ride the gamepad stick axes: `ReadTunedBalanceBoard` 
 
 Calibration is auto-parsed, not user-entered. The SDL fork exposes the board's 24-byte calibration block as the hex property `SDL.joystick.wii.balance_board_calibration`, which `InputService.ParseBalanceCalibrationHex` reads once and re-lays into the 12-float `[corner × {Kg0, Kg17, Kg34}]` shape the coercion interpolates. Without calibration, Total Weight falls back to a coarse raw-sum approximation so the source stays monotonic.
 
-`SetBalanceTare` (`InputService.cs`, `~9109`) captures the current total weight as the zero-point so Total Weight reads 0 with whatever is on the board. It is code-reachable only. No UI element calls it today.
+`SetBalanceTare` (`InputService.cs`) captures the current total weight as the zero-point so Total Weight reads 0 with whatever is on the board. It is code-reachable only. No UI element calls it today.
 
 ---
 
@@ -242,7 +242,7 @@ PCM is memoryless, which is the point. A dropped or late report on the SDL-share
 
 *Why a freshly-paired controller needs a forced re-open, and the hint-toggle that delivers it.*
 
-During the pairing ceremony SDL grabs the Wii Remote mid-pairing. Then `BluetoothSetServiceState` and the rest of the pairing churn invalidate that handle, so the SDL joystick drops and SDL keeps a stale device that only a full app restart clears. `RescanWiiControllers` (line 906) replicates the restart for just that one driver:
+During the pairing ceremony SDL grabs the Wii Remote mid-pairing. Then `BluetoothSetServiceState` and the rest of the pairing churn invalidate that handle, so the SDL joystick drops and SDL keeps a stale device that only a full app restart clears. `RescanWiiControllers` (`InputManager.cs`) replicates the restart for just that one driver:
 
 ```csharp
 for (int i = 0; i < 8 && !_disposed; i++)
@@ -288,4 +288,4 @@ These live in the SDL3 fork and are read-only from PadForge's side. See [SDL3 In
 
 ---
 
-*Last updated for PadForge 4.0.0.*
+*Last updated for PadForge 4.1.0.*

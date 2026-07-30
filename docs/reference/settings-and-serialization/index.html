@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2590,10 +2620,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#extended-custom-mappings" class="md-nav__link">
+  <a href="#raw-surface-custom-mappings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Extended Custom Mappings
+        Raw-Surface Custom Mappings
       
     </span>
   </a>
@@ -4225,10 +4255,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#extended-custom-mappings" class="md-nav__link">
+  <a href="#raw-surface-custom-mappings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Extended Custom Mappings
+        Raw-Surface Custom Mappings
       
     </span>
   </a>
@@ -4987,6 +5017,7 @@
 <p><strong>v3 (2026-04-26):</strong> Rewritten for v3. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>. If anything here drifts from the live source, the live source wins.</p>
 <p><strong>v3.4 additions.</strong> <code>AppSettingsData</code> gains the Remote Link settings: the identity (protected private key, public key, protection mode), the paired-peer trust list (<code>RemoteLinkPeers</code>), <code>EnableRemoteLink</code>, <code>RemoteLinkAutoReconnect</code>, and <code>RemoteLinkPort</code>. <code>PadSetting</code> gains <code>RotationRange</code>, <code>AutoCenterStrength</code>, and <code>WheelRpmLeds</code> for the wheel tab (all in the checksum). The controller-audio mirror toggle and source persist on the per-device slot config. A MIDI input device persists as an ordinary <code>UserDevice</code> record. See <a href="../remote-link-internals/">Remote Link Internals</a>, <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>, and <a href="../controller-audio-internals/">Controller Audio Internals</a> for how each field is consumed.</p>
 <p><strong>v4.0.0 additions.</strong> The per-(slot, device) config bag was renamed from <code>PlayStationSlotConfigData</code> to <code>DeviceSlotConfigData</code>, and its on-disk element names changed to <code>&lt;DeviceSlotConfigs&gt;&lt;Config/&gt;</code> (AppSettings) and <code>&lt;ProfileDeviceSlotConfigs&gt;&lt;Config/&gt;</code> (Profiles). The old <code>PlayStationConfigs</code> / <code>ProfilePlayStationConfigs</code> spellings are read-only legacy aliases migrated forward on load (<code>ShouldSerialize</code> false), so one load-save cycle rewrites an old file. <code>AppSettingsData</code> and <code>ProfileData</code> gain the Keyboard+Mouse SOCD / Snap-Tap config (<code>KbmConfigs</code> of <code>KbmSlotConfigData</code>, #205), <code>SoundPackages</code> (#83), <code>SlotSoundVolumes</code>, the default-profile custom touchpad gestures, and <code>FirstRunTourCompleted</code> (which retires the <code>PadForge.firstrun</code> marker file). <code>PadSetting</code> gains the stick boundary-calibration pair (#174), the 12-field trigger rumble routing block (#102), and the Wii pointer-mode fields (#203), all in the checksum and clone list. <code>ShiftActivator</code> gains <code>AutoCancelMs</code> (Toggle-mode inactivity auto-cancel, #206). <code>MappingRow</code> gains the stick-trim trio (#155) and the <code>StickTrim</code> combine. <code>ActionData</code> grows the sound, rumble-detail, cursor, run-program, text-block, pointer-mode, and Guide-LED action fields.</p>
+<p><strong>v4.1.0 additions.</strong> The raw-surface key grammar renamed from <code>Extended*</code> to <code>Raw*</code> (<code>RawAxis0</code>, <code>RawBtn0</code>, <code>RawPov0Up</code>). On-disk element names stay pinned and legacy keys normalize on load (see <a href="#raw-surface-custom-mappings">Raw-Surface Custom Mappings</a>). <code>VirtualControllerType</code> gains <code>Nintendo</code> (5, the virtual Switch Pro, #215), with <code>NintendoSlotOrder</code>, <code>MaxNintendoSlots</code>, and its own positional raw auto-map. <code>MappingSet</code> gains the Base-layer appearance trio, <code>&lt;RumbleAudio&gt;</code> (bass shakers, #236), button SOCD (<code>SocdMode</code> / <code>SocdPairs</code>), the <code>Authoritative</code> flag, and the Workshop provenance stamps, all gated by <code>HasAuthoredContent</code>. <code>MacroData</code> gains seven activation modes (<code>MacroTriggerMode</code> 5–11, #253) plus <code>TriggerHoldMs</code>, <code>TriggerDoublePressMs</code>, the shift-layer <code>LayerMask</code> gate (#253/#254), <code>PairId</code>, and <code>ReleaseLingerMs</code>. <code>MacroActionType</code> runs through <code>AxisScale</code> (51, #251). <code>MappingSource</code> and <code>ShiftActivator</code> grow the per-source shaping / gating fields and the release / double-press activator fields listed in their tables. <code>DeviceSlotConfigData</code> gains the Guide Button LED pair and the synthetic touchpad pressure pair. <code>TouchpadGestureSettings</code> gains the Pointer Response block (libinput port) and the mouse-feel fields.</p>
 </blockquote>
 <hr />
 <p>This page is a developer reference for PadForge's settings persistence.</p>
@@ -5239,7 +5270,7 @@
 <a id="__codelineno-2-145" name="__codelineno-2-145" href="#__codelineno-2-145"></a><span class="w">      </span><span class="nt">&lt;AxisToButtonThreshold&gt;</span>50<span class="nt">&lt;/AxisToButtonThreshold&gt;</span>
 <a id="__codelineno-2-146" name="__codelineno-2-146" href="#__codelineno-2-146"></a><span class="w">      </span><span class="cm">&lt;!-- Dictionary-based mappings (only present when non-empty) --&gt;</span>
 <a id="__codelineno-2-147" name="__codelineno-2-147" href="#__codelineno-2-147"></a><span class="w">      </span><span class="nt">&lt;ExtendedMappings&gt;</span>
-<a id="__codelineno-2-148" name="__codelineno-2-148" href="#__codelineno-2-148"></a><span class="w">        </span><span class="nt">&lt;Map</span><span class="w"> </span><span class="na">Key=</span><span class="s">&quot;ExtendedAxis0&quot;</span><span class="w"> </span><span class="na">Value=</span><span class="s">&quot;Axis 0&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-2-148" name="__codelineno-2-148" href="#__codelineno-2-148"></a><span class="w">        </span><span class="nt">&lt;Map</span><span class="w"> </span><span class="na">Key=</span><span class="s">&quot;RawAxis0&quot;</span><span class="w"> </span><span class="na">Value=</span><span class="s">&quot;Axis 0&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <a id="__codelineno-2-149" name="__codelineno-2-149" href="#__codelineno-2-149"></a><span class="w">        </span><span class="nt">&lt;Map</span><span class="w"> </span><span class="na">Key=</span><span class="s">&quot;ExtendedBtn0&quot;</span><span class="w"> </span><span class="na">Value=</span><span class="s">&quot;Button 0&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <a id="__codelineno-2-150" name="__codelineno-2-150" href="#__codelineno-2-150"></a><span class="w">      </span><span class="nt">&lt;/ExtendedMappings&gt;</span>
 <a id="__codelineno-2-151" name="__codelineno-2-151" href="#__codelineno-2-151"></a><span class="w">      </span><span class="nt">&lt;MidiMappings&gt;</span>
@@ -5270,7 +5301,7 @@
 <a id="__codelineno-2-176" name="__codelineno-2-176" href="#__codelineno-2-176"></a><span class="w">    </span><span class="nt">&lt;EnableAutoProfileSwitching&gt;</span>false<span class="nt">&lt;/EnableAutoProfileSwitching&gt;</span>
 <a id="__codelineno-2-177" name="__codelineno-2-177" href="#__codelineno-2-177"></a><span class="w">    </span><span class="nt">&lt;ActiveProfileId</span><span class="w"> </span><span class="nt">/&gt;</span>
 <a id="__codelineno-2-178" name="__codelineno-2-178" href="#__codelineno-2-178"></a><span class="w">    </span><span class="nt">&lt;SlotControllerTypes&gt;</span>
-<a id="__codelineno-2-179" name="__codelineno-2-179" href="#__codelineno-2-179"></a><span class="w">      </span><span class="nt">&lt;Type&gt;</span>0<span class="nt">&lt;/Type&gt;</span><span class="w">    </span><span class="cm">&lt;!-- VirtualControllerType enum: 0=Microsoft, 1=PlayStation (XmlEnum=&quot;Sony&quot; on disk), 2=Extended, 3=Midi, 4=KeyboardMouse --&gt;</span>
+<a id="__codelineno-2-179" name="__codelineno-2-179" href="#__codelineno-2-179"></a><span class="w">      </span><span class="nt">&lt;Type&gt;</span>0<span class="nt">&lt;/Type&gt;</span><span class="w">    </span><span class="cm">&lt;!-- VirtualControllerType enum: 0=Microsoft, 1=PlayStation (XmlEnum=&quot;Sony&quot; on disk), 2=Extended, 3=Midi, 4=KeyboardMouse, 5=Nintendo --&gt;</span>
 <a id="__codelineno-2-180" name="__codelineno-2-180" href="#__codelineno-2-180"></a><span class="w">      </span><span class="nt">&lt;Type&gt;</span>1<span class="nt">&lt;/Type&gt;</span>
 <a id="__codelineno-2-181" name="__codelineno-2-181" href="#__codelineno-2-181"></a><span class="w">    </span><span class="nt">&lt;/SlotControllerTypes&gt;</span>
 <a id="__codelineno-2-182" name="__codelineno-2-182" href="#__codelineno-2-182"></a><span class="w">    </span><span class="nt">&lt;SlotCreated&gt;</span>
@@ -6765,17 +6796,18 @@
 </tbody>
 </table>
 <h3 id="dictionary-based-mapping-systems">Dictionary-Based Mapping Systems<a class="headerlink" href="#dictionary-based-mapping-systems" title="Permanent link">&para;</a></h3>
-<p>Extended, MIDI, and KB+M use dictionary-based storage for arbitrary key counts. All three share <code>ExtendedMappingEntry</code> as the serialization type and follow the same pattern: in-memory <code>Dictionary&lt;string, string&gt;</code> backed by a serializable <code>ExtendedMappingEntry[]</code>. Dictionary is lazily populated on first access and flushed to the array before serialization.</p>
-<h4 id="extended-custom-mappings">Extended Custom Mappings<a class="headerlink" href="#extended-custom-mappings" title="Permanent link">&para;</a></h4>
-<p>Extended (HIDMaestro custom-HID) slot with arbitrary axis/button/POV counts. Keys:
-- <code>ExtendedAxis0</code>, <code>ExtendedAxis0Neg</code>. Axis mappings (positive and negative directions)
-- <code>ExtendedBtn0</code>, <code>ExtendedBtn5</code>. Button mappings
-- <code>ExtendedPov0Up</code>, <code>ExtendedPov0Down</code>, <code>ExtendedPov0Left</code>, <code>ExtendedPov0Right</code>. POV directions
-- <code>ExtendedStick{N}DzX</code>, <code>ExtendedStick{N}DzY</code>, <code>ExtendedStick{N}AdzX</code>, etc.. Per-stick deadzone/calibration settings</p>
+<p>Extended, MIDI, and KB+M use dictionary-based storage for arbitrary key counts. All three share <code>RawMappingEntry</code> as the serialization type and follow the same pattern: in-memory <code>Dictionary&lt;string, string&gt;</code> backed by a serializable <code>RawMappingEntry[]</code>. Dictionary is lazily populated on first access and flushed to the array before serialization.</p>
+<h4 id="raw-surface-custom-mappings">Raw-Surface Custom Mappings<a class="headerlink" href="#raw-surface-custom-mappings" title="Permanent link">&para;</a></h4>
+<p>Extended (HIDMaestro custom-HID) and Nintendo slots with arbitrary axis/button/POV counts. The raw-surface grammar renamed from <code>Extended*</code> to <code>Raw*</code> in 4.1.0 (commit 4fed2c2e). Keys:
+- <code>RawAxis0</code>, <code>RawAxis0Neg</code>. Axis mappings (positive and negative directions)
+- <code>RawBtn0</code>, <code>RawBtn5</code>. Button mappings
+- <code>RawPov0Up</code>, <code>RawPov0Down</code>, <code>RawPov0Left</code>, <code>RawPov0Right</code>. POV directions
+- <code>RawStick{N}DzX</code>, <code>RawStick{N}DzY</code>, <code>RawStick{N}AdzX</code>, etc.. Per-stick deadzone/calibration settings</p>
+<p>Legacy <code>Extended*</code> tokens in older settings files are rewritten at load by <code>MappingSetMigrator.NormalizeRawToken</code> (idempotent, applied to row targets and dictionary keys alike), so pre-4.1.0 files keep loading. The XML ELEMENT names stay pinned (<code>&lt;ExtendedMappings&gt;&lt;Map&gt;</code>), so the on-disk container shape never changed.</p>
 <p>The same dictionary carries the Flick Stick card's per-device tuning (#225, v4.1), regardless of slot type. Eight keys per device: <code>FlickStickDots</code> (default 14400), <code>FlickStickTime</code> (0.1), <code>FlickStickThreshold</code> (0.9), <code>FlickStickSnapMode</code> (<code>"None"</code>), <code>FlickStickSnapStrength</code> (1.0), <code>FlickStickForwardDz</code> (0), <code>FlickStickSmoothing</code> (-1), <code>FlickStickOnEngage</code> (<code>"1"</code> / <code>"0"</code>, default off). <code>SaveFlickStickCard</code> writes them (invariant-culture numbers, snap mode as a plain string) and <code>LoadFlickStickCard</code> reads them (both in <code>PadForge.App/Services/SettingsService.cs</code>). The save path also re-stamps the stored values onto every <code>"Flick Stick ..."</code> source's <code>ParamFlick*</code> fields via <code>ApplyFlickStickParamsToRow</code>. An absent <code>FlickStickDots</code> means the card was never stored for that device. The load path then seeds the card from the slot's flick source, so a Workshop import's translator-carried tuning survives until the user tunes the card. The keys ride the normal sorted Extended fold in the checksum (item 18 above) and survive <code>ClearMappingDescriptors()</code> through <code>IsPerDeviceTuningKey</code>'s <code>StartsWith("FlickStick")</code> clause, the same per-device-tuning carve-out the <code>MotionSteer*</code> and steering keys use.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="na">[XmlArray(&quot;ExtendedMappings&quot;)]</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="na">[XmlArrayItem(&quot;Map&quot;)]</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">public</span><span class="w"> </span><span class="n">ExtendedMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">ExtendedMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">public</span><span class="w"> </span><span class="n">RawMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">RawMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <h4 id="midi-mappings">MIDI Mappings<a class="headerlink" href="#midi-mappings" title="Permanent link">&para;</a></h4>
 <p>MIDI output. Keys:
@@ -6783,7 +6815,7 @@
 - <code>MidiNote0</code>, <code>MidiNote5</code>. Note mappings for buttons</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="na">[XmlArray(&quot;MidiMappings&quot;)]</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">[XmlArrayItem(&quot;Map&quot;)]</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">public</span><span class="w"> </span><span class="n">ExtendedMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">MidiMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">public</span><span class="w"> </span><span class="n">RawMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">MidiMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <h4 id="kbm-keyboardmouse-mappings">KBM (Keyboard+Mouse) Mappings<a class="headerlink" href="#kbm-keyboardmouse-mappings" title="Permanent link">&para;</a></h4>
 <p>Keyboard+Mouse output. Keys:
@@ -6793,7 +6825,7 @@
 - <code>KbmScroll</code>, <code>KbmScrollNeg</code>. Scroll wheel</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="na">[XmlArray(&quot;KbmMappings&quot;)]</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="na">[XmlArrayItem(&quot;Map&quot;)]</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">public</span><span class="w"> </span><span class="n">ExtendedMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">KbmMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">public</span><span class="w"> </span><span class="n">RawMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">KbmMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <h4 id="mapping-deadzones">Mapping Deadzones<a class="headerlink" href="#mapping-deadzones" title="Permanent link">&para;</a></h4>
 <p>Per-mapping deadzone overrides. Each entry sets the deadzone threshold for a specific target mapping, overriding the global <code>AxisToButtonThreshold</code>. Keys are target setting names from any VC type:
@@ -6809,7 +6841,7 @@
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="na">[XmlArray(&quot;MappingDeadZones&quot;)]</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="na">[XmlArrayItem(&quot;Map&quot;)]</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">public</span><span class="w"> </span><span class="n">ExtendedMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">MappingDeadZoneEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">public</span><span class="w"> </span><span class="n">RawMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">MappingDeadZoneEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -6838,7 +6870,7 @@
 <p>Per-mapping "fire on either side of center" flag, parallel to <code>MappingDeadZones</code> and keyed the same way (target setting names). The third independent axis-to-button flag, kept in its own dictionary so the descriptor string stays unchanged. Stored as <code>"1"</code> / <code>"0"</code> / <code>""</code> (missing = false). Prefixed with <code>MBD:</code> in the checksum.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="na">[XmlArray(&quot;MappingBidirectional&quot;)]</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="na">[XmlArrayItem(&quot;Map&quot;)]</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">public</span><span class="w"> </span><span class="n">ExtendedMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">MappingBidirectionalEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">public</span><span class="w"> </span><span class="n">RawMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">MappingBidirectionalEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -6864,7 +6896,7 @@
 </table>
 <p>Lazily initialized via <code>EnsureMappingBidirectionalDict()</code> (double-checked locking). JSON key for clipboard round-trip: <code>__MappingBidirectional</code>.</p>
 <h4 id="shared-entry-type">Shared Entry Type<a class="headerlink" href="#shared-entry-type" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ExtendedMappingEntry</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RawMappingEntry</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">{</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Key</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
@@ -7034,7 +7066,7 @@
 <p>The <code>Gyro tuning</code> block carries a code comment flagging it as the historical clone-list omission whose absence made every Gyro slider revert to defaults on restart. The cure was adding the names here so <code>CloneDeep()</code> → <code>CopyFrom()</code> actually carries them.</p>
 <p><strong>Excluded:</strong>
 - <code>PadSettingChecksum</code>. Recomputed after copy.
-- <code>ExtendedMappingEntries</code>, <code>MidiMappingEntries</code>, <code>KbmMappingEntries</code>, <code>MappingDeadZoneEntries</code>, <code>MappingBidirectionalEntries</code>. Deep-copied separately in <code>CopyFrom()</code> and serialized separately in <code>ToJson()</code> / <code>FromJson()</code>.
+- <code>RawMappingEntries</code>, <code>MidiMappingEntries</code>, <code>KbmMappingEntries</code>, <code>MappingDeadZoneEntries</code>, <code>MappingBidirectionalEntries</code>. Deep-copied separately in <code>CopyFrom()</code> and serialized separately in <code>ToJson()</code> / <code>FromJson()</code>.
 - <code>TouchpadSettings</code>. The v3.3 per-(device, padIdx) typed sub-tree. Deep-copied separately in <code>CopyFrom()</code>, serialized as <code>__TouchpadSettings</code> in <code>ToJson()</code> / <code>FromJson()</code>.
 - <code>MouseGestureSettings</code>. The v4 per-device typed sub-tree (#200). Deep-copied separately in <code>CopyFrom()</code>, serialized as <code>__MouseGestureSettings</code>.
 - <code>SlotMultiSourceRows</code>, <code>DeviceScopedMultiSourceRows</code>, <code>SlotPerDeviceSettingsJson</code>, <code>SlotDeviceConfigsJson</code>, <code>SlotExtendedConfigJson</code>, <code>SlotMidiConfigJson</code>, <code>SlotKbmConfigJson</code>, <code>SlotShiftActivatorsJson</code>, <code>SlotMenusJson</code> (v4.1, #9: the slot's <code>MappingSet.Menus</code>, so Copy / Paste carries the Menus-tab state like the shift authoring). Clipboard-only payloads populated by the Copy path on the source side. <code>[XmlIgnore]</code> + <code>[JsonIgnore]</code> so they never reach the on-disk XML.</p>
@@ -7126,6 +7158,26 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>BaseLayerName</code> / <code>BaseColor</code> / <code>BaseIcon</code></td>
+<td>attributes</td>
+<td>(4.1.0) Base layer display name, color, and emoji icon, the Base half of the shift-layer appearance model.</td>
+</tr>
+<tr>
+<td><code>&lt;RumbleAudio&gt;</code></td>
+<td><code>RumbleAudioConfig</code></td>
+<td>(4.1.0, #236) Bass Shakers: <code>Enabled</code>, <code>EndpointId</code>, <code>MasterGainPercent</code> (50), <code>ChannelMode</code>, and four <code>&lt;Voice&gt;</code> entries (enable, frequency, gain per feedback channel).</td>
+</tr>
+<tr>
+<td><code>SocdMode</code> / <code>&lt;SocdPairs&gt;</code></td>
+<td>attribute + list</td>
+<td>(4.1.0, #245) Controller-button SOCD cleaning: resolution mode plus the opposing button pairs, applied to the combined output right before submit.</td>
+</tr>
+<tr>
+<td><code>Authoritative</code></td>
+<td>attribute</td>
+<td>(4.1.0) Marks a mapping set the grid writer owns; guards the domain-swap window.</td>
+</tr>
 <tr>
 <td><code>&lt;Row&gt;</code></td>
 <td><code>MappingRow[]</code></td>
@@ -7741,11 +7793,11 @@
 <td>(v3.1) Visual order for Xbox-family slots. XML name kept as <code>MicrosoftSlotOrder</code> for v2 back-compat.</td>
 </tr>
 <tr>
-<td><code>PlayStationSlotOrder</code> / <code>ExtendedSlotOrder</code> / <code>KeyboardMouseSlotOrder</code> / <code>MidiSlotOrder</code></td>
+<td><code>PlayStationSlotOrder</code> / <code>NintendoSlotOrder</code> / <code>ExtendedSlotOrder</code> / <code>KeyboardMouseSlotOrder</code> / <code>MidiSlotOrder</code></td>
 <td><code>int[]</code></td>
 <td><code>[XmlArray][XmlArrayItem("PadIndex")]</code></td>
 <td><code>null</code></td>
-<td>(v3.1) Per-group visual order.</td>
+<td>(v3.1; Nintendo added in 4.1.0) Per-group visual order.</td>
 </tr>
 <tr>
 <td><code>EnableDsuMotionServer</code></td>
@@ -8307,7 +8359,22 @@
 <tr>
 <td><code>TriggerMode</code></td>
 <td><code>MacroTriggerMode</code></td>
-<td><code>OnPress</code>, <code>OnRelease</code>, <code>WhileHeld</code>, <code>Always</code>, or <code>CustomExpression</code> (v3.2)</td>
+<td><code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253). <code>ShortPress</code> and <code>HoldForMs</code> share <code>TriggerHoldMs</code> to compose tap-vs-hold on one button.</td>
+</tr>
+<tr>
+<td><code>TriggerHoldMs</code></td>
+<td><code>int</code></td>
+<td>(#244) Hold threshold for <code>HoldForMs</code> / <code>ShortPress</code>, reset default 500.</td>
+</tr>
+<tr>
+<td><code>TriggerDoublePressMs</code></td>
+<td><code>int</code></td>
+<td>(#244) Multi-press window for <code>SinglePress</code> / <code>DoublePress</code> / <code>TriplePress</code>, reset default 442.</td>
+</tr>
+<tr>
+<td><code>LayerMask</code></td>
+<td><code>string</code></td>
+<td>(#253/#254) Per-macro shift-layer scope. Empty = any layer. Stamped at the add funnel; migrator pins legacy macros to Base semantics via Any.</td>
 </tr>
 <tr>
 <td><code>ConsumeTriggerButtons</code></td>
@@ -8437,7 +8504,7 @@
 <a id="__codelineno-24-83" name="__codelineno-24-83" href="#__codelineno-24-83"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong><code>MacroActionType</code></strong> is <strong>APPEND-ONLY</strong> (<code>PadForge.App/ViewModels/MacroItem.cs</code>): the macro clipboard leg writes the enum numerically via <code>System.Text.Json</code> defaults, so inserting a member re-meanings every previously copied clipboard payload. The settings XML writes names and is insertion-safe, the clipboard is not. New members go at the end. The full ordered set (index in parentheses):</p>
-<p><code>ButtonPress</code> (0), <code>ButtonRelease</code> (1), <code>KeyPress</code> (2), <code>KeyRelease</code> (3), <code>Delay</code> (4), <code>AxisSet</code> (5), <code>SystemVolume</code> (6), <code>AppVolume</code> (7), <code>MouseMove</code> (8), <code>MouseButtonPress</code> (9), <code>MouseButtonRelease</code> (10), <code>MouseScroll</code> (11), <code>ToggleTouchpadOverlay</code> (12, v3.2), <code>LightbarColor</code> (13), <code>LightbarColorClear</code> (14), <code>LightbarModeSet</code> (15), <code>LightbarModeCycle</code> (16), <code>SetGyroEngaged</code> (17), <code>Rumble</code> (18), <code>RumbleStop</code> (19), <code>RumbleTrigger</code> (20, #102), <code>RumbleTriggerStop</code> (21, #102), <code>PlaySound</code> (22, #83), <code>SoundStop</code> (23, #83), <code>MouseRecenter</code> (24, #108), <code>MouseFixPosition</code> (25, #109), <code>MouseLimitRegion</code> (26, #110), <code>DisconnectController</code> (27, #162), <code>RunProgram</code> (28), <code>TextBlock</code> (29, #201), <code>PointerModeCycle</code> (30, #203), <code>PointerModeSet</code> (31, #203), <code>GuideLedBrightness</code> (32, #209).</p>
+<p><code>ButtonPress</code> (0), <code>ButtonRelease</code> (1), <code>KeyPress</code> (2), <code>KeyRelease</code> (3), <code>Delay</code> (4), <code>AxisSet</code> (5), <code>SystemVolume</code> (6), <code>AppVolume</code> (7), <code>MouseMove</code> (8), <code>MouseButtonPress</code> (9), <code>MouseButtonRelease</code> (10), <code>MouseScroll</code> (11), <code>ToggleTouchpadOverlay</code> (12, v3.2), <code>LightbarColor</code> (13), <code>LightbarColorClear</code> (14), <code>LightbarModeSet</code> (15), <code>LightbarModeCycle</code> (16), <code>SetGyroEngaged</code> (17), <code>Rumble</code> (18), <code>RumbleStop</code> (19), <code>RumbleTrigger</code> (20, #102), <code>RumbleTriggerStop</code> (21, #102), <code>PlaySound</code> (22, #83), <code>SoundStop</code> (23, #83), <code>MouseRecenter</code> (24, #108), <code>MouseFixPosition</code> (25, #109), <code>MouseLimitRegion</code> (26, #110), <code>DisconnectController</code> (27, #162), <code>RunProgram</code> (28), <code>TextBlock</code> (29, #201), <code>PointerModeCycle</code> (30, #203), <code>PointerModeSet</code> (31, #203), <code>GuideLedBrightness</code> (32, #209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40, translator v15), <code>MouseNudge</code> (41, translator v16), <code>CycleTapList</code> (42, translator v16), <code>ToggleMouseButton</code> (43, translator v18), <code>ToggleVcAxis</code> (44, translator v18), <code>RepeatVcAxisWhileHeld</code> (45, translator v18), <code>ToggleWheel</code> (46, translator v18), <code>AxisAdd</code> (47, #237 relative deflection), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251).</p>
 <p>The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (<code>RumbleHoldMode</code>, <code>RumbleStrengthLeft</code>, <code>RumbleStrengthRight</code>, <code>RumbleHoldMs</code>, <code>RumbleFadeMs</code>) are <code>[XmlElement]</code> on <code>ActionData</code> and round-trip through disk. Both macro converters (<code>BuildActionData</code> save, <code>BuildMacroAction</code> load) carry them, and the runtime applies them via <code>MacroRumbleOverride.Fire*</code>.</p>
 <table>
 <thead>
@@ -9294,6 +9361,11 @@
 <td>Maximum MIDI virtual controllers</td>
 </tr>
 <tr>
+<td><code>MaxNintendoSlots</code></td>
+<td><code>MaxPads</code> (16)</td>
+<td>(4.1.0, #246) Maximum Nintendo virtual controllers</td>
+</tr>
+<tr>
 <td><code>MaxKeyboardMouseSlots</code></td>
 <td><code>MaxPads</code> (16)</td>
 <td>Maximum Keyboard+Mouse virtual controllers</td>
@@ -9529,7 +9601,7 @@
 <a id="__codelineno-36-24" name="__codelineno-36-24" href="#__codelineno-36-24"></a>    |
 <a id="__codelineno-36-25" name="__codelineno-36-25" href="#__codelineno-36-25"></a>    v  Step 2: Flush dictionaries and recompute checksums
 <a id="__codelineno-36-26" name="__codelineno-36-26" href="#__codelineno-36-26"></a>    |  For each UserSetting&#39;s PadSetting:
-<a id="__codelineno-36-27" name="__codelineno-36-27" href="#__codelineno-36-27"></a>    |    - FlushExtendedMappings() -- dict -&gt; ExtendedMappingEntries[]
+<a id="__codelineno-36-27" name="__codelineno-36-27" href="#__codelineno-36-27"></a>    |    - FlushRawMappings() -- dict -&gt; RawMappingEntries[]
 <a id="__codelineno-36-28" name="__codelineno-36-28" href="#__codelineno-36-28"></a>    |    - FlushMidiMappings() -- dict -&gt; MidiMappingEntries[]
 <a id="__codelineno-36-29" name="__codelineno-36-29" href="#__codelineno-36-29"></a>    |    - FlushKbmMappings() -- dict -&gt; KbmMappingEntries[]
 <a id="__codelineno-36-30" name="__codelineno-36-30" href="#__codelineno-36-30"></a>    |    - UpdateChecksum() -- recompute MD5 from all properties

@@ -1,6 +1,6 @@
 # Architecture Overview
 
-High-level architecture: solution structure, project layout, design philosophy, threading model, data flow, dependencies, and build system.
+*High-level architecture: solution structure, project layout, design philosophy, threading model, data flow, dependencies, and build system.*
 
 > **Note:** This page describes the cross-cutting architecture and project layout. The day-to-day virtual-controller lifecycle (HIDMaestro thread-pool create/destroy, OpenXInput shim, bubble-up cascade, inactivity timeout) is documented in [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 
@@ -23,18 +23,20 @@ graph TB
         IM[InputManager<br/>Polling loop . Steps 1-6]
         HMP[HM lifecycle thread pool<br/>Create / Destroy off polling thread]
         ABD[AudioBassDetector<br/>WASAPI loopback . IIR filter]
+        RAS[RumbleAudioService<br/>Bass Shakers . WASAPI render]
     end
 
     subgraph "Virtual Controllers"
         MS[Xbox<br/>Xbox 360 / One / Series / Elite / Adaptive]
         SONY[PlayStation<br/>DS3 / DS4 / DualSense / DualSense Edge]
+        NIN[Nintendo<br/>Switch Pro]
         EXT[Extended<br/>Sticks . Wheels . Custom HID]
         KBM[Keyboard+Mouse<br/>SendInput, no driver]
         MIDI[MIDI<br/>Windows MIDI Services]
     end
 
     subgraph "Data Layer. PadForge.Engine"
-        PS[PadSetting . UserSetting . UserDevice<br/>Gamepad . Vibration . MotionSnapshot]
+        PS[PadSetting . UserSetting . UserDevice<br/>Gamepad . RawHidState . Vibration]
         SDL[SdlDeviceWrapper<br/>SDL3 P/Invoke]
         RIL[RawInputListener<br/>Keyboard . Mouse]
         IHM[InputHookManager<br/>LL hooks . input suppression]
@@ -46,7 +48,7 @@ graph TB
         HM[HIDMaestro<br/>UMDF2 user-mode driver, 225+ profiles]
         HH[HidHide Driver]
         WMS[Windows MIDI Services]
-        WASAPI[Windows Audio<br/>WASAPI Loopback]
+        WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
         DSU_CLIENT[DSU Clients<br/>Cemu / Dolphin / Yuzu / Ryujinx]
         BROWSER[Web Browsers<br/>Phone / tablet]
         PEER[Remote Link Peers<br/>Paired PadForge PCs over LAN]
@@ -63,17 +65,21 @@ graph TB
     IM --> HMP
     IM --> KBM
     IM --> MIDI
+    IM --> RAS
     HMP --> MS
     HMP --> SONY
+    HMP --> NIN
     HMP --> EXT
     IM --> SDL
     IM --> RIL
     IM --> IHM
     ABD --> WASAPI
+    RAS --> WASAPI
     SDL --> SDL3
     SDL --> OXI
     MS --> HM
     SONY --> HM
+    NIN --> HM
     EXT --> HM
     MIDI --> WMS
     DS --> HH
@@ -121,7 +127,7 @@ PadForge.App/
     AssemblyInfo.cs                   # Assembly metadata only (title, copyright, theme, COM GUID). AssemblyVersion + AssemblyFileVersion live in ..\SharedVersion.cs linked into both csproj.
 
   Common/
-    ControllerIcons.cs                # SVG path data for controller type icons (Xbox, PlayStation, Extended, MIDI, KB+M)
+    ControllerIcons.cs                # SVG path data for controller type icons (Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M)
     CurveLut.cs                       # Sensitivity curve LUT generation (per-axis response curves)
     DriverInstaller.cs                # HidHide / Windows MIDI Services install. Legacy ViGEmBus / vJoy uninstall
     HidHideController.cs              # HidHide IOCTL API: blacklist/whitelist/cloaking via \\.\HidHide
@@ -143,7 +149,7 @@ PadForge.App/
       InputManager.Step5.VirtualDevices.cs      # HIDMaestro + MIDI + KBM virtual controller lifecycle (HM lifecycle on thread pool)
       InputManager.Step6.RetrieveOutputStates.cs # Copy combined states for UI display
       InputManager.MenuRuntime.cs     # Radial / touch menu runtime: per-(slot, device, menu) hover-commit contexts (#9)
-      HMaestroVirtualController.cs    # IVirtualController for HIDMaestro (Xbox, PlayStation, Extended)
+      HMaestroVirtualController.cs    # IVirtualController for HIDMaestro (Xbox, PlayStation, Nintendo, Extended)
       HMaestroProfileCatalog.cs       # HIDMaestro profile lookup (HMProfile per VC subtype)
       HMaestroFfbDescriptor.cs        # Feedback descriptor for HM controllers (rumble + FFB ranges)
       HMaestroFfbDecoder.cs           # Decodes raw HM feedback packets into Vibration / FFB state
@@ -159,6 +165,9 @@ PadForge.App/
       Ds3DirectService.cs             # Surfaces a BthPS3 RAW-PDO DualShock 3 (no DsHidMini) as an SDL virtual joystick
       Ds4SbcEncoder.cs                # Clean-room SBC encoder for the DS4 Bluetooth audio stream (32 kHz stereo, bitpool 48)
       AudioMuteService.cs             # Tracks system default-output mute state for audio-rumble gating
+      SlotButtonSocd.cs               # Controller-button SOCD cleaner, applied to the slot's final combined output at the Step 5 submit (#240)
+      RumbleAudioService.cs           # Rumble-to-audio (Bass Shakers) renderer: endpoint-keyed WASAPI players fed from the poll loop (#236)
+      RumbleAudioSampleProvider.cs    # Allocation-free sine synthesizer for one rumble-to-audio endpoint (#236)
       MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
       KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
       InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
@@ -311,7 +320,8 @@ PadForge.Engine/
     CustomInputState.cs         # API-agnostic input snapshot: axes[24], sliders[8], povs[4], buttons[256], gyro[3], accel[3], per-pad touchpads[]
     DeviceObjectItem.cs         # Metadata for one axis/button/hat on a device
     ForceFeedbackState.cs       # Per-device rumble: change detection, haptic effect lifecycle
-    GamepadTypes.cs             # Gamepad struct (XInput layout), ExtendedRawState, MidiRawState, KbmRawState, Vibration, MotionSnapshot
+    GamepadTypes.cs             # Gamepad struct (XInput layout), TouchpadState, RawHidState, KbmRawState, MidiRawState
+    LfeOutputState.cs           # Packed per-slot LFE voice state for rumble-to-audio: four ushort voices in one long, one Volatile read/write per side (#236)
     InputTypes.cs               # DeviceObjectTypeFlags + MapType enums, ObjectGuid + InputDeviceType constant classes
     VirtualControllerTypes.cs   # VirtualControllerType enum, IVirtualController interface
     InputHookManager.cs         # WH_KEYBOARD_LL / WH_MOUSE_LL hooks for mapped input suppression
@@ -326,7 +336,7 @@ PadForge.Engine/
     MappingSet.cs               # Per-VC mapping table: rows + ShiftActivators (Issue #61) + Menus (#9)
     MappingSetMigrator.cs       # Loads v2 per-device PadSetting mapping fields into the v3 MappingSet shape
     MappingSource.cs            # One physical input feeding a row: Kind, DeviceGuid, Descriptor, Invert, Half, …
-    MappingTranslation.cs       # Cross-layout mapping translation (Xbox/PlayStation/Extended/MIDI/KBM equivalence)
+    MappingTranslation.cs       # Cross-layout mapping translation (Xbox/PlayStation/Nintendo/Extended/MIDI/KBM equivalence)
     PadSetting.cs               # Per-slot tuning (deadzones, force feedback, lighting, AT, MIDI, etc.)
     PassthroughCloneGenerator.cs # 1:1 passthrough clone of a physical device onto an Extended VC (#196)
     PerDeviceSettingsEntry.cs   # (v3.3) Clipboard payload. One per assigned device on Copy / Paste / Copy From, carrying a nested PadSettingJson
@@ -433,6 +443,9 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - **Radial / touch menus (#9 B-17)**. `Engine/Menus/` (definition model on the slot's `MappingSet`), `InputManager.MenuRuntime.cs` (per-(slot, device, menu) hover-commit runtime), `MenuEditorItem.cs` (Menus tab VM), `MenuOverlayWindow.xaml(.cs)` (click-through HUD)
 - **Mouse-gesture Custom activation (#216)**. A sixth gesture-activation session armed by a recorded cross-device input (keyboard key, gamepad button, wheel pedal) held while gesturing
 - **Switch HOME LED (#226)**. `SwitchHomeLedSetter.cs`, the third #209 Guide LED lane (see the writer list above)
+- **Nintendo virtual controllers (#215/#246)**. `VirtualControllerType.Nintendo`, a fourth HM-backed slot family. A console-family face like Xbox / PlayStation (own group, icon, Nintendo button lettering) riding the Extended raw-HID data path with the fixed `switch-pro` catalog profile. No Customize surface: the slot always deploys the catalog profile as-is
+- **Rumble to Audio / Bass Shakers (#236)**. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones. `RumbleAudioService` + `RumbleAudioSampleProvider` (App) render, `LfeOutputState` (Engine) packs the four voices into one long, and the poll loop's `UpdateRumbleAudioLane` publishes once per tick from the slot's `MappingSet.RumbleAudio` config. Surfaced as the per-slot "Bass Shakers" tab
+- **Controller-button SOCD (#240)**. `SlotButtonSocd.cs` extends #205's keyboard Snap Tap to gamepad and raw-HID slots: pair cleaning on the slot's final combined output right before the Step 5 submit, configured via `MappingSet.SocdMode` / `SocdPairs`
 
 ### PadForge.SteamWorkshop
 
@@ -479,11 +492,11 @@ SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_SWITCH2, "1");         // Switch 2 Pro (cus
 
 ### Why HIDMaestro (not ViGEmBus + vJoy)
 
-Virtual Xbox, PlayStation, and Extended controllers all come from **HIDMaestro**. v2 used ViGEmBus for Xbox / DS4 virtuals and vJoy for everything else. v3 replaces both:
+Virtual Xbox, PlayStation, Nintendo, and Extended controllers all come from **HIDMaestro**. v2 used ViGEmBus for Xbox / DS4 virtuals and vJoy for everything else. v3 replaces both:
 
 | Advantage | Detail |
 |---|---|
-| One driver, two roles | HIDMaestro covers Xbox-family, DS4 / DualSense, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side |
+| One driver, two roles | HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side |
 | 225+ profiles in the catalog | Pre-built profiles for the long tail of DirectInput devices, plus a profile builder for custom HID descriptors. vJoy was generic-only |
 | DualSense native | A real virtual DualSense (lightbar, adaptive triggers, mic LED, touchpad). ViGEmBus only emulated Xbox 360, Xbox One, and DS4 |
 | Per-controller `OutputReceived` | One callback per virtual device delivers full game output (rumble, lightbar, AT, FFB). Feeds Sony's `UserEffectsDispatcher` and the FFB decoder |
@@ -601,7 +614,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## Threading Model
 
-Up to ten concurrent execution contexts. Some run whenever the engine runs, the rest start on demand:
+Up to eleven concurrent execution contexts. Some run whenever the engine runs, the rest start on demand:
 
 ### 1. Engine Thread (InputManager, 1000 Hz)
 
@@ -632,7 +645,7 @@ Runs the 6-step pipeline (see [Input Pipeline](input-pipeline.md)). Uses a 3-tie
 - Reads `RetrievedOutputStates[]` / `RetrievedKbmRawStates[]` for dashboard/schematic display
 - Reads `UserDevice.InputState` for Devices page live visualization (only when visible)
 - Pushes macro snapshots from PadViewModels to `MacroSnapshots[]`
-- Updates `SlotControllerTypes[]`, `SlotExtendedConfigs[]`, `SlotExtendedIsCustom[]`, `_midiConfigs[]`
+- Updates `SlotControllerTypes[]`, `SlotCustomLayouts[]`, `SlotRawHidSurface[]`, `_midiConfigs[]`
 - Syncs device list from `UserDevices` → `DevicesViewModel` (via `DeviceService`)
 - Updates dashboard statistics (frequency, device count, online status)
 - Runs macro trigger recording
@@ -721,6 +734,10 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 `LinkServer` (issue #138) is not a dedicated `Thread`. `Start(port)` opens a TCP listener and a UDP socket, then launches `AcceptLoopAsync` and `UdpLoopAsync` as fire-and-forget tasks on the thread pool, plus a 3-second `Timer` for keepalive and dead-connection reaping. TCP carries the pairing handshake, UDP carries the input/feedback datagram stream. Each paired peer's shared controller becomes a `RemotePeerDevice` visible in Step 1 enumeration. Off by default. Nothing listens until Remote Link is enabled, and the crypto identity gate runs before any peer input reaches the pipeline.
 
+### 11. Bass Shakers WASAPI Render (RumbleAudioService, on demand)
+
+`RumbleAudioService` (issue #236) renders each slot's inbound game feedback as low-frequency sine tones. Players are keyed by audio endpoint, not by slot: every slot routed to one endpoint shares a single NAudio `WasapiOut` (shared mode, event-sync, 30 ms buffers), one sample clock, and one composite limiter. Each `WasapiOut` runs its own render thread, and a 5-second reconcile `Timer` resolves configured endpoints and prunes dead players. The poll loop's `UpdateRumbleAudioLane` publishes a packed four-voice `LfeOutputState` long per slot each tick (`Volatile.Write`). `RumbleAudioSampleProvider` reads it on the render thread (`Volatile.Read`). Silence is an explicit edge, never an inference from callback inactivity: idle entry, engine stop, and slot delete publish it synchronously. A configured-but-unresolved endpoint fails closed (no fallback device).
+
 ### Thread Safety Summary
 
 | Shared State | Writer | Reader | Sync |
@@ -740,6 +757,7 @@ Injected mouse movement is processed synchronously: it traverses every process's
 | `AudioBassDetector._bassEnergy` | WASAPI callback | Engine (Step 2) | Volatile float |
 | `_pendingMouseDx` / `_pendingMouseDy` | Engine (Step 4b), KBM VC | Mouse Injector thread | `Interlocked.Add` / `Exchange` |
 | `RemotePeerDevice` state | Remote Link UDP loop | Engine (Step 2) | `_stateLock` (double-buffered) |
+| `RumbleAudioService` voice packs | Engine (poll lane) | WASAPI render thread | Volatile long (four packed voices) |
 
 ---
 
@@ -780,7 +798,7 @@ Step 4: CombineOutputStates()
   │    Merge all device OutputStates mapped to this slot
   │    Axes: max absolute value wins
   │    Buttons: OR (any device pressing = pressed)
-  │    Also produces ExtendedRawState, MidiRawState, KbmRawState
+  │    Also produces RawHidState, MidiRawState, KbmRawState
   │
   ▼
 Step 4b: EvaluateMacros()
@@ -795,8 +813,9 @@ Step 5: UpdateVirtualDevices()
   │    Create/destroy IVirtualController if type changed or slot toggled
   │      (HM lifecycle dispatched to thread pool, see [HIDMaestro Deep Dive](hidmaestro-deep-dive.md))
   │    Submit CombinedOutputStates[i] → virtual controller
-  │    Xbox / PlayStation / Extended: HMaestroVirtualController
+  │    Xbox / PlayStation / Nintendo / Extended: HMaestroVirtualController
   │      → HMController.SubmitState (gamepad path)
+  │      → SubmitRawHidState → HMController.SubmitState (raw-HID surface: Extended custom layouts + Nintendo)
   │      → HMController.SubmitRawReport (Sony Report 0x01 passthrough on DS4 / DualSense)
   │    KBM: SendInput() → Win32 keyboard/mouse events
   │    MIDI: Windows MIDI Services → virtual MIDI port
@@ -826,10 +845,12 @@ Step 2: ApplyForceFeedback() (engine thread)
   │  Reads VibrationStates[slot] for each device in that slot
   │  Merges with audio-bass rumble (max), macro rumble (max), and Constant Force
   │  Routes by source-pad VID/PID to the per-family writer:
-  │    Sony (DS4/DualSense) → UserEffectsDispatcher (sole writer; SDL skipped)
-  │    Xbox One+ (One/Elite/Series) → XboxImpulseHidWriter raw HID (sole writer; SDL skipped)
+  │    Sony (DS4/DualSense) → UserEffectsDispatcher (sole writer, SDL skipped)
+  │    Xbox One+ (One/Elite/Series) → XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
   │    Everything else → SDL_RumbleJoystick or SDL haptic effects
 ```
+
+Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio path (#236): once per tick the poll loop's `UpdateRumbleAudioLane` publishes each slot's packed voice state to `RumbleAudioService`, which renders it as low-frequency tones on the configured audio endpoint (the "Bass Shakers" tab).
 
 ---
 
@@ -971,13 +992,14 @@ Up to **16 virtual controller slots** (`MaxPads = 16`). Per-type limits:
 |---|---|---|
 | Xbox | 16 | `MaxXbox360Slots = MaxPads` (constant name preserved from v2) |
 | PlayStation | 16 | `MaxPlayStationSlots = MaxPads` |
+| Nintendo | 16 | `MaxNintendoSlots = MaxPads` |
 | Extended | 16 | `MaxExtendedSlots = 16` |
 | MIDI | 16 | `MaxMidiSlots = MaxPads` |
 | Keyboard+Mouse | 16 | `MaxKeyboardMouseSlots = MaxPads` |
 
 The "Add Controller" button hides when all 16 slots are in use.
 
-> **XInput visibility**: The XInput API addresses only slots 0–3. Xbox VCs beyond slot 3 still work but may be invisible to XInput-only games. DirectInput, SDL, and raw HID see all 16. PlayStation and Extended VCs are unaffected by the XInput slot cap.
+> **XInput visibility**: The XInput API addresses only slots 0–3. Xbox VCs beyond slot 3 still work but may be invisible to XInput-only games. DirectInput, SDL, and raw HID see all 16. PlayStation, Nintendo, and Extended VCs are unaffected by the XInput slot cap.
 
 Per-slot state arrays in `SettingsManager`:
 
@@ -990,7 +1012,7 @@ Per-slot state arrays in `InputManager`:
 
 ```csharp
 public Gamepad[] CombinedOutputStates;          // Step 4 output
-public ExtendedRawState[] CombinedExtendedRawStates;    // Step 4 output (Extended VC raw axes/buttons/POVs)
+public RawHidState[] CombinedRawHidStates;      // Step 4 output (raw-HID axes/buttons/POVs: Extended custom + Nintendo)
 public MidiRawState[] CombinedMidiRawStates;    // Step 4 output (MIDI)
 public KbmRawState[] CombinedKbmRawStates;      // Step 4 output (KeyboardMouse)
 public Gamepad[] RetrievedOutputStates;          // Step 6 output (UI display)
@@ -999,11 +1021,11 @@ public Vibration[] VibrationStates;              // HIDMaestro feedback
 public MotionSnapshot[] MotionSnapshots;         // DSU motion data
 public MacroItem[][] MacroSnapshots;             // Macro definitions
 public VirtualControllerType[] SlotControllerTypes;  // Configured type
-internal bool[] SlotExtendedIsCustom;                // Custom Extended config vs gamepad preset
+internal bool[] SlotRawHidSurface;               // Raw-HID pipeline (custom axis/button counts) vs Gamepad preset pipeline
 internal MidiSlotConfig[] _midiConfigs;          // Per-slot MIDI configuration
 ```
 
-Pad indices are data identity. A pad's mappings, profile, devices, and settings live at its pad index and never move. Visual position within an HM-backed group (Xbox / PlayStation / Extended) is the kernel-slot anchor: drag-reorder mutates `SettingsManager.SlotOrders` and reroutes the pad-index pointer in `_virtualControllers[]` so the data at the new pad-at-position-V feeds into V's kernel slot. Same-profile reorders pointer-swap. Different-profile positions destroy + recreate. See [Services Layer#slot-reordering](services-layer.md#slot-reordering).
+Pad indices are data identity. A pad's mappings, profile, devices, and settings live at its pad index and never move. Visual position within an HM-backed group (Xbox / PlayStation / Nintendo / Extended) is the kernel-slot anchor: drag-reorder mutates `SettingsManager.SlotOrders` and reroutes the pad-index pointer in `_virtualControllers[]` so the data at the new pad-at-position-V feeds into V's kernel slot. Same-profile reorders pointer-swap. Different-profile positions destroy + recreate. See [Services Layer#slot-reordering](services-layer.md#slot-reordering).
 
 ---
 
@@ -1015,11 +1037,11 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 - [ViewModels](viewmodels.md): `PadViewModel`, `DashboardViewModel`, `DevicesViewModel`, `SettingsViewModel`
 - [XAML Views](xaml-views.md): `DashboardPage`, `PadPage`, `DevicesPage`, `SettingsPage`
 - [Settings and Serialization](settings-and-serialization.md): XML persistence, `SettingsManager`, `SettingsService` data flow
-- [Virtual Controllers](../features/virtual-controllers.md): `IVirtualController` implementations (`HMaestroVirtualController` for Xbox / PlayStation / Extended, plus MIDI and KB+M)
+- [Virtual Controllers](../features/virtual-controllers.md): `IVirtualController` implementations (`HMaestroVirtualController` for Xbox / PlayStation / Nintendo / Extended, plus MIDI and KB+M)
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface, thread-pool lifecycle, OpenXInput shim, bubble-up cascade
 - [SDL3 Integration](sdl3-integration.md): SDL3 P/Invoke, device enumeration, state reading, haptic
 - [Build and Publish](build-and-publish.md): Build commands, publish configuration, CI/CD
 
 ---
 
-_Last updated for PadForge 4.1.0._
+*Last updated for PadForge 4.1.0.*

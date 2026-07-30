@@ -16,6 +16,7 @@ PadForge picks the view from the slot's controller type.
 |---|---|---|
 | **Xbox** | 3D model | Yes |
 | **PlayStation** | 3D model | Yes |
+| **Nintendo** | 2D Switch Pro overlay | No (2D only, no 3D mesh) |
 | **Extended** | Procedural schematic | No |
 | **Keyboard + Mouse** | Keyboard and mouse layout | No |
 | **MIDI** | Piano keyboard and CC sliders | No |
@@ -26,7 +27,7 @@ On Xbox and PlayStation slots a corner button switches between the 3D model and 
 
 ## 3D model
 
-The active model swaps with the assigned profile. Four meshes cover every controller: Xbox 360, a shared Xbox One body used for Xbox One, Elite, Series, and Adaptive profiles, DualShock 4, and DualSense. Xbox Series profiles add a clickable Share button on the shared Xbox One body. The other Xbox profiles use the same body with the Share region inert, so it doesn't respond to hover or clicks. There is no separate Series 3D mesh. The distinct Series artwork lives only in the 2D overlay.
+The active model swaps with the assigned profile. Four meshes cover the Xbox and PlayStation slots: Xbox 360, a shared Xbox One body used for Xbox One, Elite, Series, and Adaptive profiles, DualShock 4, and DualSense. Xbox Series profiles add a clickable Share button on the shared Xbox One body. The other Xbox profiles use the same body with the Share region inert, so it doesn't respond to hover or clicks. There is no separate Series 3D mesh. The distinct Series artwork lives only in the 2D overlay. Nintendo slots have no 3D mesh at all. Like the Series artwork, the Switch Pro art exists only in 2D.
 
 Each model registers hit regions for every button, stick, trigger, and the touchpad. Click anywhere on the model to target that control.
 
@@ -120,12 +121,24 @@ PlayStation slots (DualShock 4, DualSense) show a live touchpad preview on both 
 
 | View | Touchpad rendering |
 |---|---|
-| 3D model | Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the active touches reported by the source controller. |
-| 2D overlay | Finger dots drawn on a flat representation of the touchpad area. Same source data as the 3D view. |
+| 3D model | Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the slot's combined touchpad output. |
+| 2D overlay | Finger dots drawn on a flat representation of the touchpad area. Same data as the 3D view. |
 
 The touchpad surface is a click target for mapping. Click anywhere on the touchpad in either view to start recording a Touchpad Click mapping. During Map All on PlayStation outputs, Touchpad Click comes after the buttons and axes, then the Motion Gyro and Motion Accelerometer rows finish the sequence.
 
-The spheres and dots render only when a DualShock 4 or DualSense feeds the slot. They follow the finger positions reported by that controller.
+The spheres and dots follow the slot's Touchpad mapping rows (**Touchpad 1 Finger 1 X** through **Touchpad 1 Finger 2 Touch**). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.
+
+---
+
+## Nintendo preview
+
+Nintendo slots always show a flat 2D Switch Pro diagram. No 3D mesh exists for the Switch Pro, so the 2D/3D toggle is hidden.
+
+![Nintendo slot preview](../images/pad-nintendo-configbar.png)
+
+The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.
+
+A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.
 
 ---
 
@@ -192,4 +205,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

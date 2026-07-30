@@ -117,7 +117,7 @@ The version gate rejects anything below 3 with the exact reason: "Steam Input co
 
 ### Translator version history
 
-`TranslationReport.CurrentTranslatorVersion` is **7**. Each report stamps the version it was produced under, and the summary digest leads with it. The bumps:
+`TranslationReport.CurrentTranslatorVersion` is **26**. Each report stamps the version it was produced under, and the summary digest leads with it. Every bump is summarized in the doc comment above the constant in `TranslationReport.cs`, which is the authoritative changelog. The bumps:
 
 | Version | Commit | What it added |
 |---|---|---|
@@ -128,6 +128,27 @@ The version gate rejects anything below 3 with the exact reason: "Steam Input co
 | 5 | `caa347dc` (wave 4a) | `flickstick` mode as the Flick Stick source on `KbmMouseX`, with the group's `sensitivity` landing on `ParamFlickCountsPer360`. |
 | 6 | `495c8cc0` (wave 4b) | Trackpad `mouse_region` as Clean absolute `Touchpad {p} Pointer X/Y` rows (region geometry on `ParamPointerCenter` / `ParamPointerExtent`). Retired `AbsoluteMouseApproximated`: `absolute_mouse` is relative in Steam too, so the relative rows are faithful and Clean. |
 | 7 | `b006ee7e` (wave 4c) | `radial_menu` and `touch_menu` as first-class `MenuDefinitionEntry` menus with the on-screen overlay. Retired the `RadialMenuNeedsOverlay` / `TouchMenuNeedsOverlay` skips and the two-cell touch-spot approximation. |
+| 8 | | Group axis inversion: `invert_x` / `invert_y` flip the emitted mouse-axis source's Invert flag on every mode whose engine read honors it. |
+| 9 | | `mouse_joystick` emits right-stick axis rows instead of KbM mouse. Unmerged `CHANGE_PRESET` lowers to a Latch of the target layer. |
+| 10 | | Gap closure G1-G15: activator `haptic_intensity` as RumblePulse macros, `button_capture` to the raw SDL MISC1 source, `2dscroll` onto one-shot swipe gestures. |
+| 11 | | Response-curve channel: Steam's curve cluster (`curve_exponent` preset and friends) lands on emitted stick axis pairs as per-source params. |
+| 12 | | Stick-hosted swipe and wheel: `2dscroll` on a stick lowers each `dpad_*` member's one-shot bindings onto tap macros on the member's wedge read. |
+| 13 | | Vocabulary census against Steam's own serializer: `LSTICK_`/`RSTICK_` direction params lower to bipolar thumb-axis rows. |
+| 14 | | Self-arming gesture reads: `TrackpadFeatureRequired` retires whole, authoritative slots' mapped gesture descriptors self-enable the gesture gate. |
+| 15 | | The swipe / flick skip family closes: gyro-hosted `2dscroll` lowers onto one-shot tap macros on signed gyro-rate halves. `MouseWheelTap` action lands. |
+| 16 | | `mouse_delta` builds on the new one-shot `MouseNudge` macro through the engine's accumulate-and-flush mouse lane. `CycleTapList` lands. |
+| 17 | | `Double_Press` activators on any host lower to macros on the engine's new DoublePress trigger. Stick `mouse_region` engages on a deflection ring. |
+| 18 | | The response-cluster and gate/latch waves: the curve/range shaping seam widens to every analog lane, click gates ride `GateDescriptor`, and the latch/turbo family completes (`ToggleMouseButton` / `ToggleVcAxis` / `RepeatVcAxisWhileHeld` / `ToggleWheel`). |
+| 19 | | Audit-2 semantics: the gyro-hosted `mouse_joystick` rotation matrix stays orthogonal against the yaw-frame flip, `mouse_wheel` `hold_repeats` lowers to repeats. |
+| 20 | | `CHANGE_PRESET` sentinel ids (32766 next / 32765 previous) lower as one Cycle activator through every action set in authored order. |
+| 21 | | Menu cell icons carry: authored icon names ride `MenuItemDefinition.Icon`, resolved against the local Steam client's binding-icon art. |
+| 22 | | The Skyrim notes: `gyro_ratchet_button_mask` lowers onto a slot-level clutch lane grounded per bit against Steam's `k_eGamepadButtonBitMask`. |
+| 23 | | `gyro_button` engage arm gains the full bitmask enum, indexing the same table as the ratchet grounding. |
+| 24 | | The mass-sweep top four: `button_macro0..4` resolve as the device's extra buttons (bits 32-39, capability-gated). |
+| 25 | | Wild-corpus round 2: serializer-vocabulary switch members resolve, `always_on_action` lowers onto the constant-true source with `LayerMask` scoping, radial menus host on the physical dpad / face diamond, `deadzone_shape` lands per source. |
+| 26 | | Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise `MobileTouchSurfaceOnly` / `ChordWithoutPartner` classes. |
+
+Versions 8 through 26 land across the 4.1.0 cycle. Commit hashes for each ride the doc comment in `TranslationReport.cs`, one block per bump.
 
 The Nintendo face-button folding (`7cfc8be3`, labels folded to positions for Switch-authored configs via `PhysicalSlotResolver.UsesNintendoLabels`) did not bump the version: it changed slot resolution, not report shape.
 
@@ -165,6 +186,8 @@ Activators duplicate onto whichever mapping set(s) actually contain the layer's 
 
 ### Group and activator settings honored
 
+> **Currency note (4.1.0).** This table records the v7-era state. Waves v18 through v26 consumed most of the drops listed below: click gates now ride `MappingSource.GateDescriptor` on every source, the latch/turbo family completed, response curves land on every analog lane, and the haptic / double-press / ratchet clusters all build. The authoritative per-setting status is the version changelog above plus `ConfigTranslator.cs` at HEAD.
+
 The v1 translator read six setting keys. The waves widened that considerably:
 
 | Setting | Handling |
@@ -197,7 +220,7 @@ Same config + same options = identical output, asserted by test. Ordering: prese
 
 `TranslationStatus`: `Clean = 0`, `Partial = 1`, `Skipped = 2`, `Error = 3`. Entries carry `Status`, `ReasonKey`, `ReasonArgs`, `SourcePath`, `Binding` (raw binding text), and `Emitted` (an unlocalized diagnostic trace like `KbmKey57 <- Touchpad 0 DPadUp`). The report also counts rows, macros, menus (`MenuCount`), and activators per set, and `ToSummaryString()` renders the provenance digest (`v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0`).
 
-Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display time so the manifest localizes. The vocabulary is append-only: keys a wave retires stay defined and localized so reports serialized under older translator versions render forever. The full vocabulary at v7, by family:
+Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v15 onward a wave that retires a key DELETES the key and its locale strings (each deletion is named in the version changelog above), so the live vocabulary is exactly the `Workshop_Tr_*` set in `Strings.resx` at HEAD. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list:
 
 ### Emission (Clean)
 

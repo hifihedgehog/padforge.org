@@ -1122,6 +1122,8 @@
       
         
       
+        
+      
     
     
     
@@ -1527,6 +1529,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2724,7 +2754,7 @@
 
 
 <h1 id="steering">Steering<a class="headerlink" href="#steering" title="Permanent link">&para;</a></h1>
-<p>Two per-stick steering modes make a thumbstick act like a steering wheel, plus a Motion Lean input that steers from controller tilt.</p>
+<p><em>Two per-stick steering modes make a thumbstick act like a steering wheel, plus a Motion Lean input that steers from controller tilt.</em></p>
 <p>Winding and Angle to Axis live on the <strong>Sticks</strong> tab, one mode per stick, and write to the stick's virtual axis. Motion Lean is a separate input you map like a gyro source, tuned on the <strong>Gyro</strong> tab. The math follows JoyShockMapper's steering stick modes. The at-lock haptic feedback is PadForge's addition.</p>
 <p>Every mode is off by default. With the mode set to <strong>Off</strong>, the stick is a normal stick. Pick a mode to make it act like a steering wheel.</p>
 <h2 id="modes">Modes<a class="headerlink" href="#modes" title="Permanent link">&para;</a></h2>
@@ -2814,14 +2844,74 @@
 <p>A Wii Nunchuk or a left Joy-Con exposes its own lean source in the input dropdown, <strong>Nunchuk Lean</strong> or <strong>Left Joy-Con Lean</strong>. It steers from that second sensor's tilt, using the same math and the same Motion Steering card tuning.</p>
 <p>Motion Lean needs a controller with a motion sensor. Without one it produces no output.</p>
 <h2 id="at-lock-feedback">At-lock feedback<a class="headerlink" href="#at-lock-feedback" title="Permanent link">&para;</a></h2>
-<p>When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The channels are per-slot and off by default:</p>
+<p>When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The <strong>Steering Lock Feedback</strong> card sits at the bottom of the <strong>Sticks</strong> tab. Every channel is per-slot and off by default, and rows the selected device can't play are hidden.</p>
+<table>
+<thead>
+<tr>
+<th>Toggle</th>
+<th>What it does</th>
+<th>Hardware</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rumble Pulse on Lock</strong></td>
+<td>Grip-motor pulse on lock entry</td>
+<td>Any pad with rumble</td>
+</tr>
+<tr>
+<td><strong>Trigger Vibration on Lock</strong></td>
+<td>The same pulse on the trigger actuators</td>
+<td>Xbox One and later impulse triggers, DualSense adaptive triggers</td>
+</tr>
+<tr>
+<td><strong>Lightbar Pulse on Lock</strong></td>
+<td>Lightbar flashes a color on lock entry</td>
+<td>DualSense / DualShock 4</td>
+</tr>
+<tr>
+<td><strong>Trigger Resistance near Lock</strong></td>
+<td>DualSense trigger resistance ramps up as the wheel approaches lock, so you feel it coming</td>
+<td>DualSense</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trigger Resistance near Lock</strong> only engages on triggers you haven't already configured on the Adaptive Triggers tab, so it never overrides your own trigger effects.</p>
+<p><strong>Pulse Length</strong> sets how long the rumble and trigger pulses last. The lightbar pulse has its own timing: it jumps to the chosen color on lock entry, holds at full strength for <strong>Hold</strong>, then fades back out over <strong>Decay</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pulse Length</td>
+<td>80 ms</td>
+<td>0–2000</td>
+</tr>
+<tr>
+<td>Hold</td>
+<td>80 ms</td>
+<td>0–2000</td>
+</tr>
+<tr>
+<td>Decay</td>
+<td>250 ms</td>
+<td>0–5000</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>Color</strong> dropdown picks where the lightbar color comes from:</p>
 <ul>
-<li><strong>Rumble</strong>: a pulse on lock entry.</li>
-<li><strong>Trigger vibration</strong>: the same pulse on the trigger motors, on Xbox One and later impulse triggers and on DualSense adaptive triggers.</li>
-<li><strong>Lightbar</strong> pulses to a chosen color on lock entry, then fades on its own timer (DualSense / DualShock 4).</li>
-<li><strong>Adaptive-trigger resistance</strong>: DualSense trigger resistance ramps up as the wheel approaches lock, so you feel it coming. It only engages on triggers you haven't already configured on the Adaptive Triggers tab, so it never overrides your own trigger effects.</li>
+<li><strong>Fixed</strong>: one color, chosen in a full picker under <strong>Lightbar Color</strong> with an HSV field, swatch, <strong>HEX</strong> box, and RGB sliders. The default is red.</li>
+<li><strong>Random Hue</strong>: a random full-brightness hue on every lock entry.</li>
+<li><strong>Palette Step</strong>: a dedicated palette editor. Add colors to step through, one per lock. The palette belongs to this card alone. Leave it empty and the pulse goes dark instead of borrowing colors from another feature, and the step position restarts at the first color when PadForge restarts.</li>
 </ul>
-<p>A controller-speaker tone on lock entry is planned alongside the speaker output work.</p>
+<p>At-lock feedback fires for every steering source on the slot, including a <strong>Nunchuk Lean</strong> or <strong>Left Joy-Con Lean</strong> row. Steer from the second sensor and all four channels still work.</p>
+<p>A controller-speaker tone on lock entry is still planned. The speaker output it will ride on shipped with <a href="../../features/controller-audio/">Controller Audio</a>, but the tone itself is not implemented yet.</p>
 <p>Physical feedback honors the per-slot test target: when you're testing one assigned device, only it reacts.</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2830,7 +2920,7 @@
 <li>The mode and its tunables save with the profile.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

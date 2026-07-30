@@ -1127,6 +1127,8 @@
       
         
       
+        
+      
     
     
     
@@ -1532,6 +1534,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2734,7 +2764,7 @@
 
 
 <h1 id="a-five-minute-remap">A Five-Minute Remap<a class="headerlink" href="#a-five-minute-remap" title="Permanent link">&para;</a></h1>
-<p><em>Change what a button does. The walkthrough swaps A and B, and the same
+<p><em>Change what a button does: the walkthrough swaps A and B, and the same
 moves cover any rebind you will ever make.</em></p>
 <p>You need a virtual controller with a physical pad assigned to it. That is
 <a href="../first-controller/">Your First Controller</a>.</p>
@@ -2742,14 +2772,16 @@ moves cover any rebind you will ever make.</em></p>
 <h2 id="1-open-the-mapping-table">1. Open the mapping table<a class="headerlink" href="#1-open-the-mapping-table" title="Permanent link">&para;</a></h2>
 <p>On the <a href="../../features/dashboard/">Dashboard</a>, click the slot's card to
 open its configuration, then open the <strong>Mappings</strong> tab. One table drives
-the whole slot: each row is one output the game sees, grouped into
-Buttons, Left Stick, Right Stick, Triggers, and D-Pad.</p>
+the whole slot: each row is one output the game sees. Rows run in order:
+buttons, D-Pad, triggers, left stick, right stick. PlayStation slots add
+touchpad and motion rows at the end, and Nintendo slots add the motion
+pair.</p>
 <p><img alt="Button and axis mapping grid with source, value, and record columns" src="../../images/pad-mappings.png" /></p>
 <h2 id="2-record-the-first-swap">2. Record the first swap<a class="headerlink" href="#2-record-the-first-swap" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Find the <strong>A</strong> row under Buttons.</li>
-<li>Click <strong>Record</strong> on that row. The button changes to "Recording..." and
-   the row pulses blue.</li>
+<li>Find the <strong>A</strong> row. Button rows sit at the top, A first.</li>
+<li>Click the record icon on that row. The icon switches to a stop
+   glyph, its tooltip reads "Recording...", and the row pulses orange.</li>
 <li>Press <strong>B</strong> on your physical pad.</li>
 </ol>
 <p>PadForge captures the press, fills in the source, and stops recording.
@@ -2759,8 +2791,8 @@ The A output is now driven by the physical B button.</p>
 a button can catch the stick instead.</p>
 </blockquote>
 <h2 id="3-record-the-other-half">3. Record the other half<a class="headerlink" href="#3-record-the-other-half" title="Permanent link">&para;</a></h2>
-<p>Do the same on the <strong>B</strong> row: click <strong>Record</strong>, press <strong>A</strong> on the pad.
-The swap is complete.</p>
+<p>Do the same on the <strong>B</strong> row: click its record icon, press <strong>A</strong> on the
+pad. The swap is complete.</p>
 <h2 id="4-verify-on-the-spot">4. Verify on the spot<a class="headerlink" href="#4-verify-on-the-spot" title="Permanent link">&para;</a></h2>
 <p>Press A and B on the pad and watch the <strong>Value</strong> column. Each press lights
 the swapped row in real time, and what you see there is exactly what the
@@ -2768,13 +2800,39 @@ game gets. No save step, no apply step. Your mapping persists in
 <code>PadForge.xml</code> next to the executable.</p>
 <hr />
 <h2 id="when-recording-grabs-the-wrong-input">When recording grabs the wrong input<a class="headerlink" href="#when-recording-grabs-the-wrong-input" title="Permanent link">&para;</a></h2>
-<p>Use the source dropdown instead. Each source has a cascading dropdown:
-pick the device, then the exact input ("B", "Axis 3", "POV 0 Up").
-Picking an input assigns it on the spot, same result as recording. The
-blank entry at the top clears the source, and the row's <strong>Clear</strong> button
-resets the whole row.</p>
+<p>Use the source dropdown instead. It is one list of every input the slot
+can see, grouped under device-name headers, with the <strong>(Any device)</strong>
+group first. Pick an entry ("B", "Axis 3", "POV 0 Up") and it assigns on
+the spot, same result as recording.</p>
+<p>Clearing has three scopes:</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Where</th>
+<th>What it resets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Clear</strong></td>
+<td>on the row</td>
+<td>the primary source and its options (invert, half-axis, deadzone)</td>
+</tr>
+<tr>
+<td><strong>Clear</strong></td>
+<td>on an extra source</td>
+<td>that source only, the emptied slot stays on the row</td>
+</tr>
+<tr>
+<td><strong>Clear All</strong></td>
+<td>Mappings tab toolbar</td>
+<td>every row completely, tuning included, after a confirmation</td>
+</tr>
+</tbody>
+</table>
 <h2 id="when-you-want-to-remap-everything">When you want to remap everything<a class="headerlink" href="#when-you-want-to-remap-everything" title="Permanent link">&para;</a></h2>
-<p><strong>Map All</strong>, on the Controller tab or the Mappings tab toolbar, walks
+<p><strong>Map All</strong>, on the Preview tab or the Mappings tab toolbar, walks
 every row in order: it highlights a row, prompts for the matching input,
 captures it, and moves on. The fastest way to set up an unrecognized
 device (a generic joystick, an arcade encoder) from scratch.</p>
@@ -2787,6 +2845,7 @@ device (a generic joystick, an arcade encoder) from scratch.</p>
   <a href="../../guides/shift-layers/">Shift Layers</a>.</li>
 <li>Timed sequences on one press: <a href="../../guides/macros/">Macros</a>.</li>
 </ul>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

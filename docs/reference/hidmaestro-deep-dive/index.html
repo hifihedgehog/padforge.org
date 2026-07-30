@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2197,10 +2227,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#one-driver-five-categories" class="md-nav__link">
+  <a href="#one-driver-six-categories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        One driver, five categories
+        One driver, six categories
       
     </span>
   </a>
@@ -2725,10 +2755,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#one-driver-five-categories" class="md-nav__link">
+  <a href="#one-driver-six-categories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        One driver, five categories
+        One driver, six categories
       
     </span>
   </a>
@@ -2893,9 +2923,9 @@
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge ships with HM 1.3.17, which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.</p>
-<h3 id="one-driver-five-categories">One driver, five categories<a class="headerlink" href="#one-driver-five-categories" title="Permanent link">&para;</a></h3>
-<p>The five <code>VirtualControllerType</code> values map to HM as follows:</p>
+<p>PadForge ships with HM 1.3.22, which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch. The interim milestones a successor should know: v1.3.18 added the virtual Switch Pro profile and the IMU submission channel (HM#33), v1.3.21 corrected the Switch Pro Bluetooth descriptor to the real pad's wire shape (HM#37), and v1.3.22 made the input worker survive foreign stop signals, the structural fix for the frozen-output bug (HM#38).</p>
+<h3 id="one-driver-six-categories">One driver, six categories<a class="headerlink" href="#one-driver-six-categories" title="Permanent link">&para;</a></h3>
+<p>The six <code>VirtualControllerType</code> values map to HM as follows:</p>
 <table>
 <thead>
 <tr>
@@ -2929,6 +2959,11 @@
 <td>KeyboardMouse (<code>KeyboardMouse = 4</code>)</td>
 <td>Win32 SendInput</td>
 <td>NOT HM. No driver. Pumps <code>INPUT</code> structures into the OS input queue.</td>
+</tr>
+<tr>
+<td>Nintendo (<code>Nintendo = 5</code>)</td>
+<td>HM</td>
+<td>A virtual Switch Pro Controller (VID 057E, PID 2009, the Bluetooth wire shape) on a fixed catalog profile, no Customize. Rides the same raw-HID data path as Extended, with gyro passthrough over the HM v1.3.18 IMU channel and HOME LED control.</td>
 </tr>
 </tbody>
 </table>

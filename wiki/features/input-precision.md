@@ -30,9 +30,11 @@ The [Dashboard](dashboard.md) shows the live rate next to the engine power butto
 | Jitter | Under a millisecond. A short spin at the end of each cycle holds the boundary tight |
 | Idle rate | About 20 Hz when no slot is active, to save power |
 
-A slot counts as active once it is turned on and has at least one controller assigned. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that exists but is turned off, or has no controller assigned, does not hold the loop awake.
+A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake.
 
 While a [Remote Link](../guides/remote-link.md) peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.
+
+Cursor and scroll speed on a [Keyboard + Mouse](controller-slots.md) slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.
 
 ---
 
@@ -50,11 +52,11 @@ You can set any deadzone or range value by raw digit (0 to 32768) on the Sticks 
 
 ## Output precision by slot type
 
-How much of that resolution reaches the game depends on the slot type. Xbox and PlayStation outputs are fixed by their respective controller formats. Extended slots are not, so they carry the most detail.
+How much of that resolution reaches the game depends on the slot type. Xbox, PlayStation, and Nintendo outputs are fixed by their console formats. Extended slots are not, so they carry the most detail.
 
 ### Extended slots
 
-An Extended slot is the custom controller you build in PadForge. Its sticks and triggers are 16-bit by default, so nothing is lost between the stick and the game.
+An Extended slot is the custom controller you build in PadForge. With the default Custom profile, its sticks and triggers are 16-bit, so nothing is lost between the stick and the game. Pick a catalog profile instead (a Logitech wheel, a HOTAS, and so on) and the slot ships that controller's HID descriptor exactly, at that controller's own bit depth.
 
 | Property | Sticks | Triggers |
 |----------|--------|----------|
@@ -81,7 +83,20 @@ A PlayStation slot emits the DualShock 4 or DualSense format, depending on the p
 | Range | 256 positions | 256 positions |
 | Effective bits | 8 | 8 |
 
-Want 16-bit stick precision with PlayStation button labels at the same time? Build an Extended slot from a DualShock-style or DualSense-style profile. Extended profiles are not bound by the original format's bit depth. See [Controller Slots](controller-slots.md).
+The 8-bit ceiling is the DualShock and DualSense formats themselves, so no PlayStation profile lifts it. If a game accepts a generic controller and you want 16-bit output, build an [Extended slot](controller-slots.md) with the Custom profile instead. The trade is plain: the game sees a generic HID controller, and the PlayStation button labels go with the format.
+
+### Nintendo slots
+
+A Nintendo slot emits the Switch Pro Controller format from its single preset, Nintendo Switch Pro Controller. Sticks keep the full 16-bit resolution: the report games read declares 16-bit stick axes, more than the 12-bit values a physical Pro Controller packs into its own full-mode reports, so nothing PadForge sends is squeezed.
+
+ZL and ZR are digital buttons, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Trigger Deadzones tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
+
+| Property | Sticks | Triggers |
+|----------|--------|----------|
+| Range | 65,536 positions | 2 states (pressed or released) |
+| Effective bits | 16 | 1 |
+
+The D-Pad is a POV hat with full 8-way output. See [POV hats](#pov-hats).
 
 ---
 
@@ -97,7 +112,7 @@ The deadzone shapes follow the geometry described by the [minimuino thumbstick-d
 
 ## POV hats
 
-An Extended slot reports its POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.
+Extended and Nintendo slots report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.
 
 ---
 
@@ -109,4 +124,4 @@ There is no per-axis or per-button overhead. At 1000 Hz that is one report per c
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.1.0.*

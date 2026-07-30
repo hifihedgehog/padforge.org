@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -4001,6 +4031,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#rumbleaudioservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RumbleAudioService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#nfcreaderservice" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4043,6 +4084,17 @@
     <span class="md-ellipsis">
       
         WorkshopProfileMaterializer (v4.1, #9)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workshoptuningapplier-v41-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkshopTuningApplier (v4.1, #9)
       
     </span>
   </a>
@@ -6657,6 +6709,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#rumbleaudioservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RumbleAudioService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#nfcreaderservice" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6699,6 +6762,17 @@
     <span class="md-ellipsis">
       
         WorkshopProfileMaterializer (v4.1, #9)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workshoptuningapplier-v41-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkshopTuningApplier (v4.1, #9)
       
     </span>
   </a>
@@ -6856,10 +6930,61 @@
 
 
 <h1 id="services-layer">Services Layer<a class="headerlink" href="#services-layer" title="Permanent link">&para;</a></h1>
-<p>Five service classes bridge <strong>PadForge.Engine</strong> with the <strong>WPF UI layer</strong>. All live in <code>PadForge.App/Services/</code> and run on the WPF dispatcher thread unless noted otherwise.</p>
+<p><em>Five ViewModel-bridge services carry engine state to the WPF UI and back, with a bench of smaller workers beside them.</em></p>
+<p>Five service classes bridge <strong>PadForge.Engine</strong> with the <strong>WPF UI layer</strong> and get full sections on this page: <code>InputService</code>, <code>SettingsService</code>, <code>DeviceService</code>, <code>RecorderService</code>, and <code>ForegroundMonitorService</code>. They run on the WPF dispatcher thread unless noted otherwise. <code>PadForge.App/Services/</code> holds ten more residents:</p>
+<table>
+<thead>
+<tr>
+<th>Resident</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DsuMotionServer</code></td>
+<td>DSU motion server on its own UDP thread. Lifecycle <a href="#dsu-server-lifecycle">below</a>, protocol on <a href="../dsu-protocol/">DSU Protocol Implementation</a></td>
+</tr>
+<tr>
+<td><code>WebControllerServer</code></td>
+<td>Phone-as-controller HTTP/WebSocket server. Lifecycle <a href="#web-controller-server-lifecycle">below</a></td>
+</tr>
+<tr>
+<td><code>NfcReaderService</code></td>
+<td>PC/SC monitor for NFC macro triggers (#150). <a href="#nfcreaderservice">Below</a></td>
+</tr>
+<tr>
+<td><code>WorkshopProfileMaterializer</code></td>
+<td>Workshop import to <code>ProfileData</code> bridge (#9). <a href="#workshopprofilematerializer-v41-9">Below</a></td>
+</tr>
+<tr>
+<td><code>WorkshopTuningApplier</code></td>
+<td>Folds a Workshop import's parked tuning stamps into the assigned device's own settings (#9). <a href="#workshoptuningapplier-v41-9">Below</a></td>
+</tr>
+<tr>
+<td><code>WiiPairingService</code></td>
+<td>In-app Bluetooth pairing ceremony for Wii controllers (#116), following the sequence Dolphin documents, over the Win32 Bluetooth API</td>
+</tr>
+<tr>
+<td><code>Ds3PairingService</code></td>
+<td>DualShock 3 guided USB pairing ceremony (#116): sixpair over WinUSB plus the radio-side device record BthPS3 needs</td>
+</tr>
+<tr>
+<td><code>Ds3DriverInstaller</code></td>
+<td>Installs and arms the embedded BthPS3 / BthPS3PSM drivers and binds a docked DS3 to WinUSB, reboot-free</td>
+</tr>
+<tr>
+<td><code>GyroCalibratorService</code></td>
+<td>Samples an at-rest controller and writes the per-(device, slot) gyro bias onto its <code>PadSetting</code></td>
+</tr>
+<tr>
+<td><code>CursorControlService</code></td>
+<td>Owns the 200 Hz desktop-cursor timeline feeding the "Mouse Position X" / "Mouse Position Y" sources (#107)</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><strong>Engine-side subsystems (3.4).</strong> Two more runtime subsystems sit alongside these services. <code>AudioPassthroughService</code> drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through <code>InputService</code> and documented on their own pages: <a href="../controller-audio-internals/">Controller Audio Internals</a> and <a href="../remote-link-internals/">Remote Link Internals</a>.</p>
-<p><strong>App-side helpers (3.6.0).</strong> Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as <code>static</code> P/Invoke surfaces. <code>HapticToneService</code> and <code>WiiSpeakerService</code> turn macro sounds into HD-haptic tones and Wii-speaker PCM. <code>NfcReaderService</code> (with <code>WinScard</code>) owns the PC/SC monitor for NFC macro triggers. <code>BluetoothLinkHelper</code> performs per-family Bluetooth disconnect. They live in <code>PadForge.Common.Input</code> (and <code>PadForge.Services</code> for <code>NfcReaderService</code>), and are documented in <a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a> below.</p>
+<p><strong>App-side helpers (3.6.0).</strong> Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as <code>static</code> P/Invoke surfaces. <code>HapticToneService</code> and <code>WiiSpeakerService</code> turn macro sounds into HD-haptic tones and Wii-speaker PCM. <code>NfcReaderService</code> (with <code>WinScard</code>) owns the PC/SC monitor for NFC macro triggers. <code>BluetoothLinkHelper</code> performs per-family Bluetooth disconnect. They live in <code>PadForge.Common.Input</code> (and <code>PadForge.Services</code> for <code>NfcReaderService</code>), and are documented in <a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a> below. 4.1.0 added three more to the same section: <code>TouchpadPulseService</code> (#219), <code>SwitchHomeLedSetter</code> (#226), and <code>RumbleAudioService</code> (#236, the Bass Shakers renderer).</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TB
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    MW[MainWindow]
@@ -6955,11 +7080,15 @@
 <li><a href="#foregroundmonitorservice-all-events">All Events</a></li>
 <li><a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a></li>
 <li><a href="#haptictoneservice">HapticToneService</a></li>
+<li><a href="#touchpadpulseservice">TouchpadPulseService</a></li>
+<li><a href="#switchhomeledsetter">SwitchHomeLedSetter</a></li>
 <li><a href="#wiispeakerservice">WiiSpeakerService</a></li>
+<li><a href="#rumbleaudioservice">RumbleAudioService</a></li>
 <li><a href="#nfcreaderservice">NfcReaderService</a></li>
 <li><a href="#winscard">WinScard</a></li>
 <li><a href="#bluetoothlinkhelper">BluetoothLinkHelper</a></li>
 <li><a href="#workshopprofilematerializer-v41-9">WorkshopProfileMaterializer (v4.1, #9)</a></li>
+<li><a href="#workshoptuningapplier-v41-9">WorkshopTuningApplier (v4.1, #9)</a></li>
 </ul>
 <hr />
 <h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
@@ -7025,6 +7154,9 @@
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Button SOCD (4.1.0, discussion #240).</strong> KB+M slots get keyboard SOCD (#205) through the <code>_kbmConfigs[]</code> sync above. Controller slots (Xbox / PlayStation / Nintendo / Extended) have their own SOCD lane that bypasses the 30 Hz sync entirely: <code>MappingSet.SocdMode</code> / <code>SocdPairs</code> on the slot's MappingSet, read directly by the engine from <code>SettingsManager.SlotMappingSets</code> and applied to the slot's final combined output right before the Step 5 submit (<code>SlotButtonSocd</code>). Gamepad-surface slots pair buttons by mapping target name ("ButtonA:ButtonB"). Raw-surface slots (Extended, Nintendo) pair flat button indices ("12:13"). Pair semantics are the #205 <code>SocdCleaner</code> state machine: LastWins, Neutral, or FirstWins, with the winner's release re-pressing the still-held partner the same frame.</p>
+</blockquote>
 <hr />
 <h2 id="threading-model">Threading Model<a class="headerlink" href="#threading-model" title="Permanent link">&para;</a></h2>
 <p>PadForge uses three primary threads. Knowing which thread owns what prevents race conditions.</p>
@@ -7117,7 +7249,7 @@
 <li><strong>Capture default profile snapshot</strong>. Uses <code>PendingDefaultSnapshot</code> (from prior XML) or creates one via <code>SnapshotCurrentProfile()</code>.</li>
 <li><strong>Async Raw Input enumeration</strong>. Keyboard and mouse devices are discovered on a background thread via <code>Task.Run</code>, preventing UI thread stalls from slow HID enumeration. Results are merged into the device list when the task completes.</li>
 <li><strong>Start engine</strong>. <code>_inputManager.Start()</code> launches the polling thread.</li>
-<li><strong>Start subsystems</strong>. DSU, web controller, audio bass detector (each conditional on settings).</li>
+<li><strong>Start subsystems</strong>. DSU, web controller, audio bass detector (each conditional on settings), plus the self-healing sink reconcilers, which start unconditionally: <code>RumbleAudioService.EnsureStarted()</code> (#236), <code>WiiSpeakerService.EnsureStarted()</code>, and <code>HapticToneService.EnsureStarted()</code>.</li>
 <li><strong>Clear stale HidHide state</strong>. <code>HidHideController.ClearAll()</code> removes leftover entries.</li>
 <li><strong>Apply device hiding</strong>. HidHide blacklist + input hooks.</li>
 <li><strong>Start UI timer</strong>. 30 Hz <code>DispatcherTimer</code> at <code>DispatcherPriority.Render</code>.</li>
@@ -7187,6 +7319,7 @@
 </tbody>
 </table>
 <p>Per-device stick/trigger previews read either KBM pre-deadzone values (synthesized into a <code>Gamepad</code> struct) or the selected device's <code>RawMappedState</code>.</p>
+<p>KB+M cursor and scroll outputs are time-based rates, not per-poll displacements (4.1.0): full stick deflection moves the cursor at 1,200 px/s (<code>KeyboardMouseVirtualController.MouseFullScalePxPerSec</code>, the DS4Windows stick-as-mouse scale) and turns the wheel at ~33 notches/s, independent of the polling-rate setting. The per-stick KBM speed knob scales from those constants.</p>
 <h4 id="visibility-gating">Visibility gating<a class="headerlink" href="#visibility-gating" title="Permanent link">&para;</a></h4>
 <p>Two flags gate expensive per-frame work:</p>
 <table>
@@ -7495,8 +7628,8 @@
 4. Captures <code>ProfileData.Macros</code> (<code>&lt;ProfileMacros&gt;</code>), a copy of the current macro set. A profile carries its own macros, so switching profiles swaps macros too. A <code>null</code> <code>Macros</code> marks a pre-macro-era profile and leaves the live macros untouched on apply.</p>
 <h4 id="applyprofileprofiledata-profile-public"><code>ApplyProfile(ProfileData profile)</code> (public)<a class="headerlink" href="#applyprofileprofiledata-profile-public" title="Permanent link">&para;</a></h4>
 <p>Restores a profile:
-1. <strong>Topology</strong>. Sets <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>OutputType</code>, <code>ProfileId</code> (per-slot HM profile slug), and unassigns devices from destroyed slots. The HM slug update gates Step 5's per-slot diff at <code>InputManager.Step5.VirtualDevices.cs:620-633</code>. Slots whose new slug matches the live <code>HMaestroVirtualController.ProfileId</code> stay live untouched. Slots whose slug differs are destroyed and recreated with the new identity.
-2. <strong>Device assignments (single-pass transition)</strong>. Builds the desired final assignment map from <code>profile.Entries</code> first, then transitions each <code>UserSetting</code> directly old → new <code>MapTo</code> (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe <code>HasAnyDeviceMapped == false</code> for surviving slots and fall into the immediate-destroy path at <code>InputManager.Step5.VirtualDevices.cs:704-718</code>. Slots whose mapping is unchanged across profiles transition with zero teardown.
+1. <strong>Topology</strong>. Sets <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>OutputType</code>, <code>ProfileId</code> (per-slot HM profile slug), and unassigns devices from destroyed slots. The HM slug update gates Step 5's per-slot diff: <code>UpdateVirtualDevices()</code> Pass 1 in <code>InputManager.Step5.VirtualDevices.cs</code> compares each slot's <code>SlotProfileIds[]</code> against the live <code>HMaestroVirtualController.ProfileId</code>. Slots whose new slug matches stay live untouched. Slots whose slug differs are destroyed and recreated with the new identity.
+2. <strong>Device assignments (single-pass transition)</strong>. Builds the desired final assignment map from <code>profile.Entries</code> first, then transitions each <code>UserSetting</code> directly old → new <code>MapTo</code> (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe <code>HasAnyDeviceMapped == false</code> for surviving slots and fall into the <code>!HasAnyDeviceMapped</code> immediate-destroy branch of <code>UpdateVirtualDevices()</code> in <code>InputManager.Step5.VirtualDevices.cs</code>. Slots whose mapping is unchanged across profiles transition with zero teardown.
 3. <strong>Extended/MIDI configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string) and MIDI config (channel, CC/note ranges, velocity).
 4. <strong>Server settings</strong>. Sets DSU and web controller enable/port.
 5. <strong>Macros</strong>. When <code>profile.Macros</code> is non-null, replaces the live macro set via <code>LoadMacros(profile.Macros)</code>. A null value leaves the current macros in place (pre-macro-era profile).
@@ -7513,7 +7646,7 @@
 <p>The reorder model rests on five rules:</p>
 <ul>
 <li><strong>Pad indices are data identity.</strong> A pad's mappings, profile, devices, settings, and dirty flags live at its pad index and never move on reorder.</li>
-<li><strong>Visual position is the kernel-slot anchor.</strong> Within an HM-backed group (Xbox / PlayStation / Extended), the VC at visual position V holds kernel slot V. <code>SlotOrders[group][V] = padIndex</code> says which pad's data the VC at slot V is serving.</li>
+<li><strong>Visual position is the kernel-slot anchor.</strong> Within an HM-backed group (Xbox / PlayStation / Nintendo / Extended), the VC at visual position V holds kernel slot V. <code>SlotOrders[group][V] = padIndex</code> says which pad's data the VC at slot V is serving.</li>
 <li><strong>Reorder repoints, not rebuilds.</strong> <code>SwapSlots</code> / <code>MoveSlot</code> mutate <code>SlotOrders</code> (visual order). The kernel VC at each visual position stays put. The pad-index pointer in <code>_virtualControllers[]</code> moves so the data at the new pad-at-position-V feeds into V's kernel slot.</li>
 <li><strong>Same-profile reorders are zero-flicker.</strong> Pointer swap in <code>_virtualControllers[]</code> plus <code>FeedbackPadIndex</code> update on the moved VC. Per-VC state arrays move with the VC.</li>
 <li><strong>Different-profile positions destroy + recreate.</strong> Only the specific positions whose profile changed. Matching positions in the same reorder still pointer-swap.</li>
@@ -8025,7 +8158,7 @@
 <h4 id="updateactiveprofilesnapshot-private"><code>UpdateActiveProfileSnapshot()</code> (private)<a class="headerlink" href="#updateactiveprofilesnapshot-private" title="Permanent link">&para;</a></h4>
 <p>Called during Save. If a named profile is active, updates its stored snapshot from current state (entries, PadSettings, topology, server settings).</p>
 <h4 id="updatetopologycountsprofilelistitem-bool-int-internal-static"><code>UpdateTopologyCounts(ProfileListItem, bool[], int[])</code> (internal, static)<a class="headerlink" href="#updatetopologycountsprofilelistitem-bool-int-internal-static" title="Permanent link">&para;</a></h4>
-<p>Counts Xbox/PlayStation/Extended/MIDI/KBM slots and sets topology label (e.g., "2x Xbox, 1x PlayStation").</p>
+<p>Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM slots and sets topology label (e.g., "2x Xbox, 1x PlayStation").</p>
 <h3 id="settingsservice-all-public-methods">SettingsService All Public Methods<a class="headerlink" href="#settingsservice-all-public-methods" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8212,8 +8345,9 @@
 <h4 id="createslotvirtualcontrollertype-type-xbox-public-int"><code>CreateSlot(VirtualControllerType type = Xbox)</code> (public) -&gt; <code>int</code><a class="headerlink" href="#createslotvirtualcontrollertype-type-xbox-public-int" title="Permanent link">&para;</a></h4>
 <p>Creates the next available slot:
 1. Sets <code>OutputType</code> before <code>SlotCreated</code> (order matters for sidebar rebuild).
-2. Sets <code>ProfileId = GetDefaultProfileId(type)</code> so the profile picker shows a selection immediately. For Xbox slots the default comes from <code>InputManager.DefaultXboxProfileId</code>. For Extended this is the Custom "PadForge Game Controller" profile.
+2. Sets <code>ProfileId = GetDefaultProfileId(type)</code> so the profile picker shows a selection immediately. Per-category defaults (<code>InputManager.Step5.VirtualDevices.cs</code>): Xbox gets <code>DefaultXboxProfileId</code> (<code>xbox-series-xs-bt</code>), PlayStation gets <code>dualshock-4-v2</code>, Nintendo gets <code>DefaultNintendoProfileId</code> (<code>switch-pro</code>, the category's only profile), Extended gets the Custom "PadForge Game Controller" profile (<code>padforge-custom</code>). MIDI and Keyboard + Mouse have no HIDMaestro profile (null).
 3. Returns slot index (0–15) or -1 if full.</p>
+<p>The <code>Nintendo</code> type (4.1.0, #246) is <code>VirtualControllerType.Nintendo = 5</code>: a console-family bucket like Xbox / PlayStation (own sidebar group, icon, fixed catalog profile) riding the Extended raw-HID data path. It has no Customize surface. The fixed group order across the sidebar and dashboard is Xbox / PlayStation / Nintendo / Extended / Keyboard + Mouse / MIDI (<code>VirtualControllerGroups.InOrder</code>), and Nintendo slots cap at <code>SettingsManager.MaxNintendoSlots</code> (all 16 pads, like the other HM groups).</p>
 <h4 id="deleteslotint-slotindex-public-slotdeletioninfo"><code>DeleteSlot(int slotIndex)</code> (public) -&gt; <code>SlotDeletionInfo</code><a class="headerlink" href="#deleteslotint-slotindex-public-slotdeletioninfo" title="Permanent link">&para;</a></h4>
 <p>Clears <code>SlotCreated[slotIndex]</code>, calls <code>padVm.ResetAllSettings()</code> to prevent stale leaks, removes all UserSettings mapped to this slot. Returns a <code>SlotDeletionInfo</code> record struct (<code>VirtualControllerType Type</code>, <code>int OldGroupPosition</code>) carrying the deleted slot's type and its pre-removal index in the matching group's order list. Both are captured before <code>SlotOrders.Remove</code> mutates the list so <code>InputService.OnSlotDeleted</code> can drive the bubble-down cascade without re-querying. <code>OldGroupPosition</code> is -1 when the slot wasn't in any order list.</p>
 <h4 id="setslotenabledint-slotindex-bool-enabled-public"><code>SetSlotEnabled(int slotIndex, bool enabled)</code> (public)<a class="headerlink" href="#setslotenabledint-slotindex-bool-enabled-public" title="Permanent link">&para;</a></h4>
@@ -8601,7 +8735,7 @@
 <strong>Type:</strong> <code>internal static</code></p>
 <p>Turns macro sounds into HD-haptic tones on controllers whose haptics are LRAs (issue #147). Covers Nintendo Joy-Con and Pro (HD Rumble, report <code>0x10</code>), the Steam Controller 2015 (<code>0x8F</code> feature square wave), the Steam Deck, and the Steam Controller 2026 / Triton (<code>0x83</code> LFO-tone output report). An LRA cannot play PCM, so each rumble tick reduces the macro mix to one <code>(dominant frequency, amplitude)</code> pair via <code>HapticToneReducer</code> and encodes it per family through <code>HapticToneEncoder</code>. A pad with more than one actuator still plays that single mono tone. The combined Joy-Con pair is the exception since #223: its sink opens both children and drives both coils, routing the tone by the slot's active body motor (left motor → left coil, right motor → right, both or neither commanded → both coils), with each side staying hot for 300 ms after its motor drops so packet-rate rumble flapping doesn't strobe the audio.</p>
 <p>Structurally the Valve/Nintendo analogue of the Sony speaker path: a controller assigned to a slot becomes an output sink whose <code>MacroMixer</code> is returned to <code>SoundMacroService</code>, so a macro <code>PlaySound</code> fans out to it with no macro-layer change. Family detection (<code>FamilyOf</code>) mirrors the bundled SDL's <code>controller_list.h</code> VID/PID table rather than a hand-picked PID list. Switch 2 is deliberately excluded (no reference plays an audible tone on its actuator).</p>
-<p>Reconciled from <code>InputService</code>: <code>EnsureStarted()</code> (~line 1429) starts a 3 s self-healing reconcile timer that builds and tears down sinks off the current slot assignments. <code>InputService.Start()</code> also calls <code>Reconcile()</code> once (~line 1422) to resume any persisted mirror toggle on launch. Also carries a Remote Link lane (#138 x #147): <code>ApplyRemoteTone()</code> drives a device's tone from a paired peer's shipped <code>(freq, amp)</code> frame.</p>
+<p>Reconciled from <code>InputService.Start()</code>: <code>EnsureStarted()</code> starts a 3 s self-healing reconcile timer that builds and tears down sinks off the current slot assignments, and <code>Reconcile()</code> runs once at start to resume any persisted mirror toggle on launch. Also carries a Remote Link lane (#138 x #147): <code>ApplyRemoteTone()</code> drives a device's tone from a paired peer's shipped <code>(freq, amp)</code> frame.</p>
 <table>
 <thead>
 <tr>
@@ -8742,7 +8876,7 @@
 <strong>Namespace:</strong> <code>PadForge.Common.Input</code>
 <strong>Type:</strong> <code>internal static</code></p>
 <p>Plays macro sounds through a Wii Remote's built-in speaker as low-rate PCM (issue #146, sub-feature 2). The 48 kHz macro mix is resampled to signed 8-bit PCM at 2000 Hz mono and written as one <code>0x18</code> speaker report (20 samples) per 10 ms tick. PCM is used over 4-bit ADPCM because it is memoryless: a dropped or late report on the SDL-shared Bluetooth link is a single click, not a cascading decoder desync. The wire protocol (I2C register map, <code>0x14</code>/<code>0x16</code>/<code>0x18</code>/<code>0x19</code> reports) is grounded in dolphin's <code>Speaker.cpp</code>. Write path is chosen per device by a <code>BuildSink</code> probe: overlapped <code>WriteFile</code> when the BT stack accepts it, else synchronous <code>HidD_SetOutputReport</code>.</p>
-<p>Same sink shape as <code>HapticToneService</code>: a Wii Remote assigned to a slot exposes its <code>MacroMixer</code> to <code>SoundMacroService</code>, and a per-slot system-audio loopback mirror is available (same option DualSense exposes). Wired from <code>InputService</code>: <code>EnsureStarted()</code> (~line 1427) starts the 3 s reconcile timer, and <code>Start()</code> calls <code>Reconcile()</code> once (~line 1421) to resume a persisted mirror on launch.</p>
+<p>Same sink shape as <code>HapticToneService</code>: a Wii Remote assigned to a slot exposes its <code>MacroMixer</code> to <code>SoundMacroService</code>, and a per-slot system-audio loopback mirror is available (same option DualSense exposes). Wired from <code>InputService.Start()</code>: <code>EnsureStarted()</code> starts the 3 s reconcile timer, and <code>Reconcile()</code> runs once at start to resume a persisted mirror on launch.</p>
 <table>
 <thead>
 <tr>
@@ -8776,6 +8910,64 @@
 <td><code>Shutdown</code></td>
 <td><code>void Shutdown()</code></td>
 <td>Tears down every speaker sink</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rumbleaudioservice">RumbleAudioService<a class="headerlink" href="#rumbleaudioservice" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>PadForge.App/Common/Input/RumbleAudioService.cs</code>
+<strong>Namespace:</strong> <code>PadForge.Common.Input</code>
+<strong>Type:</strong> <code>internal static</code></p>
+<p>Rumble-to-audio renderer for bass shakers and LFE channels (4.1.0, issue #236), surfaced in the UI as the Pad page's "Bass Shakers" tab. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones, four fixed voices per slot.</p>
+<p>Data path: VC output callbacks fill a controller-local pack, the poll thread's feedback lane evaluates the slot's voice bindings once per tick and publishes the result (<code>PublishIfCurrent</code>), and the render thread reads the published packs as its only input. The class never reads <code>VibrationStates</code>, <code>FinalVibrationStates</code>, macro rumble, test rumble, or any per-physical-device projection, which makes the feedback loop (shaker tone to loopback to <code>AudioBassDetector</code> to audio rumble to louder tone) impossible by construction. Players are keyed by endpoint, not slot: all slots routed to one endpoint share a single <code>WasapiOut</code>, one sample clock, and one composite limiter.</p>
+<p>Lifecycle: <code>EnsureStarted()</code> is called unconditionally from <code>InputService.Start()</code> (cheap when no slot has a config). Silence is an explicit edge, never an inference from callback inactivity: idle entry and engine stop (<code>InputManager</code>), panic quiesce (<code>InputService.PanicQuiesceOutputs</code>), and slot delete all call <code>SilenceSlot</code> / <code>SilenceAll</code>, and a per-slot generation makes a stale in-flight poll publish lose against a newer silence edge. A configured-but-unresolved endpoint fails closed, with no fallback device. The renderer dies with the engine (<code>StopAll</code> in <code>InputManager.Stop</code>), deliberately not with <code>SoundMacroService.StopAll</code>, which runs on every profile apply.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnsureStarted</code></td>
+<td><code>void EnsureStarted()</code></td>
+<td>Starts the 5 s reconcile worker. Idempotent</td>
+</tr>
+<tr>
+<td><code>RequestReconcile</code></td>
+<td><code>void RequestReconcile()</code></td>
+<td>Nudges the worker after a config edit. Never touches WASAPI on the calling thread</td>
+</tr>
+<tr>
+<td><code>PublishIfCurrent</code></td>
+<td><code>void PublishIfCurrent(int slot, int generation, long packed)</code></td>
+<td>Poll-thread publish, discarded if a silence edge advanced the slot's generation since <code>GetGeneration</code> was read</td>
+</tr>
+<tr>
+<td><code>SilenceSlot</code> / <code>SilenceAll</code></td>
+<td><code>void SilenceSlot(int slot)</code> / <code>void SilenceAll()</code></td>
+<td>Explicit per-slot / all-slot silence edges</td>
+</tr>
+<tr>
+<td><code>PulseTestVoice</code></td>
+<td><code>void PulseTestVoice(int slot, int voice, int durationMs)</code></td>
+<td>Bass Shakers tab test button: plays one voice at full authored gain</td>
+</tr>
+<tr>
+<td><code>StartSweep</code> / <code>StopTest</code></td>
+<td><code>void StartSweep(int slot, int durationMs)</code> / <code>void StopTest(int slot)</code></td>
+<td>20–120 Hz resonance-finding sweep on the LOW voice, and its stop</td>
+</tr>
+<tr>
+<td><code>GetSlotStatus</code></td>
+<td><code>string GetSlotStatus(int slot)</code></td>
+<td>Per-slot endpoint status for the UI: null = inactive, "!" prefix = fail-closed error marker</td>
+</tr>
+<tr>
+<td><code>StopAll</code></td>
+<td><code>void StopAll()</code></td>
+<td>Fades and disposes every endpoint player, stops the worker. Engine stop / app exit</td>
 </tr>
 </tbody>
 </table>
@@ -8884,7 +9076,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>IsDisconnectTarget()</code> gates the four #162 UI surfaces (macro candidates, idle countdown, Devices-page control, Specific-device picker) so all four agree. The device-aware overload excludes <code>peer://</code> (Remote Link) devices and adds the Switch 2 family (which the SDL BLE driver leaves without a <code>DevicePath</code> or serial) plus the combined gen-1 Joy-Con pair (PID 0x2008), whose synthetic path the plain-path predicate cannot see. Powers the idle-disconnect countdown and the Disconnect Controller macro action. <code>ReEnablePendingDevNodes()</code> is called from <code>InputService</code> shutdown (~line 1640) to re-enable any devnode still inside its 30 s disable window.</p>
+<p><code>IsDisconnectTarget()</code> gates the four #162 UI surfaces (macro candidates, idle countdown, Devices-page control, Specific-device picker) so all four agree. The device-aware overload excludes <code>peer://</code> (Remote Link) devices and adds the Switch 2 family (which the SDL BLE driver leaves without a <code>DevicePath</code> or serial) plus the combined gen-1 Joy-Con pair (PID 0x2008), whose synthetic path the plain-path predicate cannot see. Powers the idle-disconnect countdown and the Disconnect Controller macro action. <code>ReEnablePendingDevNodes()</code> is called at the top of <code>InputService.Stop()</code> to re-enable any devnode still inside its 30 s disable window.</p>
 <table>
 <thead>
 <tr>
@@ -8935,6 +9127,18 @@
 <h2 id="workshopprofilematerializer-v41-9">WorkshopProfileMaterializer (v4.1, #9)<a class="headerlink" href="#workshopprofilematerializer-v41-9" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Services/WorkshopProfileMaterializer.cs</code></p>
 <p>Static bridge between the <code>PadForge.SteamWorkshop</code> translator and the app's profile model. <code>Materialize(TranslatedProfile, SteamWorkshopSource)</code> builds a <code>ProfileData</code> that carries only the slots the translation demands (<code>NeedsXboxSlot</code> / <code>NeedsKbmSlot</code>), packed from slot 0 with the Xbox VC first when present, so a split config lands Xbox at slot 0 and Keyboard + Mouse at slot 1 while a keyboard-only config imports as a single KbM VC at slot 0 (each created slot enabled, default HIDMaestro profile id per type, device assignments deliberately empty). It attaches the translated <code>MappingSet</code>s, clones each translated menu (<code>MenuDefinitionEntry</code>, #9 B-17) onto every created slot's <code>MappingSet.Menus</code> (the menu runtime and the fired-set provider are slot-keyed, so a split config's two slots each carry their own copy, and the overlay publisher dedupes at display time), converts translated macros to <code>MacroData</code> on pad 0 with <code>OutputController</code> triggers (a macro carrying a device-free descriptor trigger converts instead through the exact picker path, <code>MacroItem.TryBuildTriggerEntry</code>, and is dropped when any descriptor fails to convert), converts Steam's normalized 0..65535 cursor coordinates to primary-monitor pixels for <code>MoveMouseToScreenPosition</code>, and stamps the provenance block. MainWindow's <code>AddWorkshopProfile</code> sink then mirrors the <code>.pfprofile</code> import path (name dedup, <code>Profiles</code> append, <code>MarkDirty</code>, optional <code>LoadProfile</code>). Full detail on <a href="../steam-workshop-import-internals/">Steam Workshop Config Import Internals</a>.</p>
+<hr />
+<h2 id="workshoptuningapplier-v41-9">WorkshopTuningApplier (v4.1, #9)<a class="headerlink" href="#workshoptuningapplier-v41-9" title="Permanent link">&para;</a></h2>
+<p><strong>File:</strong> <code>PadForge.App/Services/WorkshopTuningApplier.cs</code></p>
+<p>Static companion to the materializer. A Steam config assumes one controller, so its tuning is per physical input, but the import runs before any device is assigned and device tuning is keyed by device GUID. The import therefore parks the values on the slot as <code>MappingSet.Workshop*</code> stamps. <code>ApplyToAssignedDevice(slotIndex, ps, deviceGuid)</code> folds those stamps into the assigned device's own <code>PadSetting</code> at assignment time, then clears them, so from then on the values live in the user's settings and the existing cards show and edit them.</p>
+<p>Rules:</p>
+<ul>
+<li><strong>Applied only where the user has not already chosen something.</strong> Re-assigning a device cannot silently overwrite hand-set tuning.</li>
+<li><strong>Cleared unconditionally.</strong> A stamp offered once has done its job. Leaving it would re-apply after the user deliberately changed the value back.</li>
+<li><strong>Called from every assignment funnel.</strong> Both <code>DeviceService.OnAssignToSlot</code> (the device list's assign command) and <code>DeviceService.AssignDeviceToSlot</code> (drag-and-drop and programmatic). Idempotent and cheap, so over-calling is free and under-calling is a silent regression.</li>
+<li><strong>Also folds per-source response shaping</strong> the import writes onto its rows (<code>FoldSourceShaping</code>), which had the same live-in-the-engine, absent-from-the-cards defect one level down.</li>
+</ul>
+<p>Two stamps stay runtime overlays because no user-facing card exists to fold them into: <code>WorkshopGyroRatchetDescriptors</code> (no ratchet field on <code>PadSetting</code>) and <code>ParamFlickRotationOffsetDeg</code> (no rotation-offset control). The second is a known gap, not a deliberate exclusion.</p>
 <hr />
 <h2 id="mainwindow-service-wiring">MainWindow Service Wiring<a class="headerlink" href="#mainwindow-service-wiring" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/MainWindow.xaml.cs</code></p>

@@ -909,13 +909,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#host-input" class="md-nav__link">
+  <a href="#opens-with" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host Input
+        Opens With
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Opens With">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#click-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Click Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -938,6 +955,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Cells">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cells-as-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cells as sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1096,6 +1130,8 @@
       
         
           
+        
+      
         
       
         
@@ -1543,6 +1579,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2662,13 +2726,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#host-input" class="md-nav__link">
+  <a href="#opens-with" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Host Input
+        Opens With
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Opens With">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#click-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Click Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2691,6 +2772,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Cells">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cells-as-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cells as sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2756,10 +2854,10 @@
 
 
 <h1 id="menus">Menus<a class="headerlink" href="#menus" title="Permanent link">&para;</a></h1>
-<p><em>Turn a stick or touchpad into an on-screen ring or grid. Hover to pick a cell, and a fire mode decides when the pick commits.</em></p>
+<p><em>Turn a stick, a touchpad, or any two recorded axes into an on-screen ring or grid of commands.</em></p>
 <!-- SCREENSHOT: pad-menus (capture post-deploy: Menus tab with a radial menu selected, cell bindings visible) -->
 
-<p>A menu puts a set of commands on a stick or touchpad surface. Engage the surface and a ring or grid appears on screen. Point at a cell and it highlights. Depending on the fire mode, the cell's binding fires on click, on release, or the whole time it is hovered. It is the same idea as Steam Input's radial and touch menus, and configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> bring theirs along.</p>
+<p>A menu puts a set of commands on an input surface. Engage the surface and a ring or grid appears on screen. Point at a cell and it highlights. Depending on the fire mode, the cell's binding fires on click, on release, or the whole time it is hovered. It is the same idea as Steam Input's radial and touch menus, and configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> bring theirs along.</p>
 <p>Each slot has its own menu list. Open a slot, switch to the <strong>Menus</strong> tab, and click <strong>Add</strong>. <strong>Remove</strong> and <strong>Duplicate</strong> manage the list.</p>
 <hr />
 <h2 id="style">Style<a class="headerlink" href="#style" title="Permanent link">&para;</a></h2>
@@ -2782,13 +2880,32 @@
 </tbody>
 </table>
 <hr />
-<h2 id="host-input">Host Input<a class="headerlink" href="#host-input" title="Permanent link">&para;</a></h2>
-<p>The <strong>Host Input</strong> picker sets the surface that drives the menu: <strong>Left Stick</strong>, <strong>Right Stick</strong>, or a touchpad (<strong>Touchpad 1</strong> and up). A Record button next to the picker captures the host from a live input, and a reset restores the default (Right Stick).</p>
-<ul>
-<li>A stick host engages when the stick leaves the <strong>Engage Deadzone</strong> (default 25) and reads the stick click as the menu's click.</li>
-<li>A touchpad host engages on touch and reads the pad click.</li>
-<li>On a single-pad controller (DualSense, DualShock 4) a <strong>Pad Half</strong> picker narrows the host to <strong>Left Half</strong> or <strong>Right Half</strong>, so one pad can carry two menus, the way Steam treats the PS touchpad as two.</li>
-</ul>
+<h2 id="opens-with">Opens With<a class="headerlink" href="#opens-with" title="Permanent link">&para;</a></h2>
+<p>The <strong>Opens With</strong> picker sets the input that opens and steers the menu. It reads the physical controllers assigned to the slot, never the virtual controller's layout. The cell bindings below are what the menu outputs. A Record button next to the picker captures the host from a live input, and a reset restores the default (<strong>Right Stick</strong>).</p>
+<table>
+<thead>
+<tr>
+<th>Host</th>
+<th>How it engages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Left Stick</strong> / <strong>Right Stick</strong></td>
+<td>When the stick leaves the <strong>Engage Deadzone</strong> (default 25).</td>
+</tr>
+<tr>
+<td><strong>Touchpad 1</strong> and up</td>
+<td>On touch. A <strong>Pad Half</strong> picker (<strong>Whole Pad</strong>, <strong>Left Half</strong>, <strong>Right Half</strong>) narrows the menu to half the pad, so one pad can carry two menus, the way Steam treats the PS touchpad as two.</td>
+</tr>
+<tr>
+<td><strong>Custom Axes</strong></td>
+<td>Record any two axes as <strong>Steer X</strong> and <strong>Steer Y</strong>, then push past the deadzone like a stick. This is how joysticks, wheels, and other non-gamepad devices host menus.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="click-input">Click Input<a class="headerlink" href="#click-input" title="Permanent link">&para;</a></h3>
+<p><strong>Click Input</strong> sets the button the <strong>On Click</strong> and <strong>On Click Release</strong> fire modes read, recordable from any assigned device. Left empty it shows <strong>(host default)</strong>: the stick click for a stick host, the trackpad click for a touchpad. A <strong>Custom Axes</strong> host has no default click, so record one before using those two fire modes.</p>
 <hr />
 <h2 id="fire-mode">Fire Mode<a class="headerlink" href="#fire-mode" title="Permanent link">&para;</a></h2>
 <table>
@@ -2822,12 +2939,15 @@
 <p><strong>Cells</strong> sets how many cells the menu carries, 1 to 20. For a radial menu that is the ring count, with the optional <strong>Center Cell</strong> on top. Each cell has:</p>
 <ul>
 <li>A <strong>Label</strong>, rendered on the overlay.</li>
-<li>A binding: <strong>None</strong>, a <strong>Keyboard Key</strong>, or a <strong>Controller Button</strong> (Xbox naming).</li>
+<li>A binding: <strong>None</strong>, a <strong>Keyboard Key</strong>, or a <strong>Controller Button</strong>.</li>
 </ul>
+<p><strong>Controller Button</strong> speaks the slot's own lettering: Xbox letters on an Xbox slot, DualShock symbols on a PlayStation slot, Nintendo letters on a Nintendo slot, and the custom layout's numbered buttons on an Extended slot. <strong>Keyboard + Mouse</strong> and <strong>MIDI</strong> slots have no controller buttons to press, so the choice is not offered there, and a button binding left behind by a slot-type switch shows as <strong>Controller Button (not on this slot type)</strong>.</p>
+<h3 id="cells-as-sources">Cells as sources<a class="headerlink" href="#cells-as-sources" title="Permanent link">&para;</a></h3>
+<p>Every cell also fires as a menu-item source, pickable in <a href="../../features/mappings/">Mappings</a> rows and macro triggers as entries like <strong>Menu 1 Cell 3</strong>. A cell set to <strong>None</strong> still fires this way, so a cell can do real work with no direct binding. A cell driven through a mapping row or macro shows <strong>Used by a mapping or macro</strong> in its binding picker.</p>
 <p>A menu imported from the Steam Workshop can carry richer cell behavior (key combos, layer switches, macros). Those arrive wired through the profile's mapping rows and macros automatically, so the cell fires whatever the config authored even though the cell row here shows no direct binding.</p>
 <hr />
 <h2 id="the-overlay">The overlay<a class="headerlink" href="#the-overlay" title="Permanent link">&para;</a></h2>
-<p>While a menu is engaged, a click-through overlay draws the ring or grid at the configured spot on the primary monitor, with the hovered cell highlighted in the system accent color. It never steals focus from the game.</p>
+<p>While a menu is engaged, a click-through overlay draws the ring or grid at the configured spot on the primary monitor, with the hovered cell highlighted in PadForge's ember accent. It never steals focus from the game.</p>
 <p>Per-menu appearance controls: <strong>Show Labels</strong>, <strong>Screen Position</strong> (X and Y percent, default centered), <strong>Size</strong> (10–400%), and <strong>Opacity</strong> (5–100%, default 90).</p>
 <p>The overlay itself is optional. The <a href="../../features/dashboard/">Dashboard</a> carries a <strong>Menu Overlay</strong> toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.</p>
 <hr />
@@ -2841,7 +2961,8 @@
 <ul>
 <li><a href="../steam-workshop-import/">Steam Workshop Config Import</a>: imported radial and touch menus land here.</li>
 <li><a href="../shift-layers/">Shift Layers</a>: layer-scoped menus and what layer cells become.</li>
-<li><a href="../macros/">Macros</a>: imported menu cells can fire macros.</li>
+<li><a href="../../features/mappings/">Button and Axis Mappings</a>: menu cells as mapping sources.</li>
+<li><a href="../macros/">Macros</a>: menu cells can trigger macros, and imported cells can fire them.</li>
 <li><a href="../../features/touchpad/">Touchpad</a>: the other things a touchpad surface can do.</li>
 <li><a href="../../features/dashboard/">Dashboard</a>: the Menu Overlay toggle.</li>
 </ul>

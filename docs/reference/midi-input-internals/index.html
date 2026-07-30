@@ -998,6 +998,8 @@
       
         
       
+        
+      
     
     
     
@@ -1403,6 +1405,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2802,11 +2832,11 @@
 <h2 id="midiinputdevice-an-endpoint-as-an-input-device">MidiInputDevice: an endpoint as an input device<a class="headerlink" href="#midiinputdevice-an-endpoint-as-an-input-device" title="Permanent link">&para;</a></h2>
 <p><code>MidiInputDevice</code> implements <code>ISdlInputDevice</code>, the same contract the SDL gamepads, keyboards, mice, and web and peer devices implement, so the rest of the <a href="../input-pipeline/">Input Pipeline</a> treats it uniformly. One instance exists per connected MIDI endpoint. <code>GetInputDeviceType()</code> returns <code>InputDeviceType.Midi</code> (27), which flows into <code>UserDevice.CapType</code> and is the field the picker keys on.</p>
 <p>It exposes zero gamepad surface: no axes, buttons, hats, or device objects. The entire mappable surface lives in <code>CustomInputState.Midi</code>, the same pattern as the touchpad sub-state. Its identity is synthetic. The VID and PID spell "MI" and "MD", the device path is <code>midi://{endpointId}</code>, and the instance and product GUIDs are MD5 hashes of the endpoint ID and name. It has no rumble, haptic, or motion.</p>
-<p><code>Open</code> pulls the shared WM2 session, creates an endpoint connection, subscribes to <code>MessageReceived</code>, and opens it. <code>Dispose</code> unsubscribes and disconnects. The WinRT callback thread writes state under a lock and the polling thread reads a clone, the same discipline the web-controller device uses.</p>
+<p><code>Open</code> pulls the shared WM2 session, creates an endpoint connection, subscribes to <code>MessageReceived</code>, and opens it. Every one of those calls is a WinRT RPC into the MIDI service, and <code>Open</code> runs on the polling thread, so the whole body runs on a worker bounded by a 3 s timeout (<code>OpenTimeoutMs</code>). A hung open is orphaned and torn down later on its own thread. <code>Dispose</code> unsubscribes and hands the disconnect to <code>MidiInputRuntime.Disconnect</code>, which is fire-and-forget on a worker for the same reason: a hung midisrv wedged the whole engine through exactly this lane (live stack, 2026-07-23), and nothing waits on the service from the polling thread anymore. The WinRT callback thread writes state under a lock, and the polling thread reads a pooled copy: <code>GetCurrentState</code> fills one of two reused snapshot buffers (<code>PooledInputStatePair</code>) via <code>CopyInto</code> rather than allocating a fresh clone per poll.</p>
 <hr />
 <h2 id="midiinputruntime-the-shared-wm2-session">MidiInputRuntime: the shared WM2 session<a class="headerlink" href="#midiinputruntime-the-shared-wm2-session" title="Permanent link">&para;</a></h2>
 <p><code>MidiInputRuntime</code> is a static class over <code>Microsoft.Windows.Devices.Midi2</code> (Windows MIDI Services). Its <code>Session</code> property lazily creates one <code>MidiSession</code>, but only after <code>MidiVirtualController.IsAvailable()</code> returns true. It never initializes the SDK itself. It rides the runtime the output side brings up, and returns null when Windows MIDI Services is absent.</p>
-<p><code>EnumerateEndpoints</code> calls <code>MidiEndpointDeviceInformation.FindAll</code> and keeps only the normal message endpoints and the virtual-device responders, skipping the diagnostics endpoints and the in-box synth. Keeping the virtual-device responders is deliberate. It is what lets PadForge's own MIDI virtual-controller endpoints appear as inputs, which is the no-hardware loopback test path. <code>Shutdown</code> disposes the session and must run before <code>MidiVirtualController.Shutdown</code> on app exit.</p>
+<p><code>EnumerateEndpoints</code> calls <code>MidiEndpointDeviceInformation.FindAll</code> and keeps only the normal message endpoints (<code>MidiEndpointDevicePurpose.NormalMessageEndpoint</code>), skipping the diagnostic endpoints, the in-box synth, and the virtual-device responder twins. PadForge's own MIDI virtual-controller endpoints still appear as inputs (the no-hardware loopback path) because the service publishes a client-visible twin of every virtual device as a normal endpoint. The device-side responder twin is for the hosting application only, and enumerating it is how the input lane used to poke stranded responder corpses every sweep (the MIDI VC lifecycle-wedge fix). <code>Shutdown</code> disposes the session and must run before <code>MidiVirtualController.Shutdown</code> on app exit.</p>
 <hr />
 <h2 id="message-parsing">Message parsing<a class="headerlink" href="#message-parsing" title="Permanent link">&para;</a></h2>
 <p><code>OnMessageReceived</code> reads the first UMP word and the message-type nibble. The whole body is wrapped in try-catch so a malformed packet cannot take down the WinRT callback thread. It handles MIDI 1.0 (32-bit UMP, message type 0x2) and MIDI 2.0 (64-bit UMP, message type 0x4):</p>
@@ -2841,11 +2871,24 @@
 </tr>
 </tbody>
 </table>
-<p>On the MIDI 1.0 path velocity decides on versus off (a Note On with velocity 0 is a Note Off), and velocity is never stored as a value. The MIDI 2.0 path is different. A Note On there writes <code>SetNote(note, true)</code> regardless of velocity, because a MIDI 2.0 Note On with velocity 0 is a valid note-on, so on the 2.0 branch only a Note Off (0x8) releases the note. Reads are channel-merged (omni). The channel nibble is never inspected, so a note or CC means the same thing on any channel. Two channel-mode CCs get extra handling in the CC path: All Sound Off (CC 120) and All Notes Off (CC 123) clear every note lane after their value is written, so a controller that ends a phrase with one of those instead of per-note Note Off does not leave mapped note-buttons latched on. Channel pressure, polyphonic aftertouch, and program change have no case and are dropped.</p>
+<p>On the MIDI 1.0 path velocity decides on versus off (a Note On with velocity 0 is a Note Off), and velocity is never stored as a value. The MIDI 2.0 path is different. A Note On there writes <code>SetNote(note, true)</code> regardless of velocity, because a MIDI 2.0 Note On with velocity 0 is a valid note-on, so on the 2.0 branch only a Note Off (0x8) releases the note. Reads are channel-merged (omni). The channel nibble is never inspected, so a note or CC means the same thing on any channel. Channel pressure, polyphonic aftertouch, and program change have no case and are dropped.</p>
+<p>The channel-mode CCs get extra handling in the CC path, after their value is written:</p>
+<ul>
+<li><strong>All Sound Off (CC 120) and All Notes Off (CC 123)</strong> clear every note lane, so a controller that ends a phrase with one of these instead of per-note Note Off does not leave mapped note-buttons latched on.</li>
+<li><strong>Omni Off/On and Mono/Poly (CCs 124–127)</strong> clear the note lanes too, since each carries All Notes Off semantics per MIDI 1.0. CC 122 (Local Control) clears nothing.</li>
+<li><strong>Reset All Controllers (CC 121)</strong> applies the RP-015 reset to the lanes this state models: pitch bend recenters, the mod wheel (CC 1) and pedals (CCs 64–67) drop to 0, expression (CC 11) returns to 127, and the RPN and NRPN selectors (CCs 98–101) return to null. Each reset lane's encoder pulse machine is cleared in both directions, so queued detent pulses stop with the reset. Bank, volume, pan, and sound lanes stay put, per RP-015. Without this, a keyboard panic (121 plus 123) released mapped notes but left a mapped Pitch Bend axis frozen off-center.</li>
+</ul>
 <p>A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (center 0x40, 0x41 is one step up, 0x3F is one step down). A small positive delta queues an up pulse on lane <code>2*cc</code> and a small negative delta queues a down pulse on <code>2*cc+1</code>. Values outside the band read as an absolute fader and never pulse. The two's-complement and signed-bit encoder styles read as absolute jumps. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. <code>MidiInputState</code> holds the note, CC, encoder up and down, and pitch-bend arrays plus a <code>Clone</code>, and is null on <code>CustomInputState</code> for non-MIDI devices.</p>
 <hr />
 <h2 id="enumeration-and-teardown-phase-1e">Enumeration and teardown (Phase 1e)<a class="headerlink" href="#enumeration-and-teardown-phase-1e" title="Permanent link">&para;</a></h2>
-<p><code>UpdateDevices</code> calls <code>UpdateMidiInputDevices</code> as Phase 1e, alongside the SDL, Raw Input, and Precision Touchpad phases. Enumeration is async. A background task refreshes the cached endpoint list (the WinRT device query is expensive and is kept off the poll loop), and the polling thread consumes the latest snapshot. For each endpoint it either keeps an existing <code>MidiInputDevice</code>, or creates one, opens it, and runs it through <code>FindOrCreateUserDevice</code> then <code>LoadFromExternalDevice</code> then <code>IsOnline = true</code>. A vanished endpoint is marked offline and disposed.</p>
+<p><code>UpdateDevices</code> calls <code>UpdateMidiInputDevices</code> as Phase 1e, alongside the SDL, Raw Input, and Precision Touchpad phases. Enumeration is async. A background task refreshes the cached endpoint list (the WinRT device query is expensive and is kept off the poll loop), and the polling thread consumes the latest snapshot. For each endpoint it either keeps an existing <code>MidiInputDevice</code>, or creates one, opens it, and runs it through <code>FindOrCreateUserDevice</code> then <code>LoadFromExternalDevice</code> then <code>IsOnline = true</code>.</p>
+<p>Two gates run before any open:</p>
+<ul>
+<li><strong>Loopback readiness.</strong> A PadForge-shaped endpoint (<code>MidiEndpointJanitor.IsPadForgeEndpointId</code>) opens only while the owning <code>MidiVirtualController</code> in this process reports its device side ready (<code>MidiVirtualController.IsReadyEndpointInstance</code>). A PadForge endpoint with no ready owner is either mid-create or a corpse stranded by a failed service-side teardown, and opening a corpse re-animates it inside the service. It is never reopened. The endpoint janitor removes it instead.</li>
+<li><strong>Failed-open backoff.</strong> An endpoint whose open failed is skipped for 60 s (<code>_midiOpenFailedAt</code>), so a sick service is not re-poked every sweep. The backoff entry is dropped when the endpoint vanishes, so a re-created endpoint starts fresh.</li>
+</ul>
+<p>A vanished endpoint is marked offline, disposed, and has its mapped outputs neutralized. Step 3 keeps the last OutputState for an offline device, so a note or CC held at the moment of the unplug would otherwise stay stamped on the slot's combined output.</p>
+<p><code>CloseMidiInputsForEndpoint</code> closes any open loopback input connections to one PadForge MIDI endpoint, and the ordering is the contract: the loopback client connections must close before that endpoint's device-side teardown, because tearing down a virtual endpoint while this process still holds a client connection to it is the deterministic midisrv wedge (bench 2026-07-23). Callers demote the endpoint's registry claim first (<code>MidiVirtualController.MarkClosing</code>) so the scanner cannot reopen it in that window. Closing neutralizes the device's mapped outputs too, so held notes and CCs release.</p>
 <p><code>ShutdownMidiInputs</code> suppresses further enumeration, disposes every open device, and calls <code>MidiInputRuntime.Shutdown</code>. The ordering at the Windows MIDI Services uninstall path is load-bearing: <code>ShutdownMidiInputs</code> runs first, then the output controller shuts down, then the service is removed, because MIDI input enumeration loads the SDK runtime whenever the service is installed.</p>
 <hr />
 <h2 id="descriptor-resolution-and-coercion">Descriptor resolution and coercion<a class="headerlink" href="#descriptor-resolution-and-coercion" title="Permanent link">&para;</a></h2>
@@ -2853,7 +2896,7 @@
 <p><code>SourceCoercion</code> classifies any <code>"Midi "</code> descriptor as <code>SourceType.Midi</code> and <code>TryParseMidi</code> resolves the kind (note, CC, encoder up, encoder down, pitch bend) and index. Three reader branches consume <code>state.Midi</code>: <code>ReadAsBool</code> for button and POV targets (a CC past its per-source deadzone), <code>ReadAsBipolar</code> for axes (a CC as a centered slider), and <code>ReadAsUnipolar</code> for triggers. The per-source invert flag is applied on top.</p>
 <hr />
 <h2 id="distinct-from-the-midi-virtual-output">Distinct from the MIDI virtual output<a class="headerlink" href="#distinct-from-the-midi-virtual-output" title="Permanent link">&para;</a></h2>
-<p><code>MidiVirtualController</code> is the unrelated output path. Its <code>Type</code> is <code>VirtualControllerType.Midi</code> (a separate enum, value 3, from <code>InputDeviceType.Midi</code> which is 27). It creates a Windows MIDI Services virtual device and sends Control Change and Note messages out. The input and output paths meet only at the availability check, at the uninstall teardown, and in the loopback case where one of the output endpoints is what an input slot maps from.</p>
+<p><code>MidiVirtualController</code> is the unrelated output path. Its <code>Type</code> is <code>VirtualControllerType.Midi</code> (a separate enum, value 3, from <code>InputDeviceType.Midi</code> which is 27). It creates a Windows MIDI Services virtual device and sends Control Change and Note messages out. The input and output paths meet only at the availability check, at the uninstall teardown, and on the loopback path, where the input scanner opens an output endpoint's client-visible twin only while its owning controller reports ready.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2864,7 +2907,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: the Windows MIDI Services install.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

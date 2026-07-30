@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1479,10 +1481,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pairing-a-wii-controller" class="md-nav__link">
+  <a href="#pairing-a-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Pairing a Wii controller
+        Pairing a controller
       
     </span>
   </a>
@@ -2159,6 +2161,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -3594,10 +3624,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pairing-a-wii-controller" class="md-nav__link">
+  <a href="#pairing-a-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Pairing a Wii controller
+        Pairing a controller
       
     </span>
   </a>
@@ -4018,7 +4048,7 @@
 <h2 id="device-card-list">Device card list<a class="headerlink" href="#device-card-list" title="Permanent link">&para;</a></h2>
 <p>Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchpads) sort to the bottom. Within each group, cards sort alphabetically by name, then by Vendor ID, then by Product ID.</p>
 <h3 id="type-filter-chips">Type filter chips<a class="headerlink" href="#type-filter-chips" title="Permanent link">&para;</a></h3>
-<p>A row of chips sits above the card list: <strong>ALL</strong>, <strong>GAMEPAD</strong>, <strong>JOYSTICK</strong>, <strong>WHEEL</strong>, <strong>KEYBOARD</strong>, <strong>MOUSE</strong>, <strong>OTHER</strong>. Each chip carries a live count of the devices in that group. Click one to show only that type. Click <strong>ALL</strong> to clear the filter. The active chip lights up in the accent color, and the counts update as devices connect and drop.</p>
+<p>A row of chips sits above the card list: <strong>ALL</strong>, <strong>GAMEPAD</strong>, <strong>JOYSTICK</strong>, <strong>WHEEL</strong>, <strong>KEYBOARD</strong>, <strong>MOUSE</strong>, <strong>OTHER</strong>. Each chip carries a live count of the devices in that group. Click one to show only that type. Click <strong>ALL</strong> to clear the filter. The active chip lights up in ember orange, and the counts update as devices connect and drop.</p>
 <p>GAMEPAD covers standard pads. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, and anything unclassified.</p>
 <!-- SCREENSHOT: devices-facet-chips -->
 <p><img alt="Type filter chips above the device list, each with a live count" src="../../images/devices-facet-chips.png" /></p>
@@ -4033,8 +4063,8 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Status dot</strong></td>
-<td>Lit for connected, dim for disconnected</td>
+<td><strong>Status flame</strong></td>
+<td>The same ember flame the driver cards wear. Filled and glowing for connected, outline only for disconnected.</td>
 </tr>
 <tr>
 <td><strong>Device name</strong></td>
@@ -4042,7 +4072,7 @@
 </tr>
 <tr>
 <td><strong>Slot badges</strong></td>
-<td><a href="../controller-slots/">Slot</a> numbers the device is assigned to, each with the slot's controller-type icon. No badge shows if the device is unassigned.</td>
+<td><a href="../controller-slots/">Slot</a> numbers the device is assigned to, each with the slot's controller-type icon (a Nintendo slot wears the Switch mark). No badge shows if the device is unassigned.</td>
 </tr>
 <tr>
 <td><strong>Remove button</strong></td>
@@ -4069,7 +4099,7 @@
 </tr>
 <tr>
 <td><strong>Capabilities</strong></td>
-<td>Axis, button, and POV hat counts plus feature tags (Rumble, Gyro, Accel)</td>
+<td>Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader)</td>
 </tr>
 <tr>
 <td><strong>Battery</strong></td>
@@ -4172,7 +4202,7 @@
 <h3 id="what-happens-on-assignment">What happens on assignment<a class="headerlink" href="#what-happens-on-assignment" title="Permanent link">&para;</a></h3>
 <ol>
 <li>The slot's <a href="../controller-slots/">virtual controller</a> is created if it does not exist yet</li>
-<li>A default <a href="../mappings/">mapping</a> is built for the device type and output type (Xbox, PlayStation, Extended, etc.)</li>
+<li>A default <a href="../mappings/">mapping</a> is built for the device type and output type (Xbox, PlayStation, Nintendo, Extended, etc.)</li>
 <li>For gamepads and joysticks, "Hide from games" turns on if HidHide is installed</li>
 <li>Slot badges update right away</li>
 </ol>
@@ -4233,18 +4263,18 @@
 <tbody>
 <tr>
 <td>Released</td>
-<td>Dim gray</td>
+<td>Dim recessed cell</td>
 </tr>
 <tr>
 <td>Pressed</td>
-<td>Filled with the system accent color</td>
+<td>Outline and number lit in cold blue, with a glow</td>
 </tr>
 </tbody>
 </table>
-<p>Gamepad mode shows the 11 standard buttons, indexed 0-10 (0 is A, 1 is B, on through Guide). Raw mode shows every physical button (13 or 17 on some controllers). Either way the circles read as numbers, not letters. The count is what changes between modes.</p>
+<p>Gamepad mode shows the 11 standard buttons (0 is A, 1 is B, on through Guide at 10) plus every extended button the pad actually has: Misc1 at 11, paddles at 12–15, touchpad click at 16, Misc2–6 at 17–21. Physical buttons the mapping leaves unclaimed follow from 22 up. Each circle is numbered by its real index, the same number the mapping picker and recorder use, so gaps are normal. A DualSense shows a button 16 for its touchpad click with nothing at 12–15. Raw mode shows every physical button instead, densely numbered from 0. Either way the circles read as numbers, not letters.</p>
 <p>Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags. See their sections below.</p>
 <h3 id="keyboards">Keyboards<a class="headerlink" href="#keyboards" title="Permanent link">&para;</a></h3>
-<p>A QWERTY layout replaces axes and buttons. Main keys, navigation cluster, arrows, numpad. Keys light up in the accent color as you press them.</p>
+<p>A QWERTY layout replaces axes and buttons. Main keys, navigation cluster, arrows, numpad. Keys light up in the same cold blue as the button circles as you press them.</p>
 <h3 id="mice">Mice<a class="headerlink" href="#mice" title="Permanent link">&para;</a></h3>
 <p>A mouse graphic replaces axes and buttons:</p>
 <ul>
@@ -4268,7 +4298,7 @@
 </tr>
 <tr>
 <td>Direction pressed</td>
-<td>Accent line from center toward the pressed direction</td>
+<td>Cold blue line from center toward the pressed direction</td>
 </tr>
 </tbody>
 </table>
@@ -4298,6 +4328,7 @@
 </tbody>
 </table>
 <p>Three decimal places. A still controller reads near 0.000.</p>
+<p>A second block, <strong>Aux Gyroscope</strong>, appears for the left Joy-Con of a combined pair. It sits beside the Aux Accelerometer readout, so you can see which half a reading comes from, and it maps as its own source (Left Joy-Con Gyro Pitch, Yaw, and Roll). Only the Joy-Con pair shows one. The Nunchuk has no gyro.</p>
 <h3 id="accelerometer">Accelerometer<a class="headerlink" href="#accelerometer" title="Permanent link">&para;</a></h3>
 <p>Shows on devices with an accelerometer. Linear acceleration:</p>
 <table>
@@ -4332,6 +4363,7 @@
 <li><strong>Windows Precision Touchpad.</strong> Laptop trackpads and external precision touchpads. PadForge treats each one as its own device card with a live touch preview. These trackpads have no physical click button, so no click input appears for them in the mapping picker or auto-map.</li>
 </ul>
 <p>A device with two touch surfaces (Steam Controller 2026, Steam Deck, original Steam Controller) shows a separate live preview for each pad, labeled <strong>Touchpad 1</strong> and <strong>Touchpad 2</strong> in the raw input view.</p>
+<p>Pressure maps too. Each finger gets a Touchpad N Finger M Pressure source in the mapping picker, and pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015) can shape it with the per-device <strong>Enable Synthetic Pressure</strong> option on the <a href="../touchpad/">Touchpad</a> tab.</p>
 <p>A third and fourth source live elsewhere: <a href="../../guides/web-controller/">Web Controller</a> clients in touchpad-only or DS4-with-touchpad mode, and the on-screen <a href="../dashboard/#touchpad-overlay">Touchpad Overlay</a>. All four feed the same per-slot configuration on the <a href="../touchpad/">Touchpad</a> tab.</p>
 <hr />
 <h2 id="midi-devices">MIDI devices<a class="headerlink" href="#midi-devices" title="Permanent link">&para;</a></h2>
@@ -4341,7 +4373,7 @@
 <h2 id="consumer-control-devices">Consumer Control devices<a class="headerlink" href="#consumer-control-devices" title="Permanent link">&para;</a></h2>
 <p>Media keys show up here as their own device card, typed <strong>Consumer Control</strong>. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.</p>
 <p><img alt="Consumer Control device detail pane with named media chips" src="../../images/devices-consumer.png" /></p>
-<p>Select the card and the detail pane shows named button chips instead of the numbered-button grid: Play/Pause, Mute, Volume Up, Volume Down, Next Track, Previous Track, and the rest of the media keys the device reports. A chip lights up in the accent color while its key is held.</p>
+<p>Select the card and the detail pane shows named button chips instead of the numbered-button grid: Play/Pause, Mute, Volume Up, Volume Down, Next Track, Previous Track, and the rest of the media keys the device reports. A chip lights up in cold blue while its key is held.</p>
 <p>Each named media key maps as a <a href="../mappings/">source</a> and works as a <a href="../../guides/macros/">macro</a> trigger. These devices have no sticks or triggers. <strong>Consume Mapped Inputs</strong> does not apply to them, so that toggle is left out.</p>
 <hr />
 <h2 id="nfc-readers">NFC readers<a class="headerlink" href="#nfc-readers" title="Permanent link">&para;</a></h2>
@@ -4350,9 +4382,11 @@
 <p>The detail pane has a <strong>Register / Manage NFC Tags</strong> button. It opens a dialog where you tap a tag to capture it, then give the tag a name. Each registered tag becomes its own button you can <a href="../mappings/">map</a>, alongside an <strong>Any NFC Tag</strong> button that any tag triggers. The pane lists your named tags and highlights the one you just tapped.</p>
 <p>The deep how-to (registering, naming, and mapping tags) lives on <a href="../nfc-tags/">NFC Tags</a>.</p>
 <hr />
-<h2 id="pairing-a-wii-controller">Pairing a Wii controller<a class="headerlink" href="#pairing-a-wii-controller" title="Permanent link">&para;</a></h2>
-<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog, which walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself.</p>
-<p>Once paired, a Wii controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad. See <a href="../../devices/wii-controllers/">Wii Controllers</a> for the pairing steps and the per-controller button layouts.</p>
+<h2 id="pairing-a-controller">Pairing a controller<a class="headerlink" href="#pairing-a-controller" title="Permanent link">&para;</a></h2>
+<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog. A <strong>Controller Family</strong> selector offers two families: <strong>Nintendo Wii</strong> and <strong>Sony DualShock 3</strong>.</p>
+<p>The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See <a href="../../devices/wii-controllers/">Wii Controllers</a> for the pairing steps and the per-controller button layouts.</p>
+<p>The DualShock 3 family pairs over USB: connect the controller with a cable, click <strong>Pair</strong>, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See <a href="../../devices/dualshock-3/">DualShock 3</a>.</p>
+<p>Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.</p>
 <hr />
 <h2 id="input-hiding">Input hiding<a class="headerlink" href="#input-hiding" title="Permanent link">&para;</a></h2>
 <p>When a physical device feeds a <a href="../controller-slots/">slot</a>, games can see both devices and double up the input. PadForge offers two ways to stop that, set per device.</p>
@@ -4439,7 +4473,7 @@
 <p><img alt="Power section with Idle Disconnect timer and battery indicator" src="../../images/devices-power.png" /></p>
 <h3 id="idle-disconnect">Idle Disconnect<a class="headerlink" href="#idle-disconnect" title="Permanent link">&para;</a></h3>
 <p>Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes, and the suffix reads <strong>minutes (0 = never)</strong>. Set it to 0 to leave the controller on.</p>
-<p>Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link to drop, so nothing happens. Charging doesn't hold it off. Dropping Bluetooth doesn't interrupt the charge, so an idle pad left on a charger still disconnects. It works on the wireless families PadForge can power off: Sony, Xbox, Wii Remote, Valve, and Switch 2.</p>
+<p>Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link to drop, so nothing happens. Charging doesn't hold it off. Dropping Bluetooth doesn't interrupt the charge, so an idle pad left on a charger still disconnects. It targets any Bluetooth-linked pad (Sony, gen-1 Switch Pro and Joy-Cons, Wii Remote, and the rest), Xbox controllers on the XInput driver, the Switch 2 family, and the combined gen-1 Joy-Con pair, where PadForge drops both halves' links. A pad reaching this PC through <a href="../../guides/remote-link/">Remote Link</a> is excluded. This machine holds no radio link to it.</p>
 <hr />
 <h2 id="force-raw-joystick-mode">Force Raw Joystick Mode<a class="headerlink" href="#force-raw-joystick-mode" title="Permanent link">&para;</a></h2>
 <p>By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translates raw button and axis indices into a standard layout (A/B/X/Y, LX/LY, LT/RT) via a built-in controller database.</p>
@@ -4463,7 +4497,7 @@
 </tr>
 <tr>
 <td>Extra buttons go missing</td>
-<td>Controllers with more than 11 buttons lose the extras in gamepad mode</td>
+<td>The mapping consumed physical buttons, so they never surface in gamepad mode</td>
 </tr>
 <tr>
 <td>Works in joy.cpl but not PadForge</td>
@@ -4483,7 +4517,7 @@
 <ol>
 <li>Select the device card</li>
 <li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for PadForge's own virtual controllers and other virtual input sources.)</li>
-<li>Check <strong>Force raw joystick mode</strong></li>
+<li>Check <strong>Force raw joystick mode (bypass gamepad remapping)</strong></li>
 <li>Saved right away. Persists across restarts.</li>
 </ol>
 <h3 id="what-changes">What changes<a class="headerlink" href="#what-changes" title="Permanent link">&para;</a></h3>
@@ -4533,7 +4567,7 @@
 <li><strong><a href="../../guides/profiles/">Profiles</a>.</strong> A profile falls back to VID:PID. If a profile was saved with a device that now has a different identity (a port change, for example), PadForge matches by VID:PID so the profile still applies.</li>
 </ul>
 <h3 id="offline-device-cards">Offline device cards<a class="headerlink" href="#offline-device-cards" title="Permanent link">&para;</a></h3>
-<p>Disconnected devices stay in the list with a dim status dot.</p>
+<p>Disconnected devices stay in the list with an unlit status flame.</p>
 <ul>
 <li>Every mapping, slot assignment, and setting is kept</li>
 <li>Reconnect with the same GUID and everything comes back</li>
@@ -4567,7 +4601,7 @@
 <ul>
 <li>Check the raw input section. Are axes, buttons, and POVs drawn?</li>
 <li>If they show but never change, try <strong>Force Raw Joystick Mode</strong></li>
-<li>For Bluetooth devices, confirm a stable connection (lit status dot)</li>
+<li>For Bluetooth devices, confirm a stable connection (lit status flame)</li>
 </ul>
 <h3 id="buttons-missing-or-mapped-wrong">Buttons missing or mapped wrong<a class="headerlink" href="#buttons-missing-or-mapped-wrong" title="Permanent link">&para;</a></h3>
 <ul>
@@ -4601,6 +4635,7 @@
 <ul>
 <li><a href="../controller-slots/">Controller Slots</a>: create slots before assigning devices.</li>
 <li><a href="../../devices/wii-controllers/">Wii Controllers</a>: pair a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller from the header Pair button.</li>
+<li><a href="../../devices/dualshock-3/">DualShock 3</a>: pair a DualShock 3 over USB from the same Pair button.</li>
 <li><a href="../mappings/">Button and Axis Mappings</a>: map inputs after assigning a device.</li>
 <li><a href="../stick-deadzones/">Stick Deadzones</a>: calibrate center offset and deadzones.</li>
 <li><a href="../../guides/macros/">Macros</a>: automated actions triggered by device inputs.</li>
@@ -4615,7 +4650,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: general troubleshooting guide.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 

@@ -10,7 +10,7 @@
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
-5. Back on the [Dashboard](../features/dashboard.md), click **Add Controller** and pick a type (Xbox, PlayStation, Extended, Keyboard+Mouse, or MIDI). The first Xbox, PlayStation, or Extended controller you add installs HIDMaestro automatically. No button to click.
+5. Back on the [Dashboard](../features/dashboard.md), click **Add Controller** and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, or MIDI). The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. No button to click.
 6. Plug in a physical controller. It appears on the **[Devices](../features/devices.md)** page. Click the slot badge on its card to assign it.
 7. Done. Games now see a virtual controller.
 
@@ -34,7 +34,7 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 PadForge opens the [Dashboard](../features/dashboard.md) after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.
 
-1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard+Mouse, or MIDI. The first Xbox, PlayStation, or Extended controller you add installs HIDMaestro automatically.
+1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, or MIDI. The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically.
 2. **Check devices.** Open **[Devices](../features/devices.md)**. PadForge auto-detects every connected gamepad, joystick, keyboard, and mouse.
 3. **Assign a device.** Click the slot badge on a device card to route that physical controller through the virtual one.
 
@@ -48,9 +48,9 @@ The **About** page, at the bottom of the sidebar, lists the projects PadForge is
 
 ## HIDMaestro
 
-HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, and Extended controller types. Keyboard+Mouse and MIDI use their own paths and do not need it.
+HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it.
 
-The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card lights its status indicator and shows the version once installation completes. After that, every Xbox, PlayStation, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
+The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card lights its status indicator and shows the version once installation completes. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
 If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.
 
@@ -73,7 +73,7 @@ Hides physical controllers from games so only the virtual ones are visible. Inst
 
 Creates virtual MIDI endpoints for the MIDI virtual controller type. Install it if you want to send MIDI to DAWs, synthesizers, or VJ tools. Skip it if you do not need MIDI output. Requires Windows 11 24H2 (build 26100) or later. The Install button is disabled on older versions.
 
-### Keyboard+Mouse
+### Keyboard + Mouse
 
 Always on. Maps controller inputs to keyboard keys and mouse moves. No driver required.
 
@@ -130,4 +130,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.0.0.*
+*Last updated for PadForge 4.1.0.*

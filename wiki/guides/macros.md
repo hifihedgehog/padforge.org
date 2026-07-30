@@ -40,16 +40,16 @@ A trigger can mix buttons, axes, and D-pad directions. All of them must be activ
 
 ### Trigger source
 
-You pick where the trigger reads its inputs:
+The **Source** dropdown picks where the trigger reads its inputs:
 
 | Source | Reads from | Use when |
 |---|---|---|
-| **Output Controller** | The virtual controller after mapping (A, B, X, Y, LB, LT, etc.) | Most setups. The trigger keeps working when you swap physical devices. |
-| **Input Device** | Raw inputs on one specific physical controller | The button is outside the standard 11 (touchpad click, pressure buttons, flight-stick extras), or you want a device-specific combo. |
+| **Assigned Devices** | Raw inputs on the physical controllers assigned to the slot | The button is outside the standard 11 (touchpad click, pressure buttons, flight-stick extras), or you want a device-specific combo. |
+| **Virtual Controller** | The slot's combined output after mapping (A, B, X, Y, LB, LT, etc.) | Most setups. The trigger keeps working when you swap physical devices. |
 
-An **Input Device** source also reaches devices that are not gamepads. An NFC reader shows an **Any NFC Tag** button plus one button per tag you have registered. A media device shows its named media keys (Play/Pause, Mute, and the rest). Tap a registered tag or press a media key to fire the macro, the same way a button press does.
+An **Assigned Devices** source also reaches devices that are not gamepads. An NFC reader shows an **Any NFC Tag** button plus one button per tag you have registered. A media device shows its named media keys (Play/Pause, Mute, and the rest). Tap a registered tag or press a media key to fire the macro, the same way a button press does.
 
-An Input Device trigger does not have to name a specific device. Entries picked from the **(Any device)** group fire from whichever assigned device provides that input, and they render with an "(Any device)" chip. Profiles imported from the [Steam Workshop](steam-workshop-import.md) use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.
+An Assigned Devices trigger does not have to name a specific device. Entries picked from the **(Any device)** group fire from whichever assigned device provides that input, and they render with an "(Any device)" chip. Profiles imported from the [Steam Workshop](steam-workshop-import.md) use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.
 
 ### Record a trigger
 
@@ -64,18 +64,20 @@ An Input Device trigger does not have to name a specific device. Entries picked 
 | Type | Behavior |
 |---|---|
 | Button | Pressed buttons go into the combo. LB + A means both held. |
-| Axis | Fires when the stick or trigger crosses the threshold. Each axis entry has its own **Invert**, **Half**, **Bidirectional**, and **Deadzone** options, the same set the merge-mapping editor uses on axis-to-button sources. **Half** by itself picks one side of center (Invert flips which side). **Half** plus **Bidirectional** fires past the deadzone on either side. This lets you bind separate macros to left-stick-left and left-stick-right, or one macro to "deflected past N percent in any direction". |
+| Axis | Fires when the stick or trigger crosses the threshold. Each **Assigned Devices** axis entry has its own **Invert**, **Half**, **Bidirectional**, and **Deadzone** options, the same set the merge-mapping editor uses on axis-to-button sources. **Half** by itself picks one side of center (Invert flips which side). **Half** plus **Bidirectional** fires past the deadzone on either side. This lets you bind separate macros to left-stick-left and left-stick-right, or one macro to "deflected past N percent in any direction". |
 | D-pad / POV hat | Fires when the hat matches the recorded direction. The match is a 45-degree sector, so "Up" also catches small diagonals. |
 
 A mixed example: LB + Right Stick X (Positive) + D-pad Up. All three must hold for the macro to fire.
 
 ### Axis threshold
 
-When the trigger has an axis, a threshold slider appears (1 to 100 percent, default 50). The axis must cross that percent to count.
+When the trigger has a **Virtual Controller** axis, a **Threshold** slider appears (1 to 100 percent, default 50). The axis must cross that percent to count.
 
 - 10 percent. A tiny push fires the macro.
 - 90 percent. You need to push almost all the way.
-- With a direction filter, the threshold only applies to that half of the axis.
+- The **Direction** dropdown (Any, Positive, Negative) picks which side of the axis counts, and the threshold applies to that side.
+
+**Assigned Devices** axis entries do not use this slider. Each one carries its own per-entry **Invert**, **Half**, **Bidirectional**, and **Deadzone** controls instead.
 
 ### Gesture triggers
 
@@ -94,7 +96,7 @@ Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only aft
 
 ## Custom Expression trigger mode
 
-Pick **Custom Expression** in the Trigger picker when the shape you want is bigger than a fixed combo. Chords across two pads. "Press this only if that other thing isn't pressed." Axes crossing a threshold that depends on another axis. Anything you can write as a small expression.
+Pick **Custom Expression** in the **Fire** dropdown when the shape you want is bigger than a fixed combo. Chords across two pads. "Press this only if that other thing isn't pressed." Axes crossing a threshold that depends on another axis. Anything you can write as a small expression.
 
 ### Variables
 
@@ -102,8 +104,8 @@ Add as many variables as the formula needs. Each one becomes a letter: `a` for t
 
 Each variable binds to one of two things:
 
-- An **Input Device** input: any button, POV direction, or axis on any physical device assigned to the slot.
-- An **Output Controller** channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.
+- An **Assigned Devices** input: any button, POV direction, or axis on any physical device assigned to the slot.
+- A **Virtual Controller** channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.
 
 Click **Record** on a variable row, push the input you want it to follow, and PadForge fills it in. Click **Clear** to wipe a binding.
 
@@ -115,7 +117,7 @@ The **Trigger Formula** text box accepts:
 - Math operators: `+`, `-`, `*`, `/`.
 - Comparisons: `<`, `>`, `<=`, `>=`, `==`, `!=`.
 - Logic: `&&` (and), `||` (or), `!` (not), `?:` (if/else).
-- Functions: `abs`, `min`, `max`, `clamp`, `sign`, `lerp`, `round`, `sqrt`.
+- Functions: `abs`, `min`, `max`, `clamp`, `sign`, `lerp`, `round`, `sqrt`, `pow`, `hypot`, `deadzone`, `floor`, `ceil`, `sin`, `cos`, `tan`, `atan2`. Every one has a chip on the palette below the box.
 
 ### Starter recipes
 
@@ -143,12 +145,46 @@ See [Button and Axis Mappings](../features/mappings.md) for the cross-device inp
 
 ## Fire modes
 
+The **Fire** dropdown sets when the macro runs.
+
 | Mode | When it fires |
 |---|---|
-| **On Press** | Once, the moment the trigger becomes active. Good for one-shot commands and toggles. |
+| **On Press** | Once, the moment the trigger becomes active. Good for one-shot commands. |
+| **On Single Press** | Once, when a press is not followed by a second press within the Press Window. Lets one button carry separate single-, double-, and triple-press macros. |
 | **On Release** | Once, the moment the trigger releases. Good for charged shots. |
 | **While Held** | Every frame while the trigger is active. Good for turbo fire and live mouse control. |
+| **On Long Press** | Once, after the trigger has been held continuously for the Hold Time. A shorter tap does nothing. |
+| **On Short Press** | Once, when the trigger is released before the Hold Time elapses. Holding past the threshold fires nothing. |
+| **On Double Press** | When the trigger is pressed twice within the Press Window. If held on the second press, it stays active until release. |
+| **On Triple Press** | When the trigger is pressed three times within the Press Window. If held on the third press, it stays active until release. |
+| **Toggle** | First press latches the actions on. Press again to release. Holds and repeats stay active until the second press. |
+| **Turbo** | Repeats the actions at the Interval for as long as the trigger is held. |
 | **Always** | Every frame, with no trigger. Good for stick-to-mouse and a permanent volume knob. |
+| **Custom Expression** | On the rising edge of a formula you write. See [Custom Expression trigger mode](#custom-expression-trigger-mode). |
+
+Three fields appear beside the modes that use them:
+
+| Field | Modes | Meaning |
+|---|---|---|
+| **Hold Time** (ms, default 500) | On Long Press, On Short Press | The tap-vs-hold boundary. |
+| **Press Window** (ms, default 442) | On Single Press, On Double Press, On Triple Press | How close together the presses must land. |
+| **Interval** (ms) | Toggle, Turbo | The repeat pacing. These two modes repeat until release on their own, so the Repeat section is replaced by this one field. |
+
+Tap-vs-hold on one button: two macros, **On Short Press** on the first and **On Long Press** on the second, same trigger. The tap fires one, the hold fires the other, and neither double-fires.
+
+---
+
+## Layer
+
+On a slot with [shift layers](shift-layers.md), every macro carries a **Layer** dropdown.
+
+| Choice | When the macro fires |
+|---|---|
+| **Any layer** (default) | Regardless of the engaged layer. |
+| **Base** | Only while the slot is on the unshifted Base. |
+| A named layer | Only while that layer is engaged, exactly like a mapping row. |
+
+The dropdown appears once the slot has at least one shift layer. A macro that arrives with a scope already set (pasted or imported) shows the row even on a slot with no layers, so the scope stays visible and clearable.
 
 ---
 
@@ -196,6 +232,12 @@ Controller-button autofire, the virtual-pad twin of Repeat Key While Held. While
 
 Each fire latches or unlatches a controller button or a key. A latched output stays held until the next fire or until the macro is disabled. Imported Steam configs use these for their toggle presses.
 
+All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a **Pulse While Latched** checkbox: while latched, the output pulses on and off at the repeat interval instead of holding solid.
+
+### Cycle Tap List
+
+Each fire performs the next tap in the **Steps** list and advances. With **Wrap** on, the list restarts after the last step. With it off, firing stops at the end. Imported Steam configs use it for their cycle bindings.
+
 ### Run Program
 
 Launch a program or file. You choose what runs.
@@ -210,14 +252,50 @@ The launch is fire-and-forget, so the rest of the macro does not wait for it.
 
 Pause the sequence for the given number of milliseconds.
 
-### Axis Set
+### Combo Break
 
-Force a virtual controller axis to a fixed value.
+The sequence pauses here. Press the trigger again to continue. A held trigger must be released first. Chain several to split one macro into a press-by-press combo.
 
-| Axis | Value range |
+### Set Axis
+
+Force a virtual controller axis to a fixed value. The **Value** box is a percent of full deflection.
+
+| Axis | Value |
 |---|---|
-| Stick (LX, LY, RX, RY) | -32768 to 32767. 0 is center. |
-| Trigger (LT, RT) | 0 to 32767. 0 is released. |
+| Stick (LX, LY, RX, RY) | -100 to 100 percent. 0 is center. |
+| Trigger (LT, RT) | Percent of pull. 0 is released, 100 is a full pull. |
+
+### Hold Axis
+
+Writes the axis value every frame for the duration. With the Until Release repeat mode, the axis stays asserted until the trigger releases.
+
+### Axis Add (Relative)
+
+Adds a signed percent on top of what the mapping already wrote to the axis, every frame for the duration. Negative values subtract. Trigger targets add on the pull scale (100 percent is a full pull).
+
+### Set Axis (Latched)
+
+Holds the axis at the value until released, surviving Combo Breaks. Firing another latched step on the same axis replaces the value, so latched steps separated by Combo Breaks build a press-by-press ladder: walk on the first press, jog on the second, sprint on the third. **Release Axis Latches** returns the axis to physical control.
+
+### Release Axis Latches
+
+Clears latched axis values (latched steps and axis toggles) for the chosen axis, or **All Axes**, across every macro on the slot. The axis returns to physical control.
+
+### Scale Axis
+
+Multiplies the axis's current value while active. -50 percent halves the deflection (run becomes walk), +50 percent amplifies it half again, clamped to full scale. It composes with the physical input, so no yield option is needed.
+
+### Toggle Axis
+
+Each fire latches or unlatches the axis value. While latched, the axis is written every frame until the next fire or until the macro is disabled.
+
+### Repeat Axis While Held
+
+Axis turbo. While the trigger is held, asserts the axis value on an on/off square wave at the set interval.
+
+### Yield to Physical Input
+
+Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a **Yield to Physical Input** checkbox. When physical movement pushes the target axis past the threshold, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.
 
 ### System Volume
 
@@ -257,12 +335,28 @@ Map an axis to cursor movement. Updates every frame.
 
 Press or release a mouse button. Press has a duration in milliseconds and auto-releases. Buttons: Left, Right, Middle, X1 (Back), X2 (Forward).
 
+### Toggle Mouse Button
+
+Each fire latches or unlatches a mouse button. A latched button stays held until the next fire or until the macro is disabled. Same button list as Mouse Button Press.
+
 ### Mouse Scroll
 
 Map an axis to scroll wheel movement. Updates every frame.
 
 - **Sensitivity.** Scroll units per frame at full deflection. 3 to 5 is a good start.
 - Stick Y scrolls in both directions. Triggers scroll one way.
+
+### Mouse Wheel Tick
+
+Sends one discrete wheel detent per fire. The **Value** is the signed tick count. Positive scrolls up, or right with **Scroll Horizontal** checked.
+
+### Toggle Wheel Scroll
+
+Each fire latches or unlatches a continuous scroll. While latched, it sends the tick count once per interval until the next fire or until the macro is disabled.
+
+### Nudge Cursor
+
+Moves the cursor by a fixed number of pixels per fire. Positive X moves right, positive Y moves down, and negative values are allowed.
 
 ### Recenter Mouse
 
@@ -295,32 +389,32 @@ Warp the cursor to a fixed screen spot in one press. One jump, no pinning: the c
 
 Good for map pings, minimap clicks, and menu buttons that always live at the same spot. Community configs imported from the [Steam Workshop](steam-workshop-import.md) use this action for their cursor-warp bindings.
 
-### Lightbar Color
+### Set Lightbar Color
 
 Push an RGB color to every Sony pad on the slot as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.
 
 Two hold modes:
 
 - **Reactive.** Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.
-- **Sticky.** Hold the color at full brightness until a **Lightbar Color Clear** action or a fresh override replaces it. Good for armed / disarmed markers.
+- **Sticky.** Hold the color at full brightness until a **Clear Lightbar Override** action or a fresh override replaces it. Good for armed / disarmed markers.
 
 Available on slots that have at least one Sony pad (DualShock 4, DualSense, DualSense Edge).
 
-### Lightbar Color Clear
+### Clear Lightbar Override
 
 Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.
 
-### Lightbar Mode Set
+### Set Lightbar Mode
 
 Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot renders the new mode with its own palette and decay settings.
 
-### Lightbar Mode Cycle
+### Cycle Lightbar Modes
 
 Step through an ordered list of base lightbar modes. Each fire advances one step. The list wraps at the end.
 
 ### Rumble
 
-Drive the slot's physical rumble from a macro. Per-motor strength from 0 to 100 percent, so a macro can hit one motor by itself or both together. Two hold modes match Lightbar Color:
+Drive the slot's physical rumble from a macro. Per-motor strength from 0 to 100 percent, so a macro can hit one motor by itself or both together. Two hold modes match Set Lightbar Color:
 
 - **Reactive.** Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.
 - **Sticky.** Hold at full strength until a **Stop Rumble** action runs. Good for armed states and click-and-hold sustain.
@@ -395,14 +489,14 @@ Works on Bluetooth controllers only. A USB-wired controller is skipped, and disc
 
 ### Axis source for continuous actions
 
-System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources:
+System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources, picked in the **Axis from** dropdown:
 
 | Source | What you get |
 |---|---|
-| **Output Controller** (default) | The virtual controller's combined output after deadzone, range, and inversion. Device-independent. |
-| **Input Device** | Raw input on one specific physical controller. Pick the device and axis from dropdowns. |
+| **Virtual Controller** (default) | The slot's combined output after deadzone, range, and inversion. Device-independent. |
+| **Assigned Devices** | Raw input on one specific physical controller. Pick the device and axis from dropdowns. |
 
-Pick **Input Device** when the axis is unmapped (a throttle lever you want for volume) or you want to skip the deadzone and curve math.
+Pick **Assigned Devices** when the axis is unmapped (a throttle lever you want for volume) or you want to skip the deadzone and curve math.
 
 ### Axis options
 
@@ -437,7 +531,9 @@ Stick-to-mouse aiming (Always mode):
 | **Fixed Count** | Runs N times in a row. |
 | **Until Release** | Loops while the trigger is held. Requires **While Held**. |
 
-Fixed Count and Until Release both have a **Repeat Delay** in milliseconds between runs.
+Fixed Count and Until Release both have a **Delay** in milliseconds between runs.
+
+In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline **Interval** field beside the fire mode.
 
 Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 50 ms. A presses every 100 ms (about 10 times a second) while held.
 
@@ -445,14 +541,14 @@ Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 
 
 ## Consume trigger buttons
 
-On by default. The trigger's buttons are stripped from the virtual controller output, so the game only sees the macro's actions.
+On by default. The trigger's inputs are stripped before the game sees them, so the game only sees the macro's actions.
 
 | State | Game sees |
 |---|---|
 | On (default) | Macro output only. LB + RB are hidden. |
 | Off | The trigger buttons and the macro output, both. |
 
-Consume only applies to buttons on the Output Controller source. Input Device triggers are not part of the combined gamepad state, so there is nothing to consume.
+Consume works for virtual controller buttons, raw device buttons, and touchpad or gyro style inputs. Assigned Devices button entries are stripped at the source, before mapping. Axis-threshold, POV, and gesture triggers are not consumed. Always and Custom Expression macros never consume anything, since they ignore the trigger entry list.
 
 ---
 
@@ -460,10 +556,11 @@ Consume only applies to buttons on the Output Controller source. Input Device tr
 
 | Type | Actions | Behavior |
 |---|---|---|
-| Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Move Mouse to Position, Delay, Axis Set | One at a time, top to bottom. |
-| Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held | Every frame, all in parallel. |
+| Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis | One at a time, top to bottom. |
+| Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held | Every frame, all in parallel. |
+| Latched | Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis, Toggle Wheel Scroll, Set Axis (Latched) | Fire in sequence, then the latched output persists until the next fire or a release. |
 
-Both types mix in one macro. Two Mouse Move actions (X and Y) run in parallel while a Button Press in the same list runs in sequence next to them.
+All three mix in one macro. Two Mouse Move actions (X and Y) run in parallel while a Button Press in the same list runs in sequence next to them. A **Combo Break** splits the sequence: everything above it runs on the first press, everything below waits for the next.
 
 ---
 
@@ -547,7 +644,7 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 - Macro lightbar overrides do not override what the game writes at the packet level. A game that drives the lightbar each frame wins.
 - Macro rumble takes the stronger of the macro and game strength, so a game holding a motor at full strength masks a weaker macro pulse.
-- Input Device triggers cannot use **Consume trigger buttons**. The raw input layer is upstream of the combined gamepad state.
+- **Consume trigger buttons** strips button-shaped inputs only. An axis-threshold, POV, or gesture trigger stays visible to the game even with Consume on.
 
 ---
 
@@ -556,7 +653,8 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 - [Button and Axis Mappings](../features/mappings.md): set up base mappings before you add macros.
 - [Controller Slots](../features/controller-slots.md): every slot has its own macro list.
 - [Controller Audio](../features/controller-audio.md): the Play Sound action, output device picker, and sound packages.
-- [Devices](../features/devices.md): pick the physical device for Input Device triggers.
+- [Devices](../features/devices.md): pick the physical device for Assigned Devices triggers.
+- [Shift Layers](shift-layers.md): the layers the macro **Layer** dropdown scopes to.
 - [Force Feedback](../features/force-feedback.md): rumble and vibration settings the macro layers over.
 - [Profiles](profiles.md): Macros save per profile, so each game can have its own set.
 - [Steam Workshop Config Import](steam-workshop-import.md): imported community configs arrive with cursor-warp, autofire, toggle, and long-press macros pre-built.
@@ -564,4 +662,4 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.1.0.*

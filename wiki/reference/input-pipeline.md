@@ -22,6 +22,7 @@ graph TD
         S5[Step 5: UpdateVirtualDevices<br/>HIDMaestro lifecycle on thread pool<br/>Per-slot create/destroy/reorder<br/>Inactivity timeout + bubble-up cascade]
         S6[Step 6: RetrieveOutputStates<br/>Copy for UI display]
         DS3[UpdateDs3PlayerNumber<br/>#191 bridged-DS3 player LED]
+        RA[UpdateRumbleAudioLane<br/>#236 rumble-to-audio publish]
         WAIT[Drift-compensated<br/>hybrid sleep/spin-wait]
 
         SDL --> S1
@@ -37,13 +38,14 @@ graph TD
         S4b --> S5
         S5 --> S6
         S6 --> DS3
-        DS3 --> WAIT
+        DS3 --> RA
+        RA --> WAIT
         WAIT -->|next cycle| SDL
     end
 
     subgraph "UI Thread (30Hz)"
         UI_READ[Read RetrievedOutputStates]
-        UI_WRITE[Write MacroSnapshots<br/>SlotControllerTypes<br/>SlotCustomLayouts + SlotExtended*]
+        UI_WRITE[Write MacroSnapshots<br/>SlotControllerTypes<br/>SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
     end
 
     subgraph "HIDMaestro Callback Thread"
@@ -141,7 +143,7 @@ public partial class InputManager : IDisposable
 | Property | Type | Written By | Read By | Description |
 |---|---|---|---|---|
 | `CombinedOutputStates` | `Gamepad[MaxPads]` | Step 4 (engine) | Step 5, Step 6, UI | Combined gamepad state per slot |
-| `CombinedExtendedRawStates` | `ExtendedRawState[MaxPads]` | Step 4 (engine) | Step 5 | Combined raw HID state for Extended Custom-profile slots |
+| `CombinedRawHidStates` | `RawHidState[MaxPads]` | Step 4 (engine) | Step 5 | Combined raw HID state for Extended / Nintendo raw-surface slots |
 | `CombinedMidiRawStates` | `MidiRawState[MaxPads]` | Step 4 (engine) | Step 5 | Combined MIDI raw state |
 | `CombinedKbmRawStates` | `KbmRawState[MaxPads]` | Step 4 (engine) | Step 5 | Combined KBM raw state |
 | `RetrievedOutputStates` | `Gamepad[MaxPads]` | Step 6 (engine) | UI timer | Copy of combined states for UI display |
@@ -302,6 +304,9 @@ Step 6: RetrieveOutputStates()-- copy combined output for UI consumption
 UpdateDs3PlayerNumber()       -- rate-limited player-LED refresh for the bridged Bluetooth DS3 (#191)
   |
   v
+UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
+  |                              slot destroyed this tick publishes zeros the same tick
+  v
 Frequency measurement (~1/second)
   |
   v
@@ -310,7 +315,7 @@ Drift-compensated hybrid sleep/spin-wait
 
 **Poll-frame gate:**
 
-`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 427) is called once per cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 1192). It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
+`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 564) is called once per cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 1422). It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
 
 **3-Tier Polling Sleep Strategy:**
 
@@ -354,15 +359,21 @@ Safety mechanisms:
 **Idle mode:**
 
 When no VC slots exist (`IsIdle == true`), the loop enters low-power mode:
+- Calls `RumbleAudioService.SilenceAll()` every iteration. The #236 feedback lane does not run in idle, so idle entry is an explicit silence edge and every iteration republishes it
 - Pumps `SDL_UpdateJoysticks()`
 - Runs `UpdateDevices()` every 5 seconds (instead of 2) so new controllers still appear on the Devices page
 - Runs `UpdateInputStates()` for Devices page raw input preview
 - Fires `RemoteLinkPollTick?.Invoke()` so shared devices keep streaming their #138 delta accumulation while no slot is active on this end
 - Runs `EvaluateGlobalMacros()` so profile shortcuts still work from an empty profile
+- Calls `ReleaseAllLatchedMacroKeys()`. The slot macro evaluator's latched-key reconcile does not run in idle, so any `ToggleKey` latch is released rather than left stuck down. Latch bits stay set on the actions and re-assert when the pipeline wakes
 - Skips Steps 3–6
 - Sleeps at ~20 Hz (`Thread.Sleep(50)`)
 - Reports `CurrentFrequency = 0`
 - On transition back to active: sets `firstCycle = true` for immediate enumeration, resets drift state to prevent burst cycles
+
+**Focus suspend:**
+
+The engine half of the "continue polling when window loses focus" setting. When `SuspendWhenBackground` is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (`NeutralizeCombinedOutputs`), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs `UpdateVirtualDevices()` at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from `_idle`, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.
 
 **Sleep guard:** Every 5 seconds, calls `SetThreadExecutionState(ES_CONTINUOUS)` to clear execution-state flags SDL may re-assert, so the PC can still sleep.
 
@@ -370,14 +381,14 @@ When no VC slots exist (`IsIdle == true`), the loop enters low-power mode:
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 11289), `MoveSlot(int, int)` (line 11322), and `MoveSlotToGroupTail(int)` (line 11369). Each mutates `SettingsManager.SlotOrders` for the new visual order, then routes through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point:
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 13921), `MoveSlot(int, int)` (line 13954), and `MoveSlotToGroupTail(int)` (line 14001). Each mutates `SettingsManager.SlotOrders` for the new visual order, then routes through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point:
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
     VirtualControllerType groupType, IReadOnlyList<int> oldOrder, IReadOnlyList<int> newOrder)
 ```
 
-`InputManager.Step5.VirtualDevices.cs` line 1766. Intra-group only, and only for the three HM-backed groups (Xbox / PlayStation / Extended); it early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
+`InputManager.Step5.VirtualDevices.cs` line 2379. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
 
 - **Same profile at V**: reuse the kernel VC in place. The pad-index pointer in `_virtualControllers[]` moves so the new pad-at-position-V feeds V's kernel slot, and `FeedbackPadIndex` is updated on the surviving VC so the rumble callback writes the right `VibrationStates[]` entry. No teardown.
 - **Different profile at V**: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.
@@ -392,14 +403,16 @@ private void UpdateMotionSnapshots()
 
 Called after Step 2 (`InputManager.cs` line 1215). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion.
 
-**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. `ResolveMotionSource` (`InputManager.cs` ~2233-2261) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:
+**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. `ResolveMotionSource` (`InputManager.cs` ~2814) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:
 
 ```csharp
-var gyroSrc  = ResolveMotionSource(ms, MappingSetMigrator.MotionGyroTarget,  requireGyro: true);
-var accelSrc = ResolveMotionSource(ms, MappingSetMigrator.MotionAccelTarget, requireGyro: false);
+var gyroSrc  = ResolveMotionSource(ms, MappingSetMigrator.MotionGyroTarget,  requireGyro: true,  padIndex);
+var accelSrc = ResolveMotionSource(ms, MappingSetMigrator.MotionAccelTarget, requireGyro: false, padIndex);
 ```
 
-The two sub-channels can land on different devices. Non-Sony slots have no motion rows, so both resolve to null and the snapshot is written `HasMotion = false`. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A `"Motion Accel L"` source reads the aux (Nunchuk / left Joy-Con) accelerometer via `s.AccelAux` instead of the body IMU (#199 follow-up).
+The two sub-channels can land on different devices. A 250 ms row-presence gate caches whether the slot's `MappingSet` has any motion rows at all, so slots without them skip both per-tick row walks (a set-reference change re-scans immediately). Motion rows exist only on motion-capable slot families: `MappingSetMigrator.EnsureMotionRows` (`MappingSetMigrator.cs` ~647-666) backfills them on load and on device assignment for **PlayStation and Nintendo** slots (the virtual Switch Pro gained a real IMU surface in HIDMaestro v1.3.18). Other slot types have no motion rows, so both resolves return null and the snapshot is written `HasMotion = false`. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A `"Motion Accel L"` source reads the aux (Nunchuk / left Joy-Con) accelerometer via `s.AccelAux` instead of the body IMU (#199 follow-up).
+
+**Delivery.** The DSU server reads `MotionSnapshots` after Step 2 (below). Step 5 additionally delivers `MotionSnapshots[padIndex]` to HIDMaestro through `SubmitRawHidState`'s IMU channel on Nintendo / Extended raw-surface slots, and through the extended `SubmitGamepadState` overload on PlayStation slots. `HasMotion = false` submits zeroes.
 
 **No sign transform here.** The native SDL sensor frame is preserved. Accel is a raw scaled read. Gyro passes through the per-(device, slot) Gyro tab tuning chain first:
 
@@ -991,7 +1004,7 @@ Both sides being persisted means a per-pad route survives only if it sits in bot
 
 **File:** `InputManager.Step3.UpdateOutputStates.cs`
 
-Maps each device's `CustomInputState` to a `Gamepad` struct (and optionally `ExtendedRawState`, `MidiRawState`, or `KbmRawState`) via `PadSetting` mapping descriptors. Contains the mapping engine, deadzone processing, sensitivity curves, and center offset corrections.
+Maps each device's `CustomInputState` to a `Gamepad` struct (and optionally `RawHidState`, `MidiRawState`, or `KbmRawState`) via `PadSetting` mapping descriptors. Contains the mapping engine, deadzone processing, sensitivity curves, and center offset corrections.
 
 **Companion file (v3.2):** `InputManager.Step3.MappingSetEval.cs` runs ahead of the per-device pass on slots that carry a `MappingSet`. It resolves each row's multiple sources against the active shift layer, applies the selected combine mode, and writes a synthesized `PadSetting` snapshot that the per-device pass below then consumes through the same `MapInputToGamepad` path. The mode is `row.CombineMode`, one of `MaxAbs` (UI label "Strongest"), `Sum` ("Combined"), `Average`, `OR` ("Either"), `AND` ("Both"), `XOR` ("Only one"), `StickTrim` ("Stick Trim", #155), or `Custom` (formula editor). Slots without a MappingSet skip the evaluator and fall straight into the per-device pass.
 
@@ -1018,9 +1031,9 @@ private void UpdateOutputStates()
    e. Map to gamepad: `us.OutputState = MapInputToGamepad(ud.InputState, ps, us.InstanceGuidString, slotIndex, out rawMapped)`
    f. Save `us.RawMappedState = rawMapped` (pre-deadzone snapshot for UI preview)
    g. **Type-specific raw mapping** based on `SlotControllerTypes[slot]`:
-      - Extended Custom HID: `MapInputToExtendedRaw(ud.InputState, ps, SlotCustomLayouts[slot], mappingSet, deviceGuid, slot)` using dictionary-based descriptor mappings
-      - MIDI: `MapInputToMidiRaw(ud.InputState, ps, ccCount, noteCount, mappingSet, deviceGuid, slot)` for MIDI CC/note output
-      - KeyboardMouse: `MapInputToKbmRaw(ud.InputState, ps, mappingSet, deviceGuid, slot)` for keyboard/mouse output
+      - Extended / Nintendo raw surface (`SlotControllerTypes[slot] is Extended or Nintendo && SlotRawHidSurface[slot]`): `EnsureRawShape(ref us.RawHidScratch, cfg)` then `MapInputToExtendedRaw(ref us.RawHidScratch, ud.InputState, ps, cfg, ms, deviceGuid, slot)`. The map builds into the poll-owned scratch, and a fresh copy is published to `us.RawHidOutputState` only on content change (`RawContentEquals` / `RawCopyOf`), because published arrays are read cross-thread by the UI and must stay immutable after publish
+      - MIDI: same scratch/publish-on-change contract via `EnsureMidiShape` + `MapInputToMidiRaw(ref us.MidiRawScratch, ud.InputState, ps, ccCount, noteCount, ms, deviceGuid, slot)`
+      - KeyboardMouse: `us.KbmRawOutputState = MapInputToKbmRaw(ud.InputState, ps, ms, deviceGuid, slot)`. `KbmRawState` is all value fields, so a struct assign is already a copy
 
       All three carry the `MappingSet` context so their per-target evaluators resolve rows shift-layer aware (#221, see [Shift Layer Activators](#shift-layer-activators-and-the-cycle-cursor)).
 
@@ -1333,15 +1346,16 @@ Returns unsigned 0–65535:
 | Button | 65535 (pressed) or 0 (released) |
 | POV | `PovDirectionToAxisValue`. Up/Left = 0, Down/Right = 65535, inactive = 32767 |
 
-### Extended Custom HID Mapping
+### Raw-HID Mapping (Extended / Nintendo)
 
 ```csharp
-private static ExtendedRawState MapInputToExtendedRaw(CustomInputState state, PadSetting ps,
+internal static void MapInputToExtendedRaw(ref RawHidState raw,
+    CustomInputState state, PadSetting ps,
     CustomControllerLayout cfg,
     MappingSet mappingSet, string thisDeviceGuid, int slotIndex)
 ```
 
-Uses dictionary-based mappings (`ps.GetExtendedMapping("ExtendedAxis0")`, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from `CustomControllerLayout`. The trailing `mappingSet` / `thisDeviceGuid` / `slotIndex` arguments hand the v3.2 `MappingSet` evaluator the context it needs to resolve multi-source rows that target Extended channels.
+`InputManager.Step3.UpdateOutputStates.cs` line 2174. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned `raw` (the per-setting `us.RawHidScratch`), starting with `raw.Clear()` so POVs begin centered. The caller republishes into `us.RawHidOutputState` only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (`ps.GetExtendedMapping("ExtendedAxis0")`, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from `CustomControllerLayout`. The trailing `mappingSet` / `thisDeviceGuid` / `slotIndex` arguments hand the v3.2 `MappingSet` evaluator the context it needs to resolve multi-source rows that target Extended channels.
 
 - **Axes**: Uses `MapToThumbAxisWithNeg` for each axis (signed short range). No `NegateAxis` needed. Unlike the gamepad path, the raw path has no second inversion in `SubmitRawState`.
 - **Buttons**: Uses `MapToButtonPressed` for each button, sets via `raw.SetButton(i, true)`
@@ -1577,7 +1591,7 @@ With `includeBase = false` (the default, `CycleIncludeBase = false`), Base is on
 
 **File:** `InputManager.Step4.CombineOutputStates.cs`
 
-Merges mapped `Gamepad` states from all devices assigned to each VC slot into a single combined state. Handles four output types (Gamepad, ExtendedRawState, MidiRawState, KbmRawState) plus per-slot touchpad state (`CombinedTouchpadStates`) for PlayStation slots.
+Merges mapped `Gamepad` states from all devices assigned to each VC slot into a single combined state. Handles four output types (Gamepad, RawHidState, MidiRawState, KbmRawState) plus per-slot touchpad state (`CombinedTouchpadStates`) for PlayStation slots.
 
 ### Method Signature
 
@@ -1600,7 +1614,7 @@ For each of the 16 slots:
 3. **0 devices**: clear all applicable state arrays for this slot
 4. **1 device**: direct struct copy. No merge needed (optimization for the common case)
 5. **N devices**: iterate and call `MergeGamepad()` for each. Also merge type-specific raw states:
-   - Extended Custom HID: `MergeExtendedRaw()` (first populated device seeds the combine, subsequent are merged). Takes the slot's `CustomControllerLayout` so trigger axes use pressed-wins and stick axes use magnitude-wins.
+   - Extended Custom HID: `MergeRawHid()` (first populated device seeds the combine, subsequent are merged). Takes the slot's `CustomControllerLayout` so trigger axes use pressed-wins and stick axes use magnitude-wins.
    - MIDI: `MidiRawState.Combine()` (static method)
    - KBM: `KbmRawState.Combine()` (static method)
 6. **Touchpad (PlayStation slots only)**: write `CombinedTouchpadStates[slot]`. The first assigned device with an active finger or click wins (single-source, so if one device drops out the next takes over). When that state carries `Click`, OR `Gamepad.TOUCHPAD` into the combined `Buttons` bitmap so every downstream consumer (Step 5 submit, Step 6 copy, dispatcher click detection) sees the press.
@@ -1622,7 +1636,7 @@ private static void MergeGamepad(ref Gamepad dest, ref Gamepad src)
 | `ThumbRY` | Largest absolute magnitude wins | |
 
 ```csharp
-private static void MergeExtendedRaw(ref ExtendedRawState dest, ref ExtendedRawState src, CustomControllerLayout layout)
+private static void MergeRawHid(ref RawHidState dest, ref RawHidState src, CustomControllerLayout layout)
 ```
 
 | Field | Merge Rule |
@@ -1657,7 +1671,7 @@ For each slot (0–15):
 1. Read `MacroSnapshots[i]`. If null or empty, skip
 2. Delegate to type-specific evaluator:
    - `EvaluateSlotMacros(ref Gamepad, MacroItem[])` for standard slots (Xbox / PlayStation / Gamepad-preset Extended / KBM)
-   - `EvaluateSlotMacrosCustomExtended(ref ExtendedRawState, MacroItem[])` for custom Extended slots (operates on `uint[]` button words instead of `ushort` Gamepad.Buttons)
+   - `EvaluateSlotMacrosCustomExtended(ref RawHidState, MacroItem[])` for custom Extended slots (operates on `uint[]` button words instead of `ushort` Gamepad.Buttons)
 
 After the per-slot pass, `CollectMenuDirectOutputs()` delivers menu direct bindings, then `ReconcileLatchedKeys()` settles the frame's latched-key set once for all slots (both below).
 
@@ -1673,7 +1687,7 @@ After the per-slot pass, `CollectMenuDirectOutputs()` delivers menu direct bindi
 
 1. **Button flags**: Three sub-types (checked via priority):
    - **Raw device buttons** (`UsesRawTrigger`): Reads `FindOnlineDeviceByInstanceGuid(macro.TriggerDeviceGuid).InputState.Buttons[rawIndices[i]]`. Bypasses the mapping pipeline. Reads directly from the physical device's raw button state.
-   - **Extended Custom HID button words** (`UsesCustomTrigger`): Checks `(raw.Buttons[w] & tw[w]) == tw[w]` against the combined ExtendedRawState.
+   - **Extended Custom HID button words** (`UsesCustomTrigger`): Checks `(raw.Buttons[w] & tw[w]) == tw[w]` against the combined RawHidState.
    - **Xbox bitmask** (default): `(gp.Buttons & triggerButtons) == triggerButtons` against the combined Gamepad.
 
 2. **Axis thresholds** (`macro.TriggerAxisTargets[]`): Each axis target is evaluated:
@@ -1701,7 +1715,16 @@ public enum MacroTriggerMode
     OnRelease,        // Fire once when trigger transitions active -> inactive
     WhileHeld,        // Fire continuously while trigger is active
     Always,           // Skips trigger check, runs every frame until stopped
-    CustomExpression  // Rising edge of a user formula over a/b/c inputs, active when result >= 0.5
+    CustomExpression, // Rising edge of a user formula over a/b/c inputs, active when result >= 0.5
+    // Activation modes appended for #238/#244 and #253 (ordinals pinned)
+    HoldForMs = 5,    // On Long Press: fires once the hold crosses TriggerHoldMs
+    DoublePress = 6,  // Fires on the second press inside TriggerDoublePressMs
+    TriplePress = 7,  // Fires on the third press inside the window
+    SinglePress = 8,  // Deferred single: fires only when no second press follows
+    Toggle = 9,       // Each press flips the macro between running and stopped
+    Turbo = 10,       // Refires on an interval while the trigger is held
+    ShortPress = 11   // On Short Press: fires on release BEFORE TriggerHoldMs,
+                      // the tap half of tap-vs-hold with HoldForMs (#253)
 }
 ```
 
@@ -1770,7 +1793,21 @@ public enum MacroActionType
     RepeatVcButtonWhileHeld, // VC-button turbo: 50% duty-cycle square wave on the target buttons
     ToggleVcButton,        // Latch/unlatch VC buttons, OR'd into the combined output every frame
     ToggleKey,             // Latch/unlatch keyboard keys via the per-frame latched-key reconcile
-    GyroRecenter           // Re-reference the slot's gyro-aim state to the current pose (B-18)
+    GyroRecenter,          // Re-reference the slot's gyro-aim state to the current pose (B-18)
+    // Appended for the translator v15-v18 waves and #237/#251 (ordinals pinned)
+    AxisHold = 39,         // Assert a VC axis value for a duration (hold-until-release via RepeatMode)
+    MouseWheelTap = 40,    // One discrete wheel detent per fire, signed tick count, horizontal lane option
+    MouseNudge = 41,       // One fixed-pixel cursor nudge per fire, batched through the injector lane
+    CycleTapList = 42,     // Each fire executes the NEXT step of a CSV tap list, with optional wrap
+    ToggleMouseButton = 43,// Latch/unlatch a mouse button, per-frame reconcile like ToggleKey
+    ToggleVcAxis = 44,     // Latch a VC axis at a value (AxisHold shape driven by a latch)
+    RepeatVcAxisWhileHeld = 45, // Axis turbo on the 50% duty square wave while the trigger is held
+    ToggleWheel = 46,      // Latch/unlatch a continuous wheel scroll
+    AxisAdd = 47,          // Add a signed delta to a VC axis each fire (#237 relative deflection)
+    ComboBreak = 48,       // Cancel the containing combo's remaining actions (#237)
+    AxisSetLatched = 49,   // Latched value ladder: set-and-hold an axis value (#251)
+    AxisLatchRelease = 50, // Release an AxisSetLatched hold (#251)
+    AxisScale = 51         // Proportional scale on a VC axis while engaged (#251)
 }
 ```
 
@@ -2042,21 +2079,33 @@ if (vc is MidiVirtualController midiVc)
     midiVc.SubmitMidiRawState(CombinedMidiRawStates[padIndex]);
 else if (vc is KeyboardMouseVirtualController kbmVc)
     kbmVc.SubmitKbmState(CombinedKbmRawStates[padIndex]);
-else if (SlotControllerTypes[padIndex] == VirtualControllerType.Extended
-         && SlotExtendedIsCustom[padIndex]
+else if (SlotControllerTypes[padIndex] is VirtualControllerType.Extended
+             or VirtualControllerType.Nintendo
+         && SlotRawHidSurface[padIndex]
          && vc is HMaestroVirtualController hmExt)
 {
     var layout = SlotCustomLayouts[padIndex];
-    hmExt.SubmitExtendedRawState(
-        CombinedExtendedRawStates[padIndex],
-        layout.Sticks, layout.Triggers);
+    // Button SOCD (#240): clean the final combined raw buttons
+    // right before submit, flat-index grammar on the word array.
+    var socdExt = ResolveSlotSocd(padIndex, extendedIndices: true);
+    if (socdExt != null)
+        socdExt.ApplyExtended(CombinedRawHidStates[padIndex].Buttons);
+    hmExt.SubmitRawHidState(
+        CombinedRawHidStates[padIndex],
+        layout.Sticks,
+        layout.Triggers,
+        // IMU channel (HM v1.3.18): the slot's aggregated motion
+        // snapshot rides beside the raw surface.
+        MotionSnapshots[padIndex]);
 }
 else
 {
-    // Xbox / PlayStation / Extended-non-custom slots take the
-    // standard XInput-shaped path. PlayStation slots additionally
-    // submit Sony Report 0x01 (touchpad / gyro / accel / battery)
-    // via SubmitRawReport after SubmitGamepadState in the same poll.
+    // Xbox / PlayStation / non-raw slots take the standard
+    // XInput-shaped path, with the same slot SOCD cleaning applied
+    // to the Gamepad button bitmap before submit. PlayStation slots
+    // additionally submit Sony Report 0x01 (touchpad / gyro / accel
+    // / battery) via SubmitRawReport after SubmitGamepadState in
+    // the same poll.
     vc.SubmitGamepadState(CombinedOutputStates[padIndex]);
 }
 ```
@@ -2067,18 +2116,16 @@ else
 private IVirtualController CreateVirtualController(int padIndex)
 ```
 
-1. Check prerequisites: HIDMaestro client required for Xbox, PlayStation, and Extended (not for MIDI / KBM)
-2. **For Xbox**: Snapshot XInput slot mask BEFORE connecting via `GetXInputConnectedSlotMask()`
-3. Create concrete controller instance based on `SlotControllerTypes[padIndex]`:
+1. Check prerequisites: HIDMaestro client required for Xbox, PlayStation, Nintendo, and Extended (not for MIDI / KBM)
+2. Create concrete controller instance based on `SlotControllerTypes[padIndex]`:
    - `CreateHMaestroController(VirtualControllerType.Xbox, profileId, padIndex)` for Xbox slots
    - `CreateHMaestroController(VirtualControllerType.PlayStation, profileId, padIndex)` for PlayStation slots
    - `CreateHMaestroController(VirtualControllerType.Extended, profileId, padIndex)` for Extended slots. Resolves the slot's HIDMaestro profile slug via `_hmaestroContext.GetProfile(profileId)` (falling back to `HMaestroProfileCatalog.GetProfileById` for synthetic entries like `padforge-custom`), applies per-slot product-string / layout / FFB overrides through `HMProfileBuilder` + `HidDescriptorBuilder` for customized Extended slots, then returns `new HMaestroVirtualController(_hmaestroContext, effectiveProfile, type)`
    - `CreateMidiController(padIndex)`. Creates virtual MIDI endpoint with computed instance number
    - `KeyboardMouseVirtualController(padIndex)`
-4. Call `vc.Connect()`
-5. **For Xbox**: Spin-wait up to 50 ms for XInput slot to appear (mask delta)
-6. Increment active counters
-7. Register feedback callback: `vc.RegisterFeedbackCallback(padIndex, VibrationStates)`. Wires HIDMaestro's `HMController.OutputReceived` to `VibrationStates[padIndex]`
+3. Call `vc.Connect()`. XInput slot claim for Xbox slots waits inside HIDMaestro's `CreateController` (`WaitForHidChild` / `WaitForDeviceStarted` / `WaitForXInputSlotClaim`), so there is no consumer-side mask snapshot or spin-wait.
+4. Increment active counters
+5. Register feedback callback: `vc.RegisterFeedbackCallback(padIndex, VibrationStates)`. Wires HIDMaestro's `HMController.OutputReceived` to `VibrationStates[padIndex]`
 
 ### Virtual Controller Destruction
 
@@ -2086,11 +2133,9 @@ private IVirtualController CreateVirtualController(int padIndex)
 private void DestroyVirtualController(int padIndex)
 ```
 
-1. **For Xbox**: Snapshot XInput slot mask
-2. `vc.Disconnect()`
-3. **For Xbox**: Wait up to 50 ms for slot to disappear from XInput
-4. `vc.Dispose()`. Releases the HIDMaestro device through `HMController.Dispose()`. Without this, devices leak as phantom HID nodes until the next launch.
-5. **In `finally`**: Clear `_virtualControllers[padIndex]` and `_slotInitializing[padIndex]` even if Disconnect/Dispose throws, so the next Pass 2 can re-create the slot cleanly.
+1. `vc.Disconnect()`
+2. `vc.Dispose()`. Releases the HIDMaestro device through `HMController.Dispose()`. Without this, devices leak as phantom HID nodes until the next launch.
+3. **In `finally`**: Clear `_virtualControllers[padIndex]` and `_slotInitializing[padIndex]` even if Disconnect/Dispose throws, so the next Pass 2 can re-create the slot cleanly.
 
 ### Slot Activity Check
 
@@ -2107,17 +2152,6 @@ private bool HasAnyDeviceMapped(int padIndex)
 ```
 
 Returns true if any UserSetting (online or offline) has `MapTo == padIndex`. Distinguishes "user unassigned all devices" (destroy immediately) from "device temporarily offline" (grace period).
-
-### XInput Slot Mask
-
-```csharp
-[DllImport("xinput1_4.dll", EntryPoint = "#100")]
-private static extern uint XInputGetStateEx(uint dwUserIndex, ref XInputStateInternal pState);
-
-private static uint GetXInputConnectedSlotMask()
-```
-
-Probes XInput slots 0–3 (API limit) via undocumented ordinal #100 (`XInputGetStateEx`, which reports Guide button unlike the public API). Returns a 4-bit mask. Used only to detect HIDMaestro Xbox virtual controller appear/disappear for slot assignment sync.
 
 ---
 
@@ -2187,7 +2221,7 @@ CustomInputState (unsigned axes 0–65535, bool[] buttons, centidegree POVs, gyr
     v  per-UserSetting OutputState
 Gamepad struct (signed axes, XInput button bitmask, ushort triggers)
   -- or --
-ExtendedRawState (signed short[] axes, uint[] button words, int[] POVs)
+RawHidState (signed short[] axes, uint[] button words, int[] POVs)
   -- or --
 MidiRawState (byte[] cc values, bool[] note states)
   -- or --
@@ -2197,7 +2231,7 @@ KbmRawState (VK codes, mouse delta/buttons)
     |     Merge multiple devices per slot (OR/MAX/magnitude rules)
     |
     v  per-slot combined state
-CombinedOutputStates[slot]  /  CombinedExtendedRawStates[slot]  /  etc.
+CombinedOutputStates[slot]  /  CombinedRawHidStates[slot]  /  etc.
     |
     v  [Step 4b: EvaluateMacros]
     |     Trigger state machine, inject button/axis/volume/mouse actions (in-place modification)
@@ -2205,7 +2239,7 @@ CombinedOutputStates[slot]  /  CombinedExtendedRawStates[slot]  /  etc.
     v  [Step 5: UpdateVirtualDevices]
     |     Create/destroy VCs, submit reports
     |
-IVirtualController.SubmitGamepadState()  /  SubmitExtendedRawState()  /  SubmitMidiRawState()  /  SubmitKbmState()
+IVirtualController.SubmitGamepadState()  /  SubmitRawHidState()  /  SubmitMidiRawState()  /  SubmitKbmState()
     |                                               |                        |                       |
     v                                               v                        v                       v
 HIDMaestro Xbox / PlayStation / Extended            MIDI (Windows MIDI Services)    Win32 SendInput
@@ -2267,16 +2301,16 @@ public struct Gamepad
 }
 ```
 
-### ExtendedRawState Struct
+### RawHidState Struct
 
 ```csharp
-public struct ExtendedRawState
+public struct RawHidState
 {
     public short[] Axes;     // Signed short range, up to 8 axes
     public uint[] Buttons;   // 4 x 32-bit words = 128 buttons max
     public int[] Povs;       // Up to 4, -1=centered, 0-35900=direction (centidegrees)
 
-    public static ExtendedRawState Create(int nAxes, int nButtons, int nPovs);
+    public static RawHidState Create(int nAxes, int nButtons, int nPovs);
     public void SetButton(int index, bool pressed);
     public bool IsButtonPressed(int index);
     public void Clear();     // Zeros axes, clears buttons, sets POVs to -1 (centered)
@@ -2329,7 +2363,8 @@ public enum VirtualControllerType
     [XmlEnum("Sony")]      PlayStation = 1, // PlayStation family (DS3/DS4, DualSense, PS Move)
     Extended = 2,      // Any other HIDMaestro profile, or a custom HID descriptor
     Midi = 3,          // Windows MIDI Services virtual endpoint
-    KeyboardMouse = 4  // Win32 SendInput keyboard + mouse
+    KeyboardMouse = 4, // Win32 SendInput keyboard + mouse
+    Nintendo = 5       // Virtual Switch Pro via HM, rides the raw-HID path
 }
 ```
 

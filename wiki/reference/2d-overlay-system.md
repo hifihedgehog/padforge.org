@@ -33,7 +33,7 @@ MidiPreviewView.xaml.cs         (piano + CC slider view)
 
 ### When Each View Is Used
 
-`PadPage.ApplyViewMode()` selects the view. Priority: KeyboardMouse > Midi > Custom Extended > standard gamepad (2D/3D toggle).
+`PadPage.ApplyViewMode()` selects the view. Priority: KeyboardMouse > Midi > Custom Extended > Nintendo > standard gamepad (2D/3D toggle). The Nintendo branch (4.1.0, `OutputType == VirtualControllerType.Nintendo`) pins `ControllerModel2DView` to the SWITCHPRO layout with the 2D/3D toggle hidden.
 
 | Condition | View | Toggle |
 |-----------|------|--------|
@@ -720,10 +720,10 @@ Creates:
 
 | Condition | Target |
 |-----------|--------|
-| `\|dx\| > \|dy\|`, `dx > 0` | `ExtendedAxis{axisXIdx}` (positive X) |
-| `\|dx\| > \|dy\|`, `dx <= 0` | `ExtendedAxis{axisXIdx}Neg` (negative X) |
-| `\|dy\| > \|dx\|`, `dy > 0` | `ExtendedAxis{axisYIdx}` (positive Y = down) |
-| `\|dy\| > \|dx\|`, `dy <= 0` | `ExtendedAxis{axisYIdx}Neg` (negative Y = up) |
+| `\|dx\| > \|dy\|`, `dx > 0` | `RawAxis{axisXIdx}` (positive X) |
+| `\|dx\| > \|dy\|`, `dx <= 0` | `RawAxis{axisXIdx}Neg` (negative X) |
+| `\|dy\| > \|dx\|`, `dy > 0` | `RawAxis{axisYIdx}` (positive Y = down) |
+| `\|dy\| > \|dx\|`, `dy <= 0` | `RawAxis{axisYIdx}Neg` (negative Y = up) |
 
 #### CreateTriggerWidget
 
@@ -736,7 +736,7 @@ Creates:
 2. **Fill bar** (`Rectangle`). Accent-colored, height 0 initially, grows from bottom
 3. **Label**. "TN" above the bar
 
-**Click-to-record:** fires `ExtendedAxis{axisIdx}`.
+**Click-to-record:** fires `RawAxis{axisIdx}`.
 
 #### CreatePovWidget
 
@@ -751,7 +751,7 @@ Creates:
 
 **Hover:** direction arrow rotated to mouse quadrant (0/90/180/270 degrees).
 
-**Click-to-record:** quadrant detection fires `ExtendedPov{index}Up`, `Down`, `Left`, or `Right`.
+**Click-to-record:** quadrant detection fires `RawPov{index}Up`, `Down`, `Left`, or `Right`.
 
 #### CreateButtonWidget
 
@@ -763,16 +763,16 @@ Creates:
 1. **Circle** (`Ellipse`). Dim stroke, dark background, hand cursor
 2. **Label** (`TextBlock`). Button number (1-indexed) centered in circle
 
-**Click-to-record:** fires `ExtendedBtn{index}`.
+**Click-to-record:** fires `RawBtn{index}`.
 
 ### Click-to-Record Target Names
 
 | Widget | Target Format | Quadrant-Based |
 |--------|---------------|----------------|
-| Stick | `ExtendedAxis{X}` / `ExtendedAxis{X}Neg` | Yes (X vs Y, positive vs negative) |
-| Trigger | `ExtendedAxis{N}` | No |
-| POV | `ExtendedPov{N}Up` / `Down` / `Left` / `Right` | Yes (4 cardinal directions) |
-| Button | `ExtendedBtn{N}` | No |
+| Stick | `RawAxis{X}` / `RawAxis{X}Neg` | Yes (X vs Y, positive vs negative) |
+| Trigger | `RawAxis{N}` | No |
+| POV | `RawPov{N}Up` / `Down` / `Left` / `Right` | Yes (4 cardinal directions) |
+| Button | `RawBtn{N}` | No |
 
 ### Per-Frame Rendering
 
@@ -836,7 +836,7 @@ The trigger flash colors the background rect's border, not the inner fill bar. A
 **POV direction mapping:**
 
 ```csharp
-string dir = target.Substring($"ExtendedPov{w.PovIndex}".Length);  // "Up", "Down", "Left", "Right"
+string dir = target.Substring($"RawPov{w.PovIndex}".Length);  // "Up", "Down", "Left", "Right"
 double angle = dir switch
 {
     "Up" => 0,

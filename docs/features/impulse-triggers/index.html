@@ -1000,6 +1000,8 @@
       
         
       
+        
+      
     
     
     
@@ -1616,6 +1618,34 @@
     
   
     Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
   
 
     
@@ -2907,7 +2937,7 @@
 <p><img alt="Impulse Triggers tab with Overall Gain, per-trigger gain, Constant Trigger Force, and Audio Bass Trigger Rumble cards" src="../../images/pad-impulse-triggers.png" /></p>
 <hr />
 <h2 id="when-the-tab-shows">When the tab shows<a class="headerlink" href="#when-the-tab-shows" title="Permanent link">&para;</a></h2>
-<p>The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (Wireless Adapter and Bluetooth). Pick any of those in the Pad page's source picker and the tab appears.</p>
+<p>The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (Wireless Adapter and Bluetooth). Any other pad that reports trigger-rumble capability surfaces the tab too. Pick any of those in the Pad page's source picker and the tab appears.</p>
 <p>DualSense and DualSense Edge do not surface this tab. Their trigger motors are written through DualSense's own effects channel, the <strong>Vibration</strong> mode on the <a href="../adaptive-triggers/">Adaptive Triggers</a> tab, not Microsoft's impulse-trigger protocol. The same Xbox impulse data that a game sends gets routed there automatically, so a DualSense playing Forza still buzzes both triggers.</p>
 <p>Xbox 360 and most third-party pads have no trigger motors and the tab stays hidden.</p>
 <p>The tab is <strong>per pad per slot</strong>. Every physical pad mapped to the slot keeps its own Impulse Triggers, Constant Trigger Force, and Audio Bass Trigger Rumble values. Pick a different device in the assigned-devices dropdown and the tab rebinds to that device.</p>
@@ -3073,6 +3103,7 @@
 <p>DualSense pads receive impulse data as Adaptive Trigger Vibration mode. Plug a DualSense into the same virtual Xbox slot as an Xbox One+ pad and trigger pulses fire on both in step.</p>
 <p>On Xbox One, Elite, and Series pads, PadForge drives the trigger motors directly and stays the only source of rumble on the pad while a slot is active. See <a href="../force-feedback/">Force Feedback</a> for body-motor rumble.</p>
 <p>When the physical pad is plugged into another PC and shared over <a href="../../guides/remote-link/">Remote Link</a>, the same trigger output crosses the link. Game passthrough, constant trigger force, and audio bass trigger rumble all reach the remote pad's trigger motors.</p>
+<p>The slot-tier <strong>Bass Shakers</strong> tab (<a href="../controller-slots/">Controller Slots</a>) can also play game trigger feedback as audio tones: its <strong>Left Trigger</strong> and <strong>Right Trigger</strong> voices each get a tone, and <strong>Controller Stereo</strong> mode splits them to the left and right speaker channels.</p>
 <hr />
 <h2 id="reset-controls">Reset controls<a class="headerlink" href="#reset-controls" title="Permanent link">&para;</a></h2>
 <p>Every slider has its own reset button. Each card has a Reset All button.</p>
@@ -3122,7 +3153,7 @@
 <li><a href="../controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.1.0.</em></p>
 
 
 
