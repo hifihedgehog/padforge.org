@@ -1,28 +1,61 @@
-# PadForge Documentation
+---
+title: Home
+hide:
+  - navigation
+  - toc
+---
 
-PadForge turns any input device into a virtual controller Windows games can
-use. Plug in a gamepad, a keyboard, a wheel, a Wii Remote, a MIDI keyboard,
-or a phone browser. Games see a real Xbox, PlayStation, or Switch pad.
+<div class="pf-hero" markdown>
+<p class="pf-kicker">PadForge Documentation</p>
 
-These docs serve two readers at once. Guides and feature pages stay in plain
-English and get you working in minutes. The Technical Reference goes as deep
-as wire protocols and the input pipeline, for people who want to know exactly
-what the software does.
+# Learn it in minutes. Master it to the wire.
+
+<p class="pf-lede">PadForge turns any input device into a virtual controller
+Windows games can use. These docs serve two readers at once. Guides stay in
+plain English and get you working fast. The Technical Reference goes as deep
+as wire protocols, for people who want to know exactly what the software
+does.</p>
+
+[Get started](start/index.md){ .md-button .md-button--primary }
+[Technical Reference](reference/index.md){ .md-button }
+
+</div>
 
 <div class="pf-cards" markdown>
 
 <a href="start/">
-<h3>New here? Start</h3>
+<span class="pf-eyebrow">New here</span>
+<h3>Start</h3>
 <p>Install PadForge, plug in a controller, and remap your first button. No prior knowledge assumed.</p>
 </a>
 
 <a href="guides/">
-<h3>Do a thing: Guides</h3>
+<span class="pf-eyebrow">Do a thing</span>
+<h3>Guides</h3>
 <p>Task-by-task walkthroughs. Import a Steam config, aim with gyro, build macros, use your phone as a controller.</p>
 </a>
 
+<a href="features/">
+<span class="pf-eyebrow">Every control</span>
+<h3>Features</h3>
+<p>What every page, tab, and card in the app does, one page per feature.</p>
+</a>
+
+<a href="devices/">
+<span class="pf-eyebrow">Your hardware</span>
+<h3>Devices</h3>
+<p>Setup walkthroughs for the controller families that need one, like DualShock 3 pairing and Wii extensions.</p>
+</a>
+
+<a href="troubleshooting/">
+<span class="pf-eyebrow">Something broke</span>
+<h3>Troubleshooting</h3>
+<p>Symptoms, causes, and fixes for drivers, detection, and games that refuse to listen.</p>
+</a>
+
 <a href="reference/">
-<h3>Go deep: Technical Reference</h3>
+<span class="pf-eyebrow">Go deep</span>
+<h3>Technical Reference</h3>
 <p>Architecture, the 1000 Hz input pipeline, drivers, and every protocol PadForge speaks.</p>
 </a>
 
@@ -40,17 +73,6 @@ what the software does.
   triggers.
 - **Steam Workshop import.** Bring an existing Steam Input config across
   and every supported setting lands on a PadForge control you can edit.
-
-## Where things are
-
-| You want | Go to |
-| --- | --- |
-| Install and first run | [Start](start/index.md) |
-| A specific task, step by step | [Guides](guides/index.md) |
-| What every tab and card does | [Features](features/index.md) |
-| Help with a specific controller family | [Devices](devices/index.md) |
-| Something is not working | [Troubleshooting](troubleshooting.md) |
-| How it works inside | [Technical Reference](reference/index.md) |
 
 PadForge is free and open source. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).

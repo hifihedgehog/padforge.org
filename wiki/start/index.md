@@ -13,12 +13,12 @@ remapped controller. None of them need prior knowledge.
    PlayStation, Switch Pro, keyboard and mouse, or MIDI), and the default
    mapping is already playable.
 
+Two walkthroughs carry you through both ends of that list:
+
+- **[Your First Controller](first-controller.md)** goes from a fresh
+  install to a game seeing a virtual pad.
+- **[A Five-Minute Remap](five-minute-remap.md)** changes your first
+  binding and shows the three ways to bind anything.
+
 From there, the [Guides](../guides/index.md) take over: each one walks a
 single task from start to finish.
-
-!!! tip "Coming soon"
-    Two walkthroughs are being written for this section: *Your first
-    controller* and *A five-minute remap*. Until they land, the
-    [Installation](installation.md) page covers first-run setup, and the
-    [Features](../features/index.md) pages document every control on every
-    tab.

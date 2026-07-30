@@ -15,6 +15,10 @@ theme:
   custom_dir: wiki/overrides
   logo: assets/logo.png
   favicon: assets/icon.png
+  # Fonts load in wiki/overrides/main.html (Archivo, Instrument Sans,
+  # JetBrains Mono, matching the landing page); Material's own Google
+  # Fonts loader stays off.
+  font: false
   palette:
     # Light
     - media: "(prefers-color-scheme: light)"
@@ -67,6 +71,8 @@ nav:
   - Start:
       - start/index.md
       - Installation: start/installation.md
+      - Your First Controller: start/first-controller.md
+      - A Five-Minute Remap: start/five-minute-remap.md
   - Guides:
       - guides/index.md
       - Import a Steam config: guides/steam-workshop-import.md
