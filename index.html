@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PadForge — Make any input look like any controller</title>
+    <title>PadForge: Make any input look like any controller</title>
     <meta name="description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
     <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller, Remote Link, share controller between PCs, controller speaker audio, wheel force feedback, MIDI input">
-    <meta property="og:title" content="PadForge — Make any input look like any controller">
+    <meta property="og:title" content="PadForge: Make any input look like any controller">
     <meta property="og:description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
-
     <meta property="og:image" content="https://padforge.org/assets/logo.png">
     <meta property="og:url" content="https://padforge.org">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="PadForge — Make any input look like any controller">
+    <meta name="twitter:title" content="PadForge: Make any input look like any controller">
     <meta name="twitter:description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi.">
     <meta name="twitter:image" content="https://padforge.org/assets/logo.png">
     <link rel="icon" type="image/png" href="assets/icon.png">
-    <link rel="stylesheet" href="style.css?v=v4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=v5">
+    <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
@@ -25,67 +28,79 @@
 <nav class="navbar">
     <div class="container nav-container">
         <a href="#" class="nav-logo">
-            <img src="assets/icon.png" alt="PadForge" width="36" height="36">
+            <img src="assets/icon.png" alt="PadForge" width="32" height="32">
             <span>PadForge</span>
         </a>
         <button class="nav-toggle" aria-label="Toggle navigation">
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
-            <li><a href="#what-you-can-do">What it does</a></li>
+            <li><a href="#translate">Remap</a></li>
+            <li><a href="#feel">Feel</a></li>
+            <li><a href="#motion">Motion</a></li>
+            <li><a href="#anywhere">Anywhere</a></li>
             <li><a href="#compare">Compare</a></li>
-            <li><a href="#features">Details</a></li>
-            <li><a href="#screenshots">Screenshots</a></li>
             <li><a href="#faq">FAQ</a></li>
-            <li><a href="#download">Download</a></li>
-            <li><a href="https://github.com/hifihedgehog/PadForge" class="nav-github" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="/docs/" class="nav-docs">Docs</a></li>
+            <li><a href="#download" class="nav-cta">Download</a></li>
         </ul>
     </div>
 </nav>
 
 <!-- Hero -->
 <header class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
     <div class="container hero-content">
-        <img src="assets/logo.png" alt="PadForge Logo" class="hero-logo">
-        <h1>Make any input look like any controller.</h1>
-        <p class="hero-sub">PadForge sits between your controller and the game and shows the game whatever shape it wants to see. Free. Open source. No paywall.</p>
+        <h1 class="hero-title">Any input.<br>Any controller.</h1>
+        <p class="hero-sub">PadForge sits between your hardware and the game, and shows the game whatever controller it wants to see. Free. Open source. No paywall.</p>
+        <div class="hero-buttons">
+            <a href="#download" class="btn btn-primary">Download for Windows</a>
+            <a href="/docs/" class="btn btn-secondary">Read the docs</a>
+        </div>
+        <figure class="hero-shot reveal">
+            <img src="assets/screenshot-dashboard.jpg" alt="PadForge Dashboard with virtual controllers, motion server, web controller, and driver status" fetchpriority="high">
+        </figure>
         <div class="hero-trust">
-            <a href="https://www.softpedia.com/get/Gaming-Related/PadForge.shtml" class="hero-trust-item hero-trust-award" target="_blank" rel="noopener">
+            <a href="https://www.softpedia.com/get/Gaming-Related/PadForge.shtml" class="hero-trust-item" target="_blank" rel="noopener">
                 <img src="assets/softpedia-excellent-editors-review-award.png" alt="Softpedia Editor's Pick: rated 5 out of 5, Excellent" class="hero-award-img">
-                <span class="hero-trust-text"><strong>Softpedia Editor's Pick.</strong> Rated 5/5, Excellent.</span>
+                <span><strong>Softpedia Editor's Pick.</strong> Rated 5/5, Excellent.</span>
             </a>
             <span class="hero-trust-divider" aria-hidden="true"></span>
-            <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-trust-item hero-trust-credit" target="_blank" rel="noopener">
-                <span class="hero-lockup">
-                    <img src="assets/hidmaestro-logo-dark.png" alt="" class="hero-powered-logo">
-                    <span class="hero-lockup-name">HIDMaestro</span>
-                </span>
-                <span class="hero-trust-text"><strong>Powered by HIDMaestro.</strong> One driver, 225+ device profiles.</span>
+            <a href="https://github.com/hifihedgehog/HIDMaestro" class="hero-trust-item" target="_blank" rel="noopener">
+                <img src="assets/hidmaestro-logo-dark.png" alt="" class="hero-powered-logo">
+                <span><strong>Powered by HIDMaestro.</strong> One driver, 225+ device profiles.</span>
             </a>
-        </div>
-        <div class="hero-buttons">
-            <a href="#download" class="btn btn-primary">Download</a>
-            <a href="https://github.com/hifihedgehog/PadForge" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
         </div>
     </div>
 </header>
 
+<!-- Stat band -->
+<section class="stats" aria-label="PadForge by the numbers">
+    <div class="container stats-row">
+        <div class="stat reveal"><span class="stat-num">16</span><span class="stat-label">virtual controllers at once</span></div>
+        <div class="stat reveal"><span class="stat-num">225+</span><span class="stat-label">device profiles</span></div>
+        <div class="stat reveal"><span class="stat-num">1000<em>Hz</em></span><span class="stat-label">polling, sub-ms jitter</span></div>
+        <div class="stat reveal"><span class="stat-num">$0</span><span class="stat-label">forever, no paywall</span></div>
+    </div>
+</section>
+
 <!-- How it works -->
-<section id="how-it-works" class="how-it-works">
+<section id="how-it-works" class="how">
     <div class="container">
-        <h2 class="how-header">Three steps from download to playing</h2>
+        <p class="kicker reveal">Three steps</p>
+        <h2 class="reveal">Download to playing in minutes.</h2>
         <div class="how-steps">
-            <div class="how-step">
+            <div class="how-step reveal">
                 <div class="how-num">1</div>
                 <h3>Download and run</h3>
-                <p>Single EXE, no installer. PadForge runs elevated, so Windows shows the UAC prompt every launch. First launch installs HIDMaestro (the driver that creates virtual controllers) inside that same elevated session.</p>
+                <p>Single EXE, no installer. PadForge runs elevated, so Windows shows the UAC prompt every launch. First launch installs HIDMaestro, the driver that creates virtual controllers, inside that same elevated session.</p>
             </div>
-            <div class="how-step">
+            <div class="how-step reveal">
                 <div class="how-num">2</div>
                 <h3>Add a virtual controller</h3>
-                <p>Click <strong>Add Controller</strong> on the Dashboard. Pick Xbox, PlayStation, Extended (flight stick / wheel / HOTAS), MIDI, or Keyboard + Mouse. Up to 16 at once.</p>
+                <p>Click <strong>Add Controller</strong> on the Dashboard. Pick Xbox, PlayStation, Extended (flight stick, wheel, HOTAS), MIDI, or Keyboard&nbsp;+&nbsp;Mouse. Up to 16 at once.</p>
             </div>
-            <div class="how-step">
+            <div class="how-step reveal">
                 <div class="how-num">3</div>
                 <h3>Assign your real controller</h3>
                 <p>Open the Devices page, click the slot badge on your physical pad. Most controllers auto-map on assign. For the rest, press <strong>Map All</strong>. Done.</p>
@@ -94,304 +109,224 @@
     </div>
 </section>
 
-<!-- Feature stories -->
-<section id="what-you-can-do" class="stories">
+<!-- ═══ Chapter: Remap ═══ -->
+<section id="translate" class="chapter">
     <div class="container">
-        <h2 class="stories-header">What PadForge does for you</h2>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">Phone as a controller</span>
-                <h3>Open a browser. Press buttons.</h3>
-                <p>PadForge runs a tiny web server. Any device with a browser on your Wi-Fi can load it, pick a layout (Xbox 360, DualShock 4, or multi-touch touchpad), and play. Up to 16 phones connect at once, each a separate virtual pad. Touch buttons, dual analog sticks, an 8-way D-pad. Real rumble feedback through the Vibration API. No app to install on the phone.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-web-controller.jpg" alt="Web controller showing analog sticks, D-pad, triggers, and ABXY buttons" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Any controller, any game</span>
-                <h3>That game that won't read your wheel? It will now.</h3>
+        <p class="kicker reveal">Remap</p>
+        <h2 class="chapter-title reveal">That game that won't read your wheel? It will now.</h2>
+        <div class="chapter-hero reveal">
+            <div class="chapter-hero-copy">
                 <p>PadForge translates a PS5 DualSense into the Xbox pad a Steam game expects. A Logitech G29 wheel into the gamepad a racing game accepts. A Saitek HOTAS into the gamepad a flight game stubbornly insists on. The game never knows the difference.</p>
             </div>
-            <div class="story-shot">
+            <figure class="chapter-hero-shot">
                 <img src="assets/screenshot-mappings.jpg" alt="Mapping table with Source, Value, and Options columns" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">Native wheel force feedback</span>
-                <h3>Your wheel fights back.</h3>
-                <p>Plug a Logitech, Fanatec, or Thrustmaster wheel into a slot and PadForge drives its force feedback in the wheel's own native protocol: constant force plus spring, damper, and friction straight from the game. A dedicated Wheel tab sets rotation range in degrees, auto-center strength, and the RPM shift LEDs. A racing game that only knows how to talk to an Xbox pad now loads your wheel up with real road feel.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-wheel.jpg" alt="Wheel tab with rotation range, auto-center, and RPM shift LED controls" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Share controllers across your PCs</span>
-                <h3>The controller is on the other PC. The game doesn't care.</h3>
-                <p>Remote Link shares devices across the PadForge PCs on your network. A controller, wheel, or HOTAS plugged into one PC drives a game on another, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Connect as many PCs as you like, and one shared controller can drive games on several at once. Pair each pair of PCs once with a six-digit code. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-remote-link.jpg" alt="Remote Link section on the Dashboard with paired and nearby PCs" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">Audio through the controller speaker</span>
-                <h3>Sound from the speaker in your hands.</h3>
-                <p>The DualSense and DualShock 4 have a speaker built into the pad, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. The DualSense plays over USB or Bluetooth. The DualShock 4 plays over Bluetooth. Each speaker-capable pad gets its own per-slot Audio tab, with a source picker and a master volume. Controllers with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, the Steam Controller, or the Steam Deck, play the same macro sounds as a vibrating tone, so beeps and cues come through the grip. A Wii Remote plays them through its own speaker.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-audio.jpg" alt="Audio tab with mirror source picker and master volume" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">A MIDI keyboard as a controller</span>
-                <h3>MIDI in, gamepad out.</h3>
-                <p>PadForge reads MIDI input devices as mapping sources. Notes, Control Change knobs, pitch bend, and encoder dials from a MIDI keyboard or pad controller bind like any button or axis, so a piano key can press A and a mod wheel can pull a trigger. It rides the same Windows MIDI Services stack the MIDI virtual controller uses. No bridge software.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-midi-input.jpg" alt="A MIDI device on the Devices page with the live note and CC preview" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
+            </figure>
+        </div>
+        <div class="rail" tabindex="0">
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">Multi-source mapping</span>
                 <h3>Pedals, wheel, and HOTAS throttle. One virtual stick.</h3>
                 <p>One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Invert On Hold, or Ramp. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-mappings.jpg" alt="Multi-source mapping row with combine mode and formula editor" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">Shift layers</span>
                 <h3>Caps Lock for your controller.</h3>
-                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose. The activator steps Next, and a second Previous button steps backward from another device if you like. Wrap Around loops past the last layer, and Include Base keeps Base in the rotation or leaves it as the resting state. A No Button layer has no activator of its own and shows up only inside a Cycle queue. Per-layer color and emoji icon. A Win11-style flyout pops to confirm the active layer the moment it engages.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-mappings.jpg" alt="Shift layer tab strip above the mapping grid" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">Gyro at Steam Input parity</span>
-                <h3>Aim with the controller, not the stick.</h3>
-                <p>Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. A stick gate wakes the gyro from any stick and any direction, read before the stick's own deadzone. Tuning saves per pad per slot, so the same pad on two slots can feel two different ways. Or aim with the desktop mouse: two Mouse Position sources read the cursor and drive a virtual stick from it, each with a Sensitivity dial of its own.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-gyro.jpg" alt="Gyro tab with Motion Passthrough, Calibration, Sensitivity, Response Shaping, and Engage cards" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Trigger motors that feel the game</span>
-                <h3>Forza, Gears, and Halo on your real Xbox pad.</h3>
-                <p>PadForge passes Xbox impulse trigger data straight to the assigned physical Xbox One, Elite, or Series pad. The same data routes to DualSense as Adaptive Trigger Vibration so a DualSense playing Forza buzzes the triggers in step with an Xbox One pad doing the same. Plus audio-bass-driven trigger rumble and a constant trigger force that resumes when the game stops. A Trigger Routing card on the Force Feedback tab feeds the main rumble motor into the trigger motors, one trigger at a time, with per-trigger source, scale, and activator settings that reach both Xbox impulse triggers and DualSense Adaptive Trigger Vibration.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-impulse-triggers.jpg" alt="Impulse Triggers tab with per-trigger gain, Constant Trigger Force, and Audio Bass Trigger Rumble" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">DualSense effects in any game</span>
-                <h3>Adaptive triggers and lightbar that don't need the game's blessing.</h3>
-                <p>Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fifteen lightbar modes, six of them tied to your system audio (three Audio Pulse variants, three Audio Bands variants). The DualSense lights and triggers light up in games that have never heard of a DualSense.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive Triggers tab with mode dropdown and per-trigger sliders" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Touchpad as more than a touchpad</span>
-                <h3>Turn the DualSense pad into a mouse, a stick, or a D-pad.</h3>
-                <p>A new Touchpad tab on every slot whose source carries a touchpad surface. Map a finger to mouse X/Y with per-axis sensitivity and invert. Anchor a virtual analog stick where your finger lands. Drop a wedge-thresholded D-pad on top. Plus the gesture stack: 4-way and 8-way swipes, taps, longpress, pinch, rotate, two- to five-finger gestures, and shape templates that match a finger trace against Square, Triangle, Z, Checkmark, and Circle in either direction (clockwise and counter-clockwise bind separately). Every toggle saves per slot. The same pad on two slots can fire two completely different gesture sets.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-touchpad.jpg" alt="Touchpad tab with Stick / D-Pad Output, Mouse Output, Gesture Detection, In-Box Gestures, and Custom Gestures cards" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">DualShock 3, paired in-app</span>
-                <h3>The PS3 pad on PC, without the driver hunt.</h3>
-                <p>A DualShock 3 works two ways. Plug it in over USB and PadForge binds it through WinUSB on its own. Or pair it over Bluetooth from the Devices page, which installs the signed BthPS3 driver only when you pair one. Either way you get the sixaxis motion, ten pressure-sensitive face buttons, rumble, the player LED, and the battery reading. No DsHidMini, no ScpToolkit. Remove the controller and PadForge cleans up the pairing after it.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-ds3-pair.jpg" alt="Pair a Controller dialog set to DualShock 3 with USB and Bluetooth options" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Wii pointer modes</span>
-                <h3>Point the Wii Remote like a light gun, or a mouse.</h3>
-                <p>The Pointer tab reads the Wii Remote's IR camera, and now it reads it several ways. FPS Mouse drives the desktop mouse for shooters. The border modes keep the aimed area square, corrected for your screen's aspect ratio, so a wide monitor doesn't stretch the aim. When the camera loses the sensor bar, IR-offscreen freeze holds the last position instead of snapping to a corner. Cycle the modes live, or drop a Set Pointer Mode step into a macro to jump straight to one.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-pointer.jpg" alt="Pointer tab with FPS Mouse and border pointer modes for the Wii Remote IR camera" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
+                <p>Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Stick-assisted triggers</span>
+                <h3>A digital trigger that pulls like an analog one.</h3>
+                <p>Some pads only give you a digital trigger, on or off. Stick Trim changes that. Set a trigger's combine mode to Stick Trim and a stick axis ramps the pull while you hold the button, so a bumper press plus a nudge of the stick reads as a partial squeeze in the game. Each mapping sets its own deadzone, ramp rate, and whether the pull resets on release.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">SOCD cleaning</span>
+                <h3>Left and right at once, resolved your way.</h3>
+                <p>Press left and right together and something has to give. The Keyboard&nbsp;+&nbsp;Mouse controller cleans those opposing pairs across every key you map. Last-wins takes the newest press, the Snap Tap behavior. First-wins keeps the key you were already holding. Neutral cancels both to center.</p>
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">Mouse gestures</span>
                 <h3>Hold a mouse button. Flick. Fire.</h3>
                 <p>Hold any button on the mouse and flick the cursor. Up, down, left, right, or a plain click while held, five gestures off one button. Each fires its own action, so a single side button turns into five bindings. Send a flick to a shift layer, a macro, or a virtual button.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-mouse-gestures.jpg" alt="Mouse gesture configuration with flick directions bound to actions" loading="lazy">
-            </div>
-        </article>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Media keys as inputs</span>
+                <h3>Your keyboard's media keys, mapped.</h3>
+                <p>The media row on a keyboard, a media remote, a headset's transport buttons: PadForge reads them as their own device with named button chips. Map Play/Pause, Mute, Volume, or track keys to a virtual button or a macro trigger, same as any other input.</p>
+            </article>
+        </div>
+    </div>
+</section>
 
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Stick-assisted triggers</span>
-                <h3>A digital trigger that pulls like an analog one.</h3>
-                <p>Some pads only give you a digital trigger, on or off. Stick Trim changes that. Set a trigger's combine mode to Stick Trim and a stick axis ramps the pull while you hold the button, so a bumper press plus a nudge of the stick reads as a partial squeeze in the game. Each mapping sets its own deadzone, ramp rate, and whether the pull resets the moment you let go.</p>
+<!-- ═══ Chapter: Feel ═══ -->
+<section id="feel" class="chapter chapter-alt">
+    <div class="container">
+        <p class="kicker reveal">Feel</p>
+        <h2 class="chapter-title reveal">Your wheel fights back.</h2>
+        <div class="chapter-hero reveal">
+            <div class="chapter-hero-copy">
+                <p>Plug a Logitech, Fanatec, or Thrustmaster wheel into a slot and PadForge drives its force feedback in the wheel's own native protocol: constant force plus spring, damper, and friction straight from the game. A dedicated Wheel tab sets rotation range in degrees, auto-center strength, and the RPM shift LEDs. A racing game that only knows how to talk to an Xbox pad now loads your wheel up with real road feel.</p>
             </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-mappings.jpg" alt="Stick Trim combine mode on a trigger mapping row" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">SOCD cleaning</span>
-                <h3>Left and right at once, resolved your way.</h3>
-                <p>Press left and right together and something has to give. The Keyboard + Mouse controller cleans those opposing pairs across every key you map. Last-wins takes the newest press, the Snap Tap behavior. First-wins keeps the key you were already holding. Neutral cancels both to center. Pick one and it applies to every mapped pair at once.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-kbm-socd.jpg" alt="SOCD cleaning modes on the Keyboard + Mouse controller" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
+            <figure class="chapter-hero-shot">
+                <img src="assets/screenshot-wheel.jpg" alt="Wheel tab with rotation range, auto-center, and RPM shift LED controls" loading="lazy">
+            </figure>
+        </div>
+        <div class="rail" tabindex="0">
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Trigger motors that feel the game</span>
+                <h3>Forza, Gears, and Halo on your real Xbox pad.</h3>
+                <p>PadForge passes Xbox impulse trigger data straight to the assigned physical Xbox One, Elite, or Series pad. The same data routes to DualSense as Adaptive Trigger Vibration, so a DualSense playing Forza buzzes the triggers in step with an Xbox pad doing the same. Plus audio-bass-driven trigger rumble, a constant trigger force, and a Trigger Routing card that feeds the main rumble motor into the trigger motors with per-trigger source, scale, and activator settings.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">DualSense effects in any game</span>
+                <h3>Adaptive triggers and lightbar that don't need the game's blessing.</h3>
+                <p>Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fifteen lightbar modes, six of them tied to your system audio (three Audio Pulse variants, three Audio Bands variants). The DualSense lights and triggers light up in games that have never heard of a DualSense.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Audio through the controller speaker</span>
+                <h3>Sound from the speaker in your hands.</h3>
+                <p>The DualSense and DualShock 4 have a speaker built in, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, Steam Controller, or Steam Deck, play the same sounds as a vibrating tone. A Wii Remote plays them through its own speaker.</p>
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">Guide LED brightness</span>
                 <h3>Dim the glowing button, or let it follow the battery.</h3>
-                <p>Set how bright the Guide button glows on an Xbox One, Elite, or Series pad over USB, and the home LED on the 2015 Steam Controller. Hold it at a fixed level, or let it track the battery so a full charge shines and a low one dims. A macro action changes it on demand. It rides the same Xbox GIP lane the pad already uses, so there is nothing extra to install.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-guide-led.jpg" alt="Guide button LED brightness control with fixed and battery-following options" loading="lazy">
-            </div>
-        </article>
+                <p>Set how bright the Guide button glows on an Xbox One, Elite, or Series pad over USB, and the home LED on the 2015 Steam Controller. Hold it at a fixed level, or let it track the battery so a full charge shines and a low one dims. A macro action changes it on demand. It rides the same Xbox GIP lane the pad already uses.</p>
+            </article>
+        </div>
+    </div>
+</section>
 
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">Up to 16 controllers</span>
-                <h3>Local co-op without limits.</h3>
-                <p>Run two sim racers on two wheels at once. A flight stick plus throttle plus rudder pedals as one virtual HOTAS. Mixed gamepad types in one session. One combo press toggles every virtual controller on or off when you need to step away.</p>
+<!-- ═══ Chapter: Motion ═══ -->
+<section id="motion" class="chapter">
+    <div class="container">
+        <p class="kicker reveal">Motion</p>
+        <h2 class="chapter-title reveal">Aim with the controller, not the stick.</h2>
+        <div class="chapter-hero reveal">
+            <div class="chapter-hero-copy">
+                <p>Gyro at Steam Input parity. Reference frames (Local, Player, World). Dual-threshold smoothing. Real-world calibration. A cross-device Aim Engage button that lets you hold a paddle on the wheel to wake the gyro on your handheld. A stick gate wakes the gyro from any stick and any direction, read before the stick's own deadzone. Tuning saves per pad per slot, so the same pad on two slots can feel two different ways.</p>
             </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-dashboard.jpg" alt="Dashboard with multiple virtual controllers active at once" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
+            <figure class="chapter-hero-shot">
+                <img src="assets/screenshot-gyro.jpg" alt="Gyro tab with Motion Passthrough, Calibration, Sensitivity, Response Shaping, and Engage cards" loading="lazy">
+            </figure>
+        </div>
+        <div class="rail" tabindex="0">
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Touchpad as more than a touchpad</span>
+                <h3>Turn the DualSense pad into a mouse, a stick, or a D-pad.</h3>
+                <p>Map a finger to mouse X/Y with per-axis sensitivity and invert. Anchor a virtual analog stick where your finger lands. Drop a wedge-thresholded D-pad on top. Plus the gesture stack: 4-way and 8-way swipes, taps, longpress, pinch, rotate, two- to five-finger gestures, and shape templates that match a finger trace against Square, Triangle, Z, Checkmark, and Circle in either direction. Every toggle saves per slot.</p>
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">Motion to emulators</span>
                 <h3>Gyro into Cemu, Dolphin, Yuzu, and Ryujinx.</h3>
                 <p>The built-in DSU / Cemuhook server broadcasts gyroscope and accelerometer on UDP port 26760 so emulators can use real motion for Splatoon, Wii titles, 3DS games, and anything else that asks for it. DualSense, DualShock 4, Switch Pro, and 2026 Steam Controller sources work out of the box.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-dashboard.jpg" alt="Dashboard Motion Server section with port and enable toggle" loading="lazy">
-            </div>
-        </article>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Wii pointer modes</span>
+                <h3>Point the Wii Remote like a light gun, or a mouse.</h3>
+                <p>The Pointer tab reads the Wii Remote's IR camera several ways. FPS Mouse drives the desktop mouse for shooters. The border modes keep the aimed area square, corrected for your screen's aspect ratio. When the camera loses the sensor bar, IR-offscreen freeze holds the last position instead of snapping to a corner. Cycle the modes live, or jump straight to one from a macro.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Joy-Con 2 optical mouse</span>
+                <h3>The Joy-Con 2 is a mouse. So use it like one.</h3>
+                <p>A Nintendo Switch 2 Joy-Con has an optical sensor on its face. Set it on a desk and slide it. Two sources, Mouse Motion X and Mouse Motion Y, drive a stick for mouse-look, a button, or the scroll wheel, each with its own Sensitivity dial. The right Joy-Con's IR camera also reports a brightness value you can map, so covering the sensor works like a button.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Mouse as a source</span>
+                <h3>Aim with the desktop mouse.</h3>
+                <p>Two Mouse Position sources read where the cursor sits and drive a virtual stick from it, each with a Sensitivity dial of its own. Separate Mouse Speed sources read movement instead of position, for velocity-style bindings.</p>
+            </article>
+        </div>
+    </div>
+</section>
 
-        <article class="story">
-            <div class="story-copy">
+<!-- ═══ Chapter: Anywhere ═══ -->
+<section id="anywhere" class="chapter chapter-alt">
+    <div class="container">
+        <p class="kicker reveal">Anywhere</p>
+        <h2 class="chapter-title reveal">Open a browser. Press buttons.</h2>
+        <div class="chapter-hero reveal">
+            <div class="chapter-hero-copy">
+                <p>PadForge runs a tiny web server. Any device with a browser on your Wi-Fi can load it, pick a layout (Xbox 360, DualShock 4, or multi-touch touchpad), and play. Up to 16 phones connect at once, each a separate virtual pad. Touch buttons, dual analog sticks, an 8-way D-pad. Real rumble feedback through the Vibration API. No app to install on the phone.</p>
+            </div>
+            <figure class="chapter-hero-shot">
+                <img src="assets/screenshot-web-controller.jpg" alt="Web controller showing analog sticks, D-pad, triggers, and ABXY buttons" loading="lazy">
+            </figure>
+        </div>
+        <div class="rail" tabindex="0">
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Share controllers across your PCs</span>
+                <h3>The controller is on the other PC. The game doesn't care.</h3>
+                <p>Remote Link shares devices across the PadForge PCs on your network. A controller, wheel, or HOTAS plugged into one PC drives a game on another, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Pair once with a six-digit code. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">A MIDI keyboard as a controller</span>
+                <h3>MIDI in, gamepad out.</h3>
+                <p>PadForge reads MIDI input devices as mapping sources. Notes, Control Change knobs, pitch bend, and encoder dials from a MIDI keyboard or pad controller bind like any button or axis, so a piano key can press A and a mod wheel can pull a trigger. It rides the same Windows MIDI Services stack the MIDI virtual controller uses. No bridge software.</p>
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">MIDI from a gamepad</span>
                 <h3>A 16-channel MIDI controller, no extra hardware.</h3>
-                <p>Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. PadForge creates a real Windows MIDI endpoint through Windows MIDI Services that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-midi.jpg" alt="MIDI virtual controller with CC count, Note count, channel, and velocity" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Wii controllers, paired in-app</span>
-                <h3>Pair a Wii Remote without leaving PadForge.</h3>
-                <p>Windows' own Bluetooth prompt asks for a PIN you type, but a Wii controller's PIN is six raw bytes set by the sync button you press, not text. So PadForge runs the pairing itself: click Pair on the Devices page, press the red SYNC button under the battery cover, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, a Remote plus Nunchuk, a Classic Controller, and a Wii U Pro Controller all map as normal pads, with the accelerometer and Wii Motion Plus gyro feeding the same motion pipeline as a DualSense. A new Pointer tab turns the Wii Remote's IR camera into an on-screen pointer you can map to a stick or the mouse, and a Balance Board reports weight and lean as mapping sources.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-wii.jpg" alt="Pair a Controller dialog with Wii sync instructions and found-controllers list" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
+                <p>Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. PadForge creates a real Windows MIDI endpoint that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge.</p>
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">NFC tag triggers</span>
                 <h3>Tap a tag. Fire a macro.</h3>
                 <p>Plug in an NFC reader, any PC/SC contactless reader like an ACR122U, and a tag tap runs a macro. Register a tag from the Devices page: hold it on the reader, give it a name, and it is saved for good. Each tag becomes its own trigger, next to an Any NFC Tag trigger that any tag fires. Map an amiibo, a sticker, or a card to a button combo, a profile switch, or a whole action sequence.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-devices-nfc.jpg" alt="NFC reader selected on the Devices page, with the Register / Manage NFC Tags button and Any NFC Tag trigger" loading="lazy">
-            </div>
-        </article>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">On-screen touchpad overlay</span>
+                <h3>A touchpad on any monitor.</h3>
+                <p>Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required.</p>
+            </article>
+        </div>
+    </div>
+</section>
 
-        <article class="story story-reverse">
-            <div class="story-copy">
-                <span class="story-eyebrow">Joy-Con 2 optical mouse</span>
-                <h3>The Joy-Con 2 is a mouse. So use it like one.</h3>
-                <p>A Nintendo Switch 2 Joy-Con has an optical sensor on its face. Set it on a desk and slide it. Two new sources, Mouse Motion X and Mouse Motion Y, drive a stick for mouse-look, a button, or the scroll wheel, each with its own Sensitivity dial. The right Joy-Con's IR camera also reports a brightness value you can map, so covering the sensor works like a button.</p>
+<!-- ═══ Chapter: Every device ═══ -->
+<section id="devices-chapter" class="chapter">
+    <div class="container">
+        <p class="kicker reveal">Every device</p>
+        <h2 class="chapter-title reveal">Local co-op without limits.</h2>
+        <div class="chapter-hero reveal">
+            <div class="chapter-hero-copy">
+                <p>Run two sim racers on two wheels at once. A flight stick plus throttle plus rudder pedals as one virtual HOTAS. Mixed gamepad types in one session, up to 16 virtual controllers. One combo press toggles every virtual controller on or off when you need to step away.</p>
             </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-mappings.jpg" alt="Mouse Motion source in the mapping grid" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story">
-            <div class="story-copy">
-                <span class="story-eyebrow">Media keys as inputs</span>
-                <h3>Your keyboard's media keys, mapped.</h3>
-                <p>The media row on a keyboard, a media remote, a headset's transport buttons: PadForge reads them as their own device with named button chips. Map Play/Pause, Mute, Volume, or Next and Previous Track to a virtual button or a macro trigger, same as any other input.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-devices-consumer.jpg" alt="Consumer Control device selected on the Devices page, showing named media-key chips like Play/Pause, Mute, and Volume" loading="lazy">
-            </div>
-        </article>
-
-        <article class="story story-reverse">
-            <div class="story-copy">
+            <figure class="chapter-hero-shot">
+                <img src="assets/screenshot-devices.jpg" alt="Devices page with every detected device as a card" loading="lazy">
+            </figure>
+        </div>
+        <div class="rail" tabindex="0">
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Wii controllers, paired in-app</span>
+                <h3>Pair a Wii Remote without leaving PadForge.</h3>
+                <p>A Wii controller's PIN is six raw bytes set by the sync button, not text you can type into the Windows prompt. So PadForge runs the pairing itself: click Pair, press the red SYNC button, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller all map as normal pads, with the accelerometer and Motion Plus gyro feeding the same motion pipeline as a DualSense. A Balance Board reports weight and lean as mapping sources.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">DualShock 3, paired in-app</span>
+                <h3>The PS3 pad on PC, without the driver hunt.</h3>
+                <p>Plug it in over USB and PadForge binds it through WinUSB on its own. Or pair it over Bluetooth from the Devices page, which installs the signed BthPS3 driver only when you pair one. Either way you get the sixaxis motion, ten pressure-sensitive face buttons, rumble, the player LED, and the battery reading. No DsHidMini, no ScpToolkit. Remove the controller and PadForge cleans up the pairing after it.</p>
+            </article>
+            <article class="rail-card reveal">
                 <span class="story-eyebrow">Battery and idle disconnect</span>
                 <h3>See the charge. Sleep it when idle.</h3>
-                <p>Every wireless pad that reports a battery shows its charge on the Devices page, with a charging glyph while it tops up. Set an Idle Disconnect timer and a Bluetooth controller drops its link after a few quiet minutes, so it sleeps instead of draining on the coffee table. A Disconnect Controller macro turns one off on command, from a chord or a button.</p>
-            </div>
-            <div class="story-shot">
-                <img src="assets/screenshot-devices-power.jpg" alt="DualSense selected on the Devices page with the Power section and its Idle Disconnect timer" loading="lazy">
-            </div>
-        </article>
+                <p>Every wireless pad that reports a battery shows its charge on the Devices page, with a charging glyph while it tops up. Set an Idle Disconnect timer and a Bluetooth controller drops its link after a few quiet minutes, so it sleeps instead of draining on the coffee table. A Disconnect Controller macro turns one off on command.</p>
+            </article>
+            <article class="rail-card reveal">
+                <span class="story-eyebrow">Unknown hardware welcome</span>
+                <h3>If Windows sees it, you can map it.</h3>
+                <p>For unrecognised gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release.</p>
+            </article>
+        </div>
     </div>
 </section>
 
 <!-- Comparison -->
 <section id="compare" class="compare">
     <div class="container">
-        <h2>How PadForge stacks up</h2>
-        <p class="compare-intro">Feature comparison against the other Windows controller mappers. Each cell is verified against the tool's own docs, source, or release notes: x360ce v4.17.15.0 (last public release Nov 2020); XOutput 3.32 (deprecated and archived Dec 2024); reWASD 9.4.0 (May 2026); ds4windowsapp/DS4Windows v3.5 (Feb 2026); Steam Input (rolling Steam client updates). Cells marked ⚠️ mean the feature exists but is limited or unverified at the level of detail PadForge implements it.</p>
+        <p class="kicker reveal">Compare</p>
+        <h2 class="reveal">How PadForge stacks up.</h2>
+        <p class="compare-intro reveal">Feature comparison against the other Windows controller mappers. Each cell is verified against the tool's own docs, source, or release notes: x360ce v4.17.15.0 (last public release Nov 2020); XOutput 3.32 (deprecated and archived Dec 2024); reWASD 9.4.0 (May 2026); ds4windowsapp/DS4Windows v3.5 (Feb 2026); Steam Input (rolling Steam client updates). Cells marked ⚠️ mean the feature exists but is limited or unverified at the level of detail PadForge implements it.</p>
+        <details class="compare-details reveal" open>
+            <summary><span>The full table, 44 rows</span></summary>
         <div class="compare-table-wrapper">
             <table class="compare-table">
                 <colgroup>
@@ -462,6 +397,7 @@
                 </tbody>
             </table>
         </div>
+        </details>
         <p class="compare-footer">❌ means the feature is absent. Tools without recent shipping releases (XOutput 2024, x360ce 2020) reflect their last public binary, not unreleased master commits.</p>
     </div>
 </section>
@@ -469,133 +405,134 @@
 <!-- Technical details -->
 <section id="features" class="features">
     <div class="container">
-        <h2>Technical details</h2>
-        <p class="compare-intro">Short punch list. Each card is one feature, end to end.</p>
+        <p class="kicker reveal">The spec sheet</p>
+        <h2 class="reveal">Every feature, end to end.</h2>
+        <p class="compare-intro reveal">Short punch list. Each card is one feature. The <a href="/docs/">documentation</a> covers each in full.</p>
         <div class="features-grid">
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6" class="e"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6" class="e"/><path d="M8.3 10.8 15.7 6.2"/><path d="M8.3 13.2 15.7 17.8"/></svg></div>
                 <h3>Remote Link</h3>
                 <p>Share a controller, wheel, or HOTAS with the other PCs on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, player LEDs, and speaker audio return to the real hardware. Pair once with a six-digit code. Works on your home network, or across the internet through a VPN like ZeroTier.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.4-7.98 5.5 5.5 0 0 1 10.6-1.02A3.75 3.75 0 0 1 17 16.9"/><path d="M12 11.4v6.6" class="e"/><path d="M9.3 15.4 12 18l2.7-2.6" class="e"/></svg></div>
                 <h3>Steam Workshop config import</h3>
                 <p>Browse the community controller configs on the Steam Workshop and translate the one you pick into a PadForge profile: buttons, sticks, triggers, keyboard and mouse bindings, shift layers, and macros. Anonymous Steam connection, no account. An import report shows what came across clean and what was approximated. Off until you enable it in Settings.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" class="e"/><path d="M12 9.6V3.1"/><path d="M10 13.6 4.9 16.7"/><path d="M14 13.6 19.1 16.7"/></svg></div>
                 <h3>Native wheel force feedback</h3>
                 <p>Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3l4.5 3.5v-12L7 9.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6" class="e"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11" class="e"/></svg></div>
                 <h3>Controller speaker audio</h3>
                 <p>Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="1.6"/><path d="M8 6.4V18"/><path d="M13 6.4V18"/><path d="M18 6.4V18"/><path d="M10 6.4v5.4" class="e"/><path d="M15 6.4v5.4" class="e"/></svg></div>
                 <h3>MIDI input</h3>
                 <p>Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.9"/><circle cx="5" cy="12" r="1.9"/><circle cx="5" cy="19" r="1.9"/><circle cx="19" cy="12" r="2.3" class="e"/><path d="M6.9 5.4C12 7 12 12 16.7 12"/><path d="M7 12h9.7"/><path d="M6.9 18.6C12 17 12 12 16.7 12"/></svg></div>
                 <h3>Multi-source mappings</h3>
                 <p>One row, any number of inputs, any number of devices. Six combine modes plus a drag-and-drop formula editor. Cross-device chords for free.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2 4 7.6l8 4.2 8-4.2-8-4.4z" class="e"/><path d="M4 12.2l8 4.2 8-4.2"/><path d="M4 16.6l8 4.2 8-4.2"/></svg></div>
                 <h3>Shift layers</h3>
                 <p>Caps Lock for your controller. Hold, Toggle, Latch, Cycle, Sticky, or No Button. Cycle steps a queue of layers with Next and Previous buttons. Per-layer color and emoji. Cross-device activators.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.8" width="11" height="18.4" rx="2.2"/><path d="M10.4 5.6h3.2"/><path d="M10.2 18.4h3.6" class="e"/></svg></div>
                 <h3>Phone-as-controller</h3>
                 <p>Browser-based gamepad over Wi-Fi. Xbox 360, DualShock 4, or multi-touch touchpad layout. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.8" width="18" height="14.4" rx="2"/><path d="M3 9h18"/><circle cx="5.6" cy="6.9" r="0.55"/><circle cx="12.5" cy="14" r="2.6" class="e"/></svg></div>
                 <h3>On-screen touchpad overlay</h3>
                 <p>Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.4"/><path d="M9.6 8.6l5.4 5.2-3 .5 1.6 3.3-1.7.8-1.6-3.3-2.3 2z" class="e"/></svg></div>
                 <h3>Touchpad outputs</h3>
                 <p>Map any touchpad (DualSense, DS4, laptop trackpad, phone web touchpad, overlay) to mouse X/Y with per-axis sensitivity and invert, to a virtual analog stick anchored where your finger lands, or to a wedge-thresholded D-pad. Plus the gesture stack: swipes, taps, longpress, pinch, rotate, custom shape templates. Every toggle is per slot.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="9" ry="3.4" transform="rotate(58 12 12)" class="e"/><circle cx="12" cy="12" r="1.8" class="e"/></svg></div>
                 <h3>Gyro at Steam Input parity</h3>
                 <p>Local, Player, and World reference frames. Real-world calibration. Cross-device Aim Engage. Tuning saves per pad per slot.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3.4" width="10" height="17.2" rx="5"/><path d="M12 7v3.2" class="e"/></svg></div>
                 <h3>Mouse as a source</h3>
                 <p>Two Mouse Position sources read where the desktop cursor sits and push a stick, trigger, or button toward it. A per-row Sensitivity dial (0.1 to 5.0) sets the cursor travel for full deflection. Separate from the Mouse Speed sources that read movement. Primary monitor only.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 3.8 7.2v9.6L12 21.2l8.2-4.4V7.2L12 2.8z"/><path d="M3.9 7.3 12 11.6l8.1-4.3" class="e"/><path d="M12 21.2V11.6" class="e"/></svg></div>
                 <h3>3D and 2D visualization</h3>
                 <p>Native art per profile. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense. Click any button in 3D to record its mapping.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="3.2" class="e"/><path d="M12 1.6V5"/><path d="M12 19v3.4"/><path d="M1.6 12H5"/><path d="M19 12h3.4"/></svg></div>
                 <h3>Six deadzone shapes</h3>
                 <p>Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis anti-deadzone. Custom sensitivity curves with unlimited draggable points.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7.5 3.5 12 8 16.5"/><path d="M16 7.5 20.5 12 16 16.5"/><path d="M3.5 12h17" class="e"/></svg></div>
                 <h3>Force feedback both ways</h3>
                 <p>Full rumble passthrough. HID PID 1.0 for wheels and joysticks. Audio bass rumble synthesized from system audio. Constant force vector.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0-3.8 10.7c.7.6.9 1.1.9 1.9h5.8c0-.8.2-1.3.9-1.9A6 6 0 0 0 12 3z"/><path d="M9.6 18.2h4.8"/><path d="M10.6 20.8h2.8"/><path d="M12 8.6v4.2M10 10.6h4" class="e"/></svg></div>
                 <h3>Adaptive triggers and lightbar</h3>
                 <p>Seven DualSense trigger modes plus a one-click GameCube preset. Fifteen lightbar modes including audio-pulse, audio-band, Strobe, and Battery.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12.5h3.6l2.4 6 3.4-13 2.4 9.4 1.6-2.4h3.6" class="e"/></svg></div>
                 <h3>Impulse triggers</h3>
                 <p>Xbox impulse trigger passthrough on the assigned physical pad. Same data routes to DualSense as Adaptive Trigger Vibration. Audio-bass trigger rumble.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5 4.5 13.8H11l-1 7.7 8.5-11.3H12l1-7.7z" class="e"/></svg></div>
                 <h3>Macros with action sequences</h3>
                 <p>Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble. Five fire modes. Cursor actions to recenter the mouse, pin it at a point, or fence it inside a rectangle. Duplicate a macro in place, copy and paste between virtual controllers, or pull every macro from another in one step.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8.6h18"/><circle cx="5.8" cy="6.3" r="0.55"/><circle cx="8" cy="6.3" r="0.55"/><path d="M8.5 14.4h6l-1.7-1.7" class="e"/><path d="M15.5 16.6h-6l1.7 1.7" class="e"/></svg></div>
                 <h3>Per-app profiles</h3>
                 <p>Watches the foreground window. Switches when a matching app takes focus. Win11-style flyout confirms.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="14.5" r="2" class="e"/><path d="M8.6 11a5 5 0 0 1 6.8 0"/><path d="M6.1 8.4a8.6 8.6 0 0 1 11.8 0"/></svg></div>
                 <h3>DSU motion server</h3>
                 <p>Gyro and accel on UDP 26760. Cemu, Dolphin, Yuzu, Ryujinx all read it. Plug-and-play for any emulator that speaks Cemuhook.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.6l10-2v11.2"/><circle cx="6.4" cy="18" r="2.5" class="e"/><circle cx="16.4" cy="14.8" r="2.5" class="e"/></svg></div>
                 <h3>MIDI virtual output</h3>
                 <p>Channel 1-16. CC for axes, Note On/Off for buttons. Real Windows MIDI Services endpoint. No loopMIDI bridge.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.7" r="7.4"/><path d="M12 13.7V9.2" class="e"/><path d="M9.6 2.6h4.8"/><path d="M12 2.6v2.6"/><path d="M18.7 6.9l1.3-1.3"/></svg></div>
                 <h3>1000 Hz polling</h3>
                 <p>Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18" class="e"/><path d="M10.6 6.2A9.6 9.6 0 0 1 12 6c5.5 0 9 6 9 6a15 15 0 0 1-2.9 3.4"/><path d="M6.6 7.7A15 15 0 0 0 3 12s3.5 6 9 6a9 9 0 0 0 3.4-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></div>
                 <h3>Hide physical controllers</h3>
                 <p>HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8.2h8a5 5 0 0 1 4.9 6c-.5 2.6-3.4 3.2-4.8 1.6L14.2 14H9.8l-1.9 1.8c-1.4 1.6-4.3 1-4.8-1.6a5 5 0 0 1 4.9-6z"/><path d="M7 11.4v2.6M5.7 12.7h2.6" class="e"/><circle cx="15.8" cy="11.8" r="0.9" class="e"/><circle cx="17.4" cy="13.8" r="0.9" class="e"/></svg></div>
                 <h3>Wii controllers</h3>
-                <p>In-app Bluetooth pairing. A Wii controller's PIN is raw bytes set by the sync button, not text you can type into the Windows prompt. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing you redo each session. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Wii Motion Plus gyro feed the motion pipeline. Attach or detach a Nunchuk live and it re-identifies. The IR camera drives an on-screen pointer, and a Balance Board reports weight and lean.</p>
+                <p>In-app Bluetooth pairing. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Motion Plus gyro feed the motion pipeline. The IR camera drives an on-screen pointer, and a Balance Board reports weight and lean.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon"><svg class="ficon" viewBox="0 0 24 24" fill="none" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.7 12.6 12.3 4h5.6a2 2 0 0 1 2 2v5.6l-8.6 8.6a2 2 0 0 1-2.8 0l-4.8-4.8a2 2 0 0 1 0-2.8z"/><circle cx="16.4" cy="7.6" r="1.3" class="e"/></svg></div>
                 <h3>NFC tag triggers</h3>
-                <p>Read NFC tags through a PC/SC contactless reader and fire a macro on a tap. Register and name each tag from the Devices page. Every tag is its own trigger, next to an Any NFC Tag trigger. Media keys map too: a keyboard's media row appears as its own device with named button chips, and wireless pads show a battery charge indicator with an optional idle-disconnect timer.</p>
+                <p>Read NFC tags through a PC/SC contactless reader and fire a macro on a tap. Register and name each tag from the Devices page. Every tag is its own trigger, next to an Any NFC Tag trigger. Media keys map too, and wireless pads show battery charge with an optional idle-disconnect timer.</p>
             </div>
         </div>
     </div>
@@ -604,8 +541,9 @@
 <!-- Screenshots -->
 <section id="screenshots" class="screenshots">
     <div class="container">
-        <h2>Screenshots</h2>
-        <div class="screenshot-gallery">
+        <p class="kicker reveal">See it</p>
+        <h2 class="reveal">Screenshots.</h2>
+        <div class="screenshot-gallery reveal">
             <div class="screenshot-nav">
                 <button class="screenshot-prev" aria-label="Previous screenshot">&larr;</button>
                 <button class="screenshot-next" aria-label="Next screenshot">&rarr;</button>
@@ -721,20 +659,20 @@
 
 <!-- Download -->
 <section id="download" class="download">
+    <div class="download-glow" aria-hidden="true"></div>
     <div class="container download-content">
-        <h2>Download</h2>
-        <p>Free. Open source. No installer. Single EXE. Windows 10 or 11, 64-bit.</p>
-        <div class="download-buttons">
+        <h2 class="download-title reveal">Free means free.</h2>
+        <p class="reveal">No installer. Single EXE. Windows 10 or 11, 64-bit.<br>PadForge will never become paid, freemium, or Patreon early-access paywalled.</p>
+        <div class="download-buttons reveal">
             <a href="https://github.com/hifihedgehog/PadForge/releases/latest" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Download latest release</a>
         </div>
-        <div class="download-info">
+        <div class="download-info reveal">
             <p>PadForge installs <strong>HIDMaestro</strong> on first run. HIDMaestro is the driver that creates virtual controllers. When you add a slot, HIDMaestro spins up a real HID device matching the controller shape you picked. The device disappears when you delete the slot.</p>
             <p>Two more drivers are optional. PadForge offers to install each only when you need its feature:</p>
             <ul>
                 <li><strong>HidHide.</strong> Hides your physical controller so games only see the virtual one. Install it when a game sees both at once.</li>
                 <li><strong>Windows MIDI Services.</strong> Required for MIDI input and the MIDI virtual controller type. Needs Windows 11 24H2 or later.</li>
             </ul>
-            <p class="download-promise"><strong>Free means free.</strong> PadForge will never become paid, freemium, or Patreon early-access paywalled.</p>
         </div>
     </div>
 </section>
@@ -742,10 +680,11 @@
 <!-- FAQ -->
 <section id="faq" class="faq">
     <div class="container">
-        <h2 class="faq-header">Questions people ask</h2>
+        <p class="kicker reveal">FAQ</p>
+        <h2 class="faq-header reveal">Questions people ask.</h2>
         <div class="faq-list">
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Will PadForge get my account banned in online games?</summary>
                 <div class="faq-body">
                     <p>PadForge is a user-mode app running outside the game process. Games see PadForge's virtual controller as a real HID device, the same way they see any commercial gamepad. Nothing is injected into the game, no game memory is read or written, no anti-cheat hook is touched.</p>
@@ -753,7 +692,7 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Is PadForge actually free, or is the free version crippled?</summary>
                 <div class="faq-body">
                     <p>PadForge is fully free. No tiered version, no feature paywall, no time-limited trial. The entire feature set ships in one EXE.</p>
@@ -761,7 +700,7 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Which controllers work as a source device?</summary>
                 <div class="faq-body">
                     <p>Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (USB or in-app Bluetooth pairing), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, the Wii Remote and its Nunchuk, Classic Controller, and Wii U Pro Controller (paired in-app), any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads.</p>
@@ -769,7 +708,7 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>How do I pair a Wii controller?</summary>
                 <div class="faq-body">
                     <p>Open the Devices page and click <strong>Pair</strong>, next to Refresh. Pick Nintendo Wii in the dialog, then press the red <strong>SYNC</strong> button under the battery cover. PadForge finds the controller and bonds it, so it reconnects on its own the next time you press a button. To pair for one session without bonding, tick <strong>Temporary Pairing</strong> and hold <strong>1 and 2</strong> instead.</p>
@@ -777,15 +716,15 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Does PadForge run when PadForge isn't running?</summary>
                 <div class="faq-body">
-                    <p>HIDMaestro (the virtual-controller driver) stays loaded by Windows even when PadForge is closed, so already-created virtual controllers keep their device identity across launches. But the input pipeline — reading your physical pad and forwarding it — only runs while PadForge is open. Close PadForge and the virtual controllers stop receiving input.</p>
+                    <p>HIDMaestro (the virtual-controller driver) stays loaded by Windows even when PadForge is closed, so already-created virtual controllers keep their device identity across launches. But the input pipeline, reading your physical pad and forwarding it, only runs while PadForge is open. Close PadForge and the virtual controllers stop receiving input.</p>
                     <p>Enable <strong>Start at login</strong>, <strong>Start minimized</strong>, and <strong>Minimize to system tray</strong> in Settings to make PadForge a persistent background service. Combined, those three give a fully silent setup that wakes when you sign in.</p>
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>The game still sees my physical controller alongside the virtual one. What now?</summary>
                 <div class="faq-body">
                     <p>Install HidHide from Settings → Drivers. It's a driver-level cloak that hides the physical device from every non-whitelisted process while leaving PadForge able to read it. The per-device toggle on the Devices page enables it for that controller.</p>
@@ -793,21 +732,21 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Do I need an internet connection?</summary>
                 <div class="faq-body">
                     <p>No. PadForge is local-only. It does not phone home, does not sync to a cloud, does not require an account, and never talks to a license server. Your settings live in <code>PadForge.xml</code> next to the EXE. Back that file up to keep your profiles.</p>
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Can I use a phone or tablet as a controller?</summary>
                 <div class="faq-body">
                     <p>Yes. Enable the Web Controller on the Dashboard, open the URL it shows from any browser on the same Wi-Fi network (no app to install), pick an Xbox 360 layout, a DualShock 4 layout, or a Touchpad-only layout, and start playing. The browser sends input, PadForge feeds it into the slot you assign it to, and rumble feeds back to the phone through the browser's Vibration API where supported.</p>
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>What does PadForge need to run?</summary>
                 <div class="faq-body">
                     <p>Windows 10 or 11, 64-bit. The .NET 10 Desktop Runtime is bundled in the single-file release so there is nothing else to install. HIDMaestro auto-installs on first launch. HidHide and Windows MIDI Services are optional and install from Settings when you need them.</p>
@@ -815,7 +754,7 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>I have a controller PadForge doesn't recognise. Can I add it?</summary>
                 <div class="faq-body">
                     <p>Yes, in two ways. The fast way: turn on <strong>Force Raw Joystick Mode</strong> on the device card. PadForge stops trying to interpret it as a known gamepad layout and exposes every raw button and axis directly. Map them by hand on the Mappings tab.</p>
@@ -823,7 +762,7 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>Can I share a controller across several PCs?</summary>
                 <div class="faq-body">
                     <p>Yes, across as many as you like. Remote Link pairs PadForge PCs on the same local network. A controller, wheel, or HOTAS plugged into one PC shows up in the others' Devices lists, ready to assign to a slot and map like any local controller. One PC can be linked to several at once, both directions, and the feedback returns to the real hardware: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it is plugged in.</p>
@@ -831,7 +770,7 @@
                 </div>
             </details>
 
-            <details class="faq-item">
+            <details class="faq-item reveal">
                 <summary>How does PadForge compare to reWASD, Steam Input, or DS4Windows?</summary>
                 <div class="faq-body">
                     <p>See the comparison table above. reWASD is the closest paid alternative at $9.99 and up. Where PadForge takes a different approach: DualSense virtual output, Extended virtual joysticks through 225+ HIDMaestro profiles, MIDI virtual output, a built-in phone-as-controller server, and gyro that matches Steam Input's reference-frame model (Local, Player, World) with real-world calibration and cross-device Aim Engage. DS4Windows, x360ce, and XOutput each leave one or more of those out.</p>
@@ -850,9 +789,9 @@
             <span>PadForge</span>
         </div>
         <div class="footer-links">
+            <a href="/docs/">Docs</a>
             <a href="https://github.com/hifihedgehog/PadForge" target="_blank" rel="noopener">GitHub</a>
             <a href="https://github.com/hifihedgehog/PadForge/issues" target="_blank" rel="noopener">Issues</a>
-            <a href="https://github.com/hifihedgehog/PadForge/wiki" target="_blank" rel="noopener">Wiki</a>
             <a href="https://github.com/hifihedgehog/PadForge/discussions" target="_blank" rel="noopener">Discussions</a>
         </div>
         <div class="footer-right">
@@ -870,6 +809,24 @@
         links.classList.toggle('open');
         toggle.classList.toggle('active');
     });
+
+    // Scroll reveal. Respects reduced-motion: the CSS only hides .reveal
+    // elements when motion is allowed, so without the observer nothing
+    // would stay invisible either way.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('in');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    }
 
     // Screenshot gallery
     const items = document.querySelectorAll('.screenshot-item');
@@ -906,7 +863,14 @@
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
             e.preventDefault();
-            const target = document.querySelector(a.getAttribute('href'));
+            const href = a.getAttribute('href');
+            if (href.length < 2) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                links.classList.remove('open');
+                toggle.classList.remove('active');
+                return;
+            }
+            const target = document.querySelector(href);
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth' });
                 links.classList.remove('open');
