@@ -11,6 +11,8 @@ a community config.
 Open them from **Profiles** with **Browse Starter Profiles**, beside
 Browse Community Configs.
 
+![The starter profile gallery, showing each archetype with its output type and a one-line description](../images/profiles-starter-gallery.png)
+
 ---
 
 ## Why they work on any controller
