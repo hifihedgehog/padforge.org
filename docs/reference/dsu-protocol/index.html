@@ -1,0 +1,4400 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/dsu-protocol/">
+      
+      
+        <link rel="prev" href="../dsu-motion-server/">
+      
+      
+        <link rel="next" href="../remote-link-internals/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>DSU Protocol - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dsu-protocol-implementation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DSU Protocol
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motionsnapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MotionSnapshot
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MotionSnapshot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sdl-to-dsu-axis-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDL-to-DSU Axis Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dsumotionserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DsuMotionServer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DsuMotionServer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requestresponse-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request/Response Flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server Ownership
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Public API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#broadcastmotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BroadcastMotion()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packet-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet Format
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packet Format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#header-16-bytes-all-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Header (16 bytes, all messages)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#message-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Message Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Message Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-request-client-to-server-type-0x100000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Request (Client to Server, type 0x100000)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version-response-server-to-client-type-0x100000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Response (Server to Client, type 0x100000)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-info-request-client-to-server-type-0x100001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Info Request (Client to Server, type 0x100001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-info-response-server-to-client-type-0x100001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Info Response (Server to Client, type 0x100001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pad-data-request-subscription-client-to-server-type-0x100002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pad Data Request / Subscription (Client to Server, type 0x100002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pad-data-response-server-to-client-type-0x100002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pad Data Response (Server to Client, type 0x100002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subscription-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscription Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subscription Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Structures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subscriber-resolution-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscriber Resolution Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expiration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expiration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crc32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CRC32
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CRC32">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#computecrc32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ComputeCrc32()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finalizecrc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FinalizeCrc()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receive-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Receive Loop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Receive Loop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#packet-validation-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet Validation Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threading-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threading Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slot-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slot Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#polling-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Polling Optimization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dsudiag-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DsuDiag Tool
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motionsnapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MotionSnapshot
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MotionSnapshot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sdl-to-dsu-axis-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDL-to-DSU Axis Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dsumotionserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DsuMotionServer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DsuMotionServer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requestresponse-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request/Response Flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server Ownership
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Public API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#broadcastmotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BroadcastMotion()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packet-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet Format
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packet Format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#header-16-bytes-all-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Header (16 bytes, all messages)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#message-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Message Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Message Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-request-client-to-server-type-0x100000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Request (Client to Server, type 0x100000)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version-response-server-to-client-type-0x100000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Response (Server to Client, type 0x100000)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-info-request-client-to-server-type-0x100001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Info Request (Client to Server, type 0x100001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-info-response-server-to-client-type-0x100001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Info Response (Server to Client, type 0x100001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pad-data-request-subscription-client-to-server-type-0x100002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pad Data Request / Subscription (Client to Server, type 0x100002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pad-data-response-server-to-client-type-0x100002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pad Data Response (Server to Client, type 0x100002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subscription-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscription Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subscription Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Structures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subscriber-resolution-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscriber Resolution Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expiration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expiration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crc32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CRC32
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CRC32">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#computecrc32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ComputeCrc32()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finalizecrc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FinalizeCrc()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receive-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Receive Loop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Receive Loop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#packet-validation-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet Validation Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threading-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threading Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slot-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slot Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#polling-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Polling Optimization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dsudiag-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DsuDiag Tool
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="dsu-protocol-implementation">DSU Protocol Implementation<a class="headerlink" href="#dsu-protocol-implementation" title="Permanent link">&para;</a></h1>
+<p>PadForge implements the cemuhook DSU (DualShock UDP) protocol to stream motion data (gyroscope and accelerometer) to emulators. Compatible with Cemu, Dolphin, Yuzu, Ryujinx, and any cemuhook client.</p>
+<p><strong>File:</strong> <code>PadForge.App/Services/DsuMotionServer.cs</code>
+<strong>Namespace:</strong> <code>PadForge.Services</code>
+<strong>Protocol Spec:</strong> <a href="https://github.com/v1993/cemuhook-protocol">https://github.com/v1993/cemuhook-protocol</a></p>
+<hr />
+<h2 id="motionsnapshot">MotionSnapshot<a class="headerlink" href="#motionsnapshot" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">MotionSnapshot</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">AccelX</span><span class="p">,</span><span class="w"> </span><span class="n">AccelY</span><span class="p">,</span><span class="w"> </span><span class="n">AccelZ</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">GyroPitch</span><span class="p">,</span><span class="w"> </span><span class="n">GyroYaw</span><span class="p">,</span><span class="w"> </span><span class="n">GyroRoll</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">TimestampUs</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasMotion</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Single slot's motion data, ready for DSU transmission. Units already in DSU conventions:</p>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th>Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accel</td>
+<td>g-force (1g = 9.80665 m/s^2)</td>
+</tr>
+<tr>
+<td>Gyro</td>
+<td>degrees/second</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sdl-to-dsu-axis-mapping">SDL-to-DSU Axis Mapping<a class="headerlink" href="#sdl-to-dsu-axis-mapping" title="Permanent link">&para;</a></h3>
+<p>SDL uses a right-handed coordinate system. The DS4/DSU protocol expects different sign conventions. Mapping derived from Switch Pro Controller's BetterJoy-to-DSU mapping, translated through SDL standard coordinates, and verified with DualSense (all axes match across DualSense and Switch 2 Pro Controller).</p>
+<table>
+<thead>
+<tr>
+<th>DSU Field</th>
+<th>SDL Source</th>
+<th>Sign</th>
+<th>Derivation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AccelX</code></td>
+<td><code>ax</code></td>
+<td>Inverted (<code>-ax</code>)</td>
+<td>DS4 X-accel is opposite to SDL X</td>
+</tr>
+<tr>
+<td><code>AccelY</code></td>
+<td><code>ay</code></td>
+<td>Inverted (<code>-ay</code>)</td>
+<td>DS4 Y-accel is opposite to SDL Y</td>
+</tr>
+<tr>
+<td><code>AccelZ</code></td>
+<td><code>az</code></td>
+<td>Inverted (<code>-az</code>)</td>
+<td>DS4 Z-accel is opposite to SDL Z</td>
+</tr>
+<tr>
+<td><code>GyroPitch</code></td>
+<td><code>gx</code></td>
+<td>Inverted (<code>-gx</code>)</td>
+<td>DS4 pitch is opposite to SDL gyro X</td>
+</tr>
+<tr>
+<td><code>GyroYaw</code></td>
+<td><code>gy</code></td>
+<td><strong>Not inverted</strong> (<code>gy</code>)</td>
+<td>Same sign in both coordinate systems</td>
+</tr>
+<tr>
+<td><code>GyroRoll</code></td>
+<td><code>gz</code></td>
+<td>Inverted (<code>-gz</code>)</td>
+<td>DS4 roll is opposite to SDL gyro Z</td>
+</tr>
+</tbody>
+</table>
+<p>Accel and gyro must be in the same coordinate frame. <code>AccelX</code> and <code>GyroPitch</code> must reference the same physical axis. Five of six axes are inverted. Only <code>GyroYaw</code> preserves sign.</p>
+<p>The sign transform lives in <code>BuildPadDataPacket</code>, not in <code>MotionSnapshot</code>. The snapshot stays in SDL's native sensor frame, so the Sony HID report packers read a faithful controller frame. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.</p>
+<hr />
+<h2 id="dsumotionserver">DsuMotionServer<a class="headerlink" href="#dsumotionserver" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DsuMotionServer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
+</code></pre></div>
+<h3 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MaxSlots</code></td>
+<td><code>4</code></td>
+<td>DSU protocol slot limit (PadForge slots 4–15 skip DSU broadcast)</td>
+</tr>
+<tr>
+<td><code>ProtocolVersion</code></td>
+<td><code>1001</code></td>
+<td>cemuhook protocol version</td>
+</tr>
+<tr>
+<td><code>HeaderSize</code></td>
+<td><code>16</code></td>
+<td>Packet header size in bytes</td>
+</tr>
+<tr>
+<td><code>MsgTypeVersion</code></td>
+<td><code>0x100000</code></td>
+<td>Server to client: version response</td>
+</tr>
+<tr>
+<td><code>MsgTypeControllerInfo</code></td>
+<td><code>0x100001</code></td>
+<td>Server to client: controller info</td>
+</tr>
+<tr>
+<td><code>MsgTypePadData</code></td>
+<td><code>0x100002</code></td>
+<td>Server to client: pad data with motion</td>
+</tr>
+<tr>
+<td><code>ClientTimeoutMs</code></td>
+<td><code>5000</code></td>
+<td>Client subscription expiry (5 seconds)</td>
+</tr>
+<tr>
+<td><code>SIO_UDP_CONNRESET</code></td>
+<td><code>0x9800000C</code></td>
+<td>IOControl to suppress ICMP port-unreachable resets</td>
+</tr>
+</tbody>
+</table>
+<h3 id="instance-state">Instance State<a class="headerlink" href="#instance-state" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_socket</code></td>
+<td><code>Socket</code></td>
+<td>UDP socket bound to <code>IPAddress.Loopback</code></td>
+</tr>
+<tr>
+<td><code>_receiveThread</code></td>
+<td><code>Thread</code></td>
+<td>Background receive loop thread</td>
+</tr>
+<tr>
+<td><code>_running</code></td>
+<td><code>volatile bool</code></td>
+<td>Server running flag</td>
+</tr>
+<tr>
+<td><code>_serverId</code></td>
+<td><code>uint</code></td>
+<td>Unique server ID (from <code>Environment.TickCount</code>)</td>
+</tr>
+<tr>
+<td><code>_port</code></td>
+<td><code>int</code></td>
+<td>Listening port</td>
+</tr>
+<tr>
+<td><code>_packetCounters</code></td>
+<td><code>uint[4]</code></td>
+<td>Per-slot packet counter (incremented each broadcast)</td>
+</tr>
+<tr>
+<td><code>_subscriptions</code></td>
+<td><code>Dictionary&lt;(EndPoint, int), long&gt;</code></td>
+<td>Per-slot client subscriptions with <code>Stopwatch.GetTimestamp()</code></td>
+</tr>
+<tr>
+<td><code>_allSlotSubscriptions</code></td>
+<td><code>Dictionary&lt;EndPoint, long&gt;</code></td>
+<td>All-slot client subscriptions with timestamp</td>
+</tr>
+<tr>
+<td><code>_slotConnected</code></td>
+<td><code>bool[4]</code></td>
+<td>Per-slot connection state reported to clients</td>
+</tr>
+<tr>
+<td><code>_slotHasMotion</code></td>
+<td><code>bool[4]</code></td>
+<td>Per-slot motion capability (device has gyro/accel sensors)</td>
+</tr>
+<tr>
+<td><code>_disposed</code></td>
+<td><code>bool</code></td>
+<td>Dispose guard</td>
+</tr>
+</tbody>
+</table>
+<h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">StatusChanged</span><span class="p">;</span>
+</code></pre></div>
+<p>Raised on server status changes. Localized values from <code>Strings.Instance</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"Listening on :{port}"</code></td>
+<td>Successful bind</td>
+</tr>
+<tr>
+<td><code>"Port {port} in use"</code></td>
+<td><code>SocketError.AddressAlreadyInUse</code></td>
+</tr>
+<tr>
+<td><code>"Failed to start"</code></td>
+<td>Other exceptions</td>
+</tr>
+<tr>
+<td><code>"Stopped"</code></td>
+<td>After <code>Stop()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="requestresponse-flow">Request/Response Flow<a class="headerlink" href="#requestresponse-flow" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sequenceDiagram
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    participant Client as Emulator (Client)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    participant Server as PadForge (Server)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    participant Poll as Polling Thread
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    Note over Client,Server: All packets use DSUC (client) / DSUS (server) magic + CRC32
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    Client-&gt;&gt;Server: Version Request (0x100000)
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    Server-&gt;&gt;Client: Version Response (version=1001)
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    Client-&gt;&gt;Server: Controller Info Request (0x100001)&lt;br/&gt;slots=[0,1,2,3]
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    Server-&gt;&gt;Client: Controller Info (slot 0, connected, full gyro)
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    Server-&gt;&gt;Client: Controller Info (slot 1, not connected)
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    Server-&gt;&gt;Client: Controller Info (slot 2, not connected)
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    Server-&gt;&gt;Client: Controller Info (slot 3, not connected)
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    Client-&gt;&gt;Server: Pad Data Request (0x100002)&lt;br/&gt;flags=0x01, slot=0&lt;br/&gt;(subscribes to slot 0)
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    loop Every ~1ms (1000 Hz)
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        Poll-&gt;&gt;Server: BroadcastMotion(slot=0, snapshot, connected=true)
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        Server-&gt;&gt;Server: GetSubscribers(0) -&gt; [Client]
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        Server-&gt;&gt;Client: Pad Data (slot 0, motion data)
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    end
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    Note over Client,Server: Subscriptions expire after 5 seconds.&lt;br/&gt;Client must re-subscribe
+</code></pre></div>
+<hr />
+<h2 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h2>
+<h3 id="start">Start()<a class="headerlink" href="#start" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Start</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">26760</span><span class="p">)</span>
+</code></pre></div>
+<ol>
+<li>Returns <code>true</code> immediately if already running.</li>
+<li>Sets <code>_port</code> and generates <code>_serverId</code> from <code>Environment.TickCount</code>.</li>
+<li>Creates a UDP socket (<code>AddressFamily.InterNetwork</code>, <code>SocketType.Dgram</code>).</li>
+<li>Applies <code>SIO_UDP_CONNRESET</code> IOControl to suppress ICMP port-unreachable exceptions on subsequent <code>ReceiveFrom</code> calls. Catches exceptions on non-Windows or older OS.</li>
+<li>Binds to <code>IPAddress.Loopback</code> on the given port.</li>
+<li>Sets <code>_running = true</code>.</li>
+<li>Starts background receive thread (<code>"PadForge.DsuServer"</code>, <code>IsBackground = true</code>).</li>
+<li>Raises <code>StatusChanged</code> with listening message.</li>
+<li>Returns <code>true</code>.</li>
+</ol>
+<p><strong>Error handling:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Exception</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SocketException</code> (<code>AddressAlreadyInUse</code>)</td>
+<td>Disposes socket, raises port-in-use status, returns <code>false</code></td>
+</tr>
+<tr>
+<td>Any other</td>
+<td>Disposes socket, raises failure status, returns <code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="stop">Stop()<a class="headerlink" href="#stop" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Stop</span><span class="p">()</span>
+</code></pre></div>
+<ol>
+<li>Returns immediately if not running.</li>
+<li>Sets <code>_running = false</code>.</li>
+<li>Closes socket (exception caught).</li>
+<li>Joins receive thread with 2 s timeout.</li>
+<li>Nulls <code>_receiveThread</code> and <code>_socket</code>.</li>
+<li>Under <code>lock(_subscriptions)</code>: clears both subscription dictionaries.</li>
+<li>Zeroes all <code>_packetCounters</code>.</li>
+<li>Raises <code>StatusChanged</code> with stopped message.</li>
+</ol>
+<h3 id="dispose">Dispose()<a class="headerlink" href="#dispose" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Dispose</span><span class="p">()</span>
+</code></pre></div>
+<p>Calls <code>Stop()</code> if not already disposed. Sets <code>_disposed = true</code>. Not thread-safe (no lock on <code>_disposed</code> flag).</p>
+<h3 id="server-ownership">Server Ownership<a class="headerlink" href="#server-ownership" title="Permanent link">&para;</a></h3>
+<p><code>DsuMotionServer</code> does not create itself. <code>InputService</code> owns the instance (<code>_dsuServer</code> field) and wires it to the polling loop through <code>InputManager.DsuServer</code>.</p>
+<p><code>InputService.StartDsuServerIfEnabled()</code>:</p>
+<ol>
+<li>Returns if <code>Dashboard.EnableDsuMotionServer</code> is false or <code>_inputManager</code> is null.</li>
+<li>Returns if <code>_dsuServer</code> is already non-null (idempotent).</li>
+<li>Constructs a <code>DsuMotionServer</code> and subscribes to <code>StatusChanged</code>. The handler marshals <code>DsuServerStatus</code> and <code>IsDsuServerRunning</code> onto the dispatcher.</li>
+<li>Reads <code>Dashboard.DsuMotionServerPort</code>. Clamps out-of-range values (below 1024 or above 65535) to the default 26760.</li>
+<li>On <code>Start(port)</code> success, assigns <code>_inputManager.DsuServer = _dsuServer</code>. On failure, disposes the server and nulls the field.</li>
+</ol>
+<p><code>InputService.StopDsuServer()</code> nulls <code>_inputManager.DsuServer</code> first, then disposes the server and nulls <code>_dsuServer</code>. A dispatcher callback settles <code>IsDsuServerRunning</code> to false after the <code>Dispose</code> path's own "Stopped" status has fired.</p>
+<p>The <code>DsuMotionServerPort</code> and <code>EnableDsuMotionServer</code> values persist per-app profile. A profile restore reapplies the port only when it falls in [1024, 65535]. Changing the port while the server is enabled stops and restarts the server so the new port takes effect.</p>
+<hr />
+<h2 id="public-api">Public API<a class="headerlink" href="#public-api" title="Permanent link">&para;</a></h2>
+<h3 id="broadcastmotion">BroadcastMotion()<a class="headerlink" href="#broadcastmotion" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BroadcastMotion</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">MotionSnapshot</span><span class="w"> </span><span class="n">snapshot</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">connected</span><span class="p">)</span>
+</code></pre></div>
+<p>Called from the InputManager polling thread at ~1000 Hz. Primary data path.</p>
+<ol>
+<li>Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).</li>
+<li>Updates <code>_slotConnected[slot]</code> and <code>_slotHasMotion[slot]</code>.</li>
+<li>Calls <code>GetSubscribers(slot)</code>.</li>
+<li>Returns immediately if no subscribers (no packet allocation).</li>
+<li>Builds pad data packet via <code>BuildPadDataPacket(slot, snapshot, connected)</code>.</li>
+<li>Sends packet to each subscriber via <code>_socket.SendTo()</code>. Exceptions caught silently (client may be gone).</li>
+</ol>
+<p><strong>Performance</strong>: Packet allocation only occurs when subscribers exist. At 1000 Hz with no subscribers, the method returns after a dictionary lookup.</p>
+<hr />
+<h2 id="packet-format">Packet Format<a class="headerlink" href="#packet-format" title="Permanent link">&para;</a></h2>
+<h3 id="header-16-bytes-all-messages">Header (16 bytes, all messages)<a class="headerlink" href="#header-16-bytes-all-messages" title="Permanent link">&para;</a></h3>
+<p>All packets share this header:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Byte offset  Size  Field              Notes
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>[0..3]       4     Magic              &quot;DSUS&quot; (server to client) or &quot;DSUC&quot; (client to server)
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>[4..5]       2     Protocol version   Little-endian uint16, value 1001
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>[6..7]       2     Payload length     Little-endian uint16, excludes header (16 bytes)
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>[8..11]      4     CRC32              Little-endian uint32, zeroed before computation
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>[12..15]     4     ID                 Server ID (server to client) or Client ID (client to server)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">WriteHeader</span><span class="p">(</span><span class="kt">byte</span><span class="p">[]</span><span class="w"> </span><span class="n">packet</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">payloadLength</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">msgType</span><span class="p">)</span>
+</code></pre></div>
+<p>Writes the 16-byte header with <code>"DSUS"</code> magic, protocol version, payload length, and server ID. CRC32 field left zeroed (filled later by <code>FinalizeCrc</code>). Also writes the message type at the start of the payload (offset <code>HeaderSize</code>).</p>
+<h3 id="message-types">Message Types<a class="headerlink" href="#message-types" title="Permanent link">&para;</a></h3>
+<h4 id="version-request-client-to-server-type-0x100000">Version Request (Client to Server, type 0x100000)<a class="headerlink" href="#version-request-client-to-server-type-0x100000" title="Permanent link">&para;</a></h4>
+<p>No additional payload beyond the message type.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Byte offset  Size  Field
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>[0..15]      16    Header (magic=&quot;DSUC&quot;, CRC, clientId)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>[16..19]     4     Message type: 0x100000
+</code></pre></div>
+<p>Total packet: 20 bytes. Payload length: 4 bytes.</p>
+<h4 id="version-response-server-to-client-type-0x100000">Version Response (Server to Client, type 0x100000)<a class="headerlink" href="#version-response-server-to-client-type-0x100000" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Byte offset  Size  Field
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>[0..15]      16    Header (magic=&quot;DSUS&quot;, CRC, serverId)
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>[16..19]     4     Message type: 0x100000
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>[20..21]     2     Protocol version: 1001
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>[22..23]     2     Padding (zero)
+</code></pre></div>
+<p>Total packet: 24 bytes. Payload length: 8 bytes.</p>
+<h4 id="controller-info-request-client-to-server-type-0x100001">Controller Info Request (Client to Server, type 0x100001)<a class="headerlink" href="#controller-info-request-client-to-server-type-0x100001" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Byte offset  Size  Field
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>[0..15]      16    Header
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>[16..19]     4     Message type: 0x100001
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>[20..23]     4     Number of ports requested (int32 LE)
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>[24..N]      N     Slot indices (one byte each)
+</code></pre></div>
+<p>Validated: <code>numPorts</code> must be in [0, MaxSlots] and the packet must contain enough bytes for all slot indices. Each valid slot triggers a <code>SendControllerInfo()</code> response.</p>
+<h4 id="controller-info-response-server-to-client-type-0x100001">Controller Info Response (Server to Client, type 0x100001)<a class="headerlink" href="#controller-info-response-server-to-client-type-0x100001" title="Permanent link">&para;</a></h4>
+<p>One response per requested slot.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Byte offset  Size  Field              Value
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>[0..15]      16    Header             magic=&quot;DSUS&quot;
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>[16..19]     4     Message type       0x100001
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>[20]         1     Slot number        0–3
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>[21]         1     Slot state         0=not connected, 2=connected
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>[22]         1     Device model       0=N/A, 2=full gyro
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>[23]         1     Connection type    0=N/A
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>[24..29]     6     MAC address        00:00:00:00:00:{slot}
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>[30]         1     Battery status     0x05 (charged)
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>[31]         1     Padding            0x00
+</code></pre></div>
+<p>Total packet: 32 bytes. Payload length: 16 bytes.</p>
+<p><strong>MAC address</strong>: Fake but unique per slot. Last byte is the slot number (0–3). All others are 0x00.</p>
+<p><strong>Device model</strong>: 2 (full gyro) when <code>_slotHasMotion[slot]</code> is true, 0 otherwise.</p>
+<h4 id="pad-data-request-subscription-client-to-server-type-0x100002">Pad Data Request / Subscription (Client to Server, type 0x100002)<a class="headerlink" href="#pad-data-request-subscription-client-to-server-type-0x100002" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Byte offset  Size  Field
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>[0..15]      16    Header
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>[16..19]     4     Message type: 0x100002
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>[20]         1     Flags (subscription mode)
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>[21]         1     Slot number
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>[22..27]     6     MAC address
+</code></pre></div>
+<p>Validated: packet must be at least <code>HeaderSize + 12</code> (28) bytes.</p>
+<p><strong>Subscription flags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Flag Value</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x00</code></td>
+<td>Subscribe to ALL pads (stored in <code>_allSlotSubscriptions</code>)</td>
+</tr>
+<tr>
+<td><code>0x01</code></td>
+<td>Subscribe to specific slot by ID (stored in <code>_subscriptions[(endpoint, slot)]</code>)</td>
+</tr>
+<tr>
+<td><code>0x02</code></td>
+<td>Subscribe by MAC (treated as all-slot subscription)</td>
+</tr>
+<tr>
+<td><code>0x03</code></td>
+<td>Both <code>0x01</code> and <code>0x02</code> (subscribe to specific slot AND all-slot)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pad-data-response-server-to-client-type-0x100002">Pad Data Response (Server to Client, type 0x100002)<a class="headerlink" href="#pad-data-response-server-to-client-type-0x100002" title="Permanent link">&para;</a></h4>
+<p>The largest message type. Contains controller info, button state, analog inputs, touch data, and motion data. PadForge is a <strong>motion-only server</strong>. Buttons, sticks, D-pad, and touch are zeroed (sticks centered at 128).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Byte offset  Size  Field                    Value / Notes
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>─────────── ───── ──────────────────────── ─────────────────────────────────
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>[0..15]      16    Header                   magic=&quot;DSUS&quot;
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>[16..19]     4     Message type             0x100002
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>[20]         1     Slot number              0–3
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>[21]         1     Slot state               0=disconnected, 2=connected
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>[22]         1     Device model             0=N/A, 2=full gyro
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>[23]         1     Connection type          0=N/A
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>[24..29]     6     MAC address              00:00:00:00:00:{slot}
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>[30]         1     Battery status           0x05 (charged)
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>[31]         1     Connected flag           1=connected, 0=disconnected
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>[32..35]     4     Packet counter           uint32 LE, incremented per packet
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>[36]         1     Buttons bitmask 1        0x00 (zeroed, motion-only)
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>[37]         1     Buttons bitmask 2        0x00 (zeroed)
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>[38]         1     Home button              0x00 (zeroed)
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>[39]         1     Touch button             0x00 (zeroed)
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>[40]         1     Left stick X             128 (centered)
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>[41]         1     Left stick Y             128 (centered)
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>[42]         1     Right stick X            128 (centered)
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a>[43]         1     Right stick Y            128 (centered)
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a>[44..47]     4     Analog D-Pad             0x00 (L, D, R, U)
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a>[48..55]     8     Analog buttons           0x00 (8 bytes)
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a>[56..61]     6     Touch 1 data             0x00 (active, id, x16, y16)
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>[62..67]     6     Touch 2 data             0x00
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>[68..75]     8     Motion timestamp         int64 LE, microseconds
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a>[76..79]     4     Accel X                  float LE (g-force)
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a>[80..83]     4     Accel Y                  float LE
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a>[84..87]     4     Accel Z                  float LE
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a>[88..91]     4     Gyro Pitch               float LE (deg/s)
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a>[92..95]     4     Gyro Yaw                 float LE
+<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a>[96..99]     4     Gyro Roll                float LE
+</code></pre></div>
+<p>Total packet: 100 bytes (16 header + 84 payload).
+Payload: 4 bytes message type + 80 bytes data.</p>
+<p><strong>Code offset mapping</strong>: In <code>BuildPadDataPacket</code>, <code>o = HeaderSize + 4</code> (= 20) is the base offset after the message type. Code comments use relative offsets (<code>[+0]</code> slot, <code>[+48]</code> timestamp, <code>[+56]</code> accelX). Absolute byte offset = <code>20 + relative</code>. Payload offset = <code>4 + relative</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Code relative (<code>o+N</code>)</th>
+<th>Absolute byte</th>
+<th>Payload offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slot</td>
+<td><code>o + 0</code></td>
+<td>20</td>
+<td>+4</td>
+</tr>
+<tr>
+<td>Packet counter</td>
+<td><code>o + 12</code></td>
+<td>32</td>
+<td>+16</td>
+</tr>
+<tr>
+<td>Left stick X</td>
+<td><code>o + 20</code></td>
+<td>40</td>
+<td>+24</td>
+</tr>
+<tr>
+<td>Motion timestamp</td>
+<td><code>o + 48</code></td>
+<td>68</td>
+<td>+52</td>
+</tr>
+<tr>
+<td>Accel X</td>
+<td><code>o + 56</code></td>
+<td>76</td>
+<td>+60</td>
+</tr>
+<tr>
+<td>Accel Y</td>
+<td><code>o + 60</code></td>
+<td>80</td>
+<td>+64</td>
+</tr>
+<tr>
+<td>Accel Z</td>
+<td><code>o + 64</code></td>
+<td>84</td>
+<td>+68</td>
+</tr>
+<tr>
+<td>Gyro Pitch</td>
+<td><code>o + 68</code></td>
+<td>88</td>
+<td>+72</td>
+</tr>
+<tr>
+<td>Gyro Yaw</td>
+<td><code>o + 72</code></td>
+<td>92</td>
+<td>+76</td>
+</tr>
+<tr>
+<td>Gyro Roll</td>
+<td><code>o + 76</code></td>
+<td>96</td>
+<td>+80</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Motion timestamp</strong>: <code>Int64</code> (8 bytes) at <code>o + 48</code> (absolute bytes 68–75). Microsecond timestamp per the cemuhook spec.</p>
+<p><strong>Float encoding</strong>: Accelerometer and gyroscope values are IEEE 754 single-precision floats, little-endian, via <code>BinaryPrimitives.WriteSingleLittleEndian</code>.</p>
+<hr />
+<h2 id="subscription-management">Subscription Management<a class="headerlink" href="#subscription-management" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EndPoint</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetSubscribers</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">)</span>
+</code></pre></div>
+<p>Returns endpoints subscribed to the given slot. Called from <code>BroadcastMotion()</code> at ~1000 Hz per active slot.</p>
+<h3 id="data-structures">Data Structures<a class="headerlink" href="#data-structures" title="Permanent link">&para;</a></h3>
+<p>Two subscription dictionaries, both protected by <code>lock(_subscriptions)</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Dictionary</th>
+<th>Key</th>
+<th>Value</th>
+<th>Populated By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_subscriptions</code></td>
+<td><code>(EndPoint, slotIndex)</code></td>
+<td><code>Stopwatch.GetTimestamp()</code></td>
+<td>Pad data request with <code>flags &amp; 0x01</code></td>
+</tr>
+<tr>
+<td><code>_allSlotSubscriptions</code></td>
+<td><code>EndPoint</code></td>
+<td><code>Stopwatch.GetTimestamp()</code></td>
+<td>Pad data request with <code>flags == 0</code> or <code>flags &amp; 0x02</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="subscriber-resolution-algorithm">Subscriber Resolution Algorithm<a class="headerlink" href="#subscriber-resolution-algorithm" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Acquire <code>lock(_subscriptions)</code>.</li>
+<li>Compute <code>timeoutTicks</code> from <code>Stopwatch.Frequency * ClientTimeoutMs / 1000</code> (5 s in high-resolution ticks).</li>
+<li><strong>Per-slot subscribers</strong>: iterate <code>_subscriptions</code> for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and a <code>seen</code> HashSet.</li>
+<li><strong>All-slot subscribers</strong>: iterate <code>_allSlotSubscriptions</code>. Expired entries go to a removal list. Active ones go to the result if not already in <code>seen</code> (prevents duplicates).</li>
+<li><strong>Prune expired</strong>: remove all expired entries from both dictionaries.</li>
+<li>Release lock and return result list.</li>
+</ol>
+<h3 id="expiration">Expiration<a class="headerlink" href="#expiration" title="Permanent link">&para;</a></h3>
+<p>Subscriptions expire after <code>ClientTimeoutMs</code> (5000 ms). Clients must re-send pad data requests to stay subscribed. Expired entries are pruned lazily during <code>GetSubscribers()</code>. No background cleanup thread.</p>
+<p>Timestamps use <code>Stopwatch.GetTimestamp()</code> (high-resolution performance counter) for sub-millisecond precision.</p>
+<hr />
+<h2 id="crc32">CRC32<a class="headerlink" href="#crc32" title="Permanent link">&para;</a></h2>
+<h3 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="n">Crc32Table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerateCrc32Table</span><span class="p">();</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="nf">GenerateCrc32Table</span><span class="p">()</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="p">{</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">uint</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">256</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="n">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">            </span><span class="n">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">entry</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">entry</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="mh">0xEDB88320</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">entry</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">        </span><span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">entry</span><span class="p">;</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">table</span><span class="p">;</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="p">}</span>
+</code></pre></div>
+<p>Standard CRC32 with reflected polynomial <code>0xEDB88320</code> (bit-reversed <code>0x04C11DB7</code>). The 256-entry lookup table is generated once at static initialization.</p>
+<h3 id="computecrc32">ComputeCrc32()<a class="headerlink" href="#computecrc32" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nf">ComputeCrc32</span><span class="p">(</span><span class="kt">byte</span><span class="p">[]</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">crc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">        </span><span class="n">crc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">crc</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">Crc32Table</span><span class="p">[(</span><span class="n">crc</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">];</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">crc</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">;</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Standard table-driven CRC32: init <code>0xFFFFFFFF</code>, final XOR <code>0xFFFFFFFF</code>. Processes <code>length</code> bytes (not the full array).</p>
+<h3 id="finalizecrc">FinalizeCrc()<a class="headerlink" href="#finalizecrc" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">FinalizeCrc</span><span class="p">(</span><span class="kt">byte</span><span class="p">[]</span><span class="w"> </span><span class="n">packet</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Outgoing</strong>: zero <code>packet[8..11]</code>, compute CRC over the entire packet, write result back to <code>packet[8..11]</code>.</p>
+<p><strong>Incoming</strong> (in <code>ProcessPacket</code>): read CRC from <code>data[8..11]</code>, zero those bytes, compute CRC over <code>HeaderSize + payloadLength</code> bytes, reject on mismatch.</p>
+<hr />
+<h2 id="receive-loop">Receive Loop<a class="headerlink" href="#receive-loop" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ReceiveLoop</span><span class="p">()</span>
+</code></pre></div>
+<p>Background thread (<code>IsBackground = true</code>). Loops <code>ReceiveFrom()</code> with a 1024-byte buffer until <code>_running</code> is false.</p>
+<h3 id="packet-validation-pipeline">Packet Validation Pipeline<a class="headerlink" href="#packet-validation-pipeline" title="Permanent link">&para;</a></h3>
+<p>Each received packet passes five validation checks before dispatch. Stage 1 runs in <code>ReceiveLoop</code>, before <code>ProcessPacket</code> is called. Stages 2 through 5 run in <code>ProcessPacket</code>, which never re-checks length. Its first action reads <code>data[0..3]</code> for the magic bytes.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Location</th>
+<th>Check</th>
+<th>Reject Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>ReceiveLoop</code></td>
+<td>Minimum size</td>
+<td><code>received &lt; HeaderSize + 4</code> (20 bytes). Packet dropped via <code>continue</code>, <code>ProcessPacket</code> not called</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>ProcessPacket</code></td>
+<td>Magic bytes</td>
+<td>Not <code>"DSUC"</code> (bytes <code>D</code>, <code>S</code>, <code>U</code>, <code>C</code>)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>ProcessPacket</code></td>
+<td>Protocol version</td>
+<td><code>version &gt; ProtocolVersion</code> (1001)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>ProcessPacket</code></td>
+<td>Payload length</td>
+<td><code>HeaderSize + payloadLength &gt; received</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>ProcessPacket</code></td>
+<td>CRC32</td>
+<td>Computed CRC does not match received CRC</td>
+</tr>
+</tbody>
+</table>
+<p>After validation, dispatches based on message type:</p>
+<table>
+<thead>
+<tr>
+<th>Message Type</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x100000</code></td>
+<td><code>HandleVersionRequest(sender)</code></td>
+</tr>
+<tr>
+<td><code>0x100001</code></td>
+<td><code>HandleControllerInfoRequest(data, length, sender)</code></td>
+</tr>
+<tr>
+<td><code>0x100002</code></td>
+<td><code>HandlePadDataRequest(data, length, sender)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="exception-handling">Exception Handling<a class="headerlink" href="#exception-handling" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Exception</th>
+<th>When</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SocketException</code> when <code>!_running</code></td>
+<td>Socket closed during shutdown</td>
+<td><code>break</code> (exit loop)</td>
+</tr>
+<tr>
+<td><code>ObjectDisposedException</code></td>
+<td>Socket object disposed</td>
+<td><code>break</code> (exit loop)</td>
+</tr>
+<tr>
+<td>Any other exception</td>
+<td>Malformed packet, transient error</td>
+<td>Silently caught, continue loop</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="threading-model">Threading Model<a class="headerlink" href="#threading-model" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>graph LR
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>    subgraph &quot;Receive Thread&quot;
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>        RT[&quot;ReceiveLoop()&lt;br/&gt;(background thread)&quot;]
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>        RT --&gt; PV[&quot;ProcessPacket&lt;br/&gt;Validate + dispatch&quot;]
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>        PV --&gt; HV[&quot;HandleVersionRequest&quot;]
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>        PV --&gt; HC[&quot;HandleControllerInfoRequest&quot;]
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>        PV --&gt; HP[&quot;HandlePadDataRequest&lt;br/&gt;(updates subscriptions)&quot;]
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>    end
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    subgraph &quot;Polling Thread (InputManager)&quot;
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>        PT[&quot;~1000Hz polling loop&quot;]
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>        PT --&gt; BM[&quot;BroadcastMotion()&quot;]
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>        BM --&gt; GS[&quot;GetSubscribers()&quot;]
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>        GS --&gt; BP[&quot;BuildPadDataPacket()&quot;]
+<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>        BP --&gt; ST[&quot;socket.SendTo()&quot;]
+<a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>    end
+<a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a>
+<a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a>    HP -.-&gt;|&quot;lock(_subscriptions)&quot;| SUB[&quot;_subscriptions&lt;br/&gt;_allSlotSubscriptions&quot;]
+<a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a>    GS -.-&gt;|&quot;lock(_subscriptions)&quot;| SUB
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_subscriptions</code> dictionary</td>
+<td>Protected by <code>lock(_subscriptions)</code>. Both read (GetSubscribers) and write (HandlePadDataRequest) acquire the same lock</td>
+</tr>
+<tr>
+<td><code>_running</code> flag</td>
+<td><code>volatile bool</code>. No lock needed, provides happens-before ordering</td>
+</tr>
+<tr>
+<td><code>_slotConnected</code>, <code>_slotHasMotion</code></td>
+<td>Written by polling thread (BroadcastMotion), read by receive thread (SendControllerInfo). No lock. Benign race (stale value at worst)</td>
+</tr>
+<tr>
+<td><code>_packetCounters</code></td>
+<td>Accessed only from BroadcastMotion (single caller per slot). No lock needed.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="slot-limits">Slot Limits<a class="headerlink" href="#slot-limits" title="Permanent link">&para;</a></h2>
+<p>The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (<code>InputManager.MaxPads = 16</code>), but only slots 0–3 participate in DSU broadcasts. <code>InputManager.BroadcastDsuMotion()</code> loops over all 16 pads each frame and calls <code>BroadcastMotion(padIndex, ...)</code>. The server drops slots 4–15 through its <code>slot &gt;= MaxSlots</code> guard, so those 12 calls return after a single range check with no lock and no allocation.</p>
+<hr />
+<h2 id="polling-optimization">Polling Optimization<a class="headerlink" href="#polling-optimization" title="Permanent link">&para;</a></h2>
+<p><code>BroadcastMotion()</code> runs at ~1000 Hz per active slot. Optimizations for zero-subscriber overhead:</p>
+<ol>
+<li><strong>Guard clause</strong>: returns immediately on <code>!_running</code>, null socket, or out-of-range slot (no lock).</li>
+<li><strong>Subscriber check before build</strong>: <code>GetSubscribers(slot)</code> runs first. Empty result skips <code>BuildPadDataPacket()</code> (no 100-byte allocation).</li>
+<li><strong>Lazy expiration</strong>: expired subscriptions pruned during <code>GetSubscribers()</code>, not via a separate timer.</li>
+</ol>
+<p>At 1000 Hz with 4 active slots and no subscribers: ~4000 dictionary lookups/s (under <code>lock</code>), zero allocation.</p>
+<hr />
+<h2 id="dsudiag-tool">DsuDiag Tool<a class="headerlink" href="#dsudiag-tool" title="Permanent link">&para;</a></h2>
+<p><strong>Location:</strong> <code>tools/DsuDiag/</code></p>
+<p>Standalone DSU client that displays received motion data per slot in real time. Used for debugging axis mapping and verifying protocol compliance.</p>
+<ol>
+<li>Enable the DSU motion server on the PadForge Dashboard (default port 26760).</li>
+<li>Run <code>DsuDiag.exe</code>. Connects to <code>localhost:26760</code>.</li>
+<li>Subscribes to all 4 slots and prints accelerometer/gyroscope values to the console.</li>
+</ol>
+<hr />
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../architecture-overview/">Architecture Overview</a>: DSU receive thread, threading model</li>
+<li><a href="../services-layer/">Services Layer</a>: <code>InputService</code> manages <code>DsuMotionServer</code> lifecycle (start/stop/port)</li>
+<li><a href="../input-pipeline/">Input Pipeline</a>: <code>UpdateMotionSnapshots()</code> and <code>BroadcastDsuMotion()</code> called after Step 2</li>
+<li><a href="../engine-library/">Engine Library</a>: <code>SdlDeviceWrapper</code> gyro/accel sensor reading (<code>MotionSnapshot</code> itself lives in <code>PadForge.App/Services</code>, documented above)</li>
+<li><a href="../sdl3-integration/">SDL3 Integration</a>: <code>SDL_GetGamepadSensorData</code> for gyro and accelerometer</li>
+<li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.0.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../dsu-motion-server/" class="md-footer__link md-footer__link--prev" aria-label="Previous: DSU Motion Server">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                DSU Motion Server
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../remote-link-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Remote Link Internals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Remote Link Internals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,4287 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/steam-workshop-import-internals/">
+      
+      
+        <link rel="prev" href="../remote-link-internals/">
+      
+      
+        <link rel="next" href="../controller-audio-internals/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Steam Workshop Import Internals - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#steam-workshop-config-import-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Steam Workshop Import Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-opt-in-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The opt-in gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clients
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clients">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steamworkshopclient-the-anonymous-cm-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamWorkshopClient: the anonymous CM session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steamugcdownloader-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamUgcDownloader validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steamartworkclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamArtworkClient
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vdf-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VDF parser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typed-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typed model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configtranslator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConfigTranslator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ConfigTranslator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#translator-version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translator version history
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split-config-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Split-config routing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-bindings-matched-analogs-and-authoritative-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity bindings, matched analogs, and authoritative sets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#presets-and-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presets and layers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-and-activator-settings-honored" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group and activator settings honored
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse_position-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MOUSE_POSITION coordinates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determinism-and-caps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Determinism and caps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translationreport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TranslationReport
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TranslationReport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emission-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emission (Clean)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approximations-and-caveats-partial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approximations and caveats (Partial)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skipped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-render-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy, render-only
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cache
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-legacy-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local legacy fallback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provenance-and-the-update-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provenance and the update check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-side-wiring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App-side wiring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="App-side wiring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workshopbrowsedialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkshopBrowseDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workshopprofilematerializer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkshopProfileMaterializer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engine-substrate-shipped-with-the-import-usable-everywhere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine substrate (shipped with the import, usable everywhere)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Engine substrate (shipped with the import, usable everywhere)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-abstract-gamepad-descriptor-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The abstract Gamepad descriptor family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-per-source-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic per-source Sensitivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#touchpad-finger-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpad finger pressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-macro-action-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The macro-action family
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-opt-in-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The opt-in gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clients
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clients">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steamworkshopclient-the-anonymous-cm-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamWorkshopClient: the anonymous CM session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steamugcdownloader-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamUgcDownloader validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steamartworkclient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamArtworkClient
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vdf-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VDF parser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typed-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typed model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configtranslator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConfigTranslator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ConfigTranslator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#translator-version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translator version history
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split-config-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Split-config routing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-bindings-matched-analogs-and-authoritative-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity bindings, matched analogs, and authoritative sets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#presets-and-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presets and layers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-and-activator-settings-honored" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group and activator settings honored
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse_position-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MOUSE_POSITION coordinates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determinism-and-caps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Determinism and caps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translationreport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TranslationReport
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TranslationReport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#emission-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emission (Clean)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approximations-and-caveats-partial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approximations and caveats (Partial)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skipped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-render-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy, render-only
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cache
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-legacy-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local legacy fallback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provenance-and-the-update-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provenance and the update check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-side-wiring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App-side wiring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="App-side wiring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workshopbrowsedialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkshopBrowseDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workshopprofilematerializer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkshopProfileMaterializer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engine-substrate-shipped-with-the-import-usable-everywhere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine substrate (shipped with the import, usable everywhere)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Engine substrate (shipped with the import, usable everywhere)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-abstract-gamepad-descriptor-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The abstract Gamepad descriptor family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-per-source-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic per-source Sensitivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#touchpad-finger-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpad finger pressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-macro-action-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The macro-action family
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="steam-workshop-config-import-internals">Steam Workshop Config Import Internals<a class="headerlink" href="#steam-workshop-config-import-internals" title="Permanent link">&para;</a></h1>
+<p><em>The <code>PadForge.SteamWorkshop</code> assembly (anonymous Steam clients, VDF parser, typed config model, translator, cache), the engine substrate it rides on (the abstract Gamepad descriptor family, generic per-source Sensitivity, the macro-action family), and the app-side dialog, materializer, and provenance plumbing.</em></p>
+<p>This is the developer-side companion to <a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a> (the user guide) and issue #9.</p>
+<hr />
+<h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.SteamWorkshop/ISteamWorkshopGate.cs</code></td>
+<td>The opt-in gate every client enforces at construction.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamWorkshopClient.cs</code></td>
+<td>SteamKit2 anonymous CM session + <code>PublishedFile.QueryFiles</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamStoreClient.cs</code></td>
+<td>Anonymous HTTPS game search and app details.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamCommunityClient.cs</code></td>
+<td>Creator persona and avatar.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamRemoteStorageClient.cs</code></td>
+<td>Batched per-file Workshop metadata.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamUgcDownloader.cs</code></td>
+<td>VDF blob download from the config CDN.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamArtworkClient.cs</code></td>
+<td>Store artwork with fallback chains and stale-serve.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Api/SteamHttp.cs</code></td>
+<td>The shared <code>HttpClient</code> (15 s timeout, <code>PadForge/{version}</code> User-Agent).</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Vdf/VdfParser.cs</code>, <code>VdfNode.cs</code>, <code>VdfSyntaxException.cs</code></td>
+<td>Original recursive-descent VDF parser.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Model/SteamInputConfig.cs</code> (+ Group, Preset, Input, Activator, Binding)</td>
+<td>Typed Steam Input config model.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Translation/ConfigTranslator.cs</code></td>
+<td>The translator.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Translation/TranslationReport.cs</code>, <code>TranslationStatus.cs</code>, <code>TranslationOptions.cs</code>, <code>TranslatedProfile.cs</code></td>
+<td>Report, status enum, options, neutral output shape.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs</code>, <code>SteamInputVkTable.cs</code>, <code>XInputTargetTable.cs</code></td>
+<td>Steam slot → PadForge source resolution, key and pad-target tables.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Cache/SteamWorkshopCache.cs</code>, <code>CacheCategory.cs</code></td>
+<td>File-system cache, TTLs, dual budgets, LRU.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop/Local/LocalWorkshopConfigStore.cs</code></td>
+<td>Read-only legacy fallback from the local Steam install.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/WorkshopBrowseDialog.xaml(.cs)</code></td>
+<td>The browse dialog.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/WorkshopProfileMaterializer.cs</code></td>
+<td><code>TranslatedProfile</code> → <code>ProfileData</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/MainWindow.xaml.cs</code></td>
+<td>Dialog entry, import sink, cache clear, update check.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/SettingsService.cs</code></td>
+<td><code>EnableCommunityConfigLookup</code>, <code>ShowLegacyWorkshopConfigs</code>, <code>SteamWorkshopSource</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/Mapping/SourceCoercion.cs</code></td>
+<td>Gamepad alias table, generic Sensitivity, pressure read, the flick stick and touchpad pointer families.</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Menus/MenuDefinitionEntry.cs</code> (+ <code>MenuEvaluator.cs</code>, <code>MenuSelectionMath.cs</code>)</td>
+<td>The menu model translated menus land on. See <a href="../../guides/menus/">Menus</a> and the engine pages.</td>
+</tr>
+<tr>
+<td><code>PadForge.SteamWorkshop.Tests/</code></td>
+<td>Parser, client, cache, and translation tests: <code>TranslationEdgeTests</code> plus per-wave suites (<code>WaveOneA</code>, <code>WaveTwoA</code>, <code>WaveThree</code>, <code>WaveFour</code>, <code>WaveFourB</code>, <code>WaveFourC</code>) and 30 golden fixtures.</td>
+</tr>
+</tbody>
+</table>
+<p>The assembly targets <code>net10.0-windows</code>, references <code>PadForge.Engine</code>, and carries a single direct NuGet dependency: <code>SteamKit2</code> 3.4.0 (LGPL 2.1). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.</p>
+<hr />
+<h2 id="the-opt-in-gate">The opt-in gate<a class="headerlink" href="#the-opt-in-gate" title="Permanent link">&para;</a></h2>
+<p><code>ISteamWorkshopGate</code> exposes one member, <code>IsCommunityConfigLookupEnabled</code>. <code>DelegateSteamWorkshopGate</code> adapts a <code>Func&lt;bool&gt;</code> (the app passes <code>() =&gt; settings.EnableCommunityConfigLookup</code>). <code>SteamWorkshopGuard.EnsureEnabled</code> throws <code>InvalidOperationException</code> ("Community config lookup is disabled in PadForge settings...") when the gate is off.</p>
+<p>Every client constructor calls the guard first: <code>SteamWorkshopClient</code>, <code>SteamStoreClient</code>, <code>SteamCommunityClient</code>, <code>SteamRemoteStorageClient</code>, <code>SteamUgcDownloader</code>, <code>SteamArtworkClient</code>. With the Settings toggle off, no client can even be built. That is the defense-in-depth layer under the UI-level gating.</p>
+<hr />
+<h2 id="clients">Clients<a class="headerlink" href="#clients" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Client</th>
+<th>Transport</th>
+<th>Endpoint</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SteamWorkshopClient</code></td>
+<td>SteamKit2 CM session (WebSocket over 443)</td>
+<td>CM servers via SteamKit2 directory fetch</td>
+<td>The only Steam-protocol surface.</td>
+</tr>
+<tr>
+<td><code>SteamStoreClient</code></td>
+<td>HTTPS GET</td>
+<td><code>store.steampowered.com/api/storesearch/</code>, <code>/api/appdetails</code></td>
+<td>Game search, app details.</td>
+</tr>
+<tr>
+<td><code>SteamCommunityClient</code></td>
+<td>HTTPS GET</td>
+<td><code>steamcommunity.com/profiles/{steamId}?xml=1</code></td>
+<td>Persona name + avatar URLs. Tolerant XML parse, never throws on missing fields.</td>
+</tr>
+<tr>
+<td><code>SteamRemoteStorageClient</code></td>
+<td>HTTPS POST</td>
+<td><code>api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/</code></td>
+<td>Batched form post (<code>itemcount</code>, <code>publishedfileids[i]</code>).</td>
+</tr>
+<tr>
+<td><code>SteamUgcDownloader</code></td>
+<td>HTTPS GET</td>
+<td>caller-supplied <code>file_url</code> (config CDN)</td>
+<td>10 MB cap, size and HTML-page validation.</td>
+</tr>
+<tr>
+<td><code>SteamArtworkClient</code></td>
+<td>HTTPS GET</td>
+<td><code>cdn.cloudflare.steamstatic.com/steam/apps/{appId}/{file}</code></td>
+<td>Fallback chains, magic-byte image check, 16 MB cap.</td>
+</tr>
+</tbody>
+</table>
+<p>All REST clients share <code>SteamHttp.Client</code>: one lazy <code>HttpClient</code>, 15-second timeout, <code>PadForge/{version}</code> User-Agent, case-insensitive JSON. No API key, no cookies, no tokens anywhere. Creator avatar images are the one fetch outside these clients: the browse dialog downloads the <code>avatars.fastly.steamstatic.com</code> URLs from the profile XML on its own <code>HttpClient</code> (same timeout, same User-Agent) and caches them under the art budget.</p>
+<h3 id="steamworkshopclient-the-anonymous-cm-session">SteamWorkshopClient: the anonymous CM session<a class="headerlink" href="#steamworkshopclient-the-anonymous-cm-session" title="Permanent link">&para;</a></h3>
+<p>Configuration: <code>SteamConfiguration.Create(b =&gt; b.WithProtocolTypes(ProtocolTypes.WebSocket).WithDirectoryFetch(true))</code>. WebSocket rides port 443, which passes firewalls that block Steam's classic CM ports. <code>EnsureLoggedOnAsync</code> connects, then <code>SteamUser.LogOnAnonymous()</code>, with 15-second timeouts on both stages (<code>ConnectTimeout</code>, <code>LogonTimeout</code>) and a <code>SemaphoreSlim</code> making the logon idempotent. A background task pumps <code>CallbackManager.RunWaitCallbacks</code> every 100 ms and never lets an exception escape.</p>
+<p>Search goes through <code>SteamUnifiedMessages</code> → <code>PublishedFile.QueryFiles</code> with:</p>
+<ul>
+<li><code>appid = 241100</code> (<code>ControllerConfigsAppId</code>): the query filters on the <em>consumer</em> app, Steam's controller-configs bucket. This is <code>appid</code>, not <code>creator_appid</code>.</li>
+<li><code>filetype = 15</code> (<code>MatchingFileTypeControllerBindings</code>, Steamworks' <code>k_PFI_MatchingFileType_ControllerBindings</code>): the QueryFiles matching-file-type enum, a different enum from the per-item <code>EWorkshopFileType.ControllerBinding = 12</code>. Without it the query returns nothing.</li>
+<li>a required <code>app</code> kv-tag (<code>required_kv_tags</code>, key <code>app</code>, value = the target game's app id): every config carries it, and it scopes the 241100 bucket down to one game.</li>
+<li><code>requiredtags</code> for the dialog's controller filter chips,</li>
+<li><code>return_vote_data</code>, <code>return_tags</code>, <code>return_kv_tags</code>, <code>return_short_description</code>, <code>return_metadata</code>, <code>return_details</code>, <code>return_playtime_stats = 30</code>.</li>
+</ul>
+<p>The shape was grounded live against the CM (smoke harness, 2026-07-13): Skyrim SE returns 155,694 items under <code>appid = 241100</code> + <code>filetype = 15</code> + the <code>app</code> kv-tag, and zero under <code>appid = game</code>.</p>
+<p>The browse dialog requests <code>EPublishedFileQueryType.RankedByVote</code> (30 per page for the list, a 1-per-page probe for the shelf's config counts). Defaults on <code>SearchAsync</code> are <code>RankedByTotalUniqueSubscriptions</code>, page 1, 30 per page.</p>
+<p>Client-side politeness: an in-memory single-flight map keyed by cache key, and a 100 ms minimum spacing between outbound requests (<code>MinRequestSpacing</code>). Responses cache 24 h as protobuf bytes.</p>
+<h3 id="steamugcdownloader-validation">SteamUgcDownloader validation<a class="headerlink" href="#steamugcdownloader-validation" title="Permanent link">&para;</a></h3>
+<p>Rejects an empty <code>file_url</code> (<code>ArgumentException</code>, the legacy marker), a declared or streamed size past <code>MaxVdfBytes</code> (10 MB, matching the parser cap), a size that misses the expected <code>file_size</code>, and an HTML error page masquerading as a VDF (leading-tag sniff). Strips a UTF-8 BOM before decoding.</p>
+<h3 id="steamartworkclient">SteamArtworkClient<a class="headerlink" href="#steamartworkclient" title="Permanent link">&para;</a></h3>
+<p>Two fallback chains, tried in order until a fetch succeeds:</p>
+<ul>
+<li>Portrait: <code>library_600x900.jpg</code> → <code>capsule_616x353.jpg</code> → <code>header.jpg</code></li>
+<li>Hero: <code>library_hero.jpg</code> → <code>header.jpg</code></li>
+</ul>
+<p>Reads ride <code>TryGetBytesStaleOk</code> with the 7-day art TTL. A fresh hit returns immediately. A stale hit re-fetches, and on <code>HttpRequestException</code> / <code>IOException</code> / timeout serves the stale copy instead, so offline browsing keeps its art. A definitive CDN 404 returns null and lets the chain degrade. Every payload passes a magic-byte check (JPEG, PNG, GIF, WEBP) and a 16 MB cap before caching. Art is hotlinked at runtime and never rehosted or bundled.</p>
+<hr />
+<h2 id="vdf-parser">VDF parser<a class="headerlink" href="#vdf-parser" title="Permanent link">&para;</a></h2>
+<p><code>VdfParser.Parse</code> / <code>TryParse</code> is an original recursive-descent implementation. Hard limits: <code>DefaultMaxDepth = 32</code> nesting levels, <code>MaxInputBytes = 10 MB</code> (measured as UTF-8 bytes). It rejects binary VDF up front: a NUL first byte or the literal <code>VBKV</code> magic throws "Binary VDF (VBKV) is not supported."</p>
+<p>Handled: quoted and unquoted tokens, duplicate keys (preserved in order, exposed via <code>Multi(key)</code> since real configs repeat <code>"group"</code> and <code>"preset"</code>), <code>//</code> line and <code>/* */</code> block comments, escape sequences (<code>\"</code>, <code>\\</code>, <code>\n</code>, <code>\t</code>, <code>\r</code>, with unknown escapes passing through literally), empty objects and values, embedded Unicode, a leading BOM, and Valve's <code>[$WIN32]</code>-style conditionals (skipped).</p>
+<p><code>VdfNode</code> is null-safe: the indexer returns a <code>Missing</code> sentinel instead of null, key lookup is case-insensitive, and typed accessors (<code>AsInt</code>, <code>AsDouble</code>, <code>AsBool</code>) parse with <code>InvariantCulture</code>. <code>VdfSyntaxException</code> carries offset, line, and column.</p>
+<hr />
+<h2 id="typed-model">Typed model<a class="headerlink" href="#typed-model" title="Permanent link">&para;</a></h2>
+<p><code>SteamInputConfig.FromVdf</code> accepts the document root or the <code>controller_mappings</code> node directly and validates structure into <code>SteamInputConfig</code> → <code>SteamInputGroup</code> / <code>SteamInputPreset</code> → <code>SteamInputInput</code> → <code>SteamInputActivator</code> → <code>SteamInputBinding</code>. Malformed structure throws <code>SteamInputConfigException</code>.</p>
+<p>The version gate rejects anything below 3 with the exact reason: "Steam Input config version {N} (pre-2017 schema). Translator targets version 3 only." A missing or non-numeric <code>version</code> is also rejected. Current Workshop configs are version 3, and the grammar has not moved.</p>
+<hr />
+<h2 id="configtranslator">ConfigTranslator<a class="headerlink" href="#configtranslator" title="Permanent link">&para;</a></h2>
+<p><code>Translate(config, options)</code> produces a <code>TranslatedProfile</code>: two <code>MappingSet</code>s (<code>XboxMappingSet</code>, <code>KbmMappingSet</code>), a macro list, a menu list (<code>Menus</code>, <code>MenuDefinitionEntry</code> objects from <code>PadForge.Engine.Menus</code>), a name and description, slot-demand flags (<code>NeedsXboxSlot</code>, <code>NeedsKbmSlot</code>), and a <code>TranslationReport</code>. It never touches <code>ProfileData</code>. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros whose triggers read the Xbox slot's combined output. A macro riding a device-free <code>InputDevice</code> trigger (paddle, touchpad, gyro) demands no Xbox slot on its own. An <code>Identities.Count</code> clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for menus when no Xbox slot is demanded, so every import with a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps <code>MappingSet.Authoritative</code> on both sets it places and clones each menu onto every created slot's <code>MappingSet.Menus</code>.</p>
+<p><code>TranslationOptions</code> has exactly four fields: <code>FileId</code> (feeds deterministic layer names), <code>PreferredLanguage</code> (default <code>"english"</code>, for localized title fallback), <code>ProfileNameOverride</code>, and <code>IncludedPresetIds</code>, the preset filter the dialog's chips re-run translation with (null means all).</p>
+<h3 id="translator-version-history">Translator version history<a class="headerlink" href="#translator-version-history" title="Permanent link">&para;</a></h3>
+<p><code>TranslationReport.CurrentTranslatorVersion</code> is <strong>7</strong>. Each report stamps the version it was produced under, and the summary digest leads with it. The bumps:</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Commit</th>
+<th>What it added</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>1087f9bb</code></td>
+<td>Initial translator: authoritative sets, identity rows, matched-side analog passthroughs, split routing, presets and layers, MOUSE_POSITION warp macros.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>8667de96</code> (wave 1)</td>
+<td><code>single_button</code> and <code>gyro_to_mouse</code> modes, Steam Controller digital-trigger switch members, <code>#token</code> localized titles, inner deadzone, <code>set_led</code> lightbar and Guide-LED macros, <code>Long_Press</code> layer carries, the named-drop vocabulary (haptic, response curve, gyro button mask, activator delay, interruptible, player number, lizard mode, scroll gesture).</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>86fd8ef6</code> (wave 2)</td>
+<td><code>Long_Press</code> key and button macros, xinput <code>hold_repeats</code> turbo macros, activator <code>toggle</code> latches (<code>ToggleVcButton</code> / <code>ToggleKey</code>), <code>camera_reset</code> as gyro recenter, <code>mouse_region</code> cursor-clamp macros.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>6196fa89</code> (wave 3)</td>
+<td>Device-free <code>InputDevice</code> macro triggers (retired most <code>NoDeviceFreeTrigger</code> skips), DS4 and DualSense trackpad halves as region-windowed sources, <code>four_buttons</code>-on-trackpad quadrant collapse, per-row touchpad mouse sensitivity (retired <code>TouchpadTuningNotPerRow</code>).</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>caa347dc</code> (wave 4a)</td>
+<td><code>flickstick</code> mode as the Flick Stick source on <code>KbmMouseX</code>, with the group's <code>sensitivity</code> landing on <code>ParamFlickCountsPer360</code>.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>495c8cc0</code> (wave 4b)</td>
+<td>Trackpad <code>mouse_region</code> as Clean absolute <code>Touchpad {p} Pointer X/Y</code> rows (region geometry on <code>ParamPointerCenter</code> / <code>ParamPointerExtent</code>). Retired <code>AbsoluteMouseApproximated</code>: <code>absolute_mouse</code> is relative in Steam too, so the relative rows are faithful and Clean.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>b006ee7e</code> (wave 4c)</td>
+<td><code>radial_menu</code> and <code>touch_menu</code> as first-class <code>MenuDefinitionEntry</code> menus with the on-screen overlay. Retired the <code>RadialMenuNeedsOverlay</code> / <code>TouchMenuNeedsOverlay</code> skips and the two-cell touch-spot approximation.</td>
+</tr>
+</tbody>
+</table>
+<p>The Nintendo face-button folding (<code>7cfc8be3</code>, labels folded to positions for Switch-authored configs via <code>PhysicalSlotResolver.UsesNintendoLabels</code>) did not bump the version: it changed slot resolution, not report shape.</p>
+<h3 id="split-config-routing">Split-config routing<a class="headerlink" href="#split-config-routing" title="Permanent link">&para;</a></h3>
+<p>Every binding lands by nature, not by a user-chosen slot. <code>xinput_button</code> targets go to the Xbox set (<code>ButtonA</code>, <code>DPadUp</code>, <code>LeftTrigger</code>, <code>LeftThumbAxisX</code>...). Key, mouse-button, mouse-move, and scroll targets go to the KbM set (<code>KbmKey##</code>, <code>KbmMBtn0-4</code>, <code>KbmMouseX/Y</code>, <code>KbmScroll</code>, <code>KbmScrollH</code>). One config routinely fills both.</p>
+<h3 id="identity-bindings-matched-analogs-and-authoritative-sets">Identity bindings, matched analogs, and authoritative sets<a class="headerlink" href="#identity-bindings-matched-analogs-and-authoritative-sets" title="Permanent link">&para;</a></h3>
+<p>An <code>xinput_button</code> binding whose resolved source already maps to that target through the device automap (no soft-press, no click gate) is an identity. Every identity emits an explicit row. In <code>Finalize</code>, an identity whose <code>(slot, layer, target)</code> gained a real row from some other binding is re-absorbed onto that row as an extra source. The rest materialize as rows of their own. Both paths report Clean <code>RowEmitted</code>.</p>
+<p>Matched-side implicit analog outputs get the same treatment. A <code>trigger</code> group with no <code>output_trigger</code> redirect passes the analog pull through in Steam without any binding object, and a <code>joystick_move</code> group with no <code>output_joystick</code> redirect passes the stick through the same way. <code>Finalize</code> materializes each as an explicit full-axis row ("Gamepad LeftTrigger" → <code>LeftTrigger</code>, "Gamepad LeftStickX/Y" → <code>LeftThumbAxisX/Y</code>, right side likewise), one Clean <code>RowEmitted</code> per row. The analog source lands first, so a trigger's click identity absorbs behind it, and such rows keep the axis default combine (max-abs) rather than Sum, keeping the pull a clean analog read. These rows only materialize when the Xbox side is in play through bindings at all: a pure keyboard/mouse config keeps zero Xbox rows and no Xbox pad, and a macro-only config keeps its zero-row set on the whole-set passthrough.</p>
+<p>The rows must be explicit because imported sets are authoritative (<code>MappingSet.Authoritative</code>, stamped by the materializer). <code>MergeMappingSetsFromLegacy</code> contributes nothing to an authoritative set when a device is assigned: no sources injected into existing rows, no automap rows appended. Departed-device source cleanup and the empty-row drop still run. That merge was the double-mapping bug: the imported rows spelled a binding out, then the assigned device's auto-mapped legacy descriptors landed on top and the input fired twice.</p>
+<p>One deliberate exception: a set with zero rows (a macro-only import) still rides the whole-set legacy passthrough at runtime. The assigned pad automaps wholesale and the macros trigger from that combined output.</p>
+<p>Older imports carried two report entries this design retires: the per-preset Clean <code>DefaultAutomapPassthrough</code> aggregate (identities emitted zero rows then) and the Partial <code>AutomapAlsoActive</code> warning (the automap no longer asserts alongside an authoritative set, so there is nothing to warn about). Both reason keys stay renderable for reports serialized before the change.</p>
+<h3 id="presets-and-layers">Presets and layers<a class="headerlink" href="#presets-and-layers" title="Permanent link">&para;</a></h3>
+<p>The first preset by id becomes the literal layer <code>"Base"</code>. Every other preset becomes <code>"Layer_{FileId}_{presetId}"</code>. An <code>active modeshift</code> group becomes <code>"Layer_{FileId}_{presetId}_MS_{slotToken}_{groupId}"</code>. Activator emission (<code>ShiftActivator.Mode</code> strings are exact):</p>
+<table>
+<thead>
+<tr>
+<th>Steam Input construct</th>
+<th>ShiftActivator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode_shift</code></td>
+<td><code>Mode = "Hold"</code> (<code>"Toggle"</code> when the activator carries <code>toggle = 1</code>), <code>InheritUnmapped = true</code></td>
+</tr>
+<tr>
+<td><code>controller_action HOLD_LAYER</code></td>
+<td><code>Mode = "Hold"</code> (<code>"Toggle"</code> with <code>toggle = 1</code>), <code>InheritUnmapped = true</code></td>
+</tr>
+<tr>
+<td><code>controller_action ADD_LAYER</code></td>
+<td><code>Mode = "Toggle"</code>, <code>InheritUnmapped = true</code></td>
+</tr>
+<tr>
+<td><code>controller_action REMOVE_LAYER</code></td>
+<td>No activator. Partial <code>RemoveLayerApproximated</code> (approximated as toggle-off).</td>
+</tr>
+<tr>
+<td><code>controller_action CHANGE_PRESET</code></td>
+<td><code>Mode = "Custom"</code> with <code>JumpToLayer</code></td>
+</tr>
+<tr>
+<td>Same-input CHANGE_PRESET pairs</td>
+<td>Merged to <code>Mode = "Cycle"</code> (<code>CycleLayers</code> ordinal-sorted, <code>CycleIncludeBase</code> when a jump targeted Base)</td>
+</tr>
+<tr>
+<td><code>Long_Press</code> layer switch</td>
+<td>The carrying activator gains <code>DelayMs</code> from <code>long_press_time</code> (v2).</td>
+</tr>
+</tbody>
+</table>
+<p>Activators duplicate onto whichever mapping set(s) actually contain the layer's rows. <code>Kind</code> is always <code>"Button"</code> (trigger pulls gate at <code>AxisThreshold = 0.5</code>). Since wave 4c, activators evaluate with their true slot index, so an activator descriptor can read slot-scoped families such as menu-item fires.</p>
+<h3 id="group-and-activator-settings-honored">Group and activator settings honored<a class="headerlink" href="#group-and-activator-settings-honored" title="Permanent link">&para;</a></h3>
+<p>The v1 translator read six setting keys. The waves widened that considerably:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sensitivity</code></td>
+<td>Mouse-output groups: <code>ratio = clamp(sens / baseline, 0.05, 20.0)</code> with <code>StickMouseBaseline = 80</code>, <code>TrackpadMouseBaseline = 50</code>. Stick family → per-source <code>Sensitivity</code>; gyro family → <code>GyroSensitivity</code>; touchpad-finger family → per-row <code>Sensitivity</code> (since v4). On a <code>flickstick</code> group it is Steam's Dots Per 360° and lands on <code>ParamFlickCountsPer360</code>. On a menu it is In-Menu Sensitivity, dropped as Partial <code>MenuTuningDropped</code>.</td>
+</tr>
+<tr>
+<td><code>hold_repeats</code> + <code>repeat_rate</code></td>
+<td><code>key_press</code> → a <code>RepeatKeyWhileHeld</code> macro. <code>xinput_button</code> → a <code>RepeatVcButtonWhileHeld</code> turbo macro (since v3), except identity and trigger-axis targets where the row keeps and the repeat drops (Partial <code>RepeatDropped</code>). <code>repeat_rate</code> clamps 10–1000 ms into the macro interval.</td>
+</tr>
+<tr>
+<td><code>toggle</code></td>
+<td>On an activator: a <code>ToggleVcButton</code> / <code>ToggleKey</code> latch macro, or <code>Mode = "Toggle"</code> on a layer carry (since v3). No latch for the output → Partial <code>ToggleDropped</code>.</td>
+</tr>
+<tr>
+<td><code>long_press_time</code></td>
+<td>Carries into the activator <code>DelayMs</code> on long-press layer switches.</td>
+</tr>
+<tr>
+<td><code>deadzone_inner_radius</code></td>
+<td>Group deadzone. Also feeds a menu's <code>EngageDeadzonePercent</code>.</td>
+</tr>
+<tr>
+<td><code>requires_click</code></td>
+<td>Trackpad d-pad wedges gain an AND-combined <code>"Touchpad {p} Click"</code> gate source. Dropped (Partial <code>ClickGateDropped</code>) when a second source joins the target.</td>
+</tr>
+<tr>
+<td><code>output_trigger</code></td>
+<td>Crossed side emits an axis row to the opposite trigger. Matched side emits its own full-axis passthrough row via the <code>Finalize</code> matched-analog pass, with any click identity absorbed behind the analog source.</td>
+</tr>
+<tr>
+<td><code>output_joystick</code></td>
+<td>Crossed stick emits <code>{dst}ThumbAxisX/Y</code> rows. Matched stick emits its own axis pair via the matched-analog pass. Trackpad-as-stick emits them as Partial <code>TrackpadFeatureRequired</code>.</td>
+</tr>
+<tr>
+<td><code>mouse_region</code> geometry</td>
+<td><code>position_x/y</code>, <code>scale</code>, <code>sensitivity_horiz_scale</code>, <code>sensitivity_vert_scale</code> land on the pointer-source region params (trackpad host) or the clamp-macro geometry (stick and gyro hosts). <code>teleport_*</code> and <code>edge_binding_*</code> → Partial <code>MouseRegionTuningDropped</code>.</td>
+</tr>
+<tr>
+<td>Menu keys</td>
+<td><code>touchmenu_button_fire_type</code> (clamped 0–3), <code>touch_menu_position_x/_y</code>, <code>touch_menu_scale</code>, <code>touch_menu_opacity</code>, <code>touch_menu_show_labels</code>, <code>touch_menu_button_count</code>.</td>
+</tr>
+<tr>
+<td>Named drops</td>
+<td><code>haptic_intensity</code> aggregates into Partial <code>HapticIntensityDropped</code>. Response-curve and range keys → <code>ResponseCurveNotSupported</code>. <code>gyro_button</code> masks → <code>GyroButtonMaskDropped</code>. <code>delay_start</code> / <code>delay_end</code> → <code>ActivatorDelayDropped</code>. <code>interruptable</code> → <code>InterruptibleDropped</code>. Flick stick's <code>edge_binding_radius</code>, <code>mouse_smoothing</code>, <code>rotation</code>, <code>transition_time</code> → <code>FlickStickTuningDropped</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>trackball</code>, <code>mouse_dampening_trigger</code>, and double-tap timing are still not referenced and fall through silently (double-press activators are skipped whole).</p>
+<h3 id="mouse_position-coordinates">MOUSE_POSITION coordinates<a class="headerlink" href="#mouse_position-coordinates" title="Permanent link">&para;</a></h3>
+<p>The translator keeps Steam's normalized 16-bit space: <code>NormalizedX/Y = clamp(x, 0, 65535)</code>. The materializer converts to primary-monitor physical pixels: <code>round(n / 65535 * (screen - 1))</code> clamped to the screen, using <code>GetSystemMetrics(SM_CXSCREEN/SM_CYSCREEN)</code>. The result feeds a <code>MoveMouseToScreenPosition</code> macro action (one cursor warp on fire).</p>
+<h3 id="determinism-and-caps">Determinism and caps<a class="headerlink" href="#determinism-and-caps" title="Permanent link">&para;</a></h3>
+<p>Same config + same options = identical output, asserted by test. Ordering: presets ascending by id; group entries by <code>(slotToken, groupId)</code>; inputs by name; final rows by <code>(Kbm, Base-first, Layer, Target)</code> ordinal; activators by <code>(LayerMask, Descriptor, Mode)</code> with a dedup key. Constants: <code>MaxRowsPerSlot = 5000</code> per slot class (exceeding it emits Error <code>RowCapExceeded</code> and stops adding rows for that slot), <code>MaxReferenceDepth = 4</code> for <code>reference</code>-mode group chains (cycles and overruns emit Error <code>ReferenceCycle</code>). All emitted sources carry an empty <code>DeviceGuid</code>.</p>
+<hr />
+<h2 id="translationreport">TranslationReport<a class="headerlink" href="#translationreport" title="Permanent link">&para;</a></h2>
+<p><code>TranslationStatus</code>: <code>Clean = 0</code>, <code>Partial = 1</code>, <code>Skipped = 2</code>, <code>Error = 3</code>. Entries carry <code>Status</code>, <code>ReasonKey</code>, <code>ReasonArgs</code>, <code>SourcePath</code>, <code>Binding</code> (raw binding text), and <code>Emitted</code> (an unlocalized diagnostic trace like <code>KbmKey57 &lt;- Touchpad 0 DPadUp</code>). The report also counts rows, macros, menus (<code>MenuCount</code>), and activators per set, and <code>ToSummaryString()</code> renders the provenance digest (<code>v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0</code>).</p>
+<p>Reason keys are resx keys in the <code>Workshop_Tr_*</code> namespace, resolved at display time so the manifest localizes. The vocabulary is append-only: keys a wave retires stay defined and localized so reports serialized under older translator versions render forever. The full vocabulary at v7, by family:</p>
+<h3 id="emission-clean">Emission (Clean)<a class="headerlink" href="#emission-clean" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Workshop_Tr_RowEmitted</code></td>
+<td>A mapping-row source emitted normally.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ShiftLayerEmitted</code></td>
+<td>A shift activator emitted (<code>layer: {name}</code>).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MenuEmitted</code></td>
+<td>A radial or touch menu emitted (<code>{count}</code> bound cells). v7.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MacroEmitted</code></td>
+<td>A macro emitted on a device-free <code>InputDevice</code> trigger with no feature gate. v4.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ToggleLatchEmitted</code></td>
+<td>An activator <code>toggle</code> latch emitted (<code>latches {output}</code>). Clean when descriptor-triggered, Partial when it rides the Xbox combined output. v3.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="approximations-and-caveats-partial">Approximations and caveats (Partial)<a class="headerlink" href="#approximations-and-caveats-partial" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Workshop_Tr_TrackpadFeatureRequired</code></td>
+<td>Trackpad wedge / trackpad-as-stick / touch-spot rows that need a touchpad feature enabled (<code>Touchpad joystick output</code> or <code>Touchpad touch spots</code>).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_SoftPressApproximated</code></td>
+<td><code>soft_press</code> becomes a plain press threshold (a 15% deadzone on an analog trigger pull). Sources that need a touchpad feature report <code>TrackpadFeatureRequired</code> instead.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MacroTriggerViaXboxOutput</code></td>
+<td>A macro whose trigger reads the Xbox slot's combined output (autofire, key-on-release, or cursor warp on a standard pad button).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_RepeatDropped</code></td>
+<td><code>xinput_button</code> with <code>hold_repeats</code> on an identity or trigger-axis target: row kept, turbo dropped. Other targets get a turbo macro instead (v3).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_RemoveLayerApproximated</code></td>
+<td><code>REMOVE_LAYER</code> approximated as toggle-off.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ClickGateDropped</code></td>
+<td>A <code>requires_click</code> gate abandoned when a second source joined the target.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_LongPressKeyTap</code></td>
+<td>A <code>Long_Press</code> key: taps at the threshold where Steam holds until release. v3.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ToggleDropped</code></td>
+<td>An activator <code>toggle</code> with no latch for that output. v3.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_CameraResetApproximated</code></td>
+<td><code>camera_reset</code> approximated as a gyro recenter. v3.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MouseRegionApproximated</code></td>
+<td>A stick- or gyro-hosted <code>mouse_region</code> approximated as a centered cursor clamp while the surface is held (<code>{scale}%</code>, region center <code>{x}%, {y}%</code>). v3. Trackpad hosts go Clean via the pointer family instead (v6).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MouseRegionTuningDropped</code></td>
+<td><code>teleport_*</code> / <code>edge_binding_*</code> mouse-region keys dropped. v3.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_TouchQuadrantApproximated</code></td>
+<td><code>four_buttons</code> cells share the hosting touch surface (no per-cell zones). v4.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_TrackpadHalfApproximated</code></td>
+<td>A binding hosted on one half of the touchpad where PadForge reads the whole pad. v4.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MenuIconsDropped</code></td>
+<td>Menu cells with icons render text labels (<code>{count}</code> cells). v7.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MenuTuningDropped</code></td>
+<td>In-menu <code>sensitivity</code> and other unsupported menu tuning. v7.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_FlickStickTuningDropped</code></td>
+<td>Flick stick keys with no PadForge equivalent (<code>edge_binding_radius</code>, <code>mouse_smoothing</code>, <code>rotation</code>, <code>transition_time</code>). v5.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_SetLedDefaultApproximated</code></td>
+<td>A restore-default <code>set_led</code> approximated as clearing the override. v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_HapticIntensityDropped</code></td>
+<td>Per-config aggregate of dropped haptic-feedback settings (<code>{count}</code> bindings). v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ResponseCurveNotSupported</code></td>
+<td>Response curve and range settings dropped (<code>{keys}</code>). v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_GyroButtonMaskDropped</code></td>
+<td><code>gyro_button</code> engage masks dropped (gyro engage is per pad in PadForge). v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ActivatorDelayDropped</code></td>
+<td><code>delay_start</code> / <code>delay_end</code> press delays dropped. v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_InterruptibleDropped</code></td>
+<td>A non-interruptible press behaves as a normal press. v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MissingModeShiftGroup</code>, <code>Workshop_Tr_MissingPreset</code>, <code>Workshop_Tr_ActivatorInputNotSupported</code>, <code>Workshop_Tr_ShiftLayerEmpty</code>, <code>Workshop_Tr_PresetHasNoActivator</code></td>
+<td>Layer and preset-switch diagnostics: dangling references, activator sources that cannot drive a layer (gesture-gated wedges, gyro), layers that produced no rows, presets nothing switches to.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="skipped">Skipped<a class="headerlink" href="#skipped" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Workshop_Tr_GameActionsNotSupported</code></td>
+<td>Per-preset aggregate of <code>game_action</code> bindings (<code>{count}</code> in-game actions, Steam-only).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_SteamSystemAction</code></td>
+<td><code>SCREENSHOT</code>, <code>SYSTEM_KEY_1</code>, <code>SHOW_KEYBOARD</code>.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_PlayerNumberActionNotSupported</code>, <code>Workshop_Tr_LizardModeActionNotSupported</code></td>
+<td>Steam-client actions with no equivalent. v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ScrollWheelModeNotSupported</code></td>
+<td>The <code>scrollwheel</code> group mode (circular scrolling). Its <code>click</code> member still translates.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ScrollGestureModeNotSupported</code></td>
+<td>The <code>2dscroll</code> directional-swipe mode. v2.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MenuEmpty</code></td>
+<td>A menu with no bound cells. v7.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MenuSurfaceNotSupported</code></td>
+<td>A menu hosted on anything but a stick or trackpad (<code>{host}</code>). v7.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_FlickStickSurfaceNotSupported</code></td>
+<td>A trackpad-hosted <code>flickstick</code> (PadForge flick stick reads a physical stick). v5.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_LongPressNotSupported</code></td>
+<td>Residual only: a <code>Long_Press</code> that is not a key, button, or layer switch (for example a trigger-axis target).</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_DoublePressNotSupported</code>, <code>Workshop_Tr_ReleaseActivatorNotSupported</code></td>
+<td>Unsupported activators. A <code>release</code> on a mouse or pad button skips. On a <code>key_press</code> it becomes an on-release macro instead.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_EdgeInputNotSupported</code></td>
+<td>An <code>edge</code> input on a non-trigger slot.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_NoDeviceFreeTrigger</code></td>
+<td>Residual only: a <code>mouse_region</code> hosted on a stick or gyro with nothing to engage it. Paddle-, touchpad-, and gyro-hosted macros translate via device-free triggers since v4.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_UnknownBindingType</code>, <code>Workshop_Tr_UnknownKey</code>, <code>Workshop_Tr_UnsupportedKey</code>, <code>Workshop_Tr_UnknownMouseButton</code>, <code>Workshop_Tr_UnknownXInputButton</code>, <code>Workshop_Tr_UnknownPhysicalInput</code>, <code>Workshop_Tr_UnknownGroupMode</code>, <code>Workshop_Tr_UnknownActivatorType</code>, <code>Workshop_Tr_UnsupportedControllerAction</code></td>
+<td>Unknown-token family: forward-compat catch-alls so translator drift degrades to labeled skips, never a crash.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Workshop_Tr_MissingGroup</code></td>
+<td>A preset references an absent group id.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_ReferenceCycle</code></td>
+<td><code>reference</code> chain cycles, dangles, or exceeds depth 4.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_RowCapExceeded</code></td>
+<td>A slot class would pass 5000 rows.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="legacy-render-only">Legacy, render-only<a class="headerlink" href="#legacy-render-only" title="Permanent link">&para;</a></h3>
+<p>These keys are no longer emitted. They stay defined so reports serialized under older translator versions keep rendering:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Retired</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Workshop_Tr_DefaultAutomapPassthrough</code></td>
+<td>v1 cycle</td>
+<td>Identity bindings emit explicit rows now.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_AutomapAlsoActive</code></td>
+<td>v1 cycle</td>
+<td>Authoritative sets retired the condition.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_TouchpadTuningNotPerRow</code></td>
+<td>v4</td>
+<td>Touchpad mouse sensitivity applies per row now.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_AbsoluteMouseApproximated</code></td>
+<td>v6</td>
+<td><code>absolute_mouse</code> is relative in Steam too. The relative rows are faithful and report Clean.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_TouchMenuNeedsOverlay</code>, <code>Workshop_Tr_RadialMenuNeedsOverlay</code></td>
+<td>v7</td>
+<td>Menus import as on-screen menus.</td>
+</tr>
+<tr>
+<td><code>Workshop_Tr_MouseRegionNotSupported</code></td>
+<td>v3/v6</td>
+<td>Mouse regions route to pointer rows, clamp macros, or the <code>NoDeviceFreeTrigger</code> residual.</td>
+</tr>
+</tbody>
+</table>
+<p>One constant (<code>TriggerThresholdApproximated</code>) is defined and localized but has never been emitted. <code>mouse_wheel</code> scroll bindings are not skipped. They emit <code>KbmScroll</code>/<code>KbmScrollH</code> rows. Empty bindings and <code>EMPTY_SUB_COMMAND</code> drop silently.</p>
+<hr />
+<h2 id="cache">Cache<a class="headerlink" href="#cache" title="Permanent link">&para;</a></h2>
+<p><code>SteamWorkshopCache</code> roots at <code>%LOCALAPPDATA%\PadForge\SteamWorkshopCache</code> with two independent budgets: <code>DefaultGeneralBudgetBytes = 50 MB</code> (everything but art) and <code>DefaultArtBudgetBytes = 60 MB</code> (art). Categories:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Directory</th>
+<th>TTL</th>
+<th>Budget group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Games</code></td>
+<td><code>games/</code></td>
+<td>24 h</td>
+<td>General</td>
+</tr>
+<tr>
+<td><code>Search</code></td>
+<td><code>search/</code></td>
+<td>24 h</td>
+<td>General</td>
+</tr>
+<tr>
+<td><code>Vdf</code></td>
+<td><code>vdf/</code></td>
+<td>none (immutable per file id + <code>time_updated</code>, evicted by LRU only)</td>
+<td>General</td>
+</tr>
+<tr>
+<td><code>Personas</code></td>
+<td><code>personas/</code></td>
+<td>7 d</td>
+<td>General</td>
+</tr>
+<tr>
+<td><code>Art</code></td>
+<td><code>art/</code></td>
+<td>7 d, stale-ok</td>
+<td>Art</td>
+</tr>
+</tbody>
+</table>
+<p>Writes are atomic (temp file + <code>File.Move</code> overwrite under a lock), then the budget is enforced by deleting least-recently-accessed files first. TTL freshness rides last-write time, LRU recency rides last-access time, both stamped from an injectable clock for tests. <code>TryGetBytes</code> deletes an expired entry. <code>TryGetBytesStaleOk</code> (the art path) reports staleness but keeps the entry so the artwork client can serve it on network failure. Keys sanitize to <code>[0-9A-Za-z._-]</code> or fall back to a SHA-256 hex name. <code>Clear()</code> backs the Settings button.</p>
+<hr />
+<h2 id="local-legacy-fallback">Local legacy fallback<a class="headerlink" href="#local-legacy-fallback" title="Permanent link">&para;</a></h2>
+<p><code>LocalWorkshopConfigStore</code> is the no-network path for configs whose <code>file_url</code> is absent (pre-2017) or dead. Read-only, never writes. Resolution order:</p>
+<ol>
+<li>Steam install path from <code>HKCU\Software\Valve\Steam\SteamPath</code>, falling back to <code>HKLM\SOFTWARE\WOW6432Node\Valve\Steam\InstallPath</code>.</li>
+<li>Library roots from <code>steamapps/libraryfolders.vdf</code> (or <code>config/libraryfolders.vdf</code>), parsed with the same VDF parser. Both the current object shape and the pre-2021 flat shape are handled, and non-numeric keys are skipped.</li>
+<li>Per library: <code>steamapps/workshop/content/241100/{publishedFileId}/</code>, preferring <code>controller_configuration.vdf</code> (SteamPipe-manifest items) and falling back to <code>*_legacy.bin</code> (pre-manifest UGC, ordinal-smallest name for determinism). Both payloads are text VDF.</li>
+</ol>
+<p>Files past the parser's 10 MB cap are refused. The layout was grounded against Valve's Workshop implementation guide and a live install (86/86 subscribed items readable, 45 valid v3 configs).</p>
+<hr />
+<h2 id="provenance-and-the-update-check">Provenance and the update check<a class="headerlink" href="#provenance-and-the-update-check" title="Permanent link">&para;</a></h2>
+<p><code>SteamWorkshopSource</code> (in <code>SettingsService.cs</code>, serialized as the <code>&lt;SteamWorkshopSource&gt;</code> element on <code>ProfileData.WorkshopSource</code>) carries <code>PublishedFileId</code>, <code>AppId</code>, <code>GameName</code>, <code>Title</code>, <code>TimeUpdated</code> (unix seconds at import), <code>ImportedAt</code> (UTC), and <code>TranslationSummary</code> (the report digest). Null on every non-imported profile.</p>
+<p>Provenance is identity-scoped, like <code>Name</code> and <code>Id</code>. The runtime snapshot copiers exclude it by design: guard comments pin that at <code>SettingsService.UpdateActiveProfileSnapshot</code> and the <code>InputService</code> snapshot copy-back (both <code>SaveActiveProfileState</code> and its 250 ms autosave twin). <code>SnapshotCurrentProfile</code> never captures it, which is what makes a <strong>Save As</strong> fork user-authored with no Workshop link. Compaction preserves it (<code>Compaction_PreservesProvenance</code>).</p>
+<p>The update check (<code>OnCheckWorkshopUpdates</code> in <code>MainWindow.xaml.cs</code>) short-circuits with a status line when the opt-in is off, collects profiles with a nonzero <code>PublishedFileId</code>, and issues one batched <code>GetPublishedFileDetails</code> POST over the distinct ids. Only per-item <code>Result == 1</code> responses count (removed or banned items stay unreported). Stale means <code>fresh.time_updated &gt; stored TimeUpdated</code>, strictly. Clean runs end in a status line. Stale runs raise a message box whose primary button reopens the browse dialog. It is not surfaced anywhere else in the UI: provenance is persisted-but-invisible metadata whose only consumer is this check.</p>
+<hr />
+<h2 id="app-side-wiring">App-side wiring<a class="headerlink" href="#app-side-wiring" title="Permanent link">&para;</a></h2>
+<h3 id="workshopbrowsedialog">WorkshopBrowseDialog<a class="headerlink" href="#workshopbrowsedialog" title="Permanent link">&para;</a></h3>
+<p>A <code>FluentWindow</code> (Mica, 1280×760) with a three-state flow (<code>WsState</code>): <code>Cold</code> (opt-in off, showing the endpoint list and an enable button), <code>Search</code> (game shelf), <code>Browse</code> (game room). Search debounces 500 ms, requires 2+ characters, and takes the top 12 store matches. The manifest pane has exactly five mutually exclusive fills: idle, loading, legacy, error, result. Only result shows the import footer. Preset chips re-run the translation with a new <code>IncludedPresetIds</code> set. Art crossfades 240 ms through steel (120 out, swap, 120 in), honors the Windows animation setting, and decodes off the UI thread. Legacy selection tries <code>LocalWorkshopConfigStore</code> before showing the subscribe prompt, and the same fallback fires for dead CDN URLs.</p>
+<h3 id="workshopprofilematerializer">WorkshopProfileMaterializer<a class="headerlink" href="#workshopprofilematerializer" title="Permanent link">&para;</a></h3>
+<p><code>Materialize(translated, source)</code> builds the <code>ProfileData</code>. It creates only the slots the translation demands (<code>NeedsXboxSlot</code> / <code>NeedsKbmSlot</code>), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with the default HIDMaestro profile id for its type and its translated mapping set attached. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on <code>PadIndex = 0</code> (the Xbox slot, which macros always demand via <code>NeedsXboxSlot</code>) with <code>OutputController</code> triggers. Name falls back to <code>"Workshop Profile"</code>. When provenance is supplied it stamps <code>ImportedAt</code> and <code>TranslationSummary</code>.</p>
+<p>The import sink (<code>AddWorkshopProfile</code> in <code>MainWindow.xaml.cs</code>) mirrors the <code>.pfprofile</code> import path: dedup the display name, append to <code>Profiles</code>, build the list card, <code>MarkDirty()</code>, and optionally <code>LoadProfile</code> for Save and Apply.</p>
+<hr />
+<h2 id="engine-substrate-shipped-with-the-import-usable-everywhere">Engine substrate (shipped with the import, usable everywhere)<a class="headerlink" href="#engine-substrate-shipped-with-the-import-usable-everywhere" title="Permanent link">&para;</a></h2>
+<h3 id="the-abstract-gamepad-descriptor-family">The abstract Gamepad descriptor family<a class="headerlink" href="#the-abstract-gamepad-descriptor-family" title="Permanent link">&para;</a></h3>
+<p><code>SourceCoercion.GamepadAliasTable</code> defines exactly 25 members. A descriptor is the literal string <code>"Gamepad " + member</code>. Evaluation folds it to the canonical per-device form via <code>CanonicalDescriptor</code>, so persisted and displayed descriptors keep the portable name while reads ride the proven <code>Button</code>/<code>Axis</code>/<code>POV</code> path. SDL's gamepad normalization is what makes the canonical indices stable across recognized pads.</p>
+<table>
+<thead>
+<tr>
+<th>Descriptor</th>
+<th>Canonical</th>
+<th>Descriptor</th>
+<th>Canonical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Gamepad ButtonA</code></td>
+<td><code>Button 0</code></td>
+<td><code>Gamepad DPadUp</code></td>
+<td><code>POV 0 Up</code></td>
+</tr>
+<tr>
+<td><code>Gamepad ButtonB</code></td>
+<td><code>Button 1</code></td>
+<td><code>Gamepad DPadDown</code></td>
+<td><code>POV 0 Down</code></td>
+</tr>
+<tr>
+<td><code>Gamepad ButtonX</code></td>
+<td><code>Button 2</code></td>
+<td><code>Gamepad DPadLeft</code></td>
+<td><code>POV 0 Left</code></td>
+</tr>
+<tr>
+<td><code>Gamepad ButtonY</code></td>
+<td><code>Button 3</code></td>
+<td><code>Gamepad DPadRight</code></td>
+<td><code>POV 0 Right</code></td>
+</tr>
+<tr>
+<td><code>Gamepad LeftShoulder</code></td>
+<td><code>Button 4</code></td>
+<td><code>Gamepad LeftStickX</code></td>
+<td><code>Axis 0</code></td>
+</tr>
+<tr>
+<td><code>Gamepad RightShoulder</code></td>
+<td><code>Button 5</code></td>
+<td><code>Gamepad LeftStickY</code></td>
+<td><code>Axis 1</code></td>
+</tr>
+<tr>
+<td><code>Gamepad ButtonBack</code></td>
+<td><code>Button 6</code></td>
+<td><code>Gamepad LeftTrigger</code></td>
+<td><code>Axis 2</code></td>
+</tr>
+<tr>
+<td><code>Gamepad ButtonStart</code></td>
+<td><code>Button 7</code></td>
+<td><code>Gamepad RightStickX</code></td>
+<td><code>Axis 3</code></td>
+</tr>
+<tr>
+<td><code>Gamepad LeftStick</code></td>
+<td><code>Button 8</code></td>
+<td><code>Gamepad RightStickY</code></td>
+<td><code>Axis 4</code></td>
+</tr>
+<tr>
+<td><code>Gamepad RightStick</code></td>
+<td><code>Button 9</code></td>
+<td><code>Gamepad RightTrigger</code></td>
+<td><code>Axis 5</code></td>
+</tr>
+<tr>
+<td><code>Gamepad ButtonGuide</code></td>
+<td><code>Button 10</code></td>
+<td><code>Gamepad Paddle1</code></td>
+<td><code>Button 12</code></td>
+</tr>
+<tr>
+<td><code>Gamepad Paddle2</code></td>
+<td><code>Button 13</code></td>
+<td><code>Gamepad Paddle3</code></td>
+<td><code>Button 14</code></td>
+</tr>
+<tr>
+<td><code>Gamepad Paddle4</code></td>
+<td><code>Button 15</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing <code>Gyro ...</code> / <code>Touchpad ...</code> descriptors, which already resolve per device. The family does not rename them. The picker offers the family only for <code>CapType == Gamepad</code> devices not in raw-numbered naming, rendered through <code>Mapping_Gamepad_Format</code> ("Gamepad {0}") with the shared <code>DevObj_*</code> member labels.</p>
+<p><strong>Empty-DeviceGuid contract.</strong> <code>MappingSource.DeviceGuid</code> defaults to <code>""</code>, documented as "first available device on the VC," resolved per frame in Step 3. The Workshop translator emits every source with an empty guid. Two seams enforce the contract off the happy path:</p>
+<ul>
+<li>The multi-source contribution builders in <code>InputManager.Step3.MappingSetEval.cs</code> (<code>BuildCustomContribsForBipolarAxis</code> / <code>Trigger</code> / <code>Button</code>, plus <code>EvaluateStickTrim</code>) resolve an empty guid to the state of the device currently being evaluated instead of a null lookup that silently contributed 0.</li>
+<li>The gesture-provider invocations in <code>SourceCoercion</code> (<code>ReadAsBool</code> / <code>ReadAsBipolar</code> / <code>ReadAsUnipolar</code>) pass the caller-resolved guid, because the gesture providers key on a concrete <code>(slot, device, pad)</code> triple and a bare empty guid always missed.</li>
+</ul>
+<h3 id="generic-per-source-sensitivity">Generic per-source Sensitivity<a class="headerlink" href="#generic-per-source-sensitivity" title="Permanent link">&para;</a></h3>
+<p><code>MappingSource.Sensitivity</code> is an <code>[XmlAttribute]</code> defaulting to 1.0 (a legacy 0 reads as 1.0 through <code>PerSourceSensitivity</code>). <code>IsGenericSensitivityDescriptor</code> gates it to sources whose canonical descriptor starts with <code>Axis</code> or <code>Slider</code>, which includes the Gamepad stick and trigger aliases and excludes the gyro / mouse-position / IR families that carry their own multipliers inside their own readers (no double scaling, one slider per source).</p>
+<p>Three application sites in <code>SourceCoercion</code>, all clamped after scaling:</p>
+<ol>
+<li><code>ReadAsBipolar</code>: axis value × sensitivity, clamped to ±1.</li>
+<li><code>ReadAsUnipolar</code>: trigger value × sensitivity, clamped to 0..1.</li>
+<li><code>ReadAsBool</code> (the axis-to-button threshold read): the raw value scales before the threshold comparison. Half-axis scales deviation from center, full-axis and slider scale magnitude from zero, and sensitivity 1.0 leaves every comparison bit-identical. Without this site the slider had no effect on axis-to-button rows.</li>
+</ol>
+<p>The editor slider runs 0.1–5.0 (<code>MappingItem</code> clamps), label <code>Mapping_Sensitivity</code>.</p>
+<h3 id="touchpad-finger-pressure">Touchpad finger pressure<a class="headerlink" href="#touchpad-finger-pressure" title="Permanent link">&para;</a></h3>
+<p>The <code>Touchpad {p} Finger {f} Pressure</code> descriptor existed in the engine. Phase A put it in the picker (<code>Mapping_TouchpadFingerPressure_Format</code>, one entry per pad × finger, gated on <code>HasTouchpad || IsTouchpad</code>, finger counts from the live SDL snapshot or the persisted capability). It reads <code>FingerPressure[f]</code> as a unipolar 0..1 level and bypasses the touchpad delta path. Values arrive from SDL's per-finger pressure on gamepad touchpads (pads without a force sensor report full on contact). The PTP reader and the touchpad overlay report binary 0/1 while a finger is down. The Workshop translator never emits this descriptor (its trackpad <code>soft_press</code> rides the click and touch descriptors as <code>SoftPressApproximated</code>). It exists for hand-built mappings.</p>
+<h3 id="the-macro-action-family">The macro-action family<a class="headerlink" href="#the-macro-action-family" title="Permanent link">&para;</a></h3>
+<p>Appended to <code>MacroActionType</code> (the enum is append-only because the clipboard serializes ints): <code>MoveMouseToScreenPosition = 33</code>, <code>RepeatKeyWhileHeld = 34</code>, <code>RepeatVcButtonWhileHeld = 35</code>, <code>ToggleVcButton = 36</code>, <code>ToggleKey = 37</code>, <code>GyroRecenter = 38</code>.</p>
+<ul>
+<li><code>MoveMouseToScreenPosition</code>: <code>MouseX</code> / <code>MouseY</code> (primary-monitor pixels, clamped to the screen), executed as one <code>CursorControlService.MoveCursorTo</code> warp. Editor: two numeric fields plus <strong>Pick on screen</strong> (3-second countdown, then captures the live cursor).</li>
+<li><code>RepeatKeyWhileHeld</code>: the shared key picker plus <code>IntervalMs</code> (clamped 10–1000, default 100). A continuous action: while the trigger holds, it sends a full key-down/key-up pulse per parsed key each time the interval elapses, first pulse immediately.</li>
+<li><code>RepeatVcButtonWhileHeld</code> (v3): the virtual-controller twin, pulsing an Xbox button on the interval (Steam's xinput <code>hold_repeats</code> turbo).</li>
+<li><code>ToggleVcButton</code> / <code>ToggleKey</code> (v3): press-to-latch, press-again-to-release, for Steam's activator <code>toggle</code> setting.</li>
+<li><code>GyroRecenter</code> (v3): Steam's <code>camera_reset</code>, approximated as a gyro recenter.</li>
+</ul>
+<p>The translator also reuses existing actions: <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>GuideLedBrightness</code> for <code>set_led</code> (v2, with HSV saturation and brightness folded by the materializer) and <code>MouseLimitRegion</code> for stick- and gyro-hosted mouse regions (v3). The translator's neutral shape is <code>TranslatedMacroAction</code>, a ten-member 0-based enum in <code>TranslatedProfile.cs</code> that the materializer lowers onto <code>MacroActionType</code>.</p>
+<p>All dispatch in the gamepad-state and Extended raw-state switches of <code>InputManager.Step4b.EvaluateMacros.cs</code>, carry the DTO triple in <code>SettingsService</code>, and follow the <code>Is*Type</code> editor-visibility pattern in <code>MacroItem.cs</code>.</p>
+<hr />
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p><code>PadForge.SteamWorkshop.Tests</code> covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through <code>TranslationEdgeTests</code>, the per-wave suites (<code>WaveOneATranslationTests</code> through <code>WaveFourCTranslationTests</code>), and 30 golden fixtures (<code>Golden/{fileId}.golden.txt</code>, re-blessed via <code>PADFORGE_BLESS_GOLDEN=1</code> so translator changes surface as reviewable diffs). <code>PadForge.Tests/WorkshopProvenanceTests.cs</code> pins the provenance XML round-trip, the materializer stamp, and compaction preservation.</p>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>: the user guide for this feature.</li>
+<li><a href="../../features/mappings/">Button and Axis Mappings</a>: the Gamepad sources and the Sensitivity slider as the user sees them.</li>
+<li><a href="../../guides/shift-layers/">Shift Layers</a>: the activator modes the translator emits.</li>
+<li><a href="../../guides/menus/">Menus</a>: what a translated <code>MenuDefinitionEntry</code> looks like in the UI.</li>
+<li><a href="../../guides/macros/">Macros</a>: the translated actions in the editor.</li>
+<li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>ProfileData</code>, the settings file, and where provenance persists.</li>
+<li><a href="../services-layer/">Services Layer</a>: <code>InputService</code> profile loading the import path reuses.</li>
+<li><a href="../engine-library/">Engine Library</a>: <code>MappingSource</code>, <code>MappingSet</code>, and the coercion layer.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.1.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../remote-link-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Remote Link Internals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Remote Link Internals
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../controller-audio-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Controller Audio Internals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Controller Audio Internals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

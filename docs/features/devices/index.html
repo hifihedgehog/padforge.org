@@ -1,0 +1,4667 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/features/devices/">
+      
+      
+        <link rel="prev" href="../dashboard/">
+      
+      
+        <link rel="next" href="../controller-slots/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Devices - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#devices" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Devices
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#page-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Page layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-card-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device card list
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device card list">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#type-filter-chips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type filter chips
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#card-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Card layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecting-a-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selecting a card
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-a-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing a device
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-detail-pane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device detail pane
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device detail pane">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device-name-and-dossier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device name and dossier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submit-device-mapping-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Submit Device Mapping button
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Submit Device Mapping button">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-use-the-button-over-a-blank-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use the button over a blank template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assigning-devices-to-slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assigning devices to slots
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assigning devices to slots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toggle-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Toggle buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag and drop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-on-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens on assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-slot-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-slot assignment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raw-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Raw input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#axes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pov-d-pad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POV / D-pad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyroscope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyroscope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accelerometer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accelerometer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchpads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#midi-devices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MIDI devices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consumer-control-devices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consumer Control devices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nfc-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NFC readers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pairing-a-wii-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pairing a Wii controller
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#input-hiding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input hiding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Input hiding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hide-from-games-hidhide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hide from Games (HidHide)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consume-mapped-inputs-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consume Mapped Inputs (Hooks)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which to use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-enable-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-enable defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety warnings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#master-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Master switch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#power" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Power">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idle-disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idle Disconnect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-raw-joystick-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force Raw Joystick Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Force Raw Joystick Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turn-it-on-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn it on when
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-turn-it-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to turn it on
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When not to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reconnection-and-guid-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reconnection and GUID persistence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reconnection and GUID persistence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-guid-is-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the GUID is built
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-that-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What that means
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offline-device-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Offline device cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stick-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stick calibration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stick calibration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#center-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Center offset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Max range
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device-does-not-appear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device does not appear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-appears-but-shows-no-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device appears but shows no input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buttons-missing-or-mapped-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Buttons missing or mapped wrong
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#double-input-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Double input in games
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings-lost-after-reconnecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings lost after reconnecting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#center-drift-after-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Center drift after calibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hidhide-toggle-grayed-out-or-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HidHide toggle grayed out or missing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#page-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Page layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-card-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device card list
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device card list">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#type-filter-chips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type filter chips
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#card-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Card layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selecting-a-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selecting a card
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-a-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing a device
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-detail-pane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device detail pane
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device detail pane">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device-name-and-dossier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device name and dossier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submit-device-mapping-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Submit Device Mapping button
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Submit Device Mapping button">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-use-the-button-over-a-blank-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why use the button over a blank template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assigning-devices-to-slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assigning devices to slots
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assigning devices to slots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toggle-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Toggle buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drag-and-drop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drag and drop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-on-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens on assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-slot-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-slot assignment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raw-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Raw input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#axes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pov-d-pad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POV / D-pad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyroscope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyroscope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accelerometer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accelerometer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchpads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#midi-devices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MIDI devices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consumer-control-devices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consumer Control devices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nfc-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NFC readers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pairing-a-wii-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pairing a Wii controller
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#input-hiding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input hiding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Input hiding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hide-from-games-hidhide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hide from Games (HidHide)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consume-mapped-inputs-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consume Mapped Inputs (Hooks)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which to use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-enable-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-enable defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety warnings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#master-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Master switch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#power" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Power">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idle-disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idle Disconnect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-raw-joystick-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force Raw Joystick Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Force Raw Joystick Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turn-it-on-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn it on when
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-turn-it-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to turn it on
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When not to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reconnection-and-guid-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reconnection and GUID persistence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reconnection and GUID persistence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-guid-is-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the GUID is built
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-that-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What that means
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offline-device-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Offline device cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stick-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stick calibration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stick calibration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#center-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Center offset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Max range
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device-does-not-appear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device does not appear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-appears-but-shows-no-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device appears but shows no input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buttons-missing-or-mapped-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Buttons missing or mapped wrong
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#double-input-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Double input in games
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings-lost-after-reconnecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings lost after reconnecting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#center-drift-after-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Center drift after calibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hidhide-toggle-grayed-out-or-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HidHide toggle grayed out or missing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="devices">Devices<a class="headerlink" href="#devices" title="Permanent link">&para;</a></h1>
+<p><em>Every gamepad, joystick, keyboard, mouse, and touchpad PadForge can see lives on this page as a card.</em></p>
+<p><img alt="Devices page showing detected controllers with status and slot badges" src="../../images/devices.png" /></p>
+<hr />
+<h2 id="page-layout">Page layout<a class="headerlink" href="#page-layout" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Left panel</strong></td>
+<td>One card for each detected device</td>
+</tr>
+<tr>
+<td><strong>Right panel</strong></td>
+<td>Detail pane for the selected device. Identity, slot assignment, hiding, live raw input.</td>
+</tr>
+<tr>
+<td><strong>Header</strong></td>
+<td><strong>Refresh</strong> button, <strong>Pair</strong> button (Wii controllers and DualShock 3), <strong>Online</strong> count, <strong>Total</strong> count (includes disconnected)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="device-card-list">Device card list<a class="headerlink" href="#device-card-list" title="Permanent link">&para;</a></h2>
+<p>Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchpads) sort to the bottom. Within each group, cards sort alphabetically by name, then by Vendor ID, then by Product ID.</p>
+<h3 id="type-filter-chips">Type filter chips<a class="headerlink" href="#type-filter-chips" title="Permanent link">&para;</a></h3>
+<p>A row of chips sits above the card list: <strong>ALL</strong>, <strong>GAMEPAD</strong>, <strong>JOYSTICK</strong>, <strong>WHEEL</strong>, <strong>KEYBOARD</strong>, <strong>MOUSE</strong>, <strong>OTHER</strong>. Each chip carries a live count of the devices in that group. Click one to show only that type. Click <strong>ALL</strong> to clear the filter. The active chip lights up in the accent color, and the counts update as devices connect and drop.</p>
+<p>GAMEPAD covers standard pads. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, and anything unclassified.</p>
+<!-- SCREENSHOT: devices-facet-chips -->
+<p><img alt="Type filter chips above the device list, each with a live count" src="../../images/devices-facet-chips.png" /></p>
+<h3 id="card-layout">Card layout<a class="headerlink" href="#card-layout" title="Permanent link">&para;</a></h3>
+<p>Top row:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status dot</strong></td>
+<td>Lit for connected, dim for disconnected</td>
+</tr>
+<tr>
+<td><strong>Device name</strong></td>
+<td>The name the hardware reports (e.g., "Xbox Wireless Controller"). Merged devices show "All Keyboards (Merged)", "All Mice (Merged)", or "All Touchpads (Merged)".</td>
+</tr>
+<tr>
+<td><strong>Slot badges</strong></td>
+<td><a href="../controller-slots/">Slot</a> numbers the device is assigned to, each with the slot's controller-type icon. No badge shows if the device is unassigned.</td>
+</tr>
+<tr>
+<td><strong>Remove button</strong></td>
+<td>X. Deletes the device and its settings. Revealed on hover or keyboard focus.</td>
+</tr>
+</tbody>
+</table>
+<p>Bottom row (one wrapping metadata line):</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td>Gamepad, Joystick, Wheel, Flight Stick, Mouse, Keyboard, NFC Reader, Consumer Control, MIDI, etc.</td>
+</tr>
+<tr>
+<td><strong>VID:PID</strong></td>
+<td>USB Vendor and Product ID in hex (<code>054C:0CE6</code> for DualSense). Omitted for merged and virtual sources that report no ID.</td>
+</tr>
+<tr>
+<td><strong>Capabilities</strong></td>
+<td>Axis, button, and POV hat counts plus feature tags (Rumble, Gyro, Accel)</td>
+</tr>
+<tr>
+<td><strong>Battery</strong></td>
+<td>A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging.</td>
+</tr>
+</tbody>
+</table>
+<p>Wired devices, devices with no battery, and offline devices show no battery indicator. The same percentage appears again as a small suffix next to the device name in a slot's assigned-device list, so you can read a controller's charge without opening its card.</p>
+<h3 id="selecting-a-card">Selecting a card<a class="headerlink" href="#selecting-a-card" title="Permanent link">&para;</a></h3>
+<p>Click a card. A vertical accent bar appears on the left edge. The detail pane fills in.</p>
+<h3 id="removing-a-device">Removing a device<a class="headerlink" href="#removing-a-device" title="Permanent link">&para;</a></h3>
+<p>The X button deletes the device and all its settings (mappings, slot assignments, hiding). The <a href="../controller-slots/">slot</a> stays. It just becomes unassigned.</p>
+<p>If the device is still plugged in, it comes back on the next scan as a fresh device with no settings.</p>
+<hr />
+<h2 id="device-detail-pane">Device detail pane<a class="headerlink" href="#device-detail-pane" title="Permanent link">&para;</a></h2>
+<h3 id="device-name-and-dossier">Device name and dossier<a class="headerlink" href="#device-name-and-dossier" title="Permanent link">&para;</a></h3>
+<p>The detail pane opens with the device name as a large heading. Below it sits the <strong>Device Dossier</strong>, a recessed monospace card that gathers every identity field PadForge holds for the device into one place. A <strong>Copy</strong> button at the top-right of the card copies the whole dossier to the clipboard as text, handy when filing a bug report.</p>
+<p>Rows whose fact the device does not report collapse instead of showing a blank placeholder. A wired pad shows no LINK or SERIAL row. A device with no resolvable HID path shows no PATH row.</p>
+<!-- SCREENSHOT: devices-dossier -->
+<p><img alt="Device Dossier card with labeled identity rows and a Copy button" src="../../images/devices-dossier.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PRODUCT</strong></td>
+<td>Product name from hardware</td>
+</tr>
+<tr>
+<td><strong>TYPE</strong></td>
+<td>Device category</td>
+</tr>
+<tr>
+<td><strong>CAPS</strong></td>
+<td>Axis / button / POV counts and feature tags</td>
+</tr>
+<tr>
+<td><strong>APP GUID</strong></td>
+<td>The identity string PadForge builds from device path, VID:PID, and serial number. It is what keeps a device's settings across reboots and re-plugs. Marquee-scrolls if long.</td>
+</tr>
+<tr>
+<td><strong>SDL GUID</strong></td>
+<td>The 32-character hex string SDL uses to look up the device's mapping. Shown when the device reports one. Marquee-scrolls if long.</td>
+</tr>
+<tr>
+<td><strong>PATH</strong></td>
+<td>HID path used for HidHide hiding. Shown for devices that report a resolvable path. A bridged device (such as a DualShock 3 over Bluetooth) shows its connection path here instead.</td>
+</tr>
+<tr>
+<td><strong>VID:PID</strong></td>
+<td>Vendor and Product ID in hex</td>
+</tr>
+<tr>
+<td><strong>LINK</strong></td>
+<td>Reads <strong>BT</strong> for a Bluetooth connection. Absent for wired and other links.</td>
+</tr>
+<tr>
+<td><strong>SERIAL</strong></td>
+<td>The serial number the device reports (a Bluetooth MAC address on most wireless pads). Shown when reported.</td>
+</tr>
+<tr>
+<td><strong>BATT</strong></td>
+<td>Battery glyph and percentage. Shown only when the device reports a battery.</td>
+</tr>
+</tbody>
+</table>
+<p>A row of capability icons sits at the bottom of the card: rumble, gyro, and touchpad marks light up for the devices that have them.</p>
+<h3 id="submit-device-mapping-button">Submit Device Mapping button<a class="headerlink" href="#submit-device-mapping-button" title="Permanent link">&para;</a></h3>
+<p>Shows in the detail pane for any joystick-class HID device PadForge does not already know as a standard gamepad. Hidden for known gamepads, keyboards, mice, and touchpads.</p>
+<p>Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:</p>
+<ul>
+<li>Device name</li>
+<li>USB Vendor ID (hex)</li>
+<li>USB Product ID (hex)</li>
+<li>SDL GUID (the 32-character hex string SDL uses to look up mappings)</li>
+<li>Axis count</li>
+<li>Button count</li>
+<li>Hat / POV count</li>
+</ul>
+<p>You fill in the per-input mapping by hand. Which raw axis index is Left Stick X. Which raw button index is A. Read those off the <strong>raw input</strong> section on this page while pressing each control.</p>
+<p>Once the issue is merged, the mapping ships in the app's built-in controller mapping database and auto-loads on every PadForge install. Future users with the same hardware get the device recognized without further setup.</p>
+<h4 id="why-use-the-button-over-a-blank-template">Why use the button over a blank template<a class="headerlink" href="#why-use-the-button-over-a-blank-template" title="Permanent link">&para;</a></h4>
+<p>The blank Device Mapping issue template makes you type the device identification fields yourself. The in-app button reads them straight from PadForge's live SDL3 enumeration, so the SDL GUID can't be mistyped. Use the button when the device is plugged in.</p>
+<hr />
+<h2 id="assigning-devices-to-slots">Assigning devices to slots<a class="headerlink" href="#assigning-devices-to-slots" title="Permanent link">&para;</a></h2>
+<h3 id="toggle-buttons">Toggle buttons<a class="headerlink" href="#toggle-buttons" title="Permanent link">&para;</a></h3>
+<p>The <strong>Virtual Controller Assignment</strong> section in the detail pane shows numbered toggles, one per existing <a href="../controller-slots/">slot</a>.</p>
+<ul>
+<li><strong>Highlighted</strong> = assigned to that slot</li>
+<li><strong>Normal</strong> = not assigned</li>
+<li>More than one toggle can be on at the same time (see Multi-slot below)</li>
+</ul>
+<p>Assigning a device builds a default <a href="../mappings/">mapping</a> if none exists and updates the slot badges. You stay on the Devices page. Open the slot's config page from the sidebar when you want to tune the mapping.</p>
+<h3 id="drag-and-drop">Drag and drop<a class="headerlink" href="#drag-and-drop" title="Permanent link">&para;</a></h3>
+<p>Drag a card from the left panel onto a sidebar slot card. Same result as clicking the toggle.</p>
+<h3 id="what-happens-on-assignment">What happens on assignment<a class="headerlink" href="#what-happens-on-assignment" title="Permanent link">&para;</a></h3>
+<ol>
+<li>The slot's <a href="../controller-slots/">virtual controller</a> is created if it does not exist yet</li>
+<li>A default <a href="../mappings/">mapping</a> is built for the device type and output type (Xbox, PlayStation, Extended, etc.)</li>
+<li>For gamepads and joysticks, "Hide from games" turns on if HidHide is installed</li>
+<li>Slot badges update right away</li>
+</ol>
+<p>Unassigning a device from every slot clears both hiding options.</p>
+<hr />
+<h2 id="multi-slot-assignment">Multi-slot assignment<a class="headerlink" href="#multi-slot-assignment" title="Permanent link">&para;</a></h2>
+<p>One physical device can feed more than one <a href="../controller-slots/">slot</a> at the same time. Real uses:</p>
+<ul>
+<li><strong>Two output types at once.</strong> One pad feeding an Xbox slot for the game and an Extended slot for a flight sim overlay.</li>
+<li><strong>Split button subsets.</strong> Left side mapped to one slot, right side to another.</li>
+<li><strong>A/B testing.</strong> Compare <a href="../stick-deadzones/">deadzone</a>, sensitivity, or <a href="../../guides/macros/">macro</a> setups without swapping hardware.</li>
+<li><strong>MIDI plus gamepad.</strong> Game input and MIDI signals from the same pad.</li>
+</ul>
+<p>Toggle multiple slot buttons in the detail pane. Each slot keeps its own <a href="../mappings/">mapping</a>, so the same physical input can mean different things on different slots.</p>
+<p>Slot badges show every assigned slot number at a glance.</p>
+<hr />
+<h2 id="raw-input">Raw input<a class="headerlink" href="#raw-input" title="Permanent link">&para;</a></h2>
+<p>The bottom of the detail pane shows live hardware data before any <a href="../mappings/">mapping</a>, <a href="../stick-deadzones/">deadzone</a>, or sensitivity work. Updates at the engine polling rate.</p>
+<h3 id="axes">Axes<a class="headerlink" href="#axes" title="Permanent link">&para;</a></h3>
+<p>Each axis row has:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>Always Axis 0, Axis 1, Axis 2, and so on. The row keeps its number in both input modes. It never switches to friendly names like LX or LT.</td>
+</tr>
+<tr>
+<td><strong>Progress bar</strong></td>
+<td>Horizontal, 0-1 range. A centered stick reads ~50%.</td>
+</tr>
+<tr>
+<td><strong>Raw value</strong></td>
+<td>Exact integer (0-65535) in monospace</td>
+</tr>
+</tbody>
+</table>
+<p>Look for:</p>
+<ul>
+<li><strong>Center drift.</strong> The axis does not rest at ~32768 when you let go. Use Calibrate Center on the <a href="../stick-deadzones/">Sticks</a> tab.</li>
+<li><strong>Trigger baseline.</strong> Some triggers rest at 0, others at 32768. Depends on hardware and input mode.</li>
+<li><strong>Dead axes.</strong> Axis never moves. The mapping database may have a bad entry. Try Force Raw Joystick Mode.</li>
+</ul>
+<h3 id="buttons">Buttons<a class="headerlink" href="#buttons" title="Permanent link">&para;</a></h3>
+<p>Small circles in a wrap layout, labeled by index (0, 1, 2...).</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Released</td>
+<td>Dim gray</td>
+</tr>
+<tr>
+<td>Pressed</td>
+<td>Filled with the system accent color</td>
+</tr>
+</tbody>
+</table>
+<p>Gamepad mode shows the 11 standard buttons, indexed 0-10 (0 is A, 1 is B, on through Guide). Raw mode shows every physical button (13 or 17 on some controllers). Either way the circles read as numbers, not letters. The count is what changes between modes.</p>
+<p>Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags. See their sections below.</p>
+<h3 id="keyboards">Keyboards<a class="headerlink" href="#keyboards" title="Permanent link">&para;</a></h3>
+<p>A QWERTY layout replaces axes and buttons. Main keys, navigation cluster, arrows, numpad. Keys light up in the accent color as you press them.</p>
+<h3 id="mice">Mice<a class="headerlink" href="#mice" title="Permanent link">&para;</a></h3>
+<p>A mouse graphic replaces axes and buttons:</p>
+<ul>
+<li>Button presses highlight on the mouse body</li>
+<li>Motion direction shows visually</li>
+<li>Scroll wheel activity reads as scroll intensity</li>
+</ul>
+<h3 id="pov-d-pad">POV / D-pad<a class="headerlink" href="#pov-d-pad" title="Permanent link">&para;</a></h3>
+<p>Compass widgets with a direction line, labeled "POV 0", "POV 1", etc.</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Centered</td>
+<td>Background circle with center dot, no line</td>
+</tr>
+<tr>
+<td>Direction pressed</td>
+<td>Accent line from center toward the pressed direction</td>
+</tr>
+</tbody>
+</table>
+<p>All 8 directions are supported (N, NE, E, SE, S, SW, W, NW). Some specialty controllers report continuous angular values.</p>
+<h3 id="gyroscope">Gyroscope<a class="headerlink" href="#gyroscope" title="Permanent link">&para;</a></h3>
+<p>Shows on devices with a gyro sensor (DualSense, DualShock 4, Switch Pro, others). Rotational velocity. Used by the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for motion-enabled emulators.</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Motion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>X</strong></td>
+<td>Pitch (forward / backward tilt)</td>
+</tr>
+<tr>
+<td><strong>Y</strong></td>
+<td>Yaw (left / right rotation)</td>
+</tr>
+<tr>
+<td><strong>Z</strong></td>
+<td>Roll (side-to-side tilt)</td>
+</tr>
+</tbody>
+</table>
+<p>Three decimal places. A still controller reads near 0.000.</p>
+<h3 id="accelerometer">Accelerometer<a class="headerlink" href="#accelerometer" title="Permanent link">&para;</a></h3>
+<p>Shows on devices with an accelerometer. Linear acceleration:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Motion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>X</strong></td>
+<td>Left / right</td>
+</tr>
+<tr>
+<td><strong>Y</strong></td>
+<td>Up / down. Gravity registers here, so a still controller reads about 9.8 or -9.8.</td>
+</tr>
+<tr>
+<td><strong>Z</strong></td>
+<td>Forward / backward</td>
+</tr>
+</tbody>
+</table>
+<p>Values are in meters per second squared. Gravity always shows up, so whichever axis points up or down sits near 9.8 or -9.8 at rest. Unlike the gyro, the accelerometer does not settle to zero when the controller is still.</p>
+<p>A second block, <strong>Aux Accelerometer</strong>, appears when a device carries a second sensor: the Nunchuk's own accelerometer, or the left Joy-Con of a combined pair. Same three axes. It maps as its own source.</p>
+<hr />
+<h2 id="touchpads">Touchpads<a class="headerlink" href="#touchpads" title="Permanent link">&para;</a></h2>
+<p>PadForge reads two kinds of touch surfaces on the Devices page.</p>
+<ul>
+<li><strong>Gamepad touchpads.</strong> The touch surfaces on DualShock 4, DualSense, Steam Controller, and Steam Deck. SDL3 reports them as part of the gamepad. They show up in the raw input view with contact position and finger count.</li>
+<li><strong>Windows Precision Touchpad.</strong> Laptop trackpads and external precision touchpads. PadForge treats each one as its own device card with a live touch preview. These trackpads have no physical click button, so no click input appears for them in the mapping picker or auto-map.</li>
+</ul>
+<p>A device with two touch surfaces (Steam Controller 2026, Steam Deck, original Steam Controller) shows a separate live preview for each pad, labeled <strong>Touchpad 1</strong> and <strong>Touchpad 2</strong> in the raw input view.</p>
+<p>A third and fourth source live elsewhere: <a href="../../guides/web-controller/">Web Controller</a> clients in touchpad-only or DS4-with-touchpad mode, and the on-screen <a href="../dashboard/#touchpad-overlay">Touchpad Overlay</a>. All four feed the same per-slot configuration on the <a href="../touchpad/">Touchpad</a> tab.</p>
+<hr />
+<h2 id="midi-devices">MIDI devices<a class="headerlink" href="#midi-devices" title="Permanent link">&para;</a></h2>
+<p>A connected MIDI keyboard, pad controller, or control surface shows up here as its own device card. Select it and the detail pane shows a live preview: a piano that lights the notes you play and vertical sliders that follow the knobs and faders. Its notes, Control Change knobs, pitch bend, and encoder dials map like any button or axis.</p>
+<p>MIDI input needs Windows 11 24H2 (build 26100) or later, the same Windows MIDI Services the MIDI virtual controller uses. See <a href="../midi-input/">MIDI Input</a> for the full list of what maps.</p>
+<hr />
+<h2 id="consumer-control-devices">Consumer Control devices<a class="headerlink" href="#consumer-control-devices" title="Permanent link">&para;</a></h2>
+<p>Media keys show up here as their own device card, typed <strong>Consumer Control</strong>. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.</p>
+<p><img alt="Consumer Control device detail pane with named media chips" src="../../images/devices-consumer.png" /></p>
+<p>Select the card and the detail pane shows named button chips instead of the numbered-button grid: Play/Pause, Mute, Volume Up, Volume Down, Next Track, Previous Track, and the rest of the media keys the device reports. A chip lights up in the accent color while its key is held.</p>
+<p>Each named media key maps as a <a href="../mappings/">source</a> and works as a <a href="../../guides/macros/">macro</a> trigger. These devices have no sticks or triggers. <strong>Consume Mapped Inputs</strong> does not apply to them, so that toggle is left out.</p>
+<hr />
+<h2 id="nfc-readers">NFC readers<a class="headerlink" href="#nfc-readers" title="Permanent link">&para;</a></h2>
+<p>A contactless smart-card / NFC reader (PC/SC class, such as an ACR122U) shows up as a device card typed <strong>NFC Reader</strong>.</p>
+<p><img alt="NFC Reader detail pane with the Register / Manage NFC Tags button" src="../../images/devices-nfc.png" /></p>
+<p>The detail pane has a <strong>Register / Manage NFC Tags</strong> button. It opens a dialog where you tap a tag to capture it, then give the tag a name. Each registered tag becomes its own button you can <a href="../mappings/">map</a>, alongside an <strong>Any NFC Tag</strong> button that any tag triggers. The pane lists your named tags and highlights the one you just tapped.</p>
+<p>The deep how-to (registering, naming, and mapping tags) lives on <a href="../nfc-tags/">NFC Tags</a>.</p>
+<hr />
+<h2 id="pairing-a-wii-controller">Pairing a Wii controller<a class="headerlink" href="#pairing-a-wii-controller" title="Permanent link">&para;</a></h2>
+<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog, which walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself.</p>
+<p>Once paired, a Wii controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad. See <a href="../../devices/wii-controllers/">Wii Controllers</a> for the pairing steps and the per-controller button layouts.</p>
+<hr />
+<h2 id="input-hiding">Input hiding<a class="headerlink" href="#input-hiding" title="Permanent link">&para;</a></h2>
+<p>When a physical device feeds a <a href="../controller-slots/">slot</a>, games can see both devices and double up the input. PadForge offers two ways to stop that, set per device.</p>
+<h3 id="hide-from-games-hidhide">Hide from Games (HidHide)<a class="headerlink" href="#hide-from-games-hidhide" title="Permanent link">&para;</a></h3>
+<p>Hides the physical device at the OS level using <a href="https://github.com/nefarius/HidHide">HidHide</a>. The whole device disappears from every non-whitelisted app the moment you toggle the option. PadForge is whitelisted automatically. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from <a href="../driver-management/">Driver Management</a>.</p>
+<p>You can whitelist more apps in <a href="../settings/">Settings</a> so they can still see hidden devices (streaming overlays, secondary remappers, etc.).</p>
+<h3 id="consume-mapped-inputs-hooks">Consume Mapped Inputs (Hooks)<a class="headerlink" href="#consume-mapped-inputs-hooks" title="Permanent link">&para;</a></h3>
+<p>Suppresses only the specific keys or mouse buttons <a href="../mappings/">mapped</a> to a virtual controller output. Unmapped keys still type. The cursor still moves. No driver needed. Windows low-level input hooks handle it. The toggle only shows for keyboards and mice.</p>
+<h3 id="which-to-use">Which to use<a class="headerlink" href="#which-to-use" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xbox / PlayStation / Switch controller</td>
+<td>Hide from Games</td>
+</tr>
+<tr>
+<td>Racing wheel or flight stick</td>
+<td>Hide from Games</td>
+</tr>
+<tr>
+<td>Keyboard with a few keys mapped</td>
+<td>Consume Mapped Inputs</td>
+</tr>
+<tr>
+<td>Mouse with side buttons mapped</td>
+<td>Consume Mapped Inputs</td>
+</tr>
+<tr>
+<td>Hide a keyboard entirely</td>
+<td>Hide from Games (read the warnings)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="auto-enable-defaults">Auto-enable defaults<a class="headerlink" href="#auto-enable-defaults" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Device type</th>
+<th>Hide from Games</th>
+<th>Consume Mapped Inputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gamepad / Joystick / Wheel / Flight Stick</td>
+<td>Auto-enabled (if HidHide is installed)</td>
+<td>Not shown</td>
+</tr>
+<tr>
+<td>Keyboard</td>
+<td>Off</td>
+<td>Off</td>
+</tr>
+<tr>
+<td>Mouse</td>
+<td>Off</td>
+<td>Off</td>
+</tr>
+</tbody>
+</table>
+<p>Keyboards and mice <strong>do not</strong> auto-enable any hiding. Blocking them by accident makes the PC hard to use.</p>
+<p>Unassigning a device from every slot clears both hiding options.</p>
+<h3 id="safety-warnings">Safety warnings<a class="headerlink" href="#safety-warnings" title="Permanent link">&para;</a></h3>
+<p>PadForge shows a confirmation flyout when you turn on hiding for a keyboard, mouse, or Consumer Control device:</p>
+<ul>
+<li><strong>HidHide on keyboard.</strong> Every app loses keyboard access. "All Keyboards (Merged)" affects every connected keyboard.</li>
+<li><strong>HidHide on mouse.</strong> Every app outside PadForge loses mouse control. "All Mice (Merged)" affects every connected mouse.</li>
+<li><strong>HidHide on a Consumer Control device (media keys).</strong> The media collection sits on a physical keyboard, so cloaking it hides that whole keyboard from every app. You get the same keyboard warning.</li>
+<li><strong>Consume on keyboard.</strong> Mapped keys stop working in other apps while PadForge runs.</li>
+<li><strong>Consume on mouse.</strong> Mapped buttons (possibly left / right click) are suppressed.</li>
+</ul>
+<p>Click <strong>Cancel</strong> to back out or <strong>Proceed</strong> to confirm.</p>
+<h3 id="master-switch">Master switch<a class="headerlink" href="#master-switch" title="Permanent link">&para;</a></h3>
+<p>The global <strong>"Hide devices from games"</strong> toggle in <a href="../settings/">Settings</a> (under Input Engine) is the master on / off. With it off, no hiding or suppression runs, no matter what each device is set to. Flipping it back on restores every per-device setting.</p>
+<hr />
+<h2 id="power">Power<a class="headerlink" href="#power" title="Permanent link">&para;</a></h2>
+<p>Wireless (Bluetooth) controllers get a <strong>Power</strong> section in the detail pane.</p>
+<p><img alt="Power section with Idle Disconnect timer and battery indicator" src="../../images/devices-power.png" /></p>
+<h3 id="idle-disconnect">Idle Disconnect<a class="headerlink" href="#idle-disconnect" title="Permanent link">&para;</a></h3>
+<p>Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes, and the suffix reads <strong>minutes (0 = never)</strong>. Set it to 0 to leave the controller on.</p>
+<p>Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link to drop, so nothing happens. Charging doesn't hold it off. Dropping Bluetooth doesn't interrupt the charge, so an idle pad left on a charger still disconnects. It works on the wireless families PadForge can power off: Sony, Xbox, Wii Remote, Valve, and Switch 2.</p>
+<hr />
+<h2 id="force-raw-joystick-mode">Force Raw Joystick Mode<a class="headerlink" href="#force-raw-joystick-mode" title="Permanent link">&para;</a></h2>
+<p>By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translates raw button and axis indices into a standard layout (A/B/X/Y, LX/LY, LT/RT) via a built-in controller database.</p>
+<p><strong>Force Raw Joystick Mode</strong> skips that translation and reads raw hardware indices straight, the same values Windows Game Controllers (joy.cpl) shows.</p>
+<h3 id="turn-it-on-when">Turn it on when<a class="headerlink" href="#turn-it-on-when" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buttons map to the wrong outputs</td>
+<td>SDL3's mapping does not match the device</td>
+</tr>
+<tr>
+<td>Some buttons read no input</td>
+<td>SDL3 ate the button and sent it to a slot that does not match</td>
+</tr>
+<tr>
+<td>Extra buttons go missing</td>
+<td>Controllers with more than 11 buttons lose the extras in gamepad mode</td>
+</tr>
+<tr>
+<td>Works in joy.cpl but not PadForge</td>
+<td>SDL3 mapping is wrong</td>
+</tr>
+<tr>
+<td>Off-brand or niche gamepads</td>
+<td>Budget controllers, retro adapters, arcade sticks often have wrong database entries</td>
+</tr>
+<tr>
+<td>DsHidMini SDF mode</td>
+<td>DualShock 3 via SDF needs raw mode. SDL3 drops some buttons.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-to-turn-it-on">How to turn it on<a class="headerlink" href="#how-to-turn-it-on" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Select the device card</li>
+<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for PadForge's own virtual controllers and other virtual input sources.)</li>
+<li>Check <strong>Force raw joystick mode</strong></li>
+<li>Saved right away. Persists across restarts.</li>
+</ol>
+<h3 id="what-changes">What changes<a class="headerlink" href="#what-changes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Axis count can change. The raw layer often exposes more axes than the six the gamepad layer reports. Rows stay labeled Axis 0, Axis 1, and so on in both modes.</li>
+<li>Button count can rise. Raw mode exposes every physical button, including any the gamepad layer folded away. Circles stay labeled by number in both modes.</li>
+<li>Auto-mapping is off. Record each <a href="../mappings/">mapping</a> by hand from the Record button.</li>
+<li>The raw input display updates right away</li>
+</ul>
+<h3 id="when-not-to-use-it">When not to use it<a class="headerlink" href="#when-not-to-use-it" title="Permanent link">&para;</a></h3>
+<p>If the controller works fine in gamepad mode, raw mode gains you nothing. Gamepad mode gives you friendly names and a default mapping.</p>
+<p>The toggle only shows for devices SDL3 recognizes as gamepads. Devices already running as raw joysticks (flight sticks, wheels, generic HID) always use raw indices.</p>
+<hr />
+<h2 id="reconnection-and-guid-persistence">Reconnection and GUID persistence<a class="headerlink" href="#reconnection-and-guid-persistence" title="Permanent link">&para;</a></h2>
+<p>PadForge identifies devices with deterministic GUIDs so they survive reboots, re-plugs, and port changes.</p>
+<h3 id="how-the-guid-is-built">How the GUID is built<a class="headerlink" href="#how-the-guid-is-built" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Source</th>
+<th>Stability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Serial number</strong> (e.g., Bluetooth MAC address)</td>
+<td>Stable across reboots, re-pairing, and port changes</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Device path</strong></td>
+<td>Stable for the same USB port. Changes if you switch ports.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>SDL instance ID</strong> + VID:PID</td>
+<td>Can change on every reconnect</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-that-means">What that means<a class="headerlink" href="#what-that-means" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Bluetooth controllers</strong> (DualSense, DualShock 4, Switch Pro). GUID stays the same across reboots and re-pairs. Settings stick.</li>
+<li><strong>Wired USB controllers.</strong> GUID stays the same on the same USB port. A different port makes a new GUID. The old settings stay on the offline (gray) card.</li>
+<li><strong><a href="../../guides/profiles/">Profiles</a>.</strong> A profile falls back to VID:PID. If a profile was saved with a device that now has a different identity (a port change, for example), PadForge matches by VID:PID so the profile still applies.</li>
+</ul>
+<h3 id="offline-device-cards">Offline device cards<a class="headerlink" href="#offline-device-cards" title="Permanent link">&para;</a></h3>
+<p>Disconnected devices stay in the list with a dim status dot.</p>
+<ul>
+<li>Every mapping, slot assignment, and setting is kept</li>
+<li>Reconnect with the same GUID and everything comes back</li>
+<li>Remove with the X button if you no longer need it</li>
+<li>Offline cards cost nothing at runtime. Stored settings only.</li>
+</ul>
+<hr />
+<h2 id="stick-calibration">Stick calibration<a class="headerlink" href="#stick-calibration" title="Permanent link">&para;</a></h2>
+<h3 id="center-offset">Center offset<a class="headerlink" href="#center-offset" title="Permanent link">&para;</a></h3>
+<p>Fixes center drift: a stick that does not rest in the middle.</p>
+<ol>
+<li>Go to the <strong>Sticks</strong> tab on the controller's config page (see <a href="../stick-deadzones/">Stick Deadzones</a>)</li>
+<li>Click <strong>Calibrate Center</strong> while the stick is at rest (do not touch it)</li>
+<li>PadForge samples hardware values for ~500 ms and calculates the offset</li>
+</ol>
+<p>The offset is applied before deadzone processing, which keeps the deadzone circle centered on the real rest position.</p>
+<h3 id="max-range">Max range<a class="headerlink" href="#max-range" title="Permanent link">&para;</a></h3>
+<p>Sets the maximum physical travel (0-100%) that maps to full output. If the stick cannot reach the corners, lower the max range so full output is reachable within the stick's actual travel.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="device-does-not-appear">Device does not appear<a class="headerlink" href="#device-does-not-appear" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Click <strong>Refresh</strong> to re-scan</li>
+<li>Confirm the device shows up in Device Manager or joy.cpl</li>
+<li>For Bluetooth controllers, check pairing in Windows Bluetooth settings</li>
+<li>For a Wii controller, pair it with the header <strong>Pair</strong> button, not Windows Bluetooth settings. See <a href="../../devices/wii-controllers/">Wii Controllers</a>.</li>
+<li>PadForge filters out its own <a href="../controller-slots/">virtual controllers</a> (HIDMaestro outputs) on purpose</li>
+<li>Some devices need a manufacturer driver</li>
+</ul>
+<h3 id="device-appears-but-shows-no-input">Device appears but shows no input<a class="headerlink" href="#device-appears-but-shows-no-input" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Check the raw input section. Are axes, buttons, and POVs drawn?</li>
+<li>If they show but never change, try <strong>Force Raw Joystick Mode</strong></li>
+<li>For Bluetooth devices, confirm a stable connection (lit status dot)</li>
+</ul>
+<h3 id="buttons-missing-or-mapped-wrong">Buttons missing or mapped wrong<a class="headerlink" href="#buttons-missing-or-mapped-wrong" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Turn on <strong>Force Raw Joystick Mode</strong> to skip SDL3's mapping</li>
+<li>Compare PadForge's raw input view with joy.cpl</li>
+<li>For an unmapped joystick-type device, click <strong>Submit Device Mapping</strong> to contribute a mapping</li>
+</ul>
+<h3 id="double-input-in-games">Double input in games<a class="headerlink" href="#double-input-in-games" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Turn on <strong>Hide from Games</strong> on the device, or <strong>Consume Mapped Inputs</strong> for keyboards and mice</li>
+<li>Confirm the master <strong>"Hide devices from games"</strong> toggle in <a href="../settings/">Settings</a> is on</li>
+<li>Confirm HidHide is installed via <a href="../driver-management/">Driver Management</a></li>
+</ul>
+<h3 id="settings-lost-after-reconnecting">Settings lost after reconnecting<a class="headerlink" href="#settings-lost-after-reconnecting" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A wired controller on a different USB port gets a new GUID. Old settings stay on the offline (gray) card. Plug back into the original port, or reconfigure on the new card.</li>
+<li>Bluetooth controllers keep their GUID via MAC address. Settings persist.</li>
+</ul>
+<h3 id="center-drift-after-calibration">Center drift after calibration<a class="headerlink" href="#center-drift-after-calibration" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Make sure the stick was completely at rest during calibration</li>
+<li>For bad drift, the stick may be worn out. Raise the <a href="../stick-deadzones/">deadzone</a> on the Sticks tab to cover it.</li>
+</ul>
+<h3 id="hidhide-toggle-grayed-out-or-missing">HidHide toggle grayed out or missing<a class="headerlink" href="#hidhide-toggle-grayed-out-or-missing" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Grayed out</strong>: HidHide is not installed. Install via <a href="../driver-management/">Driver Management</a> and restart PadForge.</li>
+<li><strong>Missing</strong>: the device is a virtual input source (PadForge's own virtual controllers, software keyboards, etc.). Hiding a virtual source has no meaning, so the toggle is left out instead of shown disabled.</li>
+</ul>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../controller-slots/">Controller Slots</a>: create slots before assigning devices.</li>
+<li><a href="../../devices/wii-controllers/">Wii Controllers</a>: pair a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller from the header Pair button.</li>
+<li><a href="../mappings/">Button and Axis Mappings</a>: map inputs after assigning a device.</li>
+<li><a href="../stick-deadzones/">Stick Deadzones</a>: calibrate center offset and deadzones.</li>
+<li><a href="../../guides/macros/">Macros</a>: automated actions triggered by device inputs.</li>
+<li><a href="../force-feedback/">Force Feedback</a>: device rumble and haptic capabilities.</li>
+<li><a href="../midi-input/">MIDI Input</a>: map a MIDI keyboard or control surface that appears here.</li>
+<li><a href="../nfc-tags/">NFC Tags</a>: register, name, and map tags read by an NFC Reader device.</li>
+<li><a href="../../reference/dsu-motion-server/">DSU Motion Server</a>: Gyro and accel data for motion-enabled emulators.</li>
+<li><a href="../../guides/profiles/">Profiles</a>: device connections persist across profile switches.</li>
+<li><a href="../dashboard/">Dashboard</a>: connected device counts at a glance.</li>
+<li><a href="../settings/">Settings</a>: master device hiding toggle.</li>
+<li><a href="../driver-management/">Driver Management</a>: HIDMaestro and HidHide driver installation.</li>
+<li><a href="../../troubleshooting/">Troubleshooting</a>: general troubleshooting guide.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.0.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../dashboard/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dashboard">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Dashboard
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../controller-slots/" class="md-footer__link md-footer__link--next" aria-label="Next: Controller Slots">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Controller Slots
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

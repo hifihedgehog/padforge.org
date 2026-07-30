@@ -1,0 +1,3350 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/wii-controllers-internals/">
+      
+      
+        <link rel="prev" href="../midi-input-internals/">
+      
+      
+        <link rel="next" href="../2d-overlay-system/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Wii Controllers Internals - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wii-controllers-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Wii Controllers Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#division-of-labor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Division of labor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wiipairingservice-one-inquiry-and-pair-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WiiPairingService: one inquiry-and-pair pass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery match
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-two-pin-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two PIN modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-deprecated-authentication-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The deprecated authentication sequence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup-of-unusable-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup of unusable records
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struct-marshaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Struct marshaling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elevation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elevation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iswiiconnected-and-pairing-narration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IsWiiConnected and pairing narration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-reading-side-the-sdl-wii-hint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The reading side: the SDL Wii hint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-remote-ir-pointer-146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Remote IR pointer (#146)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-balance-board-146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Balance Board (#146)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-remote-speaker-146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Remote speaker (#146)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rescanwiicontrollers-post-pair-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RescanWiiControllers: post-pair recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdl3-fork-hidapi_wii-fixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDL3-fork hidapi_wii fixes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#division-of-labor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Division of labor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wiipairingservice-one-inquiry-and-pair-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WiiPairingService: one inquiry-and-pair pass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery match
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-two-pin-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two PIN modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-deprecated-authentication-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The deprecated authentication sequence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup-of-unusable-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup of unusable records
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struct-marshaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Struct marshaling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elevation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elevation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iswiiconnected-and-pairing-narration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IsWiiConnected and pairing narration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-reading-side-the-sdl-wii-hint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The reading side: the SDL Wii hint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-remote-ir-pointer-146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Remote IR pointer (#146)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-balance-board-146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Balance Board (#146)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-remote-speaker-146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Remote speaker (#146)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rescanwiicontrollers-post-pair-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RescanWiiControllers: post-pair recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdl3-fork-hidapi_wii-fixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDL3-fork hidapi_wii fixes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="wii-controllers-internals">Wii Controllers Internals<a class="headerlink" href="#wii-controllers-internals" title="Permanent link">&para;</a></h1>
+<p><em>How a Bluetooth Wii controller becomes a mappable pad: the Win32 pairing ceremony in <code>WiiPairingService</code>, the SDL <code>hidapi_wii</code> read path, and the post-pair hint-toggle recovery in <code>InputManager</code>.</em></p>
+<p>This is the developer-side companion to <a href="../../devices/wii-controllers/">Wii Controllers</a> (the user guide) and issue #116.</p>
+<hr />
+<h2 id="division-of-labor">Division of labor<a class="headerlink" href="#division-of-labor" title="Permanent link">&para;</a></h2>
+<p><em>What PadForge owns versus what SDL owns once a controller is paired.</em></p>
+<p>PadForge owns one thing: the OS-level Bluetooth pairing handshake. Windows cannot drive that handshake from its own pairing UI, because a Wii controller's PIN is six raw bytes that depend on which sync button was pressed, not a typed string. <code>WiiPairingService</code> runs the handshake with the deprecated <code>bthprops.cpl</code> API.</p>
+<p>After the controller is bonded, SDL reads the standard pad state. SDL's <code>hidapi_wii</code> driver enumerates the paired device, parses its reports, and surfaces it as an ordinary SDL gamepad. It then flows through <code>SdlDeviceWrapper</code> and the normal six-step pipeline (see <a href="../input-pipeline/">Input Pipeline</a>) exactly like an Xbox or DualSense pad. There is no Wii-specific <code>InputDeviceType</code>, no synthetic identity, and no custom sub-state. This is unlike <a href="../midi-input-internals/">MIDI input</a> (a bespoke <code>MidiInputDevice</code> with <code>InputDeviceType.Midi</code>) and unlike a <a href="../remote-link-internals/">Remote Link</a> peer (<code>RemotePeerDevice</code> on a <code>peer://</code> path). The earlier direct-HID read path (<code>WiiControllerHidDevice</code>) was removed once SDL could drive the controller.</p>
+<p>The buttons, sticks, and D-pad reach the pipeline through the generic SDL gamepad mapping with no Wii-aware code. The Wii-specific reads sit on top of that path in <code>SdlDeviceWrapper</code>: the IR-pointer axes for a Wii Remote (#146), the four load-cell corners for a Balance Board (#146), and the enable of SDL's <code>hidapi_wii</code> driver via one hint. The Wii Remote speaker (#146) is a separate output path in <code>WiiSpeakerService</code>, not part of the read side.</p>
+<p>So the data flow is: PadForge pairs over Bluetooth, the Microsoft Bluetooth stack writes the link key, SDL opens the now-stable HID device, and PadForge maps it through the generic SDL path with a Wii-specific overlay for IR, the Balance Board, and the speaker.</p>
+<hr />
+<h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.App/Services/WiiPairingService.cs</code></td>
+<td>The pairing ceremony. <code>public sealed class</code>, P/Invoke over <code>bthprops.cpl</code>. Original C# over the Win32 Bluetooth API, following the sequence Dolphin's <code>Source/Core/Core/HW/WiimoteReal/IOWin.cpp</code> documents (no Dolphin GPL code).</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/PairDeviceDialog.xaml.cs</code></td>
+<td>The Fluent dialog, family-selectable via a Controller Family combo (Nintendo Wii / Sony DualShock 3). The Wii branch loops <code>RunPairingPass</code> on a background thread until a controller pairs or the user cancels. Picking DualShock 3 hides the temporary-pairing checkbox and routes <code>Pair_Click</code> to <code>PairDs3</code> / <code>Ds3PairingService</code> instead (out of scope here).</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.cs</code></td>
+<td>The SDL Wii hint at <code>InitializeSdl</code> (line 601) and <code>RescanWiiControllers</code> (line 906).</td>
+</tr>
+<tr>
+<td><code>PadForge.App/MainWindow.xaml.cs</code></td>
+<td>The <code>PairRequested</code> handler (~712) that opens the dialog then runs the rescan, and the 100 ms <code>_sdlPumpTimer</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/InputService.cs</code></td>
+<td><code>RescanWiiControllers</code> passthrough to the input manager (line 8703).</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/SdlDeviceWrapper.cs</code></td>
+<td>The capability gate that stops a stickless Wii Remote from advertising phantom stick axes, the <code>HasIrCamera</code> / <code>IsBalanceBoard</code> detection, and the IR-pointer read (<code>ReadIrPointer</code>).</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/Mapping/SourceCoercion.cs</code></td>
+<td><code>ReadTunedBalanceBoard</code>: the Lean X / Lean Y / Total Weight coercions from the four corner load cells.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/WiiSpeakerService.cs</code></td>
+<td>The Wii Remote speaker output sink. <code>internal static class</code>, 8-bit PCM at 2 kHz over the raw HID handle.</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Haptics/WiiSpeakerAdpcm.cs</code></td>
+<td>Yamaha 4-bit ADPCM codec. Compiled and unit-tested, off the live speaker path.</td>
+</tr>
+</tbody>
+</table>
+<p>The pairing service depends only on <code>bthprops.cpl</code> and <code>kernel32.dll</code>. No managed Bluetooth library is involved.</p>
+<hr />
+<h2 id="wiipairingservice-one-inquiry-and-pair-pass">WiiPairingService: one inquiry-and-pair pass<a class="headerlink" href="#wiipairingservice-one-inquiry-and-pair-pass" title="Permanent link">&para;</a></h2>
+<p><em>The <code>RunPairingPass</code> flow, the inquiry parameters, and why a pass returns every device state.</em></p>
+<p><code>RunPairingPass(bool temporary, CancellationToken ct)</code> runs a single Bluetooth inquiry and tries to bond every Wii controller it finds in pairing mode. The sequence is <code>BluetoothFindFirstRadio</code> to get the host radio handle, <code>BluetoothGetRadioInfo</code> to read the host address and name, then <code>BluetoothFindFirstDevice</code> and <code>BluetoothFindNextDevice</code> to walk the inquiry results. The inquiry uses <code>cTimeoutMultiplier = 2</code>, about 2.5 seconds per pass. The call blocks for that duration, so the dialog runs it on a background thread through <code>Task.Run</code>.</p>
+<p>The search parameters set every return flag, not just unknown devices:</p>
+<table>
+<thead>
+<tr>
+<th><code>BLUETOOTH_DEVICE_SEARCH_PARAMS</code> field</th>
+<th>Value</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fReturnAuthenticated</code></td>
+<td>1</td>
+<td>See an already-bonded controller.</td>
+</tr>
+<tr>
+<td><code>fReturnRemembered</code></td>
+<td>1</td>
+<td>See a stale half-paired record so it can be reset.</td>
+</tr>
+<tr>
+<td><code>fReturnUnknown</code></td>
+<td>1</td>
+<td>See a fresh, never-paired controller.</td>
+</tr>
+<tr>
+<td><code>fReturnConnected</code></td>
+<td>1</td>
+<td>See a controller that is already live.</td>
+</tr>
+<tr>
+<td><code>fIssueInquiry</code></td>
+<td>1</td>
+<td>Actually scan the air, not just read cached state.</td>
+</tr>
+<tr>
+<td><code>cTimeoutMultiplier</code></td>
+<td>2</td>
+<td>About 2.5 s of inquiry.</td>
+</tr>
+</tbody>
+</table>
+<p>Filtering out the remembered state would hide a controller left half-paired by an earlier attempt, so it could never be reset and re-paired. Returning all four states is what makes that record visible to the cleanup step.</p>
+<p><code>RunPairingPass</code> returns a <code>PairPassResult</code> carrying the Wii controllers seen this pass (<code>Found</code>), the ones it bonded (<code>Paired</code>), the total device count from the inquiry (<code>DiscoveredCount</code>), and an <code>Error</code> string (<code>no-radio</code>, <code>radio-info</code>, <code>no-bluetooth-stack</code>, or <code>exception</code>, null on success). <code>PairDeviceDialog</code> loops passes, accumulating found controllers in a <code>HashSet</code>, and stops on the first pass that bonds one or when the user cancels. Dolphin runs a fixed three iterations per click. PadForge instead loops until success or cancel.</p>
+<p>One cross-cutting side effect matters when a DualShock 3 is in play. If BthPS3 is installed (<code>Ds3DriverInstaller.IsBthPs3Installed()</code>), the pass forces its PSM patching off for the whole inquiry-and-pair pass (issue #199) and restores it to policy in the outer <code>finally</code> on every exit path (<code>Ds3PairingService.ReconcilePsmPatchForCrashSafety("wii-pass-end")</code>). A Wii Remote's incoming HID connection must not enter BthPS3's identify/deny/destroy path, where the upstream use-after-free lives, so with patching off the Wii's standard HID PSMs pass through to the inbox Bluetooth stack, which is where a Wii Remote belongs anyway. See <a href="../../features/driver-management/">Driver Management</a> for the BthPS3 crash-safety detail.</p>
+<hr />
+<h2 id="discovery-match">Discovery match<a class="headerlink" href="#discovery-match" title="Permanent link">&para;</a></h2>
+<p><em>How a pass decides a discovered device is a Wii controller and not a stray keyboard.</em></p>
+<p>A device matches if its advertised name starts with <code>Nintendo</code> (case-insensitive). Every Wii peripheral advertises a <code>Nintendo RVL-CNT-01</code> style name. A fresh inquiry of a never-seen device often returns an empty name, so there is a fallback: when the name is empty, the device matches only on an exact Class-of-Device value.</p>
+<table>
+<thead>
+<tr>
+<th>Class of Device</th>
+<th>Controller</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x002504</code></td>
+<td>Wii Remote</td>
+</tr>
+<tr>
+<td><code>0x000508</code></td>
+<td>Wii Remote Plus / -TR</td>
+</tr>
+</tbody>
+</table>
+<p><code>IsWiiClassOfDevice</code> matches those two exact values rather than the broad Peripheral major class. A broad match would try to pair a stray Bluetooth keyboard or mouse that happens to be in discovery range. The Class-of-Device fallback only fires when the name is empty, so a named device is never matched by class.</p>
+<hr />
+<h2 id="the-two-pin-modes">The two PIN modes<a class="headerlink" href="#the-two-pin-modes" title="Permanent link">&para;</a></h2>
+<p><em>How the SYNC button and the 1+2 hold map to two different PINs, and how the PIN bytes are derived.</em></p>
+<p>A Wii controller has two sync methods, and each one expects a different six-byte PIN.</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Trigger</th>
+<th><code>temporary</code></th>
+<th>PIN source</th>
+<th>Bonding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SYNC</td>
+<td>Red SYNC button under the battery cover</td>
+<td><code>false</code></td>
+<td>The host radio's own address (<code>radioInfo.address</code>)</td>
+<td>Persistent. Reconnects on any button press afterward.</td>
+</tr>
+<tr>
+<td>1+2</td>
+<td>Hold the <strong>1</strong> and <strong>2</strong> buttons</td>
+<td><code>true</code></td>
+<td>The controller's own address (<code>deviceInfo.Address</code>)</td>
+<td>Session only. Not bonded, so it re-pairs next time.</td>
+</tr>
+</tbody>
+</table>
+<p>The PIN derivation is the same shape in both modes. The six Bluetooth-address bytes are taken low byte first, each widened into one <code>WCHAR</code>, and the passkey length is 6:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">char</span><span class="p">[]</span><span class="w"> </span><span class="n">passkey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">char</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">passkey</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="p">)((</span><span class="n">pinSource</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">);</span>
+</code></pre></div>
+<p>This exact shape is what the deprecated authentication API expects and what Dolphin passes.</p>
+<hr />
+<h2 id="the-deprecated-authentication-sequence">The deprecated authentication sequence<a class="headerlink" href="#the-deprecated-authentication-sequence" title="Permanent link">&para;</a></h2>
+<p><em>The three-call bonding sequence Dolphin proved, and why the callback path is not used.</em></p>
+<p><code>TryPairDevice</code> runs the bonding for one discovered controller. The important detail from Dolphin: do not use the <code>BluetoothRegisterForAuthenticationEx</code> callback path. Use the deprecated <code>BluetoothAuthenticateDevice</code> with the PIN passed directly. The sequence, when the device is not already authenticated:</p>
+<ol>
+<li><strong><code>BluetoothAuthenticateDevice(IntPtr.Zero, hRadio, ref device, passkey, 6)</code>.</strong> The PIN is the wide-char array above, length 6. A non-zero return aborts the pair.</li>
+<li><strong><code>BluetoothEnumerateInstalledServices(hRadio, ref device, ref pcServices, IntPtr.Zero)</code>.</strong> A count-only query with a null service array. Dolphin notes this "must be done to make the remote remember the pairing." <code>ERROR_MORE_DATA</code> (234) is tolerated as success because the count query is expected to report that more data exists.</li>
+<li><strong><code>BluetoothSetServiceState(hRadio, ref device, HumanInterfaceDeviceServiceClass_UUID, BLUETOOTH_SERVICE_ENABLE)</code>.</strong> Enables the HID service so the controller appears as a HID device. The UUID is <code>{00001124-0000-1000-8000-00805F9B34FB}</code>.</li>
+</ol>
+<p>When the device is already authenticated (a re-pair of a remembered controller), steps 1 and 2 are skipped and only the HID-service enable runs.</p>
+<p>Every step is written to the in-memory diagnostics ring (crash context) with its return code, so a failed bond is diagnosable from the real handshake trace rather than a generic error. The dialog itself sees only the pass result (the found and paired controller names and any error), not the per-step trace.</p>
+<hr />
+<h2 id="cleanup-of-unusable-records">Cleanup of unusable records<a class="headerlink" href="#cleanup-of-unusable-records" title="Permanent link">&para;</a></h2>
+<p><em>How a stale half-paired record is forgotten so the next pass can rediscover it.</em></p>
+<p>This is Dolphin's <code>RemoveUnusableWiimoteBluetoothDevices</code>, inlined into the pass loop. For each discovered Wii controller:</p>
+<ul>
+<li><strong>Already connected</strong> (<code>fConnected != 0</code>): leave it alone. It is working. The pass counts it as found and paired and moves on.</li>
+<li><strong>Remembered but not authenticated and not connected</strong> (<code>fRemembered != 0 &amp;&amp; fAuthenticated == 0</code>): this record cannot reconnect and it blocks re-pairing. <code>BluetoothRemoveDevice(ref deviceInfo.Address)</code> forgets it, and the next pass rediscovers it fresh.</li>
+<li><strong>Otherwise</strong>: proceed to <code>TryPairDevice</code>.</li>
+</ul>
+<p>So a controller stuck in a remembered-but-dead state is reset automatically across passes, which is why the search returns the remembered state in the first place.</p>
+<hr />
+<h2 id="struct-marshaling">Struct marshaling<a class="headerlink" href="#struct-marshaling" title="Permanent link">&para;</a></h2>
+<p><em>Why the interop structs use default packing, and the failure mode when they do not.</em></p>
+<p>Default packing is required on every Bluetooth struct. <code>Pack = 1</code> would undersize them and the API rejects the <code>dwSize</code> field with <code>ERROR_REVISION_MISMATCH</code> (1306). The cause is <code>BLUETOOTH_ADDRESS</code>, an 8-byte (<code>ULONGLONG</code>) union that is 8-byte aligned, so the native layout has pad bytes the packed layout drops.</p>
+<table>
+<thead>
+<tr>
+<th>Struct</th>
+<th>Natural size</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BLUETOOTH_RADIO_INFO</code></td>
+<td>520 bytes</td>
+<td>4 pad bytes after <code>dwSize</code> before the 8-byte-aligned address.</td>
+</tr>
+<tr>
+<td><code>BLUETOOTH_DEVICE_INFO</code></td>
+<td>560 bytes</td>
+<td>Same alignment requirement.</td>
+</tr>
+<tr>
+<td><code>BLUETOOTH_DEVICE_SEARCH_PARAMS</code></td>
+<td>default</td>
+<td>The trailing <code>IntPtr hRadio</code> must land on its 8-byte slot.</td>
+</tr>
+</tbody>
+</table>
+<p>Each struct sets its <code>dwSize</code> from <code>Marshal.SizeOf&lt;T&gt;()</code> before the call, so the managed size and the native size must agree, which only holds under natural alignment. String fields are <code>ByValTStr</code> with <code>SizeConst = 248</code> and <code>CharSet.Unicode</code>.</p>
+<hr />
+<h2 id="elevation">Elevation<a class="headerlink" href="#elevation" title="Permanent link">&para;</a></h2>
+<p><em>Why the process must be elevated and how the failure surfaces.</em></p>
+<p><code>BluetoothAuthenticateDevice</code> and <code>BluetoothSetServiceState</code> return <code>ERROR_ACCESS_DENIED</code> (5) from a non-elevated process. PadForge always runs elevated (HIDMaestro requires it), so this is satisfied in normal use. The service maps the common return codes for the log through <code>DescribeError</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td><code>ACCESS_DENIED</code> (need elevation)</td>
+</tr>
+<tr>
+<td>31</td>
+<td><code>GEN_FAILURE</code></td>
+</tr>
+<tr>
+<td>87</td>
+<td><code>INVALID_PARAMETER</code></td>
+</tr>
+<tr>
+<td>170</td>
+<td><code>BUSY</code></td>
+</tr>
+<tr>
+<td>234</td>
+<td><code>MORE_DATA</code></td>
+</tr>
+<tr>
+<td>259</td>
+<td><code>NO_MORE_ITEMS</code></td>
+</tr>
+<tr>
+<td>1167</td>
+<td><code>DEVICE_NOT_CONNECTED</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="iswiiconnected-and-pairing-narration">IsWiiConnected and pairing narration<a class="headerlink" href="#iswiiconnected-and-pairing-narration" title="Permanent link">&para;</a></h2>
+<p><em>An uncalled public helper, and where the pairing narration actually goes.</em></p>
+<p><code>IsWiiConnected()</code> is a fast state read with <code>fIssueInquiry = 0</code>, so it returns the radio's current connection state without paying the 2.5-second inquiry. Its intent, stated in the doc comment, is to time the SDL re-enumeration to the moment the controller actually connects (which happens on a button press, possibly seconds after the pair completes) rather than a fixed delay. It has no caller today. The shipped post-pair recovery uses the fixed-cadence <code>RescanWiiControllers</code> instead, which the <code>MainWindow</code> <code>PairRequested</code> handler runs unconditionally after the dialog closes.</p>
+<p>PadForge writes no pairing log file. The private <code>Log</code> helper is a one-line delegate to the in-memory diagnostics ring: <code>SdlDiagLog.WriteLine("WIIPAIR " + message)</code>, the same crash-context buffer the rest of the app narrates into. That ring is the only narration sink. The dialog shows only the pass result (found and paired names from <code>PairPassResult</code>), not the per-step handshake trace. There is no <code>LogPath</code>, no <code>LogLine</code>, and no lock or <code>try/catch</code> around logging, because a ring write does not throw the way a file write can. <code>RescanWiiControllers</code> does not narrate.</p>
+<hr />
+<h2 id="the-reading-side-the-sdl-wii-hint">The reading side: the SDL Wii hint<a class="headerlink" href="#the-reading-side-the-sdl-wii-hint" title="Permanent link">&para;</a></h2>
+<p><em>The single hint that turns on SDL's Wii driver and what it does at enumeration time.</em></p>
+<p><code>InitializeSdl</code> sets <code>SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_WII, "1")</code> at line 601, before <code>SDL_Init</code>. That enables SDL's <code>hidapi_wii</code> driver. It surfaces the Bluetooth-paired controller, parses all four forms (Wii Remote / Plus, Remote plus Nunchuk, Classic / Pro, Wii U Pro), and lights the player LED, which stops the idle flashing the controller does while unassigned. From there the standard buttons, sticks, and D-pad are an ordinary SDL gamepad. The only Wii-aware reads on top of that are the IR pointer and the Balance Board corners, both covered below.</p>
+<p>One enumeration detail matters for the stickless Wii Remote. <code>SdlDeviceWrapper.GetDeviceObjects</code> gates each standard axis on <code>SDL_GamepadHasAxis</code> (the axis path mirrors the existing button gate on <code>SDL_GamepadHasButton</code>). A Wii Remote with no Nunchuk has no sticks, so it must not advertise phantom Left or Right Stick axes. A phantom axis reads as a dead center, and <code>CreateDefaultPadSetting</code>'s auto-map trusts the <code>DeviceObjects</code> capability list, so without the gate it would pin both virtual sticks to a corner. See <a href="../sdl3-integration/">SDL3 Integration</a> for the wrapper detail.</p>
+<hr />
+<h2 id="wii-remote-ir-pointer-146">Wii Remote IR pointer (#146)<a class="headerlink" href="#wii-remote-ir-pointer-146" title="Permanent link">&para;</a></h2>
+<p><em>The two sensor-bar dots, where SDL posts them, and how <code>ReadIrPointer</code> turns them into an aim point.</em></p>
+<p>The IR camera path rides the same <code>SdlDeviceWrapper</code> read that surfaces the pad. It is gated by <code>HasIrCamera</code>, set at enumeration (<code>~377</code>): the device is the Wii VID <code>0x057E</code>, it is not a Balance Board, and its raw joystick axis count is 10 or more. Reading the raw axis count (<code>SDL_GetNumJoystickAxes</code>), not the gamepad-pinned <code>NumAxes</code> of 6, is the stable signal, and it is the same idiom the right Joy-Con NIR and Joy-Con 2 mouse detections use.</p>
+<p>The SDL fork's <code>hidapi_wii</code> driver posts the two IR dots on dedicated joystick axes 6-9 (SDL#6 follow-up <code>41909fdc4e</code>), separate from the gamepad sticks so a Nunchuk or Classic extension keeps axes 0-3. Axis 6 is dot 0 X (<code>0..1023</code>), axis 7 is dot 0 Y (<code>0..767</code>), axis 8 and 9 are dot 1. A value of <code>-1</code> means the dot is not detected.</p>
+<p><code>ReadIrPointer</code> (<code>SdlDeviceWrapper.cs</code>, <code>~662-685</code>) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four values through <code>ComputeIrAim</code> into <code>CustomInputState.Ir</code> (a <code>WiiIrState</code> with <code>X</code>, <code>Y</code>, <code>Detected</code>):</p>
+<ul>
+<li>All four at exactly 0 means no report has arrived yet (two dots on one pixel is physically impossible), so <code>Detected</code> is set false rather than yanking the pointer to a corner on connect.</li>
+<li>The aim exists only when BOTH sensor-bar dots are visible. <code>ComputeIrAim</code> returns <code>Detected = false</code> if any of the four dot slots reads negative (fewer than two dots: out of reach). There is no single-dot fallback. Snapping the midpoint to the surviving dot would sit half a dot-separation away, and a steady sweep would re-walk that span of the screen (the #203 bench "double walk"). Every proven reference (Touchmote, Ryochan7-lightgun, Suegrini-4IR, WiimoteLib) computes the aim as a dot-pair midpoint and treats fewer than two dots as out of reach.</li>
+<li>The <code>1024x768</code> camera frame is normalized to the <code>[-1..+1]</code> stick range with X mirrored and Y direct, grounded against Touchmote and WiimoteLib.</li>
+</ul>
+<p>The wrapper stores only the raw screen-aligned aim. All tuning is applied later at the slot-scoped read in <code>SourceCoercion.ReadTunedIrPointer</code>, because one remote can feed several virtual controllers, each with its own settings. That read applies four stages in order:</p>
+<ol>
+<li><strong>Lineage margin stretch</strong> (base aim map, #203 pointer modes): <code>IrMarginStretchX = 1.8</code>, <code>IrMarginStretchY = 2.0</code>, applied first. A tracked pair midpoint physically cannot reach +/-1, because both LEDs must stay in the camera view. Without this stretch the cursor walls off inside the screen in every pointer mode. This is the base map, not an optional extra.</li>
+<li><strong>Sensor-bar offset</strong> (Y only): the Pointer-tab vertical bar offset, in post-stretch screen space, matching Touchmote's <code>offsetY</code>.</li>
+<li><strong>EMA smoothing</strong>: a per-(device, slot, axis) exponential moving average, clamped to <code>[0..0.95]</code>, dropped on sight loss so a re-acquire snaps instead of sliding in from stale.</li>
+<li><strong>Per-source sensitivity</strong>: <code>MappingSource.IrPointerSensitivity</code> (default <code>1.0</code>), a mapping-row Slider with a reset button on the "IR Pointer X/Y" rows, then a final clamp to <code>[-1..+1]</code>.</li>
+</ol>
+<hr />
+<h2 id="wii-balance-board-146">Wii Balance Board (#146)<a class="headerlink" href="#wii-balance-board-146" title="Permanent link">&para;</a></h2>
+<p><em>How the board is told apart, how the corner loads reach the mapping grid, and the calibration source.</em></p>
+<p><code>IsBalanceBoard</code> is set at enumeration (<code>~370</code>): the Wii VID plus an SDL name that contains "Balance Board". The board enumerates as a Wii Remote (PID <code>0x0306</code>), so the name is the only reliable discriminator, and it is what keeps the board out of the <code>HasIrCamera</code> gate.</p>
+<p>The four corner load cells ride the gamepad stick axes: <code>ReadTunedBalanceBoard</code> (<code>SourceCoercion.cs</code>, <code>~1050-1101</code>) reads <code>Axis[0]</code>, <code>Axis[1]</code>, <code>Axis[3]</code>, <code>Axis[4]</code> as top-left, bottom-left, top-right, bottom-right, undoing the unsigned <code>+32768</code> shift and clamping negatives to 0. It coerces three sources by descriptor suffix:</p>
+<ul>
+<li><strong>Lean X</strong>: <code>(right - left) / total</code>, clamped to <code>[-1..+1]</code>.</li>
+<li><strong>Lean Y</strong>: <code>(top - bottom) / total</code>.</li>
+<li><strong>Total Weight</strong>: each corner converted to kilograms and summed, minus the tare, scaled against <code>BalanceMaxKg</code>.</li>
+</ul>
+<p>Calibration is auto-parsed, not user-entered. The SDL fork exposes the board's 24-byte calibration block as the hex property <code>SDL.joystick.wii.balance_board_calibration</code>, which <code>InputService.ParseBalanceCalibrationHex</code> reads once and re-lays into the 12-float <code>[corner × {Kg0, Kg17, Kg34}]</code> shape the coercion interpolates. Without calibration, Total Weight falls back to a coarse raw-sum approximation so the source stays monotonic.</p>
+<p><code>SetBalanceTare</code> (<code>InputService.cs</code>, <code>~9109</code>) captures the current total weight as the zero-point so Total Weight reads 0 with whatever is on the board. It is code-reachable only. No UI element calls it today.</p>
+<hr />
+<h2 id="wii-remote-speaker-146">Wii Remote speaker (#146)<a class="headerlink" href="#wii-remote-speaker-146" title="Permanent link">&para;</a></h2>
+<p><em>The output side: macro sounds through the Wii Remote's built-in speaker, and why the live path is PCM, not ADPCM.</em></p>
+<p><code>WiiSpeakerService</code> (<code>PadForge.App/Common/Input/WiiSpeakerService.cs</code>) is the Nintendo analogue of the Sony speaker path in <code>AudioPassthroughService</code>. A Wii Remote assigned to a slot becomes an output sink whose <code>MacroMixer</code> is returned to <code>SoundMacroService</code> alongside the Sony sinks, so a macro Play Sound fans out to it with no macro-layer change. It gates on the Wii Remote PIDs <code>0x0306</code> (RVL-CNT-01) and <code>0x0330</code> (Wii Remote Plus / -TR).</p>
+<p>The live path streams signed 8-bit PCM at 2000 Hz, the WiiBrew-recommended config for slow Bluetooth stacks. The 48 kHz macro mix is resampled to 2000 Hz mono, quantized to 8-bit, and written as one <code>0x18</code> speaker report of 20 PCM samples per 10 ms tick (100 reports/s), never in bursts. The 20 is the sample count, not the wire frame size: the on-the-wire report is a report id, a control byte (<code>(len&lt;&lt;3)</code>), and the 20 payload bytes, zero-padded to the device's <code>OutputReportByteLength</code> (<code>ReportLen = 22</code> floor). The init sequence (<code>0x14</code> enable, <code>0x19</code> mute, the <code>0xa20001</code> register config for format <code>0x40</code> / rate <code>0x1770</code> / volume <code>0xFF</code>, then <code>0x19</code> unmute) is the WiiBrew sequence with register offsets grounded in Dolphin's <code>Speaker.h</code>. Output writes go through overlapped <code>WriteFile</code> when the BT stack accepts it, falling back to <code>HidD_SetOutputReport</code>.</p>
+<p>PCM is memoryless, which is the point. A dropped or late report on the SDL-shared BT link is a single click, not the cascading garble that differential ADPCM produces. <code>WiiSpeakerAdpcm.cs</code> (Yamaha 4-bit ADPCM) is compiled and unit-tested as the verified reference codec but stays off the live streaming path. The service also supports a system-audio loopback mirror, the same option the DualSense path offers.</p>
+<hr />
+<h2 id="rescanwiicontrollers-post-pair-recovery">RescanWiiControllers: post-pair recovery<a class="headerlink" href="#rescanwiicontrollers-post-pair-recovery" title="Permanent link">&para;</a></h2>
+<p><em>Why a freshly-paired controller needs a forced re-open, and the hint-toggle that delivers it.</em></p>
+<p>During the pairing ceremony SDL grabs the Wii Remote mid-pairing. Then <code>BluetoothSetServiceState</code> and the rest of the pairing churn invalidate that handle, so the SDL joystick drops and SDL keeps a stale device that only a full app restart clears. <code>RescanWiiControllers</code> (line 906) replicates the restart for just that one driver:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">_disposed</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">SDL_SetHint</span><span class="p">(</span><span class="n">SDL_HINT_JOYSTICK_HIDAPI_WII</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">SDL_SetHint</span><span class="p">(</span><span class="n">SDL_HINT_JOYSTICK_HIDAPI_WII</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="mi">1200</span><span class="p">);</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Setting the hint to <code>0</code> runs <code>SDL_HIDAPIDriverHintChanged</code>, which disables the driver. SDL cleans up the stale device, closes the dead handle, and resets its hidapi change count to force a re-enumerate. Setting the hint back to <code>1</code> re-opens and re-inits the now-stable device. The toggle repeats eight times over about 11 seconds (<code>(200 + 1200) * 8</code>) to cover the post-pair settling window, because the controller only connects on a button press that can come several seconds late.</p>
+<p>The work runs on a background thread through <code>Task.Run</code> and checks <code>_disposed</code> each iteration. It is safe to call from any thread because <code>SDL_SetHint</code> is thread-safe. The actual driver re-scan happens on the UI thread: <code>MainWindow</code>'s <code>_sdlPumpTimer</code> fires <code>PumpSdlEvents</code> every 100 ms, and <code>PumpSdlEvents</code> runs <code>SDL_PumpEvents</code> then <code>SDL_UpdateJoysticks</code> on the <code>SDL_Init</code> thread, which is where SDL's hidapi posts its device-change messages and where a re-enumerate actually produces joysticks. So the background toggle changes the hint and the UI pump processes each change.</p>
+<hr />
+<h2 id="sdl3-fork-hidapi_wii-fixes">SDL3-fork hidapi_wii fixes<a class="headerlink" href="#sdl3-fork-hidapi_wii-fixes" title="Permanent link">&para;</a></h2>
+<p><em>The <code>hidapi_wii</code> fixes the bundled <code>SDL3.dll</code> carries beyond the upstream driver. Non-exhaustive: the MotionPlus and D-pad fixes are catalogued elsewhere.</em></p>
+<p>Driving a Bluetooth Wii controller on Windows 8 and later relies on several fixes in PadForge's SDL3 fork, all shipped in the bundled <code>SDL3.dll</code>. These three cover pairing and connect stability:</p>
+<ol>
+<li><strong>Bluetooth <code>hid_write</code> fallback.</strong> A Wii Remote's output reports must go through <code>HidD_SetOutputReport</code>, because the Microsoft Bluetooth stack rejects <code>WriteFile</code> for an output length at or under 512 bytes (a Wiimote report is 22). The fork keeps the <code>WriteFile</code> path and adds a <code>HidD_SetOutputReport</code> fallback when <code>WriteFile</code> returns error 87 (<code>ERROR_INVALID_PARAMETER</code>). This is <code>hifihedgehog/SDL#2</code>, referenced in the <code>InitializeSdl</code> comment.</li>
+<li><strong>Connect-timeout seed.</strong> <code>m_ulLastInput</code> is seeded with <code>SDL_GetTicks()</code> in the device's <code>InitDevice</code>. Without it, a freshly-paired remote is disconnected after the app's first three-second input timeout before it has sent anything.</li>
+<li><strong>Extension hot-plug.</strong> <code>UpdateDevice</code> re-identifies the controller when a Nunchuk or other extension is attached or detached, so the form change is picked up and the device re-added without a restart.</li>
+</ol>
+<p>A fourth fix feeds the IR pointer above: the driver posts the two IR dots on dedicated joystick axes 6-9 (<code>hifihedgehog/SDL#6</code> follow-up <code>41909fdc4e</code>), separate from the gamepad sticks so an extension keeps axes 0-3. Further fork fixes handle MotionPlus and D-pad mapping (the MotionPlus identify dead-window, the ~8s MotionPlus presence-churn loop, bare-D-pad POV-hat mapping, IR + MotionPlus coexistence). Those bear on gyro and hat mapping rather than the read path here, so their detail lives on <a href="../../guides/gyro/">Gyro</a> and in the read-only SDL3 fork.</p>
+<p>These live in the SDL3 fork and are read-only from PadForge's side. See <a href="../sdl3-integration/">SDL3 Integration</a>.</p>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../devices/wii-controllers/">Wii Controllers</a>: the user guide for this feature.</li>
+<li><a href="../input-pipeline/">Input Pipeline</a>: the six-step pipeline that maps the controller once SDL surfaces it.</li>
+<li><a href="../sdl3-integration/">SDL3 Integration</a>: the <code>hidapi_wii</code> driver, the fork fixes, and the axis capability gate.</li>
+<li><a href="../../features/devices/">Devices</a>: the Pair button and the paired controller's device card.</li>
+<li><a href="../../guides/gyro/">Gyro</a>: the Wii Remote's accelerometer and Motion Plus path.</li>
+<li><a href="../controller-audio-internals/">Controller Audio Internals</a>: the shared sink model the Wii Remote speaker follows, and the HD-haptic tone path.</li>
+<li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide setup.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.0.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../midi-input-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: MIDI Input Internals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                MIDI Input Internals
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../2d-overlay-system/" class="md-footer__link md-footer__link--next" aria-label="Next: 2D Overlay System">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                2D Overlay System
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

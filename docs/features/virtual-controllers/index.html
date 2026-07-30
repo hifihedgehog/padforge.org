@@ -1,0 +1,5170 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/features/virtual-controllers/">
+      
+      
+        <link rel="prev" href="../controller-slots/">
+      
+      
+        <link rel="next" href="../mappings/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Virtual Controllers - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#virtual-controllers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Virtual Controllers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ivirtualcontroller-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IVirtualController Interface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IVirtualController Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gamepad-struct-input-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gamepad Struct (Input Contract)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feedbackpadindex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FeedbackPadIndex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-specific-submit-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type-Specific Submit Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hmaestrovirtualcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HMaestroVirtualController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HMaestroVirtualController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachdeviceconfigdeviceslotconfig-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AttachDeviceConfig(DeviceSlotConfig config)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reapplyusereffects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ReApplyUserEffects()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tickffb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TickFfb()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitgamepadstategamepad-gp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitGamepadState(Gamepad gp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitextendedrawstateextendedrawstate-raw-int-sticks-int-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitExtendedRawState(ExtendedRawState raw, int sticks, int triggers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitrawreportreadonlyspan-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitRawReport(ReadOnlySpan report)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hmaestroffbdecoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HMaestroFfbDecoder
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HMaestroFfbDecoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#report-id-dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Report-ID dispatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishinitialstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PublishInitialState()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#effect-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effect tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applyvibration-vib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apply(Vibration vib)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#midivirtualcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MidiVirtualController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MidiVirtualController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configurable-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configurable Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitgamepadstategamepad-gp_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitGamepadState(Gamepad gp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitmidirawstatemidirawstate-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitMidiRawState(MidiRawState state)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#midirawstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MidiRawState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#midi-message-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MIDI Message Helpers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-availability-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Availability Check
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Availability Check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isavailable-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IsAvailable() -&gt; bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resetavailability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResetAvailability()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shutdownbool-skipdispose-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shutdown(bool skipDispose = false)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboardmousevirtualcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KeyboardMouseVirtualController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KeyboardMouseVirtualController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applysocdconfigstring-mode-string-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApplySocdConfig(string mode, string pairs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitgamepadstategamepad-gp_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitGamepadState(Gamepad gp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitkbmstatekbmrawstate-raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitKbmState(KbmRawState raw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kbmrawstate-from-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KbmRawState (from Engine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#win32-sendinput-pinvoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Win32 SendInput P/Invoke
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ivirtualcontroller-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IVirtualController Interface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IVirtualController Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gamepad-struct-input-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gamepad Struct (Input Contract)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feedbackpadindex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FeedbackPadIndex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-specific-submit-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type-Specific Submit Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hmaestrovirtualcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HMaestroVirtualController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HMaestroVirtualController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachdeviceconfigdeviceslotconfig-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AttachDeviceConfig(DeviceSlotConfig config)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reapplyusereffects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ReApplyUserEffects()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tickffb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TickFfb()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitgamepadstategamepad-gp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitGamepadState(Gamepad gp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitextendedrawstateextendedrawstate-raw-int-sticks-int-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitExtendedRawState(ExtendedRawState raw, int sticks, int triggers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitrawreportreadonlyspan-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitRawReport(ReadOnlySpan report)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hmaestroffbdecoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HMaestroFfbDecoder
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HMaestroFfbDecoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#report-id-dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Report-ID dispatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishinitialstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PublishInitialState()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#effect-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effect tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applyvibration-vib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apply(Vibration vib)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#midivirtualcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MidiVirtualController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MidiVirtualController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configurable-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configurable Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitgamepadstategamepad-gp_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitGamepadState(Gamepad gp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitmidirawstatemidirawstate-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitMidiRawState(MidiRawState state)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#midirawstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MidiRawState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#midi-message-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MIDI Message Helpers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-availability-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Availability Check
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Availability Check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isavailable-bool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IsAvailable() -&gt; bool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resetavailability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResetAvailability()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shutdownbool-skipdispose-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shutdown(bool skipDispose = false)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboardmousevirtualcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KeyboardMouseVirtualController
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KeyboardMouseVirtualController">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constructor_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applysocdconfigstring-mode-string-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApplySocdConfig(string mode, string pairs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dispose_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dispose()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitgamepadstategamepad-gp_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitGamepadState(Gamepad gp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitkbmstatekbmrawstate-raw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SubmitKbmState(KbmRawState raw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kbmrawstate-from-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KbmRawState (from Engine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#win32-sendinput-pinvoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Win32 SendInput P/Invoke
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="virtual-controllers">Virtual Controllers<a class="headerlink" href="#virtual-controllers" title="Permanent link">&para;</a></h1>
+<p>Developer reference for the three <code>IVirtualController</code> implementations in v4: HIDMaestro-backed (one class for Xbox / PlayStation / Extended), KeyboardMouse, and MIDI. Covers state submission, axis/button mapping formulas, rumble/FFB, driver interaction, and type-specific quirks. The lifecycle layer that wraps these classes (off-polling-thread Connect/Disconnect, inactivity destroy, bubble-up cascade) lives on <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#architecture-overview">Architecture Overview</a></li>
+<li><a href="#ivirtualcontroller-interface">IVirtualController Interface</a></li>
+<li><a href="#hmaestrovirtualcontroller">HMaestroVirtualController</a></li>
+<li><a href="#keyboardmousevirtualcontroller">KeyboardMouseVirtualController</a></li>
+<li><a href="#midivirtualcontroller">MidiVirtualController</a></li>
+</ul>
+<hr />
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TB
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    subgraph Engine[&quot;PadForge.Engine (interface + types)&quot;]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        IVC[&quot;IVirtualController&lt;br/&gt;&lt;i&gt;interface&lt;/i&gt;&quot;]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        VCT[&quot;VirtualControllerType&lt;br/&gt;Xbox / PlayStation / Extended / Midi / KeyboardMouse&quot;]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        GP[&quot;Gamepad struct&lt;br/&gt;(XInput layout)&quot;]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        ERS[&quot;ExtendedRawState&lt;br/&gt;(dynamic axes/buttons/POVs)&quot;]
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        KRS[&quot;KbmRawState&lt;br/&gt;(256 VK + mouse)&quot;]
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        MRS[&quot;MidiRawState&lt;br/&gt;(CC + notes)&quot;]
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    end
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    subgraph App[&quot;PadForge.App (implementations)&quot;]
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        HMVC[&quot;HMaestroVirtualController&lt;br/&gt;One class for Xbox / PlayStation / Extended&lt;br/&gt;(HMContext + HMProfile + Type at ctor)&quot;]
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        KBM[&quot;KeyboardMouseVirtualController&lt;br/&gt;Win32 SendInput&quot;]
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        MIDI[&quot;MidiVirtualController&lt;br/&gt;Windows MIDI Services&quot;]
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    end
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    subgraph Drivers[&quot;OS / Driver Layer&quot;]
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        HM[&quot;HIDMaestro&lt;br/&gt;UMDF2 user-mode driver&lt;br/&gt;(225+ profiles)&quot;]
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        WIN[&quot;Windows&lt;br/&gt;Input Queue&quot;]
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        WMS[&quot;Windows MIDI&lt;br/&gt;Services&quot;]
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    end
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    IVC --&gt; HMVC &amp; KBM &amp; MIDI
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    VCT --&gt; HMVC
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    GP --&gt;|&quot;SubmitGamepadState()&quot;| HMVC
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    ERS --&gt;|&quot;SubmitRawReport()&quot;| HMVC
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    KRS --&gt;|&quot;SubmitKbmState()&quot;| KBM
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    MRS --&gt;|&quot;SubmitMidiRawState()&quot;| MIDI
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    HMVC --&gt;|&quot;HMController.SubmitState()&lt;br/&gt;or SubmitRawReport()&quot;| HM
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    KBM --&gt;|&quot;SendInput()&lt;br/&gt;&lt;i&gt;per event&lt;/i&gt;&quot;| WIN
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    MIDI --&gt;|&quot;SendSingleMessagePacket()&lt;br/&gt;&lt;i&gt;per CC/note&lt;/i&gt;&quot;| WMS
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    HM -.-&gt;|&quot;OutputDecoded (Sony motors / DS5 passthrough)&lt;br/&gt;OutputReceived (XInput / Xbox HID / PID FFB)&quot;| HMVC
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    style IVC fill:#fff3e0
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    style VCT fill:#fff3e0
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    style HMVC fill:#f3e5f5
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    style HM fill:#e8f5e9
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    style WIN fill:#e1f5fe
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    style WMS fill:#f3e5f5
+</code></pre></div>
+<h3 id="quick-comparison">Quick Comparison<a class="headerlink" href="#quick-comparison" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Xbox / PlayStation / Extended</th>
+<th>KBM</th>
+<th>MIDI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Class</strong></td>
+<td><code>HMaestroVirtualController</code></td>
+<td><code>KeyboardMouseVirtualController</code></td>
+<td><code>MidiVirtualController</code></td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>HIDMaestro (UMDF2 user-mode driver)</td>
+<td>Win32 SendInput (no driver)</td>
+<td>Windows MIDI Services SDK</td>
+</tr>
+<tr>
+<td><strong>Required driver</strong></td>
+<td>HIDMaestro</td>
+<td>None</td>
+<td>Windows MIDI Services</td>
+</tr>
+<tr>
+<td><strong>Submit methods</strong></td>
+<td><code>SubmitGamepadState(Gamepad)</code> for the three Xbox-shaped categories; <code>SubmitRawReport(byte[])</code> for Extended custom HID descriptors</td>
+<td><code>SubmitKbmState(KbmRawState)</code></td>
+<td><code>SubmitMidiRawState(MidiRawState)</code></td>
+</tr>
+<tr>
+<td><strong>Axis format at the SDK boundary</strong></td>
+<td><code>HMGamepadState.Axes</code> = <code>Dictionary&lt;HMAxis, float&gt;</code> normalized to [0, 1] (0.5 = stick center, 0 = released trigger). Y flipped to HID convention (up = 0.0)</td>
+<td>short delta (mouse)</td>
+<td>byte CC (0..127)</td>
+</tr>
+<tr>
+<td><strong>Button format</strong></td>
+<td><code>HMButton</code> <code>[Flags]</code> enum (bits 0..12 named A..Share)</td>
+<td>Per-VK <code>SendInput</code></td>
+<td>MIDI Note On/Off</td>
+</tr>
+<tr>
+<td><strong>Rumble/FFB</strong></td>
+<td><code>HMController.OutputDecoded</code> (Sony motors + DS5 effect passthrough) and <code>HMController.OutputReceived</code> (XInput / Xbox HID rumble, full PID FFB for Extended)</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Change detection</strong></td>
+<td>None. HM is consumer-driven and every poll forwards a fresh frame. Deduping risked dropping rapid press+release bursts between the game's HID reads.</td>
+<td>XOR per 64-bit word in the keymask</td>
+<td>Per CC/note value</td>
+</tr>
+<tr>
+<td><strong>Max instances</strong></td>
+<td>16 (across all three HM-backed categories combined, sharing the 16-slot total with KBM and MIDI)</td>
+<td>16</td>
+<td>16 (limited by Windows MIDI Services)</td>
+</tr>
+<tr>
+<td><strong>Lifecycle</strong></td>
+<td>HM <code>Connect()</code>/<code>Disconnect()</code> are off-polling-thread (wrapped in <code>Task.Run</code> by <code>Step5.VirtualDevices</code>); see <a href="../../reference/hidmaestro-deep-dive/#lifecycle-step-5-invariants">Lifecycle: Step 5 invariants</a></td>
+<td>Synchronous</td>
+<td>Synchronous</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Source files:</strong>
+- <code>PadForge.Engine/Common/VirtualControllerTypes.cs</code> — <code>IVirtualController</code> interface + <code>VirtualControllerType</code> enum (<code>[XmlEnum("Sony")]</code> preserves the on-disk name "Sony" for v2 PadForge.xml back-compat).
+- <code>PadForge.App/Common/Input/HMaestroVirtualController.cs</code> — single class for all three HM-backed categories.
+- <code>PadForge.App/Common/Input/KeyboardMouseVirtualController.cs</code> — Win32 SendInput, KbmRawState combine logic.
+- <code>PadForge.App/Common/Input/MidiVirtualController.cs</code> — Windows MIDI Services SDK, virtual endpoint creation.</p>
+<p>The lifecycle code that creates / destroys / reorders these instances per slot lives in <code>PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs</code> and is documented under <a href="../../reference/hidmaestro-deep-dive/#lifecycle-step-5-invariants">HIDMaestro Deep Dive#Lifecycle Step 5 invariants</a> (HM thread pool, inactivity timeout, bubble-up cascade for mid-stack destroys, etc.).</p>
+<hr />
+<h2 id="ivirtualcontroller-interface">IVirtualController Interface<a class="headerlink" href="#ivirtualcontroller-interface" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">namespace</span><span class="w"> </span><span class="nn">PadForge.Engine</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">VirtualControllerType</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="na">[XmlEnum(&quot;Microsoft&quot;)]</span><span class="w"> </span><span class="n">Xbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">         </span><span class="c1">// on-disk alias preserves v2 PadForge.xml</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="na">[XmlEnum(&quot;Sony&quot;)]</span><span class="w">      </span><span class="n">PlayStation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// on-disk alias preserves v2 PadForge.xml</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="n">Extended</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">Midi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">KeyboardMouse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IVirtualController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsConnected</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="c1">/// The pad slot index this VC currently occupies. Updated by the</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">        </span><span class="c1">/// reorder/swap paths so feedback callbacks write to the correct</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="c1">/// VibrationStates element after a slot reorder.</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">FeedbackPadIndex</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">Connect</span><span class="p">();</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">Disconnect</span><span class="p">();</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">SubmitGamepadState</span><span class="p">(</span><span class="n">Gamepad</span><span class="w"> </span><span class="n">gp</span><span class="p">);</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">RegisterFeedbackCallback</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="p">[]</span><span class="w"> </span><span class="n">vibrationStates</span><span class="p">);</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Defined in:</strong> <code>PadForge.Engine/Common/VirtualControllerTypes.cs</code></p>
+<h3 id="gamepad-struct-input-contract">Gamepad Struct (Input Contract)<a class="headerlink" href="#gamepad-struct-input-contract" title="Permanent link">&para;</a></h3>
+<p>XInput-layout struct used as the universal input format for the Xbox / PlayStation / Extended categories. <code>HMaestroVirtualController.SubmitGamepadState</code> translates it to <code>HMGamepadState</code>. The KBM and MIDI implementations leave <code>SubmitGamepadState</code> as a no-op and read <code>KbmRawState</code> / <code>MidiRawState</code> directly through their own submit methods.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Range</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ThumbLX</code></td>
+<td><code>short</code></td>
+<td>-32768..32767</td>
+<td>Left stick X (positive = right)</td>
+</tr>
+<tr>
+<td><code>ThumbLY</code></td>
+<td><code>short</code></td>
+<td>-32768..32767</td>
+<td>Left stick Y (positive = up)</td>
+</tr>
+<tr>
+<td><code>ThumbRX</code></td>
+<td><code>short</code></td>
+<td>-32768..32767</td>
+<td>Right stick X (positive = right)</td>
+</tr>
+<tr>
+<td><code>ThumbRY</code></td>
+<td><code>short</code></td>
+<td>-32768..32767</td>
+<td>Right stick Y (positive = up)</td>
+</tr>
+<tr>
+<td><code>LeftTrigger</code></td>
+<td><code>ushort</code></td>
+<td>0..65535</td>
+<td>Left trigger (unsigned)</td>
+</tr>
+<tr>
+<td><code>RightTrigger</code></td>
+<td><code>ushort</code></td>
+<td>0..65535</td>
+<td>Right trigger (unsigned)</td>
+</tr>
+<tr>
+<td><code>Buttons</code></td>
+<td><code>ushort</code></td>
+<td>Bitmask</td>
+<td>16 bit-constants <code>0x0001</code>..<code>0x8000</code>: DPad (Up/Down/Left/Right), Start, Back, LS, RS, LB, RB, Guide, Touchpad (<code>0x0800</code>, PlayStation slots, used by macros), A, B, X, Y</td>
+</tr>
+<tr>
+<td><code>Share</code></td>
+<td><code>bool</code></td>
+<td>true/false</td>
+<td>Xbox Series Share button. Separate field because all 16 <code>Buttons</code> bits are taken. HM exposes it as <code>HMButton.Share</code> (bit 12) on Xbox Series profiles</td>
+</tr>
+</tbody>
+</table>
+<h3 id="feedbackpadindex">FeedbackPadIndex<a class="headerlink" href="#feedbackpadindex" title="Permanent link">&para;</a></h3>
+<p>Tracks which slot this VC occupies for correct <code>VibrationStates[]</code> writes. The two runtime writers are <code>RegisterFeedbackCallback</code> (sets the initial index) and <code>InputManager.RerouteVirtualControllersForReorder</code> (<code>InputManager.Step5.VirtualDevices.cs:1887</code>, on intra-group reorder). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. (An older interface docstring names a <code>SwapSlotData</code> updater. No such method exists in the codebase.)</p>
+<h3 id="type-specific-submit-methods">Type-Specific Submit Methods<a class="headerlink" href="#type-specific-submit-methods" title="Permanent link">&para;</a></h3>
+<p>All implementations have <code>SubmitGamepadState(Gamepad gp)</code> for interface compliance, but the non-gamepad outputs use alternative submit methods and leave it as a no-op:</p>
+<ul>
+<li><strong>Xbox / PlayStation / Extended (preset profile):</strong> <code>SubmitGamepadState(Gamepad gp)</code> (<code>HMaestroVirtualController.cs:312</code>). Standard XInput-shaped path. A second overload (<code>SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)</code> at line 397) carries the PlayStation sensor / battery payload alongside the gamepad state.</li>
+<li><strong>Extended (Custom HID profile):</strong> <code>SubmitExtendedRawState(ExtendedRawState raw, int sticks, int triggers)</code> (<code>HMaestroVirtualController.cs:500</code>). Up to 8 axes, 32-bit button mask, 1 hat. <code>MapButtons</code> covers the 13 named buttons (through Share). This path carries the profile-specific button bits beyond bit 12 and arbitrary per-profile axis layouts that the fixed <code>Gamepad</code> struct can't express.</li>
+<li><strong>PlayStation (DS4 extended report):</strong> <code>SubmitRawReport(ReadOnlySpan&lt;byte&gt; report)</code> (<code>HMaestroVirtualController.cs:292</code>). Sony Report 0x01 carrying touchpad / gyro / accel / battery. Called AFTER <code>SubmitGamepadState</code> in the same poll.</li>
+<li><strong>KeyboardMouse:</strong> <code>SubmitKbmState(KbmRawState raw)</code>. Keys, mouse, scroll.</li>
+<li><strong>MIDI:</strong> <code>SubmitMidiRawState(MidiRawState state)</code>. CC values and note on/off.</li>
+</ul>
+<hr />
+<h2 id="hmaestrovirtualcontroller">HMaestroVirtualController<a class="headerlink" href="#hmaestrovirtualcontroller" title="Permanent link">&para;</a></h2>
+<p><strong>Namespace:</strong> <code>PadForge.Common.Input</code>
+<strong>Visibility:</strong> <code>internal sealed</code>
+<strong>File:</strong> <code>PadForge.App/Common/Input/HMaestroVirtualController.cs</code>
+<strong>Backs:</strong> <code>VirtualControllerType.Xbox</code>, <code>.PlayStation</code>, <code>.Extended</code>
+<strong>Max instances:</strong> 16 (<code>MaxPads</code>). HM-backed slots share that 16-slot pool with KBM and MIDI. Xbox-category slots are visible to XInput games as user index 1 through 4 (Microsoft API limit); SDL / DirectInput games see all of them.</p>
+<p>One <code>IVirtualController</code> implementation handles every preset and every custom HID descriptor through a single SDK surface: <code>HMContext</code> + <code>HMProfile</code> + <code>HMController</code>. The user-facing category (Xbox / PlayStation / Extended) is supplied at construction so per-type counting in <code>InputManager</code> and <code>InputService</code> keeps working. The actual driver-side device shape is determined by the supplied <code>HMProfile</code>.</p>
+<p>For lifecycle invariants that wrap this class (off-polling-thread Connect/Disconnect, inactivity-destroy timeout, bubble-up cascade on mid-stack destroy), see <a href="../../reference/hidmaestro-deep-dive/#lifecycle-step-5-invariants">HIDMaestro Deep Dive#Lifecycle Step 5 invariants</a>. This page covers only the controller class itself.</p>
+<h3 id="fields">Fields<a class="headerlink" href="#fields" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_ctx</code></td>
+<td><code>HMContext</code></td>
+<td>Shared HM SDK context owned by <code>InputManager</code> (<code>InputManager.Step5.VirtualDevices.cs:100</code>, <code>_hmaestroContext</code>); one instance per process.</td>
+</tr>
+<tr>
+<td><code>_profile</code></td>
+<td><code>HMProfile</code></td>
+<td>Profile handle resolved via <code>_hmaestroContext.GetProfile(profileId) ?? HMaestroProfileCatalog.GetProfileById(profileId)</code>, optionally rebuilt via <code>HMProfileBuilder.FromProfile</code> for descriptor overrides.</td>
+</tr>
+<tr>
+<td><code>_type</code></td>
+<td><code>VirtualControllerType</code></td>
+<td>Reported through <code>Type</code> so <code>SlotControllerTypes</code>-based counting keeps working.</td>
+</tr>
+<tr>
+<td><code>_controller</code></td>
+<td><code>HMController</code></td>
+<td>Live HM device returned by <code>_ctx.CreateController(_profile)</code>. Null until <code>Connect()</code>.</td>
+</tr>
+<tr>
+<td><code>_ffbDecoder</code></td>
+<td><code>HMaestroFfbDecoder</code></td>
+<td>Set when the active profile's HID descriptor contains a PID FFB block (<code>DescriptorHasPidFfbBlock(descriptorHex)</code> at <code>Connect()</code> time). Includes the synthetic Custom profile and any catalog profile whose FFB capability is wired via <code>HMProfileBuilder</code>. Null when the profile has no PID block.</td>
+</tr>
+<tr>
+<td><code>_fbVibrationStates</code></td>
+<td><code>Vibration[]</code></td>
+<td>Cached feedback array from <code>RegisterFeedbackCallback</code>, read by <code>TickFfb()</code> for the per-tick PID re-evaluation on the engine clock.</td>
+</tr>
+<tr>
+<td><code>_ds5Dispatcher</code></td>
+<td><code>DualSensePassthroughDispatcher</code></td>
+<td>Per-VC dispatcher forwarding DS5 effect messages (adaptive triggers, lightbar, audio, rumble) to the assigned physical DualSense. Created in <code>RegisterFeedbackCallback</code> only when <code>IsDualSenseVirtual</code>. Torn down first in <code>Disconnect()</code>.</td>
+</tr>
+<tr>
+<td><code>_userEffectsDispatcher</code></td>
+<td><code>UserEffectsDispatcher</code></td>
+<td>Synthesizes user-configured trigger / lightbar / audio effects from the attached <code>DeviceSlotConfig</code> and forwards them via <code>SDL_SendGamepadEffect</code>. Created by <code>AttachDeviceConfig</code>. Torn down in <code>Disconnect()</code>.</td>
+</tr>
+<tr>
+<td><code>_axLeftStickX</code> .. <code>_axRightTrigger</code></td>
+<td><code>HMAxis</code></td>
+<td>Cached wire-axis keys for the profile's first two sticks and two triggers, resolved once at construction from <code>_profile.AxisMap</code> so the 1 kHz hot path avoids re-walking <code>_profile.Sticks</code> / <code>_profile.Triggers</code>. <code>HMAxis.None</code> means the slot doesn't exist on the profile and the hot path skips it.</td>
+</tr>
+<tr>
+<td><code>_axLeftTriggerField</code>, <code>_axRightTriggerField</code></td>
+<td><code>HMAxis</code></td>
+<td>Secondary mirror targets for the trigger rows' own wire-field keys (X360 reads triggers from Vx/Vy while its canonical positions are Z/Rz). <code>HMAxis.None</code> when they coincide with the canonical key. Both positions are written so every HM SDK lane reads live trigger values (discussion #130).</td>
+</tr>
+<tr>
+<td><code>_axesScratch</code></td>
+<td><code>Dictionary&lt;HMAxis, float&gt;</code></td>
+<td>Reused per-call axes dict, allocated once and seeded at construction with every declared axis at rest (sticks 0.5, triggers 0), so the hot path stays allocation-free and never <code>Clear()</code>s away extra-axis seeds.</td>
+</tr>
+<tr>
+<td><code>_disposed</code></td>
+<td><code>bool</code></td>
+<td>Dispose guard.</td>
+</tr>
+</tbody>
+</table>
+<p><code>SonyVid</code> (<code>0x054C</code>), <code>DualSensePid</code> (<code>0x0CE6</code>), and <code>DualSenseEdgePid</code> (<code>0x0DF2</code>) are <code>const ushort</code> VID/PID gates. <code>IsDualSenseVirtual</code> returns true when <code>_profile</code> matches the Sony VID and either DualSense PID, and gates the DS5 passthrough dispatcher.</p>
+<h3 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code></td>
+<td><code>VirtualControllerType</code></td>
+<td>Xbox, PlayStation, or Extended. Matches the slot's <code>SlotControllerTypes[i]</code>.</td>
+</tr>
+<tr>
+<td><code>IsConnected</code></td>
+<td><code>bool</code></td>
+<td>True after a successful <code>Connect()</code>, false after <code>Disconnect()</code>.</td>
+</tr>
+<tr>
+<td><code>FeedbackPadIndex</code></td>
+<td><code>int</code></td>
+<td>Slot index for the rumble/FFB callback's <code>vibrationStates[]</code> write target. The property is read on every callback (not captured), so post-reorder swaps still route correctly.</td>
+</tr>
+<tr>
+<td><code>ProfileId</code></td>
+<td><code>string</code></td>
+<td><code>_profile.Id</code>. Examples: <code>"xbox-series-xs-bt"</code>, <code>"dualsense-edge-usb"</code>, the Custom profile ID.</td>
+</tr>
+<tr>
+<td><code>ProfileVendorId</code></td>
+<td><code>ushort</code></td>
+<td><code>_profile.VendorId</code>. Used by the rumble callback to select the right HID layout.</td>
+</tr>
+<tr>
+<td><code>ProfileProductId</code></td>
+<td><code>ushort</code></td>
+<td><code>_profile.ProductId</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="constructor">Constructor<a class="headerlink" href="#constructor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">public</span><span class="w"> </span><span class="nf">HMaestroVirtualController</span><span class="p">(</span><span class="n">HMContext</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">HMProfile</span><span class="w"> </span><span class="n">profile</span><span class="p">,</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
+</code></pre></div>
+<p>Stores the three arguments. Throws <code>ArgumentNullException</code> on null <code>ctx</code> or <code>profile</code>. No driver work happens here. The actual virtual device is created in <code>Connect()</code>.</p>
+<p><code>InputManager.CreateHMaestroController</code> is the only call site (<code>InputManager.Step5.VirtualDevices.cs:1492</code>). It resolves the profile, applies any per-slot overrides via <code>new HMProfileBuilder().FromProfile(baseProfile)</code> (<code>InputManager.Step5.VirtualDevices.cs:1571</code>), then constructs the wrapper (<code>:1635</code>).</p>
+<h3 id="connect">Connect()<a class="headerlink" href="#connect" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:173</code>.</p>
+<ol>
+<li>Returns immediately if already connected.</li>
+<li><code>_controller = _ctx.CreateController(_profile)</code>. The driver-side device appears here.</li>
+<li>If <code>DescriptorHasPidFfbBlock(descriptorHex)</code> returns true (any profile with a PID FFB descriptor block, including the synthetic Custom profile and catalog profiles built with <code>HMProfileBuilder</code> FFB pages): allocates <code>_ffbDecoder</code> and calls <code>_ffbDecoder.PublishInitialState()</code>. The PID Pool + initial PID State must be published before any host <code>GetFeature</code> can race in. DirectInput's <code>CDIEffect::CreateEffect</code> issues <code>GetFeature(PidPool)</code> up-front to discover capabilities, so lazy init on first <code>OutputReceived</code> is too late.</li>
+<li>Sets <code>IsConnected = true</code>.</li>
+</ol>
+<p><code>InputManager</code> calls <code>Connect()</code> from a <code>Task.Run</code> continuation in Step 5 Pass 2 (see <a href="../../reference/hidmaestro-deep-dive/#invariant-1-hm-lifecycle-does-not-block-the-polling-thread">HIDMaestro Deep Dive#Invariant 1 HM lifecycle does NOT block the polling thread</a>).</p>
+<h3 id="disconnect">Disconnect()<a class="headerlink" href="#disconnect" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:204</code>.</p>
+<ol>
+<li>Returns immediately if not connected.</li>
+<li>Disposes <code>_ds5Dispatcher</code> (best-effort, then nulled) BEFORE the controller, so its channel writer is rejecting enqueues by the time <code>_controller.Dispose()</code> fires its final <code>OutputReceived</code> close events.</li>
+<li>Disposes <code>_userEffectsDispatcher</code> (best-effort, then nulled). Its <code>Dispose</code> unsubscribes the <code>PropertyChanged</code> handler.</li>
+<li><code>_controller?.Dispose()</code>. Driver-side device goes away.</li>
+<li>Sets <code>_controller = null</code>, <code>IsConnected = false</code>.</li>
+</ol>
+<h3 id="dispose">Dispose()<a class="headerlink" href="#dispose" title="Permanent link">&para;</a></h3>
+<p>Guarded by <code>_disposed</code>. Calls <code>Disconnect()</code>. The FFB decoder, if present, is released by GC once the controller's <code>OutputReceived</code> subscription is gone.</p>
+<h3 id="attachdeviceconfigdeviceslotconfig-config">AttachDeviceConfig(DeviceSlotConfig config)<a class="headerlink" href="#attachdeviceconfigdeviceslotconfig-config" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:253</code>. Attaches a per-slot <code>PadForge.ViewModels.DeviceSlotConfig</code> so user-configured adaptive-trigger / lightbar / audio effects synthesize and forward to the assigned physical DualSense via <code>SDL_SendGamepadEffect</code>. Step 5 calls it right after <code>RegisterFeedbackCallback</code> for every HM-backed slot. The dispatcher's runtime resolve returns no targets when the slot has no physical DualSense mapped, so attaching unconditionally is cheap. First call allocates <code>_userEffectsDispatcher</code> and runs <code>ApplyOnce()</code>. Later calls <code>Rebind(config)</code> on the existing dispatcher (idempotent).</p>
+<h3 id="reapplyusereffects">ReApplyUserEffects()<a class="headerlink" href="#reapplyusereffects" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:274</code>. Re-runs <code>_userEffectsDispatcher.ApplyOnce()</code>. Called by <code>InputService</code> on every <code>InputManager.DevicesUpdated</code> tick so a freshly reconnected DualSense gets its configured lightbar / trigger / audio state re-pushed without the user touching a slider. No-op when no dispatcher is attached.</p>
+<h3 id="tickffb">TickFfb()<a class="headerlink" href="#tickffb" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:304</code>. Re-evaluates PID effect state on the engine clock by calling <code>_ffbDecoder.Apply(_fbVibrationStates[FeedbackPadIndex])</code>. The <code>OutputReceived</code> handler only applies the decoder when the game sends a report, but effect durations expire on the DEVICE clock. Without this per-tick pass, the last computed vibration latches on the physical pad the moment a game goes quiet (discussion #125). Every per-tick submit path calls it first. No-op for non-PID profiles (<code>_ffbDecoder == null</code>) or when <code>_fbVibrationStates</code> is null.</p>
+<h3 id="submitgamepadstategamepad-gp">SubmitGamepadState(Gamepad gp)<a class="headerlink" href="#submitgamepadstategamepad-gp" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:312</code>. Hot path for Xbox / PlayStation slots and for Extended slots whose profile is a catalog entry (not the Custom profile). Calls <code>TickFfb()</code>, overwrites the six canonical slots in <code>_axesScratch</code>, builds an <code>HMGamepadState { Axes = _axesScratch, Buttons = MapButtons(gp), Hat = MapHat(gp.Buttons) }</code>, and calls <code>_controller.SubmitState(state)</code>. It never <code>Clear()</code>s <code>_axesScratch</code>, so the constructor's rest-value seeds for extra axes survive frame to frame.</p>
+<p><strong>No deduping.</strong> Step 5 already honors the user-configured polling interval (default 1 kHz). HIDMaestro is consumer-driven, so every call forwards a fresh frame. Deduping on unchanged state risks dropping rapid press+release bursts between the game's HID reads.</p>
+<p><strong>Axis normalization.</strong> Values land in <code>_axesScratch</code> (a <code>Dictionary&lt;HMAxis, float&gt;</code>) keyed by the wire-axis resolved at construction, not by named <code>HMGamepadState</code> fields (those no longer exist as of HM v1.3.9). Everything normalizes to [0, 1] uniformly: sticks center at 0.5, triggers release at 0. A write is skipped when its cached key is <code>HMAxis.None</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Gamepad field</th>
+<th>Scratch key</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ThumbLX</code></td>
+<td><code>_axLeftStickX</code></td>
+<td><code>(gp.ThumbLX + 32768f) / 65535f</code></td>
+</tr>
+<tr>
+<td><code>ThumbLY</code></td>
+<td><code>_axLeftStickY</code></td>
+<td><code>(32768f - gp.ThumbLY) / 65535f</code> (Y flipped: XInput Y+ = up, HID Y+ = down)</td>
+</tr>
+<tr>
+<td><code>ThumbRX</code></td>
+<td><code>_axRightStickX</code></td>
+<td><code>(gp.ThumbRX + 32768f) / 65535f</code></td>
+</tr>
+<tr>
+<td><code>ThumbRY</code></td>
+<td><code>_axRightStickY</code></td>
+<td><code>(32768f - gp.ThumbRY) / 65535f</code></td>
+</tr>
+<tr>
+<td><code>LeftTrigger</code></td>
+<td><code>_axLeftTrigger</code> (+ <code>_axLeftTriggerField</code>)</td>
+<td><code>gp.LeftTrigger / 65535f</code></td>
+</tr>
+<tr>
+<td><code>RightTrigger</code></td>
+<td><code>_axRightTrigger</code> (+ <code>_axRightTriggerField</code>)</td>
+<td><code>gp.RightTrigger / 65535f</code></td>
+</tr>
+</tbody>
+</table>
+<p>Trigger values are mirrored to both the canonical key and the trigger row's own wire-field key when they differ, so every HM SDK lane reads live values instead of the 0.5 seed (discussion #130).</p>
+<p><strong>Buttons.</strong> <code>MapButtons</code> (<code>HMaestroVirtualController.cs:823</code>) translates 13 buttons to <code>HMButton</code> flags: A, B, X, Y, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, Guide (the 11 from <code>gp.Buttons</code>), plus Touchpad (<code>gp.Buttons &amp; 0x0800</code>) and Share (the separate <code>gp.Share</code> bool). HM silently drops the Touchpad / Share bits on profiles whose descriptor doesn't declare those button positions.</p>
+<p><strong>Hat.</strong> <code>MapHat</code> (<code>HMaestroVirtualController.cs:878</code>) collapses the four D-Pad bits into a single <code>HMHat</code> direction (<code>North</code>, <code>NorthEast</code>, <code>East</code>, <code>SouthEast</code>, <code>South</code>, <code>SouthWest</code>, <code>West</code>, <code>NorthWest</code>, <code>None</code>). Diagonals take priority over cardinals.</p>
+<h3 id="submitextendedrawstateextendedrawstate-raw-int-sticks-int-triggers">SubmitExtendedRawState(ExtendedRawState raw, int sticks, int triggers)<a class="headerlink" href="#submitextendedrawstateextendedrawstate-raw-int-sticks-int-triggers" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:500</code>. Used by Step 5 only when an Extended slot's profile is the Custom profile (<code>SlotControllerTypes[i] == Extended &amp;&amp; SlotExtendedCustomize[i]</code>). Submits up to 8 axes, up to 32 button bits (the named 13 plus profile-specific extras), and 1 hat from a single 8-way POV.</p>
+<p><strong>Why not just SubmitGamepadState:</strong> <code>MapButtons</code> covers the 13 named buttons (A..Share), but the XInput-shaped <code>Gamepad</code> struct can't express profile-specific button bits past bit 12 or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives <code>_profile.Sticks</code> / <code>_profile.Triggers</code> directly.</p>
+<p><strong>Axis layout:</strong> computed by replicating <code>ExtendedSlotConfig.ComputeAxisLayout</code>. Sticks and triggers are interleaved in groups of <code>(stickX, stickY, trigger)</code> while both are available, then trailing sticks pack at <code>(prev, prev+1)</code> and trailing triggers pack one index at a time. Hardcoded <code>(3, 4)</code> for right-stick X/Y silently dropped Stick 2 Y on every 0-trigger or 1-trigger profile, hence the explicit interleave logic.</p>
+<p><strong>Axis conversion</strong> (raw signed short to HM [0, 1] float), applied to BOTH sticks and triggers. <code>raw.Axes</code> is already HID-convention (Y+ = down, per Step 3), so sticks pass through the same shift with no extra Y inversion. Sticks rest at signed 0, which <code>ToHmRange</code> maps to 0.5. Triggers rest at <code>short.MinValue</code>, which maps to 0.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">ToHmRange</span><span class="p">(</span><span class="kt">short</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">32768f</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">65535f</span><span class="p">;</span>
+</code></pre></div>
+<p>Values write into <code>_axesScratch</code> keyed by <code>profileSticks[s].XAxis / .YAxis</code> and <code>profileTriggers[t].Axis</code>. This path DOES <code>Clear()</code> the scratch dict first (unlike the <code>SubmitGamepadState</code> overloads), then repopulates every axis the profile exposes.</p>
+<p><strong>Button mask:</strong> all 32 bits of <code>ExtendedRawState.IsButtonPressed(i)</code> are passed through to <code>(HMButton)buttonMask</code>. <code>HidReportBuilder</code> iterates bits 0..31, so any bit beyond the named 13 surfaces at the descriptor's corresponding position (direct index, or via the profile's <code>ButtonMap</code> if declared). Profiles with 13+ buttons (Stadia, flight sticks, wheels) rely on this.</p>
+<p><strong>Hat:</strong> <code>raw.Povs[0]</code> (centidegrees, -1 = centered) is rounded to the nearest octant via <code>((pov + 2250) / 4500) % 8</code>, then mapped to <code>HMHat</code>.</p>
+<h3 id="submitrawreportreadonlyspan-report">SubmitRawReport(ReadOnlySpan<byte> report)<a class="headerlink" href="#submitrawreportreadonlyspan-report" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:292</code>. Pass-through to <code>_controller.SubmitRawReport(report)</code>. Step 5 calls this for PlayStation slots whose profile carries DS4-extended fields (touchpad, gyro, accel, battery) that <code>HMGamepadState</code> doesn't model. The call lands AFTER <code>SubmitGamepadState</code> in the same poll, so the GIP buffer stays consistent and the raw Sony Report 0x01 layout overrides the HID surface with the full Sony report.</p>
+<h3 id="registerfeedbackcallbackint-padindex-vibration-vibrationstates">RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)<a class="headerlink" href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroVirtualController.cs:611</code>. Stores <code>padIndex</code> in <code>FeedbackPadIndex</code>, caches <code>vibrationStates</code> in <code>_fbVibrationStates</code> for the per-tick <code>TickFfb()</code> pass, then (when <code>_controller != null</code>) subscribes to both <code>OutputDecoded</code> and <code>OutputReceived</code>.</p>
+<p><strong>Setup work.</strong>
+1. For DualSense virtuals (<code>IsDualSenseVirtual</code>), allocates a <code>DualSensePassthroughDispatcher(padIndex)</code> and calls <code>Start()</code>. Its lifetime matches the subscription.
+2. Subscribes to <code>_controller.OutputDecoded</code> (<code>:663</code>). This carries pre-decoded, transport-agnostic fields. When <code>leftMotor</code> / <code>rightMotor</code> bytes are present it writes <code>vibrationStates[idx].LeftMotorSpeed / RightMotorSpeed = byte * 257</code>. This is the sole Sony (DS4 / DualSense) rumble path now. There is no longer an <code>OutputReceived</code> Sony <code>HidOutput</code> branch reading Report 0x05. When the DualSense passthrough is active and an <code>effectPayload</code> byte[] is present, it enqueues that to <code>_ds5Dispatcher</code> (report <code>0x02</code>) and calls <code>UserEffectsDispatcher.NotifyExternalSubsystems(idx, effectPayload)</code>.
+3. Subscribes to <code>_controller.OutputReceived</code> (<code>:693</code>) for the XInput, Xbox HID, and PID FFB paths below.</p>
+<p>The <code>OutputReceived</code> handler dispatches by <code>pkt.Source</code>, <code>HMaestroProfileCatalog.IsXboxProfile(_profile)</code>, and <code>_ffbDecoder != null</code> (never by literal VID). A leading branch also forwards Sony vendor test commands (<code>HidFeature</code>, report <code>0x80</code>) to <code>_ds5Dispatcher.EnqueueFeature</code> and returns.</p>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th><code>pkt.Source</code></th>
+<th>Length</th>
+<th>Meaning</th>
+<th>Motor write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>any</td>
+<td><code>XInput</code></td>
+<td>&gt;= 5</td>
+<td>XUSB SET_STATE rumble: <code>data[2]</code> = L, <code>data[3]</code> = R main motors. When <code>len &gt;= 7</code>, <code>data[4]</code> / <code>data[5]</code> are the per-trigger impulse motors (<code>XINPUT_VIBRATION_EX</code>). Shorter packets zero the trigger motors.</td>
+<td><code>* 257</code></td>
+</tr>
+<tr>
+<td><code>IsXboxProfile</code></td>
+<td><code>HidOutput</code></td>
+<td>4..7</td>
+<td>Xbox Series BT short HID rumble: <code>data[0]</code> / <code>data[1]</code> = L/R trigger impulse motors, <code>data[2]</code> / <code>data[3]</code> = L/R main motors, magnitude 0..100</td>
+<td><code>* 655</code></td>
+</tr>
+<tr>
+<td><code>IsXboxProfile</code></td>
+<td><code>HidOutput</code></td>
+<td>&gt;= 8</td>
+<td>Xbox wired / wireless-receiver long rumble: <code>data[5]</code> = L, <code>data[6]</code> = R</td>
+<td><code>* 257</code></td>
+</tr>
+<tr>
+<td><code>_ffbDecoder != null</code></td>
+<td><code>HidOutput</code></td>
+<td>any</td>
+<td>HID PID FFB output report. Routes to <code>_ffbDecoder.OnHidOutput(reportId, data)</code>, then <code>_ffbDecoder.Apply(vibrationStates[idx])</code>. Catalog profiles built with <code>AddPidFfbBlock</code> keep their original VID/PID here.</td>
+<td>written by decoder</td>
+</tr>
+<tr>
+<td><code>_ffbDecoder != null</code></td>
+<td><code>HidFeature</code></td>
+<td>any</td>
+<td>HID PID FFB feature report (Create New Effect). Routes to <code>_ffbDecoder.OnHidFeature(reportId, data)</code>.</td>
+<td>none directly</td>
+</tr>
+</tbody>
+</table>
+<p>The Xbox Series BT 0..100 magnitude scaled by 655 was verified against HM's own test app log of <code>xbox-series-xs-bt</code> plus <code>gamepad-tester.com</code>. Browser Gamepad API square-wave dual-rumble alternates <code>hi=127</code> / <code>hi=0</code>. The "off" phase is part of the duty cycle, not noise, so packets where both motor bytes are zero must still be forwarded. The Xbox short-HID trigger bytes at <code>data[0]</code> / <code>data[1]</code> were confirmed from a 1518-capture Game Controller Tester impulse-trigger run (2026-05-19, all <code>len=7</code>).</p>
+<p><strong>Threading:</strong> the callback runs on the HM SDK's output-dispatch thread. <code>Vibration</code> motor fields are <code>ushort</code> and aligned writes are atomic on x64. The polling thread reads these for rumble forwarding, dispatching to one of four writers depending on the source pad family: <code>UserEffectsDispatcher</code> for Sony pads (DualShock 4 / DualSense), <code>XboxImpulseHidWriter</code> raw HID for Xbox One+ pads (Xbox One / Elite / Series), <code>LogitechRawHidWriter</code> / <code>FanatecRawHidWriter</code> / <code>ThrustmasterRawHidWriter</code> raw HID for the vendor-FFB family (Logitech / Fanatec / Thrustmaster wheels plus Fanatec pedals, gated as <code>isVendorFfb</code> and intercepted before the SDL path), or <code>SDL_RumbleJoystick</code> / SDL haptic effects for everything else. Per the architecture-invariant rules, each pad family has a single writer, and SDL rumble is skipped on the Sony, Xbox One+, and vendor-FFB families.</p>
+<hr />
+<h2 id="hmaestroffbdecoder">HMaestroFfbDecoder<a class="headerlink" href="#hmaestroffbdecoder" title="Permanent link">&para;</a></h2>
+<p><strong>File:</strong> <code>PadForge.App/Common/Input/HMaestroFfbDecoder.cs</code>
+<strong>Visibility:</strong> <code>internal sealed</code>
+<strong>Allocated:</strong> by <code>HMaestroVirtualController.Connect()</code> when the profile's HID descriptor contains a PID FFB block (gate: <code>DescriptorHasPidFfbBlock(descriptorHex)</code>).</p>
+<p>Decodes HID PID 1.0 effect reports delivered through <code>HMOutputPacket</code> and aggregates running effects into a single <code>Vibration</code> for the physical FFB device. One instance per Custom-profile Extended virtual controller.</p>
+<p>The dispatch logic mirrors the v2 vJoy <code>FfbCallback</code> semantics:</p>
+<ul>
+<li>Dominant running effect drives <code>Vibration.Direction</code> and <code>Vibration.SignedMagnitude</code>.</li>
+<li>Running effects polar-split into left/right motor scalars for rumble-only physical devices.</li>
+<li>Condition effects pass through to <code>Vibration.ConditionAxes</code>.</li>
+</ul>
+<h3 id="report-id-dispatch">Report-ID dispatch<a class="headerlink" href="#report-id-dispatch" title="Permanent link">&para;</a></h3>
+<p>Report IDs are defined in <code>HMaestroFfbDescriptor.OutputReportId</code> and dispatched by <code>OnHidOutput</code> (<code>HMaestroFfbDecoder.cs:183</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Report ID</th>
+<th>Constant</th>
+<th>Decoder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x11</code></td>
+<td><code>SetEffect</code></td>
+<td><code>DecodeSetEffect</code> (also handled by <code>OnHidFeature</code> for Create New Effect)</td>
+</tr>
+<tr>
+<td><code>0x13</code></td>
+<td><code>SetCondition</code></td>
+<td><code>DecodeSetCondition</code></td>
+</tr>
+<tr>
+<td><code>0x14</code></td>
+<td><code>SetPeriodic</code></td>
+<td><code>DecodeSetPeriodic</code></td>
+</tr>
+<tr>
+<td><code>0x15</code></td>
+<td><code>SetConstantForce</code></td>
+<td><code>DecodeSetConstant</code></td>
+</tr>
+<tr>
+<td><code>0x16</code></td>
+<td><code>SetRampForce</code></td>
+<td><code>DecodeSetRamp</code></td>
+</tr>
+<tr>
+<td><code>0x1A</code></td>
+<td><code>EffectOperation</code></td>
+<td><code>DecodeEffectOperation</code></td>
+</tr>
+<tr>
+<td><code>0x1B</code></td>
+<td><code>BlockFree</code></td>
+<td><code>DecodeBlockFree</code></td>
+</tr>
+<tr>
+<td><code>0x1C</code></td>
+<td><code>DeviceControl</code></td>
+<td><code>DecodeDeviceControl</code></td>
+</tr>
+<tr>
+<td><code>0x1D</code></td>
+<td><code>DeviceGain</code></td>
+<td><code>DecodeDeviceGain</code></td>
+</tr>
+</tbody>
+</table>
+<p>The descriptor bytes that carry these IDs to the host are produced by HIDMaestro v1.1.41+'s <code>HidDescriptorBuilder.AddPidFfbBlock()</code>. PadForge only needs the IDs. It does not emit the descriptor itself.</p>
+<h3 id="publishinitialstate">PublishInitialState()<a class="headerlink" href="#publishinitialstate" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroFfbDecoder.cs:97</code> (method <code>PublishInitialState</code>). Called from <code>HMaestroVirtualController.Connect()</code> immediately after <code>CreateController</code>. Publishes the PID Pool and the initial PID State via <code>_controller.PublishPidPool(...)</code> and <code>_controller.PublishPidState(0, _stateFlags)</code>. Without these the SDK returns <code>STATUS_NO_SUCH_DEVICE</code> for the Pool Report and DirectInput cleanly concludes "no FFB". This is the gate that turns the Custom-VID device into a real DirectInput PID FFB device on the wire.</p>
+<p>Block Load is driver-owned: HM v1.1.37+ allocates the <code>EffectBlockIndex</code> and writes BL fields synchronously inside the <code>SetFeature(0x11)</code> IOCTL handler, so PadForge does not pre-publish a Block Load.</p>
+<h3 id="effect-tracking">Effect tracking<a class="headerlink" href="#effect-tracking" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="n">EffectState</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_effects</span><span class="p">;</span><span class="w">   </span><span class="c1">// keyed by EffectBlockIndex</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">private</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="n">_deviceGain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">255</span><span class="p">;</span><span class="w">                            </span><span class="c1">// 0..255 from DeviceGain report</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">private</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="n">_lastEbi</span><span class="p">;</span><span class="w">                                     </span><span class="c1">// last allocated EBI</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">private</span><span class="w"> </span><span class="n">PidStateFlags</span><span class="w"> </span><span class="n">_stateFlags</span><span class="p">;</span><span class="w">                         </span><span class="c1">// ActuatorsEnabled | ActuatorPower</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">private</span><span class="w"> </span><span class="n">EffectState</span><span class="w"> </span><span class="n">_pending</span><span class="p">;</span><span class="w">                              </span><span class="c1">// EBI=0 parameter buffer</span>
+</code></pre></div>
+<p><code>pid.dll</code>'s flow on <code>CreateEffect</code> is:</p>
+<ol>
+<li>Set Periodic / Set Constant / Set Ramp / Set Condition with <code>EBI=0</code>.</li>
+<li><code>SetFeature(0x11)</code> Create New Effect. Driver allocates <code>EBI=N</code>.</li>
+<li>Set Effect (0x11) with <code>EBI=N</code> to bind type, duration, direction.</li>
+</ol>
+<p>Step 1 carries the magnitude / period; <code>_pending</code> captures it, then <code>OnHidFeature</code> (step 2) drains it into the freshly created effect at <code>EBI=N</code>. <code>DecodeSetEffect</code> also drains <code>_pending</code> when it sees a non-zero EBI, because some host stacks pick the EBI internally and never round-trip through <code>SetFeature</code>.</p>
+<h3 id="applyvibration-vib">Apply(Vibration vib)<a class="headerlink" href="#applyvibration-vib" title="Permanent link">&para;</a></h3>
+<p><code>HMaestroFfbDecoder.cs:238</code> (method <code>Apply</code>). Aggregates running effects into the supplied <code>Vibration</code>:</p>
+<ol>
+<li>For each running, non-zero effect: gain-scale magnitude (<code>absMag * (es.Gain / 255.0)</code>), pick dominant by gain-scaled magnitude, polar-split via <code>sin((direction / 32767 * 360 + 180) % 360)</code> into <code>leftScale</code> / <code>rightScale</code>, accumulate into <code>leftSum</code> / <code>rightSum</code>.</li>
+<li>Apply device-level gain: <code>* (_deviceGain / 255.0)</code>.</li>
+<li>Scale 0..10000 to 0..65535 and clamp. Write to <code>vib.LeftMotorSpeed</code> and <code>vib.RightMotorSpeed</code>.</li>
+<li>If any effect was running, set <code>vib.HasDirectionalData = true</code> and populate <code>EffectType</code>, <code>SignedMagnitude</code>, <code>Direction</code>, <code>Period</code>, <code>DeviceGain</code> from the dominant effect. <code>ForceFeedbackState</code> consumes these to drive <code>SDL_HapticEffect</code> on physical FFB devices.</li>
+<li>If a Spring / Damper / Inertia / Friction effect is running, populate <code>vib.ConditionAxes</code> from its <code>ConditionAxisCount</code> axes, then <code>vib.HasConditionData = true</code>. <code>ForceFeedbackState.SetConditionHapticForces</code> maps these to <code>SDL_HapticCondition</code>.</li>
+</ol>
+<p>The "where force COMES FROM" to "toward" 180-degree shift is per HID PID 1.0: a force coming from East (90 degrees) pushes West, biasing the left motor.</p>
+<hr />
+<h2 id="midivirtualcontroller">MidiVirtualController<a class="headerlink" href="#midivirtualcontroller" title="Permanent link">&para;</a></h2>
+<p><strong>Namespace:</strong> <code>PadForge.Common.Input</code>
+<strong>Visibility:</strong> <code>internal sealed</code>
+<strong>SDK dependency:</strong> <code>Microsoft.Windows.Devices.Midi2</code> (Windows MIDI Services, from <code>nuget-local/</code>)
+<strong>Max instances:</strong> 16 (<code>MaxMidiSlots = MaxPads</code>)
+<strong>Availability:</strong> Requires Windows MIDI Services, detected at runtime by <code>IsAvailable()</code> (SDK init plus <code>EnsureServiceAvailable()</code>, no OS-version gate). MIDI button hidden when unavailable.</p>
+<p>Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears in DAWs and MIDI applications as "PadForge MIDI N". Falls back gracefully without MIDI Services.</p>
+<p><strong>Type isolation:</strong> MIDI cards cannot switch to Xbox / PlayStation / Extended and vice versa. Type dropdown is disabled for MIDI slots.</p>
+<h3 id="static-fields">Static Fields<a class="headerlink" href="#static-fields" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_isAvailable</code></td>
+<td><code>bool?</code></td>
+<td>Cached availability check result (nullable for first-check detection)</td>
+</tr>
+<tr>
+<td><code>_availLock</code></td>
+<td><code>object</code></td>
+<td>Lock protecting availability check (readonly)</td>
+</tr>
+<tr>
+<td><code>_initializer</code></td>
+<td><code>MidiDesktopAppSdkInitializer</code></td>
+<td>SDK initializer instance (kept alive for SDK lifetime)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="instance-fields">Instance Fields<a class="headerlink" href="#instance-fields" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_session</code></td>
+<td><code>MidiSession</code></td>
+<td>Windows MIDI Services session</td>
+</tr>
+<tr>
+<td><code>_connection</code></td>
+<td><code>MidiEndpointConnection</code></td>
+<td>Endpoint connection for sending messages</td>
+</tr>
+<tr>
+<td><code>_virtualDevice</code></td>
+<td><code>MidiVirtualDevice</code></td>
+<td>The virtual MIDI device (SuppressHandledMessages = true)</td>
+</tr>
+<tr>
+<td><code>_connected</code></td>
+<td><code>bool</code></td>
+<td>Whether this controller is connected</td>
+</tr>
+<tr>
+<td><code>_disposed</code></td>
+<td><code>bool</code></td>
+<td>Dispose guard</td>
+</tr>
+<tr>
+<td><code>_padIndex</code></td>
+<td><code>int</code></td>
+<td>Slot index (readonly)</td>
+</tr>
+<tr>
+<td><code>_channel</code></td>
+<td><code>int</code></td>
+<td>MIDI channel 0–15 (readonly, clamped via <code>Math.Clamp</code>)</td>
+</tr>
+<tr>
+<td><code>_instanceNum</code></td>
+<td><code>int</code></td>
+<td>1-based MIDI-type instance number (readonly)</td>
+</tr>
+<tr>
+<td><code>_lastCcValues</code></td>
+<td><code>byte[]</code></td>
+<td>Last sent CC values (change detection, initialized to 64 = center)</td>
+</tr>
+<tr>
+<td><code>_lastNotes</code></td>
+<td><code>bool[]</code></td>
+<td>Last sent note states (change detection)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configurable-properties">Configurable Properties<a class="headerlink" href="#configurable-properties" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CcNumbers</code></td>
+<td><code>int[]</code></td>
+<td><code>{1, 2, 3, 4, 5, 6}</code></td>
+<td>MIDI CC numbers for each CC slot</td>
+</tr>
+<tr>
+<td><code>NoteNumbers</code></td>
+<td><code>int[]</code></td>
+<td><code>{60, 61, ..., 70}</code></td>
+<td>MIDI note numbers for each note slot (11 notes)</td>
+</tr>
+<tr>
+<td><code>Velocity</code></td>
+<td><code>byte</code></td>
+<td><code>127</code></td>
+<td>Note-on velocity for button presses</td>
+</tr>
+</tbody>
+</table>
+<p>These are <code>internal</code> properties set by the mapping system before <code>Connect()</code>. They determine array sizes for change detection.</p>
+<h3 id="auto-mapping">Auto-Mapping<a class="headerlink" href="#auto-mapping" title="Permanent link">&para;</a></h3>
+<p>When a recognized gamepad is assigned to a MIDI slot, PadForge auto-maps:
+- <strong>6 axes</strong> to CC slots 0–5 (LX, LY, LT, RX, RY, RT -&gt; <code>MidiCC0</code>–<code>MidiCC5</code>)
+- <strong>11 buttons</strong> to Note slots 0–10 (A, B, X, Y, LB, RB, Back, Start, LS, RS, Guide -&gt; <code>MidiNote0</code>–<code>MidiNote10</code>)</p>
+<p>Same gamepad detection as the HM-backed slots (<code>CapType == InputDeviceType.Gamepad</code>). Non-gamepad devices get no auto-mapping.</p>
+<h3 id="properties_1">Properties<a class="headerlink" href="#properties_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code></td>
+<td><code>VirtualControllerType</code></td>
+<td>Always <code>VirtualControllerType.Midi</code></td>
+</tr>
+<tr>
+<td><code>IsConnected</code></td>
+<td><code>bool</code></td>
+<td>Read from <code>_connected</code></td>
+</tr>
+<tr>
+<td><code>FeedbackPadIndex</code></td>
+<td><code>int</code></td>
+<td>Slot index for feedback routing (unused. MIDI has no rumble)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="constructor_1">Constructor<a class="headerlink" href="#constructor_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">public</span><span class="w"> </span><span class="nf">MidiVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">instanceNum</span><span class="p">)</span>
+</code></pre></div>
+<p>Stores pad index, clamps channel to 0–15, stores 1-based instance number.</p>
+<h3 id="connect_1">Connect()<a class="headerlink" href="#connect_1" title="Permanent link">&para;</a></h3>
+<p>Returns early if already connected. Initialization sequence:</p>
+<ol>
+<li>Creates <code>MidiDeclaredEndpointInfo</code> with name <code>"PadForge MIDI {instanceNum}"</code>, product ID <code>"PADFORGE_MIDI_{instanceNum}"</code>, MIDI 1.0 protocol.</li>
+<li>Creates <code>MidiVirtualDeviceCreationConfig</code> with slot description.</li>
+<li>Adds a <code>MidiFunctionBlock</code> (bidirectional, Group 0, <code>RepresentsMidi10Connection = YesBandwidthUnrestricted</code>).</li>
+<li><code>MidiSession.Create(deviceName)</code>. Throws if null.</li>
+<li>Creates virtual device via <code>MidiVirtualDeviceManager.CreateVirtualDevice(config)</code>. <code>SuppressHandledMessages = true</code>.</li>
+<li>Creates <code>MidiEndpointConnection</code> to the device's endpoint ID.</li>
+<li>Adds virtual device as message processing plugin.</li>
+<li>Opens connection. Throws if false.</li>
+<li>Sets <code>_connected = true</code>.</li>
+<li>Initializes <code>_lastCcValues</code> (filled with 64) and <code>_lastNotes</code>.</li>
+</ol>
+<p><strong>Error handling:</strong> Steps 5–8 failure triggers full cleanup (disconnect, dispose session, null references) before re-throw. Prevents leaked MIDI sessions.</p>
+<h3 id="disconnect_1">Disconnect()<a class="headerlink" href="#disconnect_1" title="Permanent link">&para;</a></h3>
+<p>Returns early if not connected. Sequence:</p>
+<ol>
+<li>Sets <code>_connected = false</code> immediately (prevents sends during cleanup).</li>
+<li>Sends Note Off for held notes to prevent stuck notes in DAWs.</li>
+<li>Nulls <code>_lastNotes</code>.</li>
+<li>Disconnects endpoint, nulls <code>_connection</code>.</li>
+<li>Nulls <code>_virtualDevice</code>.</li>
+<li>Disposes and nulls <code>_session</code>.</li>
+</ol>
+<h3 id="submitgamepadstategamepad-gp_1">SubmitGamepadState(Gamepad gp)<a class="headerlink" href="#submitgamepadstategamepad-gp_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SubmitGamepadState</span><span class="p">(</span><span class="n">Gamepad</span><span class="w"> </span><span class="n">gp</span><span class="p">)</span>
+</code></pre></div>
+<p>Legacy path. Not used for dynamic MIDI. Kept as a no-op for <code>IVirtualController</code> interface compliance.</p>
+<h3 id="submitmidirawstatemidirawstate-state">SubmitMidiRawState(MidiRawState state)<a class="headerlink" href="#submitmidirawstatemidirawstate-state" title="Permanent link">&para;</a></h3>
+<p>Sends MIDI messages from <code>MidiRawState</code>. Returns immediately if not connected. Only sends on value change.</p>
+<p><strong>CC messages:</strong> Iterates <code>min(state.CcValues.Length, _lastCcValues.Length, CcNumbers.Length)</code>. Changed CC values trigger <code>SendCC()</code>. Triple-min guards against mid-stream config changes.</p>
+<p><strong>Note messages:</strong> Same triple-min pattern. Changed notes trigger <code>SendNoteOn()</code> or <code>SendNoteOff()</code>.</p>
+<p><strong>Thread safety:</strong> <code>_connection</code> is read into a local before null-check and send, preventing races with <code>Disconnect()</code>.</p>
+<h3 id="midirawstate">MidiRawState<a class="headerlink" href="#midirawstate" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// In PadForge.Engine/Common/GamepadTypes.cs</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">MidiRawState</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">byte</span><span class="p">[]</span><span class="w"> </span><span class="n">CcValues</span><span class="p">;</span><span class="w">   </span><span class="c1">// CC values 0–127 per CC slot</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">Notes</span><span class="p">;</span><span class="w">      </span><span class="c1">// Note on/off per note slot</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">MidiRawState</span><span class="w"> </span><span class="nf">Create</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ccCount</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">noteCount</span><span class="p">);</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>Dynamic-sized state struct. <code>Create()</code> allocates zeroed arrays of the specified sizes. <code>Clear()</code> resets CC values to 64 (center) and notes to false. <code>Connect()</code> seeds the controller's own <code>_lastCcValues</code> to 64.</p>
+<h3 id="registerfeedbackcallbackint-padindex-vibration-vibrationstates_1">RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)<a class="headerlink" href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_1" title="Permanent link">&para;</a></h3>
+<p>No-op. MIDI has no rumble/force feedback.</p>
+<h3 id="dispose_1">Dispose()<a class="headerlink" href="#dispose_1" title="Permanent link">&para;</a></h3>
+<p>Guarded by <code>_disposed</code>. Calls <code>Disconnect()</code>.</p>
+<h3 id="midi-message-helpers">MIDI Message Helpers<a class="headerlink" href="#midi-message-helpers" title="Permanent link">&para;</a></h3>
+<p>All messages are built as MIDI 1.0 UMP (Universal MIDI Packet) via <code>MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()</code> and sent via <code>_connection.SendSingleMessagePacket()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>MIDI Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SendCC(int ccNumber, byte value)</code></td>
+<td><code>ControlChange</code></td>
+<td>Sends CC on configured channel, group 0</td>
+</tr>
+<tr>
+<td><code>SendNoteOn(int note, byte velocity)</code></td>
+<td><code>NoteOn</code></td>
+<td>Sends Note On on configured channel</td>
+</tr>
+<tr>
+<td><code>SendNoteOff(int note)</code></td>
+<td><code>NoteOff</code></td>
+<td>Sends Note Off (velocity 0) on configured channel</td>
+</tr>
+</tbody>
+</table>
+<h3 id="static-availability-check">Static Availability Check<a class="headerlink" href="#static-availability-check" title="Permanent link">&para;</a></h3>
+<h4 id="isavailable-bool">IsAvailable() -&gt; bool<a class="headerlink" href="#isavailable-bool" title="Permanent link">&para;</a></h4>
+<p>Thread-safe, double-checked locking on <code>_availLock</code>. Caches result in <code>_isAvailable</code>.</p>
+<ol>
+<li>Fast path: if <code>_isAvailable.HasValue</code>, returns cached value.</li>
+<li>Under lock: creates <code>MidiDesktopAppSdkInitializer.Create()</code>.</li>
+<li><code>InitializeSdkRuntime()</code>. Disposes and caches false on failure.</li>
+<li><code>EnsureServiceAvailable()</code>. Disposes and caches false on failure.</li>
+<li>Success: keeps <code>_initializer</code> alive (required for SDK lifetime), caches true.</li>
+<li>Any exception: caches false.</li>
+</ol>
+<h4 id="resetavailability">ResetAvailability()<a class="headerlink" href="#resetavailability" title="Permanent link">&para;</a></h4>
+<p>Resets cached availability so <code>IsAvailable()</code> re-evaluates. Disposes <code>_initializer</code> if present, sets <code>_isAvailable = null</code>. Call after installing MIDI Services.</p>
+<h4 id="shutdownbool-skipdispose-false">Shutdown(bool skipDispose = false)<a class="headerlink" href="#shutdownbool-skipdispose-false" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Shutdown</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">skipDispose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
+</code></pre></div>
+<p>Disposes the SDK initializer. Call on application exit.</p>
+<p><strong><code>skipDispose</code>:</strong> When true, abandons the initializer without <code>Dispose()</code>. Use before uninstalling MIDI Services. <code>Dispose()</code> calls into the runtime and crashes if the service is being removed. Resets <code>_isAvailable = null</code>.</p>
+<hr />
+<h2 id="keyboardmousevirtualcontroller">KeyboardMouseVirtualController<a class="headerlink" href="#keyboardmousevirtualcontroller" title="Permanent link">&para;</a></h2>
+<p><strong>Namespace:</strong> <code>PadForge.Common.Input</code>
+<strong>Visibility:</strong> <code>internal sealed</code>
+<strong>No driver required</strong>. Always available on all Windows systems
+<strong>Max instances:</strong> 16 (<code>MaxPads</code>)</p>
+<p>Translates <code>KbmRawState</code> into keyboard and mouse input via Win32 <code>SendInput</code>. Maps controller inputs to key presses, mouse movement, clicks, and scroll. No virtual device. Output goes directly to the Windows input queue.</p>
+<h3 id="fields_1">Fields<a class="headerlink" href="#fields_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_connected</code></td>
+<td><code>bool</code></td>
+<td>Connection state</td>
+</tr>
+<tr>
+<td><code>_disposed</code></td>
+<td><code>bool</code></td>
+<td>Dispose guard</td>
+</tr>
+<tr>
+<td><code>_padIndex</code></td>
+<td><code>int</code></td>
+<td>Slot index (readonly)</td>
+</tr>
+<tr>
+<td><code>_prevKeys0..3</code></td>
+<td><code>ulong</code></td>
+<td>Previous key states for change detection (4 x 64 bits = 256 VK codes)</td>
+</tr>
+<tr>
+<td><code>_prevMouseButtons</code></td>
+<td><code>byte</code></td>
+<td>Previous mouse button state for change detection</td>
+</tr>
+<tr>
+<td><code>_mxAccumulator</code>, <code>_myAccumulator</code></td>
+<td><code>float</code></td>
+<td>Sub-pixel residue for mouse move. Fractional deltas (gyro-to-mouse) accumulate across frames instead of truncating to 0.</td>
+</tr>
+<tr>
+<td><code>_scrollAccumulator</code>, <code>_scrollAccumulatorH</code></td>
+<td><code>float</code></td>
+<td>Sub-line residue for vertical and horizontal scroll.</td>
+</tr>
+<tr>
+<td><code>_socd</code></td>
+<td><code>SocdCleaner</code></td>
+<td>SOCD cleaner (discussion #205, Snap Tap). Rewrites the logical key bitset before change detection. No-op while mode is Off.</td>
+</tr>
+<tr>
+<td><code>_appliedSocdMode</code>, <code>_appliedSocdPairs</code></td>
+<td><code>string</code></td>
+<td>Last-applied SOCD config strings. Reference-compared in <code>ApplySocdConfig</code> for a two-compare steady-state fast path.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Type</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MouseSensitivity</code></td>
+<td><code>float</code></td>
+<td><code>15.0f</code></td>
+<td>Pixels per frame at full axis deflection</td>
+</tr>
+<tr>
+<td><code>ScrollSensitivity</code></td>
+<td><code>float</code></td>
+<td><code>3.0f</code></td>
+<td>Lines per frame at full axis deflection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="properties_2">Properties<a class="headerlink" href="#properties_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code></td>
+<td><code>VirtualControllerType</code></td>
+<td>Always <code>VirtualControllerType.KeyboardMouse</code></td>
+</tr>
+<tr>
+<td><code>IsConnected</code></td>
+<td><code>bool</code></td>
+<td>Read from <code>_connected</code></td>
+</tr>
+<tr>
+<td><code>FeedbackPadIndex</code></td>
+<td><code>int</code></td>
+<td>Slot index (unused. KBM has no rumble)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="constructor_2">Constructor<a class="headerlink" href="#constructor_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">public</span><span class="w"> </span><span class="nf">KeyboardMouseVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">)</span>
+</code></pre></div>
+<p>Stores pad index. No resources acquired, no driver interaction.</p>
+<h3 id="connect_2">Connect()<a class="headerlink" href="#connect_2" title="Permanent link">&para;</a></h3>
+<p>Returns early if connected. Sets <code>_connected = true</code>, resets key/button tracking to zero, and calls <code>_socd.Reset()</code>. Lightweight. No virtual device created.</p>
+<h3 id="disconnect_2">Disconnect()<a class="headerlink" href="#disconnect_2" title="Permanent link">&para;</a></h3>
+<p>Returns early if not connected. Sets <code>_connected = false</code>, calls <code>ReleaseAll()</code>, then zeroes the four move/scroll accumulators.</p>
+<p><strong><code>ReleaseAll()</code>:</strong> Sends key-up for all held keys and button-up for all held mouse buttons (a release-phase <code>ProcessKeyWord</code> pass with <code>current = 0</code> emits releases for every set bit). Resets tracking to zero. Prevents stuck keys/buttons on disconnect.</p>
+<h3 id="applysocdconfigstring-mode-string-pairs">ApplySocdConfig(string mode, string pairs)<a class="headerlink" href="#applysocdconfigstring-mode-string-pairs" title="Permanent link">&para;</a></h3>
+<p><code>KeyboardMouseVirtualController.cs:76</code>. Applies the slot's SOCD (Snap Tap, discussion #205) config. Called from the poll loop before each submit. The UI thread swaps whole config strings atomically, so two <code>ReferenceEquals</code> compares detect an edit and keep the steady-state cost at two compares. On change it forwards <code>mode</code> / <code>pairs</code> to <code>_socd.Configure</code>.</p>
+<h3 id="dispose_2">Dispose()<a class="headerlink" href="#dispose_2" title="Permanent link">&para;</a></h3>
+<p>Guarded by <code>_disposed</code>. Calls <code>Disconnect()</code>.</p>
+<h3 id="submitgamepadstategamepad-gp_2">SubmitGamepadState(Gamepad gp)<a class="headerlink" href="#submitgamepadstategamepad-gp_2" title="Permanent link">&para;</a></h3>
+<p>No-op. KBM uses <code>SubmitKbmState()</code> instead. Required by the <code>IVirtualController</code> interface.</p>
+<h3 id="submitkbmstatekbmrawstate-raw">SubmitKbmState(KbmRawState raw)<a class="headerlink" href="#submitkbmstatekbmrawstate-raw" title="Permanent link">&para;</a></h3>
+<p>Primary output method. Returns if not connected. Processes SOCD cleaning, then five input categories per frame.</p>
+<p><strong>0. SOCD cleaning (Snap Tap, discussion #205):</strong></p>
+<p><code>_socd.Apply(ref raw.Keys0, ref raw.Keys1, ref raw.Keys2, ref raw.Keys3)</code> rewrites the logical bitset before change detection and before the <code>_prevKeys</code> assignment, so a suppressed loser emits its key-up and a later release of the winner lets the still-held loser through as a fresh key-down. No-op while mode is Off.</p>
+<p><strong>1. Keyboard keys (two global phases, change detection via XOR):</strong></p>
+<p><code>ProcessKeyWord(ulong current, ulong previous, int baseVk, bool releases)</code>. The frame runs a full release pass over all four VK words, then a full press pass:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">ProcessKeyWord</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">Keys0</span><span class="p">,</span><span class="w"> </span><span class="n">_prevKeys0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="n">releases</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">ProcessKeyWord</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">Keys1</span><span class="p">,</span><span class="w"> </span><span class="n">_prevKeys1</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w">  </span><span class="n">releases</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">ProcessKeyWord</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">Keys2</span><span class="p">,</span><span class="w"> </span><span class="n">_prevKeys2</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="n">releases</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">ProcessKeyWord</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">Keys3</span><span class="p">,</span><span class="w"> </span><span class="n">_prevKeys3</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="n">releases</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">ProcessKeyWord</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">Keys0</span><span class="p">,</span><span class="w"> </span><span class="n">_prevKeys0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="n">releases</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1">// ...press pass over words 1..3...</span>
+</code></pre></div>
+<p>Each phase XORs <code>current ^ previous</code> and, per bit, sends only the bits belonging to that phase (<code>changed &amp; ~current</code> for releases, <code>changed &amp; current</code> for presses). Release-before-press must be global across all four words, not per-word, or a cross-word SOCD pair (arrow + letter) still exposed both directions held between the two <code>SendInput</code> calls when the winner's word processed first. Only changed bits generate <code>SendInput</code> calls. Critical at 1000 Hz with 256 VK codes.</p>
+<p><strong>2. Mouse buttons (change detection):</strong></p>
+<p>Compares <code>raw.MouseButtons</code> against <code>_prevMouseButtons</code> via XOR.</p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Button</th>
+<th>Down Flag</th>
+<th>Up Flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Left (LMB)</td>
+<td><code>MOUSEEVENTF_LEFTDOWN</code></td>
+<td><code>MOUSEEVENTF_LEFTUP</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Right (RMB)</td>
+<td><code>MOUSEEVENTF_RIGHTDOWN</code></td>
+<td><code>MOUSEEVENTF_RIGHTUP</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Middle (MMB)</td>
+<td><code>MOUSEEVENTF_MIDDLEDOWN</code></td>
+<td><code>MOUSEEVENTF_MIDDLEUP</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>XButton1</td>
+<td><code>MOUSEEVENTF_XDOWN</code></td>
+<td><code>MOUSEEVENTF_XUP</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>XButton2</td>
+<td><code>MOUSEEVENTF_XDOWN</code></td>
+<td><code>MOUSEEVENTF_XUP</code></td>
+</tr>
+</tbody>
+</table>
+<p>XButton1/XButton2 use <code>mouseData</code> field to specify which extra button.</p>
+<p><strong>3. Mouse movement (continuous, routed through the injector thread):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">_mxAccumulator</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">raw</span><span class="p">.</span><span class="n">MouseDeltaX</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">32767.0f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MouseSensitivity</span><span class="p">;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">_myAccumulator</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="o">-</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">MouseDeltaY</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">32767.0f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MouseSensitivity</span><span class="p">);</span><span class="w">  </span><span class="c1">// Y inverted</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kt">int</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_mxAccumulator</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_myAccumulator</span><span class="p">;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">_mxAccumulator</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">dx</span><span class="p">;</span><span class="w"> </span><span class="n">_myAccumulator</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">dy</span><span class="p">;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dx</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">InputManager</span><span class="p">.</span><span class="n">AccumulateMouseMoveInput</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">);</span>
+</code></pre></div>
+<p>Never a <code>SendInput</code> on the poll thread. Injected mouse movement traverses every process's low-level mouse hook chain synchronously, and a stick at full deflection crosses the accumulator nearly every tick. The macro mouse path measured that exact per-poll-<code>SendInput</code> mechanism collapsing the loop to ~200 Hz, so this lane rides the same <code>InputManager</code> injector thread. The integer part goes to <code>AccumulateMouseMoveInput</code>, the fractional residue stays in the accumulator. Y negated (raw up = screen down). Deadzone already applied in Step 3.</p>
+<p><strong>4. Absolute pointer (Wii IR pointing, issue #146):</strong></p>
+<p>When <code>raw.MouseAbsValid</code> and <code>CursorControlService.TryGetPrimarySize(out w, out h)</code>, the aim (<code>MouseAbsX</code> / <code>MouseAbsY</code>, normalized [-1..+1]) maps over the primary screen and positions the OS cursor via <code>SetCursorPos</code> (Touchmote <code>MouseSimulator</code> idiom). A mixed mapping (IR on one axis, a stick on the other) drives only one absolute coordinate. When <code>MouseAbsXValid != MouseAbsYValid</code>, the un-driven coordinate is read back from <code>GetCursorPos</code> so it keeps its integrated position instead of recentering. On sight loss the cursor holds its last position.</p>
+<p><strong>5. Mouse scroll (vertical, continuous, injector-routed):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">_scrollAccumulator</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">raw</span><span class="p">.</span><span class="n">ScrollDelta</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">32767.0f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ScrollSensitivity</span><span class="p">;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">scroll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_scrollAccumulator</span><span class="p">;</span><span class="w"> </span><span class="n">_scrollAccumulator</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">scroll</span><span class="p">;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scroll</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">InputManager</span><span class="p">.</span><span class="n">AccumulateMouseScrollInput</span><span class="p">(</span><span class="n">scroll</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">120</span><span class="p">);</span><span class="w">  </span><span class="c1">// 120 = WHEEL_DELTA</span>
+</code></pre></div>
+<p><strong>6. Mouse scroll (horizontal, issue #154 tilt wheel):</strong></p>
+<p>Same accumulator idiom on <code>raw.ScrollDeltaH</code>, sent via <code>InputManager.AccumulateMouseScrollHInput(scrollH * 120)</code> (positive = scroll right, matching <code>MOUSEEVENTF_HWHEEL</code>).</p>
+<h3 id="registerfeedbackcallbackint-padindex-vibration-vibrationstates_2">RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)<a class="headerlink" href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_2" title="Permanent link">&para;</a></h3>
+<p>No-op. Keyboard/mouse has no rumble feedback.</p>
+<h3 id="kbmrawstate-from-engine">KbmRawState (from Engine)<a class="headerlink" href="#kbmrawstate-from-engine" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">KbmRawState</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ulong</span><span class="w"> </span><span class="n">Keys0</span><span class="p">,</span><span class="w"> </span><span class="n">Keys1</span><span class="p">,</span><span class="w"> </span><span class="n">Keys2</span><span class="p">,</span><span class="w"> </span><span class="n">Keys3</span><span class="p">;</span><span class="w">   </span><span class="c1">// 256 VK codes packed into 4 x 64-bit words</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">MouseDeltaX</span><span class="p">;</span><span class="w">                    </span><span class="c1">// Mouse X delta (signed, post-deadzone)</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">MouseDeltaY</span><span class="p">;</span><span class="w">                    </span><span class="c1">// Mouse Y delta (signed, post-deadzone)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ScrollDelta</span><span class="p">;</span><span class="w">                    </span><span class="c1">// Scroll delta (positive = up, post-deadzone)</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="n">MouseButtons</span><span class="p">;</span><span class="w">                    </span><span class="c1">// Bit 0=LMB, 1=RMB, 2=MMB, 3=X1, 4=X2</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">PreDzMouseDeltaX</span><span class="p">;</span><span class="w">               </span><span class="c1">// Mouse X before deadzone (for UI preview only)</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">PreDzMouseDeltaY</span><span class="p">;</span><span class="w">               </span><span class="c1">// Mouse Y before deadzone (for UI preview only)</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">PreDzScrollDelta</span><span class="p">;</span><span class="w">               </span><span class="c1">// Scroll before deadzone (for UI preview only)</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ScrollDeltaH</span><span class="p">;</span><span class="w">                   </span><span class="c1">// Horizontal scroll, positive = right (issue #154)</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">PreDzScrollDeltaH</span><span class="p">;</span><span class="w">              </span><span class="c1">// Horizontal scroll before deadzone (UI preview)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseAbsX</span><span class="p">,</span><span class="w"> </span><span class="n">MouseAbsY</span><span class="p">;</span><span class="w">           </span><span class="c1">// Absolute pointer aim, [-1..+1] (issue #146, Wii IR)</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MouseAbsValid</span><span class="p">;</span><span class="w">                   </span><span class="c1">// True while the camera sees the sensor bar (any-axis OR)</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MouseAbsXValid</span><span class="p">,</span><span class="w"> </span><span class="n">MouseAbsYValid</span><span class="p">;</span><span class="w">  </span><span class="c1">// Per-axis validity for mixed absolute/delta mappings</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetKey</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">vk</span><span class="p">);</span><span class="w">                 </span><span class="c1">// Read bit for VK code</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetKey</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">vk</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span><span class="w">   </span><span class="c1">// Set bit for VK code</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetMouseButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">);</span><span class="w">       </span><span class="c1">// Read bit 0-4</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetMouseButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span><span class="w">                         </span><span class="c1">// Zero all fields</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">KbmRawState</span><span class="w"> </span><span class="nf">Combine</span><span class="p">(</span><span class="n">KbmRawState</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">KbmRawState</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="p">}</span>
+</code></pre></div>
+<p><code>Combine()</code> merges two states: keys and mouse buttons OR'd, deltas take the largest absolute magnitude. Used when multiple devices map to one KBM slot.</p>
+<h3 id="win32-sendinput-pinvoke">Win32 SendInput P/Invoke<a class="headerlink" href="#win32-sendinput-pinvoke" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="na">[DllImport(&quot;user32.dll&quot;, SetLastError = true)]</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nf">SendInput</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">nInputs</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT</span><span class="p">[]</span><span class="w"> </span><span class="n">pInputs</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cbSize</span><span class="p">);</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="na">[DllImport(&quot;user32.dll&quot;)]</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nf">MapVirtualKeyW</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">uCode</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">uMapType</span><span class="p">);</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1">// Absolute cursor positioning for the Wii IR pointer (issue #146),</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="c1">// the same calls Touchmote&#39;s MouseSimulator uses.</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="na">[DllImport(&quot;user32.dll&quot;)]</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetCursorPos</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="na">[DllImport(&quot;user32.dll&quot;)]</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetCursorPos</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="n">POINT</span><span class="w"> </span><span class="n">lpPoint</span><span class="p">);</span>
+</code></pre></div>
+<p>Note that mouse movement and scroll do NOT go through <code>SendInput</code> here. Those route through the <code>InputManager</code> injector thread (<code>AccumulateMouseMoveInput</code> / <code>AccumulateMouseScrollInput</code> / <code>AccumulateMouseScrollHInput</code>). <code>SendInput</code> in this class handles keyboard keys and mouse buttons only. <code>SetCursorPos</code> / <code>GetCursorPos</code> serve the absolute-pointer path.</p>
+<p><strong>Struct alignment (x64):</strong> <code>INPUT</code> uses <code>LayoutKind.Sequential</code> with an inner <code>Explicit</code> union at <code>FieldOffset(0)</code>. On x64, <code>ULONG_PTR</code> fields need 8-byte alignment, so the union starts at offset 8. A flat <code>Explicit</code> layout with hardcoded offsets would break across architectures.</p>
+<p><strong>Key scan codes:</strong> <code>SendKeyboard</code> sets both <code>wVk</code> and <code>wScan</code> (via <code>MapVirtualKeyW</code>). Some games using DirectInput raw input require the scan code.</p>
+<p><strong>Individual calls:</strong> Each <code>SendInput</code> submits exactly 1 event. Batching key down + up would give identical timestamps, breaking some applications.</p>
+<hr />
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../reference/architecture-overview/">Architecture Overview</a>: Virtual controller types, slot system, per-type limits</li>
+<li><a href="../../reference/input-pipeline/">Input Pipeline</a>: Step 5 (<code>UpdateVirtualDevices</code>) creates / destroys VCs and submits state</li>
+<li><a href="../../reference/engine-library/">Engine Library</a>: <code>IVirtualController</code> interface, <code>Gamepad</code>, <code>ExtendedRawState</code>, <code>KbmRawState</code>, <code>MidiRawState</code>, <code>Vibration</code></li>
+<li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: HM SDK surface, OpenXInput filter, Step 5 lifecycle invariants, FFB through HM PID descriptors</li>
+<li><a href="../../reference/driver-installation-internals/">Driver Installation Internals</a>: HIDMaestro registration (no in-app uninstall) plus HidHide and Windows MIDI Services install / uninstall</li>
+<li><a href="../../reference/settings-and-serialization/">Settings and Serialization</a>: <code>VirtualControllerType</code> (<code>[XmlEnum("Microsoft")]</code> / <code>[XmlEnum("Sony")]</code> aliases) and per-slot HM profile persistence</li>
+<li><a href="../../reference/build-and-publish/">Build and Publish</a>: HIDMaestro and HidHide embedded resources</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.0.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../controller-slots/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Controller Slots">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Controller Slots
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../mappings/" class="md-footer__link md-footer__link--next" aria-label="Next: Button and Axis Mappings">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Button and Axis Mappings
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,4633 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/build-and-publish/">
+      
+      
+        <link rel="prev" href="../3d-model-system/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Build and Publish - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#build-and-publish" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Build and Publish
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#solution-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debug-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debug Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#release-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publish-portable-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish (Portable Deployment)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-file-publish-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-File Publish Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-configuration-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Configuration Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Configuration Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padforgeappcsproj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.App.csproj
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padforgeenginecsproj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.Engine.csproj
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Versioning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nuget-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NuGet Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NuGet Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padforgeapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.App
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padforgeengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-nuget-source-nuget-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local NuGet Source (nuget-local/)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#native-dlls-content-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Native DLLs (Content Items)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Native DLLs (Content Items)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sdl3dll-and-libusb-10dll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDL3.dll and libusb-1.0.dll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xinput1_4dll-openxinput-shim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        xinput1_4.dll (OpenXInput shim)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedded-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedded Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Embedded Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gamecontrollerdb_padforgetxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gamecontrollerdb_padforge.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-installers-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Installers (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bthps3-ds3-bluetooth-drivers-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BthPS3 / DS3 Bluetooth Drivers (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-model-assets-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D Model Assets (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web-controller-assets-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Controller Assets (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localization-strings-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Localization Strings (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2d-model-assets-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2D Model Assets (Resource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-github-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD (GitHub Actions)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CI/CD (GitHub Actions)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-releases-push-to-v4-dev-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic Releases (push to v4-dev only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact Naming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formal-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formal Releases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-deploy-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Deploy Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Release Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-update-version-if-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Update Version (if needed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-deploy-and-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Deploy and Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-commit-and-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Commit and Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-create-binary-zip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Create Binary Zip
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-create-github-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Create GitHub Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostic-tools-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Tools (tools/)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Diagnostic Tools (tools/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-build-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting Build Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#solution-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debug-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debug Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#release-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publish-portable-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish (Portable Deployment)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-file-publish-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-File Publish Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-configuration-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Configuration Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Configuration Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padforgeappcsproj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.App.csproj
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padforgeenginecsproj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.Engine.csproj
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Versioning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nuget-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NuGet Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NuGet Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padforgeapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.App
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padforgeengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PadForge.Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-nuget-source-nuget-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local NuGet Source (nuget-local/)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#native-dlls-content-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Native DLLs (Content Items)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Native DLLs (Content Items)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sdl3dll-and-libusb-10dll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDL3.dll and libusb-1.0.dll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xinput1_4dll-openxinput-shim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        xinput1_4.dll (OpenXInput shim)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedded-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedded Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Embedded Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gamecontrollerdb_padforgetxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gamecontrollerdb_padforge.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-installers-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Installers (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bthps3-ds3-bluetooth-drivers-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BthPS3 / DS3 Bluetooth Drivers (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-model-assets-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D Model Assets (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web-controller-assets-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Controller Assets (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localization-strings-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Localization Strings (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2d-model-assets-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2D Model Assets (Resource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-github-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD (GitHub Actions)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CI/CD (GitHub Actions)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-releases-push-to-v4-dev-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic Releases (push to v4-dev only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifact Naming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formal-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formal Releases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-deploy-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Deploy Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Release Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-update-version-if-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Update Version (if needed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-deploy-and-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Deploy and Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-commit-and-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Commit and Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-create-binary-zip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Create Binary Zip
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-create-github-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Create GitHub Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostic-tools-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Tools (tools/)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Diagnostic Tools (tools/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-build-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting Build Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="build-and-publish">Build and Publish<a class="headerlink" href="#build-and-publish" title="Permanent link">&para;</a></h1>
+<p>Build, publish, and release reference for PadForge.</p>
+<hr />
+<h2 id="solution-structure">Solution Structure<a class="headerlink" href="#solution-structure" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>PadForge.sln
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── PadForge.Engine/          Class library (net10.0-windows)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   ├── Common/               SDL3 P/Invoke, input types, device wrappers
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   ├── Data/                 PadSetting, UserDevice, UserSetting
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   └── Properties/           AssemblyInfo.cs
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── PadForge.App/             WPF application (net10.0-windows10.0.26100.0)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── Common/               SettingsManager, DriverInstaller, InputManager pipeline
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── Views/                XAML pages and code-behind
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── ViewModels/           MVVM ViewModels
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── Services/             InputService, SettingsService, DeviceService, etc.
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── WebAssets/             HTML/CSS/JS for browser virtual controller
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── Models3D/             3D model classes (Xbox360 / XboxOne / DS4 / DualSense)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── Models2D/             2D overlay layout classes (5 layouts)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── 2DModels/             PNG overlay images (DS4/, DualSense/, XBOX360/, XBOXONE/, XBOXSERIES/)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   ├── 3DModels/             OBJ meshes (DS4/, DualSense/, XBOX360/, XBOXONE/)
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   ├── Converter/            WPF value converters
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── Controls/             Custom controls (RangeSlider)
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Resources/            Icons, SDL3 DLL, embedded driver installers, localization
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   └── Properties/           AssemblyInfo.cs
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>├── nuget-local/              Local NuGet source (MIDI Services SDK)
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>├── nuget.config               Registers nuget.org + nuget-local/ as package sources
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>└── tools/
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    ├── DsuDiag/              DSU/Cemuhook diagnostic client
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    ├── Ds4InputDump/         DS4 raw HID input dump (Sony Report 0x01 passthrough debug)
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    ├── vJoy/                 Legacy v2 vJoy SDK / test utilities (kept for reference, unused by v4)
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    ├── deploy.ps1            Build + deploy to C:\PadForge
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    ├── deploy_and_restart.ps1  Deploy + restart running instance
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    ├── capture_*.ps1         Wiki screenshot capture (~20 scripts, one per surface)
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    └── (~50 ad-hoc diagnostic / UI-automation scripts, mostly v2 vJoy holdovers)
+</code></pre></div>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET SDK</td>
+<td>10.0+</td>
+<td><code>net10.0-windows10.0.26100.0</code> target framework</td>
+</tr>
+<tr>
+<td>Windows SDK</td>
+<td>10.0.26100.57</td>
+<td>Set via <code>WindowsSdkPackageVersion</code> in App csproj</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>10/11 x64</td>
+<td>WPF + Windows-specific P/Invoke</td>
+</tr>
+<tr>
+<td>Visual Studio (optional)</td>
+<td>2022+</td>
+<td>Not required; <code>dotnet</code> CLI suffices</td>
+</tr>
+</tbody>
+</table>
+<p>Minimum supported OS: Windows 10 1809 (build 17763), set via <code>SupportedOSPlatformVersion</code> in the App csproj.</p>
+<p>All native DLLs, the HidHide installer, and model assets are checked into the repository. The build needs no external downloads. The Windows MIDI Services SDK installer is fetched from GitHub releases on demand at runtime when the user clicks Install, not at build time.</p>
+<h2 id="build-commands">Build Commands<a class="headerlink" href="#build-commands" title="Permanent link">&para;</a></h2>
+<h3 id="debug-build">Debug Build<a class="headerlink" href="#debug-build" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>dotnet<span class="w"> </span>build<span class="w"> </span>-c<span class="w"> </span>Debug
+</code></pre></div>
+<p>Output: <code>PadForge.App/bin/Debug/net10.0-windows10.0.26100.0/win-x64/</code></p>
+<p>Suitable for development and debugging. <strong>Not deployable</strong>. Produces loose DLLs and requires the .NET runtime.</p>
+<h3 id="release-build">Release Build<a class="headerlink" href="#release-build" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>dotnet<span class="w"> </span>build<span class="w"> </span>-c<span class="w"> </span>Release
+</code></pre></div>
+<p>Output: <code>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/</code></p>
+<p>Not deployable. Use <code>dotnet publish</code> for deployment.</p>
+<h3 id="publish-portable-deployment">Publish (Portable Deployment)<a class="headerlink" href="#publish-portable-deployment" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>dotnet<span class="w"> </span>publish<span class="w"> </span>-c<span class="w"> </span>Release
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or explicitly:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>dotnet<span class="w"> </span>publish<span class="w"> </span>PadForge.App/PadForge.App.csproj<span class="w"> </span>-c<span class="w"> </span>Release
+</code></pre></div>
+<p>Output: <code>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/</code></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.exe</code></td>
+<td>~110 MB, single-file self-contained</td>
+</tr>
+<tr>
+<td><code>SDL3.dll</code></td>
+<td>SDL3 native library (content item)</td>
+</tr>
+<tr>
+<td><code>libusb-1.0.dll</code></td>
+<td>WinUSB for Switch 2 Pro Controller (content item)</td>
+</tr>
+<tr>
+<td><code>xinput1_4.dll</code></td>
+<td>OpenXInput-derived shim, SDL's XInput backend (content item)</td>
+</tr>
+</tbody>
+</table>
+<p>The custom gamepad mapping database ships embedded in the assembly, not as a loose file. See <a href="#gamecontrollerdb_padforgetxt">gamecontrollerdb_padforge.txt</a> under Embedded Resources.</p>
+<blockquote>
+<p><strong>Critical:</strong> Always use <code>dotnet publish</code> for deployment, never <code>dotnet build</code>. The project is configured for single-file self-contained publish. <code>dotnet build</code> produces non-functional multi-file output.</p>
+</blockquote>
+<h2 id="single-file-publish-configuration">Single-File Publish Configuration<a class="headerlink" href="#single-file-publish-configuration" title="Permanent link">&para;</a></h2>
+<p>The App csproj defines these publish properties:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cm">&lt;!-- Single-file portable publish: dotnet publish -c Release --&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">&lt;PropertyGroup&gt;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&lt;RuntimeIdentifier&gt;</span>win-x64<span class="nt">&lt;/RuntimeIdentifier&gt;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&lt;PublishSingleFile&gt;</span>true<span class="nt">&lt;/PublishSingleFile&gt;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&lt;SelfContained&gt;</span>true<span class="nt">&lt;/SelfContained&gt;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">&lt;IncludeNativeLibrariesForSelfExtract&gt;</span>true<span class="nt">&lt;/IncludeNativeLibrariesForSelfExtract&gt;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&lt;EnableCompressionInSingleFile&gt;</span>true<span class="nt">&lt;/EnableCompressionInSingleFile&gt;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">&lt;DebugType&gt;</span>embedded<span class="nt">&lt;/DebugType&gt;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nt">&lt;/PropertyGroup&gt;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RuntimeIdentifier</code></td>
+<td><code>win-x64</code></td>
+<td>Targets 64-bit Windows only</td>
+</tr>
+<tr>
+<td><code>PublishSingleFile</code></td>
+<td><code>true</code></td>
+<td>Bundles all managed assemblies into one exe</td>
+</tr>
+<tr>
+<td><code>SelfContained</code></td>
+<td><code>true</code></td>
+<td>Embeds .NET 10 runtime (no install needed on target)</td>
+</tr>
+<tr>
+<td><code>IncludeNativeLibrariesForSelfExtract</code></td>
+<td><code>true</code></td>
+<td>Packs native DLLs into the exe. Extracted to temp dir at runtime</td>
+</tr>
+<tr>
+<td><code>EnableCompressionInSingleFile</code></td>
+<td><code>true</code></td>
+<td>Compresses the bundle to reduce exe size</td>
+</tr>
+<tr>
+<td><code>DebugType</code></td>
+<td><code>embedded</code></td>
+<td>Embeds debug symbols in assemblies (no <code>.pdb</code> files); preserves stack traces for crash diagnostics</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> <code>RuntimeIdentifier</code> is set unconditionally (not only during publish), so <code>dotnet build</code> also targets <code>win-x64</code> and produces a RID-specific output folder.</p>
+<h2 id="project-configuration-details">Project Configuration Details<a class="headerlink" href="#project-configuration-details" title="Permanent link">&para;</a></h2>
+<h3 id="padforgeappcsproj">PadForge.App.csproj<a class="headerlink" href="#padforgeappcsproj" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">&lt;PropertyGroup&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&lt;OutputType&gt;</span>WinExe<span class="nt">&lt;/OutputType&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&lt;TargetFramework&gt;</span>net10.0-windows10.0.26100.0<span class="nt">&lt;/TargetFramework&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&lt;SupportedOSPlatformVersion&gt;</span>10.0.17763.0<span class="nt">&lt;/SupportedOSPlatformVersion&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&lt;WindowsSdkPackageVersion&gt;</span>10.0.26100.57<span class="nt">&lt;/WindowsSdkPackageVersion&gt;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">&lt;RootNamespace&gt;</span>PadForge<span class="nt">&lt;/RootNamespace&gt;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">&lt;AssemblyName&gt;</span>PadForge<span class="nt">&lt;/AssemblyName&gt;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">&lt;UseWPF&gt;</span>true<span class="nt">&lt;/UseWPF&gt;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&lt;UseWindowsForms&gt;</span>true<span class="nt">&lt;/UseWindowsForms&gt;</span><span class="w">  </span><span class="cm">&lt;!-- For NotifyIcon system tray --&gt;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&lt;LangVersion&gt;</span>latest<span class="nt">&lt;/LangVersion&gt;</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">&lt;Nullable&gt;</span>disable<span class="nt">&lt;/Nullable&gt;</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="nt">&lt;ImplicitUsings&gt;</span>enable<span class="nt">&lt;/ImplicitUsings&gt;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span><span class="nt">&lt;GenerateAssemblyInfo&gt;</span>false<span class="nt">&lt;/GenerateAssemblyInfo&gt;</span><span class="w">  </span><span class="cm">&lt;!-- Manual AssemblyInfo.cs --&gt;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="nt">&lt;/PropertyGroup&gt;</span>
+</code></pre></div>
+<p>Key settings:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TargetFramework</code></td>
+<td><code>net10.0-windows10.0.26100.0</code></td>
+<td>.NET 10 + Windows SDK 26100 (Win 11 24H2). Enables WinRT APIs.</td>
+</tr>
+<tr>
+<td><code>SupportedOSPlatformVersion</code></td>
+<td><code>10.0.17763.0</code></td>
+<td>Minimum OS: Windows 10 1809</td>
+</tr>
+<tr>
+<td><code>WindowsSdkPackageVersion</code></td>
+<td><code>10.0.26100.57</code></td>
+<td>Pins Windows SDK NuGet package version</td>
+</tr>
+<tr>
+<td><code>UseWindowsForms</code></td>
+<td><code>true</code></td>
+<td><code>NotifyIcon</code> system tray only (not WinForms UI)</td>
+</tr>
+<tr>
+<td><code>GenerateAssemblyInfo</code></td>
+<td><code>false</code></td>
+<td>Uses manual <code>Properties/AssemblyInfo.cs</code></td>
+</tr>
+<tr>
+<td><code>Nullable</code></td>
+<td><code>disable</code></td>
+<td>Nullable reference types not used</td>
+</tr>
+</tbody>
+</table>
+<p><strong>WinForms implicit using removal</strong>. Prevents <code>System.Drawing</code> / <code>System.Windows.Forms</code> ambiguity with WPF types:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">&lt;ItemGroup&gt;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&lt;Using</span><span class="w"> </span><span class="na">Remove=</span><span class="s">&quot;System.Drawing&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&lt;Using</span><span class="w"> </span><span class="na">Remove=</span><span class="s">&quot;System.Windows.Forms&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nt">&lt;/ItemGroup&gt;</span>
+</code></pre></div></p>
+<h3 id="padforgeenginecsproj">PadForge.Engine.csproj<a class="headerlink" href="#padforgeenginecsproj" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">&lt;PropertyGroup&gt;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&lt;TargetFramework&gt;</span>net10.0-windows<span class="nt">&lt;/TargetFramework&gt;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">&lt;RootNamespace&gt;</span>PadForge.Engine<span class="nt">&lt;/RootNamespace&gt;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">&lt;AssemblyName&gt;</span>PadForge.Engine<span class="nt">&lt;/AssemblyName&gt;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">&lt;LangVersion&gt;</span>latest<span class="nt">&lt;/LangVersion&gt;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">&lt;Nullable&gt;</span>disable<span class="nt">&lt;/Nullable&gt;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span><span class="nt">&lt;ImplicitUsings&gt;</span>enable<span class="nt">&lt;/ImplicitUsings&gt;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="nt">&lt;GenerateAssemblyInfo&gt;</span>false<span class="nt">&lt;/GenerateAssemblyInfo&gt;</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span><span class="nt">&lt;DebugType&gt;</span>embedded<span class="nt">&lt;/DebugType&gt;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="nt">&lt;/PropertyGroup&gt;</span>
+</code></pre></div>
+<p>The Engine targets <code>net10.0-windows</code> (no specific SDK version needed). SDL3 and system interop use raw <code>[DllImport]</code> P/Invoke; the only NuGet references are the Remote Link crypto packages (see below).</p>
+<h3 id="assembly-versioning">Assembly Versioning<a class="headerlink" href="#assembly-versioning" title="Permanent link">&para;</a></h3>
+<p>App and Engine share one version via <code>SharedVersion.cs</code> at the repo root. Both csproj files link it in:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">&lt;Compile</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\SharedVersion.cs&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&lt;Link&gt;</span>Properties\SharedVersion.cs<span class="nt">&lt;/Link&gt;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nt">&lt;/Compile&gt;</span>
+</code></pre></div>
+<p><code>SharedVersion.cs</code> carries <code>AssemblyVersion</code> and <code>AssemblyFileVersion</code>. The two assemblies cannot drift apart because they compile against the same file. <code>Properties/AssemblyInfo.cs</code> in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does <strong>not</strong> carry version attributes. Both projects set <code>&lt;GenerateAssemblyInfo&gt;false&lt;/GenerateAssemblyInfo&gt;</code> so the build does not regenerate either file.</p>
+<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.0.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>4.0.0.0</code>.</p>
+<h2 id="nuget-dependencies">NuGet Dependencies<a class="headerlink" href="#nuget-dependencies" title="Permanent link">&para;</a></h2>
+<h3 id="padforgeapp">PadForge.App<a class="headerlink" href="#padforgeapp" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WPF-UI</strong></td>
+<td>4.3.0</td>
+<td>nuget.org</td>
+<td>Fluent Design theme for WPF (dark mode, NavigationView, controls)</td>
+</tr>
+<tr>
+<td><strong>HelixToolkit.Core.Wpf</strong></td>
+<td>2.27.3</td>
+<td>nuget.org</td>
+<td>3D viewport rendering (OBJ model loading, camera, lighting)</td>
+</tr>
+<tr>
+<td><strong>CommunityToolkit.Mvvm</strong></td>
+<td>8.2.2</td>
+<td>nuget.org</td>
+<td>MVVM: <code>ObservableObject</code>, <code>RelayCommand</code>, <code>[ObservableProperty]</code></td>
+</tr>
+<tr>
+<td><strong>Concentus</strong></td>
+<td>2.2.2</td>
+<td>nuget.org</td>
+<td>Pure-C# Opus encoder for the DualSense Bluetooth speaker stream</td>
+</tr>
+<tr>
+<td><strong>NAudio.Wasapi</strong></td>
+<td>2.2.1</td>
+<td>nuget.org</td>
+<td>WASAPI loopback audio capture for bass-driven rumble detection</td>
+</tr>
+<tr>
+<td><strong>Nefarius.Utilities.DeviceManagement</strong></td>
+<td>5.2.0</td>
+<td>nuget.org</td>
+<td>Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses)</td>
+</tr>
+<tr>
+<td><strong>Microsoft.Windows.Devices.Midi2</strong></td>
+<td>1.0.16-rc.3.7</td>
+<td><strong>nuget-local/</strong></td>
+<td>Windows MIDI Services SDK for virtual MIDI device creation</td>
+</tr>
+</tbody>
+</table>
+<p><code>HIDMaestro.Core</code> (the virtual Xbox / PlayStation controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. It is currently v1.3.17.</p>
+<h3 id="padforgeengine">PadForge.Engine<a class="headerlink" href="#padforgeengine" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BouncyCastle.Cryptography</strong></td>
+<td>2.6.2</td>
+<td>X25519 / Ed25519 / ChaCha20-Poly1305 for Remote Link pairing and transport, on the Win10 1809 floor where the in-box AEAD is gated to Win11 22000+</td>
+</tr>
+<tr>
+<td><strong>System.Security.Cryptography.ProtectedData</strong></td>
+<td>10.0.9</td>
+<td>DPAPI at-rest protection for Remote Link peer identity keys</td>
+</tr>
+</tbody>
+</table>
+<p>All SDL3 and system interop still uses raw <code>[DllImport]</code> P/Invoke.</p>
+<h3 id="local-nuget-source-nuget-local">Local NuGet Source (<code>nuget-local/</code>)<a class="headerlink" href="#local-nuget-source-nuget-local" title="Permanent link">&para;</a></h3>
+<p>The Windows MIDI Services SDK is not on nuget.org. The <code>.nupkg</code> is stored locally:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>nuget-local/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg
+</code></pre></div>
+<p><code>nuget.config</code> at the solution root registers this folder as a package source:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">&lt;configuration&gt;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&lt;packageSources&gt;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">&lt;add</span><span class="w"> </span><span class="na">key=</span><span class="s">&quot;nuget.org&quot;</span><span class="w"> </span><span class="na">value=</span><span class="s">&quot;https://api.nuget.org/v3/index.json&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">&lt;add</span><span class="w"> </span><span class="na">key=</span><span class="s">&quot;local&quot;</span><span class="w"> </span><span class="na">value=</span><span class="s">&quot;nuget-local&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&lt;/packageSources&gt;</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>
+<p>Both <code>nuget.config</code> and <code>nuget-local/</code> must be present alongside <code>PadForge.sln</code> for <code>dotnet restore</code> to succeed.</p>
+<h2 id="native-dlls-content-items">Native DLLs (Content Items)<a class="headerlink" href="#native-dlls-content-items" title="Permanent link">&para;</a></h2>
+<p>Declared as <code>&lt;Content&gt;</code> + <code>CopyToOutputDirectory</code>, which puts them in <code>bin/.../publish/</code> alongside <code>PadForge.exe</code> during a non-single-file build. With <code>PublishSingleFile=true</code> plus <code>IncludeNativeLibrariesForSelfExtract=true</code> (both set in the csproj) the same files get folded into the single-file bundle and extracted to <code>%TEMP%\.net\PadForge\&lt;hash&gt;\</code> at first launch. Either way the user never has to drop a DLL alongside the EXE. Single-file deploy is one file.</p>
+<h3 id="sdl3dll-and-libusb-10dll">SDL3.dll and libusb-1.0.dll<a class="headerlink" href="#sdl3dll-and-libusb-10dll" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">&lt;Content</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\SDL3\x64\SDL3.dll&quot;</span><span class="w"> </span><span class="na">Link=</span><span class="s">&quot;SDL3.dll&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">         </span><span class="na">Condition=</span><span class="s">&quot;Exists(&#39;Resources\SDL3\x64\SDL3.dll&#39;)&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">&lt;CopyToOutputDirectory&gt;</span>PreserveNewest<span class="nt">&lt;/CopyToOutputDirectory&gt;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nt">&lt;/Content&gt;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nt">&lt;Content</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\SDL3\x64\libusb-1.0.dll&quot;</span><span class="w"> </span><span class="na">Link=</span><span class="s">&quot;libusb-1.0.dll&quot;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">         </span><span class="na">Condition=</span><span class="s">&quot;Exists(&#39;Resources\SDL3\x64\libusb-1.0.dll&#39;)&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nt">&lt;CopyToOutputDirectory&gt;</span>PreserveNewest<span class="nt">&lt;/CopyToOutputDirectory&gt;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="nt">&lt;/Content&gt;</span>
+</code></pre></div>
+<ul>
+<li><strong><code>Link="SDL3.dll"</code></strong>. Flattens to output root (next to <code>PadForge.exe</code>) instead of preserving the subdirectory path.</li>
+<li><strong><code>Condition="Exists(...)"</code></strong>. Build succeeds even if the DLL is absent (e.g., fresh clone).</li>
+<li><strong>SDL3.dll</strong> is a <strong>custom fork</strong> built from <code>SDL3-build/SDL/</code> with WinUSB support for Switch 2 Pro Controller. See <a href="../sdl3-integration/">SDL3 Integration</a> for build instructions.</li>
+<li><strong>libusb-1.0.dll</strong> provides WinUSB access for Switch 2 Pro Controller communication.</li>
+</ul>
+<p>Source location: <code>PadForge.App/Resources/SDL3/x64/</code></p>
+<h3 id="xinput1_4dll-openxinput-shim">xinput1_4.dll (OpenXInput shim)<a class="headerlink" href="#xinput1_4dll-openxinput-shim" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;Content</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\OpenXInput\x64\xinput1_4.dll&quot;</span><span class="w"> </span><span class="na">Link=</span><span class="s">&quot;xinput1_4.dll&quot;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">         </span><span class="na">Condition=</span><span class="s">&quot;Exists(&#39;Resources\OpenXInput\x64\xinput1_4.dll&#39;)&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">&lt;CopyToOutputDirectory&gt;</span>PreserveNewest<span class="nt">&lt;/CopyToOutputDirectory&gt;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nt">&lt;/Content&gt;</span>
+</code></pre></div>
+<ul>
+<li><strong>OpenXInput-derived.</strong> Forked from <code>Nemirtingas/OpenXInput</code> with a HIDMaestro classifier added to the enumeration step so HM virtuals are skipped during slot assignment.</li>
+<li><strong>Replaces the system <code>xinput1_4.dll</code> via DLL search order.</strong> The application directory is searched before <code>System32</code> for non-KnownDLLs, so when SDL3 calls <code>LoadLibrary("xinput1_4.dll")</code> this local copy resolves first and SDL's XInput backend uses it instead of Microsoft's.</li>
+<li><strong><code>devobj.dll</code> is deliberately not shipped alongside it.</strong> A stub <code>devobj.dll</code> would pre-empt <code>System32\devobj.dll</code> for the whole process and crash <code>setupapi.dll</code> during HID class enumeration. <code>xinput1_4.dll</code>'s <code>devobj.dll</code> import resolves from <code>System32</code> unaided. See <a href="../driver-installation-internals/">Driver Installation Internals</a>.</li>
+</ul>
+<p>Source location: <code>PadForge.App/Resources/OpenXInput/x64/</code></p>
+<h2 id="embedded-resources">Embedded Resources<a class="headerlink" href="#embedded-resources" title="Permanent link">&para;</a></h2>
+<p>Compiled into the assembly. <strong>Not</strong> visible as separate files in the output.</p>
+<h3 id="gamecontrollerdb_padforgetxt">gamecontrollerdb_padforge.txt<a class="headerlink" href="#gamecontrollerdb_padforgetxt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;gamecontrollerdb_padforge.txt&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>Custom SDL gamepad mapping database with PadForge-specific entries (e.g., DualShock 3 via DsHidMini SDF). Embedded under the manifest name <code>PadForge.gamecontrollerdb_padforge.txt</code> and streamed to SDL from memory at startup by <code>InputManager.LoadEmbeddedGamepadMappings()</code>, one <code>SDL_AddGamepadMapping</code> call per line. It is no longer copied to the output folder. Community mappings can be submitted via the GitHub issue template.</p>
+<p>Source location: <code>PadForge.App/gamecontrollerdb_padforge.txt</code></p>
+<h3 id="driver-installers-embeddedresource">Driver Installers (EmbeddedResource)<a class="headerlink" href="#driver-installers-embeddedresource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\HidHide_1.5.230_x64.exe&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HidHide_1.5.230_x64.exe</code></td>
+<td>HidHide installer. Hides physical controllers from other applications</td>
+</tr>
+</tbody>
+</table>
+<p>The HIDMaestro user-mode driver is <strong>not</strong> managed by <code>DriverInstaller</code>. The driver binaries, INF, profiles, and signing tools all ship inside <code>HIDMaestro.Core.dll</code> (referenced as a <code>&lt;Reference&gt;</code>, so it's bundled into the single-file EXE). <code>InputManager</code> calls <code>HMContext.InstallDriver()</code> on first start (from <code>EnsureHMaestroContext()</code> in <code>PadForge.App/Common/Input/</code>), which registers the driver with Windows through <code>pnputil</code> from inside PadForge's already-elevated process. No separate installer EXE. The OpenXInput shim (<code>xinput1_4.dll</code> only) ships as <code>&lt;Content&gt;</code> and is bundled into the single-file EXE via <code>IncludeNativeLibrariesForSelfExtract</code>. <code>devobj.dll</code> is deliberately not shipped. See <a href="../driver-installation-internals/">Driver Installation Internals</a> for why a bundled stub would crash HID class enumeration. The Windows MIDI Services SDK is downloaded from the GitHub releases API on demand when the user clicks Install, then run with <code>/install /quiet /norestart</code>.</p>
+<p>PadForge v2's vJoy and ViGEmBus installers are no longer bundled. v4 detects either driver on first launch and offers to uninstall via the legacy driver cleanup dialog. See <a href="../driver-installation-internals/">Driver Installation Internals</a>.</p>
+<h3 id="bthps3-ds3-bluetooth-drivers-embeddedresource">BthPS3 / DS3 Bluetooth Drivers (EmbeddedResource)<a class="headerlink" href="#bthps3-ds3-bluetooth-drivers-embeddedresource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\BthPS3\**\*.*&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">&lt;LogicalName&gt;</span>BthPS3.%(RecursiveDir)%(Filename)%(Extension)<span class="nt">&lt;/LogicalName&gt;</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
+</code></pre></div>
+<p>Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. <code>Ds3DriverInstaller.ExtractDrivers()</code> walks every manifest resource whose name starts with <code>BthPS3.</code>, strips that prefix, and drops the files under <code>%TEMP%\PadForge\BthPS3Drivers\</code> before running <code>pnputil</code>. The explicit <code>LogicalName</code> preserves the subdirectory layout inside the manifest name.</p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Resources/BthPS3/BthPS3_x64/</code></td>
+<td><code>BthPS3.inf</code>/<code>.sys</code>/<code>.cat</code> (profile driver) + <code>BthPS3_PDO_NULL_Device.inf</code>/<code>.cat</code> (raw PDO extension)</td>
+</tr>
+<tr>
+<td><code>Resources/BthPS3/BthPS3PSM_x64/</code></td>
+<td><code>BthPS3PSM.inf</code>/<code>.sys</code>/<code>.cat</code> (L2CAP PSM filter)</td>
+</tr>
+<tr>
+<td><code>Resources/BthPS3/WinUSB/</code></td>
+<td><code>ds3_winusb.inf</code>/<code>.cat</code> (DS3-over-USB WinUSB binding)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3d-model-assets-embeddedresource">3D Model Assets (EmbeddedResource)<a class="headerlink" href="#3d-model-assets-embeddedresource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="cm">&lt;!-- 3D controller model assets (adapted from Handheld Companion, CC BY-NC-SA 4.0) --&gt;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;3DModels\**\*.obj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>OBJ mesh files for 3D controller visualization. Loaded at runtime via <code>ControllerModelBase.LoadModel()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>3DModels/XBOX360/</code></td>
+<td>31 OBJ files (Xbox 360 controller parts)</td>
+</tr>
+<tr>
+<td><code>3DModels/XBOXONE/</code></td>
+<td>46 OBJ files (Xbox One parts, shared with Elite / Series / Adaptive)</td>
+</tr>
+<tr>
+<td><code>3DModels/DS4/</code></td>
+<td>36 OBJ files (DualShock 4 controller parts)</td>
+</tr>
+<tr>
+<td><code>3DModels/DualSense/</code></td>
+<td>49 OBJ files (DualSense parts, Touchpad split for click-mapping)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="web-controller-assets-embeddedresource">Web Controller Assets (EmbeddedResource)<a class="headerlink" href="#web-controller-assets-embeddedresource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="cm">&lt;!-- Web controller frontend assets (embedded, served by WebControllerServer) --&gt;</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;WebAssets\**\*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>HTML/CSS/JS for the browser-based virtual controller. Served by the embedded Kestrel web server at runtime.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WebAssets/index.html</code></td>
+<td>Landing page</td>
+</tr>
+<tr>
+<td><code>WebAssets/controller.html</code></td>
+<td>Virtual gamepad UI</td>
+</tr>
+<tr>
+<td><code>WebAssets/touchpad.html</code></td>
+<td>Touchpad surface UI</td>
+</tr>
+<tr>
+<td><code>WebAssets/css/controller.css</code></td>
+<td>Gamepad styling</td>
+</tr>
+<tr>
+<td><code>WebAssets/js/controller_client.js</code></td>
+<td>WebSocket client logic</td>
+</tr>
+<tr>
+<td><code>WebAssets/js/nipplejs.min.js</code></td>
+<td>Virtual joystick library</td>
+</tr>
+</tbody>
+</table>
+<h3 id="localization-strings-embeddedresource">Localization Strings (EmbeddedResource)<a class="headerlink" href="#localization-strings-embeddedresource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Update=</span><span class="s">&quot;Resources\Strings\Strings.resx&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&lt;Generator&gt;</span>PublicResXFileCodeGenerator<span class="nt">&lt;/Generator&gt;</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">&lt;LastGenOutput&gt;</span>Strings.Designer.cs<span class="nt">&lt;/LastGenOutput&gt;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
+</code></pre></div>
+<p>Resource files for multilingual UI support:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Language</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Strings.resx</code></td>
+<td>English (default/fallback)</td>
+</tr>
+<tr>
+<td><code>Strings.de.resx</code></td>
+<td>German</td>
+</tr>
+<tr>
+<td><code>Strings.es.resx</code></td>
+<td>Spanish</td>
+</tr>
+<tr>
+<td><code>Strings.fr.resx</code></td>
+<td>French</td>
+</tr>
+<tr>
+<td><code>Strings.it.resx</code></td>
+<td>Italian</td>
+</tr>
+<tr>
+<td><code>Strings.ja.resx</code></td>
+<td>Japanese</td>
+</tr>
+<tr>
+<td><code>Strings.ko.resx</code></td>
+<td>Korean</td>
+</tr>
+<tr>
+<td><code>Strings.nl.resx</code></td>
+<td>Dutch</td>
+</tr>
+<tr>
+<td><code>Strings.pt-BR.resx</code></td>
+<td>Brazilian Portuguese</td>
+</tr>
+<tr>
+<td><code>Strings.zh-Hans.resx</code></td>
+<td>Simplified Chinese</td>
+</tr>
+</tbody>
+</table>
+<p>The default <code>Strings.resx</code> uses <code>PublicResXFileCodeGenerator</code> to produce <code>Strings.Designer.cs</code> for strongly-typed access via <code>Strings.PropertyName</code>. Satellite <code>.resx</code> files follow standard .NET localization conventions and compile into satellite assemblies automatically.</p>
+<h3 id="2d-model-assets-resource">2D Model Assets (Resource)<a class="headerlink" href="#2d-model-assets-resource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="cm">&lt;!-- 2D controller model assets (Gamepad-Asset-Pack by AL2009man, MIT license) --&gt;</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>PNG overlay images for 2D controller schematic view (<code>DS4/</code>, <code>DualSense/</code>, <code>XBOX360/</code>, <code>XBOXONE/</code>, <code>XBOXSERIES/</code>). Uses <code>Resource</code> (not <code>EmbeddedResource</code>) so they load as WPF pack URIs (<code>pack://application:,,,/2DModels/...</code>).</p>
+<h3 id="other-resources">Other Resources<a class="headerlink" href="#other-resources" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge.ico&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-logo.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-icon.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.ico</code></td>
+<td>Application icon. Declared as <code>&lt;Resource&gt;</code>. The taskbar/exe icon is wired separately via <code>&lt;ApplicationIcon&gt;Resources\PadForge.ico&lt;/ApplicationIcon&gt;</code> in the main PropertyGroup</td>
+</tr>
+<tr>
+<td><code>PadForge-logo.png</code></td>
+<td>Brand wordmark image (About page, headers)</td>
+</tr>
+<tr>
+<td><code>PadForge-icon.png</code></td>
+<td>Brand app-icon image</td>
+</tr>
+<tr>
+<td><code>Resources/ControllerIcons.xaml</code></td>
+<td>XAML vector icon definitions (resource dictionary)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cicd-github-actions">CI/CD (GitHub Actions)<a class="headerlink" href="#cicd-github-actions" title="Permanent link">&para;</a></h2>
+<p>Workflow: <code>.github/workflows/build.yml</code></p>
+<h3 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+</code></pre></div>
+<p>Runs on every push/PR to <code>v4-dev</code> and on manual trigger.</p>
+<h3 id="build-steps">Build Steps<a class="headerlink" href="#build-steps" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Checkout</strong>. <code>actions/checkout@v5</code>, <code>fetch-depth: 0</code> (full history for commit counting)</li>
+<li><strong>Setup .NET</strong>. <code>actions/setup-dotnet@v5</code>, <code>dotnet-version: 10.x</code></li>
+<li><strong>Publish</strong>. <code>dotnet publish PadForge.App/PadForge.App.csproj -c Release</code></li>
+<li><strong>Upload artifact</strong>. <code>actions/upload-artifact@v7</code>, publish directory as <code>PadForge_r{COMMIT_COUNT}@{COMMIT_SHORT}</code></li>
+</ol>
+<h3 id="automatic-releases-push-to-v4-dev-only">Automatic Releases (push to v4-dev only)<a class="headerlink" href="#automatic-releases-push-to-v4-dev-only" title="Permanent link">&para;</a></h3>
+<p>On push (not PR), the workflow creates two GitHub releases keyed off the branch ref name:</p>
+<table>
+<thead>
+<tr>
+<th>Release</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>archive-v4-dev</code></strong></td>
+<td>Accumulates every build as <code>PadForge_r{N}@{SHA}.zip</code>. Uses <code>--clobber</code> for the latest upload. Preserves the tag across builds. Rolls to a new part when full (see below).</td>
+</tr>
+<tr>
+<td><strong><code>latest-v4-dev</code></strong></td>
+<td>Recreated on every push (old release deleted first). Contains <code>PadForge.zip</code> with the most recent build. The "always current" download link.</td>
+</tr>
+</tbody>
+</table>
+<p>Both are marked <code>--prerelease</code> and cross-link to each other in their notes.</p>
+<p><strong>Rolling archive parts.</strong> GitHub caps a release at 1000 assets. The workflow watches the active archive and, once it reaches 999 assets, creates the next numbered part (<code>archive-v4-dev-2</code>, <code>archive-v4-dev-3</code>, and so on) targeting the current commit. Each new part's notes link back to the previous part, and <code>latest-v4-dev</code> points at whichever part is currently active.</p>
+<h3 id="artifact-naming">Artifact Naming<a class="headerlink" href="#artifact-naming" title="Permanent link">&para;</a></h3>
+<p>Format: <code>PadForge_r{COMMIT_COUNT}@{7-char COMMIT_SHA}</code> (e.g., <code>PadForge_r342@f35bb36</code>)</p>
+<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="nt">DOTNET_NOLOGO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">  </span><span class="nt">DOTNET_CLI_TELEMETRY_OPTOUT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<h3 id="formal-releases">Formal Releases<a class="headerlink" href="#formal-releases" title="Permanent link">&para;</a></h3>
+<p>Created manually via <code>gh release create</code> with a version tag (e.g., <code>v4.0.0</code>, <code>v4.0.0-beta1</code>). See <a href="#release-workflow">Release Workflow</a> below.</p>
+<h2 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">&para;</a></h2>
+<p>PadForge is portable. No installer required.</p>
+<h3 id="local-deployment">Local Deployment<a class="headerlink" href="#local-deployment" title="Permanent link">&para;</a></h3>
+<p>Copy the publish output to any folder:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>cp<span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe<span class="w"> </span>C:<span class="se">\P</span>adForge<span class="se">\P</span>adForge.exe
+</code></pre></div></p>
+<p>Required companion files (placed automatically by <code>dotnet publish</code>):</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Required</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SDL3.dll</code></td>
+<td>Yes</td>
+<td>SDL3 native library</td>
+</tr>
+<tr>
+<td><code>libusb-1.0.dll</code></td>
+<td>Yes</td>
+<td>WinUSB for Switch 2 Pro Controller</td>
+</tr>
+<tr>
+<td><code>xinput1_4.dll</code></td>
+<td>Yes</td>
+<td>OpenXInput-derived XInput shim</td>
+</tr>
+</tbody>
+</table>
+<p>The gamepad mapping database is embedded in the assembly, so no <code>.txt</code> file sits alongside the exe. All three DLLs are folded into the single-file bundle on publish, so a single-file deploy is one <code>PadForge.exe</code>.</p>
+<h3 id="development-deploy-scripts">Development Deploy Scripts<a class="headerlink" href="#development-deploy-scripts" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>tools/deploy.ps1<span class="w">              </span><span class="c1"># Build, publish, copy to C:\PadForge</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>tools/deploy_and_restart.ps1<span class="w">  </span><span class="c1"># Deploy + kill running instance + restart</span>
+</code></pre></div>
+<h3 id="first-run">First Run<a class="headerlink" href="#first-run" title="Permanent link">&para;</a></h3>
+<p>PadForge creates <code>PadForge.xml</code> alongside the executable to store settings, mappings, and profiles.</p>
+<p>PadForge always requests administrator privileges on startup (declared in <code>app.manifest</code> as <code>requireAdministrator</code>). HIDMaestro / HidHide / MIDI Services management runs inside the already-elevated process.</p>
+<h2 id="release-workflow">Release Workflow<a class="headerlink" href="#release-workflow" title="Permanent link">&para;</a></h2>
+<h3 id="1-update-version-if-needed">1. Update Version (if needed)<a class="headerlink" href="#1-update-version-if-needed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Edit <code>SharedVersion.cs</code> at the repo root. Updates <code>AssemblyVersion</code> and <code>AssemblyFileVersion</code> for both App and Engine in one place.</li>
+</ul>
+<h3 id="2-build">2. Build<a class="headerlink" href="#2-build" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>dotnet<span class="w"> </span>publish<span class="w"> </span>-c<span class="w"> </span>Release
+</code></pre></div>
+<h3 id="3-deploy-and-test">3. Deploy and Test<a class="headerlink" href="#3-deploy-and-test" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>cp<span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe<span class="w"> </span>C:<span class="se">\P</span>adForge<span class="se">\P</span>adForge.exe
+</code></pre></div>
+<p>Run <code>C:\PadForge\PadForge.exe</code> and verify functionality.</p>
+<h3 id="4-commit-and-push">4. Commit and Push<a class="headerlink" href="#4-commit-and-push" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>git<span class="w"> </span>add<span class="w"> </span>-A
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release vX.Y.Z&quot;</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>git<span class="w"> </span>push
+</code></pre></div>
+<h3 id="5-create-binary-zip">5. Create Binary Zip<a class="headerlink" href="#5-create-binary-zip" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nb">cd</span><span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>zip<span class="w"> </span>-r<span class="w"> </span>PadForge-vX.Y.Z-win-x64.zip<span class="w"> </span>.
+</code></pre></div>
+<h3 id="6-create-github-release">6. Create GitHub Release<a class="headerlink" href="#6-create-github-release" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;PadForge vX.Y.Z&quot;</span><span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;Release notes here&quot;</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>gh<span class="w"> </span>release<span class="w"> </span>upload<span class="w"> </span>vX.Y.Z<span class="w"> </span>PadForge-vX.Y.Z-win-x64.zip
+</code></pre></div>
+<p>Use <code>--prerelease</code> for beta/RC releases. Use <code>--latest</code> for the default download.</p>
+<h2 id="diagnostic-tools-tools">Diagnostic Tools (<code>tools/</code>)<a class="headerlink" href="#diagnostic-tools-tools" title="Permanent link">&para;</a></h2>
+<p>Standalone diagnostic utilities and development scripts.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Command</th>
+<th>Framework</th>
+<th>Dependencies</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DsuDiag</strong></td>
+<td><code>cd tools/DsuDiag &amp;&amp; dotnet run</code></td>
+<td>net8.0</td>
+<td>None</td>
+<td>Real-time DSU/Cemuhook UDP client for verifying gyro/accel axis mapping</td>
+</tr>
+<tr>
+<td><strong>Ds4InputDump</strong></td>
+<td><code>cd tools/Ds4InputDump &amp;&amp; dotnet run</code></td>
+<td>net10.0-windows</td>
+<td>None (raw HID)</td>
+<td>Dumps DS4 raw HID input frames. Used to validate Sony Report 0x01 passthrough on PlayStation virtual controllers</td>
+</tr>
+</tbody>
+</table>
+<p>The v2 <code>vJoy/Test</code> and <code>vJoy/FfbTest</code> utilities are still in the repo under <code>tools/vJoy/</code> for historical reference. They target the deprecated vJoy stack and are not part of the v4 toolchain.</p>
+<h3 id="development-scripts">Development Scripts<a class="headerlink" href="#development-scripts" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deploy.ps1</code></td>
+<td>Build + publish + copy to <code>C:\PadForge</code></td>
+</tr>
+<tr>
+<td><code>deploy_and_restart.ps1</code></td>
+<td>Deploy + kill running instance + restart</td>
+</tr>
+<tr>
+<td><code>capture_*.ps1</code></td>
+<td>~20 per-surface wiki screenshot scripts (e.g. <code>capture_all.ps1</code>, <code>capture_pads*.ps1</code>, <code>capture_macros.ps1</code>, <code>capture_3d_2d.ps1</code>, <code>capture_3d_web.ps1</code>, <code>capture_extra_slots.ps1</code>). One per major UI surface. <code>capture_all_wrapper.ps1</code> runs them in sequence.</td>
+</tr>
+</tbody>
+</table>
+<p>A handful of <code>*vjoy*</code> scripts (<code>cleanup_vjoy.ps1</code>, <code>check_vjoy_state.ps1</code>, etc.) are v2 holdovers kept for diagnosing legacy installs the cleanup dialog encounters. The remaining ~50 scripts are ad-hoc UI automation and screenshot utilities.</p>
+<h2 id="troubleshooting-build-issues">Troubleshooting Build Issues<a class="headerlink" href="#troubleshooting-build-issues" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SDL3.dll</code> not found at runtime</td>
+<td>DLL not in <code>Resources\SDL3\x64\</code></td>
+<td>Download from SDL3 releases or build from fork</td>
+</tr>
+<tr>
+<td>MIDI package not found</td>
+<td><code>nuget.config</code> missing or <code>nuget-local/</code> folder missing</td>
+<td>Ensure both are present at solution root</td>
+</tr>
+<tr>
+<td>Missing WPF types</td>
+<td>Using <code>dotnet build</code> instead of <code>dotnet publish</code> for deployment</td>
+<td>Always use <code>dotnet publish -c Release</code> for deployment</td>
+</tr>
+<tr>
+<td><code>System.Drawing</code> ambiguity</td>
+<td>WinForms implicit usings conflict with WPF</td>
+<td>Ensure <code>&lt;Using Remove="System.Drawing" /&gt;</code> is in csproj</td>
+</tr>
+<tr>
+<td>HelixToolkit errors</td>
+<td>Package restore failed</td>
+<td>Run <code>dotnet restore</code> first</td>
+</tr>
+<tr>
+<td>Large exe size (~110 MB)</td>
+<td>Expected. Self-contained with bundled .NET runtime</td>
+<td><code>EnableCompressionInSingleFile</code> already enabled</td>
+</tr>
+<tr>
+<td>CI build fails</td>
+<td>.NET 10 SDK not available in runner</td>
+<td>Check <code>actions/setup-dotnet</code> version supports .NET 10 preview</td>
+</tr>
+<tr>
+<td><code>HIDMaestro.Core</code> reference fails to resolve</td>
+<td><code>Resources/HIDMaestro/HIDMaestro.Core.dll</code> missing or wrong build</td>
+<td>Drop a Release-build <code>HIDMaestro.Core.dll</code> from a tagged HIDMaestro release into <code>Resources/HIDMaestro/</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../architecture-overview/">Architecture Overview</a>: Solution structure, dependencies, design philosophy</li>
+<li><a href="../engine-library/">Engine Library</a>: Shared data types, SDL3 P/Invoke, device wrappers</li>
+<li><a href="../settings-and-serialization/">Settings and Serialization</a>: XML persistence, data models</li>
+<li><a href="../sdl3-integration/">SDL3 Integration</a>: Custom SDL3 fork, build instructions</li>
+<li><a href="../driver-installation-internals/">Driver Installation Internals</a>: Driver lifecycle (HIDMaestro, HidHide, MIDI Services) and legacy v2 cleanup</li>
+<li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: HM SDK surface, OpenXInput shim, four-surface filtering architecture</li>
+<li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
+</ul>
+<hr />
+<p>Last updated for PadForge 4.0.0</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../3d-model-system/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 3D Model System">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                3D Model System
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

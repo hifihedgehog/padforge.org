@@ -1,0 +1,54 @@
+/* PadForge brand palette for Material. The ember accent is the same
+   #f2652a family the landing page and the app itself use. */
+
+:root {
+  --md-primary-fg-color: #d9531c;
+  --md-primary-fg-color--light: #f2652a;
+  --md-primary-fg-color--dark: #b34314;
+  --md-accent-fg-color: #f2652a;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #f2652a;
+  --md-primary-fg-color--light: #ff7d3d;
+  --md-primary-fg-color--dark: #d9531c;
+  --md-accent-fg-color: #ff8c50;
+  /* Slightly deeper canvas than Material's default slate, closer to the
+     landing page's dark ground. */
+  --md-default-bg-color: #14171c;
+}
+
+/* Home page cards: the three-path grid. */
+.pf-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.8rem;
+  margin: 1.6rem 0;
+}
+
+.pf-cards > a {
+  display: block;
+  padding: 1rem 1.2rem;
+  border: 0.05rem solid var(--md-default-fg-color--lightest);
+  border-radius: 0.35rem;
+  color: var(--md-default-fg-color);
+  transition: border-color 125ms, transform 125ms;
+}
+
+.pf-cards > a:hover {
+  border-color: var(--md-accent-fg-color);
+  transform: translateY(-0.1rem);
+  color: var(--md-default-fg-color);
+}
+
+.pf-cards h3 {
+  margin: 0 0 0.4rem 0;
+  color: var(--md-accent-fg-color);
+  font-size: 1rem;
+}
+
+.pf-cards p {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}

@@ -1,0 +1,4756 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/guides/macros/">
+      
+      
+        <link rel="prev" href="../gyro/">
+      
+      
+        <link rel="next" href="../shift-layers/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Macros - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#macros" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Macros
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#make-a-macro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Make a macro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manage-macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manage macros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trigger-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#record-a-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Record a trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger-input-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger input types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-threshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis threshold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gesture-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gesture triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-expression-trigger-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Expression trigger mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Expression trigger mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starter-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Starter recipes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-it-fires" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it fires
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fire-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fire modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#button-press-button-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button Press / Button Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-press-key-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Press / Key Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeat-key-while-held" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeat Key While Held
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeat-button-while-held" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeat Button While Held
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toggle-button-toggle-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Toggle Button / Toggle Key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run Program
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#play-sound-stop-sounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Play Sound / Stop Sounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse-button-press-mouse-button-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Button Press / Mouse Button Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse-scroll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Scroll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recenter-mouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recenter Mouse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fix-mouse-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix Mouse Position
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-mouse-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit Mouse Region
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#move-mouse-to-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move Mouse to Position
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-color-clear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Color Clear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-mode-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Mode Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-mode-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Mode Cycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Rumble
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rumble-trigger-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble Trigger Override
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-trigger-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Trigger Vibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toggle-touchpad-overlay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Toggle Touchpad Overlay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-gyro-engaged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Gyro Engaged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyro-recenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro Recenter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cycle-pointer-modes-set-pointer-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cycle Pointer Modes / Set Pointer Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-guide-led-brightness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Guide LED Brightness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect Controller
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-source-for-continuous-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis source for continuous actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-the-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the sequence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeat-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeat modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consume-trigger-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consume trigger buttons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-actions-run-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How actions run together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#left-trigger-as-a-volume-knob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Left Trigger as a volume knob
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-stick-as-a-mouse-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right Stick as a mouse cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bumpers-as-mouse-clicks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bumpers as mouse clicks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turbo-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turbo fire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-app-music-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-app music volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-chat-combo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick chat combo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extended-custom-button-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extended Custom button support
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#make-a-macro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Make a macro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manage-macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manage macros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trigger-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#record-a-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Record a trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger-input-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger input types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-threshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis threshold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gesture-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gesture triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-expression-trigger-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Expression trigger mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Expression trigger mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starter-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Starter recipes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-it-fires" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it fires
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fire-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fire modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#button-press-button-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button Press / Button Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-press-key-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Press / Key Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeat-key-while-held" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeat Key While Held
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeat-button-while-held" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeat Button While Held
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toggle-button-toggle-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Toggle Button / Toggle Key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run Program
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#play-sound-stop-sounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Play Sound / Stop Sounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse-button-press-mouse-button-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Button Press / Mouse Button Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mouse-scroll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Scroll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recenter-mouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recenter Mouse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fix-mouse-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix Mouse Position
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-mouse-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit Mouse Region
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#move-mouse-to-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move Mouse to Position
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-color-clear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Color Clear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-mode-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Mode Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightbar-mode-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Mode Cycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Rumble
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rumble-trigger-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble Trigger Override
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-trigger-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Trigger Vibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toggle-touchpad-overlay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Toggle Touchpad Overlay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-gyro-engaged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Gyro Engaged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyro-recenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro Recenter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cycle-pointer-modes-set-pointer-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cycle Pointer Modes / Set Pointer Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-guide-led-brightness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Guide LED Brightness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disconnect Controller
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-source-for-continuous-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis source for continuous actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-the-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the sequence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeat-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeat modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consume-trigger-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consume trigger buttons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-actions-run-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How actions run together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#left-trigger-as-a-volume-knob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Left Trigger as a volume knob
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-stick-as-a-mouse-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right Stick as a mouse cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bumpers-as-mouse-clicks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bumpers as mouse clicks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turbo-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turbo fire
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-app-music-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-app music volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-chat-combo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick chat combo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extended-custom-button-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extended Custom button support
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h1>
+<p><em>Fire action sequences from controller inputs. Hold a combo, deflect a stick, push the D-pad, or run a macro every frame with no trigger at all.</em></p>
+<p><img alt="Macros tab showing trigger setup and action list" src="../../images/pad-macros.png" /></p>
+<p>Each slot has its own macro list. Open a slot, switch to the <strong>Macros</strong> tab, and click <strong>Add</strong>.</p>
+<hr />
+<h2 id="make-a-macro">Make a macro<a class="headerlink" href="#make-a-macro" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open a slot. Click the <strong>Macros</strong> tab.</li>
+<li>Click <strong>Add</strong> and name the macro.</li>
+<li>Set a <strong>trigger</strong>. The input combo that fires the macro.</li>
+<li>Add one or more <strong>actions</strong>. The steps that run when the trigger fires.</li>
+<li>Pick a <strong>fire mode</strong> and a <strong>repeat mode</strong>.</li>
+</ol>
+<p>Each row has an enable checkbox. Unchecked macros stay in your settings but do not fire.</p>
+<hr />
+<h2 id="manage-macros">Manage macros<a class="headerlink" href="#manage-macros" title="Permanent link">&para;</a></h2>
+<p>A toolbar on the <strong>Macros</strong> tab moves macros around.</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Duplicate</strong></td>
+<td>Clones the selected macro inside the same virtual controller. The copy is named <code>&lt;name&gt; (Copy)</code>.</td>
+</tr>
+<tr>
+<td><strong>Copy</strong> / <strong>Paste</strong></td>
+<td>Copy puts a macro on the system clipboard. Paste drops it into another virtual controller. This works across controllers and survives a restart.</td>
+</tr>
+<tr>
+<td><strong>Copy From...</strong></td>
+<td>Pull every macro from another virtual controller in one step.</td>
+</tr>
+</tbody>
+</table>
+<p>A macro fires only from the physical devices assigned to its own virtual controller. A macro copied from another controller no longer fires off a device that controller does not own.</p>
+<hr />
+<h2 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h2>
+<p>A trigger can mix buttons, axes, and D-pad directions. All of them must be active at the same time. Combo entries can come from more than one physical controller. A left-hand pad and a right-hand pad can fire one shared macro. A trigger can also be a single gesture (see <a href="#gesture-triggers">Gesture triggers</a> below).</p>
+<h3 id="trigger-source">Trigger source<a class="headerlink" href="#trigger-source" title="Permanent link">&para;</a></h3>
+<p>You pick where the trigger reads its inputs:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Reads from</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Output Controller</strong></td>
+<td>The virtual controller after mapping (A, B, X, Y, LB, LT, etc.)</td>
+<td>Most setups. The trigger keeps working when you swap physical devices.</td>
+</tr>
+<tr>
+<td><strong>Input Device</strong></td>
+<td>Raw inputs on one specific physical controller</td>
+<td>The button is outside the standard 11 (touchpad click, pressure buttons, flight-stick extras), or you want a device-specific combo.</td>
+</tr>
+</tbody>
+</table>
+<p>An <strong>Input Device</strong> source also reaches devices that are not gamepads. An NFC reader shows an <strong>Any NFC Tag</strong> button plus one button per tag you have registered. A media device shows its named media keys (Play/Pause, Mute, and the rest). Tap a registered tag or press a media key to fire the macro, the same way a button press does.</p>
+<p>An Input Device trigger does not have to name a specific device. Entries picked from the <strong>(Any device)</strong> group fire from whichever assigned device provides that input, and they render with an "(Any device)" chip. Profiles imported from the <a href="../steam-workshop-import/">Steam Workshop</a> use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.</p>
+<h3 id="record-a-trigger">Record a trigger<a class="headerlink" href="#record-a-trigger" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Click <strong>Record Trigger</strong>.</li>
+<li>Hold the buttons you want.</li>
+<li>Push a stick or pull a trigger past the threshold to add an axis input.</li>
+<li>Tap a D-pad direction to add a hat input.</li>
+<li>Click <strong>Stop</strong> when the inputs you want are listed.</li>
+</ol>
+<h3 id="trigger-input-types">Trigger input types<a class="headerlink" href="#trigger-input-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Button</td>
+<td>Pressed buttons go into the combo. LB + A means both held.</td>
+</tr>
+<tr>
+<td>Axis</td>
+<td>Fires when the stick or trigger crosses the threshold. Each axis entry has its own <strong>Invert</strong>, <strong>Half</strong>, <strong>Bidirectional</strong>, and <strong>Deadzone</strong> options, the same set the merge-mapping editor uses on axis-to-button sources. <strong>Half</strong> by itself picks one side of center (Invert flips which side). <strong>Half</strong> plus <strong>Bidirectional</strong> fires past the deadzone on either side. This lets you bind separate macros to left-stick-left and left-stick-right, or one macro to "deflected past N percent in any direction".</td>
+</tr>
+<tr>
+<td>D-pad / POV hat</td>
+<td>Fires when the hat matches the recorded direction. The match is a 45-degree sector, so "Up" also catches small diagonals.</td>
+</tr>
+</tbody>
+</table>
+<p>A mixed example: LB + Right Stick X (Positive) + D-pad Up. All three must hold for the macro to fire.</p>
+<h3 id="axis-threshold">Axis threshold<a class="headerlink" href="#axis-threshold" title="Permanent link">&para;</a></h3>
+<p>When the trigger has an axis, a threshold slider appears (1 to 100 percent, default 50). The axis must cross that percent to count.</p>
+<ul>
+<li>10 percent. A tiny push fires the macro.</li>
+<li>90 percent. You need to push almost all the way.</li>
+<li>With a direction filter, the threshold only applies to that half of the axis.</li>
+</ul>
+<h3 id="gesture-triggers">Gesture triggers<a class="headerlink" href="#gesture-triggers" title="Permanent link">&para;</a></h3>
+<p>A trigger can be a touchpad gesture or a mouse gesture instead of a button combo. You pick these from a list, not by recording. Recording deliberately skips gestures so a stray swipe cannot overwrite the combo.</p>
+<ol>
+<li>Click <strong>Add from List</strong> next to <strong>Record Trigger</strong>.</li>
+<li>The dropdown lists buttons, POV directions, stick and trigger axes, the touchpad click, and every gesture enabled on the slot.</li>
+<li>Pick the gesture you want. It joins the trigger the same as a recorded input.</li>
+</ol>
+<!-- SCREENSHOT: macro-add-from-list -->
+<p><img alt="The Add from List dropdown showing gestures alongside buttons and axes" src="../../images/macro-add-from-list.png" /></p>
+<p>Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the <a href="../../features/touchpad/">Touchpad</a> tab. Mouse gestures (flick left, right, up, down, or a plain click) appear once you enable them for that mouse, including the gestures armed by a <strong>Custom</strong> activation input. Gesture triggers work with every fire mode, including On Release.</p>
+<hr />
+<h2 id="custom-expression-trigger-mode">Custom Expression trigger mode<a class="headerlink" href="#custom-expression-trigger-mode" title="Permanent link">&para;</a></h2>
+<p>Pick <strong>Custom Expression</strong> in the Trigger picker when the shape you want is bigger than a fixed combo. Chords across two pads. "Press this only if that other thing isn't pressed." Axes crossing a threshold that depends on another axis. Anything you can write as a small expression.</p>
+<h3 id="variables">Variables<a class="headerlink" href="#variables" title="Permanent link">&para;</a></h3>
+<p>Add as many variables as the formula needs. Each one becomes a letter: <code>a</code> for the first, <code>b</code> for the second, then <code>c</code>, <code>d</code>, <code>e</code>, and as many more as you add. The formula refers to those letters.</p>
+<p>Each variable binds to one of two things:</p>
+<ul>
+<li>An <strong>Input Device</strong> input: any button, POV direction, or axis on any physical device assigned to the slot.</li>
+<li>An <strong>Output Controller</strong> channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.</li>
+</ul>
+<p>Click <strong>Record</strong> on a variable row, push the input you want it to follow, and PadForge fills it in. Click <strong>Clear</strong> to wipe a binding.</p>
+<h3 id="trigger-formula">Trigger Formula<a class="headerlink" href="#trigger-formula" title="Permanent link">&para;</a></h3>
+<p>The <strong>Trigger Formula</strong> text box accepts:</p>
+<ul>
+<li>Variables: <code>a</code>, <code>b</code>, <code>c</code>, … (or the indexed form <code>s[0]</code>, <code>s[1]</code>, …).</li>
+<li>Math operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>.</li>
+<li>Comparisons: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code>, <code>!=</code>.</li>
+<li>Logic: <code>&amp;&amp;</code> (and), <code>||</code> (or), <code>!</code> (not), <code>?:</code> (if/else).</li>
+<li>Functions: <code>abs</code>, <code>min</code>, <code>max</code>, <code>clamp</code>, <code>sign</code>, <code>lerp</code>, <code>round</code>, <code>sqrt</code>.</li>
+</ul>
+<h3 id="starter-recipes">Starter recipes<a class="headerlink" href="#starter-recipes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Recipe</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a alone</td>
+<td>Fire when variable a goes from 0 to 1.</td>
+</tr>
+<tr>
+<td>a and b</td>
+<td>Fire only when both a AND b are active (chord).</td>
+</tr>
+<tr>
+<td>a or b</td>
+<td>Fire when either a OR b is active.</td>
+</tr>
+<tr>
+<td>a but not b</td>
+<td>Fire when a is active and b is NOT active.</td>
+</tr>
+<tr>
+<td>Axis past 50%</td>
+<td>Fire when stick axis a is deflected more than 50% from rest.</td>
+</tr>
+</tbody>
+</table>
+<p>Click a recipe to drop it into the formula box.</p>
+<h3 id="how-it-fires">How it fires<a class="headerlink" href="#how-it-fires" title="Permanent link">&para;</a></h3>
+<p>Rising-edge detection. The macro fires once when the formula's value crosses 0.5 going up. It does not fire again until the value drops below 0.5 and rises past it.</p>
+<p>Boolean variables (button held, POV match) read as 0 or 1. A trigger axis reads 0 at rest and 1 fully pulled. A stick axis reads 0.5 at rest, falling toward 0 as you push one way and rising toward 1 as you push the other. A chord of two buttons crosses 0.5 when both go high.</p>
+<p>A stick sits at 0.5 at rest, which already meets the fire threshold, so a bare stick variable is active before you touch it. To fire on stick deflection, measure distance from center. <code>abs(a - 0.5)</code> reaches 0.25 once the stick passes halfway in either direction, so <code>abs(a - 0.5) &gt; 0.25</code> fires past that point. The <strong>Axis past 50%</strong> recipe writes that formula for you.</p>
+<p>See <a href="../../features/mappings/">Button and Axis Mappings</a> for the cross-device input picker the variable rows share with the rest of the app, and for the operator palette the Trigger Formula box uses.</p>
+<hr />
+<h2 id="fire-modes">Fire modes<a class="headerlink" href="#fire-modes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>When it fires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>On Press</strong></td>
+<td>Once, the moment the trigger becomes active. Good for one-shot commands and toggles.</td>
+</tr>
+<tr>
+<td><strong>On Release</strong></td>
+<td>Once, the moment the trigger releases. Good for charged shots.</td>
+</tr>
+<tr>
+<td><strong>While Held</strong></td>
+<td>Every frame while the trigger is active. Good for turbo fire and live mouse control.</td>
+</tr>
+<tr>
+<td><strong>Always</strong></td>
+<td>Every frame, with no trigger. Good for stick-to-mouse and a permanent volume knob.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="actions">Actions<a class="headerlink" href="#actions" title="Permanent link">&para;</a></h2>
+<p>Actions run in list order, top to bottom, each time the macro fires.</p>
+<h3 id="button-press-button-release">Button Press / Button Release<a class="headerlink" href="#button-press-button-release" title="Permanent link">&para;</a></h3>
+<p>Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.</p>
+<ul>
+<li>Names follow the slot's output type (Xbox labels, PlayStation labels, or numbered buttons for Extended Custom).</li>
+<li>Select more than one button to fire them together.</li>
+</ul>
+<h3 id="key-press-key-release">Key Press / Key Release<a class="headerlink" href="#key-press-key-release" title="Permanent link">&para;</a></h3>
+<p>Send a keyboard keystroke. The game sees it as a real key.</p>
+<ul>
+<li>Combos work (Ctrl+C, Ctrl+Alt+Delete, etc.). Keys press in order and release in reverse.</li>
+<li>Type the combo string or pick from the dropdown.</li>
+</ul>
+<h3 id="text-block">Text Block<a class="headerlink" href="#text-block" title="Permanent link">&para;</a></h3>
+<p>Type a block of plain text as keystrokes. It sends Unicode, so accents, CJK, and emoji all type regardless of keyboard layout. Newlines press Enter. A pasted tab character presses Tab.</p>
+<ul>
+<li><strong>Text.</strong> The text to type.</li>
+<li><strong>Char delay (ms).</strong> Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.</li>
+</ul>
+<p>Use Key Press for key combos like Ctrl+C. Use Text Block for literal text.</p>
+<h3 id="repeat-key-while-held">Repeat Key While Held<a class="headerlink" href="#repeat-key-while-held" title="Permanent link">&para;</a></h3>
+<p>Keyboard autofire. While the macro's trigger is held, the key presses and releases on a fixed beat.</p>
+<ul>
+<li><strong>Key.</strong> Picked with the same dropdown as Key Press.</li>
+<li><strong>Interval.</strong> Milliseconds between presses, 10 to 1000, default 100. The first press fires the moment the trigger engages, the next each time the interval elapses.</li>
+</ul>
+<p>Pair it with the <strong>While Held</strong> fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.</p>
+<h3 id="repeat-button-while-held">Repeat Button While Held<a class="headerlink" href="#repeat-button-while-held" title="Permanent link">&para;</a></h3>
+<p>Controller-button autofire, the virtual-pad twin of Repeat Key While Held. While the macro's trigger is held, the picked button pulses on and off at the interval. Imported Steam configs use it for turbo on pad buttons.</p>
+<h3 id="toggle-button-toggle-key">Toggle Button / Toggle Key<a class="headerlink" href="#toggle-button-toggle-key" title="Permanent link">&para;</a></h3>
+<p>Each fire latches or unlatches a controller button or a key. A latched output stays held until the next fire or until the macro is disabled. Imported Steam configs use these for their toggle presses.</p>
+<h3 id="run-program">Run Program<a class="headerlink" href="#run-program" title="Permanent link">&para;</a></h3>
+<p>Launch a program or file. You choose what runs.</p>
+<ul>
+<li><strong>Program.</strong> The path to the program or file.</li>
+<li><strong>Arguments.</strong> Optional command-line arguments.</li>
+<li><strong>Working directory.</strong> Optional. The folder the program treats as its current directory, not the folder the program file sits in. Blank uses the default.</li>
+</ul>
+<p>The launch is fire-and-forget, so the rest of the macro does not wait for it.</p>
+<h3 id="delay">Delay<a class="headerlink" href="#delay" title="Permanent link">&para;</a></h3>
+<p>Pause the sequence for the given number of milliseconds.</p>
+<h3 id="axis-set">Axis Set<a class="headerlink" href="#axis-set" title="Permanent link">&para;</a></h3>
+<p>Force a virtual controller axis to a fixed value.</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Value range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stick (LX, LY, RX, RY)</td>
+<td>-32768 to 32767. 0 is center.</td>
+</tr>
+<tr>
+<td>Trigger (LT, RT)</td>
+<td>0 to 32767. 0 is released.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="system-volume">System Volume<a class="headerlink" href="#system-volume" title="Permanent link">&para;</a></h3>
+<p>Map an axis to Windows master volume. Updates every frame.</p>
+<ul>
+<li><strong>Axis.</strong> Which axis drives volume.</li>
+<li><strong>Invert.</strong> Release-to-louder.</li>
+<li><strong>Show volume OSD.</strong> The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.</li>
+<li><strong>Volume Limit.</strong> Caps the maximum. 30 to 50 percent is a safe start for protecting your ears.</li>
+</ul>
+<h3 id="app-volume">App Volume<a class="headerlink" href="#app-volume" title="Permanent link">&para;</a></h3>
+<p>Same as System Volume, but it drives one app in the Windows audio mixer.</p>
+<ul>
+<li><strong>Process name.</strong> The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.</li>
+<li>The other options match System Volume.</li>
+</ul>
+<h3 id="play-sound-stop-sounds">Play Sound / Stop Sounds<a class="headerlink" href="#play-sound-stop-sounds" title="Permanent link">&para;</a></h3>
+<p>Play a sound file through the slot's audio output. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a single vibrating tone. With no sound-capable device on the slot, it falls back to the PC's default output.</p>
+<ul>
+<li><strong>Sound.</strong> The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).</li>
+<li><strong>Volume.</strong> Scales the file against the slot's master volume.</li>
+<li><strong>Loop.</strong> Repeat until a <strong>Stop Sounds</strong> action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.</li>
+</ul>
+<p><strong>Stop Sounds</strong> ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See <a href="../../features/controller-audio/">Controller Audio</a> for the output device picker and sound packages.</p>
+<h3 id="mouse-move">Mouse Move<a class="headerlink" href="#mouse-move" title="Permanent link">&para;</a></h3>
+<p>Map an axis to cursor movement. Updates every frame.</p>
+<ul>
+<li><strong>Sensitivity</strong> (1 to 100). Pixels per frame at full deflection. 10 to 15 is a good start.</li>
+<li>X axes move horizontally, Y axes move vertically.</li>
+<li>Sub-pixel accumulation keeps the cursor smooth at low sensitivity.</li>
+</ul>
+<h3 id="mouse-button-press-mouse-button-release">Mouse Button Press / Mouse Button Release<a class="headerlink" href="#mouse-button-press-mouse-button-release" title="Permanent link">&para;</a></h3>
+<p>Press or release a mouse button. Press has a duration in milliseconds and auto-releases. Buttons: Left, Right, Middle, X1 (Back), X2 (Forward).</p>
+<h3 id="mouse-scroll">Mouse Scroll<a class="headerlink" href="#mouse-scroll" title="Permanent link">&para;</a></h3>
+<p>Map an axis to scroll wheel movement. Updates every frame.</p>
+<ul>
+<li><strong>Sensitivity.</strong> Scroll units per frame at full deflection. 3 to 5 is a good start.</li>
+<li>Stick Y scrolls in both directions. Triggers scroll one way.</li>
+</ul>
+<h3 id="recenter-mouse">Recenter Mouse<a class="headerlink" href="#recenter-mouse" title="Permanent link">&para;</a></h3>
+<p>Snap the cursor to the center of the primary monitor in one press.</p>
+<ul>
+<li><strong>Mode.</strong> Which axes snap: X+Y, X only, or Y only.</li>
+</ul>
+<h3 id="fix-mouse-position">Fix Mouse Position<a class="headerlink" href="#fix-mouse-position" title="Permanent link">&para;</a></h3>
+<p>A toggle that pins the cursor at a fixed coordinate. Fire once to pin, fire again to release.</p>
+<ul>
+<li><strong>Mode.</strong> Which axes the pin holds.</li>
+<li><strong>Pin X / Pin Y.</strong> The coordinate to hold.</li>
+</ul>
+<h3 id="limit-mouse-region">Limit Mouse Region<a class="headerlink" href="#limit-mouse-region" title="Permanent link">&para;</a></h3>
+<p>A toggle that fences the cursor inside an inset rectangle. Fire once to clamp, fire again to release.</p>
+<ul>
+<li><strong>Mode.</strong> Which axes the clamp applies to.</li>
+<li><strong>Inset X / Inset Y.</strong> How far in from each screen edge the fence sits.</li>
+</ul>
+<p>These three pair with the <strong>Mouse Position X / Y</strong> mapping sources (see <a href="../../features/mappings/">Button and Axis Mappings</a>). While a pin or clamp is active, PadForge writes the cursor every frame, so a game that also moves the cursor can fight it. The action editor notes this.</p>
+<h3 id="move-mouse-to-position">Move Mouse to Position<a class="headerlink" href="#move-mouse-to-position" title="Permanent link">&para;</a></h3>
+<p>Warp the cursor to a fixed screen spot in one press. One jump, no pinning: the cursor is free again the instant it lands.</p>
+<ul>
+<li><strong>Mouse X / Mouse Y.</strong> The target coordinate in pixels on the primary monitor.</li>
+<li><strong>Pick on screen.</strong> Click it, then place the cursor where you want it. The button counts down three seconds ("Capturing in 3...") and captures the spot into the two fields.</li>
+</ul>
+<p>Good for map pings, minimap clicks, and menu buttons that always live at the same spot. Community configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> use this action for their cursor-warp bindings.</p>
+<h3 id="lightbar-color">Lightbar Color<a class="headerlink" href="#lightbar-color" title="Permanent link">&para;</a></h3>
+<p>Push an RGB color to every Sony pad on the slot as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.</p>
+<p>Two hold modes:</p>
+<ul>
+<li><strong>Reactive.</strong> Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.</li>
+<li><strong>Sticky.</strong> Hold the color at full brightness until a <strong>Lightbar Color Clear</strong> action or a fresh override replaces it. Good for armed / disarmed markers.</li>
+</ul>
+<p>Available on slots that have at least one Sony pad (DualShock 4, DualSense, DualSense Edge).</p>
+<h3 id="lightbar-color-clear">Lightbar Color Clear<a class="headerlink" href="#lightbar-color-clear" title="Permanent link">&para;</a></h3>
+<p>Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.</p>
+<h3 id="lightbar-mode-set">Lightbar Mode Set<a class="headerlink" href="#lightbar-mode-set" title="Permanent link">&para;</a></h3>
+<p>Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot renders the new mode with its own palette and decay settings.</p>
+<h3 id="lightbar-mode-cycle">Lightbar Mode Cycle<a class="headerlink" href="#lightbar-mode-cycle" title="Permanent link">&para;</a></h3>
+<p>Step through an ordered list of base lightbar modes. Each fire advances one step. The list wraps at the end.</p>
+<h3 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h3>
+<p>Drive the slot's physical rumble from a macro. Per-motor strength from 0 to 100 percent, so a macro can hit one motor by itself or both together. Two hold modes match Lightbar Color:</p>
+<ul>
+<li><strong>Reactive.</strong> Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.</li>
+<li><strong>Sticky.</strong> Hold at full strength until a <strong>Stop Rumble</strong> action runs. Good for armed states and click-and-hold sustain.</li>
+</ul>
+<p>Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand.</p>
+<h3 id="stop-rumble">Stop Rumble<a class="headerlink" href="#stop-rumble" title="Permanent link">&para;</a></h3>
+<p>End any active macro rumble override on the slot, no matter which motor was running. Pair this with a Sticky Rumble action to give the macro a clean release.</p>
+<h3 id="rumble-trigger-override">Rumble Trigger Override<a class="headerlink" href="#rumble-trigger-override" title="Permanent link">&para;</a></h3>
+<p>Drive the trigger motors directly from a macro. This is the macro counterpart to the <a href="../../features/force-feedback/#trigger-routing">Trigger Routing</a> card, sending strength straight to the trigger channel: Xbox impulse triggers or DualSense Adaptive Trigger Vibration.</p>
+<h3 id="stop-trigger-vibration">Stop Trigger Vibration<a class="headerlink" href="#stop-trigger-vibration" title="Permanent link">&para;</a></h3>
+<p>End any active Rumble Trigger Override on the slot. Pair it with a Rumble Trigger Override the way Stop Rumble pairs with a Sticky Rumble action.</p>
+<h3 id="toggle-touchpad-overlay">Toggle Touchpad Overlay<a class="headerlink" href="#toggle-touchpad-overlay" title="Permanent link">&para;</a></h3>
+<p>Toggles the on-screen <a href="../../features/dashboard/#touchpad-overlay">Touchpad Overlay</a> visibility. Each fire flips it: open if closed, close if open. Useful for binding a controller chord to "show me a touchpad on screen for the next gesture" without leaving the game.</p>
+<h3 id="set-gyro-engaged">Set Gyro Engaged<a class="headerlink" href="#set-gyro-engaged" title="Permanent link">&para;</a></h3>
+<p>Drives the slot's macro gyro-engage bit, OR-combined with the <a href="../gyro/">Gyro</a> tab's Aim Engage button at the evaluator. Three modes:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Toggle</strong></td>
+<td>Each fire flips the slot's macro-engaged bit.</td>
+</tr>
+<tr>
+<td><strong>On</strong></td>
+<td>Forces the bit true.</td>
+</tr>
+<tr>
+<td><strong>Off</strong></td>
+<td>Forces the bit false.</td>
+</tr>
+</tbody>
+</table>
+<p>Per slot, volatile (resets on profile switch and app restart). Lets a macro hold gyro on for one trigger pull then release it without rebinding the engage button. Combines with the Aim Engage button via OR. Either source can engage. Both must release to disengage.</p>
+<h3 id="gyro-recenter">Gyro Recenter<a class="headerlink" href="#gyro-recenter" title="Permanent link">&para;</a></h3>
+<p>Zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Imported Steam configs use it for their camera-reset bindings.</p>
+<h3 id="cycle-pointer-modes-set-pointer-mode">Cycle Pointer Modes / Set Pointer Mode<a class="headerlink" href="#cycle-pointer-modes-set-pointer-mode" title="Permanent link">&para;</a></h3>
+<p>Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the <a href="../../devices/wii-controllers/">Wii Controllers</a> tab.</p>
+<ul>
+<li><strong>Cycle Pointer Modes.</strong> Check the modes you want in the list. Each fire advances to the next checked mode. The list wraps at the end. The cycle position resets on app restart.</li>
+<li><strong>Set Pointer Mode.</strong> Sets one fixed mode.</li>
+</ul>
+<h3 id="set-guide-led-brightness">Set Guide LED Brightness<a class="headerlink" href="#set-guide-led-brightness" title="Permanent link">&para;</a></h3>
+<p>Set the brightness of the glowing Guide or Home button, 0 to 100 percent, for every capable controller on the slot. 0 turns the LED off.</p>
+<ul>
+<li>Xbox One and later pads accept it over USB only. Bluetooth is ignored.</li>
+<li>The 2015 Steam Controller accepts it on any connection.</li>
+<li>Switch pads with a HOME button LED (Pro Controller, right Joy-Con, combined pair, charging grip) accept it on any connection.</li>
+</ul>
+<p>The write is transient and not saved. Pair two of these actions to flash the LED when a macro starts and restore it when the macro ends. The <a href="../../features/lighting/">Lighting</a> tab's Guide Button LED setting reasserts on its next update.</p>
+<h3 id="disconnect-controller">Disconnect Controller<a class="headerlink" href="#disconnect-controller" title="Permanent link">&para;</a></h3>
+<p>Turn off a Bluetooth controller. PadForge drops the link, and the controller goes to sleep once the link is gone. Good for a chord or button combo that puts a controller to sleep without reaching for it.</p>
+<p>Pick a <strong>Target</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>What it turns off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Triggering Device</strong></td>
+<td>The controller (or controllers) that fired this macro's trigger.</td>
+</tr>
+<tr>
+<td><strong>Specific Device</strong></td>
+<td>One controller you pick from a dropdown.</td>
+</tr>
+<tr>
+<td><strong>All Devices on This Slot</strong></td>
+<td>Every Bluetooth controller mapped to this pad's slot.</td>
+</tr>
+<tr>
+<td><strong>All Bluetooth Devices</strong></td>
+<td>Every Bluetooth controller PadForge knows.</td>
+</tr>
+</tbody>
+</table>
+<p>Works on Bluetooth controllers only. A USB-wired controller is skipped, and disconnecting a charging controller over Bluetooth doesn't interrupt its charge.</p>
+<p><img alt="The Disconnect Controller action with the Target dropdown" src="../../images/macro-disconnect.png" /></p>
+<h3 id="axis-source-for-continuous-actions">Axis source for continuous actions<a class="headerlink" href="#axis-source-for-continuous-actions" title="Permanent link">&para;</a></h3>
+<p>System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Output Controller</strong> (default)</td>
+<td>The virtual controller's combined output after deadzone, range, and inversion. Device-independent.</td>
+</tr>
+<tr>
+<td><strong>Input Device</strong></td>
+<td>Raw input on one specific physical controller. Pick the device and axis from dropdowns.</td>
+</tr>
+</tbody>
+</table>
+<p>Pick <strong>Input Device</strong> when the axis is unmapped (a throttle lever you want for volume) or you want to skip the deadzone and curve math.</p>
+<h3 id="axis-options">Axis options<a class="headerlink" href="#axis-options" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Invert axis.</strong> Reverse the direction. Volume: release-to-louder. Mouse: opposite cursor.</li>
+<li><strong>Show volume OSD.</strong> The Windows volume flyout. System Volume only. On by default.</li>
+</ul>
+<h3 id="build-the-sequence">Build the sequence<a class="headerlink" href="#build-the-sequence" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Click <strong>Add Action</strong> and pick the type.</li>
+<li>Set it up (button, key, delay, etc.).</li>
+<li>Add more rows. They run top to bottom.</li>
+<li>Use the delete icon to remove a row.</li>
+</ol>
+<p>Quick melee combo:</p>
+<ol>
+<li>Button Press: Y (50 ms)</li>
+<li>Delay: 100 ms</li>
+<li>Button Press: B (50 ms)</li>
+</ol>
+<p>Stick-to-mouse aiming (Always mode):</p>
+<ol>
+<li>Mouse Move: Right Stick X, sensitivity 15</li>
+<li>Mouse Move: Right Stick Y, sensitivity 15</li>
+</ol>
+<hr />
+<h2 id="repeat-modes">Repeat modes<a class="headerlink" href="#repeat-modes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Once</strong></td>
+<td>Runs one time.</td>
+</tr>
+<tr>
+<td><strong>Fixed Count</strong></td>
+<td>Runs N times in a row.</td>
+</tr>
+<tr>
+<td><strong>Until Release</strong></td>
+<td>Loops while the trigger is held. Requires <strong>While Held</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p>Fixed Count and Until Release both have a <strong>Repeat Delay</strong> in milliseconds between runs.</p>
+<p>Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 50 ms. A presses every 100 ms (about 10 times a second) while held.</p>
+<hr />
+<h2 id="consume-trigger-buttons">Consume trigger buttons<a class="headerlink" href="#consume-trigger-buttons" title="Permanent link">&para;</a></h2>
+<p>On by default. The trigger's buttons are stripped from the virtual controller output, so the game only sees the macro's actions.</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Game sees</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>On (default)</td>
+<td>Macro output only. LB + RB are hidden.</td>
+</tr>
+<tr>
+<td>Off</td>
+<td>The trigger buttons and the macro output, both.</td>
+</tr>
+</tbody>
+</table>
+<p>Consume only applies to buttons on the Output Controller source. Input Device triggers are not part of the combined gamepad state, so there is nothing to consume.</p>
+<hr />
+<h2 id="how-actions-run-together">How actions run together<a class="headerlink" href="#how-actions-run-together" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Actions</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential</td>
+<td>Button Press / Release, Key Press / Release, Mouse Button Press / Release, Move Mouse to Position, Delay, Axis Set</td>
+<td>One at a time, top to bottom.</td>
+</tr>
+<tr>
+<td>Continuous</td>
+<td>System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held</td>
+<td>Every frame, all in parallel.</td>
+</tr>
+</tbody>
+</table>
+<p>Both types mix in one macro. Two Mouse Move actions (X and Y) run in parallel while a Button Press in the same list runs in sequence next to them.</p>
+<hr />
+<h2 id="recipes">Recipes<a class="headerlink" href="#recipes" title="Permanent link">&para;</a></h2>
+<h3 id="left-trigger-as-a-volume-knob">Left Trigger as a volume knob<a class="headerlink" href="#left-trigger-as-a-volume-knob" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fire mode: Always</li>
+<li>Action: System Volume. Axis: Left Trigger. Volume Limit 50 percent. OSD on.</li>
+</ul>
+<p>Always mode means there is no trigger combo. The Volume Limit prevents an accidental blast.</p>
+<h3 id="right-stick-as-a-mouse-cursor">Right Stick as a mouse cursor<a class="headerlink" href="#right-stick-as-a-mouse-cursor" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fire mode: Always</li>
+<li>Actions:</li>
+<li>Mouse Move: Right Stick X, sensitivity 15</li>
+<li>Mouse Move: Right Stick Y, sensitivity 15</li>
+</ul>
+<p>Lower sensitivity gives you precision. Higher gives you speed. Pair this with the bumper recipe below for full mouse control.</p>
+<h3 id="bumpers-as-mouse-clicks">Bumpers as mouse clicks<a class="headerlink" href="#bumpers-as-mouse-clicks" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Macro</th>
+<th>Fire mode</th>
+<th>Trigger</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Left Click</td>
+<td>On Press</td>
+<td>LB</td>
+<td>Mouse Button Press: Left (50 ms)</td>
+</tr>
+<tr>
+<td>Right Click</td>
+<td>On Press</td>
+<td>RB</td>
+<td>Mouse Button Press: Right (50 ms)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="turbo-fire">Turbo fire<a class="headerlink" href="#turbo-fire" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fire mode: While Held</li>
+<li>Trigger: Right Trigger axis, threshold 50 percent</li>
+<li>Repeat: Until Release, delay 50 ms</li>
+<li>Action: Button Press: A (30 ms)</li>
+</ul>
+<p>A presses about every 80 ms (30 ms press plus 50 ms delay) while the trigger is past 50 percent. Release to stop.</p>
+<h3 id="per-app-music-volume">Per-app music volume<a class="headerlink" href="#per-app-music-volume" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fire mode: While Held</li>
+<li>Trigger: LB</li>
+<li>Consume trigger buttons: On</li>
+<li>Action: App Volume. Axis: Left Stick Y. Process: Spotify. Volume Limit 80 percent.</li>
+</ul>
+<p>Hold LB and move the left stick up or down to set Spotify volume. The game never sees LB. The level stays where you leave it.</p>
+<h3 id="quick-chat-combo">Quick chat combo<a class="headerlink" href="#quick-chat-combo" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fire mode: On Press</li>
+<li>Trigger: D-pad Down + A</li>
+<li>Actions:</li>
+<li>Key Press: T (50 ms). Opens chat.</li>
+<li>Delay: 100 ms</li>
+<li>Key Press: G (50 ms)</li>
+<li>Delay: 50 ms</li>
+<li>Key Press: G (50 ms)</li>
+<li>Delay: 50 ms</li>
+<li>Key Press: Return (50 ms). Sends the message.</li>
+</ul>
+<p>Increase the delays if the game needs more time between keystrokes.</p>
+<hr />
+<h2 id="extended-custom-button-support">Extended Custom button support<a class="headerlink" href="#extended-custom-button-support" title="Permanent link">&para;</a></h2>
+<p>Extended slots set to <strong>Custom</strong> support up to 128 buttons. The trigger recorder and the Button Press dropdown grow to match the slot's button count. Xbox, PlayStation, and gamepad-shaped HIDMaestro profiles use the standard button names.</p>
+<hr />
+<h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Delays under 10 ms may not register in some games. Start at 50 ms and work down.</li>
+<li>Test in the actual game. Timing needs change per title.</li>
+<li>Mixing button and axis inputs in one trigger cuts down on accidental fires.</li>
+<li>Mouse sensitivity 10 to 15 for cursor work. 3 to 5 for scrolling.</li>
+<li>Macros save per profile. Different games can have different macro lists through <a href="../profiles/">Profiles</a>.</li>
+</ul>
+<hr />
+<h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Macro lightbar overrides do not override what the game writes at the packet level. A game that drives the lightbar each frame wins.</li>
+<li>Macro rumble takes the stronger of the macro and game strength, so a game holding a motor at full strength masks a weaker macro pulse.</li>
+<li>Input Device triggers cannot use <strong>Consume trigger buttons</strong>. The raw input layer is upstream of the combined gamepad state.</li>
+</ul>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../features/mappings/">Button and Axis Mappings</a>: set up base mappings before you add macros.</li>
+<li><a href="../../features/controller-slots/">Controller Slots</a>: every slot has its own macro list.</li>
+<li><a href="../../features/controller-audio/">Controller Audio</a>: the Play Sound action, output device picker, and sound packages.</li>
+<li><a href="../../features/devices/">Devices</a>: pick the physical device for Input Device triggers.</li>
+<li><a href="../../features/force-feedback/">Force Feedback</a>: rumble and vibration settings the macro layers over.</li>
+<li><a href="../profiles/">Profiles</a>: Macros save per profile, so each game can have its own set.</li>
+<li><a href="../steam-workshop-import/">Steam Workshop Config Import</a>: imported community configs arrive with cursor-warp, autofire, toggle, and long-press macros pre-built.</li>
+<li><a href="../../troubleshooting/">Troubleshooting</a>: fixes for macros that do not fire.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.1.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../gyro/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Motion aiming (Gyro)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Motion aiming (Gyro)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../shift-layers/" class="md-footer__link md-footer__link--next" aria-label="Next: Shift Layers">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Shift Layers
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

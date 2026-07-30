@@ -1,0 +1,4311 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/features/stick-deadzones/">
+      
+      
+        <link rel="prev" href="../mappings/">
+      
+      
+        <link rel="next" href="../trigger-deadzones/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Stick Deadzones - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#stick-deadzones" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Stick Deadzones
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameter-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameter reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#processing-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deadzone-shapes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deadzone shapes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deadzone shapes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scaled-radial-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaled Radial (default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#radial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hybrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sloped-scaled-axial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sloped Scaled Axial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sloped-axial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sloped Axial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preview behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-deadzone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-deadzone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anti-deadzone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#behavior-at-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Behavior at 20%
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#picking-a-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Picking a value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuning-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuning steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linear-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensitivity-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sensitivity curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive editor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#center-offset-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Center offset calibration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Center offset calibration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic calibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual adjustment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Range">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calibrate-boundary-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calibrate boundary (recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directional-range-caps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directional range caps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live preview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live preview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-preview-tells-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the preview tells you
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reset-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reset buttons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-settings-by-genre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended settings by genre
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended settings by genre">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-person-and-third-person-shooters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-person and third-person shooters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#racing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Racing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flight-simulators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flight simulators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#platformers-and-action-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platformers and action games
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strategy-and-menu-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategy and menu navigation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flick-stick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flick Stick
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-directinput-sticks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom DirectInput sticks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameter-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameter reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#processing-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deadzone-shapes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deadzone shapes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deadzone shapes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scaled-radial-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaled Radial (default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#radial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hybrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sloped-scaled-axial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sloped Scaled Axial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sloped-axial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sloped Axial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preview behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-deadzone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-deadzone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anti-deadzone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#behavior-at-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Behavior at 20%
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#picking-a-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Picking a value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuning-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuning steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linear-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensitivity-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sensitivity curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive editor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#center-offset-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Center offset calibration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Center offset calibration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic calibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual adjustment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Range">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calibrate-boundary-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calibrate boundary (recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directional-range-caps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directional range caps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live preview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live preview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-preview-tells-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the preview tells you
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reset-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reset buttons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-settings-by-genre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended settings by genre
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended settings by genre">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-person-and-third-person-shooters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-person and third-person shooters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#racing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Racing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flight-simulators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flight simulators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#platformers-and-action-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platformers and action games
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strategy-and-menu-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategy and menu navigation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flick-stick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flick Stick
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-directinput-sticks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom DirectInput sticks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="stick-deadzones">Stick Deadzones<a class="headerlink" href="#stick-deadzones" title="Permanent link">&para;</a></h1>
+<p><em>Stop drift, defeat in-game deadzones, and reshape stick response per axis.</em></p>
+<p><img alt="Stick deadzone settings with circular preview and sliders" src="../../images/pad-sticks.png" /></p>
+<p>The Sticks tab runs each thumbstick through a fixed chain of processing stages. Every slider has a row reset, and every section has a Reset All. Each stick keeps its own values. On a Keyboard + Mouse slot the tab also carries the <a href="#flick-stick">Flick Stick</a> card.</p>
+<hr />
+<h2 id="parameter-reference">Parameter reference<a class="headerlink" href="#parameter-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Range</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deadzone X / Y</td>
+<td>0–100%</td>
+<td>Ignores input below this size. Kills drift. Set per axis.</td>
+</tr>
+<tr>
+<td>Anti-Deadzone X / Y</td>
+<td>0–100%</td>
+<td>Sets a minimum output the moment the stick leaves the deadzone. Defeats game deadzones. Set per axis.</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>0–100%</td>
+<td>Blends the anti-deadzone curve (0%) with a straight line (100%). Shared across both axes.</td>
+</tr>
+<tr>
+<td>Deadzone Shape</td>
+<td>Dropdown</td>
+<td>Geometric shape of the ignored region.</td>
+</tr>
+<tr>
+<td>Sensitivity X / Y</td>
+<td>Preset or Custom</td>
+<td>Per-axis curve applied after the deadzone.</td>
+</tr>
+<tr>
+<td>Center Offset X / Y</td>
+<td>-100–100%</td>
+<td>Shifts the deadzone center to the stick's real resting spot. Applied first.</td>
+</tr>
+<tr>
+<td>Range caps</td>
+<td>1–100%</td>
+<td>Physical push that counts as full output. Four caps: left, right, down, up.</td>
+</tr>
+<tr>
+<td>Boundary calibration</td>
+<td>Tool</td>
+<td>Measures the stick's reachable edge and rescales it to a circle.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="processing-order">Processing order<a class="headerlink" href="#processing-order" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Center offset.</strong> Cancels out hardware drift at rest.</li>
+<li><strong>Boundary reshape.</strong> When the stick is boundary-calibrated, warps the measured edge onto a circle. Skipped when the stick has no calibration.</li>
+<li><strong>Deadzone.</strong> Zeroes input inside the deadzone shape.</li>
+<li><strong>Range caps.</strong> Cap the input ceiling per direction.</li>
+<li><strong>Sensitivity curve.</strong> Reshapes the response.</li>
+<li><strong>Anti-deadzone.</strong> Adds a minimum output floor.</li>
+<li><strong>Linear.</strong> Blends the curve toward a straight line.</li>
+</ol>
+<hr />
+<h2 id="deadzone-shapes">Deadzone shapes<a class="headerlink" href="#deadzone-shapes" title="Permanent link">&para;</a></h2>
+<p><img alt="Deadzone shape dropdown" src="../../images/pad-sticks-deadzone-dropdown.png" /></p>
+<p>The shape dropdown changes the geometry of the ignored region. Default is Scaled Radial. The reset button next to the dropdown restores it.</p>
+<h3 id="scaled-radial-default">Scaled Radial (default)<a class="headerlink" href="#scaled-radial-default" title="Permanent link">&para;</a></h3>
+<p>Circular (or elliptical) deadzone. Output is rescaled so it starts at zero at the deadzone edge and ramps up to full. No jump at the boundary.</p>
+<ul>
+<li>Best for most games and most players. Every direction is treated equally, so diagonals feel natural.</li>
+<li>Third-person movement feels the same whether you push forward, sideways, or diagonally.</li>
+</ul>
+<h3 id="radial">Radial<a class="headerlink" href="#radial" title="Permanent link">&para;</a></h3>
+<p>Same circle as Scaled Radial. No rescale. Output jumps to the raw magnitude at the boundary.</p>
+<ul>
+<li>Best for raw feel with drift filtering only. Use when the game does its own rescaling.</li>
+</ul>
+<h3 id="axial">Axial<a class="headerlink" href="#axial" title="Permanent link">&para;</a></h3>
+<p>Deadzones applied per axis. The ignored region forms a cross of vertical and horizontal strips. Each axis is independent.</p>
+<ul>
+<li>Best for 2D platformers, top-down strategy, menu navigation.</li>
+<li>Example: in a side-scroller, vertical wobble does not bleed into horizontal movement.</li>
+</ul>
+<h3 id="hybrid">Hybrid<a class="headerlink" href="#hybrid" title="Permanent link">&para;</a></h3>
+<p>Two stages. Scaled Radial kills center noise. Sloped Scaled Axial adds wedge-shaped axis filtering on top.</p>
+<ul>
+<li>Best for competitive shooters that need a clean center and precise cardinal tracking.</li>
+<li>Example: tracking a horizontal target without vertical drift, with natural diagonals.</li>
+</ul>
+<h3 id="sloped-scaled-axial">Sloped Scaled Axial<a class="headerlink" href="#sloped-scaled-axial" title="Permanent link">&para;</a></h3>
+<p>Wedge-shaped regions. The deadzone on one axis grows as the other axis deflects further. Output is rescaled.</p>
+<ul>
+<li>Best for racing and flight sims. Strong axis lock for clean straight-line input.</li>
+<li>Example: steering hard right filters out small Y-axis wobble on its own.</li>
+</ul>
+<h3 id="sloped-axial">Sloped Axial<a class="headerlink" href="#sloped-axial" title="Permanent link">&para;</a></h3>
+<p>Same wedges as Sloped Scaled Axial without the rescale. Output may jump at the boundary.</p>
+<ul>
+<li>Best for the same cases as Sloped Scaled Axial when the game does its own rescaling.</li>
+</ul>
+<h3 id="preview-behavior">Preview behavior<a class="headerlink" href="#preview-behavior" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Shape</th>
+<th>Preview</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scaled Radial / Radial</td>
+<td>Circle (ellipse when X and Y differ)</td>
+</tr>
+<tr>
+<td>Axial</td>
+<td>Cross pattern</td>
+</tr>
+<tr>
+<td>Sloped / Sloped Scaled</td>
+<td>Wedge regions</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>Circle plus wedges</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="anti-deadzone">Anti-deadzone<a class="headerlink" href="#anti-deadzone" title="Permanent link">&para;</a></h2>
+<p>Some games have a built-in deadzone you cannot turn off. Anti-Deadzone gives the game a minimum output the moment the stick crosses PadForge's deadzone, so the game's own deadzone is already covered.</p>
+<h3 id="behavior-at-20">Behavior at 20%<a class="headerlink" href="#behavior-at-20" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Stick position</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inside deadzone</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Just past deadzone</td>
+<td>Jumps to 20%</td>
+</tr>
+<tr>
+<td>Full deflection</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>In between</td>
+<td>Spread across 20–100%</td>
+</tr>
+</tbody>
+</table>
+<p>The rest of your stick range squeezes into the space above the anti-deadzone floor. A higher floor leaves less room for fine control near the edge.</p>
+<h3 id="picking-a-value">Picking a value<a class="headerlink" href="#picking-a-value" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Anti-Deadzone</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0%</td>
+<td>The game has no internal deadzone.</td>
+</tr>
+<tr>
+<td>5–10%</td>
+<td>The stick feels slightly sluggish at first push.</td>
+</tr>
+<tr>
+<td>15–25%</td>
+<td>The game eats small aim adjustments.</td>
+</tr>
+<tr>
+<td>30–50%</td>
+<td>The game has a very aggressive deadzone (older titles, some ports).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tuning-steps">Tuning steps<a class="headerlink" href="#tuning-steps" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Set the deadzone just high enough to stop drift.</li>
+<li>Push the stick slowly. Watch the preview dot.</li>
+<li>If the dot moves but the game does nothing, raise anti-deadzone 5% at a time.</li>
+<li>Stop the moment the game responds. Going higher compresses your usable range.</li>
+</ol>
+<hr />
+<h2 id="linear-response">Linear response<a class="headerlink" href="#linear-response" title="Permanent link">&para;</a></h2>
+<p>The Linear slider blends the response between the anti-deadzone curve and a straight line.</p>
+<table>
+<thead>
+<tr>
+<th>Linear</th>
+<th>Feel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0% (default)</td>
+<td>Full anti-deadzone floor. Output jumps to the floor past the deadzone, then climbs in a straight line to full.</td>
+</tr>
+<tr>
+<td>25–50%</td>
+<td>Some curve remains. Middle ground for precision and speed.</td>
+</tr>
+<tr>
+<td>75–100%</td>
+<td>Near or fully linear. Equal stick travel produces equal output change.</td>
+</tr>
+</tbody>
+</table>
+<p>If anti-deadzone is 0%, Linear does nothing. The response is already a straight line.</p>
+<hr />
+<h2 id="sensitivity-curves">Sensitivity curves<a class="headerlink" href="#sensitivity-curves" title="Permanent link">&para;</a></h2>
+<p><img alt="Sensitivity preset dropdown" src="../../images/pad-sticks-sensitivity-dropdown.png" /></p>
+<p>Each stick has its own Sensitivity X and Sensitivity Y curve. The curve reshapes output after the deadzone runs.</p>
+<h3 id="presets">Presets<a class="headerlink" href="#presets" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Feel</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear</td>
+<td>1:1 input to output</td>
+<td>Raw control with no reshape</td>
+</tr>
+<tr>
+<td>Smooth</td>
+<td>Extra precision near center, full output at edge</td>
+<td>General use. Most games.</td>
+</tr>
+<tr>
+<td>Aggressive</td>
+<td>Small inputs produce large output</td>
+<td>Fast reactions over fine control</td>
+</tr>
+<tr>
+<td>Instant</td>
+<td>Near-digital. Small flick produces almost full output.</td>
+<td>Quick 180 turns, quick-scoping</td>
+</tr>
+<tr>
+<td>S-Curve</td>
+<td>Precision near center and near full, steep ramp mid-travel</td>
+<td>Competitive shooters needing fine aim plus fast turns</td>
+</tr>
+<tr>
+<td>Delay</td>
+<td>Output stays low until ~80% deflection, then surges</td>
+<td>Sniping. Very fine aim, slower turns.</td>
+</tr>
+<tr>
+<td>Custom</td>
+<td>User-defined control points</td>
+<td>Appears once you edit the curve</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interactive-editor">Interactive editor<a class="headerlink" href="#interactive-editor" title="Permanent link">&para;</a></h3>
+<p>Two charts appear side by side, one per axis. Input runs across, output runs up.</p>
+<ul>
+<li><strong>Double-click</strong> to add a control point. There is no limit on how many you add.</li>
+<li><strong>Drag</strong> a control point to reshape the curve.</li>
+<li><strong>Right-click</strong> a control point to remove it.</li>
+</ul>
+<p>Editing any point switches the preset to Custom. The reset button restores Linear.</p>
+<p>A live indicator dot tracks your stick's current position on the curve, so you can see the exact output as you move.</p>
+<hr />
+<h2 id="center-offset-calibration">Center offset calibration<a class="headerlink" href="#center-offset-calibration" title="Permanent link">&para;</a></h2>
+<p>A worn stick can sit slightly off-center electrically and drift at rest. The usual workaround is a bigger deadzone, but that wastes range. Center offset shifts the deadzone center to the stick's actual rest position. The deadzone can then be smaller while still killing drift. This runs before everything else.</p>
+<h3 id="when-to-use-it">When to use it<a class="headerlink" href="#when-to-use-it" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The raw readout shows a non-zero value at rest.</li>
+<li>The preview dot sits off-center with your hands off the stick.</li>
+<li>You need a bigger-than-expected deadzone to stop drift.</li>
+<li>The controller is worn or aged.</li>
+</ul>
+<h3 id="automatic-calibration">Automatic calibration<a class="headerlink" href="#automatic-calibration" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Put the controller on a flat surface. Do not touch the stick.</li>
+<li>Click <strong>Calibrate Center</strong> for that stick.</li>
+<li>PadForge samples raw values for about half a second (15 readings) and averages them.</li>
+<li>Center Offset X and Y are set automatically to cancel the measured drift.</li>
+</ol>
+<h3 id="manual-adjustment">Manual adjustment<a class="headerlink" href="#manual-adjustment" title="Permanent link">&para;</a></h3>
+<p>Each axis has a Center Offset slider from -100% to +100%.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Positive</td>
+<td>Shifts center right (X) or up (Y)</td>
+</tr>
+<tr>
+<td>Negative</td>
+<td>Shifts center left (X) or down (Y)</td>
+</tr>
+<tr>
+<td>0%</td>
+<td>No correction (default)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="range">Range<a class="headerlink" href="#range" title="Permanent link">&para;</a></h2>
+<p>The Range section sets how far you push a stick to reach full output. It has a boundary calibration tool and four directional caps.</p>
+<h3 id="calibrate-boundary-recommended">Calibrate boundary (recommended)<a class="headerlink" href="#calibrate-boundary-recommended" title="Permanent link">&para;</a></h3>
+<p><img alt="Boundary calibration button with a circularity readout and the measured edge drawn on the stick preview" src="../../images/pad-sticks-boundary-calibration.png" /></p>
+<p>No stick reaches a perfect circle. The corners fall short, and worn sticks lose reach unevenly. Boundary calibration measures the exact edge your stick can physically reach, then rescales every position so your full motion maps onto a clean circle. Nothing gets clipped, at any angle.</p>
+<p>This is the recommended way to true up a stick. The four sliders below only cap the cardinal directions. Use them to limit range on purpose, not to correct it.</p>
+<ol>
+<li>Click <strong>Calibrate boundary</strong> for the stick.</li>
+<li>Sweep the stick slowly around its outer rim. The button counts down the sectors still left to cover.</li>
+<li>Once every sector is covered, the button asks for one more lap to sharpen the measurement. Keep sweeping.</li>
+<li>The button commits on its own once the rim is fully mapped. Clicking it again mid-sweep commits early.</li>
+</ol>
+<p>As you sweep, the measured edge draws on the preview as an outline, and a circularity percentage shows next to the button. Higher means rounder. Once calibrated the button reads <strong>Recalibrate boundary</strong>. The reset button beside it clears the calibration.</p>
+<h3 id="directional-range-caps">Directional range caps<a class="headerlink" href="#directional-range-caps" title="Permanent link">&para;</a></h3>
+<p>Each direction has its own cap. Lower a cap and a smaller physical push in that direction counts as full output.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Min Range X (Left)</td>
+<td>Leftward deflection</td>
+</tr>
+<tr>
+<td>Max Range X (Right)</td>
+<td>Rightward deflection</td>
+</tr>
+<tr>
+<td>Min Range Y (Down)</td>
+<td>Downward deflection</td>
+</tr>
+<tr>
+<td>Max Range Y (Up)</td>
+<td>Upward deflection</td>
+</tr>
+</tbody>
+</table>
+<p>All four go from 1% to 100% and default to 100%.</p>
+<table>
+<thead>
+<tr>
+<th>Cap</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100%</td>
+<td>Default. Full physical push required.</td>
+</tr>
+<tr>
+<td>85%</td>
+<td>Full output at 85% deflection.</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>Full output at 70%. Short-throw feel.</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>Full output at half deflection. Very sensitive.</td>
+</tr>
+</tbody>
+</table>
+<p>Use the caps to shorten the throw on a direction deliberately. To fix a stick that reaches unevenly or falls short in the corners, run Calibrate boundary instead.</p>
+<hr />
+<h2 id="live-preview">Live preview<a class="headerlink" href="#live-preview" title="Permanent link">&para;</a></h2>
+<p>A circular preview next to the sliders shows the stick in real time.</p>
+<ul>
+<li><strong>RAW dot.</strong> The stick's position before any processing, in cold blue.</li>
+<li><strong>OUT dot.</strong> The fully processed position, in ember. The gap between RAW and OUT is what your settings do.</li>
+<li><strong>Deadzone region.</strong> Shaded shape in the center matching the selected geometry (circle, cross, or wedges).</li>
+<li><strong>Measured boundary.</strong> After you run Calibrate boundary, the mapped edge draws as an outline. The gap between it and the outer ring is what the reshape corrects.</li>
+</ul>
+<h3 id="what-the-preview-tells-you">What the preview tells you<a class="headerlink" href="#what-the-preview-tells-you" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>What to watch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Testing drift</td>
+<td>Release the stick. Dot off-center? Raise deadzone or calibrate center offset.</td>
+</tr>
+<tr>
+<td>Testing shape</td>
+<td>Push slowly outward in different directions. The dot starts moving at the deadzone edge.</td>
+</tr>
+<tr>
+<td>Testing sensitivity</td>
+<td>Push from center to edge. Watch how fast the dot accelerates.</td>
+</tr>
+<tr>
+<td>Testing range</td>
+<td>Push to the physical limit. OUT dot not reaching the edge? Run Calibrate boundary or lower a range cap.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="setting-values">Setting values<a class="headerlink" href="#setting-values" title="Permanent link">&para;</a></h2>
+<p>Every slider has 0.1% precision. Three ways to set a value:</p>
+<ul>
+<li>Drag the slider for quick adjustment.</li>
+<li>Type a percentage into the number field.</li>
+<li>Type a raw hardware value into the digit field for finer precision. Offset fields accept negative values.</li>
+</ul>
+<p>Changes apply immediately.</p>
+<hr />
+<h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
+<p>Every row has a reset button (circular arrow icon) that restores the default. Reset All at the top of each stick section resets everything for that stick in one click.</p>
+<hr />
+<h2 id="recommended-settings-by-genre">Recommended settings by genre<a class="headerlink" href="#recommended-settings-by-genre" title="Permanent link">&para;</a></h2>
+<p>Starting points only. Use the preview and in-game testing to fine-tune.</p>
+<h3 id="first-person-and-third-person-shooters">First-person and third-person shooters<a class="headerlink" href="#first-person-and-third-person-shooters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Left stick (movement)</th>
+<th>Right stick (aiming)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deadzone</td>
+<td>5–8%</td>
+<td>3–6% (as low as possible)</td>
+</tr>
+<tr>
+<td>Anti-Deadzone</td>
+<td>0–5%</td>
+<td>10–20%</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>50–75%</td>
+<td>25–50%</td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>Scaled Radial</td>
+<td>Hybrid or Scaled Radial</td>
+</tr>
+<tr>
+<td>Sensitivity</td>
+<td>Linear or Smooth</td>
+<td>S-Curve or Smooth</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>Calibrate boundary</td>
+<td>Calibrate boundary</td>
+</tr>
+</tbody>
+</table>
+<p>Movement sticks are forgiving. Aim sticks need the tightest deadzone for micro-adjustments. Anti-deadzone on the aim stick defeats the game's internal deadzone. S-Curve gives precision near center and fast turns at the edge. Hybrid helps hold pure horizontal tracking.</p>
+<h3 id="racing">Racing<a class="headerlink" href="#racing" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Left stick (steering)</th>
+<th>Right stick (camera)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deadzone</td>
+<td>3–8%</td>
+<td>5–10%</td>
+</tr>
+<tr>
+<td>Anti-Deadzone</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>0–25%</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>Sloped Scaled Axial or Scaled Radial</td>
+<td>Scaled Radial</td>
+</tr>
+<tr>
+<td>Sensitivity</td>
+<td>Smooth or Delay</td>
+<td>Linear</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>Calibrate boundary</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<p>Zero anti-deadzone avoids sudden jumps. Smooth or Delay curves add precision near center for gentle corrections. Sloped Scaled Axial locks pure left and right without vertical wobble.</p>
+<h3 id="flight-simulators">Flight simulators<a class="headerlink" href="#flight-simulators" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Left stick (pitch/roll)</th>
+<th>Right stick (yaw/throttle)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deadzone</td>
+<td>2–5% (as low as possible)</td>
+<td>3–8%</td>
+</tr>
+<tr>
+<td>Anti-Deadzone</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>0–25%</td>
+<td>25–50%</td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>Scaled Radial</td>
+<td>Scaled Radial or Axial</td>
+</tr>
+<tr>
+<td>Sensitivity</td>
+<td>Smooth or Delay</td>
+<td>Smooth</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>Calibrate boundary</td>
+<td>Calibrate boundary</td>
+</tr>
+</tbody>
+</table>
+<p>Flight controls run on small corrections most of the time. Low deadzones keep the full analog range. Smooth or Delay curves widen the precision zone near center.</p>
+<h3 id="platformers-and-action-games">Platformers and action games<a class="headerlink" href="#platformers-and-action-games" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Left stick (movement)</th>
+<th>Right stick (camera)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deadzone</td>
+<td>8–15%</td>
+<td>8–15%</td>
+</tr>
+<tr>
+<td>Anti-Deadzone</td>
+<td>5–15%</td>
+<td>0–10%</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>50–75%</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>Scaled Radial or Axial</td>
+<td>Scaled Radial</td>
+</tr>
+<tr>
+<td>Sensitivity</td>
+<td>Linear or Aggressive</td>
+<td>Linear</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>100%</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<p>Platformers need instant response. Higher anti-deadzone and Aggressive sensitivity feel snappy. Axial works well for 2D platformers that need strict horizontal and vertical control without diagonal bleed.</p>
+<h3 id="strategy-and-menu-navigation">Strategy and menu navigation<a class="headerlink" href="#strategy-and-menu-navigation" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Left stick (cursor/selection)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deadzone</td>
+<td>15–25%</td>
+</tr>
+<tr>
+<td>Anti-Deadzone</td>
+<td>10–20%</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>75–100%</td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>Axial</td>
+</tr>
+<tr>
+<td>Sensitivity</td>
+<td>Linear</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<p>Axial isolates each axis for clean cardinal movement without diagonals. Higher deadzone prevents accidental inputs. Linear keeps cursor speed predictable.</p>
+<hr />
+<h2 id="flick-stick">Flick Stick<a class="headerlink" href="#flick-stick" title="Permanent link">&para;</a></h2>
+<p><em>Point the stick and the camera turns to match. Sweep the rim to fine-turn.</em></p>
+<p>Flick stick turns a thumbstick into a compass for mouse-driven camera control. Deflect the stick past the threshold and the camera snaps to the direction you point, easing over the flick time. Hold the stick at the rim and sweep it to keep turning 1:1. Release and the camera stays put. Horizontal turns only, so most players pair it with <a href="../../guides/gyro/">Gyro</a> aiming for the vertical.</p>
+<p>Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:</p>
+<ol>
+<li>On the <strong>Mappings</strong> tab, map <strong>Flick Stick (Right Stick)</strong> (or <strong>Flick Stick (Left Stick)</strong>) to Mouse X. The source works on any layer, so a shift layer can carry it.</li>
+<li>Tune the <strong>Flick Stick</strong> card, which appears on the Sticks tab of a Keyboard + Mouse slot.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dots Per 360°</strong></td>
+<td>14400</td>
+<td>Mouse counts for one full 360° camera turn. This depends on the game's mouse sensitivity: raise it if a flick under-rotates, lower it if it over-rotates.</td>
+</tr>
+<tr>
+<td><strong>Flick Time</strong></td>
+<td>0.1 s</td>
+<td>How long a full 180° flick takes to complete, with an ease-out. Shorter turns finish in the same time.</td>
+</tr>
+<tr>
+<td><strong>Flick Threshold</strong></td>
+<td>0.9</td>
+<td>Stick deflection that starts a flick, as a fraction of full deflection. While flicking, the release point drops to 90% of this so the flick does not stutter at the rim.</td>
+</tr>
+<tr>
+<td><strong>Snap Angle</strong></td>
+<td>No Snapping</td>
+<td>Snap the flick to fixed angles for consistent turns: <strong>Forward Only</strong>, <strong>180 Degrees</strong>, <strong>90 Degrees</strong>, <strong>60 Degrees</strong>, or <strong>45 Degrees</strong>. Forward Only snaps every flick to dead ahead.</td>
+</tr>
+<tr>
+<td><strong>Snap Strength</strong></td>
+<td>1.0</td>
+<td>How strongly a flick pulls toward the snapped angle. 1 snaps fully, 0 disables snapping, values between blend.</td>
+</tr>
+<tr>
+<td><strong>Front Angle Deadzone</strong></td>
+<td>0°</td>
+<td>A flick within this angle of dead ahead turns nothing, so you can start a rim sweep without a flick-turn.</td>
+</tr>
+<tr>
+<td><strong>Sweep Smoothing</strong></td>
+<td>Automatic (-1)</td>
+<td>Smooths rim-sweep noise. -1 uses the automatic tiered window, 0 turns smoothing off, larger values smooth bigger per-tick rotations.</td>
+</tr>
+<tr>
+<td><strong>Allow Flick on Engage</strong></td>
+<td>Off</td>
+<td>When the shift layer hosting flick stick engages with the stick already deflected, fire the flick immediately. Off keeps the camera still and tracks rotation from the current stick angle.</td>
+</tr>
+</tbody>
+</table>
+<p>Every row has a reset button, and the card header's Reset All restores the whole card.</p>
+<p>Two practical notes:</p>
+<ul>
+<li><strong>Layer hosting.</strong> Put the flick stick row on a <a href="../../guides/shift-layers/">shift layer</a> to switch between flick aim and normal stick aim with one button. Leaving the layer never leaves a half-finished turn running, and re-entering it does not fire a surprise flick unless Allow Flick on Engage is on.</li>
+<li><strong>Steam Workshop imports.</strong> A community config with a flick stick group arrives with the row and the card pre-tuned, including the config's Dots Per 360°. See <a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>.</li>
+</ul>
+<hr />
+<h2 id="custom-directinput-sticks">Custom DirectInput sticks<a class="headerlink" href="#custom-directinput-sticks" title="Permanent link">&para;</a></h2>
+<p>When a slot uses Extended output with the <strong>Customize</strong> toggle on, the Sticks tab adapts to the number of sticks the layout is set to:</p>
+<table>
+<thead>
+<tr>
+<th>Number of sticks</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Sticks tab is empty</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Controls for Stick 1 only</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Stick 1 and Stick 2 (same as Xbox or PlayStation)</td>
+</tr>
+<tr>
+<td>3–4</td>
+<td>Extra sticks shown. Each uses 2 of the 8 axes shared with triggers.</td>
+</tr>
+</tbody>
+</table>
+<p>Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.</p>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
+<li><a href="../mappings/">Button and Axis Mappings</a>: map physical stick axes to virtual outputs.</li>
+<li><a href="../trigger-deadzones/">Trigger Deadzones</a>: same shape of settings for triggers.</li>
+<li><a href="../force-feedback/">Force Feedback</a>: rumble and haptic settings on the same tab row.</li>
+<li><a href="../../guides/gyro/">Gyro</a>: motion aiming that pairs with flick stick.</li>
+<li><a href="../visualization/">3D and 2D Visualization</a>: watch the stick move on the controller model.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.1.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../mappings/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Button and Axis Mappings">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Button and Axis Mappings
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../trigger-deadzones/" class="md-footer__link md-footer__link--next" aria-label="Next: Trigger Deadzones">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Trigger Deadzones
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

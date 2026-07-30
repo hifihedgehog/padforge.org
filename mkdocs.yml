@@ -1,0 +1,130 @@
+site_name: PadForge Documentation
+site_url: https://padforge.org/docs/
+site_description: >-
+  PadForge turns any input device into a virtual controller Windows games
+  can use. These docs cover everything from first install to wire protocols.
+repo_url: https://github.com/hifihedgehog/PadForge
+repo_name: hifihedgehog/PadForge
+edit_uri: ""
+
+docs_dir: wiki
+site_dir: docs
+
+theme:
+  name: material
+  custom_dir: wiki/overrides
+  logo: assets/logo.png
+  favicon: assets/icon.png
+  palette:
+    # Light
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    # Dark
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Start:
+      - start/index.md
+      - Installation: start/installation.md
+  - Guides:
+      - guides/index.md
+      - Import a Steam config: guides/steam-workshop-import.md
+      - Phone as a controller: guides/web-controller.md
+      - Motion aiming (Gyro): guides/gyro.md
+      - Macros: guides/macros.md
+      - Shift Layers: guides/shift-layers.md
+      - Radial and Grid Menus: guides/menus.md
+      - Per-game Profiles: guides/profiles.md
+      - Remote Link: guides/remote-link.md
+      - Steering with any stick: guides/steering.md
+  - Features:
+      - features/index.md
+      - Dashboard: features/dashboard.md
+      - Devices: features/devices.md
+      - Controller Slots: features/controller-slots.md
+      - Virtual Controllers: features/virtual-controllers.md
+      - Button and Axis Mappings: features/mappings.md
+      - Stick Deadzones: features/stick-deadzones.md
+      - Trigger Deadzones: features/trigger-deadzones.md
+      - Touchpad: features/touchpad.md
+      - Force Feedback: features/force-feedback.md
+      - Adaptive Triggers: features/adaptive-triggers.md
+      - Impulse Triggers: features/impulse-triggers.md
+      - Lighting: features/lighting.md
+      - Controller Audio: features/controller-audio.md
+      - Wheels: features/wheel.md
+      - NFC Tags: features/nfc-tags.md
+      - MIDI Input: features/midi-input.md
+      - 2D and 3D Visualization: features/visualization.md
+      - Input Precision: features/input-precision.md
+      - Driver Management: features/driver-management.md
+      - Settings: features/settings.md
+  - Devices:
+      - devices/index.md
+      - DualShock 3: devices/dualshock-3.md
+      - Wii Controllers: devices/wii-controllers.md
+  - Troubleshooting: troubleshooting.md
+  - Technical Reference:
+      - reference/index.md
+      - Architecture Overview: reference/architecture-overview.md
+      - Input Pipeline: reference/input-pipeline.md
+      - Engine Library: reference/engine-library.md
+      - Services Layer: reference/services-layer.md
+      - ViewModels: reference/viewmodels.md
+      - XAML Views: reference/xaml-views.md
+      - Settings and Serialization: reference/settings-and-serialization.md
+      - SDL3 Integration: reference/sdl3-integration.md
+      - HIDMaestro Deep Dive: reference/hidmaestro-deep-dive.md
+      - Driver Installation Internals: reference/driver-installation-internals.md
+      - DSU Motion Server: reference/dsu-motion-server.md
+      - DSU Protocol: reference/dsu-protocol.md
+      - Remote Link Internals: reference/remote-link-internals.md
+      - Steam Workshop Import Internals: reference/steam-workshop-import-internals.md
+      - Controller Audio Internals: reference/controller-audio-internals.md
+      - Wheel Force Feedback Internals: reference/wheel-ffb-internals.md
+      - MIDI Input Internals: reference/midi-input-internals.md
+      - Wii Controllers Internals: reference/wii-controllers-internals.md
+      - 2D Overlay System: reference/2d-overlay-system.md
+      - 3D Model System: reference/3d-model-system.md
+      - Build and Publish: reference/build-and-publish.md

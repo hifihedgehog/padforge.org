@@ -1,0 +1,4372 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/features/mappings/">
+      
+      
+        <link rel="prev" href="../virtual-controllers/">
+      
+      
+        <link rel="next" href="../stick-deadzones/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Button and Axis Mappings - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#button-and-axis-mappings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Button and Axis Mappings
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping grid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-ways-to-bind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three ways to bind
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Three ways to bind">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Record
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-source-dropdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Source dropdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Source dropdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-dropdown-vs-recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use dropdown vs. recording
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-map-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Map All
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-sources-per-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple sources per row
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multiple sources per row">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-source-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-source options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direction-badges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direction badges
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combine-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combine modes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Combine modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stick-trim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stick Trim
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-formula-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom formula editor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom formula editor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operator-palette" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator palette
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live preview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starter-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Starter recipes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source kinds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modifiers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modifiers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inv-invert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inv (Invert)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#half-half-axis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Half (Half-axis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bidirectional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bidirectional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descriptor-prefixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descriptor prefixes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shift-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shift layers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#axis-to-button-deadzone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis-to-Button Deadzone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Axis-to-Button Deadzone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mapping-a-centered-axis-to-two-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping a centered axis to two buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raw-descriptor-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw descriptor names
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gamepad-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gamepad sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#named-input-device-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Named input-device sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motion-passthrough-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion passthrough sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#copy-paste-copy-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Copy, Paste, Copy From
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Copy, Paste, Copy From">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cross-type-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-type translation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-directinput-mappings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom DirectInput mappings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom DirectInput mappings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clone-device-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clone Device 1:1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping grid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-ways-to-bind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three ways to bind
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Three ways to bind">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Record
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-source-dropdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Source dropdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Source dropdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-dropdown-vs-recording" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use dropdown vs. recording
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-map-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Map All
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-sources-per-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple sources per row
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multiple sources per row">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-source-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-source options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direction-badges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direction badges
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combine-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combine modes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Combine modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stick-trim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stick Trim
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-formula-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom formula editor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom formula editor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operator-palette" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator palette
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live preview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starter-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Starter recipes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source kinds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modifiers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modifiers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inv-invert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inv (Invert)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#half-half-axis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Half (Half-axis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bidirectional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bidirectional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descriptor-prefixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descriptor prefixes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shift-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shift layers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#axis-to-button-deadzone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis-to-Button Deadzone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Axis-to-Button Deadzone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mapping-a-centered-axis-to-two-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping a centered axis to two buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raw-descriptor-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw descriptor names
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gamepad-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gamepad sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#named-input-device-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Named input-device sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motion-passthrough-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion passthrough sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#copy-paste-copy-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Copy, Paste, Copy From
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Copy, Paste, Copy From">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cross-type-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-type translation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-directinput-mappings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom DirectInput mappings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom DirectInput mappings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clone-device-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clone Device 1:1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="button-and-axis-mappings">Button and Axis Mappings<a class="headerlink" href="#button-and-axis-mappings" title="Permanent link">&para;</a></h1>
+<p><em>The Mappings tab is per virtual controller. One table per slot, no matter how many physical devices are assigned. Cross-device input combines naturally inside a single row.</em></p>
+<p><img alt="Button and axis mapping grid with source, value, and record columns" src="../../images/pad-mappings.png" /></p>
+<hr />
+<h2 id="mapping-grid">Mapping grid<a class="headerlink" href="#mapping-grid" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Output</strong></td>
+<td>The virtual output this row controls ("A", "Left Stick X", "D-Pad Up"). What the game sees.</td>
+</tr>
+<tr>
+<td><strong>Source</strong></td>
+<td>One or more physical inputs that drive this output. Pick by hand, use Record, or click <strong>+ Add source</strong> to add another. Sources get letter tags <strong>a</strong>, <strong>b</strong>, <strong>c</strong>, … in the order you add them.</td>
+</tr>
+<tr>
+<td><strong>Value</strong></td>
+<td>Live readout of the row's combined output. Updates in real time so you can verify on the spot.</td>
+</tr>
+<tr>
+<td><strong>Combine</strong></td>
+<td>How multiple sources merge into the row's output. Hidden until a row has two or more sources. See <a href="#combine-modes">Combine modes</a>.</td>
+</tr>
+<tr>
+<td><strong>Record</strong></td>
+<td>Press a button or move an axis on any assigned physical controller. PadForge fills in the source automatically.</td>
+</tr>
+<tr>
+<td><strong>Clear</strong></td>
+<td>Removes every source on the row, resets per-source options to defaults, and blanks the dropdowns.</td>
+</tr>
+<tr>
+<td><strong>Options</strong></td>
+<td>Per-source toggles: <strong>Kind</strong>, <strong>Inv</strong> (Invert), <strong>Half</strong> (Half-axis), <strong>Bidirectional</strong>, <strong>Deadzone</strong>. Axes-only options stay hidden for button-only sources.</td>
+</tr>
+<tr>
+<td><strong>Axis-to-Button Deadzone</strong></td>
+<td>Slider (0-100%) for how far an axis must move before a discrete output fires. Per source. See <a href="#axis-to-button-deadzone">Axis-to-Button Deadzone</a>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets.</p>
+</blockquote>
+<p>Rows group by category: <strong>Buttons</strong> (face, shoulder, stick clicks, system), <strong>Left Stick / Right Stick</strong> (X and Y axes), <strong>Triggers</strong> (left and right), <strong>D-Pad</strong> (four directions).</p>
+<hr />
+<h2 id="three-ways-to-bind">Three ways to bind<a class="headerlink" href="#three-ways-to-bind" title="Permanent link">&para;</a></h2>
+<h3 id="1-record">1. Record<a class="headerlink" href="#1-record" title="Permanent link">&para;</a></h3>
+<p>The fastest way to assign one source.</p>
+<ol>
+<li>Click <strong>Record</strong> on the target row.</li>
+<li>The button changes to "Recording..." and the row pulses blue.</li>
+<li>Press the button or move the axis on any physical controller assigned to this slot.</li>
+<li>PadForge detects the input, fills in the source, and stops recording.</li>
+</ol>
+<p>PadForge detects buttons (first press), axes (movement past a threshold), D-pad / POV directions, and mouse axes.</p>
+<blockquote>
+<p><strong>Tip:</strong> Move only the input you want. Wiggling a stick while pressing a button can catch the stick instead. Push sticks firmly and pull triggers far enough to cross the detection threshold.</p>
+</blockquote>
+<h3 id="2-source-dropdown">2. Source dropdown<a class="headerlink" href="#2-source-dropdown" title="Permanent link">&para;</a></h3>
+<p>Each source has a cascading dropdown: first pick the device, then the input. The manual alternative to recording.</p>
+<ul>
+<li><strong>Recognized gamepads</strong> (Xbox, DualSense, DualShock 4, DualShock 3, Switch Pro, etc.) show friendly names. "A", "B", "Left Stick X", "Right Trigger".</li>
+<li><strong>Raw or unrecognized devices</strong> (generic joysticks, racing wheels, flight sticks, Force Raw Joystick Mode) show numbered names. "Button 0", "Axis 0", "POV 0 Up".</li>
+<li><strong>All raw buttons</strong> are listed, including ones past the standard gamepad set of 11. Arcade encoders and multi-button fight sticks that expose a dozen or more buttons show every one in the dropdown for mapping.</li>
+<li><strong>Offline devices</strong> keep their last known inputs. If a controller is disconnected, its dropdown still shows the full input list from the previous session. You can edit mappings without the device plugged in.</li>
+</ul>
+<p>Picking an input assigns it on the spot. Same result as recording. The blank entry at the top clears the source.</p>
+<h4 id="when-to-use-dropdown-vs-recording">When to use dropdown vs. recording<a class="headerlink" href="#when-to-use-dropdown-vs-recording" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Dropdown</th>
+<th>Recording</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>You know the exact input you want ("Axis 3")</td>
+<td>You're setting up a new controller from scratch</td>
+</tr>
+<tr>
+<td>Recording caught the wrong input</td>
+<td>You want to press each button in turn</td>
+</tr>
+<tr>
+<td>The input is hard to isolate physically (a specific D-pad direction)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Tip:</strong> If recording keeps catching the wrong input (a stick when you meant a button), use the dropdown to pick the exact source by hand.</p>
+</blockquote>
+<h3 id="3-map-all">3. Map All<a class="headerlink" href="#3-map-all" title="Permanent link">&para;</a></h3>
+<p><strong>Map All</strong> walks through every row in order. The fastest way to set up a controller from scratch.</p>
+<ol>
+<li>Click <strong>Map All</strong> (on the Controller tab or the Mappings tab toolbar).</li>
+<li>PadForge highlights the first row and starts recording.</li>
+<li>A blue prompt shows which output it expects ("Press A").</li>
+<li>Press the matching button or move the matching axis.</li>
+<li>PadForge captures the input and moves to the next row.</li>
+<li>Repeat until done. Click <strong>Stop</strong> (or press Escape) to stop early.</li>
+</ol>
+<p>Rows that already have a source are still in the sequence. Pressing an input overwrites the existing source. Skipping keeps it.</p>
+<p>On PlayStation virtual controllers, <strong>Touchpad Click</strong> is appended to the recording sequence as the final step. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.</p>
+<blockquote>
+<p><strong>Tip:</strong> Start with Map All to assign everything in one pass, then fine-tune individual rows.</p>
+</blockquote>
+<hr />
+<h2 id="auto-mapping">Auto-mapping<a class="headerlink" href="#auto-mapping" title="Permanent link">&para;</a></h2>
+<p>When you assign a recognized gamepad (Xbox, DualSense, DualShock 4, Switch Pro, etc.) to a slot, PadForge fills in default rows matching the standard layout. All sticks, triggers, buttons, and D-pad directions pre-assigned.</p>
+<p>Auto-mapping only binds inputs the device actually exposes. A pad with no analog sticks, like a Wii Remote, gets no stick rows at all, so its virtual sticks rest at center instead of pinning to a corner.</p>
+<p>Assigning a second physical device to the same slot extends existing rows with new sources rather than overwriting them. The combine mode picks per output type:</p>
+<ul>
+<li><strong>Buttons and D-pad directions:</strong> Either (any source fires the output).</li>
+<li><strong>Sticks and triggers:</strong> Strongest (the source pushing hardest wins).</li>
+</ul>
+<p>Existing custom rows are left alone. Auto-mapping never clobbers a row you edited by hand.</p>
+<p>Unrecognized devices (generic joysticks, flight sticks, raw-mode devices) do not get auto-mapping. Use Map All, recording, or the source dropdown to set them up.</p>
+<hr />
+<h2 id="multiple-sources-per-row">Multiple sources per row<a class="headerlink" href="#multiple-sources-per-row" title="Permanent link">&para;</a></h2>
+<p>A row can drive its output from any number of physical inputs, across any combination of assigned devices.</p>
+<h3 id="adding-sources">Adding sources<a class="headerlink" href="#adding-sources" title="Permanent link">&para;</a></h3>
+<p>Click <strong>+ Add source</strong> on any existing source to add another. The new source gets the next letter tag (<strong>a</strong> is the first, <strong>b</strong> the second, <strong>c</strong> the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.</p>
+<h3 id="per-source-options">Per-source options<a class="headerlink" href="#per-source-options" title="Permanent link">&para;</a></h3>
+<p>Each source carries its own settings:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kind</strong></td>
+<td>How the source is read. Direct, Incremental, Invert On Hold, or Ramp. See <a href="#source-kinds">Source kinds</a>.</td>
+</tr>
+<tr>
+<td><strong>Inv</strong></td>
+<td>Flips the source's value sign before the combine step.</td>
+</tr>
+<tr>
+<td><strong>Half</strong></td>
+<td>Treats a bipolar axis source as half-range (one side of center only).</td>
+</tr>
+<tr>
+<td><strong>Bidirectional</strong></td>
+<td>Half-axis only. Fires the axis-to-button gate when the input moves past the deadzone in either direction from center. Renamed from "Either" in 3.2.</td>
+</tr>
+<tr>
+<td><strong>Deadzone</strong></td>
+<td>Per-source axis-to-button activation threshold. See <a href="#axis-to-button-deadzone">Axis-to-Button Deadzone</a>.</td>
+</tr>
+<tr>
+<td><strong>Sensitivity</strong></td>
+<td>A per-source multiplier with a reset button, 0.1–5.0, default 1.0. Above 1.0 = more sensitive, below 1.0 = less. On a plain axis or slider source, including the <a href="#gamepad-sources">Gamepad sources</a>, it scales the read directly: values above 1.0 reach full deflection with less travel, and the same scaling applies when the axis feeds a button through the Axis-to-Button Deadzone. On a gyro source, 1.0 is the engine default (500°/s reaches full deflection). On a Mouse Position source, 1.0 reaches full stick deflection at 10% of screen width from center. On IR Pointer and Mouse Motion sources, it scales that family's read. Each source shows exactly one Sensitivity slider.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="direction-badges">Direction badges<a class="headerlink" href="#direction-badges" title="Permanent link">&para;</a></h3>
+<p>When a button, a D-pad direction, or a touchpad click feeds a stick axis, the row shows a direction badge next to the source. It marks which way that press drives the stick:</p>
+<ul>
+<li><strong>→ +</strong> the press pushes the stick toward the positive side.</li>
+<li><strong>← −</strong> the press pushes the stick toward the negative side.</li>
+</ul>
+<p>Toggling <strong>Inv</strong> on the source flips the badge, so it always matches what the press does at runtime. Axis and slider sources carry their own sign and get no badge. Trigger rows get no badge either.</p>
+<hr />
+<h2 id="combine-modes">Combine modes<a class="headerlink" href="#combine-modes" title="Permanent link">&para;</a></h2>
+<p>The Combine picker is hidden on rows with one source (there is nothing to combine). It appears as soon as you add a second source.</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strongest</strong></td>
+<td>Use whichever source has the strongest push</td>
+</tr>
+<tr>
+<td><strong>Combined</strong></td>
+<td>Add the sources together</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>Halfway between the sources</td>
+</tr>
+<tr>
+<td><strong>Either</strong></td>
+<td>Fire when any source is active (good for buttons)</td>
+</tr>
+<tr>
+<td><strong>Both</strong></td>
+<td>Fire only when all sources are active</td>
+</tr>
+<tr>
+<td><strong>Only one</strong></td>
+<td>Fire only when exactly one source is active</td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td>Build your own with the <a href="#custom-formula-editor">formula editor</a></td>
+</tr>
+<tr>
+<td><strong>Stick Trim</strong></td>
+<td>The last source trims the held trigger level up or down. Trigger rows only. See <a href="#stick-trim">Stick Trim</a></td>
+</tr>
+</tbody>
+</table>
+<p>For axis rows, <strong>Strongest</strong> is the auto-mapping default. For button and D-pad rows, <strong>Either</strong> is the default.</p>
+<h3 id="stick-trim">Stick Trim<a class="headerlink" href="#stick-trim" title="Permanent link">&para;</a></h3>
+<p><strong>Stick Trim</strong> shows up only on rows that target a trigger and carry two or more sources. The last source acts as a trim stick. While the other sources hold the trigger down, pushing that stick up raises the held level and pulling it down lowers it. Built for fine throttle and brake control on pads without analog triggers.</p>
+<p>Picking it opens a settings strip under the row:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Trim Deadzone</strong></td>
+<td>Stick deflection below this percentage is ignored, so steering with the same stick never nudges the held level. Default 25%.</td>
+</tr>
+<tr>
+<td><strong>Trim Speed</strong></td>
+<td>How fast a fully deflected stick slides the level, in percent of trigger range per second. 100 sweeps empty to full in one second.</td>
+</tr>
+<tr>
+<td><strong>Reset on Release</strong></td>
+<td>On, releasing the trigger snaps the held level back to full so the next press starts at 100%. Off keeps the trimmed level across releases.</td>
+</tr>
+</tbody>
+</table>
+<p>Each setting has its own reset button.</p>
+<hr />
+<h2 id="custom-formula-editor">Custom formula editor<a class="headerlink" href="#custom-formula-editor" title="Permanent link">&para;</a></h2>
+<p>Pick <strong>Custom</strong> in the Combine column to open the formula editor under the row.</p>
+<h3 id="variables">Variables<a class="headerlink" href="#variables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Refers to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>a</strong>, <strong>b</strong>, <strong>c</strong>, …</td>
+<td>The row's sources in order. <strong>a</strong> is the first source, <strong>b</strong> the second, and so on.</td>
+</tr>
+<tr>
+<td><strong>s[0]</strong>, <strong>s[1]</strong>, …</td>
+<td>Index-based alias for the same sources. <strong>s[0]</strong> is <strong>a</strong>, <strong>s[1]</strong> is <strong>b</strong>, …</td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-palette">Operator palette<a class="headerlink" href="#operator-palette" title="Permanent link">&para;</a></h3>
+<p>The operator palette sits next to the formula box. Drag an operator into the formula or click <strong>Insert</strong> to drop it at the cursor.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Operators</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arithmetic</td>
+<td><code>+</code>, <code>−</code>, <code>×</code>, <code>÷</code>, <code>(</code>, <code>)</code>, <code>-a</code></td>
+</tr>
+<tr>
+<td>Comparisons</td>
+<td><code>&lt;</code>, <code>&gt;</code>, <code>≤</code>, <code>≥</code>, <code>=</code>, <code>≠</code></td>
+</tr>
+<tr>
+<td>Logic</td>
+<td><code>&amp;&amp;</code>, <code>\|\|</code>, <code>!</code></td>
+</tr>
+<tr>
+<td>Branch</td>
+<td><code>if ? : else</code></td>
+</tr>
+<tr>
+<td>Math</td>
+<td><code>abs</code>, <code>min</code>, <code>max</code>, <code>clamp</code>, <code>sign</code>, <code>lerp</code>, <code>round</code>, <code>sqrt</code></td>
+</tr>
+<tr>
+<td>Constants</td>
+<td><code>0.5</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="live-preview">Live preview<a class="headerlink" href="#live-preview" title="Permanent link">&para;</a></h3>
+<p>Under the formula box, PadForge shows:</p>
+<ul>
+<li>The formula's current numeric value, recomputed every frame.</li>
+<li>Parse status: <strong>✓ valid</strong>, <strong>parse error</strong>, or <strong>✓ empty (evaluates to 0)</strong>.</li>
+<li>A "refs" line listing any variables the formula uses that have no source yet ("a and c have no source, treated as 0").</li>
+</ul>
+<h3 id="starter-recipes">Starter recipes<a class="headerlink" href="#starter-recipes" title="Permanent link">&para;</a></h3>
+<p>The <strong>Starter recipes</strong> section lists ready-made formulas you can drop into the box and tweak.</p>
+<table>
+<thead>
+<tr>
+<th>Recipe</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Half scale</strong></td>
+<td><code>a</code> at half strength.</td>
+</tr>
+<tr>
+<td><strong>Quarter scale</strong></td>
+<td><code>a</code> at quarter strength.</td>
+</tr>
+<tr>
+<td><strong>Reverse a</strong></td>
+<td>Flip <code>a</code>'s sign.</td>
+</tr>
+<tr>
+<td><strong>Cap to ±1</strong></td>
+<td>Sum <code>a + b</code> but never exceed ±1.</td>
+</tr>
+<tr>
+<td><strong>Weighted blend</strong></td>
+<td>70% of <code>a</code> plus 30% of <code>b</code>.</td>
+</tr>
+<tr>
+<td><strong>Difference</strong></td>
+<td><code>a</code> minus <code>b</code>.</td>
+</tr>
+<tr>
+<td><strong>a unless idle</strong></td>
+<td>Use <code>a</code>. If <code>a</code> is at rest, fall back to <code>b</code>.</td>
+</tr>
+<tr>
+<td><strong>Threshold gate</strong></td>
+<td>Fire fully if <code>a</code> is past halfway, otherwise zero. Turns an axis into a button.</td>
+</tr>
+<tr>
+<td><strong>Both pressed</strong></td>
+<td>Fire only when <code>a</code> and <code>b</code> are both pushed.</td>
+</tr>
+<tr>
+<td><strong>Stronger wins</strong></td>
+<td>Whichever of <code>a</code> or <code>b</code> is pushed harder, with sign.</td>
+</tr>
+<tr>
+<td><strong>a alone</strong></td>
+<td>Fire when <code>a</code> goes from rest to active.</td>
+</tr>
+<tr>
+<td><strong>a and b</strong></td>
+<td>Fire only when both <code>a</code> and <code>b</code> are active. A chord.</td>
+</tr>
+<tr>
+<td><strong>a or b</strong></td>
+<td>Fire when either <code>a</code> or <code>b</code> is active.</td>
+</tr>
+<tr>
+<td><strong>a but not b</strong></td>
+<td>Fire when <code>a</code> is active and <code>b</code> is not.</td>
+</tr>
+<tr>
+<td><strong>Axis past 50%</strong></td>
+<td>Fire when axis <code>a</code> is deflected more than 50% from rest.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="source-kinds">Source kinds<a class="headerlink" href="#source-kinds" title="Permanent link">&para;</a></h2>
+<p>The <strong>Kind</strong> dropdown on a source picks how PadForge evaluates that source per frame.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>What it reads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Direct</strong></td>
+<td>The source descriptor's raw value. The default.</td>
+</tr>
+<tr>
+<td><strong>Incremental</strong></td>
+<td>Ramps an accumulator via Up / Down buttons you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max).</td>
+</tr>
+<tr>
+<td><strong>Invert On Hold</strong></td>
+<td>The inner source's value, flipped while a modifier button you pick is held.</td>
+</tr>
+<tr>
+<td><strong>Ramp</strong></td>
+<td>A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the <strong>Attack</strong> time. Releasing eases back to center over the <strong>Release</strong> time when <strong>Autocenter</strong> is on, or holds the last position when it is off. <strong>Reverse</strong> scales how fast it returns when you press the opposite key. Stick-axis targets only.</td>
+</tr>
+</tbody>
+</table>
+<p>Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources read the descriptor, then flip while the modifier is held. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button captures a kind's own inputs in sequence (Up, then Down).</p>
+<hr />
+<h2 id="modifiers">Modifiers<a class="headerlink" href="#modifiers" title="Permanent link">&para;</a></h2>
+<p>The per-source toggles in the Options column. These are per source, not per row.</p>
+<h3 id="inv-invert">Inv (Invert)<a class="headerlink" href="#inv-invert" title="Permanent link">&para;</a></h3>
+<p>Flips the source's value sign. Push a stick up and the source reports "down". Use this when a controller reports an axis opposite to what the virtual output expects.</p>
+<h3 id="half-half-axis">Half (Half-axis)<a class="headerlink" href="#half-half-axis" title="Permanent link">&para;</a></h3>
+<p>Treats a bipolar axis source as half-range (0 to max) instead of full-range (-max to +max). Use this when:</p>
+<ul>
+<li>Mapping a trigger (0-100%) to a full stick axis (-100% to +100%).</li>
+<li>Mapping a stick axis to a trigger where only positive deflection should register.</li>
+</ul>
+<h3 id="bidirectional">Bidirectional<a class="headerlink" href="#bidirectional" title="Permanent link">&para;</a></h3>
+<p>Half-axis only. The axis-to-button gate fires on absolute deflection past the deadzone, so either side of center counts. Renamed from "Either" in 3.2. Inv has no effect in this mode (mirroring around center already covers both directions).</p>
+<h3 id="descriptor-prefixes">Descriptor prefixes<a class="headerlink" href="#descriptor-prefixes" title="Permanent link">&para;</a></h3>
+<p>On raw or unrecognized devices, the Inv and Half toggles also surface as prefixes on the descriptor itself.</p>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>I</strong></td>
+<td>Inverted</td>
+<td>"IAxis 1"</td>
+</tr>
+<tr>
+<td><strong>H</strong></td>
+<td>Half-axis</td>
+<td>"HAxis 0"</td>
+</tr>
+<tr>
+<td><strong>IH</strong></td>
+<td>Both</td>
+<td>"IHAxis 2"</td>
+</tr>
+</tbody>
+</table>
+<p>Recognized gamepads show friendly names instead. You only see these prefixes on numbered raw descriptors.</p>
+<hr />
+<h2 id="shift-layers">Shift layers<a class="headerlink" href="#shift-layers" title="Permanent link">&para;</a></h2>
+<p>A shift layer is a second mapping table on the same slot, active only while a button is held, a chord is engaged, or an axis is past a threshold. Same outputs, different bindings. Useful for double-duty controllers (driving / on-foot, weapon swap, menu nav) without juggling profiles.</p>
+<p>Each slot can carry any number of shift layers, each with its own activator and its own row set. Unmapped targets on a layer fall through to the Base layer by default (toggleable per layer).</p>
+<p>See <a href="../../guides/shift-layers/">Shift Layers</a> for the full activator reference, mode list (Hold, Toggle, Latch, Cycle, Sticky, No Button), and per-layer options.</p>
+<hr />
+<h2 id="axis-to-button-deadzone">Axis-to-Button Deadzone<a class="headerlink" href="#axis-to-button-deadzone" title="Permanent link">&para;</a></h2>
+<p>When a source feeds a discrete output (button, D-pad direction, keyboard key, MIDI note, or Extended HID button), the <strong>Axis-to-Button Deadzone</strong> column controls how far the source must travel before the output fires. This stops small joystick movement from triggering button presses by accident.</p>
+<ul>
+<li>Each source has its own slider (0-100%) with an editable text field and a reset button.</li>
+<li>The default is <strong>50%</strong>. The source must pass the halfway point to fire.</li>
+<li>The column is only enabled when the source is an axis or slider and the target is a discrete output. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the <a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a> tabs for those.</li>
+<li>A higher value (80%) means a firmer push before the button fires. A lower value (20%) makes it more sensitive.</li>
+<li>Values persist per source and ride along with Copy, Paste, and Copy From operations.</li>
+</ul>
+<h3 id="mapping-a-centered-axis-to-two-buttons">Mapping a centered axis to two buttons<a class="headerlink" href="#mapping-a-centered-axis-to-two-buttons" title="Permanent link">&para;</a></h3>
+<p>Flight sticks, racing wheels, and other devices with a centered axis (resting at 50%) need a special setup when mapped to two opposing buttons (left and right). Two rows, one source each.</p>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Source</th>
+<th>Inv</th>
+<th>Half</th>
+<th>Deadzone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Left</strong></td>
+<td>Axis 0</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>50%</td>
+</tr>
+<tr>
+<td><strong>Right</strong></td>
+<td>Axis 0</td>
+<td>No</td>
+<td>Yes</td>
+<td>50%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why this works:</strong></p>
+<ol>
+<li><strong>Half</strong> tells PadForge to use only one side of the axis range (center to edge) instead of the full swing.</li>
+<li><strong>Inv</strong> on the left direction flips the active half. "Left of center" fires "Left". "Right of center" fires "Right".</li>
+<li><strong>Deadzone at 50%</strong> means the source must travel 50% of the half range (25% of the full range) before the button fires. That gives a comfortable deadzone around the center rest position.</li>
+</ol>
+<p>Without <strong>Half</strong>, a 50% deadzone would reference the full axis range, requiring 75% total travel to fire. Much less intuitive. With <strong>Half</strong> on, the deadzone percentage applies only within the active half, so the numbers behave the way you expect.</p>
+<blockquote>
+<p><strong>Tip:</strong> Start with 50% deadzone and adjust up or down depending on how much stick travel you want before the button fires. A higher value gives a wider neutral zone around center. A lower value makes the button respond sooner.</p>
+</blockquote>
+<hr />
+<h2 id="raw-descriptor-names">Raw descriptor names<a class="headerlink" href="#raw-descriptor-names" title="Permanent link">&para;</a></h2>
+<p>For unrecognized devices or Force Raw Joystick Mode, the source picker shows numbered descriptors instead of friendly names.</p>
+<table>
+<thead>
+<tr>
+<th>Descriptor</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Button 0</strong>, <strong>Button 1</strong>, ...</td>
+<td>Physical button by zero-based index</td>
+</tr>
+<tr>
+<td><strong>Axis 0</strong>, <strong>Axis 1</strong>, ...</td>
+<td>Physical axis by zero-based index. Typical order: LX(0), LY(1), LT(2), RX(3), RY(4), RT(5), but varies by device</td>
+</tr>
+<tr>
+<td><strong>POV 0 Up</strong>, <strong>POV 0 Right</strong>, ...</td>
+<td>Direction on POV hat 0 (most controllers have one)</td>
+</tr>
+<tr>
+<td><strong>Slider 0</strong>, <strong>Slider 1</strong></td>
+<td>Slider axes (flight sticks, throttles)</td>
+</tr>
+<tr>
+<td><strong>Mouse Speed X</strong>, <strong>Mouse Speed Y</strong></td>
+<td>Mouse movement speed (velocity) axes</td>
+</tr>
+<tr>
+<td><strong>Mouse Position X</strong>, <strong>Mouse Position Y</strong></td>
+<td>Absolute desktop cursor position. Screen center reads 0, and offset from center normalizes to the stick range. Primary monitor only.</td>
+</tr>
+<tr>
+<td><strong>Mouse Motion X</strong>, <strong>Mouse Motion Y</strong></td>
+<td>Optical mouse motion on a Switch 2 Joy-Con. Map it to sticks, buttons, or scroll. Mouse Motion X can drive horizontal scroll.</td>
+</tr>
+<tr>
+<td><strong>Gyro Pitch</strong>, <strong>Gyro Yaw</strong>, <strong>Gyro Roll</strong></td>
+<td>Calibrated gyro rate axes on devices with motion</td>
+</tr>
+<tr>
+<td><strong>Gyro Horizontal (Yaw + Roll)</strong></td>
+<td>Blended horizontal-turn axis that combines yaw and roll, so aiming works the same whether the pad is held flat or upright</td>
+</tr>
+<tr>
+<td><strong>IR Pointer X</strong>, <strong>IR Pointer Y</strong></td>
+<td>Wii Remote pointer position from the sensor bar</td>
+</tr>
+<tr>
+<td><strong>IR Offscreen</strong></td>
+<td>Fires when a Wii Remote's camera loses sight of the sensor bar. The lightgun reload input.</td>
+</tr>
+<tr>
+<td><strong>IR Brightness</strong></td>
+<td>Right Joy-Con IR camera. Rises as an object covers or nears the camera window.</td>
+</tr>
+<tr>
+<td><strong>Balance Total Weight</strong></td>
+<td>Total weight on a Wii Balance Board</td>
+</tr>
+<tr>
+<td><strong>Balance Lean X</strong>, <strong>Balance Lean Y</strong></td>
+<td>Weight shift left / right and forward / back on a Wii Balance Board</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>I</strong> and <strong>H</strong> <a href="#descriptor-prefixes">modifier prefixes</a> can appear before any of these.</p>
+<p>Touchpad entries also ride the raw list on pads with a touchpad:</p>
+<table>
+<thead>
+<tr>
+<th>Descriptor</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Touchpad 1 Finger 1 X / Y</strong>, <strong>Touchpad Click</strong></td>
+<td>Finger position and the hard click. See <a href="../touchpad/">Touchpad</a> for the full touchpad surface.</td>
+</tr>
+<tr>
+<td><strong>Touchpad 1 Finger 1 Pressure</strong></td>
+<td>The finger's reported press level, 0 to 1. Pads without a force sensor report full while the finger is down, so it also works as a plain touch contact. One entry per touchpad and finger.</td>
+</tr>
+<tr>
+<td><strong>Touchpad 1 Pointer X / Y</strong></td>
+<td>Absolute finger position for cursor warping. Bind to Mouse X/Y on a Keyboard + Mouse slot and the cursor jumps to where the finger sits. Single-pad devices also offer <strong>Left Half</strong> and <strong>Right Half</strong> variants. Tuning lives on the <a href="../touchpad/">Touchpad</a> tab's Absolute Pointer card.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="gamepad-sources">Gamepad sources<a class="headerlink" href="#gamepad-sources" title="Permanent link">&para;</a></h2>
+<p>Every recognized gamepad's source dropdown carries a <strong>Gamepad</strong> group next to its device-specific entries. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") instead of pinning it to one physical pad. The row then reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework: build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Sources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Face buttons</td>
+<td>Gamepad A, Gamepad B, Gamepad X, Gamepad Y</td>
+</tr>
+<tr>
+<td>Shoulders</td>
+<td>Gamepad Left Shoulder, Gamepad Right Shoulder</td>
+</tr>
+<tr>
+<td>System</td>
+<td>Gamepad Back, Gamepad Start, Gamepad Guide</td>
+</tr>
+<tr>
+<td>Stick clicks</td>
+<td>Gamepad Left Stick Button, Gamepad Right Stick Button</td>
+</tr>
+<tr>
+<td>Paddles</td>
+<td>Gamepad Right Paddle 1, Gamepad Left Paddle 1, Gamepad Right Paddle 2, Gamepad Left Paddle 2</td>
+</tr>
+<tr>
+<td>D-pad</td>
+<td>Gamepad D-Pad Up, Down, Left, Right</td>
+</tr>
+<tr>
+<td>Stick axes</td>
+<td>Gamepad Left Stick X, Left Stick Y, Right Stick X, Right Stick Y</td>
+</tr>
+<tr>
+<td>Triggers</td>
+<td>Gamepad Left Trigger, Gamepad Right Trigger</td>
+</tr>
+</tbody>
+</table>
+<p>Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (<strong>Gyro Pitch</strong>, <strong>Touchpad 1 Finger 1 X</strong>), so they have no Gamepad-prefixed twin. Two more device-portable entries sit beside the family on recognized gamepads: <strong>Flick Stick (Right Stick)</strong> and <strong>Flick Stick (Left Stick)</strong>, which read the whole stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See <a href="../stick-deadzones/#flick-stick">flick stick</a>.</p>
+<p>The source dropdown leads with an <strong>(Any device)</strong> group carrying the Gamepad family plus the device-portable gyro, touchpad, and flick stick entries. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
+<p>Profiles imported from the <a href="../../guides/steam-workshop-import/">Steam Workshop</a> are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Stick and trigger Gamepad sources take the per-source <strong>Sensitivity</strong> slider like any plain axis.</p>
+<hr />
+<h2 id="named-input-device-sources">Named input-device sources<a class="headerlink" href="#named-input-device-sources" title="Permanent link">&para;</a></h2>
+<p>Some assigned devices show named buttons instead of numbered descriptors. They appear in the source dropdown under their device, grouped like any gamepad.</p>
+<ul>
+<li><strong>Consumer Control keys.</strong> A media keyboard's consumer collection shows its keys by name (Play/Pause, Mute, Volume Up, Next Track, and the rest). Map one to a virtual button. A usage outside the known set reads as "Consumer 0xNNNN".</li>
+<li><strong>NFC tags.</strong> An NFC reader shows <strong>Any NFC Tag</strong> plus one entry per registered tag. A tap fires the source as a momentary press. Register and name tags on the <a href="../devices/">Devices</a> page. See <a href="../nfc-tags/">NFC Tags</a>.</li>
+</ul>
+<p>Both also work as <a href="../../guides/macros/">Macros</a> Input Device triggers.</p>
+<hr />
+<h2 id="motion-passthrough-sources">Motion passthrough sources<a class="headerlink" href="#motion-passthrough-sources" title="Permanent link">&para;</a></h2>
+<p>Pads with a motion sensor add whole-sensor sources to the picker. Each binds the device's full three-axis stream to the virtual controller's motion output in one row, separate from the individual <strong>Gyro Pitch / Yaw / Roll</strong> axes.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it feeds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Motion Gyro</strong></td>
+<td>The device's full gyro stream to the virtual controller's motion gyro output.</td>
+</tr>
+<tr>
+<td><strong>Motion Accelerometer</strong></td>
+<td>The device's full accelerometer stream to the virtual controller's motion accelerometer output.</td>
+</tr>
+<tr>
+<td><strong>Nunchuk Accelerometer</strong> / <strong>Left Joy-Con Accelerometer</strong></td>
+<td>The accelerometer on an attached Nunchuk or left Joy-Con instead of the main body. Shows as <strong>Aux Motion Accelerometer</strong> on other devices.</td>
+</tr>
+</tbody>
+</table>
+<p>Auto-mapping adds the motion rows for pads that report a sensor. Delete a motion row and you can re-add it from the source dropdown. See <a href="../../guides/gyro/">Gyro</a> for calibration and tuning, and <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for broadcasting the feed to emulators.</p>
+<hr />
+<h2 id="copy-paste-copy-from">Copy, Paste, Copy From<a class="headerlink" href="#copy-paste-copy-from" title="Permanent link">&para;</a></h2>
+<p>The toolbar above the mapping grid has bulk operations.</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Clear All</strong></td>
+<td>Removes every source and resets every Axis-to-Button Deadzone to 50% for this slot.</td>
+</tr>
+<tr>
+<td><strong>Copy</strong></td>
+<td>Copies the current mapping table and every assigned device's tuning (gyro, touchpad, FFB, impulse triggers, adaptive triggers, lighting) to the clipboard.</td>
+</tr>
+<tr>
+<td><strong>Paste</strong></td>
+<td>Applies a copied table. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit.</td>
+</tr>
+<tr>
+<td><strong>Copy From</strong></td>
+<td>Same as Paste, sourced from another slot instead of the clipboard.</td>
+</tr>
+<tr>
+<td><strong>Map All</strong></td>
+<td>Starts the <a href="#3-map-all">Map All wizard</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>Multi-source rows round-trip whole. Every source on a row, its kind, every per-source option, the combine mode, and the custom formula all copy together.</p>
+<p>The per-device payload covers every assigned device on the source slot, not just the one selected at the time of Copy. Target-side devices that don't match any source entry are left alone.</p>
+<p>Per-row Copy and Paste are available from the row's context menu. Same round-trip rules apply.</p>
+<h3 id="cross-type-translation">Cross-type translation<a class="headerlink" href="#cross-type-translation" title="Permanent link">&para;</a></h3>
+<p>Copy From and Paste translate mappings between controller types automatically.</p>
+<table>
+<thead>
+<tr>
+<th>Translation</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Xbox to PlayStation</strong></td>
+<td>A → Cross, B → Circle, X → Square, Y → Triangle, LB → L1, RB → R1, etc.</td>
+</tr>
+<tr>
+<td><strong>PlayStation to Xbox</strong></td>
+<td>Cross → A, Circle → B, Square → X, Triangle → Y, etc.</td>
+</tr>
+<tr>
+<td><strong>To or from DirectInput</strong></td>
+<td>Translated via the standardized gamepad mapping</td>
+</tr>
+</tbody>
+</table>
+<p>Both buttons and axes translate. Pasting to the same controller type applies mappings unchanged.</p>
+<blockquote>
+<p><strong>Tip:</strong> Copy From saves time with multiple controllers. Set up the first, then Copy From on the rest.</p>
+</blockquote>
+<hr />
+<h2 id="custom-directinput-mappings">Custom DirectInput mappings<a class="headerlink" href="#custom-directinput-mappings" title="Permanent link">&para;</a></h2>
+<p>For Extended (HIDMaestro) slots, the mapping grid adjusts to match the active HIDMaestro profile's layout (or your override values when <strong>Customize</strong> is on).</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Rows shown</th>
+<th>Axis pool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sticks</strong></td>
+<td>X and Y per stick (0-4 sticks)</td>
+<td>2 axes per stick</td>
+</tr>
+<tr>
+<td><strong>Triggers</strong></td>
+<td>One per trigger (0-8 triggers)</td>
+<td>1 axis per trigger</td>
+</tr>
+<tr>
+<td><strong>Buttons</strong></td>
+<td>One per button (0-128 buttons)</td>
+<td>.</td>
+</tr>
+<tr>
+<td><strong>POVs</strong></td>
+<td>Four directions per POV hat (0-4 hats)</td>
+<td>.</td>
+</tr>
+</tbody>
+</table>
+<p>Sticks and triggers share a pool of 8 axes. Example: 2 sticks (4 axes) + 2 triggers (2 axes) = 6 of 8 used. Changing the DirectInput config rebuilds the mapping grid automatically.</p>
+<h3 id="clone-device-11">Clone Device 1:1<a class="headerlink" href="#clone-device-11" title="Permanent link">&para;</a></h3>
+<p><strong>Clone Device 1:1</strong> maps a physical device straight through in one click. Every axis, button, and hat on the selected device binds to the same-numbered virtual output, and the layout resizes to match the device.</p>
+<!-- SCREENSHOT: pad-extended-clone-device -->
+<p><img alt="Clone Device 1:1 confirmation dialog listing the resulting axis, button, and POV counts" src="../../images/pad-extended-clone-device.png" /></p>
+<ol>
+<li>Select the device on the slot you want to clone.</li>
+<li>Click <strong>Clone Device 1:1</strong>.</li>
+<li>Confirm the prompt. It lists the resulting layout (axes, buttons, POVs).</li>
+</ol>
+<p>The clone replaces that device's existing rows on the slot with its own inputs. If the device has more inputs than an Extended controller can carry, PadForge maps as many as fit and leaves the rest unmapped.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>An axis moves the wrong direction.</strong> Turn on <strong>Inv</strong> on that source.</li>
+<li><strong>A trigger mapped to a stick only reaches 50%.</strong> Turn on <strong>Half</strong> to expand half-range input to full-range output.</li>
+<li><strong>Recording keeps catching the wrong input.</strong> Use the <a href="#2-source-dropdown">source dropdown</a> to pick the exact input by hand.</li>
+<li><strong>Buttons or axes are missing or numbered wrong.</strong> Try Force Raw Joystick Mode on the <a href="../devices/">Devices</a> page to bypass gamepad remapping.</li>
+<li><strong>A joystick axis fires a button on the slightest touch.</strong> Raise the <a href="#axis-to-button-deadzone">Axis-to-Button Deadzone</a> on that source.</li>
+<li><strong>A centered axis mapped to two buttons fires both at rest.</strong> Turn on <strong>Half</strong> on both sources, <strong>Inv</strong> on one direction, set deadzone to 50%. See <a href="#mapping-a-centered-axis-to-two-buttons">Mapping a centered axis to two buttons</a>.</li>
+<li><strong>Two sources on the same row fight each other.</strong> Switch the row to <strong>Either</strong> (buttons) or <strong>Strongest</strong> (axes), or pick <strong>Custom</strong> and write a rule that resolves the conflict.</li>
+<li><strong>A custom formula shows "parse error".</strong> The status line points at the bad token. Common causes: a stray operator, a missing close paren, <code>=</code> used for equality instead of <code>==</code>.</li>
+</ul>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../guides/shift-layers/">Shift Layers</a>: per-slot second mapping table activated by a button, chord, or axis.</li>
+<li><a href="../visualization/">3D and 2D Visualization</a>: click-to-map from the controller model.</li>
+<li><a href="../controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
+<li><a href="../stick-deadzones/">Stick Deadzones</a>: adjust response after mapping stick axes.</li>
+<li><a href="../trigger-deadzones/">Trigger Deadzones</a>: adjust range after mapping triggers.</li>
+<li><a href="../force-feedback/">Force Feedback</a>: rumble and vibration settings.</li>
+<li><a href="../../guides/macros/">Macros</a>: trigger action sequences from button combos.</li>
+<li><a href="../devices/">Devices</a>: assign physical devices to slots before mapping.</li>
+<li><a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>: imported community configs are built from Gamepad sources.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.1.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../virtual-controllers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Virtual Controllers">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Virtual Controllers
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../stick-deadzones/" class="md-footer__link md-footer__link--next" aria-label="Next: Stick Deadzones">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Stick Deadzones
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

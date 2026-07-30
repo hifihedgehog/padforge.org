@@ -1,0 +1,4359 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/troubleshooting/">
+      
+      
+        <link rel="prev" href="../devices/wii-controllers/">
+      
+      
+        <link rel="next" href="../reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Troubleshooting - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#troubleshooting" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Troubleshooting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#no-devices-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Devices Detected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controller-detected-but-not-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Detected but Not Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-controller-not-appearing-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Controller Not Appearing in Games
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#double-input-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Double Input in Games
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rumble-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audio-bass-rumble-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio Bass Rumble Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extended-controllers-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extended Controllers Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-feedback-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force Feedback Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#midi-not-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MIDI Not Available
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-midi-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No MIDI Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#my-macro-doesnt-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My Macro Doesn't Fire
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mouse-actions-from-macros-arent-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Actions from Macros Aren't Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#always-mode-macro-wont-stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Always-Mode Macro Won't Stop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboardmouse-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboard+Mouse Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-not-saving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings Not Saving
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-wont-start-or-uac-prompt-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Won't Start or UAC Prompt Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-cpu-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High CPU Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dsu-motion-not-working-in-emulator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DSU Motion Not Working in Emulator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-controller-not-connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Controller Not Connecting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-controller-drops-on-ios-safari-after-tab-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Controller drops on iOS Safari After Tab Switch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-link-pc-not-appearing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link PC Not Appearing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-link-pairing-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link Pairing Fails
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-device-not-showing-after-pairing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared Device Not Showing After Pairing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-link-feedback-or-keyboard-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link Feedback or Keyboard Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-not-switching-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile Not Switching Automatically
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-configs-steam-workshop-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Configs (Steam Workshop) Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensitivity-curves-not-responding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity Curves Not Responding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steam-controller-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steam Controller Conflicts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buttons-map-to-wrong-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Buttons Map to Wrong Outputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-raw-joystick-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force Raw Joystick Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mouse-or-keyboard-input-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse or Keyboard Input Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stick-drift-after-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stick Drift After Calibration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#volume-macro-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volume Macro Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shift-layer-wont-engage-or-wont-turn-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shift Layer Won't Engage or Won't Turn Off
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impulse-triggers-tab-not-visible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impulse Triggers Tab Not Visible
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-expression-macro-wont-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Expression Macro Won't Fire
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchpad-overlay-doesnt-drive-the-ds4-dualsense-touchpad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpad Overlay Doesn't Drive the DS4 / DualSense Touchpad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nfc-reader-not-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NFC Reader Not Detected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media-keys-consumer-control-not-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Keys (Consumer Control) Not Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-remote-ir-pointer-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Remote IR Pointer Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#joy-con-2-mouse-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joy-Con 2 Mouse Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#battery-level-not-showing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery Level Not Showing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controller-wont-auto-disconnect-when-idle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Won't Auto-Disconnect When Idle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hd-haptic-tones-sound-wrong-or-garbled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HD Haptic Tones Sound Wrong or Garbled
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logs-and-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logs and diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#no-devices-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Devices Detected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controller-detected-but-not-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Detected but Not Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-controller-not-appearing-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Controller Not Appearing in Games
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#double-input-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Double Input in Games
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rumble-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audio-bass-rumble-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio Bass Rumble Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extended-controllers-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extended Controllers Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-feedback-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force Feedback Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#midi-not-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MIDI Not Available
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-midi-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No MIDI Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#my-macro-doesnt-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My Macro Doesn't Fire
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mouse-actions-from-macros-arent-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse Actions from Macros Aren't Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#always-mode-macro-wont-stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Always-Mode Macro Won't Stop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboardmouse-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboard+Mouse Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-not-saving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings Not Saving
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-wont-start-or-uac-prompt-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App Won't Start or UAC Prompt Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-cpu-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High CPU Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dsu-motion-not-working-in-emulator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DSU Motion Not Working in Emulator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-controller-not-connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Controller Not Connecting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-controller-drops-on-ios-safari-after-tab-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Controller drops on iOS Safari After Tab Switch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-link-pc-not-appearing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link PC Not Appearing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-link-pairing-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link Pairing Fails
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-device-not-showing-after-pairing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared Device Not Showing After Pairing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-link-feedback-or-keyboard-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link Feedback or Keyboard Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-not-switching-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile Not Switching Automatically
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-configs-steam-workshop-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Configs (Steam Workshop) Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sensitivity-curves-not-responding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity Curves Not Responding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steam-controller-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steam Controller Conflicts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buttons-map-to-wrong-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Buttons Map to Wrong Outputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-raw-joystick-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force Raw Joystick Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mouse-or-keyboard-input-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mouse or Keyboard Input Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stick-drift-after-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stick Drift After Calibration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#volume-macro-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volume Macro Issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shift-layer-wont-engage-or-wont-turn-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shift Layer Won't Engage or Won't Turn Off
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impulse-triggers-tab-not-visible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impulse Triggers Tab Not Visible
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-expression-macro-wont-fire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Expression Macro Won't Fire
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchpad-overlay-doesnt-drive-the-ds4-dualsense-touchpad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpad Overlay Doesn't Drive the DS4 / DualSense Touchpad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nfc-reader-not-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NFC Reader Not Detected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media-keys-consumer-control-not-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Keys (Consumer Control) Not Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wii-remote-ir-pointer-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wii Remote IR Pointer Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#joy-con-2-mouse-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joy-Con 2 Mouse Not Working
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#battery-level-not-showing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery Level Not Showing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controller-wont-auto-disconnect-when-idle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Won't Auto-Disconnect When Idle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hd-haptic-tones-sound-wrong-or-garbled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HD Haptic Tones Sound Wrong or Garbled
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logs-and-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logs and diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related Pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
+<p><em>Common problems and how to fix them. If your issue is not on this page, check <a href="https://github.com/hifihedgehog/PadForge/issues">GitHub Issues</a>.</em></p>
+<p><img alt="Settings page where most troubleshooting starts (driver install, polling interval, language)" src="../images/settings.png" /></p>
+<p>Related pages: <a href="../start/installation/">Installation</a>, <a href="../features/settings/">Settings</a>, <a href="../features/driver-management/">Driver Management</a>, <a href="../features/devices/">Devices</a>.</p>
+<hr />
+<h2 id="no-devices-detected">No Devices Detected<a class="headerlink" href="#no-devices-detected" title="Permanent link">&para;</a></h2>
+<p><strong>The <a href="../features/devices/">Devices</a> page is empty or the <a href="../features/dashboard/">Dashboard</a> shows "0 / 0 devices online."</strong></p>
+<ol>
+<li>Try a different USB port. Use one directly on the computer, not a hub.</li>
+<li>Try a different cable. Some cables are charge-only.</li>
+<li>Confirm <code>SDL3.dll</code> is in the PadForge folder. Re-extract the zip if missing.</li>
+<li>Restart PadForge. Some devices need a fresh launch.</li>
+<li>Check Windows Device Manager. If the device does not appear under "Human Interface Devices" or "Sound, video and game controllers," the issue is the device or its driver.</li>
+<li>For Bluetooth controllers, pair and connect in Windows Bluetooth settings before starting PadForge.</li>
+<li>If HidHide is installed, open the HidHide Client and add PadForge to the whitelist. Or disable <strong>"Hide devices from games"</strong> on the <a href="../features/settings/">Settings</a> page to test.</li>
+<li>Close other controller tools (DS4Windows, BetterJoy, reWASD, x360ce). They may intercept access.</li>
+<li>A DualShock 3 pairs through PadForge itself, with no separate driver tool to install. Connect it by USB, click <strong>Pair</strong> on the <a href="../features/devices/">Devices</a> page, and follow the dialog. When it finishes, unplug the pad and press the PS button to connect over Bluetooth. It then streams with rumble and the player-number LED.</li>
+</ol>
+<hr />
+<h2 id="controller-detected-but-not-mapping">Controller Detected but Not Mapping<a class="headerlink" href="#controller-detected-but-not-mapping" title="Permanent link">&para;</a></h2>
+<p><strong>The controller appears on <a href="../features/devices/">Devices</a> but produces no output or wrong output on the virtual controller.</strong></p>
+<ol>
+<li>Unknown or unusual controllers may need manual mapping.</li>
+<li>Assign the device to a slot. Select at least one numbered toggle on the <a href="../features/devices/">Devices</a> page.</li>
+<li>Map inputs manually via <strong>Record</strong> on the <a href="../features/mappings/">Button and Axis Mappings</a> tab for each button and axis.</li>
+<li>Enable <strong>Force raw joystick mode</strong> on the <a href="../features/devices/">Devices</a> page if SDL3's remapping produces wrong outputs. Re-record all mappings afterward.</li>
+<li>Check live input on the Devices page. If axes and buttons do not respond there, the issue is at the driver or HID level.</li>
+<li>Check the source dropdown on each mapping row. Confirm it points to the correct input device.</li>
+</ol>
+<hr />
+<h2 id="virtual-controller-not-appearing-in-games">Virtual Controller Not Appearing in Games<a class="headerlink" href="#virtual-controller-not-appearing-in-games" title="Permanent link">&para;</a></h2>
+<p><strong>A slot is created and a device assigned, but games do not detect the virtual controller.</strong></p>
+<ol>
+<li>Install <strong>HIDMaestro</strong> from <a href="../features/settings/">Settings</a> for Xbox, PlayStation, or Extended output.</li>
+<li>Install <strong>Windows MIDI Services</strong> from <a href="../features/settings/">Settings</a> for MIDI output.</li>
+<li>Confirm the slot is enabled. The power icon on the Dashboard card should be green.</li>
+<li>Confirm the engine is running. The Dashboard should show "Running" with a green icon.</li>
+<li>Restart the game. Some games only scan for controllers at startup.</li>
+<li>Check the game's input settings. Some games require manual controller selection.</li>
+<li>For Extended controllers, verify in <code>joy.cpl</code> (Win+R &gt; <code>joy.cpl</code>). If controllers are not listed, see "Extended Controllers Not Working" below.</li>
+</ol>
+<hr />
+<h2 id="double-input-in-games">Double Input in Games<a class="headerlink" href="#double-input-in-games" title="Permanent link">&para;</a></h2>
+<p><strong>Every press registers twice, menus scroll too fast, or the game shows two controllers.</strong></p>
+<p>The game is reading both the physical controller and PadForge's virtual controller.</p>
+<ol>
+<li>Install <strong>HidHide</strong> from <a href="../features/settings/">Settings</a>.</li>
+<li>Enable <strong>"Hide devices from games"</strong> on the <a href="../features/settings/">Settings</a> page.</li>
+<li>On the <a href="../features/devices/">Devices</a> page, enable <strong>"Hide from games"</strong> per device.</li>
+<li>If PadForge stops seeing a hidden device, check the HidHide whitelist on <a href="../features/settings/">Settings</a>: PadForge's path must be listed.</li>
+<li>Add other apps (emulators, tools) to the whitelist if they also need the hidden device.</li>
+<li>Restart the game after changing HidHide settings.</li>
+<li>Check the game's controller settings. Disable the physical controller and keep the virtual one.</li>
+<li>If using Steam, disable Steam Input for the game or close Steam entirely.</li>
+<li>BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device "Hide from games" toggle is on and that <strong>"Hide devices from games"</strong> is enabled in the HidHide section of <a href="../features/settings/">Settings</a>.</li>
+</ol>
+<hr />
+<h2 id="rumble-not-working">Rumble Not Working<a class="headerlink" href="#rumble-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>No vibration from the physical controller when games send force feedback.</strong></p>
+<ol>
+<li>Set <strong>Overall Gain</strong> above 0% on the <a href="../features/force-feedback/">Force Feedback</a> tab.</li>
+<li>Set both <strong>left motor</strong> and <strong>right motor</strong> strength above 0%.</li>
+<li>Click <strong>Test Rumble</strong> to verify hardware support. No vibration means the device lacks rumble motors or driver support.</li>
+<li>Confirm a device is assigned to the slot and connected (green status dot).</li>
+<li>Check rumble support on the Devices page capabilities list. Devices without native rumble attempt haptic fallback, but results vary.</li>
+<li>Try a different game. Not all games use force feedback.</li>
+<li>Close other controller software (Steam Input, DS4Windows, reWASD) that may intercept rumble.</li>
+<li>A DualShock 3 rumbles once it is paired through PadForge's <strong>Pair</strong> flow on the <a href="../features/devices/">Devices</a> page. Rumble is native over that connection. A DS3 running through some other driver may not pass rumble.</li>
+<li>For Extended output, the game must send HID PID 1.0 force feedback. See "Force Feedback Not Working" below.</li>
+</ol>
+<hr />
+<h2 id="audio-bass-rumble-not-working">Audio Bass Rumble Not Working<a class="headerlink" href="#audio-bass-rumble-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>Audio Bass Rumble is enabled but the controller does not vibrate, or the Level meter stays flat.</strong></p>
+<ol>
+<li>Confirm audio plays through the system default render device. The Level meter should show activity.</li>
+<li>Level meter flat during playback? Toggle Audio Bass Rumble off and on to restart WASAPI capture.</li>
+<li>Set <strong>Overall Gain</strong> above 0%. It applies to audio rumble too.</li>
+<li>Increase <strong>sensitivity</strong> (default 4, try 8-12, range 1-20).</li>
+<li>Raise <strong>Bass Cutoff</strong> (default 80 Hz, range 20-200 Hz) to capture more mid-bass.</li>
+<li>Set both motor scale sliders above 0%.</li>
+<li>Click <strong>Test Rumble</strong>. No vibration means the device lacks rumble motors.</li>
+<li>Some apps (DAWs, certain games) open audio in exclusive mode, blocking WASAPI loopback.</li>
+<li>At least one audio output device must be active in Windows Sound settings.</li>
+</ol>
+<hr />
+<h2 id="extended-controllers-not-working">Extended Controllers Not Working<a class="headerlink" href="#extended-controllers-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>Extended (HIDMaestro) controllers do not appear in games or <code>joy.cpl</code>.</strong></p>
+<ol>
+<li>Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Cancelling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.</li>
+<li>Verify the HIDMaestro driver shows "Installed" on the <a href="../features/settings/">Settings</a> page.</li>
+<li>Check <code>joy.cpl</code> (Win+R &gt; <code>joy.cpl</code>). If empty, create an Extended slot on the Dashboard first.</li>
+<li>Restart PadForge after installing HIDMaestro.</li>
+<li>If a slot stays stuck on "Initializing," check the <strong>Inactivity timeout</strong> in <a href="../features/settings/">Settings</a>. After the timeout, a slot whose mapped devices stay offline has its live virtual controller torn down to free its kernel slot. The slot configuration (mappings, profile, position) is preserved. The virtual controller recreates automatically when the devices return online.</li>
+</ol>
+<hr />
+<h2 id="force-feedback-not-working">Force Feedback Not Working<a class="headerlink" href="#force-feedback-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>Games send force feedback but the physical controller does not vibrate on an Extended slot.</strong></p>
+<ol>
+<li>Confirm the game sends <strong>HID PID 1.0</strong> force feedback. Most native DirectInput FFB games do. XInput-only games do not. Use Xbox or PlayStation output for XInput rumble.</li>
+<li>Set <strong>Overall Gain</strong> above 0% on the <a href="../features/force-feedback/">Force Feedback</a> tab.</li>
+<li>Set motor strength sliders above 0%.</li>
+<li>Click <strong>Test Rumble</strong> to confirm the physical controller supports rumble.</li>
+<li>HIDMaestro Extended profiles publish constant, ramp, periodic (sine, square, triangle, sawtooth), and condition (spring, damper, inertia, friction) effects. Effect types outside that set may not produce rumble.</li>
+<li>Restart the game. Some games only initialize FFB at startup.</li>
+</ol>
+<hr />
+<h2 id="midi-not-available">MIDI Not Available<a class="headerlink" href="#midi-not-available" title="Permanent link">&para;</a></h2>
+<p><strong>The MIDI button does not appear in the "Add Controller" popup.</strong></p>
+<ol>
+<li>Install <strong>Windows MIDI Services</strong> from <a href="../features/settings/">Settings</a>.</li>
+<li>Windows MIDI Services requires <strong>Windows 11 24H2 (build 26100) or later</strong>. Earlier Windows 11 builds and any Windows 10 build are unsupported by Microsoft's SDK.</li>
+<li>Restart PadForge after installing.</li>
+<li>Verify the "Windows MIDI Services" service is running (Win+R &gt; <code>services.msc</code>).</li>
+<li>"Failed to create MIDI session" means the SDK initialized but cannot reach the service. Restart the service or reboot.</li>
+</ol>
+<hr />
+<h2 id="no-midi-output">No MIDI Output<a class="headerlink" href="#no-midi-output" title="Permanent link">&para;</a></h2>
+<p><strong>A MIDI slot is active but no messages reach the DAW or synthesizer.</strong></p>
+<ol>
+<li>In the DAW, look for <strong>"PadForge MIDI N"</strong> in the MIDI input list.</li>
+<li>Set the receiving app to read from the PadForge MIDI endpoint.</li>
+<li>Confirm the engine is running and the slot is enabled (green power icon).</li>
+<li>Match the MIDI channel (1-16) between PadForge and the receiving app.</li>
+<li>Verify CC numbers (axes) and note numbers (buttons) match what the receiving app expects.</li>
+<li>Use a MIDI monitor (MIDI-OX or Windows MIDI Services console) to confirm PadForge is sending. If messages appear there but not in the DAW, the issue is DAW configuration.</li>
+</ol>
+<hr />
+<h2 id="my-macro-doesnt-fire">My Macro Doesn't Fire<a class="headerlink" href="#my-macro-doesnt-fire" title="Permanent link">&para;</a></h2>
+<p><strong>A macro trigger is configured but pressing the trigger does nothing.</strong></p>
+<ol>
+<li>All trigger components must be active <strong>simultaneously</strong>. Partial presses do not fire.</li>
+<li>For axis triggers, the input must exceed the configured <strong>threshold percentage</strong>.</li>
+<li>Confirm the macro's enable checkbox is checked.</li>
+<li>Confirm the engine is running and the slot is enabled.</li>
+<li>If the trigger source is "Input Device" but no device is assigned, there is nothing to read. Switch to "Output Controller" or assign a device.</li>
+<li>Check for conflicting macros with overlapping triggers on the same slot.</li>
+</ol>
+<hr />
+<h2 id="mouse-actions-from-macros-arent-working">Mouse Actions from Macros Aren't Working<a class="headerlink" href="#mouse-actions-from-macros-arent-working" title="Permanent link">&para;</a></h2>
+<p><strong>A macro with Mouse Move, Mouse Button, or Mouse Scroll produces no visible effect.</strong></p>
+<ol>
+<li>Match the axis source. "Output Controller" reads mapped output, "Input Device" reads the physical device directly.</li>
+<li>Adjust the <strong>sensitivity slider</strong> if movement is too fast or too slow.</li>
+<li>Confirm the trigger is firing (see "My Macro Doesn't Fire" above).</li>
+<li>Anti-cheat software may block simulated mouse input.</li>
+</ol>
+<hr />
+<h2 id="always-mode-macro-wont-stop">Always-Mode Macro Won't Stop<a class="headerlink" href="#always-mode-macro-wont-stop" title="Permanent link">&para;</a></h2>
+<p><strong>A macro set to "Always" runs continuously regardless of button state.</strong></p>
+<ol>
+<li>Expected behavior. Always-mode macros fire every frame while the slot is active. No trigger required.</li>
+<li>Uncheck the macro's enable checkbox to stop it.</li>
+<li>Delete the macro if it is no longer needed.</li>
+<li>Disable the slot (power icon on the Dashboard card) to stop all its macros.</li>
+</ol>
+<hr />
+<h2 id="keyboardmouse-not-working">Keyboard+Mouse Not Working<a class="headerlink" href="#keyboardmouse-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>A Keyboard+Mouse slot is active but key presses or mouse movement do not appear in games.</strong></p>
+<ol>
+<li>Verify the slot type is Keyboard+Mouse on the Dashboard card.</li>
+<li>Assign physical inputs to keyboard keys or mouse buttons on the Mappings tab.</li>
+<li>Adjust mouse sensitivity on the Sticks tab or macro action settings.</li>
+<li>Anti-cheat software (EAC, BattlEye, Vanguard) may block simulated input.</li>
+<li>Confirm the engine is running and the slot is enabled.</li>
+</ol>
+<hr />
+<h2 id="settings-not-saving">Settings Not Saving<a class="headerlink" href="#settings-not-saving" title="Permanent link">&para;</a></h2>
+<p><strong>Changes revert after restart or the settings file does not update.</strong></p>
+<ol>
+<li>Wait for autosave. PadForge saves after changes settle. Unexpected closes may lose recent edits.</li>
+<li>Click <strong>Save</strong> on the <a href="../features/settings/">Settings</a> page to force an immediate save.</li>
+<li>Confirm PadForge has write access to its folder. <code>PadForge.xml</code> lives next to the executable. "Error saving settings" in the status bar indicates a permissions issue.</li>
+<li>Click <strong>"Open Folder"</strong> on Settings and verify <code>PadForge.xml</code> exists and is not read-only.</li>
+<li>Add a PadForge exception if antivirus software blocks file writes.</li>
+<li>If "Error loading settings" appears on startup, the XML is corrupted. Delete <code>PadForge.xml</code> and restart. PadForge creates fresh defaults. Or click <strong>"Reset to Defaults."</strong></li>
+<li>If the folder is synced by OneDrive, Dropbox, or similar, concurrent access across machines can corrupt the file. Move PadForge to a non-synced folder.</li>
+</ol>
+<hr />
+<h2 id="app-wont-start-or-uac-prompt-issues">App Won't Start or UAC Prompt Issues<a class="headerlink" href="#app-wont-start-or-uac-prompt-issues" title="Permanent link">&para;</a></h2>
+<p><strong>PadForge does not start, closes immediately, or shows a UAC prompt every time.</strong></p>
+<ol>
+<li>UAC is expected. PadForge always runs as administrator. HIDMaestro driver registration, HidHide whitelist edits, and the polling loop all run in that one elevated process.</li>
+<li>Clicking "No" on UAC blocks startup. Windows does not start an administrator-required app when the user declines the prompt. Run PadForge again and accept the prompt.</li>
+<li>PadForge allows only one instance. Check Task Manager for existing PadForge processes.</li>
+<li>PadForge requires the <strong>.NET 10 Desktop Runtime</strong>. Download it from Microsoft if missing.</li>
+<li>If <code>SDL3.dll</code> is missing, PadForge crashes on startup. Re-extract from the release zip.</li>
+</ol>
+<hr />
+<h2 id="high-cpu-usage">High CPU Usage<a class="headerlink" href="#high-cpu-usage" title="Permanent link">&para;</a></h2>
+<p><strong>PadForge uses significant CPU, causing fan noise or slowdowns.</strong></p>
+<ol>
+<li>Increase the <strong>polling interval</strong> in <a href="../features/settings/">Settings</a> &gt; Input Engine. Default is 1 ms (~1000 Hz). Try 4 ms (~250 Hz) or 8 ms (~125 Hz) for casual use.</li>
+<li>Disable <strong>"Continue polling when window loses focus"</strong> if PadForge is only needed during gameplay.</li>
+<li>Remove unused virtual controller slots.</li>
+<li>Disable <strong>Audio Bass Rumble</strong> on unused slots (runs WASAPI capture and real-time DSP).</li>
+</ol>
+<hr />
+<h2 id="dsu-motion-not-working-in-emulator">DSU Motion Not Working in Emulator<a class="headerlink" href="#dsu-motion-not-working-in-emulator" title="Permanent link">&para;</a></h2>
+<p><strong>The emulator does not receive gyroscope or accelerometer data.</strong></p>
+<ol>
+<li>Enable <strong>"Enable DSU motion server (CemuHook Motion Provider protocol)"</strong> on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Listening."</li>
+<li>Match the port (default 26760) between PadForge and the emulator. "Port already in use" means another app (BetterJoy, DS4Windows) is on that port.</li>
+<li>Use <code>127.0.0.1</code> as the server address. PadForge binds to loopback only.</li>
+<li>Confirm the controller has motion sensors on the <a href="../features/devices/">Devices</a> page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion.</li>
+<li>DSU protocol supports slots 1-4 only. Assign the motion device to one of those slots.</li>
+<li>Allow UDP port 26760 through Windows Firewall.</li>
+<li>In the emulator's motion settings, add a DSU server at <code>127.0.0.1</code> with the matching port and select the correct slot.</li>
+</ol>
+<hr />
+<h2 id="web-controller-not-connecting">Web Controller Not Connecting<a class="headerlink" href="#web-controller-not-connecting" title="Permanent link">&para;</a></h2>
+<p><strong>The browser shows "Disconnected" or cannot reach the web controller URL.</strong></p>
+<ol>
+<li>Enable the web controller on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Running" with a URL.</li>
+<li>Both devices must be on the same Wi-Fi or LAN network.</li>
+<li>PadForge creates a firewall rule automatically.</li>
+<li>"Port in use" means another app occupies port 8080. Change the port in <a href="../features/settings/">Settings</a>.</li>
+<li>"Access denied" on a port means Windows reserved it or another service holds it. Change the web controller port in <a href="../features/settings/">Settings</a> to a free one.</li>
+<li>Rotate the browser device to <strong>landscape</strong> orientation.</li>
+<li>Try Chrome, Firefox, or Edge if WebSocket issues occur.</li>
+</ol>
+<hr />
+<h2 id="web-controller-drops-on-ios-safari-after-tab-switch">Web Controller drops on iOS Safari After Tab Switch<a class="headerlink" href="#web-controller-drops-on-ios-safari-after-tab-switch" title="Permanent link">&para;</a></h2>
+<p><strong>On iPhone or iPad Safari, the web controller shows "Disconnected" after locking the screen, switching tabs, or returning from another app.</strong></p>
+<p>iOS Safari kills WebSocket connections when the page loses focus. The web controller page detects the dropped socket and auto-reloads to reconnect. If reconnection does not happen, do this:</p>
+<ol>
+<li>Tap the page to bring it back into focus.</li>
+<li>Pull down to refresh, or close the tab and reopen the URL.</li>
+<li>Keep Safari in the foreground while playing. Background-tab WebSockets are not reliable on iOS.</li>
+<li>Add the page to the Home Screen as a PWA for a more stable foreground session.</li>
+</ol>
+<hr />
+<h2 id="remote-link-pc-not-appearing">Remote Link PC Not Appearing<a class="headerlink" href="#remote-link-pc-not-appearing" title="Permanent link">&para;</a></h2>
+<p><strong>A second PC runs Remote Link but does not show up under "Nearby PCs (Not Paired)."</strong></p>
+<ol>
+<li>Enable <strong>Remote Link</strong> on both PCs from the <a href="../features/dashboard/">Dashboard</a>. A PC only announces itself while it is on.</li>
+<li>Both PCs must be on the same local network. Discovery is a same-subnet broadcast, so a separate guest network, VLAN, or Wi-Fi band hides them from each other.</li>
+<li>Some networks block broadcast. Open <strong>Or Connect by Address (Advanced)</strong>, enter the other PC's address and port, and click <strong>Pair / Connect</strong>.</li>
+<li>Allow PadForge through the firewall on each PC. For per-port rules, open UDP 27501 for discovery and TCP 27500 (or your changed listening port) for the connection.</li>
+<li>For play across the internet, put both PCs on one virtual network with a VPN like ZeroTier, then connect by address. Broadcast discovery does not cross the internet.</li>
+</ol>
+<hr />
+<h2 id="remote-link-pairing-fails">Remote Link Pairing Fails<a class="headerlink" href="#remote-link-pairing-fails" title="Permanent link">&para;</a></h2>
+<p><strong>Pairing does not complete, or the six-digit codes differ on the two screens.</strong></p>
+<ol>
+<li>Check that the two codes match before confirming. A mismatch means the PCs did not reach each other directly. Cancel and retry.</li>
+<li>Confirm on both PCs. Pairing needs both sides to accept.</li>
+<li>A failed handshake creates no device and shares nothing. Start pairing again from one side.</li>
+<li>A PC you revoked cannot reconnect until you pair it again.</li>
+</ol>
+<hr />
+<h2 id="shared-device-not-showing-after-pairing">Shared Device Not Showing After Pairing<a class="headerlink" href="#shared-device-not-showing-after-pairing" title="Permanent link">&para;</a></h2>
+<p><strong>Two PCs are paired but the owner's controller does not appear in the consumer's device list.</strong></p>
+<ol>
+<li>Confirm the pairing is active. Each PC lists the other under <strong>Paired PCs</strong> on the <a href="../features/dashboard/">Dashboard</a>.</li>
+<li>Remote Link shares controllers, wheels, and HOTAS hardware, not arbitrary USB devices.</li>
+<li>On the consumer, assign the shared device to a <a href="../features/controller-slots/">slot</a> and map it like a local controller.</li>
+<li>Auto-reconnect is on by default. With it off, the PCs do not relink on their own after a drop. Turn it back on in the Remote Link settings, or re-pair.</li>
+</ol>
+<hr />
+<h2 id="remote-link-feedback-or-keyboard-not-working">Remote Link Feedback or Keyboard Not Working<a class="headerlink" href="#remote-link-feedback-or-keyboard-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>A shared device drives the game, but rumble, LEDs, or keyboard output do not reach the owner PC.</strong></p>
+<ol>
+<li>Feedback returns only for what the physical device supports: rumble, Xbox trigger rumble, wheel force feedback, adaptive triggers, lightbar, player LEDs, Guide button LED brightness, speaker audio, and HD haptic tones. A device without a given feature shows nothing for it.</li>
+<li>Keyboard, mouse, and macros from a shared device are blocked when <strong>gamepad-only</strong> is on for that paired PC. Untick it in the pairing options if you trust the PC.</li>
+<li>See <a href="../features/force-feedback/">Force Feedback</a>, <a href="../features/impulse-triggers/">Impulse Triggers</a>, <a href="../features/lighting/">Lighting</a>, and <a href="../features/controller-audio/">Controller Audio</a> for the per-feature setup, which also applies over the link.</li>
+</ol>
+<hr />
+<h2 id="profile-not-switching-automatically">Profile Not Switching Automatically<a class="headerlink" href="#profile-not-switching-automatically" title="Permanent link">&para;</a></h2>
+<p><strong>Auto-profile switching is enabled but PadForge does not switch when the game is in the foreground.</strong></p>
+<ol>
+<li>Confirm <strong>"Auto-switch profiles based on foreground application"</strong> is checked on the <a href="../guides/profiles/">Profiles</a> section.</li>
+<li>Verify the executable path matches (case-insensitive, full path). Use the file browser button to avoid typos.</li>
+<li>For games launchable from multiple locations, separate paths with the pipe character (<code>|</code>).</li>
+<li>Add the game's own executable, not the launcher's (Steam, Epic, etc.).</li>
+<li>If the game runs elevated but PadForge does not, foreground detection may fail. Run PadForge as administrator.</li>
+<li>Save after configuring. Profile data must persist to <code>PadForge.xml</code>.</li>
+</ol>
+<hr />
+<h2 id="community-configs-steam-workshop-issues">Community Configs (Steam Workshop) Issues<a class="headerlink" href="#community-configs-steam-workshop-issues" title="Permanent link">&para;</a></h2>
+<p><strong>"Steam is unreachable" in the Browse Community Configs dialog.</strong></p>
+<ol>
+<li>Check your internet connection and click <strong>Retry</strong>.</li>
+<li>Corporate or school networks sometimes block Steam. The connection uses standard HTTPS (port 443).</li>
+<li>Already-imported profiles keep working offline. They live on this PC.</li>
+</ol>
+<p><strong>An imported profile double-inputs or fights the original Steam config.</strong></p>
+<p>The imported profile replaces what the Steam config did. Disable Steam Input for the game (Steam &gt; game properties &gt; Controller), or close Steam, and cloak the physical pad on the <a href="../features/devices/">Devices</a> page.</p>
+<p><strong>An imported profile does nothing in game.</strong></p>
+<ol>
+<li>Assign your physical controller to both of the profile's pads. Imports ship with no device assignments.</li>
+<li>Confirm the profile is active (load it, or add the game's executable via <strong>Edit</strong> for auto-switch).</li>
+</ol>
+<p>See <a href="../guides/steam-workshop-import/">Steam Workshop Config Import</a> for the full feature guide.</p>
+<hr />
+<h2 id="sensitivity-curves-not-responding">Sensitivity Curves Not Responding<a class="headerlink" href="#sensitivity-curves-not-responding" title="Permanent link">&para;</a></h2>
+<p><strong>A sensitivity curve is set but stick or trigger output seems unaffected.</strong></p>
+<ol>
+<li>Check the correct axis. X (horizontal) and Y (vertical) have independent curves.</li>
+<li>If the preset is "Linear," no modification is applied. Select a different preset or add custom points.</li>
+<li>Click <strong>Reset</strong> to restore Linear, then apply a new preset to verify functionality.</li>
+<li>A large deadzone leaves little range for the curve to affect. Reduce the deadzone to test.</li>
+<li>Custom control points placed nearly linearly produce no visible change. Spread them further apart.</li>
+<li>Per-direction max range settings may cause asymmetric behavior. Review them on the Sticks tab.</li>
+<li>Non-default deadzone shapes (Axial, Hybrid, Sloped) interact differently with curves. Try Scaled Radial to isolate the issue.</li>
+</ol>
+<hr />
+<h2 id="steam-controller-conflicts">Steam Controller Conflicts<a class="headerlink" href="#steam-controller-conflicts" title="Permanent link">&para;</a></h2>
+<p><strong>Controller behaves unexpectedly, is not detected, or rumble stops. Especially Switch Pro or Switch 2 Pro.</strong></p>
+<ol>
+<li>Disable <strong>Steam Input</strong> for the specific controller in Steam &gt; Settings &gt; Controller.</li>
+<li>Close Steam entirely if not in use.</li>
+<li>Switch 2 Pro Controller. Steam may lock the WinUSB interface. Close Steam before connecting, or disable Switch controller support in Steam.</li>
+</ol>
+<hr />
+<h2 id="buttons-map-to-wrong-outputs">Buttons Map to Wrong Outputs<a class="headerlink" href="#buttons-map-to-wrong-outputs" title="Permanent link">&para;</a></h2>
+<p><strong>Buttons do not match expected positions, trigger two inputs, or produce no input.</strong></p>
+<ol>
+<li>Enable <strong>Force raw joystick mode</strong> on the <a href="../features/devices/">Devices</a> page to bypass SDL3's remapping.</li>
+<li>Re-record all mappings manually with <strong>Record</strong> on the <a href="../features/mappings/">Button and Axis Mappings</a> tab.</li>
+<li>Verify in <code>joy.cpl</code> that buttons work correctly at the Windows level.</li>
+<li>Known affected devices: certain third-party controllers with non-standard HID layouts.</li>
+</ol>
+<hr />
+<h2 id="force-raw-joystick-mode">Force Raw Joystick Mode<a class="headerlink" href="#force-raw-joystick-mode" title="Permanent link">&para;</a></h2>
+<p><strong>Buttons map wrong, trigger double inputs, or shoulder/trigger/stick-click inputs are missing.</strong></p>
+<p>SDL3's gamepad mapping does not match the device's HID report layout (common with some third-party controllers).</p>
+<ol>
+<li>Go to the <strong>Devices</strong> page.</li>
+<li>Select the problematic device.</li>
+<li>Enable <strong>Force raw joystick mode</strong> in the Input Mode section.</li>
+<li>Go to the <strong>Mappings</strong> tab and manually record each button.</li>
+<li>Auto-mapping is unavailable in raw mode, but raw indices will be correct.</li>
+</ol>
+<hr />
+<h2 id="mouse-or-keyboard-input-issues">Mouse or Keyboard Input Issues<a class="headerlink" href="#mouse-or-keyboard-input-issues" title="Permanent link">&para;</a></h2>
+<p><strong>Mouse buttons don't register, mouse movement is barely visible, or mouse axes can't be recorded.</strong></p>
+<ol>
+<li>Mouse buttons map like any other input. On the Mappings tab, click <strong>Record</strong> on a row and press the mouse button.</li>
+<li>Mouse axes show relative deltas, not absolute positions. Fast movements produce larger values.</li>
+<li>When recording a mouse axis mapping, move the mouse in the desired direction. Detection is instant.</li>
+<li>PadForge does not automatically consume mouse or keyboard inputs. Enable "Consume mapped inputs" or "Hide from games" manually if needed (a warning appears before enabling).</li>
+</ol>
+<hr />
+<h2 id="stick-drift-after-calibration">Stick Drift After Calibration<a class="headerlink" href="#stick-drift-after-calibration" title="Permanent link">&para;</a></h2>
+<p><strong>The stick drifts even after setting deadzones.</strong></p>
+<ol>
+<li>Go to the <strong>Sticks</strong> tab.</li>
+<li>Leave the stick at rest. Do not touch it.</li>
+<li>Click <strong>Calibrate Center</strong>.</li>
+<li>PadForge measures the actual rest position and applies an offset so the deadzone centers correctly.</li>
+</ol>
+<hr />
+<h2 id="volume-macro-issues">Volume Macro Issues<a class="headerlink" href="#volume-macro-issues" title="Permanent link">&para;</a></h2>
+<p><strong>Volume changes direction is wrong, or the OSD appears when it should not.</strong></p>
+<ol>
+<li>Wrong direction. Enable <strong>Invert axis</strong> on the volume action settings.</li>
+<li>Unwanted OSD. Disable <strong>Show volume OSD</strong> on the volume action.</li>
+<li>Volume not changing. Confirm the trigger fires (see "My Macro Doesn't Fire" above).</li>
+</ol>
+<hr />
+<h2 id="shift-layer-wont-engage-or-wont-turn-off">Shift Layer Won't Engage or Won't Turn Off<a class="headerlink" href="#shift-layer-wont-engage-or-wont-turn-off" title="Permanent link">&para;</a></h2>
+<p><strong>The activator input is set but the layer never turns on, a long press never registers, or a toggled layer stays stuck on.</strong></p>
+<ol>
+<li>Check the <strong>Mode</strong>. Hold keeps the layer on only while the activator is held. Toggle and Latch flip the layer on a press and keep it on until you press again. Sticky (one-shot) turns the layer on with a tap, then drops it the moment you use a mapped input on the layer and release. Cycle steps through an ordered list of layers, one per press.</li>
+<li>Check the <strong>Delay</strong>. In Hold mode it is a debounce: the activator must stay held that long before the layer changes. In Toggle, Latch, or Sticky mode a non-zero Delay turns the activator into a long press, so the layer flips only when the hold crosses that time and a quick tap does nothing. Lower the Delay to 0 if a tap should register.</li>
+<li>For an <strong>Axis</strong> activator, the input must cross the threshold. Default is 0.5 of full deflection.</li>
+<li>For a <strong>Chord</strong> activator, both inputs must hold at the same time.</li>
+<li>The activator can live on a different physical device than the slot it shifts. Confirm that device is online.</li>
+<li>Last engaged wins on conflicts. If a different slot's activator fired more recently, that layer is active instead.</li>
+<li>Look at the engaged-layer flyout at the bottom of the screen. If it never appears, the activator never registered the input.</li>
+</ol>
+<p><strong>A toggled layer won't turn off.</strong></p>
+<ol>
+<li>Tap the activator again to release a Toggle layer.</li>
+<li>Set <strong>Auto-Cancel After Inactivity</strong> (Toggle mode) so the layer drops itself after an idle stretch. It is 0 (off) by default. Enter a time in milliseconds. The layer turns back off after that long with none of its own mapped inputs active, and the timer restarts on every layer input.</li>
+</ol>
+<hr />
+<h2 id="impulse-triggers-tab-not-visible">Impulse Triggers Tab Not Visible<a class="headerlink" href="#impulse-triggers-tab-not-visible" title="Permanent link">&para;</a></h2>
+<p><strong>The Impulse Triggers tab is missing on a slot you expected to have it.</strong></p>
+<ol>
+<li>The tab only appears when the assigned physical pad has trigger motors. Xbox One, Xbox Elite (Series 1 / Series 2), and Xbox Series X|S pads have them. Xbox 360 and most third-party pads do not.</li>
+<li>The tab is per pad per slot. Pick the right physical device in the assigned-devices dropdown.</li>
+<li>A DualSense does not get this tab. Its trigger motors are driven from the Adaptive Triggers tab instead. Xbox impulse data a game sends routes there automatically as trigger vibration, gentler than Xbox impulse-trigger motors. If the buzz feels weak, raise the Vibration effect strength on the Adaptive Triggers tab.</li>
+</ol>
+<hr />
+<h2 id="custom-expression-macro-wont-fire">Custom Expression Macro Won't Fire<a class="headerlink" href="#custom-expression-macro-wont-fire" title="Permanent link">&para;</a></h2>
+<p><strong>A Custom Expression macro is set up but the formula never crosses 0.5.</strong></p>
+<ol>
+<li>Open the formula editor and watch the <strong>live preview value</strong> while you press the variable inputs. A button or trigger variable that never moves off 0, or a stick variable that never moves off 0.5, is not bound.</li>
+<li>Each variable needs a recorded input. Click <strong>Record</strong> on a variable row and press the input.</li>
+<li>The macro fires on the <strong>rising edge</strong> (0 → over 0.5). It does not refire until the value drops below 0.5 and rises past it again.</li>
+<li>Buttons and POV directions read as 0 or 1. Triggers read 0 at rest up to 1 fully pressed. A stick axis reads 0.5 at rest and moves toward 0 or 1 as you push it, so a resting stick showing 0.5 is normal, not a binding failure.</li>
+<li>Verify the formula syntax. Parse status under the formula box shows <strong>✓ valid</strong> or <strong>parse error</strong>.</li>
+</ol>
+<hr />
+<h2 id="touchpad-overlay-doesnt-drive-the-ds4-dualsense-touchpad">Touchpad Overlay Doesn't Drive the DS4 / DualSense Touchpad<a class="headerlink" href="#touchpad-overlay-doesnt-drive-the-ds4-dualsense-touchpad" title="Permanent link">&para;</a></h2>
+<p><strong>The Touchpad Overlay window is enabled but touch input doesn't reach the game.</strong></p>
+<ol>
+<li>The overlay drives the touchpad on the assigned <strong>PlayStation</strong> slot only. Confirm the slot type is PlayStation, not Xbox or Extended.</li>
+<li>The slot needs at least one mapped device. The overlay forwards finger contacts. The slot needs to exist for them to land somewhere.</li>
+<li>If the slot's source is a real DualSense or DS4, that pad passes its own touchpad through to the game, and that takes priority over the overlay. Remove or hide the physical pad from the slot to let the overlay drive the touchpad instead.</li>
+</ol>
+<hr />
+<h2 id="nfc-reader-not-detected">NFC Reader Not Detected<a class="headerlink" href="#nfc-reader-not-detected" title="Permanent link">&para;</a></h2>
+<p><strong>A USB NFC reader is plugged in but does not appear as a device, or the Register NFC Tag dialog says no reader is found.</strong></p>
+<ol>
+<li>PadForge reads through the Windows <strong>Smart Card</strong> service (<code>SCardSvr</code>) over the PC/SC stack. Open <code>services.msc</code> and confirm "Smart Card" is running. Windows stops it automatically when the last reader is unplugged.</li>
+<li>Use a <strong>PC/SC contactless reader (CCID)</strong>, such as the ACR122U. Readers without a PC/SC driver do not enumerate.</li>
+<li>A reader plugged in after launch is picked up automatically. PadForge retries roughly every 5 seconds, so wait a moment.</li>
+<li>Register a tag before mapping it: open the Register NFC Tags dialog, tap the tag on the reader, name it, click Register. Each registered tag becomes a bindable button.</li>
+<li>An unregistered tag only pulses the "Any NFC Tag" button, not a per-tag button. Register the specific tag to bind it on its own.</li>
+<li>PadForge reads only the tag <strong>UID</strong> (NTAG21x, MIFARE, amiibo all work). It does not read tag memory, authenticate sectors, or write tags.</li>
+</ol>
+<hr />
+<h2 id="media-keys-consumer-control-not-mapping">Media Keys (Consumer Control) Not Mapping<a class="headerlink" href="#media-keys-consumer-control-not-mapping" title="Permanent link">&para;</a></h2>
+<p><strong>Play/Pause, volume, or other media keys on a keyboard or remote do not show up as a mappable source.</strong></p>
+<ol>
+<li>The keyboard or remote must expose a media-key device. Windows presents a keyboard's media-key row as a separate Consumer Control device. A basic keyboard without a media row exposes none and is not enumerated.</li>
+<li>Media keys arrive on a separate path from normal keys. Pick the device (or "All Consumer Controls (Merged)") as the mapping source, not the keyboard.</li>
+<li>Consumer Control is an <strong>input source only</strong>. PadForge cannot suppress media keys, so they still reach the OS even when mapped. There is no "consume" option for them.</li>
+<li>Standard media keys have stable mappings. An uncommon usage gets a session-only "Consumer 0xNNNN" slot whose index is not stable across restarts, so re-record those after an update.</li>
+</ol>
+<hr />
+<h2 id="wii-remote-ir-pointer-not-working">Wii Remote IR Pointer Not Working<a class="headerlink" href="#wii-remote-ir-pointer-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>A Wii Remote is connected but the IR Pointer source stays centered or does not aim.</strong></p>
+<ol>
+<li>The IR pointer needs a <strong>sensor bar or any IR light source</strong> in view of the remote's camera. It reads the two sensor-bar dots. With no dots visible it reports centered.</li>
+<li>A powered USB sensor bar or a pair of IR emitters both drive it. The bar only needs to emit IR, it carries no data.</li>
+<li>Aim the remote at the bar. When the camera loses the dots the source relaxes to center and re-acquires when a dot returns.</li>
+<li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> to stick axes. Tune sensor-bar position, vertical offset, smoothing, and sensitivity on the Pointer tab.</li>
+<li>A right Joy-Con's <strong>IR Brightness</strong> source is different. It reports a single cover/proximity value, not an X/Y pointer.</li>
+</ol>
+<hr />
+<h2 id="joy-con-2-mouse-not-working">Joy-Con 2 Mouse Not Working<a class="headerlink" href="#joy-con-2-mouse-not-working" title="Permanent link">&para;</a></h2>
+<p><strong>A Joy-Con 2 is connected but its optical mouse sensor produces no Mouse Motion output.</strong></p>
+<ol>
+<li>The Joy-Con 2 mouse needs PadForge's <strong>bundled <code>SDL3.dll</code></strong>. The sensor rides on the custom SDL fork's BLE Switch 2 driver. A stock or mismatched <code>SDL3.dll</code> never exposes it, so the source stays silent with no error.</li>
+<li>Re-extract <code>SDL3.dll</code> from the release zip if you replaced it. Confirm it sits next to <code>PadForge.exe</code>.</li>
+<li>Connect the Joy-Con 2 over Bluetooth. The mouse data comes through the wireless Switch 2 path.</li>
+<li>Map <strong>Mouse Motion X</strong> and <strong>Mouse Motion Y</strong> to stick axes or scroll. Adjust the per-source Sensitivity if the cursor moves too fast or slow.</li>
+</ol>
+<hr />
+<h2 id="battery-level-not-showing">Battery Level Not Showing<a class="headerlink" href="#battery-level-not-showing" title="Permanent link">&para;</a></h2>
+<p><strong>A controller's battery glyph or percentage is missing on the Devices page.</strong></p>
+<ol>
+<li>Battery shows only when the device reports a level. Many wired controllers and some Bluetooth pads report nothing, so no indicator appears.</li>
+<li>The reading refreshes about every 5 seconds, not every frame. Give it a moment after connecting.</li>
+<li>An offline device shows no battery. Confirm the green status dot first.</li>
+<li>If SDL cannot read the battery for the device, PadForge cannot either. There is no manual override.</li>
+</ol>
+<hr />
+<h2 id="controller-wont-auto-disconnect-when-idle">Controller Won't Auto-Disconnect When Idle<a class="headerlink" href="#controller-wont-auto-disconnect-when-idle" title="Permanent link">&para;</a></h2>
+<p><strong>The idle auto-disconnect timeout is set but the controller never disconnects, or it disconnects too soon.</strong></p>
+<ol>
+<li>Idle Disconnect is <strong>off by default</strong> (0). Set a timeout in minutes on the device's Power section to enable it.</li>
+<li>It only affects <strong>Bluetooth</strong> controllers. A wired (USB) controller has no radio link to drop, so it stays connected even with a timeout set.</li>
+<li>Xbox, Valve (Steam Controller), and Switch 2 pads receive a direct power-off. Sony pads, the Wii Remote, and other Bluetooth controllers drop their Bluetooth link instead, which needs the controller to report a valid MAC address (Bluetooth pads do). A pad that reports none stays connected.</li>
+<li>Aiming with the Wii IR pointer or Joy-Con 2 mouse counts as activity, so you are not disconnected mid-use.</li>
+<li>Charging does not pause the countdown. An idle pad disconnects even while charging, and dropping Bluetooth does not interrupt the charge.</li>
+</ol>
+<hr />
+<h2 id="hd-haptic-tones-sound-wrong-or-garbled">HD Haptic Tones Sound Wrong or Garbled<a class="headerlink" href="#hd-haptic-tones-sound-wrong-or-garbled" title="Permanent link">&para;</a></h2>
+<p><strong>Audio routed to a controller's haptic actuator plays beeps fine but speech and music come through as buzz.</strong></p>
+<ol>
+<li>This is a hardware limit, not a bug. These controllers (Nintendo Joy-Con and Switch Pro, Steam Controller 2015, Steam Deck, Steam Controller 2026) reproduce sound through haptic actuators, not a speaker.</li>
+<li>A haptic actuator plays one frequency at a time. PadForge reduces the audio to that one dominant tone plus a volume envelope each tick. Simple alert tones and melodic cues survive. Speech and full music do not.</li>
+<li>Joy-Con and Pro tones fold into roughly 41-626 Hz. Content outside that band is lost. The 2015 Steam Controller and Steam Deck play pitch only, with no working volume, so they feel flatter.</li>
+<li>DualSense and DualShock 4 do not use this path. They play through their actual speaker. A Wii Remote likewise uses its speaker.</li>
+<li>Switch 2 (Joy-Con 2, Pro Controller 2) does not play haptic tones. Its actuator is driven for rumble feel only.</li>
+</ol>
+<hr />
+<h2 id="logs-and-diagnostics">Logs and diagnostics<a class="headerlink" href="#logs-and-diagnostics" title="Permanent link">&para;</a></h2>
+<p>PadForge writes no log files while it runs. A healthy session leaves nothing on disk. Two files can sit next to <code>PadForge.exe</code>:</p>
+<ul>
+<li><code>PadForge.xml</code> holds your settings.</li>
+<li><code>crash.log</code> appears only after a crash. It records the error plus a tail of recent internal diagnostics. This is the file to attach to a bug report.</li>
+</ul>
+<p>If PadForge has not crashed there is no <code>crash.log</code>, and that is normal.</p>
+<p><strong>Deep diagnostics (when asked by support).</strong> For a problem that is hard to reproduce, support may ask for a full trace. Set the <code>PADFORGE_DIAG</code> environment variable to a file path before launching PadForge, and every internal diagnostic line is written to that file for the session. Leave the variable unset for normal use, when PadForge writes nothing.</p>
+<hr />
+<h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No devices</td>
+<td>Check USB, cable, Device Manager</td>
+</tr>
+<tr>
+<td>Detected but no mapping</td>
+<td>Assign to slot, check source dropdown</td>
+</tr>
+<tr>
+<td>No virtual controller in game</td>
+<td>Install HIDMaestro / MIDI Services</td>
+</tr>
+<tr>
+<td>Double input</td>
+<td>Install HidHide, enable "Hide devices from games"</td>
+</tr>
+<tr>
+<td>BLE controller not hidden</td>
+<td>Enable per-device "Hide from games" and "Hide devices from games" in Settings</td>
+</tr>
+<tr>
+<td>Wrong button mapping</td>
+<td>Force raw joystick mode, re-record</td>
+</tr>
+<tr>
+<td>No rumble</td>
+<td>Overall Gain &gt; 0%, motor strength &gt; 0%, Test Rumble</td>
+</tr>
+<tr>
+<td>Audio bass rumble flat</td>
+<td>Check audio playing, raise sensitivity</td>
+</tr>
+<tr>
+<td>Extended controller not in joy.cpl</td>
+<td>Install HIDMaestro, verify driver status, restart PadForge</td>
+</tr>
+<tr>
+<td>Extended FFB silent</td>
+<td>Game must send HID PID 1.0 effects, check gain</td>
+</tr>
+<tr>
+<td>No MIDI button</td>
+<td>Install Windows MIDI Services (Win 11 only)</td>
+</tr>
+<tr>
+<td>No MIDI output</td>
+<td>Select "PadForge MIDI N" in DAW input</td>
+</tr>
+<tr>
+<td>No motion in emulator</td>
+<td>Enable DSU server, match port, use 127.0.0.1</td>
+</tr>
+<tr>
+<td>DSU port in use</td>
+<td>Close conflicting app or change port</td>
+</tr>
+<tr>
+<td>Web controller disconnected</td>
+<td>Same network, check firewall, try another port</td>
+</tr>
+<tr>
+<td>iOS Safari drops the web controller</td>
+<td>Keep Safari in the foreground or install the page as a PWA</td>
+</tr>
+<tr>
+<td>Remote Link PC not appearing</td>
+<td>Same network, enable on both, allow firewall, or connect by address</td>
+</tr>
+<tr>
+<td>Remote Link pairing fails</td>
+<td>Codes must match on both screens, then retry the handshake</td>
+</tr>
+<tr>
+<td>Remote Link device missing after pairing</td>
+<td>Check the pairing is active, assign the shared device to a slot</td>
+</tr>
+<tr>
+<td>Remote Link feedback or keys missing</td>
+<td>Device must support the feature, untick gamepad-only for keys</td>
+</tr>
+<tr>
+<td>No NFC reader detected</td>
+<td>Start the Smart Card service, use a PC/SC (CCID) reader</td>
+</tr>
+<tr>
+<td>Media keys not mapping</td>
+<td>Keyboard needs a media-key device, input only, no suppress</td>
+</tr>
+<tr>
+<td>Wii IR pointer centered</td>
+<td>Aim at a sensor bar or IR source, map IR Pointer X/Y</td>
+</tr>
+<tr>
+<td>Joy-Con 2 mouse silent</td>
+<td>Use the bundled SDL3.dll, map Mouse Motion X/Y</td>
+</tr>
+<tr>
+<td>Battery not showing</td>
+<td>Wired/unsupported devices report none, refreshes every 5 s</td>
+</tr>
+<tr>
+<td>Won't auto-disconnect when idle</td>
+<td>Bluetooth only, off by default, set timeout in minutes</td>
+</tr>
+<tr>
+<td>Haptic tone garbled on speech/music</td>
+<td>Single actuator plays one tone, only beeps and cues survive</td>
+</tr>
+<tr>
+<td>Profile not switching</td>
+<td>Verify exe path, enable auto-switching</td>
+</tr>
+<tr>
+<td>Sensitivity curve no effect</td>
+<td>Check axis (X vs Y), preset not Linear</td>
+</tr>
+<tr>
+<td>Settings lost</td>
+<td>Wait for autosave, check file permissions</td>
+</tr>
+<tr>
+<td>UAC prompt every launch</td>
+<td>Expected. PadForge always runs as administrator.</td>
+</tr>
+<tr>
+<td>App crashes on start</td>
+<td>Check SDL3.dll present, .NET 10 installed</td>
+</tr>
+<tr>
+<td>High CPU</td>
+<td>Increase polling interval in Settings</td>
+</tr>
+<tr>
+<td>Steam conflict</td>
+<td>Disable Steam Input or close Steam</td>
+</tr>
+<tr>
+<td>Macro doesn't fire</td>
+<td>All triggers simultaneous, check threshold</td>
+</tr>
+<tr>
+<td>Mouse macro not working</td>
+<td>Check axis source, adjust sensitivity</td>
+</tr>
+<tr>
+<td>Always-mode macro won't stop</td>
+<td>Disable macro or disable slot</td>
+</tr>
+<tr>
+<td>Keyboard+Mouse not working</td>
+<td>Check slot type, add mappings</td>
+</tr>
+<tr>
+<td>Mouse buttons not registering</td>
+<td>Record the button on a mapping row</td>
+</tr>
+<tr>
+<td>Stick drift after deadzone</td>
+<td>Calibrate Center on Sticks tab</td>
+</tr>
+<tr>
+<td>Volume macro wrong direction</td>
+<td>Enable Invert axis</td>
+</tr>
+<tr>
+<td>Volume OSD unwanted</td>
+<td>Disable Show volume OSD</td>
+</tr>
+<tr>
+<td>DualShock 3 not connecting</td>
+<td>Pair through PadForge, unplug, press PS over Bluetooth</td>
+</tr>
+<tr>
+<td>Shift layer stuck or won't engage</td>
+<td>Check mode and Delay, axis threshold, activator online. A Toggle layer releases on a second tap or via Auto-Cancel</td>
+</tr>
+<tr>
+<td>Impulse Triggers tab missing</td>
+<td>Slot needs an Xbox One/Elite/Series pad. DualSense uses the Adaptive Triggers tab</td>
+</tr>
+<tr>
+<td>Custom Expression macro silent</td>
+<td>Watch live preview value. Rising-edge means it must cross 0.5</td>
+</tr>
+<tr>
+<td>Touchpad Overlay no input in game</td>
+<td>Slot must be PlayStation type. A real DualSense or DS4 in the slot overrides the overlay</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-pages">Related Pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../start/installation/">Installation</a>: First-time setup guide</li>
+<li><a href="../features/settings/">Settings</a>: Engine and driver configuration</li>
+<li><a href="../features/driver-management/">Driver Management</a>: Driver installation</li>
+<li><a href="../features/dashboard/">Dashboard</a>: Engine and driver status</li>
+<li><a href="../features/controller-slots/">Controller Slots</a>: Virtual controller creation and management</li>
+<li><a href="../features/devices/">Devices</a>: Device detection and input state</li>
+<li><a href="../features/mappings/">Button and Axis Mappings</a>: Input mapping configuration</li>
+<li><a href="../features/stick-deadzones/">Stick Deadzones</a>: Thumbstick deadzone and calibration</li>
+<li><a href="../features/trigger-deadzones/">Trigger Deadzones</a>: Trigger range and deadzone</li>
+<li><a href="../features/force-feedback/">Force Feedback</a>: Rumble configuration</li>
+<li><a href="../guides/macros/">Macros</a>: Triggers and actions</li>
+<li><a href="../guides/profiles/">Profiles</a>: Per-application profiles</li>
+<li><a href="../reference/dsu-motion-server/">DSU Motion Server</a>: Motion data for emulators</li>
+<li><a href="../guides/web-controller/">Web Controller</a>: Browser-based virtual controller</li>
+<li><a href="../guides/remote-link/">Remote Link</a>: Share a controller across PCs on your network</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.1.0</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../devices/wii-controllers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Wii Controllers">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Wii Controllers
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../reference/" class="md-footer__link md-footer__link--next" aria-label="Next: Technical Reference">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Technical Reference
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
