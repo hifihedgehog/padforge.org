@@ -70,9 +70,10 @@ hand.
 
 | Profile | For |
 | --- | --- |
-| **Fighting Games** | 2D fighters, tournament-legal out of the box |
+| **Fighting Games** | 2D fighters, set up to clear the rules |
 | **Emulation** | RetroArch and the frontends built on it |
 | **Racing** | Calmer steering and finer control near centre |
+| **Space Sim** | Six degrees of freedom on two sticks |
 | **Gyro Aim** | Motion for fine aim, with the stick still live |
 
 ---
@@ -87,12 +88,18 @@ for sixteen more. That is the arrangement Final Fantasy XIV's Cross
 Hotbar uses, and the double-tap tier is a real activator rather than a
 macro workaround.
 
-### Fighting Games is tournament-legal
+### Fighting Games clears the tournament rules
 
 SOCD cleaning is set to Neutral on both axes, so pressing left and right
-together produces no movement, and the same for up and down. Capcom's
-rules require exactly that on both axes, and Evo's baseline permits it,
-so Neutral is the setting that is legal under both.
+together produces no movement, and the same for up and down.
+
+Street Fighter League's rules, section 2.6, say a controller must either
+maintain both opposing inputs or reject both, on each axis. Neutral is
+the reject-both case, so it complies, and the implementations the rule
+rules out are the selective ones: last-input priority, first-input
+priority, and the older up-priority. Evo's baseline is looser and permits
+those too, which makes Neutral the setting that satisfies both without
+having to check which ruleset a given event runs.
 
 The profile also binds only **one** directional surface. The D-pad
 drives and the left stick is left unbound on purpose, because the rules
@@ -109,6 +116,26 @@ its own.
 The left stick also drives the D-pad, because NES, SNES and Mega Drive
 cores have no analog sticks at all. Without that, a stick-first player
 gets nothing.
+
+### Space Sim is Frontier's own layout
+
+Roll on the left stick's X, pitch on its Y, vertical thrust on the right
+stick's Y. Those three are unanimous across every gamepad preset Elite
+Dangerous ships. Throttle is the bumpers, because a self-centering stick
+cannot hold a throttle setting, and Frontier only puts an absolute
+throttle axis on their HOTAS presets. The triggers are the guns.
+
+What the profile adds over a bare pad is the response shape. Docking
+happens in the first tenth of stick travel, so every flight axis is
+softened near centre and keeps full authority at the rim. Click the right
+stick for a Precision mode that softens it much further, and click again
+to leave.
+
+One thing it deliberately does not do. Elite ships two gamepad presets
+that differ on a single axis: right-stick X is yaw in one and lateral
+thrust in the other. Both use the same physical output, so which one you
+get is decided inside Elite's own binding file, and no controller profile
+can reach it. Pick the preset you want in-game.
 
 ### Media Remote sends the real media keys
 
@@ -130,9 +157,9 @@ not much of a recenter. Back keeps its ordinary press.
 
 ## Silencing the pad
 
-Every keyboard-and-mouse profile has a quiet layer. Hold **Start** for
-about half a second and the controller stops sending anything at all.
-Hold it again to bring it back.
+Every profile has a quiet layer. Hold **Start** for about half a second
+and the controller stops sending anything at all. Hold it again to bring
+it back.
 
 This is for the moment you alt-tab away and do not want the pad typing
 into whatever now has focus.
