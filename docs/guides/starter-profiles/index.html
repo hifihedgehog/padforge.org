@@ -3185,10 +3185,17 @@ Hold them again to bring it back.</p>
 into whatever now has focus.</p>
 <p>It is two buttons on purpose. A layer that opens on a single button takes
 that button over completely, so putting the gesture on Start alone would
-cost you Start. A pair costs nothing, because neither button does anything
-unusual until both are down. Guide works here because PadForge hides the
-physical controller from Windows, so the Guide press reaches PadForge
-instead of opening Game Bar.</p>
+cost you Start outright. A pair costs nothing: each button keeps its own
+binding, and only the two together mean anything else. Guide works here
+because PadForge hides the physical controller from Windows, so the press
+reaches PadForge instead of opening Game Bar.</p>
+<p>On Media Remote this is why Stop is a quick tap of Guide rather than a
+plain press. Holding Guide is the start of the silence gesture, so a press
+that turns into a hold no longer stops playback.</p>
+<p>The one controller this does not reach is a pad whose driver profile has
+no Guide button at all. There is no second gesture for those, because
+every other pair of buttons is already spoken for in at least one profile,
+and taking one back is the thing this design exists to avoid.</p>
 <hr />
 <h2 id="what-they-do-not-do">What they do not do<a class="headerlink" href="#what-they-do-not-do" title="Permanent link">&para;</a></h2>
 <ul>
