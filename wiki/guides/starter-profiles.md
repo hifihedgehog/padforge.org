@@ -157,12 +157,19 @@ not much of a recenter. Back keeps its ordinary press.
 
 ## Silencing the pad
 
-Every profile has a quiet layer. Hold **Start** for about half a second
-and the controller stops sending anything at all. Hold it again to bring
-it back.
+Every profile has a quiet layer. Hold **Guide and Start together** for
+about half a second and the controller stops sending anything at all.
+Hold them again to bring it back.
 
 This is for the moment you alt-tab away and do not want the pad typing
 into whatever now has focus.
+
+It is two buttons on purpose. A layer that opens on a single button takes
+that button over completely, so putting the gesture on Start alone would
+cost you Start. A pair costs nothing, because neither button does anything
+unusual until both are down. Guide works here because PadForge hides the
+physical controller from Windows, so the Guide press reaches PadForge
+instead of opening Game Bar.
 
 ---
 
