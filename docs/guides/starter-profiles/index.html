@@ -855,15 +855,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#three-worth-knowing-about" class="md-nav__link">
+  <a href="#a-few-worth-knowing-about" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three worth knowing about
+        A few worth knowing about
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Three worth knowing about">
+    <nav class="md-nav" aria-label="A few worth knowing about">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -893,6 +893,28 @@
     <span class="md-ellipsis">
       
         Emulation puts the hotkeys on Back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-remote-sends-the-real-media-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Remote sends the real media keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyro-aim-has-a-calibrate-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro Aim has a calibrate button
       
     </span>
   </a>
@@ -2840,15 +2862,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#three-worth-knowing-about" class="md-nav__link">
+  <a href="#a-few-worth-knowing-about" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Three worth knowing about
+        A few worth knowing about
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Three worth knowing about">
+    <nav class="md-nav" aria-label="A few worth knowing about">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2878,6 +2900,28 @@
     <span class="md-ellipsis">
       
         Emulation puts the hotkeys on Back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media-remote-sends-the-real-media-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media Remote sends the real media keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyro-aim-has-a-calibrate-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro Aim has a calibrate button
       
     </span>
   </a>
@@ -2967,6 +3011,11 @@ version to pick.</p>
 </ul>
 <p>On a controller with two touchpads the right pad wins. On a controller
 with none, the stick simply does all the work.</p>
+<p>Which stick backs the touchpad up depends on the profile. Point and
+Click and Isometric RPG put the cursor on the <strong>left</strong> stick and keep the
+right one for the camera, because in those games the pointer and the view
+are two different jobs for two different thumbs. Everything else uses the
+right stick.</p>
 <hr />
 <h2 id="the-profiles">The profiles<a class="headerlink" href="#the-profiles" title="Permanent link">&para;</a></h2>
 <h3 id="keyboard-and-mouse">Keyboard and mouse<a class="headerlink" href="#keyboard-and-mouse" title="Permanent link">&para;</a></h3>
@@ -3045,7 +3094,7 @@ hand.</p>
 </tbody>
 </table>
 <hr />
-<h2 id="three-worth-knowing-about">Three worth knowing about<a class="headerlink" href="#three-worth-knowing-about" title="Permanent link">&para;</a></h2>
+<h2 id="a-few-worth-knowing-about">A few worth knowing about<a class="headerlink" href="#a-few-worth-knowing-about" title="Permanent link">&para;</a></h2>
 <h3 id="hotbar-puts-32-abilities-behind-two-triggers">Hotbar puts 32 abilities behind two triggers<a class="headerlink" href="#hotbar-puts-32-abilities-behind-two-triggers" title="Permanent link">&para;</a></h3>
 <p>Hold the left trigger for eight slots on the D-pad and face buttons, hold
 the right trigger for a different eight, and double-tap either trigger
@@ -3069,6 +3118,17 @@ its own.</p>
 <p>The left stick also drives the D-pad, because NES, SNES and Mega Drive
 cores have no analog sticks at all. Without that, a stick-first player
 gets nothing.</p>
+<h3 id="media-remote-sends-the-real-media-keys">Media Remote sends the real media keys<a class="headerlink" href="#media-remote-sends-the-real-media-keys" title="Permanent link">&para;</a></h3>
+<p>Play/Pause, Stop, Mute, Volume Up and Down, Next and Previous Track, and
+browser Back are the actual system keys, so they work in whatever is
+playing rather than only in a player that happens to bind space and <code>F</code>.
+They ride the macro lane, because the keyboard row engine carries letters
+and arrows but not the media block.</p>
+<p>The arrows still seek, since seeking has no system key.</p>
+<h3 id="gyro-aim-has-a-calibrate-button">Gyro Aim has a calibrate button<a class="headerlink" href="#gyro-aim-has-a-calibrate-button" title="Permanent link">&para;</a></h3>
+<p>Hold <strong>Back</strong> for most of a second and the gyro recenters. Motion
+controls drift, and a recenter you can only reach by opening the app is
+not much of a recenter. Back keeps its ordinary press.</p>
 <hr />
 <h2 id="silencing-the-pad">Silencing the pad<a class="headerlink" href="#silencing-the-pad" title="Permanent link">&para;</a></h2>
 <p>Every keyboard-and-mouse profile has a quiet layer. Hold <strong>Start</strong> for
@@ -3082,11 +3142,6 @@ into whatever now has focus.</p>
 <li><strong>They never switch automatically.</strong> An archetype has no executable to
   match on, so you pick one by hand. Per-game switching is what
   <a href="../profiles/">per-game profiles</a> are for.</li>
-<li><strong>Media Remote leaves out the system media keys.</strong> Volume, next and
-  previous track, and browser back are not available as plain bindings,
-  so the profile uses the keys that work inside players instead: space to
-  play and pause, the arrows to seek and change volume, <code>F</code> for
-  fullscreen and <code>M</code> for mute.</li>
 <li><strong>Racing ships a shape, not a truth.</strong> The steering curve is a sensible
   starting point to nudge, not a claim about any particular game. Racing
   titles disagree wildly about what their own numbers mean.</li>

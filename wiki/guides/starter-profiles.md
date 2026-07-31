@@ -36,6 +36,12 @@ version to pick.
 On a controller with two touchpads the right pad wins. On a controller
 with none, the stick simply does all the work.
 
+Which stick backs the touchpad up depends on the profile. Point and
+Click and Isometric RPG put the cursor on the **left** stick and keep the
+right one for the camera, because in those games the pointer and the view
+are two different jobs for two different thumbs. Everything else uses the
+right stick.
+
 ---
 
 ## The profiles
@@ -71,7 +77,7 @@ hand.
 
 ---
 
-## Three worth knowing about
+## A few worth knowing about
 
 ### Hotbar puts 32 abilities behind two triggers
 
@@ -104,6 +110,22 @@ The left stick also drives the D-pad, because NES, SNES and Mega Drive
 cores have no analog sticks at all. Without that, a stick-first player
 gets nothing.
 
+### Media Remote sends the real media keys
+
+Play/Pause, Stop, Mute, Volume Up and Down, Next and Previous Track, and
+browser Back are the actual system keys, so they work in whatever is
+playing rather than only in a player that happens to bind space and `F`.
+They ride the macro lane, because the keyboard row engine carries letters
+and arrows but not the media block.
+
+The arrows still seek, since seeking has no system key.
+
+### Gyro Aim has a calibrate button
+
+Hold **Back** for most of a second and the gyro recenters. Motion
+controls drift, and a recenter you can only reach by opening the app is
+not much of a recenter. Back keeps its ordinary press.
+
 ---
 
 ## Silencing the pad
@@ -122,11 +144,6 @@ into whatever now has focus.
 - **They never switch automatically.** An archetype has no executable to
   match on, so you pick one by hand. Per-game switching is what
   [per-game profiles](profiles.md) are for.
-- **Media Remote leaves out the system media keys.** Volume, next and
-  previous track, and browser back are not available as plain bindings,
-  so the profile uses the keys that work inside players instead: space to
-  play and pause, the arrows to seek and change volume, `F` for
-  fullscreen and `M` for mute.
 - **Racing ships a shape, not a truth.** The steering curve is a sensible
   starting point to nudge, not a claim about any particular game. Racing
   titles disagree wildly about what their own numbers mean.
