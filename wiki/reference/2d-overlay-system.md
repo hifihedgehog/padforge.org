@@ -177,6 +177,49 @@ public static class XboxSeriesXLayout
 
 Selected for Xbox Series profiles. Adds a `ButtonShare` overlay between View and the dpad. Xbox Series profiles include Share. Older Xbox One / Elite / Adaptive profiles do not.
 
+### SwitchProLayout
+
+```csharp
+public static class SwitchProLayout
+{
+    public const int BaseWidth = 1485;
+    public const int BaseHeight = 1079;
+    public const string BasePath = "2DModels/SWITCHPRO/NSwitchPro_base.png";
+    public const double StickMaxTravel = 25;
+    public static readonly OverlayElement[] Overlays;  // 22 elements
+}
+```
+
+Selected when `ResolveAssetFolders` returns `SWITCHPRO`, which is every Nintendo-output slot. Triggers come as active+base pairs like the Xbox layouts, since ZL and ZR render as a clipped fill even though the hardware reports them digitally.
+
+Carries `ButtonShare` for Capture, and its `ButtonBack` / `ButtonStart` are Minus and Plus. The overlay set is named by function, not by the labels printed on the shell, so the same target names drive every layout.
+
+### SteamDeckLayout and SteamControllerLayout
+
+```csharp
+public static class SteamDeckLayout
+{
+    public const int BaseWidth = 2241;
+    public const int BaseHeight = 933;
+    public const string BasePath = "2DModels/STEAMDECK/SD_base.png";
+    public const double StickMaxTravel = 22;
+    public static readonly OverlayElement[] Overlays;  // 28 elements
+}
+
+public static class SteamControllerLayout
+{
+    public const int BaseWidth = 1466;
+    public const int BaseHeight = 1049;
+    public const string BasePath = "2DModels/STEAMCONTROLLER/SC_base.png";
+    public const double StickMaxTravel = 28;
+    public static readonly OverlayElement[] Overlays;  // 19 elements
+}
+```
+
+These two are generated into the same file but `ControllerModel2DView` never dispatches them. Their consumer is `WorkshopControllerPreview`, which draws the controller a Steam config was authored for, and that is a different device from whatever the user has assigned.
+
+Both carry dual touchpads (`LeftTouchpad` / `LeftTouchpadClick` and the right-hand pair). Steam Deck adds `ButtonQuickAccess` and four rear paddles. Steam Controller has one stick, so it carries `LeftThumbRing` with no right-hand counterpart, plus `LeftGrip` and `RightGrip`.
+
 ### Touchpad Click Highlight
 
 The touchpad-click visual is a PNG from the asset pack, not a hand-drawn shape. `BuildTouchpadPreview()` loads `DS4_Touchpad_Click.png` (or `DualSense_Touchpad_Click.png`) via `CreateImage` at the layout's `TouchpadClick` rectangle and adds it at Z=6, collapsed by default. It shows at full opacity while `TouchpadClickPressed` is true, at 0.4 opacity on hover, and toggled by the Map All flash.
@@ -259,7 +302,40 @@ PadForge.App/2DModels/
     DS4_AnalogStick_Click.png             (shared for both stick clicks)
     DS4_Touchpad_Click.png                (touchpad-click highlight)
     DS4_Lightbar_Front.png, DS4_Lightbar_Rear.png  (lightbar preview, #175)
+  SWITCHPRO/  (18 images)
+    NSwitchPro_base.png                   (1485x1079, base controller image)
+    NSwitchPro_FaceButton.png             (single image for all 4 face buttons)
+    NSwitchPro_D-PAD_Up/Down/Left/Right.png
+    NSwitchPro_L_Bumper.png, NSwitchPro_R_Bumper.png
+    NSwitchPro_ZL_Rest.png, NSwitchPro_ZR_Rest.png    (trigger base)
+    NSwitchPro_ZL.png, NSwitchPro_ZR.png              (trigger fill)
+    NSwitchPro_Plus-MinusButton.png       (shared for Minus and Plus)
+    NSwitchPro_HomeButton.png, NSwitchPro_CaptureButton.png
+    NSwitchPro_LeftStick.png, NSwitchPro_RightStick.png
+    NSwitchPro_AnalogStickClick.png       (shared for both stick clicks)
+  STEAMDECK/  (17 images)
+    SD_base.png                           (2241x933, base controller image)
+    SD_Face_Button.png, SD_D-PAD_Up/Down/Left/Right.png
+    SD_L1.png, SD_R1.png, SD_L2.png, SD_R2.png
+    SD_View-Menu_Button.png, SD_Guide-QuickMenu_Button.png
+    SD_LeftAnalogStick.png, SD_RightAnalogStick.png, SD_Joystick_Click.png
+    SD_Touchpad_Click.png                 (shared by both pads)
+    SD_CompactTile.png                    (gallery tile, not an overlay)
+  STEAMCONTROLLER/  (14 images)
+    SC_base.png                           (1466x1049, base controller image)
+    SC_Face_Button.png
+    SC_LeftBumper-Active.png, SC_RightBumper-Active.png
+    SC_LeftTrigger-FullPull-Active.png, SC_RightTrigger-FullPull-Active.png
+    SC_Start-Select_Button.png, SC_Guide_Button.png
+    SC_LeftGrip_Button.png, SC_RightGrip_Button.png
+    SC_AnalogStick.png, SC_AnalogStick_Click.png      (one stick only)
+    SC_LeftTrackpad_Click.png, SC_RightTrackpad_Click.png
+  MOUSE/  (8 images + LICENSE)
+    mouse_body.png, mouse_lmb.png, mouse_rmb.png, mouse_wheel.png
+    mouse_sideupper.png, mouse_sidelower.png, mouse_line.png, mouse.svg
 ```
+
+Steam Deck and Steam Controller ship no `*_Rest` trigger art, so their triggers are single-image elements rather than the active+base pair the Xbox and Switch layouts use. The Steam Deck's D-pad and face art also serve the Workshop preview only, since no PadForge output type resolves to those folders.
 
 All PNGs are declared as WPF `Resource` (not `EmbeddedResource`):
 
@@ -312,7 +388,7 @@ public event EventHandler<string> ControllerElementRecordRequested;
 | Field | Type | Description |
 |-------|------|-------------|
 | `_vm` | `PadViewModel` | Bound ViewModel |
-| `_loadedModel` | `string` | One of `"XBOX360"`, `"XBOXONE"`, `"XBOXSERIES"`, `"DS4"`, `"DualSense"` |
+| `_loadedModel` | `string` | One of `"XBOX360"`, `"XBOXONE"`, `"XBOXSERIES"`, `"DS4"`, `"DualSense"`, `"SWITCHPRO"` |
 | `_dirty` | `bool` | Render-frame update flag |
 | `_baseImage` | `Image` | Base controller image at Z=1 (above TriggerBase, below overlays) |
 | `_overlayImages` | `Dictionary<string, Image>` | Target name to overlay Image element |
@@ -348,7 +424,7 @@ public void Unbind()
 private void EnsureModel()
 ```
 
-Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)` and dispatches `BuildCanvas()` against one of five layout classes:
+Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)` and dispatches `BuildCanvas()` against one of six layout classes:
 
 | Resolved folder | Layout class | Profile family |
 |-----------------|--------------|----------------|
@@ -356,9 +432,12 @@ Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(Profil
 | `DualSense` | `DualSenseLayout` | DualSense / DualSense Edge |
 | `XBOXONE` | `XboxOneSLayout` | Xbox One, Xbox Elite, Xbox Adaptive |
 | `XBOXSERIES` | `XboxSeriesXLayout` | Xbox Series |
+| `SWITCHPRO` | `SwitchProLayout` | Nintendo output |
 | anything else | `Xbox360Layout` | Xbox 360 fallback |
 
-Extended slots route to `ControllerSchematicView` instead of this view, so this control only ever sees Xbox or PlayStation slots in practice.
+Extended slots route to `ControllerSchematicView` instead of this view, so this control sees Xbox, PlayStation, and Nintendo slots.
+
+`SteamDeckLayout` and `SteamControllerLayout` live in the same generated file but are not in this switch. `WorkshopControllerPreview` owns them.
 
 Returns immediately if `_loadedModel == needed`; otherwise calls `BuildCanvas()`.
 
@@ -1170,7 +1249,7 @@ All five views share the same architecture:
 2. **Bind/Unbind lifecycle**. `PadPage.BindActiveModelView()` calls `Unbind()` on all five, then `Bind(vm)` on the active one. Only one view processes `CompositionTarget.Rendering` at a time.
 3. **Dirty-flag rendering**. `CompositionTarget.Rendering` gated by `_dirty`, set by `PropertyChanged`.
 4. **Interactions**. Click-to-record, hover highlight, flash animation (Map All). Same target names across views.
-5. **Model selection** (2D/3D only). `EnsureModel()` resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)`, which picks one of `"DS4"`, `"DualSense"`, `"XBOXONE"`, `"XBOXSERIES"`, or `"XBOX360"`. Extended slots route to `ControllerSchematicView` instead, so this logic only fires for Xbox and PlayStation slots.
+5. **Model selection** (2D/3D only). `EnsureModel()` resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)`, which picks one of `"DS4"`, `"DualSense"`, `"XBOXONE"`, `"XBOXSERIES"`, `"SWITCHPRO"`, or `"XBOX360"`. Extended slots route to `ControllerSchematicView` instead, so this logic fires for Xbox, PlayStation, and Nintendo slots.
 
 Key differences:
 
