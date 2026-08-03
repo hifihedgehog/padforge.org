@@ -134,6 +134,10 @@ The two hands read independently, so the left half can drive the cursor while th
 - The [Devices](../features/devices.md) page shows the left half's readings as **Aux Gyroscope** and **Aux Accelerometer** telemetry blocks.
 - The left-side sources work over [Remote Link](../guides/remote-link.md), like the Nunchuk pair.
 
+### One slot for every Joy-Con grip
+
+A Joy-Con set shows up as three separate devices over its lifetime: the combined pair, the left half alone, and the right half alone. Assignments are per device and persist while a device is offline, so you can assign all three to the same virtual controller slot, each with mappings that fit its grip (sideways single, upright pair). Whichever identity is currently connected feeds the slot. Splitting the pair or rejoining it switches mapping sets on its own, with nothing to reconfigure.
+
 ---
 
 ## Joy-Con IR brightness
