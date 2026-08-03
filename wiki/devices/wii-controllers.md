@@ -144,7 +144,7 @@ For a sideways single Joy-Con, build the half's mapping set with the grip rotate
 
 ## Joy-Con IR brightness
 
-The right Joy-Con's IR camera reports a single brightness value, exposed as a source called **IR Brightness**. Cover the sensor and it reads bright. Uncover it and it reads dark. Only the standalone right Joy-Con has it. The left Joy-Con and the combined pair do not.
+The right Joy-Con's IR camera reports a single brightness value, exposed as a source called **IR Brightness**. Cover the sensor and it reads bright. Uncover it and it reads dark. It works on the standalone right Joy-Con and on a combined pair, where the right half's camera feeds the source, so a split-pair grip can use the cover gesture too. The left Joy-Con alone does not have it, and neither does a Joy-Con 2 (its inner edge carries the optical mouse instead).
 
 Map it three ways:
 
