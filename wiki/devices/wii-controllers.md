@@ -138,6 +138,8 @@ The two hands read independently, so the left half can drive the cursor while th
 
 A Joy-Con set shows up as three separate devices over its lifetime: the combined pair, the left half alone, and the right half alone. Assignments are per device and persist while a device is offline, so you can assign all three to the same virtual controller slot, each with mappings that fit its grip (sideways single, upright pair). Whichever identity is currently connected feeds the slot. Splitting the pair or rejoining it switches mapping sets on its own, with nothing to reconfigure.
 
+For a sideways single Joy-Con, build the half's mapping set with the grip rotated in mind. On a sideways left Joy-Con, stick up points right, so map the stick's physical Y axis to the virtual left stick's X and the physical X axis to Y (invert to taste with each row's **Invert** toggle), put SL and SR on the bumpers, and use the face of the D-pad as the four action buttons. The right half mirrors this with the opposite rotation. Save each grip as its own [profile](../guides/profiles.md), or put the alternate grip behind a [shift layer](../guides/shift-layers.md) to switch hold modes live without touching the device list.
+
 ---
 
 ## Joy-Con IR brightness
