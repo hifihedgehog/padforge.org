@@ -1032,6 +1032,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1572,6 +1576,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../vr-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../visualization/" class="md-nav__link">
         
   
@@ -1904,6 +1964,17 @@
     <span class="md-ellipsis">
       
         Uninstall guards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-steamvr-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The SteamVR card
       
     </span>
   </a>
@@ -3195,6 +3266,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#the-steamvr-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The SteamVR card
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hide-devices-from-games" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3530,11 +3612,12 @@
 </blockquote>
 <hr />
 <h2 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h2>
-<p>Three driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.</p>
+<p>Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.</p>
 <ul>
 <li><strong>HidHide</strong> card: Install and Uninstall buttons.</li>
 <li><strong>HIDMaestro</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.</li>
 <li><strong>Windows MIDI Services</strong> card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).</li>
+<li><strong>SteamVR</strong> card: needed only for <a href="../vr-controllers/">VR slots</a>. It describes itself as <em>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</em></li>
 </ul>
 <p>PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.</p>
 <h3 id="driver-summary">Driver summary<a class="headerlink" href="#driver-summary" title="Permanent link">&para;</a></h3>
@@ -3562,6 +3645,11 @@
 <td>Sends MIDI virtual-controller output. Needs Windows 11 24H2 (build 26100)+.</td>
 <td>You drive a DAW, synth, or other MIDI app from a controller.</td>
 </tr>
+<tr>
+<td><strong>SteamVR</strong></td>
+<td>Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client.</td>
+<td>You want a <a href="../vr-controllers/">VR slot</a>. The VR tile stays disabled without it.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="uninstall-guards">Uninstall guards<a class="headerlink" href="#uninstall-guards" title="Permanent link">&para;</a></h3>
@@ -3570,6 +3658,9 @@
 <li><strong>HidHide</strong> stays locked while any device still has the cloak armed. Disarm the cloak on the <a href="../devices/">Devices</a> page first.</li>
 <li><strong>Windows MIDI Services</strong> stays locked while any slot still outputs MIDI. Delete those slots or switch them to another output on the <a href="../controller-slots/">Controller Slots</a> page first.</li>
 </ul>
+<h3 id="the-steamvr-card">The SteamVR card<a class="headerlink" href="#the-steamvr-card" title="Permanent link">&para;</a></h3>
+<p>Before installing, the card offers an <strong>install location</strong>. It defaults to <code>C:\SteamVR</code> and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.</p>
+<p><strong>Uninstall appears only for an install PadForge itself created.</strong> PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.</p>
 <h3 id="hide-devices-from-games">Hide devices from games<a class="headerlink" href="#hide-devices-from-games" title="Permanent link">&para;</a></h3>
 <p>This checkbox sits inside the <strong>HidHide</strong> card. It only shows when HidHide is installed. Master switch for input hiding. Two pieces sit under it.</p>
 <ul>
@@ -3772,7 +3863,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

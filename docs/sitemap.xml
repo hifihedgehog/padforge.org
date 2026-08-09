@@ -2,258 +2,266 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://padforge.org/docs/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/troubleshooting/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/devices/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/devices/dualshock-3/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/devices/wii-controllers/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/adaptive-triggers/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/bass-shakers/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/controller-audio/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/controller-slots/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/dashboard/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/devices/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/driver-management/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/force-feedback/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
+    </url>
+    <url>
+         <loc>https://padforge.org/docs/features/headset-motion/</loc>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/impulse-triggers/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/input-precision/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/lighting/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/mappings/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/midi-input/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/nfc-tags/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/settings/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/stick-deadzones/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/touchpad/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/trigger-deadzones/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/virtual-controllers/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/visualization/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
+    </url>
+    <url>
+         <loc>https://padforge.org/docs/features/vr-controllers/</loc>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/features/wheel/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/gyro/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/macros/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/menus/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/profiles/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/remote-link/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/shift-layers/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/starter-profiles/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/steam-workshop-import/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/steering/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/guides/web-controller/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/2d-overlay-system/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/3d-model-system/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/architecture-overview/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/build-and-publish/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/controller-audio-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/driver-installation-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/dsu-motion-server/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/dsu-protocol/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/engine-library/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/hidmaestro-deep-dive/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/input-pipeline/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/midi-input-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/remote-link-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/sdl3-integration/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/services-layer/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/settings-and-serialization/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/steam-workshop-import-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/viewmodels/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/wheel-ffb-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/wii-controllers-internals/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/xaml-views/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/start/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/start/first-controller/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/start/five-minute-remap/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
     <url>
          <loc>https://padforge.org/docs/start/installation/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <lastmod>2026-08-09</lastmod>
     </url>
 </urlset>

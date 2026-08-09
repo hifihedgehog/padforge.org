@@ -110,11 +110,12 @@ Registers a logon scheduled task so PadForge runs when you log into Windows. Pad
 
 ## Driver Management
 
-Three driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.
+Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.
 
 - **HidHide** card: Install and Uninstall buttons.
 - **HIDMaestro** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.
 - **Windows MIDI Services** card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).
+- **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
 PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.
 
@@ -125,6 +126,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
 | **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 225+ device profiles. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, or Extended slot. Required for those four slot types. |
 | **Windows MIDI Services** | Sends MIDI virtual-controller output. Needs Windows 11 24H2 (build 26100)+. | You drive a DAW, synth, or other MIDI app from a controller. |
+| **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
 ### Uninstall guards
 
@@ -132,6 +134,12 @@ PadForge blocks two driver uninstalls until you clear what still depends on them
 
 - **HidHide** stays locked while any device still has the cloak armed. Disarm the cloak on the [Devices](devices.md) page first.
 - **Windows MIDI Services** stays locked while any slot still outputs MIDI. Delete those slots or switch them to another output on the [Controller Slots](controller-slots.md) page first.
+
+### The SteamVR card
+
+Before installing, the card offers an **install location**. It defaults to `C:\SteamVR` and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.
+
+**Uninstall appears only for an install PadForge itself created.** PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.
 
 ### Hide devices from games
 
@@ -282,4 +290,4 @@ Paste these into any issue you file.
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*
