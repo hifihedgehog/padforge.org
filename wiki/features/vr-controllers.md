@@ -21,7 +21,7 @@ Two details worth knowing before you start it:
 - **Choose where it goes.** The card has an install-location field. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
 - **It is several gigabytes.** The download runs for a few minutes on a fast connection and considerably longer on a slow one.
 
-If SteamVR is already on the machine, from Steam or from anywhere else, PadForge finds it and the card simply reports it as installed.
+An existing SteamVR is found automatically when it came from Steam, or when it sits at `C:\SteamVR`, and the card then reports it as installed. A hand-placed install somewhere else is not discovered, so point the install location at it or let PadForge fetch its own copy.
 
 ---
 
@@ -38,18 +38,19 @@ The slot's **Preview** tab draws both hands side by side, with each stick, trigg
 
 ## What each hand exposes
 
-Both hands carry the same control set, and every one of them is a mapping target.
+Both hands carry the same control set, and all of it is mappable.
 
 | Target | Type | Notes |
 |---|---|---|
 | Stick X / Y | Axis | Full range, both directions |
 | Stick click | Button | Separate from deflection |
 | Trigger | Axis | Analog pull |
-| Trigger click | Button | The full-pull click |
+| Trigger click | Button | Fires on any nonzero pull, matching how real trigger hardware asserts its digital follower |
 | Grip | Axis | Analog squeeze |
-| Grip click | Button | The full-squeeze click |
+| Grip click | Button | Fires at the slot's axis-to-button threshold, 50% by default |
 | A / B | Button | Per hand |
 | System | Button | Per hand |
+| A touch / B touch | Button | Capacitive touch, separate from the press. Map All skips these, so bind them by hand if you want them |
 
 Triggers and grips are genuinely analog. In the preview they fill from the bottom like a gauge rather than switching on and off, which is the quickest way to see whether a source is giving you a real analog value or just a button.
 
@@ -63,7 +64,7 @@ When a VR game buzzes a hand, that pulse does not stop at the virtual controller
 
 ## Motion
 
-The hand poses come from the driver's own identity. PadForge does not fabricate positional tracking, so the hands are not room-scale tracked objects. What this feature gives you is the **controls**: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.
+PadForge does not fabricate positional tracking. The driver parks both hands a fixed distance in front of the headset, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the **controls**: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.
 
 ---
 
@@ -71,6 +72,7 @@ The hand poses come from the driver's own identity. PadForge does not fabricate 
 
 Stated plainly, because they will shape whether this is useful to you:
 
+- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added.
 - **No per-slot VR configuration.** The driver ships one honest identity. There is no VR equivalent of the PlayStation or Extended profile pickers.
 - **The runtime is a hard requirement.** No SteamVR, no VR slot, and the tile stays disabled.
 - **SteamVR's own Test Controller is not a reliable indicator.** Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the app's own Preview tab, or the game.

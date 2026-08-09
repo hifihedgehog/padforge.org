@@ -2815,8 +2815,8 @@
 <p>Confirmed working on the <strong>WH-1000XM5</strong> family over Bluetooth.</p>
 <hr />
 <h2 id="how-padforge-finds-it">How PadForge finds it<a class="headerlink" href="#how-padforge-finds-it" title="Permanent link">&para;</a></h2>
-<p>Discovery is by capability, not by a hardcoded model list. PadForge looks for a Bluetooth HID device exposing a <strong>Sensor page (0x20), usage 0xE1</strong> collection whose sensor-description feature report begins with the marker <code>#AndroidHeadTracker#</code>. Any headset presenting that collection is a candidate, whatever its name.</p>
-<p>Pair the headphones to Windows as you normally would. When PadForge recognises the tracker, it appears on the <strong>Devices</strong> page as its own device with a headphone icon, alongside your controllers.</p>
+<p>Discovery is by capability, not by a hardcoded model list. PadForge looks for a HID device exposing a <strong>Sensor page (0x20), usage 0xE1</strong> collection whose sensor-description feature report begins with the marker <code>#AndroidHeadTracker#</code>. Any headset presenting that collection is a candidate, whatever its name.</p>
+<p>Pair the headphones to Windows as you normally would. When PadForge recognises the tracker, it appears on the <strong>Devices</strong> page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.</p>
 <p>Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
@@ -2842,7 +2842,7 @@
 <td>Lean</td>
 </tr>
 <tr>
-<td>Gyro Horizontal</td>
+<td>Gyro Horizontal (Yaw + Roll)</td>
 <td>Yaw and roll blended, for a grip-agnostic turn</td>
 </tr>
 </tbody>
@@ -2854,12 +2854,12 @@
 <ul>
 <li><strong>Rotation is the signal.</strong> On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesises an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.</li>
 <li><strong>Accelerometer is advertised only when the descriptor exposes it.</strong> Some firmware reports orientation without it.</li>
-<li><strong>The frame is remapped once, at ingest.</strong> The tracker's axes are rotated into the same frame SDL uses for controllers, so a headset and a gamepad both drive a mapping the same way.</li>
+<li><strong>The frame is remapped once, at ingest.</strong> The tracker's axes are swapped and signed into the same frame SDL uses for controllers, so a headset and a gamepad both drive a mapping the same way.</li>
 </ul>
 <hr />
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Bluetooth only.</strong> A USB-connected headset does not present the tracker collection.</li>
+<li><strong>Validated over Bluetooth.</strong> That is how these headsets expose the tracker and how this was tested. PadForge itself applies no transport filter, so it would open the collection over any transport that presented it.</li>
 <li><strong>Rotation, not position.</strong> Leaning physically closer to the screen changes nothing. Only orientation is reported.</li>
 <li><strong>Battery.</strong> The tracker runs off the headphone battery like anything else it does.</li>
 </ul>

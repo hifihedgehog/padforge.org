@@ -2867,7 +2867,7 @@
 <li><strong>Choose where it goes.</strong> The card has an install-location field. It defaults to <code>C:\SteamVR</code> and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.</li>
 <li><strong>It is several gigabytes.</strong> The download runs for a few minutes on a fast connection and considerably longer on a slow one.</li>
 </ul>
-<p>If SteamVR is already on the machine, from Steam or from anywhere else, PadForge finds it and the card simply reports it as installed.</p>
+<p>An existing SteamVR is found automatically when it came from Steam, or when it sits at <code>C:\SteamVR</code>, and the card then reports it as installed. A hand-placed install somewhere else is not discovered, so point the install location at it or let PadForge fetch its own copy.</p>
 <hr />
 <h2 id="creating-a-vr-slot">Creating a VR slot<a class="headerlink" href="#creating-a-vr-slot" title="Permanent link">&para;</a></h2>
 <ol>
@@ -2879,7 +2879,7 @@
 <p>The slot's <strong>Preview</strong> tab draws both hands side by side, with each stick, trigger, grip, and button lighting as you press it, so you can confirm a mapping without putting a headset on.</p>
 <hr />
 <h2 id="what-each-hand-exposes">What each hand exposes<a class="headerlink" href="#what-each-hand-exposes" title="Permanent link">&para;</a></h2>
-<p>Both hands carry the same control set, and every one of them is a mapping target.</p>
+<p>Both hands carry the same control set, and all of it is mappable.</p>
 <table>
 <thead>
 <tr>
@@ -2907,7 +2907,7 @@
 <tr>
 <td>Trigger click</td>
 <td>Button</td>
-<td>The full-pull click</td>
+<td>Fires on any nonzero pull, matching how real trigger hardware asserts its digital follower</td>
 </tr>
 <tr>
 <td>Grip</td>
@@ -2917,7 +2917,7 @@
 <tr>
 <td>Grip click</td>
 <td>Button</td>
-<td>The full-squeeze click</td>
+<td>Fires at the slot's axis-to-button threshold, 50% by default</td>
 </tr>
 <tr>
 <td>A / B</td>
@@ -2929,6 +2929,11 @@
 <td>Button</td>
 <td>Per hand</td>
 </tr>
+<tr>
+<td>A touch / B touch</td>
+<td>Button</td>
+<td>Capacitive touch, separate from the press. Map All skips these, so bind them by hand if you want them</td>
+</tr>
 </tbody>
 </table>
 <p>Triggers and grips are genuinely analog. In the preview they fill from the bottom like a gauge rather than switching on and off, which is the quickest way to see whether a source is giving you a real analog value or just a button.</p>
@@ -2937,11 +2942,12 @@
 <p>When a VR game buzzes a hand, that pulse does not stop at the virtual controller. PadForge fans it back out to whatever physical device is driving the slot, riding the same lane ordinary game rumble uses. A DualSense driving the right hand rumbles when the right hand is buzzed.</p>
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
-<p>The hand poses come from the driver's own identity. PadForge does not fabricate positional tracking, so the hands are not room-scale tracked objects. What this feature gives you is the <strong>controls</strong>: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.</p>
+<p>PadForge does not fabricate positional tracking. The driver parks both hands a fixed distance in front of the headset, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the <strong>controls</strong>: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.</p>
 <hr />
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <p>Stated plainly, because they will shape whether this is useful to you:</p>
 <ul>
+<li><strong>One VR slot, ever.</strong> The pair is the unit. A second VR slot cannot be added.</li>
 <li><strong>No per-slot VR configuration.</strong> The driver ships one honest identity. There is no VR equivalent of the PlayStation or Extended profile pickers.</li>
 <li><strong>The runtime is a hard requirement.</strong> No SteamVR, no VR slot, and the tile stays disabled.</li>
 <li><strong>SteamVR's own Test Controller is not a reliable indicator.</strong> Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the app's own Preview tab, or the game.</li>
