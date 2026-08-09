@@ -35,6 +35,7 @@
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
+            <li><a href="#finish">Finishes</a></li>
             <li><a href="#translate">Remap</a></li>
             <li><a href="#feel">Feel</a></li>
             <li><a href="#motion">Motion</a></li>
@@ -58,7 +59,9 @@
             <a href="/docs/" class="btn btn-secondary">Read the docs</a>
         </div>
         <figure class="hero-shot reveal">
-            <img src="assets/screenshot-dashboard.jpg" alt="PadForge Dashboard with virtual controllers, motion server, web controller, and driver status" fetchpriority="high">
+            <img src="assets/screenshot-colorway-dualsense-spiderman2.jpg"
+                 alt="PadForge showing a DualSense in the Spider-Man 2 finish, rendered in the app's 3D controller preview"
+                 fetchpriority="high" width="2582" height="1550">
         </figure>
         <div class="hero-trust">
             <a href="https://www.softpedia.com/get/Gaming-Related/PadForge.shtml" class="hero-trust-item" target="_blank" rel="noopener">
@@ -73,6 +76,45 @@
         </div>
     </div>
 </header>
+
+<!-- ═══ Finish picker: the app renders the pad you actually own ═══ -->
+<section id="finish" class="finish" aria-labelledby="finish-title">
+    <div class="container">
+        <p class="kicker reveal">Finishes</p>
+        <h2 id="finish-title" class="finish-title reveal">It looks like your controller.<br>Because it is yours.</h2>
+        <p class="finish-lede reveal">PadForge draws the real thing, down to the finish. Pick yours and the preview, the button map and the annotations all follow it.</p>
+
+        <figure class="finish-stage reveal">
+            <img id="finish-image"
+                 src="assets/screenshot-colorway-dualsense-spiderman2.jpg"
+                 alt="DualSense in the Spider-Man 2 finish, shown in PadForge's controller preview"
+                 width="2582" height="1550" loading="lazy" decoding="async">
+        </figure>
+
+        <div class="finish-meta">
+            <p class="finish-name" id="finish-name" aria-live="polite">Spider-Man&nbsp;2</p>
+            <p class="finish-family" id="finish-family">DualSense</p>
+        </div>
+
+        <!-- Radio semantics: arrow keys move between finishes, which is what a
+             swatch rail should do for anyone not using a mouse. -->
+        <div class="finish-swatches" role="radiogroup" aria-label="Controller finish">
+            <button class="sw is-active" role="radio" aria-checked="true"  style="--sw:#B4243C; --sw2:#1b1b1f" data-img="colorway-dualsense-spiderman2" data-name="Spider-Man 2"        data-family="DualSense"><span class="sw-t">Spider-Man 2</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#3a3a3c; --sw2:#c9a227" data-img="colorway-dualsense-ffxvi"      data-name="Final Fantasy XVI"  data-family="DualSense"><span class="sw-t">Final Fantasy XVI</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9C243C; --sw2:#5e1024" data-img="colorway-dualsense-cosmicred"  data-name="Cosmic Red"         data-family="DualSense"><span class="sw-t">Cosmic Red</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#FC54CC; --sw2:#8e2a72" data-img="colorway-dualsense-novapink"   data-name="Nova Pink"          data-family="DualSense"><span class="sw-t">Nova Pink</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#243C9C; --sw2:#141f52" data-img="colorway-dualsense-cobalt"     data-name="Deep Earth Cobalt"  data-family="DualSense"><span class="sw-t">Deep Earth Cobalt</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9C0C24; --sw2:#3d0710" data-img="colorway-dualsense-volcanic"   data-name="Deep Earth Volcanic" data-family="DualSense"><span class="sw-t">Deep Earth Volcanic</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#6b6a66; --sw2:#3c3a38" data-img="colorway-dualsense-graycamo"   data-name="Gray Camouflage"    data-family="DualSense"><span class="sw-t">Gray Camouflage</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#476D91; --sw2:#8a5fb0" data-img="colorway-xbox-stellarshift"    data-name="Stellar Shift"      data-family="Xbox Series"><span class="sw-t">Stellar Shift</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9c8b3c; --sw2:#3f4a35" data-img="colorway-xbox-halo"            data-name="Halo Infinite"      data-family="Xbox Series"><span class="sw-t">Halo Infinite</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#c9c4bf; --sw2:#9C2424" data-img="colorway-xbox-starfield"       data-name="Starfield"          data-family="Xbox Series"><span class="sw-t">Starfield</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#b9b6b1; --sw2:#8f1d2b" data-img="colorway-xbox-porsche"         data-name="Porsche 75th"       data-family="Xbox Series"><span class="sw-t">Porsche 75th</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#3C9C54; --sw2:#1d5c30" data-img="colorway-xbox-velocitygreen"   data-name="Velocity Green"     data-family="Xbox Series"><span class="sw-t">Velocity Green</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#E4FC6C; --sw2:#3aa6c9" data-img="colorway-xbox-remix"           data-name="Remix"              data-family="Xbox Series"><span class="sw-t">Remix</span></button>
+        </div>
+    </div>
+</section>
 
 <!-- Stat band -->
 <section class="stats" aria-label="PadForge by the numbers">
@@ -917,6 +959,81 @@
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
+
+    /* ---- Finish picker -------------------------------------------------
+       Swaps the stage image, the display name and the family label. The
+       swatches are a radiogroup, so arrow keys walk them and the roving
+       tabindex keeps a single stop in the tab order. Images are decoded
+       before the crossfade starts, so a switch never shows a half-painted
+       frame; without that the first click on a finish flashed white while
+       the JPEG streamed in. No-JS readers keep the Spider-Man stage and
+       the full finish list stays in the DOM for them. */
+    const stage  = document.querySelector('.finish-stage');
+    const fImg   = document.getElementById('finish-image');
+    const fName  = document.getElementById('finish-name');
+    const fFam   = document.getElementById('finish-family');
+    const swatches = Array.from(document.querySelectorAll('.finish-swatches .sw'));
+
+    if (stage && fImg && swatches.length) {
+        swatches.forEach((s, i) => s.tabIndex = s.classList.contains('is-active') ? 0 : -1);
+
+        const srcFor = key => 'assets/screenshot-' + key + '.jpg';
+        const warm = new Set();
+        const preload = key => {
+            if (warm.has(key)) return;
+            warm.add(key);
+            const im = new Image();
+            im.src = srcFor(key);
+        };
+
+        const select = (sw, focus) => {
+            if (!sw || sw.classList.contains('is-active')) { if (focus) sw.focus(); return; }
+            swatches.forEach(o => {
+                const on = o === sw;
+                o.classList.toggle('is-active', on);
+                o.setAttribute('aria-checked', on ? 'true' : 'false');
+                o.tabIndex = on ? 0 : -1;
+            });
+            const key = sw.dataset.img;
+            const next = new Image();
+            next.decoding = 'async';
+            next.src = srcFor(key);
+            const paint = () => {
+                fImg.src = next.src;
+                fImg.alt = sw.dataset.name + ' finish, shown in PadForge’s controller preview';
+                fName.textContent = sw.dataset.name;
+                fFam.textContent  = sw.dataset.family;
+                stage.classList.remove('is-swapping');
+            };
+            stage.classList.add('is-swapping');
+            (next.decode ? next.decode().catch(() => {}) : Promise.resolve()).then(() => {
+                setTimeout(paint, 60);
+            });
+            if (focus) sw.focus();
+        };
+
+        swatches.forEach(sw => {
+            sw.addEventListener('click', () => select(sw, false));
+            sw.addEventListener('mouseenter', () => preload(sw.dataset.img));
+            sw.addEventListener('focus', () => preload(sw.dataset.img));
+            sw.addEventListener('keydown', e => {
+                const i = swatches.indexOf(sw);
+                let j = null;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % swatches.length;
+                if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   j = (i - 1 + swatches.length) % swatches.length;
+                if (e.key === 'Home') j = 0;
+                if (e.key === 'End')  j = swatches.length - 1;
+                if (j === null) return;
+                e.preventDefault();
+                select(swatches[j], true);
+            });
+        });
+
+        /* Warm the neighbours of the opening finish so the first two
+           clicks in either direction are instant. */
+        preload(swatches[1] && swatches[1].dataset.img);
+        preload(swatches[swatches.length - 1].dataset.img);
+    }
 })();
 </script>
 

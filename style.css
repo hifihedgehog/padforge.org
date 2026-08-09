@@ -60,7 +60,11 @@ body {
     overflow-x: hidden;
 }
 
-img { max-width: 100%; display: block; }
+/* height:auto is load-bearing, not decoration. Images that carry width and
+   height attributes (which they should, so the layout does not jump while
+   they load) otherwise keep the literal attribute height while CSS caps the
+   width, and a 2582x1550 screenshot renders as a portrait smear. */
+img { max-width: 100%; height: auto; display: block; }
 
 .container {
     max-width: var(--container);
@@ -852,4 +856,150 @@ a:hover { color: var(--text-hi); }
     .rail-card { flex-basis: 84vw; }
 
     .screenshot-nav { position: static; justify-content: flex-end; margin-bottom: 0.8rem; }
+}
+
+/* =====================================================================
+   FINISH PICKER
+   The app's colorway system, shown the way a hardware product page shows
+   finishes: one enormous product frame, a quiet swatch rail beneath it,
+   and the finish name set large enough to be the headline it deserves.
+   The point is not decoration. PadForge renders the finish the user
+   actually owns, so the picker demonstrates a real capability.
+   ===================================================================== */
+
+.finish {
+    padding: var(--section-pad) 0 calc(var(--section-pad) * 0.75);
+    background:
+        radial-gradient(120% 80% at 50% 0%, rgba(242, 101, 42, 0.07), transparent 60%),
+        var(--bg-alt);
+    border-block: 1px solid var(--border-soft);
+    text-align: center;
+    overflow: hidden;
+}
+
+.finish-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    font-size: clamp(2.3rem, 6.4vw, 4.6rem);
+    color: var(--text-hi);
+    margin: 0.35rem auto 0;
+    max-width: 16ch;
+    text-wrap: balance;
+}
+
+.finish-lede {
+    max-width: 54ch;
+    margin: 1.35rem auto 0;
+    color: var(--text-muted);
+    font-size: clamp(1rem, 1.5vw, 1.12rem);
+    text-wrap: pretty;
+}
+
+/* The stage holds a fixed aspect so swapping finishes never reflows the
+   page. A finish change should move nothing but the pixels inside it. */
+.finish-stage {
+    position: relative;
+    max-width: 1080px;
+    margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+    aspect-ratio: 2582 / 1550;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-sunken);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 40px 110px -25px rgba(0, 0, 0, 0.85),
+        0 0 160px -40px var(--ember-glow);
+}
+
+.finish-stage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 260ms ease;
+}
+
+.finish-stage.is-swapping img { opacity: 0; }
+
+.finish-meta {
+    margin-top: clamp(1.6rem, 3vw, 2.4rem);
+    min-height: 4.2rem;
+}
+
+.finish-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3.2vw, 2.35rem);
+    letter-spacing: -0.02em;
+    color: var(--text-hi);
+    line-height: 1.15;
+}
+
+.finish-family {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--telemetry-dim);
+    margin-top: 0.45rem;
+}
+
+/* Swatch rail. Scrolls horizontally on narrow screens rather than
+   wrapping into a ragged block, which is what makes it read as a
+   deliberate rail instead of a pile of dots. */
+.finish-swatches {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.7rem, 1.6vw, 1.15rem);
+    margin-top: clamp(1.8rem, 3.5vw, 2.6rem);
+    padding: 0.5rem 1rem 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+}
+
+.finish-swatches::-webkit-scrollbar { display: none; }
+
+.sw {
+    --ring: transparent;
+    position: relative;
+    flex: 0 0 auto;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: linear-gradient(150deg, var(--sw) 0%, var(--sw) 46%, var(--sw2) 54%, var(--sw2) 100%);
+    cursor: pointer;
+    padding: 0;
+    scroll-snap-align: center;
+    box-shadow: 0 0 0 2px var(--bg-alt), 0 0 0 3px var(--ring), 0 6px 16px -6px rgba(0,0,0,0.9);
+    transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms ease;
+}
+
+.sw:hover { transform: translateY(-3px) scale(1.06); }
+.sw:focus-visible { outline: none; --ring: var(--telemetry); }
+.sw.is-active { --ring: var(--ember); transform: translateY(-2px) scale(1.04); }
+
+/* The label is for assistive tech and for the tooltip; the visible name
+   lives in .finish-name so it can be set at display scale. */
+.sw-t {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .finish-stage img,
+    .sw { transition: none; }
+}
+
+@media (max-width: 640px) {
+    .finish-swatches { justify-content: flex-start; }
+    .sw { width: 2.25rem; height: 2.25rem; }
 }
