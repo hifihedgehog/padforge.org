@@ -914,15 +914,85 @@ a:hover { color: var(--text-hi); }
         0 0 160px -40px var(--ember-glow);
 }
 
-.finish-stage img {
+/* Two stacked layers crossfade. The outgoing one stays painted underneath
+   until the incoming one is fully opaque, so there is never a frame of
+   background showing through mid-swap. */
+.finish-layer {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: opacity 260ms ease;
+    opacity: 0;
+    transition: opacity 620ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
 }
 
-.finish-stage.is-swapping img { opacity: 0; }
+.finish-layer.is-live { opacity: 1; z-index: 1; }
+
+/* A slow push inward while a finish holds the stage. It is the difference
+   between a slideshow and something that feels alive, and it costs one
+   compositor-only transform. */
+@media (prefers-reduced-motion: no-preference) {
+    .finish-layer.is-live { animation: finish-drift 9s ease-out both; }
+}
+
+@keyframes finish-drift {
+    from { transform: scale(1.008); }
+    to   { transform: scale(1.052); }
+}
+
+/* Autoplay controls ------------------------------------------------------ */
+
+.finish-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.35rem;
+}
+
+.finish-play {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 1.05rem 0.5rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-sunken) 70%, transparent);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.finish-play:hover,
+.finish-play:focus-visible { color: var(--text-hi); border-color: var(--ember); }
+.finish-play svg { fill: currentColor; display: block; }
+.finish-play .fp-play  { display: none; }
+.finish-play .fp-pause { display: block; }
+.finish-play:not(.is-playing) .fp-play  { display: block; }
+.finish-play:not(.is-playing) .fp-pause { display: none; }
+
+/* The ring is the clock. It tells you the stage moves on its own and how
+   soon, which is what separates an intentional cycle from a page that
+   changed while you were reading it. */
+.sw-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: conic-gradient(var(--ember) calc(var(--p, 0) * 360deg), rgba(255, 255, 255, 0.09) 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.2px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.2px));
+    opacity: 0;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+}
+
+.sw.is-active .sw-ring { opacity: 1; }
+.finish.is-paused .sw.is-active .sw-ring { opacity: 0.32; }
 
 .finish-meta {
     margin-top: clamp(1.6rem, 3vw, 2.4rem);

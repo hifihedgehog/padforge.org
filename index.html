@@ -84,11 +84,16 @@
         <h2 id="finish-title" class="finish-title reveal">It looks like your controller.<br>Because it is yours.</h2>
         <p class="finish-lede reveal">PadForge draws the real thing, down to the finish. Pick yours and the preview, the button map and the annotations all follow it.</p>
 
-        <figure class="finish-stage reveal">
-            <img id="finish-image"
+        <figure class="finish-stage reveal" id="finish-stage">
+            <!-- Two layers so a finish change crossfades instead of blinking.
+                 The incoming layer is decoded before it is revealed, so the
+                 stage never shows a half-painted JPEG. -->
+            <img class="finish-layer is-live" id="finish-layer-a"
                  src="assets/screenshot-colorway-dualsense-spiderman2.jpg"
                  alt="DualSense in the Spider-Man 2 finish, shown in PadForge's controller preview"
                  width="2582" height="1550" loading="lazy" decoding="async">
+            <img class="finish-layer" id="finish-layer-b" alt="" aria-hidden="true"
+                 width="2582" height="1550" decoding="async">
         </figure>
 
         <div class="finish-meta">
@@ -99,19 +104,27 @@
         <!-- Radio semantics: arrow keys move between finishes, which is what a
              swatch rail should do for anyone not using a mouse. -->
         <div class="finish-swatches" role="radiogroup" aria-label="Controller finish">
-            <button class="sw is-active" role="radio" aria-checked="true"  style="--sw:#B4243C; --sw2:#1b1b1f" data-img="colorway-dualsense-spiderman2" data-name="Spider-Man 2"        data-family="DualSense"><span class="sw-t">Spider-Man 2</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#3a3a3c; --sw2:#c9a227" data-img="colorway-dualsense-ffxvi"      data-name="Final Fantasy XVI"  data-family="DualSense"><span class="sw-t">Final Fantasy XVI</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9C243C; --sw2:#5e1024" data-img="colorway-dualsense-cosmicred"  data-name="Cosmic Red"         data-family="DualSense"><span class="sw-t">Cosmic Red</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#FC54CC; --sw2:#8e2a72" data-img="colorway-dualsense-novapink"   data-name="Nova Pink"          data-family="DualSense"><span class="sw-t">Nova Pink</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#243C9C; --sw2:#141f52" data-img="colorway-dualsense-cobalt"     data-name="Deep Earth Cobalt"  data-family="DualSense"><span class="sw-t">Deep Earth Cobalt</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9C0C24; --sw2:#3d0710" data-img="colorway-dualsense-volcanic"   data-name="Deep Earth Volcanic" data-family="DualSense"><span class="sw-t">Deep Earth Volcanic</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#6b6a66; --sw2:#3c3a38" data-img="colorway-dualsense-graycamo"   data-name="Gray Camouflage"    data-family="DualSense"><span class="sw-t">Gray Camouflage</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#476D91; --sw2:#8a5fb0" data-img="colorway-xbox-stellarshift"    data-name="Stellar Shift"      data-family="Xbox Series"><span class="sw-t">Stellar Shift</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9c8b3c; --sw2:#3f4a35" data-img="colorway-xbox-halo"            data-name="Halo Infinite"      data-family="Xbox Series"><span class="sw-t">Halo Infinite</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#c9c4bf; --sw2:#9C2424" data-img="colorway-xbox-starfield"       data-name="Starfield"          data-family="Xbox Series"><span class="sw-t">Starfield</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#b9b6b1; --sw2:#8f1d2b" data-img="colorway-xbox-porsche"         data-name="Porsche 75th"       data-family="Xbox Series"><span class="sw-t">Porsche 75th</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#3C9C54; --sw2:#1d5c30" data-img="colorway-xbox-velocitygreen"   data-name="Velocity Green"     data-family="Xbox Series"><span class="sw-t">Velocity Green</span></button>
-            <button class="sw"           role="radio" aria-checked="false" style="--sw:#E4FC6C; --sw2:#3aa6c9" data-img="colorway-xbox-remix"           data-name="Remix"              data-family="Xbox Series"><span class="sw-t">Remix</span></button>
+            <button class="sw is-active" role="radio" aria-checked="true"  style="--sw:#B4243C; --sw2:#1b1b1f" data-img="colorway-dualsense-spiderman2" data-name="Spider-Man 2"        data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Spider-Man 2</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#3a3a3c; --sw2:#c9a227" data-img="colorway-dualsense-ffxvi"      data-name="Final Fantasy XVI"  data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Final Fantasy XVI</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9C243C; --sw2:#5e1024" data-img="colorway-dualsense-cosmicred"  data-name="Cosmic Red"         data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Cosmic Red</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#FC54CC; --sw2:#8e2a72" data-img="colorway-dualsense-novapink"   data-name="Nova Pink"          data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Nova Pink</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#243C9C; --sw2:#141f52" data-img="colorway-dualsense-cobalt"     data-name="Deep Earth Cobalt"  data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Deep Earth Cobalt</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9C0C24; --sw2:#3d0710" data-img="colorway-dualsense-volcanic"   data-name="Deep Earth Volcanic" data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Deep Earth Volcanic</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#6b6a66; --sw2:#3c3a38" data-img="colorway-dualsense-graycamo"   data-name="Gray Camouflage"    data-family="DualSense"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Gray Camouflage</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#476D91; --sw2:#8a5fb0" data-img="colorway-xbox-stellarshift"    data-name="Stellar Shift"      data-family="Xbox Series"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Stellar Shift</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#9c8b3c; --sw2:#3f4a35" data-img="colorway-xbox-halo"            data-name="Halo Infinite"      data-family="Xbox Series"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Halo Infinite</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#c9c4bf; --sw2:#9C2424" data-img="colorway-xbox-starfield"       data-name="Starfield"          data-family="Xbox Series"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Starfield</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#b9b6b1; --sw2:#8f1d2b" data-img="colorway-xbox-porsche"         data-name="Porsche 75th"       data-family="Xbox Series"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Porsche 75th</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#3C9C54; --sw2:#1d5c30" data-img="colorway-xbox-velocitygreen"   data-name="Velocity Green"     data-family="Xbox Series"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Velocity Green</span></button>
+            <button class="sw"           role="radio" aria-checked="false" style="--sw:#E4FC6C; --sw2:#3aa6c9" data-img="colorway-xbox-remix"           data-name="Remix"              data-family="Xbox Series"><span class="sw-ring" aria-hidden="true"></span><span class="sw-t">Remix</span></button>
+        </div>
+
+        <div class="finish-controls">
+            <button class="finish-play is-playing" id="finish-play" type="button" aria-label="Pause the finish cycle">
+                <svg class="fp-pause" viewBox="0 0 12 14" width="12" height="14" aria-hidden="true"><rect x="0" y="0" width="4" height="14" rx="1.2"/><rect x="8" y="0" width="4" height="14" rx="1.2"/></svg>
+                <svg class="fp-play" viewBox="0 0 12 14" width="12" height="14" aria-hidden="true"><path d="M1 1.2v11.6a1 1 0 0 0 1.53.85l9-5.8a1 1 0 0 0 0-1.7l-9-5.8A1 1 0 0 0 1 1.2z"/></svg>
+                <span class="fp-label">Pause</span>
+            </button>
         </div>
     </div>
 </section>
@@ -119,9 +132,9 @@
 <!-- Stat band -->
 <section class="stats" aria-label="PadForge by the numbers">
     <div class="container stats-row">
-        <div class="stat reveal"><span class="stat-num">16</span><span class="stat-label">virtual controllers at once</span></div>
-        <div class="stat reveal"><span class="stat-num">225+</span><span class="stat-label">device profiles</span></div>
-        <div class="stat reveal"><span class="stat-num">1000<em>Hz</em></span><span class="stat-label">polling, sub-ms jitter</span></div>
+        <div class="stat reveal"><span class="stat-num" data-count="16">16</span><span class="stat-label">virtual controllers at once</span></div>
+        <div class="stat reveal"><span class="stat-num" data-count="225" data-suffix="+">225+</span><span class="stat-label">device profiles</span></div>
+        <div class="stat reveal"><span class="stat-num" data-count="1000" data-suffix="&lt;em&gt;Hz&lt;/em&gt;">1000<em>Hz</em></span><span class="stat-label">polling, sub-ms jitter</span></div>
         <div class="stat reveal"><span class="stat-num">$0</span><span class="stat-label">forever, no paywall</span></div>
     </div>
 </section>
@@ -960,64 +973,190 @@
         navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    /* ---- Finish picker -------------------------------------------------
-       Swaps the stage image, the display name and the family label. The
-       swatches are a radiogroup, so arrow keys walk them and the roving
-       tabindex keeps a single stop in the tab order. Images are decoded
-       before the crossfade starts, so a switch never shows a half-painted
-       frame; without that the first click on a finish flashed white while
-       the JPEG streamed in. No-JS readers keep the Spider-Man stage and
-       the full finish list stays in the DOM for them. */
-    const stage  = document.querySelector('.finish-stage');
-    const fImg   = document.getElementById('finish-image');
-    const fName  = document.getElementById('finish-name');
-    const fFam   = document.getElementById('finish-family');
+    /* ---- Stat count-up --------------------------------------------------
+       The numbers count to their value the first time the band comes into
+       view. The markup already contains the final figures, so a reader with
+       no JS, or with reduced motion asked for, sees them immediately and
+       nothing here can ever leave a wrong number on screen. */
+    const stats = Array.from(document.querySelectorAll('.stat-num[data-count]'));
+    if (stats.length && !reduce && 'IntersectionObserver' in window) {
+        const ease = t => 1 - Math.pow(1 - t, 3);
+        const run = el => {
+            const target = parseInt(el.dataset.count, 10);
+            const suffix = el.dataset.suffix || '';
+            const DUR = 1100;
+            const t0 = performance.now();
+            const step = now => {
+                const t = Math.min(1, (now - t0) / DUR);
+                el.innerHTML = Math.round(target * ease(t)).toLocaleString() + suffix;
+                if (t < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        };
+        const so = new IntersectionObserver(es => {
+            es.forEach(e => { if (e.isIntersecting) { run(e.target); so.unobserve(e.target); } });
+        }, { threshold: 0.6 });
+        stats.forEach(el => so.observe(el));
+    }
+
+    /* ---- Finish showcase ------------------------------------------------
+       The stage advances on its own. A picker that waits to be clicked is a
+       picker most visitors never touch, so the finishes present themselves
+       and the swatches become a way to steer rather than a chore.
+
+       What "advances on its own" has to mean to be tolerable:
+         - it stops on hover and on keyboard focus, so it never moves out
+           from under someone who is reading or aiming at a swatch,
+         - it stops when scrolled out of view or when the tab is hidden, so
+           no phone burns battery cycling a section nobody is looking at,
+         - it never starts under prefers-reduced-motion,
+         - and it can be stopped outright, which WCAG 2.2.2 requires of
+           anything that moves for more than five seconds.
+       The ring on the active swatch shows how long the current finish holds,
+       so the movement reads as deliberate rather than twitchy. */
+    const fSection = document.getElementById('finish');
+    const fStage   = document.getElementById('finish-stage');
+    const fName    = document.getElementById('finish-name');
+    const fFam     = document.getElementById('finish-family');
+    const fPlay    = document.getElementById('finish-play');
+    const layers   = [document.getElementById('finish-layer-a'),
+                      document.getElementById('finish-layer-b')];
     const swatches = Array.from(document.querySelectorAll('.finish-swatches .sw'));
 
-    if (stage && fImg && swatches.length) {
-        swatches.forEach((s, i) => s.tabIndex = s.classList.contains('is-active') ? 0 : -1);
-
+    if (fStage && layers[0] && layers[1] && fPlay && swatches.length) {
+        const HOLD = 4200;                 // ms a finish holds the stage
         const srcFor = key => 'assets/screenshot-' + key + '.jpg';
+
+        let live = 0;                      // which layer is showing
+        let idx  = 0;                      // which swatch is active
+        let stopped = reduce;              // explicit stop, or reduced motion
+        let hovering = false, focused = false, visible = true;
+        let startedAt = 0, held = 0, swapping = false;
+
+        swatches.forEach((sw, i) => { sw.tabIndex = i === 0 ? 0 : -1; });
+
         const warm = new Set();
         const preload = key => {
-            if (warm.has(key)) return;
+            if (!key || warm.has(key)) return;
             warm.add(key);
             const im = new Image();
+            im.decoding = 'async';
             im.src = srcFor(key);
         };
 
-        const select = (sw, focus) => {
-            if (!sw || sw.classList.contains('is-active')) { if (focus) sw.focus(); return; }
-            swatches.forEach(o => {
-                const on = o === sw;
+        const running = () => !stopped && !hovering && !focused && visible && !document.hidden;
+
+        function paint(i) {
+            const sw = swatches[i];
+            swatches.forEach((o, k) => {
+                const on = k === i;
                 o.classList.toggle('is-active', on);
                 o.setAttribute('aria-checked', on ? 'true' : 'false');
                 o.tabIndex = on ? 0 : -1;
+                if (!on) o.style.removeProperty('--p');
             });
-            const key = sw.dataset.img;
-            const next = new Image();
-            next.decoding = 'async';
-            next.src = srcFor(key);
-            const paint = () => {
-                fImg.src = next.src;
-                fImg.alt = sw.dataset.name + ' finish, shown in PadForge’s controller preview';
-                fName.textContent = sw.dataset.name;
-                fFam.textContent  = sw.dataset.family;
-                stage.classList.remove('is-swapping');
-            };
-            stage.classList.add('is-swapping');
-            (next.decode ? next.decode().catch(() => {}) : Promise.resolve()).then(() => {
-                setTimeout(paint, 60);
-            });
-            if (focus) sw.focus();
-        };
+            fName.textContent = sw.dataset.name;
+            fFam.textContent  = sw.dataset.family;
+        }
 
-        swatches.forEach(sw => {
-            sw.addEventListener('click', () => select(sw, false));
+        function show(i) {
+            if (i === idx || swapping) return;
+            const sw  = swatches[i];
+            const inc = layers[1 - live];
+            const out = layers[live];
+            swapping = true;
+            inc.src = srcFor(sw.dataset.img);
+            const reveal = () => {
+                inc.alt = sw.dataset.name + ' finish, shown in PadForge\u2019s controller preview';
+                inc.removeAttribute('aria-hidden');
+                out.alt = '';
+                out.setAttribute('aria-hidden', 'true');
+                /* Re-trigger the drift by dropping the class and forcing a
+                   reflow before re-adding it. Without the reflow the browser
+                   coalesces both writes, the animation never restarts, and
+                   only the very first finish would ever move. */
+                inc.classList.remove('is-live');
+                void inc.offsetWidth;
+                inc.classList.add('is-live');
+                out.classList.remove('is-live');
+                live = 1 - live;
+                idx = i;
+                paint(i);
+                swapping = false;
+                held = 0;
+                startedAt = performance.now();
+                preload(swatches[(i + 1) % swatches.length].dataset.img);
+            };
+            /* Race the decode against a deadline. A decode that never settles
+               would leave swapping true forever and kill the cycle outright,
+               and a stalled image is not a reason to freeze the whole
+               section. Whichever finishes first reveals; reveal is
+               idempotent. */
+            let done = false;
+            const once = () => { if (!done) { done = true; reveal(); } };
+            const dec = inc.decode ? inc.decode().catch(() => {}) : Promise.resolve();
+            dec.then(once);
+            setTimeout(once, 900);
+        }
+
+        function tick(now) {
+            raf = requestAnimationFrame(tick);
+            if (!running() || swapping) { startedAt = now - held; return; }
+            held = now - startedAt;
+            const p = Math.min(1, held / HOLD);
+            swatches[idx].style.setProperty('--p', p.toFixed(4));
+            if (p >= 1) show((idx + 1) % swatches.length);
+        }
+        let raf = 0;
+
+        function setStopped(v) {
+            stopped = v;
+            fPlay.classList.toggle('is-playing', !v);
+            fPlay.setAttribute('aria-label', v ? 'Play the finish cycle' : 'Pause the finish cycle');
+            fPlay.querySelector('.fp-label').textContent = v ? 'Play' : 'Pause';
+            fSection.classList.toggle('is-paused', v);
+        }
+
+        fPlay.addEventListener('click', () => {
+            setStopped(!stopped);
+            if (!stopped) { held = 0; startedAt = performance.now(); }
+        });
+
+        /* Hover and focus only hold the clock. They never clear an explicit
+           stop, because undoing a deliberate choice on mouseout is worse
+           than not pausing at all. */
+        /* Mouse only. A touch pointer fires pointerenter on tap and may never
+           fire pointerleave, which would strand the cycle paused for the
+           entire visit on a phone: the exact devices where it is the whole
+           point. */
+        fSection.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hovering = true; });
+        fSection.addEventListener('pointerleave', e => {
+            if (e.pointerType === 'mouse') { hovering = false; startedAt = performance.now() - held; }
+        });
+        /* Keyboard focus only. Clicking a swatch moves focus to it and leaves
+           it there, so treating any focus as a pause would mean one click
+           stops the cycle for good. :focus-visible is the browser's own
+           answer to "did this focus come from the keyboard". */
+        fSection.addEventListener('focusin', e => {
+            focused = !!(e.target && e.target.matches && e.target.matches(':focus-visible'));
+        });
+        fSection.addEventListener('focusout', () => { focused = false; startedAt = performance.now() - held; });
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) startedAt = performance.now() - held;
+        });
+
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(es => {
+                visible = es[0].isIntersecting;
+                if (visible) startedAt = performance.now() - held;
+            }, { threshold: 0.25 }).observe(fSection);
+        }
+
+        swatches.forEach((sw, i) => {
+            sw.addEventListener('click', () => { show(i); sw.focus(); });
             sw.addEventListener('mouseenter', () => preload(sw.dataset.img));
             sw.addEventListener('focus', () => preload(sw.dataset.img));
             sw.addEventListener('keydown', e => {
-                const i = swatches.indexOf(sw);
                 let j = null;
                 if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % swatches.length;
                 if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   j = (i - 1 + swatches.length) % swatches.length;
@@ -1025,14 +1164,21 @@
                 if (e.key === 'End')  j = swatches.length - 1;
                 if (j === null) return;
                 e.preventDefault();
-                select(swatches[j], true);
+                show(j);
+                swatches[j].focus();
             });
         });
 
-        /* Warm the neighbours of the opening finish so the first two
-           clicks in either direction are instant. */
-        preload(swatches[1] && swatches[1].dataset.img);
-        preload(swatches[swatches.length - 1].dataset.img);
+        setStopped(stopped);
+        paint(0);
+
+        /* Warm the whole rail once the page is idle. Thirteen finishes is
+           cheap next to ever showing a blank stage mid-cycle. */
+        const warmAll = () => swatches.forEach(sw => preload(sw.dataset.img));
+        if ('requestIdleCallback' in window) requestIdleCallback(warmAll, { timeout: 4000 });
+        else setTimeout(warmAll, 2500);
+
+        if (!reduce) { startedAt = performance.now(); raf = requestAnimationFrame(tick); }
     }
 })();
 </script>
