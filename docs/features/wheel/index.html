@@ -1657,6 +1657,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#moza-and-other-standard-pid-wheels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moza and other standard-PID wheels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#centering-and-constant-force-pick-one-seat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Centering and Constant Force pick one seat
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3003,6 +3025,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#moza-and-other-standard-pid-wheels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moza and other standard-PID wheels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#centering-and-constant-force-pick-one-seat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Centering and Constant Force pick one seat
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3073,7 +3117,7 @@
 <p><em>Native force feedback for Logitech, Fanatec, and Thrustmaster wheels, plus rotation range, auto centering, and RPM shift LEDs on a tab of their own.</em></p>
 <p><img alt="Wheel tab with rotation range, auto centering, and RPM LED controls" src="../../images/pad-wheel.png" /></p>
 <p>The Wheel tab appears when the slot has a supported Logitech, Fanatec, or Thrustmaster wheel assigned as a physical device. It is <strong>per pad per slot</strong>, like the other tuning tabs. Pick a different wheel in the assigned-devices dropdown and the tab rebinds to that wheel.</p>
-<p>For a wheel PadForge does not recognize by model, force feedback still runs through the <a href="../force-feedback/">Force Feedback</a> pipeline. The Wheel tab appears only when that wheel exposes a single steering axis with a centering spring and PadForge reads it as a driving device. Then it shows the auto centering row alone. The rotation-range and RPM-LED rows stay hidden, since those need the vendor's own commands. A generic wheel without that centering spring gets no Wheel tab at all.</p>
+<p>For a wheel PadForge does not recognize by model, force feedback still runs through the <a href="../force-feedback/">Force Feedback</a> pipeline. The Wheel tab appears when that wheel advertises a centering spring and PadForge reads it as a driving device, including wheelbase-and-pedals composites that report more than one force-feedback axis. Then it shows the auto centering row alone. The rotation-range and RPM-LED rows stay hidden, since those need the vendor's own commands. A generic wheel without that centering spring gets no Wheel tab at all.</p>
 <hr />
 <h2 id="what-native-means-here">What "native" means here<a class="headerlink" href="#what-native-means-here" title="Permanent link">&para;</a></h2>
 <p>Most mappers route a wheel's force feedback through the generic DirectInput or SDL haptic path. PadForge does that too for unrecognized wheels. For the models listed below it does something more direct: it speaks each vendor's own HID protocol, the same one the vendor's driver speaks.</p>
@@ -3191,6 +3235,10 @@
 <p>T300RS (PS3, PS4, and GT variants, plus the advanced and Ferrari F1 modes), T-GT II, T248, TX, TS-XW, TS-PC Racer.</p>
 <p>The <strong>T150</strong> uses a separate protocol and runs through the generic path.</p>
 <hr />
+<h3 id="moza-and-other-standard-pid-wheels">Moza and other standard-PID wheels<a class="headerlink" href="#moza-and-other-standard-pid-wheels" title="Permanent link">&para;</a></h3>
+<p>Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard USB PID force-feedback protocol rather than a proprietary one, so they ride the generic path by design. There is no Moza driver to add, and that is not a gap: the same is true of Cammus, VRS, Asetek, Simucube and PXN bases. What the generic path gives them is game force feedback plus the Auto Centering spring. What it cannot give them is vendor-specific rotation range or RPM LEDs, which have no standard command.</p>
+<h3 id="centering-and-constant-force-pick-one-seat">Centering and Constant Force pick one seat<a class="headerlink" href="#centering-and-constant-force-pick-one-seat" title="Permanent link">&para;</a></h3>
+<p>Both are idle behaviours: each applies its force only while the game is not sending force feedback of its own. A wheel has one force-feedback effect slot, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. Game force outranks both and hands the slot back the moment it goes quiet. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.</p>
 <h2 id="over-remote-link">Over Remote Link<a class="headerlink" href="#over-remote-link" title="Permanent link">&para;</a></h2>
 <p>A supported wheel plugged into another PC and shared over <a href="../../guides/remote-link/">Remote Link</a> keeps the whole native pipeline. The PC running the game decodes the game's force-feedback effects exactly as it does for a local wheel. Instead of writing to the wheel, it ships the steering parameters across the link: constant force, the condition effects, the periodic waveform, rotation range, auto centering, and the RPM LED state. The wheel's PC re-encodes them with its own vendor writer, so the wheel firmware receives the same commands a local wheel would.</p>
 <ul>
@@ -3228,7 +3276,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: help when a wheel has no force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 
