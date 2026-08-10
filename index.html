@@ -1149,10 +1149,21 @@
            fire pointerleave, which would strand the cycle paused for the
            entire visit on a phone: the exact devices where it is the whole
            point. */
-        fSection.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hovering = true; });
-        fSection.addEventListener('pointerleave', e => {
-            if (e.pointerType === 'mouse') { hovering = false; startedAt = performance.now() - held; }
-        });
+        /* Hover-pause belongs to the SWATCH RAIL, not the whole section.
+
+           Listening on the section meant that scrolling the page with the
+           cursor anywhere over it set hovering = true and stopped the cycle,
+           the second half of "the timer stops if I scroll even slightly".
+           Reading the picture is not a reason to stop a slideshow. Aiming at
+           a swatch is, because the thing you are aiming at would otherwise
+           move out from under the pointer. */
+        const fRail = document.querySelector('.finish-swatches');
+        if (fRail) {
+            fRail.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hovering = true; });
+            fRail.addEventListener('pointerleave', e => {
+                if (e.pointerType === 'mouse') { hovering = false; startedAt = performance.now() - held; }
+            });
+        }
         /* Keyboard focus only. Clicking a swatch moves focus to it and leaves
            it there, so treating any focus as a pause would mean one click
            stops the cycle for good. :focus-visible is the browser's own
@@ -1165,11 +1176,22 @@
             if (!document.hidden) startedAt = performance.now() - held;
         });
 
+        /* Watch the STAGE, at any visibility.
+
+           This observed the whole section at threshold 0.25, and the section
+           is taller than most viewports: a small scroll dropped the visible
+           fraction under a quarter, isIntersecting went false, and the cycle
+           stopped dead. Reported as "the timer stops if I scroll even
+           slightly", which is exactly what a 25% threshold on an
+           taller-than-screen element does.
+
+           The question is only "can the reader see the picture", so the
+           target is the stage and the threshold is 0. Any sliver counts. */
         if ('IntersectionObserver' in window) {
             new IntersectionObserver(es => {
                 visible = es[0].isIntersecting;
                 if (visible) startedAt = performance.now() - held;
-            }, { threshold: 0.25 }).observe(fSection);
+            }, { threshold: 0 }).observe(fStage);
         }
 
         swatches.forEach((sw, i) => {
