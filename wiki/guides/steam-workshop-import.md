@@ -10,6 +10,8 @@ Steam Workshop holds years of community controller layouts built in Steam Input.
 
 ## Turn it on
 
+![The Workshop browser before the community-config opt-in is enabled](../images/workshop-cold.png)
+
 The feature is off by default. PadForge sends nothing to Steam until you enable it.
 
 1. Open **Settings** and find the **Community Configs** card.
@@ -35,6 +37,10 @@ See [Settings](../features/settings.md) for the card in context.
 
 ## Browse configs
 
+![The config list for a selected game](../images/workshop-configs.png)
+
+![Searching the Steam Workshop for a game](../images/workshop-search.png)
+
 Open the **Profiles** page and click **Browse Community Configs**. The button is always there. If Community Configs is still off, the dialog opens on an unlit "The forge is cold" panel that names the Steam servers involved and offers the **Enable Community Configs** step right in place.
 
 ### Find the game
@@ -59,6 +65,8 @@ Each card shows:
 
 ## The translation manifest
 
+![The translation manifest listing what each binding became](../images/workshop-manifest.png)
+
 Click a card and PadForge downloads the config, translates it, and fills the manifest pane. Three stat blocks summarize the run:
 
 | Stat | Meaning |
@@ -82,6 +90,8 @@ Steam Input configs can carry several action sets (Default, Driving, Menu, and s
 ---
 
 ## Import
+
+![An imported config applied as an ordinary PadForge profile](../images/workshop-applied.png)
 
 Two buttons finish the job:
 

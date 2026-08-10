@@ -27,6 +27,8 @@ An existing SteamVR is found automatically when it came from Steam, or when it s
 
 ## Creating a VR slot
 
+![The VR slot's config bar](../images/pad-vr-configbar.png)
+
 1. On the **Dashboard**, click **Add Controller**.
 2. Pick the **VR** tile.
 3. Assign a physical device to the slot on the **Devices** page, the same as any other slot type.
@@ -37,6 +39,8 @@ The slot's **Preview** tab draws both hands side by side, with each stick, trigg
 ---
 
 ## What each hand exposes
+
+![The VR slot's mapping grid with both hands' targets](../images/pad-vr-mappings.png)
 
 Both hands carry the same control set, and all of it is mappable.
 

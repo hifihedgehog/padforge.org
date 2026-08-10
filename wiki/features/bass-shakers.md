@@ -5,6 +5,7 @@ controller receives to an audio output as low-frequency tones, for bass
 shakers and subwoofers.*
 
 <!-- SCREENSHOT: pad-bass-shakers -->
+![The Bass Shakers tab with the Rumble to Audio card and its four voices](../images/pad-bass-shakers.png)
 
 The tab is per slot. It works with Xbox, DualShock 4 / DualSense, and
 Nintendo Switch Pro virtual controllers, plus Extended virtual controllers

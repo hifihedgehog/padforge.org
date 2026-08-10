@@ -137,6 +137,8 @@ PadForge blocks two driver uninstalls until you clear what still depends on them
 
 ### The SteamVR card
 
+![The SteamVR card with its install location field](../images/settings-steamvr.png)
+
 Before installing, the card offers an **install location**. It defaults to `C:\SteamVR` and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.
 
 **Uninstall appears only for an install PadForge itself created.** PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.
@@ -184,6 +186,8 @@ For full driver detail see [Driver Management](driver-management.md).
 ---
 
 ## Community Configs
+
+![The Community Configs card in Settings](../images/settings-community-configs.png)
 
 Controls the [Steam Workshop Config Import](../guides/steam-workshop-import.md) feature: browsing community-made Steam Input controller configs and translating them into PadForge profiles.
 

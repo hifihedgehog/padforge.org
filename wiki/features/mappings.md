@@ -254,6 +254,8 @@ To give a button one of these behaviors, bind the macro's trigger to the physica
 
 ## Modifiers
 
+![Per-source sensitivity on a mapping row](../images/mapping-sensitivity.png)
+
 The per-source toggles in the Options column. These are per source, not per row.
 
 ### Invert
@@ -338,6 +340,8 @@ Without **Half**, a 50% deadzone would reference the full axis range, requiring 
 
 ## SOCD cleaning
 
+![SOCD cleaning on a Keyboard and Mouse slot](../images/pad-kbm-socd.png)
+
 The **Simultaneous Opposite Cardinal Directions (SOCD)** card lives on the slot-tier **Output** tab, alongside Keep Controller Awake. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.
 
 | Mode | What it does |
@@ -392,6 +396,8 @@ Touchpad entries also ride the raw list on pads with a touchpad:
 ---
 
 ## Gamepad sources
+
+![The source picker listing a gamepad's inputs](../images/gamepad-source-picker.png)
 
 Every recognized gamepad's source dropdown carries a **Gamepad** group next to its device-specific entries. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") instead of pinning it to one physical pad. The row then reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework: build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.
 

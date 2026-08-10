@@ -190,6 +190,8 @@ The dropdown appears once the slot has at least one shift layer. A macro that ar
 
 ## Actions
 
+![The Move Mouse to Position action editor](../images/macro-move-mouse.png)
+
 Actions run in list order, top to bottom, each time the macro fires.
 
 ### Button Press / Button Release
@@ -530,6 +532,8 @@ Stick-to-mouse aiming (Always mode):
 ---
 
 ## Repeat modes
+
+![The Repeat Key While Held action with its interval and key combo](../images/macro-repeat-key.png)
 
 | Mode | Behavior |
 |---|---|

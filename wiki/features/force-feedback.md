@@ -239,6 +239,7 @@ Every slider has its own reset button. Reset All restores everything in its sect
 ## Bass Shakers
 
 <!-- SCREENSHOT: pad-bass-shakers -->
+![Rumble to Audio routing game feedback to a bass shaker](../images/pad-bass-shakers.png)
 
 The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Only game feedback plays through the audio output. Macro and test rumble stay on the controller.
 

@@ -8,7 +8,9 @@
 
 ---
 
-## Which view shows
+## 
+
+![The Extended slot's schematic view](../images/pad-extended-schematic.png)Which view shows
 
 PadForge picks the view from the slot's controller type.
 
