@@ -9,6 +9,7 @@ extra capabilities or extra setup steps worth their own walkthrough.
 | Family | Why it has a page |
 | --- | --- |
 | [DualShock 3](dualshock-3.md) | Needs a one-time pairing step over USB before Bluetooth works |
+| [SpaceMouse](spacemouse.md) | A 6DoF puck games can't see on their own, with an axis legend worth having open while you map it |
 | [Wii Controllers](wii-controllers.md) | Pairing, extensions, Motion Plus, the IR pointer, and the Joy-Con extras (IR Brightness, the Joy-Con 2 mouse) |
 
 Families without a page here (DualSense, DualShock 4, Xbox, Switch Pro,
@@ -20,4 +21,4 @@ Joy-Con works the same way, except for the extras documented on the
 **IR Brightness** source, the Joy-Con 2 optical mouse, and the per-half
 motion sources on a combined pair.
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*
