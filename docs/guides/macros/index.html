@@ -1127,6 +1127,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pressure-scaled-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pressure-Scaled Rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cycle-tap-list" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3943,6 +3954,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pressure-scaled-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pressure-Scaled Rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cycle-tap-list" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4944,6 +4966,14 @@
 <h3 id="toggle-button-toggle-key">Toggle Button / Toggle Key<a class="headerlink" href="#toggle-button-toggle-key" title="Permanent link">&para;</a></h3>
 <p>Each fire latches or unlatches a controller button or a key. A latched output stays held until the next fire or until the macro is disabled. Imported Steam configs use these for their toggle presses.</p>
 <p>All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a <strong>Pulse While Latched</strong> checkbox: while latched, the output pulses on and off at the repeat interval instead of holding solid.</p>
+<h3 id="pressure-scaled-rate">Pressure-Scaled Rate<a class="headerlink" href="#pressure-scaled-rate" title="Permanent link">&para;</a></h3>
+<p>Every action that shows the Interval field also carries a <strong>Pressure-Scaled Rate</strong> checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the <strong>Slow Interval</strong>, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on modern pads and works with any analog input.</p>
+<ul>
+<li><strong>Slow Interval.</strong> The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.</li>
+<li><strong>Rate Curve.</strong> Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.</li>
+<li><strong>Device and Axis.</strong> The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast.</li>
+</ul>
+<p>A DualShock 3 example: trigger the macro on Cross, set the source to the Cross pressure axis, and the button becomes a fire-rate dial. Squeeze lightly for single aimed shots, press through for full auto.</p>
 <h3 id="cycle-tap-list">Cycle Tap List<a class="headerlink" href="#cycle-tap-list" title="Permanent link">&para;</a></h3>
 <p>Each fire performs the next tap in the <strong>Steps</strong> list and advances. With <strong>Wrap</strong> on, the list restarts after the last step. With it off, firing stops at the end. Imported Steam configs use it for their cycle bindings.</p>
 <h3 id="run-program">Run Program<a class="headerlink" href="#run-program" title="Permanent link">&para;</a></h3>
@@ -5395,7 +5425,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: fixes for macros that do not fire.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 
