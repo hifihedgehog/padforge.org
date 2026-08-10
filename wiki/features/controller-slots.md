@@ -99,6 +99,10 @@ No driver. Always available. Sends keyboard and mouse input to Windows instead o
 
 The Output tab carries a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
 
+When a mouse is the slot's selected device, a **Mouse** tab appears carrying the **Mouse Gestures** card. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can be the gesture button, or bind a custom activation input. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures on the Mappings tab, or use them as macro triggers.
+
+![The Mouse Gestures card on a Keyboard and Mouse slot](../images/pad-mouse-gestures.png)
+
 Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pairs, with the same four modes. There it applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned. Xbox and PlayStation slots pick named buttons for each pair. Nintendo and Extended slots enter raw button indices.
 
 ![Keyboard and mouse controller preview](../images/pad-kbm-preview.png)
