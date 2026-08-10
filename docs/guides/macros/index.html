@@ -4971,7 +4971,8 @@
 <ul>
 <li><strong>Slow Interval.</strong> The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.</li>
 <li><strong>Rate Curve.</strong> Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.</li>
-<li><strong>Device and Axis.</strong> The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast.</li>
+<li><strong>Ramp Start / Ramp End.</strong> The pressure window the ramp lives in, default 0 to 100 percent. Below the start the rate stays at the Slow Interval, at the end it reaches the full-press rate. Raise the start to ignore a trigger's resting slack, lower the end to hit full speed without bottoming out.</li>
+<li><strong>Device and Axis.</strong> The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. <strong>Record</strong> captures the next axis you move, <strong>Clear</strong> empties the pair.</li>
 </ul>
 <p>A DualShock 3 example: trigger the macro on Cross, set the source to the Cross pressure axis, and the button becomes a fire-rate dial. Squeeze lightly for single aimed shots, press through for full auto.</p>
 <h3 id="cycle-tap-list">Cycle Tap List<a class="headerlink" href="#cycle-tap-list" title="Permanent link">&para;</a></h3>
