@@ -79,7 +79,7 @@ The Mouse Output sources above move the cursor relatively, like a laptop touchpa
 
 - Touch the pad and the cursor jumps to the matching spot on the primary monitor. Slide and it follows 1:1.
 - Lift the finger and the cursor stays where it was.
-- On a single-pad controller the picker also offers **Left Half** and **Right Half** variants that read one half of the pad as the whole surface.
+- The first pad also offers **Touchpad 1 Pointer X (Left Half)** and **(Right Half)** variants (and the same pair on Y) that read one half of the pad as the whole surface.
 - A row that mixes a pointer source with relative sources (gyro, stick) keeps the relative aim live while no finger is down. The moment a finger lands, the pointer takes over.
 
 The card tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.
@@ -137,7 +137,7 @@ Master controls for the per-tick gesture recognizer.
 
 ## In-Box Gestures
 
-Every toggle here is off by default. Flip the ones you want. A gesture's entries appear in the mapping picker only after **Enable Gestures on This Touchpad** (Gesture Detection card above) and the gesture's own category toggle are both on.
+Every toggle here is off by default. Flip the ones you want. Gating is three levels, and all three have to pass before a gesture's entries appear in the mapping picker: **Enable Gestures on This Touchpad** (Gesture Detection card above), a **Recognize** setting that includes the in-box catalog (`In-Box Only` or `Both`), and the gesture's own category toggle. A family is never gated on another family's checkbox.
 
 **Touch spots.** Held buttons for where the pad is being touched: **Left Touch**, **Right Touch**, **Top Touch**, and **Multitouch**. One finger lands in Left, Right, or Top (the top quarter). Two or more fingers hold Multitouch. The left/right split sits at two fifths of the width, the same boundary DS4Windows uses, and exactly one spot is held at a time. The mapped button holds while the finger stays in the zone, releases the moment it lifts, and hands over live when the finger slides across a boundary. Bind them like any button: touchpad left to A, right to B, top to C.
 
@@ -157,7 +157,7 @@ Each gesture appears as an entry in the mapping picker. Bind **Swipe Up** to a b
 
 Profile-scoped: captured custom gestures travel with whichever profile is active when they're recorded. Each gesture has a name, finger count, and the recorded finger path(s).
 
-Click **+ Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the **Samples to capture** control defaults to 3 and adjusts from 1 to 5. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
+Click **+ Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the **Samples to capture** dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
 
 A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn't currently selected as the active mapping device still drives the recorder, so you can capture a gesture on the touchpad while the slot's primary device is something else.
 
@@ -196,4 +196,4 @@ Shape matching runs two open-source gesture recognizers on every single-finger s
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

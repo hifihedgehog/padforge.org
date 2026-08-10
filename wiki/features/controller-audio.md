@@ -47,7 +47,7 @@ The mirror captures a Windows **output endpoint**, not a single program. To send
 
 ## Haptic-tone pad controls
 
-Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads show two extra control groups in the Sound Output card. A resonant actuator buzzing along with background music is more intrusive than a small speaker playing it, so these let you rein it in.
+Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads show three extra control groups in the Sound Output card. A resonant actuator buzzing along with background music is more intrusive than a small speaker playing it, so the first two let you rein it in.
 
 <!-- SCREENSHOT: pad-audio-haptic-controls -->
 <!-- image pending recapture: ![Play mirrored audio and High tones controls on the Audio tab](../images/pad-audio-haptic-controls.png) -->
@@ -75,6 +75,25 @@ Decide what happens to pitches above a limit you set. This applies to the mirror
 | Fold them down an octave | Pitches above the limit drop an octave at a time until they fall under it, keeping their pitch character lower down. |
 
 **Tone limit** sets the cutoff, default 800 Hz. That keeps engine and impact rumble while catching high-pitched beeps. Folding is the gentler choice.
+
+### Play DualSense haptics on this controller
+
+Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a **Haptics Gain** slider, 25 to 300%, default 100%.
+
+---
+
+## DualSense headset jack
+
+A DualSense or DualSense Edge adds two more rows under Master volume.
+
+| Control | What it does |
+|---|---|
+| Headphone Volume | Hardware volume of the pad's headset jack, 0-100. Written into the pad's firmware register, so it holds with no app in the loop. The HeadphoneVolumeUp / HeadphoneVolumeDown macro actions step the same setting. |
+| Output Path | Where the pad plays its audio: Default, Headphones (Stereo), Headphones (Mono), Headphones + Speaker, Speaker Only, Follow Headphone Jack. |
+
+Headphones + Speaker plays mono on the headset side, a firmware limit. Over Bluetooth that mode plays through the headphones only. Follow Headphone Jack switches to headphones when something is plugged in and back to the speaker when unplugged. With no jack reading available it behaves like Default.
+
+A DualShock 4 does not get these rows.
 
 ---
 
@@ -142,4 +161,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

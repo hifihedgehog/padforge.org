@@ -132,6 +132,8 @@ nav:
       - Remote Link Internals: reference/remote-link-internals.md
       - Steam Workshop Import Internals: reference/steam-workshop-import-internals.md
       - Controller Audio Internals: reference/controller-audio-internals.md
+      - Virtual VR Controllers Internals: reference/vr-controllers-internals.md
+      - Headset Head Tracking Internals: reference/headset-motion-internals.md
       - Wheel Force Feedback Internals: reference/wheel-ffb-internals.md
       - MIDI Input Internals: reference/midi-input-internals.md
       - Wii Controllers Internals: reference/wii-controllers-internals.md

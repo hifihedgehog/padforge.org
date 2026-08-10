@@ -56,6 +56,7 @@ Worth knowing, because it explains the behaviour you will see:
 - [Motion aiming (Gyro)](../guides/gyro.md) for the whole gyro pipeline, curves, and engage modes
 - [Devices](devices.md) for assigning it to a slot
 - [Mappings](mappings.md) for binding its axes
+- [Headset Head Tracking: Internals](../reference/headset-motion-internals.md) for the descriptor probe and the rotation-to-rate synthesis
 
 ---
 

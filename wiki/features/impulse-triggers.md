@@ -33,6 +33,7 @@ Game-driven passthrough. Forza, Gears, Halo, and any other game that writes Xbox
 | Left Trigger | 0–100% | 100% | Scales the left trigger motor magnitude. |
 | Right Trigger | 0–100% | 100% | Scales the right trigger motor magnitude. |
 | Swap left and right trigger motors | On/Off | Off | Flips which physical trigger motor receives the left vs. right signal. Use when the trigger pulses feel reversed. |
+| Translate adaptive trigger vibrations | On/Off | Off | When a game drives this slot as a virtual DualSense, its vibration-style adaptive trigger effects play on this controller's impulse trigger motors. Resistance-style effects have no vibration equivalent and are ignored. |
 
 ### Test buttons
 
@@ -102,7 +103,7 @@ The slot-tier **Bass Shakers** tab ([Controller Slots](controller-slots.md)) can
 
 Every slider has its own reset button. Each card has a Reset All button.
 
-- **Impulse Triggers Reset All**: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.
+- **Impulse Triggers Reset All**: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, Translate adaptive trigger vibrations off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.
 - **Constant Trigger Force Reset All**: toggle off, left 0.00, right 0.00. Affects this card only.
 - **Audio Bass Trigger Rumble Reset All**: disabled, sensitivity 4.0, cutoff 80 Hz, both triggers 100%. Affects this card only.
 
@@ -129,4 +130,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

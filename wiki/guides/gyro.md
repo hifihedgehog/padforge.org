@@ -21,9 +21,9 @@ The first card carries one checkbox: **Apply Gyro Tuning to Motion Passthrough**
 
 Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.
 
-Check the box to route the rest of the Gyro tab's tuning (deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert) through the motion the virtual controller reports. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.
+Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The [engage gates](#engage-gates) come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.
 
-The virtual controller types that carry motion to the game are DualShock 4, DualSense, and, since 4.1.0, the Nintendo (virtual Switch Pro) type. Xbox types have no motion channel.
+The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense), the Nintendo (virtual Switch Pro) type since 4.1.0, and Extended slots whose HIDMaestro profile exposes an IMU. Xbox types have no motion channel.
 
 Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.
 
@@ -60,7 +60,7 @@ Top-level scaling, axis inversion, and the reference frame the gyro is interpret
 
 ### Units
 
-The **Units** dropdown offers **Multiplier** (the default) and **Degrees per screen turn**. It is a saved preference only: in 4.1.0 neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.
+The **Units** dropdown offers **Multiplier** (the default) and **Degrees per screen turn**. It is a saved preference only: neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.
 
 ### Horizontal and Vertical
 
@@ -94,6 +94,17 @@ The **Space** dropdown picks how raw gyro motion is mapped to camera input.
 | World | World additionally re-projects vertical motion onto world axes. Useful when the pad pitches around a lot during play. |
 
 Local stays as the default so existing configs feel identical.
+
+---
+
+## Compass
+
+A **Compass** card appears between Sensitivity and Response Shaping, and only on a controller that carries a magnetometer. Anchoring yaw to magnetic north removes the slow horizontal drift gyro aiming accumulates.
+
+- **Anchor yaw to compass.** Off by default. Turn it on after calibrating.
+- **Calibrate Magnetometer.** Press it, rotate the controller through every orientation in a figure-8 for a few seconds, then press again. The button reads **Finish Calibration** while the sweep runs.
+
+The card has a per-row reset on the checkbox and no card-level Reset All.
 
 ---
 
@@ -283,10 +294,11 @@ The values save automatically to your profile whenever you change anything on th
 
 ## Reset buttons
 
-Every row has a reset button (circular arrow icon). Each card has a **Reset All** button next to its title that snaps every value in the card back to defaults.
+Every row has a reset button (circular arrow icon). Each card except Compass has a **Reset All** button next to its title that snaps every value in the card back to defaults.
 
 | Button | Resets |
 |---|---|
+| Reset Motion Passthrough | Apply Gyro Tuning to Motion Passthrough |
 | Reset Calibration | Auto-cal bias + timestamp |
 | Reset Sensitivity | Units, Space, Horizontal, Vertical, both Invert flags, Real-World Calibration |
 | Reset Response Shaping | Deadzone, Tightening, Smoothing Threshold, Smoothing Window, Acceleration, Output Curve |
@@ -359,4 +371,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

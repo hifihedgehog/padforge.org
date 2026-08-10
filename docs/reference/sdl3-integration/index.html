@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3544,6 +3548,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -5281,6 +5341,16 @@
 <td>Enables the fork's Joy-Con 2 optical-mouse axes (<code>hifihedgehog/SDL#8</code>, #154). The BLE driver posts absolute 16-bit mouse counters on joystick axes 6/7 (raw axis count 8), read as "Mouse Motion X/Y" sources.</td>
 </tr>
 <tr>
+<td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH_SHAPED_RUMBLE</code></td>
+<td><code>"1"</code></td>
+<td>Enables the fork's frequency-shaped Switch rumble (#271 item 4, <code>hifihedgehog/SDL#25</code>). Upstream drives the Switch LRAs at two fixed carriers with amplitude-only tables. With the hint on, each motor's intensity also sweeps its frequency band (low ~41-160 Hz, high 160-320 Hz) with attack and decay transients. Classic LRA packet only, Switch 2 encoding untouched.</td>
+</tr>
+<tr>
+<td><code>SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER</code></td>
+<td><code>"1"</code></td>
+<td>Enables the fork's Switch 2 BLE magnetometer channel (#271 item 5, same fork commit). Three raw int16 axes after the mouse counters, availability riding the raw axis count (9 = magnetometer, 11 = mouse plus magnetometer). PadForge does not consume them yet. The hint keeps the axes observable on a bench.</td>
+</tr>
+<tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER</code></td>
 <td><code>"1"</code></td>
 <td>Enables SDL's Sony-sixaxis PS3 driver (#194). Claims a DualShock 3 in DsHidMini SXS mode, the only mode that serves motion, and reads its accelerometer, yaw gyro, and 10 pressure axes. Do <strong>not</strong> also set <code>SDL_HINT_JOYSTICK_HIDAPI_PS3</code> (the regular PS3 driver outranks sixaxis and writes at the device).</td>
@@ -5565,6 +5635,16 @@
 <td>Joy-Con 2 L/R optical mouse surfaced as "Mouse Motion X/Y" sources (#154)</td>
 </tr>
 <tr>
+<td><code>HasSwitch2Magnetometer</code></td>
+<td><code>bool</code></td>
+<td>Switch 2 BLE magnetometer stream (#271 item 5). Raw wire units land on the wrapper-local <code>Switch2MagX/Y/Z</code> fields, not on <code>CustomInputState</code>, so the Remote Link codec's full Block enum stays untouched</td>
+</tr>
+<tr>
+<td><code>Switch2MagActive</code></td>
+<td><code>bool</code></td>
+<td>False until the first nonzero magnetometer sample, because a zero triple must not feed the compass</td>
+</tr>
+<tr>
 <td><code>HasExtraGenericAxes</code></td>
 <td><code>bool</code></td>
 <td>Raw axes beyond the standard six, surfaced as generic "Axis N" sources (#193)</td>
@@ -5716,26 +5796,28 @@
 <a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>    |        for gamepads than haptic LeftRight effects. Haptic is only needed
 <a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    |        for devices where simple rumble doesn&#39;t work.
 <a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>    |
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>    |-- NO: Keep haptic open, pick best strategy:
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>    |-- NO: Keep haptic open. Store Haptic, HapticFeatures, then
 <a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>            |
-<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>            (features &amp; SDL_HAPTIC_LEFTRIGHT)?
-<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>            |-- YES: HapticStrategy = LeftRight (best. Independent L/R motors)
-<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>            |
-<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>            (features &amp; SDL_HAPTIC_SINE)?
-<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>            |-- YES: HapticStrategy = Sine (good. Periodic vibration)
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>            NumHapticAxes = SDL_GetNumHapticAxes(haptic)
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>            |   1 axis -&gt; wheels (single-axis FFB: Spring/Damper on steering axis)
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>            |   2+ axes -&gt; joysticks, gamepads (X+Y axis condition effects)
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>            |
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>            Pick best strategy:
 <a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>            |
-<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>            (features &amp; SDL_HAPTIC_CONSTANT)?
-<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>            |-- YES: HapticStrategy = Constant (acceptable. Steady force)
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>            (features &amp; SDL_HAPTIC_LEFTRIGHT)?
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>            |-- YES: HapticStrategy = LeftRight (best. Independent L/R motors)
 <a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>            |
-<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>            None of the above?
-<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>            |-- Close haptic, return (no usable effect types)
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>            (features &amp; SDL_HAPTIC_SINE)?
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>            |-- YES: HapticStrategy = Sine (good. Periodic vibration)
 <a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a>            |
-<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a>            NumHapticAxes = SDL_GetNumHapticAxes(haptic)
-<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>            |   1 axis -&gt; wheels (single-axis FFB: Spring/Damper on steering axis)
-<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>            |   2+ axes -&gt; joysticks, gamepads (X+Y axis condition effects)
-<a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>            |
-<a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a>            (features &amp; SDL_HAPTIC_GAIN)?
-<a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a>            |-- YES: SDL_SetHapticGain(haptic, 100) -- maximize gain
+<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a>            (features &amp; SDL_HAPTIC_CONSTANT)?
+<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>            |-- YES: HapticStrategy = Constant (acceptable. Steady force)
+<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>            |
+<a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>            None of the above?
+<a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a>            |-- Close haptic, clear Haptic + HapticFeatures, return
+<a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a>            |
+<a id="__codelineno-16-35" name="__codelineno-16-35" href="#__codelineno-16-35"></a>            (features &amp; SDL_HAPTIC_GAIN)?
+<a id="__codelineno-16-36" name="__codelineno-16-36" href="#__codelineno-16-36"></a>            |-- YES: SDL_SetHapticGain(haptic, 100) -- maximize gain
 </code></pre></div>
 <table>
 <thead>
@@ -6537,7 +6619,7 @@
 <h4 id="maintainer-integration-path">Maintainer integration path<a class="headerlink" href="#maintainer-integration-path" title="Permanent link">&para;</a></h4>
 <ol>
 <li>Take the merged mapping submission. SDL GUID and raw indices are in the issue body.</li>
-<li>Construct the SDL gamepad mapping string. Format: <code>GUID,Device Name,a:bN,b:bN,x:bN,y:bN,leftshoulder:bN,rightshoulder:bN,leftx:aN,lefty:aN,righttrigger:aN,…,platform:Windows,</code>. See the file's existing entries for examples (DS3 DsHidMini, G920, etc.).</li>
+<li>Construct the SDL gamepad mapping string. Format: <code>GUID,Device Name,a:bN,b:bN,x:bN,y:bN,leftshoulder:bN,rightshoulder:bN,leftx:aN,lefty:aN,righttrigger:aN,…,platform:Windows,</code>. The file currently carries one entry, the DS3 DsHidMini line above. Use it as the shape reference.</li>
 <li>Append the line to <code>PadForge.App/gamecontrollerdb_padforge.txt</code>.</li>
 <li>Build and deploy locally. Restart PadForge with the device plugged in and confirm SDL recognizes it as a gamepad on the Devices page (the Submit Mapping button should now disappear, indicating SDL has it mapped).</li>
 <li>Commit and push. The file is an <code>&lt;EmbeddedResource&gt;</code> in <code>PadForge.App.csproj</code>, so it ships inside <code>PadForge.exe</code>; no separate file deployment.</li>
@@ -6586,13 +6668,13 @@
 <td>1</td>
 <td><strong>Switch 2 Pro Controller</strong>: WinUSB bulk I/O on Windows. The controller is a USB composite device with two interfaces. SDL needs to drive HID Interface 0 for input and WinUSB Interface 1 for the bulk init sequence.</td>
 <td><code>7c4118c49</code></td>
-<td>—</td>
+<td>None</td>
 </tr>
 <tr>
 <td>2</td>
 <td><strong>HIDMaestro virtual-controller filter</strong> (PadForge-specific): <code>SDL_GetJoysticks</code> walks each device's PnP parent chain and drops any device whose hardware-ID list contains the <code>HIDMAESTRO</code> substring, with a fast-path substring match on the interface symlink. Stops SDL from re-enumerating the virtual controllers PadForge just created.</td>
 <td><code>60d06e2f4</code> (main filter) + <code>14f883872</code> (HMXINPUT dead-branch cleanup)</td>
-<td>—</td>
+<td>None</td>
 </tr>
 <tr>
 <td>3</td>
@@ -6743,8 +6825,8 @@
 </table>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:601</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:49</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:906</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:719</code>).</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:695</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:50</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1045</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:808</code>).</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git
@@ -6764,7 +6846,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.0.0</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

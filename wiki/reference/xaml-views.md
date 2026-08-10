@@ -6,7 +6,7 @@
 
 ---
 
-All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Styled with [WPF UI 4.2 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
+All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` (`CurveEditor`, `TriggerTravelArc`) and `PadForge.App/Views/Controls/` (`LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph`). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
 
 ## Contents
 
@@ -16,6 +16,7 @@ All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `Ma
 - [DevicesPage](#devicespage)
 - [KBMPreviewView](#kbmpreviewview)
 - [MidiPreviewView](#midipreviewview)
+- [VRPreviewView](#vrpreviewview)
 - [MousePreviewControl](#mousepreviewcontrol)
 - [SettingsPage](#settingspage)
 - [ProfilesPage](#profilespage)
@@ -109,7 +110,7 @@ NavigationView items use 48px height and 14px font size. Dashboard, Profiles, an
 | `About` | About | `E946` FontIcon (info) | XAML footer (`NavAbout`) |
 
 Dynamic controller cards are appended after "Devices" (index 3 onward) via `RebuildControllerSection()`. Each `NavigationViewItem` contains:
-- Power/type glyph plus a mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI tiles in `VirtualControllerGroups.InOrder`, active type lit, plus a fixed-width "#N" instance token
+- Power/type glyph plus a mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI / VR tiles in `VirtualControllerGroups.InOrder`, active type lit, plus a fixed-width "#N" instance token. The MIDI tile is disabled without Windows MIDI Services and the VR tile without SteamVR, unless the slot already carries that type
 - Slot label ("Controller 1", etc.)
 - Device name subtitle
 - Delete button (visible on hover)
@@ -133,18 +134,19 @@ Drag devices from the Devices page to a sidebar controller card:
 
 ### Add Controller Popup
 
-`Popup` with one button per output type, built in `ShowControllerTypePopup`. The six buttons follow `VirtualControllerGroups.InOrder`:
+`Popup` with one button per output type, built in `ShowControllerTypePopup`. The seven buttons follow `VirtualControllerGroups.InOrder`:
 
 | Button | AutomationId | Icon | Per-type cap |
 |--------|--------------|------|--------------|
-| Xbox | `AddXbox360Btn` | Xbox SVG | `SettingsManager.MaxXbox360Slots` |
-| PlayStation | `AddDS4Btn` | DS4 SVG | `SettingsManager.MaxPlayStationSlots` |
-| Nintendo | `AddNintendoBtn` | Switch logo SVG | `SettingsManager.MaxNintendoSlots` |
-| Extended | `AddRawBtn` | Joystick SVG | `SettingsManager.MaxExtendedSlots` |
-| Keyboard+Mouse | `AddKeyboardMouseBtn` | `E961` glyph | `SettingsManager.MaxKeyboardMouseSlots` |
-| MIDI | `AddMidiBtn` | `E8D6` glyph | `SettingsManager.MaxMidiSlots` |
+| Xbox | `AddXbox360Btn` | Xbox SVG | `SettingsManager.MaxXbox360Slots` (16) |
+| PlayStation | `AddDS4Btn` | DS4 SVG | `SettingsManager.MaxPlayStationSlots` (16) |
+| Nintendo | `AddNintendoBtn` | Switch logo SVG | `SettingsManager.MaxNintendoSlots` (16) |
+| Extended | `AddRawBtn` | Joystick SVG | `SettingsManager.MaxExtendedSlots` (16) |
+| Keyboard+Mouse | `AddKeyboardMouseBtn` | `E961` glyph | `SettingsManager.MaxKeyboardMouseSlots` (16) |
+| MIDI | `AddMidiBtn` | `E8D6` glyph | `SettingsManager.MaxMidiSlots` (16) |
+| VR | `AddVrBtn` | `F119` glyph | `SettingsManager.MaxVrSlots` (1) |
 
-The method counts each type from `Pads[].OutputType` and disables a button (opacity 0.35, "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})") when the global slot total reaches 16 or that type hits its own per-type cap. MIDI additionally requires Windows MIDI Services. `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same six types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
+The method counts each type from `Pads[].OutputType` and disables a button (opacity 0.35, "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})") when the global slot total reaches 16 or that type hits its own per-type cap. MIDI additionally requires Windows MIDI Services (`DriverInstaller.IsMidiServicesInstalled()`) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
 
 ### Status Bar
 
@@ -175,7 +177,7 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 
 ### Composition Root (Code-Behind)
 
-`MainWindow.xaml.cs` is the service wiring hub (~6784 lines). Constructor:
+`MainWindow.xaml.cs` is the service wiring hub (~7880 lines). Constructor:
 
 1. Creates `MainViewModel` as root and sets `DataContext`.
 2. Sets child `DataContext` on Dashboard, Devices, Settings, Profiles pages.
@@ -194,7 +196,7 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 | Timer | Interval | Purpose |
 |-------|----------|---------|
 | `DispatcherTimer` | 33ms (~30Hz) | `InputService._uiTimer` fires `UiTimer_Tick` to push engine state into ViewModels |
-| `_driverStatusTimer` | 5s | Polls HidHide and Windows MIDI Services status for hot-plug detection. HIDMaestro is embedded so it has no install/uninstall poll |
+| `_driverStatusTimer` | 5s | Polls HidHide, Windows MIDI Services, and SteamVR presence for hot-plug detection, and runs the status-bar message decay sweep. HIDMaestro is embedded so it has no install/uninstall poll |
 | `CompositionTarget.Rendering` | ~60fps | Used by all visualization views (3D, 2D, Schematic, MIDI, KBM, MousePreview) for per-frame visual updates |
 
 ---
@@ -208,22 +210,29 @@ Engine toggle, slot summary cards, DSU/Web settings, and driver status.
 ### Layout Structure
 
 ```
-ScrollViewer (Padding="24,0")
-  └─ StackPanel (Margin="0,16,0,16")
+ScrollViewer
+  └─ StackPanel (Margin="24,16,24,16")
        ├─ Page header (icon + title)
        ├─ "Input Engine" section header
-       ├─ CardBorder: Engine status card (Grid, 4 columns)
+       ├─ CardBorder: Engine status card (EngineCard, Grid, 4 columns)
        │   ├─ Col 0: Engine toggle flame `Path` (FlameOuterGeometry, ember when Running, gold when Idle/Stopping, else outline)
        │   ├─ Col 1: EngineStatus text
        │   ├─ Col 2: PollingFrequencyText
        │   └─ Col 3: Online/Total devices count
        ├─ "Virtual Controllers" section header
-       ├─ ItemsControl (WrapPanel) → SlotSummaries
-       │   └─ DataTemplate: slot card Border (252px wide)
-       │       ├─ Row 0: Power btn + Gamepad icon + Slot # + Type buttons (Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI) + Instance label
-       │       ├─ Row 1: DeviceName (marquee overflow)
-       │       └─ Row 2: StatusText + mapped/connected counts
-       ├─ "Add Controller" card (MouseLeftButtonUp → AddControllerRequested)
+       ├─ ItemsControl (SlotsItemsControl, WrapPanel over a CompositeCollection:
+       │   SlotSummaries plus the Add Controller tile in the same wrap flow)
+       │   ├─ DataTemplate: slot card Border (252px wide, 5 rows)
+       │   │   ├─ Row 0: Power flame btn + "Slot" + SlotNumber
+       │   │   ├─ Row 1: Type segment (Xbox / PlayStation / Nintendo / Extended /
+       │   │   │    KB+M / MIDI / VR) on a recessed track + "#N" instance label
+       │   │   │    + Delete button
+       │   │   ├─ Row 2: Device roster (per-device name + battery glyph, marquee
+       │   │   │    on overflow) or the DeviceName empty-state line
+       │   │   ├─ Row 3: StatusText + mapped/connected counts
+       │   │   └─ Row 4: StageLedger chips (per-stage glyphs with hover readout)
+       │   └─ Add Controller tile (AddControllerCard, 252px, dashed steel outline,
+       │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
        ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
        ├─ "Motion Server" section (DSU)
        │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
@@ -238,12 +247,14 @@ ScrollViewer (Padding="24,0")
        │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
        │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
        ├─ "Touchpad Overlay" section
-       │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider,
-       │      reset-position button
+       │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
+       │      NumberBox + reset, reset-position button, status flame +
+       │      TouchpadOverlayStatus
        └─ "Drivers" section
-           └─ CardBorder (Grid, 2 rows × 2 cols)
-               ├─ Row 0: HidHide status
-               └─ Row 1: MIDI Services status
+           └─ CardBorder (Grid, 3 rows × 2 cols)
+               ├─ Row 0: HidHide status (ED1A glyph)
+               ├─ Row 1: MIDI Services status (E8D6 glyph)
+               └─ Row 2: SteamVR status (F119 glyph, SteamVrStatusText, #49)
 ```
 
 ### Key Bindings
@@ -260,27 +271,33 @@ ScrollViewer (Padding="24,0")
 | `DsuMotionServerPort` | `DashboardViewModel` | DSU port NumberBox |
 | `DsuServerStatus` | `DashboardViewModel` | DSU status text |
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
-| `WebControllerPort` | `DashboardViewModel` | Web controller port |
+| `WebControllerPort` / `WebControllerStatus` | `DashboardViewModel` | Web controller port and status text |
 | `EnableRemoteLink` / `RemoteLinkPort` / `RemoteLinkConnectHost` | `DashboardViewModel` | Remote Link enable, port, and connect-by-address host (#138) |
 | `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status dot and text |
 | `RemoteLink` | `DashboardViewModel` | Sub-ViewModel: identity-protection modes, trusted peers, nearby-unpaired list, revoke commands |
 | `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
-| `EnableTouchpadOverlay` | `DashboardViewModel` | Touchpad overlay enable |
-| `HidHideStatusText` / `MidiServicesStatusText` | `DashboardViewModel` | Driver status text shown on the Dashboard. HIDMaestro is embedded, with status shown on the Settings page only |
+| `EnableTouchpadOverlay` / `TouchpadOverlayOpacity` / `TouchpadOverlayStatus` | `DashboardViewModel` | Touchpad overlay enable, opacity, and status text |
+| `HidHideStatusText` / `MidiServicesStatusText` / `SteamVrStatusText` | `DashboardViewModel` | Driver status text shown on the Dashboard. HIDMaestro is embedded, with status shown on the Settings page only |
 
 ### Slot Card DataTemplate Bindings (SlotSummary)
 
 | Binding | Type | Description |
 |---------|------|-------------|
 | `PadIndex` | `int` | Used as `Tag` for button click routing |
-| `SlotNumber` | `string` | Global slot display number |
+| `SlotNumber` | `int` | Global slot display number (1-based) |
 | `IsEnabled` | `bool` | Controls power toggle color |
 | `OutputType` | `VirtualControllerType` | Selects which type button is highlighted (Opacity 1.0 vs 0.3) |
 | `TypeInstanceLabel` | `string` | Per-type instance number |
-| `DeviceName` | `string` | Physical device name (marquee on overflow) |
+| `MappedDevices` | `ObservableCollection<PadViewModel.MappedDeviceInfo>` | Row 2 device roster (name + battery glyph, marquee on overflow) |
+| `DeviceName` | `string` | Empty-state line, shown only when `MappedDevices.Count` is 0 |
 | `StatusText` | `string` | e.g. "Active", "Disabled" |
 | `MappedDeviceCount` / `ConnectedDeviceCount` | `int` | Mapped/connected counts |
-| `IsInitializing` | `bool` | Triggers green opacity flash animation |
+| `HasMappedDevices` | `bool` | `MappedDeviceCount > 0`. Gates the ember flame and the card's warm rim |
+| `IsVirtualControllerConnected` | `bool` | Live VC present. Drops the flame to gold when false |
+| `IsSelected` | `bool` | Card whose pad page is in focus keeps the ember glow at rest |
+| `IsCreateFailed` | `bool` | VC creation failed. Outranks the awaiting-devices tooltip |
+| `IsInitializing` | `bool` | Triggers the ember flash animation (steady ember with reduced motion) |
+| `StageLedger` | `ObservableCollection<SlotStageInfo>` | Row 4 stage chips (sticks / triggers / gyro / lighting / touchpad / audio) |
 
 ### Power Toggle State Machine
 
@@ -293,17 +310,19 @@ The slot power toggle is a flame `Path` (`FlameOuterGeometry`), not a glyph. It 
 | `IsEnabled=True` + `HasMappedDevices=True` | `EmberBrush` + glow | "Active" |
 | above + `IsVirtualControllerConnected=False` | `WaitBrush` gold | "Awaiting Controllers" |
 | above + `EngineStateKey="Stopped"` | `WaitBrush` gold | "Engine Stopped" |
+| `IsEnabled=True` + `IsCreateFailed=True` | (fill unchanged) | "Virtual controller failed" |
 | `IsInitializing=True` | `EmberBrush` (flashing) | "Initializing" |
 
 ### Type Switch Buttons
 
-5 type buttons per slot card (Xbox, PlayStation, Extended, KB+M, MIDI) using a custom `TypeSwitchButton` style. Dark gray rounded background on hover, transparent border. Active type at Opacity 1.0, inactive at 0.3. Unavailable types (missing prerequisite, e.g. MIDI without Windows MIDI Services) show `Cursor.No` and a tooltip explaining the requirement. Clicks are guarded in code-behind. The power button also uses the `TypeSwitchButton` style for visual consistency.
+7 type buttons per slot card (Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR) using a custom `TypeSwitchButton` style, seated on a recessed `SegTrackBrush` segment. Dark gray rounded background on hover, transparent border. Active type at Opacity 1.0, inactive at 0.3. Unavailable types (missing prerequisite, e.g. MIDI without Windows MIDI Services, VR without SteamVR) show `Cursor.No` and a tooltip explaining the requirement. Clicks are guarded in code-behind. The power button also uses the `TypeSwitchButton` style for visual consistency.
 
 ### UI Automation
 
 | AutomationId | Element | Purpose |
 |--------------|---------|---------|
 | `EnableWebControllerCheckBox` | CheckBox | Web controller enable toggle |
+| `EnableRemoteLinkCheckBox` | CheckBox | Remote Link enable toggle (#138) |
 
 ### Event Handlers (Code-Behind)
 
@@ -315,9 +334,11 @@ The slot power toggle is a flame `Path` (`FlameOuterGeometry`), not a glyph. It 
 | `PowerToggle_Click` | Button.Click | Raises `SlotEnabledToggled(slotIndex, !IsEnabled)` |
 | `XboxType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Xbox)`. HIDMaestro is embedded so no install gate |
 | `DS4Type_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, PlayStation)` |
+| `NintendoType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Nintendo)` |
 | `ExtendedType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Extended)` |
 | `KeyboardMouseType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, KeyboardMouse)` |
 | `MidiType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Midi)` |
+| `VrType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Vr)` (#49) |
 | `SlotCard_Loaded` | Border.Loaded | Wires `PreviewMouseLeftButtonDown` for drag start |
 | `OnCardMouseDown` | PreviewMouseLeftButtonDown | Records drag start position. Skips if inside a Button |
 | `OnDragMove` | PreviewMouseMove | Begins/updates card drag with ghost adorner |
@@ -340,18 +361,23 @@ Drag to reorder (same adorner system as sidebar):
 
 **Files:** `PadPage.xaml`, `PadPage.xaml.cs`
 
-Per-slot configuration: two-tier tab strip, optional config bars, and 17 tab panels (Tags 0-16). Tier 1 (slot scope) holds Preview, Mappings, Macros, Menus, and Bass Shakers. Tier 2 (device scope) holds the device selector and the capability tabs, most gated on source-device capability.
+Per-slot configuration: two-tier tab strip, optional config bars, and 18 tab panels (Tags 0-17). Tier 1 (slot scope) holds Preview, Mappings, Macros, Menus, Bass Shakers, and Output. Tier 2 (device scope) holds the device selector and the capability tabs, most gated on source-device capability.
 
 ### Layout Structure
 
 ```
 Grid (3 rows)
 ├─ Row 0 (Auto): Two-tier tab strip (StackPanel of two gradient-bordered Borders)
-│   ├─ Tier 1 (slot scope, ember underline): slot tabs pushed right (TabStripButton, GroupName="PadTab")
+│   ├─ Tier 1 (slot scope, ember underline): scope label + identity chip + preset
+│   │   chip on the left, slot tabs pushed right (TabStripButton, GroupName="PadTab")
 │   │   ├─ RadioButton "Preview" (Tag=0, x:Name="TabController", AutomationId="TabController")
 │   │   ├─ RadioButton "Mappings" (Tag=2, AutomationId="MappingsTab")
 │   │   ├─ RadioButton "Macros" (Tag=1, AutomationId="MacrosTab")
-│   │   └─ RadioButton "Menus" (Tag=15, AutomationId="MenusTab", #9)
+│   │   ├─ RadioButton "Menus" (Tag=15, AutomationId="MenusTab", #9)
+│   │   ├─ RadioButton "Bass Shakers" (Tag=16, AutomationId="BassShakersTab",
+│   │   │    Visibility bound to RumbleAudioTabVisible, #236)
+│   │   └─ RadioButton "Output" (Tag=17, AutomationId="OutputTab",
+│   │        Visibility bound to OutputTabVisible, #270 follow-up)
 │   └─ Tier 2 (device scope, cold underline): scope label + device ComboBox on the left,
 │      capability tabs pushed right in a WrapPanel (TabStripButtonCold, GroupName="PadTabDevice")
 │       ├─ ComboBox (MappedDevices; item = LivenessFlame Path + Name + battery)
@@ -371,9 +397,11 @@ Grid (3 rows)
 │   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
 │   └─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
 ├─ Invisible MappingsCountIndicator (for UI Automation)
-└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-15),
+└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
    SelectedIndex bound to SelectedConfigTab
 ```
+
+The `HMaestroProfileBar` preset chip sits inline in tier 1 rather than on its own row. The Extended and MIDI config bars are the only Row 1 occupants.
 
 ### Custom Styles (UserControl.Resources)
 
@@ -392,7 +420,7 @@ Grid (3 rows)
 
 ### Custom Tab Strip
 
-Two `RadioButton` groups. The slot tier (Preview / Mappings / Macros / Menus) uses `TabStripButton` with `GroupName="PadTab"`. The device tier (Sticks through Mouse) uses `TabStripButtonCold` with `GroupName="PadTabDevice"`. The two groups are independent so WPF never auto-unchecks across tiers. `SyncTabStripSelection()` keeps exactly one tab checked overall (#175 item 18: only the tier owning the active tab shows a highlight). Its slot-tier test is `selected <= 2 || selected == 15`, since Menus (Tag 15) is the appended TabItem's index rather than a tier-2 tag. Each button stores its Tag (0-15) and sets `vm.SelectedConfigTab = Tag` on click via `TabBtn_Click`.
+Two `RadioButton` groups. The slot tier (Preview / Mappings / Macros / Menus / Bass Shakers / Output) uses `TabStripButton` with `GroupName="PadTab"`. The device tier (Sticks through Mouse) uses `TabStripButtonCold` with `GroupName="PadTabDevice"`. The two groups are independent so WPF never auto-unchecks across tiers. `SyncTabStripSelection()` keeps exactly one tab checked overall (#175 item 18: only the tier owning the active tab shows a highlight). Its slot-tier test is `selected <= 2 || selected == 15 || selected == 16 || selected == 17`, since Menus, Bass Shakers, and Output are appended TabItem indices rather than tier-2 tags. Each button stores its Tag (0-17) and sets `vm.SelectedConfigTab = Tag` on click via `TabBtn_Click`. `ConfigTabControl_PreviewKeyDown` swallows Ctrl+Tab and calls `CycleConfigTab`, which walks the visible RadioButtons of both groups because the header-less `TabControl` template breaks WPF's own Ctrl+Tab handling (discussion #140).
 
 A `TabControl` with hidden header (custom `ControlTemplate` showing only `PART_SelectedContentHost`) provides content switching. `SelectedIndex` is bound to `SelectedConfigTab`.
 
@@ -406,8 +434,8 @@ Tabs hidden by output type and by source-device capability:
 | Macros | Visible | Visible | Visible | always |
 | Mappings | Visible | Visible | Visible | always |
 | Menus | Visible | Visible | Visible | always (slot scope, #9) |
-| Sticks | Visible | Visible (Mouse X/Y + Scroll) | **Hidden** | always within Xbox/PS/Extended |
-| Triggers | Visible | **Hidden** | **Hidden** | always within Xbox/PS/Extended |
+| Sticks | Visible | Visible (Mouse X/Y + Scroll) | **Hidden** | always within Xbox/PS/Nintendo/Extended |
+| Triggers | Visible | **Hidden** | **Hidden** | hidden on an Extended or Nintendo slot whose profile declares no analog triggers (`ExtendedConfig.TriggerCount == 0`, the Switch Pro's digital ZL/ZR), visible otherwise |
 | Force Feedback | Visible if `hasForceFeedback` | **Hidden** | **Hidden** | selected device's CapType is stick-class (Gamepad / Joystick / Driving / Flight / FirstPerson). Hidden for keyboard / mouse / touchpad / MIDI even on an Xbox/PS/Extended slot |
 | Impulse Triggers | Visible if `hasImpulseTriggers` | **Hidden** | **Hidden** | source device has impulse-trigger motors (Xbox One / One S / Elite / Elite Series 2 / Series X\|S, Microsoft VID). Xbox 360 and DualSense excluded |
 | Adaptive Triggers | Visible if `hasAdaptiveTriggers` | **Hidden** | **Hidden** | source device is a DualSense or DualSense Edge |
@@ -419,20 +447,25 @@ Tabs hidden by output type and by source-device capability:
 | Audio | Visible if `hasAudio` | **Hidden** | **Hidden** | source has a speaker (DualSense / DS4 / Wii Remote) or plays HD haptic tones (Joy-Con, Switch Pro, Steam Controller / Deck, SC 2026) (#147) |
 | Mouse | Visible if source is a mouse | **Hidden** | **Hidden** | source device is a mouse (per-device mouse-gesture settings, #200) |
 
-Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15, Bass Shakers 16. Bass Shakers (4.1.0, #236, AutomationId `BassShakersTab`) is slot-tier and gates on SLOT TYPE, not device capability: visible via `RumbleAudioTabVisible` for Xbox, PlayStation, and Nintendo slots plus Extended slots with a force-feedback surface. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (`LightbarModeCard`, `LightingLightbarSubtitle`, `LightingPlayerIdleHint`) collapse and the `GuideLedCard` brightness control takes their place.
+VR slots (#49) hide both Sticks and Triggers: the `Vr` lane reads none of the stick or trigger tuning keys those tabs edit.
+
+Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15, Bass Shakers 16, Output 17. Bass Shakers (4.1.0, #236, AutomationId `BassShakersTab`) is slot-tier and gates on SLOT TYPE, not device capability: visible via `RumbleAudioTabVisible` for Xbox, PlayStation, and Nintendo slots plus Extended slots with a force-feedback surface. Output (#270 follow-up, AutomationId `OutputTab`) is slot-tier too and carries the SOCD and Keep Controller Awake cards. `OutputTabVisible` is false only for MIDI and VR slots, which have no output-behavior surface. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (`LightbarModeCard`, `LightingLightbarSubtitle`, `LightingPlayerIdleHint`) collapse and the `GuideLedCard` brightness control takes their place.
 
 If the selected tab is hidden, the view auto-switches to Preview (index 0). `SyncTabVisibility()` toggles the device-tier capability tabs from the selected device's capabilities, and also drives the motor activity bars (`MotorBarsGrid`).
 
-### Preview Tab Type Icon
+### Slot Identity Chip
 
-The Preview tab (Tag 0, `x:Name="TabController"`, header text `Pad_Tab_Preview`) shows a dynamic type icon via nested DataTriggers on `OutputType`:
+The Preview tab itself (Tag 0, `x:Name="TabController"`, header text `Pad_Tab_Preview`) is text-only. The type icon lives in the standalone, non-interactive identity chip at the left of tier 1, which stays ember regardless of which tab is checked. It picks its icon via DataTriggers on `OutputType`:
+
 - `Xbox` → `XboxControllerIcon` (Image)
 - `PlayStation` → `DS4ControllerIcon` (Image)
+- `Nintendo` → `NintendoControllerIcon` (Image)
 - `Extended` → `ExtendedControllerIcon` (Image)
-- `Midi` → `E8D6` glyph (music note, TextBlock, Image collapsed)
+- anything else → `GenericControllerIcon` (the Image default)
+- `Midi` → `EC4F` glyph (TextBlock, Image collapsed)
 - `KeyboardMouse` → `E961` glyph (keyboard, TextBlock, Image collapsed)
 
-The DrawingImage resource keys (`XboxControllerIcon`, `DS4ControllerIcon`) keep the v2 short names. One icon represents the whole family regardless of which specific HM profile (Xbox 360 / Xbox One / Series / Elite / Adaptive, or DS4 / DualSense / DualSense Edge) the slot ends up running. `TypeInstanceLabel` shows the per-type instance number (e.g., "2" for the second Xbox slot).
+The DrawingImage resource keys (`XboxControllerIcon`, `DS4ControllerIcon`) keep the v2 short names. One icon represents the whole family regardless of which specific HM profile (Xbox 360 / Xbox One / Series / Elite / Adaptive, or DS4 / DualSense / DualSense Edge) the slot ends up running. Beside the icon, one `TextBlock` carries `OutputTypeDisplayName` plus a `TypeInstanceLabel` Run in telemetry mono, so the type name and the "#2" token share a baseline.
 
 ### Multi-Device Selector
 
@@ -444,15 +477,19 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 |--------------|---------|---------|
 | `TabController` | RadioButton (tab 0) | Preview tab identification. x:Name kept from v2/v3, header text is now "Preview" |
 | `MappingsTab` | RadioButton (tab 2) | Mappings tab identification |
-| `HMaestroProfileCombo` | ComboBox | HIDMaestro profile selection for Xbox / PlayStation slots. Extended has its own `ExtendedProfileCombo` |
-| `ExtendedStickCountBox` | TextBox | Extended slot thumbstick count override |
+| `HMaestroProfileCombo` | ComboBox | HIDMaestro profile selection for Xbox / PlayStation / Nintendo slots. Extended has its own `ExtendedProfileCombo` (no AutomationId) |
+| `RawStickCountBox` | TextBox | Extended slot thumbstick count override |
 | `ExtendedTriggerCountBox` | TextBox | Extended slot trigger count override |
-| `ExtendedPovCountBox` | TextBox | Extended slot POV count override |
-| `ExtendedButtonCountBox` | TextBox | Extended slot button count override |
+| `RawPovCountBox` | TextBox | Extended slot POV count override |
+| `RawButtonCountBox` | TextBox | Extended slot button count override |
 | `MappingsCountIndicator` | TextBlock (invisible) | `AutomationProperties.Name` bound to `Mappings.Count` |
 | `DeadZoneShapeCombo` | ComboBox | Deadzone shape selector (Sticks tab) |
 | `SensitivityXCombo` | ComboBox | Sensitivity X preset (Sticks tab) |
 | `TriggerPresetCombo` | ComboBox | Trigger sensitivity preset (Triggers tab) |
+| `ControllerModelHost` | Grid | Preview tab visualization host |
+| `ViewModeToggle` | Button | 2D/3D preview toggle |
+| `MacroAddButton` / `MacroRemoveButton` | ui:Button | Macro list add and remove |
+| `MenuAddButton` / `MenuRemoveButton` | ui:Button | Menu list add and remove (#9) |
 
 ### Event Handlers (Code-Behind)
 
@@ -490,6 +527,7 @@ Grid (3 rows)
 │   ├─ ControllerSchematicView (procedural Extended/HID layout, Collapsed)
 │   ├─ MidiPreviewView (MIDI, Collapsed)
 │   ├─ KBMPreviewView (KB+Mouse, Collapsed)
+│   ├─ VRPreviewView (VR hand pair, Collapsed, #49)
 │   └─ ViewModeToggle button (top-left, E8B9↔F158 icon)
 ├─ Row 1 (Auto): Motor activity bars (MotorBarsGrid, 400px wide, centered)
 │   ├─ Col 0: Left Motor ProgressBar (MotorCapsuleTemplate) + label, clickable
@@ -505,6 +543,7 @@ Grid (3 rows)
 |-------------|--------------------|-----------|-------------|----------------|
 | KeyboardMouse |. |. | KBMPreviewView | No |
 | Midi |. |. | MidiPreviewView | No |
+| Vr |. |. | VRPreviewView | No |
 | Extended | Custom HID layout |. | ControllerSchematicView | No |
 | Extended | Xbox / DS4 catalog | 2D | ControllerModel2DView | Yes |
 | Extended | Xbox / DS4 catalog | 3D | ControllerModelView | Yes |
@@ -513,7 +552,7 @@ Grid (3 rows)
 | PlayStation |. | 2D | ControllerModel2DView | Yes |
 | PlayStation |. | 3D | ControllerModelView | Yes |
 
-**`BindActiveModelView()`**: Unbinds all five views, subscribes the active view's `ControllerElementRecordRequested` event, then calls `Bind(vm)`. All views fire `ControllerElementRecordRequested` with a PadSetting target name for click-to-record.
+**`BindActiveModelView()`**: Unbinds all six views, subscribes the active view's `ControllerElementRecordRequested` event, then calls `Bind(vm)`. All views fire `ControllerElementRecordRequested` with a PadSetting target name for click-to-record. The 2D view additionally wires `AnnotationChipNavigateRequested` and `AnnotationsToggled`.
 
 **Motor Activity Bars**. Two `ProgressBar` capsules (`MotorBarsGrid`, `MotorCapsuleTemplate`, `Minimum=0`/`Maximum=1`) bound to `LeftMotorDisplay`/`RightMotorDisplay`. The template fills an ember gradient with a leading-edge glow that grows from zero width at 0%. Each capsule is wrapped in a clickable `Grid` for motor test. Hover dims to 0.7 opacity via `Motor_MouseEnter`/`Motor_MouseLeave`.
 
@@ -529,7 +568,9 @@ Grid (3 columns)
     └─ StackPanel (DataContext=SelectedMacro)
         ├─ Name TextBox (UpdateSourceTrigger=PropertyChanged)
         ├─ Enabled CheckBox
-        ├─ Trigger Mode ComboBox (OnPress/OnRelease/WhileHeld/Always/CustomExpression)
+        ├─ Fire mode ComboBox, 12 items in strip order: OnPress, SinglePress,
+        │   OnRelease, WhileHeld, HoldForMs, ShortPress, DoublePress, TriplePress,
+        │   Toggle, Turbo, Always, CustomExpression
         ├─ Trigger Combination panel (hidden when Always mode)
         │   ├─ Trigger Source ComboBox (InputDevice/OutputController)
         │   ├─ Trigger display/recording text + Record button
@@ -544,7 +585,7 @@ Grid (3 columns)
             ├─ Add Action / Remove buttons
             ├─ Actions ListBox (DisplayMemberPath="DisplayText")
             └─ Action editor Border (DataContext=SelectedAction)
-                ├─ Action Type ComboBox (33 types)
+                ├─ Action Type ComboBox (34 `MacroActionType` values)
                 └─ Type-specific panels (conditional visibility):
 ```
 
@@ -552,7 +593,7 @@ Grid (3 columns)
 
 | Field | Binding | Visibility |
 |-------|---------|------------|
-| Fire mode dropdown | `TriggerMode` (SelectedValue) | Always |
+| Fire mode dropdown | `TriggerMode` (SelectedValue, `SelectedValuePath="Tag"`) | Always |
 | Trigger source | `TriggerSource` | Hidden in Always mode (`IsNotAlwaysMode`) |
 | Trigger display | `TriggerDisplayText` / `RecordingLiveText` | Hidden in Always mode |
 | Record button | `RecordTriggerCommand` / `RecordTriggerButtonText` | Hidden in Always mode |
@@ -692,7 +733,8 @@ ScrollViewer
               │   │   + two TextBox edits (dz.max) + two digit edits + reset
               │   ├─ Anti-Deadzone (DzSlider 0-100% + % edit + digit edit + reset)
               │   ├─ "Sensitivity Curve" header + hint text
-              │   ├─ Preset ComboBox (CurvePresetNames) + reset
+              │   ├─ Preset ComboBox (`CurvePresetChoices`, the instance accessor
+              │   │   over the static `CurvePresetNames`) + reset
               │   └─ Live value bar (ProgressBar 0-1 + RawDisplay text)
               └─ Col 1 (Auto): CurveEditor (120px, IsSigned=False)
                   └─ CurveString=SensitivityCurve, DeadZone/MaxRange bindings
@@ -798,7 +840,7 @@ Every setting row carries the canonical Reset button, and the host row carries R
 
 ### HIDMaestro Profile Bar
 
-`HMaestroProfileBar` is shown for `Xbox` and `PlayStation` slots. Its visibility is `HasHMaestroProfileBar && !isExtended`. `HasHMaestroProfileBar` is true for Xbox, PlayStation, and Extended, but Extended slots hide this compact bar and use the separate `ExtendedConfigBar` (with its own `ExtendedProfileCombo`) instead. It contains the profile picker only:
+`HMaestroProfileBar` is a `ChipGhost` preset chip inline in tier 1, shown for `Xbox`, `PlayStation`, and `Nintendo` slots. Its visibility is `HasHMaestroProfileBar && !isExtended`. `HasHMaestroProfileBar` is true for Xbox, PlayStation, Nintendo, and Extended, but Extended slots hide this compact chip and use the separate `ExtendedConfigBar` (with its own `ExtendedProfileCombo`) instead. It contains the profile picker only:
 
 | Control | AutomationId | Binding |
 |---------|--------------|---------|
@@ -815,7 +857,7 @@ The profile drives identity (VID/PID/product string) and layout (axes/buttons/PO
 | 1 | `ExtendedProfileCombo` + `ExtendedImportBtn` | Profile picker (same `AvailableProfiles` source) plus Import-From-Device |
 | 2 | `ExtendedCustomizeChk` + `ExtendedResetDefaultsBtn` | Master toggle for the rows below. Reset reverts to catalog defaults |
 | 3 | `ExtendedProductStringBox`, `ExtendedOemOverrideChk`, `ExtendedVidBox`, `ExtendedPidBox` | Identity overrides |
-| 4 | `ExtendedStickCountBox`, `ExtendedTriggerCountBox`, `ExtendedPovCountBox`, `ExtendedButtonCountBox`, `ExtendedTouchpadChk`, `ExtendedRumbleChk` | Layout overrides |
+| 4 | `RawStickCountBox`, `ExtendedTriggerCountBox`, `RawPovCountBox`, `RawButtonCountBox`, `ExtendedForceFeedbackChk` | Layout overrides. The count boxes kept their v2 `Raw*` names except triggers |
 
 Override rows 3 and 4 are gated by `IsChecked={ElementName=ExtendedCustomizeChk}`, so toggling Customize off restores the catalog profile as-is. `_syncingExtendedConfig` guard prevents recursive updates inside `SyncExtendedConfigBar()`.
 
@@ -855,55 +897,62 @@ Grid (Margin="24,16")
 │   ├─ Refresh Button (RefreshCommand)
 │   └─ Online/Total count display
 └─ Row 1 (*): Main content (Grid, 2 columns)
-    ├─ Col 0 (*): Device card ListBox
-    │   └─ ListBoxItem with custom ControlTemplate (4px accent left bar on selection)
-    │       └─ Card Border (CornerRadius=8, Padding="12,10")
-    │           ├─ Row 0, Col 0: LivenessFlame Path + DeviceName (SemiBold, 13px)
-    │           ├─ Row 0-1, Col 1: Slot badges (WrapPanel of numbered badges) or "Unassigned"
-    │           ├─ Row 0-1, Col 2: Remove device Button (E711 × icon)
-    │           └─ Row 1: DeviceType + VID:PID + CapabilitiesSummary
+    ├─ Col 0 (*): Facet chips + device card ListBox + drag-assign hint
+    │   ├─ Row 0: Type facet chips (ALL / GAMEPAD / JOYSTICK / WHEEL / KEYBOARD /
+    │   │    MOUSE / OTHER, MouseLeftButtonUp="FacetChip_Click", count per chip)
+    │   ├─ Row 1: ListBoxItem with custom ControlTemplate (4px accent left bar on selection)
+    │   │   └─ Card Border (CornerRadius=8, Padding="12,10")
+    │   │       ├─ Row 0, Col 0: LivenessFlame Path + DeviceName (SemiBold, 13px)
+    │   │       ├─ Row 0-1, Col 1: Slot badges (WrapPanel of numbered badges).
+    │   │       │    No badges means unassigned. There is no fallback pill
+    │   │       ├─ Row 0-1, Col 2: Remove device Button (E711 × icon)
+    │   │       └─ Row 1: DeviceType + VID:PID + CapabilitiesSummary
+    │   └─ Row 2: Devices_DragAssignHint text
     └─ Col 1 (340px): Detail panel (Border with ScrollViewer)
-        ├─ Device identity section
-        │   ├─ DeviceName (16px, SemiBold, wrapping)
-        │   ├─ Product name, Type, Capabilities
-        │   ├─ Instance GUID (marquee overflow)
-        │   ├─ Instance Path (marquee, conditional StringToVisibility)
-        │   └─ VID:PID
+        ├─ DeviceName headline (CardTitle, wrapping)
+        ├─ Device Dossier (#175 competitor item 7): eyebrow + copy Button
+        │   (CopyDossier_Click, E8C8) over a recessed telemetry-mono card whose
+        │   token rows are PRODUCT / TYPE / CAPS / VID:PID / APP GUID / SDL GUID /
+        │   PATH / LINK / BT / SERIAL / BATT. Rows whose fact is absent collapse
         ├─ Submit Mapping Button (joysticks only, opens GitHub issue template)
+        ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag, #150)
         ├─ Separator
         ├─ VC Assignment section
         │   └─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
         ├─ Separator
-        ├─ Input Mode section (gamepads only)
+        ├─ Input Mode section (ShowInputModeSection)
         │   └─ "Force raw joystick mode" CheckBox (ForceRawJoystickMode)
-        ├─ Separator
-        ├─ Input Hiding section
-        │   ├─ "Hide from games (HidHide)" CheckBox (HidHideEnabled)
+        ├─ Input Hiding section (ShowInputHidingSection)
+        │   ├─ "Hide from games (HidHide)" CheckBox (HidHideEnabled, HidingToggle_Click)
         │   └─ "Consume mapped inputs" CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+        ├─ Separator
         ├─ Power section (#162, wireless controllers only, ShowIdleDisconnect)
         │   └─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes)
-        ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
-        │   └─ ItemsControl → ConsumerButtons (named button chips)
-        ├─ NFC named-tag preview (#150)
-        │   ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag)
-        │   └─ ItemsControl → NfcTags (registered named tags)
-        ├─ Separator
         └─ Raw Input State section
             ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
             │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
             ├─ Buttons (joysticks/gamepads, hidden for keyboard/mouse)
             │   └─ WrapPanel of 24×24 circles, accent fill when pressed
+            ├─ NFC named-tag preview (#150, IsNfcDevice)
+            │   └─ ItemsControl → NfcTags (registered named tags)
+            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
+            │   └─ ItemsControl → ConsumerButtons (named button chips)
             ├─ Keyboard layout (keyboard devices only)
             │   └─ Viewbox → Canvas (556×136) with positioned key Borders
             ├─ Mouse preview (mouse devices only)
             │   └─ Viewbox → MousePreviewControl
+            ├─ MIDI preview (MIDI input devices)
+            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
             ├─ D-Pad / POV hats (conditional on RawPovs.Count > 0)
             │   └─ Horizontal StackPanel of compass indicators
             │       ├─ 36×36 Ellipse background + center dot
             │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
-            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, Consolas F3 format)
+            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
             ├─ Accelerometer (HasAccelData, same layout as gyro)
-            └─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair's left-half accel, #199)
+            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair's left-half accel, #199)
+            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair's left Joy-Con, #252)
+            └─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+                TouchpadPreviewBorder and Touchpad2PreviewBorder)
 ```
 
 ### Key Bindings
@@ -918,6 +967,7 @@ Grid (Margin="24,16")
 | `ActiveSlotItems` | `DevicesViewModel` | Slot toggle button items |
 | `ToggleSlotCommand` | `DevicesViewModel` | Toggle device-to-slot assignment |
 | `RemoveDeviceCommand` | `DevicesViewModel` | Remove device from list |
+| `SelectedFacet` | `DevicesViewModel` | Active type facet chip. `FacetCountGamepad` and friends fill the per-chip counts |
 
 ### Device Card Bindings (DeviceRowViewModel)
 
@@ -925,8 +975,7 @@ Grid (Margin="24,16")
 |---------|-------------|
 | `IsOnline` | Drives a `LivenessFlame` `Path` (fills `EmberBrush` with a glow when online, `LivenessFlameBase` outline stroke when offline). The device-name text also dims when offline. |
 | `DeviceName` | Bold device name |
-| `SlotBadges` | Collection of slot assignment badges |
-| `IsUnassigned` | Shows "Unassigned" badge when no slots assigned |
+| `SlotBadges` | Collection of slot assignment badges. Absence of badges encodes unassigned (#175 phase 2 item 9 removed the `IsUnassigned` flag and its gray fallback pill) |
 | `DeviceType` | Type string |
 | `VendorIdHex` / `ProductIdHex` | Hex VID:PID |
 | `CapabilitiesSummary` | e.g. "6 axes, 11 buttons, 1 POV" |
@@ -936,12 +985,14 @@ Grid (Margin="24,16")
 
 | Binding | Description |
 |---------|-------------|
-| `DeviceName`, `ProductName`, `DeviceType` | Device identity |
-| `CapabilitiesSummary` | Capabilities line |
-| `InstanceGuid` | GUID (marquee) |
-| `HidHideInstancePath` | Instance path (conditional visibility via `StringToVisibility`) |
+| `DeviceName`, `ProductName`, `DeviceType` | Device identity (dossier PRODUCT / TYPE rows) |
+| `CapabilitiesSummary` | Dossier CAPS row |
+| `InstanceGuid` | Dossier APP GUID row |
+| `SdlGuid`, `DossierConnectionPath`, `SerialNumber` | Dossier SDL GUID / LINK / SERIAL rows, each collapsed via `StringToVisibility` when empty |
+| `HidHideInstancePath` | Dossier PATH row (conditional visibility via `StringToVisibility`) |
 | `ShowSubmitMapping` | Submit mapping button visibility (joysticks only) |
-| `IsGamepad` | Controls Input Mode section visibility |
+| `ShowInputModeSection` | Input Mode section visibility (`IsGamepad && !IsInternalVirtual`) |
+| `ShowInputHidingSection` | Input Hiding section visibility (`!IsInternalVirtual`) |
 | `ForceRawJoystickMode` | Force raw toggle |
 | `IsHidHideAvailable` | Enables/disables HidHide checkbox |
 | `HidHideEnabled` | HidHide toggle |
@@ -953,12 +1004,13 @@ Grid (Margin="24,16")
 | `RawAxes` | Axis ProgressBar items |
 | `RawButtons` | Button circle items |
 | `IsKeyboardDevice` / `IsMouseDevice` | Switches between button circles, keyboard canvas, or mouse graphic |
-
-The NFC and Consumer previews bind to the page DataContext (`DevicesViewModel`), not to `SelectedDevice`: `IsNfcDevice` / `NfcTags` and `IsConsumerDevice` / `ConsumerButtons`. Only `ShowRegisterNfcTag`, `ShowIdleDisconnect`, and `IdleDisconnectMinutes` above are `SelectedDevice`-scoped.
 | `KeyboardKeys` | QWERTY keyboard layout items |
 | `RawPovs` | POV compass items |
-| `HasGyroData` / `HasAccelData` / `HasAccelAuxData` | Gyro / accel / aux-accel section visibility |
-| `GyroX/Y/Z` / `AccelX/Y/Z` / `AccelAuxX/Y/Z` | Motion sensor values (aux accel is #199) |
+| `HasGyroData` / `HasAccelData` / `HasAccelAuxData` / `HasGyroAuxData` | Gyro / accel / aux-accel / aux-gyro section visibility |
+| `GyroX/Y/Z` / `AccelX/Y/Z` / `AccelAuxX/Y/Z` | Motion sensor values (aux accel is #199, aux gyro is #252) |
+| `HasTouchpadData` / `TouchpadLabel` | Touchpad preview visibility and caption |
+
+The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC and Consumer previews do the same: `IsNfcDevice` / `NfcTags` and `IsConsumerDevice` / `ConsumerButtons`. `ShowRegisterNfcTag`, `ShowIdleDisconnect`, and `IdleDisconnectMinutes` are `SelectedDevice`-scoped and bind through the `SelectedDevice.` prefix.
 
 ### Selection Highlighting
 
@@ -972,9 +1024,11 @@ Custom `ListBoxItem` `ControlTemplate`:
 | Handler | Trigger | Action |
 |---------|---------|--------|
 | `RemoveDevice_Click` | Button.Click | Selects device, executes `RemoveDeviceCommand` |
-| `HidingToggle_Changed` | CheckBox.Checked/Unchecked | Shows warning flyout for mouse/keyboard enable, clears `LastRawStateDeviceGuid` for rebuild, calls `NotifyDeviceHidingChanged` |
+| `FacetChip_Click` | Border.MouseLeftButtonUp | Sets `SelectedFacet` from the chip's `Tag`, filtering the device list |
+| `HidingToggle_Click` | CheckBox.Click | Shows warning flyout for mouse/keyboard enable, clears `LastRawStateDeviceGuid` for rebuild, calls `NotifyDeviceHidingChanged` |
 | `ShowHidingWarningFlyout` | (internal) | WPF UI `Flyout` with warning icon, message, Proceed/Cancel buttons. Reverts checkbox immediately, re-checks only on Proceed. |
 | `SubmitMapping_Click` | Button.Click | Opens browser to GitHub issue template with device info pre-filled |
+| `CopyDossier_Click` | Button.Click | Copies the device dossier's token rows to the clipboard |
 | `RegisterNfcTag_Click` | Button.Click | Opens `RegisterNfcTagDialog` for the selected NFC reader (#150) |
 | `IdleDisconnect_LostFocus` | TextBox.LostFocus | Applies the clamped idle-disconnect minutes (#162) |
 | `DeviceCard_MouseDown` | PreviewMouseLeftButtonDown | Records drag start position. Skips if inside a Button |
@@ -1026,7 +1080,7 @@ Pre-cached `static readonly` dark and light brush variants for key backgrounds, 
 
 **Files:** `MidiPreviewView.xaml`, `MidiPreviewView.xaml.cs`
 
-MIDI note and CC visualization for MIDI virtual controller slots, shown on the PadPage Preview tab.
+MIDI note and CC visualization for MIDI virtual controller slots, shown on the PadPage Preview tab. The same control serves the Devices page twice (`MidiNotesPreview`, `MidiCcPreview`) for a physical MIDI input device's raw state.
 
 ### Layout
 
@@ -1052,6 +1106,35 @@ Pre-cached `static readonly` dark and light brush variants for CC bar fills, pia
 ### Layout Rebuild
 
 The entire canvas is cleared and rebuilt on any `MidiSlotConfig` property change. No partial layout updates.
+
+---
+
+## VRPreviewView
+
+**Files:** `VRPreviewView.xaml`, `VRPreviewView.xaml.cs`
+
+Live preview for a VR slot (#49), shown on the PadPage Preview tab. One VR slot drives both SteamVR hands, so the art is the pair side by side rather than a single controller body.
+
+### Layout
+
+`Viewbox` over a single `Canvas` (`VrCanvas`), built once on `Loaded` from the 2D art in `2DModels/VRCONTROLLER/`. Base art is 975×726, and the twelve elements are positioned in those pixels:
+
+| Element | Targets |
+|---------|---------|
+| `VRController_L_Stick` / `_R_Stick` | `VrLStick` / `VrRStick` (click plus four directions) |
+| `VRController_L_A` / `_R_A` | `VrLA` / `VrRA` (inner press disc, outer touch ring) |
+| `VRController_L_B` / `_R_B` | `VrLB` / `VrRB` |
+| `VRController_L_System` / `_R_System` | `VrLSystem` / `VrRSystem` (single-target) |
+| `VRController_L_Trigger` / `_R_Trigger` | `VrLTrigger` / `VrRTrigger` (body axis, tip band click) |
+| `VRController_L_Grip` / `_R_Grip` | `VrLGrip` / `VrRGrip` |
+
+### Rendering
+
+Element tinting follows the `Rectangle` + `ImageBrush` `OpacityMask` idiom the branded 2D packs use: the cutout supplies the shape and one brush supplies the color, so lit, hover, and flash all drive the same layer. Triggers and grips fill bottom-up through a `RectangleGeometry` clip rather than scaling opacity. Stick caps translate up to 14px with deflection, and the stick's tint layer and region highlight share that transform. Frames come from `CompositionTarget.Rendering` against a cached `VrRawState`.
+
+### Interaction
+
+Same click-to-record contract as the other previews, including `Bind(vm)` / `Unbind()` and `ControllerElementRecordRequested`. Every element except System carries more than one target, so each one gets a region highlight: the element's own overlay clipped to the region under the pointer, at the drawn packs' 0.4 hover opacity.
 
 ---
 
@@ -1092,8 +1175,8 @@ Application settings in vertical `CardBorder` sections.
 ### Layout Structure
 
 ```
-ScrollViewer (Padding="24,16")
-  └─ StackPanel
+ScrollViewer (Padding="24,0")
+  └─ StackPanel (Margin="0,16,0,16")
       ├─ Page header (E713 gear icon + title)
       ├─ Language card (CardBorder)
       │   ├─ Icon F2B7 + "Language" title + description
@@ -1108,7 +1191,8 @@ ScrollViewer (Padding="24,16")
       │   ├─ Auto-start toggle (AutoStartEngine)
       │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
       │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs)
-      │   └─ Hide devices toggle (EnableInputHiding)
+      │   └─ HM inactivity timeout: NumberBox 0-3600s
+      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
       ├─ Window card
       │   ├─ Icon E737 + title + description
       │   ├─ Minimize to tray (MinimizeToTray)
@@ -1118,17 +1202,25 @@ ScrollViewer (Padding="24,16")
       │   ├─ Icon ED1A + title + description
       │   ├─ Status: dot + HidHideStatusText + HidHideVersion
       │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
+      │   ├─ Hide devices toggle (EnableInputHiding)
+      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches)
       │   └─ Whitelist section (only when installed):
       │       ├─ Title + description
       │       ├─ ListBox of HidHideWhitelistPaths (Consolas, 12px)
       │       └─ Add/Remove buttons
       ├─ HIDMaestro Driver card
       │   ├─ Icon E7FC + title + description
-      │   └─ Status: green dot + "Installed" + HIDMaestroVersion (no Install/Uninstall buttons; HIDMaestro is embedded in the binary)
+      │   └─ Status: green dot + "Installed" + HIDMaestroVersion (no Install/Uninstall
+      │      buttons, because HIDMaestro is embedded in the binary)
       ├─ Windows MIDI Services card
       │   ├─ Icon E8D6 + title + description
       │   ├─ Status: dot + MidiServicesStatusText + MidiServicesVersion
       │   └─ Install/Uninstall buttons (Install disabled tooltip when IsMidiOsSupported=False)
+      ├─ SteamVR card (#49)
+      │   ├─ Icon F119 + title + description
+      │   ├─ Status: dot + IsSteamVrInstalled state
+      │   ├─ Install directory TextBox + Browse button (SteamVrBrowse_Click → SteamVrInstallDir)
+      │   └─ Install/Uninstall buttons (InstallSteamVrCommand / UninstallSteamVrCommand)
       ├─ Community Configs card (#9)
       │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
       │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
@@ -1157,7 +1249,9 @@ ScrollViewer (Padding="24,16")
 | `AutoStartEngine` | CheckBox | Auto-start engine on launch |
 | `EnablePollingOnFocusLoss` | CheckBox | Continue polling when app loses focus |
 | `PollingRateMs` | NumberBox (1-16) | Polling interval in ms |
-| `EnableInputHiding` | CheckBox | Master input hiding toggle |
+| `HmInactivityDestroyTimeoutSeconds` | NumberBox (0-3600) | Seconds of device inactivity before the VC is torn down. 0 means never |
+| `EnableInputHiding` | CheckBox | Master input hiding toggle (HidHide card) |
+| `KeepHidHideCloaksBetweenLaunches` | CheckBox | Leave cloaks in place across app restarts |
 | `MinimizeToTray` | CheckBox | Minimize to system tray |
 | `StartMinimized` | CheckBox | Start app minimized |
 | `StartAtLogin` | CheckBox | Start at Windows login |
@@ -1167,6 +1261,8 @@ ScrollViewer (Padding="24,16")
 | `SelectedWhitelistPath` | object | Selected whitelist item |
 | `AddWhitelistPathCommand` / `RemoveWhitelistPathCommand` | ICommand | Whitelist management |
 | `IsMidiServicesInstalled` / `IsMidiOsSupported` | bool | MIDI Services status. Controls Install button visibility and disabled-tooltip |
+| `IsSteamVrInstalled` / `IsSteamVrOwned` / `SteamVrInstallDir` | bool, bool, string | SteamVR card status, whether PadForge created the Steam-free install, and its directory (#49) |
+| `InstallSteamVrCommand` / `UninstallSteamVrCommand` | ICommand | SteamVR install/uninstall |
 | `SaveCommand` / `ReloadCommand` / `ResetCommand` / `OpenSettingsFolderCommand` | ICommand | Settings file operations |
 | `EnableCommunityConfigLookup` / `ShowLegacyWorkshopConfigs` | CheckBox | Steam Workshop opt-in + legacy sub-toggle (#9) |
 | `ClearWorkshopCacheCommand` / `CheckWorkshopUpdatesCommand` | ICommand | Workshop cache clear and imported-profile update check |
@@ -1174,7 +1270,12 @@ ScrollViewer (Padding="24,16")
 
 ### Code-Behind
 
-Constructor only. All logic in ViewModel.
+Two handlers beyond the constructor. Everything else lives in the ViewModel.
+
+| Handler | Trigger | Action |
+|---------|---------|--------|
+| `ShowTour_Click` | Appearance card button | Calls `MainWindow.StartFirstRunTour()` to re-run the welcome tour (#175) |
+| `SteamVrBrowse_Click` | SteamVR card button | `OpenFolderDialog` for the Steam-free SteamVR install directory, writes `SettingsViewModel.SteamVrInstallDir` (#49) |
 
 ---
 
@@ -1187,25 +1288,33 @@ Per-app profile management.
 ### Layout Structure
 
 ```
-ScrollViewer (Padding="24,16")
-  └─ StackPanel
+ScrollViewer (Padding="24,0")
+  └─ StackPanel (Margin="0,16,0,16")
       ├─ Page header (E8F1 people icon + title)
       └─ CardBorder
-          ├─ Icon E8F1 + "Management" title + description
+          ├─ Icon E8B7 + "Management" title + description
           ├─ Auto-switch CheckBox (EnableAutoProfileSwitching)
-          ├─ Active profile info (ActiveProfileInfo, SemiBold)
-          ├─ Profile ListBox (MinHeight=60, MaxHeight=300)
-          │   └─ ItemTemplate:
-          │       ├─ Profile Name (SemiBold)
-          │       ├─ Executables list (trimmed, collapsed when empty)
-          │       └─ Type count badges (horizontal StackPanel):
-          │           ├─ Xbox badge: Xbox SVG + XboxCount (collapsed when 0)
-          │           ├─ PlayStation badge: PS SVG + PlayStationCount (collapsed when 0)
-          │           ├─ Extended badge: Joystick SVG + ExtendedCount (collapsed when 0)
-          │           ├─ MIDI badge: E8D6 glyph + MidiCount (collapsed when 0)
-          │           ├─ KB+M badge: E961 glyph + KbmCount (collapsed when 0)
-          │           └─ "No slots" fallback (visible when HasNoSlots=True)
-          └─ Action buttons: New / Save As / Edit / Load / Delete
+          ├─ FOREGROUND live readout (visible only while auto-switch is on):
+          │   mono token + lit flame when IsForegroundMatched + ForegroundExeName,
+          │   plus the no-rules hint when NoProfileHasExecutables
+          ├─ Drop-zone Grid (AllowDrop, ProfileList_DragEnter/DragOver/DragLeave/Drop
+          │   for .pfprofile import, ProfileDropOverlay cue)
+          │   └─ Profile card ListBox (ProfileListBox, WrapPanel of steel cards,
+          │       MinHeight=92, MaxHeight=452, MouseDoubleClick loads)
+          │       └─ ItemTemplate:
+          │           ├─ Profile Name (SemiBold) + "Built in" tag on the default
+          │           ├─ Executable names (FirstExecutableName, SecondExecutableName,
+          │           │   ExtraExecutablesSuffix, each collapsed when empty)
+          │           └─ Type count badges (horizontal StackPanel):
+          │               ├─ Xbox badge: Xbox SVG + XboxCount (collapsed when 0)
+          │               ├─ PlayStation badge: PS SVG + PlayStationCount (collapsed when 0)
+          │               ├─ Extended badge: Joystick SVG + ExtendedCount (collapsed when 0)
+          │               ├─ MIDI badge: E8D6 glyph + MidiCount (collapsed when 0)
+          │               ├─ KB+M badge: E961 glyph + KbmCount (collapsed when 0)
+          │               ├─ Nintendo badge: Switch SVG + NintendoCount (collapsed when 0)
+          │               └─ "No slots" fallback (visible when HasNoSlots=True)
+          └─ Action buttons: New / Save As / Load / Edit / Export / Import /
+             Browse Starters / Browse Community / Delete
 ```
 
 ### Key Bindings
@@ -1213,13 +1322,16 @@ ScrollViewer (Padding="24,16")
 | Binding | Target | Description |
 |---------|--------|-------------|
 | `EnableAutoProfileSwitching` | CheckBox | Enables foreground app monitoring |
-| `ActiveProfileInfo` | TextBlock | Current active profile name |
+| `ForegroundExeName` / `IsForegroundMatched` / `NoProfileHasExecutables` | TextBlock, flame, hint | The FOREGROUND live readout. `SettingsViewModel.ActiveProfileInfo` is set by the services but is not bound on this page. The status bar's `ProfilePill` carries the active-profile name |
 | `ProfileItems` | ListBox ItemsSource | Profile list |
-| `SelectedProfile` | ListBox SelectedItem | Selected profile |
+| `SelectedProfile` | ListBox SelectedItem | Selected profile. `SelectedProfile.IsDefault` disables Edit and Delete |
 | `NewProfileCommand` | Button | Create new profile |
 | `SaveAsProfileCommand` | Button | Save current config as profile |
 | `EditProfileCommand` | Button | Edit profile name/exes |
 | `LoadProfileCommand` | Button | Load selected profile |
+| `ExportProfileCommand` / `ImportProfileCommand` | Button | `.pfprofile` export and import |
+| `BrowseStarterProfilesCommand` | Button | Opens `StarterProfilesDialog` (#256) |
+| `BrowseCommunityConfigsCommand` | Button | Opens `WorkshopBrowseDialog` (#9) |
 | `DeleteProfileCommand` | Button | Delete selected profile |
 
 ### Profile Item Bindings
@@ -1227,9 +1339,11 @@ ScrollViewer (Padding="24,16")
 | Binding | Description |
 |---------|-------------|
 | `Name` | Profile name (SemiBold) |
-| `Executables` | Comma-separated exe list (collapsed when empty via DataTrigger) |
-| `XboxCount` / `PlayStationCount` / `ExtendedCount` / `MidiCount` / `KbmCount` | Per-type counts (badge collapsed when 0) |
-| `HasNoSlots` | Shows "No slots" badge when all type counts are zero |
+| `IsDefault` | Marks the built-in Default profile. Blocks Edit and Delete |
+| `Executables` | Comma-separated exe list backing the card. `HasExecutables` gates the auto-switch hint |
+| `FirstExecutableName` / `SecondExecutableName` / `ExtraExecutablesSuffix` | The card renders at most two exe names plus a "+N more" suffix, each collapsed via `StringToVisibility` |
+| `XboxCount` / `PlayStationCount` / `ExtendedCount` / `MidiCount` / `KbmCount` / `NintendoCount` | Per-type counts (badge collapsed when 0) |
+| `HasNoSlots` | Shows "No slots" badge when all six type counts are zero |
 
 ### Controller Shortcuts Card
 
@@ -1241,9 +1355,11 @@ CardBorder (Margin="0,20,0,0")
       ├─ Icon E71B + "Shortcuts" title + description
       ├─ ItemsControl (ItemsSource="{Binding ProfileShortcuts}")
       │   └─ ItemTemplate (Grid, 5 columns):
-      │       ├─ Col 0: Mode ComboBox (Next/Previous/Specific/ToggleWindow, Width=155)
-      │       ├─ Col 1: Profile ComboBox (Specific only, Width=140, collapsed otherwise)
-      │       ├─ Col 2: Device ComboBox (Width=220)
+      │       ├─ Col 0: Mode ComboBox (SwitchModes: Next / Previous / Specific /
+      │       │    ToggleWindow / ToggleVCsDisabled, Width=290)
+      │       ├─ Col 1: Profile ComboBox (ProfileChoices, Specific only, Width=140,
+      │       │    collapsed otherwise)
+      │       ├─ Col 2: Device ComboBox (DeviceChoices, Width=290)
       │       ├─ Col 3: ButtonComboDisplay TextBlock (fills remaining, marquee-enabled)
       │       └─ Col 4: Action buttons (Learn/Clear/Delete)
       │           ├─ Learn: Click="ShortcutLearn_Click", icon toggles Record/Stop
@@ -1257,7 +1373,9 @@ CardBorder (Margin="0,20,0,0")
 | Handler | Trigger | Action |
 |---------|---------|--------|
 | `ProfileList_MouseDoubleClick` | ListBox.MouseDoubleClick | Executes `LoadProfileCommand` |
+| `ProfileList_DragEnter` / `DragOver` / `DragLeave` / `Drop` | Drop-zone Grid | Accepts a dropped `.pfprofile` file for import and drives the `ProfileDropOverlay` cue |
 | `ShortcutLearn_Click` | Learn button Click | Starts 5-second combo recording for the row's `ProfileShortcutViewModel` |
+| `ProfileChoices_DropDownOpened` / `DeviceChoices_DropDownOpened` | ComboBox.DropDownOpened | Rebuilds the shortcut row's profile and device lists on open |
 | `AddShortcut_Click` | "Add Shortcut" button Click | Creates a new `GlobalMacroData`, wraps in `ProfileShortcutViewModel`, adds to list |
 
 ### Shortcut Recording State (Code-Behind)
@@ -1354,16 +1472,20 @@ Application identity, description, technologies, and license.
 ### Layout Structure
 
 ```
-ScrollViewer (Padding="24,16")
-  └─ StackPanel
+ScrollViewer (Padding="24,0")
+  └─ StackPanel (Margin="0,16,0,16")
       ├─ Page header (E946 info icon + title)
       ├─ App identity card (centered, 24px padding)
-      │   ├─ "PadForge" (28px, Bold)
+      │   ├─ PadForge-icon.png (120px)
+      │   ├─ "PadForge" (28px, Bold, Display face)
       │   ├─ Subtitle (14px)
       │   └─ Tagline (12px)
+      ├─ "Testimony" section header (E734 icon)
+      ├─ Testimony card (Scripture + doxology, italic)
+      ├─ "Overview" section header (E7C3 icon)
       ├─ Description card (wrapping text, line height 22)
       ├─ "Built With" section header (E74C checkmark icon)
-      ├─ Technologies card (Grid, 164px label + description, 38 rows):
+      ├─ Technologies card (Grid, 164px label + description, 47 rows):
       │   ├─ .NET 10
       │   ├─ SDL3
       │   ├─ Raw Input
@@ -1374,11 +1496,9 @@ ScrollViewer (Padding="24,16")
       │   ├─ HelixToolkit
       │   ├─ WPF UI
       │   ├─ MVVM Toolkit
-      │   └─ ...28 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, Dolphin, DS4Windows, WiimoteLib, and others)
+      │   └─ ...37 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
       ├─ "License" section header (E8D7 icon)
-      ├─ License card (12px wrapping text, secondary brush)
-      ├─ "Testimony" section header (E734 icon)
-      └─ Testimony card (Scripture + doxology, italic)
+      └─ License card (12px wrapping text, secondary brush)
 ```
 
 ### Code-Behind
@@ -1393,21 +1513,27 @@ Constructor only. All text from localized string bindings.
 
 **Files:** `CopyFromDialog.xaml`, `CopyFromDialog.xaml.cs`
 
-Modal dialog to copy from another slot. Lists every slot that has at least one assigned device. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through `InputService.BuildPerDeviceSettingsSnapshot` + `ApplyPerDeviceSettingsToSlot`, matched by `InstanceGuid` (perfect round-trip) or `ProductGuid` (same model, different unit).
+Modal dialog to copy from another slot (`FluentWindow`, 420x420). Lists every slot that has at least one assigned device. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through `InputService.BuildPerDeviceSettingsSnapshot` + `ApplyPerDeviceSettingsToSlot`, matched by `InstanceGuid` (perfect round-trip) or `ProductGuid` (same model, different unit).
 
 ### ProfileDialog
 
 **Files:** `ProfileDialog.xaml`, `ProfileDialog.xaml.cs`
 
-Modal dialog to create/edit profiles. Fields: profile name, executable list (comma-separated).
+Modal dialog to create/edit profiles (`FluentWindow`, 500x470). Fields: profile name, executable list (comma-separated).
+
+### StarterProfilesDialog
+
+**Files:** `StarterProfilesDialog.xaml`, `StarterProfilesDialog.xaml.cs`
+
+The bundled starter-profile browser (#256). `FluentWindow` (700x620, min 560x480) opened from the Profiles page "Browse Starters" button. Picking a starter materializes it as a new profile.
 
 ### RegisterNfcTagDialog
 
 **Files:** `RegisterNfcTagDialog.xaml`, `RegisterNfcTagDialog.xaml.cs`
 
-Capture-and-name flow for NFC tags (#150). The class extends `Wpf.Ui.Controls.FluentWindow` (`ExtendsContentIntoTitleBar`, `WindowBackdropType="Mica"`). Opened from the Devices page for an NFC reader. Tapping a tag captures its UID, the user names it, and it is added to `NfcTagRegistry`, which surfaces it as a bindable named button on the NFC device. The dialog also lists registered tags with a Remove action.
+Capture-and-name flow for NFC tags (#150). The class extends `Wpf.Ui.Controls.FluentWindow` (`ExtendsContentIntoTitleBar`, `WindowBackdropType="Mica"`, 520x520). Opened from the Devices page for an NFC reader. Tapping a tag captures its UID, the user names it, and it is added to `NfcTagRegistry`, which surfaces it as a bindable named button on the NFC device. The dialog also lists registered tags with a Remove action.
 
-While open, the dialog subscribes to `NfcReaderService.TagDetected` (from `NfcReaderService.Active`). `OnTagDetected` (~49) fires on the reader's monitor thread and marshals to the UI thread via `Dispatcher.BeginInvoke` before normalizing the UID and enabling `RegisterBtn`. `RegisterButton_Click` (~63) calls `NfcTagRegistry.Register(uid, name)`, then refreshes the list. The subscription is torn down on `Closed`.
+While open, the dialog subscribes to two capture paths: `NfcReaderService.TagDetected` (from `NfcReaderService.Active`) for a standalone reader, and `NfcTagRegistry.ControllerTagDetected` for a controller-borne reader, with `NfcTagRegistry.RegistrationCaptureActive` raised for the dialog's lifetime. `OnTagDetected` fires on the reader's monitor thread and marshals to the UI thread via `Dispatcher.BeginInvoke` before normalizing the UID and enabling `RegisterBtn`. `RegisterButton_Click` calls `NfcTagRegistry.Register(uid, name)`, then refreshes the list. Both subscriptions are torn down on `Closed`.
 
 | Element | Binding / Handler | Purpose |
 |---------|-------------------|---------|
@@ -1501,7 +1627,7 @@ The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080
 
 ## Value Converters
 
-All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 760-777). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
+All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 1044-1061). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
 
 | Converter | Key | Input | Output | Description |
 |-----------|-----|-------|--------|-------------|
@@ -1557,12 +1683,12 @@ The #175 ember restyle grew `App.xaml` well past the old two-dictionary shell. M
         <!-- keyed: EmberIconButton(+Hot), EmberAccentButton, EmberPrimaryButton,
              EmberDestructiveButton, EmberSelectListItem, EmberSlider,
              InstrumentBarRaw / InstrumentBarOut, EmberFocusVisual, EntranceFade -->
-        <!-- 18 global converter registrations (lines 760-777) -->
+        <!-- 18 global converter registrations (lines 1044-1061) -->
     </ResourceDictionary>
 </Application.Resources>
 ```
 
-Ember identity tokens (`ColdBrush`, `EmberBrush`, `SteelGroundBrush`, and their relatives) carry the #175 color language: cold = the physical side (devices, sources, telemetry), ember = the virtual side (outputs, anything live), steel = the ground the two sit on. Green/gold/red stay health-only (`WaitBrush` is the only sanctioned gold). `EmberThemeProbe` / `EmberTheme.ApplyAccent` swap the theme-scoped pairs on a light/dark flip.
+Ember identity tokens (`ColdBrush`, `EmberBrush`, `SteelGroundBrush`, `CrucibleCardBrush`, and their relatives) carry the #175 color language: cold = the physical side (devices, sources, telemetry), ember = the virtual side (outputs, anything live), steel = the ground the two sit on. Green/gold/red stay health-only (`WaitBrush` is the only sanctioned gold). `EmberThemeProbe` / `EmberTheme.ApplyAccent` swap the theme-scoped pairs on a light/dark flip.
 
 Theme is applied at runtime via `Wpf.Ui.Appearance.ApplicationThemeManager.Apply(...)` (Light / Dark) or `ApplySystemTheme()`. The `Theme="Dark"` attribute on `ThemesDictionary` is the design-time default.
 
@@ -1592,7 +1718,8 @@ Theme is applied at runtime via `Wpf.Ui.Appearance.ApplicationThemeManager.Apply
 |-----|--------|-------------|
 | `XboxControllerIcon` | svgrepo.com (32x32) | Xbox logo icon |
 | `DS4ControllerIcon` | svgrepo.com (32x32) | PlayStation logo icon |
-| `ExtendedControllerIcon` | svgrepo.com (24x24) | Joystick icon |
+| `NintendoControllerIcon` | Switch logo (32x32 box) | Nintendo family icon |
+| `ExtendedControllerIcon` | svgrepo.com, viewBox -4 -2 24 24 | Joystick icon |
 | `GenericControllerIcon` | svgrepo.com (512x512, scaled) | Generic gamepad with D-pad and face buttons |
 | `KeyboardMouseControllerIcon` | placeholder path | Placeholder so resource lookup succeeds. KB+M actually renders via an MDL2 glyph in code-behind. There is no `MidiControllerIcon`. MIDI uses the `E8D6` MDL2 glyph directly. |
 
@@ -1632,7 +1759,10 @@ Defined inline in the App.xaml ember-tokens dictionary. Values below are the dar
 |-----------|-------|-------|
 | `EmberBrush` / `EmberHotBrush` / `EmberDeepBrush` | `#FF6B2C` / `#FFA24D` / `#C43D0C` | Virtual side: outputs, live state, accent verbs |
 | `ColdBrush` / `ColdDeepBrush` / `ColdMutedBrush` | `#58B6E4` / `#2E6A8F` / `#9E58B6E4` | Physical side: devices, sources, telemetry |
-| `SteelGroundBrush` / `SteelCardBrush` / `SteelRaisedBrush` / `SteelLineBrush` | `#0B0E14` / `#111623` / `#1B2333` / `#253049` | Ground, card, raised, hairline |
+| `SteelGroundBrush` / `SteelRaisedBrush` / `SteelLineBrush` / `SteelLineSoftBrush` | `#0B0E14` / `#1B2333` / `#253049` / `#1C2536` | Ground, raised, hairline, soft hairline |
+| `CrucibleCardBrush` | `#111623` gradient | Slot-card ground. `EmberTheme` swaps it per theme, and light falls back to the card fill. There is no `SteelCardBrush` key |
+| `EmberTintBrush` / `ColdTintBrush` | `#1AFF6B2C` / `#1A58B6E4` | Checked-tab and chip washes |
+| `EmberTextBrush` | `#FF6B2C` | Raw-ember text that deepens on white. Theme-paired |
 | `WaitBrush` | `#E8B434` | The only sanctioned gold: cooling flames, awaiting-devices |
 
 The `RangeSliderThumbFill` brush from the v3 layout no longer exists.
@@ -1693,7 +1823,7 @@ The engine-state indicator in the status bar uses the same flame with DataTrigge
 <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
 ```
 
-Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `E961` keyboard, `EC05` broadcast, `E774` globe, `ED5D` driver, `F2B7` language, `E8D7` document, `E74C` checkmark, `F404` home, `E7BA` warning.
+Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `EC05` broadcast, `E774` globe, `ED5D` driver, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning.
 
 ### WPF UI NumberBox
 
@@ -1725,7 +1855,7 @@ Long text (device names, GUIDs, paths) uses `MarqueeBehavior.IsEnabled="True"` i
 
 ### Bind/Unbind Pattern
 
-All five visualization views (3D, 2D, Schematic, MIDI, KBM) share this interface:
+All six visualization views (3D, 2D, Schematic, MIDI, KBM, VR) share this interface:
 
 ```csharp
 public void Bind(PadViewModel vm)    // Subscribe to PropertyChanged, hook rendering, load model
@@ -1829,12 +1959,12 @@ private void CustomizeToggle_Changed(object sender, RoutedEventArgs e)
 - [Architecture Overview](architecture-overview.md): Application shell, page hosting, WPF UI theme
 - [ViewModels](viewmodels.md): `PadViewModel`, `DashboardViewModel`, `DevicesViewModel`, `SettingsViewModel`
 - [Services Layer](services-layer.md): `InputService`, `SettingsService`, `DeviceService` wired in `MainWindow.xaml.cs`
-- [2D Overlay System](2d-overlay-system.md): `ControllerModel2DView`, `ControllerSchematicView`, `KBMPreviewView`, `MidiPreviewView`
+- [2D Overlay System](2d-overlay-system.md): `ControllerModel2DView`, `ControllerSchematicView`, `KBMPreviewView`, `MidiPreviewView`, `VRPreviewView`
 - [3D Model System](3d-model-system.md): `ControllerModelView` (HelixToolkit 3D viewport)
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` descriptors driving mapping grid UI
-- [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M (all HM-backed types are produced by `HMaestroVirtualController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, the `VirtualControllerGroups.InOrder` visual order.
+- [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR (all HM-backed types are produced by `HMaestroVirtualController`, VR by `HMaestroVRController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, and a VR button (`F119` glyph, AutomationId `AddVrBtn`, capacity via `MaxVrSlots` = 1) at the tail, the `VirtualControllerGroups.InOrder` visual order.
 - [Driver Installation Internals](driver-installation-internals.md): HidHide and Windows MIDI Services install/uninstall triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput is unpacked next to `PadForge.exe` from the single-file bundle)
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

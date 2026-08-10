@@ -129,7 +129,7 @@ The telemetry readers are original. Where a game's memory layout came from a pub
 
 ## Remote Link wheel relay
 
-A shared wheel works over [Remote Link](remote-link-internals.md) through a parallel dispatch in `InputService`. The consumer ships a semantic wheel frame, and `ApplyRemoteWheel` re-encodes it on the owner with the owner's own vendor writer, calling the same `WriteCondition`, `WriteConstantForce`, `WritePeriodic`, `WriteRange`, `WriteAutocenter`, and `WriteRpmLeds` methods. This is why the writers are referenced from both Step 2 and `InputService`.
+A shared wheel works over [Remote Link](remote-link-internals.md) through a parallel dispatch in `InputService`. The consumer ships a semantic wheel frame, and `ApplyRemoteWheel` re-encodes it on the owner with the owner's own vendor writer, calling the same condition, constant-force, periodic, range, auto-center, and RPM-LED entry points Step 2 uses (`WriteCondition` / `WriteConstantForce` on Logitech and Thrustmaster, `WriteWheelCondition` / `WriteWheelConstantForce` on Fanatec, `WritePeriodic` on Thrustmaster only, then `WriteRange`, `WriteAutocenter`, and `WriteRpmLeds` on all three). This is why the writers are referenced from both Step 2 and `InputService`.
 
 ---
 
@@ -143,4 +143,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

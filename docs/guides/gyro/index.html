@@ -960,6 +960,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#response-shaping" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2383,6 +2394,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2864,6 +2879,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3175,6 +3246,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#response-shaping" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3463,8 +3545,8 @@
 <h2 id="motion-passthrough">Motion Passthrough<a class="headerlink" href="#motion-passthrough" title="Permanent link">&para;</a></h2>
 <p>The first card carries one checkbox: <strong>Apply Gyro Tuning to Motion Passthrough</strong>.</p>
 <p>Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.</p>
-<p>Check the box to route the rest of the Gyro tab's tuning (deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert) through the motion the virtual controller reports. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.</p>
-<p>The virtual controller types that carry motion to the game are DualShock 4, DualSense, and, since 4.1.0, the Nintendo (virtual Switch Pro) type. Xbox types have no motion channel.</p>
+<p>Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The <a href="#engage-gates">engage gates</a> come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.</p>
+<p>The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense), the Nintendo (virtual Switch Pro) type since 4.1.0, and Extended slots whose HIDMaestro profile exposes an IMU. Xbox types have no motion channel.</p>
 <p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.</p>
 <hr />
 <h2 id="motion-steering">Motion Steering<a class="headerlink" href="#motion-steering" title="Permanent link">&para;</a></h2>
@@ -3486,7 +3568,7 @@
 <h2 id="sensitivity">Sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">&para;</a></h2>
 <p>Top-level scaling, axis inversion, and the reference frame the gyro is interpreted in. Every gyro mapping on this device inherits these values.</p>
 <h3 id="units">Units<a class="headerlink" href="#units" title="Permanent link">&para;</a></h3>
-<p>The <strong>Units</strong> dropdown offers <strong>Multiplier</strong> (the default) and <strong>Degrees per screen turn</strong>. It is a saved preference only: in 4.1.0 neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.</p>
+<p>The <strong>Units</strong> dropdown offers <strong>Multiplier</strong> (the default) and <strong>Degrees per screen turn</strong>. It is a saved preference only: neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.</p>
 <h3 id="horizontal-and-vertical">Horizontal and Vertical<a class="headerlink" href="#horizontal-and-vertical" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3538,6 +3620,14 @@
 </tbody>
 </table>
 <p>Local stays as the default so existing configs feel identical.</p>
+<hr />
+<h2 id="compass">Compass<a class="headerlink" href="#compass" title="Permanent link">&para;</a></h2>
+<p>A <strong>Compass</strong> card appears between Sensitivity and Response Shaping, and only on a controller that carries a magnetometer. Anchoring yaw to magnetic north removes the slow horizontal drift gyro aiming accumulates.</p>
+<ul>
+<li><strong>Anchor yaw to compass.</strong> Off by default. Turn it on after calibrating.</li>
+<li><strong>Calibrate Magnetometer.</strong> Press it, rotate the controller through every orientation in a figure-8 for a few seconds, then press again. The button reads <strong>Finish Calibration</strong> while the sweep runs.</li>
+</ul>
+<p>The card has a per-row reset on the checkbox and no card-level Reset All.</p>
 <hr />
 <h2 id="response-shaping">Response Shaping<a class="headerlink" href="#response-shaping" title="Permanent link">&para;</a></h2>
 <p>A deadzone, two smoothing thresholds, a smoothing window, an acceleration term, and an output curve.</p>
@@ -3799,7 +3889,7 @@
 <p>The values save automatically to your profile whenever you change anything on this tab.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
-<p>Every row has a reset button (circular arrow icon). Each card has a <strong>Reset All</strong> button next to its title that snaps every value in the card back to defaults.</p>
+<p>Every row has a reset button (circular arrow icon). Each card except Compass has a <strong>Reset All</strong> button next to its title that snaps every value in the card back to defaults.</p>
 <table>
 <thead>
 <tr>
@@ -3808,6 +3898,10 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Reset Motion Passthrough</td>
+<td>Apply Gyro Tuning to Motion Passthrough</td>
+</tr>
 <tr>
 <td>Reset Calibration</td>
 <td>Auto-cal bias + timestamp</td>
@@ -4005,7 +4099,7 @@
 <li><a href="../steering/">Steering</a>: tune the Motion Lean tilt-steering input whose card lives on this tab.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

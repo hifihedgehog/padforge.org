@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2152,6 +2156,17 @@
     <span class="md-ellipsis">
       
         Since 4.1.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#since-420" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Since 4.2.0
       
     </span>
   </a>
@@ -3047,6 +3062,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3313,6 +3384,17 @@
     <span class="md-ellipsis">
       
         Since 4.1.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#since-420" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Since 4.2.0
       
     </span>
   </a>
@@ -3850,67 +3932,70 @@
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        EXT[Extended&lt;br/&gt;Sticks . Wheels . Custom HID]
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        KBM[Keyboard+Mouse&lt;br/&gt;SendInput, no driver]
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        MIDI[MIDI&lt;br/&gt;Windows MIDI Services]
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    end
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    subgraph &quot;Data Layer. PadForge.Engine&quot;
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        PS[PadSetting . UserSetting . UserDevice&lt;br/&gt;Gamepad . RawHidState . Vibration]
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        SDL[SdlDeviceWrapper&lt;br/&gt;SDL3 P/Invoke]
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        RIL[RawInputListener&lt;br/&gt;Keyboard . Mouse]
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        IHM[InputHookManager&lt;br/&gt;LL hooks . input suppression]
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    end
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    subgraph &quot;External Systems&quot;
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        SDL3[SDL3.dll&lt;br/&gt;Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        OXI[OpenXInput&lt;br/&gt;xinput1_4 shim]
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver, 225+ profiles]
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        HH[HidHide Driver]
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        WMS[Windows MIDI Services]
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WASAPI[Windows Audio&lt;br/&gt;WASAPI Loopback + Render]
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        DSU_CLIENT[DSU Clients&lt;br/&gt;Cemu / Dolphin / Yuzu / Ryujinx]
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        BROWSER[Web Browsers&lt;br/&gt;Phone / tablet]
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        PEER[Remote Link Peers&lt;br/&gt;Paired PadForge PCs over LAN]
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    end
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    UI --&gt; VM
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    VM --&gt; IS
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    VM --&gt; SS
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    IS --&gt; IM
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    IS --&gt; ABD
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    IS --&gt; DS
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    IS --&gt; FMS
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    RS --&gt; IM
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    IM --&gt; HMP
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    IM --&gt; KBM
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    IM --&gt; MIDI
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    IM --&gt; RAS
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    HMP --&gt; MS
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    HMP --&gt; SONY
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    HMP --&gt; NIN
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    HMP --&gt; EXT
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    IM --&gt; SDL
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    IM --&gt; RIL
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    IM --&gt; IHM
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    ABD --&gt; WASAPI
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    RAS --&gt; WASAPI
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    SDL --&gt; SDL3
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    SDL --&gt; OXI
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    MS --&gt; HM
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    SONY --&gt; HM
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    NIN --&gt; HM
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    EXT --&gt; HM
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    MIDI --&gt; WMS
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    DS --&gt; HH
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    IM -.-&gt;|UDP 26760| DSU_CLIENT
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    IM -.-&gt;|HTTP+WS| BROWSER
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    IM -.-&gt;|TCP+UDP, crypto-paired| PEER
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    style UI fill:#e1f5fe
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    style IM fill:#f3e5f5
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    style HMP fill:#f3e5f5
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    style PS fill:#e8f5e9
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    style SDL3 fill:#fff3e0
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    style OXI fill:#fff3e0
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    style HM fill:#fff3e0
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        VR[VR&lt;br/&gt;SteamVR left+right hand pair]
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    end
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    subgraph &quot;Data Layer. PadForge.Engine&quot;
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        PS[PadSetting . UserSetting . UserDevice&lt;br/&gt;Gamepad . RawHidState . Vibration]
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        SDL[SdlDeviceWrapper&lt;br/&gt;SDL3 P/Invoke]
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        RIL[RawInputListener&lt;br/&gt;Keyboard . Mouse]
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        IHM[InputHookManager&lt;br/&gt;LL hooks . input suppression]
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    end
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    subgraph &quot;External Systems&quot;
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        SDL3[SDL3.dll&lt;br/&gt;Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        OXI[OpenXInput&lt;br/&gt;xinput1_4 shim]
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver, 225 profiles&lt;br/&gt;+ native OpenVR driver for the VR slot]
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        HH[HidHide Driver]
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WMS[Windows MIDI Services]
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        WASAPI[Windows Audio&lt;br/&gt;WASAPI Loopback + Render]
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        DSU_CLIENT[DSU Clients&lt;br/&gt;Cemu / Dolphin / Yuzu / Ryujinx]
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        BROWSER[Web Browsers&lt;br/&gt;Phone / tablet]
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        PEER[Remote Link Peers&lt;br/&gt;Paired PadForge PCs over LAN]
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    end
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    UI --&gt; VM
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    VM --&gt; IS
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    VM --&gt; SS
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    IS --&gt; IM
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    IS --&gt; ABD
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    IS --&gt; DS
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    IS --&gt; FMS
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    RS --&gt; IM
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    IM --&gt; HMP
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    IM --&gt; KBM
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    IM --&gt; MIDI
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    IM --&gt; RAS
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    HMP --&gt; MS
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    HMP --&gt; SONY
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    HMP --&gt; NIN
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    HMP --&gt; EXT
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    HMP --&gt; VR
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    IM --&gt; SDL
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    IM --&gt; RIL
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    IM --&gt; IHM
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    ABD --&gt; WASAPI
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    RAS --&gt; WASAPI
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    SDL --&gt; SDL3
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    SDL --&gt; OXI
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    MS --&gt; HM
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    SONY --&gt; HM
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    NIN --&gt; HM
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    EXT --&gt; HM
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    VR --&gt; HM
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    MIDI --&gt; WMS
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    DS --&gt; HH
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    IM -.-&gt;|UDP 26760| DSU_CLIENT
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    IM -.-&gt;|HTTP+WS| BROWSER
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    IM -.-&gt;|TCP+UDP, crypto-paired| PEER
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    style UI fill:#e1f5fe
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    style IM fill:#f3e5f5
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    style HMP fill:#f3e5f5
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    style PS fill:#e8f5e9
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>    style SDL3 fill:#fff3e0
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    style OXI fill:#fff3e0
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    style HM fill:#fff3e0
 </code></pre></div>
 <hr />
 <h2 id="solution-structure">Solution Structure<a class="headerlink" href="#solution-structure" title="Permanent link">&para;</a></h2>
@@ -3968,175 +4053,222 @@
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    DriverInstaller.cs                # HidHide / Windows MIDI Services install. Legacy ViGEmBus / vJoy uninstall
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    HidHideController.cs              # HidHide IOCTL API: blacklist/whitelist/cloaking via \\.\HidHide
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    MarqueeBehavior.cs                # WPF attached behavior for scrolling/marquee text animation
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    SettingsManager.cs                # Slot arrays, profiles, PadSetting defaults, partial class (see below)
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    StartupHelper.cs                  # Run-at-startup registry helper (HKCU\...\Run)
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    VirtualKey.cs                     # Windows VK code → display name lookup table
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    Input/
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>      AudioBassDetector.cs            # WASAPI loopback capture + 8th-order IIR bass extraction
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>      InputManager.cs                 # Core partial class: fields, Start/Stop, PollingLoop, IDisposable
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>      InputManager.Step1.UpdateDevices.cs       # Device enumeration (SDL3 + Raw Input)
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>      InputManager.Step2.UpdateInputStates.cs   # Input state reading + force feedback
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>      InputManager.Step3.MappingSetEval.cs      # Per-VC MappingSet evaluation (rows, sources, combine modes, shift layers)
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>      InputManager.Step3.SteeringLockFeedback.cs # At-lock steering feedback for winding-stick / 2D steering (#94)
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>      InputManager.Step3.UpdateOutputStates.cs  # Mapping engine (descriptor → OutputState)
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>      InputManager.Step4.CombineOutputStates.cs # Multi-device merge per slot
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>      InputManager.Step4b.EvaluateMacros.cs     # Macro trigger/action state machine
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>      InputManager.Step5.VirtualDevices.cs      # HIDMaestro + MIDI + KBM virtual controller lifecycle (HM lifecycle on thread pool)
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>      InputManager.Step6.RetrieveOutputStates.cs # Copy combined states for UI display
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>      InputManager.MenuRuntime.cs     # Radial / touch menu runtime: per-(slot, device, menu) hover-commit contexts (#9)
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>      HMaestroVirtualController.cs    # IVirtualController for HIDMaestro (Xbox, PlayStation, Nintendo, Extended)
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>      HMaestroProfileCatalog.cs       # HIDMaestro profile lookup (HMProfile per VC subtype)
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>      HMaestroFfbDescriptor.cs        # Feedback descriptor for HM controllers (rumble + FFB ranges)
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>      HMaestroFfbDecoder.cs           # Decodes raw HM feedback packets into Vibration / FFB state
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>      SonyReportPackers.cs            # DS3 / DS4 / DualSense Report 0x01 input passthrough packers
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>      UserEffectsDispatcher.cs        # Per-Sony-slot sole writer of effect packets (rumble + lightbar + AT + mic LED)
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>      SonyEffectWriter.cs             # Low-level Sony effect packet write helper called by the dispatcher
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>      TouchpadPulseService.cs         # Sony-side swipe-haptic pulse delivery: 80 ms bursts max-combined into the dispatcher&#39;s rumble bytes (#219)
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>      DualSensePassthroughDispatcher.cs # Per-slot worker forwarding game-driven DS5 effect output reports (AT)
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>      Ds5EffectSynthesizer.cs         # Builds DS5 (DualSense) effect packets from PadSetting state
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>      Ds4EffectSynthesizer.cs         # Builds DS4 (DualShock 4) effect packets from PadSetting state
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>      XboxImpulseHidWriter.cs         # Raw HID writer for Xbox One+ rumble + impulse triggers (sole writer, bypasses SDL)
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>      SwitchHomeLedSetter.cs          # Switch HOME-button LED brightness via per-device SDL_SetJoystickLED, queued off-thread (#226)
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>      Ds3DirectService.cs             # Surfaces a BthPS3 RAW-PDO DualShock 3 (no DsHidMini) as an SDL virtual joystick
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>      Ds4SbcEncoder.cs                # Clean-room SBC encoder for the DS4 Bluetooth audio stream (32 kHz stereo, bitpool 48)
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>      AudioMuteService.cs             # Tracks system default-output mute state for audio-rumble gating
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>      SlotButtonSocd.cs               # Controller-button SOCD cleaner, applied to the slot&#39;s final combined output at the Step 5 submit (#240)
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>      RumbleAudioService.cs           # Rumble-to-audio (Bass Shakers) renderer: endpoint-keyed WASAPI players fed from the poll loop (#236)
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>      RumbleAudioSampleProvider.cs    # Allocation-free sine synthesizer for one rumble-to-audio endpoint (#236)
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>      MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>      KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>      InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>
-<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>  Services/
-<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>    InputService.cs                   # Bridge: InputManager (engine thread) ↔ UI (30Hz timer)
-<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>    SettingsService.cs                # Settings load/save, applies PadSettings to InputManager
-<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>    DeviceService.cs                  # Device list UI sync (ObservableCollection from UserDevices)
-<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>    DsuMotionServer.cs                # UDP server on port 26760. DSU/Cemuhook motion protocol
-<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>    ForegroundMonitorService.cs       # Polls GetForegroundWindow at 30Hz for per-app profile switching
-<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>    RecorderService.cs                # Input mapping recorder (physical input → mapping descriptors)
-<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>    WebControllerServer.cs            # Embedded HTTP+WebSocket server for browser-based virtual controllers
-<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>    CursorControlService.cs           # Samples the desktop cursor at 200 Hz for the Mouse Position X/Y sources (#107)
-<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>    GyroCalibratorService.cs          # Averages held-still gyro readings into a per-(device, slot) at-rest bias
-<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>    NfcReaderService.cs               # PC/SC context + monitor thread raising TagDetected on tag presence (#150)
-<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>    WiiPairingService.cs              # In-app Bluetooth pairing ceremony for Wii controllers (#116)
-<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>    Ds3PairingService.cs             # Guided USB pairing ceremony for the DualShock 3 (#116)
-<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>    Ds3DriverInstaller.cs             # Installs/arms Nefarius BthPS3 + BthPS3PSM + DS3 WinUSB INF
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    MappingDisplayResolver.cs         # Descriptor → grid display label, including the contextual aux-motion labels
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    ProfileTransfer.cs                # Profile export / import payloads
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    SoundPackageManager.cs            # Sound package install, listing, and lookup for macro sound actions
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    SetupApiInterop.cs                # SetupAPI P/Invoke shared by the device-ancestry walks
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    SettingsManager.cs                # Slot arrays, profiles, PadSetting defaults, partial class (see below)
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    StartupHelper.cs                  # Run-at-startup registry helper (HKCU\...\Run)
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    VirtualKey.cs                     # Windows VK code → display name lookup table
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    Telemetry/                        # Racing-telemetry sources feeding wheel RPM LEDs
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>      TelemetryHub.cs                 # Demand-driven owner of the sources, publishes one current snapshot for FFB dispatch
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>      ITelemetrySource.cs             # Source interface
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>      ForzaUdpTelemetrySource.cs      # Forza Data Out (default port 5300)
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>      CodemastersUdpTelemetrySource.cs / OutGaugeTelemetrySource.cs / ScsTruckTelemetrySource.cs
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>      AssettoCorsaTelemetrySource.cs / IRacingTelemetrySource.cs / MadnessTelemetrySource.cs
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>      RFactor1TelemetrySource.cs / RFactor2TelemetrySource.cs / RaceRoomTelemetrySource.cs
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>      RpmLedMap.cs                    # RPM fraction → per-vendor LED bitmask
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    Input/
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>      AudioBassDetector.cs            # WASAPI loopback capture + 8th-order IIR bass extraction
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>      InputManager.cs                 # Core partial class: fields, Start/Stop, PollingLoop, IDisposable
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>      InputManager.Step1.UpdateDevices.cs       # Device enumeration (SDL3 + Raw Input)
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>      InputManager.Step1.UsbipVhciGuard.cs      # PnP-ancestry check that keeps PadForge&#39;s own composite USB persona out of Step 1
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>      InputManager.Step2.UpdateInputStates.cs   # Input state reading + force feedback
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>      InputManager.Step3.MappingSetEval.cs      # Per-VC MappingSet evaluation (rows, sources, combine modes, shift layers)
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>      InputManager.Step3.SteeringLockFeedback.cs # At-lock steering feedback for winding-stick / 2D steering (#94)
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>      InputManager.Step3.UpdateOutputStates.cs  # Mapping engine (descriptor → OutputState)
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>      InputManager.Step4.CombineOutputStates.cs # Multi-device merge per slot
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>      InputManager.Step4b.EvaluateMacros.cs     # Macro trigger/action state machine
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>      InputManager.Step5.VirtualDevices.cs      # HIDMaestro + MIDI + KBM virtual controller lifecycle (HM lifecycle on thread pool)
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>      InputManager.Step6.RetrieveOutputStates.cs # Copy combined states for UI display
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>      InputManager.MenuRuntime.cs     # Radial / touch menu runtime: per-(slot, device, menu) hover-commit contexts (#9)
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>      HMaestroVirtualController.cs    # IVirtualController for HIDMaestro (Xbox, PlayStation, Nintendo, Extended)
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>      HMaestroVRController.cs         # IVirtualController for the VR slot type (#49): one HMVRController drives both SteamVR hands
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>      HMaestroProfileCatalog.cs       # HIDMaestro profile lookup (HMProfile per VC subtype)
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>      HMaestroFfbDescriptor.cs        # Feedback descriptor for HM controllers (rumble + FFB ranges)
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>      HMaestroFfbDecoder.cs           # Decodes raw HM feedback packets into Vibration / FFB state
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>      SonyReportPackers.cs            # DS3 / DS4 / DualSense Report 0x01 input passthrough packers
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>      UserEffectsDispatcher.cs        # Per-Sony-slot sole writer of effect packets (rumble + lightbar + AT + mic LED)
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>      PlayStationEffectWriter.cs      # Low-level PlayStation effect packet write helper called by the dispatcher
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>      TouchpadPulseService.cs         # Sony-side swipe-haptic pulse delivery: 80 ms bursts max-combined into the dispatcher&#39;s rumble bytes (#219)
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>      DualSensePassthroughDispatcher.cs # Per-slot worker forwarding game-driven DS5 effect output reports (AT)
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>      Ds5EffectSynthesizer.cs         # Builds DS5 (DualSense) effect packets from PadSetting state
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>      Ds4EffectSynthesizer.cs         # Builds DS4 (DualShock 4) effect packets from PadSetting state
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>      XboxImpulseHidWriter.cs         # Raw HID writer for Xbox One+ rumble + impulse triggers (sole writer, bypasses SDL)
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>      SwitchHomeLedSetter.cs          # Switch HOME-button LED brightness via per-device SDL_SetJoystickLED, queued off-thread (#226)
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>      Ds3DirectService.cs             # Surfaces a BthPS3 RAW-PDO DualShock 3 (no DsHidMini) as an SDL virtual joystick
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>      Ds4SbcEncoder.cs                # Clean-room SBC encoder for the DS4 Bluetooth audio stream (32 kHz stereo, bitpool 48)
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>      AudioMuteService.cs             # Tracks system default-output mute state for audio-rumble gating
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>      SlotButtonSocd.cs               # Controller-button SOCD cleaner, applied to the slot&#39;s final combined output at the Step 5 submit (#240)
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>      RumbleAudioService.cs           # Rumble-to-audio (Bass Shakers) renderer: endpoint-keyed WASAPI players fed from the poll loop (#236)
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>      RumbleAudioSampleProvider.cs    # Allocation-free sine synthesizer for one rumble-to-audio endpoint (#236)
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>      MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>      KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>      InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
 <a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>
-<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>  ViewModels/
-<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>    ViewModelBase.cs                  # Base class: INotifyPropertyChanged, OnCultureChanged hook
-<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>    MainViewModel.cs                  # Shell VM: navigation, sidebar items, profile list, Pads[] array
-<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>    DashboardViewModel.cs             # Per-slot status cards, virtual controller status
-<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>    PadViewModel.cs                   # Per-slot mapping/settings/deadzone/macro configuration
-<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>    PadViewModel.Mouse.cs             # Mouse tab state: per-(slot, device) mouse-gesture settings (#200)
-<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>    PadViewModel.Touchpad.cs          # Touchpad tab state: per-(slot, device, pad) gesture settings
-<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>    DevicesViewModel.cs               # Physical device list with live input visualization
-<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>    DeviceRowViewModel.cs             # Single device card in the Devices page
-<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>    SettingsViewModel.cs              # App-level settings (polling rate, driver status, etc.)
-<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>    MappingItem.cs                    # Single axis/button mapping row in PadPage
-<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>    MappingSourceItem.cs              # One source row within a multi-source MappingItem (Engine.Data.MappingSource)
-<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>    MacroItem.cs                      # Macro definition: trigger, actions, repeat mode, state machine
-<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>    ShiftLayerInfo.cs                 # VM wrapper around one ShiftActivator on a slot&#39;s MappingSet (#61)
-<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>    MenuEditorItem.cs                 # Editor VM for one radial / touch menu on a slot&#39;s MappingSet, write-through like the mapping grid (#9)
-<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>    MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts
-<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>    DeviceSlotConfig.cs               # Per-slot PlayStation output config (Adaptive Triggers + Lighting tabs)
-<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>    KbmSlotConfig.cs                  # Per-slot keyboard+mouse output config (SOCD / Snap Tap, #205)
-<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>    ExtendedSlotConfig.cs                 # Extended VC config: axis/button/POV/stick/trigger counts (HIDMaestro Extended profile)
-<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>    StickConfigItem.cs                # Thumbstick deadzone / anti-deadzone / linear config
-<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>    TriggerConfigItem.cs              # Trigger deadzone / anti-deadzone / max range config
-<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>    ProfileShortcutViewModel.cs       # Global button-combo → profile-switch shortcut row (GlobalMacroData)
-<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a>    RemoteLinkNearbyPeer.cs           # One PadForge PC discovered on the LAN, shown in Dashboard &quot;Nearby PCs&quot; (#138)
-<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a>    RemoteLinkTrustedPeer.cs          # One trusted peer row in the Settings paired-peer manager (#138)
-<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a>
-<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a>  Views/
-<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a>    DashboardPage.xaml(.cs)           # Card-based dashboard with per-slot status and 3D/2D preview
-<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a>    PadPage.xaml(.cs)                 # Mapping grid, deadzone sliders, macros
-<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a>    DevicesPage.xaml(.cs)             # Physical device list with live input visualization
-<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a>    SettingsPage.xaml(.cs)            # Polling rate, driver install, DSU toggle
-<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a>    ProfilesPage.xaml(.cs)            # Profile management: save/load/delete
-<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a>    AboutPage.xaml(.cs)               # Version, credits, license
-<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a>    ControllerModelView.xaml(.cs)     # 3D controller visualization (HelixToolkit viewport)
-<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a>    ControllerModel2DView.xaml(.cs)   # 2D controller overlay (Canvas-based)
-<a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a>    ControllerSchematicView.xaml(.cs) # Schematic controller diagram (vector-based)
-<a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a>    KBMPreviewView.xaml(.cs)          # Keyboard+Mouse interactive preview
-<a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>    MidiPreviewView.xaml(.cs)         # MIDI piano keyboard + CC slider preview
-<a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a>    MousePreviewControl.xaml(.cs)     # Read-only mouse graphic for Devices page detail pane
-<a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a>    MenuOverlayWindow.xaml(.cs)       # Click-through radial / touch menu HUD, pulled from ActiveMenuOverlay on the ~30 Hz UI timer (#9)
-<a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>    CopyFromDialog.xaml(.cs)          # Copy mappings + every assigned device&#39;s tuning from another slot
-<a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a>    ProfileDialog.xaml(.cs)           # Save new profile (name + exe list)
-<a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a>    RemoteLinkPairDialog.xaml(.cs)    # First-contact pairing approval: short authentication string + fingerprint (#138)
-<a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a>    RemoteLinkPasswordDialog.xaml(.cs) # Set/enter the Remote Link portable-identity password (#138)
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>  Services/
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>    InputService.cs                   # Bridge: InputManager (engine thread) ↔ UI (30Hz timer)
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>    SettingsService.cs                # Settings load/save, applies PadSettings to InputManager
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>    DeviceService.cs                  # Device list UI sync (ObservableCollection from UserDevices)
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>    DsuMotionServer.cs                # UDP server on port 26760. DSU/Cemuhook motion protocol
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>    ForegroundMonitorService.cs       # Polls GetForegroundWindow at 30Hz for per-app profile switching
+<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>    RecorderService.cs                # Input mapping recorder (physical input → mapping descriptors)
+<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>    WebControllerServer.cs            # Embedded HTTP+WebSocket server for browser-based virtual controllers
+<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>    CursorControlService.cs           # Samples the desktop cursor at 200 Hz for the Mouse Position X/Y sources (#107)
+<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>    GyroCalibratorService.cs          # Averages held-still gyro readings into a per-(device, slot) at-rest bias
+<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>    NfcReaderService.cs               # PC/SC context + monitor thread raising TagDetected on tag presence (#150)
+<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>    WiiPairingService.cs              # In-app Bluetooth pairing ceremony for Wii controllers (#116)
+<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>    Ds3PairingService.cs             # Guided USB pairing ceremony for the DualShock 3 (#116)
+<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>    Ds3DriverInstaller.cs             # Installs/arms Nefarius BthPS3 + BthPS3PSM + DS3 WinUSB INF
+<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>    StarterProfileCatalog.cs          # The bundled starter profiles (#256): genre archetypes with no device GUIDs baked in
+<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>    WorkshopProfileMaterializer.cs    # Turns a translated Workshop config into a real ProfileData with its VC slots (#9)
+<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>    WorkshopTuningApplier.cs          # Moves a Workshop import&#39;s device tuning onto the device once one is assigned (#9)
+<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>    HeadsetTrackerRepair.cs           # Repairs a Sony headset whose head-tracker HID node never enumerates (#188)
+<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>
+<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>  ViewModels/
+<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>    ViewModelBase.cs                  # Base class: INotifyPropertyChanged, OnCultureChanged hook
+<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>    MainViewModel.cs                  # Shell VM: navigation, sidebar items, profile list, Pads[] array
+<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a>    DashboardViewModel.cs             # Per-slot status cards, virtual controller status
+<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a>    PadViewModel.cs                   # Per-slot mapping/settings/deadzone/macro configuration
+<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a>    PadViewModel.Mouse.cs             # Mouse tab state: per-(slot, device) mouse-gesture settings (#200)
+<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a>    PadViewModel.Touchpad.cs          # Touchpad tab state: per-(slot, device, pad) gesture settings
+<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a>    DevicesViewModel.cs               # Physical device list with live input visualization
+<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a>    DeviceRowViewModel.cs             # Single device card in the Devices page
+<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a>    SettingsViewModel.cs              # App-level settings (polling rate, driver status, etc.)
+<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a>    MappingItem.cs                    # Single axis/button mapping row in PadPage
+<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a>    MappingSourceItem.cs              # One source row within a multi-source MappingItem (Engine.Data.MappingSource)
+<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a>    MacroItem.cs                      # Macro definition: trigger, actions, repeat mode, state machine
+<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a>    ShiftLayerInfo.cs                 # VM wrapper around one ShiftActivator on a slot&#39;s MappingSet (#61)
+<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a>    MenuEditorItem.cs                 # Editor VM for one radial / touch menu on a slot&#39;s MappingSet, write-through like the mapping grid (#9)
+<a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a>    MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts
+<a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a>    DeviceSlotConfig.cs               # Per-slot PlayStation output config (Adaptive Triggers + Lighting tabs)
+<a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>    KbmSlotConfig.cs                  # Per-slot keyboard+mouse output config (SOCD / Snap Tap, #205)
+<a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a>    ExtendedSlotConfig.cs                 # Extended VC config: axis/button/POV/stick/trigger counts (HIDMaestro Extended profile)
+<a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a>    StickConfigItem.cs                # Thumbstick deadzone / anti-deadzone / linear config
+<a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>    TriggerConfigItem.cs              # Trigger deadzone / anti-deadzone / max range config
+<a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a>    ProfileShortcutViewModel.cs       # Global button-combo → profile-switch shortcut row (GlobalMacroData)
+<a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a>    RemoteLinkNearbyPeer.cs           # One PadForge PC discovered on the LAN, shown in Dashboard &quot;Nearby PCs&quot; (#138)
+<a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a>    RemoteLinkTrustedPeer.cs          # One trusted peer row in the Settings paired-peer manager (#138)
 <a id="__codelineno-1-112" name="__codelineno-1-112" href="#__codelineno-1-112"></a>
-<a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a>  Models3D/
-<a id="__codelineno-1-114" name="__codelineno-1-114" href="#__codelineno-1-114"></a>    ControllerModelBase.cs            # Abstract base for 3D models (OBJ loading, part animation)
-<a id="__codelineno-1-115" name="__codelineno-1-115" href="#__codelineno-1-115"></a>    ControllerModelXbox360.cs         # Xbox 360 3D model parts and animation bindings
-<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a>    ControllerModelXboxOne.cs         # Xbox One / Elite / Series / Adaptive 3D model
-<a id="__codelineno-1-117" name="__codelineno-1-117" href="#__codelineno-1-117"></a>    ControllerModelDS4.cs             # DualShock 4 3D model parts and animation bindings
-<a id="__codelineno-1-118" name="__codelineno-1-118" href="#__codelineno-1-118"></a>    ControllerModelDualSense.cs       # DualSense / DualSense Edge 3D model
-<a id="__codelineno-1-119" name="__codelineno-1-119" href="#__codelineno-1-119"></a>
-<a id="__codelineno-1-120" name="__codelineno-1-120" href="#__codelineno-1-120"></a>  Models2D/
-<a id="__codelineno-1-121" name="__codelineno-1-121" href="#__codelineno-1-121"></a>    ControllerOverlayLayout.cs        # 2D overlay positioning data (button/stick coordinates)
-<a id="__codelineno-1-122" name="__codelineno-1-122" href="#__codelineno-1-122"></a>
-<a id="__codelineno-1-123" name="__codelineno-1-123" href="#__codelineno-1-123"></a>  2DModels/                           # PNG sprites from Gamepad-Asset-Pack (MIT)
-<a id="__codelineno-1-124" name="__codelineno-1-124" href="#__codelineno-1-124"></a>    DS4/                              # DualShock 4 sprites
-<a id="__codelineno-1-125" name="__codelineno-1-125" href="#__codelineno-1-125"></a>    DualSense/                        # DualSense sprites
-<a id="__codelineno-1-126" name="__codelineno-1-126" href="#__codelineno-1-126"></a>    XBOX360/                          # Xbox 360 sprites
-<a id="__codelineno-1-127" name="__codelineno-1-127" href="#__codelineno-1-127"></a>    XBOXONE/                          # Xbox One S sprites (shared with Elite / Adaptive)
-<a id="__codelineno-1-128" name="__codelineno-1-128" href="#__codelineno-1-128"></a>    XBOXSERIES/                       # Xbox Series sprites (adds Share button overlay)
-<a id="__codelineno-1-129" name="__codelineno-1-129" href="#__codelineno-1-129"></a>
-<a id="__codelineno-1-130" name="__codelineno-1-130" href="#__codelineno-1-130"></a>  3DModels/                           # OBJ meshes from Handheld Companion (CC BY-NC-SA 4.0)
-<a id="__codelineno-1-131" name="__codelineno-1-131" href="#__codelineno-1-131"></a>    DS4/                              # DualShock 4 meshes
-<a id="__codelineno-1-132" name="__codelineno-1-132" href="#__codelineno-1-132"></a>    DualSense/                        # DualSense meshes (Touchpad split out for click-mapping)
-<a id="__codelineno-1-133" name="__codelineno-1-133" href="#__codelineno-1-133"></a>    XBOX360/                          # Xbox 360 meshes
-<a id="__codelineno-1-134" name="__codelineno-1-134" href="#__codelineno-1-134"></a>    XBOXONE/                          # Xbox One meshes (shared with Elite / Series / Adaptive)
-<a id="__codelineno-1-135" name="__codelineno-1-135" href="#__codelineno-1-135"></a>
-<a id="__codelineno-1-136" name="__codelineno-1-136" href="#__codelineno-1-136"></a>  Controls/
-<a id="__codelineno-1-137" name="__codelineno-1-137" href="#__codelineno-1-137"></a>    CurveEditor.xaml(.cs)             # Interactive sensitivity curve editor (Bezier/linear)
-<a id="__codelineno-1-138" name="__codelineno-1-138" href="#__codelineno-1-138"></a>    RangeSlider.cs                    # Dual-thumb range slider (deadzone min/max)
-<a id="__codelineno-1-139" name="__codelineno-1-139" href="#__codelineno-1-139"></a>
-<a id="__codelineno-1-140" name="__codelineno-1-140" href="#__codelineno-1-140"></a>  Converter/
-<a id="__codelineno-1-141" name="__codelineno-1-141" href="#__codelineno-1-141"></a>    BoolToTriggerShapeKindConverter.cs # bool → trigger shape kind (left / right)
-<a id="__codelineno-1-142" name="__codelineno-1-142" href="#__codelineno-1-142"></a>    BoolToVisibilityConverter.cs      # bool → Visible / Collapsed
-<a id="__codelineno-1-143" name="__codelineno-1-143" href="#__codelineno-1-143"></a>    CrossGeometryConverter.cs         # Cross/X geometry for close buttons
-<a id="__codelineno-1-144" name="__codelineno-1-144" href="#__codelineno-1-144"></a>    NormToCanvasConverter.cs          # Normalized float → Canvas pixel coordinate
-<a id="__codelineno-1-145" name="__codelineno-1-145" href="#__codelineno-1-145"></a>    SignedNormToCanvasConverter.cs    # Signed normalized (-1..+1) → centered Canvas position
-<a id="__codelineno-1-146" name="__codelineno-1-146" href="#__codelineno-1-146"></a>    NullToCollapsedConverter.cs       # null → Collapsed, non-null → Visible
-<a id="__codelineno-1-147" name="__codelineno-1-147" href="#__codelineno-1-147"></a>    PercentToSizeConverter.cs         # Percentage → pixel size
-<a id="__codelineno-1-148" name="__codelineno-1-148" href="#__codelineno-1-148"></a>    SlopedWedgeGeometryConverter.cs   # Wedge geometry for trigger visuals
-<a id="__codelineno-1-149" name="__codelineno-1-149" href="#__codelineno-1-149"></a>    StringToVisibilityConverter.cs    # Non-empty string → Visible, empty → Collapsed
-<a id="__codelineno-1-150" name="__codelineno-1-150" href="#__codelineno-1-150"></a>
-<a id="__codelineno-1-151" name="__codelineno-1-151" href="#__codelineno-1-151"></a>  Resources/
-<a id="__codelineno-1-152" name="__codelineno-1-152" href="#__codelineno-1-152"></a>    ControllerIcons.xaml              # XAML resource dictionary with controller icon geometries
-<a id="__codelineno-1-153" name="__codelineno-1-153" href="#__codelineno-1-153"></a>    PadForge.ico                      # Application icon
-<a id="__codelineno-1-154" name="__codelineno-1-154" href="#__codelineno-1-154"></a>    PadForge-logo.png                 # App logo bitmap (WPF Resource)
-<a id="__codelineno-1-155" name="__codelineno-1-155" href="#__codelineno-1-155"></a>    PadForge-icon.png                 # App icon bitmap (WPF Resource)
-<a id="__codelineno-1-156" name="__codelineno-1-156" href="#__codelineno-1-156"></a>    Strings/
-<a id="__codelineno-1-157" name="__codelineno-1-157" href="#__codelineno-1-157"></a>      Strings.resx                    # Base (English) UI string resources
-<a id="__codelineno-1-158" name="__codelineno-1-158" href="#__codelineno-1-158"></a>      Strings.Designer.cs            # Hand-written INotifyPropertyChanged resource accessor
-<a id="__codelineno-1-159" name="__codelineno-1-159" href="#__codelineno-1-159"></a>      Strings.de.resx                # German
-<a id="__codelineno-1-160" name="__codelineno-1-160" href="#__codelineno-1-160"></a>      Strings.es.resx                # Spanish
-<a id="__codelineno-1-161" name="__codelineno-1-161" href="#__codelineno-1-161"></a>      Strings.fr.resx                # French
-<a id="__codelineno-1-162" name="__codelineno-1-162" href="#__codelineno-1-162"></a>      Strings.it.resx                # Italian
-<a id="__codelineno-1-163" name="__codelineno-1-163" href="#__codelineno-1-163"></a>      Strings.ja.resx                # Japanese
-<a id="__codelineno-1-164" name="__codelineno-1-164" href="#__codelineno-1-164"></a>      Strings.ko.resx                # Korean
-<a id="__codelineno-1-165" name="__codelineno-1-165" href="#__codelineno-1-165"></a>      Strings.nl.resx                # Dutch
-<a id="__codelineno-1-166" name="__codelineno-1-166" href="#__codelineno-1-166"></a>      Strings.pt-BR.resx             # Brazilian Portuguese
-<a id="__codelineno-1-167" name="__codelineno-1-167" href="#__codelineno-1-167"></a>      Strings.zh-Hans.resx           # Simplified Chinese
-<a id="__codelineno-1-168" name="__codelineno-1-168" href="#__codelineno-1-168"></a>    SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
-<a id="__codelineno-1-169" name="__codelineno-1-169" href="#__codelineno-1-169"></a>    SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
-<a id="__codelineno-1-170" name="__codelineno-1-170" href="#__codelineno-1-170"></a>    OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe; SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge&#39;s own XInput view
-<a id="__codelineno-1-171" name="__codelineno-1-171" href="#__codelineno-1-171"></a>    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
-<a id="__codelineno-1-172" name="__codelineno-1-172" href="#__codelineno-1-172"></a>    HidHide_1.5.230_x64.exe           # Embedded HidHide installer
-<a id="__codelineno-1-173" name="__codelineno-1-173" href="#__codelineno-1-173"></a>
-<a id="__codelineno-1-174" name="__codelineno-1-174" href="#__codelineno-1-174"></a>  WebAssets/
-<a id="__codelineno-1-175" name="__codelineno-1-175" href="#__codelineno-1-175"></a>    index.html                        # Landing page with Xbox 360 and DS4 layout cards
-<a id="__codelineno-1-176" name="__codelineno-1-176" href="#__codelineno-1-176"></a>    controller.html                   # Controller UI shell (dynamic overlay layout)
-<a id="__codelineno-1-177" name="__codelineno-1-177" href="#__codelineno-1-177"></a>    css/controller.css                # Responsive dark theme with touch-optimized zones
-<a id="__codelineno-1-178" name="__codelineno-1-178" href="#__codelineno-1-178"></a>    js/controller_client.js           # WebSocket client, touch handling, layout renderer
-<a id="__codelineno-1-179" name="__codelineno-1-179" href="#__codelineno-1-179"></a>    js/nipplejs.min.js                # Virtual joystick library for analog sticks
-<a id="__codelineno-1-180" name="__codelineno-1-180" href="#__codelineno-1-180"></a>
-<a id="__codelineno-1-181" name="__codelineno-1-181" href="#__codelineno-1-181"></a>  Themes/
-<a id="__codelineno-1-182" name="__codelineno-1-182" href="#__codelineno-1-182"></a>    Generic.xaml                      # Custom control default styles (RangeSlider)
+<a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a>  Views/
+<a id="__codelineno-1-114" name="__codelineno-1-114" href="#__codelineno-1-114"></a>    DashboardPage.xaml(.cs)           # Card-based dashboard with per-slot status and 3D/2D preview
+<a id="__codelineno-1-115" name="__codelineno-1-115" href="#__codelineno-1-115"></a>    PadPage.xaml(.cs)                 # Mapping grid, deadzone sliders, macros
+<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a>    DevicesPage.xaml(.cs)             # Physical device list with live input visualization
+<a id="__codelineno-1-117" name="__codelineno-1-117" href="#__codelineno-1-117"></a>    SettingsPage.xaml(.cs)            # Polling rate, driver install, DSU toggle
+<a id="__codelineno-1-118" name="__codelineno-1-118" href="#__codelineno-1-118"></a>    ProfilesPage.xaml(.cs)            # Profile management: save/load/delete
+<a id="__codelineno-1-119" name="__codelineno-1-119" href="#__codelineno-1-119"></a>    AboutPage.xaml(.cs)               # Version, credits, license
+<a id="__codelineno-1-120" name="__codelineno-1-120" href="#__codelineno-1-120"></a>    ControllerModelView.xaml(.cs)     # 3D controller visualization (HelixToolkit viewport)
+<a id="__codelineno-1-121" name="__codelineno-1-121" href="#__codelineno-1-121"></a>    ControllerModel2DView.xaml(.cs)   # 2D controller overlay (Canvas-based)
+<a id="__codelineno-1-122" name="__codelineno-1-122" href="#__codelineno-1-122"></a>    ControllerSchematicView.xaml(.cs) # Schematic controller diagram (vector-based)
+<a id="__codelineno-1-123" name="__codelineno-1-123" href="#__codelineno-1-123"></a>    KBMPreviewView.xaml(.cs)          # Keyboard+Mouse interactive preview
+<a id="__codelineno-1-124" name="__codelineno-1-124" href="#__codelineno-1-124"></a>    MidiPreviewView.xaml(.cs)         # MIDI piano keyboard + CC slider preview
+<a id="__codelineno-1-125" name="__codelineno-1-125" href="#__codelineno-1-125"></a>    MousePreviewControl.xaml(.cs)     # Read-only mouse graphic for Devices page detail pane
+<a id="__codelineno-1-126" name="__codelineno-1-126" href="#__codelineno-1-126"></a>    VRPreviewView.xaml(.cs)           # VR slot preview: left and right hand controller art with live input regions (#49)
+<a id="__codelineno-1-127" name="__codelineno-1-127" href="#__codelineno-1-127"></a>    MenuOverlayWindow.xaml(.cs)       # Click-through radial / touch menu HUD, pulled from ActiveMenuOverlay on the ~30 Hz UI timer (#9)
+<a id="__codelineno-1-128" name="__codelineno-1-128" href="#__codelineno-1-128"></a>    CopyFromDialog.xaml(.cs)          # Copy mappings + every assigned device&#39;s tuning from another slot
+<a id="__codelineno-1-129" name="__codelineno-1-129" href="#__codelineno-1-129"></a>    ProfileDialog.xaml(.cs)           # Save new profile (name + exe list)
+<a id="__codelineno-1-130" name="__codelineno-1-130" href="#__codelineno-1-130"></a>    RemoteLinkPairDialog.xaml(.cs)    # First-contact pairing approval: short authentication string + fingerprint (#138)
+<a id="__codelineno-1-131" name="__codelineno-1-131" href="#__codelineno-1-131"></a>    RemoteLinkPasswordDialog.xaml(.cs) # Set/enter the Remote Link portable-identity password (#138)
+<a id="__codelineno-1-132" name="__codelineno-1-132" href="#__codelineno-1-132"></a>
+<a id="__codelineno-1-133" name="__codelineno-1-133" href="#__codelineno-1-133"></a>  Models3D/
+<a id="__codelineno-1-134" name="__codelineno-1-134" href="#__codelineno-1-134"></a>    ControllerModelBase.cs            # Abstract base for 3D models (OBJ loading, part animation)
+<a id="__codelineno-1-135" name="__codelineno-1-135" href="#__codelineno-1-135"></a>    ControllerModelXbox360.cs         # Xbox 360 3D model parts and animation bindings
+<a id="__codelineno-1-136" name="__codelineno-1-136" href="#__codelineno-1-136"></a>    ControllerModelXboxSeries.cs      # Xbox Series 3D model, real Share button, replaces the Xbox One stand-in for Series profiles
+<a id="__codelineno-1-137" name="__codelineno-1-137" href="#__codelineno-1-137"></a>    ControllerModelDS4.cs             # DualShock 4 3D model parts and animation bindings
+<a id="__codelineno-1-138" name="__codelineno-1-138" href="#__codelineno-1-138"></a>    ControllerModelDualSense.cs       # DualSense 3D model
+<a id="__codelineno-1-139" name="__codelineno-1-139" href="#__codelineno-1-139"></a>    ControllerModelDualSenseEdge.cs   # DualSense Edge: DualSense body against the DualSenseEdge asset folder
+<a id="__codelineno-1-140" name="__codelineno-1-140" href="#__codelineno-1-140"></a>    ControllerModelSwitch2Pro.cs      # Switch 2 Pro mesh, serves every Nintendo slot (switch-pro and switch2-pro profile families)
+<a id="__codelineno-1-141" name="__codelineno-1-141" href="#__codelineno-1-141"></a>
+<a id="__codelineno-1-142" name="__codelineno-1-142" href="#__codelineno-1-142"></a>  Models2D/
+<a id="__codelineno-1-143" name="__codelineno-1-143" href="#__codelineno-1-143"></a>    ControllerOverlayLayout.cs        # 2D overlay positioning data (button/stick coordinates)
+<a id="__codelineno-1-144" name="__codelineno-1-144" href="#__codelineno-1-144"></a>    Controller2DColorways.cs          # Per-colorway sprite variants for the 2D overlays
+<a id="__codelineno-1-145" name="__codelineno-1-145" href="#__codelineno-1-145"></a>    NintendoPreviewMap.cs             # Raw-HID button index to Nintendo preview target mapping
+<a id="__codelineno-1-146" name="__codelineno-1-146" href="#__codelineno-1-146"></a>
+<a id="__codelineno-1-147" name="__codelineno-1-147" href="#__codelineno-1-147"></a>  2DModels/                           # PNG sprites from Gamepad-Asset-Pack (MIT)
+<a id="__codelineno-1-148" name="__codelineno-1-148" href="#__codelineno-1-148"></a>    DS4/                              # DualShock 4 sprites
+<a id="__codelineno-1-149" name="__codelineno-1-149" href="#__codelineno-1-149"></a>    DualSense/                        # DualSense sprites
+<a id="__codelineno-1-150" name="__codelineno-1-150" href="#__codelineno-1-150"></a>    DUALSENSEEDGE/                    # DualSense Edge sprites
+<a id="__codelineno-1-151" name="__codelineno-1-151" href="#__codelineno-1-151"></a>    XBOX360/                          # Xbox 360 sprites
+<a id="__codelineno-1-152" name="__codelineno-1-152" href="#__codelineno-1-152"></a>    XBOXONE/                          # Xbox One S sprites (shared with Elite / Adaptive)
+<a id="__codelineno-1-153" name="__codelineno-1-153" href="#__codelineno-1-153"></a>    XBOXSERIES/                       # Xbox Series sprites (adds Share button overlay)
+<a id="__codelineno-1-154" name="__codelineno-1-154" href="#__codelineno-1-154"></a>    SWITCHPRO/                        # Switch Pro sprites
+<a id="__codelineno-1-155" name="__codelineno-1-155" href="#__codelineno-1-155"></a>    SWITCH2PRO/                       # Switch 2 Pro sprites
+<a id="__codelineno-1-156" name="__codelineno-1-156" href="#__codelineno-1-156"></a>    STEAMDECK/ STEAMCONTROLLER/       # Workshop preview only, never dispatched by ControllerModel2DView
+<a id="__codelineno-1-157" name="__codelineno-1-157" href="#__codelineno-1-157"></a>    VRCONTROLLER/                     # VR slot preview art (#49)
+<a id="__codelineno-1-158" name="__codelineno-1-158" href="#__codelineno-1-158"></a>    MOUSE/                            # Mouse layers for the KBM preview
+<a id="__codelineno-1-159" name="__codelineno-1-159" href="#__codelineno-1-159"></a>
+<a id="__codelineno-1-160" name="__codelineno-1-160" href="#__codelineno-1-160"></a>  3DModels/                           # OBJ meshes, loaded from the assembly&#39;s resource stream (MSBuild renames the folder to _3DModels)
+<a id="__codelineno-1-161" name="__codelineno-1-161" href="#__codelineno-1-161"></a>    DS4/                              # DualShock 4 meshes
+<a id="__codelineno-1-162" name="__codelineno-1-162" href="#__codelineno-1-162"></a>    DualSense/                        # DualSense meshes (Touchpad split out for click-mapping)
+<a id="__codelineno-1-163" name="__codelineno-1-163" href="#__codelineno-1-163"></a>    DualSenseEdge/                    # DualSense Edge meshes
+<a id="__codelineno-1-164" name="__codelineno-1-164" href="#__codelineno-1-164"></a>    XBOX360/                          # Xbox 360 meshes (Handheld Companion, CC BY-NC-SA 4.0)
+<a id="__codelineno-1-165" name="__codelineno-1-165" href="#__codelineno-1-165"></a>    XboxSeries/                       # Xbox Series meshes, also serve Xbox One / Elite / Adaptive profiles
+<a id="__codelineno-1-166" name="__codelineno-1-166" href="#__codelineno-1-166"></a>    Switch2Pro/                       # Switch 2 Pro meshes (every Nintendo slot)
+<a id="__codelineno-1-167" name="__codelineno-1-167" href="#__codelineno-1-167"></a>
+<a id="__codelineno-1-168" name="__codelineno-1-168" href="#__codelineno-1-168"></a>  Controls/
+<a id="__codelineno-1-169" name="__codelineno-1-169" href="#__codelineno-1-169"></a>    CurveEditor.xaml(.cs)             # Interactive sensitivity curve editor (Bezier/linear)
+<a id="__codelineno-1-170" name="__codelineno-1-170" href="#__codelineno-1-170"></a>    RangeSlider.cs                    # Dual-thumb range slider (deadzone min/max)
+<a id="__codelineno-1-171" name="__codelineno-1-171" href="#__codelineno-1-171"></a>    TriggerTravelArc.xaml(.cs)        # Trigger travel arc visual for the adaptive-trigger surfaces
+<a id="__codelineno-1-172" name="__codelineno-1-172" href="#__codelineno-1-172"></a>
+<a id="__codelineno-1-173" name="__codelineno-1-173" href="#__codelineno-1-173"></a>  Views/Controls/
+<a id="__codelineno-1-174" name="__codelineno-1-174" href="#__codelineno-1-174"></a>    LabeledShapeIcon.xaml(.cs)        # Labeled shape glyph
+<a id="__codelineno-1-175" name="__codelineno-1-175" href="#__codelineno-1-175"></a>    ProfilePill.xaml(.cs)             # Profile chip used in the shell and dialogs
+<a id="__codelineno-1-176" name="__codelineno-1-176" href="#__codelineno-1-176"></a>    TriggerEffectGraph.xaml(.cs)      # Adaptive-trigger effect curve graph
+<a id="__codelineno-1-177" name="__codelineno-1-177" href="#__codelineno-1-177"></a>
+<a id="__codelineno-1-178" name="__codelineno-1-178" href="#__codelineno-1-178"></a>  Converter/
+<a id="__codelineno-1-179" name="__codelineno-1-179" href="#__codelineno-1-179"></a>    BoolToTriggerShapeKindConverter.cs # bool → trigger shape kind (left / right)
+<a id="__codelineno-1-180" name="__codelineno-1-180" href="#__codelineno-1-180"></a>    BoolToVisibilityConverter.cs      # bool → Visible / Collapsed
+<a id="__codelineno-1-181" name="__codelineno-1-181" href="#__codelineno-1-181"></a>    CrossGeometryConverter.cs         # Cross/X geometry for close buttons
+<a id="__codelineno-1-182" name="__codelineno-1-182" href="#__codelineno-1-182"></a>    NormToCanvasConverter.cs          # Normalized float → Canvas pixel coordinate
+<a id="__codelineno-1-183" name="__codelineno-1-183" href="#__codelineno-1-183"></a>    SignedNormToCanvasConverter.cs    # Signed normalized (-1..+1) → centered Canvas position
+<a id="__codelineno-1-184" name="__codelineno-1-184" href="#__codelineno-1-184"></a>    NullToCollapsedConverter.cs       # null → Collapsed, non-null → Visible
+<a id="__codelineno-1-185" name="__codelineno-1-185" href="#__codelineno-1-185"></a>    PercentToSizeConverter.cs         # Percentage → pixel size
+<a id="__codelineno-1-186" name="__codelineno-1-186" href="#__codelineno-1-186"></a>    SlopedWedgeGeometryConverter.cs   # Wedge geometry for trigger visuals
+<a id="__codelineno-1-187" name="__codelineno-1-187" href="#__codelineno-1-187"></a>    StringToVisibilityConverter.cs    # Non-empty string → Visible, empty → Collapsed
+<a id="__codelineno-1-188" name="__codelineno-1-188" href="#__codelineno-1-188"></a>    DzShapeNameConverter.cs           # DeadZoneShape → display name
+<a id="__codelineno-1-189" name="__codelineno-1-189" href="#__codelineno-1-189"></a>    EnumEqualityVisibilityConverter.cs / EnumIndexConverter.cs  # Enum comparison and index binding
+<a id="__codelineno-1-190" name="__codelineno-1-190" href="#__codelineno-1-190"></a>    IndexLessThanVisibilityConverter.cs / IndexToLetterConverter.cs / OneBasedIndexConverter.cs
+<a id="__codelineno-1-191" name="__codelineno-1-191" href="#__codelineno-1-191"></a>    HexToBrushConverter.cs / RgbToBrushConverter.cs  # Color string or RGB triple → Brush
+<a id="__codelineno-1-192" name="__codelineno-1-192" href="#__codelineno-1-192"></a>    ExeIconConverter.cs               # Executable path → its shell icon
+<a id="__codelineno-1-193" name="__codelineno-1-193" href="#__codelineno-1-193"></a>    UppercaseConverter.cs             # String → upper case
+<a id="__codelineno-1-194" name="__codelineno-1-194" href="#__codelineno-1-194"></a>
+<a id="__codelineno-1-195" name="__codelineno-1-195" href="#__codelineno-1-195"></a>  Resources/
+<a id="__codelineno-1-196" name="__codelineno-1-196" href="#__codelineno-1-196"></a>    ControllerIcons.xaml              # XAML resource dictionary with controller icon geometries
+<a id="__codelineno-1-197" name="__codelineno-1-197" href="#__codelineno-1-197"></a>    ZackslyIcons/                     # Vendor button-glyph icon set
+<a id="__codelineno-1-198" name="__codelineno-1-198" href="#__codelineno-1-198"></a>    BthPS3/                           # Microsoft-signed BthPS3 + BthPS3PSM drivers and the DS3 WinUSB INF (embedded)
+<a id="__codelineno-1-199" name="__codelineno-1-199" href="#__codelineno-1-199"></a>    PadForge.ico                      # Application icon
+<a id="__codelineno-1-200" name="__codelineno-1-200" href="#__codelineno-1-200"></a>    PadForge-logo.png                 # App logo bitmap (WPF Resource)
+<a id="__codelineno-1-201" name="__codelineno-1-201" href="#__codelineno-1-201"></a>    PadForge-icon.png                 # App icon bitmap (WPF Resource)
+<a id="__codelineno-1-202" name="__codelineno-1-202" href="#__codelineno-1-202"></a>    Strings/
+<a id="__codelineno-1-203" name="__codelineno-1-203" href="#__codelineno-1-203"></a>      Strings.resx                    # Base (English) UI string resources
+<a id="__codelineno-1-204" name="__codelineno-1-204" href="#__codelineno-1-204"></a>      Strings.Designer.cs            # Hand-written INotifyPropertyChanged resource accessor
+<a id="__codelineno-1-205" name="__codelineno-1-205" href="#__codelineno-1-205"></a>      Strings.de.resx                # German
+<a id="__codelineno-1-206" name="__codelineno-1-206" href="#__codelineno-1-206"></a>      Strings.es.resx                # Spanish
+<a id="__codelineno-1-207" name="__codelineno-1-207" href="#__codelineno-1-207"></a>      Strings.fr.resx                # French
+<a id="__codelineno-1-208" name="__codelineno-1-208" href="#__codelineno-1-208"></a>      Strings.it.resx                # Italian
+<a id="__codelineno-1-209" name="__codelineno-1-209" href="#__codelineno-1-209"></a>      Strings.ja.resx                # Japanese
+<a id="__codelineno-1-210" name="__codelineno-1-210" href="#__codelineno-1-210"></a>      Strings.ko.resx                # Korean
+<a id="__codelineno-1-211" name="__codelineno-1-211" href="#__codelineno-1-211"></a>      Strings.nl.resx                # Dutch
+<a id="__codelineno-1-212" name="__codelineno-1-212" href="#__codelineno-1-212"></a>      Strings.pt-BR.resx             # Brazilian Portuguese
+<a id="__codelineno-1-213" name="__codelineno-1-213" href="#__codelineno-1-213"></a>      Strings.zh-Hans.resx           # Simplified Chinese
+<a id="__codelineno-1-214" name="__codelineno-1-214" href="#__codelineno-1-214"></a>    SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
+<a id="__codelineno-1-215" name="__codelineno-1-215" href="#__codelineno-1-215"></a>    SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
+<a id="__codelineno-1-216" name="__codelineno-1-216" href="#__codelineno-1-216"></a>    OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe; SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge&#39;s own XInput view
+<a id="__codelineno-1-217" name="__codelineno-1-217" href="#__codelineno-1-217"></a>    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+<a id="__codelineno-1-218" name="__codelineno-1-218" href="#__codelineno-1-218"></a>    HidHide_1.5.230_x64.exe           # Embedded HidHide installer
+<a id="__codelineno-1-219" name="__codelineno-1-219" href="#__codelineno-1-219"></a>
+<a id="__codelineno-1-220" name="__codelineno-1-220" href="#__codelineno-1-220"></a>  WebAssets/
+<a id="__codelineno-1-221" name="__codelineno-1-221" href="#__codelineno-1-221"></a>    index.html                        # Landing page with Xbox 360 and DS4 layout cards
+<a id="__codelineno-1-222" name="__codelineno-1-222" href="#__codelineno-1-222"></a>    controller.html                   # Controller UI shell (dynamic overlay layout)
+<a id="__codelineno-1-223" name="__codelineno-1-223" href="#__codelineno-1-223"></a>    touchpad.html                     # Touchpad surface UI
+<a id="__codelineno-1-224" name="__codelineno-1-224" href="#__codelineno-1-224"></a>    css/controller.css                # Responsive dark theme with touch-optimized zones
+<a id="__codelineno-1-225" name="__codelineno-1-225" href="#__codelineno-1-225"></a>    js/controller_client.js           # WebSocket client, touch handling, layout renderer
+<a id="__codelineno-1-226" name="__codelineno-1-226" href="#__codelineno-1-226"></a>    js/nipplejs.min.js                # Virtual joystick library for analog sticks
+<a id="__codelineno-1-227" name="__codelineno-1-227" href="#__codelineno-1-227"></a>
+<a id="__codelineno-1-228" name="__codelineno-1-228" href="#__codelineno-1-228"></a>  Themes/
+<a id="__codelineno-1-229" name="__codelineno-1-229" href="#__codelineno-1-229"></a>    Generic.xaml                      # Custom control default styles (RangeSlider)
 </code></pre></div>
 <h3 id="padforgeengine">PadForge.Engine<a class="headerlink" href="#padforgeengine" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>PadForge.Engine/
@@ -4156,73 +4288,88 @@
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    GamepadTypes.cs             # Gamepad struct (XInput layout), TouchpadState, RawHidState, KbmRawState, MidiRawState
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    LfeOutputState.cs           # Packed per-slot LFE voice state for rumble-to-audio: four ushort voices in one long, one Volatile read/write per side (#236)
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    InputTypes.cs               # DeviceObjectTypeFlags + MapType enums, ObjectGuid + InputDeviceType constant classes
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    VirtualControllerTypes.cs   # VirtualControllerType enum, IVirtualController interface
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    InputHookManager.cs         # WH_KEYBOARD_LL / WH_MOUSE_LL hooks for mapped input suppression
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    PrecisionTouchpadReader.cs  # Windows Precision Touchpad reader (Raw Input, HID descriptors, tip-switch, multi-report frame assembly, HID-contact-id-stable slot assignment)
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    TouchpadOverlayDevice.cs    # On-screen overlay touchpad surface (implements ISdlInputDevice)
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    WebControllerDevice.cs      # Virtual input device from browser clients (implements ISdlInputDevice)
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>  Data/
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    DeadZoneShape.cs            # Deadzone shape enum
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    DeviceTuning.cs             # Per-pad-per-slot tuning bag (gyro, etc.)
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    MappingRow.cs               # One output row inside a MappingSet (Target, Sources, CombineMode, LayerMask)
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    MappingSet.cs               # Per-VC mapping table: rows + ShiftActivators (Issue #61) + Menus (#9)
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    MappingSetMigrator.cs       # Loads v2 per-device PadSetting mapping fields into the v3 MappingSet shape
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    MappingSource.cs            # One physical input feeding a row: Kind, DeviceGuid, Descriptor, Invert, Half, …
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    MappingTranslation.cs       # Cross-layout mapping translation (Xbox/PlayStation/Nintendo/Extended/MIDI/KBM equivalence)
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>    PadSetting.cs               # Per-slot tuning (deadzones, force feedback, lighting, AT, MIDI, etc.)
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    PassthroughCloneGenerator.cs # 1:1 passthrough clone of a physical device onto an Extended VC (#196)
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>    PerDeviceSettingsEntry.cs   # (v3.3) Clipboard payload. One per assigned device on Copy / Paste / Copy From, carrying a nested PadSettingJson
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>    ShiftActivator.cs           # One activator on a MappingSet: input descriptor, Mode, Kind, LayerMask, color
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>    UserDevice.cs               # Physical device record: GUID, name, capabilities, runtime state
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    UserSetting.cs              # Links a UserDevice (InstanceGuid) to a pad slot (MapTo) with a PadSetting
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>  Menus/
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>    MenuDefinitionEntry.cs      # (v4.1) XML-serializable menu definition: kind (radial/grid), host surface, fire type, items with optional direct bindings (#9)
-<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>    MenuEvaluator.cs            # (v4.1) Hover-commit state machine: engage, hover, Click / ClickRelease / TouchRelease / Always fire types (#9)
-<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>    MenuSelectionMath.cs        # (v4.1) Pure radial-wedge / grid-cell selection math on the shipped #88 radial-zone convention (#9)
-<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>
-<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>  Touchpad/
-<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>    GestureRecognizer.cs        # (v3.3) Per-tick touchpad recognizer: Tier 1 (swipes/radial/taps/longpress), Tier 2 (pinch/rotate/multi-finger), Tier 3 (shape matches via ShapeRecognizer + angular-margin)
-<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>    ShapeRecognizer.cs          # (v3.3) Canonical $Q point-cloud matcher (Magrofuoco/Vatavu/Anthony/Wobbrock 2018). Resample → Scale → TranslateTo, matched[]-tracked CloudDistance, LUT-driven ComputeLowerBound, bidirectional CloudMatch
-<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>    ShapeTemplate.cs            # (v3.3) Pre-processed template: PointCloud + LookupTable, FingerCount, ThresholdOverride, AngularSignature
-<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>    AngularMarginRecognizer.cs  # (v3.3) Per-segment angle-direction matcher (GestureSign-style). Runs alongside ShapeRecognizer on single-finger templates and keeps the higher-confidence match
-<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>    InBoxShapeTemplates.cs      # (v3.3) Procedural builders for the in-box shapes (Circle, CircleCCW, Square, Triangle, Z, Checkmark)
-<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>    TouchpadCustomGesture.cs    # (v3.3) XML-serializable user-recorded gesture; compiled to a ShapeTemplate at profile load
-<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>    TouchpadGestureContext.cs   # (v3.3) Per-(slot, device, padIdx) gesture state: finger paths, timestamps, FiredGesturesThisFrame, cooldown
-<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>    TouchpadGestureSettings.cs  # (v3.3) Per-(slot, device, padIdx) toggles + thresholds (every feature off by default)
-<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>    TouchpadSettingsEntry.cs    # (v3.3) Serialization wrapper that pairs TouchpadGestureSettings with its (DeviceGuid, TouchpadIndex) key inside PadSetting
-<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a>    SwipeHapticsEvaluator.cs    # (v4.1) Per-(slot, device, pad) finger-travel accumulator emitting a swipe-haptic tick per travel detent (#219)
-<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a>
-<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a>  RemoteLink/                   # Peer-to-peer controller sharing over LAN (issue #138). Off by default
-<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>    LinkServer.cs               # TCP control listener (pairing handshake) + UDP input/feedback stream
-<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>    LinkDiscovery.cs            # LAN discovery of nearby PadForge PCs (Dashboard &quot;Nearby PCs&quot;)
-<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>    LinkConnection.cs           # ILinkControlChannel: transport-agnostic duplex control channel
-<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>    LinkHandshake.cs            # SAS pairing handshake, yields the 32-byte session key + trust material
-<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a>    LinkSession.cs              # AEAD seal/open of datagrams on the input/feedback channel
-<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a>    TcpControlChannel.cs        # ILinkControlChannel over TCP: u32-length-prefixed framing with a size cap
-<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a>    CustomInputStateCodec.cs    # Compact absolute-frame codec for CustomInputState datagrams
-<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a>    OutputEffectCodec.cs        # Codec for the reverse output relay (rumble / effect, consumer → owner)
-<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a>    PeerCrypto.cs               # Pinned suite: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (BouncyCastle)
-<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a>    PeerIdentity.cs             # This PC&#39;s long-lived Ed25519 identity, SHA-256 fingerprint
-<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a>    PeerTrust.cs                # One trusted-peer record (Ed25519 public key, serialized to PadForge.xml)
-<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a>    PeerTrustStore.cs           # Trust list + admission decision (FirstContact vs known key)
-<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a>    IdentityProtector.cs        # At-rest wrap of the private identity key (DPAPI or password)
-<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a>    AntiReplayWindow.cs         # IPsec-style sliding replay window over the datagram sequence (RFC 6479)
-<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a>    RemotePeerDevice.cs         # A peer-exposed device surfaced into the local pipeline (peer:// path)
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    VirtualControllerTypes.cs   # VirtualControllerType enum (Xbox 0, PlayStation 1, Extended 2, Midi 3, KeyboardMouse 4, Nintendo 5, Vr 6), IVirtualController interface
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    VrRawState.cs               # One slot&#39;s VR output: VrHandRaw left + right, button bits mirroring HMVRButton exactly (#49)
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    InputHookManager.cs         # WH_KEYBOARD_LL / WH_MOUSE_LL hooks for mapped input suppression
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    PrecisionTouchpadReader.cs  # Windows Precision Touchpad reader (Raw Input, HID descriptors, tip-switch, multi-report frame assembly, HID-contact-id-stable slot assignment)
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    TouchpadOverlayDevice.cs    # On-screen overlay touchpad surface (implements ISdlInputDevice)
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    WebControllerDevice.cs      # Virtual input device from browser clients (implements ISdlInputDevice)
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>  Data/
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    DeadZoneShape.cs            # Deadzone shape enum
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    DeviceTuning.cs             # Per-pad-per-slot tuning bag (gyro, etc.)
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    MappingRow.cs               # One output row inside a MappingSet (Target, Sources, CombineMode, LayerMask)
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    MappingSet.cs               # Per-VC mapping table: rows + ShiftActivators (Issue #61) + Menus (#9)
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    MappingSetMigrator.cs       # Loads v2 per-device PadSetting mapping fields into the v3 MappingSet shape
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    MappingSource.cs            # One physical input feeding a row: Kind, DeviceGuid, Descriptor, Invert, Half, …
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>    MappingTranslation.cs       # Cross-layout mapping translation (Xbox/PlayStation/Nintendo/Extended/MIDI/KBM equivalence)
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    PadSetting.cs               # Per-slot tuning (deadzones, force feedback, lighting, AT, MIDI, etc.)
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>    PassthroughCloneGenerator.cs # 1:1 passthrough clone of a physical device onto an Extended VC (#196)
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>    RumbleAudioConfig.cs        # Per-slot Rumble to Audio config carried on the MappingSet (#236)
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>    PerDeviceSettingsEntry.cs   # (v3.3) Clipboard payload. One per assigned device on Copy / Paste / Copy From, carrying a nested PadSettingJson
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    ShiftActivator.cs           # One activator on a MappingSet: input descriptor, Mode, Kind, LayerMask, color
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>    UserDevice.cs               # Physical device record: GUID, name, capabilities, runtime state
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    UserSetting.cs              # Links a UserDevice (InstanceGuid) to a pad slot (MapTo) with a PadSetting
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>  Menus/
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>    MenuDefinitionEntry.cs      # (v4.1) XML-serializable menu definition: kind (radial/grid), host surface, fire type, items with optional direct bindings (#9)
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>    MenuEvaluator.cs            # (v4.1) Hover-commit state machine: engage, hover, Click / ClickRelease / TouchRelease / Always fire types (#9)
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>    MenuSelectionMath.cs        # (v4.1) Pure radial-wedge / grid-cell selection math on the shipped #88 radial-zone convention (#9)
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>  Touchpad/
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>    GestureRecognizer.cs        # (v3.3) Per-tick touchpad recognizer: Tier 1 (swipes/radial/taps/longpress), Tier 2 (pinch/rotate/multi-finger), Tier 3 (shape matches via ShapeRecognizer + angular-margin)
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>    ShapeRecognizer.cs          # (v3.3) Canonical $Q point-cloud matcher (Magrofuoco/Vatavu/Anthony/Wobbrock 2018). Resample → Scale → TranslateTo, matched[]-tracked CloudDistance, LUT-driven ComputeLowerBound, bidirectional CloudMatch
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>    ShapeTemplate.cs            # (v3.3) Pre-processed template: PointCloud + LookupTable, FingerCount, ThresholdOverride, AngularSignature
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>    AngularMarginRecognizer.cs  # (v3.3) Per-segment angle-direction matcher (GestureSign-style). Runs alongside ShapeRecognizer on single-finger templates and keeps the higher-confidence match
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>    InBoxShapeTemplates.cs      # (v3.3) Procedural builders for the in-box shapes (Circle, CircleCCW, Square, Triangle, Z, Checkmark)
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>    TouchpadCustomGesture.cs    # (v3.3) XML-serializable user-recorded gesture; compiled to a ShapeTemplate at profile load
+<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>    TouchpadGestureContext.cs   # (v3.3) Per-(slot, device, padIdx) gesture state: finger paths, timestamps, FiredGesturesThisFrame, cooldown
+<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a>    TouchpadGestureSettings.cs  # (v3.3) Per-(slot, device, padIdx) toggles + thresholds (every feature off by default)
+<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a>    TouchpadSettingsEntry.cs    # (v3.3) Serialization wrapper that pairs TouchpadGestureSettings with its (DeviceGuid, TouchpadIndex) key inside PadSetting
+<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a>    SwipeHapticsEvaluator.cs    # (v4.1) Per-(slot, device, pad) finger-travel accumulator emitting a swipe-haptic tick per travel detent (#219)
+<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>    TouchpadGestureAutoArm.cs   # Arms a gesture session without an explicit activation input
+<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>
+<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>  Mouse/                        # Mouse-gesture recognition (#200)
+<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>    MouseGestureRecognizer.cs   # Per-tick recognizer over the accumulated mouse path
+<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a>    MouseGestureContext.cs      # Per-(slot, device) gesture state
+<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a>    MouseGestureSettings.cs     # Per-(slot, device) toggles + thresholds
+<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a>    MouseGestureSettingsEntry.cs # Serialization wrapper keyed by device GUID
+<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a>
+<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a>  RemoteLink/                   # Peer-to-peer controller sharing over LAN (issue #138). Off by default
+<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a>    LinkServer.cs               # TCP control listener (pairing handshake) + UDP input/feedback stream
+<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a>    LinkDiscovery.cs            # LAN discovery of nearby PadForge PCs (Dashboard &quot;Nearby PCs&quot;)
+<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a>    LinkConnection.cs           # ILinkControlChannel: transport-agnostic duplex control channel
+<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a>    LinkHandshake.cs            # SAS pairing handshake, yields the 32-byte session key + trust material
+<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a>    LinkSession.cs              # AEAD seal/open of datagrams on the input/feedback channel
+<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a>    TcpControlChannel.cs        # ILinkControlChannel over TCP: u32-length-prefixed framing with a size cap
+<a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a>    CustomInputStateCodec.cs    # Compact absolute-frame codec for CustomInputState datagrams
+<a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a>    OutputEffectCodec.cs        # Codec for the reverse output relay (rumble / effect, consumer → owner)
+<a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a>    PeerCrypto.cs               # Pinned suite: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (BouncyCastle)
+<a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a>    PeerIdentity.cs             # This PC&#39;s long-lived Ed25519 identity, SHA-256 fingerprint
+<a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a>    PeerTrust.cs                # One trusted-peer record (Ed25519 public key, serialized to PadForge.xml)
+<a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a>    PeerTrustStore.cs           # Trust list + admission decision (FirstContact vs known key)
+<a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a>    IdentityProtector.cs        # At-rest wrap of the private identity key (DPAPI or password)
+<a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a>    AntiReplayWindow.cs         # IPsec-style sliding replay window over the datagram sequence (RFC 6479)
+<a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a>    RemotePeerDevice.cs         # A peer-exposed device surfaced into the local pipeline (peer:// path)
 </code></pre></div>
 <h3 id="tools">tools/<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>tools/
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  DsuDiag/                      # Standalone DSU client for motion data diagnostics
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  Ds4InputDump/                 # DS4 raw HID input dump (Sony Report 0x01 passthrough debug)
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  vJoy/                         # Legacy v2 vJoy test/SDK assets (kept for reference, unused by v3)
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  capture_screenshots.ps1       # Automated screenshot capture script
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  capture_all.ps1               # Full screenshot capture orchestration
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  deploy.ps1                    # Build + deploy to install directory
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  deploy_and_restart.ps1        # Deploy + restart PadForge
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  dump_ui_tree.ps1              # WPF visual tree dump for debugging
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>  overlay_positions.py          # 2D controller overlay coordinate generator
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>  (+ legacy vJoy diagnostic scripts from v2)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  Ds4InputDump/                 # DS4 raw HID input dump (Report 0x01 passthrough debug)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  PersonaVerify/                # Composite USB persona audio verification harness
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  SteamWorkshopSmoke/           # Manually-run live-network smoke harness for the Workshop client
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  SteamWorkshopSweep/           # Wild-corpus regression sweep for the Workshop config translator
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  combomeasure/                 # WPF width-measurement harness for the Indicator LEDs combos
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  capture_all.ps1               # Full screenshot capture orchestration (+ _wrapper for elevation)
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  capture_vr.ps1 / capture_web.ps1 / capture_colorways.ps1
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>  prep_xml_for_capture.ps1      # Preps PadForge.xml with sample slots and macros for capture runs
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>  convert_screenshots.ps1 / add_slots_via_ui.ps1 / probe_macro_list.ps1
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>  diag-sweep.ps1                # Runtime self-diagnostics harvest via UI Automation, must run elevated
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>  deploy.ps1                    # Copy the published exe to C:\PadForge and relaunch
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>  kill_padforge.ps1             # Elevated kill of a running instance
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>  verify_site_carousel.ps1      # Site carousel check
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>  overlay_positions.py          # 2D controller overlay coordinate generator
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>  gen_mouse_art.py / gen_2d_colorways.py / gen_dualsense_edge_art.py / gen_switchpro_s2_art.py
 </code></pre></div>
 <h3 id="new-since-the-initial-trees-through-400">New since the initial trees (through 4.0.0)<a class="headerlink" href="#new-since-the-initial-trees-through-400" title="Permanent link">&para;</a></h3>
 <p>The <code>Common/Input/</code>, <code>Services/</code>, <code>Engine/Data/</code>, and <code>Engine/RemoteLink/</code> trees above cover the core pipeline and the physical-device / Remote Link subsystems. Later feature work added these files, kept here so the core trees stay readable:</p>
@@ -4272,6 +4419,27 @@
 <li><strong>Rumble to Audio / Bass Shakers (#236)</strong>. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones. <code>RumbleAudioService</code> + <code>RumbleAudioSampleProvider</code> (App) render, <code>LfeOutputState</code> (Engine) packs the four voices into one long, and the poll loop's <code>UpdateRumbleAudioLane</code> publishes once per tick from the slot's <code>MappingSet.RumbleAudio</code> config. Surfaced as the per-slot "Bass Shakers" tab</li>
 <li><strong>Controller-button SOCD (#240)</strong>. <code>SlotButtonSocd.cs</code> extends #205's keyboard Snap Tap to gamepad and raw-HID slots: pair cleaning on the slot's final combined output right before the Step 5 submit, configured via <code>MappingSet.SocdMode</code> / <code>SocdPairs</code></li>
 </ul>
+<h3 id="since-420">Since 4.2.0<a class="headerlink" href="#since-420" title="Permanent link">&para;</a></h3>
+<p><strong>App <code>Common/Input/</code></strong></p>
+<ul>
+<li><code>HMaestroVRController.cs</code>. The VR slot type (#49). One <code>HMVRController</code> pipe drives both SteamVR hands. Haptic pulses arrive as (hand, amplitude, duration) and fan into the slot's <code>Vibration</code> entry with a decay timer, because the rumble path latches motor speeds until someone writes zero</li>
+<li><code>SonyHeadsetMotionDevice.cs</code> / <code>SonyHeadsetHid.cs</code> / <code>HeadTrackerHid.cs</code> / <code>HeadTrackerMath.cs</code>. Sony headset head tracker (WH-1000XM5 family) over Bluetooth Classic as an Android Head Tracker HID sensor collection, surfaced as a motion-only <code>ISdlInputDevice</code> (#188). <code>HeadTrackerMath</code> synthesizes an angular rate from consecutive rotation vectors when the descriptor reports rotation but no gyro usage</li>
+<li><code>AtToImpulseTranslator.cs</code>. Adaptive-trigger blocks a game writes to a virtual DualSense, translated to Xbox impulse-trigger output when the physical pad is an Xbox One+ (#271 item 3)</li>
+<li><code>MidiServiceRecovery.cs</code> / <code>MidiEndpointJanitor.cs</code>. One-shot recovery for a wedged <code>midisrv</code>, and removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death</li>
+<li><code>PlayStationEffectWriter.cs</code>. The former <code>SonyEffectWriter.cs</code>, renamed to match the PlayStation VC family naming</li>
+</ul>
+<p><strong>App <code>Common/</code></strong></p>
+<ul>
+<li><code>Telemetry/</code>. Racing-telemetry sources for wheel RPM LEDs, listed in the tree above</li>
+<li><code>AmbientMotionProbe.cs</code>, <code>StickBoundary.cs</code>, <code>StickPeakHoldBehavior.cs</code>, <code>StickTrailBehavior.cs</code>, <code>EmberTheme.cs</code>, <code>DeviceTransport.cs</code>, <code>DeviceTypeGlyph.cs</code>, <code>MenuIconResolver.cs</code>, <code>ComboBoxWidthBehavior.cs</code></li>
+</ul>
+<p><strong>Engine</strong></p>
+<ul>
+<li><code>Common/VrRawState.cs</code>. <code>VrHandRaw</code> left + right per slot. Button bits mirror <code>HMVRButton</code> exactly, so the wrapper's conversion is a cast rather than a table</li>
+<li><code>Mouse/</code>. Mouse-gesture recognition, listed in the tree above</li>
+<li><code>Data/RumbleAudioConfig.cs</code>, <code>Touchpad/TouchpadGestureAutoArm.cs</code></li>
+</ul>
+<p><code>VirtualControllerType.Vr = 6</code> is appended after <code>Nintendo</code>. Numeric values are persisted, so the enum is append-only.</p>
 <h3 id="padforgesteamworkshop">PadForge.SteamWorkshop<a class="headerlink" href="#padforgesteamworkshop" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PadForge.SteamWorkshop/
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  ISteamWorkshopGate.cs      # Opt-in gate; every client constructor throws when it is off
@@ -4326,7 +4494,7 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1">// NEVER set SDL_HINT_JOYSTICK_RAWINPUT. Conflicts with XInput enumeration</span>
 </code></pre></div>
 <h3 id="why-hidmaestro-not-vigembus-vjoy">Why HIDMaestro (not ViGEmBus + vJoy)<a class="headerlink" href="#why-hidmaestro-not-vigembus-vjoy" title="Permanent link">&para;</a></h3>
-<p>Virtual Xbox, PlayStation, Nintendo, and Extended controllers all come from <strong>HIDMaestro</strong>. v2 used ViGEmBus for Xbox / DS4 virtuals and vJoy for everything else. v3 replaces both:</p>
+<p>Virtual Xbox, PlayStation, Nintendo, Extended, and VR controllers all come from <strong>HIDMaestro</strong>. v2 used ViGEmBus for Xbox / DS4 virtuals and vJoy for everything else. v3 replaces both:</p>
 <table>
 <thead>
 <tr>
@@ -4340,7 +4508,7 @@
 <td>HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side</td>
 </tr>
 <tr>
-<td>225+ profiles in the catalog</td>
+<td>225 profiles in the catalog</td>
 <td>Pre-built profiles for the long tail of DirectInput devices, plus a profile builder for custom HID descriptors. vJoy was generic-only</td>
 </tr>
 <tr>
@@ -4396,7 +4564,7 @@
 <h3 id="command-event-decoupling">Command + Event Decoupling<a class="headerlink" href="#command-event-decoupling" title="Permanent link">&para;</a></h3>
 <p>VMs expose commands and raise events but never call services or touch the input pipeline directly:</p>
 <ol>
-<li>VMs raise events (e.g., <code>MappingChanged</code>, <code>SlotAdded</code>, <code>SelectedDeviceChanged</code>)</li>
+<li>VMs raise events (e.g. <code>PadViewModel.SelectedDeviceChanged</code>, <code>MainViewModel.StartEngineRequested</code>, <code>DevicesViewModel.AssignToSlotRequested</code>)</li>
 <li><code>MainWindow.xaml.cs</code> or service classes subscribe</li>
 <li>Handlers call <code>InputService</code>, <code>SettingsService</code>, etc.</li>
 </ol>
@@ -4445,7 +4613,7 @@
 <p>The engine thread reads <code>SettingsManager</code> without referencing the WPF-dependent <code>SettingsService</code>.</p>
 <hr />
 <h2 id="inputmanager-partial-class-split">InputManager Partial Class Split<a class="headerlink" href="#inputmanager-partial-class-split" title="Permanent link">&para;</a></h2>
-<p><code>InputManager</code> is a <code>partial class</code> split across 11 files for <strong>pipeline stage isolation</strong>. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).</p>
+<p><code>InputManager</code> is a <code>partial class</code> split across 12 files for <strong>pipeline stage isolation</strong>. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).</p>
 <table>
 <thead>
 <tr>
@@ -4469,6 +4637,11 @@
 <td><code>InputManager.Step1.UpdateDevices.cs</code></td>
 <td>Step 1</td>
 <td>SDL device enumeration, open/close, HIDMaestro filtering, <code>UserDevices</code>/<code>UserSettings</code> collection classes</td>
+</tr>
+<tr>
+<td><code>InputManager.Step1.UsbipVhciGuard.cs</code></td>
+<td>Step 1</td>
+<td>Composite-persona self-readback guard: walks a Sony-VID device's PnP ancestry for the <code>ROOT\HIDMAESTRO_UDE</code> stamp so PadForge never ingests its own USB persona</td>
 </tr>
 <tr>
 <td><code>InputManager.Step2.UpdateInputStates.cs</code></td>
@@ -4503,7 +4676,7 @@
 <tr>
 <td><code>InputManager.Step5.VirtualDevices.cs</code></td>
 <td>Step 5</td>
-<td>Create/destroy <code>IVirtualController</code> (HM lifecycle on thread pool, see <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>), submit <code>CombinedOutputStates[]</code> via <code>HMController.SubmitState</code> / <code>SubmitRawReport</code> (HM) or per-VC paths (MIDI/KBM), XInput slot detection</td>
+<td>Create/destroy <code>IVirtualController</code> (HM lifecycle on thread pool, see <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>), submit <code>CombinedOutputStates[]</code> via <code>HMController.SubmitState</code> / <code>SubmitRawReport</code> (HM) or per-VC paths (VR / MIDI / KBM), XInput slot detection</td>
 </tr>
 <tr>
 <td><code>InputManager.Step6.RetrieveOutputStates.cs</code></td>
@@ -4566,7 +4739,7 @@
 <p>The reader implements four spec-mandatory behaviors on top of the basic HidP_GetUsageValue parse: tip-switch (usage 0x42) for "is this contact touching," multi-report frame assembly across the 2-contacts-per-report fragmentation typical of certified PTP hardware, HID-contact-id-stable slot assignment so engine-side paths don't extend with the wrong physical finger when a low-slot finger lifts, and a 100 ms staleness clear. Field-level reference: <a href="../engine-library/#precisiontouchpadreader">Engine Library</a>.</p>
 <p>Per-device state is held in <code>PtpDeviceState</code> keyed by <code>RAWINPUTHEADER.hDevice</code>. The engine reads it in Step 2 via <code>_ptpReader.ReadInto(hDevice, state)</code>.</p>
 <h3 id="6-dsu-receive-thread">6. DSU Receive Thread<a class="headerlink" href="#6-dsu-receive-thread" title="Permanent link">&para;</a></h3>
-<p><code>DsuMotionServer</code> uses <code>UdpClient.ReceiveAsync()</code> on a background task for DSU client subscriptions (Cemu, Dolphin). Motion data is broadcast by the engine thread after Step 2 (no separate send thread). DSU protocol is limited to 4 slots. Slots 4–15 skip broadcast.</p>
+<p><code>DsuMotionServer</code> runs a dedicated background thread named <code>PadForge.DsuServer</code> on a blocking <code>Socket.ReceiveFrom</code> loop, handling DSU client subscriptions (Cemu, Dolphin). Motion data is broadcast by the engine thread after Step 2 (no separate send thread). DSU protocol is limited to 4 slots. Slots 4–15 skip broadcast.</p>
 <h3 id="7-input-hook-thread-inputhookmanager-on-demand">7. Input Hook Thread (InputHookManager, on demand)<a class="headerlink" href="#7-input-hook-thread-inputhookmanager-on-demand" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">_hookThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">HookThreadProc</span><span class="p">(</span><span class="n">ready</span><span class="p">))</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p">{</span>
@@ -4760,17 +4933,18 @@
 <a id="__codelineno-13-49" name="__codelineno-13-49" href="#__codelineno-13-49"></a>  │      → HMController.SubmitState (gamepad path)
 <a id="__codelineno-13-50" name="__codelineno-13-50" href="#__codelineno-13-50"></a>  │      → SubmitRawHidState → HMController.SubmitState (raw-HID surface: Extended custom layouts + Nintendo)
 <a id="__codelineno-13-51" name="__codelineno-13-51" href="#__codelineno-13-51"></a>  │      → HMController.SubmitRawReport (Sony Report 0x01 passthrough on DS4 / DualSense)
-<a id="__codelineno-13-52" name="__codelineno-13-52" href="#__codelineno-13-52"></a>  │    KBM: SendInput() → Win32 keyboard/mouse events
-<a id="__codelineno-13-53" name="__codelineno-13-53" href="#__codelineno-13-53"></a>  │    MIDI: Windows MIDI Services → virtual MIDI port
-<a id="__codelineno-13-54" name="__codelineno-13-54" href="#__codelineno-13-54"></a>  │
-<a id="__codelineno-13-55" name="__codelineno-13-55" href="#__codelineno-13-55"></a>  ▼
-<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a>Step 6: RetrieveOutputStates()
-<a id="__codelineno-13-57" name="__codelineno-13-57" href="#__codelineno-13-57"></a>  │  Copy CombinedOutputStates[] → RetrievedOutputStates[]
-<a id="__codelineno-13-58" name="__codelineno-13-58" href="#__codelineno-13-58"></a>  │  Copy CombinedKbmRawStates[] → RetrievedKbmRawStates[]
-<a id="__codelineno-13-59" name="__codelineno-13-59" href="#__codelineno-13-59"></a>  │  (Value copy, consumed by UI timer at 30 Hz)
-<a id="__codelineno-13-60" name="__codelineno-13-60" href="#__codelineno-13-60"></a>  │
-<a id="__codelineno-13-61" name="__codelineno-13-61" href="#__codelineno-13-61"></a>  ▼
-<a id="__codelineno-13-62" name="__codelineno-13-62" href="#__codelineno-13-62"></a>Game reads virtual controller via XInput / DirectInput / SDL / raw HID
+<a id="__codelineno-13-52" name="__codelineno-13-52" href="#__codelineno-13-52"></a>  │    VR: HMaestroVRController → HMVRController (both SteamVR hands from one slot)
+<a id="__codelineno-13-53" name="__codelineno-13-53" href="#__codelineno-13-53"></a>  │    KBM: SendInput() → Win32 keyboard/mouse events
+<a id="__codelineno-13-54" name="__codelineno-13-54" href="#__codelineno-13-54"></a>  │    MIDI: Windows MIDI Services → virtual MIDI port
+<a id="__codelineno-13-55" name="__codelineno-13-55" href="#__codelineno-13-55"></a>  │
+<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a>  ▼
+<a id="__codelineno-13-57" name="__codelineno-13-57" href="#__codelineno-13-57"></a>Step 6: RetrieveOutputStates()
+<a id="__codelineno-13-58" name="__codelineno-13-58" href="#__codelineno-13-58"></a>  │  Copy CombinedOutputStates[] → RetrievedOutputStates[]
+<a id="__codelineno-13-59" name="__codelineno-13-59" href="#__codelineno-13-59"></a>  │  Copy CombinedKbmRawStates[] → RetrievedKbmRawStates[]
+<a id="__codelineno-13-60" name="__codelineno-13-60" href="#__codelineno-13-60"></a>  │  (Value copy, consumed by UI timer at 30 Hz)
+<a id="__codelineno-13-61" name="__codelineno-13-61" href="#__codelineno-13-61"></a>  │
+<a id="__codelineno-13-62" name="__codelineno-13-62" href="#__codelineno-13-62"></a>  ▼
+<a id="__codelineno-13-63" name="__codelineno-13-63" href="#__codelineno-13-63"></a>Game reads virtual controller via XInput / DirectInput / SDL / raw HID
 </code></pre></div>
 <h3 id="reverse-data-flow-game-rumble-physical-controller">Reverse data flow (game rumble → physical controller)<a class="headerlink" href="#reverse-data-flow-game-rumble-physical-controller" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Game sends rumble via XInput / DirectInput FFB
@@ -5102,9 +5276,15 @@
 <td>16</td>
 <td><code>MaxKeyboardMouseSlots = MaxPads</code></td>
 </tr>
+<tr>
+<td>VR</td>
+<td>1</td>
+<td><code>MaxVrSlots = 1</code></td>
+</tr>
 </tbody>
 </table>
 <p>The "Add Controller" button hides when all 16 slots are in use.</p>
+<p>VR is the one type capped below the global count. One slot already drives both SteamVR hands, so a second would fight the first over the same pair of devices. <code>SettingsManager.CanSlotTakeType()</code> enforces the cap in one place, because a type switch on an existing slot could otherwise mint a second VR slot past the add-popup's own check.</p>
 <blockquote>
 <p><strong>XInput visibility</strong>: The XInput API addresses only slots 0–3. Xbox VCs beyond slot 3 still work but may be invisible to XInput-only games. DirectInput, SDL, and raw HID see all 16. PlayStation, Nintendo, and Extended VCs are unaffected by the XInput slot cap.</p>
 </blockquote>
@@ -5117,14 +5297,15 @@
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="k">public</span><span class="w"> </span><span class="n">RawHidState</span><span class="p">[]</span><span class="w"> </span><span class="n">CombinedRawHidStates</span><span class="p">;</span><span class="w">      </span><span class="c1">// Step 4 output (raw-HID axes/buttons/POVs: Extended custom + Nintendo)</span>
 <a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="k">public</span><span class="w"> </span><span class="n">MidiRawState</span><span class="p">[]</span><span class="w"> </span><span class="n">CombinedMidiRawStates</span><span class="p">;</span><span class="w">    </span><span class="c1">// Step 4 output (MIDI)</span>
 <a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="k">public</span><span class="w"> </span><span class="n">KbmRawState</span><span class="p">[]</span><span class="w"> </span><span class="n">CombinedKbmRawStates</span><span class="p">;</span><span class="w">      </span><span class="c1">// Step 4 output (KeyboardMouse)</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="k">public</span><span class="w"> </span><span class="n">Gamepad</span><span class="p">[]</span><span class="w"> </span><span class="n">RetrievedOutputStates</span><span class="p">;</span><span class="w">          </span><span class="c1">// Step 6 output (UI display)</span>
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="k">public</span><span class="w"> </span><span class="n">KbmRawState</span><span class="p">[]</span><span class="w"> </span><span class="n">RetrievedKbmRawStates</span><span class="p">;</span><span class="w">     </span><span class="c1">// Step 6 output (KBM UI preview)</span>
-<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="k">public</span><span class="w"> </span><span class="n">Vibration</span><span class="p">[]</span><span class="w"> </span><span class="n">VibrationStates</span><span class="p">;</span><span class="w">              </span><span class="c1">// HIDMaestro feedback</span>
-<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="k">public</span><span class="w"> </span><span class="n">MotionSnapshot</span><span class="p">[]</span><span class="w"> </span><span class="n">MotionSnapshots</span><span class="p">;</span><span class="w">         </span><span class="c1">// DSU motion data</span>
-<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="k">public</span><span class="w"> </span><span class="n">MacroItem</span><span class="p">[][]</span><span class="w"> </span><span class="n">MacroSnapshots</span><span class="p">;</span><span class="w">             </span><span class="c1">// Macro definitions</span>
-<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="k">public</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotControllerTypes</span><span class="p">;</span><span class="w">  </span><span class="c1">// Configured type</span>
-<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="k">internal</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotRawHidSurface</span><span class="p">;</span><span class="w">               </span><span class="c1">// Raw-HID pipeline (custom axis/button counts) vs Gamepad preset pipeline</span>
-<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="k">internal</span><span class="w"> </span><span class="n">MidiSlotConfig</span><span class="p">[]</span><span class="w"> </span><span class="n">_midiConfigs</span><span class="p">;</span><span class="w">          </span><span class="c1">// Per-slot MIDI configuration</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="k">public</span><span class="w"> </span><span class="n">VrRawState</span><span class="p">[]</span><span class="w"> </span><span class="n">CombinedVrRawStates</span><span class="p">;</span><span class="w">        </span><span class="c1">// Step 4 output (VR: the slot&#39;s left+right hand pair)</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="k">public</span><span class="w"> </span><span class="n">Gamepad</span><span class="p">[]</span><span class="w"> </span><span class="n">RetrievedOutputStates</span><span class="p">;</span><span class="w">          </span><span class="c1">// Step 6 output (UI display)</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="k">public</span><span class="w"> </span><span class="n">KbmRawState</span><span class="p">[]</span><span class="w"> </span><span class="n">RetrievedKbmRawStates</span><span class="p">;</span><span class="w">     </span><span class="c1">// Step 6 output (KBM UI preview)</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="k">public</span><span class="w"> </span><span class="n">Vibration</span><span class="p">[]</span><span class="w"> </span><span class="n">VibrationStates</span><span class="p">;</span><span class="w">              </span><span class="c1">// HIDMaestro feedback</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="k">public</span><span class="w"> </span><span class="n">MotionSnapshot</span><span class="p">[]</span><span class="w"> </span><span class="n">MotionSnapshots</span><span class="p">;</span><span class="w">         </span><span class="c1">// DSU motion data</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="k">public</span><span class="w"> </span><span class="n">MacroItem</span><span class="p">[][]</span><span class="w"> </span><span class="n">MacroSnapshots</span><span class="p">;</span><span class="w">             </span><span class="c1">// Macro definitions</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="k">public</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotControllerTypes</span><span class="p">;</span><span class="w">  </span><span class="c1">// Configured type</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="k">internal</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotRawHidSurface</span><span class="p">;</span><span class="w">               </span><span class="c1">// Raw-HID pipeline (custom axis/button counts) vs Gamepad preset pipeline</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="k">internal</span><span class="w"> </span><span class="n">MidiSlotConfig</span><span class="p">[]</span><span class="w"> </span><span class="n">_midiConfigs</span><span class="p">;</span><span class="w">          </span><span class="c1">// Per-slot MIDI configuration</span>
 </code></pre></div>
 <p>Pad indices are data identity. A pad's mappings, profile, devices, and settings live at its pad index and never move. Visual position within an HM-backed group (Xbox / PlayStation / Nintendo / Extended) is the kernel-slot anchor: drag-reorder mutates <code>SettingsManager.SlotOrders</code> and reroutes the pad-index pointer in <code>_virtualControllers[]</code> so the data at the new pad-at-position-V feeds into V's kernel slot. Same-profile reorders pointer-swap. Different-profile positions destroy + recreate. See <a href="../services-layer/#slot-reordering">Services Layer#slot-reordering</a>.</p>
 <hr />
@@ -5136,13 +5317,13 @@
 <li><a href="../viewmodels/">ViewModels</a>: <code>PadViewModel</code>, <code>DashboardViewModel</code>, <code>DevicesViewModel</code>, <code>SettingsViewModel</code></li>
 <li><a href="../xaml-views/">XAML Views</a>: <code>DashboardPage</code>, <code>PadPage</code>, <code>DevicesPage</code>, <code>SettingsPage</code></li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: XML persistence, <code>SettingsManager</code>, <code>SettingsService</code> data flow</li>
-<li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: <code>IVirtualController</code> implementations (<code>HMaestroVirtualController</code> for Xbox / PlayStation / Nintendo / Extended, plus MIDI and KB+M)</li>
+<li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: <code>IVirtualController</code> implementations (<code>HMaestroVirtualController</code> for Xbox / PlayStation / Nintendo / Extended, <code>HMaestroVRController</code> for VR, plus MIDI and KB+M)</li>
 <li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: HM SDK surface, thread-pool lifecycle, OpenXInput shim, bubble-up cascade</li>
 <li><a href="../sdl3-integration/">SDL3 Integration</a>: SDL3 P/Invoke, device enumeration, state reading, haptic</li>
 <li><a href="../build-and-publish/">Build and Publish</a>: Build commands, publish configuration, CI/CD</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

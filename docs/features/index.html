@@ -1960,6 +1960,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2441,6 +2445,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -2741,7 +2801,7 @@ touch.</p>
 </tr>
 <tr>
 <td><a href="virtual-controllers/">Virtual Controllers</a></td>
-<td>What games see: Xbox, PlayStation, Switch Pro, Extended, KBM, MIDI</td>
+<td>What games see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR</td>
 </tr>
 <tr>
 <td><a href="settings/">Settings</a></td>
@@ -2786,6 +2846,10 @@ when that device has the matching hardware.</p>
 <tr>
 <td><a href="bass-shakers/">Bass Shakers</a></td>
 <td>Game rumble and force feedback routed to an audio output as low-frequency tones for bass shakers and subwoofers. Shown on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>SOCD cleaning and Keep Controller Awake, the two cards that shape the slot's output right before it reaches the game. Hidden on MIDI and VR slots. SOCD is documented on <a href="mappings/">Mappings</a></td>
 </tr>
 </tbody>
 </table>
@@ -2869,9 +2933,17 @@ when that device has the matching hardware.</p>
 <td><a href="input-precision/">Input Precision</a></td>
 <td>Polling rate, resolution, and latency across the whole pipeline</td>
 </tr>
+<tr>
+<td><a href="vr-controllers/">Virtual VR Controllers</a></td>
+<td>A SteamVR left and right hand pair driven from one slot</td>
+</tr>
+<tr>
+<td><a href="headset-motion/">Headset Head Tracking</a></td>
+<td>Head rotation from a Sony headset as a motion source</td>
+</tr>
 </tbody>
 </table>
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

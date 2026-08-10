@@ -384,6 +384,8 @@ private static void LoadEmbeddedGamepadMappings()
 | `SDL_HINT_JOYSTICK_HIDAPI_WII` | `"1"` | Enables SDL's Wii HIDAPI driver (#116). Surfaces the Bluetooth-paired Wii Remote / Nunchuk / Classic / Wii U Pro and lights the player LED. Relies on the fork's `hid_write` fix (`hifihedgehog/SDL#2`). |
 | `SDL_HINT_JOYSTICK_BLE_SWITCH2` | `"1"` | Enables the fork's Bluetooth-LE Switch 2 driver (`hifihedgehog/SDL#5`, #153). Switch 2 controllers speak a custom BLE GATT service, not HID-over-Bluetooth, so hidapi can't see them. Runs a BLE advertisement scan while PadForge is open. |
 | `SDL_HINT_JOYSTICK_BLE_SWITCH2_MOUSE` | `"1"` | Enables the fork's Joy-Con 2 optical-mouse axes (`hifihedgehog/SDL#8`, #154). The BLE driver posts absolute 16-bit mouse counters on joystick axes 6/7 (raw axis count 8), read as "Mouse Motion X/Y" sources. |
+| `SDL_HINT_JOYSTICK_HIDAPI_SWITCH_SHAPED_RUMBLE` | `"1"` | Enables the fork's frequency-shaped Switch rumble (#271 item 4, `hifihedgehog/SDL#25`). Upstream drives the Switch LRAs at two fixed carriers with amplitude-only tables. With the hint on, each motor's intensity also sweeps its frequency band (low ~41-160 Hz, high 160-320 Hz) with attack and decay transients. Classic LRA packet only, Switch 2 encoding untouched. |
+| `SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER` | `"1"` | Enables the fork's Switch 2 BLE magnetometer channel (#271 item 5, same fork commit). Three raw int16 axes after the mouse counters, availability riding the raw axis count (9 = magnetometer, 11 = mouse plus magnetometer). PadForge does not consume them yet. The hint keeps the axes observable on a bench. |
 | `SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER` | `"1"` | Enables SDL's Sony-sixaxis PS3 driver (#194). Claims a DualShock 3 in DsHidMini SXS mode, the only mode that serves motion, and reads its accelerometer, yaw gyro, and 10 pressure axes. Do **not** also set `SDL_HINT_JOYSTICK_HIDAPI_PS3` (the regular PS3 driver outranks sixaxis and writes at the device). |
 | `SDL_HINT_VIDEO_ALLOW_SCREENSAVER` | `"1"` | Counteracts `SDL_INIT_VIDEO`'s default screensaver suppression. PadForge only needs VIDEO for keyboard/mouse enumeration. |
 | `SDL_HINT_JOYSTICK_RAWINPUT` | **NOT SET** | **Must not be "1".** SDL3's raw input backend conflicts with XInput. Raw input claims Xbox controllers first, leaving XInput with no unclaimed devices. Discovered via Cemu comparison. Omitted (not "0" either) so SDL defaults to XInput for Xbox and HIDAPI for others. |
@@ -571,6 +573,8 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `IsBalanceBoard` | `bool` | Wii Balance Board (#146) |
 | `HasJoyConIr` | `bool` | Standalone right Joy-Con NIR camera surfaced as an "IR Brightness" source (#151) |
 | `HasJoyCon2Mouse` | `bool` | Joy-Con 2 L/R optical mouse surfaced as "Mouse Motion X/Y" sources (#154) |
+| `HasSwitch2Magnetometer` | `bool` | Switch 2 BLE magnetometer stream (#271 item 5). Raw wire units land on the wrapper-local `Switch2MagX/Y/Z` fields, not on `CustomInputState`, so the Remote Link codec's full Block enum stays untouched |
+| `Switch2MagActive` | `bool` | False until the first nonzero magnetometer sample, because a zero triple must not feed the compass |
 | `HasExtraGenericAxes` | `bool` | Raw axes beyond the standard six, surfaced as generic "Axis N" sources (#193) |
 | `SupportedButtonIndices` | `int[]` | Sparse list of button positions the device actually exposes (Devices preview gating) |
 | `GamepadHandle` | `IntPtr` | Alias of `GameController`, used by the DualSense passthrough dispatcher |
@@ -655,7 +659,13 @@ OpenHaptic()
     |        for gamepads than haptic LeftRight effects. Haptic is only needed
     |        for devices where simple rumble doesn't work.
     |
-    |-- NO: Keep haptic open, pick best strategy:
+    |-- NO: Keep haptic open. Store Haptic, HapticFeatures, then
+            |
+            NumHapticAxes = SDL_GetNumHapticAxes(haptic)
+            |   1 axis -> wheels (single-axis FFB: Spring/Damper on steering axis)
+            |   2+ axes -> joysticks, gamepads (X+Y axis condition effects)
+            |
+            Pick best strategy:
             |
             (features & SDL_HAPTIC_LEFTRIGHT)?
             |-- YES: HapticStrategy = LeftRight (best. Independent L/R motors)
@@ -667,11 +677,7 @@ OpenHaptic()
             |-- YES: HapticStrategy = Constant (acceptable. Steady force)
             |
             None of the above?
-            |-- Close haptic, return (no usable effect types)
-            |
-            NumHapticAxes = SDL_GetNumHapticAxes(haptic)
-            |   1 axis -> wheels (single-axis FFB: Spring/Damper on steering axis)
-            |   2+ axes -> joysticks, gamepads (X+Y axis condition effects)
+            |-- Close haptic, clear Haptic + HapticFeatures, return
             |
             (features & SDL_HAPTIC_GAIN)?
             |-- YES: SDL_SetHapticGain(haptic, 100) -- maximize gain
@@ -1274,7 +1280,7 @@ Two paths depending on whether you are a user contributing a mapping or a mainta
 #### Maintainer integration path
 
 1. Take the merged mapping submission. SDL GUID and raw indices are in the issue body.
-2. Construct the SDL gamepad mapping string. Format: `GUID,Device Name,a:bN,b:bN,x:bN,y:bN,leftshoulder:bN,rightshoulder:bN,leftx:aN,lefty:aN,righttrigger:aN,…,platform:Windows,`. See the file's existing entries for examples (DS3 DsHidMini, G920, etc.).
+2. Construct the SDL gamepad mapping string. Format: `GUID,Device Name,a:bN,b:bN,x:bN,y:bN,leftshoulder:bN,rightshoulder:bN,leftx:aN,lefty:aN,righttrigger:aN,…,platform:Windows,`. The file currently carries one entry, the DS3 DsHidMini line above. Use it as the shape reference.
 3. Append the line to `PadForge.App/gamecontrollerdb_padforge.txt`.
 4. Build and deploy locally. Restart PadForge with the device plugged in and confirm SDL recognizes it as a gamepad on the Devices page (the Submit Mapping button should now disappear, indicating SDL has it mapped).
 5. Commit and push. The file is an `<EmbeddedResource>` in `PadForge.App.csproj`, so it ships inside `PadForge.exe`; no separate file deployment.
@@ -1327,8 +1333,8 @@ The branch began with six commits spanning four logical features. v4 consumes su
 
 | # | Feature | SDL3 commits | Paired non-SDL work |
 |---|---------|--------------|---------------------|
-| 1 | **Switch 2 Pro Controller**: WinUSB bulk I/O on Windows. The controller is a USB composite device with two interfaces. SDL needs to drive HID Interface 0 for input and WinUSB Interface 1 for the bulk init sequence. | `7c4118c49` | — |
-| 2 | **HIDMaestro virtual-controller filter** (PadForge-specific): `SDL_GetJoysticks` walks each device's PnP parent chain and drops any device whose hardware-ID list contains the `HIDMAESTRO` substring, with a fast-path substring match on the interface symlink. Stops SDL from re-enumerating the virtual controllers PadForge just created. | `60d06e2f4` (main filter) + `14f883872` (HMXINPUT dead-branch cleanup) | — |
+| 1 | **Switch 2 Pro Controller**: WinUSB bulk I/O on Windows. The controller is a USB composite device with two interfaces. SDL needs to drive HID Interface 0 for input and WinUSB Interface 1 for the bulk init sequence. | `7c4118c49` | None |
+| 2 | **HIDMaestro virtual-controller filter** (PadForge-specific): `SDL_GetJoysticks` walks each device's PnP parent chain and drops any device whose hardware-ID list contains the `HIDMAESTRO` substring, with a fast-path substring match on the interface symlink. Stops SDL from re-enumerating the virtual controllers PadForge just created. | `60d06e2f4` (main filter) + `14f883872` (HMXINPUT dead-branch cleanup) | None |
 | 3 | **16 XInput controllers**: bumps `XUSER_MAX_COUNT` from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, not just the first four. | `ba25d3671` | [`hifihedgehog/OpenXinput`](https://github.com/hifihedgehog/OpenXinput) branch `OpenXinput1_4` commit `45c91b1` (CMake default bump) |
 | 4 | **XInput Share button**: reads OpenXInput's `XInputGetSystemButtons` ordinal 109 and exposes Share at raw button 11 + the gamepad-db `misc1` mapping. | `1b266767c` (loader + dispatch) + `3fbf1429f` (gamepad-db `misc1:b11` mapping) | Uses an existing OpenXInput export. No OpenXInput change needed. |
 
@@ -1400,9 +1406,9 @@ PadForge needs no code change for the extension swap. `SdlDeviceWrapper.BuildIns
 
 #### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_WII`
 
-Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:601`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:49`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
+Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:695`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:50`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
 
-`InputManager.RescanWiiControllers()` (`InputManager.cs:906`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it after the `PairDeviceDialog` closes (`MainWindow.xaml.cs:719`).
+`InputManager.RescanWiiControllers()` (`InputManager.cs:1045`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it after the `PairDeviceDialog` closes (`MainWindow.xaml.cs:808`).
 
 ### Build Instructions
 
@@ -1430,4 +1436,4 @@ Copy the output `SDL3.dll` into `PadForge.App/Resources/SDL3/x64/` before publis
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.2.0.*

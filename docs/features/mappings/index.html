@@ -2512,6 +2512,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2973,6 +2977,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3961,11 +4021,11 @@
 </tr>
 <tr>
 <td><strong>Trim Speed</strong></td>
-<td>How fast a fully deflected stick slides the level, in percent of trigger range per second. 100 sweeps empty to full in one second.</td>
+<td>How fast a fully deflected stick slides the level, in percent of trigger range per second. 100 sweeps empty to full in one second. Default 100.</td>
 </tr>
 <tr>
 <td><strong>Reset on Release</strong></td>
-<td>On, releasing the trigger snaps the held level back to full so the next press starts at 100%. Off keeps the trimmed level across releases.</td>
+<td>On by default. Releasing the trigger snaps the held level back to full so the next press starts at 100%. Off keeps the trimmed level across releases.</td>
 </tr>
 </tbody>
 </table>
@@ -4244,7 +4304,7 @@
 </blockquote>
 <hr />
 <h2 id="socd-cleaning">SOCD cleaning<a class="headerlink" href="#socd-cleaning" title="Permanent link">&para;</a></h2>
-<p>The <strong>Simultaneous Opposite Cardinal Directions (SOCD)</strong> card sits directly below the mapping grid. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.</p>
+<p>The <strong>Simultaneous Opposite Cardinal Directions (SOCD)</strong> card lives on the slot-tier <strong>Output</strong> tab, alongside Keep Controller Awake. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.</p>
 <table>
 <thead>
 <tr>
@@ -4278,7 +4338,7 @@
 <li>The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.</li>
 <li>The card's Reset All turns the mode off and removes every pair.</li>
 </ul>
-<p>Keyboard + Mouse slots show a twin card that cleans opposing key pairs on the virtual keyboard output instead. See <a href="../controller-slots/">Controller Slots</a>. MIDI slots have neither card.</p>
+<p>Keyboard + Mouse slots show a twin card on the same tab that cleans opposing key pairs on the virtual keyboard output instead. See <a href="../controller-slots/">Controller Slots</a>. MIDI and VR slots have no Output tab at all.</p>
 <hr />
 <h2 id="raw-descriptor-names">Raw descriptor names<a class="headerlink" href="#raw-descriptor-names" title="Permanent link">&para;</a></h2>
 <p>For unrecognized devices or Force Raw Joystick Mode, the source picker shows numbered descriptors instead of friendly names.</p>
@@ -4421,8 +4481,27 @@
 </tr>
 </tbody>
 </table>
-<p>Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (<strong>Gyro Pitch</strong>, <strong>Touchpad 1 Finger 1 X</strong>), so they have no Gamepad-prefixed twin. Two more device-portable entries sit beside the family on recognized gamepads: <strong>Flick Stick (Right Stick)</strong> and <strong>Flick Stick (Left Stick)</strong>, which read the whole stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See <a href="../stick-deadzones/#flick-stick">flick stick</a>.</p>
-<p>The source dropdown leads with an <strong>(Any device)</strong> group carrying the Gamepad family plus the device-portable gyro, touchpad, and flick stick entries. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
+<p>Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (<strong>Gyro Pitch</strong>, <strong>Touchpad 1 Finger 1 X</strong>), so they have no Gamepad-prefixed twin.</p>
+<p>Four more entries sit beside the twenty-five on a recognized gamepad, because each reads a whole stick rather than one input:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it reads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flick Stick (Right Stick)</strong>, <strong>Flick Stick (Left Stick)</strong></td>
+<td>The stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See <a href="../stick-deadzones/#flick-stick">flick stick</a>.</td>
+</tr>
+<tr>
+<td><strong>Gamepad Left Stick Ring</strong>, <strong>Gamepad Right Stick Ring</strong></td>
+<td>The stick pair's deflection magnitude, clamped to 0–1. On a button target the Axis-to-Button Deadzone becomes the ring radius, and <strong>Invert</strong> selects the inner ring instead of the outer one.</td>
+</tr>
+</tbody>
+</table>
+<p>The source dropdown leads with an <strong>(Any device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Gamepad Left Stick Touch</strong>, <strong>Gamepad Right Stick Touch</strong>, <strong>Gamepad Left Grip Touch</strong>, and <strong>Gamepad Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, <strong>Gyro Lean X</strong> and <strong>Gyro Lean Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
 <p>Profiles imported from the <a href="../../guides/steam-workshop-import/">Steam Workshop</a> are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source <strong>Acceleration</strong> slider.</p>
 <hr />
 <h2 id="named-input-device-sources">Named input-device sources<a class="headerlink" href="#named-input-device-sources" title="Permanent link">&para;</a></h2>
@@ -4617,7 +4696,7 @@
 <li><a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>: imported community configs are built from Gamepad sources.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

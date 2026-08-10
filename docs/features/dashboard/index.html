@@ -2212,6 +2212,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2693,6 +2697,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3154,7 +3214,7 @@
 </tr>
 <tr>
 <td><strong>Drivers</strong></td>
-<td>Install status for <a href="../driver-management/">HidHide and MIDI Services</a>.</td>
+<td>Install status for <a href="../driver-management/">HidHide, MIDI Services, and SteamVR</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -3247,7 +3307,7 @@
 <tr>
 <td><strong>Type track</strong></td>
 <td>Second row</td>
-<td>A recessed segmented strip of six type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI. The active type is lit ember. The others are dim. Click a dim icon to switch type. When Windows MIDI Services is missing, the MIDI icon alone shows a no-entry cursor and a tooltip saying it's required. The other types have no such gate.</td>
+<td>A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember. The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: with Windows MIDI Services missing the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate.</td>
 </tr>
 <tr>
 <td><strong>Per-type instance number</strong></td>
@@ -3326,7 +3386,7 @@
 </table>
 <p>Click anywhere on a card (except the delete or power flame) to open the slot's configuration: <a href="../mappings/">Button and Axis Mappings</a>, <a href="../stick-deadzones/">Stick Deadzones</a>, <a href="../trigger-deadzones/">Trigger Deadzones</a>, <a href="../force-feedback/">Force Feedback</a>, <a href="../adaptive-triggers/">Adaptive Triggers</a>, <a href="../lighting/">Lighting</a>, and <a href="../../guides/macros/">Macros</a>.</p>
 <h3 id="reordering-slots">Reordering slots<a class="headerlink" href="#reordering-slots" title="Permanent link">&para;</a></h3>
-<p>Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, and MIDI each reorder on their own. Cross-type drops are ignored. The per-type instance number (the <code>#2</code> on the second Xbox slot) updates as soon as you drop.</p>
+<p>Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, and VR each reorder on their own. Cross-type drops are ignored. The per-type instance number (the <code>#2</code> on the second Xbox slot) updates as soon as you drop.</p>
 <p>Same-profile reorders are a pointer swap. No kernel rebuild, no game disconnection. Different-profile reorders rebuild only the positions whose profile changed. See <a href="../controller-slots/#what-happens-on-reorder">Controller Slots</a>.</p>
 <h3 id="add-controller">Add Controller<a class="headerlink" href="#add-controller" title="Permanent link">&para;</a></h3>
 <p>An <strong>Add Controller</strong> card sits at the bottom when at least one type still has room. Click it to pick a type. The card disappears when every type is at capacity. See <a href="../controller-slots/">Controller Slots</a> for limits.</p>
@@ -3378,7 +3438,7 @@
 </tr>
 <tr>
 <td><strong>Status indicator</strong></td>
-<td>A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on <code>&lt;url&gt;</code>".</td>
+<td>A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on <code>&lt;url&gt;</code>" until clients connect, then "Running (<code>&lt;n&gt;</code> clients)".</td>
 </tr>
 </tbody>
 </table>
@@ -3415,7 +3475,7 @@
 <h3 id="identity-protection">Identity Protection<a class="headerlink" href="#identity-protection" title="Permanent link">&para;</a></h3>
 <p>Sets how this PC stores its pairing identity. <strong>Secure — this PC only</strong> keys it to the machine. The portable modes carry your pairings on a thumb drive between machines.</p>
 <h3 id="paired-pcs-and-nearby-pcs">Paired PCs and Nearby PCs<a class="headerlink" href="#paired-pcs-and-nearby-pcs" title="Permanent link">&para;</a></h3>
-<p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, and revoke, plus a revoke-all. <strong>Nearby PCs</strong> lists peers discovered on the network. <strong>Connect by address</strong> reaches a peer by IP when discovery can't find it.</p>
+<p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, and revoke, plus <strong>Revoke all</strong>. <strong>Nearby PCs (Not Paired)</strong> lists peers discovered on the network. <strong>Or Connect by Address (Advanced)</strong> reaches a peer by IP when discovery can't find it.</p>
 <p>See <a href="../../guides/remote-link/">Remote Link</a> for full details.</p>
 <hr />
 <h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
@@ -3471,7 +3531,7 @@
 </tr>
 </tbody>
 </table>
-<p>The overlay tracks 1-2 finger contacts and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch is supported when the OS reports touch events. Mouse drag falls back to single-finger.</p>
+<p>The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.</p>
 <hr />
 <h2 id="drivers">Drivers<a class="headerlink" href="#drivers" title="Permanent link">&para;</a></h2>
 <p>Install status for each driver. Name on the left, status on the right.</p>
@@ -3494,9 +3554,14 @@
 <td>MIDI virtual controller output through Windows MIDI Services. Requires Windows 11 24H2 (build 26100) or later.</td>
 <td>You want to send MIDI to DAWs, synths, or VJ tools.</td>
 </tr>
+<tr>
+<td><strong>SteamVR</strong></td>
+<td>The VR runtime the <a href="../vr-controllers/">VR slot type</a> drives.</td>
+<td>You want a VR virtual controller.</td>
+</tr>
 </tbody>
 </table>
-<p>When Windows MIDI Services is missing, the MIDI type icon on a slot card shows a no-entry cursor and a tooltip saying it's required. Install or remove drivers from <a href="../settings/">Settings</a>. HIDMaestro and the full driver list live on the <a href="../driver-management/">Driver Management</a> page.</p>
+<p>When Windows MIDI Services or SteamVR is missing, that type's icon on a slot card shows a no-entry cursor and a tooltip saying what it needs. Install or remove drivers from <a href="../settings/">Settings</a>. HIDMaestro and the full driver list live on the <a href="../driver-management/">Driver Management</a> page.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3510,7 +3575,7 @@
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

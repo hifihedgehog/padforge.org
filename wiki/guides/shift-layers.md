@@ -114,6 +114,8 @@ When a shift layer engages, a Windows-11-style flyout appears at the bottom of t
 
 The flyout scans every slot, not only the currently-viewed pad. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.
 
+The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Shift layer flyout** toggle, on by default. Turn it off and layers still engage, just without the announcement.
+
 ---
 
 ## Multi-activator resolution
@@ -191,4 +193,4 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

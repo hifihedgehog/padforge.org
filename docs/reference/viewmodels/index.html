@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2531,6 +2535,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#driver-status-steamvr-49" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Status: SteamVR (#49)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#driver-uninstall-guards" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3248,10 +3263,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#slot-socd-245" class="md-nav__link">
+  <a href="#output-tab-slot-socd-245-and-keep-controller-awake" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Slot SOCD (#245)
+        Output tab: Slot SOCD (#245) and Keep Controller Awake
       
     </span>
   </a>
@@ -4353,6 +4368,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#persona-haptics-271-item-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persona haptics (#271 item 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headphone-jack-and-audio-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headphone jack and audio path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#macro-lightbar-override-63" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4765,6 +4802,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -5318,6 +5411,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#driver-status-steamvr-49" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Status: SteamVR (#49)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#driver-uninstall-guards" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6035,10 +6139,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#slot-socd-245" class="md-nav__link">
+  <a href="#output-tab-slot-socd-245-and-keep-controller-awake" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Slot SOCD (#245)
+        Output tab: Slot SOCD (#245) and Keep Controller Awake
       
     </span>
   </a>
@@ -7140,6 +7244,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#persona-haptics-271-item-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persona haptics (#271 item 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headphone-jack-and-audio-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headphone jack and audio path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#macro-lightbar-override-63" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7298,6 +7424,7 @@
 <blockquote>
 <p><strong>v4 (2026-07-12):</strong> Refreshed for v4. Remote Link (<code>DashboardViewModel</code> + <code>SettingsViewModel</code>, and the <code>RemoteLinkTrustedPeer</code> / <code>RemoteLinkNearbyPeer</code> rows), the per-(slot, device) <code>DeviceSlotConfig</code> (renamed from <code>PlayStationSlotConfig</code>), <code>KbmSlotConfig</code> (SOCD / Snap Tap), multi-source mapping rows (<code>MappingSourceItem</code>), the mouse-gesture partial, and the Ember dashboard vocabulary all landed since the v3 rewrite. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>. If anything here drifts from the live source, the live source wins.</p>
 <p><strong>v4.1 (2026-07-30):</strong> The Nintendo output type (#215) joins the family. <code>PadViewModel</code> gains the Bass Shakers tab (#236), the slot SOCD card (#240), the flick rotation offset, gyro Acceleration, and the macro Layer dropdown. <code>MacroItem</code> carries the #238 / #253 fire-mode wave and per-macro layer scope (#254). Mapping rows and sources gain Flip Output, per-source Acceleration, and the #251 axis-latch macro actions. The Touchpad partial grows the libinput pointer Response, momentum, and pointer-region cards. <code>DeviceSlotConfig</code> adds synthetic touch pressure (#239) and the Switch home-LED lane (#226).</p>
+<p><strong>v4.2:</strong> The VR output type (#49) lands as <code>VirtualControllerType.Vr</code> (6), with a <code>VrControllerIcon</code> sidebar entry, a <code>VrOutputSnapshot</code>, and a SteamVR row in both driver-status surfaces (<code>DashboardViewModel.IsSteamVrInstalled</code>, plus the install / uninstall pair on <code>SettingsViewModel</code>). The pad page grows two slot-tier tabs: Bass Shakers at index 16 and Output at index 17 (SOCD plus Keep Controller Awake). <code>DeviceSlotConfig</code> gains headphone-jack volume, the DualSense audio-output path, and persona haptics, with <code>MacroActionType.HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> (52 / 53) driving the volume. Sony headset head trackers get their own device class (<code>HeadsetMotion</code>, #188). <code>RawHidState</code> replaced the old <code>ExtendedRawState</code>, so the Extended snapshot is now <code>RawHidOutputSnapshot</code>.</p>
 </blockquote>
 <hr />
 <p>All ViewModels live in <code>PadForge.App/ViewModels/</code> (<code>PadForge.ViewModels</code> namespace). Built on <a href="https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/">CommunityToolkit.Mvvm</a> (<code>ObservableObject</code>, <code>RelayCommand</code>).</p>
@@ -7378,7 +7505,7 @@
 <tr>
 <td><code>IconKey</code></td>
 <td><code>string</code></td>
-<td>Resource key for controller type icon (e.g., <code>"XboxControllerIcon"</code>, <code>"DS4ControllerIcon"</code>, <code>"NintendoControllerIcon"</code>, <code>"ExtendedControllerIcon"</code>, <code>"MidiControllerIcon"</code>, <code>"KeyboardMouseControllerIcon"</code>).</td>
+<td>Resource key for controller type icon (e.g., <code>"XboxControllerIcon"</code>, <code>"DS4ControllerIcon"</code>, <code>"NintendoControllerIcon"</code>, <code>"ExtendedControllerIcon"</code>, <code>"MidiControllerIcon"</code>, <code>"KeyboardMouseControllerIcon"</code>, <code>"VrControllerIcon"</code>).</td>
 </tr>
 <tr>
 <td><code>IsEnabled</code></td>
@@ -7404,6 +7531,11 @@
 <td><code>IsVirtualControllerConnected</code></td>
 <td><code>bool</code></td>
 <td>Live virtual controller is alive (created + reporting <code>IsConnected</code>). Drives the sidebar green-vs-yellow indicator so the slot stays green through the HM-inactivity grace window and only turns yellow once the timeout tears the VC down.</td>
+</tr>
+<tr>
+<td><code>IsCreateFailed</code></td>
+<td><code>bool</code></td>
+<td>The slot's latest virtual-controller create attempt failed (engine createFailed latch). Distinct from awaiting devices, so the flame tooltip does not blame absent devices for a failed create.</td>
 </tr>
 </tbody>
 </table>
@@ -7497,7 +7629,7 @@
 <td><code>StatusText</code></td>
 <td><code>string</code></td>
 <td><code>"Ready"</code></td>
-<td>Status bar text.</td>
+<td>Status bar text. Plain writes are info-class and decay after ~5 s (<code>StatusDecayMs</code>). Every write restamps the decay window.</td>
 </tr>
 <tr>
 <td><code>IsEngineRunning</code></td>
@@ -7607,6 +7739,14 @@
 <td><code>RefreshCommands()</code></td>
 <td>Notifies <code>CanExecuteChanged</code> on start/stop commands. Call after <code>IsEngineRunning</code> changes.</td>
 </tr>
+<tr>
+<td><code>SetStatus(string, bool persist = false)</code></td>
+<td>Writes the status bar with an explicit class. <code>persist: true</code> (failures, prompts a later write always terminates) exempts the message from the decay sweep until the next write.</td>
+</tr>
+<tr>
+<td><code>ClearDecayedStatus()</code></td>
+<td>Clears a decayed info message. Re-checks <code>IsStatusDecayDue</code> first, so a write that lands mid-sweep wins. Called from MainWindow's 5 s driver-status timer.</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -7701,7 +7841,7 @@
 </tbody>
 </table>
 <h3 id="driver-status">Driver Status<a class="headerlink" href="#driver-status" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro is bundled with PadForge as a managed SDK and ships with the executable, so the dashboard does not surface an install/uninstall row for it. HidHide and Windows MIDI Services are optional system drivers and have their own rows.</p>
+<p>HIDMaestro is bundled with PadForge as a managed SDK and ships with the executable, so the dashboard does not surface an install/uninstall row for it. HidHide, Windows MIDI Services, and SteamVR are optional system components and have their own rows.</p>
 <table>
 <thead>
 <tr>
@@ -7728,6 +7868,16 @@
 </tr>
 <tr>
 <td><code>MidiServicesStatusText</code></td>
+<td><code>string</code></td>
+<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+</tr>
+<tr>
+<td><code>IsSteamVrInstalled</code></td>
+<td><code>bool</code></td>
+<td>SteamVR present, which gates the VR slot type (#49). Kept current by MainWindow's periodic status refresh alongside the MIDI Services flag. Notifies <code>SteamVrStatusText</code>.</td>
+</tr>
+<tr>
+<td><code>SteamVrStatusText</code></td>
 <td><code>string</code></td>
 <td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
 </tr>
@@ -7956,6 +8106,18 @@
 <td>Radial / touch menu overlay (#9): render the <code>MenuOverlayWindow</code> HUD while a menu is engaged. When off, menus still hover and commit blind (the runtime never depends on the window).</td>
 </tr>
 <tr>
+<td><code>EnableShiftLayerFlyout</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Show the shift-layer flyout while a slot sits on a non-Base layer. Purely a display of engagement state the poll thread already computes, so turning it off changes nothing about which layer is active.</td>
+</tr>
+<tr>
+<td><code>EnableProfileOverlay</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Show the profile-switch overlay when a profile changes. The switch still happens when off, this only suppresses the announcement.</td>
+</tr>
+<tr>
 <td><code>TouchpadOverlayOpacity</code></td>
 <td><code>double</code></td>
 <td><code>0.25</code></td>
@@ -8042,7 +8204,11 @@
 <tbody>
 <tr>
 <td><code>RefreshActiveSlots(IList&lt;int&gt;, bool)</code></td>
-<td>Rebuilds <code>SlotSummaries</code> for active slots. Updates display labels, sets <code>ShowAddController</code>. Called by InputService.</td>
+<td>Rebuilds <code>SlotSummaries</code> for active slots. Updates display labels, re-applies the remembered focus selection, sets <code>ShowAddController</code>. Called by InputService.</td>
+</tr>
+<tr>
+<td><code>SetSelectedPad(int)</code></td>
+<td>Marks the slot whose pad page is in focus so its card wears the selection glow. <code>-1</code> clears it. The index is remembered, so a later <code>RefreshActiveSlots</code> rebuild re-applies the flag to fresh summaries.</td>
 </tr>
 </tbody>
 </table>
@@ -8106,13 +8272,19 @@
 <td><code>IsVirtualControllerConnected</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>Virtual controller connected.</td>
+<td>Virtual controller connected. Notifies <code>StatusText</code>.</td>
 </tr>
 <tr>
 <td><code>IsInitializing</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>Virtual controller initializing.</td>
+<td>Virtual controller initializing. Notifies <code>StatusText</code>.</td>
+</tr>
+<tr>
+<td><code>IsCreateFailed</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>The slot's latest create attempt failed (engine createFailed latch). Its own status: a failed slot with online devices is neither forging nor awaiting devices. Notifies <code>StatusText</code>.</td>
 </tr>
 <tr>
 <td><code>MappedDeviceCount</code></td>
@@ -8136,7 +8308,7 @@
 <td><code>StatusText</code></td>
 <td><code>string</code></td>
 <td><code>"Idle"</code></td>
-<td>Ember status vocabulary (#175). The getter returns <code>Dashboard_StatusCold</code> (<code>"Cold"</code>) for an enabled, non-initializing slot with zero mappings. It returns <code>Main_AwaitingDevices</code> (<code>"Awaiting devices"</code>) for a mapped slot with nothing connected once the live VC is gone. While the VC survives the inactivity grace (60 s default), a device dropout must not flap the card to awaiting. Every other case passes through the engine-assigned setter value: <code>Main_Active</code> (<code>"Forging"</code>) when a device is online, <code>Common_Idle</code> (<code>"Idle"</code>), <code>Common_Disabled</code> (<code>"Disabled"</code>), or <code>Main_Initializing</code> (<code>"Initializing"</code>). The old <code>"No mapping"</code> string is intercepted by the Cold branch.</td>
+<td>Ember status vocabulary (#175). For an enabled, non-initializing slot the getter checks three branches in order. A failed create returns <code>Main_VcFailed</code> first. Then zero mappings returns <code>Dashboard_StatusCold</code> (<code>"Cold"</code>). It returns <code>Main_AwaitingDevices</code> (<code>"Awaiting devices"</code>) for a mapped slot with nothing connected once the live VC is gone. While the VC survives the inactivity grace (60 s default), a device dropout must not flap the card to awaiting. Every other case passes through the engine-assigned setter value: <code>Main_Active</code> (<code>"Forging"</code>) when a device is online, <code>Common_Idle</code> (<code>"Idle"</code>), <code>Common_Disabled</code> (<code>"Disabled"</code>), or <code>Main_Initializing</code> (<code>"Initializing"</code>). The old <code>"No mapping"</code> string is intercepted by the Cold branch.</td>
 </tr>
 <tr>
 <td><code>IsEnabled</code></td>
@@ -8483,6 +8655,11 @@
 <td><code>bool</code></td>
 <td>Static: <code>true</code> if OS build &gt;= 26100 (Win11 24H2).</td>
 </tr>
+<tr>
+<td><code>MidiOsSupported</code></td>
+<td><code>bool</code></td>
+<td>Instance forwarder over the static above. A XAML <code>Binding</code> path resolves against the DataContext instance and cannot reach a static member, so SettingsPage binds this one. Never raises <code>PropertyChanged</code> because the OS build cannot change while the app runs.</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -8503,6 +8680,83 @@
 <td><code>UninstallMidiServicesCommand</code></td>
 <td><code>IsMidiServicesInstalled &amp;&amp; !HasAnyMidiSlots()</code></td>
 <td>Raises <code>UninstallMidiServicesRequested</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="driver-status-steamvr-49">Driver Status: SteamVR (#49)<a class="headerlink" href="#driver-status-steamvr-49" title="Permanent link">&para;</a></h3>
+<p>The VR slot type needs SteamVR present. PadForge can install it Steam-free through steamcmd, and it only offers to remove the copy it created itself.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IsSteamVrInstalled</code></td>
+<td><code>bool</code></td>
+<td>A SteamVR install of either shape is present (Steam client, or the Steam-free steamcmd one). Notifies <code>SteamVrStatusText</code> and <code>ShowSteamVrUninstall</code>.</td>
+</tr>
+<tr>
+<td><code>SteamVrStatusText</code></td>
+<td><code>string</code></td>
+<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+</tr>
+<tr>
+<td><code>SteamVrInstallDir</code></td>
+<td><code>string</code></td>
+<td>Where the Steam-free install will land (seeded from <code>DriverInstaller.SteamVrInstallDir</code>). Not persisted by PadForge: after a successful install the HIDMaestro path hint is the durable record.</td>
+</tr>
+<tr>
+<td><code>IsSteamVrOwned</code></td>
+<td><code>bool</code></td>
+<td>The present install is the Steam-free one PadForge created. A Steam-client install is never PadForge's to remove.</td>
+</tr>
+<tr>
+<td><code>ShowSteamVrUninstall</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned</code>.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>CanExecute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>InstallSteamVrCommand</code></td>
+<td><code>!IsSteamVrInstalled</code></td>
+<td>Raises <code>InstallSteamVrRequested</code>.</td>
+</tr>
+<tr>
+<td><code>UninstallSteamVrCommand</code></td>
+<td><code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned</code></td>
+<td>Raises <code>UninstallSteamVrRequested</code>.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>InstallSteamVrRequested</code></td>
+<td>Install SteamVR Steam-free.</td>
+</tr>
+<tr>
+<td><code>UninstallSteamVrRequested</code></td>
+<td>Remove the PadForge-owned install.</td>
 </tr>
 </tbody>
 </table>
@@ -8745,21 +8999,27 @@
 </tr>
 <tr>
 <td><code>ClearWorkshopCacheCommand</code></td>
-<td><code>ICommand</code></td>
+<td><code>RelayCommand</code></td>
 <td></td>
-<td>Raised to MainWindow's <code>OnClearWorkshopCache</code> (empties <code>SteamWorkshopCache</code>).</td>
+<td>Raises <code>ClearWorkshopCacheRequested</code>, handled by MainWindow (empties <code>SteamWorkshopCache</code>).</td>
 </tr>
 <tr>
 <td><code>CheckWorkshopUpdatesCommand</code></td>
-<td><code>ICommand</code></td>
+<td><code>RelayCommand</code></td>
 <td></td>
-<td>Raised to MainWindow's <code>OnCheckWorkshopUpdates</code> (batched provenance check).</td>
+<td>Raises <code>CheckWorkshopUpdatesRequested</code>, handled by MainWindow (batched provenance check).</td>
 </tr>
 <tr>
 <td><code>BrowseCommunityConfigsCommand</code></td>
-<td><code>ICommand</code></td>
+<td><code>RelayCommand</code></td>
 <td></td>
 <td>The Profiles-page entry. No CanExecute gate: with the opt-in off the dialog opens on its cold state and offers the enable step.</td>
+</tr>
+<tr>
+<td><code>BrowseStarterProfilesCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td></td>
+<td>Opens the starter-profile gallery (#256) through <code>BrowseStarterProfilesRequested</code>. Always enabled: the catalog ships in the box, so there is no opt-in and no network.</td>
 </tr>
 </tbody>
 </table>
@@ -9387,24 +9647,64 @@
 <td>Selected device exposes a touchpad surface (DS4 / DualSense / Steam Controller / Steam Deck / overlay touchpad).</td>
 </tr>
 <tr>
+<td><code>IsMidiDevice</code></td>
+<td><code>bool</code></td>
+<td>Selected device is a MIDI input (#128). Drives the live piano / CC preview off <code>LiveMidi</code>.</td>
+</tr>
+<tr>
+<td><code>IsNfcDevice</code></td>
+<td><code>bool</code></td>
+<td>Selected device is an NFC reader (#150). Populates <code>NfcTags</code>.</td>
+</tr>
+<tr>
+<td><code>IsConsumerDevice</code></td>
+<td><code>bool</code></td>
+<td>Selected device is a Consumer Control collection (#168). Populates <code>ConsumerButtons</code>.</td>
+</tr>
+<tr>
+<td><code>IsHeadsetMotionDevice</code></td>
+<td><code>bool</code></td>
+<td>Selected device is a Sony headset head tracker (#188). Collapses the raw Axes / Buttons sections, since a motion-only source has neither and the gyro readout is its whole preview.</td>
+</tr>
+<tr>
+<td><code>NfcTags</code></td>
+<td><code>ObservableCollection&lt;NfcTagDisplayItem&gt;</code></td>
+<td>Registered-tag rows for the NFC preview. Rebuilt by <code>RebuildNfcTags()</code>.</td>
+</tr>
+<tr>
+<td><code>ConsumerButtons</code></td>
+<td><code>ObservableCollection&lt;ConsumerButtonDisplayItem&gt;</code></td>
+<td>Named media-key chips for the Consumer Control preview.</td>
+</tr>
+<tr>
+<td><code>LiveMidi</code></td>
+<td><code>MidiInputState</code></td>
+<td>Latest MIDI input snapshot the piano / CC preview polls. Plain property, no change notification.</td>
+</tr>
+<tr>
 <td><code>HasTouchpadData</code></td>
 <td><code>bool</code></td>
 <td>At least one finger is currently in contact.</td>
 </tr>
 <tr>
-<td><code>TouchpadX0</code> / <code>TouchpadY0</code></td>
+<td><code>TouchpadX0</code>–<code>TouchpadX4</code> / <code>TouchpadY0</code>–<code>TouchpadY4</code></td>
 <td><code>double</code></td>
-<td>First finger normalized position (0.0–1.0).</td>
+<td>Per-finger normalized position (0.0–1.0) on the first pad. Five contacts, not two.</td>
 </tr>
 <tr>
-<td><code>TouchpadX1</code> / <code>TouchpadY1</code></td>
-<td><code>double</code></td>
-<td>Second finger normalized position.</td>
-</tr>
-<tr>
-<td><code>TouchpadDown0</code> / <code>TouchpadDown1</code></td>
+<td><code>TouchpadDown0</code>–<code>TouchpadDown4</code></td>
 <td><code>bool</code></td>
 <td>Per-finger contact state.</td>
+</tr>
+<tr>
+<td><code>HasSecondTouchpadData</code></td>
+<td><code>bool</code></td>
+<td>The device exposes a second pad (Steam Controller / Steam Deck). Switches the labels to <code>TouchpadLabel</code> / <code>Touchpad2Label</code>.</td>
+</tr>
+<tr>
+<td><code>Pad2X0</code>–<code>Pad2X4</code> / <code>Pad2Y0</code>–<code>Pad2Y4</code> / <code>Pad2Down0</code>–<code>Pad2Down4</code></td>
+<td><code>double</code> / <code>bool</code></td>
+<td>Second-pad contacts, same five-finger shape.</td>
 </tr>
 <tr>
 <td><code>MouseMotionX</code></td>
@@ -9575,12 +9875,12 @@
 <tr>
 <td><code>HideDeviceCommand</code></td>
 <td><code>HasSelectedDevice</code></td>
-<td>Sets <code>IsHidden = true</code>, raises <code>HideDeviceRequested</code>.</td>
+<td>Raises <code>HideDeviceRequested</code> with the selected device's InstanceGuid. The row itself stays in the collection until the service refreshes the list.</td>
 </tr>
 <tr>
 <td><code>RemoveDeviceCommand</code></td>
 <td><code>HasSelectedDevice</code></td>
-<td>Removes device, raises <code>RemoveDeviceRequested</code>.</td>
+<td>Removes the row from <code>Devices</code>, clears <code>SelectedDevice</code>, raises <code>RemoveDeviceRequested</code>, then <code>RefreshCounts()</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -9641,16 +9941,24 @@
 </thead>
 <tbody>
 <tr>
-<td><code>RebuildRawStateCollections(int axisCount, IReadOnlyList&lt;int&gt; buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList&lt;ConsumerButtonDisplayItem&gt; consumerButtons)</code></td>
-<td>Rebuilds axis/button/POV collections for a new device. <code>buttonIndices</code> is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both <code>Index</code> and <code>DisplayNumber</code>). The class-flag booleans default to <code>false</code> and <code>consumerButtons</code> to <code>null</code>. Handles keyboard, mouse, touchpad, MIDI, NFC, and Consumer Control cases.</td>
+<td><code>RebuildRawStateCollections(int axisCount, IReadOnlyList&lt;int&gt; buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList&lt;ConsumerButtonDisplayItem&gt; consumerButtons, bool isHeadsetMotion)</code></td>
+<td>Rebuilds axis/button/POV collections for a new device. <code>buttonIndices</code> is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both <code>Index</code> and <code>DisplayNumber</code>). The class-flag booleans default to <code>false</code> and <code>consumerButtons</code> to <code>null</code>. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, and headset-motion cases.</td>
 </tr>
 <tr>
 <td><code>ClearRawState()</code></td>
-<td>Clears all raw state display data.</td>
+<td>Clears all raw state display data, including the class flags and the NFC / Consumer collections.</td>
+</tr>
+<tr>
+<td><code>RebuildNfcTags()</code></td>
+<td>Repopulates <code>NfcTags</code> from the registered-tag store.</td>
 </tr>
 <tr>
 <td><code>RefreshSlotButtons()</code></td>
 <td>Rebuilds <code>ActiveSlotItems</code> from created slots and selected device assignments.</td>
+</tr>
+<tr>
+<td><code>RefreshAllSlotBadges()</code></td>
+<td>Re-derives every row's <code>SlotBadges</code> after a slot set changes.</td>
 </tr>
 <tr>
 <td><code>FindByGuid(Guid)</code></td>
@@ -9658,7 +9966,7 @@
 </tr>
 <tr>
 <td><code>RefreshCounts()</code></td>
-<td>Updates <code>TotalCount</code> and <code>OnlineCount</code>.</td>
+<td>Updates <code>TotalCount</code> and <code>OnlineCount</code>, recomputes every facet count, and re-runs the active filter.</td>
 </tr>
 <tr>
 <td><code>NotifyDeviceHidingChanged(Guid)</code></td>
@@ -9710,6 +10018,21 @@
 <td><code>IsAssigned</code></td>
 <td><code>bool</code></td>
 <td>Selected device is assigned to this slot.</td>
+</tr>
+<tr>
+<td><code>VcType</code></td>
+<td><code>VirtualControllerType</code></td>
+<td>The slot's output type. Notifies the two icon properties below.</td>
+</tr>
+<tr>
+<td><code>TypeGeometry</code></td>
+<td><code>Geometry</code></td>
+<td>Branded type icon path from <code>SlotTypeIconMap.GeometryFor</code>. Null for the glyph-drawn types.</td>
+</tr>
+<tr>
+<td><code>TypeGlyph</code></td>
+<td><code>string</code></td>
+<td>Segoe glyph from <code>SlotTypeIconMap.GlyphFor</code> for the types with no path geometry (MIDI <code>E8D6</code>, Keyboard+Mouse <code>E961</code>, VR <code>F119</code>).</td>
 </tr>
 </tbody>
 </table>
@@ -10068,16 +10391,22 @@
 <td>Device enabled for mapping. Notifies <code>StatusText</code>.</td>
 </tr>
 <tr>
-<td><code>IsHidden</code></td>
-<td><code>bool</code></td>
-<td><code>false</code></td>
-<td>Hidden from the UI.</td>
-</tr>
-<tr>
 <td><code>StatusText</code></td>
 <td><code>string</code></td>
 <td>-</td>
 <td>Computed: <code>"Disabled"</code>, <code>"Online"</code>, or <code>"Offline"</code>.</td>
+</tr>
+<tr>
+<td><code>SerialNumber</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>Device serial, where the transport reports one.</td>
+</tr>
+<tr>
+<td><code>HasVidPid</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: either <code>VendorId</code> or <code>ProductId</code> is non-zero. Gates the VID:PID line.</td>
 </tr>
 </tbody>
 </table>
@@ -10166,9 +10495,19 @@
 <td>Computed: <code>DeviceTypeKey == "Midi"</code>. Drives the live piano / CC preview (#128).</td>
 </tr>
 <tr>
+<td><code>IsHeadsetMotionDevice</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>DeviceTypeKey == "HeadsetMotion"</code>. True for Sony headset head trackers (#188). Collapses the raw Axes / Buttons preview, which a motion-only source has neither of, and gates the repair action.</td>
+</tr>
+<tr>
 <td><code>ShowRegisterNfcTag</code></td>
 <td><code>bool</code></td>
 <td>Computed: <code>DeviceTypeKey == "Nfc"</code>. Shows the Register / Manage NFC Tags button (#150).</td>
+</tr>
+<tr>
+<td><code>IsBluetoothLink</code></td>
+<td><code>bool</code></td>
+<td>Computed by <code>DeviceTransport.IsBluetooth</code> from the device path and VID:PID.</td>
 </tr>
 </tbody>
 </table>
@@ -10200,7 +10539,7 @@
 <tr>
 <td><code>DeviceTypeKey</code></td>
 <td><code>string</code></td>
-<td>English type key (<code>"Gamepad"</code>, <code>"Joystick"</code>, <code>"Wheel"</code>, <code>"FlightStick"</code>, <code>"FirstPerson"</code>, <code>"Supplemental"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>). Notifies <code>DeviceType</code>.</td>
+<td>English type key: <code>"Gamepad"</code>, <code>"Joystick"</code>, <code>"Wheel"</code>, <code>"FlightStick"</code>, <code>"FirstPerson"</code>, <code>"Supplemental"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"ConsumerControl"</code>, <code>"HeadsetMotion"</code>. Anything else falls back to the generic "Device" label. Notifies <code>DeviceType</code>.</td>
 </tr>
 <tr>
 <td><code>DeviceType</code></td>
@@ -10226,6 +10565,16 @@
 <td><code>HasTouchpad</code></td>
 <td><code>bool</code></td>
 <td>Exposes a touchpad surface.</td>
+</tr>
+<tr>
+<td><code>ShowTouchpadCapability</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>HasTouchpad</code> and the device is not itself a touchpad, so a touchpad row does not advertise itself twice.</td>
+</tr>
+<tr>
+<td><code>HasCapabilityIcons</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>HasRumble \|\| HasGyro \|\| ShowTouchpadCapability</code>. Gates the icon strip.</td>
 </tr>
 <tr>
 <td><code>CapabilitiesSummary</code></td>
@@ -10377,7 +10726,7 @@
 <tr>
 <td><code>ShowSubmitMapping</code></td>
 <td><code>bool</code></td>
-<td>Computed: true for joysticks only.</td>
+<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, and <code>"HeadsetMotion"</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -10416,6 +10765,16 @@
 <td><code>SlotNumber</code></td>
 <td><code>int</code></td>
 <td>Sequential global number (1-based among created slots).</td>
+</tr>
+<tr>
+<td><code>VcType</code></td>
+<td><code>VirtualControllerType</code></td>
+<td>The slot's output type, which picks the badge art below.</td>
+</tr>
+<tr>
+<td><code>TypeGeometry</code> / <code>TypeGlyph</code></td>
+<td><code>Geometry</code> / <code>string</code></td>
+<td>Branded icon path, or the Segoe glyph for the types with no path (<code>SlotTypeIconMap</code>).</td>
 </tr>
 </tbody>
 </table>
@@ -10469,7 +10828,13 @@
 <td><code>OutputTypeIndex</code></td>
 <td><code>int</code></td>
 <td>-</td>
-<td>ComboBox SelectedIndex (<code>0</code>=Xbox, <code>1</code>=PlayStation, <code>2</code>=Extended, <code>3</code>=Midi, <code>4</code>=KeyboardMouse). Maps directly to <code>VirtualControllerType</code> enum values.</td>
+<td>ComboBox SelectedIndex, a plain cast over <code>OutputType</code>: <code>0</code>=Xbox, <code>1</code>=PlayStation, <code>2</code>=Extended, <code>3</code>=Midi, <code>4</code>=KeyboardMouse, <code>5</code>=Nintendo, <code>6</code>=Vr. The setter ignores any value <code>Enum.IsDefined</code> rejects.</td>
+</tr>
+<tr>
+<td><code>OutputTypeDisplayName</code></td>
+<td><code>string</code></td>
+<td>-</td>
+<td>Computed: localized type name for the tier-1 header. Re-raised on <code>OutputType</code> and culture changes.</td>
 </tr>
 <tr>
 <td><code>ConfigItemDirtyCallback</code></td>
@@ -10694,6 +11059,7 @@
 <p>Combined slot output values, updated at 30 Hz by <code>UpdateFromEngineState()</code>. Bound to the 2D/3D controller visualizer.</p>
 <p><strong>Buttons (all <code>bool</code>):</strong></p>
 <p><code>ButtonA</code>, <code>ButtonB</code>, <code>ButtonX</code>, <code>ButtonY</code>, <code>LeftShoulder</code>, <code>RightShoulder</code>, <code>ButtonBack</code>, <code>ButtonStart</code>, <code>LeftThumbButton</code>, <code>RightThumbButton</code>, <code>ButtonGuide</code>, <code>DPadUp</code>, <code>DPadDown</code>, <code>DPadLeft</code>, <code>DPadRight</code></p>
+<p>Family extras on the same lane, each driving the 2D overlay and 3D mesh accent for the pads that carry the button: <code>ButtonShare</code> (Xbox Series), <code>ButtonMute</code> (DualSense mic mute), <code>LeftFunction</code> / <code>RightFunction</code> (DualSense Edge Fn), <code>ButtonC</code>, <code>LeftPaddle</code> / <code>RightPaddle</code> (Switch 2 Pro C, GL, GR, written by the raw bridge from wire indices 20, 19, 18).</p>
 <p><strong>Axes (combined slot values):</strong></p>
 <table>
 <thead>
@@ -11269,9 +11635,51 @@
 <td><code>false</code></td>
 <td>Invert Y.</td>
 </tr>
+<tr>
+<td><code>TouchpadMouseMomentum</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Keep the cursor gliding after the finger lifts.</td>
+</tr>
+<tr>
+<td><code>TouchpadMouseMomentumDecay</code></td>
+<td><code>double</code></td>
+<td><code>0.90</code></td>
+<td>Per-tick momentum decay (0.80–1.00). Higher glides longer.</td>
+</tr>
+<tr>
+<td><code>TouchpadPointerResponse</code></td>
+<td><code>string</code></td>
+<td><code>"Simple"</code></td>
+<td><code>"Simple"</code> (flat multiplier) or <code>"Trackpad"</code> (the libinput pointer-acceleration port). Notifies <code>TouchpadPointerResponseIsSimple</code> / <code>TouchpadPointerResponseIsTrackpad</code>, which gate the two halves of the card.</td>
+</tr>
+<tr>
+<td><code>TouchpadTrackpadThreshold</code></td>
+<td><code>double</code></td>
+<td><code>130</code></td>
+<td>Trackpad-curve speed threshold in mm/s (20–600).</td>
+</tr>
+<tr>
+<td><code>TouchpadTrackpadPadWidthMm</code></td>
+<td><code>double</code></td>
+<td><code>69</code></td>
+<td>Physical pad width in mm the curve normalizes against (20–150).</td>
+</tr>
+<tr>
+<td><code>TouchpadMouseAcceleration</code></td>
+<td><code>double</code></td>
+<td><code>0</code></td>
+<td>Simple-response acceleration exponent (0.0–5.0). <code>0</code> is linear.</td>
+</tr>
+<tr>
+<td><code>TouchpadMouseJitterReduction</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Suppress sub-pixel jitter at rest.</td>
+</tr>
 </tbody>
 </table>
-<p><strong>Absolute pointer card (#9):</strong></p>
+<p><strong>Recognizer tolerances:</strong></p>
 <table>
 <thead>
 <tr>
@@ -11283,16 +11691,71 @@
 </thead>
 <tbody>
 <tr>
-<td><code>TouchpadPointerStretchX</code></td>
+<td><code>TouchpadTapMaxMotion</code></td>
 <td><code>double</code></td>
-<td><code>1.0</code></td>
-<td>Margin stretch for the "Touchpad N Pointer X" absolute cursor sources (1.0–3.0). 1.0 = Steam's 1:1 pad-to-screen map. Higher values reach the screen edges before the pad bezel.</td>
+<td><code>0.04</code></td>
+<td>Travel a contact may drift and still count as a tap, as a fraction of the pad (0.01–0.30).</td>
 </tr>
 <tr>
-<td><code>TouchpadPointerStretchY</code></td>
+<td><code>TouchpadLongPressMaxMotion</code></td>
+<td><code>double</code></td>
+<td><code>0.05</code></td>
+<td>Same guard for a long press (0.01–0.30).</td>
+</tr>
+<tr>
+<td><code>TouchpadTwoFingerSwipeAngularTolerance</code></td>
+<td><code>double</code></td>
+<td><code>25</code></td>
+<td>How far apart, in degrees, two fingers may travel and still read as one swipe (5–90).</td>
+</tr>
+<tr>
+<td><code>TouchpadPinchThreshold</code></td>
+<td><code>double</code></td>
+<td><code>0.25</code></td>
+<td>Spread change that fires a pinch (0.05–1.00).</td>
+</tr>
+<tr>
+<td><code>TouchpadRotateThresholdDegrees</code></td>
+<td><code>double</code></td>
+<td><code>20</code></td>
+<td>Rotation that fires a two-finger rotate (5–90).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pointer region card (#9):</strong> the screen rectangle the "Touchpad N Pointer X/Y" absolute cursor sources map onto. The four values are authored together: touching any of them latches the region as user-authored, so a later default sweep leaves it alone.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TouchpadPointerRegionSizeX</code></td>
 <td><code>double</code></td>
 <td><code>1.0</code></td>
-<td>Y counterpart (1.0–3.0).</td>
+<td>Region width as a fraction of the work area (0.05–3.0). <code>1.0</code> is Steam's 1:1 pad-to-screen map.</td>
+</tr>
+<tr>
+<td><code>TouchpadPointerRegionSizeY</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>Region height (0.05–3.0).</td>
+</tr>
+<tr>
+<td><code>TouchpadPointerRegionCenterX</code></td>
+<td><code>double</code></td>
+<td><code>0.5</code></td>
+<td>Region center X in work-area fractions (0.0–1.0).</td>
+</tr>
+<tr>
+<td><code>TouchpadPointerRegionCenterY</code></td>
+<td><code>double</code></td>
+<td><code>0.5</code></td>
+<td>Region center Y (0.0–1.0).</td>
 </tr>
 </tbody>
 </table>
@@ -11374,7 +11837,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Reset commands:</strong> every setting row carries a <code>Reset&lt;Property&gt;Command</code> that restores its default above, plus per-card <code>ResetTouchpadDetectionCardCommand</code>, <code>ResetTouchpadInBoxCardCommand</code>, <code>ResetTouchpadJoystickCardCommand</code>, <code>ResetTouchpadMouseCardCommand</code>, <code>ResetTouchpadPointerCardCommand</code>, and <code>ResetTouchpadSwipeHapticsCardCommand</code>. Defaults mirror <code>TouchpadGestureSettings.Default()</code>, so Reset to Defaults round-trips the tab by construction.</p>
+<p><strong>Reset commands:</strong> every setting row carries a <code>Reset&lt;Property&gt;Command</code> that restores its default above, plus per-card <code>ResetTouchpadDetectionCardCommand</code>, <code>ResetTouchpadInBoxCardCommand</code>, <code>ResetTouchpadJoystickCardCommand</code>, <code>ResetTouchpadMouseCardCommand</code>, <code>ResetTouchpadPointerCardCommand</code>, <code>ResetTouchpadSwipeHapticsCardCommand</code>, and <code>ResetTouchpadSyntheticPressureCardCommand</code>. Defaults mirror <code>TouchpadGestureSettings.Default()</code>, so Reset to Defaults round-trips the tab by construction.</p>
 <table>
 <thead>
 <tr>
@@ -12237,8 +12700,88 @@
 </table>
 <h3 id="bass-shakers-236">Bass Shakers (#236)<a class="headerlink" href="#bass-shakers-236" title="Permanent link">&para;</a></h3>
 <p>The per-slot Bass Shakers tab surface, MappingSet-backed like Menus and persisted through the same dirty callback. <code>RumbleAudioTabVisible</code> gates the tab on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback (Customize on: the ForceFeedbackEnabled checkbox decides; Customize off: the catalog profile descriptor must carry a PID FFB block). The card binds <code>RumbleAudioEnabled</code>, <code>RumbleAudioEndpointId</code> (output device picker), <code>RumbleAudioChannelMode</code> (Mono / Controller Stereo), <code>RumbleAudioMasterGain</code>, and <code>RumbleAudioVoices</code>, an <code>ObservableCollection</code> of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into <code>MappingSet.RumbleAudio</code> (<code>RumbleAudioConfig</code>), so the routing travels with profiles and Copy / Paste.</p>
-<h3 id="slot-socd-245">Slot SOCD (#245)<a class="headerlink" href="#slot-socd-245" title="Permanent link">&para;</a></h3>
-<p>Controller-button SOCD, distinct from <code>KbmSlotConfig</code>'s key SOCD (#205). <code>SocdCardVisible</code> and <code>KbmSocdCardVisible</code> are mutually exclusive by slot type. The card binds <code>SocdMode</code> over <code>MappingSet.SocdMode</code> (<code>AvailableSlotSocdModes</code>: Off / Last Wins / First Wins / Neutral), and <code>SocdPairItems</code> (<code>SlotSocdPairItem</code>) edits the opposing button pairs from <code>SocdButtonOptions</code>. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.</p>
+<h3 id="output-tab-slot-socd-245-and-keep-controller-awake">Output tab: Slot SOCD (#245) and Keep Controller Awake<a class="headerlink" href="#output-tab-slot-socd-245-and-keep-controller-awake" title="Permanent link">&para;</a></h3>
+<p>Both cards live on the Output tab (index 17). <code>OutputTabVisible</code> is a slot-type gate: every type except MIDI and VR, the two with no output-behavior surface at all.</p>
+<p>Controller-button SOCD is distinct from <code>KbmSlotConfig</code>'s key SOCD (#205). <code>SocdCardVisible</code> and <code>KbmSocdCardVisible</code> are mutually exclusive by slot type. The card binds <code>SocdMode</code> over <code>MappingSet.SocdMode</code> (<code>AvailableSlotSocdModes</code>: Off / Last Wins / First Wins / Neutral), and <code>SocdPairItems</code> (<code>SlotSocdPairItem</code>) edits the opposing button pairs from <code>SocdButtonOptions</code>. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.</p>
+<p>Keep Controller Awake holds a stick off-center so a console-style pad never idles out. Like the Bass Shakers config, it lives on the slot's <code>MappingSet</code> and every setter fires <code>ConfigItemDirtyCallback</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KeepAwakeCardVisible</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: Xbox and PlayStation slots only.</td>
+</tr>
+<tr>
+<td><code>KeepAwakeEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Card master switch, over <code>MappingSet.KeepAwakeEnabled</code>.</td>
+</tr>
+<tr>
+<td><code>KeepAwakeAxis</code></td>
+<td><code>string</code></td>
+<td><code>"LX"</code></td>
+<td>Held axis, locale-stable: <code>LX</code>, <code>LY</code>, <code>RX</code>, <code>RY</code>. The default is stored as an empty string, so the getter substitutes <code>"LX"</code>.</td>
+</tr>
+<tr>
+<td><code>AvailableKeepAwakeAxes</code></td>
+<td><code>IReadOnlyList&lt;GyroLabeledOption&gt;</code></td>
+<td>-</td>
+<td>Axis picker options, reusing the stick-axis strings the mapping grid already localizes.</td>
+</tr>
+<tr>
+<td><code>KeepAwakeDeflection</code></td>
+<td><code>int</code></td>
+<td><code>25</code></td>
+<td>Held deflection percent, clamped 1–90. A persisted <code>0</code> means unset and reads as the engine default 25, so the card always shows the effective number.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResetKeepAwakeAxisCommand</code></td>
+<td>Back to <code>"LX"</code>.</td>
+</tr>
+<tr>
+<td><code>ResetKeepAwakeDeflectionCommand</code></td>
+<td>Back to 25.</td>
+</tr>
+<tr>
+<td><code>ResetKeepAwakeCardCommand</code></td>
+<td>Disabled, axis and deflection back to their unset defaults, then <code>ReloadKeepAwake()</code>.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ReloadKeepAwake()</code></td>
+<td>Re-raises the whole card off the live <code>MappingSet</code>. Called on profile apply and output-type change.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="menus-9">Menus (#9)<a class="headerlink" href="#menus-9" title="Permanent link">&para;</a></h3>
 <p>Radial / touch menus for this slot. Slot-level like Macros: the collection wraps the LIVE <code>MenuDefinitionEntry</code> list on the slot's <code>MappingSet</code> (write-through), and every edit fires <code>ConfigItemDirtyCallback</code> so the autosave path persists the set. Rows are <a href="#menueditoritem">MenuEditorItem</a> instances.</p>
 <table>
@@ -12341,7 +12884,7 @@
 <td><code>SelectedConfigTab</code></td>
 <td><code>int</code></td>
 <td><code>0</code></td>
-<td>Always-visible: 0=Preview (the <code>TabController</code> RadioButton, <code>Tag="0"</code>, binds <code>Pad_Tab_Preview</code> = "Preview"), 1=Macros, 2=Mappings, 3=Sticks, 4=Triggers, 5=Force Feedback. Visibility-gated on the active source device's capability flags: 6=Adaptive Triggers (HasAdaptiveTriggers), 7=Lighting (HasLightbar), 8=Gyro (HasGyro), 9=Impulse Triggers (HasRumbleTriggers), 10=Touchpad (HasTouchpad), 11=Wheel, 12=Audio, 13=Pointer (IR-capable Wii Remote, #146), 14=Mouse (source device is a mouse, #200). Slot-scope like tabs 0–2 and always visible: 15=Menus (#9). Tag values match the <code>RadioButton.Tag</code> strings on the PadPage tab strip.</td>
+<td>Always-visible: 0=Preview (the <code>TabController</code> RadioButton, <code>Tag="0"</code>, binds <code>Pad_Tab_Preview</code> = "Preview"), 1=Macros, 2=Mappings, 3=Sticks, 4=Triggers, 5=Force Feedback. Visibility-gated on the active source device's capability flags: 6=Adaptive Triggers (HasAdaptiveTriggers), 7=Lighting (HasLightbar), 8=Gyro (HasGyro), 9=Impulse Triggers (HasRumbleTriggers), 10=Touchpad (HasTouchpad), 11=Wheel, 12=Audio (<code>AudioTabIndex</code>), 13=Pointer (IR-capable Wii Remote, #146), 14=Mouse (source device is a mouse, #200). Slot-scope like tabs 0–2: 15=Menus (#9, always visible), 16=Bass Shakers (<code>BassShakersTabIndex</code>, gated on <code>RumbleAudioTabVisible</code>), 17=Output (<code>OutputTabIndex</code>, gated on <code>OutputTabVisible</code>). Tag values match the <code>RadioButton.Tag</code> strings on the PadPage tab strip. Entering 12 re-derives the sound-macro list and the mirror endpoints. Entering 16 re-enumerates render endpoints and re-seeds the voice rows. A gate that closes under the current selection evicts it back to tab 0.</td>
 </tr>
 </tbody>
 </table>
@@ -12498,8 +13041,8 @@
 <td>Updates per-device stick/trigger values for tab previews.</td>
 </tr>
 <tr>
-<td><code>UpdateFromExtendedRawState(ExtendedRawState)</code></td>
-<td>Updates combined output from Extended raw state.</td>
+<td><code>UpdateFromRawHidState(RawHidState)</code></td>
+<td>Publishes the combined raw-HID output for the Extended schematic. Skips the notification when axes, hardware axes, buttons, and POVs all match the last snapshot, so an idle slot does not re-arm a repaint at 30 Hz. On a Nintendo slot it also projects the raw state onto the Gamepad-shaped preview properties.</td>
 </tr>
 <tr>
 <td><code>UpdateFromMidiRawState(MidiRawState)</code></td>
@@ -12530,14 +13073,19 @@
 </thead>
 <tbody>
 <tr>
-<td><code>ExtendedOutputSnapshot</code></td>
-<td><code>ExtendedRawState</code></td>
-<td>Latest Extended raw state for custom display. Updated at 30 Hz.</td>
+<td><code>RawHidOutputSnapshot</code></td>
+<td><code>RawHidState</code></td>
+<td>Latest raw-HID state for the Extended / Nintendo schematic. Updated at 30 Hz by <code>UpdateFromRawHidState</code>, which raises <code>PropertyChanged</code> for it. Private setter.</td>
 </tr>
 <tr>
 <td><code>KbmOutputSnapshot</code></td>
 <td><code>KbmRawState</code></td>
-<td>Latest KBM raw state. Updated at 30 Hz.</td>
+<td>Latest KBM raw state. Updated at 30 Hz. Plain auto-property, no change notification: the view polls it.</td>
+</tr>
+<tr>
+<td><code>VrOutputSnapshot</code></td>
+<td><code>VrRawState</code></td>
+<td>Latest VR raw state for the VR preview (#49). Same plain auto-property contract as the KBM twin.</td>
 </tr>
 <tr>
 <td><code>MidiOutputSnapshot</code></td>
@@ -12573,7 +13121,7 @@
 <tr>
 <td><code>Category</code></td>
 <td><code>MappingCategory</code></td>
-<td>Grouping: <code>Buttons</code>, <code>DPad</code>, <code>Triggers</code>, <code>LeftStick</code>, <code>RightStick</code>.</td>
+<td>Grouping: <code>Buttons</code>, <code>DPad</code>, <code>Triggers</code>, <code>LeftStick</code>, <code>RightStick</code>, <code>Touchpad</code>, <code>Motion</code>.</td>
 </tr>
 <tr>
 <td><code>NegSettingName</code></td>
@@ -12747,7 +13295,7 @@
 <td><code>MappingDeadZone</code></td>
 <td><code>int</code></td>
 <td><code>50</code></td>
-<td>Axis activation threshold (0–100%). Input below this percentage is ignored for this mapping row.</td>
+<td>Axis activation threshold, clamped 1–100%. Input below this percentage is ignored for this mapping row. <code>0</code> is disallowed because it used to read as "unset" and silently reverted to 50.</td>
 </tr>
 <tr>
 <td><code>IsDeadZoneApplicable</code></td>
@@ -12795,6 +13343,60 @@
 <td><code>false</code></td>
 <td>Upper half of axis range only. Calls <code>RebuildDescriptor()</code> to toggle <code>"H"</code> prefix.</td>
 </tr>
+<tr>
+<td><code>IsBidirectional</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>With <code>IsHalfAxis</code>, fires on absolute deflection past the deadzone, either side of center. Persisted through <code>PadSetting.MappingBidirectional</code>, not a descriptor prefix, because the I/H prefixes are already spoken for.</td>
+</tr>
+<tr>
+<td><code>IsInvertApplicable</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: <code>!(IsHalfAxis &amp;&amp; IsBidirectional)</code>. Mirroring around center already covers both directions.</td>
+</tr>
+<tr>
+<td><code>InvertOutput</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Flip Output: invert what the row writes, for the half-axis reads where <code>Invert</code> is consumed as the half selector. Round-trips to <code>MappingSource.InvertOutput</code>.</td>
+</tr>
+<tr>
+<td><code>IsInvertOutputApplicable</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed by the engine's own <code>InvertConsumedByHalfAxisRead</code> predicate against the prefix-stripped primary. Gates the Flip Output checkbox.</td>
+</tr>
+<tr>
+<td><code>ParamAccel</code></td>
+<td><code>double</code></td>
+<td><code>0</code></td>
+<td>Per-row acceleration exponent, clamped 0.0–5.0. Has <code>ResetParamAccelCommand</code>.</td>
+</tr>
+<tr>
+<td><code>GyroSensitivity</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>Primary-source gyro multiplier, clamped 0.1–10. Gated by <code>IsGyroSource</code>.</td>
+</tr>
+<tr>
+<td><code>MouseCursorSensitivity</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>Primary-source cursor sensitivity, clamped 0.1–5. Gated by <code>IsMouseCursorSource</code>.</td>
+</tr>
+<tr>
+<td><code>IrPointerSensitivity</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>Primary-source Wii IR-pointer sensitivity, clamped 0.1–5. Gated by <code>IsIrPointerSource</code>.</td>
+</tr>
+<tr>
+<td><code>Sensitivity</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>Generic per-source knob for a plain Axis / Slider read, clamped 0.1–5. Gated by <code>IsGenericSensitivitySource</code>, which is mutually exclusive with the three specialized gates above.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="commands_3">Commands<a class="headerlink" href="#commands_3" title="Permanent link">&para;</a></h3>
@@ -12813,6 +13415,10 @@
 <tr>
 <td><code>ClearCommand</code></td>
 <td>Clears source, neg descriptor, resets <code>IsInverted</code>/<code>IsHalfAxis</code>.</td>
+</tr>
+<tr>
+<td><code>ResetGyroSensitivityCommand</code>, <code>ResetMouseCursorSensitivityCommand</code>, <code>ResetIrPointerSensitivityCommand</code>, <code>ResetSensitivityCommand</code>, <code>ResetParamAccelCommand</code></td>
+<td>Per-control resets for the primary-source knobs above.</td>
 </tr>
 </tbody>
 </table>
@@ -13019,12 +13625,22 @@
 <tr>
 <td><code>DisplayName</code></td>
 <td><code>string</code></td>
-<td>Human-readable display name (e.g., <code>"A"</code>, <code>"Left Stick X"</code>).</td>
+<td>Human-readable display name (e.g., <code>"A"</code>, <code>"Left Stick X"</code>). <code>ToString()</code> returns it.</td>
+</tr>
+<tr>
+<td><code>DeviceGuid</code></td>
+<td><code>string</code></td>
+<td>Owning device for the cross-device picker. Empty = the "(Any device)" group.</td>
+</tr>
+<tr>
+<td><code>DeviceLabel</code></td>
+<td><code>string</code></td>
+<td>Friendly device name for that group heading.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="mappingcategory-enum">MappingCategory (enum)<a class="headerlink" href="#mappingcategory-enum" title="Permanent link">&para;</a></h3>
-<p>Values: <code>Buttons</code>, <code>DPad</code>, <code>Triggers</code>, <code>LeftStick</code>, <code>RightStick</code>.</p>
+<p>Values: <code>Buttons</code>, <code>DPad</code>, <code>Triggers</code>, <code>LeftStick</code>, <code>RightStick</code>, <code>Touchpad</code>, <code>Motion</code>. <code>Motion</code> covers the bundled motion-passthrough rows (<code>MotionGyro</code> / <code>MotionAccel</code> targets), auto-created on Sony-class slots for every assigned gyro or accel-capable device and rendered as one combined Motion row when both sub-channels come from the same source. <code>Touchpad</code> rows are the one category <code>IsRecordable</code> excludes.</p>
 <hr />
 <h2 id="mappingsourceitem">MappingSourceItem<a class="headerlink" href="#mappingsourceitem" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>MappingSourceItem.cs</code></p>
@@ -13877,7 +14493,7 @@
 </tbody>
 </table>
 <h3 id="type-check-properties-all-computed-not-serialized">Type-Check Properties (all computed, not serialized)<a class="headerlink" href="#type-check-properties-all-computed-not-serialized" title="Permanent link">&para;</a></h3>
-<p><code>IsButtonType</code>, <code>IsKeyType</code>, <code>IsDurationType</code>, <code>IsAxisType</code>, <code>IsSystemVolumeType</code>, <code>IsAppVolumeType</code>, <code>IsMouseMoveType</code>, <code>IsMouseButtonType</code>, <code>IsContinuousAxisType</code>, <code>IsDeviceAxisSource</code>, <code>IsOutputAxisSource</code></p>
+<p>One <code>Is*Type</code> flag per action family, plus the rolled-up families the editor gates whole panels on (<code>IsAnyRumbleType</code>, <code>IsAnyAxisValueType</code>, <code>IsAnyVcButtonType</code>, <code>IsAnyKeyType</code>, and the rest). A representative set: <code>IsButtonType</code>, <code>IsKeyType</code>, <code>IsDurationType</code>, <code>IsAxisType</code>, <code>IsSystemVolumeType</code>, <code>IsAppVolumeType</code>, <code>IsMouseMoveType</code>, <code>IsMouseButtonType</code>, <code>IsContinuousAxisType</code>, <code>IsDeviceAxisSource</code>, <code>IsOutputAxisSource</code>.</p>
 <h3 id="button-action-properties">Button Action Properties<a class="headerlink" href="#button-action-properties" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -14215,7 +14831,7 @@
 <p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253; shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
 <p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code></p>
 <p><strong>MacroRepeatMode:</strong> <code>Once</code>, <code>FixedCount</code>, <code>UntilRelease</code></p>
-<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251). The append-only rule is stated in code beside the enum.</p>
+<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53). The last pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. The append-only rule is stated in code beside the enum.</p>
 <p><strong>MacroDisconnectTarget</strong> (#162): <code>TriggeringDevice</code> (0), <code>SpecificDevice</code> (1), <code>SlotDevices</code> (2), <code>AllDevices</code> (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.</p>
 <p><strong>MacroLightbarHoldMode:</strong> <code>Reactive</code>, <code>Sticky</code> (v3.1)</p>
 <p><strong>MacroLightbarColorSource:</strong> <code>Fixed</code>, <code>RandomHue</code>, <code>PaletteStep</code> (v3.1)</p>
@@ -14396,7 +15012,7 @@
 <tr>
 <td><code>HostOptions</code></td>
 <td><code>IReadOnlyList&lt;MenuHostOption&gt;</code></td>
-<td>The five pickable host surfaces: <code>Gamepad LeftStick</code>, <code>Gamepad RightStick</code>, <code>Touchpad 0</code>–<code>Touchpad 2</code> (labels from <code>Menu_Host_*</code> resx, touchpads displayed 1-based as "Touchpad 1..3").</td>
+<td>The five built-in host surfaces: <code>Gamepad LeftStick</code>, <code>Gamepad RightStick</code>, <code>Touchpad 0</code>, <code>Touchpad 1</code> (labels from <code>Menu_Host_*</code> resx, touchpads displayed 1-based as "Touchpad 1" / "Touchpad 2"), and <code>Custom</code> for the devices the named surfaces cannot describe (joysticks, wheels, anything not detected as a gamepad). An authored descriptor outside that grammar is appended as its own entry so the selection never silently lies. Never gated on assignment or online state, because imported profiles land on slots with nothing assigned yet.</td>
 </tr>
 <tr>
 <td><code>SelectedHost</code></td>
@@ -14407,6 +15023,11 @@
 <td><code>HostIsTouchpad</code></td>
 <td><code>bool</code></td>
 <td>Computed from <code>SelectedHost</code>. Shows the Pad Half row.</td>
+</tr>
+<tr>
+<td><code>IsCustomHost</code></td>
+<td><code>bool</code></td>
+<td>Computed: the Custom host is selected, which swaps in the <code>CustomX</code> / <code>CustomY</code> / <code>Click</code> pickers (<code>CustomXChoices</code>, <code>CustomXSelected</code>, <code>CustomXSubtitle</code>, and their Y and click twins) and their own record buttons.</td>
 </tr>
 <tr>
 <td><code>HostHalfOptions</code> / <code>HostHalfIndex</code></td>
@@ -14493,7 +15114,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Per-row resets</strong> (canon: every setting row has one): <code>ResetHostCommand</code> (right stick, whole pad), <code>ResetFireCommand</code> (On Click), <code>ResetCellsCommand</code> (4 cells, no center), <code>ResetGeometryCommand</code> (50/50, 100%, 90%, labels on), <code>ResetDeadzoneCommand</code> (25).</p>
+<p><strong>Per-row resets</strong> (canon: every setting row has one): <code>ResetHostCommand</code> (right stick, whole pad, custom descriptors cleared), <code>ResetHostHalfCommand</code> (whole pad), <code>ResetStyleCommand</code> (Radial), <code>ResetFireCommand</code> (On Click), <code>ResetCellsCommand</code> (4 cells, no center), <code>ResetGeometryCommand</code> (50/50, scale 100%, opacity 90%, labels on), <code>ResetDeadzoneCommand</code> (25), plus <code>ResetCustomXCommand</code> / <code>ResetCustomYCommand</code> / <code>ResetClickCommand</code> for the Custom host's three inputs.</p>
 <h3 id="menucellitem">MenuCellItem<a class="headerlink" href="#menucellitem" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>MenuEditorItem.cs</code></p>
 <p>One cell row in the menu editor: label + one direct binding (none / keyboard key / virtual-controller button). The <code>_item</code> reference is null until the cell has content.</p>
@@ -14515,6 +15136,11 @@
 <td><code>Label</code></td>
 <td><code>string</code></td>
 <td>Cell label. Setting it materializes the item entry, clearing it drops an otherwise-empty entry.</td>
+</tr>
+<tr>
+<td><code>HasIcon</code> / <code>IconName</code> / <code>IconImage</code> / <code>ShowIconGlyph</code></td>
+<td><code>bool</code> / <code>string</code> / <code>ImageSource</code> / <code>bool</code></td>
+<td>Cell icon: the stored name, the resolved image, and the glyph fallback used when the name resolves to no image.</td>
 </tr>
 <tr>
 <td><code>BindingKind</code></td>
@@ -14762,12 +15388,12 @@
 <tr>
 <td><code>AxisXIndex</code></td>
 <td><code>int</code></td>
-<td>Raw axis index for X in <code>ExtendedRawState.Axes</code> (-1 for gamepad). Read-only.</td>
+<td>Raw axis index for X in <code>RawHidState.Axes</code> (custom Extended only, -1 for gamepad). Read-only.</td>
 </tr>
 <tr>
 <td><code>AxisYIndex</code></td>
 <td><code>int</code></td>
-<td>Raw axis index for Y in <code>ExtendedRawState.Axes</code> (-1 for gamepad). Read-only.</td>
+<td>Raw axis index for Y in <code>RawHidState.Axes</code> (custom Extended only, -1 for gamepad). Read-only.</td>
 </tr>
 </tbody>
 </table>
@@ -15200,7 +15826,7 @@
 <tr>
 <td><code>AxisIndex</code></td>
 <td><code>int</code></td>
-<td>Raw axis index in <code>ExtendedRawState.Axes</code> (-1 for gamepad). Read-only.</td>
+<td>Raw axis index in <code>RawHidState.Axes</code> (custom Extended only, -1 for gamepad). Read-only.</td>
 </tr>
 </tbody>
 </table>
@@ -15820,6 +16446,75 @@
 </tr>
 </tbody>
 </table>
+<h3 id="persona-haptics-271-item-1">Persona haptics (#271 item 1)<a class="headerlink" href="#persona-haptics-271-item-1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AudioPersonaHapticsEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Render the virtual DualSense's authored haptic audio (persona UAC channels 3/4) on this device's actuators through the haptic-tone chain. Off by default because the derived tones only approximate the designer's track.</td>
+</tr>
+<tr>
+<td><code>AudioPersonaHapticsGain</code></td>
+<td><code>int</code></td>
+<td><code>100</code></td>
+<td>Input gain percent (25–300) applied before the tone reducer, so a quiet authored track can still reach the actuators.</td>
+</tr>
+</tbody>
+</table>
+<p>Reset commands: <code>ResetPersonaHapticsCommand</code>, <code>ResetPersonaHapticsGainCommand</code> (both on <code>PadViewModel</code>, alongside the Audio tab's other row resets).</p>
+<h3 id="headphone-jack-and-audio-path">Headphone jack and audio path<a class="headerlink" href="#headphone-jack-and-audio-path" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HeadphoneVolume</code></td>
+<td><code>int</code></td>
+<td><code>100</code></td>
+<td>Headphone-jack hardware volume percent, clamped 0–100. Maps onto the DS5 output report's VolumeHeadphones byte over Sony's own scePad window. <code>0%</code> writes <code>0x00</code>. Owned by the Audio-tab card and the <code>HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> macro actions.</td>
+</tr>
+<tr>
+<td><code>AudioOutputPath</code></td>
+<td><code>AudioOutputPath</code></td>
+<td><code>Automatic</code></td>
+<td>Where the DualSense plays its audio (output report byte 7 bits 4–5).</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResetHeadphoneVolumeCommand</code></td>
+<td>Back to 100.</td>
+</tr>
+<tr>
+<td><code>ResetAudioOutputPathCommand</code></td>
+<td>Back to <code>Automatic</code>.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="macro-lightbar-override-63">Macro lightbar override (#63)<a class="headerlink" href="#macro-lightbar-override-63" title="Permanent link">&para;</a></h3>
 <p>Transient runtime state set by <code>MacroActionType.LightbarColor</code>. Not persisted (<code>[XmlIgnore]</code>).</p>
 <table>
@@ -15833,13 +16528,13 @@
 </thead>
 <tbody>
 <tr>
-<td><code>MacroOverrideR</code> / <code>G</code> / <code>B</code></td>
+<td><code>MacroOverrideR</code> / <code>MacroOverrideG</code> / <code>MacroOverrideB</code></td>
 <td><code>byte</code></td>
 <td><code>0</code></td>
 <td>Override RGB.</td>
 </tr>
 <tr>
-<td><code>MacroOverrideStartUtc</code> / <code>HoldEndUtc</code> / <code>ExpiresAtUtc</code></td>
+<td><code>MacroOverrideStartUtc</code> / <code>MacroOverrideHoldEndUtc</code> / <code>MacroOverrideExpiresAtUtc</code></td>
 <td><code>DateTime</code></td>
 <td><code>MinValue</code></td>
 <td>Hold window bounds. Full intensity over [Start, HoldEnd], linear fade to 0 over [HoldEnd, Expires].</td>
@@ -16124,6 +16819,7 @@
 <p>Each control has a matching <code>Reset…Command</code> (mirroring the Sticks / Triggers per-row reset pattern), plus the palette add/remove commands <code>AddPaletteColorCommand</code>, <code>RemovePaletteColorCommand</code>, <code>AddInputReactivePaletteColorCommand</code>, <code>RemoveInputReactivePaletteColorCommand</code>, <code>ResetInputReactivePaletteCommand</code>, <code>ResetPaletteCommand</code>.</p>
 <h3 id="enums-and-helper-classes-deviceslotconfigcs">Enums and helper classes (DeviceSlotConfig.cs)<a class="headerlink" href="#enums-and-helper-classes-deviceslotconfigcs" title="Permanent link">&para;</a></h3>
 <p><strong>AdaptiveTriggerMode:</strong> <code>Off</code>(0), <code>Feedback</code>(1), <code>Weapon</code>(2), <code>Vibration</code>(3), <code>MultiplePositionFeedback</code>(4), <code>SlopeFeedback</code>(5), <code>MultiplePositionVibration</code>(6). Sony's seven PS5 SDK effect modes.</p>
+<p><strong>AudioOutputPath:</strong> <code>Automatic</code>(0), <code>StereoHeadset</code>(1), <code>MonoHeadset</code>(2), <code>HeadsetAndSpeaker</code>(3), <code>SpeakerOnly</code>(4), <code>FollowHeadphoneJack</code>(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. <code>Automatic</code> writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. <code>FollowHeadphoneJack</code> tracks the pad's own jack detect, which arrives on the Bluetooth raw lane, and resolves to the default when there is no reading. Persisted numerically, so the members are append-only.</p>
 <p><strong>MicLedMode:</strong> <code>Off</code>(0), <code>Solid</code>(1), <code>Pulse</code>(2), <code>FollowDeviceMute</code>(3).</p>
 <p><strong>PlayerLedMode:</strong> <code>Off</code>(0), <code>Player1</code>(1), <code>Player2</code>(2), <code>Player3</code>(3), <code>Player4</code>(4), <code>All</code>(5), <code>PlayerNumber</code>(6, default). Sequential to map 1:1 with the dropdown.</p>
 <p><strong>PlayerLedBrightness:</strong> <code>High</code>(0), <code>Medium</code>(1), <code>Low</code>(2).</p>
@@ -16134,7 +16830,7 @@
 <p><strong>MicLedDeviceItem:</strong> <code>Id</code> (CoreAudio endpoint string), <code>Display</code> (label, prefixed <code>[In]</code> / <code>[Out]</code>).</p>
 <p><strong>LightbarPaletteEntry</strong> (<code>ObservableObject</code>): <code>R</code>, <code>G</code>, <code>B</code> (byte), <code>Hex</code> (two-way <code>"RRGGBB"</code> shim, <code>[XmlIgnore]</code>).</p>
 <h3 id="deviceslotconfigdata">DeviceSlotConfigData<a class="headerlink" href="#deviceslotconfigdata" title="Permanent link">&para;</a></h3>
-<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
+<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>AudioOutputPath</code> = Automatic, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
 <hr />
 <h2 id="kbmslotconfig">KbmSlotConfig<a class="headerlink" href="#kbmslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>KbmSlotConfig.cs</code></p>
@@ -16388,14 +17084,14 @@
 <li><a href="../architecture-overview/">Architecture Overview</a>: MVVM design philosophy, <code>CommunityToolkit.Mvvm</code> usage</li>
 <li><a href="../xaml-views/">XAML Views</a>: View counterparts: <code>DashboardPage</code>, <code>PadPage</code>, <code>DevicesPage</code>, <code>SettingsPage</code></li>
 <li><a href="../services-layer/">Services Layer</a>: <code>InputService</code>, <code>SettingsService</code>, <code>DeviceService</code> consumed by ViewModels</li>
-<li><a href="../engine-library/">Engine Library</a>: <code>Gamepad</code>, <code>ExtendedRawState</code>, <code>KbmRawState</code>, <code>MidiRawState</code>, <code>PadSetting</code></li>
+<li><a href="../engine-library/">Engine Library</a>: <code>Gamepad</code>, <code>RawHidState</code>, <code>KbmRawState</code>, <code>VrRawState</code>, <code>MidiRawState</code>, <code>PadSetting</code></li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>SettingsManager</code> data synced to/from ViewModels by <code>SettingsService</code></li>
 <li><a href="../input-pipeline/">Input Pipeline</a>: <code>InputManager</code> state reflected in <code>PadViewModel</code> output snapshots</li>
 <li><a href="../2d-overlay-system/">2D Overlay System</a>: <code>ControllerModel2DView</code>, <code>ControllerSchematicView</code> bound to <code>PadViewModel</code></li>
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> bound to <code>PadViewModel</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

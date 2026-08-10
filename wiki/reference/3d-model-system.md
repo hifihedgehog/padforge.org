@@ -1,6 +1,6 @@
 # 3D Model System
 
-Renders interactive Xbox and PlayStation controller models from Wavefront OBJ meshes using [HelixToolkit.WPF](https://github.com/helix-toolkit/helix-toolkit). Adapted from [Handheld Companion](https://github.com/Valkirie/HandheldCompanion) (CC BY-NC-SA 4.0).
+Renders interactive Xbox, PlayStation, and Nintendo controller models from Wavefront OBJ meshes using [HelixToolkit.WPF](https://github.com/helix-toolkit/helix-toolkit). The loader, view, and animation code are adapted from [Handheld Companion](https://github.com/Valkirie/HandheldCompanion) (CC BY-NC-SA 4.0), as is the Xbox 360 mesh. Every other family runs on purchased hado CGTrader meshes split per-part, with per-colorway texture atlases.
 
 **Namespace:** `PadForge.Models3D` (model classes), `PadForge.Views` (view)
 
@@ -11,10 +11,15 @@ Renders interactive Xbox and PlayStation controller models from Wavefront OBJ me
 ```
 ControllerModelBase (abstract)
     |
-    +-- ControllerModelXbox360   (Xbox 360 meshes, colors, rotation points)
-    +-- ControllerModelXboxOne   (Xbox One / Elite / Adaptive / Series mesh share)
-    +-- ControllerModelDS4       (DualShock 4 meshes, colors, rotation points)
-    +-- ControllerModelDualSense (DualSense / DualSense Edge meshes)
+    +-- ControllerModelXbox360        (HC mesh, flat plastic colors)
+    +-- ControllerModelXboxSeries     (Series mesh, 13 colorways; also serves
+    |                                  Xbox One / Elite / Adaptive profiles)
+    +-- ControllerModelDS4            (DualShock 4 mesh, 2 colorways)
+    +-- ControllerModelDualSense      (DualSense mesh, 10 colorways)
+    |     |
+    |     +-- ControllerModelDualSenseEdge  (Edge asset folder, own family)
+    +-- ControllerModelSwitch2Pro     (Switch 2 Pro mesh; also serves the
+                                       original Switch Pro profile)
 
 ControllerModelView (UserControl)
     |
@@ -51,7 +56,22 @@ public abstract class ControllerModelBase : IDisposable
 | Field | Type | Description |
 |-------|------|-------------|
 | `model3DGroup` | `Model3DGroup` | Root scene group containing all child meshes. Assigned to `ModelVisual3D.Content`. |
-| `ModelName` | `string` | One of `"XBOX360"`, `"XBOXONE"`, `"DS4"`, `"DualSense"`. Used for embedded resource path resolution. |
+| `ModelName` | `string` | Embedded-resource folder. `"XBOX360"` or `"Switch2Pro"` for the single-appearance families, `"{family}.{appearance}"` for the rest (`"DS4.JetBlack"`, `"DualSense.White"`, `"DualSenseEdge.Edge"`, `"XboxSeries.Carbon"`). |
+| `ModelFamily` | `string` | Everything before the first `.` in `ModelName`, or `ModelName` when there is no dot. The identity `EnsureModel()` compares against, so a colorway swap does not read as a family swap. |
+| `Touchpad` | `Model3DGroup` | Touch surface, or null on models without one. DS4 points it at `Screen.obj`, DualSense at `Touchpad.obj`. |
+| `RiderDecals` | `HashSet<GeometryModel3D>` | Decal geometries appended into a moving host group. The view masks its accent overlay by the rider's own texture alpha for these. |
+| `CoveringRiderDecals` | `HashSet<GeometryModel3D>` | Riders whose art covers the whole host face (the Xbox guide emblem). Highlight tints the rider's own texels instead of hiding it. |
+
+### Scale and Touchpad Insets
+
+| Member | Default | Description |
+|--------|---------|-------------|
+| `ModelScale` | `1.0` | Uniform scale applied at the host `ModelVisual3D`, not on `model3DGroup`, so the finger-sphere sibling visuals scale with the mesh. |
+| `TouchpadXInsetFrac` | `0.03` | Fractional inset cropping the Touchpad mesh bounds to the real touch-sensitive width. |
+| `TouchpadZTopInsetFrac` | `0.12` | Top inset. |
+| `TouchpadZBottomInsetFrac` | `0.12` | Bottom inset. |
+
+The defaults match the DS4 `Screen.obj`. DualSense overrides all three and `ModelScale`. Switch 2 Pro overrides `ModelScale` only.
 
 ### Common Geometry Groups
 
@@ -113,12 +133,13 @@ protected ControllerModelBase(string modelName)
 
 Steps are order-dependent:
 
-1. **Set ModelName**. Determines the embedded-resource folder. One of `"XBOX360"`, `"XBOXONE"`, `"DS4"`, or `"DualSense"`. Picked by `HMaestroProfileCatalog.ResolveAssetFolders` against the slot's `ProfileId` and `OutputType`.
+1. **Set ModelName and derive ModelFamily**. `ModelName` is the embedded-resource folder, chosen by `HMaestroProfileCatalog.ResolveAssetFolders` against the slot's `ProfileId` and `OutputType`, plus the pad's colorway for the families that have one. `ModelFamily` is the part before the first dot.
 2. **Load common geometry** via `LoadModel()`: MainBody, stick rings, motors, triggers.
 3. **Register trigger ClickMap entries**: `LeftShoulderTrigger` -> `"LeftTrigger"`, `RightShoulderTrigger` -> `"RightTrigger"`. Triggers use ClickMap (not ButtonMap) because they are continuous axes, not toggle buttons.
 4. **Iterate ButtonFileMap**: Calls `TryLoadModel()` per entry, then `RegisterButton()` to populate both `ButtonMap` and `ClickMap`. Special cases: `LeftStickClick.obj` and `RightStickClick.obj` also set `LeftThumb`/`RightThumb` references for tilt animation.
-5. **Add all parts to `model3DGroup.Children`**. Assigned to `ModelVisual3D.Content`.
-6. **Subclass constructor continues**. Loads extra meshes (face button overlays, symbol meshes), assigns colored materials, calls `DrawAccentHighlights()` last.
+5. **Join the rings to the stick-button lists**. `LeftThumbRing` is appended to `ButtonMap["LeftThumbButton"]` and `RightThumbRing` to `ButtonMap["RightThumbButton"]`, directly rather than through `RegisterButton()`. A stick press glows the cap and the ring as one piece, and the ring stays out of `ClickMap` so it remains a quadrant target.
+6. **Add all parts to `model3DGroup.Children`**. Assigned to `ModelVisual3D.Content`.
+7. **Subclass constructor continues**. Loads extra meshes, applies texture atlases or flat colors, calls `DrawAccentHighlights()`, then attaches rider decals and adds the static decal and transparent overlays last.
 
 **Note:** Stick rings are NOT in ClickMap. The view handles ring clicks via `IsStickRingHit()` with quadrant-based axis detection, since ring clicks must determine axis direction from click position.
 
@@ -155,6 +176,24 @@ foreach (var name in assembly.GetManifestResourceNames())
     if (name.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
         // Found it
 ```
+
+### Texture and Decal Helpers
+
+```csharp
+protected Material LoadTexturedMaterial(string filename, double opacity = 1.0)     // flat grey fallback
+protected Material TryLoadTexturedMaterial(string filename, double opacity = 1.0)  // null when absent
+protected static Material AddGloss(Material baseMaterial, double intensity, double power)
+protected void AttachRiderDecal(Model3DGroup host, string filename, Material material, bool covering = false)
+protected static void ApplyMaterial(Model3DGroup group, Material material)
+```
+
+`TryLoadTexturedMaterial` loads a PNG atlas by the same suffix search, decodes it from a `MemoryStream` that outlives `BeginInit`/`EndInit`, and wraps it in a frozen `DiffuseMaterial` over an `ImageBrush`. `ViewportUnits` must be `Absolute`: the default `RelativeToBoundingBox` remaps the image onto each mesh's texcoord bounding box, which would render the whole atlas squeezed onto every part's own UV island.
+
+`AddGloss` wraps a material in a `MaterialGroup` with a `SpecularMaterial` on top. `DiffuseMaterial` has no specular term, so a semi-transparent diffuse layer renders as a flat tint and clear ABXY shells read as no shell at all.
+
+`AttachRiderDecal` loads a decal mesh and moves its `GeometryModel3D` children into the host group so they travel with it. Trigger labels rotate with a pulled trigger, stick-cap knurl art deflects with the stick. A missing file is a no-op, so a colorway without a given rider stays valid. `covering: true` also records the geometry in `CoveringRiderDecals`.
+
+`ApplyMaterial` paints every `GeometryModel3D` in a group, front and back. `ControllerModelXbox360` and `ControllerModelSwitch2Pro` instead keep a private `SetMaterial` that paints only `Children[0]`.
 
 ### Dispose Pattern
 
@@ -235,9 +274,19 @@ Face button overlays (`B1Button`–`B4Button`) use transparent variants (`Alpha 
 
 ```csharp
 public class ControllerModelDS4 : ControllerModelBase
+public ControllerModelDS4(string appearance = "JetBlack")
 ```
 
-Calls `base("DS4")`.
+Calls `base($"DS4.{Validate(appearance)}")`. The mesh is the purchased hado model, classified into the Handheld Companion part names by spatial containment against the HC stand-in, sticks split at the cap cut.
+
+### Appearances
+
+| Id | Name |
+|----|------|
+| `JetBlack` | Jet Black |
+| `MagmaRed` | Magma Red |
+
+An unrecognized id falls back to `AppearanceIds[0]` (`JetBlack`).
 
 ### DS4-Specific Mesh Groups
 
@@ -245,33 +294,25 @@ Calls `base("DS4")`.
 |-------|-------------|-------------|
 | `LeftShoulderMiddle` | `Shoulder-Left-Middle.obj` | Left shoulder middle piece |
 | `RightShoulderMiddle` | `Shoulder-Right-Middle.obj` | Right shoulder middle piece |
-| `Screen` | `Screen.obj` | Touchpad/screen area |
+| `Screen` | `Screen.obj` | Touchpad surface |
 | `MainBodyBack` | `MainBodyBack.obj` | Back panel |
 | `AuxPort` | `Aux-Port.obj` | Auxiliary port |
 | `Triangle` | `Triangle.obj` | Decorative triangle element |
-| `DPadDownArrow` | `DPadDownArrow.obj` | D-pad down arrow indicator |
-| `DPadUpArrow` | `DPadUpArrow.obj` | D-pad up arrow indicator |
-| `DPadLeftArrow` | `DPadLeftArrow.obj` | D-pad left arrow indicator |
-| `DPadRightArrow` | `DPadRightArrow.obj` | D-pad right arrow indicator |
+| `DecalOverlay` | `Decal.obj` | Static glyph and label overlay, added last |
 
-### PlayStation Color Palette
+### Materials
 
-| Name | Hex | Usage |
-|------|-----|-------|
-| `ColorPlasticBlack` | `#38383A` | Default body color |
-| `ColorPlasticWhite` | `#E0E0E0` | Main body, motors, triangle |
-| `MaterialPlasticTriangle` | `#66a0a4` | Triangle face button symbol |
-| `MaterialPlasticCross` | `#96b2d9` | Cross (X) face button symbol |
-| `MaterialPlasticCircle` | `#d66673` | Circle face button symbol |
-| `MaterialPlasticSquare` | `#d7bee5` | Square face button symbol |
+Two atlases per colorway: `Body.png` for every solid part, `Decal.png` for the art. There is no flat color palette. `MaterialBody` paints every `ButtonMap` group first, then every remaining child of `model3DGroup`, then `DrawAccentHighlights()` runs.
 
-### Face Button Symbols
+### Rider Decals
 
-DS4 loads separate symbol meshes (`B1-Symbol.obj` through `B4-Symbol.obj`) via `TryLoadModel()`. Each symbol shares its `ButtonMap` entry with the base button mesh for joint highlighting. Symbol meshes get PlayStation-specific colors. Base meshes default to black.
+The face-button symbols (`B1-Symbol.obj` through `B4-Symbol.obj`) are decal art: their UVs address the decal atlas, not the body atlas. Giving them the body material skinned the buttons with whatever the body atlas holds at those coordinates. They attach as riders into their own button groups, so a press moves and lights the symbol with the button. `Decal-Shoulder-Left/Right-Trigger.obj` ride the triggers, `Decal-L1.obj` / `Decal-R1.obj` ride the bumpers so the lettering glows with a bumper press instead of staying grey in the static overlay.
+
+The constructor also asks for d-pad arrow riders (`DPadUpArrow.obj` and siblings) and stick-ring knurl riders (`Decal-Joystick-Left/Right-Ring.obj`). Neither DS4 colorway folder ships those files, so `AttachRiderDecal` no-ops on them. That art comes from the body and decal atlases instead.
 
 ### Touchpad Mapping
 
-The DS4 exposes `Screen.obj` (the touchpad surface) as `Touchpad` and registers `ClickMap[Screen] = "TouchpadClick"`, so the surface is a click-to-record hit target. `Touchpad` is the base-class property the view reads for the touchpad click highlight and finger-sphere preview. DS4 does not override the touchpad inset fractions, so the view uses the defaults (`TouchpadXInsetFrac = 0.03`, `TouchpadZTopInsetFrac = 0.12`, `TouchpadZBottomInsetFrac = 0.12`).
+The DS4 exposes `Screen.obj` as `Touchpad` and registers `ClickMap[Screen] = "TouchpadClick"`, so the surface is a click-to-record hit target. `Touchpad` is the base-class property the view reads for the touchpad click highlight and finger-sphere preview. DS4 does not override the touchpad inset fractions, so the view uses the defaults (`TouchpadXInsetFrac = 0.03`, `TouchpadZTopInsetFrac = 0.12`, `TouchpadZBottomInsetFrac = 0.12`).
 
 ### Rotation Points
 
@@ -280,79 +321,73 @@ The DS4 exposes `Screen.obj` (the touchpad surface) as `Touchpad` and registers 
 | `JoystickRotationPointCenterLeftMillimeter` | `(-25.5, -5.086, -21.582)` |
 | `JoystickRotationPointCenterRightMillimeter` | `(25.5, -5.086, -21.582)` |
 | `JoystickMaxAngleDeg` | `19.0` |
-| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-38.061, 3.09, 26.842)` |
-| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(38.061, 3.09, 26.842)` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-38.061, -0.34, 18.59)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(38.061, -0.34, 18.59)` |
 | `TriggerMaxAngleDeg` | `16.0` |
+| `ModelScale` | `1.0` (161 mm body width, real-world scale) |
+
+The trigger hinge sits a third of the way up the part, by the Xbox One model's fraction of the trigger bounds, not at its top edge. Pinned at the top the paddle swept backwards into the bumper instead of swinging.
 
 ---
 
-## ControllerModelXboxOne
+## ControllerModelXboxSeries
 
-**File:** `PadForge.App/Models3D/ControllerModelXboxOne.cs`
+**File:** `PadForge.App/Models3D/ControllerModelXboxSeries.cs`
 
 ```csharp
-public class ControllerModelXboxOne : ControllerModelBase
-public ControllerModelXboxOne(bool enableShare)
+public class ControllerModelXboxSeries : ControllerModelBase
+public ControllerModelXboxSeries(string appearance = "Carbon", bool enableShare = true)
 ```
 
-Calls `base("XBOXONE")`. Used by Xbox One, Xbox Elite, Xbox Series, and Xbox Adaptive profiles. Handheld Companion has no Xbox Series mesh, so Series profiles borrow this one.
+Calls `base($"XboxSeries.{Validate(appearance)}")`. Purchased hado CGTrader mesh, split per-part: 33 shells classified, the hybrid d-pad disc bisected into four wedges, sticks neck-split into cap-head ring groups and stem/base click groups.
 
-### Xbox One-Specific Mesh Groups
+This class replaced `ControllerModelXboxOne`, which no longer exists. Xbox One, Elite, and Adaptive profiles now render this mesh too, because it is the better model and the shapes are close enough. Their 2D layouts still diverge, which is why `ResolveAssetFolders` returns `("XBOXONE", "XboxSeries")` for them.
+
+### Appearances
+
+Thirteen colorways share the mesh: Carbon Black, Robot White, Electric Volt, Daystrike Camo, Halo Infinite, Starfield, Stellar Shift, Deep Pink, Porsche 75th Anniversary, Velocity Green, Pulse Red, Shock Blue, Remix Special Edition. Ids are `AppearanceIds`, display strings are `AppearanceNames`. An unrecognized id falls back to `Carbon`.
+
+### Series-Specific Mesh Groups
 
 | Field | Loaded From | Description |
 |-------|-------------|-------------|
-| `MainBodyBack` | `MainBodyBack.obj` | Back shell |
-| `MainBodyTop` | `MainBodyTop.obj` | Top shell |
-| `MainBodySide` | `MainBodySide.obj` | Side grips |
-| `BackSymbol` | `BackSymbol.obj` | View-button glyph |
-| `StartSymbol` | `StartSymbol.obj` | Menu-button glyph |
-| `BatteryDoor` | `BatteryDoor.obj` | AA-pack door |
-| `BatteryDoorInner` | `BatteryDoorInner.obj` | Door interior |
-| `SpecialOuter` | `SpecialOuter.obj` | Guide button outer ring |
-| `ShareButton` | `ShareButton.obj` | Share button (Series only) |
-| `ShareButtonSymbol` | `ShareButtonSymbol.obj` | Share-button glyph |
-| `USBPortInner` / `USBPortOuter` | `USBPortInner.obj`, `USBPortOuter.obj` | USB-C port |
-| `B1Button`–`B4Button` | `B1-Button.obj`–`B4-Button.obj` | Translucent face-button caps |
-| `B1Interior`–`B4Interior` | `B1-Interior.obj`–`B4-Interior.obj` | Face-button interior shells (painted black) |
-| `B1Interior2`–`B4Interior2` | `B1-Interior2.obj`–`B4-Interior2.obj` | Inner face-button cores (painted black) |
+| `ShareButton` | `Share.obj` | Share button |
+| `DecalOverlay` | `Decal.obj` | Static glyph overlay, puffed 0.22 mm at export |
+| `TransparentTrim` | `Transparent.obj` | Clear ABXY domes, loaded with `TryLoadModel` |
 
 ### Share Button Wiring
 
-The constructor takes a `bool enableShare` argument. `true` is passed only when `ProfileId` starts with `xbox-series-`. Xbox One, Elite, and Adaptive profiles get `false`. When false, the Share mesh stays inert: visible body geometry, no hover, no click, no accent highlight. HM silently drops the Share bit on non-Series profiles, so the mapping UI does not surface it either.
+The constructor takes a `bool enableShare`. The view passes `true` only when `ProfileId` starts with `xbox-series-`. Xbox One, Elite, and Adaptive profiles get `false`, and the Share mesh stays inert: visible body geometry, no hover, no click, no accent highlight. HM silently drops the Share bit on non-Series profiles, so the mapping UI does not surface it either.
 
-### Color Palette
+### Materials
 
-| Name | Hex | Usage |
-|------|-----|-------|
-| `ColorPlasticBlack` | `#26272C` | Shoulders, triggers, stick clicks, dpad, guide, USB outer, button-interior shells, symbols |
-| `ColorPlasticWhite` | `#D8D7DC` | Main shell, share button face, view/menu faces, default fallback |
-| `ColorPlasticGreen` | `#76BA58` | A button (base `B1.obj`) |
-| `ColorPlasticRed` | `#FA3D45` | B button (base `B2.obj`) |
-| `ColorPlasticBlue` | `#119AE5` | X button (base `B3.obj`) |
-| `ColorPlasticYellow` | `#E4D70E` | Y button (base `B4.obj`) |
-| `ColorPlasticTransparent` | `#232323` α=50 | Translucent face-button caps over the colored interior |
+`Body.png` for the solid parts, `Decal.png` for the art, `Transparent.png` for the clear plastic. The transparent material runs through `AddGloss(…, 0.60, 40.0)` because flat diffuse left the ABXY shells barely there. Two fallbacks guard colorways that merged their trim into the body: a missing `Transparent.png` samples `Body.png` at 30 % opacity, and `Transparent.obj` loads through `TryLoadModel` so a missing mesh is skipped instead of throwing. All thirteen shipped colorways carry both files today, so neither fallback currently fires.
+
+Rider decals: knurl rings onto the stick cap-head groups, dotted grip panels onto the triggers and bumpers, and `Decal-Special.obj` onto the guide button as a **covering** rider, so a guide press tints the emblem's own texels accent while the button keeps its default material. Starfield alone ships `Transparent-Shoulder-Left/Right-Trigger.obj`, clear trigger shells that ride the trigger groups so they rotate with the pull. On every other colorway those two calls are no-ops.
 
 ### Rotation Points
 
 | Parameter | Value |
 |-----------|-------|
-| `JoystickRotationPointCenterLeftMillimeter` | `(-39.0, -8.0, 22.2)` |
-| `JoystickRotationPointCenterRightMillimeter` | `(20.0, -8.0, -1.1)` |
-| `JoystickMaxAngleDeg` | `17.0` |
-| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-44.668, 3.087, 39.705)` |
-| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(44.668, 3.087, 39.705)` |
-| `TriggerMaxAngleDeg` | `16.0` |
+| `JoystickRotationPointCenterLeftMillimeter` | `(-39.6, -18.0, 21.4)` |
+| `JoystickRotationPointCenterRightMillimeter` | `(20.0, -18.0, -3.0)` |
+| `JoystickMaxAngleDeg` | `14.0` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-43.9, -3.29, 40.15)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(43.9, -3.29, 40.15)` |
+| `TriggerMaxAngleDeg` | `12.0` |
+| `ModelScale` | `1.0` (155.3 mm body width, real-world scale) |
 
-### Material Assignment Order
+### Draw Order
 
-1. Load Xbox One-specific meshes. Register `ButtonShare` (the `ShareButton` body mesh) if `enableShare`.
-2. Paint the base face buttons green / red / blue / yellow via `ButtonMap["ButtonA".."ButtonY"]`. These map to `B1.obj`–`B4.obj`, not the `Interior` meshes.
-3. Paint View and Menu faces white.
-4. Paint shoulders, triggers, stick clicks, guide, and dpad black.
-5. Generic pass: USB outer, `B1Interior`–`B4Interior`, the `Interior2` cores, stick rings, shoulder triggers, and glyph meshes (`ShareButtonSymbol`, `StartSymbol`, `BackSymbol`) go black.
-6. Face-button caps get the translucent material.
-7. Everything else defaults to white plastic.
-8. `DrawAccentHighlights()` called last.
+1. Load `Share.obj`. Register `ButtonShare` if `enableShare`.
+2. Paint every `ButtonMap` group with the body atlas.
+3. Paint every remaining scene child with the body atlas.
+4. `DrawAccentHighlights()`.
+5. Attach rider decals into the ring, trigger, bumper, and guide groups.
+6. Add `Decal.obj` with the decal atlas.
+7. Add `Transparent.obj` with the glossed transparent atlas, when the colorway has one.
+
+Steps 6 and 7 come last because WPF renders transparency in scene order.
 
 ---
 
@@ -362,75 +397,145 @@ The constructor takes a `bool enableShare` argument. `true` is passed only when 
 
 ```csharp
 public class ControllerModelDualSense : ControllerModelBase
+public ControllerModelDualSense(string appearance = "White")
+protected ControllerModelDualSense(string appearance, string family)
 ```
 
-Calls `base("DualSense")`. Used by DualSense and DualSense Edge profiles.
+The public constructor delegates to the family-scoped protected one with family `"DualSense"`, which calls `base($"{family}.{appearance}")`. Purchased hado CGTrader mesh, split into per-part OBJs from the source's welded main object. The source ships real stick rings, individual d-pad buttons, the touchpad, and separate `Decal.obj` and `Transparent.obj` overlay meshes with their own atlases.
+
+The DualSense Edge is a separate family with its own class, not an appearance of this one.
+
+### Appearances
+
+Ten colorways: White, Midnight Black, Cosmic Red, Gray Camouflage, Nova Pink, Deep Earth Cobalt Blue, Deep Earth Sterling Silver, Deep Earth Volcanic Red, Final Fantasy XVI, Spider-Man 2. An unrecognized id falls back to `White`.
 
 ### DualSense-Specific Mesh Groups
 
 | Field | Loaded From | Description |
 |-------|-------------|-------------|
-| `MainBodyBack` | `MainBodyBack.obj` | Back grip shell |
-| `MainBodyFront` | `MainBodyFront.obj` | Front face plate |
-| `Touchpad` | `Touchpad.obj` | Central touch surface (split out of upstream `MainBody.obj` so it is its own click-mappable and highlight-able mesh) |
-| `AudioJack` | `AudioJack.obj` | 3.5 mm jack |
-| `USBPort` | `USBPort.obj` | USB-C port |
-| `Charger` | `Charger.obj` | Charging contacts |
-| `LED1`, `LED2`, `LED3` | `LED1.obj`–`LED3.obj` | Player-indicator LEDs |
-| `ShareSymbol` | `ShareSymbol.obj` | Create-button glyph |
-| `MenuSymbol` | `MenuSymbol.obj` | Options-button glyph |
-| `B1Button`–`B4Button` | `B1Button.obj`–`B4Button.obj` | Translucent face-button caps |
-| `B1ButtonSymbol`–`B4ButtonSymbol` | `B1ButtonSymbol.obj`–`B4ButtonSymbol.obj` | Cross / Circle / Square / Triangle glyphs |
-| `DPadUpArrow`, `DPadDownArrow`, `DPadLeftArrow`, `DPadRightArrow` | `DPad*Arrow.obj` | Arrow glyphs on the dpad |
-| `DPadUpCover`, `DPadDownCover`, `DPadLeftCover`, `DPadRightCover` | `DPad*Cover.obj` | Translucent dpad covers |
+| `Touchpad` | `Touchpad.obj` | Central touch surface. `ClickMap[Touchpad] = "TouchpadClick"`. |
+| `MuteButton` | `MuteButton.obj` | Mic-mute capsule, re-filed out of the clear-plastic mesh. Registered as `ButtonMute`. |
+| `DecalOverlay` | `Decal.obj` | Static glyph and label overlay |
+| `TransparentTrim` | `Transparent.obj` | Clear plastic: face-button domes, lightbar, mic bar |
 
-### Touchpad Split
+### Materials
 
-`MainBody.obj` from Handheld Companion is one file with multiple connected components: grip handles, the central front-face area, dpad pieces, and face-button pieces are joined together. `tools/overlay_positions.py` runs a one-time split that writes `MainBody.obj` minus the central front-face component and a separate `Touchpad.obj` with just the touch surface. The DualSense constructor loads both so `MainBody` renders the grip and button areas while `Touchpad` is independently clickable and highlight-able. `ClickMap[Touchpad] = "TouchpadClick"`.
+`Body.png`, `Decal.png`, and `Transparent.png` per colorway. The transparent atlas carries alpha from the source opacity map. Midnight Black merged its trim into the body mesh and ships no `Transparent.png`, so it samples `Body.png` at 30 % opacity instead. Either way it goes through `AddGloss(…, 0.60, 40.0)`. The ungloss'd flat material is kept as the highlight fallback, because that path reads a `DiffuseMaterial` brush.
 
-### PlayStation Color Palette
+Rider decals: L2/R2 label faces into the trigger groups, stick-cap knurl art into the ring groups, `Decal-L1.obj` / `Decal-R1.obj` onto the bumpers.
 
-| Name | Hex | Usage |
-|------|-----|-------|
-| `ColorPlasticBlack` | `#21242E` | Front face plate, audio jack, USB port, stick rings, shoulder triggers |
-| `ColorPlasticGrey` | `#7C7F8C` | Share / Menu glyphs, dpad arrows, face-button glyphs |
-| `ColorPlasticWhite` | `#DADFE8` | Back shell, default fallback |
-| `ColorPlasticTransparent` | `#DADFE8` α=100 | Dpad covers, face-button caps |
-| `ColorMetal` | `#5A4928` | Charging contacts |
-| `ColorLEDOff` | `#35383E` | Unlit player-indicator LED |
-| `AccentButtonBackground` (theme) | accent | Lit player-indicator LEDs (LED1, LED2) |
+`Decal.obj` is added to the scene after everything else, then `Transparent.obj` and `MuteButton` last, since WPF renders transparency in scene order. Both of those also get their highlight material assigned by hand, because `DrawAccentHighlights()` walked the scene before they joined it.
 
 ### Rotation Points
 
 | Parameter | Value |
 |-----------|-------|
-| `JoystickRotationPointCenterLeftMillimeter` | `(-30.339, -10.7, -1.507)` |
-| `JoystickRotationPointCenterRightMillimeter` | `(30.339, -10.7, -1.507)` |
+| `JoystickRotationPointCenterLeftMillimeter` | `(-25.7, -15.0, -0.1)` |
+| `JoystickRotationPointCenterRightMillimeter` | `(25.7, -15.0, -0.1)` |
 | `JoystickMaxAngleDeg` | `14.0` |
-| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-65.4, -0.64, 45.8)` |
-| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(65.4, -0.64, 45.8)` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-49.4, 4.99, 41.0)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(49.4, 4.99, 41.0)` |
 | `TriggerMaxAngleDeg` | `16.0` |
 
 ### Uniform Model Scale
 
-Handheld Companion modeled the DualSense larger than the DS4 in raw mesh units (MainBody width 199.9 mm vs 165.7 mm, ~21 % bigger) even though the real-world controllers are nearly the same size. The shared viewport camera is sized for DS4-class meshes, so this class overrides `ModelScale = 165.7 / 199.9`. The view applies the scale at the `ModelVisual3D` level, which scales the controller mesh AND the sibling finger-sphere visuals together so stick highlights and touchpad finger dots stay glued to the correct surface.
+The hado mesh is real-world scale, MainBody width 160.6 mm, while the shared viewport camera is framed for DS4-class meshes at 165.7 mm. This class overrides `ModelScale = 165.7 / 160.6`. The view applies the scale at the `ModelVisual3D` level, which scales the controller mesh AND the sibling finger-sphere visuals together so stick highlights and touchpad finger dots stay glued to the correct surface.
 
 ### Touchpad Inset Region
 
-The split-out `Touchpad` mesh extends beyond the actual touch-sensitive surface: bounds are roughly X ∈ [−42, 38] (80 mm) and Z ∈ [19, 63] (44 mm) versus the real touch area of ~52 × 32 mm. The class overrides `TouchpadXInsetFrac = 0.175`, `TouchpadZTopInsetFrac = 0.10`, `TouchpadZBottomInsetFrac = 0.02` so the rendered finger dot lands where a real finger would land instead of sliding past the visual edges.
+The `Touchpad` mesh is 64.5 x 35.0 mm, the real touch-active area is about 52 x 32 mm centered slightly high. The class overrides `TouchpadXInsetFrac = 0.097`, `TouchpadZTopInsetFrac = 0.05`, `TouchpadZBottomInsetFrac = 0.04` so the rendered finger dot lands where a real finger would land instead of sliding past the visual edges.
 
-### Material Assignment Order
+---
 
-1. Load DualSense-specific meshes. Insert `Touchpad` into `ClickMap` as `TouchpadClick`.
-2. Per `ButtonMap` target: black for shoulders, triggers, stick clicks, and guide. White for everything else.
-3. Generic pass: front shell, audio jack, USB, stick rings, and shoulder triggers go black.
-4. Share / Menu glyphs, dpad arrows, and face-button glyphs go grey.
-5. LED1 and LED2 take the accent material.
-6. Charger gets the metal material.
-7. LED3 takes the unlit-LED material.
-8. Dpad covers and face-button caps get the translucent material.
-9. Everything else defaults to white plastic.
-10. `DrawAccentHighlights()` called last.
+## ControllerModelDualSenseEdge
+
+**File:** `PadForge.App/Models3D/ControllerModelDualSenseEdge.cs`
+
+```csharp
+public sealed class ControllerModelDualSenseEdge : ControllerModelDualSense
+public ControllerModelDualSenseEdge() : base("Edge", "DualSenseEdge")
+```
+
+Its own family with a one-entry appearance list (`"Edge"` / `"DualSense Edge"`), shadowing the base arrays with `new` because statics cannot be virtual. Nothing resolves those through a base-typed expression: the view's family switch names this type explicitly, and the Edge reaches the shared body through the protected family-scoped constructor.
+
+The Edge extras live in the DualSense body, gated by `TryLoadModel` so they are absent on the plain colorways.
+
+| File | Target | Notes |
+|------|--------|-------|
+| `LeftBackButton.obj` | `LeftPaddle` | Re-filed out of MainBody |
+| `RightBackButton.obj` | `RightPaddle` | Re-filed out of MainBody |
+| `LeftFnButton.obj` | `LeftFunction` | Re-filed out of the stick housing |
+| `RightFnButton.obj` | `RightFunction` | Re-filed out of the stick housing |
+| `StickHousingL.obj`, `StickHousingR.obj` | (static) | Fixed housings that must not swing with deflection |
+| `StickModule.png` | (atlas) | The removable stick modules have their own atlas. Every other colorway UVs the sticks into the body atlas, so a missing file falls back to it. |
+
+The Fn buttons come out of the stick housings, so their UVs live in the module atlas. The generic button pass gives them the body atlas first, then a second pass re-points them. `Decal-Fn-Left.obj` and `Decal-Fn-Right.obj` ride their buttons so the labels light with a press.
+
+The subclass constructor overrides one thing: the trigger hinge, because the Edge trigger mesh sits about 0.8 mm higher than the standard DualSense's.
+
+| Parameter | Value |
+|-----------|-------|
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-49.4, 5.08, 41.8)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(49.4, 5.08, 41.8)` |
+
+Everything else, including `ModelScale` and the touchpad insets, is inherited.
+
+---
+
+## ControllerModelSwitch2Pro
+
+**File:** `PadForge.App/Models3D/ControllerModelSwitch2Pro.cs`
+
+```csharp
+public class ControllerModelSwitch2Pro : ControllerModelBase
+public ControllerModelSwitch2Pro(bool enableSwitch2Controls = true)
+```
+
+Calls `base("Switch2Pro")`. One appearance, so no colorway picker. Purchased hado CGTrader mesh split from a single welded 53k-poly source by loose-part separation.
+
+Serves every Nintendo slot: both the `switch-pro` and `switch2-pro` profile families, the same arrangement as Xbox One profiles riding the Series mesh.
+
+`B1.obj` through `B4.obj` are assigned by **Nintendo label, not position**. The raw-to-preview bridge maps wire button 1 (physical A, right position) to `"ButtonA"`, so `B1.obj` is the right-position button.
+
+### Switch-2-Specific Mesh Groups
+
+| Field | Loaded From | Description |
+|-------|-------------|-------------|
+| `Capture` | `Capture.obj` | Capture button. Always registered as `ButtonShare`, the same grammar slot Xbox Series Share rides. |
+| `CButton` | `CButton.obj` | C button, registered as `ButtonC` only when enabled |
+| `GL`, `GR` | `GL.obj`, `GR.obj` | Grip buttons, registered as `LeftPaddle` / `RightPaddle` only when enabled |
+| `LED1`–`LED4` | `LED1.obj`–`LED4.obj` | Four player-indicator LEDs |
+| `WellFill` | `WellFill.obj` | Hidden dark strip inside the top rail. The single-skin source has no interior, so elevated rear angles otherwise see through the bumper and trigger seams to the background. |
+| `InnerLiner` | `InnerLiner.obj` | MainBody displaced 1.2 mm inward along vertex normals, so slit gaps read as seams instead of holes. |
+
+### Switch 2 Control Wiring
+
+The `enableSwitch2Controls` flag gates C, GL, and GR into the click-to-record and highlight maps. The view resolves it by asking the canonical wire table, `NintendoPreviewMap.IndexOf(ProfileId, "ButtonC") >= 0`, rather than matching on the profile id, so the mesh is interactive exactly when the pad has the control. On an original Switch Pro profile the three meshes still draw, they just never respond.
+
+### Materials
+
+One baked diffuse atlas, `Switch2Pro_Diffuse.png` (base color times ambient occlusion, since WPF 3D has no PBR), serves every source part. Glyphs, d-pad arrows, and panel lines all come from the texture. Generated meshes with synthetic UVs keep flat colors.
+
+| Name | Hex | Usage |
+|------|-----|-------|
+| `ColorStick` | `#3A3B3D` | Motors |
+| `ColorLEDOff` | `#2E2F31` | LED2, LED3, LED4 |
+| `ColorSeam` | `#26272A` | `WellFill`, `InnerLiner` |
+| `AccentButtonBackground` (theme) | accent | LED1. Falls back to `#2196F3`. |
+
+### Rotation Points
+
+| Parameter | Value |
+|-----------|-------|
+| `JoystickRotationPointCenterLeftMillimeter` | `(-39.6, -10.0, 19.7)` |
+| `JoystickRotationPointCenterRightMillimeter` | `(17.7, -10.0, -1.2)` |
+| `JoystickMaxAngleDeg` | `14.0` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-42.8, 3.91, 42.45)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(42.8, 3.91, 42.45)` |
+| `TriggerMaxAngleDeg` | `8.0` |
+| `ModelScale` | `1.02` (148.0 mm body width) |
+
+ZL and ZR are short-travel digital paddles that snap to full pull, which is why the max angle is 8 degrees. The DualSense's 16 drove them through the rail.
 
 ---
 
@@ -438,9 +543,11 @@ The split-out `Touchpad` mesh extends beyond the actual touch-sensitive surface:
 
 ### Directory Structure
 
+Two shapes live side by side. The single-appearance families keep their OBJs directly under the family folder. The colorway families put one folder per appearance underneath, each holding a full mesh set plus its own PNG atlases. `ModelName` is the path segment after `3DModels/`, which is why it carries the appearance for the second shape.
+
 ```
 PadForge.App/3DModels/
-  XBOX360/         (31 meshes)
+  XBOX360/         (31 meshes, no textures)
     MainBody.obj                             (body)
     MainBody-Charger.obj                     (battery pack)
     Joystick-Left-Ring.obj                   (left stick torus ring)
@@ -459,89 +566,117 @@ PadForge.App/3DModels/
     DPadUp.obj, DPadDown.obj,                (D-pad directions)
       DPadLeft.obj, DPadRight.obj
     LeftStickClick.obj, RightStickClick.obj  (stick click caps)
-  XBOXONE/         (46 meshes)
-    MainBody.obj                             (body)
-    MainBodyBack.obj, MainBodyTop.obj,       (shell panels)
-      MainBodySide.obj
-    Joystick-Left-Ring.obj                   (left stick torus ring)
-    Joystick-Right-Ring.obj                  (right stick torus ring)
+  Switch2Pro/      (32 meshes + 1 texture)
+    MainBody.obj                             (body shell)
+    InnerLiner.obj                           (inward-displaced shell, seam fill)
+    WellFill.obj                             (dark strip inside the top rail)
+    Joystick-Left-Ring.obj                   (left stick cap head)
+    Joystick-Right-Ring.obj                  (right stick cap head)
+    LeftStickClick.obj, RightStickClick.obj  (stick stem + base)
     MotorLeft.obj, MotorRight.obj            (rumble motors)
-    Shoulder-Left-Trigger.obj                (left trigger)
-    Shoulder-Right-Trigger.obj               (right trigger)
-    BatteryDoor.obj, BatteryDoorInner.obj    (AA-pack door)
-    SpecialOuter.obj                         (guide button outer ring)
-    ShareButton.obj, ShareButtonSymbol.obj   (Series Share button + glyph)
-    StartSymbol.obj, BackSymbol.obj          (Menu + View glyphs)
-    USBPortInner.obj, USBPortOuter.obj       (USB-C port)
-    B1.obj, B2.obj, B3.obj, B4.obj           (base face buttons: A, B, X, Y)
-    B1-Button.obj, B2-Button.obj,            (translucent face-button caps)
-      B3-Button.obj, B4-Button.obj
-    B1-Interior.obj, B2-Interior.obj,        (colored face-button interiors)
-      B3-Interior.obj, B4-Interior.obj
-    B1-Interior2.obj, B2-Interior2.obj,      (inner cores)
-      B3-Interior2.obj, B4-Interior2.obj
-    L1.obj, R1.obj                           (shoulder bumpers)
-    Back.obj, Start.obj, Special.obj         (View, Menu, Guide buttons)
+    Shoulder-Left-Trigger.obj                (ZL)
+    Shoulder-Right-Trigger.obj               (ZR)
+    L1.obj, R1.obj                           (L, R bumpers)
+    B1.obj, B2.obj, B3.obj, B4.obj           (face buttons by LABEL: A, B, X, Y)
     DPadUp.obj, DPadDown.obj,                (D-pad directions)
       DPadLeft.obj, DPadRight.obj
-    LeftStickClick.obj, RightStickClick.obj  (stick click caps)
-  DS4/             (36 meshes)
-    MainBody.obj                             (body)
-    MainBodyBack.obj                         (back panel)
-    Joystick-Left-Ring.obj                   (left stick torus ring)
-    Joystick-Right-Ring.obj                  (right stick torus ring)
-    MotorLeft.obj, MotorRight.obj            (rumble motors)
-    Shoulder-Left-Trigger.obj                (left trigger L2)
-    Shoulder-Right-Trigger.obj               (right trigger R2)
-    Shoulder-Left-Middle.obj                 (left shoulder middle)
-    Shoulder-Right-Middle.obj                (right shoulder middle)
-    Screen.obj                               (touchpad area)
-    Aux-Port.obj                             (auxiliary port)
-    Triangle.obj                             (decorative triangle)
-    DPadDownArrow.obj, DPadUpArrow.obj,      (D-pad arrow indicators)
-      DPadLeftArrow.obj, DPadRightArrow.obj
-    B1.obj, B2.obj, B3.obj, B4.obj           (base face buttons: Cross, Circle, Square, Triangle)
-    B1-Symbol.obj, B2-Symbol.obj,            (PlayStation symbol overlays)
-      B3-Symbol.obj, B4-Symbol.obj
-    L1.obj, R1.obj                           (shoulder bumpers)
-    Back.obj, Start.obj, Special.obj         (Share, Options, PS buttons)
-    DPadUp.obj, DPadDown.obj,                (D-pad directions)
-      DPadLeft.obj, DPadRight.obj
-    LeftStickClick.obj, RightStickClick.obj  (stick click caps)
-  DualSense/       (49 meshes)
-    MainBody.obj                             (body, minus the touchpad area)
-    MainBodyBack.obj, MainBodyFront.obj      (back shell, front face plate)
-    Touchpad.obj                             (split-out central touch surface)
-    Joystick-Left-Ring.obj                   (left stick torus ring)
-    Joystick-Right-Ring.obj                  (right stick torus ring)
-    MotorLeft.obj, MotorRight.obj            (rumble motors)
-    Shoulder-Left-Trigger.obj                (L2 adaptive trigger)
-    Shoulder-Right-Trigger.obj               (R2 adaptive trigger)
-    AudioJack.obj                            (3.5 mm jack)
-    USBPort.obj                              (USB-C port)
-    Charger.obj                              (charging contacts)
-    LED1.obj, LED2.obj, LED3.obj             (player-indicator LEDs)
-    ShareSymbol.obj, MenuSymbol.obj          (Create + Options glyphs)
-    B1.obj, B2.obj, B3.obj, B4.obj           (base face buttons: Cross, Circle, Square, Triangle)
-    B1Button.obj, B2Button.obj,              (translucent face-button caps)
-      B3Button.obj, B4Button.obj
-    B1ButtonSymbol.obj, B2ButtonSymbol.obj,  (glyph overlays)
-      B3ButtonSymbol.obj, B4ButtonSymbol.obj
-    L1.obj, R1.obj                           (shoulder bumpers)
-    Back.obj, Start.obj, Special.obj         (Create, Options, PS buttons)
-    DPadUp.obj, DPadDown.obj,                (D-pad directions)
-      DPadLeft.obj, DPadRight.obj
-    DPadUpArrow.obj, DPadDownArrow.obj,      (D-pad arrow glyphs)
-      DPadLeftArrow.obj, DPadRightArrow.obj
-    DPadUpCover.obj, DPadDownCover.obj,      (translucent dpad covers)
-      DPadLeftCover.obj, DPadRightCover.obj
-    LeftStickClick.obj, RightStickClick.obj  (stick click caps)
+    Back.obj, Start.obj, Special.obj         (Minus, Plus, Home)
+    Capture.obj                              (Capture button)
+    CButton.obj                              (C button, Switch 2 only)
+    GL.obj, GR.obj                           (grip buttons, Switch 2 only)
+    LED1.obj .. LED4.obj                     (player-indicator LEDs)
+    Switch2Pro_Diffuse.png                   (baked base color x AO atlas)
+  DS4/
+    JetBlack/, MagmaRed/                     (37 meshes + Body.png, Decal.png each)
+      MainBody.obj, MainBodyBack.obj         (body, back panel)
+      Screen.obj                             (touchpad surface)
+      Shoulder-Left-Middle.obj               (left shoulder middle)
+      Shoulder-Right-Middle.obj              (right shoulder middle)
+      Shoulder-Left-Trigger.obj              (L2)
+      Shoulder-Right-Trigger.obj             (R2)
+      Joystick-Left-Ring.obj                 (left stick cap head)
+      Joystick-Right-Ring.obj                (right stick cap head)
+      LeftStickClick.obj, RightStickClick.obj
+      MotorLeft.obj, MotorRight.obj
+      Aux-Port.obj, Triangle.obj
+      B1.obj .. B4.obj                       (Cross, Circle, Square, Triangle)
+      B1-Symbol.obj .. B4-Symbol.obj         (symbol riders)
+      L1.obj, R1.obj
+      Back.obj, Start.obj, Special.obj       (Share, Options, PS)
+      DPadUp.obj .. DPadRight.obj
+      Decal.obj                              (static glyph overlay)
+      Decal-L1.obj, Decal-R1.obj             (bumper lettering riders)
+      Decal-Shoulder-Left-Trigger.obj        (L2 label rider)
+      Decal-Shoulder-Right-Trigger.obj       (R2 label rider)
+  DualSense/
+    White/, Midnight/, CosmicRed/,           (32 meshes each + Body.png,
+    GrayCamo/, NovaPink/,                     Decal.png, Transparent.png.
+    DeepEarthCobalt/, DeepEarthSterling/,     Midnight has no Transparent.png)
+    DeepEarthVolcanic/, FFXVI/, SpiderMan2/
+      MainBody.obj                           (body shell)
+      Touchpad.obj                           (touch surface)
+      MuteButton.obj                         (mic-mute capsule)
+      Transparent.obj                        (clear plastic: domes, lightbar, mic bar)
+      Decal.obj                              (static glyph overlay)
+      Joystick-Left-Ring.obj                 (left stick cap head)
+      Joystick-Right-Ring.obj                (right stick cap head)
+      LeftStickClick.obj, RightStickClick.obj
+      MotorLeft.obj, MotorRight.obj
+      Shoulder-Left-Trigger.obj              (L2)
+      Shoulder-Right-Trigger.obj             (R2)
+      L1.obj, R1.obj
+      B1.obj .. B4.obj                       (Cross, Circle, Square, Triangle)
+      Back.obj, Start.obj, Special.obj       (Create, Options, PS)
+      DPadUp.obj .. DPadRight.obj
+      Decal-Joystick-Left-Ring.obj           (knurl riders)
+      Decal-Joystick-Right-Ring.obj
+      Decal-L1.obj, Decal-R1.obj
+      Decal-Shoulder-Left-Trigger.obj
+      Decal-Shoulder-Right-Trigger.obj
+  DualSenseEdge/
+    Edge/                                    (40 meshes + Body.png, Decal.png,
+                                              Transparent.png, StickModule.png)
+      (the full DualSense set, plus:)
+      LeftBackButton.obj, RightBackButton.obj  (back paddles)
+      LeftFnButton.obj, RightFnButton.obj      (Fn buttons)
+      StickHousingL.obj, StickHousingR.obj     (fixed module housings)
+      Decal-Fn-Left.obj, Decal-Fn-Right.obj    (Fn label riders)
+  XboxSeries/
+    Carbon/, Robot/, ElectricVolt/,          (32 meshes each + Body.png,
+    DaystrikeCamo/, HaloInfinite/,            Decal.png, Transparent.png.
+    Starfield/, StellarShift/, DeepPink/,     Starfield has 34, see below)
+    Porsche75th/, VelocityGreen/,
+    PulseRed/, ShockBlue/, Remix/
+      MainBody.obj                           (body shell)
+      Share.obj                              (Share button)
+      Transparent.obj                        (clear ABXY domes)
+      Decal.obj                              (static glyph overlay)
+      Joystick-Left-Ring.obj                 (left stick cap head)
+      Joystick-Right-Ring.obj                (right stick cap head)
+      LeftStickClick.obj, RightStickClick.obj
+      MotorLeft.obj, MotorRight.obj
+      Shoulder-Left-Trigger.obj              (LT)
+      Shoulder-Right-Trigger.obj             (RT)
+      L1.obj, R1.obj                         (LB, RB)
+      B1.obj .. B4.obj                       (A, B, X, Y)
+      Back.obj, Start.obj, Special.obj       (View, Menu, Guide)
+      DPadUp.obj .. DPadRight.obj            (bisected disc wedges)
+      Decal-Joystick-Left-Ring.obj           (knurl riders)
+      Decal-Joystick-Right-Ring.obj
+      Decal-L1.obj, Decal-R1.obj             (bumper grip riders)
+      Decal-Shoulder-Left-Trigger.obj
+      Decal-Shoulder-Right-Trigger.obj
+      Decal-Special.obj                      (covering guide-emblem rider)
+    Starfield/ adds:
+      Transparent-Shoulder-Left-Trigger.obj  (clear trigger shells that
+      Transparent-Shoulder-Right-Trigger.obj  rotate with the pull)
 ```
 
-All OBJ files are embedded as `EmbeddedResource` in the project file:
+Meshes and textures are both embedded as `EmbeddedResource`:
 
 ```xml
 <EmbeddedResource Include="3DModels\**\*.obj" />
+<EmbeddedResource Include="3DModels\**\*.png" />
 ```
 
 ---
@@ -550,7 +685,7 @@ All OBJ files are embedded as `EmbeddedResource` in the project file:
 
 **File:** `PadForge.App/Views/ControllerModelView.xaml`, `ControllerModelView.xaml.cs`
 
-WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (~1680 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1037 lines: the annotation overlay, see below).
+WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2148 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1052 lines: the annotation overlay, see below).
 
 ### XAML Structure
 
@@ -585,29 +720,39 @@ WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. T
          No Background so empty space stays click-through to the viewport. -->
     <Canvas x:Name="AnnotationCanvas" Visibility="Collapsed" ClipToBounds="True" />
 
-    <!-- Top-right controls: annotation toggle (Tag glyph E8EC) + Reset View -->
+    <!-- Top-right controls: colorway picker, annotation toggle
+         (Tag glyph E8EC), Reset View -->
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                 VerticalAlignment="Top" Margin="0,8,8,0">
+        <ComboBox x:Name="AppearancePicker" MinWidth="130"
+                  Visibility="Collapsed"
+                  SelectionChanged="AppearancePicker_SelectionChanged" />
         <ui:Button x:Name="AnnotationToggleButton"
                    Style="{StaticResource EmberIconButton}"
                    Click="AnnotationToggle_Click">
-            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8EC;" />
+            <TextBlock x:Name="AnnotationToggleGlyph"
+                       FontFamily="Segoe MDL2 Assets" Text="&#xE8EC;" />
         </ui:Button>
-        <Button x:Name="ResetViewButton" Content="Reset View"
-                Click="ResetView_Click" />
+        <Button x:Name="ResetViewButton" Click="ResetView_Click" />
     </StackPanel>
 </Grid>
 ```
 
 The camera is wrapped in `<helix:HelixViewport3D.Camera>` rather than being a bare child. The viewport is named `ModelViewPort` (the code-behind reads it for hit testing and projection). The rim light is a third light source (see [Lighting](#lighting)). All built-in HelixToolkit camera controls are disabled. Rotation, zoom, and pan are handled by custom event handlers to avoid conflicts with PadForge's click-to-map and touch gesture handling.
 
+### Colorway Picker
+
+`AppearancePicker` shows only when the current model family ships more than one appearance, which `UpdateAppearancePicker()` decides from `AppearanceRegistry(family)`. The registry is a switch over `"XboxSeries"`, `"DualSense"`, `"DS4"`, and `"DualSenseEdge"`, reading each model class's static `AppearanceIds` / `AppearanceNames`. `DualSenseEdge` has one entry, so its picker stays collapsed. Xbox 360 and Switch 2 Pro are not in the registry at all.
+
+Selection writes `PadViewModel.SetModelAppearance(family, id)`, which raises `Model3DAppearances`, which re-enters `EnsureModel()` and rebuilds against the new atlas set. The choice is per virtual controller, persisted on the pad's `PadSetting`, so two VCs of the same family can wear different colorways.
+
 ### Events
 
 ```csharp
-public event EventHandler<string> ControllerElementRecordRequested;
-public event EventHandler<bool> AnnotationsToggled;
-public event EventHandler<string> AnnotationChipNavigateRequested;
-public bool AnnotationsEnabled { get; set; }
+public event EventHandler<string> ControllerElementRecordRequested;   // xaml.cs
+public event EventHandler<bool> AnnotationsToggled;                   // Annotations.cs
+public event EventHandler<string> AnnotationChipNavigateRequested;    // Annotations.cs
+public bool AnnotationsEnabled { get; set; }                          // Annotations.cs
 ```
 
 | Member | Fires when | Payload |
@@ -625,7 +770,9 @@ The last three drive the annotation overlay (see [Annotation Overlay](#annotatio
 |-------|------|-------------|
 | `_vm` | `PadViewModel` | Bound ViewModel |
 | `_currentModel` | `ControllerModelBase` | Active 3D model |
-| `_currentModelShareEnabled` | `bool` | Whether the live Xbox One mesh has Share wired. Forces a rebuild on an Xbox One ↔ Xbox Series profile swap within the same asset folder. |
+| `_currentModelExtraControlsEnabled` | `bool` | Whether the live mesh has its borrowed-but-absent controls wired. Forces a rebuild on an Xbox One to Xbox Series swap, or a Switch Pro to Switch 2 Pro swap, within the same asset folder. |
+| `_currentModelAppearance` | `string` | Live colorway id. A change forces a rebuild the same way. |
+| `_appearancePickerSyncing` | `bool` | Suppresses the `SelectionChanged` write-back while the picker is being populated |
 | `_dirty` | `bool` | Render-frame update flag |
 | `_triggerAngleLeft/Right` | `float` | Current trigger angles (change detection) |
 | `_flashTimer` | `DispatcherTimer` | Map All flash timer (400 ms) |
@@ -652,8 +799,10 @@ The last three drive the annotation overlay (see [Annotation Overlay](#annotatio
 | `_modelRotation` | `Transform3DGroup` | Persistent scale + rotation on `ModelVisual3D.Transform` |
 | `_yawRotation` | `AxisAngleRotation3D` | Yaw: axis (0,0,1) |
 | `_pitchRotation` | `AxisAngleRotation3D` | Pitch: axis (1,0,0) |
-| `_modelScaleTransform` | `ScaleTransform3D` | Per-model uniform scale, composed into `_modelRotation` (first child) so rotation and scale share one `Transform` assignment. Used for the DualSense down-scale. |
-| `_touchpadHighlightMaterial` | `DiffuseMaterial` | Accent-color material (alpha `0xC0`) shown on the touchpad surface while click is held |
+| `_modelScaleTransform` | `ScaleTransform3D` | Per-model uniform scale, composed into `_modelRotation` so rotation and scale share one `Transform` assignment. Used for the DualSense and Switch 2 Pro scale corrections. |
+| `_modelRecenter` | `TranslateTransform3D` | Vertical recenter, computed once per model load from the mesh's static bounds. First child of `_modelRotation`, so scale and rotation both see a model whose visual center is the origin. Never live bounds: trigger pulls change the group's bounds a little, and the whole model would bob with them. |
+| `_stickTransforms3D` | `Dictionary<Model3DGroup, …>` | Retained per-stick rotation graph keyed on the ring group. Cleared on every model rebuild, since the keys are the outgoing model's groups. |
+| `_touchpadHighlightMaterial` | `DiffuseMaterial` | Fully opaque accent material shown on the touchpad surface while click is held |
 | `_touchpadCurrentlyHighlighted` | `bool` | Tracks the current touchpad material swap so it does not churn every frame |
 | `_touchpadFinger0Visual` / `_touchpadFinger1Visual` | `ModelVisual3D` | Finger-sphere visuals (orange, blue) parented under `ModelVisual3D` |
 | `_touchpadFinger0Transform` / `_touchpadFinger1Transform` | `TranslateTransform3D` | Per-finger position. Parked at `OffsetY = -10000` while the finger is up |
@@ -667,7 +816,7 @@ public void Bind(PadViewModel vm)
 public void Unbind()
 ```
 
-`Bind` subscribes to `PropertyChanged`, hooks `CompositionTarget.Rendering`, calls `EnsureModel()`, and rebuilds annotations. `OutputType` or `ProfileId` changes trigger `EnsureModel()` (the `ProfileId` path handles an Xbox One ↔ Xbox Series swap within the same `XBOXONE` asset folder, which must rebuild the mesh to flip Share between inert and live). `CurrentRecordingTarget` changes trigger flash animation and arrow overlays. All other changes set `_dirty`.
+`Bind` subscribes to `PropertyChanged`, hooks `CompositionTarget.Rendering`, calls `EnsureModel()`, and rebuilds annotations. `OutputType`, `ProfileId`, or `Model3DAppearances` changes trigger `EnsureModel()`. `CurrentRecordingTarget` changes trigger flash animation and arrow overlays. The six live gyro and accel readout properties return early, because the 3D render never consumes them and a motion pad at rest otherwise re-armed the full refresh every tick. All other changes set `_dirty`.
 
 ### Model Lifecycle
 
@@ -675,22 +824,35 @@ public void Unbind()
 private void EnsureModel()
 ```
 
-Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)`, which returns one of four model names:
+Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)`, whose second tuple element is the 3D folder:
 
 | Profile family | Resolved folder | Model class |
 |----------------|-----------------|-------------|
-| DualSense / DualSense Edge | `DualSense` | `ControllerModelDualSense` |
-| Xbox One, Xbox Elite, Xbox Series, Xbox Adaptive | `XBOXONE` | `ControllerModelXboxOne` |
+| DualSense Edge | `DualSenseEdge` | `ControllerModelDualSenseEdge` |
+| DualSense | `DualSense` | `ControllerModelDualSense` |
 | DualShock 4 | `DS4` | `ControllerModelDS4` |
-| Xbox 360 (fallback) | `XBOX360` | `ControllerModelXbox360` |
+| Xbox Series | `XboxSeries` | `ControllerModelXboxSeries` |
+| Xbox One, Xbox Elite, Xbox Adaptive | `XboxSeries` | `ControllerModelXboxSeries` |
+| Switch 2 Pro | `Switch2Pro` | `ControllerModelSwitch2Pro` |
+| Switch Pro | `Switch2Pro` | `ControllerModelSwitch2Pro` |
+| Xbox 360, and the fallback | `XBOX360` | `ControllerModelXbox360` |
 
-When `XBOXONE` is selected, `EnsureModel()` also checks whether the `ProfileId` starts with `xbox-series-`. If it does, `ControllerModelXboxOne` is constructed with `enableShare: true` so the Share mesh becomes click-mappable. Xbox One, Elite, and Adaptive profiles get `enableShare: false` (mesh is rendered but inert).
+The Edge check runs before the plain DualSense one, because Edge profile ids start with `dualsense` too and must never get a plain DualSense mesh.
 
-The model swap is skipped when `_currentModel.ModelName == needed` and the Share-enabled flag has not changed, so re-entrancy from PropertyChanged storms is cheap.
+Two meshes are shared by profiles that do not all have every control. `wantExtraControls` decides whether the borrowed-but-absent controls get wired into the hover, click-to-record, and highlight maps. The meshes draw either way.
 
-Extended slots route to `ControllerSchematicView` instead of this view, so this control only ever sees Xbox or PlayStation slots in practice. The v2 `ExtendedConfig.Preset` enum that previously gated DS4-vs-Xbox360 model selection on Extended slots was dropped in v3 (commit `d57a725`).
+| Folder | Test | Gates |
+|--------|------|-------|
+| `XboxSeries` | `ProfileId` starts with `xbox-series-` | Share button |
+| `Switch2Pro` | `NintendoPreviewMap.IndexOf(ProfileId, "ButtonC") >= 0` | C, GL, GR |
 
-Returns immediately if the current model matches. Otherwise disposes the old model, creates the new one, and assigns to `ModelVisual3D.Content`.
+The Switch test asks the canonical wire table rather than matching on the profile id, so the mesh is interactive exactly when the pad has the control and the two cannot drift apart.
+
+The rebuild is skipped when `_currentModel.ModelFamily`, `_currentModelExtraControlsEnabled`, and `_currentModelAppearance` all match what is wanted, so re-entrancy from PropertyChanged storms is cheap. Comparing `ModelFamily` and not `ModelName` is what keeps a colorway from reading as a family change.
+
+On a real rebuild: `_stickTransforms3D` is cleared and both retained trigger angles reset to zero, because both key on the outgoing model. Without the reset a switch carried the old model's pull angles into the new one and the triggers rendered part-pressed at rest. The arrow overlay is removed, the old model disposed, the new one constructed and assigned to `ModelVisual3D.Content`, then `ModelScale` is pushed into `_modelScaleTransform`, `_modelRecenter.OffsetZ` is computed from the fresh static bounds, and the finger visuals and annotations are rebuilt.
+
+`PadPage.ApplyViewMode()` routes Extended slots to `ControllerSchematicView`, MIDI to `MidiPreviewView`, KB+Mouse to `KBMPreviewView`, and VR to `VRPreview`. This control serves the gamepad presets, which means Xbox, PlayStation, and Nintendo slots.
 
 ### Render-Frame Update Pipeline
 
@@ -699,20 +861,23 @@ Returns immediately if the current model matches. Otherwise disposes the old mod
 ```
 OnRendering()
     |
+    +-> visibility gate (skip if !IsVisible or the window is minimized)
     +-> _dirty check (skip if clean)
     |
-    +-> HighlightButtons()          -- swap materials for 16 buttons
+    +-> HighlightButtons()          -- swap materials for 22 button targets
     +-> UpdateJoystick() x2         -- tilt left/right stick meshes
     +-> UpdateTrigger() x2          -- rotate left/right trigger meshes
     +-> UpdateTouchpadPreview3D()   -- touchpad highlight + finger spheres
     +-> UpdateAnnotationLevelBars() -- trigger bar heights (no-op if overlay off)
 ```
 
+The visibility gate is a retained-page guard. Pages are eagerly instantiated and visibility-toggled, so `Loaded` fires at startup even for hidden pages and `Unloaded` never fires. Without it a connected device's 30 Hz updates kept `_dirty` set and this handler rebuilt the whole WPF3D transform and material graph every frame while invisible. `_dirty` stays set, so the first visible frame catches up. `IsVisible` stays true while minimized, which is why the minimize probe is a separate test.
+
 `UpdateTouchpadPreview3D()` runs every dirty frame but returns immediately when the current model has no `Touchpad`. `UpdateAnnotationLevelBars()` returns immediately when the overlay is off.
 
 #### HighlightButtons()
 
-Iterates the 16-element `ButtonProperties` array, reads each `PadViewModel` bool via `GetButtonState()`, and swaps between `DefaultMaterials` and `HighlightMaterials`:
+Iterates the 22-element `ButtonProperties` array, reads each `PadViewModel` bool via `GetButtonState()`, and swaps between `DefaultMaterials` and `HighlightMaterials`:
 
 ```csharp
 private static readonly string[] ButtonProperties =
@@ -721,14 +886,20 @@ private static readonly string[] ButtonProperties =
     "LeftShoulder", "RightShoulder",
     "ButtonBack", "ButtonStart", "ButtonGuide",
     "ButtonShare",
+    "ButtonMute",
+    "LeftFunction",
+    "RightFunction",
+    "ButtonC",
+    "LeftPaddle",
+    "RightPaddle",
     "DPadUp", "DPadDown", "DPadLeft", "DPadRight",
     "LeftThumbButton", "RightThumbButton"
 };
 ```
 
-`ButtonShare` only resolves to a mesh on Xbox Series profiles, where `enableShare` registered it in `ButtonMap`. On every other model `ButtonMap.TryGetValue` misses and the entry is skipped. `GetButtonState()` has a matching `"ButtonShare" => _vm.ButtonShare` case.
+Seven of those resolve to a mesh on only some models: `ButtonShare` on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), `ButtonMute` on DualSense and Edge, `LeftFunction` / `RightFunction` on the Edge alone, and `ButtonC` / `LeftPaddle` / `RightPaddle` on Switch 2 Pro when the extra controls are wired, with the paddles also on the Edge. Everywhere else `ButtonMap.TryGetValue` misses and the entry is skipped. `GetButtonState()` carries a matching case for all 22.
 
-For each button, iterates all `Model3DGroup` entries in `ButtonMap` (multi-mesh support). Only modifies `GeometryModel3D` children with `DiffuseMaterial`.
+For each button, iterates all `Model3DGroup` entries in `ButtonMap` (multi-mesh support). The `DiffuseMaterial` type guard is bypassed for the stick rings, the stick clicks, and the bumpers, because mid-deflection those carry a graded `MaterialGroup` and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.
 
 #### UpdateJoystick()
 
@@ -740,8 +911,9 @@ private void UpdateJoystick(
 ```
 
 1. Normalizes raw values (`short.MaxValue`) to &minus;1–1 range.
-2. **Gradient highlight**: Blends default/highlight materials by deflection magnitude via `GradientHighlight()`.
-3. **Rotation**: `AxisAngleRotation3D` for X (around Z) and Y (around X), centered at `rotationPoint`. Both ring and thumb meshes share the same `Transform3DGroup`.
+2. **Ownership check**: If the stick button is pressed, hovered, or flashing, the button highlight owns the whole stick at full intensity and this pass skips the grading so it does not stomp the glow back to rest.
+3. **Gradient highlight**: Grades every geometry in the ring group and the click group, cap and knurl riders alike, by deflection magnitude. A visual deadzone of 0.05 gates it, because a drifting stick otherwise keeps its ring permanently accent-tinted. Mapping is unaffected: this gates only the preview glow.
+4. **Rotation**: `AxisAngleRotation3D` for X (around Z) and Y (around X), centered at `rotationPoint`. Both ring and thumb meshes share one retained `Transform3DGroup`, cached in `_stickTransforms3D` and mutated in place. Allocating the five-object graph per dirty frame was pure churn.
 
 #### UpdateTrigger()
 
@@ -754,17 +926,26 @@ private void UpdateTrigger(
     ref float prevAngle)
 ```
 
-1. **Gradient color**: Blends default/highlight materials by trigger value (0–1).
-2. **Rotation**: `AxisAngleRotation3D` around X axis at `rotationPoint`. Max angle: `-maxAngleDeg * value`.
-3. **Change detection**: Skips update if angle delta < 0.01 degrees.
+1. **Hover check**: Returns immediately when the trigger is the hovered group.
+2. **Gradient color**: Grades the trigger geometry and its label decal riders by trigger value (0–1), above a 0.03 deadzone so sensor noise does not keep the pull glow lit at rest.
+3. **Rotation**: `AxisAngleRotation3D` around X axis at `rotationPoint`. Max angle: `-maxAngleDeg * value`.
+4. **Change detection**: Skips the rotation if angle delta < 0.01 degrees.
 
 #### GradientHighlight()
 
 ```csharp
-private static DiffuseMaterial GradientHighlight(Material defaultMaterial, Material highlightMaterial, float factor)
+private static Material GradientHighlight(GeometryModel3D owner,
+    Material defaultMaterial, Material highlightMaterial, float factor,
+    bool riderDecal = false)
 ```
 
-ARGB linear interpolation between default and highlight colors. Creates a new `DiffuseMaterial` per call (no caching; only called when values change).
+Two paths, chosen by what the default material is.
+
+A flat `DiffuseMaterial` over a solid brush takes the ARGB interpolation path between default and highlight colors.
+
+A textured default, meaning an `ImageBrush` or an existing `MaterialGroup`, cannot express the lerp as a solid color: a color fallback made any deflection show the full accent over the atlas. That path instead builds a `MaterialGroup` of the art plus a lit accent overlay whose alpha scales with the factor, so the glow grades while the texture stays visible underneath. Rider overlays are additionally masked by the rider's own alpha, which is what `riderDecal` selects.
+
+Both paths retain their result per geometry in a `ConditionalWeakTable` keyed on the owning `GeometryModel3D` and mutate the brush color in place on later calls, so a rebuilt model's entries collect on their own. `s_riderDefaults` holds the per-geometry rest material, because a rider inside a ring or trigger group carries its own decal material and restoring the group default would repaint it wrongly.
 
 ### Model Rotation and Panning
 
@@ -828,10 +1009,10 @@ Uses hit position relative to the stick ring's mesh centroid (`IsStickRingHit` p
 
 `Viewport_PreviewMouseMove` hit-tests at the cursor on every move:
 
-- **Buttons/triggers**: `ApplyHoverHighlight()` sets highlight material. `RestoreHoverGroup()` restores default (skipped during flash animation).
+- **Buttons/triggers**: `ApplyHoverHighlight()` sets the highlight material. `RestoreHoverGroup()` restores default (skipped during flash animation). Both go through `ResolveTargetGroups()`, which walks the hit group to its `ClickMap` target and back out through `ButtonMap`, so hovering a stick click lights the ring with it and hovering one mesh of a multi-mesh button lights the rest.
 - **Stick rings**: `ShowHoverQuadrant()` creates a semi-transparent wedge overlay from the ring's mesh triangles, clipped to the target quadrant.
 - `ClearHover()` removes all hover state and resets the cursor.
-- `Viewport_MouseLeave` also clears hover (and releases dangling right-drag).
+- `Viewport_MouseLeave` also clears hover, ends the left gesture, and releases a dangling drag. `RestoreHoverGroup()` returns early when `_currentModel` is null, because a stale `_hoverGroup` can outlive a swap to a non-3D preview.
 
 ### Flash Animation (Map All)
 
@@ -841,6 +1022,7 @@ private void UpdateFlashTarget(string target)
 
 Starts when `CurrentRecordingTarget` changes. A `DispatcherTimer` at 400 ms toggles highlight/default materials:
 
+- **Nintendo targets first**: a Nintendo slot's `CurrentRecordingTarget` is a raw grid name (`RawBtn1`, `RawAxis0Neg`), while the flash machinery speaks the preview element grammar. `NintendoPreviewMap.ToPreview(target, ProfileId)` translates it before anything resolves. `ShowArrowForTarget()` does the same translation for the same reason.
 - **Buttons/triggers**: Swaps materials via `ResolveFlashGroups()`.
 - **Stick axes**: `ShowQuadrantRingOverlay()` for the target quadrant + `ShowArrowForTarget()` for direction. `FlashQuadrantRing()` toggles overlay alpha between 200 and 0.
 - Stops when `CurrentRecordingTarget` becomes null.
@@ -874,7 +1056,7 @@ Builds a highlight overlay from the ring's mesh triangles:
 
 ### Touchpad Preview (PlayStation slots)
 
-The view renders a live touchpad preview for any model that exposes a `Touchpad` mesh (DualSense via the split-out `Touchpad.obj`, DS4 via `Screen.obj`).
+The view renders a live touchpad preview for any model that exposes a `Touchpad` mesh: DualSense and Edge via `Touchpad.obj`, DS4 via `Screen.obj`.
 
 ```csharp
 private void BuildTouchpadFingerVisuals()
@@ -885,10 +1067,10 @@ private static void PositionFingerSphere(
     ControllerModelBase model)
 ```
 
-- **Build** (`BuildTouchpadFingerVisuals`, called from `EnsureModel()`): tears down any prior finger visuals, then, if `_currentModel.Touchpad != null`, builds two finger spheres and the click-highlight material. Skipped for Xbox models (no `Touchpad`).
+- **Build** (`BuildTouchpadFingerVisuals`, called from `EnsureModel()`): tears down any prior finger visuals, then, if `_currentModel.Touchpad != null`, builds two finger spheres and the click-highlight material. Skipped for Xbox 360, Xbox Series, and Switch 2 Pro models, which have no `Touchpad`.
 - **Finger spheres** (`CreateFingerSphere`): a `MeshBuilder.AddSphere` of radius 2.5 (12 slices, 8 stacks). Finger 0 is orange `#FF6600`, finger 1 is blue `#0066FF` (both alpha `0xE6`), matching the 2D touchpad dots. Each sphere is a `ModelVisual3D` child of `ModelVisual3D`, so the model's uniform scale and rotation apply to it. Parked at `OffsetY = -10000` while its finger is up.
-- **Click highlight** (`UpdateTouchpadPreview3D`, called every dirty frame): while `TouchpadClickPressed` is true, the touchpad surface geometry's material swaps to `_touchpadHighlightMaterial` (the app accent color at alpha `0xC0`, from `ResolveAccentColor()` reading `AccentFillColorDefaultBrush`, fallback `#2196F3`). Restored to `DefaultMaterials[Touchpad]` on release. The swap is gated by `_touchpadCurrentlyHighlighted` so it does not churn every frame.
-- **Finger position** (`PositionFingerSphere`): maps the normalized `TouchpadFingerN(X,Y)` into the `Touchpad.Bounds` box. `normX 0..1` → model X left→right, `normY 0=top` → high model Z, and Y floats the sphere just in front of the surface (`bounds.Y - 1.5`). The touchpad mesh overshoots the real touch-sensitive area, so each model's `TouchpadXInsetFrac` / `TouchpadZTopInsetFrac` / `TouchpadZBottomInsetFrac` inset the mapped rectangle. DualSense overrides these (see [Touchpad Inset Region](#touchpad-inset-region)). DS4 uses the defaults `0.03 / 0.12 / 0.12`.
+- **Click highlight** (`UpdateTouchpadPreview3D`, called every dirty frame): while `TouchpadClickPressed` is true, the touchpad surface geometry's material swaps to `_touchpadHighlightMaterial`, the app accent color at full opacity, from `ResolveAccentColor()` reading `AccentFillColorDefaultBrush` with a `#2196F3` fallback. The old `0xC0` alpha let interior geometry show through the pressed pad on the hado meshes, so the material is now solid and matches every other pressed button. Restored to `DefaultMaterials[Touchpad]` on release. The swap is gated by `_touchpadCurrentlyHighlighted` so it does not churn every frame.
+- **Finger position** (`PositionFingerSphere`): maps the normalized `TouchpadFingerN(X,Y)` into the `Touchpad.Bounds` box. `normX 0..1` → model X left→right, `normY 0=top` → high model Z, and Y floats the sphere just in front of the surface (`bounds.Y - 1.5`). The touchpad mesh overshoots the real touch-sensitive area, so each model's `TouchpadXInsetFrac` / `TouchpadZTopInsetFrac` / `TouchpadZBottomInsetFrac` inset the mapped rectangle. DualSense and the Edge override these (see [Touchpad Inset Region](#touchpad-inset-region)). DS4 uses the defaults `0.03 / 0.12 / 0.12`.
 
 ---
 
@@ -947,15 +1129,15 @@ The 150 ms `AnnotationTick` is the primary re-projection trigger. `CameraChanged
 
 ## Material System
 
-All models use WPF `DiffuseMaterial` with `SolidColorBrush`. Three categories:
+Xbox 360 and Switch 2 Pro's generated parts use `DiffuseMaterial` over a `SolidColorBrush`. Every other family uses `DiffuseMaterial` over a frozen `ImageBrush` atlas, sometimes inside a `MaterialGroup` with a `SpecularMaterial` on top. Three categories:
 
 | Category | Source | Storage | Usage |
 |----------|--------|---------|-------|
-| **Default** | Static `Color` fields per subclass (e.g., `ColorPlasticWhite`). Xbox 360 face overlays use `Alpha = 150`. | `DefaultMaterials[group]` | Restored after highlight/flash |
-| **Highlight** | `DrawAccentHighlights()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. | `HighlightMaterials[group]` | Applied on press or flash |
-| **Gradient** | `GradientHighlight()` ARGB-interpolates default/highlight per call. | None (created per call) | Sticks and triggers (proportional) |
+| **Default** | Per-colorway PNG atlases (`Body.png`, `Decal.png`, `Transparent.png`, `StickModule.png`), or static `Color` fields on Xbox 360 and Switch 2 Pro. Xbox 360 face overlays use `Alpha = 150`. | `DefaultMaterials[group]` | Restored after highlight/flash |
+| **Highlight** | `DrawAccentHighlights()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. One shared material for every group in the scene at the time it runs. | `HighlightMaterials[group]` | Applied on press or flash |
+| **Gradient** | `GradientHighlight()` interpolates ARGB for solid defaults, or layers an alpha-scaled accent overlay for textured ones. | `ConditionalWeakTable` keyed on the `GeometryModel3D` | Sticks and triggers (proportional) |
 
-Gradient materials are not cached. The dirty flag limits updates to one per render frame, WPF3D materials are lightweight, and gradients only update when values change.
+Gradient materials are retained per geometry and mutated in place rather than reallocated. The DualSense `TransparentTrim` and `MuteButton` set their highlight material by hand, since `DrawAccentHighlights()` ran before either joined the scene.
 
 ---
 
@@ -977,12 +1159,18 @@ Standard WPF3D right-handed coordinates:
 
 ### Model Rotation Transform
 
-Applied to `ModelVisual3D.Transform` (not the camera) so lighting stays screen-relative.
+`ModelVisual3D.Transform` is one `Transform3DGroup` built in the constructor and mutated afterwards, never replaced. Replacing it would un-wire the yaw and pitch children and break left-drag rotation. Rotation lives here rather than on the camera so lighting stays screen-relative.
 
-| Transform | Axis | Source | Clamp |
-|-----------|------|--------|-------|
-| Yaw | Z (0,0,1) | Left-drag horizontal | None |
-| Pitch | X (1,0,0) | Left-drag vertical | &minus;60–+60 degrees |
+Child order matters:
+
+| # | Transform | Axis | Source | Clamp |
+|---|-----------|------|--------|-------|
+| 1 | `_modelRecenter` | Z | Static mesh bounds at load | none |
+| 2 | `_modelScaleTransform` | uniform | `ControllerModelBase.ModelScale` | none |
+| 3 | Yaw | Z (0,0,1) | Left-drag horizontal | none |
+| 4 | Pitch | X (1,0,0) | Left-drag vertical | &minus;60–+60 degrees |
+
+Recenter runs first, in model units, so the scale and both rotations see a model whose visual center is the origin. The camera frames the origin and yaw/pitch pivot there, so a family authored off-center would hang off-center and rotate about the wrong point. The DS4 meshes are authored with their vertical center 21.9 mm below origin, every other family within 6 mm, which is why the DS4 sat low and clipped its handles when pitched front-facing. Scale comes before rotation so the rotated controller does not scale around its rotated bounding-box center.
 
 ### Joystick Tilt Transform
 
@@ -990,7 +1178,7 @@ Applied to `ModelVisual3D.Transform` (not the camera) so lighting stays screen-r
 1. **X tilt**: Around Z axis, proportional to stick X, centered at `JoystickRotationPointCenter{Left/Right}Millimeter`.
 2. **Y tilt**: Around X axis, proportional to stick Y, same center.
 
-Both capped at `JoystickMaxAngleDeg` (19 degrees for Xbox 360 and DS4).
+Both capped at `JoystickMaxAngleDeg`: 19 degrees on Xbox 360 and DS4, 14 on Xbox Series, DualSense, and Switch 2 Pro.
 
 ### Trigger Rotation Transform
 
@@ -1011,10 +1199,14 @@ Three light sources in XAML:
 
 | Technique | Detail |
 |-----------|--------|
-| **Dirty flag batching** | 16 buttons + 4 axes + 2 triggers + touchpad preview + annotation bars coalesced into one render-frame update. |
+| **Visibility gate** | `OnRendering` returns before any work when the control is not visible or the window is minimized. |
+| **Dirty flag batching** | 22 button targets + 4 axes + 2 triggers + touchpad preview + annotation bars coalesced into one render-frame update. |
+| **High-churn property skip** | The six gyro and accel readout properties never set `_dirty`, so a motion pad at rest does not re-arm the refresh every tick. |
 | **Trigger change detection** | Skips rotation if angle delta < 0.01 degrees. |
-| **No gradient caching** | New `DiffuseMaterial` per call; acceptable since dirty flag limits frequency and WPF3D materials are lightweight. |
-| **One-time mesh loading** | OBJ meshes load in the constructor. `EnsureModel()` recreates only when the resolved model name changes or the Xbox One Share flag flips. |
+| **Visual deadzones** | Stick grading below 0.05 deflection and trigger grading below 0.03 restore the rest material instead of grading, so sensor noise does not hold the glow lit. |
+| **Retained transforms** | Per-stick rotation graphs live in `_stickTransforms3D` and get their two angles mutated, instead of a five-object graph allocated per dirty frame. |
+| **Retained gradient materials** | Per-geometry `ConditionalWeakTable` entries whose brush color is mutated in place. Weak keys let a rebuilt model's entries collect. |
+| **One-time mesh loading** | OBJ meshes and PNG atlases load in the constructor. `EnsureModel()` recreates only when the family, the extra-controls flag, or the colorway changes. |
 | **Preview events** | Tunneling events prevent double-processing by HelixToolkit and PadForge. |
 
 ---
@@ -1030,4 +1222,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 4.0.0*
+*Last updated for PadForge 4.2.0.*

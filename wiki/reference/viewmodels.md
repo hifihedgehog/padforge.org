@@ -5,6 +5,8 @@
 > **v4 (2026-07-12):** Refreshed for v4. Remote Link (`DashboardViewModel` + `SettingsViewModel`, and the `RemoteLinkTrustedPeer` / `RemoteLinkNearbyPeer` rows), the per-(slot, device) `DeviceSlotConfig` (renamed from `PlayStationSlotConfig`), `KbmSlotConfig` (SOCD / Snap Tap), multi-source mapping rows (`MappingSourceItem`), the mouse-gesture partial, and the Ember dashboard vocabulary all landed since the v3 rewrite. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on [HIDMaestro Deep Dive](hidmaestro-deep-dive.md). If anything here drifts from the live source, the live source wins.
 >
 > **v4.1 (2026-07-30):** The Nintendo output type (#215) joins the family. `PadViewModel` gains the Bass Shakers tab (#236), the slot SOCD card (#240), the flick rotation offset, gyro Acceleration, and the macro Layer dropdown. `MacroItem` carries the #238 / #253 fire-mode wave and per-macro layer scope (#254). Mapping rows and sources gain Flip Output, per-source Acceleration, and the #251 axis-latch macro actions. The Touchpad partial grows the libinput pointer Response, momentum, and pointer-region cards. `DeviceSlotConfig` adds synthetic touch pressure (#239) and the Switch home-LED lane (#226).
+>
+> **v4.2:** The VR output type (#49) lands as `VirtualControllerType.Vr` (6), with a `VrControllerIcon` sidebar entry, a `VrOutputSnapshot`, and a SteamVR row in both driver-status surfaces (`DashboardViewModel.IsSteamVrInstalled`, plus the install / uninstall pair on `SettingsViewModel`). The pad page grows two slot-tier tabs: Bass Shakers at index 16 and Output at index 17 (SOCD plus Keep Controller Awake). `DeviceSlotConfig` gains headphone-jack volume, the DualSense audio-output path, and persona haptics, with `MacroActionType.HeadphoneVolumeUp` / `HeadphoneVolumeDown` (52 / 53) driving the volume. Sony headset head trackers get their own device class (`HeadsetMotion`, #188). `RawHidState` replaced the old `ExtendedRawState`, so the Extended snapshot is now `RawHidOutputSnapshot`.
 
 ---
 
@@ -64,12 +66,13 @@ Sidebar entry for one virtual controller. Shows controller type icon, slot numbe
 | `Tag` | `string` | Navigation tag (`"Pad1"`–`"Pad16"`). Computed as `$"Pad{PadIndex + 1}"`. |
 | `SlotNumber` | `int` | 1-based controller number among active slots. |
 | `InstanceLabel` | `string` | Per-type instance label (e.g., `"1"`, `"2"`). |
-| `IconKey` | `string` | Resource key for controller type icon (e.g., `"XboxControllerIcon"`, `"DS4ControllerIcon"`, `"NintendoControllerIcon"`, `"ExtendedControllerIcon"`, `"MidiControllerIcon"`, `"KeyboardMouseControllerIcon"`). |
+| `IconKey` | `string` | Resource key for controller type icon (e.g., `"XboxControllerIcon"`, `"DS4ControllerIcon"`, `"NintendoControllerIcon"`, `"ExtendedControllerIcon"`, `"MidiControllerIcon"`, `"KeyboardMouseControllerIcon"`, `"VrControllerIcon"`). |
 | `IsEnabled` | `bool` | Virtual controller enabled. |
 | `ConnectedDeviceCount` | `int` | Mapped physical devices connected. |
 | `MappedDeviceCount` | `int` | Physical devices assigned to this slot in config, connected or not. Lets the mini card split "assigned but awaiting" (idle) from "nothing assigned" (cold), the same split the Dashboard card makes. Added by commit `2006ac6b`. |
 | `IsInitializing` | `bool` | Virtual controller initializing. |
 | `IsVirtualControllerConnected` | `bool` | Live virtual controller is alive (created + reporting `IsConnected`). Drives the sidebar green-vs-yellow indicator so the slot stays green through the HM-inactivity grace window and only turns yellow once the timeout tears the VC down. |
+| `IsCreateFailed` | `bool` | The slot's latest virtual-controller create attempt failed (engine createFailed latch). Distinct from awaiting devices, so the flame tooltip does not blame absent devices for a failed create. |
 
 **XAML binding:** Sidebar `ListBox` binds to `MainViewModel.NavControllerItems`. Each template binds `SlotNumber`, `InstanceLabel`, `IconKey` (via `DynamicResource`), and `IsEnabled`.
 
@@ -105,7 +108,7 @@ Root ViewModel. Manages navigation state, 16 pad ViewModels, sidebar controller 
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `StatusText` | `string` | `"Ready"` | Status bar text. |
+| `StatusText` | `string` | `"Ready"` | Status bar text. Plain writes are info-class and decay after ~5 s (`StatusDecayMs`). Every write restamps the decay window. |
 | `IsEngineRunning` | `bool` | `false` | Polling loop active. Calls `RefreshEngineStatus()`. |
 | `HasActiveSlots` | `bool` | `false` | Any virtual controller slots exist. Calls `RefreshEngineStatus()`. |
 | `EngineStatusText` | `string` | - | Computed localized text: `Engine_Forging` (`"Forging"`, engine running with active slots) / `Common_Idle` (`"Idle"`, running with no created slots) / `Common_Stopped` (`"Stopped"`). Note: this is the localized display text. `DashboardViewModel.EngineStateKey` carries the non-localized `"Running"` / `"Idle"` / `"Stopped"` key for XAML DataTriggers. |
@@ -135,6 +138,8 @@ Root ViewModel. Manages navigation state, 16 pad ViewModels, sidebar controller 
 | `RefreshNavControllerItems()` | Rebuilds sidebar entries from `SettingsManager.SlotCreated[]`. Computes per-type instance numbers and updates each pad's `Title`, `SlotLabel`, `TypeInstanceLabel`. Raises `NavControllerItemsRefreshed` only when the active-slot set changed (add / remove / reorder). Property-only changes (icon, label, enabled) update in place without the event. |
 | `RefreshEngineStatus()` | Notifies `EngineStatusText` and `EngineStatusBrush`. |
 | `RefreshCommands()` | Notifies `CanExecuteChanged` on start/stop commands. Call after `IsEngineRunning` changes. |
+| `SetStatus(string, bool persist = false)` | Writes the status bar with an explicit class. `persist: true` (failures, prompts a later write always terminates) exempts the message from the decay sweep until the next write. |
+| `ClearDecayedStatus()` | Clears a decayed info message. Re-checks `IsStatusDecayDue` first, so a write that lands mid-sweep wins. Called from MainWindow's 5 s driver-status timer. |
 
 ---
 
@@ -171,7 +176,7 @@ Overview of all controller slots, engine status, connected devices, and driver s
 
 ### Driver Status
 
-HIDMaestro is bundled with PadForge as a managed SDK and ships with the executable, so the dashboard does not surface an install/uninstall row for it. HidHide and Windows MIDI Services are optional system drivers and have their own rows.
+HIDMaestro is bundled with PadForge as a managed SDK and ships with the executable, so the dashboard does not surface an install/uninstall row for it. HidHide, Windows MIDI Services, and SteamVR are optional system components and have their own rows.
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -179,6 +184,8 @@ HIDMaestro is bundled with PadForge as a managed SDK and ships with the executab
 | `HidHideStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
 | `IsMidiServicesInstalled` | `bool` | Windows MIDI Services installed. Notifies `MidiServicesStatusText`. |
 | `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
+| `IsSteamVrInstalled` | `bool` | SteamVR present, which gates the VR slot type (#49). Kept current by MainWindow's periodic status refresh alongside the MIDI Services flag. Notifies `SteamVrStatusText`. |
+| `SteamVrStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
 
 ### DSU Motion Server
 
@@ -238,6 +245,8 @@ On-screen transparent touchpad window that drives the DS4 / DualSense touchpad o
 |----------|------|---------|-------------|
 | `EnableTouchpadOverlay` | `bool` | `false` | Overlay visible. |
 | `EnableMenuOverlay` | `bool` | `true` | Radial / touch menu overlay (#9): render the `MenuOverlayWindow` HUD while a menu is engaged. When off, menus still hover and commit blind (the runtime never depends on the window). |
+| `EnableShiftLayerFlyout` | `bool` | `true` | Show the shift-layer flyout while a slot sits on a non-Base layer. Purely a display of engagement state the poll thread already computes, so turning it off changes nothing about which layer is active. |
+| `EnableProfileOverlay` | `bool` | `true` | Show the profile-switch overlay when a profile changes. The switch still happens when off, this only suppresses the announcement. |
 | `TouchpadOverlayOpacity` | `double` | `0.25` | Surface opacity 0.0–1.0. Notifies `TouchpadOverlayOpacityPercent`. |
 | `TouchpadOverlayOpacityPercent` | `int` | `25` | 0–100 integer view of opacity for NumberBox binding. |
 | `TouchpadOverlayMonitor` | `int` | `0` | Monitor index the overlay is pinned to (0 = primary). |
@@ -259,7 +268,8 @@ On-screen transparent touchpad window that drives the DS4 / DualSense touchpad o
 
 | Method | Description |
 |--------|-------------|
-| `RefreshActiveSlots(IList<int>, bool)` | Rebuilds `SlotSummaries` for active slots. Updates display labels, sets `ShowAddController`. Called by InputService. |
+| `RefreshActiveSlots(IList<int>, bool)` | Rebuilds `SlotSummaries` for active slots. Updates display labels, re-applies the remembered focus selection, sets `ShowAddController`. Called by InputService. |
+| `SetSelectedPad(int)` | Marks the slot whose pad page is in focus so its card wears the selection glow. `-1` clears it. The index is remembered, so a later `RefreshActiveSlots` rebuild re-applies the flag to fresh summaries. |
 
 ---
 
@@ -278,12 +288,13 @@ Summary card for one virtual controller slot on the Dashboard.
 | `BatteryText` | `string` | `""` | Battery of the first mapped device reporting one, e.g. `"78%"`. Empty otherwise (#175, issue #167 lane). |
 | `IsActive` | `bool` | `false` | Has at least one online mapped device. |
 | `IsSelected` | `bool` | `false` | Whether this slot's pad page is the one currently in focus. Drives the persistent selection glow on the card. Set by `DashboardViewModel.SetSelectedPad`, not the same as `IsActive`. |
-| `IsVirtualControllerConnected` | `bool` | `false` | Virtual controller connected. |
-| `IsInitializing` | `bool` | `false` | Virtual controller initializing. |
+| `IsVirtualControllerConnected` | `bool` | `false` | Virtual controller connected. Notifies `StatusText`. |
+| `IsInitializing` | `bool` | `false` | Virtual controller initializing. Notifies `StatusText`. |
+| `IsCreateFailed` | `bool` | `false` | The slot's latest create attempt failed (engine createFailed latch). Its own status: a failed slot with online devices is neither forging nor awaiting devices. Notifies `StatusText`. |
 | `MappedDeviceCount` | `int` | `0` | Devices mapped to this slot. Notifies `HasMappedDevices` and `StatusText`. |
 | `HasMappedDevices` | `bool` | - | Computed: `MappedDeviceCount > 0`. Ember heat gating (#175): cards with zero mappings stay cold (no ember rim, no glow, steel seg tile) even when enabled. |
 | `ConnectedDeviceCount` | `int` | `0` | Mapped devices connected. |
-| `StatusText` | `string` | `"Idle"` | Ember status vocabulary (#175). The getter returns `Dashboard_StatusCold` (`"Cold"`) for an enabled, non-initializing slot with zero mappings. It returns `Main_AwaitingDevices` (`"Awaiting devices"`) for a mapped slot with nothing connected once the live VC is gone. While the VC survives the inactivity grace (60 s default), a device dropout must not flap the card to awaiting. Every other case passes through the engine-assigned setter value: `Main_Active` (`"Forging"`) when a device is online, `Common_Idle` (`"Idle"`), `Common_Disabled` (`"Disabled"`), or `Main_Initializing` (`"Initializing"`). The old `"No mapping"` string is intercepted by the Cold branch. |
+| `StatusText` | `string` | `"Idle"` | Ember status vocabulary (#175). For an enabled, non-initializing slot the getter checks three branches in order. A failed create returns `Main_VcFailed` first. Then zero mappings returns `Dashboard_StatusCold` (`"Cold"`). It returns `Main_AwaitingDevices` (`"Awaiting devices"`) for a mapped slot with nothing connected once the live VC is gone. While the VC survives the inactivity grace (60 s default), a device dropout must not flap the card to awaiting. Every other case passes through the engine-assigned setter value: `Main_Active` (`"Forging"`) when a device is online, `Common_Idle` (`"Idle"`), `Common_Disabled` (`"Disabled"`), or `Main_Initializing` (`"Initializing"`). The old `"No mapping"` string is intercepted by the Cold branch. |
 | `IsEnabled` | `bool` | `true` | Slot enabled for output. |
 | `SlotNumber` | `int` | `1` | 1-based controller number among active slots. |
 | `TypeInstanceLabel` | `string` | `"1"` | Per-type instance label. |
@@ -391,11 +402,34 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 | `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
 | `MidiServicesVersion` | `string` | MIDI Services version. |
 | `IsMidiOsSupported` | `bool` | Static: `true` if OS build >= 26100 (Win11 24H2). |
+| `MidiOsSupported` | `bool` | Instance forwarder over the static above. A XAML `Binding` path resolves against the DataContext instance and cannot reach a static member, so SettingsPage binds this one. Never raises `PropertyChanged` because the OS build cannot change while the app runs. |
 
 | Command | CanExecute | Description |
 |---------|-----------|-------------|
 | `InstallMidiServicesCommand` | `!IsMidiServicesInstalled && IsMidiOsSupported` | Raises `InstallMidiServicesRequested`. |
 | `UninstallMidiServicesCommand` | `IsMidiServicesInstalled && !HasAnyMidiSlots()` | Raises `UninstallMidiServicesRequested`. |
+
+### Driver Status: SteamVR (#49)
+
+The VR slot type needs SteamVR present. PadForge can install it Steam-free through steamcmd, and it only offers to remove the copy it created itself.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `IsSteamVrInstalled` | `bool` | A SteamVR install of either shape is present (Steam client, or the Steam-free steamcmd one). Notifies `SteamVrStatusText` and `ShowSteamVrUninstall`. |
+| `SteamVrStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
+| `SteamVrInstallDir` | `string` | Where the Steam-free install will land (seeded from `DriverInstaller.SteamVrInstallDir`). Not persisted by PadForge: after a successful install the HIDMaestro path hint is the durable record. |
+| `IsSteamVrOwned` | `bool` | The present install is the Steam-free one PadForge created. A Steam-client install is never PadForge's to remove. |
+| `ShowSteamVrUninstall` | `bool` | Computed: `IsSteamVrInstalled && IsSteamVrOwned`. |
+
+| Command | CanExecute | Description |
+|---------|-----------|-------------|
+| `InstallSteamVrCommand` | `!IsSteamVrInstalled` | Raises `InstallSteamVrRequested`. |
+| `UninstallSteamVrCommand` | `IsSteamVrInstalled && IsSteamVrOwned` | Raises `UninstallSteamVrRequested`. |
+
+| Event | Description |
+|-------|-------------|
+| `InstallSteamVrRequested` | Install SteamVR Steam-free. |
+| `UninstallSteamVrRequested` | Remove the PadForge-owned install. |
 
 ### Driver Uninstall Guards
 
@@ -460,9 +494,10 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 |--------|------|---------|-------------|
 | `EnableCommunityConfigLookup` | `bool` | `false` | Master opt-in for the Steam Workshop clients. Persisted, dirty-gate allowlisted. |
 | `ShowLegacyWorkshopConfigs` | `bool` | `false` | Legacy sub-toggle. Persisted, dirty-gate allowlisted. |
-| `ClearWorkshopCacheCommand` | `ICommand` | | Raised to MainWindow's `OnClearWorkshopCache` (empties `SteamWorkshopCache`). |
-| `CheckWorkshopUpdatesCommand` | `ICommand` | | Raised to MainWindow's `OnCheckWorkshopUpdates` (batched provenance check). |
-| `BrowseCommunityConfigsCommand` | `ICommand` | | The Profiles-page entry. No CanExecute gate: with the opt-in off the dialog opens on its cold state and offers the enable step. |
+| `ClearWorkshopCacheCommand` | `RelayCommand` | | Raises `ClearWorkshopCacheRequested`, handled by MainWindow (empties `SteamWorkshopCache`). |
+| `CheckWorkshopUpdatesCommand` | `RelayCommand` | | Raises `CheckWorkshopUpdatesRequested`, handled by MainWindow (batched provenance check). |
+| `BrowseCommunityConfigsCommand` | `RelayCommand` | | The Profiles-page entry. No CanExecute gate: with the opt-in off the dialog opens on its cold state and offers the enable step. |
+| `BrowseStarterProfilesCommand` | `RelayCommand` | | Opens the starter-profile gallery (#256) through `BrowseStarterProfilesRequested`. Always enabled: the catalog ships in the box, so there is no opt-in and no network. |
 
 ### Remote Link Peer Manager (#138)
 
@@ -634,10 +669,18 @@ The ALL chip binds `TotalCount`. `RefreshCounts()` recomputes every facet count 
 | `IsKeyboardDevice` | `bool` | Selected device is a keyboard. |
 | `IsMouseDevice` | `bool` | Selected device is a mouse. |
 | `IsTouchpadDevice` | `bool` | Selected device exposes a touchpad surface (DS4 / DualSense / Steam Controller / Steam Deck / overlay touchpad). |
+| `IsMidiDevice` | `bool` | Selected device is a MIDI input (#128). Drives the live piano / CC preview off `LiveMidi`. |
+| `IsNfcDevice` | `bool` | Selected device is an NFC reader (#150). Populates `NfcTags`. |
+| `IsConsumerDevice` | `bool` | Selected device is a Consumer Control collection (#168). Populates `ConsumerButtons`. |
+| `IsHeadsetMotionDevice` | `bool` | Selected device is a Sony headset head tracker (#188). Collapses the raw Axes / Buttons sections, since a motion-only source has neither and the gyro readout is its whole preview. |
+| `NfcTags` | `ObservableCollection<NfcTagDisplayItem>` | Registered-tag rows for the NFC preview. Rebuilt by `RebuildNfcTags()`. |
+| `ConsumerButtons` | `ObservableCollection<ConsumerButtonDisplayItem>` | Named media-key chips for the Consumer Control preview. |
+| `LiveMidi` | `MidiInputState` | Latest MIDI input snapshot the piano / CC preview polls. Plain property, no change notification. |
 | `HasTouchpadData` | `bool` | At least one finger is currently in contact. |
-| `TouchpadX0` / `TouchpadY0` | `double` | First finger normalized position (0.0–1.0). |
-| `TouchpadX1` / `TouchpadY1` | `double` | Second finger normalized position. |
-| `TouchpadDown0` / `TouchpadDown1` | `bool` | Per-finger contact state. |
+| `TouchpadX0`–`TouchpadX4` / `TouchpadY0`–`TouchpadY4` | `double` | Per-finger normalized position (0.0–1.0) on the first pad. Five contacts, not two. |
+| `TouchpadDown0`–`TouchpadDown4` | `bool` | Per-finger contact state. |
+| `HasSecondTouchpadData` | `bool` | The device exposes a second pad (Steam Controller / Steam Deck). Switches the labels to `TouchpadLabel` / `Touchpad2Label`. |
+| `Pad2X0`–`Pad2X4` / `Pad2Y0`–`Pad2Y4` / `Pad2Down0`–`Pad2Down4` | `double` / `bool` | Second-pad contacts, same five-finger shape. |
 | `MouseMotionX` | `double` | Mouse X motion. |
 | `MouseMotionY` | `double` | Mouse Y motion. |
 | `MouseScrollIntensity` | `double` | Normalized scroll intensity (−1 to 1). |
@@ -679,8 +722,8 @@ The ALL chip binds `TotalCount`. `RefreshCounts()` recomputes every facet count 
 | `PairCommand` | always | Raises `PairRequested`. Opens the Bluetooth pairing flow for controllers that need an in-app pairing ceremony (Wii controllers, #116). |
 | `AssignToSlotCommand` | `HasSelectedDevice` | `RelayCommand<int>`. Raises `AssignToSlotRequested` with slot index (0–15). |
 | `ToggleSlotCommand` | `HasSelectedDevice` | `RelayCommand<int>`. Toggles slot assignment. Raises `ToggleSlotRequested`. |
-| `HideDeviceCommand` | `HasSelectedDevice` | Sets `IsHidden = true`, raises `HideDeviceRequested`. |
-| `RemoveDeviceCommand` | `HasSelectedDevice` | Removes device, raises `RemoveDeviceRequested`. |
+| `HideDeviceCommand` | `HasSelectedDevice` | Raises `HideDeviceRequested` with the selected device's InstanceGuid. The row itself stays in the collection until the service refreshes the list. |
+| `RemoveDeviceCommand` | `HasSelectedDevice` | Removes the row from `Devices`, clears `SelectedDevice`, raises `RemoveDeviceRequested`, then `RefreshCounts()`. |
 
 ### Events
 
@@ -698,11 +741,13 @@ The ALL chip binds `TotalCount`. `RefreshCounts()` recomputes every facet count 
 
 | Method | Description |
 |--------|-------------|
-| `RebuildRawStateCollections(int axisCount, IReadOnlyList<int> buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList<ConsumerButtonDisplayItem> consumerButtons)` | Rebuilds axis/button/POV collections for a new device. `buttonIndices` is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both `Index` and `DisplayNumber`). The class-flag booleans default to `false` and `consumerButtons` to `null`. Handles keyboard, mouse, touchpad, MIDI, NFC, and Consumer Control cases. |
-| `ClearRawState()` | Clears all raw state display data. |
+| `RebuildRawStateCollections(int axisCount, IReadOnlyList<int> buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList<ConsumerButtonDisplayItem> consumerButtons, bool isHeadsetMotion)` | Rebuilds axis/button/POV collections for a new device. `buttonIndices` is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both `Index` and `DisplayNumber`). The class-flag booleans default to `false` and `consumerButtons` to `null`. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, and headset-motion cases. |
+| `ClearRawState()` | Clears all raw state display data, including the class flags and the NFC / Consumer collections. |
+| `RebuildNfcTags()` | Repopulates `NfcTags` from the registered-tag store. |
 | `RefreshSlotButtons()` | Rebuilds `ActiveSlotItems` from created slots and selected device assignments. |
+| `RefreshAllSlotBadges()` | Re-derives every row's `SlotBadges` after a slot set changes. |
 | `FindByGuid(Guid)` | Finds a `DeviceRowViewModel` by instance GUID. |
-| `RefreshCounts()` | Updates `TotalCount` and `OnlineCount`. |
+| `RefreshCounts()` | Updates `TotalCount` and `OnlineCount`, recomputes every facet count, and re-runs the active filter. |
 | `NotifyDeviceHidingChanged(Guid)` | Raises `DeviceHidingChanged`. |
 
 ### Internal State
@@ -724,6 +769,9 @@ Single slot toggle button on the Devices page.
 | `PadIndex` | `int` | Zero-based slot index (0–15). |
 | `SlotNumber` | `int` | 1-based number among active slots. |
 | `IsAssigned` | `bool` | Selected device is assigned to this slot. |
+| `VcType` | `VirtualControllerType` | The slot's output type. Notifies the two icon properties below. |
+| `TypeGeometry` | `Geometry` | Branded type icon path from `SlotTypeIconMap.GeometryFor`. Null for the glyph-drawn types. |
+| `TypeGlyph` | `string` | Segoe glyph from `SlotTypeIconMap.GlyphFor` for the types with no path geometry (MIDI `E8D6`, Keyboard+Mouse `E961`, VR `F119`). |
 
 ### AxisDisplayItem
 
@@ -848,8 +896,9 @@ Single device row on the Devices page. Shows identification, status, capabilitie
 |----------|------|---------|-------------|
 | `IsOnline` | `bool` | `false` | Device connected. Notifies `StatusText`. |
 | `IsEnabled` | `bool` | `true` | Device enabled for mapping. Notifies `StatusText`. |
-| `IsHidden` | `bool` | `false` | Hidden from the UI. |
 | `StatusText` | `string` | - | Computed: `"Disabled"`, `"Online"`, or `"Offline"`. |
+| `SerialNumber` | `string` | `""` | Device serial, where the transport reports one. |
+| `HasVidPid` | `bool` | - | Computed: either `VendorId` or `ProductId` is non-zero. Gates the VID:PID line. |
 
 ### Battery (#167)
 
@@ -875,7 +924,9 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsMidiDevice` | `bool` | Computed: `DeviceTypeKey == "Midi"`. Drives the live piano / CC preview (#128). |
+| `IsHeadsetMotionDevice` | `bool` | Computed: `DeviceTypeKey == "HeadsetMotion"`. True for Sony headset head trackers (#188). Collapses the raw Axes / Buttons preview, which a motion-only source has neither of, and gates the repair action. |
 | `ShowRegisterNfcTag` | `bool` | Computed: `DeviceTypeKey == "Nfc"`. Shows the Register / Manage NFC Tags button (#150). |
+| `IsBluetoothLink` | `bool` | Computed by `DeviceTransport.IsBluetooth` from the device path and VID:PID. |
 
 ### Capabilities
 
@@ -884,12 +935,14 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | `AxisCount` | `int` | Number of axes. |
 | `ButtonCount` | `int` | Number of buttons. |
 | `PovCount` | `int` | Number of POV hat switches. |
-| `DeviceTypeKey` | `string` | English type key (`"Gamepad"`, `"Joystick"`, `"Wheel"`, `"FlightStick"`, `"FirstPerson"`, `"Supplemental"`, `"Mouse"`, `"Keyboard"`). Notifies `DeviceType`. |
+| `DeviceTypeKey` | `string` | English type key: `"Gamepad"`, `"Joystick"`, `"Wheel"`, `"FlightStick"`, `"FirstPerson"`, `"Supplemental"`, `"Mouse"`, `"Keyboard"`, `"Touchpad"`, `"Midi"`, `"Nfc"`, `"ConsumerControl"`, `"HeadsetMotion"`. Anything else falls back to the generic "Device" label. Notifies `DeviceType`. |
 | `DeviceType` | `string` | Computed: localized type from `DeviceTypeKey`. |
 | `HasRumble` | `bool` | Supports rumble. |
 | `HasGyro` | `bool` | Has gyroscope. |
 | `HasAccel` | `bool` | Has accelerometer. |
 | `HasTouchpad` | `bool` | Exposes a touchpad surface. |
+| `ShowTouchpadCapability` | `bool` | Computed: `HasTouchpad` and the device is not itself a touchpad, so a touchpad row does not advertise itself twice. |
+| `HasCapabilityIcons` | `bool` | Computed: `HasRumble \|\| HasGyro \|\| ShowTouchpadCapability`. Gates the icon strip. |
 | `CapabilitiesSummary` | `string` | Computed: e.g., `"6 axes, 11 buttons, 1 POV, Rumble, Gyro"`. |
 
 ### Slot Assignment
@@ -929,7 +982,7 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsGamepad` | `bool` | Computed: true if `DeviceTypeKey == "Gamepad"`. |
-| `ShowSubmitMapping` | `bool` | Computed: true for joysticks only. |
+| `ShowSubmitMapping` | `bool` | Computed: the device can have a community mapping submitted. True for everything except `"Gamepad"`, `"Mouse"`, `"Keyboard"`, `"Touchpad"`, `"Midi"`, `"Nfc"`, and `"HeadsetMotion"`. |
 
 | Method | Description |
 |--------|-------------|
@@ -945,6 +998,8 @@ Slot assignment badge (icon + number).
 |----------|------|-------------|
 | `SlotIndex` | `int` | Zero-based pad slot index. |
 | `SlotNumber` | `int` | Sequential global number (1-based among created slots). |
+| `VcType` | `VirtualControllerType` | The slot's output type, which picks the badge art below. |
+| `TypeGeometry` / `TypeGlyph` | `Geometry` / `string` | Branded icon path, or the Segoe glyph for the types with no path (`SlotTypeIconMap`). |
 
 ---
 
@@ -964,7 +1019,8 @@ The largest ViewModel. One per virtual controller slot (16 total). Handles outpu
 | `SlotLabel` | `string` | - | Display label (e.g., `"Virtual Controller 1"`). |
 | `OutputType` | `VirtualControllerType` | `Xbox` | Output type. Resets deadzones, rebuilds mappings/stick/trigger configs, syncs macro button style. |
 | `TypeInstanceLabel` | `string` | `"1"` | Per-type instance label. Set by `RefreshNavControllerItems`. |
-| `OutputTypeIndex` | `int` | - | ComboBox SelectedIndex (`0`=Xbox, `1`=PlayStation, `2`=Extended, `3`=Midi, `4`=KeyboardMouse). Maps directly to `VirtualControllerType` enum values. |
+| `OutputTypeIndex` | `int` | - | ComboBox SelectedIndex, a plain cast over `OutputType`: `0`=Xbox, `1`=PlayStation, `2`=Extended, `3`=Midi, `4`=KeyboardMouse, `5`=Nintendo, `6`=Vr. The setter ignores any value `Enum.IsDefined` rejects. |
+| `OutputTypeDisplayName` | `string` | - | Computed: localized type name for the tier-1 header. Re-raised on `OutputType` and culture changes. |
 | `ConfigItemDirtyCallback` | `Action` | `null` | Called on config item change. Wired to `SettingsService.MarkDirty()`. |
 
 ### Extended Configuration
@@ -1036,6 +1092,8 @@ Combined slot output values, updated at 30 Hz by `UpdateFromEngineState()`. Boun
 **Buttons (all `bool`):**
 
 `ButtonA`, `ButtonB`, `ButtonX`, `ButtonY`, `LeftShoulder`, `RightShoulder`, `ButtonBack`, `ButtonStart`, `LeftThumbButton`, `RightThumbButton`, `ButtonGuide`, `DPadUp`, `DPadDown`, `DPadLeft`, `DPadRight`
+
+Family extras on the same lane, each driving the 2D overlay and 3D mesh accent for the pads that carry the button: `ButtonShare` (Xbox Series), `ButtonMute` (DualSense mic mute), `LeftFunction` / `RightFunction` (DualSense Edge Fn), `ButtonC`, `LeftPaddle` / `RightPaddle` (Switch 2 Pro C, GL, GR, written by the raw bridge from wire indices 20, 19, 18).
 
 **Axes (combined slot values):**
 
@@ -1179,13 +1237,32 @@ Per-(active device, pad-index) touchpad-tab settings. Same Load / Sync / guard r
 | `TouchpadMouseSensitivityY` | `double` | `1.0` | Y sensitivity (0.05–10.0). |
 | `TouchpadMouseInvertX` | `bool` | `false` | Invert X. |
 | `TouchpadMouseInvertY` | `bool` | `false` | Invert Y. |
+| `TouchpadMouseMomentum` | `bool` | `false` | Keep the cursor gliding after the finger lifts. |
+| `TouchpadMouseMomentumDecay` | `double` | `0.90` | Per-tick momentum decay (0.80–1.00). Higher glides longer. |
+| `TouchpadPointerResponse` | `string` | `"Simple"` | `"Simple"` (flat multiplier) or `"Trackpad"` (the libinput pointer-acceleration port). Notifies `TouchpadPointerResponseIsSimple` / `TouchpadPointerResponseIsTrackpad`, which gate the two halves of the card. |
+| `TouchpadTrackpadThreshold` | `double` | `130` | Trackpad-curve speed threshold in mm/s (20–600). |
+| `TouchpadTrackpadPadWidthMm` | `double` | `69` | Physical pad width in mm the curve normalizes against (20–150). |
+| `TouchpadMouseAcceleration` | `double` | `0` | Simple-response acceleration exponent (0.0–5.0). `0` is linear. |
+| `TouchpadMouseJitterReduction` | `bool` | `true` | Suppress sub-pixel jitter at rest. |
 
-**Absolute pointer card (#9):**
+**Recognizer tolerances:**
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `TouchpadPointerStretchX` | `double` | `1.0` | Margin stretch for the "Touchpad N Pointer X" absolute cursor sources (1.0–3.0). 1.0 = Steam's 1:1 pad-to-screen map. Higher values reach the screen edges before the pad bezel. |
-| `TouchpadPointerStretchY` | `double` | `1.0` | Y counterpart (1.0–3.0). |
+| `TouchpadTapMaxMotion` | `double` | `0.04` | Travel a contact may drift and still count as a tap, as a fraction of the pad (0.01–0.30). |
+| `TouchpadLongPressMaxMotion` | `double` | `0.05` | Same guard for a long press (0.01–0.30). |
+| `TouchpadTwoFingerSwipeAngularTolerance` | `double` | `25` | How far apart, in degrees, two fingers may travel and still read as one swipe (5–90). |
+| `TouchpadPinchThreshold` | `double` | `0.25` | Spread change that fires a pinch (0.05–1.00). |
+| `TouchpadRotateThresholdDegrees` | `double` | `20` | Rotation that fires a two-finger rotate (5–90). |
+
+**Pointer region card (#9):** the screen rectangle the "Touchpad N Pointer X/Y" absolute cursor sources map onto. The four values are authored together: touching any of them latches the region as user-authored, so a later default sweep leaves it alone.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `TouchpadPointerRegionSizeX` | `double` | `1.0` | Region width as a fraction of the work area (0.05–3.0). `1.0` is Steam's 1:1 pad-to-screen map. |
+| `TouchpadPointerRegionSizeY` | `double` | `1.0` | Region height (0.05–3.0). |
+| `TouchpadPointerRegionCenterX` | `double` | `0.5` | Region center X in work-area fractions (0.0–1.0). |
+| `TouchpadPointerRegionCenterY` | `double` | `0.5` | Region center Y (0.0–1.0). |
 
 **Swipe haptics card (#219):**
 
@@ -1208,7 +1285,7 @@ Per-(active device, pad-index) touchpad-tab settings. Same Load / Sync / guard r
 | `RecordTouchpadGestureRequested` | `RecordTouchpadGestureArgs` | Open the recorder dialog for (device, pad). |
 | `DeleteTouchpadGestureRequested` | `TouchpadCustomGestureItem` | Delete a saved custom gesture. |
 
-**Reset commands:** every setting row carries a `Reset<Property>Command` that restores its default above, plus per-card `ResetTouchpadDetectionCardCommand`, `ResetTouchpadInBoxCardCommand`, `ResetTouchpadJoystickCardCommand`, `ResetTouchpadMouseCardCommand`, `ResetTouchpadPointerCardCommand`, and `ResetTouchpadSwipeHapticsCardCommand`. Defaults mirror `TouchpadGestureSettings.Default()`, so Reset to Defaults round-trips the tab by construction.
+**Reset commands:** every setting row carries a `Reset<Property>Command` that restores its default above, plus per-card `ResetTouchpadDetectionCardCommand`, `ResetTouchpadInBoxCardCommand`, `ResetTouchpadJoystickCardCommand`, `ResetTouchpadMouseCardCommand`, `ResetTouchpadPointerCardCommand`, `ResetTouchpadSwipeHapticsCardCommand`, and `ResetTouchpadSyntheticPressureCardCommand`. Defaults mirror `TouchpadGestureSettings.Default()`, so Reset to Defaults round-trips the tab by construction.
 
 | Method | Description |
 |--------|-------------|
@@ -1428,9 +1505,31 @@ Drive the `ItemsControl`-based Sticks and Triggers tabs. Gamepad presets: 2 stic
 
 The per-slot Bass Shakers tab surface, MappingSet-backed like Menus and persisted through the same dirty callback. `RumbleAudioTabVisible` gates the tab on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback (Customize on: the ForceFeedbackEnabled checkbox decides; Customize off: the catalog profile descriptor must carry a PID FFB block). The card binds `RumbleAudioEnabled`, `RumbleAudioEndpointId` (output device picker), `RumbleAudioChannelMode` (Mono / Controller Stereo), `RumbleAudioMasterGain`, and `RumbleAudioVoices`, an `ObservableCollection` of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into `MappingSet.RumbleAudio` (`RumbleAudioConfig`), so the routing travels with profiles and Copy / Paste.
 
-### Slot SOCD (#245)
+### Output tab: Slot SOCD (#245) and Keep Controller Awake
 
-Controller-button SOCD, distinct from `KbmSlotConfig`'s key SOCD (#205). `SocdCardVisible` and `KbmSocdCardVisible` are mutually exclusive by slot type. The card binds `SocdMode` over `MappingSet.SocdMode` (`AvailableSlotSocdModes`: Off / Last Wins / First Wins / Neutral), and `SocdPairItems` (`SlotSocdPairItem`) edits the opposing button pairs from `SocdButtonOptions`. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.
+Both cards live on the Output tab (index 17). `OutputTabVisible` is a slot-type gate: every type except MIDI and VR, the two with no output-behavior surface at all.
+
+Controller-button SOCD is distinct from `KbmSlotConfig`'s key SOCD (#205). `SocdCardVisible` and `KbmSocdCardVisible` are mutually exclusive by slot type. The card binds `SocdMode` over `MappingSet.SocdMode` (`AvailableSlotSocdModes`: Off / Last Wins / First Wins / Neutral), and `SocdPairItems` (`SlotSocdPairItem`) edits the opposing button pairs from `SocdButtonOptions`. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.
+
+Keep Controller Awake holds a stick off-center so a console-style pad never idles out. Like the Bass Shakers config, it lives on the slot's `MappingSet` and every setter fires `ConfigItemDirtyCallback`.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `KeepAwakeCardVisible` | `bool` | - | Computed: Xbox and PlayStation slots only. |
+| `KeepAwakeEnabled` | `bool` | `false` | Card master switch, over `MappingSet.KeepAwakeEnabled`. |
+| `KeepAwakeAxis` | `string` | `"LX"` | Held axis, locale-stable: `LX`, `LY`, `RX`, `RY`. The default is stored as an empty string, so the getter substitutes `"LX"`. |
+| `AvailableKeepAwakeAxes` | `IReadOnlyList<GyroLabeledOption>` | - | Axis picker options, reusing the stick-axis strings the mapping grid already localizes. |
+| `KeepAwakeDeflection` | `int` | `25` | Held deflection percent, clamped 1–90. A persisted `0` means unset and reads as the engine default 25, so the card always shows the effective number. |
+
+| Command | Description |
+|---------|-------------|
+| `ResetKeepAwakeAxisCommand` | Back to `"LX"`. |
+| `ResetKeepAwakeDeflectionCommand` | Back to 25. |
+| `ResetKeepAwakeCardCommand` | Disabled, axis and deflection back to their unset defaults, then `ReloadKeepAwake()`. |
+
+| Method | Description |
+|--------|-------------|
+| `ReloadKeepAwake()` | Re-raises the whole card off the live `MappingSet`. Called on profile apply and output-type change. |
 
 ### Menus (#9)
 
@@ -1461,7 +1560,7 @@ Radial / touch menus for this slot. Slot-level like Macros: the collection wraps
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `SelectedConfigTab` | `int` | `0` | Always-visible: 0=Preview (the `TabController` RadioButton, `Tag="0"`, binds `Pad_Tab_Preview` = "Preview"), 1=Macros, 2=Mappings, 3=Sticks, 4=Triggers, 5=Force Feedback. Visibility-gated on the active source device's capability flags: 6=Adaptive Triggers (HasAdaptiveTriggers), 7=Lighting (HasLightbar), 8=Gyro (HasGyro), 9=Impulse Triggers (HasRumbleTriggers), 10=Touchpad (HasTouchpad), 11=Wheel, 12=Audio, 13=Pointer (IR-capable Wii Remote, #146), 14=Mouse (source device is a mouse, #200). Slot-scope like tabs 0–2 and always visible: 15=Menus (#9). Tag values match the `RadioButton.Tag` strings on the PadPage tab strip. |
+| `SelectedConfigTab` | `int` | `0` | Always-visible: 0=Preview (the `TabController` RadioButton, `Tag="0"`, binds `Pad_Tab_Preview` = "Preview"), 1=Macros, 2=Mappings, 3=Sticks, 4=Triggers, 5=Force Feedback. Visibility-gated on the active source device's capability flags: 6=Adaptive Triggers (HasAdaptiveTriggers), 7=Lighting (HasLightbar), 8=Gyro (HasGyro), 9=Impulse Triggers (HasRumbleTriggers), 10=Touchpad (HasTouchpad), 11=Wheel, 12=Audio (`AudioTabIndex`), 13=Pointer (IR-capable Wii Remote, #146), 14=Mouse (source device is a mouse, #200). Slot-scope like tabs 0–2: 15=Menus (#9, always visible), 16=Bass Shakers (`BassShakersTabIndex`, gated on `RumbleAudioTabVisible`), 17=Output (`OutputTabIndex`, gated on `OutputTabVisible`). Tag values match the `RadioButton.Tag` strings on the PadPage tab strip. Entering 12 re-derives the sound-macro list and the mirror endpoints. Entering 16 re-enumerates render endpoints and re-seeds the voice rows. A gate that closes under the current selection evicts it back to tab 0. |
 
 ### Commands
 
@@ -1502,7 +1601,7 @@ Radial / touch menus for this slot. Slot-level like Macros: the collection wraps
 |--------|-------------|
 | `UpdateFromEngineState(Gamepad, Vibration)` | Updates combined slot output at 30 Hz. |
 | `UpdateDeviceState(Gamepad)` | Updates per-device stick/trigger values for tab previews. |
-| `UpdateFromExtendedRawState(ExtendedRawState)` | Updates combined output from Extended raw state. |
+| `UpdateFromRawHidState(RawHidState)` | Publishes the combined raw-HID output for the Extended schematic. Skips the notification when axes, hardware axes, buttons, and POVs all match the last snapshot, so an idle slot does not re-arm a repaint at 30 Hz. On a Nintendo slot it also projects the raw state onto the Gamepad-shaped preview properties. |
 | `UpdateFromMidiRawState(MidiRawState)` | Updates MIDI preview snapshot. |
 | `OnMapAllItemCompleted()` | Advances Map All to next item after 500 ms delay. |
 | `StopMapAll()` | Stops Map All, clears state, raises `MapAllCancelRequested`. |
@@ -1512,8 +1611,9 @@ Radial / touch menus for this slot. Slot-level like Macros: the collection wraps
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `ExtendedOutputSnapshot` | `ExtendedRawState` | Latest Extended raw state for custom display. Updated at 30 Hz. |
-| `KbmOutputSnapshot` | `KbmRawState` | Latest KBM raw state. Updated at 30 Hz. |
+| `RawHidOutputSnapshot` | `RawHidState` | Latest raw-HID state for the Extended / Nintendo schematic. Updated at 30 Hz by `UpdateFromRawHidState`, which raises `PropertyChanged` for it. Private setter. |
+| `KbmOutputSnapshot` | `KbmRawState` | Latest KBM raw state. Updated at 30 Hz. Plain auto-property, no change notification: the view polls it. |
+| `VrOutputSnapshot` | `VrRawState` | Latest VR raw state for the VR preview (#49). Same plain auto-property contract as the KBM twin. |
 | `MidiOutputSnapshot` | `MidiRawState` | Latest MIDI raw state snapshot. |
 
 ---
@@ -1530,7 +1630,7 @@ Single mapping row linking a physical input to an output target in the Pad page 
 |----------|------|-------------|
 | `TargetLabel` | `string` | Display label (e.g., `"A"`, `"Left Stick X"`, `"CC 1"`). Read-only. |
 | `TargetSettingName` | `string` | PadSetting property name (e.g., `"ButtonA"`, `"LeftThumbAxisX"`). Read-only. |
-| `Category` | `MappingCategory` | Grouping: `Buttons`, `DPad`, `Triggers`, `LeftStick`, `RightStick`. |
+| `Category` | `MappingCategory` | Grouping: `Buttons`, `DPad`, `Triggers`, `LeftStick`, `RightStick`, `Touchpad`, `Motion`. |
 | `NegSettingName` | `string` | Negative-direction PadSetting property. Null for non-axis targets. |
 | `HasNegDirection` | `bool` | Computed: `NegSettingName != null`. |
 
@@ -1579,7 +1679,7 @@ Single mapping row linking a physical input to an output target in the Pad page 
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `MappingDeadZone` | `int` | `50` | Axis activation threshold (0–100%). Input below this percentage is ignored for this mapping row. |
+| `MappingDeadZone` | `int` | `50` | Axis activation threshold, clamped 1–100%. Input below this percentage is ignored for this mapping row. `0` is disallowed because it used to read as "unset" and silently reverted to 50. |
 | `IsDeadZoneApplicable` | `bool` | - | Computed: true for axis-based mappings where a per-mapping deadzone is meaningful. |
 
 | Command | Description |
@@ -1594,6 +1694,15 @@ Single mapping row linking a physical input to an output target in the Pad page 
 |----------|------|---------|-------------|
 | `IsInverted` | `bool` | `false` | Axis inverted. Calls `RebuildDescriptor()` to toggle `"I"` prefix. |
 | `IsHalfAxis` | `bool` | `false` | Upper half of axis range only. Calls `RebuildDescriptor()` to toggle `"H"` prefix. |
+| `IsBidirectional` | `bool` | `false` | With `IsHalfAxis`, fires on absolute deflection past the deadzone, either side of center. Persisted through `PadSetting.MappingBidirectional`, not a descriptor prefix, because the I/H prefixes are already spoken for. |
+| `IsInvertApplicable` | `bool` | - | Computed: `!(IsHalfAxis && IsBidirectional)`. Mirroring around center already covers both directions. |
+| `InvertOutput` | `bool` | `false` | Flip Output: invert what the row writes, for the half-axis reads where `Invert` is consumed as the half selector. Round-trips to `MappingSource.InvertOutput`. |
+| `IsInvertOutputApplicable` | `bool` | - | Computed by the engine's own `InvertConsumedByHalfAxisRead` predicate against the prefix-stripped primary. Gates the Flip Output checkbox. |
+| `ParamAccel` | `double` | `0` | Per-row acceleration exponent, clamped 0.0–5.0. Has `ResetParamAccelCommand`. |
+| `GyroSensitivity` | `double` | `1.0` | Primary-source gyro multiplier, clamped 0.1–10. Gated by `IsGyroSource`. |
+| `MouseCursorSensitivity` | `double` | `1.0` | Primary-source cursor sensitivity, clamped 0.1–5. Gated by `IsMouseCursorSource`. |
+| `IrPointerSensitivity` | `double` | `1.0` | Primary-source Wii IR-pointer sensitivity, clamped 0.1–5. Gated by `IsIrPointerSource`. |
+| `Sensitivity` | `double` | `1.0` | Generic per-source knob for a plain Axis / Slider read, clamped 0.1–5. Gated by `IsGenericSensitivitySource`, which is mutually exclusive with the three specialized gates above. |
 
 ### Commands
 
@@ -1601,6 +1710,7 @@ Single mapping row linking a physical input to an output target in the Pad page 
 |---------|-------------|
 | `ToggleRecordCommand` | Toggles recording. Raises `StartRecordingRequested` or `StopRecordingRequested`. |
 | `ClearCommand` | Clears source, neg descriptor, resets `IsInverted`/`IsHalfAxis`. |
+| `ResetGyroSensitivityCommand`, `ResetMouseCursorSensitivityCommand`, `ResetIrPointerSensitivityCommand`, `ResetSensitivityCommand`, `ResetParamAccelCommand` | Per-control resets for the primary-source knobs above. |
 
 | Event | Description |
 |-------|-------------|
@@ -1657,11 +1767,13 @@ Input choice in the source dropdown.
 | Property | Type | Description |
 |----------|------|-------------|
 | `Descriptor` | `string` | Mapping descriptor (e.g., `"Button 0"`, `"Axis 1"`, `"POV 0 Up"`). Empty string = "clear" sentinel. |
-| `DisplayName` | `string` | Human-readable display name (e.g., `"A"`, `"Left Stick X"`). |
+| `DisplayName` | `string` | Human-readable display name (e.g., `"A"`, `"Left Stick X"`). `ToString()` returns it. |
+| `DeviceGuid` | `string` | Owning device for the cross-device picker. Empty = the "(Any device)" group. |
+| `DeviceLabel` | `string` | Friendly device name for that group heading. |
 
 ### MappingCategory (enum)
 
-Values: `Buttons`, `DPad`, `Triggers`, `LeftStick`, `RightStick`.
+Values: `Buttons`, `DPad`, `Triggers`, `LeftStick`, `RightStick`, `Touchpad`, `Motion`. `Motion` covers the bundled motion-passthrough rows (`MotionGyro` / `MotionAccel` targets), auto-created on Sony-class slots for every assigned gyro or accel-capable device and rendered as one combined Motion row when both sub-channels come from the same source. `Touchpad` rows are the one category `IsRecordable` excludes.
 
 ---
 
@@ -1905,7 +2017,7 @@ Single action in a macro's sequence.
 
 ### Type-Check Properties (all computed, not serialized)
 
-`IsButtonType`, `IsKeyType`, `IsDurationType`, `IsAxisType`, `IsSystemVolumeType`, `IsAppVolumeType`, `IsMouseMoveType`, `IsMouseButtonType`, `IsContinuousAxisType`, `IsDeviceAxisSource`, `IsOutputAxisSource`
+One `Is*Type` flag per action family, plus the rolled-up families the editor gates whole panels on (`IsAnyRumbleType`, `IsAnyAxisValueType`, `IsAnyVcButtonType`, `IsAnyKeyType`, and the rest). A representative set: `IsButtonType`, `IsKeyType`, `IsDurationType`, `IsAxisType`, `IsSystemVolumeType`, `IsAppVolumeType`, `IsMouseMoveType`, `IsMouseButtonType`, `IsContinuousAxisType`, `IsDeviceAxisSource`, `IsOutputAxisSource`.
 
 ### Button Action Properties
 
@@ -2002,7 +2114,7 @@ For `MacroActionType.DisconnectController`. The target is set on the action, not
 
 **MacroRepeatMode:** `Once`, `FixedCount`, `UntilRelease`
 
-**MacroActionType** (append-only, since the clipboard serializes these as ints, so members are never reordered): `ButtonPress`, `ButtonRelease`, `KeyPress`, `KeyRelease`, `Delay`, `AxisSet`, `SystemVolume`, `AppVolume`, `MouseMove`, `MouseButtonPress`, `MouseButtonRelease`, `MouseScroll`, `ToggleTouchpadOverlay` (v3.2), `LightbarColor` / `LightbarColorClear` / `LightbarModeSet` / `LightbarModeCycle` (v3.1+), `SetGyroEngaged` (#120), `Rumble` / `RumbleStop` (v3.1+), `RumbleTrigger` / `RumbleTriggerStop` (#102), `PlaySound` / `SoundStop` (#83), `MouseRecenter` (#108), `MouseFixPosition` (#109), `MouseLimitRegion` (#110), `DisconnectController` (#162), `RunProgram` (launch an external program/file), `TextBlock` (#201, Unicode text injection), `PointerModeCycle` / `PointerModeSet` (#203, Wii pointer mode), `GuideLedBrightness` (#209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40), `MouseNudge` (41), `CycleTapList` (42), `ToggleMouseButton` (43), `ToggleVcAxis` (44), `RepeatVcAxisWhileHeld` (45), `ToggleWheel` (46), `AxisAdd` (47, #237), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251). The append-only rule is stated in code beside the enum.
+**MacroActionType** (append-only, since the clipboard serializes these as ints, so members are never reordered): `ButtonPress`, `ButtonRelease`, `KeyPress`, `KeyRelease`, `Delay`, `AxisSet`, `SystemVolume`, `AppVolume`, `MouseMove`, `MouseButtonPress`, `MouseButtonRelease`, `MouseScroll`, `ToggleTouchpadOverlay` (v3.2), `LightbarColor` / `LightbarColorClear` / `LightbarModeSet` / `LightbarModeCycle` (v3.1+), `SetGyroEngaged` (#120), `Rumble` / `RumbleStop` (v3.1+), `RumbleTrigger` / `RumbleTriggerStop` (#102), `PlaySound` / `SoundStop` (#83), `MouseRecenter` (#108), `MouseFixPosition` (#109), `MouseLimitRegion` (#110), `DisconnectController` (#162), `RunProgram` (launch an external program/file), `TextBlock` (#201, Unicode text injection), `PointerModeCycle` / `PointerModeSet` (#203, Wii pointer mode), `GuideLedBrightness` (#209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40), `MouseNudge` (41), `CycleTapList` (42), `ToggleMouseButton` (43), `ToggleVcAxis` (44), `RepeatVcAxisWhileHeld` (45), `ToggleWheel` (46), `AxisAdd` (47, #237), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251), `HeadphoneVolumeUp` (52), `HeadphoneVolumeDown` (53). The last pair steps `DeviceSlotConfig.HeadphoneVolume` by 10% and clamps at the ends, persisting like any other Audio-tab edit. The append-only rule is stated in code beside the enum.
 
 **MacroDisconnectTarget** (#162): `TriggeringDevice` (0), `SpecificDevice` (1), `SlotDevices` (2), `AllDevices` (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.
 
@@ -2089,9 +2201,10 @@ Editor VM for one radial / touch menu (#9), backing a row of `PadViewModel.Menus
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `HostOptions` | `IReadOnlyList<MenuHostOption>` | The five pickable host surfaces: `Gamepad LeftStick`, `Gamepad RightStick`, `Touchpad 0`–`Touchpad 2` (labels from `Menu_Host_*` resx, touchpads displayed 1-based as "Touchpad 1..3"). |
+| `HostOptions` | `IReadOnlyList<MenuHostOption>` | The five built-in host surfaces: `Gamepad LeftStick`, `Gamepad RightStick`, `Touchpad 0`, `Touchpad 1` (labels from `Menu_Host_*` resx, touchpads displayed 1-based as "Touchpad 1" / "Touchpad 2"), and `Custom` for the devices the named surfaces cannot describe (joysticks, wheels, anything not detected as a gamepad). An authored descriptor outside that grammar is appended as its own entry so the selection never silently lies. Never gated on assignment or online state, because imported profiles land on slots with nothing assigned yet. |
 | `SelectedHost` | `MenuHostOption` | Selected host. Defaults to the right stick when the stored descriptor matches nothing. Selecting a non-touchpad host resets `HostHalf` to 0. |
 | `HostIsTouchpad` | `bool` | Computed from `SelectedHost`. Shows the Pad Half row. |
+| `IsCustomHost` | `bool` | Computed: the Custom host is selected, which swaps in the `CustomX` / `CustomY` / `Click` pickers (`CustomXChoices`, `CustomXSelected`, `CustomXSubtitle`, and their Y and click twins) and their own record buttons. |
 | `HostHalfOptions` / `HostHalfIndex` | list / `int` | Pad Half picker for touchpad hosts: 0 Whole Pad, 1 Left Half, 2 Right Half. Clamped 0–2. |
 | `HostRecording` / `HostRecordIcon` | `bool` / `string` | Freeform-recorder state for the host record button: Stop glyph (`E71A`) while recording, Record (`E7C8`) while idle, mirroring the Aim Engage record button. |
 
@@ -2116,7 +2229,7 @@ Editor VM for one radial / touch menu (#9), backing a row of `PadViewModel.Menus
 | `RebuildCells()` | internal | Rebuilds the rows for the current shape. Existing item entries keep their data. Out-of-range entries (a shrunken ring's tail, a removed center) are pruned from the definition so exports and the overlay agree with the editor. |
 | `EnsureItem(int)` / `DropItemIfEmpty(...)` | internal | Write-through for a cell edit: materializes the `MenuItemDefinition` on first use, drops it again when the label and both bindings are cleared. |
 
-**Per-row resets** (canon: every setting row has one): `ResetHostCommand` (right stick, whole pad), `ResetFireCommand` (On Click), `ResetCellsCommand` (4 cells, no center), `ResetGeometryCommand` (50/50, 100%, 90%, labels on), `ResetDeadzoneCommand` (25).
+**Per-row resets** (canon: every setting row has one): `ResetHostCommand` (right stick, whole pad, custom descriptors cleared), `ResetHostHalfCommand` (whole pad), `ResetStyleCommand` (Radial), `ResetFireCommand` (On Click), `ResetCellsCommand` (4 cells, no center), `ResetGeometryCommand` (50/50, scale 100%, opacity 90%, labels on), `ResetDeadzoneCommand` (25), plus `ResetCustomXCommand` / `ResetCustomYCommand` / `ResetClickCommand` for the Custom host's three inputs.
 
 ### MenuCellItem
 
@@ -2128,6 +2241,7 @@ One cell row in the menu editor: label + one direct binding (none / keyboard key
 |----------|------|-------------|
 | `Index` / `IsCenter` | `int` / `bool` | Cell position. `Header` renders "Center" or the localized "Cell {n}". |
 | `Label` | `string` | Cell label. Setting it materializes the item entry, clearing it drops an otherwise-empty entry. |
+| `HasIcon` / `IconName` / `IconImage` / `ShowIconGlyph` | `bool` / `string` / `ImageSource` / `bool` | Cell icon: the stored name, the resolved image, and the glyph fallback used when the name resolves to no image. |
 | `BindingKind` | `int` | `0` none, `1` keyboard key, `2` VC button, derived from which field is set. Selecting a kind seeds a default (Space / `Gamepad.A`) and zeroes the other field. |
 | `ShowKeyPicker` / `ShowButtonPicker` | `bool` | Computed from `BindingKind`. |
 | `SelectedKeyVk` | `int` | Virtual-key code, choices from `KbmSlotConfig.GetKeyOptions()`. |
@@ -2236,8 +2350,8 @@ One thumbstick section in the Sticks tab. Gamepad presets: 0 = Left, 1 = Right. 
 |----------|------|-------------|
 | `Title` | `string` | Display title (e.g., `"Left Thumbstick"`, `"Stick 1"`). Read-only. |
 | `Index` | `int` | Stick index (0-based). Read-only. |
-| `AxisXIndex` | `int` | Raw axis index for X in `ExtendedRawState.Axes` (-1 for gamepad). Read-only. |
-| `AxisYIndex` | `int` | Raw axis index for Y in `ExtendedRawState.Axes` (-1 for gamepad). Read-only. |
+| `AxisXIndex` | `int` | Raw axis index for X in `RawHidState.Axes` (custom Extended only, -1 for gamepad). Read-only. |
+| `AxisYIndex` | `int` | Raw axis index for Y in `RawHidState.Axes` (custom Extended only, -1 for gamepad). Read-only. |
 
 ### Deadzone Configuration
 
@@ -2357,7 +2471,7 @@ One trigger section in the Triggers tab. Gamepad presets: 0 = Left, 1 = Right. C
 |----------|------|-------------|
 | `Title` | `string` | Display title (e.g., `"Left Trigger"`, `"Trigger 1"`). Read-only. |
 | `Index` | `int` | Trigger index (0-based). Read-only. |
-| `AxisIndex` | `int` | Raw axis index in `ExtendedRawState.Axes` (-1 for gamepad). Read-only. |
+| `AxisIndex` | `int` | Raw axis index in `RawHidState.Axes` (custom Extended only, -1 for gamepad). Read-only. |
 
 ### Configuration
 
@@ -2541,14 +2655,35 @@ Filters the single (pitch, amplitude) pair the haptic-tone sinks reduce everythi
 | `AudioToneFilterMode` | `string` | `"Off"` | `Off`, `Cut` (silence above the limit), or `Fold` (octave-halve into the pass band). |
 | `AudioToneLimitHz` | `int` | `800` | Ceiling for Cut / Fold in Hz. |
 
+### Persona haptics (#271 item 1)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `AudioPersonaHapticsEnabled` | `bool` | `false` | Render the virtual DualSense's authored haptic audio (persona UAC channels 3/4) on this device's actuators through the haptic-tone chain. Off by default because the derived tones only approximate the designer's track. |
+| `AudioPersonaHapticsGain` | `int` | `100` | Input gain percent (25–300) applied before the tone reducer, so a quiet authored track can still reach the actuators. |
+
+Reset commands: `ResetPersonaHapticsCommand`, `ResetPersonaHapticsGainCommand` (both on `PadViewModel`, alongside the Audio tab's other row resets).
+
+### Headphone jack and audio path
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `HeadphoneVolume` | `int` | `100` | Headphone-jack hardware volume percent, clamped 0–100. Maps onto the DS5 output report's VolumeHeadphones byte over Sony's own scePad window. `0%` writes `0x00`. Owned by the Audio-tab card and the `HeadphoneVolumeUp` / `HeadphoneVolumeDown` macro actions. |
+| `AudioOutputPath` | `AudioOutputPath` | `Automatic` | Where the DualSense plays its audio (output report byte 7 bits 4–5). |
+
+| Command | Description |
+|---------|-------------|
+| `ResetHeadphoneVolumeCommand` | Back to 100. |
+| `ResetAudioOutputPathCommand` | Back to `Automatic`. |
+
 ### Macro lightbar override (#63)
 
 Transient runtime state set by `MacroActionType.LightbarColor`. Not persisted (`[XmlIgnore]`).
 
 | Member | Type | Default | Description |
 |--------|------|---------|-------------|
-| `MacroOverrideR` / `G` / `B` | `byte` | `0` | Override RGB. |
-| `MacroOverrideStartUtc` / `HoldEndUtc` / `ExpiresAtUtc` | `DateTime` | `MinValue` | Hold window bounds. Full intensity over [Start, HoldEnd], linear fade to 0 over [HoldEnd, Expires]. |
+| `MacroOverrideR` / `MacroOverrideG` / `MacroOverrideB` | `byte` | `0` | Override RGB. |
+| `MacroOverrideStartUtc` / `MacroOverrideHoldEndUtc` / `MacroOverrideExpiresAtUtc` | `DateTime` | `MinValue` | Hold window bounds. Full intensity over [Start, HoldEnd], linear fade to 0 over [HoldEnd, Expires]. |
 | `MacroOverrideHoldMode` | `MacroLightbarHoldMode` | `Reactive` | Reactive (decay-fade) or Sticky (held until cleared). |
 | `HasActiveMacroLightbarOverride` | `bool` | - | Computed: `UtcNow < ExpiresAtUtc`. |
 | `ComputeMacroOverrideIntensity()` | method | - | 0..1 scalar for the override RGB. 1.0 for Sticky. Ramps for Reactive. |
@@ -2616,6 +2751,8 @@ Each control has a matching `Reset…Command` (mirroring the Sticks / Triggers p
 
 **AdaptiveTriggerMode:** `Off`(0), `Feedback`(1), `Weapon`(2), `Vibration`(3), `MultiplePositionFeedback`(4), `SlopeFeedback`(5), `MultiplePositionVibration`(6). Sony's seven PS5 SDK effect modes.
 
+**AudioOutputPath:** `Automatic`(0), `StereoHeadset`(1), `MonoHeadset`(2), `HeadsetAndSpeaker`(3), `SpeakerOnly`(4), `FollowHeadphoneJack`(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. `Automatic` writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. `FollowHeadphoneJack` tracks the pad's own jack detect, which arrives on the Bluetooth raw lane, and resolves to the default when there is no reading. Persisted numerically, so the members are append-only.
+
 **MicLedMode:** `Off`(0), `Solid`(1), `Pulse`(2), `FollowDeviceMute`(3).
 
 **PlayerLedMode:** `Off`(0), `Player1`(1), `Player2`(2), `Player3`(3), `Player4`(4), `All`(5), `PlayerNumber`(6, default). Sequential to map 1:1 with the dropdown.
@@ -2636,7 +2773,7 @@ Each control has a matching `Reset…Command` (mirroring the Sticks / Triggers p
 
 ### DeviceSlotConfigData
 
-Serializable DTO. All scalar properties are `[XmlAttribute]`. The two palettes are `[XmlArray]`. Key defaults: `LeftEndPosition`/`RightEndPosition` = 255, `LeftStrength`/`RightStrength` = 200, `LeftFrequency`/`RightFrequency` = 10, `LightbarBlue` = 0xFF, `AudioMirrorEngageMode` = "Always", `AudioMirrorEngageReleaseMs` = 500, `AudioToneFilterMode` = "Off", `AudioToneLimitHz` = 800, `GuideLedMode` = DeviceDefault, `GuideLedBrightness` = 100, `LightbarMode` = Off (the DTO default, migrated to PlayerNumber via `LightingRev`), `PlayerLedMode` = Off (likewise). It also carries a `DeviceGuid` (per-device key, empty = a legacy slot-level entry the loader fans out) and `LightingRev` (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). `LightbarPaletteEntryData` is the palette element (`R`, `G`, `B` byte attributes).
+Serializable DTO. All scalar properties are `[XmlAttribute]`. The two palettes are `[XmlArray]`. Key defaults: `LeftEndPosition`/`RightEndPosition` = 255, `LeftStrength`/`RightStrength` = 200, `LeftFrequency`/`RightFrequency` = 10, `LightbarBlue` = 0xFF, `AudioMirrorEngageMode` = "Always", `AudioMirrorEngageReleaseMs` = 500, `AudioToneFilterMode` = "Off", `AudioToneLimitHz` = 800, `AudioPersonaHapticsEnabled` = false, `AudioPersonaHapticsGain` = 100, `HeadphoneVolume` = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), `AudioOutputPath` = Automatic, `GuideLedMode` = DeviceDefault, `GuideLedBrightness` = 100, `LightbarMode` = Off (the DTO default, migrated to PlayerNumber via `LightingRev`), `PlayerLedMode` = Off (likewise). It also carries a `DeviceGuid` (per-device key, empty = a legacy slot-level entry the loader fans out) and `LightingRev` (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). `LightbarPaletteEntryData` is the palette element (`R`, `G`, `B` byte attributes).
 
 ---
 
@@ -2729,7 +2866,7 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 - [Architecture Overview](architecture-overview.md): MVVM design philosophy, `CommunityToolkit.Mvvm` usage
 - [XAML Views](xaml-views.md): View counterparts: `DashboardPage`, `PadPage`, `DevicesPage`, `SettingsPage`
 - [Services Layer](services-layer.md): `InputService`, `SettingsService`, `DeviceService` consumed by ViewModels
-- [Engine Library](engine-library.md): `Gamepad`, `ExtendedRawState`, `KbmRawState`, `MidiRawState`, `PadSetting`
+- [Engine Library](engine-library.md): `Gamepad`, `RawHidState`, `KbmRawState`, `VrRawState`, `MidiRawState`, `PadSetting`
 - [Settings and Serialization](settings-and-serialization.md): `SettingsManager` data synced to/from ViewModels by `SettingsService`
 - [Input Pipeline](input-pipeline.md): `InputManager` state reflected in `PadViewModel` output snapshots
 - [2D Overlay System](2d-overlay-system.md): `ControllerModel2DView`, `ControllerSchematicView` bound to `PadViewModel`
@@ -2737,4 +2874,4 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -1292,6 +1292,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#raise-headphone-volume-lower-headphone-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raise Headphone Volume / Lower Headphone Volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#play-sound-stop-sounds" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2911,6 +2922,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3372,6 +3387,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -4000,6 +4071,17 @@
     <span class="md-ellipsis">
       
         App Volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#raise-headphone-volume-lower-headphone-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raise Headphone Volume / Lower Headphone Volume
       
     </span>
   </a>
@@ -4895,6 +4977,9 @@
 <li><strong>Process name.</strong> The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.</li>
 <li>The other options match System Volume.</li>
 </ul>
+<h3 id="raise-headphone-volume-lower-headphone-volume">Raise Headphone Volume / Lower Headphone Volume<a class="headerlink" href="#raise-headphone-volume-lower-headphone-volume" title="Permanent link">&para;</a></h3>
+<p>Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same <strong>Headphone Volume</strong> the <a href="../../features/controller-audio/">Controller Audio</a> tab carries, so the change sticks the way any Audio-tab edit does.</p>
+<p>The write goes to the pad, so the level holds with no app in the loop.</p>
 <h3 id="play-sound-stop-sounds">Play Sound / Stop Sounds<a class="headerlink" href="#play-sound-stop-sounds" title="Permanent link">&para;</a></h3>
 <p>Play a sound file through the slot's audio output. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a single vibrating tone. With no sound-capable device on the slot, it falls back to the PC's default output.</p>
 <ul>
@@ -5278,7 +5363,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: fixes for macros that do not fire.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

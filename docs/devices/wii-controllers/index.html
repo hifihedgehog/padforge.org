@@ -2207,6 +2207,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2668,6 +2672,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3184,7 +3244,7 @@
 <h2 id="balance-board">Balance Board<a class="headerlink" href="#balance-board" title="Permanent link">&para;</a></h2>
 <p>The Wii Balance Board pairs the same way as any other Wii controller and exposes three sources:</p>
 <ul>
-<li><strong>Balance Total Weight</strong>: the weight on the board, in kilograms.</li>
+<li><strong>Balance Total Weight</strong>: the weight on the board, computed in real kilograms and scaled across a 0 to 150 kg range.</li>
 <li><strong>Balance Lean X</strong>: the left-right weight shift, as a ratio. No calibration needed.</li>
 <li><strong>Balance Lean Y</strong>: the front-back weight shift, as a ratio. No calibration needed.</li>
 </ul>
@@ -3195,7 +3255,7 @@
 <p>A Wii Remote can play macro sounds through its built-in speaker. The speaker is low-rate audio, so it handles beeps and short cues rather than music. It appears on the <a href="../../features/controller-audio/">Audio</a> tab like other speaker-capable controllers.</p>
 <hr />
 <h2 id="left-joy-con-motion">Left Joy-Con motion<a class="headerlink" href="#left-joy-con-motion" title="Permanent link">&para;</a></h2>
-<p>A combined Joy-Con pair carries a full motion sensor in each half. The primary gyro and motion sources read the right Joy-Con. Since 4.1.0, the left half's sensors appear as their own sources in the mapping picker:</p>
+<p>A combined Joy-Con pair carries a full motion sensor in each half. On a pair the plain <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong> rows read both halves fused: each half is debiased against its own measured bias, then the two rates are averaged. The <strong>Motion Gyro</strong> passthrough row is never fused and reads the right half raw, because the passthrough has to stay a single real sensor stream. Each half also gets its own explicit rows, offered only on a pair:</p>
 <table>
 <thead>
 <tr>
@@ -3205,8 +3265,12 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Left Joy-Con Gyro Pitch</strong>, <strong>Left Joy-Con Gyro Yaw</strong>, <strong>Left Joy-Con Gyro Roll</strong></td>
-<td>The left half's rotation rate, one axis per row. Bind them to mouse or stick axes like the primary gyro axes.</td>
+<td><strong>Left Joy-Con Gyro Pitch</strong>, <strong>Left Joy-Con Gyro Yaw</strong>, <strong>Left Joy-Con Gyro Roll</strong>, <strong>Left Joy-Con Gyro Horizontal (Yaw + Roll)</strong></td>
+<td>The left half's rotation rate, raw, one row per axis. Bind them to mouse or stick axes like the plain gyro axes.</td>
+</tr>
+<tr>
+<td><strong>Right Joy-Con Gyro Pitch</strong>, <strong>Right Joy-Con Gyro Yaw</strong>, <strong>Right Joy-Con Gyro Roll</strong>, <strong>Right Joy-Con Gyro Horizontal (Yaw + Roll)</strong></td>
+<td>The right half's rotation rate, raw, which is what the plain rows read before fusion.</td>
 </tr>
 <tr>
 <td><strong>Left Joy-Con Motion Gyro</strong></td>
@@ -3269,7 +3333,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

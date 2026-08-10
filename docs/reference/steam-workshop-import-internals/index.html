@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2903,6 +2907,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3591,8 +3651,8 @@
 <td>Report, status enum, options, neutral output shape.</td>
 </tr>
 <tr>
-<td><code>PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs</code>, <code>SteamInputVkTable.cs</code>, <code>XInputTargetTable.cs</code></td>
-<td>Steam slot → PadForge source resolution, key and pad-target tables.</td>
+<td><code>PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs</code>, <code>SteamInputVkTable.cs</code>, <code>XInputTargetTable.cs</code>, <code>SteamVocabulary.cs</code></td>
+<td>Steam slot → PadForge source resolution, key and pad-target tables, the serializer-vocabulary token set.</td>
 </tr>
 <tr>
 <td><code>PadForge.SteamWorkshop/Cache/SteamWorkshopCache.cs</code>, <code>CacheCategory.cs</code></td>
@@ -3628,7 +3688,7 @@
 </tr>
 <tr>
 <td><code>PadForge.SteamWorkshop.Tests/</code></td>
-<td>Parser, client, cache, and translation tests: <code>TranslationEdgeTests</code> plus per-wave suites (<code>WaveOneA</code>, <code>WaveTwoA</code>, <code>WaveThree</code>, <code>WaveFour</code>, <code>WaveFourB</code>, <code>WaveFourC</code>) and 30 golden fixtures.</td>
+<td>Parser, client, cache, and translation tests: <code>TranslationEdgeTests</code>, the v1-v7 per-wave suites (<code>WaveOneA</code>, <code>WaveTwoA</code>, <code>WaveThree</code>, <code>WaveFour</code>, <code>WaveFourB</code>, <code>WaveFourC</code>), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures.</td>
 </tr>
 </tbody>
 </table>
@@ -4417,13 +4477,14 @@
 <li>The gesture-provider invocations in <code>SourceCoercion</code> (<code>ReadAsBool</code> / <code>ReadAsBipolar</code> / <code>ReadAsUnipolar</code>) pass the caller-resolved guid, because the gesture providers key on a concrete <code>(slot, device, pad)</code> triple and a bare empty guid always missed.</li>
 </ul>
 <h3 id="generic-per-source-sensitivity">Generic per-source Sensitivity<a class="headerlink" href="#generic-per-source-sensitivity" title="Permanent link">&para;</a></h3>
-<p><code>MappingSource.Sensitivity</code> is an <code>[XmlAttribute]</code> defaulting to 1.0 (a legacy 0 reads as 1.0 through <code>PerSourceSensitivity</code>). <code>IsGenericSensitivityDescriptor</code> gates it to sources whose canonical descriptor starts with <code>Axis</code> or <code>Slider</code>, which includes the Gamepad stick and trigger aliases and excludes the gyro / mouse-position / IR families that carry their own multipliers inside their own readers (no double scaling, one slider per source).</p>
-<p>Three application sites in <code>SourceCoercion</code>, all clamped after scaling:</p>
+<p><code>MappingSource.Sensitivity</code> is an <code>[XmlAttribute]</code> defaulting to 1.0 (a legacy 0 reads as 1.0 through <code>PerSourceSensitivity</code>). <code>IsGenericSensitivityDescriptor</code> gates it to sources whose canonical descriptor starts with <code>Axis</code> or <code>Slider</code>, plus the touchpad finger-position axes that <code>IsTouchpadFingerAxisDescriptor</code> matches. That covers the Gamepad stick and trigger aliases and excludes the gyro / mouse-position / IR families, which carry their own multipliers inside their own readers (no double scaling, one slider per source).</p>
+<p>Three generic-read application sites in <code>SourceCoercion</code>, all clamped after scaling:</p>
 <ol>
 <li><code>ReadAsBipolar</code>: axis value × sensitivity, clamped to ±1.</li>
 <li><code>ReadAsUnipolar</code>: trigger value × sensitivity, clamped to 0..1.</li>
 <li><code>ReadAsBool</code> (the axis-to-button threshold read): the raw value scales before the threshold comparison. Half-axis scales deviation from center, full-axis and slider scale magnitude from zero, and sensitivity 1.0 leaves every comparison bit-identical. Without this site the slider had no effect on axis-to-button rows.</li>
 </ol>
+<p>The family readers that own their own scaling call <code>PerSourceSensitivity</code> themselves: the three touchpad axis reads (<code>TryReadTouchpadAxis</code>, <code>TryReadTouchpadAxisAbsolute</code>, <code>TryReadTouchpadAxisRaw</code>), the trackball emitter <code>EmitBallCounts</code>, and <code>ReadGyroLean</code>.</p>
 <p>The editor slider runs 0.1–5.0 (<code>MappingItem</code> clamps), label <code>Mapping_Sensitivity</code>.</p>
 <h3 id="touchpad-finger-pressure">Touchpad finger pressure<a class="headerlink" href="#touchpad-finger-pressure" title="Permanent link">&para;</a></h3>
 <p>The <code>Touchpad {p} Finger {f} Pressure</code> descriptor existed in the engine. Phase A put it in the picker (<code>Mapping_TouchpadFingerPressure_Format</code>, one entry per pad × finger, gated on <code>HasTouchpad || IsTouchpad</code>, finger counts from the live SDL snapshot or the persisted capability). It reads <code>FingerPressure[f]</code> as a unipolar 0..1 level and bypasses the touchpad delta path. Values arrive from SDL's per-finger pressure on gamepad touchpads (pads without a force sensor report full on contact). The PTP reader and the touchpad overlay report binary 0/1 while a finger is down. The Workshop translator never emits this descriptor (its trackpad <code>soft_press</code> rides the click and touch descriptors as <code>SoftPressApproximated</code>). It exists for hand-built mappings.</p>
@@ -4440,7 +4501,7 @@
 <p>All dispatch in the gamepad-state and Extended raw-state switches of <code>InputManager.Step4b.EvaluateMacros.cs</code>, carry the DTO triple in <code>SettingsService</code>, and follow the <code>Is*Type</code> editor-visibility pattern in <code>MacroItem.cs</code>.</p>
 <hr />
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
-<p><code>PadForge.SteamWorkshop.Tests</code> covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through <code>TranslationEdgeTests</code>, the per-wave suites (<code>WaveOneATranslationTests</code> through <code>WaveFourCTranslationTests</code>), and 30 golden fixtures (<code>Golden/{fileId}.golden.txt</code>, re-blessed via <code>PADFORGE_BLESS_GOLDEN=1</code> so translator changes surface as reviewable diffs). <code>PadForge.Tests/WorkshopProvenanceTests.cs</code> pins the provenance XML round-trip, the materializer stamp, and compaction preservation.</p>
+<p><code>PadForge.SteamWorkshop.Tests</code> covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through <code>TranslationEdgeTests</code>, the v1-v7 per-wave suites (<code>WaveOneATranslationTests</code> through <code>WaveFourCTranslationTests</code>), the v8-v26 topic suites (<code>GroupAxisInversionTests</code>, <code>CurveChannelTranslationTests</code>, <code>DeadZoneGeometryTranslationTests</code>, <code>GapClosureTranslationTests</code>, <code>StickDirectionTranslationTests</code>, <code>StickSwipeScrollTests</code>, <code>AuditTwoTranslationTests</code>, <code>SentinelPresetCycleTests</code>, <code>MenuCellLabelTests</code>, <code>MenuNameDisambiguationTests</code>, <code>RatchetDelayHapticTranslationTests</code>, <code>ReleaseActivatorWheelTests</code>, <code>VocabularyCensusTests</code>, <code>MassSweepTopFourTests</code>, <code>MassSweepRoundTwoTests</code>, <code>MassSweepRoundThreeTests</code>, <code>TranslatorAuditFixTests</code>, <code>MacroTriggerReachabilityTests</code>, <code>WorkshopSourceDeviceGuidTests</code>), the reason-key lockdowns (<code>ReportReasonLockdownTests</code>, <code>ApprovedReasonLockdown</code>, <code>UserFacingVocabularyTests</code>), and 30 golden fixtures (<code>Golden/{fileId}.golden.txt</code>, re-blessed via <code>PADFORGE_BLESS_GOLDEN=1</code> so translator changes surface as reviewable diffs). <code>PadForge.Tests/WorkshopProvenanceTests.cs</code> pins the provenance XML round-trip, the materializer stamp, and compaction preservation.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4454,7 +4515,7 @@
 <li><a href="../engine-library/">Engine Library</a>: <code>MappingSource</code>, <code>MappingSet</code>, and the coercion layer.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

@@ -26,7 +26,9 @@ The transport is abstracted behind `ILinkControlChannel`, so an in-memory test h
 
 ## Discovery
 
-`LinkDiscovery` is a UDP broadcast beacon, not mDNS. It binds `IPAddress.Any:27501`, announces every two seconds to `IPAddress.Broadcast:27501`, and prunes a peer after ten seconds of silence. Because it broadcasts, it is same-subnet only. The beacon carries a four-byte magic, a version, the link port, the sender's identity fingerprint (hex), and the self-asserted machine name. A forged beacon can only put a name in the "Nearby PCs" list. The crypto gate still controls admission. The receive loop filters out the PC's own fingerprint and raises `PeersChanged`.
+`LinkDiscovery` is a UDP broadcast beacon, not mDNS. It binds `IPAddress.Any:27501`, announces every two seconds to `IPAddress.Broadcast:27501`, and prunes a peer after ten seconds of silence. Because it broadcasts, it is same-subnet only. The beacon carries a four-byte magic, a version, the link port, the sender's identity fingerprint (hex), and the self-asserted machine name. A forged beacon can only put a name in the "Nearby PCs" list. The crypto gate still controls admission. The receive loop filters out the PC's own fingerprint and raises `PeersChanged`. The discovered-peer table caps at 256 entries so a beacon flood with rotating fingerprints cannot grow it without bound. A known peer keeps refreshing and is never evicted by the cap.
+
+Discovery is a convenience, not the only way in. The Dashboard also carries a manual "Or Connect by Address (Advanced)" field with a "Pair / Connect" button, which raises `DashboardViewModel.ConnectToPeerRequested` into `InputService.OnConnectToPeerRequested`. That handler enables and starts the link server if it is off, splits an optional `:port` suffix off the typed host (falling back to the configured link port), builds the exposed-device list, and calls `LinkServer.ConnectAsync`. The auto-reconnect dial below runs through the same handler, so a hand-typed address and a discovered peer take an identical path across a subnet boundary.
 
 ---
 
@@ -162,9 +164,10 @@ On the owner, the `OutputReceived` handler `OnRemoteOutputReceived` decodes the 
 
 ## Gamepad-only enforcement
 
-`InputManager.SetDeviceRestricted` populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. `IsSlotRestricted(slot)` is true when any online restricted device maps to that slot, and it early-outs when no peer is restricted. Four chokepoints honor it:
+`InputManager.SetDeviceRestricted` populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. `IsSlotRestricted(slot)` is true when any online restricted device maps to that slot, and it early-outs when no peer is restricted (`RestrictedSnapshot` returns null and the caches rebuild only when the set changes). Five chokepoints honor it:
 
 - The KBM virtual controller (Step 5) submits a neutral state for a restricted slot, releasing anything held.
+- The VR controller pair (Step 5) submits a default `VrRawState` for a restricted slot, so a gamepad-only peer never reaches SteamVR.
 - Macros (Step 4b) are restricted when the slot is restricted or a restricted device is a macro trigger.
 - The five Win32 `SendInput` emitters (key, text, mouse move, mouse button, scroll, in Step 4b) early-return while the macro slot is restricted.
 - The menu overlay's key lane (`CollectMenuDirectOutputs`) suppresses key cells per restricted device via `RestrictedSnapshot()`. It deliberately gates per device, not per slot, so a restricted peer sharing a slot does not mute a local controller's key cells.
@@ -198,4 +201,4 @@ The auto-reconnect dial runs when a peer is discovered. It requires a trusted en
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

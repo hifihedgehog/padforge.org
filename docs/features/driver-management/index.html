@@ -1997,6 +1997,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#steamvr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamVR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SteamVR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-steps_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uninstall-steps_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uninstall steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#legacy-driver-cleanup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2306,6 +2345,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -2831,6 +2874,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3275,6 +3374,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#steamvr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteamVR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SteamVR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-steps_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uninstall-steps_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uninstall steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#legacy-driver-cleanup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3386,7 +3524,7 @@
 
 
 <h1 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h1>
-<p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers two optional ones (HidHide and Windows MIDI Services) that install and uninstall from </em><em>Settings</em><em>.</em></p>
+<p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers three optional ones (HidHide, Windows MIDI Services, and SteamVR) that install and uninstall from </em><em>Settings</em><em>.</em></p>
 <!-- SCREENSHOT: settings-drivers -->
 <p><img alt="Driver management cards" src="../../images/settings-drivers.png" /></p>
 <hr />
@@ -3420,6 +3558,11 @@
 <td>Optional. Install for MIDI input or the MIDI controller type.</td>
 <td>Virtual MIDI endpoints for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Needs Windows 11 24H2 (build 26100) or later.</td>
 </tr>
+<tr>
+<td><strong>SteamVR</strong></td>
+<td>Optional. Install for the VR controller type.</td>
+<td>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</td>
+</tr>
 </tbody>
 </table>
 <blockquote>
@@ -3428,7 +3571,7 @@
 <hr />
 <h2 id="first-run-auto-install">First-run auto-install<a class="headerlink" href="#first-run-auto-install" title="Permanent link">&para;</a></h2>
 <p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The HIDMaestro card on the <strong>Settings</strong> page lights up and the Xbox, PlayStation, Nintendo, and Extended slot types turn on.</p>
-<p>HidHide and Windows MIDI Services do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>.</p>
+<p>HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>.</p>
 <hr />
 <h2 id="status-indicators">Status indicators<a class="headerlink" href="#status-indicators" title="Permanent link">&para;</a></h2>
 <p>Each driver card on the Settings page shows an ember flame next to its status text.</p>
@@ -3476,15 +3619,19 @@
 <td><strong>MIDI Services</strong></td>
 <td>The MIDI slot type won't switch on. Its button stays visible and shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works.</td>
 </tr>
+<tr>
+<td><strong>SteamVR</strong></td>
+<td>The VR slot type won't switch on. Its button stays visible and shows the tooltip "VR (requires SteamVR)". Every other slot type works.</td>
+</tr>
 </tbody>
 </table>
 <hr />
 <h2 id="admin-rights">Admin rights<a class="headerlink" href="#admin-rights" title="Permanent link">&para;</a></h2>
-<p>PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.</p>
+<p>PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, the SteamVR install, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.</p>
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>One driver that publishes the virtual controllers. Each non-MIDI, non-Keyboard+Mouse slot uses one HIDMaestro <strong>device profile</strong>. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.</p>
-<p>New in 4.1.0: the <strong>Nintendo</strong> slot type. It always deploys the Switch Pro profile as-is (no customizing), with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The other Nintendo profiles (Switch 2 Pro, Joy-Cons, GameCube adapter, NSO retro pads) live in the <strong>Extended</strong> category.</p>
+<p>The <strong>Nintendo</strong> slot type carries two profiles: Switch Pro (the default) and Switch 2 Pro. Pick between them from the slot's preset dropdown. Neither can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the <strong>Extended</strong> category.</p>
 <h3 id="the-225-profiles-cover">The 225+ profiles cover<a class="headerlink" href="#the-225-profiles-cover" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Xbox 360, Xbox One, Xbox Series, Elite, Adaptive</li>
@@ -3597,6 +3744,23 @@
 <li>Click <strong>Uninstall</strong>.</li>
 </ol>
 <hr />
+<h2 id="steamvr">SteamVR<a class="headerlink" href="#steamvr" title="Permanent link">&para;</a></h2>
+<p>The runtime behind the VR slot type. PadForge installs it Steam-free from Valve's servers: no Steam account, no Steam client. It is several GB.</p>
+<h3 id="install-steps_2">Install steps<a class="headerlink" href="#install-steps_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
+<li>Set <strong>Install Location</strong> if you do not want the default path. The box only shows while SteamVR is missing.</li>
+<li>Click <strong>Install</strong>. The download runs from Valve's servers and the flame lights when it finishes.</li>
+</ol>
+<h3 id="uninstall-steps_2">Uninstall steps<a class="headerlink" href="#uninstall-steps_2" title="Permanent link">&para;</a></h3>
+<p><strong>Uninstall</strong> only appears for an install PadForge itself made. A SteamVR that arrived with the Steam client is left alone, and PadForge shows no removal button for it.</p>
+<ol>
+<li>Close SteamVR. The uninstall refuses while it is running.</li>
+<li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
+<li>Click <strong>Uninstall</strong>. It removes the Steam-free install and frees the space. VR virtual controllers stop working until SteamVR is installed again.</li>
+</ol>
+<p>For the slot type itself, see <a href="../vr-controllers/">Virtual VR Controllers</a>.</p>
+<hr />
 <h2 id="legacy-driver-cleanup">Legacy driver cleanup<a class="headerlink" href="#legacy-driver-cleanup" title="Permanent link">&para;</a></h2>
 <p>Older PadForge versions needed ViGEmBus and vJoy. HIDMaestro replaces both. If either is still on your PC, PadForge finds it on first launch and offers to remove it.</p>
 <table>
@@ -3657,11 +3821,19 @@
 <td style="text-align: center;">No</td>
 </tr>
 <tr>
+<td><strong>SteamVR</strong></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">No</td>
+<td style="text-align: center;">No</td>
+</tr>
+<tr>
 <td><strong>Keyboard+Mouse</strong> (no driver)</td>
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
-<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">*</td>
 <td style="text-align: center;">No</td>
 </tr>
 </tbody>
@@ -3670,8 +3842,9 @@
 <li><strong>HIDMaestro</strong> runs in user mode, so it installs with no reboot. ARM64 support tracks the HIDMaestro project. Check the <a href="https://github.com/hifihedgehog/HIDMaestro/releases">HIDMaestro releases</a> for current status.</li>
 <li><strong>HidHide</strong> is an x64 kernel driver. It does not run on ARM64 (Snapdragon laptops) or 32-bit Windows.</li>
 <li><strong>Windows MIDI Services</strong> needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows.</li>
-<li><strong>Keyboard+Mouse</strong> needs no driver. It works on any 64-bit Windows that runs PadForge.</li>
-<li><strong>PadForge itself</strong> is a 64-bit app. It runs on 64-bit Windows 10 and 11. It does not run on 32-bit Windows.</li>
+<li><strong>SteamVR</strong> is x64. Valve ships no ARM64 build.</li>
+<li><strong>Keyboard+Mouse</strong> needs no driver, so it works wherever PadForge itself runs.</li>
+<li><strong>PadForge itself</strong> ships as a 64-bit x64 app. It runs on 64-bit Windows 10 and 11, and on ARM64 Windows only through x64 emulation. It does not run on 32-bit Windows.</li>
 </ul>
 <hr />
 <h2 id="uninstall-guards">Uninstall guards<a class="headerlink" href="#uninstall-guards" title="Permanent link">&para;</a></h2>
@@ -3691,6 +3864,10 @@
 <tr>
 <td><strong>MIDI Services</strong></td>
 <td>Any MIDI slot exists.</td>
+</tr>
+<tr>
+<td><strong>SteamVR</strong></td>
+<td>SteamVR is running, or the install did not come from PadForge.</td>
 </tr>
 </tbody>
 </table>
@@ -3798,7 +3975,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

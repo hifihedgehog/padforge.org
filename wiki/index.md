@@ -57,17 +57,21 @@ does.</p>
 ## What PadForge does
 
 - **One device, many outputs.** A single physical controller can feed up to
-  16 virtual controllers: Xbox, PlayStation, Switch Pro, Extended (225+
-  DirectInput profiles), keyboard and mouse, or MIDI.
+  16 virtual controllers: Xbox, PlayStation, Switch Pro, Extended (220+
+  DirectInput profiles), keyboard and mouse, MIDI, or a SteamVR hand pair.
 - **Any input, any output.** Map a stick to the mouse, a touchpad to a
   d-pad, gyro to aim, a MIDI key to a button, a Wii Remote to a wheel.
+  A Sony headset's head rotation drives motion like any other gyro.
 - **The extras real hardware has.** Adaptive triggers, impulse triggers,
-  lighting, controller speakers, force feedback for wheels, bass-shaker
-  audio output, NFC tag triggers.
+  lighting, controller speakers and microphones, force feedback for
+  wheels, bass-shaker audio output, NFC tag triggers.
 - **Steam Workshop import.** Bring an existing Steam Input config across
   and every supported setting lands on a PadForge control you can edit.
+- **Thirteen starter profiles.** Ready-made layouts for desktop use,
+  WASD shooters, emulation, racing, space sims, and gyro aim. Load one
+  and edit from there.
 
 PadForge is free and open source. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -288,4 +288,4 @@ These live in the SDL3 fork and are read-only from PadForge's side. See [SDL3 In
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -104,7 +104,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 2. Level meter flat during playback? Toggle Audio Bass Rumble off and on to restart WASAPI capture.
 3. Set **Overall Gain** above 0%. It applies to audio rumble too.
 4. Increase **sensitivity** (default 4, try 8-12, range 1-20).
-5. Raise **Bass Cutoff** (default 80 Hz, range 20-200 Hz) to capture more mid-bass.
+5. Raise **Bass Cutoff (Hz)** (default 80, range 20-200) to capture more mid-bass.
 6. Set both motor scale sliders above 0%.
 7. Click **Test Rumble**. No vibration means the device lacks rumble motors.
 8. Some apps (DAWs, certain games) open audio in exclusive mode, blocking WASAPI loopback.
@@ -287,8 +287,8 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. Enable the web controller on the [Dashboard](features/dashboard.md): Status should show "Running" with a URL.
 2. Both devices must be on the same Wi-Fi or LAN network.
 3. PadForge creates a firewall rule automatically.
-4. "Port in use" means another app occupies port 8080. Change the port in [Settings](features/settings.md).
-5. "Access denied" on a port means Windows reserved it or another service holds it. Change the web controller port in [Settings](features/settings.md) to a free one.
+4. "Port 8080 in use" means another app occupies that port. Change the port in the **Web Controller** section of the [Dashboard](features/dashboard.md).
+5. "Access denied for port 8080 (run as admin)" means Windows reserved it or another service holds it. Change the web controller port on the [Dashboard](features/dashboard.md) to a free one.
 6. Rotate the browser device to **landscape** orientation.
 7. Try Chrome, Firefox, or Edge if WebSocket issues occur.
 
@@ -666,7 +666,7 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 | No MIDI output | Select "PadForge MIDI N" in DAW input |
 | No motion in emulator | Enable DSU server, match port, use 127.0.0.1 |
 | DSU port in use | Close conflicting app or change port |
-| Web controller disconnected | Same network, check firewall, try another port |
+| Web controller disconnected | Same network, check firewall, change the port on the Dashboard |
 | iOS Safari drops the web controller | Keep Safari in the foreground or install the page as a PWA |
 | Remote Link PC not appearing | Same network, enable on both, allow firewall, or connect by address |
 | Remote Link pairing fails | Codes must match on both screens, then retry the handshake |
@@ -724,4 +724,4 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

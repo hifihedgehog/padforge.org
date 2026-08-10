@@ -15,8 +15,9 @@ Families without a page here (DualSense, DualShock 4, Xbox, Switch Pro,
 Steam Controller, Steam Deck, generic DirectInput) are covered by the
 [Features](../features/index.md) pages, because everything about them is
 standard: their capabilities light up automatically wherever they apply.
-Joy-Con works the same way, except for two extras documented on the
-[Wii Controllers](wii-controllers.md) page: the standalone right Joy-Con's
-**IR Brightness** source and the Joy-Con 2 optical mouse.
+Joy-Con works the same way, except for the extras documented on the
+[Wii Controllers](wii-controllers.md) page: the right Joy-Con's
+**IR Brightness** source, the Joy-Con 2 optical mouse, and the per-half
+motion sources on a combined pair.
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

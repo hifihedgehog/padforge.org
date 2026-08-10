@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://padforge.org/docs/start/five-minute-remap/">
+        <link rel="canonical" href="https://padforge.org/docs/reference/vr-controllers-internals/">
       
       
-        <link rel="prev" href="../first-controller/">
+        <link rel="prev" href="../controller-audio-internals/">
       
       
-        <link rel="next" href="../../guides/">
+        <link rel="next" href="../headset-motion-internals/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>A Five-Minute Remap - PadForge Documentation</title>
+        <title>Virtual VR Controllers Internals - PadForge Documentation</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#a-five-minute-remap" class="md-skip">
+        <a href="#virtual-vr-controllers-internals" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              A Five-Minute Remap
+              Virtual VR Controllers Internals
             
           </span>
         </div>
@@ -239,13 +239,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
           
   
   
@@ -348,11 +346,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../reference/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -441,8 +441,6 @@
       
   
   
-    
-  
   
   
     
@@ -462,23 +460,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../start/" class="md-nav__link ">
               
   
   
@@ -496,13 +491,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -522,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+      <a href="../../start/installation/" class="md-nav__link">
         
   
   
@@ -550,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../first-controller/" class="md-nav__link">
+      <a href="../../start/first-controller/" class="md-nav__link">
         
   
   
@@ -575,37 +570,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    A Five-Minute Remap
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
         
   
   
@@ -621,103 +589,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-open-the-mapping-table" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Open the mapping table
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-record-the-first-swap" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Record the first swap
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-record-the-other-half" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Record the other half
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-verify-on-the-spot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Verify on the spot
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#when-recording-grabs-the-wrong-input" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When recording grabs the wrong input
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#when-you-want-to-remap-everything" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When you want to remap everything
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-to-go-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where to go next
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2033,6 +1904,8 @@
       
   
   
+    
+  
   
   
     
@@ -2092,20 +1965,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../reference/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -2123,13 +1999,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2149,7 +2025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/architecture-overview/" class="md-nav__link">
+      <a href="../architecture-overview/" class="md-nav__link">
         
   
   
@@ -2177,7 +2053,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/input-pipeline/" class="md-nav__link">
+      <a href="../input-pipeline/" class="md-nav__link">
         
   
   
@@ -2205,7 +2081,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/engine-library/" class="md-nav__link">
+      <a href="../engine-library/" class="md-nav__link">
         
   
   
@@ -2233,7 +2109,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/services-layer/" class="md-nav__link">
+      <a href="../services-layer/" class="md-nav__link">
         
   
   
@@ -2261,7 +2137,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/viewmodels/" class="md-nav__link">
+      <a href="../viewmodels/" class="md-nav__link">
         
   
   
@@ -2289,7 +2165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/xaml-views/" class="md-nav__link">
+      <a href="../xaml-views/" class="md-nav__link">
         
   
   
@@ -2317,7 +2193,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+      <a href="../settings-and-serialization/" class="md-nav__link">
         
   
   
@@ -2345,7 +2221,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+      <a href="../sdl3-integration/" class="md-nav__link">
         
   
   
@@ -2373,7 +2249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
         
   
   
@@ -2401,7 +2277,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+      <a href="../driver-installation-internals/" class="md-nav__link">
         
   
   
@@ -2429,7 +2305,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+      <a href="../dsu-motion-server/" class="md-nav__link">
         
   
   
@@ -2457,7 +2333,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+      <a href="../dsu-protocol/" class="md-nav__link">
         
   
   
@@ -2485,7 +2361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+      <a href="../remote-link-internals/" class="md-nav__link">
         
   
   
@@ -2513,7 +2389,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
   
@@ -2541,7 +2417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+      <a href="../controller-audio-internals/" class="md-nav__link">
         
   
   
@@ -2566,10 +2442,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2585,6 +2488,148 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#shape-of-the-thing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shape of the thing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#button-bits-are-a-cast-not-a-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button bits are a cast, not a table
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Button bits are a cast, not a table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#two-thresholds-not-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two thresholds, not one
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pack-domains-and-the-single-y-flip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pack: domains and the single Y flip
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#poses-come-from-the-headset-not-from-us" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Poses come from the headset, not from us
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haptics-return-on-the-vibration-lane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haptics return on the Vibration lane
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Haptics return on the Vibration lane">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-lock-is-load-bearing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The lock is load-bearing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#availability-and-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Availability and install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#things-that-will-bite-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Things that will bite you
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2597,7 +2642,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+      <a href="../headset-motion-internals/" class="md-nav__link">
         
   
   
@@ -2625,7 +2670,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
   
@@ -2653,7 +2698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+      <a href="../midi-input-internals/" class="md-nav__link">
         
   
   
@@ -2681,7 +2726,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
   
@@ -2709,7 +2754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+      <a href="../2d-overlay-system/" class="md-nav__link">
         
   
   
@@ -2737,7 +2782,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/3d-model-system/" class="md-nav__link">
+      <a href="../3d-model-system/" class="md-nav__link">
         
   
   
@@ -2765,7 +2810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/build-and-publish/" class="md-nav__link">
+      <a href="../build-and-publish/" class="md-nav__link">
         
   
   
@@ -2820,10 +2865,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-open-the-mapping-table" class="md-nav__link">
+  <a href="#shape-of-the-thing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Open the mapping table
+        Shape of the thing
       
     </span>
   </a>
@@ -2831,10 +2876,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-record-the-first-swap" class="md-nav__link">
+  <a href="#button-bits-are-a-cast-not-a-table" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Record the first swap
+        Button bits are a cast, not a table
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Button bits are a cast, not a table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#two-thresholds-not-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two thresholds, not one
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pack-domains-and-the-single-y-flip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pack: domains and the single Y flip
       
     </span>
   </a>
@@ -2842,10 +2915,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-record-the-other-half" class="md-nav__link">
+  <a href="#poses-come-from-the-headset-not-from-us" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Record the other half
+        Poses come from the headset, not from us
       
     </span>
   </a>
@@ -2853,10 +2926,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-verify-on-the-spot" class="md-nav__link">
+  <a href="#haptics-return-on-the-vibration-lane" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Verify on the spot
+        Haptics return on the Vibration lane
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Haptics return on the Vibration lane">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-lock-is-load-bearing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The lock is load-bearing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#availability-and-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Availability and install
       
     </span>
   </a>
@@ -2864,10 +2965,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#when-recording-grabs-the-wrong-input" class="md-nav__link">
+  <a href="#things-that-will-bite-you" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When recording grabs the wrong input
+        Things that will bite you
       
     </span>
   </a>
@@ -2875,21 +2976,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#when-you-want-to-remap-everything" class="md-nav__link">
+  <a href="#related" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When you want to remap everything
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-to-go-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where to go next
+        Related
       
     </span>
   </a>
@@ -2913,88 +3003,143 @@
 
 
 
-<h1 id="a-five-minute-remap">A Five-Minute Remap<a class="headerlink" href="#a-five-minute-remap" title="Permanent link">&para;</a></h1>
-<p><em>Change what a button does: the walkthrough swaps A and B, and the same
-moves cover any rebind you will ever make.</em></p>
-<p>You need a virtual controller with a physical pad assigned to it. That is
-<a href="../first-controller/">Your First Controller</a>.</p>
+<h1 id="virtual-vr-controllers-internals">Virtual VR Controllers: Internals<a class="headerlink" href="#virtual-vr-controllers-internals" title="Permanent link">&para;</a></h1>
+<p><em>How one slot becomes a SteamVR hand pair: the state struct, the mapping targets, the pack, and the haptic return path.</em></p>
+<p>The user-facing page is <a href="../../features/vr-controllers/">Virtual VR Controllers</a>. This one is for whoever has to change the code.</p>
 <hr />
-<h2 id="1-open-the-mapping-table">1. Open the mapping table<a class="headerlink" href="#1-open-the-mapping-table" title="Permanent link">&para;</a></h2>
-<p>On the <a href="../../features/dashboard/">Dashboard</a>, click the slot's card to
-open its configuration, then open the <strong>Mappings</strong> tab. One table drives
-the whole slot: each row is one output the game sees. Rows run in order:
-buttons, D-Pad, triggers, left stick, right stick. PlayStation slots add
-touchpad and motion rows at the end, and Nintendo slots add the motion
-pair.</p>
-<p><img alt="Button and axis mapping grid with source, value, and record columns" src="../../images/pad-mappings.png" /></p>
-<h2 id="2-record-the-first-swap">2. Record the first swap<a class="headerlink" href="#2-record-the-first-swap" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Find the <strong>A</strong> row. Button rows sit at the top, A first.</li>
-<li>Click the record icon on that row. The icon switches to a stop
-   glyph, its tooltip reads "Recording...", and the row pulses orange.</li>
-<li>Press <strong>B</strong> on your physical pad.</li>
-</ol>
-<p>PadForge captures the press, fills in the source, and stops recording.
-The A output is now driven by the physical B button.</p>
-<blockquote>
-<p><strong>Tip:</strong> Press only the input you want. Wiggling a stick while pressing
-a button can catch the stick instead.</p>
-</blockquote>
-<h2 id="3-record-the-other-half">3. Record the other half<a class="headerlink" href="#3-record-the-other-half" title="Permanent link">&para;</a></h2>
-<p>Do the same on the <strong>B</strong> row: click its record icon, press <strong>A</strong> on the
-pad. The swap is complete.</p>
-<h2 id="4-verify-on-the-spot">4. Verify on the spot<a class="headerlink" href="#4-verify-on-the-spot" title="Permanent link">&para;</a></h2>
-<p>Press A and B on the pad and watch the <strong>Value</strong> column. Each press lights
-the swapped row in real time, and what you see there is exactly what the
-game gets. No save step, no apply step. Your mapping persists in
-<code>PadForge.xml</code> next to the executable.</p>
+<h2 id="shape-of-the-thing">Shape of the thing<a class="headerlink" href="#shape-of-the-thing" title="Permanent link">&para;</a></h2>
+<p>One VR slot drives <strong>both</strong> hands. There is no left slot and right slot, and there is no second VR slot: <code>SettingsManager.MaxVrSlots</code> is <code>1</code>, and the add-slot gate reads <code>count &lt; MaxVrSlots</code>.</p>
+<p>The slot's output is <code>VrRawState</code> (<code>PadForge.Engine/Common/VrRawState.cs</code>), a pair of <code>VrHandRaw</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">VrHandRaw</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">byte</span><span class="w">  </span><span class="n">Buttons</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">Trigger</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">Grip</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">StickX</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">StickY</span><span class="p">;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>Everything is a value field on purpose. A struct assign copies the whole thing, which is the same discipline <code>KbmRawState</code> follows, and it means the array-aliasing trap that bit the MIDI lane cannot apply here.</p>
+<p><code>Merge</code> follows the gamepad convention when more than one device feeds the slot: buttons OR together, axes keep the larger deflection.</p>
 <hr />
-<h2 id="when-recording-grabs-the-wrong-input">When recording grabs the wrong input<a class="headerlink" href="#when-recording-grabs-the-wrong-input" title="Permanent link">&para;</a></h2>
-<p>Use the source dropdown instead. It is one list of every input the slot
-can see, grouped under device-name headers, with the <strong>(Any device)</strong>
-group first. Pick an entry ("B", "Axis 3", "POV 0 Up") and it assigns on
-the spot, same result as recording.</p>
-<p>Clearing has three scopes:</p>
+<h2 id="button-bits-are-a-cast-not-a-table">Button bits are a cast, not a table<a class="headerlink" href="#button-bits-are-a-cast-not-a-table" title="Permanent link">&para;</a></h2>
+<p><code>VrHandRaw.Buttons</code> mirrors HIDMaestro's <code>HMVRButton</code> flags <strong>exactly</strong>:</p>
 <table>
 <thead>
 <tr>
-<th>Control</th>
-<th>Where</th>
-<th>What it resets</th>
+<th>Bit</th>
+<th>Value</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Clear</strong></td>
-<td>on the row</td>
-<td>the primary source and its options (invert, half-axis, deadzone)</td>
+<td>0</td>
+<td>1</td>
+<td>System</td>
 </tr>
 <tr>
-<td><strong>Clear</strong></td>
-<td>on an extra source</td>
-<td>that source only, the emptied slot stays on the row</td>
+<td>1</td>
+<td>2</td>
+<td>A</td>
 </tr>
 <tr>
-<td><strong>Clear All</strong></td>
-<td>Mappings tab toolbar</td>
-<td>every row completely, tuning included, after a confirmation</td>
+<td>2</td>
+<td>4</td>
+<td>A touch</td>
+</tr>
+<tr>
+<td>3</td>
+<td>8</td>
+<td>B</td>
+</tr>
+<tr>
+<td>4</td>
+<td>16</td>
+<td>B touch</td>
+</tr>
+<tr>
+<td>5</td>
+<td>32</td>
+<td>Trigger click</td>
+</tr>
+<tr>
+<td>6</td>
+<td>64</td>
+<td>Grip click</td>
+</tr>
+<tr>
+<td>7</td>
+<td>128</td>
+<td>Stick click</td>
 </tr>
 </tbody>
 </table>
-<h2 id="when-you-want-to-remap-everything">When you want to remap everything<a class="headerlink" href="#when-you-want-to-remap-everything" title="Permanent link">&para;</a></h2>
-<p><strong>Map All</strong>, on the Preview tab or the Mappings tab toolbar, walks
-every row in order: it highlights a row, prompts for the matching input,
-captures it, and moves on. The fastest way to set up an unrecognized
-device (a generic joystick, an arcade encoder) from scratch.</p>
+<p>Because the layouts match, <code>PackHand</code> casts (<code>(HMVRButton)hand.Buttons</code>) instead of translating. <strong>If you add a bit, add it at the same index on both sides or the cast silently misroutes every button above it.</strong></p>
+<p>The mapping-target keys are ordered to match those bits, left hand then right:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>VrLSystem VrLA VrLATouch VrLB VrLBTouch VrLTriggerClick VrLGripClick VrLStickClick
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>VrRSystem VrRA VrRATouch VrRB VrRBTouch VrRTriggerClick VrRGripClick VrRStickClick
+</code></pre></div>
+<p><code>EvalVrButtons</code> (<code>InputManager.Step3.UpdateOutputStates.cs</code>) walks that key array and sets <code>bits |= (byte)(1 &lt;&lt; i)</code>, so <strong>the array order IS the bit order</strong>. Reordering the keys reorders the wire format.</p>
+<h3 id="two-thresholds-not-one">Two thresholds, not one<a class="headerlink" href="#two-thresholds-not-one" title="Permanent link">&para;</a></h3>
+<p>Inside <code>EvalVrButtons</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">tgt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">TriggerClickActivationPercent</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">vgt</span><span class="p">;</span>
+</code></pre></div>
+<p>Index 5 is trigger click, and <code>TriggerClickActivationPercent</code> is <code>0</code>, documented as strictly-positive detection: any nonzero pull asserts it. That mirrors real hardware, where DualSense and DS4 assert the digital trigger follower on any nonzero analog value.</p>
+<p>Every other button, grip click included, uses <code>vgt</code>, the slot's ordinary axis-to-button threshold, 50% by default. Grip click is <strong>not</strong> a full-squeeze gesture.</p>
+<p>The four touch bits are real mapping targets but carry <code>includeInMapAll: false</code> (<code>PadViewModel.cs</code>), so Map All skips them. They only ever get bound by hand.</p>
 <hr />
-<h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
+<h2 id="pack-domains-and-the-single-y-flip">Pack: domains and the single Y flip<a class="headerlink" href="#pack-domains-and-the-single-y-flip" title="Permanent link">&para;</a></h2>
+<p><code>HMaestroVRController.PackHand</code> converts the pipeline's native short domains to the driver's floats:</p>
 <ul>
-<li>Multiple sources on one row, invert and half-axis options, and combine
-  modes: <a href="../../features/mappings/">Button and Axis Mappings</a>.</li>
-<li>A second binding set on the same pad, held or toggled:
-  <a href="../../guides/shift-layers/">Shift Layers</a>.</li>
-<li>Timed sequences on one press: <a href="../../guides/macros/">Macros</a>.</li>
+<li>Trigger and grip are one-sided <code>0..32767</code>, so they divide by <code>32767f</code>.</li>
+<li>Stick axes are bipolar, so positive divides by <code>32767f</code> and negative by <code>32768f</code>. Doing both with one divisor loses a bit of range at one end.</li>
+<li><strong><code>StickY</code> is negated.</strong> That is the only frame flip in this lane: SDL is Y-down, OpenVR is Y-up. If a stick ever feels inverted in VR only, this line is the first place to look, and it is also the place a second well-meaning flip elsewhere would cancel out.</li>
 </ul>
+<p><code>PoseValid</code> is set <code>false</code>. There is no pose source, so the driver holds the hands at its own default rather than being handed a fabricated one.</p>
+<hr />
+<h2 id="poses-come-from-the-headset-not-from-us">Poses come from the headset, not from us<a class="headerlink" href="#poses-come-from-the-headset-not-from-us" title="Permanent link">&para;</a></h2>
+<p>PadForge does not fabricate positional tracking. The OpenVR driver anchors both controllers to the live HMD pose plus a fixed offset (<code>HIDMaestro/driver/openvr/src/controller_device.cpp</code>), so the hands sit a fixed distance in front of the headset and follow wherever the user looks.</p>
+<p>Stated plainly because it shapes what the feature is for: this gives games the <strong>controls</strong>, not room-scale hands.</p>
+<hr />
+<h2 id="haptics-return-on-the-vibration-lane">Haptics return on the Vibration lane<a class="headerlink" href="#haptics-return-on-the-vibration-lane" title="Permanent link">&para;</a></h2>
+<p>The return path is an event, not a poll. <code>HMVRController.HapticReceived</code> fires with <code>(hand, amplitude, durationSeconds)</code> and <code>OnHapticReceived</code> fans it into the slot's <code>Vibration</code> entry, the same lane ordinary game rumble rides, so whatever physical device drives the slot buzzes with no VR-specific plumbing downstream.</p>
+<p>Left hand drives <code>LeftMotorSpeed</code>, right drives <code>RightMotorSpeed</code>. Amplitude clamps to <code>0..1</code> and scales to <code>ushort</code>. Duration has a floor of <code>MinPulseMs</code>, because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.</p>
+<p>Overlapping pulses on one hand keep the <strong>later</strong> end tick rather than restarting the timer, so a rapid burst holds the motor for the union of its pulses instead of chopping.</p>
+<h3 id="the-lock-is-load-bearing">The lock is load-bearing<a class="headerlink" href="#the-lock-is-load-bearing" title="Permanent link">&para;</a></h3>
+<p><code>OnHapticReceived</code> re-checks <code>_connected</code> <strong>inside</strong> <code>_hapticLock</code>, and the comment there is worth preserving:</p>
+<blockquote>
+<p>Disconnect flips <code>_connected</code> and only then takes this lock to zero the lanes and dispose the timer, so a check outside it can pass, block here, and resume after teardown.</p>
+</blockquote>
+<p>Without the inner re-check, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and <code>ScheduleExpiryLocked</code> builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.</p>
+<hr />
+<h2 id="availability-and-install">Availability and install<a class="headerlink" href="#availability-and-install" title="Permanent link">&para;</a></h2>
+<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code>, which is why <code>ResetAvailability()</code> exists: after an install the cached answer is stale and the Add Controller tile would stay disabled.</p>
+<p><code>Connect()</code> refuses twice, once on <code>IsSteamVRInstalled</code> and once on <code>EnsureDriverRegistered()</code>, before constructing the pipe.</p>
+<p>Install lives in <code>DriverInstaller</code>:</p>
+<ul>
+<li><code>SteamVrInstallDir</code> is <code>C:\SteamVR</code>, the default only. The card accepts any full path.</li>
+<li>A drive root on its own is refused, because uninstall would then be aimed at an entire drive.</li>
+<li><code>GetOwnedSteamVrDir()</code> resolves what PadForge considers its own copy, and <code>HMVR.SetSteamVRPathHint</code> is both how the driver finds the runtime and how a hand-placed install becomes discoverable.</li>
+<li>Uninstall refuses while <code>vrserver</code> is running.</li>
+</ul>
+<hr />
+<h2 id="things-that-will-bite-you">Things that will bite you<a class="headerlink" href="#things-that-will-bite-you" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Adding a button</strong> means touching the bit table, the key array order, and HIDMaestro's <code>HMVRButton</code> together. The cast hides a mismatch until runtime.</li>
+<li><strong>A second Y flip</strong> anywhere in the VR lane cancels the one in <code>PackHand</code>.</li>
+<li><strong>SteamVR's own Test Controller is not a diagnostic.</strong> Switching it from left to right often shows nothing until you switch back and forth again. Trust the app's Preview tab or the game.</li>
+<li><strong>There is no per-slot VR configuration.</strong> The driver ships one identity, so there is no VR equivalent of the PlayStation or Extended profile pickers.</li>
+</ul>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../features/vr-controllers/">Virtual VR Controllers</a> for the user-facing page</li>
+<li><a href="../input-pipeline/">Input Pipeline</a> for where Step 3 evaluation and Step 5 submission sit</li>
+<li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a> for the driver side</li>
+<li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
+</ul>
+<hr />
 <p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
@@ -3033,7 +3178,7 @@ device (a generic joystick, an arcade encoder) from scratch.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../first-controller/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Your First Controller">
+          <a href="../controller-audio-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Controller Audio Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3043,20 +3188,20 @@ device (a generic joystick, an arcade encoder) from scratch.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Your First Controller
+                Controller Audio Internals
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../guides/" class="md-footer__link md-footer__link--next" aria-label="Next: Guides">
+          <a href="../headset-motion-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Headset Head Tracking Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Guides
+                Headset Head Tracking Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

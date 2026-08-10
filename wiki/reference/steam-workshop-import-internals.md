@@ -22,7 +22,7 @@ This is the developer-side companion to [Steam Workshop Config Import](../guides
 | `PadForge.SteamWorkshop/Model/SteamInputConfig.cs` (+ Group, Preset, Input, Activator, Binding) | Typed Steam Input config model. |
 | `PadForge.SteamWorkshop/Translation/ConfigTranslator.cs` | The translator. |
 | `PadForge.SteamWorkshop/Translation/TranslationReport.cs`, `TranslationStatus.cs`, `TranslationOptions.cs`, `TranslatedProfile.cs` | Report, status enum, options, neutral output shape. |
-| `PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs`, `SteamInputVkTable.cs`, `XInputTargetTable.cs` | Steam slot → PadForge source resolution, key and pad-target tables. |
+| `PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs`, `SteamInputVkTable.cs`, `XInputTargetTable.cs`, `SteamVocabulary.cs` | Steam slot → PadForge source resolution, key and pad-target tables, the serializer-vocabulary token set. |
 | `PadForge.SteamWorkshop/Cache/SteamWorkshopCache.cs`, `CacheCategory.cs` | File-system cache, TTLs, dual budgets, LRU. |
 | `PadForge.SteamWorkshop/Local/LocalWorkshopConfigStore.cs` | Read-only legacy fallback from the local Steam install. |
 | `PadForge.App/Views/WorkshopBrowseDialog.xaml(.cs)` | The browse dialog. |
@@ -31,7 +31,7 @@ This is the developer-side companion to [Steam Workshop Config Import](../guides
 | `PadForge.App/Services/SettingsService.cs` | `EnableCommunityConfigLookup`, `ShowLegacyWorkshopConfigs`, `SteamWorkshopSource`. |
 | `PadForge.Engine/Common/Mapping/SourceCoercion.cs` | Gamepad alias table, generic Sensitivity, pressure read, the flick stick and touchpad pointer families. |
 | `PadForge.Engine/Menus/MenuDefinitionEntry.cs` (+ `MenuEvaluator.cs`, `MenuSelectionMath.cs`) | The menu model translated menus land on. See [Menus](../guides/menus.md) and the engine pages. |
-| `PadForge.SteamWorkshop.Tests/` | Parser, client, cache, and translation tests: `TranslationEdgeTests` plus per-wave suites (`WaveOneA`, `WaveTwoA`, `WaveThree`, `WaveFour`, `WaveFourB`, `WaveFourC`) and 30 golden fixtures. |
+| `PadForge.SteamWorkshop.Tests/` | Parser, client, cache, and translation tests: `TranslationEdgeTests`, the v1-v7 per-wave suites (`WaveOneA`, `WaveTwoA`, `WaveThree`, `WaveFour`, `WaveFourB`, `WaveFourC`), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures. |
 
 The assembly targets `net10.0-windows`, references `PadForge.Engine`, and carries a single direct NuGet dependency: `SteamKit2` 3.4.0 (LGPL 2.1). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.
 
@@ -386,13 +386,15 @@ Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left p
 
 ### Generic per-source Sensitivity
 
-`MappingSource.Sensitivity` is an `[XmlAttribute]` defaulting to 1.0 (a legacy 0 reads as 1.0 through `PerSourceSensitivity`). `IsGenericSensitivityDescriptor` gates it to sources whose canonical descriptor starts with `Axis` or `Slider`, which includes the Gamepad stick and trigger aliases and excludes the gyro / mouse-position / IR families that carry their own multipliers inside their own readers (no double scaling, one slider per source).
+`MappingSource.Sensitivity` is an `[XmlAttribute]` defaulting to 1.0 (a legacy 0 reads as 1.0 through `PerSourceSensitivity`). `IsGenericSensitivityDescriptor` gates it to sources whose canonical descriptor starts with `Axis` or `Slider`, plus the touchpad finger-position axes that `IsTouchpadFingerAxisDescriptor` matches. That covers the Gamepad stick and trigger aliases and excludes the gyro / mouse-position / IR families, which carry their own multipliers inside their own readers (no double scaling, one slider per source).
 
-Three application sites in `SourceCoercion`, all clamped after scaling:
+Three generic-read application sites in `SourceCoercion`, all clamped after scaling:
 
 1. `ReadAsBipolar`: axis value × sensitivity, clamped to ±1.
 2. `ReadAsUnipolar`: trigger value × sensitivity, clamped to 0..1.
 3. `ReadAsBool` (the axis-to-button threshold read): the raw value scales before the threshold comparison. Half-axis scales deviation from center, full-axis and slider scale magnitude from zero, and sensitivity 1.0 leaves every comparison bit-identical. Without this site the slider had no effect on axis-to-button rows.
+
+The family readers that own their own scaling call `PerSourceSensitivity` themselves: the three touchpad axis reads (`TryReadTouchpadAxis`, `TryReadTouchpadAxisAbsolute`, `TryReadTouchpadAxisRaw`), the trackball emitter `EmitBallCounts`, and `ReadGyroLean`.
 
 The editor slider runs 0.1–5.0 (`MappingItem` clamps), label `Mapping_Sensitivity`.
 
@@ -418,7 +420,7 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ## Tests
 
-`PadForge.SteamWorkshop.Tests` covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through `TranslationEdgeTests`, the per-wave suites (`WaveOneATranslationTests` through `WaveFourCTranslationTests`), and 30 golden fixtures (`Golden/{fileId}.golden.txt`, re-blessed via `PADFORGE_BLESS_GOLDEN=1` so translator changes surface as reviewable diffs). `PadForge.Tests/WorkshopProvenanceTests.cs` pins the provenance XML round-trip, the materializer stamp, and compaction preservation.
+`PadForge.SteamWorkshop.Tests` covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through `TranslationEdgeTests`, the v1-v7 per-wave suites (`WaveOneATranslationTests` through `WaveFourCTranslationTests`), the v8-v26 topic suites (`GroupAxisInversionTests`, `CurveChannelTranslationTests`, `DeadZoneGeometryTranslationTests`, `GapClosureTranslationTests`, `StickDirectionTranslationTests`, `StickSwipeScrollTests`, `AuditTwoTranslationTests`, `SentinelPresetCycleTests`, `MenuCellLabelTests`, `MenuNameDisambiguationTests`, `RatchetDelayHapticTranslationTests`, `ReleaseActivatorWheelTests`, `VocabularyCensusTests`, `MassSweepTopFourTests`, `MassSweepRoundTwoTests`, `MassSweepRoundThreeTests`, `TranslatorAuditFixTests`, `MacroTriggerReachabilityTests`, `WorkshopSourceDeviceGuidTests`), the reason-key lockdowns (`ReportReasonLockdownTests`, `ApprovedReasonLockdown`, `UserFacingVocabularyTests`), and 30 golden fixtures (`Golden/{fileId}.golden.txt`, re-blessed via `PADFORGE_BLESS_GOLDEN=1` so translator changes surface as reviewable diffs). `PadForge.Tests/WorkshopProvenanceTests.cs` pins the provenance XML round-trip, the materializer stamp, and compaction preservation.
 
 ---
 
@@ -435,4 +437,4 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.2.0.*

@@ -8,7 +8,7 @@
 
 Each slot has its own:
 
-- Controller type (Xbox, PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI)
+- Controller type (Xbox, PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR)
 - [Button and Axis Mappings](mappings.md) (multi-source rows, shift layers, cross-device chords, custom formulas)
 - [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md)
 - [Force Feedback](force-feedback.md) / rumble settings
@@ -48,13 +48,14 @@ Pick the type you want.
 | **Joystick icon** | Extended DirectInput joystick (needs HIDMaestro) |
 | **Keyboard icon** | Keyboard+Mouse output (no driver) |
 | **Musical note icon** | MIDI output device (needs Windows MIDI Services) |
+| **VR icon** | SteamVR hand pair (needs SteamVR) |
 
 ### Dimmed buttons
 
 A type button shows faded when:
 
 - **Type at capacity.** The cursor turns into a "no" icon. The tooltip shows the cap.
-- **MIDI without Windows MIDI Services.** Only the MIDI button dims when its driver is missing. The tooltip says it needs Windows MIDI Services. The Xbox, PlayStation, Nintendo, and Extended buttons do not dim for a missing driver. See [Driver Management](driver-management.md).
+- **Missing dependency.** Two types dim when what they need is absent: MIDI without Windows MIDI Services ("MIDI (requires Windows MIDI Services)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
 
 The Add Controller card disappears when all 16 slots are in use or every type is at capacity.
 
@@ -76,9 +77,11 @@ HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 14 buttons. The slot ships as 
 
 ### Nintendo
 
-HIDMaestro-backed. The slot deploys as a Nintendo Switch Pro Controller, the only preset in this category for now. 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. ZL and ZR are digital buttons, not analog triggers, so the Trigger Deadzones tab does not appear. There is no Customize surface. The slot always deploys the preset as-is.
+HIDMaestro-backed. Two presets: **Nintendo Switch Pro Controller** (the default) and **Nintendo Switch 2 Pro Controller**. Pick one from the slot's preset dropdown.
 
-Map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to the virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. Switch 2 Pro, Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
+The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. The Switch 2 Pro preset carries 21, adding C, GL, and GR among others, on its own wire order. Neither has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on either. The slot deploys the preset as-is.
+
+Map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to the virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
 
 ![Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below](../images/pad-nintendo-configbar.png)
 
@@ -94,7 +97,7 @@ Sim titles (DCS World, MSFS, X-Plane, iRacing) read DirectInput best. Extended s
 
 No driver. Always available. Sends keyboard and mouse input to Windows instead of emulating a gamepad. Map buttons to keys, sticks to mouse movement, triggers to scroll. Good for older PC games without controller support, accessibility setups where a gamepad is easier to hold than a keyboard, and desktop or non-game use. An interactive keyboard-and-mouse preview lights up in real time as you press buttons.
 
-The Mappings tab carries a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
+The Output tab carries a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
 
 Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pairs, with the same four modes. There it applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned. Xbox and PlayStation slots pick named buttons for each pair. Nintendo and Extended slots enter raw button indices.
 
@@ -106,7 +109,13 @@ Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons
 
 ![MIDI controller configuration](../images/pad-midi-configbar.png)
 
-> **Note:** You can switch any slot to MIDI and back to a gamepad type. Switching to MIDI needs Windows MIDI Services installed. Each switch re-runs auto-mapping for the new type.
+### VR
+
+Backed by HIDMaestro's OpenVR driver and needs SteamVR installed. One slot drives both SteamVR hands, left and right, so only one VR slot can exist at a time. There is no per-slot VR config: the driver ships one identity and haptics fan out like game rumble. The driver registers its devices only while a consumer is live, so an idle machine shows no phantom controllers.
+
+The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Controllers](vr-controllers.md).
+
+> **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs Windows MIDI Services installed, and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
 
 ---
 
@@ -123,6 +132,7 @@ Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons
 | Game with keyboard+mouse only | **Keyboard+Mouse** |
 | Accessibility or desktop use | **Keyboard+Mouse** |
 | DAW, VJ software, or stage lighting | **MIDI** |
+| Driving a SteamVR hand pair from a gamepad | **VR** |
 | Not sure | **Xbox** |
 
 When in doubt, start with Xbox. It has the widest game support and you can switch later.
@@ -143,6 +153,7 @@ Up to **16 slots total** across all types. Any mix is allowed within each type's
 | **Extended** | 16 | HIDMaestro per-type cap, same as the other gamepad types. |
 | **Keyboard+Mouse** | 16 | Capped at the overall slot count. |
 | **MIDI** | 16 | Capped at the overall slot count. |
+| **VR** | 1 | One slot already drives both SteamVR hands, and SteamVR tracks one left+right pair. A second slot would fight the first over the same two devices. |
 
 Most users need 1 to 4 slots. The 16-slot cap covers arcade cabinets, sim rigs, and multi-output MIDI stations.
 
@@ -153,7 +164,7 @@ The Windows **XInput API** only exposes **4 Xbox-type controllers**. This is a W
 - **4 or fewer Xbox slots.** Every game sees all of them.
 - **More than 4 Xbox slots.** All 16 exist and work. **XInput** games detect only the first 4. **SDL, DirectInput, and raw HID** games see all 16.
 - PlayStation slots are unaffected by the XInput cap.
-- Nintendo, Extended, Keyboard+Mouse, and MIDI slots are unaffected.
+- Nintendo, Extended, Keyboard+Mouse, MIDI, and VR slots are unaffected.
 
 **Tip:** For more than 4 local-multiplayer gamepads, mix Xbox with PlayStation or Nintendo slots, or use Extended (no 4-controller cap).
 
@@ -216,7 +227,7 @@ Reordering two slots of the same type does not disconnect the game, as long as b
 
 ### Automatic type grouping
 
-New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI. This keeps XInput numbering predictable.
+New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR. This keeps XInput numbering predictable.
 
 You can override the grouping by dragging slots by hand.
 
@@ -236,22 +247,26 @@ Four tabs are always there:
 - **Macros**: combo triggers and action sequences ([Macros](../guides/macros.md)).
 - **Menus**: on-screen ring and grid menus opened from a stick or touchpad ([Menus](../guides/menus.md)).
 
-A fifth slot-tier tab, **Bass Shakers**, shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Customize checkbox decides when Customize is on, the profile's own descriptor when it is off). It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Keyboard+Mouse and MIDI slots have no feedback surface and hide it.
+Two more slot-tier tabs appear conditionally.
+
+**Bass Shakers** shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Force Feedback checkbox decides when Customize is on, the profile's own descriptor when it is off). It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Extended slots without force feedback, Keyboard+Mouse, MIDI, and VR slots have no feedback surface and hide it.
+
+**Output** carries the slot's output-behavior cards. It shows on every slot type except MIDI and VR. The SOCD cleaner is on it for every type that shows the tab. **Keep Controller Awake** sits beside it on Xbox and PlayStation slots only. That card holds a small stick deflection so games that switch their prompts the moment they see mouse or keyboard input keep treating the pad as the active device.
 
 The rest appear based on the physical device selected in the slot's device dropdown, not the slot's output type. Assign a DualSense to a PlayStation slot and the Adaptive Triggers tab appears. Assign a DualShock 4 to the same slot and it does not, because the DualShock 4 has no adaptive triggers. Switch the device dropdown and the tabs follow the newly selected device.
 
 | Tab | Appears for |
 |-----|-------------|
-| [Stick Deadzones](stick-deadzones.md) | every slot except MIDI (gated by slot type, not the device) |
-| [Trigger Deadzones](trigger-deadzones.md) | every slot except Keyboard+Mouse and MIDI (gated by slot type, not the device). Nintendo and Extended slots whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital |
+| [Stick Deadzones](stick-deadzones.md) | every slot except MIDI and VR (gated by slot type, not the device) |
+| [Trigger Deadzones](trigger-deadzones.md) | every slot except Keyboard+Mouse, MIDI, and VR (gated by slot type, not the device). Nintendo and Extended slots whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital |
 | [Force Feedback](force-feedback.md) | a stick-class input (hidden for keyboard, mouse, touchpad, and MIDI) |
 | [Gyro](../guides/gyro.md) | a gyro sensor |
 | [Impulse Triggers](impulse-triggers.md) | Xbox One / Elite / Series trigger motors |
 | [Adaptive Triggers](adaptive-triggers.md) | a DualSense or DualSense Edge |
 | [Lighting](lighting.md) | a lightbar (DualSense family, DualShock 4), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip) |
-| [Touchpad](touchpad.md) | a touchpad (DualShock 4, DualSense, Steam Controller) |
-| [Controller Audio](controller-audio.md) | a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Nintendo Switch Joy-Con and Pro Controller, Steam Controller) |
-| [Wheel](wheel.md) | a racing wheel (rotation range, auto-center, RPM shift LEDs) |
+| [Touchpad](touchpad.md) | a touch surface (DualShock 4, DualSense, the Steam Controller family, Steam Deck, Windows Precision Touchpads) |
+| [Controller Audio](controller-audio.md) | a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Joy-Con, Switch Pro Controller, Steam Controller 2015, Steam Deck, Steam Controller 2026) |
+| [Wheel](wheel.md) | a racing wheel. A recognized Logitech, Fanatec, or Thrustmaster model gets rotation range, auto-center, and RPM shift LEDs. A generic force feedback wheel gets the auto-center row alone |
 | Pointer | an IR camera ([Wii Remote](../devices/wii-controllers.md)) |
 | Mouse | a mouse (per-device mouse-gesture settings) |
 
@@ -294,8 +309,9 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 - [Touchpad](touchpad.md) and [Controller Audio](controller-audio.md): touchpad gestures and speaker output.
 - [Gyro](../guides/gyro.md): motion-sensor mapping.
 - [Wheel](wheel.md): native force-feedback wheel settings.
+- [Virtual VR Controllers](vr-controllers.md): the VR slot type and its SteamVR hand pair.
 - [Driver Management](driver-management.md): driver requirements per controller type.
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

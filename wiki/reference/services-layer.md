@@ -2,7 +2,7 @@
 
 *Five ViewModel-bridge services carry engine state to the WPF UI and back, with a bench of smaller workers beside them.*
 
-Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds ten more residents:
+Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds twelve more residents:
 
 | Resident | Role |
 |----------|------|
@@ -16,6 +16,8 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `Ds3DriverInstaller` | Installs and arms the embedded BthPS3 / BthPS3PSM drivers and binds a docked DS3 to WinUSB, reboot-free |
 | `GyroCalibratorService` | Samples an at-rest controller and writes the per-(device, slot) gyro bias onto its `PadSetting` |
 | `CursorControlService` | Owns the 200 Hz desktop-cursor timeline feeding the "Mouse Position X" / "Mouse Position Y" sources (#107) |
+| `HeadsetTrackerRepair` | Rebinds a Sony headset whose head-tracker HID child is missing or parked at `CM_PROB_FAILED_START` (#188), ported from `sony-head-tracker`'s `bluetooth.cpp` |
+| `StarterProfileCatalog` | Builds the bundled starter profiles (#256) in code as ordinary `ProfileData`, every source on the empty "(Any device)" GUID |
 
 > **Engine-side subsystems (3.4).** Two more runtime subsystems sit alongside these services. `AudioPassthroughService` drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through `InputService` and documented on their own pages: [Controller Audio Internals](controller-audio-internals.md) and [Remote Link Internals](remote-link-internals.md).
 
@@ -158,8 +160,8 @@ graph TB
 
 | Direction | Mechanism | Frequency |
 |-----------|-----------|-----------|
-| Engine -> UI | InputService reads `CombinedOutputStates[]`, `VibrationStates[]`, `CombinedExtendedRawStates[]`, `CombinedMidiRawStates[]`, `CombinedKbmRawStates[]` | 30 Hz (UI timer) |
-| UI -> Engine | InputService writes `SlotControllerTypes[]`, `MacroSnapshots[]`, `_midiConfigs[]`, `_kbmConfigs[]` (KBM SOCD #205), plus per-slot Extended config via `SyncExtendedConfigToSlot()` | 30 Hz (SyncViewModelToPadSettings) |
+| Engine -> UI | InputService reads `CombinedOutputStates[]`, `FinalVibrationStates[]`, `SelectedDeviceVibrationStates[]`, `CombinedTouchpadStates[]`, `CombinedRawHidStates[]`, `CombinedMidiRawStates[]`, `CombinedKbmRawStates[]`, `CombinedVrRawStates[]` | 30 Hz (UI timer) |
+| UI -> Engine | InputService writes `SlotControllerTypes[]`, `SlotProfileIds[]`, `MacroSnapshots[]`, `_midiConfigs[]`, `_kbmConfigs[]` (KBM SOCD #205), `_deviceSlotConfigs[]`, `_perDeviceSlotConfigs[]`, `SelectedDeviceGuids[]`, plus per-slot Extended config via `SyncExtendedConfigToSlot()` | 30 Hz (SyncViewModelToPadSettings) |
 | UI -> PadSetting | InputService pushes deadzone, force feedback, mapping values to PadSetting objects | 30 Hz (SyncViewModelToPadSettings) |
 | Engine event -> UI | `DevicesUpdated`, `FrequencyUpdated`, `ErrorOccurred` marshalled via `Dispatcher.BeginInvoke` | On engine event |
 | Settings file -> Memory | SettingsService deserializes XML into SettingsManager collections | On load |
@@ -217,33 +219,38 @@ public InputService(MainViewModel mainVm)
 
 Startup sequence:
 
-1. **Cleanup stale HIDMaestro nodes**. Removes USB device nodes from previous sessions (crash recovery).
-2. **Create InputManager**. Sets `PollingIntervalMs` from `SettingsViewModel.PollingRateMs`.
-3. **Copy slot config**. Copies `SlotControllerTypes[]`, Extended/MIDI configs from PadViewModels to engine.
-4. **Subscribe to the NFC tag registry (#150)**. `NfcTagRegistry.RegistryChanged += OnNfcTagRegistryChanged`. On a tag register/remove, the handler re-reads each NFC reader's `DeviceObjects` under `UserDevices.SyncRoot`, rebuilds every pad's input picker off the lock so the named tag appears or disappears as a bindable row, and refreshes the Devices-page tag preview if a reader is selected. Subscribed here, after settings load, so the load-time registry fan-out is not double-handled. Torn down in `Stop()`.
-5. **Subscribe to engine events**. `DevicesUpdated`, `FrequencyUpdated`, `ErrorOccurred`.
-6. **Subscribe to ViewModel changes**. `SettingsViewModel.PropertyChanged`, `DashboardViewModel.PropertyChanged`.
-7. **Create ForegroundMonitorService**. Subscribes to `ProfileSwitchRequired`.
-8. **Capture default profile snapshot**. Uses `PendingDefaultSnapshot` (from prior XML) or creates one via `SnapshotCurrentProfile()`.
-9. **Async Raw Input enumeration**. Keyboard and mouse devices are discovered on a background thread via `Task.Run`, preventing UI thread stalls from slow HID enumeration. Results are merged into the device list when the task completes.
-10. **Start engine**. `_inputManager.Start()` launches the polling thread.
-11. **Start subsystems**. DSU, web controller, audio bass detector (each conditional on settings), plus the self-healing sink reconcilers, which start unconditionally: `RumbleAudioService.EnsureStarted()` (#236), `WiiSpeakerService.EnsureStarted()`, and `HapticToneService.EnsureStarted()`.
-12. **Clear stale HidHide state**. `HidHideController.ClearAll()` removes leftover entries.
-13. **Apply device hiding**. HidHide blacklist + input hooks.
-14. **Start UI timer**. 30 Hz `DispatcherTimer` at `DispatcherPriority.Render`.
-15. **Update state**. Sets `IsEngineRunning = true`, enters idle if no slots created.
+1. **Heal the slot topology**. `CompactSlotsForGaps()` closes pad-index gaps left by saves taken before compaction-on-delete landed, before the engine or the default snapshot sees the layout.
+2. **Rebuild shift-layer tabs**. Each pad's tab strip is rebuilt from its loaded `MappingSet.ShiftActivators`, because PadViewModel constructors run before `SettingsService` parsed PadForge.xml.
+3. **Reset macro runtime latches**. Every macro's trigger latches and every action's toggle latches are cleared, so a Toggle left latched at the previous stop cannot re-fire with no input.
+4. **Create InputManager**. Sets `PollingIntervalMs` from `SettingsViewModel.PollingRateMs` and `HmInactivityTimeoutSeconds` from `HmInactivityDestroyTimeoutSeconds`.
+5. **Copy slot config**. Copies `SlotControllerTypes[]`, `SlotProfileIds[]`, Extended/MIDI/KBM configs, and the per-slot and per-device config bags from PadViewModels to the engine.
+6. **Subscribe to the NFC tag registry (#150)**. `NfcTagRegistry.RegistryChanged += OnNfcTagRegistryChanged`. On a tag register/remove, the handler re-reads each NFC reader's `DeviceObjects` under `UserDevices.SyncRoot`, rebuilds every pad's input picker off the lock so the named tag appears or disappears as a bindable row, and refreshes the Devices-page tag preview if a reader is selected. Subscribed here, after settings load, so the load-time registry fan-out is not double-handled. Torn down in `Stop()`.
+7. **Subscribe to engine events**. `DevicesUpdated`, `FrequencyUpdated`, `ErrorOccurred`, `HmVcInactivityDestroyed`, `HmVcWentNonActive`.
+8. **Wire the static providers**. The `UserEffectsDispatcher` rumble / trigger / battery / test-target lambdas, the `SourceCoercion` gyro, gravity, balance, IR, gesture and menu providers, the `AudioPassthroughService` and `HapticToneService` hooks, and `InputManager.PointerModeCycleApply` / `GuideLedApply` / `GyroRecenterApply`. All are cleared again in `Stop()`.
+9. **Create CursorControlService**. The 200 Hz cursor sampler backing the Mouse Position sources (#107).
+10. **Start the self-healing sink reconcilers**, unconditionally (cheap when nothing is configured): `RumbleAudioService.EnsureStarted()` (#236), `WiiSpeakerService.EnsureStarted()`, `HapticToneService.EnsureStarted()`.
+11. **Subscribe to ViewModel changes**. `SettingsViewModel.PropertyChanged`, `DashboardViewModel.PropertyChanged`, and the touchpad-gesture provider / applier hooks on `SettingsService`.
+12. **Create ForegroundMonitorService**. Subscribes `ProfileSwitchRequired` to `OnAutoProfileSwitchRequired`.
+13. **Capture default profile snapshot**. Uses `PendingDefaultSnapshot` (from prior XML) or creates one via `SnapshotCurrentProfile()`.
+14. **Start engine**. `_inputManager.Start()` launches the polling thread.
+15. **Start subsystems**. DSU, web controller, Remote Link, touchpad overlay, and the audio bass detector, each conditional on its Dashboard setting.
+16. **Clear stale HidHide state**. `HidHideController.ClearAll()` removes leftover entries, unless `KeepHidHideCloaksBetweenLaunches` is on.
+17. **Apply device hiding**. HidHide blacklist + input hooks.
+18. **Start UI timer**. 30 Hz `DispatcherTimer` at `DispatcherPriority.Render` (`UiTimerIntervalMs` = 33).
+19. **Update state**. Sets `IsEngineRunning = true`, refreshes commands, and runs `UpdateIdleState()` so an empty config starts idle.
+
+Raw Input enumeration is not part of this sequence. Keyboards, mice, and consumer-control devices are enumerated by the engine's Step 1 (`InputManager.Step1.UpdateDevices.cs`): synchronously on the first cycle so devices exist before Step 2, then on a `Task.Run` worker whose results the next 2-second cycle consumes.
 
 #### `Stop()`
 
-1. Stops UI timer and unsubscribes from its Tick event.
-2. Unsubscribes from all ViewModel property change events.
-3. Unsubscribes from per-pad events (`SelectedDeviceChanged`, `MappingsRebuilt`).
-4. Unsubscribes from `NfcTagRegistry.RegistryChanged` (#150).
-5. Disposes ForegroundMonitorService.
-6. Stops DSU server, web controller server, audio bass detector.
-7. Calls `RemoveDeviceHiding()` (HidHide blacklist cleanup + input hook teardown).
-8. Unsubscribes from engine events, calls `_inputManager.Stop()` and `_inputManager.Dispose()`.
-9. Updates MainViewModel state (sets engine status to "Stopped", marks all device rows offline).
+1. Latches `_stopped` with `Interlocked.Exchange` so a second call returns immediately, then calls `BluetoothLinkHelper.ReEnablePendingDevNodes()`.
+2. On the dispatcher: stops the UI timer and unsubscribes its Tick, clears every mapping row's `IsInputActive` and each pad's pipeline liveness flags, unsubscribes `SettingsViewModel.PropertyChanged` and `DashboardViewModel.PropertyChanged`, and closes the touchpad, VC-toggle, shift-layer, and menu overlay windows.
+3. Leaves the constructor-only handlers subscribed on purpose: `Devices.PropertyChanged` and the per-pad `SelectedDeviceChanged` / `MappingsRebuilt` / `LayerActivated`. `Start()` never re-adds them, so tearing them down on an engine stop would break device selection and mapping rebuilds until the app restarts.
+4. Unsubscribes `ForegroundMonitorService.ProfileSwitchRequired` and drops the instance.
+5. Stops the DSU server, the web controller server, Remote Link, and the audio bass detector.
+6. Calls `RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)`, so the persistent-cloaks setting is honored on shutdown while a mid-session `EnableInputHiding` toggle still decloaks immediately.
+7. Unsubscribes `NfcTagRegistry.RegistryChanged` (#150) and the engine events, calls `_inputManager.Stop()` and `_inputManager.Dispose()`, then nulls every static provider it wired in `Start()`, disarms the Switch NFC and Joy-Con IR hints, and disposes `CursorControlService`.
+8. Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.
 
 The v2 `preserveExtendedNodes` parameter is gone. HIDMaestro creates and destroys virtual devices dynamically, so there's no need for the v2-era "keep the vJoy node alive across a restart" path.
 
@@ -257,12 +264,18 @@ Calls `Stop()` in a try/catch (best-effort shutdown).
 
 ```
 UiTimer_Tick
-  |-- Update Pad ViewModels (gamepad state, vibration, Extended/MIDI/KBM raw state)
-  |-- UpdateDashboard()
+  |-- Pending profile switch          [PendingProfileSwitchId, set by a shortcut activator]
+  |-- Pending window toggle           [PendingToggleWindow]
+  |-- Pending bulk VC toggle          [PendingToggleVCsDisabled, #91]
+  |-- Update Pad ViewModels (gamepad state, vibration, raw HID / MIDI / KBM / VR state)
+  |-- UpdateDashboard()               [skipped while the app is background-gated]
+  |-- UpdateShiftLayerFlyout()        [SHIFT layer HUD, gated by EnableShiftLayerFlyout]
   |-- UpdateMenuOverlayWindow()       [radial / touch menu HUD, gated by EnableMenuOverlay]
   |-- UpdateDevicesRawState()         [only if Devices page visible]
   |-- UpdateMappingLiveValues()       [only if a Pad page visible]
+  |-- Battery UI refresh (5 s) and Guide-LED reapply (30 s)
   |-- UpdateMacroTriggerRecording()   [only if recording active]
+  |-- UpdateExpressionVariableRecording()
   |-- SyncViewModelToPadSettings()    [always, 30Hz]
   |-- SyncMacroSnapshots()            [always, 30Hz]
   |-- Audio rumble level meters       [only if detector active]
@@ -276,10 +289,14 @@ For each of the 16 slots:
 
 | Slot type | Source array | Update call |
 |-----------|-------------|-------------|
-| All | `CombinedOutputStates[i]`, `VibrationStates[i]` | `padVm.UpdateFromEngineState()` |
-| Custom Extended | `CombinedExtendedRawStates[i]` | `padVm.UpdateFromExtendedRawState()` |
+| All | `CombinedOutputStates[i]`, `FinalVibrationStates[i]` (slot max, preview tab), `SelectedDeviceVibrationStates[i]` (FFB tab) | `padVm.UpdateFromEngineState()` |
+| All | `CombinedTouchpadStates[i]` | `padVm.UpdateFromTouchpadState()` |
+| Raw-HID surface (Extended, Nintendo), gated on `SlotRawHidSurface[i]` | `CombinedRawHidStates[i]` | `padVm.UpdateFromRawHidState()` |
 | MIDI | `CombinedMidiRawStates[i]` | `padVm.UpdateFromMidiRawState()` |
 | KB+M | `CombinedKbmRawStates[i]` | Sets `padVm.KbmOutputSnapshot` |
+| VR | `CombinedVrRawStates[i]` | Sets `padVm.VrOutputSnapshot` |
+
+The whole per-pad mirror block is skipped while the window is minimized (`AmbientMotionProbe.IsWindowMinimized`), because none of it can render. The `UpdateFrom*` mirrors do their own shadow-array change detection, so the first tick after restore refreshes in full.
 
 Per-device stick/trigger previews read either KBM pre-deadzone values (synthesized into a `Gamepad` struct) or the selected device's `RawMappedState`.
 
@@ -298,7 +315,7 @@ Both are set by MainWindow navigation.
 
 #### Menu overlay window (4.1.0, #9 B-17)
 
-`UpdateMenuOverlayWindow()` pulls the poll thread's engaged-menu snapshot (`InputManager.ActiveMenuOverlay`, first-engaged menu wins) and drives the click-through `MenuOverlayWindow` HUD: lazily created on first engage, hidden when no menu is engaged or when `DashboardViewModel.EnableMenuOverlay` (default `true`) is off. Menus keep committing blind when the overlay is disabled. The read side is wired at engine start beside the touchpad and mouse gesture fired providers: `SourceCoercion.MenuItemFiredProvider` maps to `InputManager.IsMenuItemFired`, through which mapping rows, shift activators, and macro descriptor triggers all read fired menu items. Cleared with the other providers at `Stop()`.
+`UpdateMenuOverlayWindow()` pulls the poll thread's engaged-menu snapshot (`InputManager.ActiveMenuOverlay`, first-engaged menu wins) and drives the click-through `MenuOverlayWindow` HUD: lazily created on first engage, hidden when no menu is engaged, when `DashboardViewModel.EnableMenuOverlay` (default `true`) is off, or when the snapshot's `StampMs` is more than 250 ms old. That staleness gate is what takes the HUD down after a deleted, disabled, or emptied menu stops refreshing its snapshot without ever clearing it. Menus keep committing blind when the overlay is disabled. The read side is wired at engine start beside the touchpad and mouse gesture fired providers: `SourceCoercion.MenuItemFiredProvider` maps to `InputManager.IsMenuItemFired`, through which mapping rows, shift activators, and macro descriptor triggers all read fired menu items. Cleared with the other providers at `Stop()`.
 
 ### Dashboard Updates
 
@@ -335,7 +352,7 @@ For the active Pad page: finds the selected device, parses each `MappingItem.Sou
 
 #### `ReadMappedValue(CustomInputState, string descriptor)` (private, static)
 
-Simplified Step 3 parser for display. Strips I/H prefixes, parses "Axis N", "Button N", "Slider N", "POV N" descriptors, and reads from the state arrays.
+Simplified Step 3 parser for display. Strips the I / H / IH prefixes (honoring `SourceCoercion.IsPrefixExemptDescriptor`), decodes the touchpad family first ("Touchpad N Click", "Touchpad N Finger M X|Y|Pressure|Down", plus the #9 B-1 half-region variants), then parses "Axis N", "Button N", "Slider N", "POV N" and reads from the state arrays.
 
 ### Settings Sync (ViewModel to PadSetting)
 
@@ -344,22 +361,24 @@ Simplified Step 3 parser for display. Strips I/H prefixes, parses "Axis N", "But
 Primary runtime sync path. For each pad slot:
 
 1. **Always synced** (even with no device selected):
-   - `SlotControllerTypes[i]` from `padVm.OutputType`
+   - `SlotControllerTypes[i]` from `padVm.OutputType` and `SlotProfileIds[i]` from `padVm.ProfileId`
    - Extended config via `SyncExtendedConfigToSlot()`
-   - MIDI config via `_inputManager._midiConfigs[i]`
+   - MIDI, KBM, per-slot device config, and the per-(slot, device) config dictionary via `_midiConfigs[i]`, `_kbmConfigs[i]`, `_deviceSlotConfigs[i]`, `_perDeviceSlotConfigs[i]`
+   - `SelectedDeviceGuids[i]`, cleared to `Guid.Empty` when the slot has no selection
 
-2. **Per-device sync** (when a device is selected):
+2. **Per-device sync** (when a device is selected), dirty-gated:
+   - Runs only when `padVm.SettingsSyncDirty` is set, the selected device changed, or the `PadSetting` instance itself was replaced (a device re-add rebuilds it). Idle pads raise no PropertyChanged, so the roughly eighty `ToString` writes never run on a quiet tick.
    - Calls `SaveViewModelToPadSetting(padVm, instanceGuid, syncMappings: false)`
    - Pushes deadzones (independent X/Y), anti-deadzones, linear, center offsets, max range (independent directions), trigger deadzones, force feedback gains, audio rumble settings
    - **Mapping descriptors are NOT synced** at 30 Hz to avoid a race condition. `ClearMappingDescriptors()` creates a window where the polling thread sees empty mappings
 
-3. **Audio bass detector lifecycle**: detects when `AudioRumbleEnabled` toggles on any slot and calls `SyncAudioBassDetector()`.
+3. **Audio bass detector lifecycle**: detects when `AudioRumbleEnabled` or `AudioRumbleTriggersEnabled` toggles on any created slot and calls `SyncAudioBassDetector()`.
 
 #### `SaveViewModelToPadSetting(PadViewModel, Guid, bool syncMappings)` (private, static)
 
 Writes all tuning parameters from ViewModel to PadSetting. When `syncMappings` is true (explicit save, preset change, device switch), also clears and rewrites all mapping descriptors.
 
-#### `LoadPadSettingToViewModel(PadViewModel, Guid)` (private, static)
+#### `LoadPadSettingToViewModel(PadViewModel, Guid)` (internal, static)
 
 Reverse direction: reads PadSetting and populates the PadViewModel (deadzones, sensitivity curves, max ranges, center offsets, triggers, force feedback, audio rumble, mapping descriptors).
 
@@ -374,6 +393,7 @@ Propagates `SettingsViewModel` changes to the engine at runtime:
 | Property | Action |
 |----------|--------|
 | `PollingRateMs` | Sets `_inputManager.PollingIntervalMs` |
+| `HmInactivityDestroyTimeoutSeconds` | Sets `_inputManager.HmInactivityTimeoutSeconds` |
 | `EnableInputHiding` | Calls `ApplyDeviceHiding()` or `RemoveDeviceHiding()` |
 
 ### Dashboard Forwarding (OnDashboardPropertyChanged)
@@ -390,6 +410,10 @@ Propagates `DashboardViewModel` changes:
 | `DsuMotionServerPort` | Restarts DSU server if enabled |
 | `EnableWebController` | Starts or stops web controller server |
 | `WebControllerPort` | Restarts web controller server if enabled |
+| `EnableRemoteLink` | Starts or stops the Remote Link server (#138) |
+| `RemoteLinkPort` | Restarts Remote Link if enabled |
+| `EnableTouchpadOverlay` | Shows or hides the touchpad overlay window |
+| `TouchpadOverlayOpacity` | Sets the live overlay's surface opacity |
 
 ### Engine Event Handlers
 
@@ -397,9 +421,9 @@ All fire on the **polling thread** and are marshalled to UI via `Dispatcher.Begi
 
 | Handler | Action |
 |---------|--------|
-| `OnDevicesUpdated` | `SyncDevicesList()`, `UpdatePadDeviceInfo()`, `ApplyDeviceHiding()` |
+| `OnDevicesUpdated` | `SyncDevicesList()`, `UpdatePadDeviceInfo()`, `ApplyDeviceHiding()`, `ReseedPlayerIdentities(applySonyDispatchers: false)` (#191), `ApplyGuideLeds()` (#209), then a re-attach + `ReApplyUserEffects()` pass over every HM VC plus `ReApplyNonHmUserEffects()`, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose |
 | `OnFrequencyUpdated` | No-op (frequency read on next UI tick) |
-| `OnErrorOccurred` | Sets `_mainVm.StatusText` |
+| `OnErrorOccurred` | `_mainVm.SetStatus(..., persist: true)` |
 | `OnHmVcInactivityDestroyed` | Raises `SlotInactivityTimedOut` so MainWindow tears the slot down and runs the cascade (#206) |
 | `OnHmVcWentNonActive` | Runs the bubble-down cascade + `UpdatePadDeviceInfo()` after a non-delete VC teardown, sidebar disable or all-devices-unassigned (#206) |
 
@@ -428,15 +452,15 @@ Rebuilds each PadViewModel's `MappedDevices` from `UserSettings.FindByPadIndex()
 
 ### Per-Device Settings Swap
 
-#### `PopulateAvailableInputs()` (private)
+#### `PopulateAvailableInputs(PadViewModel padVm, UserDevice ud)` (private)
 
-Builds the input source dropdown for a pad slot's selected device. Uses `Math.Max(CapButtonCount, RawButtonCount)` to generate button entries, ensuring the full button list is available regardless of whether the device is in gamepad or raw joystick mode. When the device is offline, falls back to cached `DeviceObjects` and stored capability counts so the mapping UI remains functional without a live connection.
+Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract `Gamepad *` family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from `MappingDisplayResolver.BuildInputChoices`, which prefers the live wrapper's sparse `SupportedButtonIndices` so a device that populates only specific slots does not surface phantom "Button N" rows, and falls back to a dense `Math.Max(CapButtonCount, RawButtonCount)` range when the device is offline. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds `padVm.SlotAvailableInputs` (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.
 
 #### `RefreshMappingDropdowns()` (public)
 
 Called when `ForceRawJoystickMode` is toggled on a device. Rebuilds the input source dropdown and mapping descriptors for all pad slots using that device, reflecting the change in available raw vs. gamepad inputs.
 
-#### `OnSelectedDeviceChanged(PadViewModel, MappedDeviceInfo)`
+#### `OnSelectedDeviceChanged(object sender, PadViewModel.MappedDeviceInfo newDevice)` (private)
 
 When the user selects a different device in a pad slot's dropdown:
 1. **Saves** current ViewModel values to the previous device's PadSetting (skipped when re-adding the same device).
@@ -444,7 +468,7 @@ When the user selects a different device in a pad slot's dropdown:
 3. Populates input dropdown via `PopulateAvailableInputs()`.
 4. Updates the `_previousSelectedDevice` tracker.
 
-#### `OnMappingsRebuilt(PadViewModel)`
+#### `OnMappingsRebuilt(object sender, EventArgs e)` (private)
 
 When mappings are rebuilt (OutputType or HIDMaestro profile change), reloads mapping descriptors from PadSetting without touching deadzone or force feedback settings.
 
@@ -505,7 +529,7 @@ Called each UI tick during recording. Reads state per `TriggerSource`:
 | Source | Behavior |
 |--------|----------|
 | InputDevice | Scans raw buttons/POVs from mapped devices. First press locks `_recordingDeviceGuid` |
-| Numbered (custom Extended) | Accumulates from `CombinedExtendedRawStates` |
+| Numbered (custom Extended) | Accumulates from `CombinedRawHidStates` |
 | OutputController | Accumulates from `CombinedOutputStates` Xbox button bitmask |
 
 Axis detection: 25% threshold, 3-cycle hold confirmation (same as RecorderService).
@@ -583,7 +607,7 @@ Converts Windows paths to DOS device paths. Only modifies PadForge-managed entri
 
 #### `UpdateIdleState()` (private, 30Hz)
 
-Sets `_inputManager.IsIdle` based on whether any slot is created, enabled, and has a device assigned. Idle mode skips input/mapping/output and sleeps at ~20 Hz, reducing CPU to ~0%.
+Sets `_inputManager.IsIdle`. A slot counts as active when it is created, enabled, and has an **online** mapped device, so a slot whose every assigned pad is asleep idles the engine instead of reading as "Forging". Two overrides keep the engine awake with no active slot: a Remote Link server with live connections, and a pending HM teardown inside the inactivity window. Idle mode skips input/mapping/output and sleeps at ~20 Hz, reducing CPU to ~0%. Device enumeration continues at a reduced rate so new controllers still appear on the Devices page.
 
 ### Profile Switching
 
@@ -592,7 +616,7 @@ Sets `_inputManager.IsIdle` based on whether any slot is created, enabled, and h
 Captures current runtime state:
 1. Flushes all PadViewModel values to PadSettings.
 2. Collects `ProfileEntry` (InstanceGuid, ProductGuid, MapTo, checksum) and deduplicated `PadSetting` clones.
-3. Captures `SlotCreated[]`, `SlotEnabled[]`, `SlotControllerTypes[]`, `SlotProfileIds[]` (per-slot HIDMaestro profile slug), Extended/MIDI configs, DSU/web server settings, the per-group slot orders, and touchpad-overlay settings.
+3. Captures `SlotCreated[]`, `SlotEnabled[]`, `SlotControllerTypes[]`, `SlotProfileIds[]` (per-slot HIDMaestro profile slug), a deep clone of every slot's `MappingSet`, the Extended / MIDI / KBM / per-device slot configs, DSU, web server and Remote Link settings, all seven per-group slot orders (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR), and the overlay settings (touchpad geometry and opacity, menu overlay, shift-layer flyout, profile overlay).
 4. Captures `ProfileData.Macros` (`<ProfileMacros>`), a copy of the current macro set. A profile carries its own macros, so switching profiles swaps macros too. A `null` `Macros` marks a pre-macro-era profile and leaves the live macros untouched on apply.
 
 #### `ApplyProfile(ProfileData profile)` (public)
@@ -631,7 +655,7 @@ The reorder model rests on five rules:
 - **Same-profile reorders are zero-flicker.** Pointer swap in `_virtualControllers[]` plus `FeedbackPadIndex` update on the moved VC. Per-VC state arrays move with the VC.
 - **Different-profile positions destroy + recreate.** Only the specific positions whose profile changed. Matching positions in the same reorder still pointer-swap.
 
-Per-pad state (`_slotInactiveCounter`, `_createFailed`, `_hmInactivityFired`, `_slotInitializing`, `_pendingDisposeTask`, `_pendingConnectTask`) describes the pad's lifecycle and stays at the pad index. Per-VC state (`_loggedFirstSubmit`, `_extendedAppliedProductString`, `_extendedAppliedLayout`, `_oemOverrideClaimedVidPid`, `_lastAppliedOemLabel`) moves with the VC.
+Per-pad state (`_slotInactiveCounter`, `_createFailed`, `_hmInactivityFired`, `_slotInitializing`, `_pendingDisposeTask`, `_pendingConnectTask`) describes the pad's lifecycle and stays at the pad index. Per-VC state (`_extendedAppliedProductString`, `_extendedAppliedLayout`, `_extendedAppliedFfbEnabled`, `_extendedAppliedVendorId`, `_extendedAppliedProductId`, `_oemOverrideClaimedVidPid`, `_lastAppliedOemLabel`) moves with the VC.
 
 #### `SwapSlots(int padIndexA, int padIndexB)` (public)
 
@@ -643,7 +667,7 @@ Moves a slot from its current visual position to a new visual position within th
 
 #### `RebuildKernelOrderAfterReorder(VirtualControllerType groupType, IReadOnlyList<int> oldOrder)` (private)
 
-Thin delegator. Reads the new order from `SettingsManager.SlotOrders.GetOrderFor(groupType)` and calls `_inputManager.RerouteVirtualControllersForReorder(groupType, oldOrder, newOrder)`. Non-HM groups (KBM, MIDI) are filtered inside the engine method since their slot order is not tied to a kernel-side index allocation.
+Thin delegator. Reads the new order from `SettingsManager.SlotOrders.GetOrderFor(groupType)` and calls `_inputManager.RerouteVirtualControllersForReorder(groupType, oldOrder, newOrder)`. The engine method accepts only the four kernel-slot groups (Xbox, PlayStation, Nintendo, Extended) and early-returns for the rest (Keyboard + Mouse, MIDI, VR), whose slot order is not tied to a kernel-side index allocation.
 
 #### `InputManager.RerouteVirtualControllersForReorder(VirtualControllerType groupType, IReadOnlyList<int> oldOrder, IReadOnlyList<int> newOrder)` (public, engine)
 
@@ -655,7 +679,7 @@ Walks `oldOrder` against `newOrder` position by position and decides per visual 
 
 Same-profile cycles (Example: insert a Profile-A slot at the top of an all-Profile-A group) collapse to a pure pointer rotation across `_virtualControllers[]` with no kernel teardown. Zero-flicker for the game side. Different-profile positions go through the regular destroy + recreate path; Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate them with the new pad's profile, taking the lowest free kernel slot (which is V, because surviving VCs at positions < V keep theirs). The swap-only path does not engage Pass 2's preemption.
 
-Non-HM group types are rejected at the entry. Cross-group moves do not route through here at all. `MoveSlotToGroupTail` changes `SlotControllerTypes[padIndex]`, which Pass 1 detects as a type change and destroys the old-group VC. The new group's ordinary creation logic spins up the new VC at the tail.
+Group types outside the four kernel-slot groups are rejected at the entry. Cross-group moves do not route through here at all. `MoveSlotToGroupTail` changes `SlotControllerTypes[padIndex]`, which Pass 1 detects as a type change and destroys the old-group VC. The new group's ordinary creation logic spins up the new VC at the tail.
 
 This replaced the v2-era `ShouldRebuildKernelOrder` predicate and the live-subsequence walk that destroyed every live VC at and below the lowest changed position. Reorders now make per-position reuse decisions, so a same-profile rotation involves zero VC destroys.
 
@@ -665,20 +689,20 @@ Moves a slot to the tail of its type group. Changes `SlotControllerTypes[padInde
 
 #### `OnSlotDeleted(int padIndex, VirtualControllerType deletedType, int oldGroupPosition, bool deletedSlotHadActiveVc = true)` (public)
 
-Runs the bubble-down cascade after `DeviceService.DeleteSlot` removes a slot. Surviving HM VCs at higher visual positions in the same group drop to the lowest free kernel slot, matching the disconnect/reconnect shape an external observer sees. Takes the pre-removal group position captured by `DeleteSlot` (returned in its `SlotDeletionInfo`).
+Runs the bubble-down cascade after `DeviceService.DeleteSlot` removes a slot. Surviving HM VCs at higher visual positions in the same group drop to the lowest free kernel slot, matching the disconnect/reconnect shape an external observer sees. Takes the pre-removal group position captured by `DeleteSlot` (returned in its `SlotDeletionInfo`). The cascade is skipped when `deletedSlotHadActiveVc` is false. Afterward the method compacts pad indices via `CompactSlotsForGaps()` so the controllers list stays contiguous from index 0, falling through to `RefreshAfterSlotReorder()` only when no compaction ran.
 
 ### Test Rumble
 
 #### `SendTestRumble(int padIndex, Guid? deviceGuid)` (public)
 
-Sets both main motors to 65535 (full-scale). Optional device GUID filter. Clears after 500 ms via a one-shot `DispatcherTimer`. The two-argument overload delegates to the four-argument form with `left: true, right: true`.
+Sets both main motors to 65535 (full-scale). Optional device GUID filter. Clears after 500 ms via a one-shot `DispatcherTimer`, generation-gated in two tiers: each motor field clears only if no newer pulse wrote that same field, while the shared state (the device filter and the directional block) clears only for the newest pulse on the slot. The two-argument overload delegates to the four-argument form with `left: true, right: true`.
 
 ```csharp
 // Overload for selective motors
 public void SendTestRumble(int padIndex, Guid? deviceGuid, bool left, bool right)
 ```
 
-For Extended slots the four-argument form also emits a directional constant-force effect (East for left, West for right) so wheels and joysticks push the correct way instead of only rattling. The scalar motors are still set for rumble-only devices sharing the slot.
+For Extended slots the four-argument form also emits a directional constant-force effect, but only when exactly one side is requested (`left != right`): `Direction` 8192 for left, 24576 for right, on the "force comes from" convention, so wheels and joysticks push the correct way instead of only rattling. The scalar motors are still set for rumble-only devices sharing the slot.
 
 When `deviceGuid` is non-null, the call also stores the GUID in `_inputManager.TestRumbleTargetGuid[padIndex]`. The `UserEffectsDispatcher.TestRumbleTargetGuidProvider` callback (wired in `Start()`) reads that value so per-device effects on Impulse Triggers / Force Feedback / Adaptive Triggers / Lighting tabs only fire on the selected pad. The gate is `target == Guid.Empty || ud.InstanceGuid == target`. See `feedback_per_device_test_isolation.md` in project memory.
 
@@ -751,6 +775,13 @@ Trigger-motor sibling for Xbox One+ impulse triggers (#74). Sets `VibrationState
 | `ShutdownMidiInputs` | `void ShutdownMidiInputs()` | Tears down MIDI inputs before uninstalling Windows MIDI Services |
 | `PumpSdlEvents` | `void PumpSdlEvents()` | Pumps SDL's event queue on the UI thread for hot-plug (#116) |
 | `RescanWiiControllers` | `void RescanWiiControllers()` | Re-opens SDL's Wii hidapi devices after a pairing (#116) |
+| `SeedIdentityProtectionDisplay` | `void SeedIdentityProtectionDisplay()` | Reflects the persisted Remote Link identity-protection mode in the Settings dropdown. Must run after `SettingsService.Initialize()` |
+| `RefreshMappingDropdowns` | `void RefreshMappingDropdowns()` | Rebuilds pickers and mapping descriptors after a `ForceRawJoystickMode` toggle |
+| `ToggleMagCalibration` | `bool ToggleMagCalibration(Guid deviceGuid)` | Starts or stops a magnetometer calibration run for one device |
+| `IsMagCalibrating` | `bool IsMagCalibrating(Guid deviceGuid)` | Whether that run is in progress |
+| `RequestGyroAutoCalibration` | `void RequestGyroAutoCalibration()` | Forces an auto-calibration pass over eligible at-rest devices |
+| `GetActiveTouchpadGestures` | `TouchpadCustomGesture[] GetActiveTouchpadGestures()` | The live custom-gesture list, read by `SettingsService` at save time |
+| `BuildPerDeviceSettingsSnapshot` | `static PerDeviceSettingsEntry[] BuildPerDeviceSettingsSnapshot(int sourcePadIndex, VirtualControllerType layoutType, bool layoutIsExtended)` | Snapshots every assigned device's PadSetting on a slot for the clipboard |
 
 The profile-CRUD, touchpad-gesture, and expression-variable methods are the domain logic behind MainWindow's UI handlers.
 
@@ -771,6 +802,7 @@ Beyond these two, UI updates flow through ViewModel properties and InputManager'
 | `IsDevicesPageVisible` | `bool` (get/set) | Gates Devices page raw state updates |
 | `IsPadPageVisible` | `bool` (get/set) | Gates mapping live value updates |
 | `SettingsService` | `SettingsService` (set-only) | For triggering saves on cache updates |
+| `GyroCalibrator` | `GyroCalibratorService` (get) | Lazily created per-(device, slot) gyro bias sampler |
 | `ToggleMainWindow` | `Action` (get/set) | Callback to show/hide the main window. Set by MainWindow at startup. |
 | `ToggleVCsDisabled` | `Action` (get/set) | Callback to bulk-toggle all created VC slots enabled/disabled (#91). Set by MainWindow. See [Bulk Virtual Controller toggle](#bulk-virtual-controller-toggle-32-issue-91). |
 
@@ -1005,7 +1037,7 @@ Unsubscribes from all DevicesViewModel events.
 
 ### Device Assignment
 
-#### `OnAssignToSlot(int slotIndex)` (private)
+#### `OnAssignToSlot(object sender, int slotIndex)` (private)
 
 Assigns the selected device to a slot:
 1. Auto-creates the slot if needed.
@@ -1018,7 +1050,7 @@ Assigns the selected device to a slot:
 
 Public version for drag-and-drop. Same logic as `OnAssignToSlot` but takes a GUID directly.
 
-#### `OnToggleSlot(int slotIndex)` (private)
+#### `OnToggleSlot(object sender, int slotIndex)` (private)
 
 Toggles device assignment for a slot (multi-slot support). If unassigning leaves no remaining slots, auto-disables hiding.
 
@@ -1031,15 +1063,16 @@ Removes all slot assignments for a device.
 #### `CreateSlot(VirtualControllerType type = Xbox)` (public) -> `int`
 
 Creates the next available slot:
-1. Sets `OutputType` before `SlotCreated` (order matters for sidebar rebuild).
-2. Sets `ProfileId = GetDefaultProfileId(type)` so the profile picker shows a selection immediately. Per-category defaults (`InputManager.Step5.VirtualDevices.cs`): Xbox gets `DefaultXboxProfileId` (`xbox-series-xs-bt`), PlayStation gets `dualshock-4-v2`, Nintendo gets `DefaultNintendoProfileId` (`switch-pro`, the category's only profile), Extended gets the Custom "PadForge Game Controller" profile (`padforge-custom`). MIDI and Keyboard + Mouse have no HIDMaestro profile (null).
-3. Returns slot index (0–15) or -1 if full.
+1. Rejects the create up front when the type is already at its cap: `SettingsManager.CanSlotTakeType(type, slotType)` returns -1. Only VR is capped below the global slot count (`MaxVrSlots` = 1), and the gate lives in `SettingsManager` rather than at each UI entry point because a type *switch* from the sidebar or dashboard would otherwise mint a second VR slot.
+2. Sets `OutputType` before `SlotCreated` (order matters for sidebar rebuild).
+3. Sets `ProfileId = GetDefaultProfileId(type)` so the profile picker shows a selection immediately. Per-category defaults (`InputManager.Step5.VirtualDevices.cs`): Xbox gets `DefaultXboxProfileId` (`xbox-series-xs-bt`), PlayStation gets `DefaultPlayStationProfileId` (`dualsense-composite`, the only PlayStation persona carrying the speaker, the microphone and the channel 3/4 voice-coil haptics), Nintendo gets `DefaultNintendoProfileId` (`switch-pro`, the category's only profile), Extended gets `DefaultRawProfileId`, the Custom entry (`padforge-custom`). MIDI, Keyboard + Mouse, and VR have no HIDMaestro catalog profile (null).
+4. Sets `SlotEnabled = true`, appends the pad to its group's order list, marks dirty, raises `DeviceAssignmentChanged`, and returns the slot index (0–15) or -1 if full.
 
-The `Nintendo` type (4.1.0, #246) is `VirtualControllerType.Nintendo = 5`: a console-family bucket like Xbox / PlayStation (own sidebar group, icon, fixed catalog profile) riding the Extended raw-HID data path. It has no Customize surface. The fixed group order across the sidebar and dashboard is Xbox / PlayStation / Nintendo / Extended / Keyboard + Mouse / MIDI (`VirtualControllerGroups.InOrder`), and Nintendo slots cap at `SettingsManager.MaxNintendoSlots` (all 16 pads, like the other HM groups).
+The `Nintendo` type (4.1.0, #246) is `VirtualControllerType.Nintendo = 5`: a console-family bucket like Xbox / PlayStation (own sidebar group, icon, fixed catalog profile) riding the Extended raw-HID data path. It has no Customize surface. The fixed group order across the sidebar and dashboard is Xbox / PlayStation / Nintendo / Extended / Keyboard + Mouse / MIDI / VR (`VirtualControllerGroups.InOrder`, with `Vr = 6` appended in 4.2.0), and Nintendo slots cap at `SettingsManager.MaxNintendoSlots` (all 16 pads, like the other HM groups).
 
 #### `DeleteSlot(int slotIndex)` (public) -> `SlotDeletionInfo`
 
-Clears `SlotCreated[slotIndex]`, calls `padVm.ResetAllSettings()` to prevent stale leaks, removes all UserSettings mapped to this slot. Returns a `SlotDeletionInfo` record struct (`VirtualControllerType Type`, `int OldGroupPosition`) carrying the deleted slot's type and its pre-removal index in the matching group's order list. Both are captured before `SlotOrders.Remove` mutates the list so `InputService.OnSlotDeleted` can drive the bubble-down cascade without re-querying. `OldGroupPosition` is -1 when the slot wasn't in any order list.
+Clears `SlotCreated[slotIndex]`, resets `SlotEnabled[slotIndex]` to true (the default for the next occupant), removes the pad from its group's order list, calls `padVm.ResetAllSettings()` and nulls `SelectedMappedDevice` to prevent stale leaks, then removes all UserSettings mapped only to this slot. Returns a `SlotDeletionInfo` record struct (`VirtualControllerType Type`, `int OldGroupPosition`) carrying the deleted slot's type and its pre-removal index in the matching group's order list. Both are captured before `SlotOrders.Remove` mutates the list so `InputService.OnSlotDeleted` can drive the bubble-down cascade without re-querying. `OldGroupPosition` is -1 when the slot wasn't in any order list.
 
 #### `SetSlotEnabled(int slotIndex, bool enabled)` (public)
 
@@ -1047,15 +1080,15 @@ Sets `SettingsManager.SlotEnabled[slotIndex]`.
 
 ### Device Hiding Toggle
 
-#### `OnHideDevice(Guid instanceGuid)` (private)
+#### `OnHideDevice(object sender, Guid instanceGuid)` (private)
 
 Marks a device as hidden in SettingsManager and ViewModel.
 
-#### `OnRemoveDevice(Guid instanceGuid)` (private)
+#### `OnRemoveDevice(object sender, Guid instanceGuid)` (private)
 
 Removes a device and all associated settings. The virtual controller slot persists empty.
 
-#### `OnDeviceHidingChanged(Guid instanceGuid)` (private)
+#### `OnDeviceHidingChanged(object sender, Guid instanceGuid)` (private)
 
 Handles HidHide/ConsumeInput/ForceRawJoystickMode toggles. Writes state to UserDevice, marks dirty, raises `DeviceHidingStateChanged`.
 
@@ -1436,9 +1469,9 @@ Two stamps stay runtime overlays because no user-facing card exists to fold them
 
 MainWindow owns the service instances and wires them to ViewModels. Two notable behaviors:
 
-### SyncBarBackgrounds
+### Theme changes
 
-`SyncBarBackgrounds()` pixel-samples the current theme's background brush at runtime to match the sidebar and app branding bar backgrounds. Re-invoked on theme changes via the `ThemeManager.Current.ActualApplicationThemeChanged` handler, ensuring the bars stay consistent when the user switches between light and dark themes.
+`OnThemeChanged(object sender, int themeIndex)` is wired to `SettingsViewModel.ThemeChanged`. It applies Light, Dark, or the system theme through `ApplicationThemeManager`, then re-pins the Ember accent (`EmberTheme.ApplyAccent()`, because a theme apply re-derives the accent from the system color) and re-evaluates the steel ground via `UpdateSteelLayer()`. The steel layer is a dark-theme surface: in Light the Mica backdrop stands alone (#175).
 
 ### AddController Popup Dismiss
 
@@ -1453,14 +1486,18 @@ The "Add Controller" popup auto-dismisses on navigation, window move, window res
 ```
 App.OnStartup
   |-- MainWindow constructor
-  |     |-- Creates MainViewModel, SettingsService, InputService, DeviceService, RecorderService
-  |     |-- SettingsService.Initialize()        [loads XML into SettingsManager]
+  |     |-- Creates MainViewModel, SettingsService, InputService, RecorderService, DeviceService
+  |     |     (InputService.SettingsService is set in its object initializer, for save triggers)
   |     |-- DeviceService.WireEvents()          [subscribes to DevicesViewModel events]
-  |     |-- InputService.SettingsService = ss   [for save triggers]
-  |     |-- InputService.Start()                [creates engine, starts all subsystems]
+  |     |-- SettingsService.Initialize()        [loads XML into SettingsManager, before Show()]
+  |     |-- InputService.SeedIdentityProtectionDisplay()  [needs the parsed value]
+  |     |-- LoadProfileShortcuts(), window placement restore, sidebar + dashboard rebuild
+  |     |-- if (Settings.AutoStartEngine) InputService.Start()
+  |     |     |-- reconcilers: RumbleAudioService / WiiSpeakerService / HapticToneService
   |     |     |-- InputManager.Start()          [launches polling thread]
   |     |     |-- StartDsuServerIfEnabled()
   |     |     |-- StartWebServerIfEnabled()
+  |     |     |-- StartRemoteLinkIfEnabled()
   |     |     |-- SyncAudioBassDetector()
   |     |     |-- ApplyDeviceHiding()
   |     |     |-- UI timer starts (30Hz)
@@ -1468,20 +1505,27 @@ App.OnStartup
 
 ### Shutdown Sequence
 
+`OnClosing` cancels the close, shows the shutdown overlay, and finishes asynchronously.
+
 ```
 MainWindow.OnClosing
-  |-- InputService.Stop()
-  |     |-- UI timer stops
-  |     |-- Unsubscribe all events
-  |     |-- StopDsuServer()
-  |     |-- StopWebServer()
-  |     |-- StopAudioBassDetector()
-  |     |-- RemoveDeviceHiding()
-  |     |-- InputManager.Stop() + Dispose()
-  |     |-- Tear down all HM virtuals via HMContext.Dispose()
-  |-- SettingsService.Save()              [final save]
+  |-- e.Cancel = true, ShutdownOverlay shown, window forced visible
+  |-- Commit any in-progress TextBox edit, then SettingsService.Save() if dirty
+  |-- Stop the driver-status and SDL pump timers, cancel the Workshop update check
+  |-- Dispose the tray icon and its menu host
   |-- DeviceService.UnwireEvents()
-  |-- RecorderService.Dispose()
+  |-- await Task.Run:                     [off the UI thread: this can take seconds]
+  |     |-- RecorderService.Dispose()
+  |     |-- InputService.Dispose() -> Stop()
+  |     |     |-- UI timer stops, overlays close, ViewModel events unsubscribed
+  |     |     |-- StopDsuServer() / StopWebServer() / StopRemoteLink()
+  |     |     |-- StopAudioBassDetector()
+  |     |     |-- RemoveDeviceHiding(keepCloaks: KeepHidHideCloaksBetweenLaunches)
+  |     |     |-- InputManager.Stop() + Dispose()
+  |     |     |     |-- AwaitPendingLifecycleTasks, DestroyAllVirtualControllers,
+  |     |     |         DisposeHMaestroContextOnShutdown
+  |     |-- MidiInputRuntime.Shutdown(), MidiVirtualController.Shutdown()
+  |-- _shutdownComplete = true, Close()
 ```
 
 ### Device Connected Flow
@@ -1549,4 +1593,4 @@ User clicks Record button
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

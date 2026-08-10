@@ -13,7 +13,7 @@ touch.
 | [Dashboard](dashboard.md) | Slot overview, live activity, quick actions |
 | [Devices](devices.md) | Every detected input device and its capabilities |
 | [Controller Slots](controller-slots.md) | The 16 slots, assignment, per-slot output type |
-| [Virtual Controllers](virtual-controllers.md) | What games see: Xbox, PlayStation, Switch Pro, Extended, KBM, MIDI |
+| [Virtual Controllers](virtual-controllers.md) | What games see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR |
 | [Settings](settings.md) | Application-wide options |
 | [Driver Management](driver-management.md) | HIDMaestro and HidHide install, repair, removal |
 
@@ -33,6 +33,7 @@ when that device has the matching hardware.
 | [Macros](../guides/macros.md) | Action sequences fired by combos, sticks, or every frame |
 | [Menus](../guides/menus.md) | On-screen ring and grid menus driven by a stick or touchpad |
 | [Bass Shakers](bass-shakers.md) | Game rumble and force feedback routed to an audio output as low-frequency tones for bass shakers and subwoofers. Shown on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback |
+| Output | SOCD cleaning and Keep Controller Awake, the two cards that shape the slot's output right before it reaches the game. Hidden on MIDI and VR slots. SOCD is documented on [Mappings](mappings.md) |
 
 ### Device tabs
 
@@ -58,5 +59,7 @@ when that device has the matching hardware.
 | [NFC Tags](nfc-tags.md) | Tag registration on the Devices page, taps as macro triggers |
 | [MIDI Input](midi-input.md) | MIDI devices on the Devices page: notes, knobs, and pitch bend as mapping sources |
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
+| [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
+| [Headset Head Tracking](headset-motion.md) | Head rotation from a Sony headset as a motion source |
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -141,9 +141,9 @@ Slider 1.0–20.0. Default 4.0. Multiplies the captured system-audio peak before
 
 ### Audio bands
 
-Visible only for the three Audio Bands modes. Three bordered cards side-by-side: Quiet, Medium, Loud. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.
+Visible only for the three Audio Bands modes. Three bordered cards side-by-side: **Quiet Color**, **Medium Color**, **Loud Color**. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.
 
-Above the cards are the Quiet-to-Medium and Medium-to-Loud thresholds, set as a percent of the peak range. Each threshold has a reset button. For Audio CrossFade, a "Crossfade Width" slider sets the half-width of the blend zone at each threshold (0–50 %, default 5 %). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.
+Above the cards are the **Quiet → Medium at** and **Medium → Loud at** thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a **Crossfade Width** slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.
 
 ---
 
@@ -175,7 +175,7 @@ The DualSense-only fields (player-indicator row, mute LED, adaptive triggers) ar
 
 ---
 
-## Guide button LED
+## Guide Button LED
 
 The Lighting tab shows this card instead of the lightbar controls when the assigned device is an Xbox One or later pad, a 2015 Steam Controller, or a Switch pad with a HOME button LED: a Pro Controller, a right Joy-Con, a combined Joy-Con pair, or the charging grip. It sets the brightness of the glowing Guide or Home button.
 
@@ -206,7 +206,7 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
 - For Color Cycle, "Blend smoothly" looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.
 - Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.
-- The Audio Bands modes assume the Quiet-to-Medium and Medium-to-Loud thresholds are in ascending order. Reversing them produces the wrong band selection.
+- The Audio Bands modes assume the two thresholds are in ascending order. Reversing them produces the wrong band selection.
 
 ---
 
@@ -218,4 +218,4 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

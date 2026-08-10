@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://padforge.org/docs/start/five-minute-remap/">
+        <link rel="canonical" href="https://padforge.org/docs/reference/headset-motion-internals/">
       
       
-        <link rel="prev" href="../first-controller/">
+        <link rel="prev" href="../vr-controllers-internals/">
       
       
-        <link rel="next" href="../../guides/">
+        <link rel="next" href="../wheel-ffb-internals/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>A Five-Minute Remap - PadForge Documentation</title>
+        <title>Headset Head Tracking Internals - PadForge Documentation</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#a-five-minute-remap" class="md-skip">
+        <a href="#headset-head-tracking-internals" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              A Five-Minute Remap
+              Headset Head Tracking Internals
             
           </span>
         </div>
@@ -239,13 +239,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
           
   
   
@@ -348,11 +346,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../reference/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -441,8 +441,6 @@
       
   
   
-    
-  
   
   
     
@@ -462,23 +460,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../start/" class="md-nav__link ">
               
   
   
@@ -496,13 +491,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -522,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+      <a href="../../start/installation/" class="md-nav__link">
         
   
   
@@ -550,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../first-controller/" class="md-nav__link">
+      <a href="../../start/first-controller/" class="md-nav__link">
         
   
   
@@ -575,37 +570,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    A Five-Minute Remap
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
         
   
   
@@ -621,103 +589,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-open-the-mapping-table" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Open the mapping table
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-record-the-first-swap" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Record the first swap
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-record-the-other-half" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Record the other half
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-verify-on-the-spot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Verify on the spot
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#when-recording-grabs-the-wrong-input" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When recording grabs the wrong input
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#when-you-want-to-remap-everything" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When you want to remap everything
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-to-go-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where to go next
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2033,6 +1904,8 @@
       
   
   
+    
+  
   
   
     
@@ -2092,20 +1965,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../reference/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -2123,13 +1999,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2149,7 +2025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/architecture-overview/" class="md-nav__link">
+      <a href="../architecture-overview/" class="md-nav__link">
         
   
   
@@ -2177,7 +2053,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/input-pipeline/" class="md-nav__link">
+      <a href="../input-pipeline/" class="md-nav__link">
         
   
   
@@ -2205,7 +2081,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/engine-library/" class="md-nav__link">
+      <a href="../engine-library/" class="md-nav__link">
         
   
   
@@ -2233,7 +2109,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/services-layer/" class="md-nav__link">
+      <a href="../services-layer/" class="md-nav__link">
         
   
   
@@ -2261,7 +2137,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/viewmodels/" class="md-nav__link">
+      <a href="../viewmodels/" class="md-nav__link">
         
   
   
@@ -2289,7 +2165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/xaml-views/" class="md-nav__link">
+      <a href="../xaml-views/" class="md-nav__link">
         
   
   
@@ -2317,7 +2193,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+      <a href="../settings-and-serialization/" class="md-nav__link">
         
   
   
@@ -2345,7 +2221,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+      <a href="../sdl3-integration/" class="md-nav__link">
         
   
   
@@ -2373,7 +2249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
         
   
   
@@ -2401,7 +2277,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+      <a href="../driver-installation-internals/" class="md-nav__link">
         
   
   
@@ -2429,7 +2305,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+      <a href="../dsu-motion-server/" class="md-nav__link">
         
   
   
@@ -2457,7 +2333,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+      <a href="../dsu-protocol/" class="md-nav__link">
         
   
   
@@ -2485,7 +2361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+      <a href="../remote-link-internals/" class="md-nav__link">
         
   
   
@@ -2513,7 +2389,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
   
@@ -2541,7 +2417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+      <a href="../controller-audio-internals/" class="md-nav__link">
         
   
   
@@ -2569,7 +2445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
   
@@ -2594,10 +2470,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2613,6 +2516,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#discovery-is-by-capability-never-by-model-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery is by capability, never by model list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rotation-is-the-signal-not-the-gyro-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rotation is the signal, not the gyro field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-frame-is-remapped-once-at-ingest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The frame is remapped once, at ingest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-user-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the user sees
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations-stated-as-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations, stated as facts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2625,7 +2614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
   
@@ -2653,7 +2642,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+      <a href="../midi-input-internals/" class="md-nav__link">
         
   
   
@@ -2681,7 +2670,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
   
@@ -2709,7 +2698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+      <a href="../2d-overlay-system/" class="md-nav__link">
         
   
   
@@ -2737,7 +2726,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/3d-model-system/" class="md-nav__link">
+      <a href="../3d-model-system/" class="md-nav__link">
         
   
   
@@ -2765,7 +2754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/build-and-publish/" class="md-nav__link">
+      <a href="../build-and-publish/" class="md-nav__link">
         
   
   
@@ -2820,10 +2809,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-open-the-mapping-table" class="md-nav__link">
+  <a href="#discovery-is-by-capability-never-by-model-list" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Open the mapping table
+        Discovery is by capability, never by model list
       
     </span>
   </a>
@@ -2831,10 +2820,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-record-the-first-swap" class="md-nav__link">
+  <a href="#rotation-is-the-signal-not-the-gyro-field" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Record the first swap
+        Rotation is the signal, not the gyro field
       
     </span>
   </a>
@@ -2842,10 +2831,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-record-the-other-half" class="md-nav__link">
+  <a href="#the-frame-is-remapped-once-at-ingest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Record the other half
+        The frame is remapped once, at ingest
       
     </span>
   </a>
@@ -2853,10 +2842,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-verify-on-the-spot" class="md-nav__link">
+  <a href="#what-the-user-sees" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Verify on the spot
+        What the user sees
       
     </span>
   </a>
@@ -2864,10 +2853,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#when-recording-grabs-the-wrong-input" class="md-nav__link">
+  <a href="#limitations-stated-as-facts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When recording grabs the wrong input
+        Limitations, stated as facts
       
     </span>
   </a>
@@ -2875,21 +2864,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#when-you-want-to-remap-everything" class="md-nav__link">
+  <a href="#related" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When you want to remap everything
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-to-go-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where to go next
+        Related
       
     </span>
   </a>
@@ -2913,88 +2891,126 @@
 
 
 
-<h1 id="a-five-minute-remap">A Five-Minute Remap<a class="headerlink" href="#a-five-minute-remap" title="Permanent link">&para;</a></h1>
-<p><em>Change what a button does: the walkthrough swaps A and B, and the same
-moves cover any rebind you will ever make.</em></p>
-<p>You need a virtual controller with a physical pad assigned to it. That is
-<a href="../first-controller/">Your First Controller</a>.</p>
-<hr />
-<h2 id="1-open-the-mapping-table">1. Open the mapping table<a class="headerlink" href="#1-open-the-mapping-table" title="Permanent link">&para;</a></h2>
-<p>On the <a href="../../features/dashboard/">Dashboard</a>, click the slot's card to
-open its configuration, then open the <strong>Mappings</strong> tab. One table drives
-the whole slot: each row is one output the game sees. Rows run in order:
-buttons, D-Pad, triggers, left stick, right stick. PlayStation slots add
-touchpad and motion rows at the end, and Nintendo slots add the motion
-pair.</p>
-<p><img alt="Button and axis mapping grid with source, value, and record columns" src="../../images/pad-mappings.png" /></p>
-<h2 id="2-record-the-first-swap">2. Record the first swap<a class="headerlink" href="#2-record-the-first-swap" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Find the <strong>A</strong> row. Button rows sit at the top, A first.</li>
-<li>Click the record icon on that row. The icon switches to a stop
-   glyph, its tooltip reads "Recording...", and the row pulses orange.</li>
-<li>Press <strong>B</strong> on your physical pad.</li>
-</ol>
-<p>PadForge captures the press, fills in the source, and stops recording.
-The A output is now driven by the physical B button.</p>
-<blockquote>
-<p><strong>Tip:</strong> Press only the input you want. Wiggling a stick while pressing
-a button can catch the stick instead.</p>
-</blockquote>
-<h2 id="3-record-the-other-half">3. Record the other half<a class="headerlink" href="#3-record-the-other-half" title="Permanent link">&para;</a></h2>
-<p>Do the same on the <strong>B</strong> row: click its record icon, press <strong>A</strong> on the
-pad. The swap is complete.</p>
-<h2 id="4-verify-on-the-spot">4. Verify on the spot<a class="headerlink" href="#4-verify-on-the-spot" title="Permanent link">&para;</a></h2>
-<p>Press A and B on the pad and watch the <strong>Value</strong> column. Each press lights
-the swapped row in real time, and what you see there is exactly what the
-game gets. No save step, no apply step. Your mapping persists in
-<code>PadForge.xml</code> next to the executable.</p>
-<hr />
-<h2 id="when-recording-grabs-the-wrong-input">When recording grabs the wrong input<a class="headerlink" href="#when-recording-grabs-the-wrong-input" title="Permanent link">&para;</a></h2>
-<p>Use the source dropdown instead. It is one list of every input the slot
-can see, grouped under device-name headers, with the <strong>(Any device)</strong>
-group first. Pick an entry ("B", "Axis 3", "POV 0 Up") and it assigns on
-the spot, same result as recording.</p>
-<p>Clearing has three scopes:</p>
+<h1 id="headset-head-tracking-internals">Headset Head Tracking: Internals<a class="headerlink" href="#headset-head-tracking-internals" title="Permanent link">&para;</a></h1>
+<p><em>How a pair of headphones becomes a motion source: the descriptor probe, the marker, the rotation-to-rate synthesis, and the frame remap.</em></p>
+<p>The user-facing page is <a href="../../features/headset-motion/">Headset Head Tracking</a>. This one is for whoever has to change the code.</p>
+<p>Two files carry it:</p>
 <table>
 <thead>
 <tr>
-<th>Control</th>
-<th>Where</th>
-<th>What it resets</th>
+<th>File</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Clear</strong></td>
-<td>on the row</td>
-<td>the primary source and its options (invert, half-axis, deadzone)</td>
+<td><code>PadForge.App/Common/Input/HeadTrackerHid.cs</code></td>
+<td>The HID usage constants</td>
 </tr>
 <tr>
-<td><strong>Clear</strong></td>
-<td>on an extra source</td>
-<td>that source only, the emptied slot stays on the row</td>
+<td><code>PadForge.App/Common/Input/SonyHeadsetHid.cs</code></td>
+<td>Descriptor probe, marker check, feature-report setup</td>
 </tr>
 <tr>
-<td><strong>Clear All</strong></td>
-<td>Mappings tab toolbar</td>
-<td>every row completely, tuning included, after a confirmation</td>
+<td><code>PadForge.App/Common/Input/SonyHeadsetMotionDevice.cs</code></td>
+<td>The device itself: parse, synthesize, publish</td>
 </tr>
 </tbody>
 </table>
-<h2 id="when-you-want-to-remap-everything">When you want to remap everything<a class="headerlink" href="#when-you-want-to-remap-everything" title="Permanent link">&para;</a></h2>
-<p><strong>Map All</strong>, on the Preview tab or the Mappings tab toolbar, walks
-every row in order: it highlights a row, prompts for the matching input,
-captures it, and moves on. The fastest way to set up an unrecognized
-device (a generic joystick, an arcade encoder) from scratch.</p>
 <hr />
-<h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
+<h2 id="discovery-is-by-capability-never-by-model-list">Discovery is by capability, never by model list<a class="headerlink" href="#discovery-is-by-capability-never-by-model-list" title="Permanent link">&para;</a></h2>
+<p>There is no VID/PID table. A candidate is any HID device exposing a collection on the <strong>Sensor page</strong> with the <strong>Other: Custom</strong> usage, whose sensor-description feature report begins with a marker string:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">SensorPage</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x20</span><span class="p">;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">internal</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">OtherCustom</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mh">0xE1</span><span class="p">;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">internal</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">SensorDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0308</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">internal</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Marker</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#AndroidHeadTracker#&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>Confirmed working on the WH-1000XM5 family. Any headset presenting the same collection is a candidate, whatever its name, which is the point of probing by capability.</p>
+<p><strong>Note what the probe does NOT do: it applies no transport filter.</strong> Nothing in <code>SonyHeadsetHid</code> checks for Bluetooth. These headsets happen to expose the tracker over Bluetooth and that is where the feature was validated, but the code would open the collection over any transport that presented it. Do not write "Bluetooth only" into the docs as though the code enforced it.</p>
+<p>The remaining usages the probe cares about:</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Usage</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ReportInterval</code></td>
+<td><code>0x030E</code></td>
+<td>Sampling interval, written during setup</td>
+</tr>
+<tr>
+<td><code>ReportingAllEvents</code></td>
+<td><code>0x0841</code></td>
+<td>Reporting-state selector</td>
+</tr>
+<tr>
+<td><code>PowerFull</code></td>
+<td><code>0x0851</code></td>
+<td>Power-state selector</td>
+</tr>
+<tr>
+<td><code>Rotation</code></td>
+<td><code>0x0544</code></td>
+<td>Orientation rotation vector</td>
+</tr>
+<tr>
+<td><code>AngularVelocity</code></td>
+<td><code>0x0545</code></td>
+<td>Gyroscope, rad/s, vector form</td>
+</tr>
+<tr>
+<td><code>AccelerationVector</code></td>
+<td><code>0x0452</code></td>
+<td>Accelerometer, vector form</td>
+</tr>
+</tbody>
+</table>
+<p>Some Sensor stacks omit constant fields from value caps, which the probe accounts for rather than treating as a missing feature.</p>
+<hr />
+<h2 id="rotation-is-the-signal-not-the-gyro-field">Rotation is the signal, not the gyro field<a class="headerlink" href="#rotation-is-the-signal-not-the-gyro-field" title="Permanent link">&para;</a></h2>
+<p>This is the part that surprises people, and it is hardware-validated on the XM5: <strong>the raw gyro channel streams zeros while the rotation vector carries the real motion.</strong></p>
+<p>So the device decides at parse time. <code>SonyHeadsetMotionDevice</code> scans the parsed fields for a gyro usage:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">hasGyroUsage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// ... f.Kind == GyroVector || f.Kind == GyroScalar  =&gt;  hasGyroUsage = true</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">_synthesizeGyro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">hasGyroUsage</span><span class="p">;</span>
+</code></pre></div>
+<p>When the descriptor exposes no gyro usage, the rate is <strong>synthesized from consecutive rotation vectors</strong> using <code>_prevRotation</code> and <code>_prevRotationTicks</code>. Mappings downstream receive an ordinary gyro rate and need no headset-specific handling anywhere in the pipeline.</p>
+<p>If a firmware exposes the rotation vector but no gyro and the synthesis path is disabled, there is nothing to fall back to. That combination is guarded rather than left to produce silence.</p>
+<p>Accelerometer is advertised <strong>only when the descriptor exposes it</strong>. Some firmware reports orientation without it, and claiming otherwise would put a dead source in the picker.</p>
+<hr />
+<h2 id="the-frame-is-remapped-once-at-ingest">The frame is remapped once, at ingest<a class="headerlink" href="#the-frame-is-remapped-once-at-ingest" title="Permanent link">&para;</a></h2>
+<p>The tracker's axes are swapped and signed into the frame SDL uses for controllers, and that happens exactly once, on the way in. Downstream, a headset and a gamepad drive a mapping identically.</p>
+<p>Two consequences worth stating plainly:</p>
 <ul>
-<li>Multiple sources on one row, invert and half-axis options, and combine
-  modes: <a href="../../features/mappings/">Button and Axis Mappings</a>.</li>
-<li>A second binding set on the same pad, held or toggled:
-  <a href="../../guides/shift-layers/">Shift Layers</a>.</li>
-<li>Timed sequences on one press: <a href="../../guides/macros/">Macros</a>.</li>
+<li><strong>A second remap anywhere downstream cancels this one.</strong> If head tracking feels mirrored on one axis only, suspect a duplicate transform before suspecting the device.</li>
+<li>It is a swap plus signs, not a rotation. Describing it as "rotated into the SDL frame" is imprecise enough to mislead someone reimplementing it.</li>
 </ul>
+<p>The DSU motion server does its own flip separately, in <code>DsuMotionServer</code>, and that stays there. <code>MotionSnapshot</code> remains in the SDL native frame.</p>
+<hr />
+<h2 id="what-the-user-sees">What the user sees<a class="headerlink" href="#what-the-user-sees" title="Permanent link">&para;</a></h2>
+<p>The headset appears on the <strong>Devices</strong> page as its own device, and carries a headphone glyph in the slot's device roster on the <strong>Pad</strong> page (<code>DeviceTypeGlyph.For</code>, one call site in <code>InputService</code>).</p>
+<p>Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation, which is why it is worth pairing with Aim Engage: head tracking that is always live is disorienting in most games.</p>
+<p>The picker label is <strong>Gyro Horizontal (Yaw + Roll)</strong>, verbatim from <code>Strings.resx</code>. Not "Gyro Horizontal".</p>
+<hr />
+<h2 id="limitations-stated-as-facts">Limitations, stated as facts<a class="headerlink" href="#limitations-stated-as-facts" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Rotation, not position.</strong> Leaning physically closer to the screen changes nothing.</li>
+<li><strong>The tracker runs off the headphone battery</strong> like everything else the headset does.</li>
+<li><strong>Validated over Bluetooth.</strong> That is how these headsets expose it and how it was tested. The code imposes no transport restriction, so do not document one.</li>
+</ul>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../features/headset-motion/">Headset Head Tracking</a> for the user-facing page</li>
+<li><a href="../../guides/gyro/">Motion aiming (Gyro)</a> for the pipeline the headset feeds</li>
+<li><a href="../dsu-motion-server/">DSU Motion Server</a> for the separate flip that lives there</li>
+<li><a href="../input-pipeline/">Input Pipeline</a> for where external devices register</li>
+</ul>
+<hr />
 <p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
@@ -3033,7 +3049,7 @@ device (a generic joystick, an arcade encoder) from scratch.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../first-controller/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Your First Controller">
+          <a href="../vr-controllers-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Virtual VR Controllers Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3043,20 +3059,20 @@ device (a generic joystick, an arcade encoder) from scratch.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Your First Controller
+                Virtual VR Controllers Internals
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../guides/" class="md-footer__link md-footer__link--next" aria-label="Next: Guides">
+          <a href="../wheel-ffb-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Wheel Force Feedback Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Guides
+                Wheel Force Feedback Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

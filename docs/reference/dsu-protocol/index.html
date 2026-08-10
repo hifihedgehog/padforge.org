@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2973,6 +2977,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -4551,7 +4611,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <ol>
 <li>Enable the DSU motion server on the PadForge Dashboard (default port 26760).</li>
 <li>Run <code>DsuDiag.exe</code>. Connects to <code>localhost:26760</code>.</li>
-<li>Subscribes to all 4 slots and prints accelerometer/gyroscope values to the console.</li>
+<li>Sends a version request, then subscribes with <code>flags = 0</code> (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. Targets <code>net8.0</code>.</li>
 </ol>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
@@ -4564,7 +4624,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

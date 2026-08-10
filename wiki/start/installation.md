@@ -10,7 +10,7 @@
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
-5. Back on the [Dashboard](../features/dashboard.md), click **Add Controller** and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, or MIDI). The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. No button to click.
+5. Back on the [Dashboard](../features/dashboard.md), click **Add Controller** and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR). The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. No button to click.
 6. Plug in a physical controller. It appears on the **[Devices](../features/devices.md)** page. Click the slot badge on its card to assign it.
 7. Done. Games now see a virtual controller.
 
@@ -34,7 +34,7 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 PadForge opens the [Dashboard](../features/dashboard.md) after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.
 
-1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, or MIDI. The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically.
+1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.
 2. **Check devices.** Open **[Devices](../features/devices.md)**. PadForge auto-detects every connected gamepad, joystick, keyboard, and mouse.
 3. **Assign a device.** Click the slot badge on a device card to route that physical controller through the virtual one.
 
@@ -48,7 +48,7 @@ The **About** page, at the bottom of the sidebar, lists the projects PadForge is
 
 ## HIDMaestro
 
-HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it.
+HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.
 
 The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card lights its status indicator and shows the version once installation completes. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
@@ -60,7 +60,7 @@ See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForg
 
 ## Optional add-ons
 
-Two optional drivers install from **[Settings](../features/settings.md)**. HidHide is bundled. Windows MIDI Services downloads on demand. Each card lights its status indicator once the driver is installed and swaps its **Install** button for **Uninstall**.
+Three optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**.
 
 <!-- SCREENSHOT: settings-driver-cards -->
 ![The Settings drivers section: HIDMaestro, HidHide, and Windows MIDI Services cards](../images/settings-driver-cards.png)
@@ -72,6 +72,10 @@ Hides physical controllers from games so only the virtual ones are visible. Inst
 ### Windows MIDI Services
 
 Creates virtual MIDI endpoints for the MIDI virtual controller type. Install it if you want to send MIDI to DAWs, synthesizers, or VJ tools. Skip it if you do not need MIDI output. Requires Windows 11 24H2 (build 26100) or later. The Install button is disabled on older versions.
+
+### SteamVR
+
+The VR runtime the virtual VR controllers need. PadForge installs it straight from Valve's servers, with no Steam account and no Steam client. It is several gigabytes, so pick the **Install Location** before starting. Skip it unless you want VR slots. **Uninstall** appears only for the Steam-free install PadForge created. A SteamVR that came with the Steam client belongs to Steam and shows no uninstall.
 
 ### Keyboard + Mouse
 
@@ -85,7 +89,7 @@ PadForge bundles a build of [OpenXInput](https://github.com/hifihedgehog/OpenXin
 
 ## Administrator privileges
 
-PadForge needs administrator rights and shows a UAC prompt at startup. HIDMaestro driver registration (automatic, with no in-app uninstall path), HidHide install / uninstall / whitelist edits, and Windows MIDI Services install / uninstall all need administrator access. Reading physical controllers needs it too. Declining the prompt means PadForge does not start.
+PadForge needs administrator rights and shows a UAC prompt at startup. HIDMaestro driver registration (automatic, with no in-app uninstall path), HidHide install / uninstall / whitelist edits, and Windows MIDI Services and SteamVR install / uninstall all need administrator access. Reading physical controllers needs it too. Declining the prompt means PadForge does not start.
 
 The UAC shield is on the EXE icon as a hint. PadForge prompts once per launch.
 
@@ -111,7 +115,7 @@ With all three on, PadForge runs in the background with only a tray icon.
 
 There is no installer, so removal is short.
 
-1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide and Windows MIDI Services if you installed them. HIDMaestro has no Uninstall button and stays registered.
+1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide, Windows MIDI Services, and SteamVR if you installed them. HIDMaestro has no Uninstall button and stays registered.
 2. Close PadForge.
 3. Delete the PadForge folder.
 
@@ -130,4 +134,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

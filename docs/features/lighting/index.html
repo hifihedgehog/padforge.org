@@ -1654,7 +1654,7 @@
   <a href="#guide-button-led" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guide button LED
+        Guide Button LED
       
     </span>
   </a>
@@ -2223,6 +2223,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2704,6 +2708,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3085,7 +3145,7 @@
   <a href="#guide-button-led" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guide button LED
+        Guide Button LED
       
     </span>
   </a>
@@ -3315,8 +3375,8 @@
 <h3 id="sensitivity">Sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">&para;</a></h3>
 <p>Slider 1.0–20.0. Default 4.0. Multiplies the captured system-audio peak before the lightbar reacts, so quiet content can still drive a noticeable response. The lightbar reads the same system-audio capture as Audio Rumble. The lighting path reads the full waveform with no bass-cutoff filter.</p>
 <h3 id="audio-bands">Audio bands<a class="headerlink" href="#audio-bands" title="Permanent link">&para;</a></h3>
-<p>Visible only for the three Audio Bands modes. Three bordered cards side-by-side: Quiet, Medium, Loud. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.</p>
-<p>Above the cards are the Quiet-to-Medium and Medium-to-Loud thresholds, set as a percent of the peak range. Each threshold has a reset button. For Audio CrossFade, a "Crossfade Width" slider sets the half-width of the blend zone at each threshold (0–50 %, default 5 %). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.</p>
+<p>Visible only for the three Audio Bands modes. Three bordered cards side-by-side: <strong>Quiet Color</strong>, <strong>Medium Color</strong>, <strong>Loud Color</strong>. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.</p>
+<p>Above the cards are the <strong>Quiet → Medium at</strong> and <strong>Medium → Loud at</strong> thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a <strong>Crossfade Width</strong> slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.</p>
 <hr />
 <h2 id="indicator-leds-dualsense">Indicator LEDs (DualSense)<a class="headerlink" href="#indicator-leds-dualsense" title="Permanent link">&para;</a></h2>
 <p>A separate card below the lightbar mode picker. Five small white LEDs below the DualSense touchpad show a player-slot pattern. One mute LED sits above the microphone.</p>
@@ -3351,7 +3411,7 @@
 <p>DS4 supports all fourteen base modes (Player Number, Off, Static, Breathing, Rainbow, Color Cycle, the three Audio Pulse variants, the three Audio Bands variants, Battery, Strobe) and the Input Reactive overlay. In Player Number mode the DS4 lightbar idles on the player color. PadForge builds the DS4 lightbar the same way it builds the DualSense lightbar.</p>
 <p>The DualSense-only fields (player-indicator row, mute LED, adaptive triggers) are dropped when the assigned device is a DS4. Those controls stay hidden on the tab.</p>
 <hr />
-<h2 id="guide-button-led">Guide button LED<a class="headerlink" href="#guide-button-led" title="Permanent link">&para;</a></h2>
+<h2 id="guide-button-led">Guide Button LED<a class="headerlink" href="#guide-button-led" title="Permanent link">&para;</a></h2>
 <p>The Lighting tab shows this card instead of the lightbar controls when the assigned device is an Xbox One or later pad, a 2015 Steam Controller, or a Switch pad with a HOME button LED: a Pro Controller, a right Joy-Con, a combined Joy-Con pair, or the charging grip. It sets the brightness of the glowing Guide or Home button.</p>
 <!-- SCREENSHOT: pad-lighting-guide-led -->
 <p><img alt="Guide button LED card with mode dropdown and brightness slider" src="../../images/pad-lighting-guide-led.png" /></p>
@@ -3391,7 +3451,7 @@
 <li>Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.</li>
 <li>For Color Cycle, "Blend smoothly" looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.</li>
 <li>Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.</li>
-<li>The Audio Bands modes assume the Quiet-to-Medium and Medium-to-Loud thresholds are in ascending order. Reversing them produces the wrong band selection.</li>
+<li>The Audio Bands modes assume the two thresholds are in ascending order. Reversing them produces the wrong band selection.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
@@ -3401,7 +3461,7 @@
 <li><a href="../../guides/macros/">Macros</a>: the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, and Set Guide LED Brightness macro action types.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

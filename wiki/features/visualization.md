@@ -16,20 +16,38 @@ PadForge picks the view from the slot's controller type.
 |---|---|---|
 | **Xbox** | 3D model | Yes |
 | **PlayStation** | 3D model | Yes |
-| **Nintendo** | 2D Switch Pro overlay | No (2D only, no 3D mesh) |
+| **Nintendo** | 3D model | Yes |
 | **Extended** | Procedural schematic | No |
 | **Keyboard + Mouse** | Keyboard and mouse layout | No |
 | **MIDI** | Piano keyboard and CC sliders | No |
+| **VR** | Both SteamVR hands side by side | No |
 
-On Xbox and PlayStation slots a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads **Switch to 2D view** or **Switch to 3D view** depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.
+On Xbox, PlayStation, and Nintendo slots a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads **Switch to 2D view** or **Switch to 3D view** depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.
 
 ---
 
 ## 3D model
 
-The active model swaps with the assigned profile. Four meshes cover the Xbox and PlayStation slots: Xbox 360, a shared Xbox One body used for Xbox One, Elite, Series, and Adaptive profiles, DualShock 4, and DualSense. Xbox Series profiles add a clickable Share button on the shared Xbox One body. The other Xbox profiles use the same body with the Share region inert, so it doesn't respond to hover or clicks. There is no separate Series 3D mesh. The distinct Series artwork lives only in the 2D overlay. Nintendo slots have no 3D mesh at all. Like the Series artwork, the Switch Pro art exists only in 2D.
+The active model swaps with the assigned profile. Six meshes cover the Xbox, PlayStation, and Nintendo slots:
+
+| Mesh | Profiles it serves |
+|---|---|
+| Xbox 360 | `xbox-360*`, plus the arcade-stick / dance-pad / wheel siblings |
+| Xbox Series | `xbox-series-*`, and also Xbox One, Elite, and Adaptive |
+| DualShock 4 | `dualshock*` |
+| DualSense | `dualsense*` |
+| DualSense Edge | `dualsense-edge*` |
+| Switch 2 Pro | `switch2-pro*`, and also the original `switch-pro` |
+
+Two meshes are shared by profiles that do not all carry every control. The Series mesh serves the whole Xbox One / Elite / Series / Adaptive family, and only `xbox-series-*` profiles get a live Share button. The Switch 2 Pro mesh serves both Switch generations, and the S2-only parts (C button, GL / GR, the four player LEDs) render on an original Pro Controller as inert meshes. Borrowed-but-absent controls draw either way, but they are wired into the hover, click-to-record, and highlight maps only for the profile that actually has them, so nothing maps or flashes wrong.
+
+The 2D sets do not share the same way. Xbox One and Series keep separate artwork, and so do the two Switch Pro generations, because Switch 2 Pro art carries a C button and the GL / GR grip tiles.
 
 Each model registers hit regions for every button, stick, trigger, and the touchpad. Click anywhere on the model to target that control.
+
+### Colorways
+
+A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The Xbox Series, DualSense, DualShock 4, and DualSense Edge families have one. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
 
 ### Camera controls
 
@@ -41,7 +59,7 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 | Toggle annotations | Button (top-right) | Button (top-right) |
 | Reset view | Button (top-right) | Button (top-right) |
 
-Two buttons sit in the top-right corner: the **Mapping Annotations** toggle (tag glyph) on the left and **Reset View** on its right.
+The top-right corner holds the **Mapping Annotations** toggle (tag glyph) with **Reset View** on its right, and the **Colorway** picker to their left on families that have one.
 
 Rotation is turntable-style. Horizontal drag controls yaw. Vertical drag controls pitch, stopping short of straight up or down. **Reset View** snaps the camera back to the default angle.
 
@@ -132,13 +150,31 @@ The spheres and dots follow the slot's Touchpad mapping rows (**Touchpad 1 Finge
 
 ## Nintendo preview
 
-Nintendo slots always show a flat 2D Switch Pro diagram. No 3D mesh exists for the Switch Pro, so the 2D/3D toggle is hidden.
+Nintendo slots get both views, like Xbox and PlayStation. The 3D model is the Switch 2 Pro mesh, shared with the `switch2-pro` profiles. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay uses the Switch Pro artwork, which is its own set rather than the Switch 2 Pro one.
 
 ![Nintendo slot preview](../images/pad-nintendo-configbar.png)
 
 The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.
 
 A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.
+
+---
+
+## VR preview
+
+VR slots draw both SteamVR hands side by side. One slot drives the pair, so there is no single controller body and the 2D/3D toggle is hidden. The art is a flat drawn pack like the branded 2D overlays: one base bitmap with a per-element tint layer composited on top when an element is lit, hovered, or under record.
+
+Interaction matches the other 2D previews. Hover warms an element, clicking records it, and the element under record flashes.
+
+Elements that carry more than one mapping target split into regions, and the region under the pointer lights on its own:
+
+| Element | Regions |
+|---|---|
+| Stick | Center is the click, the surrounding half-discs are the directions |
+| A / B | Inner disc is the press, the outer ring is the touch |
+| Trigger, grip | The body is the axis, the tip band is the click |
+
+No direction arrows here. Arrows are the schematic view's grammar, not the drawn packs'.
 
 ---
 
@@ -205,4 +241,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

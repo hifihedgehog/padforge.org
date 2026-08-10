@@ -2123,6 +2123,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2604,6 +2608,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -2981,7 +3041,7 @@
 <p>You can set any deadzone or range value by raw digit (0 to 32768) on the Sticks tab for hardware-level precision. See <a href="../stick-deadzones/">Stick Deadzones</a>.</p>
 <hr />
 <h2 id="output-precision-by-slot-type">Output precision by slot type<a class="headerlink" href="#output-precision-by-slot-type" title="Permanent link">&para;</a></h2>
-<p>How much of that resolution reaches the game depends on the slot type. Xbox, PlayStation, and Nintendo outputs are fixed by their console formats. Extended slots are not, so they carry the most detail.</p>
+<p>How much of that resolution reaches the game depends on the slot type, and inside Xbox and Nintendo on the profile you pick. Those formats are fixed by the real controller's report descriptor. Extended slots are not, so they carry the most detail.</p>
 <h3 id="extended-slots">Extended slots<a class="headerlink" href="#extended-slots" title="Permanent link">&para;</a></h3>
 <p>An Extended slot is the custom controller you build in PadForge. With the default Custom profile, its sticks and triggers are 16-bit, so nothing is lost between the stick and the game. Pick a catalog profile instead (a Logitech wheel, a HOTAS, and so on) and the slot ships that controller's HID descriptor exactly, at that controller's own bit depth.</p>
 <table>
@@ -3007,25 +3067,29 @@
 </table>
 <p>POV hats on an Extended slot support full 8-way diagonals. See <a href="#pov-hats">POV hats</a>.</p>
 <h3 id="xbox-slots">Xbox slots<a class="headerlink" href="#xbox-slots" title="Permanent link">&para;</a></h3>
-<p>An Xbox slot emits the Xbox controller format. Sticks keep the full 16-bit resolution. Triggers drop to 8-bit (256 steps) because the Xbox format uses one byte per trigger.</p>
+<p>An Xbox slot emits the Xbox controller format. Sticks keep the full 16-bit resolution on every Xbox profile. Trigger depth follows the profile you pick.</p>
+<p>The default profile is Xbox Series X|S Controller (Bluetooth), which declares 10-bit triggers. So do the Xbox One, Elite, Elite Series 2, and Adaptive profiles. The Xbox 360 gamepad profiles declare 16-bit triggers instead.</p>
 <table>
 <thead>
 <tr>
 <th>Property</th>
 <th>Sticks</th>
-<th>Triggers</th>
+<th>Triggers (Xbox One and later)</th>
+<th>Triggers (Xbox 360)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Range</td>
 <td>65,536 positions</td>
-<td>256 positions</td>
+<td>1,024 positions</td>
+<td>65,536 positions</td>
 </tr>
 <tr>
 <td>Effective bits</td>
 <td>16</td>
-<td>8</td>
+<td>10</td>
+<td>16</td>
 </tr>
 </tbody>
 </table>
@@ -3054,30 +3118,31 @@
 </table>
 <p>The 8-bit ceiling is the DualShock and DualSense formats themselves, so no PlayStation profile lifts it. If a game accepts a generic controller and you want 16-bit output, build an <a href="../controller-slots/">Extended slot</a> with the Custom profile instead. The trade is plain: the game sees a generic HID controller, and the PlayStation button labels go with the format.</p>
 <h3 id="nintendo-slots">Nintendo slots<a class="headerlink" href="#nintendo-slots" title="Permanent link">&para;</a></h3>
-<p>A Nintendo slot emits the Switch Pro Controller format from its single preset, Nintendo Switch Pro Controller. Sticks keep the full 16-bit resolution: the report games read declares 16-bit stick axes, more than the 12-bit values a physical Pro Controller packs into its own full-mode reports, so nothing PadForge sends is squeezed.</p>
-<p>ZL and ZR are digital buttons, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Trigger Deadzones tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.</p>
+<p>A Nintendo slot has two presets: Nintendo Switch Pro Controller and Nintendo Switch 2 Pro Controller. Switch Pro is the default. Each ships that controller's own report descriptor, so stick depth differs between them.</p>
+<p>On Switch Pro the report games read declares 16-bit stick axes, more than the 12-bit values a physical Pro Controller packs into its own full-mode reports, so nothing PadForge sends is squeezed. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.</p>
+<p>ZL and ZR are digital buttons on both presets, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.</p>
 <table>
 <thead>
 <tr>
-<th>Property</th>
+<th>Preset</th>
 <th>Sticks</th>
 <th>Triggers</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Range</td>
-<td>65,536 positions</td>
+<td>Switch Pro</td>
+<td>65,536 positions (16-bit)</td>
 <td>2 states (pressed or released)</td>
 </tr>
 <tr>
-<td>Effective bits</td>
-<td>16</td>
-<td>1</td>
+<td>Switch 2 Pro</td>
+<td>4,096 positions (12-bit)</td>
+<td>2 states (pressed or released)</td>
 </tr>
 </tbody>
 </table>
-<p>The D-Pad is a POV hat with full 8-way output. See <a href="#pov-hats">POV hats</a>.</p>
+<p>Switch Pro reports its D-Pad as a POV hat with full 8-way output. See <a href="#pov-hats">POV hats</a>. Switch 2 Pro reports four separate direction buttons instead, which is what the real pad does, so it has no hat.</p>
 <hr />
 <h2 id="deadzone-precision">Deadzone precision<a class="headerlink" href="#deadzone-precision" title="Permanent link">&para;</a></h2>
 <p>When you turn on a deadzone, anti-deadzone, curve, or max range, PadForge runs the stick value through high-precision math before handing it back as a 16-bit number. The rounding that happens at the very end stays under one step, below any controller's own noise floor.</p>
@@ -3085,13 +3150,14 @@
 <p>The deadzone shapes follow the geometry described by the <a href="https://minimuino.github.io/thumbstick-deadzones/">minimuino thumbstick-deadzones reference</a>. For what each shape, curve, and slider does, and the order they run in, see <a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a>.</p>
 <hr />
 <h2 id="pov-hats">POV hats<a class="headerlink" href="#pov-hats" title="Permanent link">&para;</a></h2>
-<p>Extended and Nintendo slots report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.</p>
+<p>Extended slots and the Switch Pro preset report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.</p>
+<p>The Switch 2 Pro preset has no hat. Its D-Pad is four buttons on the wire.</p>
 <hr />
 <h2 id="output-throughput">Output throughput<a class="headerlink" href="#output-throughput" title="Permanent link">&para;</a></h2>
 <p>Each virtual controller sends one full state update per read. Every button, axis, and hat travels in a single report, so the cost per frame is fixed. It does not grow with how many axes or buttons the slot has.</p>
 <p>There is no per-axis or per-button overhead. At 1000 Hz that is one report per controller per millisecond. Adding more slots scales the work in a straight line.</p>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

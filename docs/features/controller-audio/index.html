@@ -1551,8 +1551,30 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#play-dualsense-haptics-on-this-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Play DualSense haptics on this controller
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dualsense-headset-jack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DualSense headset jack
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2140,6 +2162,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2621,6 +2647,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -2871,8 +2953,30 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#play-dualsense-haptics-on-this-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Play DualSense haptics on this controller
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dualsense-headset-jack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DualSense headset jack
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3015,7 +3119,7 @@
 <p>The mirror captures a Windows <strong>output endpoint</strong>, not a single program. To send one game's sound to the pad, point that game (or all of Windows) at the output you are mirroring. This is also how a game's own DualSense audio reaches the speaker: the game plays it to a Windows output, and PadForge mirrors that output. PadForge does not intercept the game's controller-audio packets directly.</p>
 <hr />
 <h2 id="haptic-tone-pad-controls">Haptic-tone pad controls<a class="headerlink" href="#haptic-tone-pad-controls" title="Permanent link">&para;</a></h2>
-<p>Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads show two extra control groups in the Sound Output card. A resonant actuator buzzing along with background music is more intrusive than a small speaker playing it, so these let you rein it in.</p>
+<p>Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads show three extra control groups in the Sound Output card. A resonant actuator buzzing along with background music is more intrusive than a small speaker playing it, so the first two let you rein it in.</p>
 <!-- SCREENSHOT: pad-audio-haptic-controls -->
 <!-- image pending recapture: ![Play mirrored audio and High tones controls on the Audio tab](../images/pad-audio-haptic-controls.png) -->
 
@@ -3069,6 +3173,31 @@
 </tbody>
 </table>
 <p><strong>Tone limit</strong> sets the cutoff, default 800 Hz. That keeps engine and impact rumble while catching high-pitched beeps. Folding is the gentler choice.</p>
+<h3 id="play-dualsense-haptics-on-this-controller">Play DualSense haptics on this controller<a class="headerlink" href="#play-dualsense-haptics-on-this-controller" title="Permanent link">&para;</a></h3>
+<p>Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a <strong>Haptics Gain</strong> slider, 25 to 300%, default 100%.</p>
+<hr />
+<h2 id="dualsense-headset-jack">DualSense headset jack<a class="headerlink" href="#dualsense-headset-jack" title="Permanent link">&para;</a></h2>
+<p>A DualSense or DualSense Edge adds two more rows under Master volume.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headphone Volume</td>
+<td>Hardware volume of the pad's headset jack, 0-100. Written into the pad's firmware register, so it holds with no app in the loop. The HeadphoneVolumeUp / HeadphoneVolumeDown macro actions step the same setting.</td>
+</tr>
+<tr>
+<td>Output Path</td>
+<td>Where the pad plays its audio: Default, Headphones (Stereo), Headphones (Mono), Headphones + Speaker, Speaker Only, Follow Headphone Jack.</td>
+</tr>
+</tbody>
+</table>
+<p>Headphones + Speaker plays mono on the headset side, a firmware limit. Over Bluetooth that mode plays through the headphones only. Follow Headphone Jack switches to headphones when something is plugged in and back to the speaker when unplugged. With no jack reading available it behaves like Default.</p>
+<p>A DualShock 4 does not get these rows.</p>
 <hr />
 <h2 id="macro-sounds">Macro sounds<a class="headerlink" href="#macro-sounds" title="Permanent link">&para;</a></h2>
 <p>A <a href="../../guides/macros/">macro</a> <strong>Play Sound</strong> action fans out to every sound sink the slot's assigned devices provide. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a vibrating tone. If the slot has no sound-capable device, the sound falls back to the PC's default output.</p>
@@ -3130,7 +3259,7 @@
 <li><a href="../../guides/remote-link/">Remote Link</a>: send the pad speaker audio to a pad on another PC.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

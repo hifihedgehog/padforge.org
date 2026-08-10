@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2665,6 +2669,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3100,7 +3160,8 @@
 <p>The transport is abstracted behind <code>ILinkControlChannel</code>, so an in-memory test harness and the TCP socket share one path.</p>
 <hr />
 <h2 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Permanent link">&para;</a></h2>
-<p><code>LinkDiscovery</code> is a UDP broadcast beacon, not mDNS. It binds <code>IPAddress.Any:27501</code>, announces every two seconds to <code>IPAddress.Broadcast:27501</code>, and prunes a peer after ten seconds of silence. Because it broadcasts, it is same-subnet only. The beacon carries a four-byte magic, a version, the link port, the sender's identity fingerprint (hex), and the self-asserted machine name. A forged beacon can only put a name in the "Nearby PCs" list. The crypto gate still controls admission. The receive loop filters out the PC's own fingerprint and raises <code>PeersChanged</code>.</p>
+<p><code>LinkDiscovery</code> is a UDP broadcast beacon, not mDNS. It binds <code>IPAddress.Any:27501</code>, announces every two seconds to <code>IPAddress.Broadcast:27501</code>, and prunes a peer after ten seconds of silence. Because it broadcasts, it is same-subnet only. The beacon carries a four-byte magic, a version, the link port, the sender's identity fingerprint (hex), and the self-asserted machine name. A forged beacon can only put a name in the "Nearby PCs" list. The crypto gate still controls admission. The receive loop filters out the PC's own fingerprint and raises <code>PeersChanged</code>. The discovered-peer table caps at 256 entries so a beacon flood with rotating fingerprints cannot grow it without bound. A known peer keeps refreshing and is never evicted by the cap.</p>
+<p>Discovery is a convenience, not the only way in. The Dashboard also carries a manual "Or Connect by Address (Advanced)" field with a "Pair / Connect" button, which raises <code>DashboardViewModel.ConnectToPeerRequested</code> into <code>InputService.OnConnectToPeerRequested</code>. That handler enables and starts the link server if it is off, splits an optional <code>:port</code> suffix off the typed host (falling back to the configured link port), builds the exposed-device list, and calls <code>LinkServer.ConnectAsync</code>. The auto-reconnect dial below runs through the same handler, so a hand-typed address and a discovered peer take an identical path across a subnet boundary.</p>
 <hr />
 <h2 id="server-connection-and-the-sealed-transport">Server, connection, and the sealed transport<a class="headerlink" href="#server-connection-and-the-sealed-transport" title="Permanent link">&para;</a></h2>
 <p><code>LinkServer</code> runs a <code>TcpListener</code> for the pairing handshake and a UDP socket for data, both on the link port (default 27500). It caps pending handshakes, times them out after three minutes, sends keepalives, and reaps idle connections. A reconnecting peer replaces its prior connection.</p>
@@ -3285,9 +3346,10 @@
 <p><strong>Sole-writer guard.</strong> A device can be both shared out and mapped locally, and output cannot merge. An inbound relay frame stamps the local path with a three-second lease, and the owner's local chokepoints skip their own writes while the lease is fresh. A device that is only lent out (not also mapped locally) has no local writer, so there is no contention. A <code>PlayerIndex</code> or <code>GuideLed</code> frame is exempt from the lease. Both are cosmetic LED updates, not effect claims, so neither blanks a locally-mapped device's rumble or lightbar for the lease window.</p>
 <hr />
 <h2 id="gamepad-only-enforcement">Gamepad-only enforcement<a class="headerlink" href="#gamepad-only-enforcement" title="Permanent link">&para;</a></h2>
-<p><code>InputManager.SetDeviceRestricted</code> populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. <code>IsSlotRestricted(slot)</code> is true when any online restricted device maps to that slot, and it early-outs when no peer is restricted. Four chokepoints honor it:</p>
+<p><code>InputManager.SetDeviceRestricted</code> populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. <code>IsSlotRestricted(slot)</code> is true when any online restricted device maps to that slot, and it early-outs when no peer is restricted (<code>RestrictedSnapshot</code> returns null and the caches rebuild only when the set changes). Five chokepoints honor it:</p>
 <ul>
 <li>The KBM virtual controller (Step 5) submits a neutral state for a restricted slot, releasing anything held.</li>
+<li>The VR controller pair (Step 5) submits a default <code>VrRawState</code> for a restricted slot, so a gamepad-only peer never reaches SteamVR.</li>
 <li>Macros (Step 4b) are restricted when the slot is restricted or a restricted device is a macro trigger.</li>
 <li>The five Win32 <code>SendInput</code> emitters (key, text, mouse move, mouse button, scroll, in Step 4b) early-return while the macro slot is restricted.</li>
 <li>The menu overlay's key lane (<code>CollectMenuDirectOutputs</code>) suppresses key cells per restricted device via <code>RestrictedSnapshot()</code>. It deliberately gates per device, not per slot, so a restricted peer sharing a slot does not mute a local controller's key cells.</li>
@@ -3311,7 +3373,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: the persisted Remote Link fields.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

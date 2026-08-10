@@ -50,7 +50,7 @@ The [Devices](../features/devices.md) page shows live gyro and accelerometer val
 ## Turn it on
 
 1. Plug in a controller that reports motion.
-2. Assign it to one of slots 1–4. The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Only those two types carry a motion channel, so an Xbox, Extended, Keyboard + Mouse, or MIDI slot broadcasts no motion.
+2. Assign it to one of slots 1–4. The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Only those two types carry a motion channel, so an Xbox, Extended, Keyboard + Mouse, MIDI, or VR slot broadcasts no motion.
 3. On the [Dashboard](../features/dashboard.md), tick **Enable DSU motion server (CemuHook Motion Provider protocol)**.
 4. Leave the **Port** box at **26760**, or type a different number. The reset button next to it returns the port to 26760.
 5. Start the input engine with the play button.
@@ -157,7 +157,7 @@ Motion axes are already oriented for emulators. Tested with DualSense, DualShock
 | Only one controller has motion | DSU caps at 4 slots. Move the motion device to slots 1–4. |
 | Device has no motion sensors | Some controllers (Xbox) ship without a gyro. Check the [Devices](../features/devices.md) page. |
 | Emulator says "connected" but no values | The physical controller has to be assigned to a slot, not only detected on the Devices page. |
-| Emulator connected, controller assigned, still no motion | The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Xbox, Extended, Keyboard + Mouse, and MIDI slots send no motion. |
+| Emulator connected, controller assigned, still no motion | The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Xbox, Extended, Keyboard + Mouse, MIDI, and VR slots send no motion. |
 
 ---
 
@@ -171,4 +171,4 @@ Motion axes are already oriented for emulators. Tested with DualSense, DualShock
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

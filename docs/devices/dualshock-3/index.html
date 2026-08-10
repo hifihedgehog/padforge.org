@@ -2134,6 +2134,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2595,6 +2599,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3087,7 +3147,7 @@
 <p>Remove the controller from the <a href="../../features/devices/">Devices</a> list and its Bluetooth pairing clears too, so it won't reconnect on its own later. To use it again, run the pairing above once more.</p>
 <hr />
 <h2 id="coexisting-with-other-bluetooth-devices">Coexisting with other Bluetooth devices<a class="headerlink" href="#coexisting-with-other-bluetooth-devices" title="Permanent link">&para;</a></h2>
-<p>The PlayStation Bluetooth driver only steps in while a DualShock 3 is paired. With no PlayStation controller paired, it stays dormant and leaves your other Bluetooth devices alone. Pairing a controller arms it, removing every controller stands it back down.</p>
+<p>The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3. PadForge arms it when a DS3 is paired, and also when Windows still has a record of a DS3 that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen a DualShock 3 it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.</p>
 <p>One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.</p>
 <hr />
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
@@ -3111,7 +3171,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

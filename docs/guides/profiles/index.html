@@ -2279,6 +2279,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2740,6 +2744,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3260,7 +3320,7 @@
 <tbody>
 <tr>
 <td>Virtual controller topology</td>
-<td>Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Nintendo, Extended, MIDI, Keyboard+Mouse).</td>
+<td>Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Nintendo, Extended, MIDI, Keyboard + Mouse, VR).</td>
 </tr>
 <tr>
 <td>Button and axis mappings</td>
@@ -3444,12 +3504,16 @@
 <td>Rename and edit the executable list.</td>
 </tr>
 <tr>
-<td><strong>Export...</strong></td>
+<td><strong>Export…</strong></td>
 <td>Write the selected profile to a shareable <code>.pfprofile</code> file.</td>
 </tr>
 <tr>
-<td><strong>Import...</strong></td>
+<td><strong>Import…</strong></td>
 <td>Read a <code>.pfprofile</code> file back in.</td>
+</tr>
+<tr>
+<td><strong>Browse Starter Profiles</strong></td>
+<td>Open the starter gallery and save a ready-made genre archetype as a new profile. See <a href="../starter-profiles/">Start from a starter profile</a>.</td>
 </tr>
 <tr>
 <td><strong>Browse Community Configs</strong></td>
@@ -3466,13 +3530,13 @@
 <p>Export writes a profile to a <code>.pfprofile</code> file. That file is one archive holding the profile plus any sound packages its macros use, so a profile with custom macro sounds travels complete. Send it to someone else, or keep it as a backup.</p>
 <ol>
 <li>Select a profile in the grid.</li>
-<li>Click <strong>Export...</strong>.</li>
+<li>Click <strong>Export…</strong>.</li>
 <li>Pick a location and save. The file is named after the profile.</li>
 </ol>
 <p>You can export the <strong>Default</strong> profile too. It writes a snapshot of your current settings.</p>
 <p>Import reads a <code>.pfprofile</code> back in.</p>
 <ol>
-<li>Click <strong>Import...</strong>.</li>
+<li>Click <strong>Import…</strong>.</li>
 <li>Pick the <code>.pfprofile</code> file.</li>
 <li>The profile joins the grid, and any bundled sound packages install alongside it. If the name already exists, PadForge adds a number.</li>
 </ol>
@@ -3568,6 +3632,7 @@
 <p>The flyout matches the Windows 11 volume OSD styling and follows your light or dark theme.</p>
 <p>An auto-switch on app focus does not raise this flyout. The active profile name updates in the status bar and on the pad page, and glows for a moment.</p>
 <p>The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled or disabled) instead of the profile flyout.</p>
+<p>The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Profile switch overlay</strong> toggle, on by default. Turn it off and shortcuts still switch profiles, just without the flyout.</p>
 <hr />
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <table>
@@ -3634,7 +3699,7 @@
 <li><a href="../steam-workshop-import/">Steam Workshop Config Import</a>: import community configs as profiles.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

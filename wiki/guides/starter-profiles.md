@@ -83,10 +83,10 @@ hand.
 ### Hotbar puts 32 abilities behind two triggers
 
 Hold the left trigger for eight slots on the D-pad and face buttons, hold
-the right trigger for a different eight, and double-tap either trigger
-for sixteen more. That is the arrangement Final Fantasy XIV's Cross
-Hotbar uses, and the double-tap tier is a real activator rather than a
-macro workaround.
+the right trigger for a different eight, and double-tap-and-hold either
+trigger for sixteen more. The second tap has to land within 442 ms of the
+first. That is the arrangement Final Fantasy XIV's Cross Hotbar uses, and
+the double-tap tier is a real activator rather than a macro workaround.
 
 ### Fighting Games clears the tournament rules
 
@@ -108,10 +108,15 @@ since hardware macros are prohibited outright.
 
 ### Emulation puts the hotkeys on Back
 
-Hold **Back** and the face buttons and shoulders become save state, load
-state, fast-forward, rewind, state slot, and menu. That mirrors how
-RetroArch's own hotkey modifier works, and Back still behaves as Back on
-its own.
+Hold **Back** and the shoulders save and load state, the triggers
+fast-forward and rewind, the D-pad's left and right step the state slot,
+Y opens the menu, and Start exits the content. They send RetroArch's own
+default keyboard hotkeys, so they work against a stock install with no
+remapping. That mirrors how RetroArch's hotkey modifier works.
+
+Back is the modifier and nothing else. A shift-layer activator eats its
+own input, so while Back is held the pad's own Back output is suppressed
+and the emulator never sees a stray press.
 
 The left stick also drives the D-pad, because NES, SNES and Mega Drive
 cores have no analog sticks at all. Without that, a stick-first player
@@ -147,19 +152,26 @@ and arrows but not the media block.
 
 The arrows still seek, since seeking has no system key.
 
-### Gyro Aim has a calibrate button
+### Gyro Aim engages on the left trigger
 
-Hold **Back** for most of a second and the gyro recenters. Motion
-controls drift, and a recenter you can only reach by opening the app is
-not much of a recenter. Back keeps its ordinary press.
+Motion drives the right stick alongside the stick itself, so aiming gains
+precision instead of losing the stick. The gyro only steers while the
+left trigger is held. Always-on motion reads as drift during normal play,
+and aiming is exactly when you want it.
+
+It also has a calibrate button. Hold **Back** for 800 ms and the gyro
+recenters. Motion controls drift, and a recenter you can only reach by
+opening the app is not much of a recenter. Back keeps its ordinary press,
+because the recenter rides a macro that does not consume its trigger.
 
 ---
 
 ## Silencing the pad
 
 Every profile has a quiet layer. Hold **Guide and Start together** for
-about half a second and the controller stops sending anything at all.
-Hold them again to bring it back.
+600 ms and the controller stops sending anything at all. Hold them again
+to bring it back. The layer is named **Quiet (nothing sends)** on the
+flyout.
 
 This is for the moment you alt-tab away and do not want the pad typing
 into whatever now has focus.

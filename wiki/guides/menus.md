@@ -69,7 +69,7 @@ While a menu is engaged, a click-through overlay draws the ring or grid at the c
 
 Per-menu appearance controls: **Show Labels**, **Screen Position** (X and Y percent, default centered), **Size** (10–400%), and **Opacity** (5–100%, default 90).
 
-The overlay itself is optional. The [Dashboard](../features/dashboard.md) carries a **Menu Overlay** toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.
+The overlay itself is optional. The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Menu Overlay** toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.
 
 ---
 
@@ -96,4 +96,4 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

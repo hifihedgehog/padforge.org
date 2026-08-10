@@ -39,7 +39,12 @@ Four feedback channels each get their own row: **Low Motor**,
 | Enable | Plays this feedback channel as a tone. Gain and frequency stay set while it is off. |
 | Frequency | Tone frequency for this channel, 20–120 Hz. |
 | Gain | Loudness of this channel before master gain. |
+| Level meter | Live bar showing what this channel is playing right now. |
 | **Test** | Plays this channel's tone for 1.5 seconds at its set gain. |
+
+Default frequencies: 40 Hz low motor, 80 Hz high motor, 60 Hz on both
+triggers. Every voice starts enabled at 100% gain. Master Gain starts at
+50%.
 
 ## Frequency Sweep
 
@@ -47,8 +52,8 @@ Four feedback channels each get their own row: **Low Motor**,
 the low motor routing. Note where your shaker responds strongest and set
 the voice frequencies there. **Stop** ends a running test or sweep.
 
-Every control has a reset button, and the tab header carries a reset for
-the whole card.
+Every control has a reset button, and the Rumble to Audio card header
+carries a **Reset All** for the whole card.
 
 ---
 
@@ -60,4 +65,4 @@ the whole card.
 - [Controller Audio](controller-audio.md) covers the controller's own
   speaker and haptic-tone audio.
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

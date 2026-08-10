@@ -85,6 +85,7 @@ Stated plainly, because they will shape whether this is useful to you:
 - [Devices](devices.md) for assigning a physical controller to the slot
 - [Mappings](mappings.md) for binding sources to the hand targets
 - [Settings](settings.md) for the SteamVR install card
+- [Virtual VR Controllers: Internals](../reference/vr-controllers-internals.md) for the state struct, the bit layout and the haptic return path
 
 ---
 

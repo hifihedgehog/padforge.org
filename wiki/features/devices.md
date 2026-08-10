@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, Mouse, Keyboard, NFC Reader, Consumer Control, MIDI, etc. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Headset Tracker, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging. |
@@ -91,7 +91,7 @@ A row of capability icons sits at the bottom of the card: rumble, gyro, and touc
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any joystick-class HID device PadForge does not already know as a standard gamepad. Hidden for known gamepads, keyboards, mice, and touchpads.
+Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, and headset motion trackers. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -248,7 +248,7 @@ PadForge reads two kinds of touch surfaces on the Devices page.
 - **Gamepad touchpads.** The touch surfaces on DualShock 4, DualSense, Steam Controller, and Steam Deck. SDL3 reports them as part of the gamepad. They show up in the raw input view with contact position and finger count.
 - **Windows Precision Touchpad.** Laptop trackpads and external precision touchpads. PadForge treats each one as its own device card with a live touch preview. These trackpads have no physical click button, so no click input appears for them in the mapping picker or auto-map.
 
-A device with two touch surfaces (Steam Controller 2026, Steam Deck, original Steam Controller) shows a separate live preview for each pad, labeled **Touchpad 1** and **Touchpad 2** in the raw input view.
+Surface count comes from SDL. Most pads report one. The Steam Controller 2026 and the Steam Deck report two. The original Steam Controller reports three. A multi-surface device shows a separate live preview per pad, labeled **Touchpad 1** and **Touchpad 2** in the raw input view. The Devices page draws at most those two previews, so a three-surface pad shows only its first two here. Every surface still maps.
 
 Pressure maps too. Each finger gets a Touchpad N Finger M Pressure source in the mapping picker, and pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015) can shape it with the per-device **Enable Synthetic Pressure** option on the [Touchpad](touchpad.md) tab.
 
@@ -388,7 +388,7 @@ By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translat
 ### How to turn it on
 
 1. Select the device card
-2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for PadForge's own virtual controllers and other virtual input sources.)
+2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for virtual input sources: web controller clients, the touchpad overlay, and NFC readers.)
 3. Check **Force raw joystick mode (bypass gamepad remapping)**
 4. Saved right away. Persists across restarts.
 
@@ -520,4 +520,4 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -10,7 +10,7 @@ This is the developer-side companion to [Controller Audio](../features/controlle
 
 | File | Role |
 |---|---|
-| `PadForge.App/Common/Input/AudioPassthroughService.cs` | The core. Sinks, captures, the worker and Bluetooth threads, USB and BT transports, Opus encode, remote-audio hooks. `internal static class`. |
+| `PadForge.App/Common/Input/AudioPassthroughService.cs` | The core. Sinks, captures, the worker and Bluetooth threads, USB and BT transports, Opus encode, remote-audio hooks, and the composite USB persona feed. `internal static class`. |
 | `PadForge.App/Common/Input/Ds4SbcEncoder.cs` | Clean-room SBC encoder for DualShock 4 Bluetooth audio. |
 | `PadForge.App/Common/Input/SoundMacroService.cs` | Macro sound decode and playback. Feeds the per-slot sink mixers, including the Wii speaker and HD-haptic tone sinks. |
 | `PadForge.App/Common/Input/WiiSpeakerService.cs` | The Wii Remote speaker sink. Real 8-bit PCM at 2 kHz over raw HID. `internal static class`. See [Wii Controllers Internals](wii-controllers-internals.md). |
@@ -44,7 +44,7 @@ Two threads, started by `EnsureThreads_NoLock`:
 1. **`WorkerThreadMain`** ("PadForge.AudioWorker") is the single owner of all device I/O. It waits on `_workSignal` or wakes every five seconds and runs `ReconcileOnWorker`. Sink build and teardown, capture start and stop, and the `CreateFile` on Bluetooth handles all happen here and only here.
 2. **`BtThreadMain`** ("PadForge.BtAudio", highest priority) runs the Bluetooth cadence loop. It never does transport I/O of its own beyond `Tx.TrySend`. On a transport error it sets `TransportFailed` and lets the worker rebuild.
 
-The worker reconcile runs five phases to keep I/O outside the lock: build the desired-sink list (phase 1, no lock), diff against `_sinks` (phase 2, under lock, no I/O), build and dispose transports (phase 3, unlocked), reconcile captures (phase 4), then notify `SoundMacroService` and sweep expired vendor-audio tests (phase 5). The desired-sink list walks the 16 slots through `EnumerateAssignedSonyPads` and `FindOnlineSonyDevice`, which gates on `IsOnline`, a non-empty `DevicePath`, the Sony VID, and a DualSense or DualShock 4 PID. Bluetooth is detected by the HID-over-BT service GUID in the device path. A wired DualShock 4 is skipped because it has no USB audio interface.
+The worker reconcile runs five phases to keep I/O outside the lock: build the desired-sink list (phase 1, no lock), diff against `_sinks` (phase 2, under lock, no I/O), build and dispose transports (phase 3, unlocked), reconcile captures (phase 4), then notify `SoundMacroService` and sweep expired vendor-audio tests (phase 5). The desired-sink list walks the 16 slots through `EnumerateAssignedSonyPads` and `FindOnlineSonyDevice`, which gates on `IsOnline`, a non-empty `DevicePath`, the Sony VID, and a DualSense or DualShock 4 PID. Bluetooth is detected by the HID-over-BT service GUID in the device path. A wired DualShock 4 is skipped because it has no USB audio interface. The Sony USB wireless adaptor (`0x0BA0`) is the one exception and keeps its sink.
 
 `BtThreadMain` runs at `CadenceMs = 10 + 2/3` (10.667 ms) and pulls 512 frames per tick. It applies a small ring-cushion drift trim, runs a two-second idle gate, and dispatches `Ds4BtTick` or `SendDs5BtFrame`. Timing uses `timeBeginPeriod(1)` and a high-resolution waitable timer. A late tick is skipped, never repaid, because the firmware drops back-to-back bursts.
 
@@ -62,7 +62,7 @@ The worker reconcile runs five phases to keep I/O outside the lock: build the de
 
 `SoundMacroService` decodes WAV, MP3, M4A, AAC, WMA, and FLAC through `MediaFoundationReader` (or a streaming reader for `pfsound://` package refs), resamples to 48 kHz stereo, and caches the PCM under a 128 MB LRU cap.
 
-`StartPlacements` is the routing core. It calls `AudioPassthroughService.GetSlotSinkMixers(slot, out pendingActivation, deviceFilter)`, which returns the `MacroMixer` of every live sink on the slot (optionally filtered to one device GUID) and marks `_macroDemand` so the sinks persist. When the slot has eligible speaker pads whose sinks are not live yet, `pendingActivation` is true and the caller drops the sound rather than leak it to the PC speakers. When the slot has no controller sink and no device filter, it falls back to a per-slot system-default `WasapiOut`, where the volume is applied in the sample domain instead.
+`StartPlacements` is the routing core. It calls `AudioPassthroughService.GetSlotSinkMixers(slot, out pendingActivation, deviceFilter)`, which returns the `MacroMixer` of every live sink on the slot (optionally filtered to one device GUID). When the slot has eligible speaker pads whose sinks are not live yet, `pendingActivation` is true, the worker is signalled, and the caller drops the sound rather than leak it to the PC speakers. Macro demand itself is never latched in the audio service: the worker re-reads it every pass through `SlotWantsMacroAudioProvider`, which `InputService` wires to `SoundMacroService.SnapshotWantsControllerAudio` over the slot's macro snapshot. When the slot has no controller sink and no device filter, it falls back to a per-slot system-default `WasapiOut`, where the volume is applied in the sample domain instead.
 
 `PlayTestBeep(slot, deviceGuid)` routes an 880 Hz, 200 ms tone through `StartPlacements` with a device filter, so the Audio-tab test hits only the selected device and never fans out to the slot's other pads.
 
@@ -70,7 +70,7 @@ The worker reconcile runs five phases to keep I/O outside the lock: build the de
 
 ## USB transport
 
-The USB branch of `BuildTransportOnWorker` reads the HID interface's PnP container ID through cfgmgr32, then matches a render `MMDevice` whose container ID is the same. If that endpoint is disabled in Windows it re-enables it through `IPolicyConfig`, then restores the prior default if Windows promoted the pad to default. `UsbFrameProvider` shapes each frame so channel 0 is silent, channel 1 carries the mono program mix `(L+R) * 0.5` (the firmware speaker tap), and any further channels are zero. Playback is `WasapiOut` in shared mode with event sync at 30 ms latency.
+The USB branch of `BuildTransportOnWorker` reads the HID interface's PnP container ID through cfgmgr32, then matches a render `MMDevice` whose container ID is the same. If that endpoint is disabled in Windows it re-enables it through `IPolicyConfig`, then restores the prior default if Windows promoted the pad to default. `UsbFrameProvider` shapes each frame through `MapMirrorChannels`, which reads the device's Audio Output Path once per `Read`. Automatic and Speaker Only silence channel 0 and put the mono program mix `(L+R) * 0.5` on channel 1 (the firmware speaker tap). Headphones (Stereo) puts L on channel 0 and R on channel 1. The mono headset paths put the downmix on channel 0, with channel 1 either silent or a copy for the split path. Follow Headphone Jack resolves to one of the others in `ResolveOutputPath` before the shaper sees it. Channels 2 and 3 are the pad's voice-coil actuators: zero unless a composite persona is feeding them. Playback is `WasapiOut` in shared mode with event sync at 30 ms latency.
 
 ---
 
@@ -78,7 +78,9 @@ The USB branch of `BuildTransportOnWorker` reads the HID interface's PnP contain
 
 Constants: 480 samples per Opus frame (10 ms at 48 kHz), 200 bytes per frame (hard CBR at 160 kbps), and a 334-byte report. `CreateDs5OpusEncoder` builds a Concentus encoder configured `OPUS_APPLICATION_AUDIO`, 160000 bps, CBR, pre-created at transport build so the first frame does not pay construction cost.
 
-Each tick time-compresses the 512-frame pull to 480 samples, then `SendDs5BtFrame` encodes it and assembles the 0x35 report: byte 0 is the report ID, byte 1 carries the sequence nibble (`Ds5Seq` advances mod 16), a 0x11 session-header packet carries `Ds5PktCounter`, and a 0x13 speaker-lane packet carries the 200-byte Opus payload. The last four bytes are a reflected CRC32 pre-seeded with the `0xA2` Sony Bluetooth output prefix. The firmware contract from the issue #83 hardware experiment is one report per tick, never bursts.
+Each tick time-compresses the 512-frame pull to 480 samples, then `SendDs5BtFrame` encodes it and assembles the 0x35 report: byte 0 is the report ID, byte 1 carries the sequence nibble (`Ds5Seq` advances mod 16), a 0x11 session-header packet carries `Ds5PktCounter` and the mic-session byte, and an audio-lane packet carries the 200-byte Opus payload. The last four bytes are a reflected CRC32 pre-seeded with the `0xA2` Sony Bluetooth output prefix. The firmware contract from the issue #83 hardware experiment is one report per tick, never bursts.
+
+Over Bluetooth the sink is addressed by packet ID, not by the firmware's output-path register. `Ds5BtAudioLanePid` returns `0x13` for the internal speaker (Automatic and Speaker Only) and `0x16` for every headset path. One report ID gets one stream: `Ds5BtWantsBothLanes` returns false, because two 0x35 reports per tick sharing one sequence counter made each lane's stream see jumps of two and warble. Every path except Headphones (Stereo) folds the frame to mono before encoding (`Ds5BtFrameNeedsMonoFold`), because the mono speaker taps one channel of a stereo stream rather than downmixing it.
 
 ---
 
@@ -86,13 +88,23 @@ Each tick time-compresses the 512-frame pull to 480 samples, then `SendDs5BtFram
 
 `Ds4SbcEncoder` is a clean-room SBC encoder written from the A2DP specification Appendix B, with no libsbc or GPL lineage. Fixed config is 32 kHz, 8 subbands, 16 blocks, joint stereo, SNR allocation, bitpool 48, producing 109-byte frames. The spec's segment-folded analysis window is un-folded at the analysis matrix, and the filterbank conventions were pinned against ffmpeg's decoder at roughly 76 and 67 dB round-trip SNR.
 
-At transport build the DualShock 4 branch sends a one-shot 0x11 control report to enable the audio path and set headphone and speaker volume bytes. `Ds4BtTick` resamples 48 kHz to 32 kHz with a persistent phase carried across ticks, encodes each complete 256-sample block to an SBC frame into a bounded queue, and drains it preferring the four-frame 0x17 report and falling back to the two-frame 0x14. Unlike the DualSense cadence, the DualShock 4 path is availability-driven and allows bursts. Byte 5 of the report selects the internal speaker.
+At transport build the DualShock 4 branch sends a one-shot 0x11 control report to enable the audio path and set headphone and speaker volume bytes. `Ds4BtTick` folds the frame to mono (this lane always routes to the internal speaker, which taps one channel), resamples 48 kHz to 32 kHz with a persistent phase and a sample carry across ticks, encodes each complete 256-sample block to an SBC frame into a queue bounded at 12 frames, and drains it preferring the four-frame 0x17 report and falling back to the two-frame 0x14. It wakes at four buffered frames. Unlike the DualSense cadence, the DualShock 4 path is availability-driven and allows bursts. Byte 5 of the report selects the internal speaker (`0x02`, against `0x24` for the headset jack), and bytes 3 and 4 carry a 16-bit frame counter that advances by frames-per-report.
+
+---
+
+## Composite USB persona lanes
+
+A slot whose virtual controller is a composite USB persona has a real Windows endpoint the game renders into. HIDMaestro delivers that PCM as four-channel windows (speaker L/R, haptic L/R) on its pacing thread, and `AttachPersonaFeed` routes it to the slot's physical Sony pads. The feed's presence is itself sink demand, so a composite slot builds its pads' transports with passthrough off and no macros.
+
+The speaker channels land in `_personaSpeakerRings` and are summed into each sink's render path inside `SinkSource.Read`, so they ride the same Opus and shared-mode WASAPI transports as macros and the system mirror. The haptic channels land in `_personaHapticRings` and split by transport. On USB they are the pad's UAC channels 2 and 3. On Bluetooth they get their own 142-byte report 0x32 carrying packets 0x11 and 0x12, built by `BuildDs5BtHapticReport`, decimated 16:1 from the 48 kHz tick to 3 kHz stereo s8 by block mean. The 0x32 stream keeps its own sequence and packet counters (`Ds5HapticSeq`, `Ds5HapticPktCounter`), separate from the 0x35 pair, for the same reason the per-device split exists: the firmware tracks sequence per stream. It never folds into the speaker report, because no reference emits packets 0x12 and 0x13 together.
+
+The microphone runs the other way. On USB it is the pad's own container-matched capture endpoint. On Bluetooth a parallel synchronous HID handle reads the pad's input reports, one 71-byte Opus packet per report, decoded as mono at 48 kHz. Decoding it as stereo on the strength of the packet's TOC byte produced full-scale noise on the consumer side, so `BtMicChannels` stays 1. Mic-open is not latched in firmware, so `Ds5MicSessionByte` rides byte 4 of the 0x11 header on every audio report and has to track the live session, otherwise a steady close byte re-closes the mic the persona just opened.
 
 ---
 
 ## Master volume as the firmware speaker byte
 
-Master volume is never scaled into the samples on the controller path. For the DualSense it is asserted on every output report in `UserEffectsDispatcher`. When the device wants the speaker path, the dispatcher sets the valid flags, writes `speakerVolume` mapped from the 0-100% master onto the firmware's `0x3D` to `0x64` window (0 mutes), and sets the audio-control flags to the internal-speaker path. When the sink tears down, a one-shot restores the headphone path. `SetSlotVolume` retunes live because the byte is read per report. The DualShock 4 path has no per-tick volume byte. Its volumes are fixed in the one-shot enable report.
+Master volume is never scaled into the samples on the controller path. For the DualSense it is asserted on every output report in `UserEffectsDispatcher`. When the device wants the speaker path, the dispatcher sets the valid flags, writes `speakerVolume` mapped from the 0-100% master onto the firmware's `0x3D` to `0x64` window (0 mutes), and sets the speaker pre-gain byte. It also routes the audio-control flags to the internal speaker, but only when the resolved Audio Output Path is Automatic. An explicit path owns that byte and its enable bit, and the #83 block keeps just the volume half. When the sink tears down, a one-shot restores the headphone path, again only when no explicit path is forced. `SetSlotVolume` retunes live because the byte is read per report. The DualShock 4 path has no per-tick volume byte. Its volumes are fixed in the one-shot enable report.
 
 ---
 
@@ -104,7 +116,7 @@ Some controllers have no speaker but do have haptic actuators: LRAs (linear reso
 
 `FamilyOf` maps the paired-set PID `0x2008` to `Family.JoyConPair`, the id SDL reports when it combines two Joy-Cons by default (issue #184). That set has no HID path of its own to open: SDL's `nintendo_joycons_combined` is a synthetic placeholder, not a real `\\?\HID#...` path, so `CreateFileW` on it fails. `BuildSink` calls `SelectPairChildPaths` to resolve both real child paths (Left `0x2006` as primary, Right `0x2007` as second) and drives **both coils** (#223). `OpenPairSecondChild` opens the second child on its own handle, timer, probed write path, and `OutputReportByteLength`, and runs the init subcommands (`0x03` arg `0x30` input-report mode, `0x48` arg `0x01` enable vibration) on it. A pair that resolves only one child degrades to single-coil and `RetryPairSecondHandles` picks the missing coil up on the 3-second reconcile.
 
-Side routing follows the slot's merged vibration snapshot: left motor active plays the left coil, right the right, both or neither play both. A side stays hot for `PairSideHoldMs = 300` ms after its motor drops so packet-rate motor flap does not strobe the tone, and a side going cold gets one neutral half before silence. The Audio-tab Test button and remote-driven sinks bypass the routing and always play both coils. Residual on record: two simultaneous pairs resolve the same first-match children, because SDL sets no serial on Switch devices.
+Side routing follows the slot's merged vibration snapshot: left motor active plays the left coil, right the right, both or neither play both. A side stays hot for `PairSideHoldMs = 300` ms after its motor drops so packet-rate motor flap does not strobe the tone, and a side going cold gets one neutral half before silence. The Audio-tab Test button and remote-driven sinks bypass the routing and always play both coils. Two simultaneous pairs no longer stack on one set of children: `ResolveUnclaimedPairChildren` walks `FirstUnclaimed` over the paths no other live pair sink already holds, so each physical Joy-Con gets exactly one writer. Residual on record: nothing at this layer proves the left it picks is the physical partner of the right it picks, because SDL owns the pairing and exposes only the combined device with an empty serial.
 
 An LRA reproduces one frequency at a time: a tone with an amplitude envelope, not PCM. A pad with more than one actuator (a Pro or Joy-Con pair has two coils, the 2015 Steam Controller has two haptics, the Steam Controller 2026 has four LRAs, two trackpads and two grips) still plays that single mono tone. The extra actuators do not buy stereo or fidelity. Beeps, alerts, and melodic cues land. Speech and music do not. Each tick the service collapses the macro mix to one tone:
 
@@ -142,7 +154,7 @@ On the haptic path that mirror can gate. When `ReconcileMirrors` starts a mirror
 
 *The one PCM sink among the tone paths.*
 
-The Wii Remote has a real speaker, not haptic coils, so its macro-audio output is genuine 8-bit PCM at 2 kHz, not a reduced tone. It is driven by `WiiSpeakerService` (`PadForge.App/Common/Input/WiiSpeakerService.cs`) on its own raw HID handle, following the same per-slot sink model and `MacroMixer` handoff to `SoundMacroService` as the Sony path here and the tone path above. The full protocol lives in [Wii Controllers Internals](wii-controllers-internals.md). It is listed here because it is the fourth macro-audio sink family and shares the sink model, but its wire format is PCM speaker reports, distinct from the `HapticToneEncoder` tone bytes.
+The Wii Remote has a real speaker, not haptic coils, so its macro-audio output is genuine 8-bit PCM at 2 kHz, not a reduced tone. It is driven by `WiiSpeakerService` (`PadForge.App/Common/Input/WiiSpeakerService.cs`) on its own raw HID handle, following the same per-slot sink model and `MacroMixer` handoff to `SoundMacroService` as the Sony path here and the tone path above. The full protocol lives in [Wii Controllers Internals](wii-controllers-internals.md). It is listed here because it is the third macro-audio sink family `SoundMacroService.StartPlacements` fans into, after the Sony sinks and the tone sinks, and it shares the sink model. Its wire format is PCM speaker reports, distinct from the `HapticToneEncoder` tone bytes.
 
 ---
 
@@ -171,4 +183,4 @@ On the owner side `InputService` hands each received frame to `HapticToneService
 
 ---
 
-*Last updated for PadForge 4.1.0*
+*Last updated for PadForge 4.2.0.*

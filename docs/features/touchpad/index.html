@@ -2150,6 +2150,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2611,6 +2615,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3126,7 +3186,7 @@
 <ul>
 <li>Touch the pad and the cursor jumps to the matching spot on the primary monitor. Slide and it follows 1:1.</li>
 <li>Lift the finger and the cursor stays where it was.</li>
-<li>On a single-pad controller the picker also offers <strong>Left Half</strong> and <strong>Right Half</strong> variants that read one half of the pad as the whole surface.</li>
+<li>The first pad also offers <strong>Touchpad 1 Pointer X (Left Half)</strong> and <strong>(Right Half)</strong> variants (and the same pair on Y) that read one half of the pad as the whole surface.</li>
 <li>A row that mixes a pointer source with relative sources (gyro, stick) keeps the relative aim live while no finger is down. The moment a finger lands, the pointer takes over.</li>
 </ul>
 <p>The card tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.</p>
@@ -3244,7 +3304,7 @@
 </table>
 <hr />
 <h2 id="in-box-gestures">In-Box Gestures<a class="headerlink" href="#in-box-gestures" title="Permanent link">&para;</a></h2>
-<p>Every toggle here is off by default. Flip the ones you want. A gesture's entries appear in the mapping picker only after <strong>Enable Gestures on This Touchpad</strong> (Gesture Detection card above) and the gesture's own category toggle are both on.</p>
+<p>Every toggle here is off by default. Flip the ones you want. Gating is three levels, and all three have to pass before a gesture's entries appear in the mapping picker: <strong>Enable Gestures on This Touchpad</strong> (Gesture Detection card above), a <strong>Recognize</strong> setting that includes the in-box catalog (<code>In-Box Only</code> or <code>Both</code>), and the gesture's own category toggle. A family is never gated on another family's checkbox.</p>
 <p><strong>Touch spots.</strong> Held buttons for where the pad is being touched: <strong>Left Touch</strong>, <strong>Right Touch</strong>, <strong>Top Touch</strong>, and <strong>Multitouch</strong>. One finger lands in Left, Right, or Top (the top quarter). Two or more fingers hold Multitouch. The left/right split sits at two fifths of the width, the same boundary DS4Windows uses, and exactly one spot is held at a time. The mapped button holds while the finger stays in the zone, releases the moment it lifts, and hands over live when the finger slides across a boundary. Bind them like any button: touchpad left to A, right to B, top to C.</p>
 <p><strong>Tier 1: single-finger fires.</strong> 4-way swipes (Up/Down/Left/Right) and 8-way diagonals (NE/NW/SE/SW). Radial zones (4 / 6 / 8 / 12 sectors with a configurable center dead-zone). Tap, double-tap, triple-tap (with a configurable inter-tap gap). Long-press (configurable hold duration).</p>
 <p><strong>Tier 2: multi-finger.</strong> Two-finger swipes (with angular-tolerance gate to distinguish from pinch / spread). Pinch / spread (relative-distance threshold). Rotate (degrees-of-rotation threshold). Three / four / five-finger gestures on devices that support multi-touch deep enough. Windows PTP carries all five.</p>
@@ -3254,7 +3314,7 @@
 <hr />
 <h2 id="custom-gestures">Custom Gestures<a class="headerlink" href="#custom-gestures" title="Permanent link">&para;</a></h2>
 <p>Profile-scoped: captured custom gestures travel with whichever profile is active when they're recorded. Each gesture has a name, finger count, and the recorded finger path(s).</p>
-<p>Click <strong>+ Record New Gesture</strong> to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the <strong>Samples to capture</strong> control defaults to 3 and adjusts from 1 to 5. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click <strong>Save</strong>, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.</p>
+<p>Click <strong>+ Record New Gesture</strong> to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the <strong>Samples to capture</strong> dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click <strong>Save</strong>, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.</p>
 <p>A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn't currently selected as the active mapping device still drives the recorder, so you can capture a gesture on the touchpad while the slot's primary device is something else.</p>
 <hr />
 <h2 id="two-slots-on-one-touchpad">Two slots on one touchpad<a class="headerlink" href="#two-slots-on-one-touchpad" title="Permanent link">&para;</a></h2>
@@ -3278,7 +3338,7 @@
 <li><a href="../devices/">Devices</a> for enumerating a laptop trackpad as a touchpad source.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2317,10 +2321,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#one-driver-six-categories" class="md-nav__link">
+  <a href="#one-driver-seven-categories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        One driver, six categories
+        One driver, seven categories
       
     </span>
   </a>
@@ -2638,6 +2642,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -2845,10 +2905,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#one-driver-six-categories" class="md-nav__link">
+  <a href="#one-driver-seven-categories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        One driver, six categories
+        One driver, seven categories
       
     </span>
   </a>
@@ -3002,7 +3062,7 @@
 <h1 id="hidmaestro-deep-dive">HIDMaestro Deep Dive<a class="headerlink" href="#hidmaestro-deep-dive" title="Permanent link">&para;</a></h1>
 <p>PadForge routes every virtual gamepad except the MIDI and Keyboard+Mouse targets through <a href="https://github.com/hifihedgehog/HIDMaestro">HIDMaestro</a>, a single user-mode UMDF2 driver. This page documents the contract between PadForge and HIDMaestro, the OpenXInput shim that keeps PadForge's own slots out of its own enumeration, and the lifecycle invariants every Step 5 / Input Manager edit must uphold.</p>
 <blockquote>
-<p>If you are reading this looking for the legacy <code>vJoy-Deep-Dive.md</code>, that page is gone. v2 used vJoy + ViGEmBus as two separate drivers and inherited a long list of phantom-controller / N²-slot / DLL-cache bugs that came with vJoy's kernel-mode HID stack. v3 replaces both with HIDMaestro and the headaches with them. The "five virtual controller categories" Xbox / PlayStation / Extended / MIDI / KB+M live in <a href="../../features/virtual-controllers/">Virtual Controllers</a>.</p>
+<p>If you are reading this looking for the legacy <code>vJoy-Deep-Dive.md</code>, that page is gone. v2 used vJoy + ViGEmBus as two separate drivers and inherited a long list of phantom-controller / N²-slot / DLL-cache bugs that came with vJoy's kernel-mode HID stack. v3 replaces both with HIDMaestro and the headaches with them. The seven virtual controller categories (Xbox, PlayStation, Extended, MIDI, KB+M, Nintendo, VR) live in <a href="../../features/virtual-controllers/">Virtual Controllers</a>.</p>
 </blockquote>
 <hr />
 <h2 id="what-hidmaestro-is">What HIDMaestro is<a class="headerlink" href="#what-hidmaestro-is" title="Permanent link">&para;</a></h2>
@@ -3013,9 +3073,61 @@
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge ships with HM 1.3.22, which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch. The interim milestones a successor should know: v1.3.18 added the virtual Switch Pro profile and the IMU submission channel (HM#33), v1.3.21 corrected the Switch Pro Bluetooth descriptor to the real pad's wire shape (HM#37), and v1.3.22 made the input worker survive foreign stop signals, the structural fix for the frozen-output bug (HM#38).</p>
-<h3 id="one-driver-six-categories">One driver, six categories<a class="headerlink" href="#one-driver-six-categories" title="Permanent link">&para;</a></h3>
-<p>The six <code>VirtualControllerType</code> values map to HM as follows:</p>
+<p>PadForge ships with HM 1.6.1 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.6.1.0), which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.</p>
+<p>The interim milestones a successor should know, each one PadForge's own call sites still cite by version:</p>
+<table>
+<thead>
+<tr>
+<th>HM version</th>
+<th>What landed</th>
+<th>Where PadForge depends on it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.3.18 (HM#33)</td>
+<td>Virtual Switch Pro profile and the IMU submission channel</td>
+<td><code>HMaestroVirtualController.cs:66</code> and <code>:900</code>, <code>MappingSetMigrator.cs:677</code></td>
+</tr>
+<tr>
+<td>v1.3.21 (HM#37)</td>
+<td>Switch Pro Bluetooth descriptor corrected to the real pad's wire shape</td>
+<td>The Nintendo category's BT report shape</td>
+</tr>
+<tr>
+<td>v1.3.22 (HM#38)</td>
+<td>Input worker survives foreign stop signals, the structural fix for the frozen-output bug</td>
+<td><code>App.xaml.cs:230</code> (the startup orphan sweep's ordering barrier)</td>
+</tr>
+<tr>
+<td>v1.4.0 (HM#39)</td>
+<td>Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in)</td>
+<td><code>AudioPassthroughService.cs:993</code>, <code>HMaestroVirtualController.cs:81</code></td>
+</tr>
+<tr>
+<td>v1.4.1 (HM#41)</td>
+<td>Ring-side audio truncation fixed</td>
+<td><code>AudioPassthroughService.cs:1892</code></td>
+</tr>
+<tr>
+<td>v1.4.3 (HM#42)</td>
+<td>The usbip-vhci node HM owns is stamped, so the persona guard can identify it</td>
+<td><code>InputManager.Step1.UsbipVhciGuard.cs:18</code></td>
+</tr>
+<tr>
+<td>v1.5.1 (HM#48)</td>
+<td>Second DS5 Edge paddle/Fn pair</td>
+<td><code>HMaestroVirtualController.cs:1270</code></td>
+</tr>
+<tr>
+<td>v1.6.0 (HM#32)</td>
+<td>Native OpenVR driver behind <code>HMVRController</code></td>
+<td><code>HMaestroVRController.cs:9</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="one-driver-seven-categories">One driver, seven categories<a class="headerlink" href="#one-driver-seven-categories" title="Permanent link">&para;</a></h3>
+<p>The seven <code>VirtualControllerType</code> values map to HM as follows:</p>
 <table>
 <thead>
 <tr>
@@ -3055,6 +3167,11 @@
 <td>HM</td>
 <td>A virtual Switch Pro Controller (VID 057E, PID 2009, the Bluetooth wire shape) on a fixed catalog profile, no Customize. Rides the same raw-HID data path as Extended, with gyro passthrough over the HM v1.3.18 IMU channel and HOME LED control.</td>
 </tr>
+<tr>
+<td>VR (<code>Vr = 6</code>)</td>
+<td>HM</td>
+<td>A SteamVR left plus right hand pair (issue #49) served by HIDMaestro's native OpenVR driver, one <code>HMVRController</code> pipe per slot. <code>HMaestroVRController</code> wraps it: <code>SubmitVrState(in VrRawState)</code> packs the pipeline state into <code>HMVRState</code>, and inbound <code>HapticReceived</code> pulses fan into the slot's <code>Vibration</code> lanes (left hand to left motor, right to right) with a 50 ms minimum pulse and a one-shot expiry timer. Slot creation refuses early when <code>HMVR.IsSteamVRInstalled</code> is false.</td>
+</tr>
 </tbody>
 </table>
 <p>Numeric values are preserved across the rename so legacy PadForge.xml files keep loading. <code>Xbox</code> carries <code>[XmlEnum("Microsoft")]</code> and <code>PlayStation</code> carries <code>[XmlEnum("Sony")]</code> purely as a back-compat accept-list for older settings files. This is the exception path, not the canonical naming.</p>
@@ -3086,6 +3203,7 @@
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="c1">//   controller.OutputDecoded   += handler   // decoded FFB events</span>
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="c1">//   controller.Dispose()             // tears down the live device</span>
 </code></pre></div>
+<p>The VR category does not use those three. It talks to a separate trio in the same assembly: the static <code>HMVR</code> (<code>IsSteamVRInstalled</code>, <code>EnsureDriverRegistered</code>), <code>HMVRController</code> (the named-pipe device pair, <code>SubmitState</code>, <code>HapticReceived</code>), and the <code>HMVRState</code> / <code>HMVRButton</code> wire types. Because the transport is a named pipe inside <code>HIDMaestro.Core</code> rather than an RPC to a service, <code>HMaestroVRController.Connect</code> and <code>Disconnect</code> carry none of the bounded-call ceremony the MIDI wrapper needs for midisrv.</p>
 <p>For Extended slots that build a custom HID descriptor, PadForge starts from the catalog profile with <code>new HMProfileBuilder().FromProfile(baseProfile)</code>, feeds a <code>HidDescriptorBuilder</code> (sticks, triggers, buttons, hats, plus <code>AddPidFfbBlock()</code> when FFB is on) through <code>FromDescriptorBuilder</code>, and calls <code>builder.Build()</code>. That returns an <code>HMProfile</code> handed straight to <code>CreateController</code>, the same as any catalog profile. There is no separate register step.</p>
 <h3 id="property-availability-gating">Property availability gating<a class="headerlink" href="#property-availability-gating" title="Permanent link">&para;</a></h3>
 <p>Every HM SDK call is annotated <code>[SupportedOSPlatform("windows10.0.26100.0")]</code>. The main project targets <code>net10.0-windows10.0.26100.0</code>, which satisfies that platform requirement, so the main build's calls are reachable without a CA1416 warning. CA1416 still fires from the auto-generated WPF temp project (<code>*_wpftmp.csproj</code>), which does not inherit <code>TargetPlatformVersion</code> from the main csproj. That is the reason the csproj comment gives for suppressing it via <code>&lt;NoWarn&gt;$(NoWarn);CA1416;WFO0003&lt;/NoWarn&gt;</code>. <code>WFO0003</code> in the same line is the WinForms HighDPI-migration recommendation, left in the manifest because the app is WPF-primary.</p>
@@ -3101,8 +3219,14 @@
 <li><strong><code>XboxImpulseHidWriter</code> raw-HID enumeration</strong>, in <code>PadForge.App/Common/Input/XboxImpulseHidWriter.cs</code>. When PadForge writes rumble + impulse-trigger reports directly to a physical Xbox One+ pad, it walks <code>HidD_GetHidGuid</code> + <code>DIGCF_DEVICEINTERFACE</code> and rejects any interface whose path contains <code>HIDMAESTRO</code> or whose <code>StableXInputInstance.FindAll</code> lookup misses (substring + 16-level PnP parent walk against hardware IDs).</li>
 <li><strong><code>HidHideController</code></strong> also classifies HM devices through a hardware-ID PnP walk (<code>IsHidMaestroDevice</code>), so the HidHide cloak whitelist treatment is consistent with the joystick-enumeration filters.</li>
 </ol>
-<p>Step 1's <code>UpdateDevices</code> does <strong>not</strong> filter HM separately. It trusts the SDL3 fork's pre-filtered <code>SDL_GetJoysticks</code> result and opens every instance ID returned.</p>
-<p>If you change HM's enumerator name, hardware ID, or ContainerID, all four surfaces (OpenXInput fork, SDL3 fork, <code>XboxImpulseHidWriter</code>, <code>HidHideController</code>) need to be kept in sync. See <code>hidmaestro-fork-resync-recipe.md</code> in project memory.</p>
+<p>Step 1's <code>UpdateDevices</code> carries a fourth, narrower check of its own: the <strong>self-readback guard</strong> (<code>InputManager.Step1.UpdateDevices.cs:160</code>). It is a backstop, not a replacement for the fork filter. A driver upgrade recreates the virtual devnodes with fresh instance paths and can slip past both the fork enumeration filter and the cloak, and when it does, SDL's Switch driver fights the virtual Switch Pro's protocol responder, cyclically resetting its inputs and interleaving rumble. The guard suppresses a wrapper when any of three markers hits:</p>
+<ul>
+<li>The serial starts with <code>HM-CTL-</code>.</li>
+<li>The device path contains <code>HIDMAESTRO</code>.</li>
+<li>The VID is Sony's <code>0x054C</code> and the path sits on a usbip-vhci node (<code>IsOnUsbipVhci</code>), which is the only discriminator a v1.4.0 composite persona carries, since a persona rides the real USB stack and has neither of the other two markers.</li>
+</ul>
+<p>Its coverage is genuinely narrow. SDL's HIDAPI drivers overwrite the hid-level <code>HM-CTL-&lt;n&gt;</code> serial with a fabricated MAC during their identity handshake, and non-Xbox virtuals' interface paths carry no <code>HIDMAESTRO</code> marker (which is exactly why the fork filter reads DEVPKEY hardware IDs instead). So the guard catches failed-handshake and serial-preserving cases only. The fork enumeration filter remains the primary defense.</p>
+<p>If you change HM's enumerator name, hardware ID, or ContainerID, all five surfaces (OpenXInput fork, SDL3 fork, <code>XboxImpulseHidWriter</code>, <code>HidHideController</code>, and Step 1's self-readback guard) need to be kept in sync. See <code>hidmaestro-fork-resync-recipe.md</code> in project memory.</p>
 <hr />
 <h2 id="lifecycle-step-5-invariants">Lifecycle: Step 5 invariants<a class="headerlink" href="#lifecycle-step-5-invariants" title="Permanent link">&para;</a></h2>
 <p><code>InputManager.Step5.VirtualDevices.cs</code> runs once per polling cycle and is responsible for matching the desired controller set (driven by user actions in the UI) against the live <code>_virtualControllers[]</code> array. Three invariants govern it:</p>
@@ -3118,32 +3242,60 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inFlight</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">inFlight</span><span class="p">.</span><span class="n">IsCompleted</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span>
 </code></pre></div>
-<p>Pass 2's create kickoff is fire-and-forget:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">_pendingConnectTask</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
+<p>Pass 2's create kickoff is fire-and-forget, and it claims the slot with an interlocked compare-exchange rather than a plain assignment:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">_pendingConnectTask</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateVirtualController</span><span class="p">(</span><span class="n">capturedIndex</span><span class="p">);</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="p">.</span><span class="n">IsConnected</span><span class="p">)</span><span class="w"> </span><span class="n">_virtualControllers</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vc</span><span class="p">;</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_slotInitializing</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">});</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vcAsync</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateVirtualController</span><span class="p">(</span><span class="n">capturedIndex</span><span class="p">);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vcAsync</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vcAsync</span><span class="p">.</span><span class="n">IsConnected</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">            </span><span class="c1">// Claim only if the slot is still empty. HM bring-up takes</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">            </span><span class="c1">// seconds, and a UI-thread reorder can install a reused VC at</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">            </span><span class="c1">// this index meanwhile. A blind assign overwrote that pointer</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">            </span><span class="c1">// and leaked the live kernel controller, unreachable from the</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">            </span><span class="c1">// array that was its only handle.</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">prior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">                </span><span class="k">ref</span><span class="w"> </span><span class="n">_virtualControllers</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">],</span><span class="w"> </span><span class="n">vcAsync</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">);</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prior</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">vcAsync</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span><span class="w"> </span><span class="cm">/* + re-attach prior&#39;s config */</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">vcAsync</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVirtualController</span><span class="p">)</span><span class="w"> </span><span class="n">_hmaestroContext</span><span class="o">?.</span><span class="n">FinalizeNames</span><span class="p">();</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span><span class="c1">// null =&gt; abort or driver failure; connected==false =&gt; dispose + latch</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_slotInitializing</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">});</span>
 </code></pre></div>
+<p>Losing that race means this task built the spare, so it disposes itself. When the loser had already registered its <code>UserEffectsDispatcher</code> under the pad's key, disposing it removes the key, so the winner is re-attached (<code>AttachDeviceConfig</code>) to reclaim it. Only one HM connect is kicked off per polling cycle, which is what preserves the ascending-kernel-slot allocation guarantee.</p>
 <p><code>InputManager.Stop()</code> calls <code>AwaitPendingLifecycleTasks()</code> (30 s timeout via <code>Task.WaitAll</code>) before <code>DestroyAllVirtualControllers()</code> to make sure no orphan HM controllers leak past engine shutdown.</p>
 <h3 id="invariant-2-inactivity-destroy-timeout">Invariant 2: Inactivity destroy timeout<a class="headerlink" href="#invariant-2-inactivity-destroy-timeout" title="Permanent link">&para;</a></h3>
 <p>A user whose mapped device goes offline (laptop sleeps, USB hub unplugged, controller battery dies) will have the slot showing 0 online devices for as long as the device stays gone. Holding the HM controller open while no device feeds it wastes a kernel slot.</p>
-<p><code>HmInactivityTimeoutSeconds</code> (default 60, 0 disables) drives a per-slot countdown in Pass 1. The engine property mirrors the <code>HmInactivityDestroyTimeoutSeconds</code> setting. The grace counter only ticks when the slot has at least one mapped device that's currently offline. A slot with no mappings at all destroys its VC immediately, not on a timer:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">isHMaestro</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">HmInactivityTimeoutSeconds</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">_hmInactivityFired</span><span class="p">[</span><span class="n">padIndex</span><span class="p">])</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">hmThresholdCycles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HmInactivityTimeoutSeconds</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="n">Max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">PollingIntervalMs</span><span class="p">);</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_slotInactiveCounter</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">hmThresholdCycles</span><span class="p">)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="n">_hmInactivityFired</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">LeftMotorSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">RightMotorSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="n">HmVcInactivityDestroyed</span><span class="o">?.</span><span class="n">Invoke</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">);</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
+<p><code>HmInactivityTimeoutSeconds</code> (default 60, 0 disables) drives a per-slot grace period in Pass 1. The engine property mirrors the <code>HmInactivityDestroyTimeoutSeconds</code> setting. The grace only runs when the slot has at least one mapped device that's currently offline. A slot with no mappings at all destroys its VC immediately, not on a timer.</p>
+<p>The elapsed time is wall clock, not polling cycles. <code>_slotInactiveSinceMs[padIndex]</code> is stamped on the grace's first tick and the threshold compares milliseconds. The older shape converted seconds into cycles using the live <code>PollingIntervalMs</code>, so changing the polling rate mid-grace rescaled a pending timeout (60 s at 1 ms became roughly 4 s after a switch to 16 ms, and the reverse stretched it). <code>_slotInactiveCounter</code> survives only for the trace and for Pass 2's zero versus non-zero eligibility test, and it saturates at <code>int.MaxValue</code> rather than wrapping.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">long</span><span class="w"> </span><span class="n">inactiveMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">TickCount64</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">_slotInactiveSinceMs</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">bool</span><span class="w"> </span><span class="n">isHMaestro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVirtualController</span><span class="p">;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isHMaestro</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">HmInactivityTimeoutSeconds</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">inactiveMs</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">HmInactivityTimeoutSeconds</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000L</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">{</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="c1">// MIDI / KeyboardMouse: teardown is cheap and has no kernel-slot</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="c1">// ordering concern, so destroy inline.</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="n">DestroyVirtualController</span><span class="p">(</span><span class="n">padIndex</span><span class="p">);</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">_virtualControllers</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">LeftMotorSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">RightMotorSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="p">}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">isHMaestro</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">HmInactivityTimeoutSeconds</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">_hmInactivityFired</span><span class="p">[</span><span class="n">padIndex</span><span class="p">])</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="p">{</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inactiveMs</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">HmInactivityTimeoutSeconds</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000L</span><span class="p">)</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">_hmInactivityFired</span><span class="p">[</span><span class="n">padIndex</span><span class="p">],</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">        </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">LeftMotorSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">        </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">RightMotorSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">        </span><span class="n">HmVcInactivityDestroyed</span><span class="o">?.</span><span class="n">Invoke</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">);</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="p">}</span>
 </code></pre></div>
+<p>The dropout grace is one user-facing contract across every slot type: MIDI and Keyboard+Mouse ride the same <code>HmInactivityTimeoutSeconds</code> as the HM-backed categories. They differ only in what happens at the end, because a non-HM slot has no kernel-slot ordering to repair and tears down inline instead of raising the cascade event.</p>
 <p>The event hops to the UI thread, which calls <code>InputService.OnSlotInactivityTimedOut(padIndex)</code>. That method tears down the live HM controller (freeing its kernel slot) via <code>DestroyVirtualControllerAsync</code>, then runs the bubble-down cascade (<code>RunBubbleDownCascadeFromPosition</code>) across surviving HM VCs at higher visual positions in the same subgroup. This runs for every HM-backed subgroup (Xbox / PlayStation / Extended), not Xbox alone. Slot configuration is preserved end-to-end: <code>SlotCreated</code>, <code>SlotEnabled</code>, the <code>PadSetting</code>, the device mappings, the per-group slot order, and every other piece of slot state stays intact. <code>PadForge.xml</code> is not touched by the timeout firing.</p>
 <p>Once the slot's mapped devices return online, <code>IsSlotActive(padIndex)</code> flips back to true, the latch clears, and Pass 2 recreates the same VC automatically at the correct visual-position kernel slot. The user's slot, mappings, profile, and per-group order all persist across the timeout cycle. The sidebar power dot stays green during the grace window (VC alive, devices offline) and turns yellow only after the timeout fires and the VC is torn down.</p>
 <h3 id="invariant-3-bubble-down-cascade-on-mid-stack-destroy">Invariant 3: Bubble-down cascade on mid-stack destroy<a class="headerlink" href="#invariant-3-bubble-down-cascade-on-mid-stack-destroy" title="Permanent link">&para;</a></h3>
@@ -3154,7 +3306,7 @@
 <li><code>CompactSlotsForGaps()</code> then compacts the pad indices so the controllers list stays contiguous from 0, driving a <code>PadViewModel</code> rebuild through <code>ApplyProfile</code>. It handles pad-index bookkeeping, not VC teardown.</li>
 </ol>
 <p>Pass 2 of Step 5 recreates the destroyed VCs in ascending position order, so each lands one kernel slot lower than before. An external observer sees a natural disconnect/reconnect, exactly what happens when you unplug a real controller.</p>
-<p>The engine gates each survivor on <code>IsHmVcAt</code> (any HM VC in the subgroup). The older Xbox-only <code>IsXboxHmVcAt</code> is kept only for Xbox-specific diagnostics. MIDI and KeyboardMouse have no kernel-slot ordering and are no-ops.</p>
+<p>The engine gates each survivor on <code>IsHmVcAt</code>, which is a plain <code>is HMaestroVirtualController</code> type check, so it covers Nintendo alongside Xbox / PlayStation / Extended. The older Xbox-only <code>IsXboxHmVcAt</code> is kept only for Xbox-specific diagnostics. MIDI, KeyboardMouse, and VR fail that type check (<code>MidiVirtualController</code>, <code>KeyboardMouseVirtualController</code>, and <code>HMaestroVRController</code> are separate types), and none of the three has a kernel-slot ordering to repair, so they are no-ops.</p>
 <p>The same bubble-down cascade fires on the non-delete transitions, through <code>RunBubbleDownCascadeFromPosition</code>, which finds the slot's still-present position in its order list and destroys survivors above it. The inactivity-timeout path is Invariant 2. The sidebar-disable and all-devices-unassigned paths arrive via the engine's <code>HmVcWentNonActive</code> event.</p>
 <p>This cascade fires on <em>destroy</em> transitions. Intra-group <em>reorder</em> is a separate flow that does not go through it. A drag-reorder within Xbox / PlayStation / Extended calls <code>InputManager.RerouteVirtualControllersForReorder</code>, which keeps the kernel VC at each visual position in place and just moves pad-index pointers. Same-profile positions reuse via pointer swap (zero teardown). Different-profile positions destroy and recreate. See <a href="../services-layer/#slot-reordering">Services Layer</a> for the full per-position decision.</p>
 <hr />
@@ -3192,7 +3344,7 @@
 <li><a href="../../features/force-feedback/">Force Feedback</a>: user-facing rumble/FFB tuning controls.</li>
 </ul>
 <hr />
-<p>Last updated for PadForge 4.0.0</p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

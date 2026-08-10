@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://padforge.org/docs/reference/wheel-ffb-internals/">
       
       
-        <link rel="prev" href="../controller-audio-internals/">
+        <link rel="prev" href="../headset-motion-internals/">
       
       
         <link rel="next" href="../midi-input-internals/">
@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2421,6 +2425,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3166,7 +3226,7 @@
 <p>The telemetry readers are original. Where a game's memory layout came from a published SDK or community header, only field offsets and wire facts were used, with no source carried across.</p>
 <hr />
 <h2 id="remote-link-wheel-relay">Remote Link wheel relay<a class="headerlink" href="#remote-link-wheel-relay" title="Permanent link">&para;</a></h2>
-<p>A shared wheel works over <a href="../remote-link-internals/">Remote Link</a> through a parallel dispatch in <code>InputService</code>. The consumer ships a semantic wheel frame, and <code>ApplyRemoteWheel</code> re-encodes it on the owner with the owner's own vendor writer, calling the same <code>WriteCondition</code>, <code>WriteConstantForce</code>, <code>WritePeriodic</code>, <code>WriteRange</code>, <code>WriteAutocenter</code>, and <code>WriteRpmLeds</code> methods. This is why the writers are referenced from both Step 2 and <code>InputService</code>.</p>
+<p>A shared wheel works over <a href="../remote-link-internals/">Remote Link</a> through a parallel dispatch in <code>InputService</code>. The consumer ships a semantic wheel frame, and <code>ApplyRemoteWheel</code> re-encodes it on the owner with the owner's own vendor writer, calling the same condition, constant-force, periodic, range, auto-center, and RPM-LED entry points Step 2 uses (<code>WriteCondition</code> / <code>WriteConstantForce</code> on Logitech and Thrustmaster, <code>WriteWheelCondition</code> / <code>WriteWheelConstantForce</code> on Fanatec, <code>WritePeriodic</code> on Thrustmaster only, then <code>WriteRange</code>, <code>WriteAutocenter</code>, and <code>WriteRpmLeds</code> on all three). This is why the writers are referenced from both Step 2 and <code>InputService</code>.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3177,7 +3237,7 @@
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: relaying a shared wheel's force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 
@@ -3215,7 +3275,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../controller-audio-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Controller Audio Internals">
+          <a href="../headset-motion-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Headset Head Tracking Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3225,7 +3285,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Controller Audio Internals
+                Headset Head Tracking Internals
               </div>
             </div>
           </a>

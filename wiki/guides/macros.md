@@ -313,6 +313,12 @@ Same as System Volume, but it drives one app in the Windows audio mixer.
 - **Process name.** The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.
 - The other options match System Volume.
 
+### Raise Headphone Volume / Lower Headphone Volume
+
+Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same **Headphone Volume** the [Controller Audio](../features/controller-audio.md) tab carries, so the change sticks the way any Audio-tab edit does.
+
+The write goes to the pad, so the level holds with no app in the loop.
+
 ### Play Sound / Stop Sounds
 
 Play a sound file through the slot's audio output. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a single vibrating tone. With no sound-capable device on the slot, it falls back to the PC's default output.
@@ -662,4 +668,4 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

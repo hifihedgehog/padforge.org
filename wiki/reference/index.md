@@ -34,8 +34,14 @@ Nothing here is required reading for using the app.
 | [Remote Link Internals](remote-link-internals.md) | Cross-PC device sharing on the wire |
 | [Steam Workshop Import Internals](steam-workshop-import-internals.md) | The VDF parser and config translator |
 | [Controller Audio Internals](controller-audio-internals.md) | Speaker and haptic audio paths |
+| [Virtual VR Controllers Internals](vr-controllers-internals.md) | One slot, a SteamVR hand pair, and the haptic return path |
+| [Headset Head Tracking Internals](headset-motion-internals.md) | The descriptor probe and rotation-to-rate synthesis |
 | [Wheel Force Feedback Internals](wheel-ffb-internals.md) | DirectInput FFB effects |
 | [MIDI Input Internals](midi-input-internals.md) | MIDI parsing and routing |
 | [Wii Controllers Internals](wii-controllers-internals.md) | Extensions, Motion Plus, IR camera |
 | [2D Overlay System](2d-overlay-system.md) | The overlay renderer |
 | [3D Model System](3d-model-system.md) | The 3D controller models |
+
+---
+
+*Last updated for PadForge 4.2.0.*

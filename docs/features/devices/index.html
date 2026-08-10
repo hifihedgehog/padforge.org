@@ -2711,6 +2711,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3172,6 +3176,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -4181,7 +4241,7 @@
 <tbody>
 <tr>
 <td><strong>Type</strong></td>
-<td>Gamepad, Joystick, Wheel, Flight Stick, Mouse, Keyboard, NFC Reader, Consumer Control, MIDI, etc.</td>
+<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Headset Tracker, or plain Device for anything unclassified.</td>
 </tr>
 <tr>
 <td><strong>VID:PID</strong></td>
@@ -4262,7 +4322,7 @@
 </table>
 <p>A row of capability icons sits at the bottom of the card: rumble, gyro, and touchpad marks light up for the devices that have them.</p>
 <h3 id="submit-device-mapping-button">Submit Device Mapping button<a class="headerlink" href="#submit-device-mapping-button" title="Permanent link">&para;</a></h3>
-<p>Shows in the detail pane for any joystick-class HID device PadForge does not already know as a standard gamepad. Hidden for known gamepads, keyboards, mice, and touchpads.</p>
+<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, and headset motion trackers. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
 <p>Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:</p>
 <ul>
 <li>Device name</li>
@@ -4452,7 +4512,7 @@
 <li><strong>Gamepad touchpads.</strong> The touch surfaces on DualShock 4, DualSense, Steam Controller, and Steam Deck. SDL3 reports them as part of the gamepad. They show up in the raw input view with contact position and finger count.</li>
 <li><strong>Windows Precision Touchpad.</strong> Laptop trackpads and external precision touchpads. PadForge treats each one as its own device card with a live touch preview. These trackpads have no physical click button, so no click input appears for them in the mapping picker or auto-map.</li>
 </ul>
-<p>A device with two touch surfaces (Steam Controller 2026, Steam Deck, original Steam Controller) shows a separate live preview for each pad, labeled <strong>Touchpad 1</strong> and <strong>Touchpad 2</strong> in the raw input view.</p>
+<p>Surface count comes from SDL. Most pads report one. The Steam Controller 2026 and the Steam Deck report two. The original Steam Controller reports three. A multi-surface device shows a separate live preview per pad, labeled <strong>Touchpad 1</strong> and <strong>Touchpad 2</strong> in the raw input view. The Devices page draws at most those two previews, so a three-surface pad shows only its first two here. Every surface still maps.</p>
 <p>Pressure maps too. Each finger gets a Touchpad N Finger M Pressure source in the mapping picker, and pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015) can shape it with the per-device <strong>Enable Synthetic Pressure</strong> option on the <a href="../touchpad/">Touchpad</a> tab.</p>
 <p>A third and fourth source live elsewhere: <a href="../../guides/web-controller/">Web Controller</a> clients in touchpad-only or DS4-with-touchpad mode, and the on-screen <a href="../dashboard/#touchpad-overlay">Touchpad Overlay</a>. All four feed the same per-slot configuration on the <a href="../touchpad/">Touchpad</a> tab.</p>
 <hr />
@@ -4606,7 +4666,7 @@
 <h3 id="how-to-turn-it-on">How to turn it on<a class="headerlink" href="#how-to-turn-it-on" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Select the device card</li>
-<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for PadForge's own virtual controllers and other virtual input sources.)</li>
+<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for virtual input sources: web controller clients, the touchpad overlay, and NFC readers.)</li>
 <li>Check <strong>Force raw joystick mode (bypass gamepad remapping)</strong></li>
 <li>Saved right away. Persists across restarts.</li>
 </ol>
@@ -4740,7 +4800,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: general troubleshooting guide.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

@@ -1957,6 +1957,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3876,6 +3880,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -5482,7 +5542,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TD
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    subgraph &quot;Engine Thread (~1000Hz)&quot;
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        SDL[SDL_UpdateJoysticks]
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        S1[Step 1: UpdateDevices&lt;br/&gt;SDL enumerate + Raw Input&lt;br/&gt;HIDMaestro virtual filter substring list]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        S1[Step 1: UpdateDevices&lt;br/&gt;SDL enumerate + Raw Input + PTP&lt;br/&gt;MIDI / NFC / headset phases&lt;br/&gt;HM self-readback guard]
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        S2[Step 2: UpdateInputStates&lt;br/&gt;SDL read axes/buttons/POV&lt;br/&gt;Gesture + menu ticks&lt;br/&gt;Force feedback + audio bass]
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        RL[RemoteLinkPollTick&lt;br/&gt;#138 per-device delta accumulate]
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        ENG[Engage settles&lt;br/&gt;gyro / trigger-route / haptic-mirror #185]
@@ -5537,7 +5597,7 @@
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    style S5 fill:#e8f5e9
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    style S6 fill:#e8f5e9
 </code></pre></div>
-<p>The pipeline is a <code>partial class InputManager</code> split across eleven files:</p>
+<p>The pipeline is a <code>partial class InputManager</code> split across twelve files:</p>
 <table>
 <thead>
 <tr>
@@ -5561,6 +5621,11 @@
 <td><code>InputManager.Step1.UpdateDevices.cs</code></td>
 <td>Step 1</td>
 <td>Device enumeration and lifecycle</td>
+</tr>
+<tr>
+<td><code>InputManager.Step1.UsbipVhciGuard.cs</code></td>
+<td>Step 1</td>
+<td>Composite-persona self-readback guard: walks the device path's PnP ancestry for HIDMaestro's stamped usbip-vhci host-controller hardware id, because a persona carries no other marker</td>
 </tr>
 <tr>
 <td><code>InputManager.Step2.UpdateInputStates.cs</code></td>
@@ -5721,8 +5786,8 @@
 </tr>
 <tr>
 <td><code>_padIndexBuffer</code></td>
-<td><code>UserSetting[MaxPads]</code></td>
-<td>Pre-allocated buffer for <code>FindByPadIndex</code> lookups (Steps 2–5)</td>
+<td><code>UserSetting[64]</code></td>
+<td>Pre-allocated buffer for <code>FindByPadIndex</code> lookups (Steps 2–5). Sized 64, deliberately not <code>MaxPads</code>: it holds one slot's mappings, and <code>FindByPadIndex</code> silently truncates at the buffer length, so a slot-count constant here capped a slot at 16 device mappings. Poll thread only. The async create-failure validation passes its own buffer.</td>
 </tr>
 <tr>
 <td><code>_instanceGuidBuffer</code></td>
@@ -5770,6 +5835,27 @@
 <td>Step 4 (engine)</td>
 <td>Step 5</td>
 <td>Combined KBM raw state</td>
+</tr>
+<tr>
+<td><code>CombinedVrRawStates</code></td>
+<td><code>VrRawState[MaxPads]</code></td>
+<td>Step 4 (engine)</td>
+<td>Step 5</td>
+<td>Combined VR hand-pair raw state for VR slots (#49)</td>
+</tr>
+<tr>
+<td><code>CombinedTouchpadStates</code></td>
+<td><code>TouchpadState[MaxPads]</code></td>
+<td>Step 4 (engine)</td>
+<td>Step 5</td>
+<td>Combined touchpad state for PlayStation slots</td>
+</tr>
+<tr>
+<td><code>SlotRawTouchpadClick</code></td>
+<td><code>bool[MaxPads]</code></td>
+<td>Step 3 (engine)</td>
+<td>InputReactive lightbar</td>
+<td>Raw physical touchpad click OR'd across the slot's devices, independent of VC type and click mapping</td>
 </tr>
 <tr>
 <td><code>RetrievedOutputStates</code></td>
@@ -5897,8 +5983,11 @@
 - <code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH2 = "1"</code>. Enable Switch 2 Pro Controller HIDAPI driver
 - <code>SDL_HINT_JOYSTICK_HIDAPI_WII = "1"</code>. Enable the Wii Remote / Nunchuk / Classic / Wii U Pro HIDAPI driver (#116). Relies on the fork's <code>HidD_SetOutputReport</code> fix
 - <code>SDL_HINT_JOYSTICK_BLE_SWITCH2 = "1"</code>. Enable the fork's Bluetooth-LE Switch 2 driver (Pro Controller 2, Joy-Con 2 L/R, NSO GameCube), which speak BLE GATT, not HID-over-Bluetooth
-- <code>SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR = "1"</code>. Post a standalone right Joy-Con's NIR MCU average-intensity byte on joystick axis 6 (#151)
 - <code>SDL_HINT_JOYSTICK_BLE_SWITCH2_MOUSE = "1"</code>. Post Joy-Con 2 optical-mouse 16-bit counters on joystick axes 6/7 (#154)
+- <code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH_SHAPED_RUMBLE = "1"</code>. The fork's frequency-shaped classic Switch rumble (#271 item 4). Each motor's intensity also sweeps its frequency band (low motor roughly 41-160 Hz, high 160-320 Hz) with attack and decay transients. Classic LRA packet only, Switch 2 encoding untouched
+- <code>SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER = "1"</code>. The fork's Switch 2 BLE magnetometer channel: three raw int16 axes after the mouse counters, availability signalled by the raw axis count (9 = magnetometer, 11 = mouse plus magnetometer). PadForge does not consume them yet
+- <code>SDL_HINT_HIDAPI_IGNORE_DEVICES = InputManager.HidapiIgnoreDevices</code> (<code>"0x146b/0x0603"</code>). Keeps SDL's hidapi layer from probing the Nacon PS4 Compact, whose HID interface wedges the Sony third-party detection FEATURE report forever on Windows and freezes the enumerating thread (#235). Ignored pads ride the XInput / DirectInput lanes instead
+- <code>SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR</code> is <strong>not</strong> set at init. The right Joy-Con's NIR camera and its NFC reader share one MCU (camera = mode 5, NFC = mode 4), so an always-on hint silently killed standalone right Joy-Con NFC. <code>InputService.RefreshSwitchMcuArming</code> sets it only while an "IR Brightness" input is actually configured (#151, #248)
 - <code>SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER = "1"</code>. Claim a DS3 running DsHidMini SixaxisCompatible mode for motion, pressure axes, and accel/gyro (#194). Do <strong>not</strong> also set <code>SDL_HINT_JOYSTICK_HIDAPI_PS3</code>
 - <code>SDL_HINT_VIDEO_ALLOW_SCREENSAVER = "1"</code>. Do not block screensaver
 - <strong>Never</strong> set <code>SDL_HINT_JOYSTICK_RAWINPUT</code>. Conflicts with XInput enumeration and hides Xbox controllers</p>
@@ -5928,15 +6017,19 @@
 <ol>
 <li>Sets <code>_running = false</code></li>
 <li>Calls <code>SoundMacroService.StopAll()</code>. Releases the macro-sound WASAPI clients</li>
+<li>Calls <code>WiiSpeakerService.Shutdown()</code> and <code>HapticToneService.Shutdown()</code>. Both streams die with the engine, not with a profile apply, because their suppression latch clears only in <code>EnsureStarted</code> at engine start</li>
+<li>Calls <code>RumbleAudioService.SilenceAll()</code> then <code>StopAll()</code>. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside <code>SoundMacroService.StopAll</code>, which also runs on every profile apply and would otherwise silence the shakers on every profile switch</li>
 <li>Joins the polling thread with a 3-second timeout</li>
-<li>Joins the mouse-injector thread with a 1-second timeout</li>
+<li>Signals <code>MouseWorkSignal</code> to unpark an idle injector, then joins the mouse-injector thread with a 1-second timeout</li>
 <li>Stops <code>RawInputListener</code></li>
 <li>Stops and disposes <code>_ptpReader</code></li>
 <li>Calls <code>StopAllForceFeedback()</code>. Best-effort stop on all devices</li>
-<li>Calls <code>AwaitPendingLifecycleTasks()</code>. Waits (bounded) for in-flight HM connect/dispose tasks so a late connect can't orphan a controller in the kernel device tree</li>
+<li>Calls <code>AwaitPendingLifecycleTasks()</code>. Waits (bounded, 30 s) for in-flight HM connect/dispose tasks so a late connect can't orphan a controller in the kernel device tree</li>
 <li>Calls <code>DestroyAllVirtualControllers()</code>. Disconnects and disposes all VCs</li>
+<li>Clears every <code>_slotInitializing</code> flag so post-stop reads return false</li>
 <li>Calls <code>DisposeHMaestroContextOnShutdown()</code>. Tears down the shared <code>HMContext</code></li>
 <li>Calls <code>CloseAllDevices()</code>. Disposes all SDL handles and clears runtime state</li>
+<li>Stops the enumeration and frequency stopwatches and zeroes <code>CurrentFrequency</code></li>
 </ol>
 <p>In v3 HIDMaestro takes a parameter-free <code>Disconnect()</code>. The v2 vJoy "preserve nodes" path is gone. HM creates and destroys virtual devices dynamically without leaving stale joy.cpl entries behind.</p>
 <h3 id="main-polling-loop">Main Polling Loop<a class="headerlink" href="#main-polling-loop" title="Permanent link">&para;</a></h3>
@@ -5995,7 +6088,7 @@
 <a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>Drift-compensated hybrid sleep/spin-wait
 </code></pre></div>
 <p><strong>Poll-frame gate:</strong></p>
-<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 564) is called once per cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 1422). It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
+<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 638) is called once per cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 1443). It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
 <p><strong>3-Tier Polling Sleep Strategy:</strong></p>
 <p>The polling loop uses a tiered sleep strategy, falling through to the next tier if the preferred timer is unavailable:</p>
 <table>
@@ -6063,11 +6156,11 @@
 <p><strong>Sleep guard:</strong> Every 5 seconds, calls <code>SetThreadExecutionState(ES_CONTINUOUS)</code> to clear execution-state flags SDL may re-assert, so the PC can still sleep.</p>
 <h3 id="slot-reorder">Slot Reorder<a class="headerlink" href="#slot-reorder" title="Permanent link">&para;</a></h3>
 <p>Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in <code>InputManager</code> swaps <code>SlotControllerTypes[]</code>, <code>VibrationStates[]</code>, or the <code>Combined*States</code> arrays between pad indices, and there is no <code>SwapSlots</code> / <code>SwapSlotData</code> method on <code>InputManager</code>.</p>
-<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 13921), <code>MoveSlot(int, int)</code> (line 13954), and <code>MoveSlotToGroupTail(int)</code> (line 14001). Each mutates <code>SettingsManager.SlotOrders</code> for the new visual order, then routes through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point:</p>
+<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 14332), <code>MoveSlot(int, int)</code> (line 14365), and <code>MoveSlotToGroupTail(int)</code> (line 14412). Each mutates <code>SettingsManager.SlotOrders</code> for the new visual order, then routes through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RerouteVirtualControllersForReorder</span><span class="p">(</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">groupType</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">oldOrder</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newOrder</span><span class="p">)</span>
 </code></pre></div>
-<p><code>InputManager.Step5.VirtualDevices.cs</code> line 2379. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
+<p><code>InputManager.Step5.VirtualDevices.cs</code> line 2523. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
 <ul>
 <li><strong>Same profile at V</strong>: reuse the kernel VC in place. The pad-index pointer in <code>_virtualControllers[]</code> moves so the new pad-at-position-V feeds V's kernel slot, and <code>FeedbackPadIndex</code> is updated on the surviving VC so the rumble callback writes the right <code>VibrationStates[]</code> entry. No teardown.</li>
 <li><strong>Different profile at V</strong>: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus <code>ApplyAscendingIndexPreemption</code> recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.</li>
@@ -6076,18 +6169,18 @@
 <h3 id="motion-snapshots">Motion Snapshots<a class="headerlink" href="#motion-snapshots" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateMotionSnapshots</span><span class="p">()</span>
 </code></pre></div>
-<p>Called after Step 2 (<code>InputManager.cs</code> line 1215). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion.</p>
-<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ResolveMotionSource</code> (<code>InputManager.cs</code> ~2814) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:</p>
+<p>Called after Step 2 (<code>InputManager.cs</code> line 1466). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion.</p>
+<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ResolveMotionSource</code> (<code>InputManager.cs</code> ~2836) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">gyroSrc</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveMotionSource</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionGyroTarget</span><span class="p">,</span><span class="w">  </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w">  </span><span class="n">padIndex</span><span class="p">);</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">accelSrc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveMotionSource</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionAccelTarget</span><span class="p">,</span><span class="w"> </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">);</span>
 </code></pre></div>
-<p>The two sub-channels can land on different devices. A 250 ms row-presence gate caches whether the slot's <code>MappingSet</code> has any motion rows at all, so slots without them skip both per-tick row walks (a set-reference change re-scans immediately). Motion rows exist only on motion-capable slot families: <code>MappingSetMigrator.EnsureMotionRows</code> (<code>MappingSetMigrator.cs</code> ~647-666) backfills them on load and on device assignment for <strong>PlayStation and Nintendo</strong> slots (the virtual Switch Pro gained a real IMU surface in HIDMaestro v1.3.18). Other slot types have no motion rows, so both resolves return null and the snapshot is written <code>HasMotion = false</code>. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A <code>"Motion Accel L"</code> source reads the aux (Nunchuk / left Joy-Con) accelerometer via <code>s.AccelAux</code> instead of the body IMU (#199 follow-up).</p>
+<p>The two sub-channels can land on different devices. A 250 ms row-presence gate caches whether the slot's <code>MappingSet</code> has any motion rows at all, so slots without them skip both per-tick row walks (a set-reference change re-scans immediately). Motion rows exist only on motion-capable slot families: <code>MappingSetMigrator.EnsureMotionRows</code> (<code>MappingSetMigrator.cs</code> ~667) backfills them on load and on device assignment for <strong>PlayStation and Nintendo</strong> slots (the virtual Switch Pro gained a real IMU surface in HIDMaestro v1.3.18). Other slot types have no motion rows, so both resolves return null and the snapshot is written <code>HasMotion = false</code>. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A <code>"Motion Accel L"</code> source reads the aux (Nunchuk / left Joy-Con) accelerometer via <code>s.AccelAux</code> instead of the body IMU (#199 follow-up).</p>
 <p><strong>Delivery.</strong> The DSU server reads <code>MotionSnapshots</code> after Step 2 (below). Step 5 additionally delivers <code>MotionSnapshots[padIndex]</code> to HIDMaestro through <code>SubmitRawHidState</code>'s IMU channel on Nintendo / Extended raw-surface slots, and through the extended <code>SubmitGamepadState</code> overload on PlayStation slots. <code>HasMotion = false</code> submits zeroes.</p>
 <p><strong>No sign transform here.</strong> The native SDL sensor frame is preserved. Accel is a raw scaled read. Gyro passes through the per-(device, slot) Gyro tab tuning chain first:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Accel — MsToG = 1/9.80665, no negation:</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Accel. MsToG = 1/9.80665, no negation:</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">   </span><span class="n">ay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">   </span><span class="n">az</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">// Gyro — GetPassthroughGyro applies bias / deadzone / sensitivity /</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1">// Gyro. GetPassthroughGyro applies bias / deadzone / sensitivity /</span>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1">// smoothing / invert, then RadToDeg = 180/PI, no negation:</span>
 <a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">SourceCoercion</span><span class="p">.</span><span class="n">GetPassthroughGyro</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">guid</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span>
 <a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">tunedPitch</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">tunedYaw</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">tunedRoll</span><span class="p">);</span>
@@ -6145,7 +6238,51 @@
 <hr />
 <h2 id="step-1-updatedevices">Step 1: UpdateDevices<a class="headerlink" href="#step-1-updatedevices" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>InputManager.Step1.UpdateDevices.cs</code></p>
-<p>Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires <code>DevicesUpdated</code> on changes. Handles SDL joysticks/gamepads, Raw Input keyboards, Raw Input mice, Raw Input Consumer Control HID collections, and Windows MIDI Services inputs. NFC readers do not enter here. They are owned by <code>NfcReaderService</code> (started lazily from Step 1, disposed on stop) rather than enumerated as SDL or Raw Input devices.</p>
+<p>Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires <code>DevicesUpdated</code> on changes. It runs eight lettered phases in order:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SDL joysticks and gamepads</td>
+</tr>
+<tr>
+<td>1b</td>
+<td>Raw Input keyboards</td>
+</tr>
+<tr>
+<td>1c</td>
+<td>Raw Input mice</td>
+</tr>
+<tr>
+<td>1d</td>
+<td>Precision touchpads, per hardware device</td>
+</tr>
+<tr>
+<td>1e</td>
+<td>Windows MIDI Services input endpoints (#128)</td>
+</tr>
+<tr>
+<td>1f</td>
+<td>NFC PC/SC readers (#150)</td>
+</tr>
+<tr>
+<td>1g</td>
+<td>Sony headset head trackers (#188)</td>
+</tr>
+<tr>
+<td>2 (and 2b, 2c)</td>
+<td>Disconnect detection for each of the above</td>
+</tr>
+</tbody>
+</table>
+<p>Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c.</p>
+<p>Phases 1e through 1g share one shape: an <code>_opened*</code> dictionary keyed by the source's stable id, an open that runs through <code>FindOrCreateUserDevice</code> then <code>LoadFromExternalDevice</code> then <code>IsOnline = true</code>, a vanished-entry sweep that marks offline and neutralizes mapped outputs, and a <code>Shutdown*</code> method that suppresses the phase for the rest of the session. The shared <code>NfcReaderService</code> monitor is a separate object with its own lifecycle (started lazily from phase 1f, retried about every 5 s while the Smart Card service is absent), but each visible reader still becomes an <code>NfcReaderDevice</code> registered here like any other source.</p>
 <h3 id="method-signature">Method Signature<a class="headerlink" href="#method-signature" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateDevices</span><span class="p">()</span>
 </code></pre></div>
@@ -6164,8 +6301,18 @@
 <tbody>
 <tr>
 <td><code>_openedSdlInstanceIds</code></td>
+<td><code>Dictionary&lt;uint, SdlDeviceWrapper&gt;</code></td>
+<td>SDL instance IDs of currently opened joysticks, skipped during enumeration. It holds the wrapper, not just the id, so the disconnect sweep can dispose an orphan whose <code>UserDevice</code> no longer points at it (a UI Remove, or a replug rebind that swapped <code>ud.Device</code>) instead of leaving SDL handles to a finalizer racing the poll loop</td>
+</tr>
+<tr>
+<td><code>_suppressedSelfVirtualIds</code></td>
 <td><code>HashSet&lt;uint&gt;</code></td>
-<td>SDL instance IDs of currently opened joysticks. Skipped during enumeration</td>
+<td>Instance IDs the self-readback guard rejected as PadForge's own HM virtuals. Kept so each pass skips them rather than reopening and re-probing every 2 s</td>
+</tr>
+<tr>
+<td><code>_sdlDisconnectCandidateSince</code></td>
+<td><code>Dictionary&lt;uint, DateTime&gt;</code></td>
+<td>First tick each instance ID looked gone. Phase 2's debounce clock</td>
 </tr>
 <tr>
 <td><code>_openedKeyboardHandles</code></td>
@@ -6238,11 +6385,13 @@
 <p><strong>Phase 1c: Enumerate mice</strong> via <code>EnumerateMice()</code></p>
 <p>Same pattern as keyboards using <code>SdlMouseWrapper</code>.</p>
 <p><strong>Enumerate Consumer Controls</strong> via <code>EnumerateConsumerControls()</code></p>
-<p>Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in <code>_cachedConsumerControls</code> and consumed in <code>UpdateDevices</code> (<code>InputManager.Step1.UpdateDevices.cs</code> ~155, ~172). <code>EnumerateConsumerControls</code> (~765-803) mirrors <code>EnumerateKeyboards</code>: for each new handle not in <code>_openedConsumerHandles</code>, it opens a <code>ConsumerControlWrapper</code>, runs <code>FindOrCreateUserDevice</code>, calls <code>ud.LoadFromConsumerDevice(wrapper)</code>, and marks the device online. <code>DetectDisconnectedHandles(_openedConsumerHandles, ...)</code> marks removed collections offline.</p>
+<p>Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in <code>_cachedConsumerControls</code> and consumed in <code>UpdateDevices</code> (<code>InputManager.Step1.UpdateDevices.cs</code> ~238, ~241). <code>EnumerateConsumerControls</code> (~1143-1180) mirrors <code>EnumerateKeyboards</code>: for each new handle not in <code>_openedConsumerHandles</code>, it opens a <code>ConsumerControlWrapper</code>, runs <code>FindOrCreateUserDevice</code>, calls <code>ud.LoadFromConsumerDevice(wrapper)</code>, and marks the device online. <code>DetectDisconnectedHandles(_openedConsumerHandles, ...)</code> marks removed collections offline.</p>
 <p><strong>Phase 1e: Enumerate MIDI inputs</strong> via <code>UpdateMidiInputDevices()</code></p>
 <p>Windows MIDI Services endpoints become input devices. Enumeration is async (the WinRT device query is expensive and is kept off the poll loop) and gated on Windows MIDI Services being present. Each endpoint becomes a <code>MidiInputDevice</code> and runs through <code>FindOrCreateUserDevice</code>, <code>LoadFromExternalDevice</code>, and <code>IsOnline = true</code>, the same as any other source. The device exposes no gamepad axes or buttons. Its mappable surface is the MIDI namespace in <code>CustomInputState.Midi</code>. See <a href="../midi-input-internals/">MIDI Input Internals</a>.</p>
-<p><strong>Phase 2: Detect disconnected joystick devices</strong></p>
-<p>Iterates <code>_openedSdlInstanceIds</code>. For each SDL ID, finds the UserDevice via <code>FindOnlineDeviceBySdlInstanceId</code>. If null or <code>!ud.Device.IsAttached</code>, calls <code>MarkDeviceOffline(ud)</code> and removes from tracking set.</p>
+<p><strong>Phase 2: Detect disconnected joystick devices (debounced)</strong></p>
+<p>Iterates <code>_openedSdlInstanceIds</code>. Three signals suggest a device is gone: the wrapper handle is null, <code>ud.Device.IsAttached</code> is false, or the SDL ID no longer appears in <code>SDL_GetJoysticks</code> (the belt-and-suspenders case for SDL keeping a stale <code>JoystickID</code> after the kernel device is gone, HIDMaestro#11).</p>
+<p>Any one signal starts a countdown in <code>_sdlDisconnectCandidateSince</code>, and the device is marked offline only if the condition holds for the full <code>SdlDisconnectDebounceMs</code> window (2000 ms). That rides out the xinputhid slot-assignment transients a HIDMaestro virtual's creation induces on a coexisting physical Xbox, which resolve in tens to low hundreds of milliseconds, so the physical pad's SDL handle survives and its Devices-page preview keeps moving. A real unplug or pair-drop stays missing past the window and surfaces with only the debounce latency added.</p>
+<p>One case skips the debounce: a device Step 2 already flipped offline (its <code>GetCurrentState</code> returned null on a detached handle) is finished off immediately, because detachment is permanent for a handle. Without that path <code>MarkDeviceOffline</code> became unreachable for real SDL unplugs once the detached-read guard shipped, so the handle leaked, the wheel-replug writer resets never ran, and per-slot output was never neutralized.</p>
 <p><strong>Phase 2b-2c: Detect disconnected keyboards/mice</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">changed</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">DetectDisconnectedHandles</span><span class="p">(</span><span class="n">_openedKeyboardHandles</span><span class="p">,</span><span class="w"> </span><span class="n">RawInputListener</span><span class="p">.</span><span class="n">EnumerateKeyboards</span><span class="p">());</span>
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">changed</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">DetectDisconnectedHandles</span><span class="p">(</span><span class="n">_openedMouseHandles</span><span class="p">,</span><span class="w"> </span><span class="n">RawInputListener</span><span class="p">.</span><span class="n">EnumerateMice</span><span class="p">());</span>
@@ -6255,12 +6404,17 @@ Manual loop under <code>SyncRoot</code> lock. Used throughout all steps.</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">private</span><span class="w"> </span><span class="n">UserDevice</span><span class="w"> </span><span class="nf">FindOnlineDeviceBySdlInstanceId</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">sdlInstanceId</span><span class="p">)</span>
 </code></pre></div>
 Manual loop under <code>SyncRoot</code> lock. Only matches online devices with non-null <code>Device</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">private</span><span class="w"> </span><span class="n">UserDevice</span><span class="w"> </span><span class="nf">FindOrCreateUserDevice</span><span class="p">(</span><span class="n">Guid</span><span class="w"> </span><span class="n">instanceGuid</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">productGuid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">internal</span><span class="w"> </span><span class="n">UserDevice</span><span class="w"> </span><span class="nf">FindOrCreateUserDevice</span><span class="p">(</span><span class="n">Guid</span><span class="w"> </span><span class="n">instanceGuid</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">productGuid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">,</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">uint</span><span class="o">&gt;</span><span class="w"> </span><span class="n">livePresentSdlIds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">serialNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
 </code></pre></div>
-<p>Three-tier lookup under <code>SyncRoot</code> lock:
-1. <strong>Exact match</strong> by InstanceGuid
-2. <strong>Fallback match</strong>: offline device with same ProductGuid (handles Bluetooth controllers reconnecting with a new device path). Migrates UserDevice and linked UserSetting to the new InstanceGuid via <code>MigrateUserSettingGuid</code>.
-3. <strong>Create new</strong>: Adds a new <code>UserDevice</code> to <code>devices.Items</code></p>
+<p>Resolution under <code>SyncRoot</code> lock:</p>
+<ol>
+<li><strong>Flapped-unit rebind, hoisted above everything else.</strong> A same-product, same-serial row still marked online whose claiming wrapper's SDL instance has left the present set is this same physical unit re-identifying inside the disconnect debounce. One physical device is never two present instances.</li>
+<li><strong>Exact match</strong> by InstanceGuid, subject to the same-serial twin gate: serial outranks device path in <code>BuildInstanceGuid</code>, so two units reporting an identical serial string build the same InstanceGuid. An exact-GUID row counts as a live twin's row only while its claiming wrapper's SDL instance is still present, which keeps the second unit from stealing the first one's row and disposing its live wrapper.</li>
+<li><strong>Fallback match</strong>: offline device with the same ProductGuid (a Bluetooth controller reconnecting on a new device path). Migrates the <code>UserDevice</code> and its linked <code>UserSetting</code> to the new InstanceGuid via <code>MigrateUserSettingGuid</code>.</li>
+<li><strong>Create new</strong>: adds a new <code>UserDevice</code> to <code>devices.Items</code>.</li>
+</ol>
+<p><code>livePresentSdlIds</code> and <code>serialNumber</code> are supplied by the SDL sweep only. Every non-SDL caller passes null and gets the plain exact-then-product resolution.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">MarkDeviceOffline</span><span class="p">(</span><span class="n">UserDevice</span><span class="w"> </span><span class="n">ud</span><span class="p">)</span>
 </code></pre></div>
 <p>Stops rumble (best-effort), disposes SDL handle (best-effort), calls <code>ud.ClearRuntimeState()</code> to reset runtime fields including <code>IsOnline = false</code>.</p>
@@ -6332,7 +6486,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
    b. Read new state. Two code paths:
       <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ud</span><span class="p">.</span><span class="n">IsTouchpad</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">Device</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_ptpReader</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_ptpReader</span><span class="p">.</span><span class="n">IsAvailable</span><span class="p">)</span>
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="p">{</span>
-<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">    </span><span class="c1">// Windows Precision Touchpad — no SDL wrapper.</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">    </span><span class="c1">// Windows Precision Touchpad, no SDL wrapper.</span>
 <a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="n">newState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CustomInputState</span><span class="p">();</span>
 <a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ud</span><span class="p">.</span><span class="n">InstanceGuid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">PtpMergedGuid</span><span class="p">)</span>
 <a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">        </span><span class="n">_ptpReader</span><span class="p">.</span><span class="n">ReadInto</span><span class="p">(</span><span class="n">newState</span><span class="p">);</span>
@@ -6360,7 +6514,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 </ol>
 <h3 id="pointer-and-mouse-sensor-reads">Pointer and Mouse-Sensor Reads<a class="headerlink" href="#pointer-and-mouse-sensor-reads" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/SdlDeviceWrapper.cs</code></p>
-<p>The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. <code>SdlDeviceWrapper.GetCurrentState</code> (~545-590) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:</p>
+<p>The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. <code>SdlDeviceWrapper.GetCurrentState</code> (~708-773) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:</p>
 <table>
 <thead>
 <tr>
@@ -6373,21 +6527,33 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <tbody>
 <tr>
 <td>Wii IR pointer (#146)</td>
-<td><code>ReadIrPointer</code> (~662-685)</td>
+<td><code>ReadIrPointer</code> (~952-989)</td>
 <td>6-9 (two sensor-bar dots)</td>
-<td><code>CustomInputState.Ir</code> (~114-121): <code>Ir.X</code> / <code>Ir.Y</code> in <code>[-1, +1]</code>, <code>Ir.Detected</code></td>
+<td><code>CustomInputState.Ir</code> (~132): <code>Ir.X</code> / <code>Ir.Y</code> in <code>[-1, +1]</code>, <code>Ir.Detected</code></td>
 </tr>
 <tr>
 <td>Right Joy-Con IR brightness (#151)</td>
-<td><code>ReadJoyConIr</code> (~649-653)</td>
+<td><code>ReadJoyConIr</code> (~939-950)</td>
 <td>6 (MCU average intensity)</td>
 <td><code>CustomInputState.JoyConIrIntensity</code></td>
 </tr>
 <tr>
 <td>Joy-Con 2 mouse (#154)</td>
-<td><code>ReadJoyCon2Mouse</code> (~610-641)</td>
+<td><code>ReadJoyCon2Mouse</code> (~900-937)</td>
 <td>6/7 (16-bit position counters)</td>
-<td><code>CustomInputState.JoyCon2MouseDX</code> / <code>DY</code> (~131-139)</td>
+<td><code>CustomInputState.JoyCon2MouseDX</code> / <code>DY</code> (~149-150)</td>
+</tr>
+<tr>
+<td>Switch 2 magnetometer (#271 item 5)</td>
+<td><code>ReadSwitch2Magnetometer</code> (~883-898)</td>
+<td>The three axes after the mouse pair</td>
+<td>Wrapper-local fields only, deliberately not <code>CustomInputState</code></td>
+</tr>
+<tr>
+<td>NFC tag reader (#241)</td>
+<td><code>ReadNfcTag</code> (~796-871)</td>
+<td>Gamepad-layer, not an axis</td>
+<td><code>CustomInputState.NfcTag[]</code>, gated on <code>NfcArmedProvider</code> so the MCU stays off until a slot arms an NFC trigger. A held tag streams present, and the button releases <code>NfcPulseMs</code> (175 ms) after removal so a single-poll gap smooths into one clean momentary edge</td>
 </tr>
 </tbody>
 </table>
@@ -6429,17 +6595,17 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <p><strong>Sony dispatcher keepalive:</strong> Step 2 also walks all 16 slots to keep the Sony <code>UserEffectsDispatcher</code>'s 33 ms timer running while anything needs its per-tick write: game or test rumble (main or impulse-trigger motors), an active macro rumble override, a steering at-lock trigger pulse (#94), a live touchpad swipe-haptic burst (<code>TouchpadPulseService.IsSlotActive(padIndex)</code>, #219), audio rumble, or a nonzero constant force. The swipe-haptic poke matters on an otherwise idle slot: the burst rides the dispatcher's rumble bytes, so a parked timer would silently drop it.</p>
 <h3 id="idle-detection">Idle Detection<a class="headerlink" href="#idle-detection" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/IdleInputDetector.cs</code></p>
-<p>Step 2 feeds the #162 idle-disconnect countdown. After reading each device's new state, <code>UpdateInputStates</code> calls <code>IdleInputDetector</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> ~324-326) to decide whether the device counts as idle this poll:</p>
+<p>Step 2 feeds the #162 idle-disconnect countdown. After reading each device's new state, <code>UpdateInputStates</code> calls <code>IdleInputDetector</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> ~444-446) to decide whether the device counts as idle this poll:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">idle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">CapType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">InputDeviceType</span><span class="p">.</span><span class="n">Gamepad</span>
 <a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">    </span><span class="o">?</span><span class="w"> </span><span class="n">IdleInputDetector</span><span class="p">.</span><span class="n">IsGamepadIdle</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">OldInputState</span><span class="p">)</span>
 <a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="n">IdleInputDetector</span><span class="p">.</span><span class="n">IsUnchanged</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">OldInputState</span><span class="p">);</span>
 </code></pre></div>
-<p><code>IsGamepadIdle</code> (~34) is an absolute test on the auto-map axis layout: no button pressed, no POV deflected, sticks (axes 0/1/3/4) inside a slop band around 32767, triggers (axes 2/5) near 0, no touchpad finger. Extra axes past 5 (#193 pressure) and sliders fall back to change-detection against <code>OldInputState</code>. <code>IsUnchanged</code> (~72) is a change-detection test for devices whose layout and rest positions are unknown (raw joysticks, wheels, remotes): idle means nothing moved since the previous poll within a small slop. Both ignore gyro/accel (idle hand tremor never settles) but count the post-3.5.0 pointer families as activity through <code>PointerOrMouseActive</code>, so aiming the Wii IR pointer (#146) or moving a Joy-Con 2 as a mouse (#154) does not read as idle. The countdown itself runs at ~1 Hz. A non-idle poll resets <code>ud.LastActiveTick</code>. The shape follows DS4Windows <code>isDS4Idle()</code>. See <a href="../services-layer/">Services Layer</a> for the disconnect action the countdown drives.</p>
+<p><code>IsGamepadIdle</code> (~34) is an absolute test on the auto-map axis layout: no button pressed, no POV deflected, sticks (axes 0/1/3/4) inside a slop band around 32767, triggers (axes 2/5) near 0, no touchpad finger. Extra axes past 5 (#193 pressure) and sliders fall back to change-detection against <code>OldInputState</code>. <code>IsUnchanged</code> (~79) is a change-detection test for devices whose layout and rest positions are unknown (raw joysticks, wheels, remotes): idle means nothing moved since the previous poll within a small slop. Both ignore gyro/accel (idle hand tremor never settles) but count the post-3.5.0 pointer families as activity through <code>PointerOrMouseActive</code>, so aiming the Wii IR pointer (#146) or moving a Joy-Con 2 as a mouse (#154) does not read as idle. The countdown itself runs at ~1 Hz. A non-idle poll resets <code>ud.LastActiveTick</code>. The shape follows DS4Windows <code>isDS4Idle()</code>. See <a href="../services-layer/">Services Layer</a> for the disconnect action the countdown drives.</p>
 <hr />
 <h2 id="trigger-rumble-routing">Trigger Rumble Routing<a class="headerlink" href="#trigger-rumble-routing" title="Permanent link">&para;</a></h2>
 <p><em>What this section covers: how a slot's main-motor rumble (the left/right vibration a game sends through XInput) gets copied or moved onto the two trigger feedback channels, Xbox impulse triggers and the DualSense adaptive-trigger (AT) Vibration, per issue #102.</em></p>
 <p>Routing sits on the force-feedback write path, not the input-mapping path. It reads the same per-slot main-motor amplitudes Step 2's <a href="#force-feedback">Force Feedback</a> already resolved and injects a derived value into the trigger output. The math lives in <code>InputManager.cs</code> (<code>UpdateTriggerRouteEngageStates</code>, <code>ParseRouteSource</code>, <code>RouteSideActive</code>, <code>ParseRouteScale</code>, <code>ApplyTriggerRouting</code>, <code>RouteMain</code>, <code>MarkRedirect</code>, <code>SettleRouteActivator</code>, <code>ApplyTriggerRoutingForSony</code>, <code>GetTriggerRouteMainRedirect</code>). The Xbox physical write applies it in <code>InputManager.Step2.UpdateInputStates.cs</code>. The Sony (DS4 / DualSense) write applies it through <code>InputService.SlotImpulseTriggerForDeviceProvider</code>, which feeds <code>UserEffectsDispatcher</code>.</p>
-<p>State settles once per poll. <code>PollingLoop()</code> calls <code>UpdateTriggerRouteEngageStates()</code> at line 1213, right after <code>UpdateInputStates()</code> and <code>UpdateGyroEngageStates()</code>. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.</p>
+<p>State settles once per poll. <code>PollingLoop()</code> calls <code>UpdateTriggerRouteEngageStates()</code> at line 1464, right after <code>UpdateInputStates()</code> and <code>UpdateGyroEngageStates()</code>. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.</p>
 <h3 id="route-source">Route Source<a class="headerlink" href="#route-source" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="nf">ParseRouteSource</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">switch</span>
 <a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="p">{</span>
@@ -6519,7 +6685,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <h3 id="per-tick-settle-updatetriggerrouteengagestates">Per-Tick Settle: UpdateTriggerRouteEngageStates<a class="headerlink" href="#per-tick-settle-updatetriggerrouteengagestates" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateTriggerRouteEngageStates</span><span class="p">()</span>
 </code></pre></div>
-<p>Runs once per poll across all 16 slots (<code>InputManager.cs</code> ~1587–1678). For each created slot:</p>
+<p>Runs once per poll across all 16 slots (<code>InputManager.cs</code> ~1973–2064). For each created slot:</p>
 <ol>
 <li>Under <code>UserSettings.SyncRoot</code>, pick the <strong>first</strong> UserSetting mapped to the slot whose left or right side passes <code>RouteSideActive</code>. A slot with no active route source clears <code>TriggerRouteEngagedLeft/Right[slot]</code>, the edge-detection scratch (<code>_prevTriggerRouteLeftDown/RightDown</code>), and <code>_routeSourceLeft/Right[slot]</code>, then continues.</li>
 <li>Resolve and cache the per-side source byte (<code>ParseRouteSource</code>, zeroed when that side fails <code>RouteSideActive</code>), scale (<code>ParseRouteScale</code> into <code>_routeScaleLeft/Right</code>), and Redirect flag.</li>
@@ -6558,7 +6724,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ApplyTriggerRouting</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainL</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainR</span><span class="p">,</span>
 <a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedLeft</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedRight</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainL</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainR</span><span class="p">)</span>
 </code></pre></div>
-<p>Given a slot's post-gain main-motor amplitudes, it emits the routed trigger amplitudes plus flags for which main motors to silence (<code>InputManager.cs</code> ~1708–1728). For each engaged side it calls <code>RouteMain(source, scale, mainL, mainR)</code> and, when Redirect is set, <code>MarkRedirect</code>:</p>
+<p>Given a slot's post-gain main-motor amplitudes, it emits the routed trigger amplitudes plus flags for which main motors to silence (<code>InputManager.cs</code> ~2094–2117). For each engaged side it calls <code>RouteMain(source, scale, mainL, mainR)</code> and, when Redirect is set, <code>MarkRedirect</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="nf">RouteMain</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">scale</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainL</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainR</span><span class="p">)</span>
 <a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="p">{</span>
 <a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source</span><span class="w"> </span><span class="k">switch</span>
@@ -6586,7 +6752,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 </code></pre></div>
 <p><code>MacroTriggerRumbleOverrides[slot]</code> (a <code>MacroRumbleOverride</code>, populated by the Rumble Trigger Override macro action in Step 4b) is independent of the route activator, so it contributes even when both routing sides are disengaged. It max-combines the same way <code>MacroRumbleOverride</code> layers onto the main motors.</p>
 <h3 id="xbox-physical-write">Xbox Physical Write<a class="headerlink" href="#xbox-physical-write" title="Permanent link">&para;</a></h3>
-<p>In Step 2's physical-write path (<code>InputManager.Step2.UpdateInputStates.cs</code> ~511–519), after the main and impulse amplitudes are scaled per device:</p>
+<p>In Step 2's physical-write path (<code>InputManager.Step2.UpdateInputStates.cs</code> ~648–656), after the main and impulse amplitudes are scaled per device:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="n">ApplyTriggerRouting</span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">scaledL</span><span class="p">,</span><span class="w"> </span><span class="n">scaledR</span><span class="p">,</span>
 <a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedLT</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedRT</span><span class="p">,</span>
 <a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainL</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainR</span><span class="p">);</span>
@@ -6596,7 +6762,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">routedLT</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedLT</span><span class="p">)</span><span class="w"> </span><span class="n">combinedLT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">routedLT</span><span class="p">;</span><span class="w">   </span><span class="c1">// routed layers onto the</span>
 <a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">routedRT</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedRT</span><span class="p">)</span><span class="w"> </span><span class="n">combinedRT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">routedRT</span><span class="p">;</span><span class="w">    </span><span class="c1">// impulse-trigger output</span>
 </code></pre></div>
-<p>The routed amplitude layers onto the impulse-trigger output via <code>max()</code>, and the Redirect flags silence the physical main motors. A second call at ~1072–1076 mirrors the same math for the Force Feedback tab's motor meter, so the meter reflects what the Scale slider is being tuned against.</p>
+<p>The routed amplitude layers onto the impulse-trigger output via <code>max()</code>, and the Redirect flags silence the physical main motors. A second call at ~1332–1336 mirrors the same math for the Force Feedback tab's motor meter, so the meter reflects what the Scale slider is being tuned against.</p>
 <h3 id="sony-write">Sony Write<a class="headerlink" href="#sony-write" title="Permanent link">&para;</a></h3>
 <p>DS4 / DualSense output is the sole domain of <code>UserEffectsDispatcher</code>, which runs on its own per-device dispatcher thread. Two <code>InputManager</code> entry points serve it:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ApplyTriggerRoutingForSony</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">PadSetting</span><span class="w"> </span><span class="n">devicePs</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
@@ -6604,8 +6770,8 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a>
 <a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="k">internal</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">GetTriggerRouteMainRedirect</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainL</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainR</span><span class="p">)</span>
 </code></pre></div>
-<p><code>ApplyTriggerRoutingForSony</code> (<code>InputManager.cs</code> ~1763–1775) takes caller-owned scratch <code>Vibration</code> instances to stay off the input thread's buffers. It rebuilds the main-motor amplitude the same way the Sony main-rumble provider does (<code>MacroRumbleOverride.Merge</code> -&gt; <code>ConstantForceEvaluator.Resolve</code> -&gt; <code>ScaleRumbleForDevice</code>), runs <code>ApplyTriggerRouting</code>, and max-combines the routed amplitudes into the caller's <code>triggerL</code> / <code>triggerR</code>. <code>GetTriggerRouteMainRedirect</code> reports whether engaged Redirect routing should silence each physical DualSense main motor. The game-facing virtual-controller state is left untouched.</p>
-<p>The dispatcher reaches these through <code>InputService.SlotImpulseTriggerForDeviceProvider</code> (<code>InputService.cs</code> ~700–751). That provider deliberately carries <strong>no output-VC gate</strong>:</p>
+<p><code>ApplyTriggerRoutingForSony</code> (<code>InputManager.cs</code> ~2149–2161) takes caller-owned scratch <code>Vibration</code> instances to stay off the input thread's buffers. It rebuilds the main-motor amplitude the same way the Sony main-rumble provider does (<code>MacroRumbleOverride.Merge</code> -&gt; <code>ConstantForceEvaluator.Resolve</code> -&gt; <code>ScaleRumbleForDevice</code>), runs <code>ApplyTriggerRouting</code>, and max-combines the routed amplitudes into the caller's <code>triggerL</code> / <code>triggerR</code>. <code>GetTriggerRouteMainRedirect</code> reports whether engaged Redirect routing should silence each physical DualSense main motor. The game-facing virtual-controller state is left untouched.</p>
+<p>The dispatcher reaches these through <code>InputService.SlotImpulseTriggerForDeviceProvider</code> (<code>InputService.cs</code> ~948–1020). That provider deliberately carries <strong>no output-VC gate</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="n">UserEffectsDispatcher</span><span class="p">.</span><span class="n">SlotImpulseTriggerForDeviceProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">deviceGuid</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
 <a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="p">{</span>
 <a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a><span class="w">    </span><span class="c1">// ... resolve devicePs for (padIndex, deviceGuid) ...</span>
@@ -6623,7 +6789,7 @@ Manual loop under <code>SyncRoot</code> lock. Only matches online devices with n
 <p>One asymmetry: a DualSense's AT Vibration only carries a game's own impulse-trigger feedback when the slot runs an Xbox-class VC. Main-motor routing and the macro override reach it on any VC type.</p>
 </blockquote>
 <h3 id="padsetting-fields">PadSetting Fields<a class="headerlink" href="#padsetting-fields" title="Permanent link">&para;</a></h3>
-<p>Twelve string fields on <code>PadSetting</code> back the feature (<code>PadSetting.cs</code> ~397–436), all serialized as <code>[XmlElement]</code>, included in <code>ComputeChecksum</code>, and listed in the dirty-tracking allowlist:</p>
+<p>Twelve string fields on <code>PadSetting</code> back the feature (<code>PadSetting.cs</code> ~441–480), all serialized as <code>[XmlElement]</code>, included in <code>ComputeChecksum</code>, and listed in the dirty-tracking allowlist:</p>
 <table>
 <thead>
 <tr>
@@ -6932,7 +7098,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </table>
 <p>A <code>Direct</code> source whose descriptor is the <code>"Motion Lean"</code> input (matched by <code>SourceCoercion.IsMotionLeanDescriptor</code>) is promoted to <code>MotionLeanX</code> inside <code>EvaluateForBipolarAxisTarget</code>, so the lean descriptor routes through the steering math regardless of the row's stamped Kind.</p>
 <h4 id="tickramped-the-ramped-axis-envelope-111">TickRamped: the ramped axis envelope (#111)<a class="headerlink" href="#tickramped-the-ramped-axis-envelope-111" title="Permanent link">&para;</a></h4>
-<p><code>SourceKindRuntime.TickRamped</code> (<code>PadForge.Engine/Common/Mapping/SourceKindRuntime.cs</code>, ~lines 165-228) maintains a signed <code>[-1, +1]</code> envelope per source. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.</p>
+<p><code>SourceKindRuntime.TickRamped</code> (<code>PadForge.Engine/Common/Mapping/SourceKindRuntime.cs</code>, ~lines 267-336) maintains a signed <code>[-1, +1]</code> envelope per source. <code>SourceKindRuntime</code> is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.</p>
 <p>State lives in <code>_rampedAccum</code>, a <code>Dictionary&lt;(int slot, string target, int srcIdx), double&gt;</code> keyed the same way as the Incremental accumulator (<code>_incrementalAccum</code>). Two Ramped sources on one row keep independent envelopes because <code>srcIdx</code> differs. Each frame:</p>
 <ol>
 <li>Read intent buttons: <code>up = ReadButtonLikeBool(state, src.ParamUp)</code> (positive direction), <code>down = ReadButtonLikeBool(state, src.ParamDown)</code> (negative direction). Only <code>Button N</code> and <code>POV N Dir</code> descriptors read as true. Analog inputs are not a sensible up/down trigger.</li>
@@ -7016,7 +7182,8 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 </tbody>
 </table>
-<p><code>_rampedAccum</code> is dropped by <code>SourceKindRuntime.Clear()</code> on profile switch and engine stop, so a ramped axis snaps to neutral on the next read after either event. It is not reset on row reorder. Like Incremental, the accumulator survives by <code>Target + srcIdx</code> and lingers harmlessly until the next <code>Clear</code>.</p>
+<p><code>_rampedAccum</code> is dropped three ways. <code>Clear()</code> drops it wholesale on profile switch and engine stop, so a ramped axis snaps to neutral on the next read after either event. <code>ResetForSlot(slot)</code> drops every entry for one slot, and that is what the row-replacement path calls, because PadForge replaces a slot's rows wholesale rather than editing one in place. <code>ResetForRow(slot, target)</code> is the finer-grained twin, kept for a caller that edits a single row. Dropping the accumulator and not only its frame-replay stamp is deliberate: a re-authored row otherwise resumed the previous occupant's cruise position on the next tick.</p>
+<p>Every one of those methods swaps in a fresh dictionary instead of clearing in place. The dictionaries are mutated by the 1 kHz poll thread while <code>Clear</code> runs on the UI thread, and clearing a plain <code>Dictionary</code> under a concurrent writer can corrupt its buckets and hang a later lookup in an infinite loop. A poll tick still holding the old reference writes into an orphan that is about to be collected, which is exactly the state the reset wanted dropped.</p>
 <h4 id="ui-surface">UI surface<a class="headerlink" href="#ui-surface" title="Permanent link">&para;</a></h4>
 <p><code>MappingSourceItem.cs</code> (the <code>MappingSourceItem</code> ViewModel) exposes <code>Ramped</code> in the Kind dropdown via <code>KindOptions</code> (label <code>Pad_Mapping_Kind_Ramped</code>). <code>IsRampedKind</code> and <code>UsesUpDownKeys</code> (true for both Incremental and Ramped) gate the Up/Down key pickers. The envelope controls bind to <code>ParamAttackTime</code> (UI slider 0-2 s, clamped 0-5), <code>ParamReleaseTime</code>, <code>ParamReverseMultiplier</code> (1-10), and <code>ParamAutocenter</code>. Because a stateful kind is keyed by <code>(slot, target, srcIdx)</code> and needs a concrete <code>DeviceGuid</code> to avoid being ticked once per assigned device on a multi-device slot, <code>StampDeviceFromParamChoice</code> stamps the source's device from the picked Up/Down input when it has none (#111 audit fix A).</p>
 <h3 id="steering-source-kinds">Steering Source Kinds<a class="headerlink" href="#steering-source-kinds" title="Permanent link">&para;</a></h3>
@@ -7138,7 +7305,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="w">    </span><span class="n">CustomControllerLayout</span><span class="w"> </span><span class="n">cfg</span><span class="p">,</span>
 <a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a><span class="w">    </span><span class="n">MappingSet</span><span class="w"> </span><span class="n">mappingSet</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">thisDeviceGuid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slotIndex</span><span class="p">)</span>
 </code></pre></div>
-<p><code>InputManager.Step3.UpdateOutputStates.cs</code> line 2174. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned <code>raw</code> (the per-setting <code>us.RawHidScratch</code>), starting with <code>raw.Clear()</code> so POVs begin centered. The caller republishes into <code>us.RawHidOutputState</code> only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (<code>ps.GetExtendedMapping("ExtendedAxis0")</code>, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from <code>CustomControllerLayout</code>. The trailing <code>mappingSet</code> / <code>thisDeviceGuid</code> / <code>slotIndex</code> arguments hand the v3.2 <code>MappingSet</code> evaluator the context it needs to resolve multi-source rows that target Extended channels.</p>
+<p><code>InputManager.Step3.UpdateOutputStates.cs</code> line 2197. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned <code>raw</code> (the per-setting <code>us.RawHidScratch</code>), starting with <code>raw.Clear()</code> so POVs begin centered. The caller republishes into <code>us.RawHidOutputState</code> only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (<code>ps.GetExtendedMapping("ExtendedAxis0")</code>, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from <code>CustomControllerLayout</code>. The trailing <code>mappingSet</code> / <code>thisDeviceGuid</code> / <code>slotIndex</code> arguments hand the v3.2 <code>MappingSet</code> evaluator the context it needs to resolve multi-source rows that target Extended channels.</p>
 <ul>
 <li><strong>Axes</strong>: Uses <code>MapToThumbAxisWithNeg</code> for each axis (signed short range). No <code>NegateAxis</code> needed. Unlike the gamepad path, the raw path has no second inversion in <code>SubmitRawState</code>.</li>
 <li><strong>Buttons</strong>: Uses <code>MapToButtonPressed</code> for each button, sets via <code>raw.SetButton(i, true)</code></li>
@@ -7261,7 +7428,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p><strong>Status:</strong> the cursor → stick runtime is hypothesis-under-test. The sampler, normalization, and reader paths are verified against the code, but the end-to-end cursor-to-virtual-stick behavior has not been validated in a live game.</p>
 </blockquote>
 <h3 id="360-device-family-sources">3.6.0 device-family sources<a class="headerlink" href="#360-device-family-sources" title="Permanent link">&para;</a></h3>
-<p>The 3.6.0 device work added four <code>SourceType</code> values to <code>SourceCoercion.SourceType</code> (<code>SourceCoercion.cs</code> ~52-73), each a first-class <code>MappingSource</code> resolved through the same multi-source row machinery as Mouse Position:</p>
+<p>The 3.6.0 device work added four <code>SourceType</code> values to <code>SourceCoercion.SourceType</code> (<code>SourceCoercion.cs</code> ~24-167), each a first-class <code>MappingSource</code> resolved through the same multi-source row machinery as Mouse Position:</p>
 <table>
 <thead>
 <tr>
@@ -7298,7 +7465,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 </tbody>
 </table>
-<p><code>ClassifyDescriptor</code> (<code>SourceCoercion.cs</code> ~597-645) matches these prefixes in order after the <code>Mouse Position</code> check: <code>Mouse Motion</code> → <code>JoyCon2Mouse</code>, <code>IR Pointer</code> → <code>IrPointer</code>, exact <code>IR Brightness</code> → <code>JoyConIr</code>, <code>Balance</code> → <code>BalanceBoard</code>, then <code>Midi</code>. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. <code>IrPointer</code> is read through its own tuned, slot-scoped reader <code>ReadTunedIrPointer</code> (sensor-bar offset and smoothing are per-slot Pointer-tab settings), the same pattern as <code>ReadTunedMouseCursor</code> and <code>ReadTunedGyroRate</code>.</p>
+<p><code>ClassifyDescriptor</code> (<code>SourceCoercion.cs</code> ~1130-1219) matches these prefixes in order after the <code>Mouse Position</code> check: <code>Mouse Motion</code> → <code>JoyCon2Mouse</code>, <code>Mouse Gesture</code> → <code>MouseGesture</code>, <code>IR Pointer</code> → <code>IrPointer</code>, exact <code>IR Offscreen</code> → <code>IrOffscreen</code>, exact <code>IR Brightness</code> → <code>JoyConIr</code>, <code>Balance</code> → <code>BalanceBoard</code>, then <code>Midi</code>. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. <code>IrPointer</code> is read through its own tuned, slot-scoped reader <code>ReadTunedIrPointer</code> (sensor-bar offset and smoothing are per-slot Pointer-tab settings), the same pattern as <code>ReadTunedMouseCursor</code> and <code>ReadTunedGyroRate</code>.</p>
 <hr />
 <h2 id="shift-layer-activators-and-the-cycle-cursor">Shift Layer Activators and the Cycle Cursor<a class="headerlink" href="#shift-layer-activators-and-the-cycle-cursor" title="Permanent link">&para;</a></h2>
 <p><em>How a slot's <code>MappingSet</code> decides which shift layer is active each frame, and how the #119 Cycle cursor walks a queue of layers.</em></p>
@@ -7579,7 +7746,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <hr />
 <h2 id="step-4-combineoutputstates">Step 4: CombineOutputStates<a class="headerlink" href="#step-4-combineoutputstates" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>InputManager.Step4.CombineOutputStates.cs</code></p>
-<p>Merges mapped <code>Gamepad</code> states from all devices assigned to each VC slot into a single combined state. Handles four output types (Gamepad, RawHidState, MidiRawState, KbmRawState) plus per-slot touchpad state (<code>CombinedTouchpadStates</code>) for PlayStation slots.</p>
+<p>Merges mapped <code>Gamepad</code> states from all devices assigned to each VC slot into a single combined state. Handles five output types (Gamepad, RawHidState, MidiRawState, KbmRawState, VrRawState) plus per-slot touchpad state (<code>CombinedTouchpadStates</code>) for PlayStation slots.</p>
 <h3 id="method-signature_3">Method Signature<a class="headerlink" href="#method-signature_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CombineOutputStates</span><span class="p">()</span>
 </code></pre></div>
@@ -7590,13 +7757,14 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p>For each of the 16 slots:</p>
 <ol>
 <li>Find all UserSettings mapped to this slot via <code>FindByPadIndex(padIndex, _padIndexBuffer)</code></li>
-<li>Determine slot type flags: <code>isExtended</code> (custom), <code>isMidi</code>, <code>isKbm</code>, <code>isDs4</code> (PlayStation)</li>
+<li>Determine slot type flags: <code>isExtended</code> (custom), <code>isMidi</code>, <code>isKbm</code>, <code>isVr</code>, <code>isDs4</code> (PlayStation)</li>
 <li><strong>0 devices</strong>: clear all applicable state arrays for this slot</li>
 <li><strong>1 device</strong>: direct struct copy. No merge needed (optimization for the common case)</li>
 <li><strong>N devices</strong>: iterate and call <code>MergeGamepad()</code> for each. Also merge type-specific raw states:</li>
 <li>Extended Custom HID: <code>MergeRawHid()</code> (first populated device seeds the combine, subsequent are merged). Takes the slot's <code>CustomControllerLayout</code> so trigger axes use pressed-wins and stick axes use magnitude-wins.</li>
-<li>MIDI: <code>MidiRawState.Combine()</code> (static method)</li>
+<li>MIDI: <code>MidiRawState.Combine()</code> (static method). The result is copied into the slot array through <code>CopyMidiInto</code>, never assigned. With several devices on the slot but only one of them MIDI, no <code>Combine</code> ever runs and the local still aliases that device's published state, so a bare assign would let the empty-slot <code>Clear()</code> write through it</li>
 <li>KBM: <code>KbmRawState.Combine()</code> (static method)</li>
+<li>VR: first contributor seeds <code>combinedVr</code>, each later one folds in through the instance method <code>combinedVr.Merge(us.VrRawOutputState)</code></li>
 <li><strong>Touchpad (PlayStation slots only)</strong>: write <code>CombinedTouchpadStates[slot]</code>. The first assigned device with an active finger or click wins (single-source, so if one device drops out the next takes over). When that state carries <code>Click</code>, OR <code>Gamepad.TOUCHPAD</code> into the combined <code>Buttons</code> bitmap so every downstream consumer (Step 5 submit, Step 6 copy, dispatcher click detection) sees the press.</li>
 </ol>
 <h3 id="merge-rules">Merge Rules<a class="headerlink" href="#merge-rules" title="Permanent link">&para;</a></h3>
@@ -7811,8 +7979,11 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-76-59" name="__codelineno-76-59" href="#__codelineno-76-59"></a><span class="w">    </span><span class="n">ComboBreak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">       </span><span class="c1">// Cancel the containing combo&#39;s remaining actions (#237)</span>
 <a id="__codelineno-76-60" name="__codelineno-76-60" href="#__codelineno-76-60"></a><span class="w">    </span><span class="n">AxisSetLatched</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">49</span><span class="p">,</span><span class="w">   </span><span class="c1">// Latched value ladder: set-and-hold an axis value (#251)</span>
 <a id="__codelineno-76-61" name="__codelineno-76-61" href="#__codelineno-76-61"></a><span class="w">    </span><span class="n">AxisLatchRelease</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="c1">// Release an AxisSetLatched hold (#251)</span>
-<a id="__codelineno-76-62" name="__codelineno-76-62" href="#__codelineno-76-62"></a><span class="w">    </span><span class="n">AxisScale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">51</span><span class="w">         </span><span class="c1">// Proportional scale on a VC axis while engaged (#251)</span>
-<a id="__codelineno-76-63" name="__codelineno-76-63" href="#__codelineno-76-63"></a><span class="p">}</span>
+<a id="__codelineno-76-62" name="__codelineno-76-62" href="#__codelineno-76-62"></a><span class="w">    </span><span class="n">AxisScale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">51</span><span class="p">,</span><span class="w">        </span><span class="c1">// Proportional scale on a VC axis while engaged (#251)</span>
+<a id="__codelineno-76-63" name="__codelineno-76-63" href="#__codelineno-76-63"></a><span class="w">    </span><span class="c1">// Appended in 4.2.0</span>
+<a id="__codelineno-76-64" name="__codelineno-76-64" href="#__codelineno-76-64"></a><span class="w">    </span><span class="n">HeadphoneVolumeUp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">52</span><span class="p">,</span><span class="w">  </span><span class="c1">// Raise DeviceSlotConfig.HeadphoneVolume by 10%, clamped at 100</span>
+<a id="__codelineno-76-65" name="__codelineno-76-65" href="#__codelineno-76-65"></a><span class="w">    </span><span class="n">HeadphoneVolumeDown</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">53</span><span class="w"> </span><span class="c1">// Lower it by 10%, clamped at 0</span>
+<a id="__codelineno-76-66" name="__codelineno-76-66" href="#__codelineno-76-66"></a><span class="p">}</span>
 </code></pre></div>
 <p>The three cursor actions, the rumble/trigger overrides, the sound actions, and the lightbar / pointer / gyro-engage actions each have their own execution path documented in the sections above and in <a href="../../features/mappings/">Button and Axis Mappings</a>.</p>
 <h3 id="action-execution-architecture">Action Execution Architecture<a class="headerlink" href="#action-execution-architecture" title="Permanent link">&para;</a></h3>
@@ -7853,7 +8024,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p><em>Covers the JSON clipboard format and deep-copy roundtrip behind macro Copy/Paste/Duplicate (#112), the three cursor-write macro actions (#108/#109/#110), and the slot fire-guard that keeps a copied macro from firing off a foreign device.</em></p>
 <p>The macro QOL work (#112) moved copy, paste, and duplicate onto a shared serialize/rebuild pair, and #108/#109/#110 added three macro actions that drive the desktop cursor through the same <code>CursorControlService</code> that feeds the Mouse Position sources.</p>
 <h4 id="macro-clipboard-codec-112">Macro clipboard codec (#112)<a class="headerlink" href="#macro-clipboard-codec-112" title="Permanent link">&para;</a></h4>
-<p>Copy and paste cross the Windows clipboard as JSON. The envelope is defined in <code>SettingsService.cs</code> (~3539):</p>
+<p>Copy and paste cross the Windows clipboard as JSON. The envelope is defined in <code>SettingsService.cs</code> (~4413):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MacroClipboardEnvelope</span>
 <a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a><span class="p">{</span>
 <a id="__codelineno-79-3" name="__codelineno-79-3" href="#__codelineno-79-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">      </span><span class="c1">// &quot;PadForgeMacro&quot;</span>
@@ -7905,24 +8076,24 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tbody>
 <tr>
 <td>Copy</td>
-<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> ~6310)</td>
+<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> ~7320)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>SerializeMacrosToClipboard</code> -&gt; <code>Clipboard.SetText</code></td>
 </tr>
 <tr>
 <td>Paste</td>
-<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> ~6326)</td>
+<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> ~7379)</td>
 <td><code>TryParseMacroClipboard</code> -&gt; per-<code>MacroData</code> <code>LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount)</code> -&gt; set <code>PadIndex</code> -&gt; add</td>
 </tr>
 <tr>
 <td>Duplicate</td>
-<td><code>_duplicateMacroCommand</code> (<code>PadViewModel.cs</code> ~3943)</td>
+<td><code>_duplicateMacroCommand</code> (<code>PadViewModel.cs</code> ~4722)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>LoadMacroFromData</code> -&gt; set <code>PadIndex</code> + copy name</td>
 </tr>
 </tbody>
 </table>
 <p>Because <code>LoadMacroFromData</code> rebinds button naming and count to the destination, copying an Xbox-slot macro into an Extended slot relabels its button targets for that slot rather than carrying the source slot's layout.</p>
 <h4 id="cursor-write-macro-actions-108-109-110">Cursor-write macro actions (#108 / #109 / #110)<a class="headerlink" href="#cursor-write-macro-actions-108-109-110" title="Permanent link">&para;</a></h4>
-<p>Three <code>MacroActionType</code> members drive the desktop cursor. They are handled in <code>ExecuteSequentialAction</code> (the standard-slot path, ~1074) and mirrored in <code>ExecuteSequentialActionRaw</code> (the custom-Extended path, ~1784), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: it calls into <code>CursorControlService.Active</code> (the running service, null while the engine is stopped) and then <code>AdvanceAction(macro)</code>, so with an <code>OnPress</code> trigger it fires once per press.</p>
+<p>Three <code>MacroActionType</code> members drive the desktop cursor. They are handled in <code>ExecuteSequentialAction</code> (the standard-slot path, ~2184) and mirrored in <code>ExecuteSequentialActionRaw</code> (the custom-Extended path, ~4370), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: it calls into <code>CursorControlService.Active</code> (the running service, null while the engine is stopped) and then <code>AdvanceAction(macro)</code>, so with an <code>OnPress</code> trigger it fires once per press.</p>
 <table>
 <thead>
 <tr>
@@ -7958,7 +8129,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </ol>
 <p>Because the pin/clamp writes and the source sample run on this one thread in that fixed order, the value <code>ReadTunedMouseCursor</code> later reads for a Mouse Position source is always the post-write position. The pin/clamp toggles from the macro evaluator only flip a <code>volatile</code> enable flag and publish config (released before the flag is set), so the timer never reads a half-set target. <code>RecenterCursor</code> is the exception: it is a one-shot <code>SetCursorPos</code> issued from the engine thread with no ongoing enforcement, and the next tick (&lt;=5 ms later) re-samples so the recentered axes report 0. See <a href="../../features/mappings/">Button and Axis Mappings</a> for the Mouse Position X/Y sources these actions pair with.</p>
 <h4 id="slot-device-fire-guard-findslotdevicebyinstanceguid">Slot device fire-guard (<code>FindSlotDeviceByInstanceGuid</code>)<a class="headerlink" href="#slot-device-fire-guard-findslotdevicebyinstanceguid" title="Permanent link">&para;</a></h4>
-<p>A macro must fire only from a device assigned to its own slot. <code>FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)</code> (<code>InputManager.Step4b.EvaluateMacros.cs:653</code>) enforces this with two checks before returning a device:</p>
+<p>A macro must fire only from a device assigned to its own slot. <code>FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)</code> (<code>InputManager.Step4b.EvaluateMacros.cs:1546</code>) enforces this with two checks before returning a device:</p>
 <ol>
 <li><code>SettingsManager.FindSettingByInstanceGuidAndSlot(instanceGuid, slotIndex)</code> must be non-null, confirming the device is assigned to this macro's slot.</li>
 <li><code>FindOnlineDeviceByInstanceGuid(instanceGuid)</code> must resolve an online device, after which the trigger checks additionally require a live <code>InputState</code> with a <code>Buttons</code> / <code>Povs</code> array.</li>
@@ -8055,7 +8226,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 <tr>
 <td><code>Next</code> / <code>Previous</code></td>
-<td>Calls <code>GetNextProfileId(Â±1)</code> to cycle through <code>SettingsManager.Profiles</code>, wrapping around. Sets <code>PendingProfileSwitchId</code>.</td>
+<td>Calls <code>GetNextProfileId(+1)</code> / <code>GetNextProfileId(-1)</code> to cycle through <code>SettingsManager.Profiles</code>, wrapping around. Sets <code>PendingProfileSwitchId</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -8133,7 +8304,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tr>
 <td><code>HmInactivityTimeoutSeconds</code></td>
 <td><code>int</code> (property, on <code>InputManager</code>)</td>
-<td>Consecutive-inactivity destroy timeout in seconds. Default <code>60</code>, <code>0</code> = never. Converted to cycles as <code>(seconds * 1000) / PollingIntervalMs</code>. One contract for every VC type. The former non-HM <code>SlotDestroyGraceCycles</code> (10 s) is retired.</td>
+<td>Consecutive-inactivity destroy timeout in seconds. Default <code>60</code>, <code>0</code> = never. Measured in wall-clock milliseconds against <code>_slotInactiveSinceMs</code>, not in polling cycles, so changing the polling rate mid-grace cannot rescale a pending timeout. One contract for every VC type. The former non-HM <code>SlotDestroyGraceCycles</code> (10 s) is retired.</td>
 </tr>
 <tr>
 <td><code>_slotInitializing</code></td>
@@ -8175,63 +8346,84 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p><strong>Pass 1b: Ensure HIDMaestro VC ordering across cycles</strong></p>
 <p>HIDMaestro assigns XInput/DS4 indices by <code>Connect()</code> call order. When a lower slot needs a new VC but higher slots already have same-type VCs, the new VC would get a higher index. Fix: destroy same-type VCs at higher slots so they recreate in ascending order in Pass 2.</p>
 <p><strong>Pass 2: Create virtual controllers in ascending slot order</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">padIndex</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MaxPads</span><span class="p">;</span><span class="w"> </span><span class="n">padIndex</span><span class="o">++</span><span class="p">)</span>
+<p>HM-backed slots do not create inline. The pass kicks one async connect per polling cycle and claims the slot with an interlocked compare-exchange, so a UI-thread reorder that installs a reused VC at the same index while the connect is in flight cannot be overwritten:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="n">_pendingConnectTask</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
 <a id="__codelineno-85-2" name="__codelineno-85-2" href="#__codelineno-85-2"></a><span class="p">{</span>
-<a id="__codelineno-85-3" name="__codelineno-85-3" href="#__codelineno-85-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_virtualControllers</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">_slotInactiveCounter</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-85-4" name="__codelineno-85-4" href="#__codelineno-85-4"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-85-5" name="__codelineno-85-5" href="#__codelineno-85-5"></a><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateVirtualController</span><span class="p">(</span><span class="n">padIndex</span><span class="p">);</span>
-<a id="__codelineno-85-6" name="__codelineno-85-6" href="#__codelineno-85-6"></a><span class="w">        </span><span class="n">_virtualControllers</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vc</span><span class="p">;</span>
-<a id="__codelineno-85-7" name="__codelineno-85-7" href="#__codelineno-85-7"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="p">.</span><span class="n">IsConnected</span><span class="p">)</span><span class="w"> </span><span class="n">_slotInitializing</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
-<a id="__codelineno-85-8" name="__codelineno-85-8" href="#__codelineno-85-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-85-9" name="__codelineno-85-9" href="#__codelineno-85-9"></a><span class="p">}</span>
+<a id="__codelineno-85-3" name="__codelineno-85-3" href="#__codelineno-85-3"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-85-4" name="__codelineno-85-4" href="#__codelineno-85-4"></a><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vcAsync</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateVirtualController</span><span class="p">(</span><span class="n">capturedIndex</span><span class="p">);</span>
+<a id="__codelineno-85-5" name="__codelineno-85-5" href="#__codelineno-85-5"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vcAsync</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vcAsync</span><span class="p">.</span><span class="n">IsConnected</span><span class="p">)</span>
+<a id="__codelineno-85-6" name="__codelineno-85-6" href="#__codelineno-85-6"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-85-7" name="__codelineno-85-7" href="#__codelineno-85-7"></a><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">prior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span>
+<a id="__codelineno-85-8" name="__codelineno-85-8" href="#__codelineno-85-8"></a><span class="w">                </span><span class="k">ref</span><span class="w"> </span><span class="n">_virtualControllers</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">],</span><span class="w"> </span><span class="n">vcAsync</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">);</span>
+<a id="__codelineno-85-9" name="__codelineno-85-9" href="#__codelineno-85-9"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prior</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">vcAsync</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span><span class="w"> </span><span class="cm">/* + re-attach prior&#39;s config */</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-85-10" name="__codelineno-85-10" href="#__codelineno-85-10"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-85-11" name="__codelineno-85-11" href="#__codelineno-85-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-85-12" name="__codelineno-85-12" href="#__codelineno-85-12"></a><span class="w">    </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_slotInitializing</span><span class="p">[</span><span class="n">capturedIndex</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-85-13" name="__codelineno-85-13" href="#__codelineno-85-13"></a><span class="p">});</span>
+<a id="__codelineno-85-14" name="__codelineno-85-14" href="#__codelineno-85-14"></a><span class="k">break</span><span class="p">;</span><span class="w">   </span><span class="c1">// one HM connect kicked off per cycle</span>
 </code></pre></div>
+<p>Keyboard+Mouse is the exception: it has no driver or service bring-up, so it still creates inline and assigns <code>_virtualControllers[padIndex]</code> directly. See <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a> for the full lifecycle invariants.</p>
 <p><strong>Pass 3: Submit reports for active slots</strong></p>
 <p>For each slot with a connected VC and zero inactive counter:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">MidiVirtualController</span><span class="w"> </span><span class="n">midiVc</span><span class="p">)</span>
 <a id="__codelineno-86-2" name="__codelineno-86-2" href="#__codelineno-86-2"></a><span class="w">    </span><span class="n">midiVc</span><span class="p">.</span><span class="n">SubmitMidiRawState</span><span class="p">(</span><span class="n">CombinedMidiRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
 <a id="__codelineno-86-3" name="__codelineno-86-3" href="#__codelineno-86-3"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">KeyboardMouseVirtualController</span><span class="w"> </span><span class="n">kbmVc</span><span class="p">)</span>
-<a id="__codelineno-86-4" name="__codelineno-86-4" href="#__codelineno-86-4"></a><span class="w">    </span><span class="n">kbmVc</span><span class="p">.</span><span class="n">SubmitKbmState</span><span class="p">(</span><span class="n">CombinedKbmRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
-<a id="__codelineno-86-5" name="__codelineno-86-5" href="#__codelineno-86-5"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">SlotControllerTypes</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Extended</span>
-<a id="__codelineno-86-6" name="__codelineno-86-6" href="#__codelineno-86-6"></a><span class="w">             </span><span class="k">or</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Nintendo</span>
-<a id="__codelineno-86-7" name="__codelineno-86-7" href="#__codelineno-86-7"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">SlotRawHidSurface</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
-<a id="__codelineno-86-8" name="__codelineno-86-8" href="#__codelineno-86-8"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVirtualController</span><span class="w"> </span><span class="n">hmExt</span><span class="p">)</span>
-<a id="__codelineno-86-9" name="__codelineno-86-9" href="#__codelineno-86-9"></a><span class="p">{</span>
-<a id="__codelineno-86-10" name="__codelineno-86-10" href="#__codelineno-86-10"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SlotCustomLayouts</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
-<a id="__codelineno-86-11" name="__codelineno-86-11" href="#__codelineno-86-11"></a><span class="w">    </span><span class="c1">// Button SOCD (#240): clean the final combined raw buttons</span>
-<a id="__codelineno-86-12" name="__codelineno-86-12" href="#__codelineno-86-12"></a><span class="w">    </span><span class="c1">// right before submit, flat-index grammar on the word array.</span>
-<a id="__codelineno-86-13" name="__codelineno-86-13" href="#__codelineno-86-13"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">socdExt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveSlotSocd</span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">extendedIndices</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
-<a id="__codelineno-86-14" name="__codelineno-86-14" href="#__codelineno-86-14"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">socdExt</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
-<a id="__codelineno-86-15" name="__codelineno-86-15" href="#__codelineno-86-15"></a><span class="w">        </span><span class="n">socdExt</span><span class="p">.</span><span class="n">ApplyExtended</span><span class="p">(</span><span class="n">CombinedRawHidStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">Buttons</span><span class="p">);</span>
-<a id="__codelineno-86-16" name="__codelineno-86-16" href="#__codelineno-86-16"></a><span class="w">    </span><span class="n">hmExt</span><span class="p">.</span><span class="n">SubmitRawHidState</span><span class="p">(</span>
-<a id="__codelineno-86-17" name="__codelineno-86-17" href="#__codelineno-86-17"></a><span class="w">        </span><span class="n">CombinedRawHidStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">],</span>
-<a id="__codelineno-86-18" name="__codelineno-86-18" href="#__codelineno-86-18"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Sticks</span><span class="p">,</span>
-<a id="__codelineno-86-19" name="__codelineno-86-19" href="#__codelineno-86-19"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Triggers</span><span class="p">,</span>
-<a id="__codelineno-86-20" name="__codelineno-86-20" href="#__codelineno-86-20"></a><span class="w">        </span><span class="c1">// IMU channel (HM v1.3.18): the slot&#39;s aggregated motion</span>
-<a id="__codelineno-86-21" name="__codelineno-86-21" href="#__codelineno-86-21"></a><span class="w">        </span><span class="c1">// snapshot rides beside the raw surface.</span>
-<a id="__codelineno-86-22" name="__codelineno-86-22" href="#__codelineno-86-22"></a><span class="w">        </span><span class="n">MotionSnapshots</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
-<a id="__codelineno-86-23" name="__codelineno-86-23" href="#__codelineno-86-23"></a><span class="p">}</span>
-<a id="__codelineno-86-24" name="__codelineno-86-24" href="#__codelineno-86-24"></a><span class="k">else</span>
-<a id="__codelineno-86-25" name="__codelineno-86-25" href="#__codelineno-86-25"></a><span class="p">{</span>
-<a id="__codelineno-86-26" name="__codelineno-86-26" href="#__codelineno-86-26"></a><span class="w">    </span><span class="c1">// Xbox / PlayStation / non-raw slots take the standard</span>
-<a id="__codelineno-86-27" name="__codelineno-86-27" href="#__codelineno-86-27"></a><span class="w">    </span><span class="c1">// XInput-shaped path, with the same slot SOCD cleaning applied</span>
-<a id="__codelineno-86-28" name="__codelineno-86-28" href="#__codelineno-86-28"></a><span class="w">    </span><span class="c1">// to the Gamepad button bitmap before submit. PlayStation slots</span>
-<a id="__codelineno-86-29" name="__codelineno-86-29" href="#__codelineno-86-29"></a><span class="w">    </span><span class="c1">// additionally submit Sony Report 0x01 (touchpad / gyro / accel</span>
-<a id="__codelineno-86-30" name="__codelineno-86-30" href="#__codelineno-86-30"></a><span class="w">    </span><span class="c1">// / battery) via SubmitRawReport after SubmitGamepadState in</span>
-<a id="__codelineno-86-31" name="__codelineno-86-31" href="#__codelineno-86-31"></a><span class="w">    </span><span class="c1">// the same poll.</span>
-<a id="__codelineno-86-32" name="__codelineno-86-32" href="#__codelineno-86-32"></a><span class="w">    </span><span class="n">vc</span><span class="p">.</span><span class="n">SubmitGamepadState</span><span class="p">(</span><span class="n">CombinedOutputStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
-<a id="__codelineno-86-33" name="__codelineno-86-33" href="#__codelineno-86-33"></a><span class="p">}</span>
+<a id="__codelineno-86-4" name="__codelineno-86-4" href="#__codelineno-86-4"></a><span class="p">{</span>
+<a id="__codelineno-86-5" name="__codelineno-86-5" href="#__codelineno-86-5"></a><span class="w">    </span><span class="n">kbmVc</span><span class="p">.</span><span class="n">ApplySocdConfig</span><span class="p">(</span><span class="n">kbmCfg</span><span class="p">.</span><span class="n">SocdMode</span><span class="p">,</span><span class="w"> </span><span class="n">kbmCfg</span><span class="p">.</span><span class="n">SocdPairs</span><span class="p">);</span>
+<a id="__codelineno-86-6" name="__codelineno-86-6" href="#__codelineno-86-6"></a><span class="w">    </span><span class="c1">// A gamepad-only-restricted peer must not reach the OS: submit neutral.</span>
+<a id="__codelineno-86-7" name="__codelineno-86-7" href="#__codelineno-86-7"></a><span class="w">    </span><span class="n">kbmVc</span><span class="p">.</span><span class="n">SubmitKbmState</span><span class="p">(</span><span class="n">IsSlotRestricted</span><span class="p">(</span><span class="n">padIndex</span><span class="p">)</span>
+<a id="__codelineno-86-8" name="__codelineno-86-8" href="#__codelineno-86-8"></a><span class="w">        </span><span class="o">?</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">CombinedKbmRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
+<a id="__codelineno-86-9" name="__codelineno-86-9" href="#__codelineno-86-9"></a><span class="p">}</span>
+<a id="__codelineno-86-10" name="__codelineno-86-10" href="#__codelineno-86-10"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVRController</span><span class="w"> </span><span class="n">vrVc</span><span class="p">)</span>
+<a id="__codelineno-86-11" name="__codelineno-86-11" href="#__codelineno-86-11"></a><span class="p">{</span>
+<a id="__codelineno-86-12" name="__codelineno-86-12" href="#__codelineno-86-12"></a><span class="w">    </span><span class="c1">// Same restricted-peer rule: a restricted slot submits a default</span>
+<a id="__codelineno-86-13" name="__codelineno-86-13" href="#__codelineno-86-13"></a><span class="w">    </span><span class="c1">// VrRawState so it never reaches SteamVR.</span>
+<a id="__codelineno-86-14" name="__codelineno-86-14" href="#__codelineno-86-14"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">vrOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IsSlotRestricted</span><span class="p">(</span><span class="n">padIndex</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">CombinedVrRawStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
+<a id="__codelineno-86-15" name="__codelineno-86-15" href="#__codelineno-86-15"></a><span class="w">    </span><span class="n">vrVc</span><span class="p">.</span><span class="n">SubmitVrState</span><span class="p">(</span><span class="k">in</span><span class="w"> </span><span class="n">vrOut</span><span class="p">);</span>
+<a id="__codelineno-86-16" name="__codelineno-86-16" href="#__codelineno-86-16"></a><span class="p">}</span>
+<a id="__codelineno-86-17" name="__codelineno-86-17" href="#__codelineno-86-17"></a><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">SlotControllerTypes</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Extended</span>
+<a id="__codelineno-86-18" name="__codelineno-86-18" href="#__codelineno-86-18"></a><span class="w">             </span><span class="k">or</span><span class="w"> </span><span class="n">VirtualControllerType</span><span class="p">.</span><span class="n">Nintendo</span>
+<a id="__codelineno-86-19" name="__codelineno-86-19" href="#__codelineno-86-19"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">SlotRawHidSurface</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
+<a id="__codelineno-86-20" name="__codelineno-86-20" href="#__codelineno-86-20"></a><span class="w">         </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">vc</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">HMaestroVirtualController</span><span class="w"> </span><span class="n">hmExt</span><span class="p">)</span>
+<a id="__codelineno-86-21" name="__codelineno-86-21" href="#__codelineno-86-21"></a><span class="p">{</span>
+<a id="__codelineno-86-22" name="__codelineno-86-22" href="#__codelineno-86-22"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SlotCustomLayouts</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
+<a id="__codelineno-86-23" name="__codelineno-86-23" href="#__codelineno-86-23"></a><span class="w">    </span><span class="c1">// Button SOCD (#240): clean the final combined raw buttons</span>
+<a id="__codelineno-86-24" name="__codelineno-86-24" href="#__codelineno-86-24"></a><span class="w">    </span><span class="c1">// right before submit, flat-index grammar on the word array.</span>
+<a id="__codelineno-86-25" name="__codelineno-86-25" href="#__codelineno-86-25"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">socdExt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ResolveSlotSocd</span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">extendedIndices</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<a id="__codelineno-86-26" name="__codelineno-86-26" href="#__codelineno-86-26"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">socdExt</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<a id="__codelineno-86-27" name="__codelineno-86-27" href="#__codelineno-86-27"></a><span class="w">        </span><span class="n">socdExt</span><span class="p">.</span><span class="n">ApplyExtended</span><span class="p">(</span><span class="n">CombinedRawHidStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">].</span><span class="n">Buttons</span><span class="p">);</span>
+<a id="__codelineno-86-28" name="__codelineno-86-28" href="#__codelineno-86-28"></a><span class="w">    </span><span class="n">hmExt</span><span class="p">.</span><span class="n">SubmitRawHidState</span><span class="p">(</span>
+<a id="__codelineno-86-29" name="__codelineno-86-29" href="#__codelineno-86-29"></a><span class="w">        </span><span class="n">CombinedRawHidStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">],</span>
+<a id="__codelineno-86-30" name="__codelineno-86-30" href="#__codelineno-86-30"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Sticks</span><span class="p">,</span>
+<a id="__codelineno-86-31" name="__codelineno-86-31" href="#__codelineno-86-31"></a><span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Triggers</span><span class="p">,</span>
+<a id="__codelineno-86-32" name="__codelineno-86-32" href="#__codelineno-86-32"></a><span class="w">        </span><span class="c1">// IMU channel (HM v1.3.18): the slot&#39;s aggregated motion</span>
+<a id="__codelineno-86-33" name="__codelineno-86-33" href="#__codelineno-86-33"></a><span class="w">        </span><span class="c1">// snapshot rides beside the raw surface.</span>
+<a id="__codelineno-86-34" name="__codelineno-86-34" href="#__codelineno-86-34"></a><span class="w">        </span><span class="n">MotionSnapshots</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
+<a id="__codelineno-86-35" name="__codelineno-86-35" href="#__codelineno-86-35"></a><span class="p">}</span>
+<a id="__codelineno-86-36" name="__codelineno-86-36" href="#__codelineno-86-36"></a><span class="k">else</span>
+<a id="__codelineno-86-37" name="__codelineno-86-37" href="#__codelineno-86-37"></a><span class="p">{</span>
+<a id="__codelineno-86-38" name="__codelineno-86-38" href="#__codelineno-86-38"></a><span class="w">    </span><span class="c1">// Xbox / PlayStation / non-raw slots take the standard</span>
+<a id="__codelineno-86-39" name="__codelineno-86-39" href="#__codelineno-86-39"></a><span class="w">    </span><span class="c1">// XInput-shaped path, with the same slot SOCD cleaning applied</span>
+<a id="__codelineno-86-40" name="__codelineno-86-40" href="#__codelineno-86-40"></a><span class="w">    </span><span class="c1">// to the Gamepad button bitmap before submit. PlayStation slots</span>
+<a id="__codelineno-86-41" name="__codelineno-86-41" href="#__codelineno-86-41"></a><span class="w">    </span><span class="c1">// additionally submit Sony Report 0x01 (touchpad / gyro / accel</span>
+<a id="__codelineno-86-42" name="__codelineno-86-42" href="#__codelineno-86-42"></a><span class="w">    </span><span class="c1">// / battery) via SubmitRawReport after SubmitGamepadState in</span>
+<a id="__codelineno-86-43" name="__codelineno-86-43" href="#__codelineno-86-43"></a><span class="w">    </span><span class="c1">// the same poll.</span>
+<a id="__codelineno-86-44" name="__codelineno-86-44" href="#__codelineno-86-44"></a><span class="w">    </span><span class="n">vc</span><span class="p">.</span><span class="n">SubmitGamepadState</span><span class="p">(</span><span class="n">CombinedOutputStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]);</span>
+<a id="__codelineno-86-45" name="__codelineno-86-45" href="#__codelineno-86-45"></a><span class="p">}</span>
 </code></pre></div></p>
 <h3 id="virtual-controller-creation">Virtual Controller Creation<a class="headerlink" href="#virtual-controller-creation" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="k">private</span><span class="w"> </span><span class="n">IVirtualController</span><span class="w"> </span><span class="nf">CreateVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">)</span>
 </code></pre></div>
 <ol>
-<li>Check prerequisites: HIDMaestro client required for Xbox, PlayStation, Nintendo, and Extended (not for MIDI / KBM)</li>
+<li>Check prerequisites: HIDMaestro client required for Xbox, PlayStation, Nintendo, and Extended (not for MIDI / KBM). A VR slot additionally refuses early when <code>HMVR.IsSteamVRInstalled</code> is false, since the OpenVR driver has no host to register with</li>
 <li>Create concrete controller instance based on <code>SlotControllerTypes[padIndex]</code>:</li>
 <li><code>CreateHMaestroController(VirtualControllerType.Xbox, profileId, padIndex)</code> for Xbox slots</li>
 <li><code>CreateHMaestroController(VirtualControllerType.PlayStation, profileId, padIndex)</code> for PlayStation slots</li>
 <li><code>CreateHMaestroController(VirtualControllerType.Extended, profileId, padIndex)</code> for Extended slots. Resolves the slot's HIDMaestro profile slug via <code>_hmaestroContext.GetProfile(profileId)</code> (falling back to <code>HMaestroProfileCatalog.GetProfileById</code> for synthetic entries like <code>padforge-custom</code>), applies per-slot product-string / layout / FFB overrides through <code>HMProfileBuilder</code> + <code>HidDescriptorBuilder</code> for customized Extended slots, then returns <code>new HMaestroVirtualController(_hmaestroContext, effectiveProfile, type)</code></li>
+<li><code>CreateHMaestroController(VirtualControllerType.Nintendo, profileId, padIndex)</code> for Nintendo slots (fixed <code>switch-pro</code> catalog profile, no Customize)</li>
 <li><code>CreateMidiController(padIndex)</code>. Creates virtual MIDI endpoint with computed instance number</li>
 <li><code>KeyboardMouseVirtualController(padIndex)</code></li>
+<li><code>HMaestroVRController()</code> for VR slots. Takes no pad index at construction. <code>RegisterFeedbackCallback</code> supplies it afterward, the same as every other type</li>
 <li>Call <code>vc.Connect()</code>. XInput slot claim for Xbox slots waits inside HIDMaestro's <code>CreateController</code> (<code>WaitForHidChild</code> / <code>WaitForDeviceStarted</code> / <code>WaitForXInputSlotClaim</code>), so there is no consumer-side mask snapshot or spin-wait.</li>
 <li>Increment active counters</li>
 <li>Register feedback callback: <code>vc.RegisterFeedbackCallback(padIndex, VibrationStates)</code>. Wires HIDMaestro's <code>HMController.OutputReceived</code> to <code>VibrationStates[padIndex]</code></li>
@@ -8270,7 +8462,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
    - <code>RetrievedOutputStates[padIndex] = CombinedOutputStates[padIndex]</code> (struct copy)
    - For KBM VCs: also copy <code>RetrievedKbmRawStates[padIndex] = CombinedKbmRawStates[padIndex]</code>
    - For PlayStation slots: also forward <code>RetrievedTouchpadStates[padIndex] = CombinedTouchpadStates[padIndex]</code>
-3. Otherwise: <code>RetrievedOutputStates[padIndex].Clear()</code>, <code>RetrievedKbmRawStates[padIndex].Clear()</code>, and <code>RetrievedTouchpadStates[padIndex] = default</code></p>
+3. Otherwise, and only on the transition: <code>RetrievedOutputStates[padIndex].Clear()</code>, <code>RetrievedKbmRawStates[padIndex].Clear()</code>, and <code>RetrievedTouchpadStates[padIndex] = default</code>. A per-slot <code>_retrievedCleared[]</code> one-shot gates it, because re-zeroing already-zero state cost 15 struct clears per tick on a one-slot config. The flag resets whenever the slot publishes real state again</p>
 <p>This replaced the original XInput readback (<code>XInputGetStateEx</code>). Direct copy works for every output type and avoids the ~1 ms XInput round-trip.</p>
 <hr />
 <h2 id="thread-safety-summary">Thread Safety Summary<a class="headerlink" href="#thread-safety-summary" title="Permanent link">&para;</a></h2>
@@ -8372,32 +8564,37 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-93-8" name="__codelineno-93-8" href="#__codelineno-93-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbRX</span><span class="p">;</span>
 <a id="__codelineno-93-9" name="__codelineno-93-9" href="#__codelineno-93-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">ThumbRY</span><span class="p">;</span>
 <a id="__codelineno-93-10" name="__codelineno-93-10" href="#__codelineno-93-10"></a>
-<a id="__codelineno-93-11" name="__codelineno-93-11" href="#__codelineno-93-11"></a><span class="w">    </span><span class="c1">// Xbox Series Share button. Outside the 16-bit Buttons mask because</span>
-<a id="__codelineno-93-12" name="__codelineno-93-12" href="#__codelineno-93-12"></a><span class="w">    </span><span class="c1">// all 16 XInput-equivalent bits are taken. HM exposes it as HMButton.Share.</span>
-<a id="__codelineno-93-13" name="__codelineno-93-13" href="#__codelineno-93-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Share</span><span class="p">;</span>
-<a id="__codelineno-93-14" name="__codelineno-93-14" href="#__codelineno-93-14"></a>
-<a id="__codelineno-93-15" name="__codelineno-93-15" href="#__codelineno-93-15"></a><span class="w">    </span><span class="c1">// Button flag constants</span>
-<a id="__codelineno-93-16" name="__codelineno-93-16" href="#__codelineno-93-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_UP</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0001</span><span class="p">;</span>
-<a id="__codelineno-93-17" name="__codelineno-93-17" href="#__codelineno-93-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_DOWN</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0002</span><span class="p">;</span>
-<a id="__codelineno-93-18" name="__codelineno-93-18" href="#__codelineno-93-18"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_LEFT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0004</span><span class="p">;</span>
-<a id="__codelineno-93-19" name="__codelineno-93-19" href="#__codelineno-93-19"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_RIGHT</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0008</span><span class="p">;</span>
-<a id="__codelineno-93-20" name="__codelineno-93-20" href="#__codelineno-93-20"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">START</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0010</span><span class="p">;</span>
-<a id="__codelineno-93-21" name="__codelineno-93-21" href="#__codelineno-93-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">BACK</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0020</span><span class="p">;</span>
-<a id="__codelineno-93-22" name="__codelineno-93-22" href="#__codelineno-93-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_THUMB</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0040</span><span class="p">;</span>
-<a id="__codelineno-93-23" name="__codelineno-93-23" href="#__codelineno-93-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_THUMB</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0080</span><span class="p">;</span>
-<a id="__codelineno-93-24" name="__codelineno-93-24" href="#__codelineno-93-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_SHOULDER</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0100</span><span class="p">;</span>
-<a id="__codelineno-93-25" name="__codelineno-93-25" href="#__codelineno-93-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_SHOULDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0200</span><span class="p">;</span>
-<a id="__codelineno-93-26" name="__codelineno-93-26" href="#__codelineno-93-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">GUIDE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0400</span><span class="p">;</span>
-<a id="__codelineno-93-27" name="__codelineno-93-27" href="#__codelineno-93-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">TOUCHPAD</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0800</span><span class="p">;</span><span class="w">  </span><span class="c1">// PlayStation slots only, used by macros</span>
-<a id="__codelineno-93-28" name="__codelineno-93-28" href="#__codelineno-93-28"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">A</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x1000</span><span class="p">;</span>
-<a id="__codelineno-93-29" name="__codelineno-93-29" href="#__codelineno-93-29"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">B</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x2000</span><span class="p">;</span>
-<a id="__codelineno-93-30" name="__codelineno-93-30" href="#__codelineno-93-30"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">X</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4000</span><span class="p">;</span>
-<a id="__codelineno-93-31" name="__codelineno-93-31" href="#__codelineno-93-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">Y</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">;</span>
-<a id="__codelineno-93-32" name="__codelineno-93-32" href="#__codelineno-93-32"></a>
-<a id="__codelineno-93-33" name="__codelineno-93-33" href="#__codelineno-93-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">);</span>
-<a id="__codelineno-93-34" name="__codelineno-93-34" href="#__codelineno-93-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
-<a id="__codelineno-93-35" name="__codelineno-93-35" href="#__codelineno-93-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
-<a id="__codelineno-93-36" name="__codelineno-93-36" href="#__codelineno-93-36"></a><span class="p">}</span>
+<a id="__codelineno-93-11" name="__codelineno-93-11" href="#__codelineno-93-11"></a><span class="w">    </span><span class="c1">// Out-of-mask extras. All 16 XInput-equivalent bits in Buttons are</span>
+<a id="__codelineno-93-12" name="__codelineno-93-12" href="#__codelineno-93-12"></a><span class="w">    </span><span class="c1">// taken, so these ride their own bools.</span>
+<a id="__codelineno-93-13" name="__codelineno-93-13" href="#__codelineno-93-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Share</span><span class="p">;</span><span class="w">         </span><span class="c1">// Xbox Series Share. HM exposes it as HMButton.Share (bit 12)</span>
+<a id="__codelineno-93-14" name="__codelineno-93-14" href="#__codelineno-93-14"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MicMute</span><span class="p">;</span><span class="w">       </span><span class="c1">// DualSense mic mute. SDL calls it misc1, HM carries HMButton.Misc1</span>
+<a id="__codelineno-93-15" name="__codelineno-93-15" href="#__codelineno-93-15"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">LeftPaddle</span><span class="p">;</span><span class="w">    </span><span class="c1">// DualSense Edge BACK paddles (wire bits 0x40 / 0x80)</span>
+<a id="__codelineno-93-16" name="__codelineno-93-16" href="#__codelineno-93-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">RightPaddle</span><span class="p">;</span>
+<a id="__codelineno-93-17" name="__codelineno-93-17" href="#__codelineno-93-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">LeftFunction</span><span class="p">;</span><span class="w">  </span><span class="c1">// Edge front Fn buttons (0x10 / 0x20), SDL&#39;s LEFT/RIGHT_PADDLE2</span>
+<a id="__codelineno-93-18" name="__codelineno-93-18" href="#__codelineno-93-18"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">RightFunction</span><span class="p">;</span>
+<a id="__codelineno-93-19" name="__codelineno-93-19" href="#__codelineno-93-19"></a>
+<a id="__codelineno-93-20" name="__codelineno-93-20" href="#__codelineno-93-20"></a><span class="w">    </span><span class="c1">// Button flag constants</span>
+<a id="__codelineno-93-21" name="__codelineno-93-21" href="#__codelineno-93-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_UP</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0001</span><span class="p">;</span>
+<a id="__codelineno-93-22" name="__codelineno-93-22" href="#__codelineno-93-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_DOWN</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0002</span><span class="p">;</span>
+<a id="__codelineno-93-23" name="__codelineno-93-23" href="#__codelineno-93-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_LEFT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0004</span><span class="p">;</span>
+<a id="__codelineno-93-24" name="__codelineno-93-24" href="#__codelineno-93-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">DPAD_RIGHT</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0008</span><span class="p">;</span>
+<a id="__codelineno-93-25" name="__codelineno-93-25" href="#__codelineno-93-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">START</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0010</span><span class="p">;</span>
+<a id="__codelineno-93-26" name="__codelineno-93-26" href="#__codelineno-93-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">BACK</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0020</span><span class="p">;</span>
+<a id="__codelineno-93-27" name="__codelineno-93-27" href="#__codelineno-93-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_THUMB</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0040</span><span class="p">;</span>
+<a id="__codelineno-93-28" name="__codelineno-93-28" href="#__codelineno-93-28"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_THUMB</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0080</span><span class="p">;</span>
+<a id="__codelineno-93-29" name="__codelineno-93-29" href="#__codelineno-93-29"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">LEFT_SHOULDER</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0100</span><span class="p">;</span>
+<a id="__codelineno-93-30" name="__codelineno-93-30" href="#__codelineno-93-30"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">RIGHT_SHOULDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0200</span><span class="p">;</span>
+<a id="__codelineno-93-31" name="__codelineno-93-31" href="#__codelineno-93-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">GUIDE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0400</span><span class="p">;</span>
+<a id="__codelineno-93-32" name="__codelineno-93-32" href="#__codelineno-93-32"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">TOUCHPAD</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0800</span><span class="p">;</span><span class="w">  </span><span class="c1">// PlayStation slots only, used by macros</span>
+<a id="__codelineno-93-33" name="__codelineno-93-33" href="#__codelineno-93-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">A</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x1000</span><span class="p">;</span>
+<a id="__codelineno-93-34" name="__codelineno-93-34" href="#__codelineno-93-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">B</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x2000</span><span class="p">;</span>
+<a id="__codelineno-93-35" name="__codelineno-93-35" href="#__codelineno-93-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">X</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4000</span><span class="p">;</span>
+<a id="__codelineno-93-36" name="__codelineno-93-36" href="#__codelineno-93-36"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">Y</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">;</span>
+<a id="__codelineno-93-37" name="__codelineno-93-37" href="#__codelineno-93-37"></a>
+<a id="__codelineno-93-38" name="__codelineno-93-38" href="#__codelineno-93-38"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsButtonPressed</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">);</span>
+<a id="__codelineno-93-39" name="__codelineno-93-39" href="#__codelineno-93-39"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetButton</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
+<a id="__codelineno-93-40" name="__codelineno-93-40" href="#__codelineno-93-40"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
+<a id="__codelineno-93-41" name="__codelineno-93-41" href="#__codelineno-93-41"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="rawhidstate-struct">RawHidState Struct<a class="headerlink" href="#rawhidstate-struct" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">RawHidState</span>
@@ -8428,6 +8625,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-95-13" name="__codelineno-95-13" href="#__codelineno-95-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">Accel</span><span class="p">;</span><span class="w">   </span><span class="c1">// [X,Y,Z] m/s^2 (SDL standard, Y=up has gravity)</span>
 <a id="__codelineno-95-14" name="__codelineno-95-14" href="#__codelineno-95-14"></a><span class="p">}</span>
 </code></pre></div>
+<p>That is the gamepad core only. <code>CustomInputState</code> also carries the optional sub-states each device family populates: <code>Touchpads</code>, <code>Midi</code>, <code>Ir</code>, <code>JoyConIrIntensity</code>, <code>JoyCon2MouseDX</code> / <code>DY</code>, <code>AccelAux</code>, <code>GyroAux</code>, <code>MouseRawDX</code> / <code>DY</code>, <code>CapSense</code>, <code>NfcTag</code>, and the battery pair. Most are null or zero unless the device exposes the capability, which is what keeps the per-poll allocation cost at zero for a plain gamepad. See <a href="../engine-library/">Engine Library</a> for the full field list.</p>
 <h3 id="ivirtualcontroller-interface">IVirtualController Interface<a class="headerlink" href="#ivirtualcontroller-interface" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IVirtualController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
 <a id="__codelineno-96-2" name="__codelineno-96-2" href="#__codelineno-96-2"></a><span class="p">{</span>
@@ -8451,9 +8649,11 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-97-8" name="__codelineno-97-8" href="#__codelineno-97-8"></a><span class="w">    </span><span class="n">Extended</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">      </span><span class="c1">// Any other HIDMaestro profile, or a custom HID descriptor</span>
 <a id="__codelineno-97-9" name="__codelineno-97-9" href="#__codelineno-97-9"></a><span class="w">    </span><span class="n">Midi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">          </span><span class="c1">// Windows MIDI Services virtual endpoint</span>
 <a id="__codelineno-97-10" name="__codelineno-97-10" href="#__codelineno-97-10"></a><span class="w">    </span><span class="n">KeyboardMouse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="c1">// Win32 SendInput keyboard + mouse</span>
-<a id="__codelineno-97-11" name="__codelineno-97-11" href="#__codelineno-97-11"></a><span class="w">    </span><span class="n">Nintendo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w">       </span><span class="c1">// Virtual Switch Pro via HM, rides the raw-HID path</span>
-<a id="__codelineno-97-12" name="__codelineno-97-12" href="#__codelineno-97-12"></a><span class="p">}</span>
+<a id="__codelineno-97-11" name="__codelineno-97-11" href="#__codelineno-97-11"></a><span class="w">    </span><span class="n">Nintendo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">      </span><span class="c1">// Virtual Switch Pro via HM, rides the raw-HID path</span>
+<a id="__codelineno-97-12" name="__codelineno-97-12" href="#__codelineno-97-12"></a><span class="w">    </span><span class="n">Vr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="w">             </span><span class="c1">// SteamVR left+right hand pair via HM&#39;s OpenVR driver (#49)</span>
+<a id="__codelineno-97-13" name="__codelineno-97-13" href="#__codelineno-97-13"></a><span class="p">}</span>
 </code></pre></div>
+<p>Numeric values are persisted. Never reorder them, and append new members at the tail.</p>
 <p>The concrete device identity (Xbox 360 Wired, DualSense, Logitech G920, ...) is picked within each category by a per-slot preset config or, for Extended, a custom HID descriptor.</p>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
@@ -8468,7 +8668,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuMotionServer</code> broadcast called after Step 2</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

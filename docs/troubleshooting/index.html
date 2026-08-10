@@ -2574,6 +2574,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3035,6 +3039,62 @@
     
   
     Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
   
 
     
@@ -3925,7 +3985,7 @@
 <li>Level meter flat during playback? Toggle Audio Bass Rumble off and on to restart WASAPI capture.</li>
 <li>Set <strong>Overall Gain</strong> above 0%. It applies to audio rumble too.</li>
 <li>Increase <strong>sensitivity</strong> (default 4, try 8-12, range 1-20).</li>
-<li>Raise <strong>Bass Cutoff</strong> (default 80 Hz, range 20-200 Hz) to capture more mid-bass.</li>
+<li>Raise <strong>Bass Cutoff (Hz)</strong> (default 80, range 20-200) to capture more mid-bass.</li>
 <li>Set both motor scale sliders above 0%.</li>
 <li>Click <strong>Test Rumble</strong>. No vibration means the device lacks rumble motors.</li>
 <li>Some apps (DAWs, certain games) open audio in exclusive mode, blocking WASAPI loopback.</li>
@@ -4080,8 +4140,8 @@
 <li>Enable the web controller on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Running" with a URL.</li>
 <li>Both devices must be on the same Wi-Fi or LAN network.</li>
 <li>PadForge creates a firewall rule automatically.</li>
-<li>"Port in use" means another app occupies port 8080. Change the port in <a href="../features/settings/">Settings</a>.</li>
-<li>"Access denied" on a port means Windows reserved it or another service holds it. Change the web controller port in <a href="../features/settings/">Settings</a> to a free one.</li>
+<li>"Port 8080 in use" means another app occupies that port. Change the port in the <strong>Web Controller</strong> section of the <a href="../features/dashboard/">Dashboard</a>.</li>
+<li>"Access denied for port 8080 (run as admin)" means Windows reserved it or another service holds it. Change the web controller port on the <a href="../features/dashboard/">Dashboard</a> to a free one.</li>
 <li>Rotate the browser device to <strong>landscape</strong> orientation.</li>
 <li>Try Chrome, Firefox, or Edge if WebSocket issues occur.</li>
 </ol>
@@ -4451,7 +4511,7 @@
 </tr>
 <tr>
 <td>Web controller disconnected</td>
-<td>Same network, check firewall, try another port</td>
+<td>Same network, check firewall, change the port on the Dashboard</td>
 </tr>
 <tr>
 <td>iOS Safari drops the web controller</td>
@@ -4611,7 +4671,7 @@
 <li><a href="../guides/remote-link/">Remote Link</a>: Share a controller across PCs on your network</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

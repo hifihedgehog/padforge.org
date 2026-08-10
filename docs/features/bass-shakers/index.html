@@ -2051,6 +2051,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2532,6 +2536,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -2854,17 +2914,24 @@ noticeable latency, and the card says so.</p>
 <td>Loudness of this channel before master gain.</td>
 </tr>
 <tr>
+<td>Level meter</td>
+<td>Live bar showing what this channel is playing right now.</td>
+</tr>
+<tr>
 <td><strong>Test</strong></td>
 <td>Plays this channel's tone for 1.5 seconds at its set gain.</td>
 </tr>
 </tbody>
 </table>
+<p>Default frequencies: 40 Hz low motor, 80 Hz high motor, 60 Hz on both
+triggers. Every voice starts enabled at 100% gain. Master Gain starts at
+50%.</p>
 <h2 id="frequency-sweep">Frequency Sweep<a class="headerlink" href="#frequency-sweep" title="Permanent link">&para;</a></h2>
 <p><strong>Frequency Sweep</strong> sweeps a tone from 20 to 120 Hz over eight seconds on
 the low motor routing. Note where your shaker responds strongest and set
 the voice frequencies there. <strong>Stop</strong> ends a running test or sweep.</p>
-<p>Every control has a reset button, and the tab header carries a reset for
-the whole card.</p>
+<p>Every control has a reset button, and the Rumble to Audio card header
+carries a <strong>Reset All</strong> for the whole card.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2874,7 +2941,7 @@ the whole card.</p>
 <li><a href="../controller-audio/">Controller Audio</a> covers the controller's own
   speaker and haptic-tone audio.</li>
 </ul>
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

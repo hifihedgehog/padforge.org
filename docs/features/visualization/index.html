@@ -1715,6 +1715,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#colorways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colorways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#camera-controls" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1801,6 +1812,17 @@
     <span class="md-ellipsis">
       
         Nintendo preview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vr-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VR preview
       
     </span>
   </a>
@@ -2123,6 +2145,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -2648,6 +2674,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -2866,6 +2948,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#colorways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colorways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#camera-controls" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2952,6 +3045,17 @@
     <span class="md-ellipsis">
       
         Nintendo preview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vr-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VR preview
       
     </span>
   </a>
@@ -3047,8 +3151,8 @@
 </tr>
 <tr>
 <td><strong>Nintendo</strong></td>
-<td>2D Switch Pro overlay</td>
-<td>No (2D only, no 3D mesh)</td>
+<td>3D model</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td><strong>Extended</strong></td>
@@ -3065,13 +3169,56 @@
 <td>Piano keyboard and CC sliders</td>
 <td>No</td>
 </tr>
+<tr>
+<td><strong>VR</strong></td>
+<td>Both SteamVR hands side by side</td>
+<td>No</td>
+</tr>
 </tbody>
 </table>
-<p>On Xbox and PlayStation slots a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads <strong>Switch to 2D view</strong> or <strong>Switch to 3D view</strong> depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.</p>
+<p>On Xbox, PlayStation, and Nintendo slots a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads <strong>Switch to 2D view</strong> or <strong>Switch to 3D view</strong> depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.</p>
 <hr />
 <h2 id="3d-model">3D model<a class="headerlink" href="#3d-model" title="Permanent link">&para;</a></h2>
-<p>The active model swaps with the assigned profile. Four meshes cover the Xbox and PlayStation slots: Xbox 360, a shared Xbox One body used for Xbox One, Elite, Series, and Adaptive profiles, DualShock 4, and DualSense. Xbox Series profiles add a clickable Share button on the shared Xbox One body. The other Xbox profiles use the same body with the Share region inert, so it doesn't respond to hover or clicks. There is no separate Series 3D mesh. The distinct Series artwork lives only in the 2D overlay. Nintendo slots have no 3D mesh at all. Like the Series artwork, the Switch Pro art exists only in 2D.</p>
+<p>The active model swaps with the assigned profile. Six meshes cover the Xbox, PlayStation, and Nintendo slots:</p>
+<table>
+<thead>
+<tr>
+<th>Mesh</th>
+<th>Profiles it serves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xbox 360</td>
+<td><code>xbox-360*</code>, plus the arcade-stick / dance-pad / wheel siblings</td>
+</tr>
+<tr>
+<td>Xbox Series</td>
+<td><code>xbox-series-*</code>, and also Xbox One, Elite, and Adaptive</td>
+</tr>
+<tr>
+<td>DualShock 4</td>
+<td><code>dualshock*</code></td>
+</tr>
+<tr>
+<td>DualSense</td>
+<td><code>dualsense*</code></td>
+</tr>
+<tr>
+<td>DualSense Edge</td>
+<td><code>dualsense-edge*</code></td>
+</tr>
+<tr>
+<td>Switch 2 Pro</td>
+<td><code>switch2-pro*</code>, and also the original <code>switch-pro</code></td>
+</tr>
+</tbody>
+</table>
+<p>Two meshes are shared by profiles that do not all carry every control. The Series mesh serves the whole Xbox One / Elite / Series / Adaptive family, and only <code>xbox-series-*</code> profiles get a live Share button. The Switch 2 Pro mesh serves both Switch generations, and the S2-only parts (C button, GL / GR, the four player LEDs) render on an original Pro Controller as inert meshes. Borrowed-but-absent controls draw either way, but they are wired into the hover, click-to-record, and highlight maps only for the profile that actually has them, so nothing maps or flashes wrong.</p>
+<p>The 2D sets do not share the same way. Xbox One and Series keep separate artwork, and so do the two Switch Pro generations, because Switch 2 Pro art carries a C button and the GL / GR grip tiles.</p>
 <p>Each model registers hit regions for every button, stick, trigger, and the touchpad. Click anywhere on the model to target that control.</p>
+<h3 id="colorways">Colorways<a class="headerlink" href="#colorways" title="Permanent link">&para;</a></h3>
+<p>A model family that ships more than one appearance shows a <strong>Colorway</strong> picker in the top-right corner, left of the annotation toggle. The Xbox Series, DualSense, DualShock 4, and DualSense Edge families have one. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.</p>
 <h3 id="camera-controls">Camera controls<a class="headerlink" href="#camera-controls" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3109,7 +3256,7 @@
 </tr>
 </tbody>
 </table>
-<p>Two buttons sit in the top-right corner: the <strong>Mapping Annotations</strong> toggle (tag glyph) on the left and <strong>Reset View</strong> on its right.</p>
+<p>The top-right corner holds the <strong>Mapping Annotations</strong> toggle (tag glyph) with <strong>Reset View</strong> on its right, and the <strong>Colorway</strong> picker to their left on families that have one.</p>
 <p>Rotation is turntable-style. Horizontal drag controls yaw. Vertical drag controls pitch, stopping short of straight up or down. <strong>Reset View</strong> snaps the camera back to the default angle.</p>
 <blockquote>
 <p><strong>Tip:</strong> Zoom in before using click-to-record so you can target small buttons accurately. Right-click drag to re-center after zooming. Click <strong>Reset View</strong> to snap back to the default angle.</p>
@@ -3254,10 +3401,38 @@
 <p>The spheres and dots follow the slot's Touchpad mapping rows (<strong>Touchpad 1 Finger 1 X</strong> through <strong>Touchpad 1 Finger 2 Touch</strong>). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.</p>
 <hr />
 <h2 id="nintendo-preview">Nintendo preview<a class="headerlink" href="#nintendo-preview" title="Permanent link">&para;</a></h2>
-<p>Nintendo slots always show a flat 2D Switch Pro diagram. No 3D mesh exists for the Switch Pro, so the 2D/3D toggle is hidden.</p>
+<p>Nintendo slots get both views, like Xbox and PlayStation. The 3D model is the Switch 2 Pro mesh, shared with the <code>switch2-pro</code> profiles. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay uses the Switch Pro artwork, which is its own set rather than the Switch 2 Pro one.</p>
 <p><img alt="Nintendo slot preview" src="../../images/pad-nintendo-configbar.png" /></p>
 <p>The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.</p>
 <p>A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.</p>
+<hr />
+<h2 id="vr-preview">VR preview<a class="headerlink" href="#vr-preview" title="Permanent link">&para;</a></h2>
+<p>VR slots draw both SteamVR hands side by side. One slot drives the pair, so there is no single controller body and the 2D/3D toggle is hidden. The art is a flat drawn pack like the branded 2D overlays: one base bitmap with a per-element tint layer composited on top when an element is lit, hovered, or under record.</p>
+<p>Interaction matches the other 2D previews. Hover warms an element, clicking records it, and the element under record flashes.</p>
+<p>Elements that carry more than one mapping target split into regions, and the region under the pointer lights on its own:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Regions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stick</td>
+<td>Center is the click, the surrounding half-discs are the directions</td>
+</tr>
+<tr>
+<td>A / B</td>
+<td>Inner disc is the press, the outer ring is the touch</td>
+</tr>
+<tr>
+<td>Trigger, grip</td>
+<td>The body is the axis, the tip band is the click</td>
+</tr>
+</tbody>
+</table>
+<p>No direction arrows here. Arrows are the schematic view's grammar, not the drawn packs'.</p>
 <hr />
 <h2 id="extended-schematic">Extended schematic<a class="headerlink" href="#extended-schematic" title="Permanent link">&para;</a></h2>
 <p>Extended slots show a procedurally generated schematic instead of a controller model, regardless of which HIDMaestro profile is active. The layout rebuilds when the active profile or count overrides change.</p>
@@ -3367,7 +3542,7 @@
 <li><a href="../../guides/macros/">Macros</a>: trigger and action authoring that uses the same recording flow.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

@@ -111,4 +111,4 @@ The sliders stay editable after loading. It's a one-click loader, not a lock.
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

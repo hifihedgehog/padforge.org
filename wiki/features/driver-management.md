@@ -1,6 +1,6 @@
 # Driver Management
 
-*PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers two optional ones (HidHide and Windows MIDI Services) that install and uninstall from **Settings**.*
+*PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers three optional ones (HidHide, Windows MIDI Services, and SteamVR) that install and uninstall from **Settings**.*
 
 <!-- SCREENSHOT: settings-drivers -->
 ![Driver management cards](../images/settings-drivers.png)
@@ -15,6 +15,7 @@
 | **Keyboard+Mouse** | Built in. No driver. | Maps controller inputs to keyboard and mouse presses. |
 | **HidHide** | Optional. Install when games show double input. | Hides physical controllers from games so they only see the virtual ones. |
 | **Windows MIDI Services** | Optional. Install for MIDI input or the MIDI controller type. | Virtual MIDI endpoints for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Needs Windows 11 24H2 (build 26100) or later. |
+| **SteamVR** | Optional. Install for the VR controller type. | VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB). |
 
 > **Upgrading from an older PadForge?** Older versions needed ViGEmBus and vJoy. HIDMaestro replaces both. If either is still on your PC, PadForge finds it on first launch and offers to remove it (see [Legacy driver cleanup](#legacy-driver-cleanup)).
 
@@ -24,7 +25,7 @@
 
 HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The HIDMaestro card on the **Settings** page lights up and the Xbox, PlayStation, Nintendo, and Extended slot types turn on.
 
-HidHide and Windows MIDI Services do not auto-install. They sit on the **Settings** page until you click **Install**.
+HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the **Settings** page until you click **Install**.
 
 ---
 
@@ -53,12 +54,13 @@ PadForge runs whether or not the optional drivers are installed. Missing drivers
 | **HIDMaestro** | It auto-installs on first use, so it isn't normally missing. If that install fails, Xbox, PlayStation, Nintendo, and Extended slots can't create a virtual controller. Keyboard+Mouse and MIDI still work. |
 | **HidHide** | "Hide from games" has no effect. Games may see the physical and the virtual at the same time. |
 | **MIDI Services** | The MIDI slot type won't switch on. Its button stays visible and shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works. |
+| **SteamVR** | The VR slot type won't switch on. Its button stays visible and shows the tooltip "VR (requires SteamVR)". Every other slot type works. |
 
 ---
 
 ## Admin rights
 
-PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.
+PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, the SteamVR install, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.
 
 ---
 
@@ -66,7 +68,7 @@ PadForge always runs as administrator. The UAC prompt fires once per launch, whe
 
 One driver that publishes the virtual controllers. Each non-MIDI, non-Keyboard+Mouse slot uses one HIDMaestro **device profile**. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.
 
-New in 4.1.0: the **Nintendo** slot type. It always deploys the Switch Pro profile as-is (no customizing), with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The other Nintendo profiles (Switch 2 Pro, Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
+The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Switch 2 Pro. Pick between them from the slot's preset dropdown. Neither can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
 
 ### The 225+ profiles cover
 
@@ -177,6 +179,28 @@ Needs **Windows 11 24H2 (build 26100) or later**. On older Windows the **Install
 
 ---
 
+## SteamVR
+
+The runtime behind the VR slot type. PadForge installs it Steam-free from Valve's servers: no Steam account, no Steam client. It is several GB.
+
+### Install steps
+
+1. Open **Settings**. Scroll to **SteamVR**.
+2. Set **Install Location** if you do not want the default path. The box only shows while SteamVR is missing.
+3. Click **Install**. The download runs from Valve's servers and the flame lights when it finishes.
+
+### Uninstall steps
+
+**Uninstall** only appears for an install PadForge itself made. A SteamVR that arrived with the Steam client is left alone, and PadForge shows no removal button for it.
+
+1. Close SteamVR. The uninstall refuses while it is running.
+2. Open **Settings**. Scroll to **SteamVR**.
+3. Click **Uninstall**. It removes the Steam-free install and frees the space. VR virtual controllers stop working until SteamVR is installed again.
+
+For the slot type itself, see [Virtual VR Controllers](vr-controllers.md).
+
+---
+
 ## Legacy driver cleanup
 
 Older PadForge versions needed ViGEmBus and vJoy. HIDMaestro replaces both. If either is still on your PC, PadForge finds it on first launch and offers to remove it.
@@ -197,13 +221,15 @@ The dialog appears once. After you pick either button, it does not come back on 
 | **HIDMaestro** | Yes | Yes | Yes | * | No |
 | **HidHide** | Yes | Yes | Yes | No | No |
 | **Windows MIDI Services** | No | No | Yes | No | No |
-| **Keyboard+Mouse** (no driver) | Yes | Yes | Yes | Yes | No |
+| **SteamVR** | Yes | Yes | Yes | No | No |
+| **Keyboard+Mouse** (no driver) | Yes | Yes | Yes | * | No |
 
 - **HIDMaestro** runs in user mode, so it installs with no reboot. ARM64 support tracks the HIDMaestro project. Check the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases) for current status.
 - **HidHide** is an x64 kernel driver. It does not run on ARM64 (Snapdragon laptops) or 32-bit Windows.
 - **Windows MIDI Services** needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows.
-- **Keyboard+Mouse** needs no driver. It works on any 64-bit Windows that runs PadForge.
-- **PadForge itself** is a 64-bit app. It runs on 64-bit Windows 10 and 11. It does not run on 32-bit Windows.
+- **SteamVR** is x64. Valve ships no ARM64 build.
+- **Keyboard+Mouse** needs no driver, so it works wherever PadForge itself runs.
+- **PadForge itself** ships as a 64-bit x64 app. It runs on 64-bit Windows 10 and 11, and on ARM64 Windows only through x64 emulation. It does not run on 32-bit Windows.
 
 ---
 
@@ -215,6 +241,7 @@ PadForge blocks driver removal while a slot still needs it.
 |---|---|
 | **HidHide** | Any device has "Hide from games" on. |
 | **MIDI Services** | Any MIDI slot exists. |
+| **SteamVR** | SteamVR is running, or the install did not come from PadForge. |
 
 Delete the slots or turn the feature off. Then **Uninstall** becomes available. (HIDMaestro has no Uninstall button, so it needs no guard.)
 
@@ -265,4 +292,4 @@ Delete the slots or turn the feature off. Then **Uninstall** becomes available. 
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

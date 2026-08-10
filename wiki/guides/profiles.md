@@ -13,7 +13,7 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 
 | Setting | What is captured |
 |---|---|
-| Virtual controller topology | Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Nintendo, Extended, MIDI, Keyboard+Mouse). |
+| Virtual controller topology | Created slots, enabled slots, and the type of each slot (Xbox, PlayStation, Nintendo, Extended, MIDI, Keyboard + Mouse, VR). |
 | Button and axis mappings | Every per-device mapping for every slot. See [Button and Axis Mappings](../features/mappings.md). |
 | Deadzones | Per-axis [Stick Deadzones](../features/stick-deadzones.md) and per-trigger [Trigger Deadzones](../features/trigger-deadzones.md). |
 | SOCD cleaning | Per-slot Simultaneous Opposite Cardinal Directions (SOCD) mode and button pairs, applied to the slot's final combined output. |
@@ -133,8 +133,9 @@ A badge hides when its count is zero. The strip gives you a quick read of the pr
 | **Save As** | Clones the current setup into a new profile. |
 | **Load** | Apply the selected profile. Double-click also loads. |
 | **Edit** | Rename and edit the executable list. |
-| **Export...** | Write the selected profile to a shareable `.pfprofile` file. |
-| **Import...** | Read a `.pfprofile` file back in. |
+| **Export…** | Write the selected profile to a shareable `.pfprofile` file. |
+| **Import…** | Read a `.pfprofile` file back in. |
+| **Browse Starter Profiles** | Open the starter gallery and save a ready-made genre archetype as a new profile. See [Start from a starter profile](starter-profiles.md). |
 | **Browse Community Configs** | Open the Steam Workshop browser and import a community-made Steam Input config as a new profile. See [Steam Workshop Config Import](steam-workshop-import.md). |
 | **Delete** | Remove the selected profile. Default cannot be deleted. |
 
@@ -145,14 +146,14 @@ A badge hides when its count is zero. The strip gives you a quick read of the pr
 Export writes a profile to a `.pfprofile` file. That file is one archive holding the profile plus any sound packages its macros use, so a profile with custom macro sounds travels complete. Send it to someone else, or keep it as a backup.
 
 1. Select a profile in the grid.
-2. Click **Export...**.
+2. Click **Export…**.
 3. Pick a location and save. The file is named after the profile.
 
 You can export the **Default** profile too. It writes a snapshot of your current settings.
 
 Import reads a `.pfprofile` back in.
 
-1. Click **Import...**.
+1. Click **Import…**.
 2. Pick the `.pfprofile` file.
 3. The profile joins the grid, and any bundled sound packages install alongside it. If the name already exists, PadForge adds a number.
 
@@ -222,6 +223,8 @@ An auto-switch on app focus does not raise this flyout. The active profile name 
 
 The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled or disabled) instead of the profile flyout.
 
+The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profile switch overlay** toggle, on by default. Turn it off and shortcuts still switch profiles, just without the flyout.
+
 ---
 
 ## Examples
@@ -269,4 +272,4 @@ The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled o
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -2168,6 +2168,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2649,6 +2653,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3070,6 +3130,12 @@
 <td>Off</td>
 <td>Flips which physical trigger motor receives the left vs. right signal. Use when the trigger pulses feel reversed.</td>
 </tr>
+<tr>
+<td>Translate adaptive trigger vibrations</td>
+<td>On/Off</td>
+<td>Off</td>
+<td>When a game drives this slot as a virtual DualSense, its vibration-style adaptive trigger effects play on this controller's impulse trigger motors. Resistance-style effects have no vibration equivalent and are ignored.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="test-buttons">Test buttons<a class="headerlink" href="#test-buttons" title="Permanent link">&para;</a></h3>
@@ -3198,7 +3264,7 @@
 <h2 id="reset-controls">Reset controls<a class="headerlink" href="#reset-controls" title="Permanent link">&para;</a></h2>
 <p>Every slider has its own reset button. Each card has a Reset All button.</p>
 <ul>
-<li><strong>Impulse Triggers Reset All</strong>: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.</li>
+<li><strong>Impulse Triggers Reset All</strong>: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, Translate adaptive trigger vibrations off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.</li>
 <li><strong>Constant Trigger Force Reset All</strong>: toggle off, left 0.00, right 0.00. Affects this card only.</li>
 <li><strong>Audio Bass Trigger Rumble Reset All</strong>: disabled, sensitivity 4.0, cutoff 80 Hz, both triggers 100%. Affects this card only.</li>
 </ul>
@@ -3243,7 +3309,7 @@
 <li><a href="../controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

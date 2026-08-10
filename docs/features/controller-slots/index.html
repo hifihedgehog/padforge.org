@@ -1343,6 +1343,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VR
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2362,6 +2373,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2843,6 +2858,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
         
   
@@ -3165,6 +3236,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VR
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3415,7 +3497,7 @@
 <h2 id="what-a-slot-owns">What a slot owns<a class="headerlink" href="#what-a-slot-owns" title="Permanent link">&para;</a></h2>
 <p>Each slot has its own:</p>
 <ul>
-<li>Controller type (Xbox, PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI)</li>
+<li>Controller type (Xbox, PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR)</li>
 <li><a href="../mappings/">Button and Axis Mappings</a> (multi-source rows, shift layers, cross-device chords, custom formulas)</li>
 <li><a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a></li>
 <li><a href="../force-feedback/">Force Feedback</a> / rumble settings</li>
@@ -3473,13 +3555,17 @@
 <td><strong>Musical note icon</strong></td>
 <td>MIDI output device (needs Windows MIDI Services)</td>
 </tr>
+<tr>
+<td><strong>VR icon</strong></td>
+<td>SteamVR hand pair (needs SteamVR)</td>
+</tr>
 </tbody>
 </table>
 <h3 id="dimmed-buttons">Dimmed buttons<a class="headerlink" href="#dimmed-buttons" title="Permanent link">&para;</a></h3>
 <p>A type button shows faded when:</p>
 <ul>
 <li><strong>Type at capacity.</strong> The cursor turns into a "no" icon. The tooltip shows the cap.</li>
-<li><strong>MIDI without Windows MIDI Services.</strong> Only the MIDI button dims when its driver is missing. The tooltip says it needs Windows MIDI Services. The Xbox, PlayStation, Nintendo, and Extended buttons do not dim for a missing driver. See <a href="../driver-management/">Driver Management</a>.</li>
+<li><strong>Missing dependency.</strong> Two types dim when what they need is absent: MIDI without Windows MIDI Services ("MIDI (requires Windows MIDI Services)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See <a href="../driver-management/">Driver Management</a>.</li>
 </ul>
 <p>The Add Controller card disappears when all 16 slots are in use or every type is at capacity.</p>
 <hr />
@@ -3491,8 +3577,9 @@
 <p>HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 14 buttons. The slot ships as a DualShock 4. Switch to DualShock 3, DualSense, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a>.</p>
 <p><img alt="PlayStation slot: the preset picker selects DualShock 4, DualShock 3, DualSense, or DualSense Edge, with the controller view below" src="../../images/pad-playstation-configbar.png" /></p>
 <h3 id="nintendo">Nintendo<a class="headerlink" href="#nintendo" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro-backed. The slot deploys as a Nintendo Switch Pro Controller, the only preset in this category for now. 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. ZL and ZR are digital buttons, not analog triggers, so the Trigger Deadzones tab does not appear. There is no Customize surface. The slot always deploys the preset as-is.</p>
-<p>Map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to the virtual pad is decoded, so <a href="../force-feedback/">Force Feedback</a> to the mapped device and the Bass Shakers tab both work. Switch 2 Pro, Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.</p>
+<p>HIDMaestro-backed. Two presets: <strong>Nintendo Switch Pro Controller</strong> (the default) and <strong>Nintendo Switch 2 Pro Controller</strong>. Pick one from the slot's preset dropdown.</p>
+<p>The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. The Switch 2 Pro preset carries 21, adding C, GL, and GR among others, on its own wire order. Neither has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on either. The slot deploys the preset as-is.</p>
+<p>Map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to the virtual pad is decoded, so <a href="../force-feedback/">Force Feedback</a> to the mapped device and the Bass Shakers tab both work. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.</p>
 <p><img alt="Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below" src="../../images/pad-nintendo-configbar.png" /></p>
 <h3 id="extended-hidmaestro">Extended (HIDMaestro)<a class="headerlink" href="#extended-hidmaestro" title="Permanent link">&para;</a></h3>
 <p>A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 225+ device profiles (HOTAS, wheels, third-party gamepads). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout.</p>
@@ -3500,14 +3587,17 @@
 <p><img alt="Extended (HIDMaestro) Controller view: profile / customize bar at top, procedural schematic of the live HID layout below" src="../../images/pad-extended-configbar.png" /></p>
 <h3 id="keyboardmouse">Keyboard+Mouse<a class="headerlink" href="#keyboardmouse" title="Permanent link">&para;</a></h3>
 <p>No driver. Always available. Sends keyboard and mouse input to Windows instead of emulating a gamepad. Map buttons to keys, sticks to mouse movement, triggers to scroll. Good for older PC games without controller support, accessibility setups where a gamepad is easier to hold than a keyboard, and desktop or non-game use. An interactive keyboard-and-mouse preview lights up in real time as you press buttons.</p>
-<p>The Mappings tab carries a <strong>Simultaneous Opposite Cardinal Directions (SOCD)</strong> card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.</p>
+<p>The Output tab carries a <strong>Simultaneous Opposite Cardinal Directions (SOCD)</strong> card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.</p>
 <p>Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pairs, with the same four modes. There it applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned. Xbox and PlayStation slots pick named buttons for each pair. Nintendo and Extended slots enter raw button indices.</p>
 <p><img alt="Keyboard and mouse controller preview" src="../../images/pad-kbm-preview.png" /></p>
 <h3 id="midi">MIDI<a class="headerlink" href="#midi" title="Permanent link">&para;</a></h3>
 <p>Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.</p>
 <p><img alt="MIDI controller configuration" src="../../images/pad-midi-configbar.png" /></p>
+<h3 id="vr">VR<a class="headerlink" href="#vr" title="Permanent link">&para;</a></h3>
+<p>Backed by HIDMaestro's OpenVR driver and needs SteamVR installed. One slot drives both SteamVR hands, left and right, so only one VR slot can exist at a time. There is no per-slot VR config: the driver ships one identity and haptics fan out like game rumble. The driver registers its devices only while a consumer is live, so an idle machine shows no phantom controllers.</p>
+<p>The Sticks, Triggers, and Output tabs hide on a VR slot. See <a href="../vr-controllers/">Virtual VR Controllers</a>.</p>
 <blockquote>
-<p><strong>Note:</strong> You can switch any slot to MIDI and back to a gamepad type. Switching to MIDI needs Windows MIDI Services installed. Each switch re-runs auto-mapping for the new type.</p>
+<p><strong>Note:</strong> You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs Windows MIDI Services installed, and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.</p>
 </blockquote>
 <hr />
 <h2 id="quick-type-reference">Quick type reference<a class="headerlink" href="#quick-type-reference" title="Permanent link">&para;</a></h2>
@@ -3554,6 +3644,10 @@
 <tr>
 <td>DAW, VJ software, or stage lighting</td>
 <td><strong>MIDI</strong></td>
+</tr>
+<tr>
+<td>Driving a SteamVR hand pair from a gamepad</td>
+<td><strong>VR</strong></td>
 </tr>
 <tr>
 <td>Not sure</td>
@@ -3605,6 +3699,11 @@
 <td style="text-align: center;">16</td>
 <td>Capped at the overall slot count.</td>
 </tr>
+<tr>
+<td><strong>VR</strong></td>
+<td style="text-align: center;">1</td>
+<td>One slot already drives both SteamVR hands, and SteamVR tracks one left+right pair. A second slot would fight the first over the same two devices.</td>
+</tr>
 </tbody>
 </table>
 <p>Most users need 1 to 4 slots. The 16-slot cap covers arcade cabinets, sim rigs, and multi-output MIDI stations.</p>
@@ -3614,7 +3713,7 @@
 <li><strong>4 or fewer Xbox slots.</strong> Every game sees all of them.</li>
 <li><strong>More than 4 Xbox slots.</strong> All 16 exist and work. <strong>XInput</strong> games detect only the first 4. <strong>SDL, DirectInput, and raw HID</strong> games see all 16.</li>
 <li>PlayStation slots are unaffected by the XInput cap.</li>
-<li>Nintendo, Extended, Keyboard+Mouse, and MIDI slots are unaffected.</li>
+<li>Nintendo, Extended, Keyboard+Mouse, MIDI, and VR slots are unaffected.</li>
 </ul>
 <p><strong>Tip:</strong> For more than 4 local-multiplayer gamepads, mix Xbox with PlayStation or Nintendo slots, or use Extended (no 4-controller cap).</p>
 <h3 id="dsucemuhook-4-slot-limit">DSU/Cemuhook 4-slot limit<a class="headerlink" href="#dsucemuhook-4-slot-limit" title="Permanent link">&para;</a></h3>
@@ -3684,7 +3783,7 @@
 <li><strong>Disabled or no-device slots.</strong> Invisible to games. Moving them changes nothing until a device comes back.</li>
 </ul>
 <h3 id="automatic-type-grouping">Automatic type grouping<a class="headerlink" href="#automatic-type-grouping" title="Permanent link">&para;</a></h3>
-<p>New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI. This keeps XInput numbering predictable.</p>
+<p>New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR. This keeps XInput numbering predictable.</p>
 <p>You can override the grouping by dragging slots by hand.</p>
 <hr />
 <h2 id="open-a-slot">Open a slot<a class="headerlink" href="#open-a-slot" title="Permanent link">&para;</a></h2>
@@ -3698,7 +3797,9 @@
 <li><strong>Macros</strong>: combo triggers and action sequences (<a href="../../guides/macros/">Macros</a>).</li>
 <li><strong>Menus</strong>: on-screen ring and grid menus opened from a stick or touchpad (<a href="../../guides/menus/">Menus</a>).</li>
 </ul>
-<p>A fifth slot-tier tab, <strong>Bass Shakers</strong>, shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Customize checkbox decides when Customize is on, the profile's own descriptor when it is off). It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Keyboard+Mouse and MIDI slots have no feedback surface and hide it.</p>
+<p>Two more slot-tier tabs appear conditionally.</p>
+<p><strong>Bass Shakers</strong> shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Force Feedback checkbox decides when Customize is on, the profile's own descriptor when it is off). It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Extended slots without force feedback, Keyboard+Mouse, MIDI, and VR slots have no feedback surface and hide it.</p>
+<p><strong>Output</strong> carries the slot's output-behavior cards. It shows on every slot type except MIDI and VR. The SOCD cleaner is on it for every type that shows the tab. <strong>Keep Controller Awake</strong> sits beside it on Xbox and PlayStation slots only. That card holds a small stick deflection so games that switch their prompts the moment they see mouse or keyboard input keep treating the pad as the active device.</p>
 <p>The rest appear based on the physical device selected in the slot's device dropdown, not the slot's output type. Assign a DualSense to a PlayStation slot and the Adaptive Triggers tab appears. Assign a DualShock 4 to the same slot and it does not, because the DualShock 4 has no adaptive triggers. Switch the device dropdown and the tabs follow the newly selected device.</p>
 <table>
 <thead>
@@ -3710,11 +3811,11 @@
 <tbody>
 <tr>
 <td><a href="../stick-deadzones/">Stick Deadzones</a></td>
-<td>every slot except MIDI (gated by slot type, not the device)</td>
+<td>every slot except MIDI and VR (gated by slot type, not the device)</td>
 </tr>
 <tr>
 <td><a href="../trigger-deadzones/">Trigger Deadzones</a></td>
-<td>every slot except Keyboard+Mouse and MIDI (gated by slot type, not the device). Nintendo and Extended slots whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital</td>
+<td>every slot except Keyboard+Mouse, MIDI, and VR (gated by slot type, not the device). Nintendo and Extended slots whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital</td>
 </tr>
 <tr>
 <td><a href="../force-feedback/">Force Feedback</a></td>
@@ -3738,15 +3839,15 @@
 </tr>
 <tr>
 <td><a href="../touchpad/">Touchpad</a></td>
-<td>a touchpad (DualShock 4, DualSense, Steam Controller)</td>
+<td>a touch surface (DualShock 4, DualSense, the Steam Controller family, Steam Deck, Windows Precision Touchpads)</td>
 </tr>
 <tr>
 <td><a href="../controller-audio/">Controller Audio</a></td>
-<td>a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Nintendo Switch Joy-Con and Pro Controller, Steam Controller)</td>
+<td>a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Joy-Con, Switch Pro Controller, Steam Controller 2015, Steam Deck, Steam Controller 2026)</td>
 </tr>
 <tr>
 <td><a href="../wheel/">Wheel</a></td>
-<td>a racing wheel (rotation range, auto-center, RPM shift LEDs)</td>
+<td>a racing wheel. A recognized Logitech, Fanatec, or Thrustmaster model gets rotation range, auto-center, and RPM shift LEDs. A generic force feedback wheel gets the auto-center row alone</td>
 </tr>
 <tr>
 <td>Pointer</td>
@@ -3791,10 +3892,11 @@
 <li><a href="../touchpad/">Touchpad</a> and <a href="../controller-audio/">Controller Audio</a>: touchpad gestures and speaker output.</li>
 <li><a href="../../guides/gyro/">Gyro</a>: motion-sensor mapping.</li>
 <li><a href="../wheel/">Wheel</a>: native force-feedback wheel settings.</li>
+<li><a href="../vr-controllers/">Virtual VR Controllers</a>: the VR slot type and its SteamVR hand pair.</li>
 <li><a href="../driver-management/">Driver Management</a>: driver requirements per controller type.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.1.0.</em></p>
+<p><em>Last updated for PadForge 4.2.0.</em></p>
 
 
 

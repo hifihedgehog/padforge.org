@@ -52,7 +52,7 @@ You can set any deadzone or range value by raw digit (0 to 32768) on the Sticks 
 
 ## Output precision by slot type
 
-How much of that resolution reaches the game depends on the slot type. Xbox, PlayStation, and Nintendo outputs are fixed by their console formats. Extended slots are not, so they carry the most detail.
+How much of that resolution reaches the game depends on the slot type, and inside Xbox and Nintendo on the profile you pick. Those formats are fixed by the real controller's report descriptor. Extended slots are not, so they carry the most detail.
 
 ### Extended slots
 
@@ -67,12 +67,14 @@ POV hats on an Extended slot support full 8-way diagonals. See [POV hats](#pov-h
 
 ### Xbox slots
 
-An Xbox slot emits the Xbox controller format. Sticks keep the full 16-bit resolution. Triggers drop to 8-bit (256 steps) because the Xbox format uses one byte per trigger.
+An Xbox slot emits the Xbox controller format. Sticks keep the full 16-bit resolution on every Xbox profile. Trigger depth follows the profile you pick.
 
-| Property | Sticks | Triggers |
-|----------|--------|----------|
-| Range | 65,536 positions | 256 positions |
-| Effective bits | 16 | 8 |
+The default profile is Xbox Series X|S Controller (Bluetooth), which declares 10-bit triggers. So do the Xbox One, Elite, Elite Series 2, and Adaptive profiles. The Xbox 360 gamepad profiles declare 16-bit triggers instead.
+
+| Property | Sticks | Triggers (Xbox One and later) | Triggers (Xbox 360) |
+|----------|--------|-------------------------------|---------------------|
+| Range | 65,536 positions | 1,024 positions | 65,536 positions |
+| Effective bits | 16 | 10 | 16 |
 
 ### PlayStation slots
 
@@ -87,16 +89,18 @@ The 8-bit ceiling is the DualShock and DualSense formats themselves, so no PlayS
 
 ### Nintendo slots
 
-A Nintendo slot emits the Switch Pro Controller format from its single preset, Nintendo Switch Pro Controller. Sticks keep the full 16-bit resolution: the report games read declares 16-bit stick axes, more than the 12-bit values a physical Pro Controller packs into its own full-mode reports, so nothing PadForge sends is squeezed.
+A Nintendo slot has two presets: Nintendo Switch Pro Controller and Nintendo Switch 2 Pro Controller. Switch Pro is the default. Each ships that controller's own report descriptor, so stick depth differs between them.
 
-ZL and ZR are digital buttons, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Trigger Deadzones tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
+On Switch Pro the report games read declares 16-bit stick axes, more than the 12-bit values a physical Pro Controller packs into its own full-mode reports, so nothing PadForge sends is squeezed. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.
 
-| Property | Sticks | Triggers |
+ZL and ZR are digital buttons on both presets, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
+
+| Preset | Sticks | Triggers |
 |----------|--------|----------|
-| Range | 65,536 positions | 2 states (pressed or released) |
-| Effective bits | 16 | 1 |
+| Switch Pro | 65,536 positions (16-bit) | 2 states (pressed or released) |
+| Switch 2 Pro | 4,096 positions (12-bit) | 2 states (pressed or released) |
 
-The D-Pad is a POV hat with full 8-way output. See [POV hats](#pov-hats).
+Switch Pro reports its D-Pad as a POV hat with full 8-way output. See [POV hats](#pov-hats). Switch 2 Pro reports four separate direction buttons instead, which is what the real pad does, so it has no hat.
 
 ---
 
@@ -112,7 +116,9 @@ The deadzone shapes follow the geometry described by the [minimuino thumbstick-d
 
 ## POV hats
 
-Extended and Nintendo slots report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.
+Extended slots and the Switch Pro preset report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.
+
+The Switch 2 Pro preset has no hat. Its D-Pad is four buttons on the wire.
 
 ---
 
@@ -124,4 +130,4 @@ There is no per-axis or per-button overhead. At 1000 Hz that is one report per c
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

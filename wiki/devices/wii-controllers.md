@@ -97,7 +97,7 @@ Each IR Pointer source row also has a **Sensitivity** dial, from 0.1 to 5.0.
 
 The Wii Balance Board pairs the same way as any other Wii controller and exposes three sources:
 
-- **Balance Total Weight**: the weight on the board, in kilograms.
+- **Balance Total Weight**: the weight on the board, computed in real kilograms and scaled across a 0 to 150 kg range.
 - **Balance Lean X**: the left-right weight shift, as a ratio. No calibration needed.
 - **Balance Lean Y**: the front-back weight shift, as a ratio. No calibration needed.
 
@@ -115,11 +115,12 @@ A Wii Remote can play macro sounds through its built-in speaker. The speaker is 
 
 ## Left Joy-Con motion
 
-A combined Joy-Con pair carries a full motion sensor in each half. The primary gyro and motion sources read the right Joy-Con. Since 4.1.0, the left half's sensors appear as their own sources in the mapping picker:
+A combined Joy-Con pair carries a full motion sensor in each half. On a pair the plain **Gyro Pitch / Yaw / Roll / Horizontal** rows read both halves fused: each half is debiased against its own measured bias, then the two rates are averaged. The **Motion Gyro** passthrough row is never fused and reads the right half raw, because the passthrough has to stay a single real sensor stream. Each half also gets its own explicit rows, offered only on a pair:
 
 | Source | Reads |
 |---|---|
-| **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll** | The left half's rotation rate, one axis per row. Bind them to mouse or stick axes like the primary gyro axes. |
+| **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's rotation rate, raw, one row per axis. Bind them to mouse or stick axes like the plain gyro axes. |
+| **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's rotation rate, raw, which is what the plain rows read before fusion. |
 | **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. |
 | **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. |
 | **Left Joy-Con Lean** | The left half's tilt, for motion steering or any axis row. |
@@ -187,4 +188,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

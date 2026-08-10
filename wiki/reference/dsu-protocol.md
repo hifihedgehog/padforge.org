@@ -590,7 +590,7 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 1. Enable the DSU motion server on the PadForge Dashboard (default port 26760).
 2. Run `DsuDiag.exe`. Connects to `localhost:26760`.
-3. Subscribes to all 4 slots and prints accelerometer/gyroscope values to the console.
+3. Sends a version request, then subscribes with `flags = 0` (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. Targets `net8.0`.
 
 ---
 
@@ -605,4 +605,4 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*

@@ -166,8 +166,8 @@ Picking it opens a settings strip under the row:
 | Setting | What it does |
 |---------|--------------|
 | **Trim Deadzone** | Stick deflection below this percentage is ignored, so steering with the same stick never nudges the held level. Default 25%. |
-| **Trim Speed** | How fast a fully deflected stick slides the level, in percent of trigger range per second. 100 sweeps empty to full in one second. |
-| **Reset on Release** | On, releasing the trigger snaps the held level back to full so the next press starts at 100%. Off keeps the trimmed level across releases. |
+| **Trim Speed** | How fast a fully deflected stick slides the level, in percent of trigger range per second. 100 sweeps empty to full in one second. Default 100. |
+| **Reset on Release** | On by default. Releasing the trigger snaps the held level back to full so the next press starts at 100%. Off keeps the trimmed level across releases. |
 
 Each setting has its own reset button.
 
@@ -338,7 +338,7 @@ Without **Half**, a 50% deadzone would reference the full axis range, requiring 
 
 ## SOCD cleaning
 
-The **Simultaneous Opposite Cardinal Directions (SOCD)** card sits directly below the mapping grid. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.
+The **Simultaneous Opposite Cardinal Directions (SOCD)** card lives on the slot-tier **Output** tab, alongside Keep Controller Awake. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.
 
 | Mode | What it does |
 |------|--------------|
@@ -353,7 +353,7 @@ The **Simultaneous Opposite Cardinal Directions (SOCD)** card sits directly belo
 - The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.
 - The card's Reset All turns the mode off and removes every pair.
 
-Keyboard + Mouse slots show a twin card that cleans opposing key pairs on the virtual keyboard output instead. See [Controller Slots](controller-slots.md). MIDI slots have neither card.
+Keyboard + Mouse slots show a twin card on the same tab that cleans opposing key pairs on the virtual keyboard output instead. See [Controller Slots](controller-slots.md). MIDI and VR slots have no Output tab at all.
 
 ---
 
@@ -406,9 +406,16 @@ Every recognized gamepad's source dropdown carries a **Gamepad** group next to i
 | Stick axes | Gamepad Left Stick X, Left Stick Y, Right Stick X, Right Stick Y |
 | Triggers | Gamepad Left Trigger, Gamepad Right Trigger |
 
-Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (**Gyro Pitch**, **Touchpad 1 Finger 1 X**), so they have no Gamepad-prefixed twin. Two more device-portable entries sit beside the family on recognized gamepads: **Flick Stick (Right Stick)** and **Flick Stick (Left Stick)**, which read the whole stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See [flick stick](stick-deadzones.md#flick-stick).
+Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (**Gyro Pitch**, **Touchpad 1 Finger 1 X**), so they have no Gamepad-prefixed twin.
 
-The source dropdown leads with an **(Any device)** group carrying the Gamepad family plus the device-portable gyro, touchpad, and flick stick entries. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an **(Any device)** chip until a device is assigned.
+Four more entries sit beside the twenty-five on a recognized gamepad, because each reads a whole stick rather than one input:
+
+| Source | What it reads |
+|---|---|
+| **Flick Stick (Right Stick)**, **Flick Stick (Left Stick)** | The stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See [flick stick](stick-deadzones.md#flick-stick). |
+| **Gamepad Left Stick Ring**, **Gamepad Right Stick Ring** | The stick pair's deflection magnitude, clamped to 0–1. On a button target the Axis-to-Button Deadzone becomes the ring radius, and **Invert** selects the inner ring instead of the outer one. |
+
+The source dropdown leads with an **(Any device)** group. It carries everything above plus four capacitive-touch reads that appear nowhere else: **Gamepad Left Stick Touch**, **Gamepad Right Stick Touch**, **Gamepad Left Grip Touch**, and **Gamepad Right Grip Touch**, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries **Gyro Pitch / Yaw / Roll / Horizontal**, **Gyro Lean X** and **Gyro Lean Y**, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an **(Any device)** chip until a device is assigned.
 
 Profiles imported from the [Steam Workshop](../guides/steam-workshop-import.md) are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source **Acceleration** slider.
 
@@ -546,4 +553,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 4.1.0.*
+*Last updated for PadForge 4.2.0.*
