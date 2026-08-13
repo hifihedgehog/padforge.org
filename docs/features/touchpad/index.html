@@ -3205,6 +3205,26 @@
 <td>0.90</td>
 <td>How far the cursor coasts, 0.80–1.00. At 1.00 the coast is frictionless: the cursor keeps its speed until you touch the pad again, like a spun trackball. Time-based, so the glide lasts the same at any polling rate. Editable only while Momentum is on.</td>
 </tr>
+<tr>
+<td>Fling Boost</td>
+<td>1.00</td>
+<td>Scales how fast a fling launches without changing drag speed, 0.1–5. The sensitivity sliders scale dragging and coasting together, so this is the knob that makes a flick travel further on its own. 1.00 launches at exactly the speed the finger was moving. Momentum only.</td>
+</tr>
+<tr>
+<td>Fling Threshold</td>
+<td>0.29</td>
+<td>How fast the finger must be moving at lift-off for the cursor to coast, in pad widths per second, 0–2. Below it the cursor stops dead. The default is the Steam Controller driver's own minimum lift velocity, which is what shipped before this knob existed. Momentum only.</td>
+</tr>
+<tr>
+<td>Max Fling Speed</td>
+<td>0 (off)</td>
+<td>Caps how fast a fling can launch, in pad widths per second, 0–30. A quick flick measures around 25. 0 turns the cap off. Momentum only.</td>
+</tr>
+<tr>
+<td>Stack Flings</td>
+<td>off</td>
+<td>Each new swipe adds to the momentum already rolling instead of replacing it, so repeated swipes build speed. A tap or a still lift stops everything, which keeps tap-to-stop working. Speed is capped by Max Fling Speed, or a built-in ceiling when the cap is off. Momentum only.</td>
+</tr>
 </tbody>
 </table>
 <p>The Speed threshold and Pad width rows appear only in <code>Trackpad</code> response, the Acceleration row only in <code>Simple</code>. They are competing models of the same thing, so the card never shows both at once.</p>

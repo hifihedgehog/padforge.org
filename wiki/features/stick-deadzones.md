@@ -355,6 +355,8 @@ Axial isolates each axis for clean cardinal movement without diagonals. Higher d
 
 On a Keyboard + Mouse slot the two sticks are **Mouse Movement** and **Scroll Wheel**, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a **Sensitivity** row that multiplies that speed.
 
+The Mouse Movement stick also carries a **Momentum** row: trackball mode for the stick. Flick the stick and release, and the cursor keeps travelling on the fling, decelerating to a stop on the same constant-friction physics the [touchpad's Momentum](touchpad.md#mouse-output) uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to centre parks the cursor without a fling. Moving the stick again catches the coast. The **Momentum Glide** slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 the coast is frictionless and only the stick stops it. Off by default, per slot and device.
+
 | Setting | Range | Default |
 |---|---|---|
 | Sensitivity | 0.1–5.0× | 1.0× |
