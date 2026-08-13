@@ -1423,6 +1423,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#gyro-plus-stick-on-one-axis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro plus stick on one axis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#stick-trim" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3429,6 +3440,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#gyro-plus-stick-on-one-axis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro plus stick on one axis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#stick-trim" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3972,7 +3994,7 @@
 </tr>
 <tr>
 <td><strong>Sensitivity</strong></td>
-<td>A per-source multiplier with a reset button, shown on four source families only: Gyro axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view), and Mouse Motion (0.1–5.0). Plain axis, slider, and Gamepad stick or trigger sources have no grid slider. Shape those on the <a href="../stick-deadzones/">Sticks tab</a>: gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier.</td>
+<td>A per-source multiplier with a reset button, shown on five source families only: Gyro rate axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Gyro Lean X / Y (0.1–5.0, where 1.0 reaches full deflection at 90° of tilt), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view), and Mouse Motion (0.1–5.0). Gyro Tilt X / Y has no dial: its gain is the degree range on the <a href="../../guides/gyro/#rate-versus-tilt">Gyro tab's</a> Gyro Tilt card. Plain axis, slider, and Gamepad stick or trigger sources have no grid slider. Shape those on the <a href="../stick-deadzones/">Sticks tab</a>: gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier.</td>
 </tr>
 <tr>
 <td><strong>Do not inherit</strong></td>
@@ -4034,6 +4056,16 @@
 </tbody>
 </table>
 <p>For axis rows, <strong>Strongest</strong> is the auto-mapping default. For button and D-pad rows, <strong>Either</strong> is the default.</p>
+<p>A collapsed row with two or more sources shows the current mode as a small chip next to the source list. Select the row and the <strong>Combine</strong> picker is in the detail strip below.</p>
+<h3 id="gyro-plus-stick-on-one-axis">Gyro plus stick on one axis<a class="headerlink" href="#gyro-plus-stick-on-one-axis" title="Permanent link">&para;</a></h3>
+<p>The most common multi-source row: the physical stick for coarse movement, gyro for fine aim, both driving the same axis.</p>
+<ol>
+<li>On the <strong>Right Stick X</strong> row, keep the stick source and click <strong>+ Add source</strong>.</li>
+<li>Set the second source to <strong>Gyro Yaw</strong> (or <strong>Gyro Horizontal</strong>) for rate aiming, or <strong>Gyro Tilt X</strong> for tilt that holds.</li>
+<li>The <strong>Combine</strong> picker appears in the detail strip and auto-selects <strong>Strongest</strong>: whichever source pushes harder wins, so the stick takes over the moment you push it and gyro handles fine aim the rest of the time. Steam and DS4Windows arbitrate the same way.</li>
+<li>Repeat on <strong>Right Stick Y</strong> with <strong>Gyro Pitch</strong> or <strong>Gyro Tilt Y</strong>.</li>
+</ol>
+<p><strong>Combined</strong> adds the two instead, clipping at full deflection when both push the same way, and <strong>Average</strong> halves both. See the <a href="../../guides/gyro/#rate-versus-tilt">gyro guide's rate-versus-tilt section</a> for which gyro source fits which feel.</p>
 <h3 id="stick-trim">Stick Trim<a class="headerlink" href="#stick-trim" title="Permanent link">&para;</a></h3>
 <p><strong>Stick Trim</strong> shows up only on rows that target a trigger and carry two or more sources. The last source acts as a trim stick. While the other sources hold the trigger down, pushing that stick up raises the held level and pulling it down lowers it. Built for fine throttle and brake control on pads without analog triggers.</p>
 <p>Picking it opens a settings strip under the row:</p>
@@ -4419,6 +4451,14 @@
 <td>Blended horizontal-turn axis that combines yaw and roll, so aiming works the same whether the pad is held flat or upright</td>
 </tr>
 <tr>
+<td><strong>Gyro Lean X</strong>, <strong>Gyro Lean Y</strong></td>
+<td>Sustained tilt from gravity. 90° of tilt from the resting grip reads full scale, the value holds while the tilt holds, and the per-source Sensitivity dial scales it. Gyro Recenter re-zeroes the grip.</td>
+</tr>
+<tr>
+<td><strong>Gyro Tilt X</strong>, <strong>Gyro Tilt Y</strong></td>
+<td>The adjustable-range tilt pair. Full deflection at the range set on the Gyro tab's Gyro Tilt card (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode.</td>
+</tr>
+<tr>
 <td><strong>Left Joy-Con Gyro Pitch</strong>, <strong>Left Joy-Con Gyro Yaw</strong>, <strong>Left Joy-Con Gyro Roll</strong></td>
 <td>The left half's own gyro on a combined Joy-Con pair. The plain Gyro axes read the right half. Offered only when the pair reports the second sensor.</td>
 </tr>
@@ -4534,7 +4574,7 @@
 </tr>
 </tbody>
 </table>
-<p>The source dropdown leads with an <strong>(Any device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Gamepad Left Stick Touch</strong>, <strong>Gamepad Right Stick Touch</strong>, <strong>Gamepad Left Grip Touch</strong>, and <strong>Gamepad Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, <strong>Gyro Lean X</strong> and <strong>Gyro Lean Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
+<p>The source dropdown leads with an <strong>(Any device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Gamepad Left Stick Touch</strong>, <strong>Gamepad Right Stick Touch</strong>, <strong>Gamepad Left Grip Touch</strong>, and <strong>Gamepad Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, the tilt pairs <strong>Gyro Lean X / Y</strong> and <strong>Gyro Tilt X / Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
 <p>Profiles imported from the <a href="../../guides/steam-workshop-import/">Steam Workshop</a> are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source <strong>Acceleration</strong> slider.</p>
 <hr />
 <h2 id="named-input-device-sources">Named input-device sources<a class="headerlink" href="#named-input-device-sources" title="Permanent link">&para;</a></h2>

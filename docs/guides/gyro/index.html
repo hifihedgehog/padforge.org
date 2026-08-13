@@ -1115,6 +1115,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rate-versus-tilt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate versus tilt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#left-joy-con-aux-gyro" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3431,6 +3442,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rate-versus-tilt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate versus tilt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#left-joy-con-aux-gyro" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3869,6 +3891,37 @@
 </ul>
 <p>Stick output recenters as soon as the engage gates close, because zeroed gyro output writes zero stick deflection. Mouse output just stops moving.</p>
 <p>See <a href="../../features/mappings/">Button and Axis Mappings</a> for the full source/destination reference.</p>
+<hr />
+<h2 id="rate-versus-tilt">Rate versus tilt<a class="headerlink" href="#rate-versus-tilt" title="Permanent link">&para;</a></h2>
+<p>PadForge covers both of Steam Input's gyro-to-stick modes. The names differ, so here is the translation:</p>
+<table>
+<thead>
+<tr>
+<th>Steam calls it</th>
+<th>PadForge equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gyro to Joystick (Camera)</strong>, <code>gyro_to_joystick</code></td>
+<td>Map <strong>Gyro Pitch / Yaw / Roll</strong> to a stick axis</td>
+</tr>
+<tr>
+<td><strong>Gyro to Joystick (Deflection)</strong>, <code>gyro_to_joystick_deflection</code></td>
+<td>Map <strong>Gyro Tilt X / Y</strong> (adjustable range) or <strong>Gyro Lean X / Y</strong> (fixed 90° range) to a stick axis</td>
+</tr>
+</tbody>
+</table>
+<p>Steam's separate "Joystick Camera" is a stick-group mode in its schema, not a gyro mode. The configurator shows both families in the same place, which makes them easy to conflate.</p>
+<p><strong>Rate</strong> is the default and what the plain gyro axes give you: instantaneous rotation speed maps to stick deflection, so you stop tilting and the stick recenters while the in-game camera stays where you turned it. This is deliberate and will not change. An integrated tilt-to-stick path shipped once and was removed, because holding the controller tilted kept the camera turning forever, the opposite of how gyro aim is supposed to feel. JoyShockMapper, Steam Input, and Splatoon all treat gyro-to-stick as rate.</p>
+<p><strong>Tilt</strong> holds. Keep the controller tilted and the stick keeps its deflection for as long as you hold the tilt. Three inputs read it, all from the accelerometer's gravity direction:</p>
+<ul>
+<li><strong>Gyro Tilt X / Gyro Tilt Y</strong> reach full deflection at the range set on this tab's <strong>Gyro Tilt</strong> card (default 25°), with a tilt deadzone that subtracts before scaling. This is the closest match to Steam's Deflection mode.</li>
+<li><strong>Gyro Lean X / Gyro Lean Y</strong> are the fixed-envelope originals: 90° of tilt is full scale, and the per-source Sensitivity dial on the mapping row scales the read.</li>
+<li><strong>Motion Lean</strong> is the steering-oriented tilt input with its own inner/outer deadzones and grip orientation on the <a href="#motion-steering">Motion Steering</a> card.</li>
+</ul>
+<p>All three capture your resting grip as the neutral when the controller connects, and the <strong>Gyro Recenter</strong> <a href="../macros/">macro action</a> re-zeroes it mid-session. Because gravity is the reference, these inputs cannot drift and need no recalibration.</p>
+<p><strong>Held yaw is not possible.</strong> Gravity points down: it moves when you pitch or roll the controller, and it does not move at all when you turn the controller flat around the vertical axis. So the tilt inputs hold pitch and roll, never yaw. Holding a yaw rotation would need the gyro's rate integrated into an angle, which drifts without something to correct it, and no shipped mode does that today. To turn a camera with gyro, use rate mode.</p>
 <hr />
 <h2 id="left-joy-con-aux-gyro">Left Joy-Con aux gyro<a class="headerlink" href="#left-joy-con-aux-gyro" title="Permanent link">&para;</a></h2>
 <p>On a combined Joy-Con pair, the primary gyro sources read the right Joy-Con. The left half is a second physical sensor, and since 4.1.0 the mapping table's input dropdown exposes it as its own sources.</p>
