@@ -103,6 +103,7 @@ nav:
       - Bass Shakers: features/bass-shakers.md
       - Wheels: features/wheel.md
       - NFC Tags: features/nfc-tags.md
+      - Voice Macros: features/voice-macros.md
       - MIDI Input: features/midi-input.md
       - Virtual VR Controllers: features/vr-controllers.md
       - Headset Head Tracking: features/headset-motion.md
