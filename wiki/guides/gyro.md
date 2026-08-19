@@ -37,6 +37,12 @@ Motion Lean is a normal input. Pick it from the input dropdown in the mapping ta
 
 ---
 
+### Gyro Tilt
+
+Gyro Tilt is an envelope for the **Gyro Tilt X** and **Gyro Tilt Y** inputs: hold a tilt and the stick holds its deflection, the way Steam's Joystick Deflection mode behaves. **Full Tilt Range** sets the angle that reaches full deflection, and **Gyro Recenter** re-zeroes the resting grip. Yaw, turning the controller flat, is invisible to gravity and does not move these inputs.
+
+![The Gyro Tilt card](../images/pad-gyro-tilt.png)
+
 ## Calibration
 
 Zero the at-rest reading so gyro mappings don't drift the mouse or stick while you hold still.
@@ -396,4 +402,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

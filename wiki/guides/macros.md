@@ -226,6 +226,11 @@ Keyboard autofire. While the macro's trigger is held, the key presses and releas
 
 Pair it with the **While Held** fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.
 
+
+**Pressure-Scaled Rate** ties the repeat rate to how hard the input is pressed. Tick it and pick the analog source the rate follows: a trigger, or a DualShock 3 pressure axis. A light press repeats slowly, a full press repeats at the Interval.
+
+![The Repeat Key While Held editor with Pressure-Scaled Rate](../images/macro-turbo.png)
+
 ### Repeat Button While Held
 
 Controller-button autofire, the virtual-pad twin of Repeat Key While Held. While the macro's trigger is held, the picked button pulses on and off at the interval. Imported Steam configs use it for turbo on pad buttons.

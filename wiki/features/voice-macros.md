@@ -20,6 +20,8 @@ Every microphone row exposes **Any Phrase** plus one button per registered phras
 
 ---
 
+![A microphone row on the Devices page, with Manage Voice Macros](../images/devices-voice.png)
+
 ## Registering phrases
 
 Open **Manage Voice Macros** from a Microphone row or a Bluetooth DualSense row on the Devices page. The dialog holds everything:
@@ -32,6 +34,8 @@ Open **Manage Voice Macros** from a Microphone row or a Bluetooth DualSense row 
 Short, distinct phrases recognize best. Two phrases that rhyme will fight each other.
 
 ---
+
+![The Voice Macros dialog](../images/voice-phrases.png)
 
 ## Binding phrases
 
@@ -60,4 +64,4 @@ Every DualSense and Microphone row's details pane carries a **Voice Macros** sec
 - On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.
 - The first enable downloads the model (~40 MB). Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words.
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

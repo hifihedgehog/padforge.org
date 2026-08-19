@@ -101,6 +101,12 @@ The Steam Deck and Steam Controller layouts carry both trackpads as real touch s
 
 ![The Steam Deck layout](../images/web-steamdeck.png)
 
+### Nintendo layouts
+
+The Switch Pro layout carries the Capture button, and the Switch 2 Pro adds the C button and its back paddles (GL and GR).
+
+![The Switch 2 Pro layout](../images/web-switch2pro.png)
+
 ### Touchpad
 
 A multi-touch surface that maps straight to the DualShock 4 / DualSense touchpad on the assigned PlayStation slot. Use it as a second input device when a phone or tablet is already in another player's hands and the DS4 / DS5 touchpad is the missing piece. No buttons or sticks, touchpad input only.

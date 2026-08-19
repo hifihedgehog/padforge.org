@@ -69,6 +69,12 @@ Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a K
 | Max Fling Speed | 0 (off) | Caps how fast a fling can launch, in pad widths per second, 0–30. A quick flick measures around 25. 0 turns the cap off. Momentum only. |
 | Stack Flings | off | Each new swipe adds to the momentum already rolling instead of replacing it, so repeated swipes build speed. A tap or a still lift stops everything, which keeps tap-to-stop working. Speed is capped by Max Fling Speed, or a built-in ceiling when the cap is off. Momentum only. |
 
+![The touchpad momentum controls](../images/pad-touchpad-momentum.png)
+
+The same coasting is available on a **stick**. On the Keyboard & Mouse slot the mouse stick carries its own **Momentum** and **Momentum Glide**, so a flick of the stick sends the cursor travelling on the same constant-deceleration physics.
+
+![Stick momentum on the Keyboard and Mouse slot](../images/pad-sticks-momentum.png)
+
 The Speed threshold and Pad width rows appear only in `Trackpad` response, the Acceleration row only in `Simple`. They are competing models of the same thing, so the card never shows both at once.
 
 Two plain limitations. First, at the default 69 mm Pad width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.
@@ -200,4 +206,4 @@ Shape matching runs two open-source gesture recognizers on every single-finger s
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

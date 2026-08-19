@@ -114,6 +114,7 @@ nav:
   - Devices:
       - devices/index.md
       - DualShock 3: devices/dualshock-3.md
+      - PlayStation Move: devices/ps-move.md
       - SpaceMouse: devices/spacemouse.md
       - Wii Controllers: devices/wii-controllers.md
   - Troubleshooting: troubleshooting.md

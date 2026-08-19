@@ -108,6 +108,18 @@ Registers a logon scheduled task so PadForge runs when you log into Windows. Pad
 
 ---
 
+## Battery Alerts
+
+Get notified when a controller's battery runs low, before it dies mid-game.
+
+- **Notify When Battery Runs Low** turns the alerts on.
+- **Notify at or Below** sets the percentage that triggers one.
+- **Also Vibrate the Controller** adds a buzz on the pad itself, so the warning reaches you without looking at the screen.
+
+The same rumble drives **identify**: buzzing a device is how you tell which of several identical pads is which.
+
+![The Battery Alerts card](../images/settings-battery-alerts.png)
+
 ## Driver Management
 
 Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.
@@ -294,4 +306,4 @@ Paste these into any issue you file.
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*
