@@ -720,7 +720,7 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 - [Profiles](guides/profiles.md): Per-application profiles
 - [DSU Motion Server](reference/dsu-motion-server.md): Motion data for emulators
 - [Web Controller](guides/web-controller.md): Browser-based virtual controller
-- [Remote Link](guides/remote-link.md): Share a controller across PCs on your network
+- [Remote Link](guides/remote-link.md): Share a controller between PCs, on your network or across the internet
 
 ---
 
