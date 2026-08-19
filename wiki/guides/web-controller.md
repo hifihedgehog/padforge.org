@@ -87,7 +87,7 @@ Switch layouts at any time by going back to the landing page.
 
 Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.
 
-![The layout picker, with finishes](../images/web-landing.png)
+![The layout picker: ten controller layouts, the touchpad surface, and the builder](../images/web-landing.png)
 
 ### Lights, on the page
 
