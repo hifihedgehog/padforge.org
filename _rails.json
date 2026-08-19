@@ -1,0 +1,152 @@
+[
+ {
+  "eyebrow": "Multi-source mapping",
+  "t": "Pedals, wheel, and HOTAS throttle. One virtual stick.",
+  "d": "One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes, Stick Trim, plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Invert On Hold, or Ramp. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing."
+ },
+ {
+  "eyebrow": "Virtual VR controllers",
+  "t": "A SteamVR hand pair, driven by whatever you already own.",
+  "d": "One slot presents a left and a right hand to SteamVR, so a gamepad, a flight stick, a keyboard, or a phone over Wi-Fi can drive them. Every stick, trigger, grip and button is a mapping target, triggers and grips stay genuinely analog, and when a game buzzes a hand the pulse comes back out through the device in your hands. PadForge installs the SteamVR runtime itself if you do not have it, with no Steam account and no Steam client. It does not fabricate positional tracking: the hands sit in front of the headset and follow where you look, so what you get is the controls."
+ },
+ {
+  "eyebrow": "Starter profiles",
+  "t": "Thirteen profiles that work on whatever pad you plug in.",
+  "d": "Pick one, assign any controller, and play. They cover a kind of game rather than a single title: Desktop, WASD and Mouse, Point and Click, Strategy, Isometric RPG, Twin-Stick, Media Remote, Hotbar, Fighting Games, Emulation, Racing, Space Sim, and Gyro Aim. They never name hardware, so one profile drives a DualSense, an Xbox pad, and a Switch Pro Controller the same way, and every profile that moves a cursor offers the touchpad and the stick at once. Hotbar puts thirty-two abilities behind two triggers. Fighting Games ships tournament-legal SOCD cleaning on both axes. Saving one adds an ordinary profile you can edit."
+ },
+ {
+  "eyebrow": "Shift layers",
+  "t": "Caps Lock for your controller.",
+  "d": "Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages."
+ },
+ {
+  "eyebrow": "Stick-assisted triggers",
+  "t": "A digital trigger that pulls like an analog one.",
+  "d": "Some pads only give you a digital trigger, on or off. Stick Trim changes that. Set a trigger's combine mode to Stick Trim and a stick axis ramps the pull while you hold the button, so a bumper press plus a nudge of the stick reads as a partial squeeze in the game. Each mapping sets its own deadzone, ramp rate, and whether the pull resets on release."
+ },
+ {
+  "eyebrow": "SOCD cleaning",
+  "t": "Left and right at once, resolved your way.",
+  "d": "Press left and right together and something has to give. The Keyboard&nbsp;+&nbsp;Mouse controller cleans those opposing pairs across every key you map, and any slot can clean opposing virtual controller buttons the same way. Last-wins takes the newest press, the Snap Tap behavior. First-wins keeps the key you were already holding. Neutral cancels both to center."
+ },
+ {
+  "eyebrow": "Nintendo output",
+  "t": "A virtual Switch Pro Controller.",
+  "d": "The Nintendo slot type creates a virtual Switch Pro Controller through HIDMaestro. Games and emulators that speak Switch see the real thing: the full button set, gyro passed through from your physical pad, and a HOME button LED under your control."
+ },
+ {
+  "eyebrow": "Mouse gestures",
+  "t": "Hold a mouse button. Flick. Fire.",
+  "d": "Hold any button on the mouse and flick the cursor. Up, down, left, right, or a plain click while held, five gestures off one button. Each fires its own action, so a single side button turns into five bindings. Send a flick to a shift layer, a macro, or a virtual button."
+ },
+ {
+  "eyebrow": "Media keys as inputs",
+  "t": "Your keyboard's media keys, mapped.",
+  "d": "The media row on a keyboard, a media remote, a headset's transport buttons: PadForge reads them as their own device with named button chips. Map Play/Pause, Mute, Volume, or track keys to a virtual button or a macro trigger, same as any other input."
+ },
+ {
+  "eyebrow": "Trigger motors that feel the game",
+  "t": "Forza, Gears, and Halo on your real Xbox pad.",
+  "d": "PadForge passes Xbox impulse trigger data straight to the assigned physical Xbox One, Elite, or Series pad. The same data routes to DualSense as Adaptive Trigger Vibration, so a DualSense playing Forza buzzes the triggers in step with an Xbox pad doing the same. Plus audio-bass-driven trigger rumble, a constant trigger force, and a Trigger Routing card that feeds the main rumble motor into the trigger motors with per-trigger source, scale, and activator settings."
+ },
+ {
+  "eyebrow": "DualSense effects in any game",
+  "t": "Adaptive triggers and lightbar that don't need the game's blessing.",
+  "d": "Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fifteen lightbar modes, six of them tied to your system audio (three Audio Pulse variants, three Audio Bands variants). The DualSense lights and triggers light up in games that have never heard of a DualSense."
+ },
+ {
+  "eyebrow": "Audio through the controller speaker",
+  "t": "Sound from the speaker in your hands.",
+  "d": "The DualSense and DualShock 4 have a speaker built in, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, Steam Controller, or Steam Deck, play the same sounds as a vibrating tone, and a combined Joy-Con pair plays it through the coil the game drives. A Wii Remote plays them through its own speaker."
+ },
+ {
+  "eyebrow": "Guide LED brightness",
+  "t": "Dim the glowing button, or let it follow the battery.",
+  "d": "Set how bright the Guide button glows on an Xbox One, Elite, or Series pad over USB, the home LED on the 2015 Steam Controller, and the HOME button on a Switch Pro or right Joy-Con on any connection. Hold it at a fixed level, or let it track the battery so a full charge shines and a low one dims. A macro action changes it on demand."
+ },
+ {
+  "eyebrow": "Bass shakers",
+  "t": "Rumble you can sit on.",
+  "d": "The Bass Shakers tab routes the game rumble and force feedback a slot receives to any audio output as low-frequency tones. Four voices, low motor, high motor, and both triggers, each with its own 20 to 120 Hz frequency and gain, a mono or controller-stereo split, and a frequency sweep to find where your shaker responds strongest."
+ },
+ {
+  "eyebrow": "Touchpad as more than a touchpad",
+  "t": "Turn the DualSense pad into a mouse, a stick, or a D-pad.",
+  "d": "Map a finger to mouse X/Y with per-axis sensitivity, invert, and a Trackpad pointer response that moves the cursor the way a laptop touchpad does. Anchor a virtual analog stick where your finger lands. Drop a wedge-thresholded D-pad on top. Pressure-sensitive pads expose per-finger pressure as sources, and swipe haptics tick the pad as a finger travels. Plus the gesture stack: 4-way and 8-way swipes, taps, longpress, pinch, rotate, two- to five-finger gestures, and shape templates. Every toggle saves per pad per slot."
+ },
+ {
+  "eyebrow": "Headset head tracking",
+  "t": "Turn your head to aim.",
+  "d": "Sony headphones that carry a head tracker become a motion source, confirmed on the WH-1000XM5 family. The whole gyro pipeline takes it: gyro-to-stick, gyro-to-mouse, aim engage, calibration, and the motion server. Discovery is by capability rather than a model list, so any headset exposing the same sensor collection is a candidate. It reports rotation, never position, and it pairs best with an engage button because head tracking that is always live is disorienting."
+ },
+ {
+  "eyebrow": "Motion to emulators",
+  "t": "Gyro into Cemu, Dolphin, Yuzu, and Ryujinx.",
+  "d": "The built-in DSU / Cemuhook server broadcasts gyroscope and accelerometer on UDP port 26760 so emulators can use real motion for Splatoon, Wii titles, 3DS games, and anything else that asks for it. Every motion source PadForge reads feeds it: DualSense, DualShock 4, Switch Pro, Joy-Con, 2026 Steam Controller, DualShock 3 sixaxis, and Wii Motion Plus."
+ },
+ {
+  "eyebrow": "Flick Stick",
+  "t": "Flick to face it. Gyro to finish it.",
+  "d": "Flick the stick to its edge and the camera snaps to that direction, then rotates as you sweep the rim, while the gyro handles fine aim. Flick sources ride the right stick, the left stick, or a touchpad, and a rotation offset card corrects games whose camera turns more or less than the flick angle."
+ },
+ {
+  "eyebrow": "Wii pointer modes",
+  "t": "Point the Wii Remote like a light gun, or a mouse.",
+  "d": "The Pointer tab reads the Wii Remote's IR camera several ways. FPS Mouse drives the desktop mouse for shooters. The border modes keep the aimed area square, corrected for your screen's aspect ratio. When the camera loses the sensor bar, IR-offscreen freeze holds the last position instead of snapping to a corner. Cycle the modes live, or jump straight to one from a macro."
+ },
+ {
+  "eyebrow": "Joy-Con 2 optical mouse",
+  "t": "The Joy-Con 2 is a mouse. So use it like one.",
+  "d": "A Nintendo Switch 2 Joy-Con has an optical sensor on its face. Set it on a desk and slide it. Two sources, Mouse Motion X and Mouse Motion Y, drive a stick for mouse-look, a button, or the scroll wheel, each with its own Sensitivity dial. The right Joy-Con's IR camera also reports a brightness value you can map, so covering the sensor works like a button."
+ },
+ {
+  "eyebrow": "Mouse as a source",
+  "t": "Aim with the desktop mouse.",
+  "d": "Two Mouse Position sources read where the cursor sits and drive a virtual stick from it, each with a Sensitivity dial of its own. Separate Mouse Speed sources read movement instead of position, for velocity-style bindings."
+ },
+ {
+  "eyebrow": "Share controllers across your PCs",
+  "t": "The controller is on the other PC. The game doesn't care.",
+  "d": "Remote Link shares devices across the PadForge PCs on your network. A controller, wheel, or HOTAS plugged into one PC drives a game on another, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Pair once with a six-digit code. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros."
+ },
+ {
+  "eyebrow": "A MIDI keyboard as a controller",
+  "t": "MIDI in, gamepad out.",
+  "d": "PadForge reads MIDI input devices as mapping sources. Notes, Control Change knobs, pitch bend, and encoder dials from a MIDI keyboard or pad controller bind like any button or axis, so a piano key can press A and a mod wheel can pull a trigger. It rides the same Windows MIDI Services stack the MIDI virtual controller uses. No bridge software."
+ },
+ {
+  "eyebrow": "MIDI from a gamepad",
+  "t": "A 16-channel MIDI controller, no extra hardware.",
+  "d": "Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. PadForge creates a real Windows MIDI endpoint that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge."
+ },
+ {
+  "eyebrow": "NFC tag triggers",
+  "t": "Tap a tag. Fire a macro.",
+  "d": "Plug in an NFC reader, any PC/SC contactless reader like an ACR122U, and a tag tap runs a macro. Register a tag from the Devices page: hold it on the reader, give it a name, and it is saved for good. Each tag becomes its own trigger, next to an Any NFC Tag trigger that any tag fires. Map an amiibo, a sticker, or a card to a button combo, a profile switch, or a whole action sequence."
+ },
+ {
+  "eyebrow": "On-screen touchpad overlay",
+  "t": "A touchpad on any monitor.",
+  "d": "Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required."
+ },
+ {
+  "eyebrow": "Wii controllers, paired in-app",
+  "t": "Pair a Wii Remote without leaving PadForge.",
+  "d": "A Wii controller's PIN is six raw bytes set by the sync button, not text you can type into the Windows prompt. So PadForge runs the pairing itself: click Pair, press the red SYNC button, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller all map as normal pads, with the accelerometer and Motion Plus gyro feeding the same motion pipeline as a DualSense. A Balance Board reports weight and lean as mapping sources."
+ },
+ {
+  "eyebrow": "DualShock 3, paired in-app",
+  "t": "The PS3 pad on PC, without the driver hunt.",
+  "d": "Plug it in over USB and PadForge binds it through WinUSB on its own. Or pair it over Bluetooth from the Devices page, which installs the signed BthPS3 driver only when you pair one. Either way you get the sixaxis motion, ten pressure-sensitive face buttons, rumble, the player LED, and the battery reading. No DsHidMini, no ScpToolkit. Remove the controller and PadForge cleans up the pairing after it."
+ },
+ {
+  "eyebrow": "Battery and idle disconnect",
+  "t": "See the charge. Sleep it when idle.",
+  "d": "Every wireless pad that reports a battery shows its charge on the Devices page, with a charging glyph while it tops up. Set an Idle Disconnect timer and a Bluetooth controller drops its link after a few quiet minutes, so it sleeps instead of draining on the coffee table. A Disconnect Controller macro turns one off on command."
+ },
+ {
+  "eyebrow": "Unknown hardware welcome",
+  "t": "If Windows sees it, you can map it.",
+  "d": "For unrecognised gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
+ }
+]
