@@ -1,118 +1,150 @@
 [
- {
-  "t": "Remote Link",
-  "d": "Share a controller, wheel, or HOTAS with the other PCs on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, player LEDs, and speaker audio return to the real hardware. Pair once with a six-digit code. Works on your home network, or across the internet through a VPN like ZeroTier."
- },
- {
-  "t": "Steam Workshop config import",
-  "d": "Browse the community controller configs on the Steam Workshop and translate the one you pick into a PadForge profile: buttons, sticks, triggers, keyboard and mouse bindings, shift layers, and macros. Anonymous Steam connection, no account. An import report shows what came across clean and what was approximated. Off until you enable it in Settings."
- },
- {
-  "t": "Native wheel force feedback",
-  "d": "Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs."
- },
- {
-  "t": "Bass shaker output",
-  "d": "Route game rumble and force feedback to any audio output as low-frequency tones. Four voices with per-voice frequency (20&ndash;120&nbsp;Hz) and gain, mono or controller-stereo split, and a frequency sweep to tune your shaker."
- },
- {
-  "t": "Nintendo virtual controller",
-  "d": "A virtual Switch Pro Controller through HIDMaestro, with gyro passthrough and HOME button LED control. Games and emulators that speak Switch see the real thing."
- },
- {
-  "t": "Virtual VR controllers",
-  "d": "One slot presents a SteamVR left and right hand pair, driven by any controller, keyboard, or motion source you map to it. Haptics return to the device you are holding. PadForge installs the SteamVR runtime itself, with no Steam account. Controls, not positional tracking, and one VR slot at a time."
- },
- {
-  "t": "Headset head tracking",
-  "d": "Sony headphones with a head tracker become a motion source, confirmed on the WH-1000XM5 family. Turn your head to aim or lean, through the same gyro pipeline everything else uses. Found by capability rather than a model list. Rotation only, never position."
- },
- {
-  "t": "Controller speaker audio",
-  "d": "Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker."
- },
- {
-  "t": "MIDI input",
-  "d": "Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output."
- },
- {
-  "t": "Multi-source mappings",
-  "d": "One row, any number of inputs, any number of devices. Six combine modes plus a drag-and-drop formula editor. Cross-device chords for free."
- },
- {
-  "t": "Shift layers",
-  "d": "Caps Lock for your controller. Hold, Toggle, Latch, Cycle, Sticky, or No Button. Cycle steps a queue of layers with Next and Previous buttons. Per-layer color and emoji. Cross-device activators."
- },
- {
-  "t": "Phone-as-controller",
-  "d": "Browser-based gamepad over Wi-Fi. Xbox 360, DualShock 4, or multi-touch touchpad layout. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install."
- },
- {
-  "t": "On-screen touchpad overlay",
-  "d": "Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required."
- },
- {
-  "t": "Touchpad outputs",
-  "d": "Map any touchpad (DualSense, DS4, laptop trackpad, phone web touchpad, overlay) to mouse X/Y with per-axis sensitivity and invert, to a virtual analog stick anchored where your finger lands, or to a wedge-thresholded D-pad. Plus the gesture stack: swipes, taps, longpress, pinch, rotate, custom shape templates. Every toggle is per slot."
- },
- {
-  "t": "Gyro at Steam Input parity",
-  "d": "Local, Player, and World reference frames. Real-world calibration. Cross-device Aim Engage. Tuning saves per pad per slot."
- },
- {
-  "t": "Mouse as a source",
-  "d": "Two Mouse Position sources read where the desktop cursor sits and push a stick, trigger, or button toward it. A per-row Sensitivity dial (0.1 to 5.0) sets the cursor travel for full deflection. Separate from the Mouse Speed sources that read movement. Primary monitor only."
- },
- {
-  "t": "3D and 2D visualization",
-  "d": "Native art per profile. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense. Click any button in 3D to record its mapping."
- },
- {
-  "t": "Six deadzone shapes",
-  "d": "Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis anti-deadzone. Custom sensitivity curves with unlimited draggable points."
- },
- {
-  "t": "Force feedback both ways",
-  "d": "Full rumble passthrough. HID PID 1.0 for wheels and joysticks. Audio bass rumble synthesized from system audio. Constant force vector."
- },
- {
-  "t": "Adaptive triggers and lightbar",
-  "d": "Seven DualSense trigger modes plus a one-click GameCube preset. Fourteen lightbar modes including audio-pulse, audio-band, Strobe, and Battery."
- },
- {
-  "t": "Impulse triggers",
-  "d": "Xbox impulse trigger passthrough on the assigned physical pad. Same data routes to DualSense as Adaptive Trigger Vibration. Audio-bass trigger rumble."
- },
- {
-  "t": "Macros with action sequences",
-  "d": "Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble, and axis actions that latch, release, and scale. Twelve fire modes, from On Press through Double, Triple, Long, and Short Press to Toggle and Turbo, plus a per-macro shift-layer scope. Cursor actions to recenter the mouse, pin it at a point, or fence it inside a rectangle. Duplicate a macro in place, copy and paste between virtual controllers, or pull every macro from another in one step."
- },
- {
-  "t": "Per-app profiles",
-  "d": "Watches the foreground window. Switches when a matching app takes focus. Win11-style flyout confirms."
- },
- {
-  "t": "DSU motion server",
-  "d": "Gyro and accel on UDP 26760. Cemu, Dolphin, Yuzu, Ryujinx all read it. Plug-and-play for any emulator that speaks Cemuhook."
- },
- {
-  "t": "MIDI virtual output",
-  "d": "Channel 1-16. CC for axes, Note On/Off for buttons. Real Windows MIDI Services endpoint. No loopMIDI bridge."
- },
- {
-  "t": "1000 Hz polling",
-  "d": "Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3."
- },
- {
-  "t": "Hide physical controllers",
-  "d": "HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches."
- },
- {
-  "t": "Wii controllers",
-  "d": "In-app Bluetooth pairing. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Motion Plus gyro feed the motion pipeline. The IR camera drives an on-screen pointer, and a Balance Board reports weight and lean."
- },
- {
-  "t": "NFC tag triggers",
-  "d": "Read NFC tags through a PC/SC contactless reader and fire a macro on a tap. Register and name each tag from the Devices page. Every tag is its own trigger, next to an Any NFC Tag trigger. Media keys map too, and wireless pads show battery charge with an optional idle-disconnect timer."
- }
+  {
+    "t": "Remote Link",
+    "d": "Share a controller, wheel, or HOTAS with the other PCs on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, player LEDs, and speaker audio return to the real hardware. Pair once with a six-digit code. Works on your home network, or across the internet through a VPN like ZeroTier."
+  },
+  {
+    "t": "Steam Workshop config import",
+    "d": "Browse the community controller configs on the Steam Workshop and translate the one you pick into a PadForge profile: buttons, sticks, triggers, keyboard and mouse bindings, shift layers, and macros. Anonymous Steam connection, no account. An import report shows what came across clean and what was approximated. Off until you enable it in Settings."
+  },
+  {
+    "t": "Native wheel force feedback",
+    "d": "Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs."
+  },
+  {
+    "t": "Bass shaker output",
+    "d": "Route game rumble and force feedback to any audio output as low-frequency tones. Four voices with per-voice frequency (20&ndash;120&nbsp;Hz) and gain, mono or controller-stereo split, and a frequency sweep to tune your shaker."
+  },
+  {
+    "t": "Nintendo virtual controller",
+    "d": "A virtual Switch Pro Controller through HIDMaestro, with gyro passthrough and HOME button LED control. Games and emulators that speak Switch see the real thing."
+  },
+  {
+    "t": "Virtual VR controllers",
+    "d": "One slot presents a SteamVR left and right hand pair, driven by any controller, keyboard, or motion source you map to it. Haptics return to the device you are holding. PadForge installs the SteamVR runtime itself, with no Steam account. Controls, not positional tracking, and one VR slot at a time."
+  },
+  {
+    "t": "Headset head tracking",
+    "d": "Sony headphones with a head tracker become a motion source, confirmed on the WH-1000XM5 family. Turn your head to aim or lean, through the same gyro pipeline everything else uses. Found by capability rather than a model list. Rotation only, never position."
+  },
+  {
+    "t": "Controller speaker audio",
+    "d": "Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker."
+  },
+  {
+    "t": "MIDI input",
+    "d": "Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output."
+  },
+  {
+    "t": "Multi-source mappings",
+    "d": "One row, any number of inputs, any number of devices. Six combine modes plus a drag-and-drop formula editor. Cross-device chords for free."
+  },
+  {
+    "t": "Shift layers",
+    "d": "Caps Lock for your controller. Hold, Toggle, Latch, Cycle, Sticky, or No Button. Cycle steps a queue of layers with Next and Previous buttons. Per-layer color and emoji. Cross-device activators."
+  },
+  {
+    "t": "Phone-as-controller",
+    "d": "Browser-based gamepad over Wi-Fi. Xbox 360, DualShock 4, or multi-touch touchpad layout. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install."
+  },
+  {
+    "t": "On-screen touchpad overlay",
+    "d": "Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required."
+  },
+  {
+    "t": "Touchpad outputs",
+    "d": "Map any touchpad (DualSense, DS4, laptop trackpad, phone web touchpad, overlay) to mouse X/Y with per-axis sensitivity and invert, to a virtual analog stick anchored where your finger lands, or to a wedge-thresholded D-pad. Plus the gesture stack: swipes, taps, longpress, pinch, rotate, custom shape templates. Every toggle is per slot."
+  },
+  {
+    "t": "Gyro at Steam Input parity",
+    "d": "Local, Player, and World reference frames. Real-world calibration. Cross-device Aim Engage. Tuning saves per pad per slot."
+  },
+  {
+    "t": "Mouse as a source",
+    "d": "Two Mouse Position sources read where the desktop cursor sits and push a stick, trigger, or button toward it. A per-row Sensitivity dial (0.1 to 5.0) sets the cursor travel for full deflection. Separate from the Mouse Speed sources that read movement. Primary monitor only."
+  },
+  {
+    "t": "3D and 2D visualization",
+    "d": "Native art per profile. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense. Click any button in 3D to record its mapping."
+  },
+  {
+    "t": "Six deadzone shapes",
+    "d": "Scaled Radial, Radial, Axial, Hybrid, Sloped Scaled Axial, Sloped Axial. Per-axis anti-deadzone. Custom sensitivity curves with unlimited draggable points."
+  },
+  {
+    "t": "Force feedback both ways",
+    "d": "Full rumble passthrough. HID PID 1.0 for wheels and joysticks. Audio bass rumble synthesized from system audio. Constant force vector."
+  },
+  {
+    "t": "Adaptive triggers and lightbar",
+    "d": "Seven DualSense trigger modes plus a one-click GameCube preset. Fourteen lightbar modes including audio-pulse, audio-band, Strobe, and Battery."
+  },
+  {
+    "t": "Impulse triggers",
+    "d": "Xbox impulse trigger passthrough on the assigned physical pad. Same data routes to DualSense as Adaptive Trigger Vibration. Audio-bass trigger rumble."
+  },
+  {
+    "t": "Macros with action sequences",
+    "d": "Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble, and axis actions that latch, release, and scale. Twelve fire modes, from On Press through Double, Triple, Long, and Short Press to Toggle and Turbo, plus a per-macro shift-layer scope. Cursor actions to recenter the mouse, pin it at a point, or fence it inside a rectangle. Duplicate a macro in place, copy and paste between virtual controllers, or pull every macro from another in one step."
+  },
+  {
+    "t": "Per-app profiles",
+    "d": "Watches the foreground window. Switches when a matching app takes focus. Win11-style flyout confirms."
+  },
+  {
+    "t": "DSU motion server",
+    "d": "Gyro and accel on UDP 26760. Cemu, Dolphin, Yuzu, Ryujinx all read it. Plug-and-play for any emulator that speaks Cemuhook."
+  },
+  {
+    "t": "MIDI virtual output",
+    "d": "Channel 1-16. CC for axes, Note On/Off for buttons. Real Windows MIDI Services endpoint. No loopMIDI bridge."
+  },
+  {
+    "t": "1000 Hz polling",
+    "d": "Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3."
+  },
+  {
+    "t": "Hide physical controllers",
+    "d": "HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches."
+  },
+  {
+    "t": "Wii controllers",
+    "d": "In-app Bluetooth pairing. Press SYNC to bond once and reconnect on any button, or hold 1 and 2 for a temporary pairing. Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller map as pads. Accelerometer and Motion Plus gyro feed the motion pipeline. The IR camera drives an on-screen pointer, and a Balance Board reports weight and lean."
+  },
+  {
+    "t": "NFC tag triggers",
+    "d": "Read NFC tags through a PC/SC contactless reader and fire a macro on a tap. Register and name each tag from the Devices page. Every tag is its own trigger, next to an Any NFC Tag trigger. Media keys map too, and wireless pads show battery charge with an optional idle-disconnect timer."
+  },
+  {
+    "t": "Voice macros",
+    "d": "Register a phrase and speak it to fire a macro. Recognition runs offline through Vosk with no account and no cloud, and the model downloads once on first use. Anything the recognizer hears that is not a registered phrase goes to an unknown bucket rather than firing at random."
+  },
+  {
+    "t": "PlayStation Move and Navigation",
+    "d": "Both PlayStation Move devices report over USB and Bluetooth. The wand carries a gyroscope, an accelerometer, an analog trigger and its illuminated sphere; the Navigation controller carries a stick, a D-pad and its buttons. PadForge reads the sensors and does no camera tracking, so there is rotation and acceleration but no position."
+  },
+  {
+    "t": "VR devices as mapping sources",
+    "d": "A headset's pose and its motion controllers become ordinary mapping sources, so what you hold in VR can drive a flat game."
+  },
+  {
+    "t": "3Dconnexion SpaceMouse",
+    "d": "The 6DoF puck reports as a six-axis controller: three translation axes and three rotation axes moving at once, plus its buttons. Games ignore the device class, so PadForge reads it directly."
+  },
+  {
+    "t": "Pressure-sensitive turbo",
+    "d": "A repeat action's rate follows how hard the input is pressed. Pick the analog source it tracks, a trigger or a DualShock 3 pressure axis, and a light press repeats slowly while a full press repeats at the interval."
+  },
+  {
+    "t": "Trackball momentum",
+    "d": "Flick a stick or a touchpad and the cursor keeps travelling, coasting to a stop on constant-deceleration physics. Momentum Glide sets how far it coasts, and the fling controls tune what a fast flick does."
+  },
+  {
+    "t": "Gyro Tilt",
+    "d": "A degree-ranged tilt mode beside the existing rate mode: hold a tilt and the stick holds its deflection, the way Steam's Joystick Deflection behaves. Full Tilt Range sets the angle that reaches full deflection, and Gyro Recenter re-zeroes the resting grip."
+  },
+  {
+    "t": "Low-battery alerts",
+    "d": "Get notified before a controller dies mid-game, at a percentage you set, with an optional buzz on the pad itself. The same rumble drives identify, which is how you tell several identical pads apart."
+  }
 ]

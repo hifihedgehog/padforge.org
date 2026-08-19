@@ -92,7 +92,7 @@
                     speaks one language. No subscription, no device tier, no
                     feature held back for a paid build.
                 </p>
-                <a href="specs.html" class="btn btn-ghost reveal" data-d="3" style="margin-top:2rem">See all 53 capabilities</a>
+                <a href="specs.html" class="btn btn-ghost reveal" data-d="3" style="margin-top:2rem">See all 61 capabilities</a>
             </div>
 
             <div class="manifest reveal" data-d="1">
@@ -108,6 +108,8 @@
                 <div class="mf" style="--mf: var(--telemetry)"><b>225+ device profiles</b><span>Wheels, HOTAS, arcade sticks, MIDI keyboards, 3D mice, touchpads</span></div>
                 <div class="mf" style="--mf: var(--brand-nin)"><b>Shift layers and SOCD</b><span>One physical button carrying four jobs, cleanly</span></div>
                 <div class="mf" style="--mf: var(--brand-steam)"><b>Per-app profiles</b><span>Switched automatically when the game takes focus</span></div>
+                <div class="mf" style="--mf: var(--ember)"><b>Your voice as a button</b><span>Registered phrases fire macros, recognised offline</span></div>
+                <div class="mf" style="--mf: var(--brand-ps)"><b>Anything with an axis is a source</b><span>PlayStation Move, SpaceMouse pucks, VR controllers, wheels, HOTAS</span></div>
             </div>
         </div>
     </div>
@@ -276,6 +278,14 @@
                         <div class="detail-body">One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes, Stick Trim, plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Invert On Hold, or Ramp. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</div>
                     </details>
                     <details class="detail">
+                        <summary>Turbo that follows how hard you press</summary>
+                        <div class="detail-body">A repeat action's rate can track an analog source, a trigger or a DualShock 3 pressure axis, so a light press repeats slowly and a full press repeats at the interval you set.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Trackball momentum</summary>
+                        <div class="detail-body">Flick a stick or a touchpad and the cursor keeps travelling, coasting to a stop. Momentum Glide sets how far it coasts, the fling controls tune what a fast flick does, and touching the pad again catches it.</div>
+                    </details>
+                    <details class="detail">
                         <summary>Shift layers</summary>
                         <div class="detail-body">Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages.</div>
                     </details>
@@ -386,6 +396,10 @@
                     on the wheel wakes the gyro on your handheld.
                 </p>
                 <div class="details reveal" data-d="3">
+                    <details class="detail">
+                        <summary>Hold a tilt, hold the stick</summary>
+                        <div class="detail-body">Gyro Tilt is a degree-ranged mode beside the usual rate mode: hold the controller at an angle and the virtual stick holds its deflection, the way Steam's Joystick Deflection behaves. Full Tilt Range sets the angle that reaches full deflection, and a Gyro Recenter action re-zeroes your resting grip. Yaw, turning the controller flat, is invisible to gravity and does not move it.</div>
+                    </details>
                     <details class="detail">
                         <summary>Turn your head to aim</summary>
                         <div class="detail-body">Sony headphones that carry a head tracker become a motion source, confirmed on the WH-1000XM5 family. The whole gyro pipeline takes it: gyro-to-stick, gyro-to-mouse, aim engage, calibration, and the motion server. Discovery is by capability rather than a model list, so any headset exposing the same sensor collection is a candidate. It reports rotation, never position, and it pairs best with an engage button because head tracking that is always live is disorienting.</div>

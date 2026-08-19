@@ -50,6 +50,7 @@
                 <a href="#motion">Motion</a>
                 <a href="#touch">Touch and pointer</a>
                 <a href="#connect">Devices and connectivity</a>
+                <a href="#more">Also included</a>
                 <a href="#comparison">Full comparison</a>
                 <a href="#faq">Questions</a>
         </div>
@@ -299,6 +300,44 @@
                 <div class="spec-row">
                     <dt>1000 Hz polling</dt>
                     <dd>Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3.</dd>
+                </div>
+            </dl>
+        </section>
+
+        <section class="spec-block" id="more">
+            <h2 class="display-s spec-h reveal">Also included</h2>
+            <dl class="spec-list reveal" data-d="1">
+                <div class="spec-row">
+                    <dt>Voice macros</dt>
+                    <dd>Register a phrase and speak it to fire a macro. Recognition runs offline through Vosk with no account and no cloud, and the model downloads once on first use. Anything the recognizer hears that is not a registered phrase goes to an unknown bucket rather than firing at random.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>PlayStation Move and Navigation</dt>
+                    <dd>Both PlayStation Move devices report over USB and Bluetooth. The wand carries a gyroscope, an accelerometer, an analog trigger and its illuminated sphere; the Navigation controller carries a stick, a D-pad and its buttons. PadForge reads the sensors and does no camera tracking, so there is rotation and acceleration but no position.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>VR devices as mapping sources</dt>
+                    <dd>A headset's pose and its motion controllers become ordinary mapping sources, so what you hold in VR can drive a flat game.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>3Dconnexion SpaceMouse</dt>
+                    <dd>The 6DoF puck reports as a six-axis controller: three translation axes and three rotation axes moving at once, plus its buttons. Games ignore the device class, so PadForge reads it directly.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Pressure-sensitive turbo</dt>
+                    <dd>A repeat action's rate follows how hard the input is pressed. Pick the analog source it tracks, a trigger or a DualShock 3 pressure axis, and a light press repeats slowly while a full press repeats at the interval.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Trackball momentum</dt>
+                    <dd>Flick a stick or a touchpad and the cursor keeps travelling, coasting to a stop on constant-deceleration physics. Momentum Glide sets how far it coasts, and the fling controls tune what a fast flick does.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Gyro Tilt</dt>
+                    <dd>A degree-ranged tilt mode beside the existing rate mode: hold a tilt and the stick holds its deflection, the way Steam's Joystick Deflection behaves. Full Tilt Range sets the angle that reaches full deflection, and Gyro Recenter re-zeroes the resting grip.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Low-battery alerts</dt>
+                    <dd>Get notified before a controller dies mid-game, at a percentage you set, with an optional buzz on the pad itself. The same rumble drives identify, which is how you tell several identical pads apart.</dd>
                 </div>
             </dl>
         </section>
