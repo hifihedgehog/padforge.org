@@ -55,8 +55,12 @@
         </div>
     </div>
 
-    <div class="hero-stage reveal" data-d="3">
-        <img src="assets/render/pad-dualsense-spiderman2.jpg" alt="DualSense controller in the Spider-Man 2 finish, rendered in PadForge" width="1356" height="900" fetchpriority="high">
+    <div class="hero-stage stage reveal" data-d="3">
+        <div class="rig">
+            <div class="rig-in">
+                <img src="assets/screenshot-dashboard.jpg" alt="The PadForge dashboard: seven virtual controller slots, the input engine running at 1000 Hz, and the motion and web controller services" width="2582" height="1550" fetchpriority="high">
+            </div>
+        </div>
     </div>
 
     <div class="container reveal" data-d="4">
@@ -72,12 +76,54 @@
 
 </header>
 
+
+<!-- ═══════════════ THE MANIFEST ═══════════════
+     Sparse everywhere else, deliberately loaded here. The message of this
+     section is the length of the list: the scroll itself is the argument
+     that the app is not a two-trick remapper.                          -->
+<section class="section section-alt" id="manifest">
+    <div class="container-wide">
+        <div class="mf-layout">
+            <div class="mf-copy">
+                <p class="kicker reveal">What it does</p>
+                <h2 class="display-l reveal" data-d="1">There are remappers.<br>And there is <em>PadForge</em>.</h2>
+                <p class="lede reveal" data-d="2">
+                    One app between every device you own and every game that only
+                    speaks one language. No subscription, no device tier, no
+                    feature held back for a paid build.
+                </p>
+                <a href="specs.html" class="btn btn-ghost reveal" data-d="3" style="margin-top:2rem">See all 53 capabilities</a>
+            </div>
+
+            <div class="manifest reveal" data-d="1">
+                <div class="mf" style="--mf: var(--ember)"><b>Sixteen virtual controllers</b><span>Xbox, PlayStation, Nintendo, VR, MIDI, keyboard and mouse</span></div>
+                <div class="mf" style="--mf: var(--brand-ps)"><b>1000 Hz input engine</b><span>Poll rate the games never see coming</span></div>
+                <div class="mf" style="--mf: var(--brand-xbox)"><b>Native wheel force feedback</b><span>Logitech, Fanatec and Thrustmaster, in the wheel's own protocol</span></div>
+                <div class="mf" style="--mf: var(--telemetry)"><b>Gyro at Steam Input parity</b><span>Flick stick, dual threshold smoothing, real-world calibration</span></div>
+                <div class="mf" style="--mf: var(--brand-nin)"><b>Macros with action timelines</b><span>Record, branch on conditions, fine-tune the timing on screen</span></div>
+                <div class="mf" style="--mf: var(--brand-steam)"><b>Adaptive triggers and lightbar</b><span>DualSense effects in games that never shipped them</span></div>
+                <div class="mf" style="--mf: var(--ember)"><b>Your phone as a controller</b><span>A browser on the Wi-Fi, sixteen of them at once, nothing to install</span></div>
+                <div class="mf" style="--mf: var(--brand-ps)"><b>Remote Link across PCs</b><span>A controller on one machine, driving a game on another</span></div>
+                <div class="mf" style="--mf: var(--brand-xbox)"><b>Audio through the controller</b><span>Speaker output, bass shakers, and rumble driven from the game's sound</span></div>
+                <div class="mf" style="--mf: var(--telemetry)"><b>225+ device profiles</b><span>Wheels, HOTAS, arcade sticks, MIDI keyboards, 3D mice, touchpads</span></div>
+                <div class="mf" style="--mf: var(--brand-nin)"><b>Shift layers and SOCD</b><span>One physical button carrying four jobs, cleanly</span></div>
+                <div class="mf" style="--mf: var(--brand-steam)"><b>Per-app profiles</b><span>Switched automatically when the game takes focus</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="chapter chapter-ember">
+    <h2>MAP</h2>
+    <p>Any source to any output, in one table you can actually read.</p>
+</div>
+
 <!-- ═══════════════ COLORWAY MORPH ═══════════════
      Apple stages a phone and lets the colour change under it. Same move:
      one product, one position, the finish morphs. The renders are the
      app's own 3D preview, lifted out of the window chrome.            -->
 <section class="section section-alt" id="finishes">
-    <div class="container">
+    <div class="container-wide">
         <div class="section-head section-head-c">
             <p class="kicker reveal">Finishes</p>
             <h2 class="display-l reveal" data-d="1">It looks like your controller.<br>Because it is yours.</h2>
@@ -87,28 +133,32 @@
             </p>
         </div>
 
-        <div class="reveal" data-d="1">
-            <div class="morph-stage" id="morph">
-                <img class="on" src="assets/render/pad-dualsense-spiderman2.jpg" data-name="Spider-Man 2" data-fam="DualSense" data-sw="#c7263a" alt="DualSense, Spider-Man 2 finish">
-                <img src="assets/render/pad-dualsense-cosmicred.jpg" data-name="Cosmic Red" data-fam="DualSense" data-sw="#b12355" alt="DualSense, Cosmic Red finish" loading="lazy">
-                <img src="assets/render/pad-dualsense-cobalt.jpg" data-name="Deep Earth Cobalt" data-fam="DualSense" data-sw="#373ec1" alt="DualSense, Cobalt finish" loading="lazy">
-                <img src="assets/render/pad-dualsense-novapink.jpg" data-name="Nova Pink" data-fam="DualSense" data-sw="#d34ba6" alt="DualSense, Nova Pink finish" loading="lazy">
-                <img src="assets/render/pad-dualsense-volcanic.jpg" data-name="Deep Earth Volcanic" data-fam="DualSense" data-sw="#be1637" alt="DualSense, Volcanic finish" loading="lazy">
-                <img src="assets/render/pad-dualsense-graycamo.jpg" data-name="Gray Camouflage" data-fam="DualSense" data-sw="#6b6b74" alt="DualSense, Gray Camo finish" loading="lazy">
-                <img src="assets/render/pad-dualsense-ffxvi.jpg" data-name="Final Fantasy XVI" data-fam="DualSense" data-sw="#5e6066" alt="DualSense, FFXVI finish" loading="lazy">
-                <img src="assets/render/pad-xbox-starfield.jpg" data-name="Starfield" data-fam="Xbox Series" data-sw="#f1edee" alt="Xbox Series controller, Starfield finish" loading="lazy">
-                <img src="assets/render/pad-xbox-stellarshift.jpg" data-name="Stellar Shift" data-fam="Xbox Series" data-sw="#7094db" alt="Xbox Series controller, Stellar Shift finish" loading="lazy">
-                <img src="assets/render/pad-xbox-velocitygreen.jpg" data-name="Velocity Green" data-fam="Xbox Series" data-sw="#53f06c" alt="Xbox Series controller, Velocity Green finish" loading="lazy">
-                <img src="assets/render/pad-xbox-porsche.jpg" data-name="Porsche 75th" data-fam="Xbox Series" data-sw="#d6811d" alt="Xbox Series controller, Porsche 75th finish" loading="lazy">
-                <img src="assets/render/pad-xbox-halo.jpg" data-name="Halo Infinite" data-fam="Xbox Series" data-sw="#8f8f93" alt="Xbox Series controller, Halo finish" loading="lazy">
-                <img src="assets/render/pad-xbox-remix.jpg" data-name="Remix" data-fam="Xbox Series" data-sw="#819d73" alt="Xbox Series controller, Remix finish" loading="lazy">
+        <div class="reveal stage fin-stage" data-d="1">
+            <div class="rig rig-r">
+                <div class="rig-in">
+                    <div class="morph-stage" id="morph">
+                        <img class="on" src="assets/screenshot-colorway-dualsense-spiderman2.jpg" data-name="Spider-Man 2" data-fam="DualSense" data-sw="#c7263a" alt="PadForge showing the Spider-Man 2 finish">
+                        <img src="assets/screenshot-colorway-dualsense-cosmicred.jpg" data-name="Cosmic Red" data-fam="DualSense" data-sw="#b12355" alt="PadForge showing the Cosmic Red finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-dualsense-cobalt.jpg" data-name="Deep Earth Cobalt" data-fam="DualSense" data-sw="#373ec1" alt="PadForge showing the Deep Earth Cobalt finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-dualsense-novapink.jpg" data-name="Nova Pink" data-fam="DualSense" data-sw="#d34ba6" alt="PadForge showing the Nova Pink finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-dualsense-volcanic.jpg" data-name="Deep Earth Volcanic" data-fam="DualSense" data-sw="#be1637" alt="PadForge showing the Deep Earth Volcanic finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-dualsense-graycamo.jpg" data-name="Gray Camouflage" data-fam="DualSense" data-sw="#6b6b74" alt="PadForge showing the Gray Camouflage finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-dualsense-ffxvi.jpg" data-name="Final Fantasy XVI" data-fam="DualSense" data-sw="#5e6066" alt="PadForge showing the Final Fantasy XVI finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-xbox-starfield.jpg" data-name="Starfield" data-fam="Xbox Series" data-sw="#f1edee" alt="PadForge showing the Starfield finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-xbox-stellarshift.jpg" data-name="Stellar Shift" data-fam="Xbox Series" data-sw="#7094db" alt="PadForge showing the Stellar Shift finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-xbox-velocitygreen.jpg" data-name="Velocity Green" data-fam="Xbox Series" data-sw="#53f06c" alt="PadForge showing the Velocity Green finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-xbox-porsche.jpg" data-name="Porsche 75th" data-fam="Xbox Series" data-sw="#d6811d" alt="PadForge showing the Porsche 75th finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-xbox-halo.jpg" data-name="Halo Infinite" data-fam="Xbox Series" data-sw="#8f8f93" alt="PadForge showing the Halo Infinite finish" loading="lazy">
+                        <img src="assets/screenshot-colorway-xbox-remix.jpg" data-name="Remix" data-fam="Xbox Series" data-sw="#819d73" alt="PadForge showing the Remix finish" loading="lazy">
+                    </div>
+                </div>
             </div>
-            <div class="morph-meta">
-                <div class="morph-name" id="morphName">Spider-Man 2</div>
-                <div class="morph-fam" id="morphFam">DualSense</div>
-            </div>
-            <div class="swatches" id="swatches" role="tablist" aria-label="Controller finishes"></div>
         </div>
+        <div class="morph-meta">
+            <div class="morph-name" id="morphName">Spider-Man 2</div>
+            <div class="morph-fam" id="morphFam">DualSense</div>
+        </div>
+        <div class="swatches" id="swatches" role="tablist" aria-label="Controller finishes"></div>
     </div>
 </section>
 
@@ -247,12 +297,21 @@
                     </details>
                 </div>
             </div>
-            <figure class="moment-media shot reveal" data-d="2">
-                <img class="zoom" src="assets/detail/map-rows.jpg" alt="Mapping rows: every virtual target bound to a physical source" loading="lazy">
-            </figure>
+            <div class="moment-media stage reveal" data-d="2">
+                <div class="rig rig-r"><div class="rig-in">
+                    <img class="zoom" src="assets/screenshot-mappings.jpg" alt="The mapping table: every virtual target bound to a physical source" loading="lazy">
+                </div>
+                <div class="rig-chip" style="right:7%; bottom:16%"><b>22</b> <i>direct bindings</i></div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<div class="chapter chapter-cy">
+    <h2>FEEL</h2>
+    <p>Force, resistance and sound, sent back to your hands.</p>
+</div>
 
 <!-- ═══════════════ MOMENT: FEEL (full bleed) ═══════════════ -->
 <section class="section section-alt" id="feel">
@@ -266,9 +325,13 @@
                 force, spring, damper and friction, straight from the game.
             </p>
         </div>
-        <figure class="shot-bleed reveal" data-d="1">
-            <img class="zoom" src="assets/detail/wheel.jpg" alt="The Wheel tab: rotation range, auto-center strength, and RPM shift LEDs" loading="lazy">
-        </figure>
+        <div class="shot-bleed stage reveal" data-d="1">
+            <div class="rig rig-soft"><div class="rig-in">
+                <img class="zoom" src="assets/screenshot-force-feedback.jpg" alt="The Force Feedback tab: constant force, spring, damper and friction, driven in the wheel's own protocol" loading="lazy">
+            </div>
+            <div class="rig-chip cy" style="right:2%; top:14%"><b>Constant, spring,</b> <i>damper, friction</i></div>
+            </div>
+        </div>
         <div class="details reveal" data-d="2" style="max-width:760px; margin-inline:auto">
             <details class="detail">
                 <summary>Trigger motors that feel the game</summary>
@@ -289,6 +352,11 @@
         </div>
     </div>
 </section>
+
+<div class="chapter chapter-steel">
+    <h2>MOVE</h2>
+    <p>The controller becomes the aim, the wheel, the pointer.</p>
+</div>
 
 <!-- ═══════════════ MOMENT: MOTION (flipped split) ═══════════════ -->
 <section class="section" id="motion">
@@ -317,12 +385,21 @@
                     </details>
                 </div>
             </div>
-            <figure class="moment-media shot reveal" data-d="2">
-                <img class="zoom" src="assets/detail/gyro.jpg" alt="The Gyro tab: motion steering, calibration, and live readout" loading="lazy">
-            </figure>
+            <div class="moment-media stage stage-cy reveal" data-d="2">
+                <div class="rig"><div class="rig-in">
+                    <img class="zoom" src="assets/screenshot-gyro.jpg" alt="The Gyro tab: motion steering, calibration, and the live readout" loading="lazy">
+                </div>
+                <div class="rig-chip cy" style="right:-3%; bottom:18%"><b>Real-world</b> <i>calibration</i></div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<div class="chapter chapter-ember">
+    <h2>REACH</h2>
+    <p>Across the room, across the house, across the network.</p>
+</div>
 
 <!-- ═══════════════ MOMENT: ANYWHERE ═══════════════ -->
 <section class="section section-alt" id="anywhere">
@@ -336,9 +413,13 @@
                 separate virtual pad. No app to install.
             </p>
         </div>
-        <figure class="shot-bleed reveal" data-d="1">
-            <img class="zoom" src="assets/screenshot-web-controller.jpg" alt="The web controller running in a phone browser" loading="lazy">
-        </figure>
+        <div class="shot-bleed stage stage-cy reveal" data-d="1">
+            <div class="rig rig-soft"><div class="rig-in">
+                <img class="zoom" src="assets/screenshot-web-controller.jpg" alt="The web controller running in a phone browser" loading="lazy">
+            </div>
+            <div class="rig-chip cy" style="left:3%; top:12%"><b>No install.</b> <i>Just a browser</i></div>
+            </div>
+        </div>
         <div class="details reveal" data-d="2" style="max-width:760px; margin-inline:auto">
             <details class="detail">
                 <summary>Share controllers across your PCs</summary>

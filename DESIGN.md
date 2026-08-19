@@ -93,11 +93,11 @@ Defined once in `:root`. Do not introduce new colours in a section.
 
 The look is dark, but never flat. Three devices, already in the CSS:
 
-1. **Radial bloom behind a product** (`.hero-stage::before`,
-   `.morph-stage::before`, `.diagram::before`). A soft ember or cyan
-   radial, blurred 46-52px, sitting behind the subject. This is what
-   makes a controller feel lit rather than pasted.
-2. **Contact shadow on the product** (`drop-shadow(0 44px 70px ...)`).
+1. **Radial bloom behind a product** (`.stage::before`,
+   `.diagram::before`). A soft ember or cyan radial, blurred 30-50px,
+   sitting behind the subject. This is what makes a machine feel lit
+   rather than pasted onto the page.
+2. **Contact shadow plus a long floor throw**, two shadows on the rig.
    Long, soft, and low-opacity.
 3. **Hairlines**, `--hairline` at 7% white, for structure. A full
    `--border` is heavier and is for panels that must read as objects.
@@ -116,18 +116,26 @@ made a rich product read as a spec dump.
 The rule now: **no two consecutive sections share a shape.** The current
 order alternates deliberately:
 
-1. Hero: centred, full-bleed product
-2. Finishes: centred, product morph
-3. The controller: asymmetric two-column, copy left / diagram right
-4. Stats: four-up typographic band
-5. Remap: split, copy left / media right
-6. Feel: centred headline, full-bleed media
-7. Motion: split, **flipped** (media left)
-8. Anywhere: centred, full-bleed media
-9. Compare: table
-10. Gallery: grid
-11. Download: centred
-12. FAQ: list
+1. Hero: centred headline, one large staged program screen
+2. Manifest: sticky copy left, a long accent-barred capability list right
+3. Chapter band: one word, full bleed, poster scale
+4. Finishes: centred, the program screen morphing its finish
+5. The controller: asymmetric two-column, copy left / diagram right
+6. Stats: four-up typographic band
+7. Remap: split, copy left / media bleeding off the right edge
+8. Feel: centred headline, full-bleed media
+9. Motion: split, **flipped** (media bleeding off the left)
+10. Anywhere: centred, full-bleed media
+11. Compare: table
+12. Gallery: grid
+13. Download: centred
+14. FAQ: list
+
+Chapter bands (`.chapter`) separate the acts: MAP, FEEL, MOVE, REACH.
+One word at poster scale on a saturated full-bleed band, alternating
+ember, cyan and steel. They are the reason a long scroll reads as
+chapters rather than an unbroken list, and they are the one place a
+saturated field of accent colour is correct.
 
 If you add a section, look at its neighbours and pick a shape neither of
 them uses.
@@ -137,7 +145,7 @@ fit more in. Whitespace is the luxury signal. Crowding is the tell.
 
 **Nothing may be absolutely positioned against the hero's bottom edge.**
 The hero carries `min-height: 100svh`, but its content (headline, lede,
-buttons, an 1180px render, the trust strip) is much taller than that on
+buttons, a full-width staged screen, the trust strip) is much taller than that on
 every real viewport, so the hero's bottom is nowhere near the fold. A
 "Scroll" cue pinned there did not sit at the fold where it would have
 meant something. It landed on top of the trust strip and printed as
@@ -152,40 +160,48 @@ is itself the invitation to scroll.
 This is where the biggest win came from, and it is the easiest thing to
 regress.
 
-**Product renders** (`assets/render/pad-*.jpg`): the app's own 3D preview,
-staged as product photography by `tools/extract_renders.py`. Used **large**.
-Five rules the script encodes, each learned by shipping the opposite:
+**The rig** is how every app screen is presented. PadForge's product is
+the application, so the application gets photographed like hardware:
+the WHOLE window, staged on a lit surface, turned slightly toward the
+reader.
 
-1. **Never crop to the subject's bounding box.** A bounding box touches
-   the product at its widest points, so grips and shoulders run off the
-   frame and read as amputated. Every render is staged onto one fixed
-   1500x1000 canvas with the subject at 70% of the width, so the product
-   never touches an edge.
-2. **Extend the backdrop from the source, not with a flat fill.** A flat
-   fill meets the app's own gradient at a visible rectangular seam. The
-   script cover-scales and heavily blurs the same pixels, then feathers
-   the paste.
-3. **Measure ONE frame per family, never per finish.** The app's 3D
-   camera is fixed, so every finish of a controller occupies the same
-   region. Measuring each finish separately measures its contact shadow
-   and its own brightness instead: across one family the measured top
-   varied by 224px and the bottom by 252px, and the controller visibly
-   jumped as the finishes crossfaded. Pass one measures the family at
-   threshold 40 (at 12 the backdrop gradient clears the threshold and
-   the "frame" becomes the whole viewport), pass two stages every member
-   inside that single shared frame. Framing is then identical by
-   construction, not by luck.
-4. **The edge fade belongs in CSS, faded to transparent.** Baking a page
-   colour into the border pixels was the first fix and it was wrong: the
-   same render appears on `--bg` in the hero and on `--bg-alt` in the
-   finishes section, and a baked colour can only ever match one of them,
-   so the other shows a rectangle. Two linear-gradient masks intersected
-   (`mask-composite: intersect`) fade all four edges to transparent and
-   work on any background.
-5. **Fade with an inset band, never a radial.** An ellipse tight enough
-   to fade the sides also clips the grips, and an ellipse inscribed in
-   the canvas touches the mid-left and mid-right edges, which is exactly
-   where the frame stayed visible.
+The rig is `.rig` / `.rig-in` in `style.css`, and it is made of five
+things, none of which are optional. Drop one and it stops reading as an
+object:
+
+1. **Perspective, not a flat rectangle.** `rotateY(-13deg) rotateX(5deg)`
+   on a 2400px perspective. `.rig-r` mirrors it, `.rig-soft` halves it.
+   Under 900px the angle stands down and the screen goes flat, because
+   the angle is a presentation device and never a legibility tax.
+2. **A rim light.** `0 0 0 1px rgba(255,255,255,0.10)` plus a brighter
+   inset top edge. PadForge's UI is nearly the same value as the page,
+   so without a rim the window dissolves into the canvas.
+3. **A contact shadow and a long floor throw.** Two shadows, not one.
+4. **A glass sheen**, a shallow diagonal highlight across the panel.
+5. **A bloom behind it** (`.stage`), ember by default and `.stage-cy`
+   for the cyan sections.
+
+**Never crop the app down to one panel.** The version this replaced
+lifted the 3D controller preview out of the window, blurred a backdrop
+in behind it, and shipped that as the product shot. The owner's verdict
+was "hamfisted with blurred features, it looks like trash", and it was
+right: cropping to one control throws away the product in order to
+feature a piece of it, and the blur announces that something was
+removed. Show the whole program screen. If it is too small to read, the
+layout is wrong, not the screenshot. Split moments bleed their media
+column past the container edge for exactly this reason.
+
+**Chips** (`.rig-chip`) pin a short line onto a staged screen. They must
+sit over dead space, never over the UI they describe, and they must say
+something the screenshot cannot say on its own. A chip that repeats a
+number already legible in the screenshot is noise on the product: the
+hero originally had three, all repeating the dashboard's own readouts,
+and removing them made it stronger.
+
+**Rotated planes project wider than their layout box.** Every stage that
+holds a rig needs bounded width with real margin, or the near edge runs
+off the viewport. This has been fixed twice: once on the hero, once on
+the finishes section.
 
 **The schematic plate** (`assets/render/dualsense-plate-dark.png`):
 generated from the app's light-mode 2D overlay art by inverting luminance
@@ -320,7 +336,7 @@ Every item here has already happened once.
 - Do not repeat the previous section's shape.
 - Do not move an image on hover or click.
 - Do not crop a screenshot horizontally through its content.
-- Do not crop a product render to its bounding box.
-- Do not measure a product render per finish. Measure per family.
-- Do not bake a page colour into a render's edges.
+- Do not crop the app down to one panel and blur the rest.
+- Do not put a chip over the UI it is describing.
+- Do not put a rig in a stage without bounded width.
 - Do not anchor anything to the hero's bottom edge.
