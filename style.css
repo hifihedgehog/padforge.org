@@ -438,7 +438,10 @@ a { color: inherit; text-decoration: none; }
 }
 .shot img { width: 100%; }
 /* Full-bleed variant: the image runs past the text column. */
-.shot-bleed { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 44px 90px -30px rgba(0,0,0,0.9); border: 1px solid var(--border-soft); }
+/* A width wrapper, never a frame. It used to round, border and
+   overflow:hidden its contents, which clipped the rotated rig inside it
+   and cut the corners clean off the machine. The rig frames itself. */
+.shot-bleed { width: min(100% - 2rem, 1300px); margin-inline: auto; }
 
 /* Detail disclosure: every word of the old cards survives, one click away. */
 .details { margin-top: 2rem; border-top: 1px solid var(--hairline); }
@@ -481,7 +484,8 @@ a { color: inherit; text-decoration: none; }
    not angled: a grid of individually rotated screens reads as chaos. */
 .gal { display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); gap: 1.6rem; }
 .gal figure {
-    position: relative; border-radius: var(--radius); overflow: hidden;
+    position: relative; container-type: inline-size;
+    border-radius: 0.625cqw 0.625cqw var(--radius) var(--radius); overflow: hidden;
     background: var(--panel); transition: box-shadow 0.5s var(--ease);
     box-shadow:
         0 0 0 1px rgba(255,255,255,0.08),
@@ -665,10 +669,11 @@ a { color: inherit; text-decoration: none; }
         radial-gradient(64% 54% at 50% 50%, rgba(242,101,42,0.06), transparent 72%);
 }
 
-.rig { position: relative; perspective: 2400px; perspective-origin: 50% 42%; }
+.rig { position: relative; perspective: 2400px; perspective-origin: 50% 42%;
+       container-type: inline-size; }
 .rig-in {
     position: relative; transform-style: preserve-3d;
-    border-radius: var(--radius); overflow: hidden;
+    border-radius: 0.625cqw; overflow: hidden;
     transform: rotateY(-13deg) rotateX(5deg);
     box-shadow:
         0 0 0 1px rgba(255,255,255,0.10),

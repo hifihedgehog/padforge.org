@@ -191,6 +191,22 @@ removed. Show the whole program screen. If it is too small to read, the
 layout is wrong, not the screenshot. Split moments bleed their media
 column past the container edge for exactly this reason.
 
+**Match the window's real curvature, and let it scale.** The captures are
+taken at 200% display scale, which is measurable rather than assumed: a
+1 DIP UI hairline is exactly 2px wide in the source. So the window is
+1280 logical px across, and Windows 11's 8 DIP corner is 16px of a
+2560px image, or 0.625% of the width. `.rig-in` therefore rounds at
+`0.625cqw` with `container-type: inline-size` on `.rig`, which holds that
+ratio at every displayed size. A fixed pixel radius cannot: the old 14px
+was too round everywhere and grotesquely too round on the gallery tiles,
+which display the same window at half the size. Verified by rendering the
+same shot at 1280px and 640px and measuring the rendered arc: 8px and
+4px.
+
+Note the captures themselves have SQUARE corners, because the harness
+grabs the window rect and the trim removes the invisible resize border.
+The curvature is ours to draw, which is exactly why it has to be right.
+
 **Trim the capture margin before staging anything.** The harness bakes an
 11px pure-black margin around each window on the left, right and top. It
 is invisible on a dark page right up until the screen is staged as an
@@ -199,6 +215,12 @@ the margin present that rim traces the edge of the BLACK BORDER rather
 than the edge of the window, and you get a rounded frame with a square
 window floating 11px inside it. `tools/trim_shots.py` measures and crops
 it, is idempotent, and must be run after every capture pass.
+
+**A capture must contain one window and nothing else.** The two browser
+shots included a strip of the PadForge window sitting behind them, which
+is invisible in a flat thumbnail and reads as a second window bleeding
+out of the first once staged. Crop a desktop capture to its own window
+border before it goes near a rig.
 
 **A machine is never cut to buy size.** An earlier version let the split
 moments bleed past the viewport edge to win pixels, which sliced the
@@ -356,5 +378,7 @@ Every item here has already happened once.
 - Do not put a chip over the UI it is describing.
 - Do not put a rig in a stage without bounded width.
 - Do not stage an untrimmed screenshot.
+- Do not round a window with a fixed pixel radius.
+- Do not stage a capture with another window visible in it.
 - Do not clip a window to make it bigger.
 - Do not anchor anything to the hero's bottom edge.
