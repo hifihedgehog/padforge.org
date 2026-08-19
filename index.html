@@ -424,18 +424,47 @@
             <h2 class="display-l reveal" data-d="1">Open a browser.<br>Press buttons.</h2>
             <p class="lede lede-center reveal" data-d="2">
                 PadForge runs a tiny web server. Any device with a browser on your Wi-Fi
-                loads it, picks a layout, and plays. Up to sixteen phones at once, each a
-                separate virtual pad. No app to install.
+                loads it, picks one of ten controller layouts, and plays. Up to sixteen
+                phones at once, each a separate virtual pad. No app to install.
             </p>
         </div>
         <div class="shot-bleed stage stage-cy reveal" data-d="1">
             <div class="rig rig-soft"><div class="rig-in">
-                <img class="zoom" src="assets/screenshot-web-controller.jpg" alt="The web controller running in a phone browser" loading="lazy">
+                <img class="zoom" src="assets/screenshot-web-landing.jpg" alt="The web controller layout picker: ten controller layouts, each with its own colour finishes" loading="lazy">
             </div>
-            <div class="rig-chip cy" style="left:3%; top:12%"><b>No install.</b> <i>Just a browser</i></div>
+            <div class="rig-chip cy" style="left:3%; top:9%"><b>Ten layouts.</b> <i>Pick a finish</i></div>
             </div>
         </div>
+
+        <div class="trio reveal" data-d="2">
+            <figure class="stage stage-cy">
+                <div class="rig rig-flat"><div class="rig-in">
+                    <img class="zoom" src="assets/screenshot-web-dualsense.jpg" alt="The DualSense web layout with a live lightbar and player LEDs" loading="lazy">
+                </div></div>
+                <figcaption><b>DualSense</b>Lightbar and player LEDs, live on the page.</figcaption>
+            </figure>
+            <figure class="stage stage-cy">
+                <div class="rig rig-flat"><div class="rig-in">
+                    <img class="zoom" src="assets/screenshot-web-steamdeck.jpg" alt="The Steam Deck web layout with both trackpads and the rear paddles" loading="lazy">
+                </div></div>
+                <figcaption><b>Steam Deck</b>Both trackpads, and L4 through R5.</figcaption>
+            </figure>
+            <figure class="stage stage-cy">
+                <div class="rig rig-flat"><div class="rig-in">
+                    <img class="zoom" src="assets/screenshot-web-custom.jpg" alt="The custom controller builder, arranging widgets on a blank pad" loading="lazy">
+                </div></div>
+                <figcaption><b>Build your own</b>Drag the widgets where your thumbs are.</figcaption>
+            </figure>
+        </div>
         <div class="details reveal" data-d="2" style="max-width:760px; margin-inline:auto">
+            <details class="detail">
+                <summary>Your phone's gyro, as a controller stick</summary>
+                <div class="detail-body">The page reads the phone's own gyroscope and accelerometer and streams them as motion, so tilting the handset aims. Browsers only hand out sensor data over a secure connection, so PadForge binds a self-signed certificate and serves the controller over HTTPS whenever it can. A QR code on the Dashboard gets the phone there without anyone typing an address.</div>
+            </details>
+            <details class="detail">
+                <summary>Build a layout that fits your hands</summary>
+                <div class="detail-body">The custom builder starts from a blank pad and lets you place sticks, buttons, triggers, D-pads and touch surfaces anywhere on it, then save it. Layouts are stored with your settings, so the phone loads yours the next time it connects.</div>
+            </details>
             <details class="detail">
                 <summary>Share controllers across your PCs</summary>
                 <div class="detail-body">Remote Link shares devices across the PadForge PCs on your network. A controller, wheel, or HOTAS plugged into one PC drives a game on another, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Pair once with a six-digit code. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros.</div>

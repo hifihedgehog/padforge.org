@@ -16,6 +16,14 @@ so the rig's radius and rim light land on the window itself.
 Idempotent by construction: it measures each file and crops only what is
 actually black, so re-running after a fresh capture is safe and re-running
 on already-trimmed files is a no-op.
+
+Run it on the CAPTURE SOURCE (padforge.org/wiki/images/*.png), not on the
+site assets. Trimming the site assets alone lasts exactly until the next
+mirror, which re-exports every asset from those PNG sources and silently
+restores the margin. Order is: capture, trim the sources, then mirror.
+
+    python tools/trim_shots.py                    # site assets (jpg)
+    python tools/trim_shots.py ../wiki/images     # capture sources (png)
 """
 import glob, os, sys
 from PIL import Image
@@ -45,7 +53,14 @@ def margin(im):
 
 
 def main():
-    files = sorted(glob.glob(os.path.join(ROOT, "assets", "screenshot-*.jpg")))
+    if len(sys.argv) > 1:
+        target = os.path.abspath(os.path.join(os.getcwd(), sys.argv[1]))
+        files = sorted(glob.glob(os.path.join(target, "*.png"))
+                       + glob.glob(os.path.join(target, "*.jpg")))
+    else:
+        files = sorted(glob.glob(os.path.join(ROOT, "assets", "screenshot-*.jpg")))
+    if not files:
+        print("no images found"); return 1
     trimmed = clean = 0
     for path in files:
         im = Image.open(path)
@@ -54,7 +69,11 @@ def main():
             clean += 1
             continue
         w, h = im.size
-        im.crop((l, t, w - r, h - b)).save(path, quality=92, optimize=True)
+        cropped = im.crop((l, t, w - r, h - b))
+        if path.lower().endswith(".png"):
+            cropped.save(path, optimize=True)
+        else:
+            cropped.save(path, quality=92, optimize=True)
         trimmed += 1
         print("trimmed %-52s l%d r%d t%d b%d  ->  %dx%d"
               % (os.path.basename(path), l, r, t, b, w - l - r, h - t - b))

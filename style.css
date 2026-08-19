@@ -807,3 +807,20 @@ a { color: inherit; text-decoration: none; }
 /* The finishes machine sits inside the wide container, and a rotated
    plane projects wider than its box, so it needs its own bounded width. */
 .fin-stage { width: min(100% - 6rem, 1300px); margin-inline: auto; }
+
+/* Three staged screens side by side, for a family of related surfaces.
+   Flat, never angled: a row of individually rotated screens reads as
+   clutter at this size, and the point here is comparison. */
+.trio {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(1.4rem, 2.5vw, 2.4rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+.trio figure { margin: 0; }
+.trio figcaption {
+    margin-top: 1rem; font-size: 0.86rem; color: var(--text-muted);
+}
+.trio figcaption b {
+    display: block; margin-bottom: 0.2rem; color: var(--text-hi);
+    font-family: var(--font-display); font-weight: 600; font-size: 0.98rem;
+}
