@@ -143,24 +143,46 @@ This is where the biggest win came from, and it is the easiest thing to
 regress.
 
 **Product renders** (`assets/render/pad-*.jpg`): the app's own 3D preview,
-cropped free of the window chrome by
-`tools/extract_renders.py`. These are the site's product photography and
-they should be used **large**. The crop boundary is measured, not guessed:
-the appearance picker ends at 0.178 of the source height and the
-controller's shoulders begin at 0.180, so the crop starts at 0.1785.
+staged as product photography by `tools/extract_renders.py`. Used **large**.
+Three rules the script encodes, each learned by shipping the opposite:
+
+1. **Never crop to the subject's bounding box.** A bounding box touches
+   the product at its widest points, so grips and shoulders run off the
+   frame and read as amputated. The canvas is sized as a multiple of the
+   measured subject (17% side, 16% top, 26% bottom) and the product never
+   touches an edge.
+2. **Extend the backdrop from the source, not with a flat fill.** A flat
+   fill meets the app's own gradient at a visible rectangular seam. The
+   script cover-scales and heavily blurs the same pixels, then feathers
+   the paste.
+3. **Fade every edge to the page background** (`PAGE_BG`, matching
+   `--bg`). A uniform inset band, not an ellipse: an ellipse touches the
+   mid-left and mid-right edges, which is exactly where the frame stayed
+   visible. The image's border pixels must BE the page, or it reads as a
+   pasted rectangle no matter what CSS does.
 
 **The schematic plate** (`assets/render/dualsense-plate-dark.png`):
 generated from the app's light-mode 2D overlay art by inverting luminance
 onto a steel ramp. It belongs to the dark canvas. The raw white art does
 not, and dropping the white plate onto the page punches a hole in it.
 
-**App screenshots**: crop to the region that carries the idea, at roughly
-1.3:1, and let it fill its column. A full window shrunk into a figure is
-unreadable, and an unreadable screenshot is decoration pretending to be
-evidence. Detail crops live in `assets/detail/`.
+**App screenshots**: every one is **clickable** (`.zoom` plus the
+lightbox), which is what resolves the old tension between showing a
+screenshot large enough to read and keeping the page calm. Show it at a
+comfortable size, let the reader open it for detail.
 
-Rule of thumb: **if you cannot read the screenshot at the size it ships
-at, crop it or cut it.**
+Cropping rules:
+
+- A crop takes the **full width of the content pane** (0.155 to 0.998) and
+  only trims vertically. Cropping horizontally chops cards off at their
+  right edge, which reads as broken.
+- **If a tab has little content, do not crop it at all.** The Wheel tab
+  is one small card in a large empty pane: any crop is either a letterbox
+  strip or mostly emptiness, so it ships as the whole window.
+- Detail crops live in `assets/detail/`.
+
+Rule of thumb: **if a crop would cut through anything, widen it or ship
+the whole window.**
 
 ---
 
@@ -207,6 +229,11 @@ at, crop it or cut it.**
 
 - Easing is `cubic-bezier(0.16, 1, 0.3, 1)` at ~0.9s. Slow and eased
   reads expensive. Fast reads cheap.
+- **Nothing that contains an image may move on hover or click.** Lifting
+  a screenshot on hover, or zooming a product render on selection, reads
+  as the page twitching. Hover changes colour, border, or brightness.
+  Selection cross-fades opacity only. Small chips (swatches) may scale
+  slightly; images never do.
 - Reveal-on-scroll is staggered with `data-d="1..5"` (90ms steps).
 - **`.reveal` is gated on `.js`.** Content is visible by default and JS
   opts into animating it. The opposite order ships a blank page the one
@@ -255,3 +282,6 @@ Every item here has already happened once.
 - Do not hand-edit `specs.html`.
 - Do not hide content behind JS by default.
 - Do not repeat the previous section's shape.
+- Do not move an image on hover or click.
+- Do not crop a screenshot horizontally through its content.
+- Do not crop a product render to its bounding box.

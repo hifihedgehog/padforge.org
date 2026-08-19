@@ -249,7 +249,7 @@
                 </div>
             </div>
             <figure class="moment-media shot reveal" data-d="2">
-                <img src="assets/detail/map-rows.jpg" alt="Mapping rows: every virtual target bound to a physical source" loading="lazy">
+                <img class="zoom" src="assets/detail/map-rows.jpg" alt="Mapping rows: every virtual target bound to a physical source" loading="lazy">
             </figure>
         </div>
     </div>
@@ -268,7 +268,7 @@
             </p>
         </div>
         <figure class="shot-bleed reveal" data-d="1">
-            <img src="assets/detail/wheel.jpg" alt="The Wheel tab: rotation range, auto-center strength, and RPM shift LEDs" loading="lazy">
+            <img class="zoom" src="assets/detail/wheel.jpg" alt="The Wheel tab: rotation range, auto-center strength, and RPM shift LEDs" loading="lazy">
         </figure>
         <div class="details reveal" data-d="2" style="max-width:760px; margin-inline:auto">
             <details class="detail">
@@ -319,7 +319,7 @@
                 </div>
             </div>
             <figure class="moment-media shot reveal" data-d="2">
-                <img src="assets/detail/gyro.jpg" alt="The Gyro tab: motion steering, calibration, and live readout" loading="lazy">
+                <img class="zoom" src="assets/detail/gyro.jpg" alt="The Gyro tab: motion steering, calibration, and live readout" loading="lazy">
             </figure>
         </div>
     </div>
@@ -338,7 +338,7 @@
             </p>
         </div>
         <figure class="shot-bleed reveal" data-d="1">
-            <img src="assets/screenshot-web-controller.jpg" alt="The web controller running in a phone browser" loading="lazy">
+            <img class="zoom" src="assets/screenshot-web-controller.jpg" alt="The web controller running in a phone browser" loading="lazy">
         </figure>
         <div class="details reveal" data-d="2" style="max-width:760px; margin-inline:auto">
             <details class="detail">
@@ -418,12 +418,12 @@
             <h2 class="display-l reveal" data-d="1">Built to be lived in.</h2>
         </div>
         <div class="gal">
-            <figure class="reveal"><img src="assets/screenshot-dashboard.jpg" alt="The dashboard" loading="lazy"><figcaption><b>Dashboard</b>Every slot, every device, live.</figcaption></figure>
-            <figure class="reveal" data-d="1"><img src="assets/screenshot-macros.jpg" alt="The macro editor" loading="lazy"><figcaption><b>Macros</b>Record, edit, and branch on conditions.</figcaption></figure>
-            <figure class="reveal" data-d="2"><img src="assets/screenshot-lighting.jpg" alt="Lighting controls" loading="lazy"><figcaption><b>Lighting</b>Fifteen modes, audio-reactive included.</figcaption></figure>
-            <figure class="reveal"><img src="assets/screenshot-devices.jpg" alt="The devices page" loading="lazy"><figcaption><b>Devices</b>Everything plugged in, identified.</figcaption></figure>
-            <figure class="reveal" data-d="1"><img src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive trigger editor" loading="lazy"><figcaption><b>Adaptive triggers</b>Seven modes with a live curve.</figcaption></figure>
-            <figure class="reveal" data-d="2"><img src="assets/screenshot-profiles.jpg" alt="Profiles" loading="lazy"><figcaption><b>Profiles</b>Per game, switched automatically.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-dashboard.jpg" alt="The dashboard" loading="lazy"><figcaption><b>Dashboard</b>Every slot, every device, live.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-macros.jpg" alt="The macro editor" loading="lazy"><figcaption><b>Macros</b>Record, edit, and branch on conditions.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-lighting.jpg" alt="Lighting controls" loading="lazy"><figcaption><b>Lighting</b>Fifteen modes, audio-reactive included.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-devices.jpg" alt="The devices page" loading="lazy"><figcaption><b>Devices</b>Everything plugged in, identified.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive trigger editor" loading="lazy"><figcaption><b>Adaptive triggers</b>Seven modes with a live curve.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-profiles.jpg" alt="Profiles" loading="lazy"><figcaption><b>Profiles</b>Per game, switched automatically.</figcaption></figure>
         </div>
     </div>
 </section>
@@ -471,6 +471,13 @@
 </section>
 
 <!-- ═══════════════ FOOTER ═══════════════ -->
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+    <button class="lb-close" id="lbClose" aria-label="Close">&#10005;</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-cap" id="lbCap"></div>
+</div>
+
 <footer class="footer">
     <div class="container">
         <div class="footer-grid">
@@ -512,6 +519,36 @@
         nav.classList.toggle("hide", y > 560 && y > last + 4);
         last = y;
     }, { passive: true });
+
+
+    /* ── Lightbox ────────────────────────────────────────────────── */
+    var lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg"),
+        lbCap = document.getElementById("lbCap"), lastFocus = null;
+    function openLb(img) {
+        lastFocus = document.activeElement;
+        lbImg.src = img.currentSrc || img.src;
+        lbImg.alt = img.alt || "";
+        lbCap.textContent = img.alt || "";
+        lb.classList.add("on");
+        document.body.style.overflow = "hidden";
+        document.getElementById("lbClose").focus();
+    }
+    function closeLb() {
+        lb.classList.remove("on");
+        document.body.style.overflow = "";
+        if (lastFocus) lastFocus.focus();
+    }
+    document.querySelectorAll("img.zoom").forEach(function (img) {
+        img.tabIndex = 0;
+        img.setAttribute("role", "button");
+        img.addEventListener("click", function () { openLb(img); });
+        img.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(img); }
+        });
+    });
+    document.getElementById("lbClose").addEventListener("click", closeLb);
+    lb.addEventListener("click", function (e) { if (e.target === lb || e.target === lbImg) closeLb(); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && lb.classList.contains("on")) closeLb(); });
 
     /* ── Colourway morph ─────────────────────────────────────────── */
     var stage = document.getElementById("morph");
