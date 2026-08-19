@@ -247,20 +247,19 @@ a { color: inherit; text-decoration: none; }
 .hero-stage img {
     position: relative;
     filter: drop-shadow(0 44px 70px rgba(0,0,0,0.72));
+    /* Edge fade to TRANSPARENT on all four sides, so the staged render
+       sits on any section background without showing its frame. Two
+       linear gradients intersected, never a radial: a radial tight
+       enough to fade the sides also clips the grips. */
+    -webkit-mask-image:
+        linear-gradient(to right, transparent 0, #000 11%, #000 89%, transparent 100%),
+        linear-gradient(to bottom, transparent 0, #000 10%, #000 90%, transparent 100%);
+    mask-image:
+        linear-gradient(to right, transparent 0, #000 11%, #000 89%, transparent 100%),
+        linear-gradient(to bottom, transparent 0, #000 10%, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
 }
-.hero-scroll {
-    position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
-    font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.26em;
-    text-transform: uppercase; color: var(--text-dim); z-index: 2;
-    display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
-}
-.hero-scroll span::after {
-    content: ""; display: block; width: 1px; height: 40px; margin: 0.7rem auto 0;
-    background: linear-gradient(var(--text-dim), transparent);
-    animation: scrollpulse 2.4s var(--ease) infinite;
-}
-@keyframes scrollpulse { 0%,100% { opacity: 0.25; transform: scaleY(0.5); transform-origin: top; } 50% { opacity: 1; transform: scaleY(1); } }
-
 /* Trust strip: quiet, hairline-separated, never a badge wall. */
 .trust {
     display: flex; align-items: center; justify-content: center; gap: clamp(1.5rem, 4vw, 3.5rem);
@@ -297,6 +296,18 @@ a { color: inherit; text-decoration: none; }
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
     opacity: 0; transition: opacity 0.6s var(--ease);
     filter: drop-shadow(0 36px 60px rgba(0,0,0,0.68));
+    /* Edge fade to TRANSPARENT on all four sides, so the staged render
+       sits on any section background without showing its frame. Two
+       linear gradients intersected, never a radial: a radial tight
+       enough to fade the sides also clips the grips. */
+    -webkit-mask-image:
+        linear-gradient(to right, transparent 0, #000 11%, #000 89%, transparent 100%),
+        linear-gradient(to bottom, transparent 0, #000 10%, #000 90%, transparent 100%);
+    mask-image:
+        linear-gradient(to right, transparent 0, #000 11%, #000 89%, transparent 100%),
+        linear-gradient(to bottom, transparent 0, #000 10%, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
 }
 .morph-stage img.on { opacity: 1; }
 .morph-meta { text-align: center; margin-top: 2.2rem; min-height: 4.2rem; }

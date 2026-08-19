@@ -135,6 +135,16 @@ them uses.
 Vertical rhythm comes from `--pad-section` (6-13rem). Do not reduce it to
 fit more in. Whitespace is the luxury signal. Crowding is the tell.
 
+**Nothing may be absolutely positioned against the hero's bottom edge.**
+The hero carries `min-height: 100svh`, but its content (headline, lede,
+buttons, an 1180px render, the trust strip) is much taller than that on
+every real viewport, so the hero's bottom is nowhere near the fold. A
+"Scroll" cue pinned there did not sit at the fold where it would have
+meant something. It landed on top of the trust strip and printed as
+ghosted, overlapping text that reads exactly like a font bug. The cue is
+gone, and the rule stands: the hero overflows the fold on purpose, which
+is itself the invitation to scroll.
+
 ---
 
 ## 7. Imagery
@@ -144,22 +154,38 @@ regress.
 
 **Product renders** (`assets/render/pad-*.jpg`): the app's own 3D preview,
 staged as product photography by `tools/extract_renders.py`. Used **large**.
-Three rules the script encodes, each learned by shipping the opposite:
+Five rules the script encodes, each learned by shipping the opposite:
 
 1. **Never crop to the subject's bounding box.** A bounding box touches
    the product at its widest points, so grips and shoulders run off the
-   frame and read as amputated. The canvas is sized as a multiple of the
-   measured subject (17% side, 16% top, 26% bottom) and the product never
-   touches an edge.
+   frame and read as amputated. Every render is staged onto one fixed
+   1500x1000 canvas with the subject at 70% of the width, so the product
+   never touches an edge.
 2. **Extend the backdrop from the source, not with a flat fill.** A flat
    fill meets the app's own gradient at a visible rectangular seam. The
    script cover-scales and heavily blurs the same pixels, then feathers
    the paste.
-3. **Fade every edge to the page background** (`PAGE_BG`, matching
-   `--bg`). A uniform inset band, not an ellipse: an ellipse touches the
-   mid-left and mid-right edges, which is exactly where the frame stayed
-   visible. The image's border pixels must BE the page, or it reads as a
-   pasted rectangle no matter what CSS does.
+3. **Measure ONE frame per family, never per finish.** The app's 3D
+   camera is fixed, so every finish of a controller occupies the same
+   region. Measuring each finish separately measures its contact shadow
+   and its own brightness instead: across one family the measured top
+   varied by 224px and the bottom by 252px, and the controller visibly
+   jumped as the finishes crossfaded. Pass one measures the family at
+   threshold 40 (at 12 the backdrop gradient clears the threshold and
+   the "frame" becomes the whole viewport), pass two stages every member
+   inside that single shared frame. Framing is then identical by
+   construction, not by luck.
+4. **The edge fade belongs in CSS, faded to transparent.** Baking a page
+   colour into the border pixels was the first fix and it was wrong: the
+   same render appears on `--bg` in the hero and on `--bg-alt` in the
+   finishes section, and a baked colour can only ever match one of them,
+   so the other shows a rectangle. Two linear-gradient masks intersected
+   (`mask-composite: intersect`) fade all four edges to transparent and
+   work on any background.
+5. **Fade with an inset band, never a radial.** An ellipse tight enough
+   to fade the sides also clips the grips, and an ellipse inscribed in
+   the canvas touches the mid-left and mid-right edges, which is exactly
+   where the frame stayed visible.
 
 **The schematic plate** (`assets/render/dualsense-plate-dark.png`):
 generated from the app's light-mode 2D overlay art by inverting luminance
@@ -253,9 +279,19 @@ the whole window.**
           --window-size=1512,13000 --virtual-time-budget=6000 \
           --screenshot=out.png file:///.../\_capture.html
    ```
-   Use `_capture.html` (generated copy with `min-height` on the hero
-   neutralised), because a `100svh` hero fills a tall capture window and
-   reads as an empty page.
+   Use `_capture.html` (`tools/make_capture.py`), because a `100svh`
+   hero fills a tall capture window and reads as an empty page. The
+   harness neutralises the hero's `min-height`, forces the `.reveal`
+   state, and freezes every transition, animation, and `will-change`, so
+   a transition photographed mid-flight cannot masquerade as a layout
+   bug. **The harness collapses the hero, so anything positioned against
+   the hero's bottom edge moves under capture.** When a capture shows
+   overlapping text, rule that out before blaming fonts: retag the
+   suspect strings with sentinels (`QQQ+ WWWWWW XXXXXXXX`) and
+   re-capture. The overlapping glyphs then spell out which element is
+   actually on top, which is how the "Scroll" collision was found after
+   font-swap, compositing, and device-scale theories had all been
+   disproved.
 2. **Check every asset resolves.** No broken `src`.
 3. **Run the retention diff** if you removed or moved copy: extract the
    visible text of the previous commit and of the new `index.html` +
@@ -285,3 +321,6 @@ Every item here has already happened once.
 - Do not move an image on hover or click.
 - Do not crop a screenshot horizontally through its content.
 - Do not crop a product render to its bounding box.
+- Do not measure a product render per finish. Measure per family.
+- Do not bake a page colour into a render's edges.
+- Do not anchor anything to the hero's bottom edge.
