@@ -14,9 +14,9 @@ Related pages: [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigge
 
 PadForge reads every connected controller on its own background thread. The default rate is **1000 Hz** (once per millisecond).
 
-You can change the rate in **[Settings](settings.md) > Input Engine > Polling interval**. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.
+You can change the rate in **[Settings](settings.md) > Input Engine > Polling Interval**. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.
 
-By default PadForge keeps reading even when its window sits behind the game. The **Continue polling when window loses focus** checkbox, in the same **Input Engine** settings, controls that. Turn it off to pause reads whenever PadForge loses focus.
+By default PadForge keeps reading even when its window sits behind the game. The **Continue Polling When Window Loses Focus** checkbox, in the same **Input Engine** settings, controls that. Turn it off to pause reads whenever PadForge loses focus.
 
 <!-- SCREENSHOT: dashboard-polling-readout -->
 ![The Dashboard engine card showing the live polling rate in Hz](../images/dashboard-polling-readout.png)
@@ -130,4 +130,4 @@ There is no per-axis or per-button overhead. At 1000 Hz that is one report per c
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

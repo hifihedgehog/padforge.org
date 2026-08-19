@@ -3594,7 +3594,7 @@
 <li>Bass Shakers (routes the game rumble and force feedback the slot receives to an audio output as low-frequency tones for bass shakers and subwoofers)</li>
 <li><a href="../impulse-triggers/">Impulse Triggers</a> (Xbox One / Elite / Series sources, routed to DualSense as AT Vibration)</li>
 <li><a href="../adaptive-triggers/">Adaptive Triggers</a> (DualSense / DualSense Edge)</li>
-<li><a href="../lighting/">Lighting</a> (DualSense / DualSense Edge / DualShock 4 lightbar, Guide button LED brightness for Xbox One / Elite / Series pads and the 2015 Steam Controller, and HOME button LED brightness for the Switch Pro Controller, right Joy-Con, combined Joy-Con pair, and charging grip)</li>
+<li><a href="../lighting/">Lighting</a> (DualSense / DualSense Edge / DualShock 4 lightbar, PS Move sphere, Guide button LED brightness for Xbox One / Elite / Series pads and the 2015 Steam Controller, and HOME button LED brightness for the Switch Pro Controller, right Joy-Con, combined Joy-Con pair, and charging grip)</li>
 <li><a href="../../guides/gyro/">Gyro</a> tuning, calibration, engage gates, and Motion Passthrough</li>
 <li><a href="../touchpad/">Touchpad</a> outputs (stick / D-pad / mouse) and gesture engine</li>
 <li><a href="../controller-audio/">Controller Audio</a> (speaker passthrough, macro sounds, volume)</li>
@@ -3664,7 +3664,7 @@
 <h3 id="xbox">Xbox<a class="headerlink" href="#xbox" title="Permanent link">&para;</a></h3>
 <p>The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons. HIDMaestro-backed. Almost every PC game with controller support reads Xbox-style input natively, so this is what to pick when you do not know what to pick.</p>
 <h3 id="playstation">PlayStation<a class="headerlink" href="#playstation" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 14 buttons. The slot ships as a DualShock 4. Switch to DualShock 3, DualSense, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a>.</p>
+<p>HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 15 buttons. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a>.</p>
 <p><img alt="PlayStation slot: the preset picker selects DualShock 4, DualShock 3, DualSense, or DualSense Edge, with the controller view below" src="../../images/pad-playstation-configbar.png" /></p>
 <h3 id="nintendo">Nintendo<a class="headerlink" href="#nintendo" title="Permanent link">&para;</a></h3>
 <p>HIDMaestro-backed. Two presets: <strong>Nintendo Switch Pro Controller</strong> (the default) and <strong>Nintendo Switch 2 Pro Controller</strong>. Pick one from the slot's preset dropdown.</p>
@@ -3678,7 +3678,7 @@
 <h3 id="keyboardmouse">Keyboard+Mouse<a class="headerlink" href="#keyboardmouse" title="Permanent link">&para;</a></h3>
 <p>No driver. Always available. Sends keyboard and mouse input to Windows instead of emulating a gamepad. Map buttons to keys, sticks to mouse movement, triggers to scroll. Good for older PC games without controller support, accessibility setups where a gamepad is easier to hold than a keyboard, and desktop or non-game use. An interactive keyboard-and-mouse preview lights up in real time as you press buttons.</p>
 <p>The Output tab carries a <strong>Simultaneous Opposite Cardinal Directions (SOCD)</strong> card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.</p>
-<p>When a mouse is the slot's selected device, a <strong>Mouse</strong> tab appears carrying the <strong>Mouse Gestures</strong> card. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can be the gesture button, or bind a custom activation input. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures on the Mappings tab, or use them as macro triggers.</p>
+<p>When a mouse is the slot's selected device, a <strong>Mouse</strong> tab appears carrying the <strong>Mouse Gestures</strong> card. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can arm the recognizer, each carrying its own five gestures, and a Custom option arms it from a recorded input on any device instead. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures on the Mappings tab, or use them as macro triggers.</p>
 <p><img alt="The Mouse Gestures card on a Keyboard and Mouse slot" src="../../images/pad-mouse-gestures.png" /></p>
 <p>Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pairs, with the same four modes. There it applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned. Xbox and PlayStation slots pick named buttons for each pair. Nintendo and Extended slots enter raw button indices.</p>
 <p><img alt="Keyboard and mouse controller preview" src="../../images/pad-kbm-preview.png" /></p>
@@ -3876,7 +3876,7 @@
 </ul>
 <h3 id="automatic-type-grouping">Automatic type grouping<a class="headerlink" href="#automatic-type-grouping" title="Permanent link">&para;</a></h3>
 <p>New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR. This keeps XInput numbering predictable.</p>
-<p>You can override the grouping by dragging slots by hand.</p>
+<p>Dragging reorders slots inside a type group. Cross-type drops are ignored, so the grouping itself stays fixed.</p>
 <hr />
 <h2 id="open-a-slot">Open a slot<a class="headerlink" href="#open-a-slot" title="Permanent link">&para;</a></h2>
 <p>Click a controller card on the <a href="../dashboard/">Dashboard</a> or its sidebar entry. The slot's config page opens with a row of tabs.</p>
@@ -3927,7 +3927,7 @@
 </tr>
 <tr>
 <td><a href="../lighting/">Lighting</a></td>
-<td>a lightbar (DualSense family, DualShock 4), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip)</td>
+<td>a lightbar or lit sphere (DualSense family, DualShock 4, PS Move), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip)</td>
 </tr>
 <tr>
 <td><a href="../touchpad/">Touchpad</a></td>
@@ -3988,7 +3988,7 @@
 <li><a href="../driver-management/">Driver Management</a>: driver requirements per controller type.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

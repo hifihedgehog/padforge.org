@@ -3994,14 +3994,14 @@
 <p>Related pages: <a href="../start/installation/">Installation</a>, <a href="../features/settings/">Settings</a>, <a href="../features/driver-management/">Driver Management</a>, <a href="../features/devices/">Devices</a>.</p>
 <hr />
 <h2 id="no-devices-detected">No Devices Detected<a class="headerlink" href="#no-devices-detected" title="Permanent link">&para;</a></h2>
-<p><strong>The <a href="../features/devices/">Devices</a> page is empty or the <a href="../features/dashboard/">Dashboard</a> shows "0 / 0 devices online."</strong></p>
+<p><strong>The <a href="../features/devices/">Devices</a> page is empty or the <a href="../features/dashboard/">Dashboard</a> shows "0/0 devices online"</strong></p>
 <ol>
 <li>Try a different USB port. Use one directly on the computer, not a hub.</li>
 <li>Try a different cable. Some cables are charge-only.</li>
 <li>Restart PadForge. Some devices need a fresh launch.</li>
 <li>Check Windows Device Manager. If the device does not appear under "Human Interface Devices" or "Sound, video and game controllers," the issue is the device or its driver.</li>
 <li>For Bluetooth controllers, pair and connect in Windows Bluetooth settings before starting PadForge.</li>
-<li>If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while <strong>"Hide devices from games"</strong> is on in <a href="../features/settings/">Settings</a>. With that toggle off, decloak the device in the HidHide Configuration Client, or turn the toggle on and let PadForge manage hiding.</li>
+<li>If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while <strong>"Hide Devices from Games"</strong> is on in <a href="../features/settings/">Settings</a>. With that toggle off, decloak the device in the HidHide Configuration Client, or turn the toggle on and let PadForge manage hiding.</li>
 <li>Close other controller tools (DS4Windows, BetterJoy, reWASD, x360ce). They may intercept access.</li>
 <li>A DualShock 3 pairs through PadForge itself, with no separate driver tool to install. Connect it by USB, click <strong>Pair</strong> on the <a href="../features/devices/">Devices</a> page, and follow the dialog. When it finishes, unplug the pad and press the PS button to connect over Bluetooth. It then streams with rumble and the player-number LED.</li>
 </ol>
@@ -4012,7 +4012,7 @@
 <li>Unknown or unusual controllers may need manual mapping.</li>
 <li>Assign the device to a slot. Select at least one numbered toggle on the <a href="../features/devices/">Devices</a> page.</li>
 <li>Map inputs manually via <strong>Record</strong> on the <a href="../features/mappings/">Mappings</a> tab for each button and axis.</li>
-<li>Enable <strong>"Force raw joystick mode (bypass gamepad remapping)"</strong> on the <a href="../features/devices/">Devices</a> page if SDL3's remapping produces wrong outputs. Re-record all mappings afterward.</li>
+<li>Enable <strong>"Force Raw Joystick Mode (Bypass Gamepad Remapping)"</strong> on the <a href="../features/devices/">Devices</a> page if SDL3's remapping produces wrong outputs. Re-record all mappings afterward.</li>
 <li>Check live input on the Devices page. If axes and buttons do not respond there, the issue is at the driver or HID level.</li>
 <li>Check the source dropdown on each mapping row. Confirm it points to the correct input device.</li>
 </ol>
@@ -4045,13 +4045,13 @@
 <p>The game is reading both the physical controller and PadForge's virtual controller.</p>
 <ol>
 <li>Install <strong>HidHide</strong> from <a href="../features/settings/">Settings</a>.</li>
-<li>Enable <strong>"Hide devices from games"</strong> on the <a href="../features/settings/">Settings</a> page.</li>
-<li>On the <a href="../features/devices/">Devices</a> page, enable <strong>"Hide from games (HidHide)"</strong> per device.</li>
+<li>Enable <strong>"Hide Devices from Games"</strong> on the <a href="../features/settings/">Settings</a> page.</li>
+<li>On the <a href="../features/devices/">Devices</a> page, enable <strong>"Hide from Games (HidHide)"</strong> per device.</li>
 <li>PadForge always whitelists itself, so it keeps seeing hidden devices. Add other apps (emulators, tools) that need a hidden device under <strong>Whitelisted Applications</strong> on <a href="../features/settings/">Settings</a>.</li>
 <li>Restart the game after changing HidHide settings.</li>
 <li>Check the game's controller settings. Disable the physical controller and keep the virtual one.</li>
 <li>If using Steam, disable Steam Input for the game or close Steam entirely.</li>
-<li>BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device <strong>"Hide from games (HidHide)"</strong> toggle is on and that <strong>"Hide devices from games"</strong> is enabled in the HidHide section of <a href="../features/settings/">Settings</a>.</li>
+<li>BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device <strong>"Hide from Games (HidHide)"</strong> toggle is on and that <strong>"Hide Devices from Games"</strong> is enabled in the HidHide section of <a href="../features/settings/">Settings</a>.</li>
 </ol>
 <hr />
 <h2 id="rumble-not-working">Rumble Not Working<a class="headerlink" href="#rumble-not-working" title="Permanent link">&para;</a></h2>
@@ -4100,7 +4100,7 @@
 <li>Verify the HIDMaestro driver shows "Installed" on the <a href="../features/settings/">Settings</a> page.</li>
 <li>Check <code>joy.cpl</code> (Win+R &gt; <code>joy.cpl</code>). If empty, create an Extended slot on the Dashboard first.</li>
 <li>Restart PadForge after installing HIDMaestro.</li>
-<li>If a slot stays stuck on "Initializing," check the <strong>Inactivity timeout</strong> in <a href="../features/settings/">Settings</a>. After the timeout, a slot whose mapped devices stay offline has its live virtual controller torn down to free its kernel slot. The slot configuration (mappings, profile, position) is preserved. The virtual controller recreates automatically when the devices return online.</li>
+<li>If a slot stays stuck on "Initializing," check the <strong>Inactivity Timeout</strong> in <a href="../features/settings/">Settings</a>. After the timeout, a slot whose mapped devices stay offline has its live virtual controller torn down to free its kernel slot. The slot configuration (mappings, profile, position) is preserved. The virtual controller recreates automatically when the devices return online.</li>
 </ol>
 <hr />
 <h2 id="force-feedback-not-working">Force Feedback Not Working<a class="headerlink" href="#force-feedback-not-working" title="Permanent link">&para;</a></h2>
@@ -4207,7 +4207,7 @@
 <p><strong>PadForge uses significant CPU, causing fan noise or slowdowns.</strong></p>
 <ol>
 <li>Increase the <strong>polling interval</strong> in <a href="../features/settings/">Settings</a> &gt; Input Engine. Default is 1 ms (~1000 Hz). Try 4 ms (~250 Hz) or 8 ms (~125 Hz) for casual use.</li>
-<li>Disable <strong>"Continue polling when window loses focus"</strong> if PadForge is only needed during gameplay.</li>
+<li>Disable <strong>"Continue Polling When Window Loses Focus"</strong> if PadForge is only needed during gameplay.</li>
 <li>Remove unused virtual controller slots.</li>
 <li>Disable <strong>Audio Bass Rumble</strong> on unused slots (runs WASAPI capture and real-time DSP).</li>
 </ol>
@@ -4215,7 +4215,7 @@
 <h2 id="dsu-motion-not-working-in-emulator">DSU Motion Not Working in Emulator<a class="headerlink" href="#dsu-motion-not-working-in-emulator" title="Permanent link">&para;</a></h2>
 <p><strong>The emulator does not receive gyroscope or accelerometer data.</strong></p>
 <ol>
-<li>Enable <strong>"Enable DSU motion server (CemuHook Motion Provider protocol)"</strong> on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Listening on :26760".</li>
+<li>Enable <strong>"Enable DSU Motion Server (CemuHook Motion Provider Protocol)"</strong> on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Listening on :26760".</li>
 <li>Match the port (default 26760) between PadForge and the emulator. "Port 26760 in use" means another app (BetterJoy, DS4Windows) is on that port.</li>
 <li>Use <code>127.0.0.1</code> as the server address. PadForge binds to loopback only.</li>
 <li>Confirm the controller has motion sensors on the <a href="../features/devices/">Devices</a> page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion.</li>
@@ -4285,7 +4285,7 @@
 <h2 id="profile-not-switching-automatically">Profile Not Switching Automatically<a class="headerlink" href="#profile-not-switching-automatically" title="Permanent link">&para;</a></h2>
 <p><strong>Auto-profile switching is enabled but PadForge does not switch when the game is in the foreground.</strong></p>
 <ol>
-<li>Confirm <strong>"Auto-switch profiles based on foreground application"</strong> is checked on the <a href="../guides/profiles/">Profiles</a> section.</li>
+<li>Confirm <strong>"Auto-Switch Profiles Based on Foreground Application"</strong> is checked on the <a href="../guides/profiles/">Profiles</a> section.</li>
 <li>Verify the executable path matches (case-insensitive, full path). Use the file browser button to avoid typos.</li>
 <li>For games launchable from multiple locations, separate paths with the pipe character (<code>|</code>).</li>
 <li>Add the game's own executable, not the launcher's (Steam, Epic, etc.).</li>
@@ -4294,7 +4294,7 @@
 </ol>
 <hr />
 <h2 id="community-configs-steam-workshop-issues">Community Configs (Steam Workshop) Issues<a class="headerlink" href="#community-configs-steam-workshop-issues" title="Permanent link">&para;</a></h2>
-<p><strong>"Steam is unreachable" in the Browse Community Configs dialog.</strong></p>
+<p><strong>"Steam Is Unreachable" in the Browse Community Configs dialog.</strong></p>
 <ol>
 <li>Check your internet connection and click <strong>Retry</strong>.</li>
 <li>Corporate or school networks sometimes block Steam. The connection uses standard HTTPS (port 443).</li>
@@ -4332,7 +4332,7 @@
 <h2 id="buttons-map-to-wrong-outputs">Buttons Map to Wrong Outputs<a class="headerlink" href="#buttons-map-to-wrong-outputs" title="Permanent link">&para;</a></h2>
 <p><strong>Buttons do not match expected positions, trigger two inputs, or produce no input.</strong></p>
 <ol>
-<li>Enable <strong>"Force raw joystick mode (bypass gamepad remapping)"</strong> on the <a href="../features/devices/">Devices</a> page to bypass SDL3's remapping.</li>
+<li>Enable <strong>"Force Raw Joystick Mode (Bypass Gamepad Remapping)"</strong> on the <a href="../features/devices/">Devices</a> page to bypass SDL3's remapping.</li>
 <li>Re-record all mappings manually with <strong>Record</strong> on the <a href="../features/mappings/">Mappings</a> tab.</li>
 <li>Verify in <code>joy.cpl</code> that buttons work correctly at the Windows level.</li>
 <li>Known affected devices: certain third-party controllers with non-standard HID layouts.</li>
@@ -4354,7 +4354,7 @@
 <ol>
 <li>Go to the <strong>Devices</strong> page.</li>
 <li>Select the problematic device.</li>
-<li>Enable <strong>"Force raw joystick mode (bypass gamepad remapping)"</strong> in the Input Mode section.</li>
+<li>Enable <strong>"Force Raw Joystick Mode (Bypass Gamepad Remapping)"</strong> in the Input Mode section.</li>
 <li>Go to the <strong>Mappings</strong> tab and manually record each button.</li>
 <li>Auto-mapping is unavailable in raw mode, but raw indices will be correct.</li>
 </ol>
@@ -4365,7 +4365,7 @@
 <li>Mouse buttons map like any other input. On the Mappings tab, click <strong>Record</strong> on a row and press the mouse button.</li>
 <li>Mouse axes show relative deltas, not absolute positions. Fast movements produce larger values.</li>
 <li>When recording a mouse axis mapping, move the mouse in the desired direction. Detection is instant.</li>
-<li>PadForge does not automatically consume mouse or keyboard inputs. Enable <strong>"Consume mapped inputs (hooks)"</strong> or <strong>"Hide from games (HidHide)"</strong> manually if needed (a warning appears before enabling).</li>
+<li>PadForge does not automatically consume mouse or keyboard inputs. Enable <strong>"Consume Mapped Inputs (Hooks)"</strong> or <strong>"Hide from Games (HidHide)"</strong> manually if needed (a warning appears before enabling).</li>
 </ol>
 <hr />
 <h2 id="stick-drift-after-calibration">Stick Drift After Calibration<a class="headerlink" href="#stick-drift-after-calibration" title="Permanent link">&para;</a></h2>
@@ -4389,8 +4389,8 @@
 <h2 id="volume-macro-issues">Volume Macro Issues<a class="headerlink" href="#volume-macro-issues" title="Permanent link">&para;</a></h2>
 <p><strong>Volume changes direction is wrong, or the OSD appears when it should not.</strong></p>
 <ol>
-<li>Wrong direction. Enable <strong>Invert axis</strong> on the volume action settings.</li>
-<li>Unwanted OSD. Disable <strong>Show volume OSD</strong> on the volume action.</li>
+<li>Wrong direction. Enable <strong>Invert Axis</strong> on the volume action settings.</li>
+<li>Unwanted OSD. Disable <strong>Show Volume OSD</strong> on the volume action.</li>
 <li>Volume not changing. Confirm the trigger fires (see "My Macro Doesn't Fire" above).</li>
 </ol>
 <hr />
@@ -4461,7 +4461,7 @@
 <p><strong>Play/Pause, volume, or other media keys on a keyboard or remote do not show up as a mappable source.</strong></p>
 <ol>
 <li>The keyboard or remote must expose a media-key device. Windows presents a keyboard's media-key row as a separate Consumer Control device. A basic keyboard without a media row exposes none and is not enumerated.</li>
-<li>Media keys arrive on a separate path from normal keys. Pick the device (or "All Consumer Controls (Merged)") as the mapping source, not the keyboard.</li>
+<li>Media keys arrive on a separate path from normal keys. Pick the media-key device itself as the mapping source, not the keyboard.</li>
 <li>Consumer Control is an <strong>input source only</strong>. PadForge cannot suppress media keys, so they still reach the OS even when mapped. There is no "consume" option for them.</li>
 <li>Standard media keys have stable mappings. An uncommon usage gets a session-only "Consumer 0xNNNN" slot whose index is not stable across restarts, so re-record those after an update.</li>
 </ol>
@@ -4549,15 +4549,15 @@
 </tr>
 <tr>
 <td>Double input</td>
-<td>Install HidHide, enable "Hide devices from games"</td>
+<td>Install HidHide, enable "Hide Devices from Games"</td>
 </tr>
 <tr>
 <td>BLE controller not hidden</td>
-<td>Enable per-device "Hide from games" and "Hide devices from games" in Settings</td>
+<td>Enable per-device "Hide from Games" and "Hide Devices from Games" in Settings</td>
 </tr>
 <tr>
 <td>Wrong button mapping</td>
-<td>Force raw joystick mode, re-record</td>
+<td>Force Raw Joystick Mode, re-record</td>
 </tr>
 <tr>
 <td>Opposite buttons vanish</td>
@@ -4709,11 +4709,11 @@
 </tr>
 <tr>
 <td>Volume macro wrong direction</td>
-<td>Enable Invert axis</td>
+<td>Enable Invert Axis</td>
 </tr>
 <tr>
 <td>Volume OSD unwanted</td>
-<td>Disable Show volume OSD</td>
+<td>Disable Show Volume OSD</td>
 </tr>
 <tr>
 <td>DualShock 3 not connecting</td>
@@ -4761,7 +4761,7 @@
 <li><a href="../guides/remote-link/">Remote Link</a>: Share a controller across PCs on your network</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

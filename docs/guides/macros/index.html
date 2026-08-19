@@ -5011,13 +5011,13 @@
 <p>Type a block of plain text as keystrokes. It sends Unicode, so accents, CJK, and emoji all type regardless of keyboard layout. Newlines press Enter. A pasted tab character presses Tab.</p>
 <ul>
 <li><strong>Text.</strong> The text to type.</li>
-<li><strong>Char delay (ms).</strong> Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.</li>
+<li><strong>Char Delay (ms).</strong> Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.</li>
 </ul>
 <p>Use Key Press for key combos like Ctrl+C. Use Text Block for literal text.</p>
 <h3 id="repeat-key-while-held">Repeat Key While Held<a class="headerlink" href="#repeat-key-while-held" title="Permanent link">&para;</a></h3>
 <p>Keyboard autofire. While the macro's trigger is held, the key presses and releases on a fixed beat.</p>
 <ul>
-<li><strong>Key.</strong> Picked with the same dropdown as Key Press.</li>
+<li><strong>Key Combo.</strong> Picked with the same dropdown as Key Press.</li>
 <li><strong>Interval.</strong> Milliseconds between presses, 10 to 1000, default 100. The first press fires the moment the trigger engages, the next each time the interval elapses.</li>
 </ul>
 <p>Pair it with the <strong>While Held</strong> fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.</p>
@@ -5044,7 +5044,7 @@
 <ul>
 <li><strong>Program.</strong> The path to the program or file.</li>
 <li><strong>Arguments.</strong> Optional command-line arguments.</li>
-<li><strong>Working directory.</strong> Optional. The folder the program treats as its current directory, not the folder the program file sits in. Blank uses the default.</li>
+<li><strong>Working Directory.</strong> Optional. The folder the program treats as its current directory, not the folder the program file sits in. Blank uses the default.</li>
 </ul>
 <p>The launch is fire-and-forget, so the rest of the macro does not wait for it.</p>
 <h3 id="delay">Delay<a class="headerlink" href="#delay" title="Permanent link">&para;</a></h3>
@@ -5091,14 +5091,14 @@
 <p>Map an axis to Windows master volume. Updates every frame.</p>
 <ul>
 <li><strong>Axis.</strong> Which axis drives volume.</li>
-<li><strong>Invert.</strong> Release-to-louder.</li>
-<li><strong>Show volume OSD.</strong> The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.</li>
+<li><strong>Invert Axis.</strong> Release-to-louder.</li>
+<li><strong>Show Volume OSD.</strong> The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.</li>
 <li><strong>Volume Limit.</strong> Caps the maximum. 30 to 50 percent is a safe start for protecting your ears.</li>
 </ul>
 <h3 id="app-volume">App Volume<a class="headerlink" href="#app-volume" title="Permanent link">&para;</a></h3>
 <p>Same as System Volume, but it drives one app in the Windows audio mixer.</p>
 <ul>
-<li><strong>Process name.</strong> The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.</li>
+<li><strong>Process.</strong> The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.</li>
 <li>The other options match System Volume.</li>
 </ul>
 <h3 id="raise-headphone-volume-lower-headphone-volume">Raise Headphone Volume / Lower Headphone Volume<a class="headerlink" href="#raise-headphone-volume-lower-headphone-volume" title="Permanent link">&para;</a></h3>
@@ -5107,9 +5107,9 @@
 <h3 id="play-sound-stop-sounds">Play Sound / Stop Sounds<a class="headerlink" href="#play-sound-stop-sounds" title="Permanent link">&para;</a></h3>
 <p>Play a sound file through the slot's audio output. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a single vibrating tone. With no sound-capable device on the slot, it falls back to the PC's default output.</p>
 <ul>
-<li><strong>Sound.</strong> The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).</li>
+<li><strong>Sound File.</strong> The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).</li>
 <li><strong>Volume.</strong> Scales the file against the slot's master volume.</li>
-<li><strong>Loop.</strong> Repeat until a <strong>Stop Sounds</strong> action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.</li>
+<li><strong>Loop Until Stopped.</strong> Repeat until a <strong>Stop Sounds</strong> action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.</li>
 </ul>
 <p><strong>Stop Sounds</strong> ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See <a href="../../features/controller-audio/">Controller Audio</a> for the output device picker and sound packages.</p>
 <h3 id="mouse-move">Mouse Move<a class="headerlink" href="#mouse-move" title="Permanent link">&para;</a></h3>
@@ -5164,8 +5164,8 @@
 <p>Push an RGB color to every Sony pad on the slot as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.</p>
 <p>Two hold modes:</p>
 <ul>
-<li><strong>Reactive.</strong> Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.</li>
-<li><strong>Sticky.</strong> Hold the color at full brightness until a <strong>Clear Lightbar Override</strong> action or a fresh override replaces it. Good for armed / disarmed markers.</li>
+<li><strong>Reactive (Fade).</strong> Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.</li>
+<li><strong>Sticky (Hold).</strong> Hold the color at full brightness until a <strong>Clear Lightbar Override</strong> action or a fresh override replaces it. Good for armed / disarmed markers.</li>
 </ul>
 <p>Available on slots that have at least one Sony pad (DualShock 4, DualSense, DualSense Edge).</p>
 <h3 id="clear-lightbar-override">Clear Lightbar Override<a class="headerlink" href="#clear-lightbar-override" title="Permanent link">&para;</a></h3>
@@ -5177,8 +5177,8 @@
 <h3 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h3>
 <p>Drive the slot's physical rumble from a macro. Per-motor strength from 0 to 100 percent, so a macro can hit one motor by itself or both together. Two hold modes match Set Lightbar Color:</p>
 <ul>
-<li><strong>Reactive.</strong> Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.</li>
-<li><strong>Sticky.</strong> Hold at full strength until a <strong>Stop Rumble</strong> action runs. Good for armed states and click-and-hold sustain.</li>
+<li><strong>Reactive (Fade).</strong> Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.</li>
+<li><strong>Sticky (Hold).</strong> Hold at full strength until a <strong>Stop Rumble</strong> action runs. Good for armed states and click-and-hold sustain.</li>
 </ul>
 <p>Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand.</p>
 <h3 id="stop-rumble">Stop Rumble<a class="headerlink" href="#stop-rumble" title="Permanent link">&para;</a></h3>
@@ -5262,7 +5262,7 @@
 <p>Works on Bluetooth controllers only. A USB-wired controller is skipped, and disconnecting a charging controller over Bluetooth doesn't interrupt its charge.</p>
 <p><img alt="The Disconnect Controller action with the Target dropdown" src="../../images/macro-disconnect.png" /></p>
 <h3 id="axis-source-for-continuous-actions">Axis source for continuous actions<a class="headerlink" href="#axis-source-for-continuous-actions" title="Permanent link">&para;</a></h3>
-<p>System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources, picked in the <strong>Axis from</strong> dropdown:</p>
+<p>System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources, picked in the <strong>Axis From</strong> dropdown:</p>
 <table>
 <thead>
 <tr>
@@ -5284,8 +5284,8 @@
 <p>Pick <strong>Assigned Devices</strong> when the axis is unmapped (a throttle lever you want for volume) or you want to skip the deadzone and curve math.</p>
 <h3 id="axis-options">Axis options<a class="headerlink" href="#axis-options" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Invert axis.</strong> Reverse the direction. Volume: release-to-louder. Mouse: opposite cursor.</li>
-<li><strong>Show volume OSD.</strong> The Windows volume flyout. System Volume only. On by default.</li>
+<li><strong>Invert Axis.</strong> Reverse the direction. Volume: release-to-louder. Mouse: opposite cursor.</li>
+<li><strong>Show Volume OSD.</strong> The Windows volume flyout. System Volume only. On by default.</li>
 </ul>
 <h3 id="build-the-sequence">Build the sequence<a class="headerlink" href="#build-the-sequence" title="Permanent link">&para;</a></h3>
 <ol>
@@ -5331,7 +5331,7 @@
 </tbody>
 </table>
 <p>Fixed Count and Until Release both have a <strong>Delay</strong> in milliseconds between runs.</p>
-<p>In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline <strong>Interval</strong> field beside the fire mode.</p>
+<p>In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline <strong>Interval</strong> field beside the fire mode. On Short Press hides it too, because the trigger is already released when the macro fires and an until-release loop can never run.</p>
 <p>Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 50 ms. A presses every 100 ms (about 10 times a second) while held.</p>
 <hr />
 <h2 id="consume-trigger-buttons">Consume trigger buttons<a class="headerlink" href="#consume-trigger-buttons" title="Permanent link">&para;</a></h2>
@@ -5472,7 +5472,7 @@
 <ul>
 <li>Macro lightbar overrides do not override what the game writes at the packet level. A game that drives the lightbar each frame wins.</li>
 <li>Macro rumble takes the stronger of the macro and game strength, so a game holding a motor at full strength masks a weaker macro pulse.</li>
-<li><strong>Consume trigger buttons</strong> strips button-shaped inputs only. An axis-threshold, POV, or gesture trigger stays visible to the game even with Consume on.</li>
+<li><strong>Consume Trigger Buttons (Hide from Game)</strong> strips button-shaped inputs only. An axis-threshold, POV, or gesture trigger stays visible to the game even with Consume on.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>

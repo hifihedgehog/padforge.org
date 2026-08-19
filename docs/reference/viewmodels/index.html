@@ -3221,6 +3221,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slot-Level Picker Lists and Mapping Picker Filter (#322, discussion #302)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-device-test-routing-32" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3291,6 +3302,17 @@
     <span class="md-ellipsis">
       
         Gyro Engage Stick Gate (#120)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyro-tilt-envelope-292" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro Tilt Envelope (#292)
       
     </span>
   </a>
@@ -3910,6 +3932,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pressure-scaled-turbo-290" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pressure-Scaled Turbo (#290)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#disconnect-action-properties-162" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4163,6 +4196,17 @@
     <span class="md-ellipsis">
       
         Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#speed-and-momentum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Speed and Momentum
       
     </span>
   </a>
@@ -6097,6 +6141,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slot-Level Picker Lists and Mapping Picker Filter (#322, discussion #302)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-device-test-routing-32" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6167,6 +6222,17 @@
     <span class="md-ellipsis">
       
         Gyro Engage Stick Gate (#120)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyro-tilt-envelope-292" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gyro Tilt Envelope (#292)
       
     </span>
   </a>
@@ -6786,6 +6852,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pressure-scaled-turbo-290" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pressure-Scaled Turbo (#290)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#disconnect-action-properties-162" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7039,6 +7116,17 @@
     <span class="md-ellipsis">
       
         Identity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#speed-and-momentum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Speed and Momentum
       
     </span>
   </a>
@@ -7515,6 +7603,7 @@
 <p><strong>v4 (2026-07-12):</strong> Refreshed for v4. Remote Link (<code>DashboardViewModel</code> + <code>SettingsViewModel</code>, and the <code>RemoteLinkTrustedPeer</code> / <code>RemoteLinkNearbyPeer</code> rows), the per-(slot, device) <code>DeviceSlotConfig</code> (renamed from <code>PlayStationSlotConfig</code>), <code>KbmSlotConfig</code> (SOCD / Snap Tap), multi-source mapping rows (<code>MappingSourceItem</code>), the mouse-gesture partial, and the Ember dashboard vocabulary all landed since the v3 rewrite. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>. If anything here drifts from the live source, the live source wins.</p>
 <p><strong>v4.1 (2026-07-30):</strong> The Nintendo output type (#215) joins the family. <code>PadViewModel</code> gains the Bass Shakers tab (#236), the slot SOCD card (#240), the flick rotation offset, gyro Acceleration, and the macro Layer dropdown. <code>MacroItem</code> carries the #238 / #253 fire-mode wave and per-macro layer scope (#254). Mapping rows and sources gain Flip Output, per-source Acceleration, and the #251 axis-latch macro actions. The Touchpad partial grows the libinput pointer Response, momentum, and pointer-region cards. <code>DeviceSlotConfig</code> adds synthetic touch pressure (#239) and the Switch home-LED lane (#226).</p>
 <p><strong>v4.2:</strong> The VR output type (#49) lands as <code>VirtualControllerType.Vr</code> (6), with a <code>VrControllerIcon</code> sidebar entry, a <code>VrOutputSnapshot</code>, and a SteamVR row in both driver-status surfaces (<code>DashboardViewModel.IsSteamVrInstalled</code>, plus the install / uninstall pair on <code>SettingsViewModel</code>). The pad page grows two slot-tier tabs: Bass Shakers at index 16 and Output at index 17 (SOCD plus Keep Controller Awake). <code>DeviceSlotConfig</code> gains headphone-jack volume, the DualSense audio-output path, and persona haptics, with <code>MacroActionType.HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> (52 / 53) driving the volume. Sony headset head trackers get their own device class (<code>HeadsetMotion</code>, #188). <code>RawHidState</code> replaced the old <code>ExtendedRawState</code>, so the Extended snapshot is now <code>RawHidOutputSnapshot</code>.</p>
+<p><strong>v4.3:</strong> The mapping picker gains one shared per-slot choice list plus a search box and device-visibility filter (#322 / discussion #302), both on <code>PadViewModel</code>. Voice macros (#317) add the <code>"Microphone"</code> device class, the Voice Macros preview on <code>DevicesViewModel</code>, <code>DeviceRowViewModel.ShowManageVoicePhrases</code>, and <code>MacroActionType.VoiceListenWhileHeld</code> (54). <code>MacroAction</code> grows the pressure-scaled turbo block (#290). <code>StickConfigItem</code> grows stick trackball momentum (#291), the touchpad partial grows the shared momentum knobs, and <code>PadViewModel</code> grows the Gyro Tilt envelope (#292). The Dashboard's web-controller card gains a URL and QR (#296), its SteamVR row goes tiered (#287), and Settings gains the low-battery notification trio (#293).</p>
 </blockquote>
 <hr />
 <p>All ViewModels live in <code>PadForge.App/ViewModels/</code> (<code>PadForge.ViewModels</code> namespace). Built on <a href="https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/">CommunityToolkit.Mvvm</a> (<code>ObservableObject</code>, <code>RelayCommand</code>).</p>
@@ -7967,9 +8056,24 @@
 <td>SteamVR present, which gates the VR slot type (#49). Kept current by MainWindow's periodic status refresh alongside the MIDI Services flag. Notifies <code>SteamVrStatusText</code>.</td>
 </tr>
 <tr>
+<td><code>IsSteamVrRunning</code></td>
+<td><code>bool</code></td>
+<td>The background VR consumer is connected to a running SteamVR (#287). Notifies <code>SteamVrStatusText</code>.</td>
+</tr>
+<tr>
+<td><code>IsVrDriverConnected</code></td>
+<td><code>bool</code></td>
+<td>A VR slot's OpenVR driver is connected in SteamVR (the SDK's <code>DriverConnected</code>, #287). Notifies <code>SteamVrStatusText</code>.</td>
+</tr>
+<tr>
+<td><code>AreVrControllersLive</code></td>
+<td><code>bool</code></td>
+<td>A VR slot's virtual hands are registered and live in SteamVR (the SDK's <code>ControllersLive</code>, #287). Notifies <code>SteamVrStatusText</code>.</td>
+</tr>
+<tr>
 <td><code>SteamVrStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+<td>Computed, tiered (#287), deepest true state wins: <code>"Not installed"</code>, then <code>Vr_Status_ControllersLive</code>, <code>Vr_Status_DriverConnected</code>, <code>Vr_Status_Running</code>, falling back to <code>"Installed"</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -8065,6 +8169,24 @@
 <td><code>0</code></td>
 <td>Connected web controller clients.</td>
 </tr>
+<tr>
+<td><code>WebControllerUrl</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The live server URL, <code>https://</code> when the secure lane bound (#296). Empty when stopped.</td>
+</tr>
+<tr>
+<td><code>WebControllerQr</code></td>
+<td><code>ImageSource</code></td>
+<td><code>null</code></td>
+<td>QR of <code>WebControllerUrl</code> so a phone opens the controller by scanning (#296). Null when stopped, which hides the image.</td>
+</tr>
+<tr>
+<td><code>HasWebControllerQr</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Whether a QR is available. Drives its visibility.</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -8078,6 +8200,10 @@
 <tr>
 <td><code>ResetWebPortCommand</code></td>
 <td>Resets <code>WebControllerPort</code> to 8080.</td>
+</tr>
+<tr>
+<td><code>CopyWebControllerUrlCommand</code></td>
+<td>Copies <code>WebControllerUrl</code> to the clipboard. No-op when empty.</td>
 </tr>
 </tbody>
 </table>
@@ -8135,6 +8261,30 @@
 <td><code>""</code></td>
 <td>Host (or host:port) the user types to initiate an outbound pairing.</td>
 </tr>
+<tr>
+<td><code>RemoteLinkMyCode</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>This PC's connection code (#294): a self-contained code embedding the public and private endpoints, minted while Remote Link runs. Empty until the STUN probe returns. Set by InputService. Notifies <code>HasRemoteLinkMyCode</code>.</td>
+</tr>
+<tr>
+<td><code>HasRemoteLinkMyCode</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: a shareable code is available to show or copy.</td>
+</tr>
+<tr>
+<td><code>RemoteLinkNatWarning</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>Network warning (#294): set when the STUN probe found no public address (UDP blocked) or an endpoint-dependent NAT direct connections cannot traverse. Empty when the network looks punchable. Notifies <code>HasRemoteLinkNatWarning</code>.</td>
+</tr>
+<tr>
+<td><code>HasRemoteLinkNatWarning</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: <code>RemoteLinkNatWarning</code> is non-empty.</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -8152,6 +8302,10 @@
 <tr>
 <td><code>ConnectToPeerCommand</code></td>
 <td>Raises <code>ConnectToPeerRequested</code> with the trimmed <code>RemoteLinkConnectHost</code> when non-empty.</td>
+</tr>
+<tr>
+<td><code>CopyRemoteLinkCodeCommand</code></td>
+<td>Copies <code>RemoteLinkMyCode</code> to the clipboard. No-op when empty.</td>
 </tr>
 </tbody>
 </table>
@@ -8792,7 +8946,7 @@
 <tr>
 <td><code>SteamVrStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+<td>Computed, tiered like the Dashboard row (#287): <code>"Not installed"</code>, then controllers-live / driver-connected / running read off <code>HMaestroVRController.GlobalDriverStatus()</code> and <code>OpenVrConsumerService.ServerConnected</code>, falling back to <code>"Installed"</code>.</td>
 </tr>
 <tr>
 <td><code>SteamVrInstallDir</code></td>
@@ -8850,6 +9004,20 @@
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RefreshSteamVrStatus()</code></td>
+<td>Raises the SteamVR row's change notification. Called by MainWindow's status refresh beside the Dashboard tier push, since <code>SteamVrStatusText</code> reads live statics.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="driver-uninstall-guards">Driver Uninstall Guards<a class="headerlink" href="#driver-uninstall-guards" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8899,6 +9067,24 @@
 <td><code>bool</code></td>
 <td><code>false</code></td>
 <td>Minimize to system tray instead of taskbar.</td>
+</tr>
+<tr>
+<td><code>BatteryNotifyEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Low-battery notification master toggle (#293).</td>
+</tr>
+<tr>
+<td><code>BatteryNotifyThreshold</code></td>
+<td><code>int</code></td>
+<td><code>15</code></td>
+<td>Percent at or below which the edge-triggered notification fires. Clamped 5–50.</td>
+</tr>
+<tr>
+<td><code>BatteryNotifyVibrate</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Also buzz the device on the low-battery edge, using the identify pulse train.</td>
 </tr>
 <tr>
 <td><code>StartMinimized</code></td>
@@ -9544,6 +9730,11 @@
 <td>Number of Keyboard+Mouse slots.</td>
 </tr>
 <tr>
+<td><code>VrCount</code></td>
+<td><code>int</code></td>
+<td>Number of VR slots (#49).</td>
+</tr>
+<tr>
 <td><code>IsDefault</code></td>
 <td><code>bool</code></td>
 <td>Computed: true if <code>Id == "__default__"</code>.</td>
@@ -9672,7 +9863,7 @@
 <td><code>FacetCountOther</code></td>
 <td><code>int</code></td>
 <td><code>0</code></td>
-<td>Rows behind the OTHER chip (touchpads, MIDI, NFC, consumer collections, unclassified).</td>
+<td>Rows behind the OTHER chip (touchpads, MIDI, NFC, microphones, consumer collections, unclassified).</td>
 </tr>
 </tbody>
 </table>
@@ -9745,6 +9936,26 @@
 <td><code>IsNfcDevice</code></td>
 <td><code>bool</code></td>
 <td>Selected device is an NFC reader (#150). Populates <code>NfcTags</code>.</td>
+</tr>
+<tr>
+<td><code>IsMicrophoneDevice</code></td>
+<td><code>bool</code></td>
+<td>Selected device is a standalone microphone (#317). Hides the numbered button grid, since every button it has is a named phrase.</td>
+</tr>
+<tr>
+<td><code>ShowVoicePhrases</code></td>
+<td><code>bool</code></td>
+<td>Selected device carries voice phrases (a microphone row, or a Bluetooth DualSense whose embedded mic is not a system device). Drives the Voice Macros section, the voice twin of the NFC Tags section.</td>
+</tr>
+<tr>
+<td><code>VoicePhrases</code></td>
+<td><code>ObservableCollection&lt;NfcTagDisplayItem&gt;</code></td>
+<td>Named phrase rows for the live preview (#317): "Any Phrase" plus each registered phrase. Reuses the NFC row item. Rebuilt by <code>RebuildVoicePhrases(int)</code>.</td>
+</tr>
+<tr>
+<td><code>VoiceButtonBase</code></td>
+<td><code>int</code></td>
+<td>Raw-button base the current device's phrase buttons sit at (0 on a microphone row, the reserved pad range on a DualSense). <code>-1</code> when none. Private setter.</td>
 </tr>
 <tr>
 <td><code>IsConsumerDevice</code></td>
@@ -10031,16 +10242,20 @@
 </thead>
 <tbody>
 <tr>
-<td><code>RebuildRawStateCollections(int axisCount, IReadOnlyList&lt;int&gt; buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList&lt;ConsumerButtonDisplayItem&gt; consumerButtons, bool isHeadsetMotion)</code></td>
-<td>Rebuilds axis/button/POV collections for a new device. <code>buttonIndices</code> is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both <code>Index</code> and <code>DisplayNumber</code>). The class-flag booleans default to <code>false</code> and <code>consumerButtons</code> to <code>null</code>. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, and headset-motion cases.</td>
+<td><code>RebuildRawStateCollections(int axisCount, IReadOnlyList&lt;int&gt; buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList&lt;ConsumerButtonDisplayItem&gt; consumerButtons, bool isHeadsetMotion, int voiceButtonBase, bool isMicrophone)</code></td>
+<td>Rebuilds axis/button/POV collections for a new device. <code>buttonIndices</code> is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both <code>Index</code> and <code>DisplayNumber</code>). The class-flag booleans default to <code>false</code>, <code>consumerButtons</code> to <code>null</code>, and <code>voiceButtonBase</code> to <code>-1</code>. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, headset-motion, and voice-phrase cases.</td>
 </tr>
 <tr>
 <td><code>ClearRawState()</code></td>
-<td>Clears all raw state display data, including the class flags and the NFC / Consumer collections.</td>
+<td>Clears all raw state display data, including the class flags and the NFC / voice / Consumer collections.</td>
 </tr>
 <tr>
 <td><code>RebuildNfcTags()</code></td>
 <td>Repopulates <code>NfcTags</code> from the registered-tag store.</td>
+</tr>
+<tr>
+<td><code>RebuildVoicePhrases(int)</code></td>
+<td>Repopulates <code>VoicePhrases</code> from <code>VoicePhraseRegistry</code> at the passed button base. A negative base clears the list.</td>
 </tr>
 <tr>
 <td><code>RefreshSlotButtons()</code></td>
@@ -10592,7 +10807,17 @@
 <tr>
 <td><code>ShowRegisterNfcTag</code></td>
 <td><code>bool</code></td>
-<td>Computed: <code>DeviceTypeKey == "Nfc"</code>. Shows the Register / Manage NFC Tags button (#150).</td>
+<td>Computed: shows the Register / Manage NFC Tags button (#150). True for a standalone PC/SC reader (<code>DeviceTypeKey == "Nfc"</code>) and for a Switch right Joy-Con / combined pair / Pro Controller (VID 057E, PID 2007 / 2008 / 2009) on a Bluetooth link, whose own reader registers through the same dialog (#241). Always false on a <code>peer://</code> row: the tap event never crosses the link, so registration belongs to the owner.</td>
+</tr>
+<tr>
+<td><code>ShowManageVoicePhrases</code></td>
+<td><code>bool</code></td>
+<td>Computed: shows the Manage Voice Macros button (#317). True for a <code>"Microphone"</code> row, and for a DualSense (VID 054C, PID 0CE6 / 0DF2) on a Bluetooth link, where the embedded mic is not a system device. Same <code>peer://</code> exclusion as the NFC button.</td>
+</tr>
+<tr>
+<td><code>HasNfcCapabilityChip</code></td>
+<td><code>bool</code></td>
+<td>Computed: the device is a Switch controller carrying an NFC reader (VID 057E, PID 2007 / 2008 / 2009). A hardware fact, not the transport-gated arming state, so it reads true over USB too. A standalone PC/SC reader is excluded, its device type already says NFC.</td>
 </tr>
 <tr>
 <td><code>IsBluetoothLink</code></td>
@@ -10629,7 +10854,7 @@
 <tr>
 <td><code>DeviceTypeKey</code></td>
 <td><code>string</code></td>
-<td>English type key: <code>"Gamepad"</code>, <code>"Joystick"</code>, <code>"Wheel"</code>, <code>"FlightStick"</code>, <code>"FirstPerson"</code>, <code>"Supplemental"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"ConsumerControl"</code>, <code>"HeadsetMotion"</code>. Anything else falls back to the generic "Device" label. Notifies <code>DeviceType</code>.</td>
+<td>English type key: <code>"Gamepad"</code>, <code>"Joystick"</code>, <code>"Wheel"</code>, <code>"FlightStick"</code>, <code>"FirstPerson"</code>, <code>"Supplemental"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HeadsetMotion"</code>. Anything else falls back to the generic "Device" label. Notifies <code>DeviceType</code>.</td>
 </tr>
 <tr>
 <td><code>DeviceType</code></td>
@@ -10748,13 +10973,13 @@
 <td><code>ShowConsumeToggle</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: true for keyboards and mice only.</td>
+<td>Computed: real keyboards and mice only (<code>(Keyboard or Mouse) &amp;&amp; !IsInternalVirtual</code>). Consumption suppresses the source at the raw/descriptor layer, which only exists for a real Windows HID device.</td>
 </tr>
 <tr>
 <td><code>IsInternalVirtual</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: true for PadForge-internal virtual sources, identified by URI-scheme <code>DevicePath</code> (<code>web://</code>, <code>overlay://</code>, <code>midi://</code>, <code>peer://</code>, <code>nfc://</code>). Covers web controllers, the touchpad overlay, MIDI-input devices, Remote Link peers, and NFC readers. HidHide can't blacklist non-HID paths, so the "Hide from games" toggle hides itself for these.</td>
+<td>Computed: true for PadForge-internal virtual sources, identified by URI-scheme <code>DevicePath</code> (<code>web://</code>, <code>overlay://</code>, <code>midi://</code>, <code>peer://</code>, <code>nfc://</code>, <code>mic://</code>). Covers web controllers, the touchpad overlay, MIDI-input devices, Remote Link peers, NFC readers, and microphone endpoints. HidHide can't blacklist non-HID paths, so the "Hide from games" toggle hides itself for these.</td>
 </tr>
 <tr>
 <td><code>ShowInputHidingSection</code></td>
@@ -10816,7 +11041,7 @@
 <tr>
 <td><code>ShowSubmitMapping</code></td>
 <td><code>bool</code></td>
-<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, and <code>"HeadsetMotion"</code>.</td>
+<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"HeadsetMotion"</code>, <code>"Microphone"</code>, and <code>"ConsumerControl"</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -11361,7 +11586,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="per-device-test-routing-32">Per-Device Test Routing (3.2)<a class="headerlink" href="#per-device-test-routing-32" title="Permanent link">&para;</a></h3>
+<h3 id="slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302">Slot-Level Picker Lists and Mapping Picker Filter (#322, discussion #302)<a class="headerlink" href="#slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302" title="Permanent link">&para;</a></h3>
+<p>Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.</p>
 <table>
 <thead>
 <tr>
@@ -11372,12 +11598,72 @@
 </thead>
 <tbody>
 <tr>
-<td><code>TestRumbleTargetGuid</code></td>
-<td><code>Guid</code></td>
-<td>InstanceGuid of the device currently visible in per-device tabs (Impulse Triggers, Force Feedback, Adaptive Triggers, Lighting). Test/Probe actions on those tabs gate on <code>target == Empty \|\| ud.InstanceGuid == target</code> so only the selected physical pad fires. The same gate covers the dispatcher / routing branches that emit physical effects from those tabs (e.g. auto-routed impulse-to-AT vibration).</td>
+<td><code>SlotAvailableInputs</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
+<td>Slot-level cross-device choice list, so the Gyro tab's Aim Engage picker and any other slot-wide picker binds without proxy-walking <code>Mappings</code>. Populated by <code>InputService.PopulateAvailableInputs</code>.</td>
+</tr>
+<tr>
+<td><code>SlotAvailableInputsView</code></td>
+<td><code>ICollectionView</code></td>
+<td>Grouped view over the list, keyed on <code>InputChoice.DeviceLabel</code> for the picker's GroupStyle header.</td>
+</tr>
+<tr>
+<td><code>SlotMacroTriggerChoices</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
+<td>The subset of <code>SlotAvailableInputs</code> that converts to a <code>MacroItem.TriggerInputEntry</code> (raw buttons, POV directions, gamepad-layout axes, touchpad click, touchpad gestures), for the macro trigger dropdown (#177).</td>
+</tr>
+<tr>
+<td><code>SlotMacroTriggerChoicesView</code></td>
+<td><code>ICollectionView</code></td>
+<td>Grouped view over the macro-trigger list, same <code>DeviceLabel</code> grouping.</td>
+</tr>
+<tr>
+<td><code>MappingInputSearch</code></td>
+<td><code>string</code></td>
+<td>Find-as-you-type over the picker list. Session state, never persisted. Setting it re-applies the filter.</td>
+</tr>
+<tr>
+<td><code>PickerDeviceFilterEntries</code></td>
+<td><code>ObservableCollection&lt;PickerDeviceFilterEntry&gt;</code></td>
+<td>The device-filter popup's rows, one per device group currently in the picker.</td>
+</tr>
+<tr>
+<td><code>MappingPickerFilterActive</code></td>
+<td><code>bool</code></td>
+<td>Computed: any hidden device or non-empty search. Lets the funnel button read as engaged.</td>
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr>
+<th>Method / Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RebuildPickerDeviceFilterEntries()</code></td>
+<td>Rebuilds the popup rows from the shared list's current device groups, preserving each group's shown / hidden state. Called after every picker repopulation.</td>
+</tr>
+<tr>
+<td><code>SetHiddenPickerDeviceKeys(IEnumerable&lt;string&gt;)</code></td>
+<td>Restores the persisted hidden set on settings load.</td>
+</tr>
+<tr>
+<td><code>GetHiddenPickerDeviceKeysJoined()</code></td>
+<td>The persisted form: hidden keys, semicolon-joined. Stored per slot in the settings root, not in profiles.</td>
+</tr>
+<tr>
+<td><code>PickerDeviceFilterChanged</code></td>
+<td>Raised when the hidden set changes so the settings service can mark dirty and persist.</td>
+</tr>
+</tbody>
+</table>
+<p>The search filters both sides: the dropdown's offered choices, and the mapping grid's own rows. A row matches when its target label or its selected source's display name carries the text. Rows are outputs, so the device-visibility set never hides them, only typed text does.</p>
+<p><code>PickerDeviceFilterEntry</code> is one popup row: <code>Key</code> (device guid, or <code>"any"</code> for the device-agnostic group), <code>Label</code>, and a two-way <code>IsShown</code> whose setter toggles the owner's hidden set.</p>
+<h3 id="per-device-test-routing-32">Per-Device Test Routing (3.2)<a class="headerlink" href="#per-device-test-routing-32" title="Permanent link">&para;</a></h3>
+<p>Not a ViewModel property. <code>InputManager.TestRumbleTargetGuid</code> is a <code>Guid[MaxPads]</code> array holding, per slot, the InstanceGuid of the device currently visible in the per-device tabs (Impulse Triggers, Force Feedback, Adaptive Triggers, Lighting). InputService's test-send methods (<code>SendTestImpulseTrigger</code> and its siblings) set the slot's entry to the device GUID the pad page passed, and clear it back to <code>Guid.Empty</code> when the pulse ends. Test / Probe actions on those tabs gate on <code>target == Empty || ud.InstanceGuid == target</code> so only the selected physical pad fires, and <code>UserEffectsDispatcher.TestRumbleTargetGuidProvider</code> carries the same gate into the dispatcher branches that emit physical effects from those tabs (for example auto-routed impulse-to-AT vibration).</p>
 <h3 id="touchpad-state-32-canonical-slot">Touchpad State (3.2 canonical slot)<a class="headerlink" href="#touchpad-state-32-canonical-slot" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -11391,20 +11677,21 @@
 <tr>
 <td><code>TouchpadClickPressed</code></td>
 <td><code>bool</code></td>
-<td>Derived from <code>state.Buttons[16]</code> (= <code>SDL_GAMEPAD_BUTTON_TOUCHPAD</code>). Drives the 2D/3D model click highlight and the per-press lightbar overlay synth.</td>
+<td>True while the touchpad-click button is held (<code>state.Buttons[16]</code> = <code>SDL_GAMEPAD_BUTTON_TOUCHPAD</code> upstream). Drives the 2D/3D model click highlight and the per-press lightbar overlay synth.</td>
 </tr>
 <tr>
-<td><code>TouchpadX0</code> / <code>TouchpadY0</code> / <code>TouchpadDown0</code></td>
+<td><code>TouchpadFinger0X</code> / <code>TouchpadFinger0Y</code> / <code>TouchpadFinger0Down</code></td>
 <td><code>float</code> / <code>float</code> / <code>bool</code></td>
-<td>First finger position and contact state on the source touchpad.</td>
+<td>First finger position (0..1, normalized to pad width / height) and contact state on the source touchpad.</td>
 </tr>
 <tr>
-<td><code>TouchpadX1</code> / <code>TouchpadY1</code> / <code>TouchpadDown1</code></td>
+<td><code>TouchpadFinger1X</code> / <code>TouchpadFinger1Y</code> / <code>TouchpadFinger1Down</code></td>
 <td><code>float</code> / <code>float</code> / <code>bool</code></td>
 <td>Second finger position and contact state.</td>
 </tr>
 </tbody>
 </table>
+<p>All seven are written by <code>UpdateFromTouchpadState(in TouchpadState)</code>, which mirrors the per-slot combined touchpad state so the 2D / 3D / web previews can render finger dots and the click highlight. Only meaningful on PlayStation slots, harmless elsewhere.</p>
 <table>
 <thead>
 <tr>
@@ -11736,6 +12023,30 @@
 <td><code>double</code></td>
 <td><code>0.90</code></td>
 <td>Per-tick momentum decay (0.80–1.00). Higher glides longer.</td>
+</tr>
+<tr>
+<td><code>TouchpadMomentumMaxSpeed</code></td>
+<td><code>double</code></td>
+<td><code>0</code></td>
+<td>Fling launch ceiling in pad widths per second (0–30). <code>0</code> = no ceiling.</td>
+</tr>
+<tr>
+<td><code>TouchpadMomentumMinLift</code></td>
+<td><code>double</code></td>
+<td><code>0.286</code></td>
+<td>Lift-velocity gate below which no fling starts (0–2). The old hardcoded value.</td>
+</tr>
+<tr>
+<td><code>TouchpadMomentumFlingGain</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>Launch-speed multiplier (0.1–5.0). Leaves drag speed alone.</td>
+</tr>
+<tr>
+<td><code>TouchpadMomentumStacking</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Whether a new fling adds to an in-flight coast instead of replacing it.</td>
 </tr>
 <tr>
 <td><code>TouchpadPointerResponse</code></td>
@@ -12412,6 +12723,36 @@
 </tr>
 </tbody>
 </table>
+<h3 id="gyro-tilt-envelope-292">Gyro Tilt Envelope (#292)<a class="headerlink" href="#gyro-tilt-envelope-292" title="Permanent link">&para;</a></h3>
+<p>Per-(slot, device) lens over the "Gyro Tilt X/Y" sources, the same shape as Flick Stick below. The save pipeline stamps these onto every tilt source (<code>ApplyGyroTiltParamsToRow</code>, the Motion Steering push pattern) and persists them in the PadSetting extended-mapping bag under <code>GyroTilt*</code> keys.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Range</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GyroTiltRangeDeg</code></td>
+<td><code>double</code></td>
+<td><code>25</code></td>
+<td>1–180</td>
+<td>Physical tilt in degrees that reaches full deflection. 25 is the modal Steam-corpus maximum. The clamp admits the corpus outliers while the slider tops at 90.</td>
+</tr>
+<tr>
+<td><code>GyroTiltInnerDz</code></td>
+<td><code>double</code></td>
+<td><code>0</code></td>
+<td>0–89</td>
+<td>Inner tilt deadzone in degrees.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reset commands:</strong> <code>ResetGyroTiltRangeCommand</code>, <code>ResetGyroTiltInnerCommand</code>, and the card-level <code>ResetGyroTiltAllCommand</code>.</p>
 <h3 id="flick-stick-225">Flick Stick (#225)<a class="headerlink" href="#flick-stick-225" title="Permanent link">&para;</a></h3>
 <p>Per-(slot, device) lens over the "Flick Stick ..." sources in the slot's KBM mapping set. The save pipeline stamps these onto every flick source (<code>ApplyFlickStickParamsToRow</code>, the Motion Steering push pattern) and persists them in the PadSetting extended-mapping bag (<code>FlickStick*</code> keys). Defaults mirror the <code>MappingSource</code> <code>ParamFlick*</code> defaults (JSM-grounded).</p>
 <table>
@@ -12585,6 +12926,7 @@
 </table>
 <p><strong>Right Stick:</strong> Same pattern with <code>Right</code> prefix: <code>RightDeadZoneShape</code>, <code>RightDeadZoneX</code>, <code>RightDeadZoneY</code>, <code>RightAntiDeadZoneX</code>, <code>RightAntiDeadZoneY</code>, <code>RightLinear</code>, <code>RightMaxRangeX</code>, <code>RightMaxRangeY</code>, <code>RightMaxRangeXNeg</code>, <code>RightMaxRangeYNeg</code>, <code>RightCenterOffsetX</code>, <code>RightCenterOffsetY</code>.</p>
 <p><strong>Backward compat shims:</strong> <code>LeftDeadZone</code> (get=<code>LeftDeadZoneX</code>, set=both X+Y), <code>RightDeadZone</code> (same pattern).</p>
+<p><strong>Speed and momentum mirrors:</strong> <code>LeftStickSensitivity</code> / <code>RightStickSensitivity</code> (<code>1.0</code>, clamped 0.1–5.0) carry the flat speed multiplier the KBM pointer sticks use, and <code>KbmMouseMomentum</code> (<code>false</code>) / <code>KbmMouseMomentumGlide</code> (<code>0.90</code>, clamped 0.80–1.00) carry the stick trackball (#291) for the KBM mouse stick. <code>SyncStickItemFromVm</code> pushes them into the matching <a href="#stickconfigitem">StickConfigItem</a>.</p>
 <p><strong>Sensitivity Curves (serialized control point strings, <code>"x,y;x,y;..."</code> format):</strong></p>
 <table>
 <thead>
@@ -13123,12 +13465,16 @@
 </thead>
 <tbody>
 <tr>
-<td><code>UpdateFromEngineState(Gamepad, Vibration)</code></td>
-<td>Updates combined slot output at 30 Hz.</td>
+<td><code>UpdateFromEngineState(Gamepad, Vibration, Vibration selectedDeviceVibration = null)</code></td>
+<td>Updates combined slot output at 30 Hz. The optional third argument drives the selected device's own motor bars.</td>
 </tr>
 <tr>
 <td><code>UpdateDeviceState(Gamepad)</code></td>
 <td>Updates per-device stick/trigger values for tab previews.</td>
+</tr>
+<tr>
+<td><code>UpdateFromTouchpadState(in TouchpadState)</code></td>
+<td>Mirrors the combined touchpad state onto the <code>TouchpadFinger*</code> / <code>TouchpadClickPressed</code> preview properties.</td>
 </tr>
 <tr>
 <td><code>UpdateFromRawHidState(RawHidState)</code></td>
@@ -13305,12 +13651,17 @@
 <tr>
 <td><code>AvailableInputs</code></td>
 <td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
-<td>Source dropdown choices. Populated by InputService on device change.</td>
+<td>Source dropdown choices, spanning every device assigned to the slot. Populated by InputService once per VC slot, not per device-dropdown change. Since #322 every row on a slot points at the ONE shared list (<code>UseSharedAvailableInputs</code>), so a keyboard-and-mouse tab switch no longer rebuilds a private copy and a grouped view per row.</td>
+</tr>
+<tr>
+<td><code>AvailableInputsView</code></td>
+<td><code>ICollectionView</code></td>
+<td>The grouped view the XAML ComboBox binds to. <code>GroupDescriptions</code> carries one <code>PropertyGroupDescription</code> on <code>InputChoice.DeviceLabel</code>, so the picker renders one dropdown with device-name headers. The default view is one object per collection, so on the shared list every row lands on the same view and the grouping is configured once.</td>
 </tr>
 <tr>
 <td><code>SelectedInput</code></td>
 <td><code>InputChoice</code></td>
-<td>Selected dropdown input. Updates <code>SourceDescriptor</code>. Empty sentinel triggers <code>ClearCommand</code>. Suppression flag prevents re-entrancy.</td>
+<td>Selected dropdown input. Updates <code>SourceDescriptor</code>. Empty sentinel triggers <code>ClearCommand</code>. Suppression flag prevents re-entrancy, and is held across the shared-list rebuild (<code>BeginSharedListRebuild</code> / <code>EndSharedListRebuild</code>) so a live ComboBox cannot write its own selection back through the TwoWay binding.</td>
 </tr>
 </tbody>
 </table>
@@ -13461,13 +13812,19 @@
 <td><code>ParamAccel</code></td>
 <td><code>double</code></td>
 <td><code>0</code></td>
-<td>Per-row acceleration exponent, clamped 0.0–5.0. Has <code>ResetParamAccelCommand</code>.</td>
+<td>Per-row acceleration exponent, clamped 0.0–5.0. Has <code>ResetParamAccelCommand</code>. Gated by <code>IsParamAccelApplicable</code>, which excludes the gravity-tilt family: those are position reads whose engine path applies only the curve / range channel (#292).</td>
 </tr>
 <tr>
 <td><code>GyroSensitivity</code></td>
 <td><code>double</code></td>
 <td><code>1.0</code></td>
-<td>Primary-source gyro multiplier, clamped 0.1–10. Gated by <code>IsGyroSource</code>.</td>
+<td>Primary-source gyro multiplier, clamped 0.1–10. Gated by <code>IsGyroSource</code>, which excludes the gravity-tilt family.</td>
+</tr>
+<tr>
+<td><code>IsGyroLeanSource</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: the primary is a gravity-lean read (<code>"Gyro Lean X"</code> / <code>"Gyro Lean Y"</code>, #292). Gates the lean row's dial, which binds <code>Sensitivity</code>.</td>
 </tr>
 <tr>
 <td><code>MouseCursorSensitivity</code></td>
@@ -13485,7 +13842,7 @@
 <td><code>Sensitivity</code></td>
 <td><code>double</code></td>
 <td><code>1.0</code></td>
-<td>Generic per-source knob for a plain Axis / Slider read, clamped 0.1–5. Gated by <code>IsGenericSensitivitySource</code>, which is mutually exclusive with the three specialized gates above.</td>
+<td>Generic per-source knob for a plain Axis / Slider read, clamped 0.1–5. Gated by <code>IsGenericSensitivitySource</code>, mutually exclusive with the specialized gates above, and reused as the Gyro Lean dial under <code>IsGyroLeanSource</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -13824,7 +14181,19 @@
 <td><code>IsGyroSource</code> / <code>IsMouseCursorSource</code> / <code>IsIrPointerSource</code> / <code>IsMouseMotionSource</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed from the descriptor prefix. Gate the matching per-source sensitivity sliders.</td>
+<td>Computed from the descriptor prefix. Gate the matching per-source sensitivity sliders. <code>IsGyroSource</code> excludes the gravity-tilt family (#292).</td>
+</tr>
+<tr>
+<td><code>IsGyroLeanSource</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: the gravity-lean pair (<code>"Gyro Lean X"</code> / <code>"Gyro Lean Y"</code>, #292). Gates the lean row's dial, which binds <code>Sensitivity</code>, the field <code>ReadGyroLean</code> scales by.</td>
+</tr>
+<tr>
+<td><code>IsParamAccelApplicable</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: gates the per-source Acceleration slider. The continuous-source family minus the gravity-tilt pairs, whose engine path never applies <code>ParamAccel</code> (#292).</td>
 </tr>
 <tr>
 <td><code>IsButtonClassDescriptor</code></td>
@@ -14878,6 +15247,63 @@
 </tr>
 </tbody>
 </table>
+<h3 id="pressure-scaled-turbo-290">Pressure-Scaled Turbo (#290)<a class="headerlink" href="#pressure-scaled-turbo-290" title="Permanent link">&para;</a></h3>
+<p>Applies to the repeat-interval action family (<code>RepeatKeyWhileHeld</code>, <code>RepeatVcButtonWhileHeld</code>, the toggles pulsing under <code>PulseWhileLatched</code>, and the rest of the <code>IsRepeatIntervalType</code> set). While the gate is on, the repeat rate follows a physical analog source (DS3 button pressure, any trigger) instead of the fixed <code>IntervalMs</code>. <code>IntervalMs</code> becomes the fast end (full press) and <code>SlowIntervalMs</code> the slow end, interpolated in rate space so a light press is a defined slow rate.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PressureScaledRate</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Master gate. Off keeps every existing macro on the legacy fixed-rate path.</td>
+</tr>
+<tr>
+<td><code>SlowIntervalMs</code></td>
+<td><code>int</code></td>
+<td><code>500</code></td>
+<td>Light-press period in ms. Clamped 10–2000 here, and floored at <code>IntervalMs</code> at evaluation time so slow can never outrun fast.</td>
+</tr>
+<tr>
+<td><code>TurboRateCurve</code></td>
+<td><code>string</code></td>
+<td><code>"Linear"</code></td>
+<td>Curve applied to the 0..1 pressure before the rate interpolation. Same vocabulary as the mapping rows' output curves: <code>Linear</code>, <code>Aggressive</code>, <code>Relaxed</code>, <code>Wide</code>, <code>ExtraWide</code>. Empty collapses to <code>Linear</code>.</td>
+</tr>
+<tr>
+<td><code>TurboRateCurveOptions</code></td>
+<td><code>IReadOnlyList&lt;GyroLabeledOption&gt;</code></td>
+<td>-</td>
+<td>Live-language curve choices for the dropdown.</td>
+</tr>
+<tr>
+<td><code>PressureStartPercent</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>Pressure at which the ramp leaves the slow rate. Below it the rate stays at <code>SlowIntervalMs</code>. Clamped 0–99. The remap runs before the curve.</td>
+</tr>
+<tr>
+<td><code>PressureEndPercent</code></td>
+<td><code>int</code></td>
+<td><code>100</code></td>
+<td>Pressure at which the ramp reaches the full-press rate. Clamped 1–100. The engine floors the span at one percent.</td>
+</tr>
+<tr>
+<td><code>ShowsPressureTurboRows</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: <code>IsRepeatIntervalType &amp;&amp; PressureScaledRate</code>. Gates the card's extra rows.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reset commands:</strong> <code>ResetIntervalMsCommand</code> (100 ms), <code>ResetSlowIntervalMsCommand</code> (500 ms), <code>ResetPressureStartCommand</code> (0), <code>ResetPressureEndCommand</code> (100).</p>
 <h3 id="disconnect-action-properties-162">Disconnect Action Properties (#162)<a class="headerlink" href="#disconnect-action-properties-162" title="Permanent link">&para;</a></h3>
 <p>For <code>MacroActionType.DisconnectController</code>. The target is set on the action, not the trigger, so a macro can turn off device X from a chord on device Y.</p>
 <table>
@@ -14921,7 +15347,7 @@
 <p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253; shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
 <p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code></p>
 <p><strong>MacroRepeatMode:</strong> <code>Once</code>, <code>FixedCount</code>, <code>UntilRelease</code></p>
-<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53). The last pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. The append-only rule is stated in code beside the enum.</p>
+<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317). The volume pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. The append-only rule is stated in code beside the enum.</p>
 <p><strong>MacroDisconnectTarget</strong> (#162): <code>TriggeringDevice</code> (0), <code>SpecificDevice</code> (1), <code>SlotDevices</code> (2), <code>AllDevices</code> (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.</p>
 <p><strong>MacroLightbarHoldMode:</strong> <code>Reactive</code>, <code>Sticky</code> (v3.1)</p>
 <p><strong>MacroLightbarColorSource:</strong> <code>Fixed</code>, <code>RandomHue</code>, <code>PaletteStep</code> (v3.1)</p>
@@ -15485,8 +15911,54 @@
 <td><code>int</code></td>
 <td>Raw axis index for Y in <code>RawHidState.Axes</code> (custom Extended only, -1 for gamepad). Read-only.</td>
 </tr>
+<tr>
+<td><code>IsPointerStick</code></td>
+<td><code>bool</code></td>
+<td>Set at construction. True on a KBM slot, where stick 0 is mouse movement and stick 1 the scroll wheel. Those are rate outputs, so the speed multiplier row applies there and only there.</td>
+</tr>
+<tr>
+<td><code>IsMouseStick</code></td>
+<td><code>bool</code></td>
+<td>Set at construction. True only for the KBM slot's stick 0. Gates the Momentum rows, since a coasting scroll wheel is kinetic scrolling and out of #291's scope.</td>
+</tr>
 </tbody>
 </table>
+<h3 id="speed-and-momentum">Speed and Momentum<a class="headerlink" href="#speed-and-momentum" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Range</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Sensitivity</code></td>
+<td><code>double</code></td>
+<td><code>1.0</code></td>
+<td>0.1–5.0</td>
+<td>Flat speed multiplier. Live for the pointer sticks above only. On a gamepad stick the per-axis response curves own the shaping. Reset: <code>ResetStickSensitivityCommand</code>.</td>
+</tr>
+<tr>
+<td><code>MomentumEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>-</td>
+<td>Stick trackball (#291): flick the mouse stick and release, and the cursor keeps travelling, coasting to a stop on the same constant-deceleration physics the touchpad's Momentum uses.</td>
+</tr>
+<tr>
+<td><code>MomentumGlide</code></td>
+<td><code>double</code></td>
+<td><code>0.90</code></td>
+<td>0.80–1.00</td>
+<td>The coast's friction band, identical to the touchpad's Momentum Glide. 0.80 full friction, 1.00 frictionless.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reset commands:</strong> <code>ResetMomentumCommand</code>, <code>ResetMomentumGlideCommand</code>.</p>
 <h3 id="deadzone-configuration">Deadzone Configuration<a class="headerlink" href="#deadzone-configuration" title="Permanent link">&para;</a></h3>
 <p>All percentage properties clamped to 0–100. Each has a <code>*Digit</code> companion for digit-based binding (signed 16-bit: +/−32768).</p>
 <table>
@@ -16585,6 +17057,12 @@
 <td><code>Automatic</code></td>
 <td>Where the DualSense plays its audio (output report byte 7 bits 4–5).</td>
 </tr>
+<tr>
+<td><code>Ds5AudioBufferLength</code></td>
+<td><code>int</code></td>
+<td><code>48</code></td>
+<td>DualSense Bluetooth audio buffer length (#314): the packet 0x11 header byte governing the transport that carries speaker audio, haptics, and microphone capture together. Clamped 16–255, defaulting to <code>AudioPassthroughService.Ds5AudioBufferLengthDefault</code>. Lower is less delay and more dropout risk.</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -16598,6 +17076,10 @@
 <tr>
 <td><code>ResetHeadphoneVolumeCommand</code></td>
 <td>Back to 100.</td>
+</tr>
+<tr>
+<td><code>ResetDs5AudioBufferLengthCommand</code></td>
+<td>Back to the 48 default.</td>
 </tr>
 <tr>
 <td><code>ResetAudioOutputPathCommand</code></td>
@@ -16920,7 +17402,7 @@
 <p><strong>MicLedDeviceItem:</strong> <code>Id</code> (CoreAudio endpoint string), <code>Display</code> (label, prefixed <code>[In]</code> / <code>[Out]</code>).</p>
 <p><strong>LightbarPaletteEntry</strong> (<code>ObservableObject</code>): <code>R</code>, <code>G</code>, <code>B</code> (byte), <code>Hex</code> (two-way <code>"RRGGBB"</code> shim, <code>[XmlIgnore]</code>).</p>
 <h3 id="deviceslotconfigdata">DeviceSlotConfigData<a class="headerlink" href="#deviceslotconfigdata" title="Permanent link">&para;</a></h3>
-<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>AudioOutputPath</code> = Automatic, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
+<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
 <hr />
 <h2 id="kbmslotconfig">KbmSlotConfig<a class="headerlink" href="#kbmslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>KbmSlotConfig.cs</code></p>
@@ -17181,7 +17663,7 @@
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> bound to <code>PadViewModel</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

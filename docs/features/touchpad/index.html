@@ -3246,12 +3246,12 @@
 <td>How finger speed becomes cursor speed. <code>Simple</code> is a flat gain plus the Acceleration knob below. <code>Trackpad</code> is the pointer-acceleration curve ported from libinput's touchpad profile, and it also moves the cursor slower than the finger at low speed, which is where a laptop trackpad's fine positioning comes from.</td>
 </tr>
 <tr>
-<td>Speed threshold</td>
+<td>Speed Threshold</td>
 <td>130</td>
 <td>Trackpad response only. Finger speed in mm/s where the cursor starts speeding up, 20–600. Lower accelerates sooner. libinput's own default and its single exposed tunable.</td>
 </tr>
 <tr>
-<td>Pad width</td>
+<td>Pad Width</td>
 <td>69</td>
 <td>Trackpad response only. Physical width of this touchpad in mm, 20–150. Decides whether slow movement can reach the fine-control range at all, so set it near the real size of the pad.</td>
 </tr>
@@ -3288,10 +3288,10 @@
 </tbody>
 </table>
 <p><img alt="The touchpad momentum controls" src="../../images/pad-touchpad-momentum.png" /></p>
-<p>The same coasting is available on a <strong>stick</strong>. On the Keyboard &amp; Mouse slot the mouse stick carries its own <strong>Momentum</strong> and <strong>Momentum Glide</strong>, so a flick of the stick sends the cursor travelling on the same constant-deceleration physics.</p>
+<p>The same coasting is available on a stick, but only on the <strong>Keyboard + Mouse</strong> slot's mouse stick, which carries its own <strong>Momentum</strong> and <strong>Momentum Glide</strong> so a flick of the stick sends the cursor travelling on the same constant-deceleration physics. A gamepad slot's sticks have no momentum row.</p>
 <p><img alt="Stick momentum on the Keyboard and Mouse slot" src="../../images/pad-sticks-momentum.png" /></p>
-<p>The Speed threshold and Pad width rows appear only in <code>Trackpad</code> response, the Acceleration row only in <code>Simple</code>. They are competing models of the same thing, so the card never shows both at once.</p>
-<p>Two plain limitations. First, at the default 69 mm Pad width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.</p>
+<p>The Speed Threshold and Pad Width rows appear only in <code>Trackpad</code> response, the Acceleration row only in <code>Simple</code>. They are competing models of the same thing, so the card never shows both at once.</p>
+<p>Two plain limitations. First, at the default 69 mm Pad Width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad Width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.</p>
 <p>Bind <strong>Touchpad 1 Finger 1 X</strong> to KBM Mouse X (and <strong>Touchpad 1 Finger 1 Y</strong> to Mouse Y) to use the surface as a trackpad. Finger entries stay 1-based in the picker, so the first contact is Finger 1. The KBM virtual controller produces real Windows mouse input. The cursor moves in whatever app has focus, games and desktop apps alike.</p>
 <hr />
 <h2 id="absolute-pointer">Absolute Pointer<a class="headerlink" href="#absolute-pointer" title="Permanent link">&para;</a></h2>
@@ -3427,7 +3427,7 @@
 <hr />
 <h2 id="custom-gestures">Custom Gestures<a class="headerlink" href="#custom-gestures" title="Permanent link">&para;</a></h2>
 <p>Profile-scoped: captured custom gestures travel with whichever profile is active when they're recorded. Each gesture has a name, finger count, and the recorded finger path(s).</p>
-<p>Click <strong>+ Record New Gesture</strong> to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the <strong>Samples to capture</strong> dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click <strong>Save</strong>, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.</p>
+<p>Click <strong>+ Record New Gesture</strong> to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the <strong>Samples to Capture</strong> dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click <strong>Save</strong>, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.</p>
 <p>A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn't currently selected as the active mapping device still drives the recorder, so you can capture a gesture on the touchpad while the slot's primary device is something else.</p>
 <hr />
 <h2 id="two-slots-on-one-touchpad">Two slots on one touchpad<a class="headerlink" href="#two-slots-on-one-touchpad" title="Permanent link">&para;</a></h2>

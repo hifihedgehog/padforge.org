@@ -2966,7 +2966,7 @@
 <hr />
 <h2 id="how-padforge-finds-it">How PadForge finds it<a class="headerlink" href="#how-padforge-finds-it" title="Permanent link">&para;</a></h2>
 <p>Discovery is by capability, not by a hardcoded model list. PadForge looks for a HID device exposing a <strong>Sensor page (0x20), usage 0xE1</strong> collection whose sensor-description feature report begins with the marker <code>#AndroidHeadTracker#</code>. Any headset presenting that collection is a candidate, whatever its name.</p>
-<p>Pair the headphones to Windows as you normally would. When PadForge recognises the tracker, it appears on the <strong>Devices</strong> page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.</p>
+<p>Pair the headphones to Windows as you normally would. When PadForge recognizes the tracker, it appears on the <strong>Devices</strong> page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.</p>
 <p>Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
@@ -2997,12 +2997,12 @@
 </tr>
 </tbody>
 </table>
-<p>Pair it with <strong>Aim Engage</strong> so head tracking only steers while you hold or toggle a button. Head tracking that is always live is disorienting in most games, and an engage gate is the difference between a novelty and something you keep switched on.</p>
+<p>Pair it with <strong>Aim Engage Button</strong> so head tracking only steers while you hold or toggle a button. Head tracking that is always live is disorienting in most games, and an engage gate is the difference between a novelty and something you keep switched on.</p>
 <hr />
 <h2 id="what-the-device-actually-reports">What the device actually reports<a class="headerlink" href="#what-the-device-actually-reports" title="Permanent link">&para;</a></h2>
-<p>Worth knowing, because it explains the behaviour you will see:</p>
+<p>Worth knowing, because it explains the behavior you will see:</p>
 <ul>
-<li><strong>Rotation is the signal.</strong> On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesises an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.</li>
+<li><strong>Rotation is the signal.</strong> On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesizes an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.</li>
 <li><strong>Accelerometer is advertised only when the descriptor exposes it.</strong> Some firmware reports orientation without it.</li>
 <li><strong>The frame is remapped once, at ingest.</strong> The tracker's axes are swapped and signed into the same frame SDL uses for controllers, so a headset and a gamepad both drive a mapping the same way.</li>
 </ul>
@@ -3022,7 +3022,7 @@
 <li><a href="../../reference/headset-motion-internals/">Headset Head Tracking: Internals</a> for the descriptor probe and the rotation-to-rate synthesis</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

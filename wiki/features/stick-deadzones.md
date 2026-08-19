@@ -28,7 +28,7 @@ The Sticks tab runs each thumbstick through a fixed chain of processing stages. 
 3. **Deadzone.** Zeroes input inside the deadzone shape.
 4. **Range caps.** Cap the input ceiling per direction.
 5. **Sensitivity curve.** Reshapes the response.
-6. **Anti-deadzone.** Adds a minimum output floor.
+6. **Anti-deadzone.** Adds a minimum output floor to the stick pair.
 7. **Linear.** Blends the curve toward a straight line.
 
 ---
@@ -104,6 +104,14 @@ Some games have a built-in deadzone you cannot turn off. Anti-Deadzone gives the
 | In between | Spread across 20–100% |
 
 The rest of your stick range squeezes into the space above the anti-deadzone floor. A higher floor leaves less room for fine control near the edge.
+
+### How the floor is applied
+
+Since 4.3.0 the floor acts on the stick pair, not on each axis alone. X and Y scale together so the combined vector magnitude lands on the floor, with the direction preserved. Flooring each axis separately used to cut wedge-shaped gaps at the four cardinals, because the quiet axis jumped from minus the floor to plus the floor as it crossed zero.
+
+The floor also ramps in across the deadzone region instead of switching on at its edge. Outside the deadzone the result is the plain radial floor. Inside, it scales down toward zero, so resting noise stays at noise scale.
+
+Axial is the exception. It runs each axis through its own independent chain, so its floor stays per axis.
 
 ### Picking a value
 
@@ -378,7 +386,7 @@ Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two 
 
 | Setting | Default | What it does |
 |---|---|---|
-| **Dots Per 360°** | 14400 | Mouse counts for one full 360° camera turn. This depends on the game's mouse sensitivity: raise it if a flick under-rotates, lower it if it over-rotates. |
+| **Dots per 360°** | 14400 | Mouse counts for one full 360° camera turn. This depends on the game's mouse sensitivity: raise it if a flick under-rotates, lower it if it over-rotates. |
 | **Flick Time** | 0.1 s | How long a full 180° flick takes to complete, with an ease-out. Shorter turns finish in the same time. |
 | **Flick Threshold** | 0.9 | Stick deflection that starts a flick, as a fraction of full deflection. While flicking, the release point drops to 90% of this so the flick does not stutter at the rim. |
 | **Snap Angle** | No Snapping | Snap the flick to fixed angles for consistent turns: **Forward Only**, **180 Degrees**, **90 Degrees**, **60 Degrees**, or **45 Degrees**. Forward Only snaps every flick to dead ahead. |
@@ -393,7 +401,7 @@ Every row has a reset button, and the card header's Reset All restores the whole
 Two practical notes:
 
 - **Layer hosting.** Put the flick stick row on a [shift layer](../guides/shift-layers.md) to switch between flick aim and normal stick aim with one button. Leaving the layer never leaves a half-finished turn running, and re-entering it does not fire a surprise flick unless Allow Flick on Engage is on.
-- **Steam Workshop imports.** A community config with a flick stick group arrives with the row and the card pre-tuned, including the config's Dots Per 360°. See [Steam Workshop Config Import](../guides/steam-workshop-import.md).
+- **Steam Workshop imports.** A community config with a flick stick group arrives with the row and the card pre-tuned, including the config's Dots per 360°. See [Steam Workshop Config Import](../guides/steam-workshop-import.md).
 
 ---
 
@@ -423,4 +431,4 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

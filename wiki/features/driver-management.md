@@ -52,7 +52,7 @@ PadForge runs whether or not the optional drivers are installed. Missing drivers
 | Missing | What you lose |
 |---|---|
 | **HIDMaestro** | It auto-installs on first use, so it isn't normally missing. If that install fails, Xbox, PlayStation, Nintendo, and Extended slots can't create a virtual controller. Keyboard+Mouse and MIDI still work. |
-| **HidHide** | "Hide from games" has no effect. Games may see the physical and the virtual at the same time. |
+| **HidHide** | **Hide from Games (HidHide)** has no effect. Games may see the physical and the virtual at the same time. |
 | **MIDI Services** | The MIDI slot type won't switch on. Its button stays visible and shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works. |
 | **SteamVR** | The VR slot type won't switch on. Its button stays visible and shows the tooltip "VR (requires SteamVR)". Every other slot type works. |
 
@@ -119,17 +119,17 @@ PadForge runs HidHide on its own. You do not need the HidHide Configuration Clie
 
 | Feature | Detail |
 |---|---|
-| **Per-device hiding** | Toggle **Hide from Games** on each device card ([Devices](devices.md) page). |
-| **Automatic whitelist** | PadForge adds itself so it can still read hidden controllers. The entry stays in the driver's whitelist between sessions. Harmless, and it keeps hidden controllers readable when **Keep devices cloaked between launches** is on. |
+| **Per-device hiding** | Toggle **Hide from Games (HidHide)** on each device card ([Devices](devices.md) page). |
+| **Automatic whitelist** | PadForge adds itself so it can still read hidden controllers. The entry stays in the driver's whitelist between sessions. Harmless, and it keeps hidden controllers readable when **Keep Devices Cloaked Between Launches** is on. |
 | **Engine-aware** | By default, hiding holds only while the engine runs. Stop the engine or close PadForge and the controllers reappear. |
-| **Master switch** | **Settings > HidHide Driver > Hide devices from games** (global on/off). Turning it off mid-session unhides every controller right away. |
-| **Keep devices cloaked between launches** | **Settings > HidHide Driver** checkbox, off by default. Leaves physical controllers hidden even while PadForge is closed. Turn it on when another app (Steam, for example) scans for controllers between PadForge sessions and should keep seeing only the virtual ones. |
+| **Master switch** | **Settings > HidHide Driver > Hide Devices from Games** (global on/off). Turning it off mid-session unhides every controller right away. |
+| **Keep Devices Cloaked Between Launches** | **Settings > HidHide Driver** checkbox, off by default. Leaves physical controllers hidden even while PadForge is closed. Turn it on when another app (Steam, for example) scans for controllers between PadForge sessions and should keep seeing only the virtual ones. |
 
 ### Whitelist
 
 Other controller utilities (Steam Input, for example) need their own whitelist entry to see hidden controllers.
 
-- **Add...** browses for an .exe.
+- **Add** browses for an .exe.
 - **Remove** drops the selected entry.
 
 ### Install steps
@@ -140,7 +140,7 @@ Other controller utilities (Steam Input, for example) need their own whitelist e
 
 ### Uninstall steps
 
-1. Turn off **Hide from Games** on every device. **Uninstall** stays disabled while any device has hiding on.
+1. Turn off **Hide from Games (HidHide)** on every device. **Uninstall** stays disabled while any device has hiding on.
 2. Open **Settings**. Scroll to **HidHide Driver**.
 3. Click **Uninstall**. It runs inside the same administrator session, so no extra prompt appears.
 
@@ -239,7 +239,7 @@ PadForge blocks driver removal while a slot still needs it.
 
 | Driver | Uninstall blocked when |
 |---|---|
-| **HidHide** | Any device has "Hide from games" on. |
+| **HidHide** | Any device has **Hide from Games (HidHide)** on. |
 | **MIDI Services** | Any MIDI slot exists. |
 | **SteamVR** | SteamVR is running, or the install did not come from PadForge. |
 
@@ -266,7 +266,7 @@ Delete the slots or turn the feature off. Then **Uninstall** becomes available. 
 | Xbox / PlayStation / Nintendo / Extended slot picked but no virtual controller appears | HIDMaestro auto-installs on first use. If that install failed, see "HIDMaestro fails to install" under **Install issues** above. |
 | Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)" | Install MIDI Services (needs Windows 11 24H2+). |
 | UAC prompt on every launch | Expected. PadForge needs administrator rights to drive its drivers, so Windows asks at startup. Everything after that runs without a second prompt. |
-| Double input (every press counts twice) | Install HidHide. Turn on **Hide from Games** for the physical controller on the [Devices](devices.md) page. |
+| Double input (every press counts twice) | Install HidHide. Turn on **Hide from Games (HidHide)** for the physical controller on the [Devices](devices.md) page. |
 | Double input still there after HidHide | Restart the game. Some games only detect controllers at launch. Restart the PC if the install was new. |
 | Virtual controller shows up but games do not see it | Restart the game once after PadForge is running. Some games and Steam only detect controllers at launch. |
 | HIDMaestro slot stuck on "Initializing" | Give it a few seconds. If it never finishes, check the inactivity timeout under **Settings**. A slot whose devices go offline drops its virtual controller after that timeout. The slot itself stays and comes back when the devices return. |
@@ -292,4 +292,4 @@ Delete the slots or turn the feature off. Then **Uninstall** becomes available. 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

@@ -51,7 +51,7 @@ When one physical controller is assigned to several virtual slots, PadForge take
 | Overall Gain | 0–100% | 100% | Master vibration strength. Scales both motors. 0% disables rumble. |
 | Left Motor | 0–100% | 100% | Low-frequency motor strength. |
 | Right Motor | 0–100% | 100% | High-frequency motor strength. |
-| Swap left and right motors | On/Off | Off | Flips which physical motor receives the left vs. right signal. Use when rumble feels backwards. |
+| Swap Left and Right Motors | On/Off | Off | Flips which physical motor receives the left vs. right signal. Use when rumble feels backwards. |
 
 ---
 
@@ -182,7 +182,7 @@ PadForge follows your default audio output device. Switch from speakers to headp
 | Setting | Range | Default | What it does |
 |---|---|---|---|
 | Sensitivity | 1.0–20.0 | 4.0 | Bass intensity multiplier. Higher means stronger rumble from quieter audio. |
-| Bass Cutoff | 20–200 Hz | 80 Hz | Low-pass cutoff. Lower keeps deep sub-bass only. Higher widens the bass range. |
+| Bass Cutoff (Hz) | 20–200 Hz | 80 Hz | Low-pass cutoff. Lower keeps deep sub-bass only. Higher widens the bass range. |
 | Left Motor | 0–100% | 100% | Audio-driven low-frequency motor scale. |
 | Right Motor | 0–100% | 100% | Audio-driven high-frequency motor scale. |
 
@@ -248,7 +248,7 @@ Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per d
 ### Turning it on
 
 1. Open the **Bass Shakers** tab for the slot.
-2. Check **Route rumble to an audio output**.
+2. Check **Route Rumble to an Audio Output**.
 3. Pick an **Output Device**. System default follows the Windows default playback device.
 4. Play a game that rumbles, or click a voice's **Test** button.
 
@@ -297,7 +297,7 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 | No vibration at all | Check Overall Gain > 0%. Click Test Rumble to confirm the device supports it. |
 | Vibration too weak | Raise Overall Gain and per-motor sliders. |
 | Vibration too strong | Lower Overall Gain or per-motor sliders. |
-| Rumble feels reversed | Turn on **Swap left and right motors**. |
+| Rumble feels reversed | Turn on **Swap Left and Right Motors**. |
 | Rumble stops intermittently | Check no other software (Steam Input, etc.) is competing for the device. |
 | Audio rumble not working | Confirm audio plays through your default output. Check the Level meter. Raise sensitivity if it barely moves. |
 | Audio rumble too aggressive | Lower sensitivity or drop the bass cutoff. |
@@ -321,4 +321,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

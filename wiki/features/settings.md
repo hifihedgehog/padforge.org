@@ -124,8 +124,8 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 
 Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.
 
-- **HidHide** card: Install and Uninstall buttons.
-- **HIDMaestro** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.
+- **HidHide Driver** card: Install and Uninstall buttons.
+- **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.
 - **Windows MIDI Services** card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).
 - **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
@@ -151,28 +151,28 @@ PadForge blocks two driver uninstalls until you clear what still depends on them
 
 ![The SteamVR card with its install location field](../images/settings-steamvr.png)
 
-Before installing, the card offers an **install location**. It defaults to `C:\SteamVR` and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.
+Before installing, the card offers an **Install Location**. It defaults to `C:\SteamVR` and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.
 
 **Uninstall appears only for an install PadForge itself created.** PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.
 
-### Hide devices from games
+### Hide Devices from Games
 
-This checkbox sits inside the **HidHide** card. It only shows when HidHide is installed. Master switch for input hiding. Two pieces sit under it.
+This checkbox sits inside the **HidHide Driver** card. It only shows when HidHide is installed. Master switch for input hiding. Two pieces sit under it.
 
 - **HidHide cloaking** makes physical controllers invisible to games at the OS level.
 - **Input hook suppression** stops mapped raw inputs reaching other input APIs.
 
 On (default) means the per-device hide toggles on the [Devices](devices.md) page do what they say. Off forces every controller visible no matter what the per-device toggles are set to. Use it as a panic button.
 
-### Keep devices cloaked between launches
+### Keep Devices Cloaked Between Launches
 
-The second checkbox in the **HidHide** card, also shown only when HidHide is installed.
+The second checkbox in the **HidHide Driver** card, also shown only when HidHide is installed.
 
 Off (default) clears every HidHide cloak when PadForge exits, so other sessions see your controllers normally.
 
 On leaves the cloaks in place between launches. Pick this when another app (Steam launching after PadForge exits, for example) scans for pads while PadForge is closed and you want it to keep seeing the physical controllers as hidden. The next PadForge start re-asserts the cloaks with no visible flicker.
 
-Flipping **Hide devices from games** off still decloaks right away, no matter what this is set to.
+Flipping **Hide Devices from Games** off still decloaks right away, no matter what this is set to.
 
 ### HidHide Whitelisted Applications
 
@@ -249,7 +249,7 @@ The full path shows at the top of this section. Use it to back up, copy between 
 | **Reset to Defaults** | Restores factory defaults. | Last resort for a broken config. No undo. |
 | **Open Folder** | Opens the config folder in Explorer. | Backup or sharing. |
 
-If unsaved changes exist, an orange **"Unsaved changes"** warning sits under the buttons.
+If unsaved changes exist, an orange **"Unsaved Changes"** warning sits under the buttons.
 
 ### Auto-save
 

@@ -41,7 +41,7 @@ See [Settings](../features/settings.md) for the card in context.
 
 ![Searching the Steam Workshop for a game](../images/workshop-search.png)
 
-Open the **Profiles** page and click **Browse Community Configs**. The button is always there. If Community Configs is still off, the dialog opens on an unlit "The forge is cold" panel that names the Steam servers involved and offers the **Enable Community Configs** step right in place.
+Open the **Profiles** page and click **Browse Community Configs**. The button is always there. If Community Configs is still off, the dialog opens on an unlit "The Forge Is Cold" panel that names the Steam servers involved and offers the **Enable Community Configs** step right in place.
 
 ### Find the game
 
@@ -51,13 +51,15 @@ Type at least two characters into **Search Games**. The search runs about half a
 
 The game's configs list ranked by rating. A filter row above the list carries an **All** chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, PlayStation, and so on). Click a chip to narrow the list to configs built for that controller.
 
+**Sorted By** re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. **Search These Configs** filters the loaded list by title.
+
 Each card shows:
 
 | Element | Meaning |
 |---|---|
 | Title and creator | The config's Workshop title, the creator's Steam name and avatar, and when it was last updated ("by Kaz · updated 3 mo ago"). |
-| Vote bar | The share of positive votes, as a filled bar plus a percentage. A full bar means everyone who voted, voted up. It is a quality signal, not a popularity count. |
-| Subscriber count | How many Steam users subscribed to the config ("12k subs"). This is the popularity count. |
+| Vote bar | The share of positive votes, as a filled bar plus a percentage and the total vote count. A full bar means everyone who voted, voted up. It is a quality signal, not a popularity count. |
+| Subscriber count | How many Steam users subscribed to the config ("12k subscribers"). This is the popularity count. |
 | Controller chips | Which controller the config was built for. Steam Deck chips render in a colder color. |
 | **LEGACY** badge | A pre-2017 config with no downloadable file. Only shown when **Show Legacy Workshop Configs** is on. |
 
@@ -121,7 +123,7 @@ Where everything lands:
 - **Action sets and layers** become [Shift Layers](shift-layers.md): hold-style mode shifts become Hold layers, add-layer commands become Toggle layers, and set-switch buttons become layer jumps or cycles.
 - **Radial and touch menus** become on-screen [Menus](menus.md) with the config's cell labels, fire mode, and screen placement.
 - **Cursor warps, key autofire, turbo, toggles, long presses, double presses, haptic pulses, and lighting commands** become [Macros](macros.md). A double-press activator rides the macro's **On Double Press** fire mode with the config's press window. A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.
-- **Flick stick** groups, hosted on a stick or a touchpad, become the [flick stick](../features/stick-deadzones.md#flick-stick) source on the Keyboard + Mouse pad, with the config's Dots Per 360° carried over.
+- **Flick stick** groups, hosted on a stick or a touchpad, become the [flick stick](../features/stick-deadzones.md#flick-stick) source on the Keyboard + Mouse pad, with the config's Dots per 360° carried over.
 - **Mouse regions on a touchpad** become the absolute [Touchpad Pointer](../features/touchpad.md#absolute-pointer) sources, so the cursor warps to your finger inside the config's region.
 - **PlayStation touchpad halves** map onto the left and right halves of the single DS4 or DualSense pad.
 - **Per-group sensitivity** from the config carries over as per-source Sensitivity on the affected rows, including per-row touchpad mouse sensitivity.
@@ -195,9 +197,9 @@ Features that skipped in older PadForge versions and translate whole now: double
 ## Troubleshooting
 
 - **Double input, or the game reacts twice per press.** The imported profile replaces what the Steam config did. It does not need Steam Input running. If Steam Input is still active for the game, both layers fire. Disable Steam Input for that game (Steam > game properties > Controller), or close Steam, and cloak the physical pad on the [Devices](../features/devices.md) page.
-- **"Steam is unreachable."** The dialog could not reach Steam. Check your connection and click **Retry**. Profiles you already imported keep working: they live on this PC.
+- **"Steam Is Unreachable."** The dialog could not reach Steam. Check your connection and click **Retry**. Profiles you already imported keep working: they live on this PC.
 - **A config's bindings do nothing in game.** Check the two imported pads have your physical controller assigned, and the profile is the active one.
-- **"No configs for this game yet."** Steam Workshop has no community controller configs for that game. You can be the first: build one in Steam, and it appears here.
+- **"No Configs for This Game Yet."** Steam Workshop has no community controller configs for that game. You can be the first: build one in Steam, and it appears here.
 
 ---
 
@@ -213,4 +215,4 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

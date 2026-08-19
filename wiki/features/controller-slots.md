@@ -15,7 +15,7 @@ Each slot has its own:
 - Bass Shakers (routes the game rumble and force feedback the slot receives to an audio output as low-frequency tones for bass shakers and subwoofers)
 - [Impulse Triggers](impulse-triggers.md) (Xbox One / Elite / Series sources, routed to DualSense as AT Vibration)
 - [Adaptive Triggers](adaptive-triggers.md) (DualSense / DualSense Edge)
-- [Lighting](lighting.md) (DualSense / DualSense Edge / DualShock 4 lightbar, Guide button LED brightness for Xbox One / Elite / Series pads and the 2015 Steam Controller, and HOME button LED brightness for the Switch Pro Controller, right Joy-Con, combined Joy-Con pair, and charging grip)
+- [Lighting](lighting.md) (DualSense / DualSense Edge / DualShock 4 lightbar, PS Move sphere, Guide button LED brightness for Xbox One / Elite / Series pads and the 2015 Steam Controller, and HOME button LED brightness for the Switch Pro Controller, right Joy-Con, combined Joy-Con pair, and charging grip)
 - [Gyro](../guides/gyro.md) tuning, calibration, engage gates, and Motion Passthrough
 - [Touchpad](touchpad.md) outputs (stick / D-pad / mouse) and gesture engine
 - [Controller Audio](controller-audio.md) (speaker passthrough, macro sounds, volume)
@@ -71,7 +71,7 @@ The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons. HIDMaestro-backed. Almos
 
 ### PlayStation
 
-HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 14 buttons. The slot ships as a DualShock 4. Switch to DualShock 3, DualSense, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
+HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 15 buttons. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
 
 ![PlayStation slot: the preset picker selects DualShock 4, DualShock 3, DualSense, or DualSense Edge, with the controller view below](../images/pad-playstation-configbar.png)
 
@@ -99,7 +99,7 @@ No driver. Always available. Sends keyboard and mouse input to Windows instead o
 
 The Output tab carries a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
 
-When a mouse is the slot's selected device, a **Mouse** tab appears carrying the **Mouse Gestures** card. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can be the gesture button, or bind a custom activation input. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures on the Mappings tab, or use them as macro triggers.
+When a mouse is the slot's selected device, a **Mouse** tab appears carrying the **Mouse Gestures** card. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can arm the recognizer, each carrying its own five gestures, and a Custom option arms it from a recorded input on any device instead. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures on the Mappings tab, or use them as macro triggers.
 
 ![The Mouse Gestures card on a Keyboard and Mouse slot](../images/pad-mouse-gestures.png)
 
@@ -233,7 +233,7 @@ Reordering two slots of the same type does not disconnect the game, as long as b
 
 New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR. This keeps XInput numbering predictable.
 
-You can override the grouping by dragging slots by hand.
+Dragging reorders slots inside a type group. Cross-type drops are ignored, so the grouping itself stays fixed.
 
 ---
 
@@ -267,7 +267,7 @@ The rest appear based on the physical device selected in the slot's device dropd
 | [Gyro](../guides/gyro.md) | a gyro sensor |
 | [Impulse Triggers](impulse-triggers.md) | Xbox One / Elite / Series trigger motors |
 | [Adaptive Triggers](adaptive-triggers.md) | a DualSense or DualSense Edge |
-| [Lighting](lighting.md) | a lightbar (DualSense family, DualShock 4), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip) |
+| [Lighting](lighting.md) | a lightbar or lit sphere (DualSense family, DualShock 4, PS Move), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip) |
 | [Touchpad](touchpad.md) | a touch surface (DualShock 4, DualSense, the Steam Controller family, Steam Deck, Windows Precision Touchpads) |
 | [Controller Audio](controller-audio.md) | a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Joy-Con, Switch Pro Controller, Steam Controller 2015, Steam Deck, Steam Controller 2026) |
 | [Wheel](wheel.md) | a racing wheel. A recognized Logitech, Fanatec, or Thrustmaster model gets rotation range, auto-center, and RPM shift LEDs. A generic force feedback wheel gets the auto-center row alone |
@@ -318,4 +318,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

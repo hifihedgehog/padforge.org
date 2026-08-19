@@ -12,7 +12,7 @@ The Windows pairing wizard can't pair a Wii controller on its own. The controlle
 
 1. Open the [Devices](../features/devices.md) page.
 2. Click **Pair**, next to **Refresh**. The **Pair a Controller** dialog opens.
-3. Leave **Controller Family** on **Nintendo Wii**. The other entry pairs a Sony DualShock 3.
+3. Leave **Controller Family** on **Nintendo Wii**. The other entries pair a **Sony DualShock 3** and a **PlayStation Move / Navigation** controller.
 4. Click **Pair** in the dialog to start scanning. The **Pair** button dims and the progress ring spins.
 5. Press the red **SYNC** button under the battery cover on the back of the controller.
 6. The controller appears in the found list and pairs on its own. You don't select it.
@@ -159,7 +159,7 @@ Map it three ways:
 
 ## Joy-Con 2 optical mouse
 
-A Nintendo Switch 2 Joy-Con has an optical mouse sensor on its inner edge, the flat side that clips onto the console. Stand the Joy-Con on that edge and slide it across a surface, and it drives two sources, **Mouse Motion X** and **Mouse Motion Y**. Either side of the pair works.
+A Nintendo Switch 2 Joy-Con has an optical mouse sensor on its inner edge, the flat side that clips onto the console. Stand the Joy-Con on that edge and slide it across a surface, and it drives two sources, **Mouse Motion X** and **Mouse Motion Y**. Either half works, left or right, as a standalone Joy-Con 2. A combined Joy-Con 2 pair does not expose the sensor, so split the pair to use it.
 
 Map them to:
 
@@ -188,4 +188,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

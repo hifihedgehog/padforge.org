@@ -3488,6 +3488,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#registervoicephrasedialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterVoicePhraseDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#confirmdialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5565,6 +5576,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#registervoicephrasedialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegisterVoicePhraseDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#confirmdialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5973,7 +5995,7 @@
 <p><strong>v4 (2026-07-12):</strong> Updated for the v4 ember restyle (#175). The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>. If anything here drifts from the live source, the live source wins.</p>
 </blockquote>
 <hr />
-<p>All views live in <code>PadForge.App/Views/</code> (<code>PadForge.Views</code> namespace), except <code>MainWindow.xaml</code> in <code>PadForge.App/</code>. Shared custom controls sit alongside them in <code>PadForge.App/Controls/</code> (<code>CurveEditor</code>, <code>TriggerTravelArc</code>) and <code>PadForge.App/Views/Controls/</code> (<code>LabeledShapeIcon</code>, <code>ProfilePill</code>, <code>TriggerEffectGraph</code>). Styled with <a href="https://github.com/lepoco/wpfui">WPF UI 4.3 (Lepo.Wpf.Ui)</a> for Fluent 2 design.</p>
+<p>All views live in <code>PadForge.App/Views/</code> (<code>PadForge.Views</code> namespace), except <code>MainWindow.xaml</code> in <code>PadForge.App/</code>. Shared custom controls sit alongside them in <code>PadForge.App/Controls/</code> (<code>CurveEditor</code>, <code>TriggerTravelArc</code>, plus the code-only <code>RangeSlider</code>) and <code>PadForge.App/Views/Controls/</code> (<code>LabeledShapeIcon</code>, <code>ProfilePill</code>, <code>TriggerEffectGraph</code>). Styled with <a href="https://github.com/lepoco/wpfui">WPF UI 4.3 (Lepo.Wpf.Ui)</a> for Fluent 2 design.</p>
 <h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="#application-shell-mainwindow">Application Shell (MainWindow)</a></li>
@@ -7370,18 +7392,20 @@
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│   ├─ &quot;Copy From&quot; Button (CopyFromCommand)
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│   ├─ &quot;Map All&quot; Button (MapAllButtonText, Click=MapAllToggle_Click)
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│   ├─ &quot;Add Layer&quot; Button (AddShiftLayerButton, Click=AddShiftLayer_Click)
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│   ├─ Hint text (italic, secondary brush)
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│   └─ &quot;Clear All&quot; Button (far end, EmberDestructiveButton, Click=ClearAllMappings_Click → ConfirmDialog)
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>├─ Row 1 (Auto): ShiftLayerTabStrip (nested layer tabs bound to LayerTabs, hidden when only Base)
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>├─ Row 2 (Auto): Pipeline-status chips (SHIFT / INV / DZ, click-to-highlight)
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>└─ Row 3 (*): DataGrid (HorizontalAlignment=Left, every column Width=&quot;Auto&quot;)
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    ├─ Column: &quot;Output&quot; (TargetLabel text)
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    ├─ Column: &quot;Source&quot; (grouped ComboBox dropdown)
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    ├─ Column: &quot;Value&quot; (CurrentValueText, mono)
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    ├─ Column: Record button (ToggleRecordCommand)
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    ├─ Column: Clear button (ClearCommand)
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    ├─ Column: &quot;Options&quot; (Invert + Half checkboxes)
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    └─ Column: &quot;Deadzone&quot; (per-mapping activation threshold, #42)
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│   ├─ MappingFilterSearchBox (ui:TextBox, MappingInputSearch, find-as-you-type)
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│   ├─ MappingDeviceFilterToggle (Filter24 funnel) + Popup (PickerDeviceFilterEntries checkboxes)
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>│   ├─ Hint text (italic, secondary brush)
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>│   └─ &quot;Clear All&quot; Button (far end, EmberDestructiveButton, Click=ClearAllMappings_Click → ConfirmDialog)
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>├─ Row 1 (Auto): ShiftLayerTabStrip (nested layer tabs bound to LayerTabs, hidden when only Base)
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>├─ Row 2 (Auto): Pipeline-status chips (SHIFT / INV / DZ, click-to-highlight)
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>└─ Row 3 (*): DataGrid (HorizontalAlignment=Left, every column Width=&quot;Auto&quot;)
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    ├─ Column: &quot;Output&quot; (TargetLabel text)
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    ├─ Column: &quot;Source&quot; (grouped ComboBox dropdown)
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    ├─ Column: &quot;Value&quot; (CurrentValueText, mono)
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    ├─ Column: Record button (ToggleRecordCommand)
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    ├─ Column: Clear button (ClearCommand)
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    ├─ Column: &quot;Options&quot; (Invert + Half checkboxes)
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>    └─ Column: &quot;Deadzone&quot; (per-mapping activation threshold, #42)
 </code></pre></div>
 <p><strong>DataGrid Properties:</strong>
 - <code>AutoGenerateColumns="False"</code>, <code>CanUserAddRows="False"</code>, <code>CanUserDeleteRows="False"</code>, <code>CanUserReorderColumns="False"</code>, <code>IsReadOnly="True"</code>.
@@ -7393,6 +7417,15 @@
 <p><strong>Options Column:</strong>
 - <code>Invert</code> CheckBox. <code>IsInverted</code> binding.
 - <code>Half</code> CheckBox. <code>IsHalfAxis</code> binding.</p>
+<p><strong>Picker Filter (#322):</strong>
+One search box and one device-visibility popup filter the slot's shared choice view, so every picker on the tab reflects them when opened. Ctrl+F focuses the box through <code>MappingsTabRoot_PreviewKeyDown</code> on the tab root.</p>
+<ul>
+<li><code>MappingInputSearch</code> is find-as-you-type and session-only, never persisted. Its setter calls <code>ApplyMappingPickerFilter()</code>.</li>
+<li>The search also <strong>filters the grid rows</strong>, not just the dropdown contents: <code>RowMatchesSearch</code> matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.</li>
+<li><code>PickerDeviceFilterEntries</code> drives the popup's per-device checkboxes. <code>HiddenPickerDeviceKeys</code> (device guids plus <code>"any"</code> for the device-agnostic group) persists per slot in the settings root, not in profiles.</li>
+<li><code>MappingPickerFilterActive</code> is true while either filter narrows the list, so the funnel reads as engaged.</li>
+</ul>
+<p>A view filter changes what a dropdown OFFERS, never what a row's binding holds.</p>
 <h3 id="sticks-tab-tab-3-detailed">Sticks Tab (Tab 3). Detailed<a class="headerlink" href="#sticks-tab-tab-3-detailed" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ScrollViewer
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  └─ ItemsControl (ItemsSource=StickConfigs, DataType=StickConfigItem)
@@ -7425,11 +7458,13 @@
 <a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>                  │   │   ├─ Radial/ScaledRadial: red ellipse
 <a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>                  │   │   ├─ Sloped/SlopedScaled: yellow wedges (SlopedWedgeGeometryConverter)
 <a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>                  │   │   └─ Hybrid: yellow wedges + red circle center
-<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>                  │   └─ Cold-blue stick position dot (9px, `#FF58B6E4`, NormToCanvasConverter)
-<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>                  ├─ RawDisplay text (centered, wrapping)
-<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>                  └─ CurveEditor pair (X-axis + Y-axis, 96px each)
-<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>                      ├─ CurveEditor X: CurveString=SensitivityCurveX, DeadZone/MaxRange bindings
-<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>                      └─ CurveEditor Y: CurveString=SensitivityCurveY, DeadZone/MaxRange bindings
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>                  │   ├─ Anti-deadzone ring (thin ember `#80FF6B2C` ellipse at the
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>                  │   │  output-floor radius, collapsed while both axes sit at 0)
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>                  │   └─ Cold-blue stick position dot (9px, `#FF58B6E4`, NormToCanvasConverter)
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>                  ├─ RawDisplay text (centered, wrapping)
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>                  └─ CurveEditor pair (X-axis + Y-axis, 96px each)
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>                      ├─ CurveEditor X: CurveString=SensitivityCurveX, DeadZone/MaxRange bindings
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>                      └─ CurveEditor Y: CurveString=SensitivityCurveY, DeadZone/MaxRange bindings
 </code></pre></div>
 <p><strong>Deadzone Shape Options (ComboBox index):</strong></p>
 <table>
@@ -7933,6 +7968,10 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>Register/Manage NFC Tags button visibility (#150)</td>
 </tr>
 <tr>
+<td><code>ShowManageVoicePhrases</code></td>
+<td>Manage Voice Macros button visibility (#317): a standalone microphone row, or a DualSense / DualSense Edge over Bluetooth where the pad itself carries the phrases. Never for a <code>peer://</code> path, since recognition runs on the owner</td>
+</tr>
+<tr>
 <td><code>RawAxes</code></td>
 <td>Axis ProgressBar items</td>
 </tr>
@@ -7966,7 +8005,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 </tbody>
 </table>
-<p>The raw-state rows above bind to the page DataContext (<code>DevicesViewModel</code>), which republishes the selected device's live state. The NFC and Consumer previews do the same: <code>IsNfcDevice</code> / <code>NfcTags</code> and <code>IsConsumerDevice</code> / <code>ConsumerButtons</code>. <code>ShowRegisterNfcTag</code>, <code>ShowIdleDisconnect</code>, and <code>IdleDisconnectMinutes</code> are <code>SelectedDevice</code>-scoped and bind through the <code>SelectedDevice.</code> prefix.</p>
+<p>The raw-state rows above bind to the page DataContext (<code>DevicesViewModel</code>), which republishes the selected device's live state. The NFC, Voice, and Consumer previews do the same: <code>IsNfcDevice</code> / <code>NfcTags</code>, <code>ShowVoicePhrases</code> / <code>VoicePhrases</code> (#317, the voice twin of the NFC tag rows), and <code>IsConsumerDevice</code> / <code>ConsumerButtons</code>. <code>ShowRegisterNfcTag</code>, <code>ShowIdleDisconnect</code>, and <code>IdleDisconnectMinutes</code> are <code>SelectedDevice</code>-scoped and bind through the <code>SelectedDevice.</code> prefix.</p>
 <h3 id="selection-highlighting">Selection Highlighting<a class="headerlink" href="#selection-highlighting" title="Permanent link">&para;</a></h3>
 <p>Custom <code>ListBoxItem</code> <code>ControlTemplate</code>:
 - <code>SelectionBar</code>. 4px <code>Border</code> with accent brush on left edge, <code>CornerRadius="2"</code>.
@@ -8016,6 +8055,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>RegisterNfcTag_Click</code></td>
 <td>Button.Click</td>
 <td>Opens <code>RegisterNfcTagDialog</code> for the selected NFC reader (#150)</td>
+</tr>
+<tr>
+<td><code>ManageVoicePhrases_Click</code></td>
+<td>Button.Click</td>
+<td>Opens <code>RegisterVoicePhraseDialog</code> for the selected microphone-carrying device (#317)</td>
 </tr>
 <tr>
 <td><code>IdleDisconnect_LostFocus</code></td>
@@ -8714,6 +8758,10 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>Resets state, shows profile name, starts the state machine</td>
 </tr>
 <tr>
+<td><code>ShowVCsToggle(bool enabled)</code></td>
+<td>One-shot toast for the master virtual-controller toggle, outside the profile state machine. Checkmark <code>\uE73E</code> in Fluent success green <code>#37C852</code> when enabled, cancel <code>\uE7E8</code> in Fluent critical red <code>#E81B1C</code> when disabled, then a 2 s dismiss. Called from <code>InputService.ShowVCsToggleOverlay</code></td>
+</tr>
+<tr>
 <td><code>StopTimers()</code></td>
 <td>Stops both <code>_dismissTimer</code> and <code>_initMonitorTimer</code>. Called during shutdown</td>
 </tr>
@@ -8807,6 +8855,47 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 </tbody>
 </table>
+<h3 id="registervoicephrasedialog">RegisterVoicePhraseDialog<a class="headerlink" href="#registervoicephrasedialog" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong> <code>RegisterVoicePhraseDialog.xaml</code>, <code>RegisterVoicePhraseDialog.xaml.cs</code></p>
+<p>Voice macro management (#317), modeled on <code>RegisterNfcTagDialog</code> and sharing its head chrome. <code>FluentWindow</code> (<code>ExtendsContentIntoTitleBar</code>, <code>WindowBackdropType="Mica"</code>, 640x620, <code>ResizeMode="NoResize"</code>) opened from the Devices page <code>ManageVoicePhrases_Click</code>. Three bands: the settings row (<code>EnabledBox</code>, <code>ModeBox</code>, <code>ConfidenceSlider</code> clamped 0.5 to 0.99 with a <code>ConfidenceText</code> readout), the live <code>HeardText</code> readout prefixed with the microphone that heard the phrase, and the type-and-name registration row with a phrase list carrying per-row Remove.</p>
+<p>There is no source picker. Phrases live on the devices that carry the microphones, and every reachable microphone runs its own session.</p>
+<p>The dialog subscribes to the static <code>VoiceMacroService.PhraseHeard</code> event, hops to the UI thread with <code>Dispatcher.BeginInvoke</code>, and lights the matching <code>PhraseRow</code> for 1400 ms. Only a <strong>firing</strong> recognition lights a row: the engine maps every utterance to its nearest phrase, so lighting on any event made rows claim matches the confidence floor had already refused. The readout line still shows every attempt with its confidence. Each row owns its own <code>FlashTimer</code>, restarted per hit so overlapping recognitions extend the light instead of truncating it. <code>Closed</code> and the close button both run <code>Unsubscribe</code>, which stops every row timer and detaches the handler.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Binding / Handler</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnabledBox</code> / <code>ModeBox</code> / <code>ConfidenceSlider</code></td>
+<td><code>Setting_Changed</code></td>
+<td>Writes <code>VoiceMacroService.Enabled</code> / <code>ListeningMode</code> / <code>MinConfidence</code>, then marks settings dirty</td>
+</tr>
+<tr>
+<td><code>HeardText</code></td>
+<td><code>VoiceMacroService.PhraseHeard</code></td>
+<td><code>[source] text (confidence)</code>, fired or ignored</td>
+</tr>
+<tr>
+<td><code>PhraseBox</code> / <code>NameBox</code></td>
+<td><code>PhraseBox_KeyDown</code></td>
+<td>Phrase and display name. Enter registers</td>
+</tr>
+<tr>
+<td><code>RegisterBtn</code></td>
+<td><code>RegisterButton_Click</code></td>
+<td><code>VoicePhraseRegistry.Register(phrase, name)</code>, then refreshes</td>
+</tr>
+<tr>
+<td><code>PhraseListBox</code></td>
+<td><code>_rows</code> (<code>PhraseRow</code>)</td>
+<td>Registered phrases with per-row Remove (<code>RemoveButton_Click</code>)</td>
+</tr>
+</tbody>
+</table>
 <h3 id="confirmdialog">ConfirmDialog<a class="headerlink" href="#confirmdialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>ConfirmDialog.xaml</code>, <code>ConfirmDialog.xaml.cs</code></p>
 <p>Generic modal confirm. <code>FluentWindow</code> with the ember-tick display-face header, a message body, and OK / Cancel buttons. Used ahead of destructive actions across the app.</p>
@@ -8846,7 +8935,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p>Remote Link password prompt (#138). <code>FluentWindow</code> (440 wide) with two <code>PasswordBox</code> fields (entry + confirm) and an error <code>InfoBar</code>. OK submits, Enter in either box submits too.</p>
 <h3 id="workshopbrowsedialog">WorkshopBrowseDialog<a class="headerlink" href="#workshopbrowsedialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>WorkshopBrowseDialog.xaml</code>, <code>WorkshopBrowseDialog.xaml.cs</code></p>
-<p>The Steam Workshop config browser (#9). <code>FluentWindow</code> (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's <code>AddWorkshopProfile</code> import sink. Full anatomy on <a href="../steam-workshop-import-internals/">Steam Workshop Config Import Internals</a>.</p>
+<p>The Steam Workshop config browser (#9). <code>FluentWindow</code> (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's <code>AddWorkshopProfile</code> import sink. The config card's pad art is <code>WorkshopControllerPreview</code> (<code>Views/WorkshopControllerPreview.xaml</code>), a <code>UserControl</code> wrapping a <code>Viewbox</code> over a code-built <code>Canvas</code> so callouts stay in the art's own pixel space, which is what <code>ControllerOverlayLayout</code>'s coordinates are expressed in. Full anatomy on <a href="../steam-workshop-import-internals/">Steam Workshop Config Import Internals</a>.</p>
 <hr />
 <h2 id="value-converters">Value Converters<a class="headerlink" href="#value-converters" title="Permanent link">&para;</a></h2>
 <p>All converters in <code>PadForge.App/Converter/</code> (<code>PadForge.Converters</code> namespace). All but one are registered as <code>StaticResource</code> in <code>App.xaml</code> (lines 1044-1061). <code>UppercaseConverter</code> (key <code>UpperConverter</code>) is registered in <code>ControllerIcons.xaml</code> instead.</p>
@@ -9385,7 +9474,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide and Windows MIDI Services install/uninstall triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput is unpacked next to <code>PadForge.exe</code> from the single-file bundle)</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

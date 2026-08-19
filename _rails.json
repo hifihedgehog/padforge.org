@@ -32,7 +32,7 @@
  {
   "eyebrow": "Nintendo output",
   "t": "A virtual Switch Pro Controller.",
-  "d": "The Nintendo slot type creates a virtual Switch Pro Controller through HIDMaestro. Games and emulators that speak Switch see the real thing: the full button set, gyro passed through from your physical pad, and a HOME button LED under your control."
+  "d": "The Nintendo slot type creates a virtual Switch Pro Controller through HIDMaestro. Games and emulators that speak Switch see the real thing: the full button set, and gyro passed through from your physical pad."
  },
  {
   "eyebrow": "Mouse gestures",
@@ -87,7 +87,7 @@
  {
   "eyebrow": "Flick Stick",
   "t": "Flick to face it. Gyro to finish it.",
-  "d": "Flick the stick to its edge and the camera snaps to that direction, then rotates as you sweep the rim, while the gyro handles fine aim. Flick sources ride the right stick, the left stick, or a touchpad, and a rotation offset card corrects games whose camera turns more or less than the flick angle."
+  "d": "Flick the stick to its edge and the camera snaps to that direction, then rotates as you sweep the rim, while the gyro handles fine aim. Flick sources ride the right stick, the left stick, or a touchpad, and a Dots per 360 dial corrects a game whose camera over-rotates or under-rotates."
  },
  {
   "eyebrow": "Wii pointer modes",
@@ -97,7 +97,7 @@
  {
   "eyebrow": "Joy-Con 2 optical mouse",
   "t": "The Joy-Con 2 is a mouse. So use it like one.",
-  "d": "A Nintendo Switch 2 Joy-Con has an optical sensor on its face. Set it on a desk and slide it. Two sources, Mouse Motion X and Mouse Motion Y, drive a stick for mouse-look, a button, or the scroll wheel, each with its own Sensitivity dial. The right Joy-Con's IR camera also reports a brightness value you can map, so covering the sensor works like a button."
+  "d": "A Nintendo Switch 2 Joy-Con has an optical sensor on its face. Set it on a desk and slide it. Two sources, Mouse Motion X and Mouse Motion Y, drive a stick for mouse-look, a button, or the scroll wheel, each with its own Sensitivity dial. The first-generation right Joy-Con carries an IR camera where this one carries the mouse sensor, and its brightness reading maps too, so covering it works like a button."
  },
  {
   "eyebrow": "Mouse as a source",
@@ -137,7 +137,7 @@
  {
   "eyebrow": "DualShock 3, paired in-app",
   "t": "The PS3 pad on PC, without the driver hunt.",
-  "d": "Plug it in over USB and PadForge binds it through WinUSB on its own. Or pair it over Bluetooth from the Devices page, which installs the signed BthPS3 driver only when you pair one. Either way you get the sixaxis motion, ten pressure-sensitive face buttons, rumble, the player LED, and the battery reading. No DsHidMini, no ScpToolkit. Remove the controller and PadForge cleans up the pairing after it."
+  "d": "Plug it in over USB and PadForge binds it through WinUSB on its own. Or pair it over Bluetooth from the Devices page, which installs the signed BthPS3 driver only when you pair one. Either way you get the sixaxis motion, ten pressure-sensitive buttons across the face, shoulders and D-pad, analog L2 and R2, rumble, the player LED, and the battery reading. No DsHidMini, no ScpToolkit. Remove the controller and PadForge cleans up the pairing after it."
  },
  {
   "eyebrow": "Battery and idle disconnect",
@@ -147,6 +147,6 @@
  {
   "eyebrow": "Unknown hardware welcome",
   "t": "If Windows sees it, you can map it.",
-  "d": "For unrecognised gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
+  "d": "For unrecognized gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
  }
 ]

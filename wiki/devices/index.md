@@ -9,6 +9,7 @@ extra capabilities or extra setup steps worth their own walkthrough.
 | Family | Why it has a page |
 | --- | --- |
 | [DualShock 3](dualshock-3.md) | Needs a one-time pairing step over USB before Bluetooth works |
+| [PlayStation Move](ps-move.md) | Same USB pairing step, plus a calibration capture the motion sensors depend on |
 | [SpaceMouse](spacemouse.md) | A 6DoF puck games can't see on their own, with an axis legend worth having open while you map it |
 | [Wii Controllers](wii-controllers.md) | Pairing, extensions, Motion Plus, the IR pointer, and the Joy-Con extras (IR Brightness, the Joy-Con 2 mouse) |
 

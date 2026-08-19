@@ -12,7 +12,7 @@ You need PadForge installed and running. If it is not,
 
 On the [Dashboard](../features/dashboard.md), click the **Add Controller**
 card at the bottom of the controller list. The same popup opens from the
-**+** button in the sidebar's controller section.
+**Add Controller** card in the sidebar's controller section.
 
 Pick **Xbox**. Almost every PC game with controller support reads
 Xbox-style input natively, so it is what to pick when you do not know what
@@ -71,4 +71,4 @@ from games. If you do not see double input, you do not need it.
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

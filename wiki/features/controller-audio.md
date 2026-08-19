@@ -31,13 +31,13 @@ Macro sounds do not depend on the mirror toggle. They play on whatever the slot'
 
 ## Mirror a Windows audio output
 
-Turn on **Mirror system audio to the controller speaker** and pick a source. PadForge captures that Windows output with a loopback and streams it to the pad speaker.
+Turn on **Mirror System Audio to the Controller Speaker** and pick a source. PadForge captures that Windows output with a loopback and streams it to the pad speaker.
 
 | Control | What it does |
 |---|---|
-| Mirror system audio | Per-device toggle. Off by default. |
-| Mirror source | "System default" or any active output device on the PC. |
-| Master volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. |
+| Mirror System Audio to the Controller Speaker | Per-device toggle. Off by default. |
+| Mirror Source | "System default" or any active output device on the PC. |
+| Master Volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. |
 
 Picking "System default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. Pick a specific output instead when you want one particular device's sound on the pad.
 
@@ -52,31 +52,31 @@ Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads show three extra contr
 <!-- SCREENSHOT: pad-audio-haptic-controls -->
 <!-- image pending recapture: ![Play mirrored audio and High tones controls on the Audio tab](../images/pad-audio-haptic-controls.png) -->
 
-### Play mirrored audio
+### Play Mirrored Audio
 
 Choose when the mirror tone plays.
 
 | Setting | What it does |
 |---|---|
 | Always | The tone tracks the mirrored audio the whole time the mirror is on. Default. |
-| While an input is held | The tone plays only while a button or trigger you pick is held. An **Engage input** picker with a record button sets that input. |
-| While the game rumbles | The tone plays only while the slot's game vibration is active. |
+| While an Input Is Held | The tone plays only while a button or trigger you pick is held. An **Engage Input** picker with a record button sets that input. |
+| While the Game Rumbles | The tone plays only while the slot's game vibration is active. |
 
-Whenever the tone is gated to an input or to rumble, a **Release delay** box keeps it playing for a moment after that source stops, so it does not clip off the instant the source drops. Default 500 ms.
+Whenever the tone is gated to an input or to rumble, a **Release Delay** box keeps it playing for a moment after that source stops, so it does not clip off the instant the source drops. Default 500 ms.
 
-### High tones
+### High Tones
 
 Decide what happens to pitches above a limit you set. This applies to the mirror, macro sounds, and the test tone.
 
 | Setting | What it does |
 |---|---|
 | Off | Every pitch plays. Default. |
-| Cut them off | Pitches above the limit go silent. |
-| Fold them down an octave | Pitches above the limit drop an octave at a time until they fall under it, keeping their pitch character lower down. |
+| Cut Them Off | Pitches above the limit go silent. |
+| Fold Them Down an Octave | Pitches above the limit drop an octave at a time until they fall under it, keeping their pitch character lower down. |
 
-**Tone limit** sets the cutoff, default 800 Hz. That keeps engine and impact rumble while catching high-pitched beeps. Folding is the gentler choice.
+**Tone Limit** sets the cutoff, default 800 Hz. That keeps engine and impact rumble while catching high-pitched beeps. Folding is the gentler choice.
 
-### Play DualSense haptics on this controller
+### Play DualSense Haptics on This Controller
 
 Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a **Haptics Gain** slider, 25 to 300%, default 100%.
 
@@ -84,7 +84,7 @@ Off by default. When a game drives the slot as a virtual DualSense and sends aut
 
 ## DualSense headset jack
 
-A DualSense or DualSense Edge adds two more rows under Master volume.
+A DualSense or DualSense Edge adds two more rows under Master Volume.
 
 | Control | What it does |
 |---|---|
@@ -119,8 +119,8 @@ The two kinds of output sound very different.
 
 Two more cards sit below the Sound Output controls.
 
-- **Sound Macros.** A quick list of the slot's sound macros. **New sound macro** creates one. Click a row to open that macro in the [Macros](../guides/macros.md) tab.
-- **Sound Packages.** **Add package…** registers an existing `.pfsounds` file. **Create package…** bundles sound files you pick into a new `.pfsounds` file. **Remove** takes a package off the list without deleting the file.
+- **Sound Macros.** A quick list of the slot's sound macros. **New Sound Macro** creates one. Click a row to open that macro in the [Macros](../guides/macros.md) tab.
+- **Sound Packages.** **Add Package…** registers an existing `.pfsounds` file. **Create Package…** bundles sound files you pick into a new `.pfsounds` file. **Remove** takes a package off the list without deleting the file.
 
 A `.pfsounds` package travels with a shared profile. A macro that plays a packaged sound resolves on another PC once that PC has the same package file.
 
@@ -131,16 +131,16 @@ A `.pfsounds` package travels with a shared profile. A macro that plays a packag
 | Button | What it does |
 |---|---|
 | Test | Plays a short test tone on the selected device only, so you can check one pad without firing the others on the slot. On a haptic-tone pad it plays as a brief vibrating tone. |
-| Stop all sounds | Stops every sound playing on the slot. |
+| Stop All Sounds | Stops every sound playing on the slot. |
 
-Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a **Reset every Sound Output setting for this device to defaults** button that clears the whole card for the selected device at once.
+Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a **Reset All** button that clears the whole card for the selected device at once.
 
 ---
 
 ## Limits
 
 - **DualShock 4 audio is Bluetooth only.** A wired DS4 exposes no audio interface. The exception is the Sony USB wireless adaptor, which presents a real USB audio endpoint.
-- **Master volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads. Each macro's Play Sound action still carries its own volume.
+- **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads. Each macro's Play Sound action still carries its own volume.
 - **The mirror is endpoint-level, not per-app.** It mirrors a Windows output device, not one program's sound.
 - **The pad speaker is small.** It suits voice, prompts, and effects more than music.
 - **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.
@@ -161,4 +161,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

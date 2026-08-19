@@ -52,7 +52,7 @@ graph TB
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
         DSU_CLIENT[DSU Clients<br/>Cemu / Dolphin / Yuzu / Ryujinx]
         BROWSER[Web Browsers<br/>Phone / tablet]
-        PEER[Remote Link Peers<br/>Paired PadForge PCs over LAN]
+        PEER[Remote Link Peers<br/>Paired PadForge PCs, LAN or internet relay]
     end
 
     UI --> VM
@@ -208,6 +208,11 @@ PadForge.App/
     WorkshopProfileMaterializer.cs    # Turns a translated Workshop config into a real ProfileData with its VC slots (#9)
     WorkshopTuningApplier.cs          # Moves a Workshop import's device tuning onto the device once one is assigned (#9)
     HeadsetTrackerRepair.cs           # Repairs a Sony headset whose head-tracker HID node never enumerates (#188)
+    VoiceMacroService.cs              # Voice macro recognition (#317): one session per microphone, pulsing that device's phrase buttons
+    VoskVoiceEngine.cs                # Vosk offline recognizer behind the same session surface SAPI uses (#317)
+    WebControllerTls.cs               # HTTPS lane for the web controller (#296): motion sensors need a secure context
+    WebCustomLayoutStore.cs           # Browser-built custom pad layouts (#296), machine-scoped on AppSettingsData
+    QrCode.cs                         # Byte-mode QR generator (Nayuki port) for the web-controller card's URL
 
   ViewModels/
     ViewModelBase.cs                  # Base class: INotifyPropertyChanged, OnCultureChanged hook
@@ -420,13 +425,14 @@ PadForge.Engine/
     MouseGestureSettings.cs     # Per-(slot, device) toggles + thresholds
     MouseGestureSettingsEntry.cs # Serialization wrapper keyed by device GUID
 
-  RemoteLink/                   # Peer-to-peer controller sharing over LAN (issue #138). Off by default
+  RemoteLink/                   # Peer-to-peer controller sharing over LAN or the internet (#138, #294). Off by default
     LinkServer.cs               # TCP control listener (pairing handshake) + UDP input/feedback stream
     LinkDiscovery.cs            # LAN discovery of nearby PadForge PCs (Dashboard "Nearby PCs")
     LinkConnection.cs           # ILinkControlChannel: transport-agnostic duplex control channel
     LinkHandshake.cs            # SAS pairing handshake, yields the 32-byte session key + trust material
     LinkSession.cs              # AEAD seal/open of datagrams on the input/feedback channel
     TcpControlChannel.cs        # ILinkControlChannel over TCP: u32-length-prefixed framing with a size cap
+    UdpControlChannel.cs        # ILinkControlChannel over a punched UDP path, same framing contract (#294)
     CustomInputStateCodec.cs    # Compact absolute-frame codec for CustomInputState datagrams
     OutputEffectCodec.cs        # Codec for the reverse output relay (rumble / effect, consumer → owner)
     PeerCrypto.cs               # Pinned suite: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (BouncyCastle)
@@ -436,6 +442,13 @@ PadForge.Engine/
     IdentityProtector.cs        # At-rest wrap of the private identity key (DPAPI or password)
     AntiReplayWindow.cs         # IPsec-style sliding replay window over the datagram sequence (RFC 6479)
     RemotePeerDevice.cs         # A peer-exposed device surfaced into the local pipeline (peer:// path)
+    StunClient.cs               # STUN binding requests that learn this PC's reflexive address (#294)
+    NatProfile.cs / PortPredictor.cs # NAT behavior classification and the port guess a symmetric NAT needs (#294)
+    HolePuncher.cs              # UDP hole punch against the peer's candidate addresses (#294)
+    PunchedConnection.cs        # The datagram path a landed punch yields (#294)
+    RendezvousProtocol.cs       # Candidate exchange over the rendezvous lane (#294)
+    IrohRelayClient.cs          # iroh relay client, the guaranteed lane when a punch cannot land (#294)
+    LinkCode.cs                 # Short shareable link code that carries the peer identity (#294)
 ```
 
 ### tools/
@@ -491,6 +504,9 @@ The `Common/Input/`, `Services/`, `Engine/Data/`, and `Engine/RemoteLink/` trees
 - `StableXInputInstance.cs`. Resolves a stable PnP instance ID for an XInput-backed Xbox pad when SDL reports a synthetic `XInput#N` path
 - `XboxControllerIdentity.cs`. Single source of truth for "is this an Xbox One+ pad that accepts the 9-byte impulse-trigger HID output report"
 - `SdlDiagLog.cs`. In-memory diagnostics ring (SDL DEBUG lines, poll-loop stall watchdogs, subsystem diagnostics). `crash.log` is the only sanctioned on-disk artifact
+- `GamepadObjectNames.cs`. Canonical display names for the gamepad axes / buttons the mapping surfaces show
+- `SyntheticInstanceId.cs`. Stable instance ID for devices SDL surfaces without a real PnP path
+- `SpaceMouseDecoder.cs`. Descriptor-driven decode of 3Dconnexion 6DoF reports (#288). Shape comes from the report descriptor, never from report length
 
 **Engine namespaces**
 
@@ -534,6 +550,26 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - `Data/RumbleAudioConfig.cs`, `Touchpad/TouchpadGestureAutoArm.cs`
 
 `VirtualControllerType.Vr = 6` is appended after `Nintendo`. Numeric values are persisted, so the enum is append-only.
+
+### Since 4.2.0, shipped in 4.3.0
+
+**App `Common/Input/`**
+
+- `OpenVrConsumerService.cs`. Consumes real VR hardware as input sources (#287). The HMD pose becomes a "VR Headset" device (lean and orientation axes plus gyro / accel), and every tracked controller becomes a "VR Controller" device. Runs its own `OpenVrConsumer` thread
+- `SpaceMouseService.cs`. 3Dconnexion SpaceMouse bridge (#288). Opens the 6DoF HID puck directly and streams it into SDL as a virtual joystick, so the mapping grid, macros, curves, DSU, and per-app profiles consume it unchanged. Report shape comes from `Engine/Common/SpaceMouseDecoder.cs`
+- `PsMoveDirectService.cs`. PS Move over USB and Bluetooth (#277). Per-pad calibration blobs are read over USB and cached by MAC, and the Bluetooth lane scales its sensors from them, the psmoveapi architecture
+- `MicrophoneInputDevice.cs`. A Windows capture endpoint exposed to the pipeline as an `ISdlInputDevice` (#317). Its buttons are the registered voice phrases: button 0 is "Any Phrase", each phrase sits at its own stable index
+- `VoicePhraseRegistry.cs` / `VoicePulse.cs`. The persisted phrase-to-index registry, and the per-pad pulse store `SdlDeviceWrapper.ExternalVoiceAugment` applies each poll so a spoken phrase reads as an ordinary button press
+
+**App `Services/`**
+
+- `VoiceMacroService.cs` / `VoskVoiceEngine.cs`. Voice macro recognition (#317), one session per microphone. Vosk is the shipped engine, behind the same session surface SAPI uses
+- `WebControllerTls.cs` / `WebCustomLayoutStore.cs` / `QrCode.cs`. The web controller's HTTPS lane, its browser-built custom pad layouts, and the QR generator for the pairing card (#296)
+
+**Engine**
+
+- `Common/SpaceMouseDecoder.cs`, `Common/GamepadObjectNames.cs`, `Common/SyntheticInstanceId.cs`
+- `RemoteLink/`. The #294 internet lane, listed in full in the tree above: `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `RendezvousProtocol`, `UdpControlChannel`, `IrohRelayClient`, `LinkCode`. Direct punch first, iroh relay as the guaranteed fallback
 
 ### PadForge.SteamWorkshop
 
@@ -703,7 +739,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## Threading Model
 
-Up to eleven concurrent execution contexts. Some run whenever the engine runs, the rest start on demand:
+Eleven documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads:
 
 ### 1. Engine Thread (InputManager, 1000 Hz)
 
@@ -955,6 +991,8 @@ Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio pa
 | **NAudio.Wasapi** | 2.2.1 | App | WASAPI loopback capture for bass-driven rumble |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Windows MIDI Services SDK for virtual MIDI devices |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | App | Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) |
+| **System.Speech** | 10.0.0 | App | SAPI recognizer session for voice macros (#317) |
+| **Vosk** | 0.3.38 | App | Offline voice-macro recognizer (Apache-2.0). Phrase-list grammar with an `[unk]` bucket |
 | **BouncyCastle.Cryptography** | 2.6.2 | Engine | Remote Link crypto: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (#138) |
 | **System.Security.Cryptography.ProtectedData** | 10.0.9 | Engine | DPAPI wrap of the Remote Link private identity key at rest (#138) |
 | **SteamKit2** | 3.4.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL 2.1. protobuf-net and ZstdSharp.Port arrive transitively |
@@ -1138,4 +1176,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

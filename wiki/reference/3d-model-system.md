@@ -685,7 +685,7 @@ Meshes and textures are both embedded as `EmbeddedResource`:
 
 **File:** `PadForge.App/Views/ControllerModelView.xaml`, `ControllerModelView.xaml.cs`
 
-WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2148 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1052 lines: the annotation overlay, see below).
+WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2169 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1052 lines: the annotation overlay, see below).
 
 ### XAML Structure
 
@@ -1222,4 +1222,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

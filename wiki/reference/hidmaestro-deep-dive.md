@@ -15,19 +15,19 @@ HIDMaestro (HM) is a UMDF2 (User-Mode Driver Framework 2) bus driver that publis
 - A pre-recorded HID report descriptor (input + output + feature reports)
 - Optional FFB PID descriptor pages
 
-PadForge ships with HM 1.6.1 (`HIDMaestro.Core.dll`, FileVersion 1.6.1.0), which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.
+PadForge ships with HM 1.6.2 (`HIDMaestro.Core.dll`, FileVersion 1.6.2.0), which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.
 
 The interim milestones a successor should know, each one PadForge's own call sites still cite by version:
 
 | HM version | What landed | Where PadForge depends on it |
 |---|---|---|
-| v1.3.18 (HM#33) | Virtual Switch Pro profile and the IMU submission channel | `HMaestroVirtualController.cs:66` and `:900`, `MappingSetMigrator.cs:677` |
+| v1.3.18 (HM#33) | Virtual Switch Pro profile and the IMU submission channel | `HMaestroVirtualController.cs:66` and `:905`, `MappingSetMigrator.cs:677` |
 | v1.3.21 (HM#37) | Switch Pro Bluetooth descriptor corrected to the real pad's wire shape | The Nintendo category's BT report shape |
 | v1.3.22 (HM#38) | Input worker survives foreign stop signals, the structural fix for the frozen-output bug | `App.xaml.cs:230` (the startup orphan sweep's ordering barrier) |
-| v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:993`, `HMaestroVirtualController.cs:81` |
-| v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:1892` |
+| v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:1151`, `HMaestroVirtualController.cs:81` |
+| v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:2070` |
 | v1.4.3 (HM#42) | The usbip-vhci node HM owns is stamped, so the persona guard can identify it | `InputManager.Step1.UsbipVhciGuard.cs:18` |
-| v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1270` |
+| v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1275` |
 | v1.6.0 (HM#32) | Native OpenVR driver behind `HMVRController` | `HMaestroVRController.cs:9` |
 
 ### One driver, seven categories
@@ -275,4 +275,4 @@ The legacy v2 driver cleanup dialog (offered on the first launch that detects Vi
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

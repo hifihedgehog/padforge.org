@@ -7171,7 +7171,7 @@
 
 <h1 id="services-layer">Services Layer<a class="headerlink" href="#services-layer" title="Permanent link">&para;</a></h1>
 <p><em>Five ViewModel-bridge services carry engine state to the WPF UI and back, with a bench of smaller workers beside them.</em></p>
-<p>Five service classes bridge <strong>PadForge.Engine</strong> with the <strong>WPF UI layer</strong> and get full sections on this page: <code>InputService</code>, <code>SettingsService</code>, <code>DeviceService</code>, <code>RecorderService</code>, and <code>ForegroundMonitorService</code>. They run on the WPF dispatcher thread unless noted otherwise. <code>PadForge.App/Services/</code> holds twelve more residents:</p>
+<p>Five service classes bridge <strong>PadForge.Engine</strong> with the <strong>WPF UI layer</strong> and get full sections on this page: <code>InputService</code>, <code>SettingsService</code>, <code>DeviceService</code>, <code>RecorderService</code>, and <code>ForegroundMonitorService</code>. They run on the WPF dispatcher thread unless noted otherwise. <code>PadForge.App/Services/</code> holds seventeen more residents:</p>
 <table>
 <thead>
 <tr>
@@ -7187,6 +7187,26 @@
 <tr>
 <td><code>WebControllerServer</code></td>
 <td>Phone-as-controller HTTP/WebSocket server. Lifecycle <a href="#web-controller-server-lifecycle">below</a></td>
+</tr>
+<tr>
+<td><code>WebControllerTls</code></td>
+<td>The HTTPS lane for that server (#296). Generates a self-signed cert, installs it to <code>LocalMachine\My</code>, and binds it to the port through <code>netsh</code>. Motion sensors exist only in a secure context, so plain HTTP cannot carry gyro</td>
+</tr>
+<tr>
+<td><code>WebCustomLayoutStore</code></td>
+<td>The browser-built custom pad layouts (#296), machine-scoped. Holds one validated JSON array that rides <code>AppSettingsData</code> in PadForge.xml, deliberately not <code>ProfileData</code></td>
+</tr>
+<tr>
+<td><code>QrCode</code></td>
+<td>Byte-mode QR generator ported from the Nayuki reference, used only to render the web controller's URL on the Dashboard card</td>
+</tr>
+<tr>
+<td><code>VoiceMacroService</code></td>
+<td>Voice macro recognition (#317). One session per microphone, no shared mic and no voice pseudo-device. Started and shut down by the engine's Step 1 device sweep, not by <code>InputService.Start()</code></td>
+</tr>
+<tr>
+<td><code>VoskVoiceEngine</code></td>
+<td>The Vosk recognition engine behind the same session surface SAPI uses (#317). Model is cached under LocalAppData and downloaded on first use, with SAPI as the fallback until it is ready</td>
 </tr>
 <tr>
 <td><code>NfcReaderService</code></td>
@@ -7232,7 +7252,7 @@
 </table>
 <blockquote>
 <p><strong>Engine-side subsystems (3.4).</strong> Two more runtime subsystems sit alongside these services. <code>AudioPassthroughService</code> drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through <code>InputService</code> and documented on their own pages: <a href="../controller-audio-internals/">Controller Audio Internals</a> and <a href="../remote-link-internals/">Remote Link Internals</a>.</p>
-<p><strong>App-side helpers (3.6.0).</strong> Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as <code>static</code> P/Invoke surfaces. <code>HapticToneService</code> and <code>WiiSpeakerService</code> turn macro sounds into HD-haptic tones and Wii-speaker PCM. <code>NfcReaderService</code> (with <code>WinScard</code>) owns the PC/SC monitor for NFC macro triggers. <code>BluetoothLinkHelper</code> performs per-family Bluetooth disconnect. They live in <code>PadForge.Common.Input</code> (and <code>PadForge.Services</code> for <code>NfcReaderService</code>), and are documented in <a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a> below. 4.1.0 added three more to the same section: <code>TouchpadPulseService</code> (#219), <code>SwitchHomeLedSetter</code> (#226), and <code>RumbleAudioService</code> (#236, the Bass Shakers renderer).</p>
+<p><strong>App-side helpers (3.6.0).</strong> Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as <code>static</code> P/Invoke surfaces. <code>HapticToneService</code> and <code>WiiSpeakerService</code> turn macro sounds into HD-haptic tones and Wii-speaker PCM. <code>NfcReaderService</code> (with <code>WinScard</code>) owns the PC/SC monitor for NFC macro triggers. <code>BluetoothLinkHelper</code> performs per-family Bluetooth disconnect. They live in <code>PadForge.Common.Input</code> (and <code>PadForge.Services</code> for <code>NfcReaderService</code>), and are documented in <a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a> below. 4.1.0 added three more to the same section: <code>TouchpadPulseService</code> (#219), <code>SwitchHomeLedSetter</code> (#226), and <code>RumbleAudioService</code> (#236, the Bass Shakers renderer). 4.3.0 added <code>SpaceMouseService</code> (#288), which opens 3Dconnexion 6DoF pucks directly and attaches them to SDL as virtual joysticks, because SDL's raw-input backend subscribes to the gamepad usage only and never turns a multi-axis controller into a joystick. It is owned by <code>InputManager</code>, not by <code>InputService</code>.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TB
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    MW[MainWindow]
@@ -7876,11 +7896,14 @@
 <h3 id="web-controller-server-lifecycle">Web Controller Server Lifecycle<a class="headerlink" href="#web-controller-server-lifecycle" title="Permanent link">&para;</a></h3>
 <h4 id="startwebserverifenabled-private"><code>StartWebServerIfEnabled()</code> (private)<a class="headerlink" href="#startwebserverifenabled-private" title="Permanent link">&para;</a></h4>
 <ol>
-<li>Checks <code>Dashboard.EnableWebController</code> and engine existence.</li>
+<li>Checks <code>Dashboard.EnableWebController</code> and engine existence. Returns early if a server is already running.</li>
 <li>Creates <code>WebControllerServer</code>, subscribes to <code>StatusChanged</code>, <code>DeviceConnected</code>, <code>DeviceDisconnected</code>.</li>
 <li>Device connect/disconnect calls <code>_inputManager.RegisterExternalDevice()</code> / <code>UnregisterExternalDevice()</code>.</li>
-<li>Validates port (1024–65535; default 8080), starts server.</li>
+<li>Validates port (1024-65535, default 8080).</li>
+<li>Calls <code>Start(port)</code> on a <code>Task.Run</code>, not on the UI thread. The start runs <code>netsh</code> up to three times for the HTTPS binding plus the firewall rule, each capped at five seconds, and this method is reached straight from the checkbox's <code>PropertyChanged</code> handler. It then hops back to the dispatcher, and if the start failed or the user has since toggled off or changed the port, it disposes the launching instance and clears <code>IsWebControllerRunning</code>.</li>
 </ol>
+<p><code>OnWebServerStatusChanged</code> publishes <code>WebControllerStatus</code>, <code>WebControllerClientCount</code>, and <code>IsWebControllerRunning</code> (from the lifecycle, never from the checkbox). It also publishes <code>WebControllerUrl</code> and rebuilds <code>WebControllerQr</code> through <code>WebControllerServer.RenderQr</code>, but only when the URL actually changed, since building a QR matrix is not free.</p>
+<p><code>WebControllerServer</code> itself caps at 16 clients, serves its browser assets from embedded resources under the <code>PadForge.WebAssets.</code> prefix, and asks <code>WebControllerTls.EnsureHttpsBinding(port)</code> for a certificate. That helper never deletes an sslcert binding it does not own (identified by PadForge's own <code>appid</code> GUID) and returns null on any failure, in which case the server falls back to plain HTTP. HTTPS matters because <code>DeviceMotionEvent</code> exists only in a secure context, so gyro from a phone requires it.</p>
 <h4 id="stopwebserver-private"><code>StopWebServer()</code> (private)<a class="headerlink" href="#stopwebserver-private" title="Permanent link">&para;</a></h4>
 <p>Unsubscribes from <code>StatusChanged</code>, disposes server, clears status and client count.</p>
 <h3 id="audio-bass-detector-lifecycle">Audio Bass Detector Lifecycle<a class="headerlink" href="#audio-bass-detector-lifecycle" title="Permanent link">&para;</a></h3>
@@ -8045,6 +8068,31 @@
 <td><code>SendTestImpulseTrigger</code></td>
 <td><code>void SendTestImpulseTrigger(int padIndex, Guid? deviceGuid, bool left, bool right)</code></td>
 <td>Test pulse on the impulse-trigger motors (#74)</td>
+</tr>
+<tr>
+<td><code>IdentifyDevice</code></td>
+<td><code>void IdentifyDevice(Guid instanceGuid)</code></td>
+<td>Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the <code>SendTestRumble</code> lane, an unmapped one gets the direct train</td>
+</tr>
+<tr>
+<td><code>TestBatteryNotification</code></td>
+<td><code>void TestBatteryNotification()</code></td>
+<td>Pushes a synthetic low-battery event through the real delivery pipeline (tray balloon, status line, identify buzz) without draining a pad (#293). Leaves the edge state untouched</td>
+</tr>
+<tr>
+<td><code>BatteryEdgeDecision</code></td>
+<td><code>static (bool Fire, bool Notified) BatteryEdgeDecision(bool hadState, int lastPct, bool notified, int pct, bool charging, int threshold)</code></td>
+<td>The pure low-battery edge rule (#293). Fires only on a crossing to at-or-below the threshold, never while charging. Charging or a rise past threshold+5 re-arms</td>
+</tr>
+<tr>
+<td><code>StartMacroActionAxisRecording</code></td>
+<td><code>void StartMacroActionAxisRecording(MacroAction action, int padIndex)</code></td>
+<td>Records an axis source into a macro action's axis field</td>
+</tr>
+<tr>
+<td><code>StopMacroActionAxisRecording</code></td>
+<td><code>void StopMacroActionAxisRecording()</code></td>
+<td>Ends that session</td>
 </tr>
 <tr>
 <td><code>ApplyPadSettingToCurrentDevice</code></td>
@@ -8289,6 +8337,7 @@
 </tbody>
 </table>
 <p>The profile-CRUD, touchpad-gesture, and expression-variable methods are the domain logic behind MainWindow's UI handlers.</p>
+<p>Beside them sit a set of <code>public static</code> helpers with no instance state, used by the pages and dialogs directly: <code>FormatExePaths</code>, <code>LocalizedDeviceName</code>, <code>CloneMappingSetDeep</code>, <code>SlotHasAnyMapping</code>, <code>ReplaceSlotMappingSet</code>, <code>ApplySlotMappingSetFromRows</code>, and the four snapshot codecs <code>BuildShiftLayerSnapshotJson</code> / <code>ApplyShiftLayerSnapshotJson</code> / <code>BuildMenusSnapshotJson</code> / <code>ApplyMenusSnapshotJson</code>.</p>
 <h3 id="inputservice-all-events">InputService All Events<a class="headerlink" href="#inputservice-all-events" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8445,7 +8494,7 @@
 <li>Calls <code>LoadAppSettings()</code>, <code>LoadPadSettings()</code>, <code>LoadMacros()</code>, <code>LoadProfiles()</code>.</li>
 </ol>
 <h4 id="loadappsettingsappsettingsdata-private"><code>LoadAppSettings(AppSettingsData)</code> (private)<a class="headerlink" href="#loadappsettingsappsettingsdata-private" title="Permanent link">&para;</a></h4>
-<p>Pushes to SettingsViewModel: <code>AutoStartEngine</code>, <code>MinimizeToTray</code>, <code>StartMinimized</code>, <code>StartAtLogin</code>, <code>EnablePollingOnFocusLoss</code>, <code>PollingRateMs</code>, theme, language, input hiding, auto-profile switching, slot types, Extended/MIDI configs, DSU/web server settings.</p>
+<p>Pushes to SettingsViewModel: <code>AutoStartEngine</code>, <code>MinimizeToTray</code>, <code>StartMinimized</code>, <code>StartAtLogin</code>, <code>EnablePollingOnFocusLoss</code>, <code>PollingRateMs</code>, theme, language, input hiding, auto-profile switching, slot types, Extended/MIDI configs, DSU/web server settings. It also seeds the machine-scoped web controller custom layouts with <code>WebCustomLayoutStore.LoadFrom(appSettings.WebCustomLayoutsJson)</code> (#296), which <code>BuildAppSettings</code> writes back from <code>WebCustomLayoutStore.Json</code>.</p>
 <p><strong>Critical load order</strong>: <code>SlotCreated[]</code> and <code>SlotEnabled[]</code> must load BEFORE <code>OutputType</code>, because OutputType fires PropertyChanged which reads SlotCreated.</p>
 <h4 id="loadpadsettingsusersetting-padsetting-private"><code>LoadPadSettings(UserSetting[], PadSetting[])</code> (private)<a class="headerlink" href="#loadpadsettingsusersetting-padsetting-private" title="Permanent link">&para;</a></h4>
 <p>For each slot (first device only), loads all tuning parameters into PadViewModel: deadzones, sensitivity curves, max ranges, center offsets, triggers, force feedback, audio rumble, Extended HID custom configs, and mapping descriptors. Per-mapping deadzones are loaded with a default of 50 (centered, no effect) for mappings that lack a stored value.</p>
@@ -9542,7 +9591,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>[30Hz tick] ForegroundMonitor.CheckForegroundWindow()
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  |-- Detects new foreground matches different profile
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  |-- ProfileSwitchRequired event fires
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  |-- InputService.OnProfileSwitchRequired(profileId)
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  |-- InputService.OnAutoProfileSwitchRequired -&gt; OnProfileSwitchRequired(profileId)
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>        |-- SaveActiveProfileState()        [snapshot outgoing profile]
 <a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>        |-- ApplyProfile(target)            [load incoming profile]
 <a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>        |     |-- Set SlotCreated/Enabled/OutputType
@@ -9572,7 +9621,7 @@
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuMotionServer</code> lifecycle managed by <code>InputService</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

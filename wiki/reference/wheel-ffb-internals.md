@@ -42,7 +42,7 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 
 ## Decode chain
 
-`HMaestroVirtualController` holds an `HMaestroFfbDecoder`, constructed when the controller's HID descriptor carries the PID force-feedback block (the gate is descriptor presence, not VID, so catalog profiles keep their identity). The HM output callback routes by packet source: a HID-output report goes to `_ffbDecoder.OnHidOutput` then immediately `Apply`, a HID feature report (the Create-New-Effect path) goes to `OnHidFeature`, and an XInput packet writes the scalar motor and impulse-trigger bytes directly. A per-tick `TickFfb` calls `Apply` again so duration-bounded effects expire even without new packets.
+`HMaestroVirtualController` holds an `HMaestroFfbDecoder`, constructed when the controller's HID descriptor carries the PID force-feedback block (the gate is descriptor presence, not VID, so catalog profiles keep their identity). The HM output callback routes by packet source: a HID-output report goes to `_ffbDecoder.OnHidOutput` then immediately `Apply`, a HID feature report (the Create-New-Effect path) goes to `OnHidFeature`, and an XInput packet writes the scalar motor and impulse-trigger bytes directly. A per-tick `TickFfb` calls `ApplyIfDue` so duration-bounded effects expire even without new packets.
 
 `HMaestroFfbDecoder.OnHidOutput` dispatches per report ID: Set Effect (0x11), Set Condition (0x13, the bit-packed per-axis condition coefficients for spring, damper, inertia, and friction), Set Periodic (0x14), Set Constant (0x15), Set Ramp (0x16), Effect Operation (0x1A, start and stop), Block Free (0x1B), Device Control (0x1C), and Device Gain (0x1D). It also handles the pre-allocation flow where the OS writes parameters before the SetFeature allocates the real effect block. `ParseFfbScales` walks the report descriptor once at construction to normalize hand-authored descriptors (the SideWinder ranges) into canonical units.
 
@@ -90,7 +90,12 @@ All three are `internal static class`, frame a vendor-shaped command padded to t
 - `ComputeWheelSteeringPeak` gain-scales the signed magnitude and projects the polar direction onto the steering axis. This is the steady amplitude Thrustmaster uploads as a firmware periodic.
 - `ComputeWheelSteeringLevel` multiplies that peak by `PeriodicWaveform`, the instantaneous waveform multiplier. For Logitech and Fanatec, which have no firmware periodic generator, a periodic effect becomes this oscillating constant force, sampled each frame.
 - `ComputeWheelRumbleLevel` turns rumble-only motor values into an oscillating constant force (heavy motor on a 120 ms period, light on 40 ms). This is what wheels get from XInput games.
-- `TryApplyAutoCenterSpring` is the software auto-center for generic SDL wheels. Gated to single-axis spring-capable haptics, it reads `AutoCenterStrength` and builds a symmetric `SDL_HAPTIC_SPRING` on the steering axis. Vendor wheels never reach here.
+- `TryApplyAutoCenterSpring` is the software auto-center for generic SDL wheels. It reads `AutoCenterStrength` and builds a symmetric `SDL_HAPTIC_SPRING`. Vendor wheels never reach here.
+- `IsGenericWheelSpringCapable(hasHaptic, hapticFeatures, inputDeviceType)` is the one predicate deciding whether a device may hold that spring: haptic present, `SDL_HAPTIC_SPRING` in the feature mask, and `InputDeviceType.Driving` (which `SdlDeviceWrapper` derives from `SDL_JOYSTICK_TYPE_WHEEL`). The Wheel tab's `hasGenericWheel` gate calls the same predicate, so the tab and the spring cannot disagree.
+
+The old clause was `NumHapticAxes <= 1`. That hid the tab for a wheelbase-plus-pedals composite reporting two haptic axes despite a working spring, which is the Moza shape (#282). Axis count is a shape detail, not an identity, so device type replaced it.
+
+The spring is built as `SDL_HAPTIC_CARTESIAN` with `dir0 = 1`, not `STEERING_AXIS`. SDL encodes `STEERING_AXIS` as a DirectInput Cartesian effect with a **zero** direction vector, and Moza is the vendor Linux had to special-case for exactly that on condition effects (`HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION` discards the caller's direction and forces `0x4000`). Constant and periodic effects keep their real direction and stay on `STEERING_AXIS`.
 
 ---
 
@@ -98,7 +103,7 @@ All three are `internal static class`, frame a vendor-shaped command padded to t
 
 `PadSetting.RotationRange` (default 900), `AutoCenterStrength` (default 0), and `WheelRpmLeds` (default 0) all participate in the settings checksum. The `PadViewModel` bridges them through `InputService`. In `ApplyForceFeedback`, range and auto-center are one-shot, re-sent only when the cached `_appliedWheelSettings` changes, with each writer clamping range to its own hardware maximum.
 
-The tab-visibility gate is `PadPage.SyncTabVisibility`. `hasWheel` is the OR of the three `IsXxxWheel` gates on the selected device's VID and PID. `hasGenericWheel` covers a non-vendor SDL wheel that can only self-center. The Wheel tab shows when either is true, but the rotation-range and RPM-LED rows show only for `hasWheel`. See [Wheel](../features/wheel.md) for the user-facing behavior.
+The tab-visibility gate is `PadPage.SyncTabVisibility`. `hasWheel` is the OR of the three `IsXxxWheel` gates on the selected device's VID and PID. `hasGenericWheel` covers a non-vendor SDL wheel that can only self-center: not `hasWheel`, `CapType == InputDeviceType.Driving`, and `ForceFeedbackState.IsGenericWheelSpringCapable(ud.Device)`. Moza bases land here, not in a vendor writer. The Wheel tab shows when either is true, but the rotation-range and RPM-LED rows show only for `hasWheel`. See [Wheel](../features/wheel.md) for the user-facing behavior.
 
 ---
 
@@ -143,4 +148,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

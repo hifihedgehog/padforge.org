@@ -110,7 +110,7 @@ Declared in `PadForge.App.csproj`:
 </EmbeddedResource>
 ```
 
-`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.2.0 ships HIDMaestro 1.6.1, the build that carries the native OpenVR driver behind the VR slot type.
+`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.3.0 ships HIDMaestro 1.6.2. The 1.6 line is the one that carries the native OpenVR driver behind the VR slot type.
 
 ---
 
@@ -761,4 +761,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

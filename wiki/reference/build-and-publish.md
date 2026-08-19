@@ -105,7 +105,7 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 
 | File | Description |
 |------|-------------|
-| `PadForge.exe` | ~296 MB, single-file self-contained. The only file in the publish directory |
+| `PadForge.exe` | ~309 MB, single-file self-contained. The only file in the publish directory |
 
 `SDL3.dll`, `libusb-1.0.dll`, and `xinput1_4.dll` are `<Content>` items, so a plain `dotnet build` drops them beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
 
@@ -225,7 +225,7 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 
 `SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. All three projects set `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
 
-**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.2.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.2.0.0`.
+**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.2.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.3.0.0`.
 
 ## NuGet Dependencies
 
@@ -239,9 +239,11 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 | **Concentus** | 2.2.2 | nuget.org | Pure-C# Opus encoder for the DualSense Bluetooth speaker stream |
 | **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI loopback audio capture for bass-driven rumble detection |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) |
+| **System.Speech** | 10.0.0 | nuget.org | SAPI recognizer behind the voice-macro trigger (#317) |
+| **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Windows MIDI Services SDK for virtual MIDI device creation |
 
-`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. It is currently v1.6.1. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.
+`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. It is currently v1.6.2. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.
 
 The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
 
@@ -401,7 +403,7 @@ There is no Xbox One mesh set and no `ControllerModelXboxOne` class. The Series 
 <EmbeddedResource Include="WebAssets\**\*" />
 ```
 
-HTML/CSS/JS for the browser-based virtual controller. Served by the embedded Kestrel web server at runtime.
+HTML/CSS/JS for the browser-based virtual controller. Served at runtime by `WebControllerServer`, which runs an `HttpListener` accept loop, not Kestrel.
 
 | File | Purpose |
 |------|---------|
@@ -602,7 +604,7 @@ Standalone diagnostic utilities and development scripts. None of the tool projec
 | **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option per locale for the Indicator LEDs card combos |
 | **PersonaVerify** | `dotnet run --project tools/PersonaVerify -- [diagLogPath]` | net10.0-windows10.0.26100.0 | NAudio 2.2.1 | Consumer-side integration check for HIDMaestro composite USB personas. Measures at the persona's own WASAPI endpoints instead of trusting PadForge's internal counters, which read healthy while Windows received full-scale noise. Also renders four channels (speaker on 1/2, authored haptics on 3/4) so the haptics lane is exercised with no game running. Pass a `PADFORGE_DIAG` log path for the log-backed checks. The audio checks run without it |
 
-The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 25 with the capture and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
+The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 30 with the capture, tracing, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
 
 ### Development Scripts
 
@@ -635,7 +637,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | Missing WPF types | Using `dotnet build` instead of `dotnet publish` for deployment | Always use `dotnet publish -c Release` for deployment |
 | `System.Drawing` ambiguity | WinForms implicit usings conflict with WPF | Ensure `<Using Remove="System.Drawing" />` is in csproj |
 | HelixToolkit errors | Package restore failed | Run `dotnet restore` first |
-| Large exe size (~296 MB) | Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset | `EnableCompressionInSingleFile` already enabled |
+| Large exe size (~309 MB) | Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset | `EnableCompressionInSingleFile` already enabled |
 | CI build fails | .NET 10 SDK not available in runner | Check `actions/setup-dotnet` version supports .NET 10 preview |
 | `HIDMaestro.Core` reference fails to resolve | `Resources/HIDMaestro/HIDMaestro.Core.dll` missing or wrong build | Drop a Release-build `HIDMaestro.Core.dll` from a tagged HIDMaestro release into `Resources/HIDMaestro/` |
 
@@ -653,4 +655,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

@@ -127,7 +127,7 @@ Each palette is a wrapping list of swatches. Each entry has an in-place color pi
 
 A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.
 
-Color Cycle exposes a "Blend smoothly between palette colors" checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.
+Color Cycle exposes a **Blend Smoothly Between Palette Colors** checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.
 
 ---
 
@@ -143,7 +143,7 @@ Slider 1.0–20.0. Default 4.0. Multiplies the captured system-audio peak before
 
 Visible only for the three Audio Bands modes. Three bordered cards side-by-side: **Quiet Color**, **Medium Color**, **Loud Color**. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.
 
-Above the cards are the **Quiet → Medium at** and **Medium → Loud at** thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a **Crossfade Width** slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.
+Above the cards are the **Low-to-Mid Boundary** and **Mid-to-High Boundary** thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a **Crossfade Width** slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.
 
 ---
 
@@ -154,12 +154,12 @@ A separate card below the lightbar mode picker. Five small white LEDs below the 
 | Control | Values |
 |---|---|
 | Player Pattern | Player Number (default), Off, Player 1, Player 2, Player 3, Player 4, All |
-| Mute LED Mode | Off, Solid, Pulse, Follow audio device |
+| Mute LED Mode | Off, Solid, Pulse, Follow Audio Device |
 | LED Brightness | High, Medium, Low. Affects the player row. Firmware exposes no separate brightness register for the mute LED. |
 
 Player Number lights the pips for the virtual controller's number. It is the default.
 
-Follow audio device mirrors a chosen audio endpoint's mute state. Picking it reveals an Audio device dropdown that lists the active input and output devices. The mute LED lights when that device is muted and turns off when it is unmuted.
+Follow Audio Device mirrors a chosen audio endpoint's mute state. Picking it reveals an **Audio Device** dropdown that lists the active input and output devices. The mute LED lights when that device is muted and turns off when it is unmuted.
 
 Each dropdown on this card has a one-click reset button. Player Pattern resets to Player Number, Mute LED Mode to Off, and LED Brightness to High.
 
@@ -204,7 +204,7 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 ## Tips
 
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
-- For Color Cycle, "Blend smoothly" looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.
+- For Color Cycle, Blend Smoothly looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.
 - Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.
 - The Audio Bands modes assume the two thresholds are in ascending order. Reversing them produces the wrong band selection.
 
@@ -218,4 +218,4 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

@@ -3900,7 +3900,7 @@
 </tr>
 <tr>
 <td><strong>Source</strong></td>
-<td>One or more physical inputs that drive this output. Pick by hand, use Record, or click <strong>+ Add source</strong> to add another. Sources get letter tags <strong>a</strong>, <strong>b</strong>, <strong>c</strong>, … in the order you add them.</td>
+<td>One or more physical inputs that drive this output. Pick by hand, use Record, or click <strong>+ Add Source</strong> to add another. Sources get letter tags <strong>a</strong>, <strong>b</strong>, <strong>c</strong>, … in the order you add them.</td>
 </tr>
 <tr>
 <td><strong>Value</strong></td>
@@ -3916,7 +3916,7 @@
 </tr>
 <tr>
 <td><strong>Options</strong></td>
-<td>Per-source controls: <strong>Invert</strong>, <strong>Half</strong>, <strong>Bidirectional</strong>, plus <strong>Flip Output</strong>, <strong>Do not inherit</strong>, <strong>Acceleration</strong>, and <strong>Sensitivity</strong> where they apply. Toggles that cannot act on the current source gray out. See <a href="#per-source-options">Per-source options</a>.</td>
+<td>Per-source controls: <strong>Invert</strong>, <strong>Half</strong>, <strong>Bidirectional</strong>, plus <strong>Flip Output</strong>, <strong>Do Not Inherit</strong>, <strong>Acceleration</strong>, and <strong>Sensitivity</strong> where they apply. Toggles that cannot act on the current source gray out. See <a href="#per-source-options">Per-source options</a>.</td>
 </tr>
 <tr>
 <td><strong>Axis-to-Button Deadzone</strong></td>
@@ -4012,7 +4012,7 @@
 <h2 id="multiple-sources-per-row">Multiple sources per row<a class="headerlink" href="#multiple-sources-per-row" title="Permanent link">&para;</a></h2>
 <p>A row can drive its output from any number of physical inputs, across any combination of assigned devices.</p>
 <h3 id="adding-sources">Adding sources<a class="headerlink" href="#adding-sources" title="Permanent link">&para;</a></h3>
-<p>Click <strong>+ Add source</strong> on any existing source to add another. The new source gets the next letter tag (<strong>a</strong> is the first, <strong>b</strong> the second, <strong>c</strong> the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.</p>
+<p>Click <strong>+ Add Source</strong> on any existing source to add another. The new source gets the next letter tag (<strong>a</strong> is the first, <strong>b</strong> the second, <strong>c</strong> the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.</p>
 <p>Each extra source renders as its own chip with the same controls the primary carries: a mode dropdown, the input picker, Record and Clear buttons, the option checkboxes, the sliders that apply to it, and a remove button that deletes the source outright.</p>
 <h3 id="per-source-options">Per-source options<a class="headerlink" href="#per-source-options" title="Permanent link">&para;</a></h3>
 <p>Each source carries its own settings:</p>
@@ -4057,7 +4057,7 @@
 <td>A per-source multiplier with a reset button, shown on five source families only: Gyro rate axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Gyro Lean X / Y (0.1–5.0, where 1.0 reaches full deflection at 90° of tilt), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view), and Mouse Motion (0.1–5.0). Gyro Tilt X / Y has no dial: its gain is the degree range on the <a href="../../guides/gyro/#rate-versus-tilt">Gyro tab's</a> Gyro Tilt card. Plain axis, slider, and Gamepad stick or trigger sources have no grid slider. Shape those on the <a href="../stick-deadzones/">Sticks tab</a>: gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier.</td>
 </tr>
 <tr>
-<td><strong>Do not inherit</strong></td>
+<td><strong>Do Not Inherit</strong></td>
 <td>Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See <a href="#shift-layers">Shift layers</a>.</td>
 </tr>
 </tbody>
@@ -4120,7 +4120,7 @@
 <h3 id="gyro-plus-stick-on-one-axis">Gyro plus stick on one axis<a class="headerlink" href="#gyro-plus-stick-on-one-axis" title="Permanent link">&para;</a></h3>
 <p>The most common multi-source row: the physical stick for coarse movement, gyro for fine aim, both driving the same axis.</p>
 <ol>
-<li>On the <strong>Right Stick X</strong> row, keep the stick source and click <strong>+ Add source</strong>.</li>
+<li>On the <strong>Right Stick X</strong> row, keep the stick source and click <strong>+ Add Source</strong>.</li>
 <li>Set the second source to <strong>Gyro Yaw</strong> (or <strong>Gyro Horizontal</strong>) for rate aiming, or <strong>Gyro Tilt X</strong> for tilt that holds.</li>
 <li>The <strong>Combine</strong> picker appears in the detail strip and auto-selects <strong>Strongest</strong>: whichever source pushes harder wins, so the stick takes over the moment you push it and gyro handles fine aim the rest of the time. Steam and DS4Windows arbitrate the same way.</li>
 <li>Repeat on <strong>Right Stick Y</strong> with <strong>Gyro Pitch</strong> or <strong>Gyro Tilt Y</strong>.</li>
@@ -4321,7 +4321,7 @@
 <p>Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources read the descriptor, then flip while the modifier is held. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button captures a kind's own inputs in sequence (Up, then Down).</p>
 <hr />
 <h2 id="activation-modes">Activation modes<a class="headerlink" href="#activation-modes" title="Permanent link">&para;</a></h2>
-<p>A mapping row is stateless: the output follows the source every frame, and nothing latches. Press-pattern behaviors like toggle and turbo belong to <a href="../../guides/macros/">Macros</a>, through each macro's <strong>Fire</strong> picker: <strong>On Press</strong>, <strong>On Release</strong>, <strong>While Held</strong>, <strong>Always</strong>, <strong>On Long Press</strong>, <strong>On Short Press</strong>, <strong>On Double Press</strong>, <strong>Toggle</strong> (the first press latches the actions on, the next press releases), and <strong>Turbo</strong> (the actions repeat at an interval while the trigger is held).</p>
+<p>A mapping row is stateless: the output follows the source every frame, and nothing latches. Press-pattern behaviors like toggle and turbo belong to <a href="../../guides/macros/">Macros</a>, through each macro's <strong>Fire</strong> picker: <strong>On Press</strong>, <strong>On Single Press</strong>, <strong>On Release</strong>, <strong>While Held</strong>, <strong>On Long Press</strong>, <strong>On Short Press</strong>, <strong>On Double Press</strong>, <strong>On Triple Press</strong>, <strong>Toggle</strong> (the first press latches the actions on, the next press releases), <strong>Turbo</strong> (the actions repeat at an interval while the trigger is held), <strong>Always</strong>, and <strong>Custom Expression</strong>.</p>
 <p>To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid.</p>
 <hr />
 <h2 id="modifiers">Modifiers<a class="headerlink" href="#modifiers" title="Permanent link">&para;</a></h2>
@@ -4372,9 +4372,9 @@
 <h2 id="shift-layers">Shift layers<a class="headerlink" href="#shift-layers" title="Permanent link">&para;</a></h2>
 <p>A shift layer is a second mapping table on the same slot, active only while a button is held, a chord is engaged, or an axis is past a threshold. Same outputs, different bindings. Useful for double-duty controllers (driving / on-foot, weapon swap, menu nav) without juggling profiles.</p>
 <p>Each slot can carry any number of shift layers, each with its own activator and its own row set.</p>
-<p>By default a layer <strong>replaces</strong> Base: targets without a row on the layer output nothing while the layer is active. Check <strong>Inherit Unmapped Targets From Base</strong> in the activator dialog to overlay instead, so unmapped targets fall through to Base. While you are editing an inheriting layer, a <strong>Do not inherit</strong> checkbox appears in each row's Options column to keep that one target off rather than falling through.</p>
+<p>By default a layer <strong>replaces</strong> Base: targets without a row on the layer output nothing while the layer is active. Check <strong>Inherit Unmapped Targets from Base</strong> in the activator dialog to overlay instead, so unmapped targets fall through to Base. While you are editing an inheriting layer, a <strong>Do Not Inherit</strong> checkbox appears in each row's Options column to keep that one target off rather than falling through.</p>
 <p>Activators can also wait for the release edge: the <strong>Fire on Release</strong> option flips the layer when the button is let go instead of when it is pressed (Toggle, Latch, Cycle, and Sticky modes).</p>
-<p>Right-click a layer pill for <strong>Configure activator…</strong>, <strong>Rename layer…</strong>, <strong>Copy layer rows</strong>, <strong>Paste rows into layer</strong>, <strong>Clear layer rows</strong>, and <strong>Delete layer</strong>. Copy and Paste move a whole layer's row set between layers, including across slots, and work on the Base pill too.</p>
+<p>Right-click a layer pill for <strong>Configure Activator…</strong>, <strong>Rename Layer…</strong>, <strong>Copy Layer Rows</strong>, <strong>Paste Rows into Layer</strong>, <strong>Clear Layer Rows</strong>, and <strong>Delete Layer</strong>. Copy and Paste move a whole layer's row set between layers, including across slots, and work on the Base pill too.</p>
 <p>See <a href="../../guides/shift-layers/">Shift Layers</a> for the full activator reference, mode list (Hold, Toggle, Latch, Cycle, Sticky, No Button), and per-layer options.</p>
 <hr />
 <h2 id="axis-to-button-deadzone">Axis-to-Button Deadzone<a class="headerlink" href="#axis-to-button-deadzone" title="Permanent link">&para;</a></h2>
@@ -4711,13 +4711,13 @@
 </tr>
 <tr>
 <td><strong>Clear All</strong></td>
-<td>Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, <strong>Acceleration</strong>, every <strong>Sensitivity</strong>, <strong>Do not inherit</strong>, <strong>Primary Mode</strong> back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping.</td>
+<td>Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, <strong>Acceleration</strong>, every <strong>Sensitivity</strong>, <strong>Do Not Inherit</strong>, <strong>Primary Mode</strong> back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping.</td>
 </tr>
 </tbody>
 </table>
 <p>Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together.</p>
 <p>The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.</p>
-<p>There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click <strong>Copy layer rows</strong> and <strong>Paste rows into layer</strong> (see <a href="#shift-layers">Shift layers</a>).</p>
+<p>There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click <strong>Copy Layer Rows</strong> and <strong>Paste Rows into Layer</strong> (see <a href="#shift-layers">Shift layers</a>).</p>
 <h3 id="cross-type-translation">Cross-type translation<a class="headerlink" href="#cross-type-translation" title="Permanent link">&para;</a></h3>
 <p>Copy From and Paste translate mappings between controller types automatically.</p>
 <table>
@@ -4829,7 +4829,7 @@
 <li><a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>: imported community configs are built from Gamepad sources.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

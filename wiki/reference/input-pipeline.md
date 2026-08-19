@@ -19,7 +19,7 @@ graph TD
         S3[Step 3: UpdateOutputStates<br/>MapInputToGamepad<br/>Deadzones + curves]
         S4[Step 4: CombineOutputStates<br/>Multi-device merge<br/>OR/MAX/magnitude rules]
         S4b[Step 4b: EvaluateMacros<br/>Trigger state machine<br/>Button/axis/volume/mouse]
-        S5[Step 5: UpdateVirtualDevices<br/>HIDMaestro lifecycle on thread pool<br/>Per-slot create/destroy/reorder<br/>Inactivity timeout + bubble-up cascade]
+        S5[Step 5: UpdateVirtualDevices<br/>HIDMaestro lifecycle on thread pool<br/>Per-slot create/destroy/reorder<br/>Inactivity timeout + bubble-down cascade]
         S6[Step 6: RetrieveOutputStates<br/>Copy for UI display]
         DS3[UpdateDs3PlayerNumber<br/>#191 bridged-DS3 player LED]
         RA[UpdateRumbleAudioLane<br/>#236 rumble-to-audio publish]
@@ -215,7 +215,12 @@ Post-init:
 1. Calls `LoadEmbeddedGamepadMappings()`. Reads the `gamecontrollerdb_padforge.txt` resource embedded in the single-file exe and applies each non-comment line via `SDL_AddGamepadMapping`. The file-path overload (`SDL_AddGamepadMappingsFromFile`) is unusable when the file ships inside the exe rather than as a loose file next to it. `EmbeddedMappingsLoaded` records the applied count for the About / Settings diagnostic
 2. Calls `SDL_EnableScreenSaver()`. SDL_INIT_VIDEO disables the screensaver by default
 3. Calls `SetThreadExecutionState(ES_CONTINUOUS)`. Clears execution-state flags so the PC can sleep
-4. Starts `Ds3DirectService` (Bluetooth DS3 behind BthPS3, no DsHidMini) so a raw-PDO DS3 surfaces as a virtual joystick to the normal pipeline
+4. Starts the side-band device services, each of which surfaces its hardware as a virtual joystick to the normal pipeline. Every one is wrapped in its own try/catch, so a failure logs and leaves the rest running:
+   - `Ds3DirectService` (Bluetooth DS3 behind BthPS3, no DsHidMini)
+   - A second `Ds3DirectService` with `navigation: true`. The PlayStation Navigation controller is a half sixaxis on the same BthPS3 stack (#277)
+   - `PsMoveDirectService`. The Move motion controller's own protocol lane, ZCM1 (49-byte report) and ZCM2 (44-byte) (#277). It also supplies `SdlDeviceWrapper.ExternalPowerInfoProvider` and `ExternalDevicePathProvider` alongside `Ds3DirectService`, because SDL has no power or path channel for virtual joysticks
+   - `SpaceMouseService`. 3Dconnexion 6DoF pucks, HID usage 0x08 Multi-axis Controller, invisible to SDL's raw-input backend (#288)
+   - `OpenVrConsumerService`. Headset pose and tracked controllers through a background OpenVR client, a 5 s registry-file poll until SteamVR exists and runs, and it never launches SteamVR itself (#287)
 
 **Error handling:** Catches `DllNotFoundException` (SDL3.dll missing) and generic exceptions. Raises `ErrorOccurred` but does not throw. `Start()` checks the return value and aborts on failure.
 
@@ -326,7 +331,7 @@ Drift-compensated hybrid sleep/spin-wait
 
 **Poll-frame gate:**
 
-`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 638) is called once per cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 1443). It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
+`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 647) is called once per cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 1557). It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
 
 **3-Tier Polling Sleep Strategy:**
 
@@ -392,14 +397,14 @@ The engine half of the "continue polling when window loses focus" setting. When 
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 14332), `MoveSlot(int, int)` (line 14365), and `MoveSlotToGroupTail(int)` (line 14412). Each mutates `SettingsManager.SlotOrders` for the new visual order, then routes through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point:
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 15416), `MoveSlot(int, int)` (line 15449), and `MoveSlotToGroupTail(int)` (line 15496). Each mutates `SettingsManager.SlotOrders` for the new visual order, then routes through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point:
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
     VirtualControllerType groupType, IReadOnlyList<int> oldOrder, IReadOnlyList<int> newOrder)
 ```
 
-`InputManager.Step5.VirtualDevices.cs` line 2523. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
+`InputManager.Step5.VirtualDevices.cs` line 2568. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
 
 - **Same profile at V**: reuse the kernel VC in place. The pad-index pointer in `_virtualControllers[]` moves so the new pad-at-position-V feeds V's kernel slot, and `FeedbackPadIndex` is updated on the surviving VC so the rumble callback writes the right `VibrationStates[]` entry. No teardown.
 - **Different profile at V**: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.
@@ -412,9 +417,9 @@ Same-profile cycles collapse to a pure pointer rotation across `_virtualControll
 private void UpdateMotionSnapshots()
 ```
 
-Called after Step 2 (`InputManager.cs` line 1466). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion.
+Called after Step 2 (`InputManager.cs` line 1580). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion.
 
-**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. `ResolveMotionSource` (`InputManager.cs` ~2836) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:
+**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. `ResolveMotionSource` (`InputManager.cs` ~2951) walks the rows for a target name and returns the first source whose owning device is online and, for gyro, has gyro capability:
 
 ```csharp
 var gyroSrc  = ResolveMotionSource(ms, MappingSetMigrator.MotionGyroTarget,  requireGyro: true,  padIndex);
@@ -505,7 +510,7 @@ private static extern uint SetThreadExecutionState(uint esFlags);
 
 **File:** `InputManager.Step1.UpdateDevices.cs`
 
-Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires `DevicesUpdated` on changes. It runs eight lettered phases in order:
+Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires `DevicesUpdated` on changes. It runs nine lettered phases in order:
 
 | Phase | Source |
 |---|---|
@@ -515,6 +520,7 @@ Enumerates connected devices at 2-second intervals (5-second in idle mode). Open
 | 1d | Precision touchpads, per hardware device |
 | 1e | Windows MIDI Services input endpoints (#128) |
 | 1f | NFC PC/SC readers (#150) |
+| 1f2 | Standalone Windows capture endpoints, the voice-macro microphones (#317) |
 | 1g | Sony headset head trackers (#188) |
 | 2 (and 2b, 2c) | Disconnect detection for each of the above |
 
@@ -585,7 +591,7 @@ Same pattern as keyboards using `SdlMouseWrapper`.
 
 **Enumerate Consumer Controls** via `EnumerateConsumerControls()`
 
-Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` ~238, ~241). `EnumerateConsumerControls` (~1143-1180) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
+Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` ~238, ~241). `EnumerateConsumerControls` (~1159-1196) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
 
 **Phase 1e: Enumerate MIDI inputs** via `UpdateMidiInputDevices()`
 
@@ -760,15 +766,15 @@ private void UpdateInputStates()
 
 **File:** `PadForge.Engine/Common/SdlDeviceWrapper.cs`
 
-The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. `SdlDeviceWrapper.GetCurrentState` (~708-773) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:
+The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. `SdlDeviceWrapper.GetCurrentState` (~740-806) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:
 
 | Source | Reader | Axes | Populates |
 |---|---|---|---|
-| Wii IR pointer (#146) | `ReadIrPointer` (~952-989) | 6-9 (two sensor-bar dots) | `CustomInputState.Ir` (~132): `Ir.X` / `Ir.Y` in `[-1, +1]`, `Ir.Detected` |
-| Right Joy-Con IR brightness (#151) | `ReadJoyConIr` (~939-950) | 6 (MCU average intensity) | `CustomInputState.JoyConIrIntensity` |
-| Joy-Con 2 mouse (#154) | `ReadJoyCon2Mouse` (~900-937) | 6/7 (16-bit position counters) | `CustomInputState.JoyCon2MouseDX` / `DY` (~149-150) |
-| Switch 2 magnetometer (#271 item 5) | `ReadSwitch2Magnetometer` (~883-898) | The three axes after the mouse pair | Wrapper-local fields only, deliberately not `CustomInputState` |
-| NFC tag reader (#241) | `ReadNfcTag` (~796-871) | Gamepad-layer, not an axis | `CustomInputState.NfcTag[]`, gated on `NfcArmedProvider` so the MCU stays off until a slot arms an NFC trigger. A held tag streams present, and the button releases `NfcPulseMs` (175 ms) after removal so a single-poll gap smooths into one clean momentary edge |
+| Wii IR pointer (#146) | `ReadIrPointer` (~997-1035) | 6-9 (two sensor-bar dots) | `CustomInputState.Ir` (~132): `Ir.X` / `Ir.Y` in `[-1, +1]`, `Ir.Detected` |
+| Right Joy-Con IR brightness (#151) | `ReadJoyConIr` (~984-996) | 6 (MCU average intensity) | `CustomInputState.JoyConIrIntensity` |
+| Joy-Con 2 mouse (#154) | `ReadJoyCon2Mouse` (~945-983) | 6/7 (16-bit position counters) | `CustomInputState.JoyCon2MouseDX` / `DY` (~149-150) |
+| Switch 2 magnetometer (#271 item 5) | `ReadSwitch2Magnetometer` (~928-944) | The three axes after the mouse pair | Wrapper-local fields only, deliberately not `CustomInputState` |
+| NFC tag reader (#241) | `ReadNfcTag` (~841-927) | Gamepad-layer, not an axis | `CustomInputState.NfcTag[]`, gated on `NfcArmedProvider` so the MCU stays off until a slot arms an NFC trigger. A held tag streams present, and the button releases `NfcPulseMs` (175 ms) after removal so a single-poll gap smooths into one clean momentary edge |
 
 `ReadIrPointer` averages the two detected dots, mirrors X (not Y), and normalizes the 1024x768 camera frame to the stick range. Pointer-tab tuning (sensor-bar offset, smoothing) is applied later at the slot-scoped `SourceCoercion.ReadTunedIrPointer`, not here, because one remote can feed several slots. `ReadJoyCon2Mouse` turns the absolute 16-bit counters into signed per-poll deltas with wraparound, priming its previous value on the first poll so connect emits no spurious jump. All three fields are per device, so two remotes or Joy-Cons on one slot stay independent.
 
@@ -850,7 +856,7 @@ bool idle = ud.CapType == InputDeviceType.Gamepad
 
 Routing sits on the force-feedback write path, not the input-mapping path. It reads the same per-slot main-motor amplitudes Step 2's [Force Feedback](#force-feedback) already resolved and injects a derived value into the trigger output. The math lives in `InputManager.cs` (`UpdateTriggerRouteEngageStates`, `ParseRouteSource`, `RouteSideActive`, `ParseRouteScale`, `ApplyTriggerRouting`, `RouteMain`, `MarkRedirect`, `SettleRouteActivator`, `ApplyTriggerRoutingForSony`, `GetTriggerRouteMainRedirect`). The Xbox physical write applies it in `InputManager.Step2.UpdateInputStates.cs`. The Sony (DS4 / DualSense) write applies it through `InputService.SlotImpulseTriggerForDeviceProvider`, which feeds `UserEffectsDispatcher`.
 
-State settles once per poll. `PollingLoop()` calls `UpdateTriggerRouteEngageStates()` at line 1464, right after `UpdateInputStates()` and `UpdateGyroEngageStates()`. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.
+State settles once per poll. `PollingLoop()` calls `UpdateTriggerRouteEngageStates()` at line 1578, right after `UpdateInputStates()` and `UpdateGyroEngageStates()`. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.
 
 ### Route Source
 
@@ -903,7 +909,7 @@ The per-trigger Scale slider is an integer percent string in `0..200`, parsed to
 private void UpdateTriggerRouteEngageStates()
 ```
 
-Runs once per poll across all 16 slots (`InputManager.cs` ~1973–2064). For each created slot:
+Runs once per poll across all 16 slots (`InputManager.cs` ~2088–2179). For each created slot:
 
 1. Under `UserSettings.SyncRoot`, pick the **first** UserSetting mapped to the slot whose left or right side passes `RouteSideActive`. A slot with no active route source clears `TriggerRouteEngagedLeft/Right[slot]`, the edge-detection scratch (`_prevTriggerRouteLeftDown/RightDown`), and `_routeSourceLeft/Right[slot]`, then continues.
 2. Resolve and cache the per-side source byte (`ParseRouteSource`, zeroed when that side fails `RouteSideActive`), scale (`ParseRouteScale` into `_routeScaleLeft/Right`), and Redirect flag.
@@ -935,7 +941,7 @@ private void ApplyTriggerRouting(int slot, ushort mainL, ushort mainR,
     out ushort routedLeft, out ushort routedRight, out bool zeroMainL, out bool zeroMainR)
 ```
 
-Given a slot's post-gain main-motor amplitudes, it emits the routed trigger amplitudes plus flags for which main motors to silence (`InputManager.cs` ~2094–2117). For each engaged side it calls `RouteMain(source, scale, mainL, mainR)` and, when Redirect is set, `MarkRedirect`:
+Given a slot's post-gain main-motor amplitudes, it emits the routed trigger amplitudes plus flags for which main motors to silence (`InputManager.cs` ~2209–2228). For each engaged side it calls `RouteMain(source, scale, mainL, mainR)` and, when Redirect is set, `MarkRedirect`:
 
 ```csharp
 private static ushort RouteMain(byte source, double scale, ushort mainL, ushort mainR)
@@ -998,9 +1004,9 @@ internal void ApplyTriggerRoutingForSony(int slot, PadSetting devicePs, Vibratio
 internal void GetTriggerRouteMainRedirect(int slot, out bool zeroMainL, out bool zeroMainR)
 ```
 
-`ApplyTriggerRoutingForSony` (`InputManager.cs` ~2149–2161) takes caller-owned scratch `Vibration` instances to stay off the input thread's buffers. It rebuilds the main-motor amplitude the same way the Sony main-rumble provider does (`MacroRumbleOverride.Merge` -> `ConstantForceEvaluator.Resolve` -> `ScaleRumbleForDevice`), runs `ApplyTriggerRouting`, and max-combines the routed amplitudes into the caller's `triggerL` / `triggerR`. `GetTriggerRouteMainRedirect` reports whether engaged Redirect routing should silence each physical DualSense main motor. The game-facing virtual-controller state is left untouched.
+`ApplyTriggerRoutingForSony` (`InputManager.cs` ~2264–2275) takes caller-owned scratch `Vibration` instances to stay off the input thread's buffers. It rebuilds the main-motor amplitude the same way the Sony main-rumble provider does (`MacroRumbleOverride.Merge` -> `ConstantForceEvaluator.Resolve` -> `ScaleRumbleForDevice`), runs `ApplyTriggerRouting`, and max-combines the routed amplitudes into the caller's `triggerL` / `triggerR`. `GetTriggerRouteMainRedirect` reports whether engaged Redirect routing should silence each physical DualSense main motor. The game-facing virtual-controller state is left untouched.
 
-The dispatcher reaches these through `InputService.SlotImpulseTriggerForDeviceProvider` (`InputService.cs` ~948–1020). That provider deliberately carries **no output-VC gate**:
+The dispatcher reaches these through `InputService.SlotImpulseTriggerForDeviceProvider` (`InputService.cs` ~993–1060). That provider deliberately carries **no output-VC gate**:
 
 ```csharp
 UserEffectsDispatcher.SlotImpulseTriggerForDeviceProvider = (padIndex, deviceGuid) =>
@@ -1022,7 +1028,7 @@ Game-written impulse triggers only ever arrive on Xbox-class VCs, so `raw.*Trigg
 
 ### PadSetting Fields
 
-Twelve string fields on `PadSetting` back the feature (`PadSetting.cs` ~441–480), all serialized as `[XmlElement]`, included in `ComputeChecksum`, and listed in the dirty-tracking allowlist:
+Twelve string fields on `PadSetting` back the feature (`PadSetting.cs` ~440–478), all serialized as `[XmlElement]`, included in `ComputeChecksum`, and listed in the dirty-tracking allowlist:
 
 | Field (Left / Right) | Default | Meaning |
 |---|---|---|
@@ -1349,11 +1355,18 @@ Six deadzone shapes, selected via `PadSetting.LeftThumbDeadZoneShape` / `RightTh
 | `SlopedScaledAxial` | Same + rescale from `[effDz, mr]` to `[0, 1]` | Cardinal lock without jump |
 | `Hybrid` | Stage 1: Scaled Radial (center noise removal) then Stage 2: Sloped Scaled Axial (cardinal precision) | Best of both approaches |
 
-**Post-deadzone pipeline** (per-axis, all shapes):
-1. **Sensitivity curve**: `CurveLut.Lookup(lut, remapped)`. Transforms [0,1] value through a user-defined response curve
-2. **Anti-deadzone**: `output = adzNorm + remapped * (1.0 - adzNorm)`. Offsets output minimum so small movements register past the game's internal deadzone
-3. **Linear adjustment**: `output = remapped * linearFactor + output * (1.0 - linearFactor)`. Blends raw linear and anti-deadzone-adjusted output
-4. **Scale and clamp**: `sign * output * 32767.0`, clamped to `short` range
+**Post-deadzone pipeline.** `Axial` runs the per-axis `ApplySingleDeadZone`, which is unchanged: curve, then `output = adzNorm + remapped * (1.0 - adzNorm)`, then linear, then `sign * output * 32767.0` clamped to `short`.
+
+The five shaped paths run `ApplyPostDeadZone`, and since 4.3.0 (#330) their anti-deadzone floors the stick **pair** by radial magnitude rather than each axis on its own:
+
+1. **Sensitivity curve**, per axis, and only past the deadzone gate (`rem > 0`). An authored curve may carry a point at x=0 with y > 0, so looking it up at rest would reopen the rest drift the guard exists to stop
+2. **Pair magnitude**: `pairMag = sqrt(remLutX^2 + remLutY^2)`, taken post-curve so the floor stays exact at every curve
+3. **Ramp factor**: the raw pair's elliptical distance `sqrt((nx/dzX)^2 + (ny/dzY)^2)`, clamped at 1, scaling the configured anti-deadzone. Outside the deadzone ellipse it is 1 and the floor is the plain radial floor. Inside it scales down linearly, so a Sloped shape's center passthrough cannot snap to 20% of range the moment a pull crosses the ellipse. Both axes at zero deadzone ramp at full strength
+4. **Radial floor** per axis: the vector magnitude maps `pairMag -> adz + pairMag * (1 - adz)` with direction preserved, computed as `remapped * ((adzNorm + pairMag * (1 - adzNorm)) / pairMag)`. On-axis (`pairMag <= remapped`) it collapses to the scalar formula so single-axis output is bit-identical to the pre-#330 pipeline, and at or past full deflection the floor adds nothing. `remapped <= 0` returns 0 outright, anti-deadzone or not
+5. **Linear adjustment**: `output = remapped * linearFactor + floored * (1.0 - linearFactor)`
+6. **Scale and clamp**: `sign * output * 32767.0`, clamped to `short` range
+
+Flooring each axis alone forbade the band (0, anti) per axis, which cut wedge-shaped gaps out of a slow circle at every cardinal: the minor axis jumped from `-anti` to `+anti` as it crossed zero.
 
 **Independent max range:** Each axis has separate positive and negative values. Input sign selects: `nx >= 0 ? maxRangeX : maxRangeXNeg`. Allows asymmetric stick range (e.g., less travel in one direction).
 
@@ -1365,12 +1378,13 @@ private static ushort ApplyTriggerDeadZone(ushort value, double deadZone, double
 ```
 
 1. Normalize to 0.0–1.0
-2. Deadzone: values below threshold zeroed
-3. Max range: cap input ceiling
-4. Remap from `[dzNorm, maxNorm]` to `[0, 1]`
-5. Sensitivity curve LUT (if provided)
-6. Anti-deadzone: offset output minimum
-7. Scale to 0–65535 and clamp
+2. Zero guard: a released trigger (`norm <= 0`) returns 0 before anything else. With the shipped `deadZone == 0` default the strict `<` below never fired, so an anti-deadzone shipped a permanent phantom pull while the preview showed zero (#330 audit)
+3. Deadzone: values below threshold zeroed
+4. Max range: cap input ceiling
+5. Remap from `[dzNorm, maxNorm]` to `[0, 1]`
+6. Sensitivity curve LUT (if provided)
+7. Anti-deadzone: offset output minimum
+8. Scale to 0–65535 and clamp
 
 ### Raw Value Extraction
 
@@ -1396,7 +1410,7 @@ internal static void MapInputToExtendedRaw(ref RawHidState raw,
     MappingSet mappingSet, string thisDeviceGuid, int slotIndex)
 ```
 
-`InputManager.Step3.UpdateOutputStates.cs` line 2197. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned `raw` (the per-setting `us.RawHidScratch`), starting with `raw.Clear()` so POVs begin centered. The caller republishes into `us.RawHidOutputState` only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (`ps.GetExtendedMapping("ExtendedAxis0")`, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from `CustomControllerLayout`. The trailing `mappingSet` / `thisDeviceGuid` / `slotIndex` arguments hand the v3.2 `MappingSet` evaluator the context it needs to resolve multi-source rows that target Extended channels.
+`InputManager.Step3.UpdateOutputStates.cs` line 2273. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned `raw` (the per-setting `us.RawHidScratch`), starting with `raw.Clear()` so POVs begin centered. The caller republishes into `us.RawHidOutputState` only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (`ps.GetRawMapping("RawAxis0")`, etc.) instead of fixed gamepad field names. Supports arbitrary axis/button/POV counts from `CustomControllerLayout`. The trailing `mappingSet` / `thisDeviceGuid` / `slotIndex` arguments hand the v3.2 `MappingSet` evaluator the context it needs to resolve multi-source rows that target Extended channels.
 
 - **Axes**: Uses `MapToThumbAxisWithNeg` for each axis (signed short range). No `NegateAxis` needed. Unlike the gamepad path, the raw path has no second inversion in `SubmitRawState`.
 - **Buttons**: Uses `MapToButtonPressed` for each button, sets via `raw.SetButton(i, true)`
@@ -1498,7 +1512,7 @@ This matches the gyro source, which is read by its own tuned reader (`ReadTunedG
 
 ### 3.6.0 device-family sources
 
-The 3.6.0 device work added four `SourceType` values to `SourceCoercion.SourceType` (`SourceCoercion.cs` ~24-167), each a first-class `MappingSource` resolved through the same multi-source row machinery as Mouse Position:
+The 3.6.0 device work added four `SourceType` values to `SourceCoercion.SourceType` (`SourceCoercion.cs` ~24-174), each a first-class `MappingSource` resolved through the same multi-source row machinery as Mouse Position:
 
 | `SourceType` | Descriptor strings | Read from | Range |
 |---|---|---|---|
@@ -1507,7 +1521,7 @@ The 3.6.0 device work added four `SourceType` values to `SourceCoercion.SourceTy
 | `JoyConIr` (#151) | `"IR Brightness"` | `CustomInputState.JoyConIrIntensity` (per device) | unipolar `[0, 1]` |
 | `JoyCon2Mouse` (#154) | `"Mouse Motion X"` / `"Mouse Motion Y"` | `CustomInputState.JoyCon2MouseDX` / `DY` (per device) | bipolar `[-1, +1]` per-poll velocity |
 
-`ClassifyDescriptor` (`SourceCoercion.cs` ~1130-1219) matches these prefixes in order after the `Mouse Position ` check: `Mouse Motion ` → `JoyCon2Mouse`, `Mouse Gesture ` → `MouseGesture`, `IR Pointer ` → `IrPointer`, exact `IR Offscreen` → `IrOffscreen`, exact `IR Brightness` → `JoyConIr`, `Balance ` → `BalanceBoard`, then `Midi `. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. `IrPointer` is read through its own tuned, slot-scoped reader `ReadTunedIrPointer` (sensor-bar offset and smoothing are per-slot Pointer-tab settings), the same pattern as `ReadTunedMouseCursor` and `ReadTunedGyroRate`.
+`ClassifyDescriptor` (`SourceCoercion.cs` ~1188-1279) matches these prefixes in order after the `Mouse Position ` check: `Mouse Motion ` → `JoyCon2Mouse`, `Mouse Gesture ` → `MouseGesture`, `IR Pointer ` → `IrPointer`, exact `IR Offscreen` → `IrOffscreen`, exact `IR Brightness` → `JoyConIr`, `Balance ` → `BalanceBoard`, then `Midi `. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. `IrPointer` is read through its own tuned, slot-scoped reader `ReadTunedIrPointer` (sensor-bar offset and smoothing are per-slot Pointer-tab settings), the same pattern as `ReadTunedMouseCursor` and `ReadTunedGyroRate`.
 
 ---
 
@@ -1713,7 +1727,7 @@ For each slot (0–15):
 1. Read `MacroSnapshots[i]`. If null or empty, skip
 2. Delegate to type-specific evaluator:
    - `EvaluateSlotMacros(ref Gamepad, MacroItem[])` for standard slots (Xbox / PlayStation / Gamepad-preset Extended / KBM)
-   - `EvaluateSlotMacrosCustomExtended(ref RawHidState, MacroItem[])` for custom Extended slots (operates on `uint[]` button words instead of `ushort` Gamepad.Buttons)
+   - `EvaluateSlotMacrosExtended(ref RawHidState, MacroItem[])` for raw-surface slots (operates on `uint[]` button words instead of `ushort` Gamepad.Buttons)
 
 After the per-slot pass, `CollectMenuDirectOutputs()` delivers menu direct bindings, then `ReconcileLatchedKeys()` settles the frame's latched-key set once for all slots (both below).
 
@@ -1852,7 +1866,12 @@ public enum MacroActionType
     AxisScale = 51,        // Proportional scale on a VC axis while engaged (#251)
     // Appended in 4.2.0
     HeadphoneVolumeUp = 52,  // Raise DeviceSlotConfig.HeadphoneVolume by 10%, clamped at 100
-    HeadphoneVolumeDown = 53 // Lower it by 10%, clamped at 0
+    HeadphoneVolumeDown = 53, // Lower it by 10%, clamped at 0
+    // Appended in 4.3.0
+    VoiceListenWhileHeld = 54 // Voice-macro push-to-talk (#315): holds the recognizer's
+                              // listen gate open. Continuous, parameterless, and the gate
+                              // is a decaying heartbeat, so a macro that dies mid-hold
+                              // closes it about 100 ms later instead of latching on
 }
 ```
 
@@ -1899,7 +1918,7 @@ The macro QOL work (#112) moved copy, paste, and duplicate onto a shared seriali
 
 #### Macro clipboard codec (#112)
 
-Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (~4413):
+Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (~4558):
 
 ```csharp
 public sealed class MacroClipboardEnvelope
@@ -1927,15 +1946,15 @@ Copy uses only the serialize half. Paste and Duplicate run the full roundtrip an
 
 | Path | Site | Flow |
 |---|---|---|
-| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` ~7320) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
-| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` ~7379) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount)` -> set `PadIndex` -> add |
-| Duplicate | `_duplicateMacroCommand` (`PadViewModel.cs` ~4722) | `BuildMacroDataForMacro` -> `LoadMacroFromData` -> set `PadIndex` + copy name |
+| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` ~7533) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
+| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` ~7592) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount)` -> set `PadIndex` -> add |
+| Duplicate | `_duplicateMacroCommand` (`PadViewModel.cs` ~4952) | `BuildMacroDataForMacro` -> `LoadMacroFromData` -> set `PadIndex` + copy name |
 
 Because `LoadMacroFromData` rebinds button naming and count to the destination, copying an Xbox-slot macro into an Extended slot relabels its button targets for that slot rather than carrying the source slot's layout.
 
 #### Cursor-write macro actions (#108 / #109 / #110)
 
-Three `MacroActionType` members drive the desktop cursor. They are handled in `ExecuteSequentialAction` (the standard-slot path, ~2184) and mirrored in `ExecuteSequentialActionRaw` (the custom-Extended path, ~4370), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: it calls into `CursorControlService.Active` (the running service, null while the engine is stopped) and then `AdvanceAction(macro)`, so with an `OnPress` trigger it fires once per press.
+Three `MacroActionType` members drive the desktop cursor. They are handled in `ExecuteSequentialAction` (the standard-slot path, ~2329) and mirrored in `ExecuteSequentialActionRaw` (the custom-Extended path, ~4541), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: it calls into `CursorControlService.Active` (the running service, null while the engine is stopped) and then `AdvanceAction(macro)`, so with an `OnPress` trigger it fires once per press.
 
 | `MacroActionType` | Service call | Behavior |
 |---|---|---|
@@ -1955,7 +1974,7 @@ Because the pin/clamp writes and the source sample run on this one thread in tha
 
 #### Slot device fire-guard (`FindSlotDeviceByInstanceGuid`)
 
-A macro must fire only from a device assigned to its own slot. `FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)` (`InputManager.Step4b.EvaluateMacros.cs:1546`) enforces this with two checks before returning a device:
+A macro must fire only from a device assigned to its own slot. `FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)` (`InputManager.Step4b.EvaluateMacros.cs:1554`) enforces this with two checks before returning a device:
 
 1. `SettingsManager.FindSettingByInstanceGuidAndSlot(instanceGuid, slotIndex)` must be non-null, confirming the device is assigned to this macro's slot.
 2. `FindOnlineDeviceByInstanceGuid(instanceGuid)` must resolve an online device, after which the trigger checks additionally require a live `InputState` with a `Buttons` / `Povs` array.
@@ -1983,7 +2002,8 @@ Uses Windows Core Audio COM (`IAudioEndpointVolume.SetMasterVolumeLevelScalar`).
 | OSD trigger | Net-zero `VK_VOLUME_UP` + `VK_VOLUME_DOWN` pair to show Windows flyout, rate-limited to ~5 Hz |
 | Correction window | Corrects for 150 ms after OSD to counteract async VK_VOLUME drift (~2%) |
 | Lazy init | COM endpoint created on first call, cached thereafter |
-| Permanent failure | If COM init fails, sets `_audioEndpointFailed = true` and stops trying |
+| Failure backoff | A COM failure drops the cached endpoint and sets `_audioEndpointRetryAtMs` to now plus `AudioComRetryCooldownMs` (2000 ms). It is a retry deadline, not a permanent latch: audio-service restarts and default-device switches are transient, and dropping the interface makes the retry re-resolve the current default endpoint |
+| Landed-write stamp | `_lastSetVolume` is recorded only after the COM write returns, so a skipped or throwing write does not register the target as applied and get swallowed by the dedup at the top |
 
 ### Per-App Volume Control
 
@@ -2048,7 +2068,7 @@ public enum SwitchProfileMode
 
 **File:** `InputManager.Step5.VirtualDevices.cs`
 
-Submits combined gamepad states to virtual controllers via `HMController.SubmitState` (gamepad path) and `HMController.SubmitRawReport` (Sony Report 0x01 passthrough on DS4 / DualSense, plus Extended raw HID), plus `MidiVirtualController` and `KeyboardMouseVirtualController` for the non-HM categories. Manages VC lifecycle: creation, destruction, type changes, activity tracking, and the inactivity-destroy + bubble-up cascade documented in [HIDMaestro Deep Dive](hidmaestro-deep-dive.md). HM lifecycle (create / destroy) is dispatched to the thread pool so the polling thread does not block on driver IPC.
+Submits combined gamepad states to virtual controllers via `HMController.SubmitState` (gamepad path) and `HMController.SubmitRawReport` (Sony Report 0x01 passthrough on DS4 / DualSense, plus Extended raw HID), plus `MidiVirtualController` and `KeyboardMouseVirtualController` for the non-HM categories. Manages VC lifecycle: creation, destruction, type changes, activity tracking, and the inactivity-destroy + bubble-down cascade documented in [HIDMaestro Deep Dive](hidmaestro-deep-dive.md). HM lifecycle (create / destroy) is dispatched to the thread pool so the polling thread does not block on driver IPC.
 
 ### Method Signature
 
@@ -2066,12 +2086,12 @@ private void UpdateVirtualDevices()
 
 | Field | Type | Description |
 |---|---|---|
-| `_hmContext` | `static HMContext` | Shared HIDMaestro context (one per process), lazy-initialized |
-| `_hmContextLock` | `static object` | Lock for double-checked lazy init |
+| `_hmaestroContext` | `static HMContext` | Shared HIDMaestro context (one per process), lazy-initialized |
+| `_hmaestroContextLock` | `static object` | Lock for double-checked lazy init |
+| `_hmaestroContextFailed` | `static bool` | Sticky: a failed init is not retried for the process lifetime |
 | `_virtualControllers` | `IVirtualController[MaxPads]` | VC instances per slot; `null` = no VC |
 | `SlotControllerTypes` | `VirtualControllerType[MaxPads]` | Type per slot. UI writes at 30 Hz, Step 5 reads at ~1000 Hz. |
 | `SlotCustomLayouts` | `CustomControllerLayout[MaxPads]` | Per-slot HID descriptor layout (axes, buttons, POVs, FFB) for Extended Custom profile |
-| `SlotExtendedIsCustom` | `bool[MaxPads]` | true = HM Custom-profile path (raw descriptor), false = catalog profile (preset path) |
 | `SlotExtendedCustomize` | `bool[MaxPads]` | Per-slot Customize toggle: when true the catalog profile is overridden with the user's `SlotCustomLayouts[]` shape |
 | `SlotExtendedFfbEnabled` | `bool[MaxPads]` | Per-slot toggle for the HID PID FFB descriptor block |
 | `_midiConfigs` | `MidiSlotConfig[MaxPads]` | Per-slot MIDI config snapshot |
@@ -2268,7 +2288,7 @@ Three concurrent threads:
 **Synchronization mechanisms:**
 - `SyncRoot` locks on `UserDevices`/`UserSettings` for collection access
 - Single-word `SlotControllerTypes[]` writes (torn-write-safe on x64) coordinate the UI's reorder with the polling thread's read
-- `_hmContextLock` for double-checked lazy init of the shared `HMContext`
+- `_hmaestroContextLock` for double-checked lazy init of the shared `HMContext`
 - `volatile` on `_running`/`_idle` for cross-thread visibility
 - Atomic reference swaps for `ud.InputState` and `MacroSnapshots[i]`
 - Struct value copies for `Gamepad` and small value types (word-aligned, atomic on x64)
@@ -2463,4 +2483,4 @@ The concrete device identity (Xbox 360 Wired, DualSense, Logitech G920, ...) is 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

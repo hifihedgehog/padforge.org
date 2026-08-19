@@ -4,11 +4,12 @@
 
 The user-facing page is [Headset Head Tracking](../features/headset-motion.md). This one is for whoever has to change the code.
 
-Two files carry it:
+Four files carry it:
 
 | File | Role |
 |---|---|
-| `PadForge.App/Common/Input/HeadTrackerHid.cs` | The HID usage constants |
+| `PadForge.App/Common/Input/HeadTrackerHid.cs` | The HID usage constants and the pure descriptor decode |
+| `PadForge.App/Common/Input/HeadTrackerMath.cs` | `AngularRateFromRotationVectors`, the rotation-to-rate math |
 | `PadForge.App/Common/Input/SonyHeadsetHid.cs` | Descriptor probe, marker check, feature-report setup |
 | `PadForge.App/Common/Input/SonyHeadsetMotionDevice.cs` | The device itself: parse, synthesize, publish |
 
@@ -56,9 +57,11 @@ bool hasGyroUsage = false;
 _synthesizeGyro = !hasGyroUsage;
 ```
 
-When the descriptor exposes no gyro usage, the rate is **synthesized from consecutive rotation vectors** using `_prevRotation` and `_prevRotationTicks`. Mappings downstream receive an ordinary gyro rate and need no headset-specific handling anywhere in the pipeline.
+When the descriptor exposes no gyro usage, the rate is **synthesized from consecutive rotation vectors** using `_prevRotation` and `_prevRotationTicks` (`SynthesizeGyroFromRotation`, which calls `HeadTrackerMath.AngularRateFromRotationVectors`). Mappings downstream receive an ordinary gyro rate and need no headset-specific handling anywhere in the pipeline.
 
-If a firmware exposes the rotation vector but no gyro and the synthesis path is disabled, there is nothing to fall back to. That combination is guarded rather than left to produce silence.
+Parse time is not the only decision point. A descriptor that does expose a gyro usage but streams an all-zero word falls back to synthesis at runtime, and that fallback is **revocable in both directions**: one nonzero sample marks the field live (`_gyroFieldLive`), and a sustained zero run of `GyroZeroRunToRevoke` samples hands the lane back to rotation. A one-way latch here meant a single startup artifact disabled synthesis for the life of the device object.
+
+A descriptor carrying neither a gyro usage nor a rotation vector has nothing this source can serve, so `Open` fails it outright rather than attaching a device that would publish silence.
 
 Accelerometer is advertised **only when the descriptor exposes it**. Some firmware reports orientation without it, and claiming otherwise would put a dead source in the picker.
 
@@ -104,4 +107,4 @@ The picker label is **Gyro Horizontal (Yaw + Roll)**, verbatim from `Strings.res
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

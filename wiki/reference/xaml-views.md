@@ -6,7 +6,7 @@
 
 ---
 
-All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` (`CurveEditor`, `TriggerTravelArc`) and `PadForge.App/Views/Controls/` (`LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph`). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
+All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` (`CurveEditor`, `TriggerTravelArc`, plus the code-only `RangeSlider`) and `PadForge.App/Views/Controls/` (`LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph`). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
 
 ## Contents
 
@@ -630,6 +630,8 @@ Grid (4 rows, x:Name="MappingDataGrid" at Row 3)
 │   ├─ "Copy From" Button (CopyFromCommand)
 │   ├─ "Map All" Button (MapAllButtonText, Click=MapAllToggle_Click)
 │   ├─ "Add Layer" Button (AddShiftLayerButton, Click=AddShiftLayer_Click)
+│   ├─ MappingFilterSearchBox (ui:TextBox, MappingInputSearch, find-as-you-type)
+│   ├─ MappingDeviceFilterToggle (Filter24 funnel) + Popup (PickerDeviceFilterEntries checkboxes)
 │   ├─ Hint text (italic, secondary brush)
 │   └─ "Clear All" Button (far end, EmberDestructiveButton, Click=ClearAllMappings_Click → ConfirmDialog)
 ├─ Row 1 (Auto): ShiftLayerTabStrip (nested layer tabs bound to LayerTabs, hidden when only Base)
@@ -656,6 +658,16 @@ Grid (4 rows, x:Name="MappingDataGrid" at Row 3)
 **Options Column:**
 - `Invert` CheckBox. `IsInverted` binding.
 - `Half` CheckBox. `IsHalfAxis` binding.
+
+**Picker Filter (#322):**
+One search box and one device-visibility popup filter the slot's shared choice view, so every picker on the tab reflects them when opened. Ctrl+F focuses the box through `MappingsTabRoot_PreviewKeyDown` on the tab root.
+
+- `MappingInputSearch` is find-as-you-type and session-only, never persisted. Its setter calls `ApplyMappingPickerFilter()`.
+- The search also **filters the grid rows**, not just the dropdown contents: `RowMatchesSearch` matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.
+- `PickerDeviceFilterEntries` drives the popup's per-device checkboxes. `HiddenPickerDeviceKeys` (device guids plus `"any"` for the device-agnostic group) persists per slot in the settings root, not in profiles.
+- `MappingPickerFilterActive` is true while either filter narrows the list, so the funnel reads as engaged.
+
+A view filter changes what a dropdown OFFERS, never what a row's binding holds.
 
 ### Sticks Tab (Tab 3). Detailed
 
@@ -691,6 +703,8 @@ ScrollViewer
                   │   │   ├─ Radial/ScaledRadial: red ellipse
                   │   │   ├─ Sloped/SlopedScaled: yellow wedges (SlopedWedgeGeometryConverter)
                   │   │   └─ Hybrid: yellow wedges + red circle center
+                  │   ├─ Anti-deadzone ring (thin ember `#80FF6B2C` ellipse at the
+                  │   │  output-floor radius, collapsed while both axes sit at 0)
                   │   └─ Cold-blue stick position dot (9px, `#FF58B6E4`, NormToCanvasConverter)
                   ├─ RawDisplay text (centered, wrapping)
                   └─ CurveEditor pair (X-axis + Y-axis, 96px each)
@@ -1001,6 +1015,7 @@ Grid (Margin="24,16")
 | `ShowIdleDisconnect` | Power section visibility (wireless controllers, #162) |
 | `IdleDisconnectMinutes` | Idle-disconnect countdown minutes |
 | `ShowRegisterNfcTag` | Register/Manage NFC Tags button visibility (#150) |
+| `ShowManageVoicePhrases` | Manage Voice Macros button visibility (#317): a standalone microphone row, or a DualSense / DualSense Edge over Bluetooth where the pad itself carries the phrases. Never for a `peer://` path, since recognition runs on the owner |
 | `RawAxes` | Axis ProgressBar items |
 | `RawButtons` | Button circle items |
 | `IsKeyboardDevice` / `IsMouseDevice` | Switches between button circles, keyboard canvas, or mouse graphic |
@@ -1010,7 +1025,7 @@ Grid (Margin="24,16")
 | `GyroX/Y/Z` / `AccelX/Y/Z` / `AccelAuxX/Y/Z` | Motion sensor values (aux accel is #199, aux gyro is #252) |
 | `HasTouchpadData` / `TouchpadLabel` | Touchpad preview visibility and caption |
 
-The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC and Consumer previews do the same: `IsNfcDevice` / `NfcTags` and `IsConsumerDevice` / `ConsumerButtons`. `ShowRegisterNfcTag`, `ShowIdleDisconnect`, and `IdleDisconnectMinutes` are `SelectedDevice`-scoped and bind through the `SelectedDevice.` prefix.
+The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC, Voice, and Consumer previews do the same: `IsNfcDevice` / `NfcTags`, `ShowVoicePhrases` / `VoicePhrases` (#317, the voice twin of the NFC tag rows), and `IsConsumerDevice` / `ConsumerButtons`. `ShowRegisterNfcTag`, `ShowIdleDisconnect`, and `IdleDisconnectMinutes` are `SelectedDevice`-scoped and bind through the `SelectedDevice.` prefix.
 
 ### Selection Highlighting
 
@@ -1030,6 +1045,7 @@ Custom `ListBoxItem` `ControlTemplate`:
 | `SubmitMapping_Click` | Button.Click | Opens browser to GitHub issue template with device info pre-filled |
 | `CopyDossier_Click` | Button.Click | Copies the device dossier's token rows to the clipboard |
 | `RegisterNfcTag_Click` | Button.Click | Opens `RegisterNfcTagDialog` for the selected NFC reader (#150) |
+| `ManageVoicePhrases_Click` | Button.Click | Opens `RegisterVoicePhraseDialog` for the selected microphone-carrying device (#317) |
 | `IdleDisconnect_LostFocus` | TextBox.LostFocus | Applies the clamped idle-disconnect minutes (#162) |
 | `DeviceCard_MouseDown` | PreviewMouseLeftButtonDown | Records drag start position. Skips if inside a Button |
 | `DeviceCard_MouseMove` | PreviewMouseMove | Initiates `DragDrop.DoDragDrop` with `DeviceInstanceGuid` data when threshold exceeded |
@@ -1455,6 +1471,7 @@ During the Initializing phase, `StatusIcon` plays a `DoubleAnimation` opacity fl
 | `CheckInitState` | `Func<(bool anyInitializing, bool allReady)>`. Set by `InputService` |
 | `CheckAnyOffline` | `Func<bool>`. Set by `InputService` |
 | `ShowProfileName(string name)` | Resets state, shows profile name, starts the state machine |
+| `ShowVCsToggle(bool enabled)` | One-shot toast for the master virtual-controller toggle, outside the profile state machine. Checkmark `\uE73E` in Fluent success green `#37C852` when enabled, cancel `\uE7E8` in Fluent critical red `#E81B1C` when disabled, then a 2 s dismiss. Called from `InputService.ShowVCsToggleOverlay` |
 | `StopTimers()` | Stops both `_dismissTimer` and `_initMonitorTimer`. Called during shutdown |
 
 ### Positioning
@@ -1543,6 +1560,24 @@ While open, the dialog subscribes to two capture paths: `NfcReaderService.TagDet
 | `RegisterBtn` | `RegisterButton_Click` | Registers the captured tag |
 | `TagListBox` | `NfcTagRegistry.Tags` | Registered tags with per-row Remove (`RemoveButton_Click`) |
 
+### RegisterVoicePhraseDialog
+
+**Files:** `RegisterVoicePhraseDialog.xaml`, `RegisterVoicePhraseDialog.xaml.cs`
+
+Voice macro management (#317), modeled on `RegisterNfcTagDialog` and sharing its head chrome. `FluentWindow` (`ExtendsContentIntoTitleBar`, `WindowBackdropType="Mica"`, 640x620, `ResizeMode="NoResize"`) opened from the Devices page `ManageVoicePhrases_Click`. Three bands: the settings row (`EnabledBox`, `ModeBox`, `ConfidenceSlider` clamped 0.5 to 0.99 with a `ConfidenceText` readout), the live `HeardText` readout prefixed with the microphone that heard the phrase, and the type-and-name registration row with a phrase list carrying per-row Remove.
+
+There is no source picker. Phrases live on the devices that carry the microphones, and every reachable microphone runs its own session.
+
+The dialog subscribes to the static `VoiceMacroService.PhraseHeard` event, hops to the UI thread with `Dispatcher.BeginInvoke`, and lights the matching `PhraseRow` for 1400 ms. Only a **firing** recognition lights a row: the engine maps every utterance to its nearest phrase, so lighting on any event made rows claim matches the confidence floor had already refused. The readout line still shows every attempt with its confidence. Each row owns its own `FlashTimer`, restarted per hit so overlapping recognitions extend the light instead of truncating it. `Closed` and the close button both run `Unsubscribe`, which stops every row timer and detaches the handler.
+
+| Element | Binding / Handler | Purpose |
+|---------|-------------------|---------|
+| `EnabledBox` / `ModeBox` / `ConfidenceSlider` | `Setting_Changed` | Writes `VoiceMacroService.Enabled` / `ListeningMode` / `MinConfidence`, then marks settings dirty |
+| `HeardText` | `VoiceMacroService.PhraseHeard` | `[source] text (confidence)`, fired or ignored |
+| `PhraseBox` / `NameBox` | `PhraseBox_KeyDown` | Phrase and display name. Enter registers |
+| `RegisterBtn` | `RegisterButton_Click` | `VoicePhraseRegistry.Register(phrase, name)`, then refreshes |
+| `PhraseListBox` | `_rows` (`PhraseRow`) | Registered phrases with per-row Remove (`RemoveButton_Click`) |
+
 ### ConfirmDialog
 
 **Files:** `ConfirmDialog.xaml`, `ConfirmDialog.xaml.cs`
@@ -1621,7 +1656,7 @@ Remote Link password prompt (#138). `FluentWindow` (440 wide) with two `Password
 
 **Files:** `WorkshopBrowseDialog.xaml`, `WorkshopBrowseDialog.xaml.cs`
 
-The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's `AddWorkshopProfile` import sink. Full anatomy on [Steam Workshop Config Import Internals](steam-workshop-import-internals.md).
+The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's `AddWorkshopProfile` import sink. The config card's pad art is `WorkshopControllerPreview` (`Views/WorkshopControllerPreview.xaml`), a `UserControl` wrapping a `Viewbox` over a code-built `Canvas` so callouts stay in the art's own pixel space, which is what `ControllerOverlayLayout`'s coordinates are expressed in. Full anatomy on [Steam Workshop Config Import Internals](steam-workshop-import-internals.md).
 
 ---
 
@@ -1967,4 +2002,4 @@ private void CustomizeToggle_Changed(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

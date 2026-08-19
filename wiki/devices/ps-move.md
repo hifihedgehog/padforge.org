@@ -1,12 +1,29 @@
 # PlayStation Move
 
-*The Move wand and the Navigation controller as mapping sources, over USB and Bluetooth.*
+*The Move wand and the Navigation controller as mapping sources, over Bluetooth.*
 
-Both PlayStation Move devices report to PadForge without a driver install. The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.
+The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.
 
-Plug either in over USB, or pair it over Bluetooth, and it appears on the [Devices](../features/devices.md) page under its own name.
+Both connect over Bluetooth through the same signed PlayStation Bluetooth driver the [DualShock 3](dualshock-3.md) uses, which PadForge installs at pairing time. They appear on the [Devices](../features/devices.md) page as **PS Move Motion Controller** and **PS Move Navigation Controller**.
 
 ![A PS Move Motion Controller on the Devices page, with its live motion readout](../images/devices-move.png)
+
+---
+
+## Pairing
+
+1. Open the [Devices](../features/devices.md) page and click **Pair**.
+2. Set **Controller Family** to **PlayStation Move / Navigation**.
+3. Connect the controller with a USB cable and click **Pair**. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.
+4. Unplug and press the controller's **PS** button. It connects over Bluetooth.
+
+Docking an original Move over USB also runs this on its own, so a wand that has never been paired pairs the first time you plug it in to charge.
+
+---
+
+## USB
+
+USB is a pairing and charging dock, not an input path, for the original Move (ZCM1) and for the Navigation controller. Neither streams input over the cable. The PS4-era Move (ZCM2) does stream over USB.
 
 ---
 
@@ -16,11 +33,12 @@ Plug either in over USB, or pair it over Bluetooth, and it appears on the [Devic
 |---|---|
 | **Gyroscope** | Three axes, feeding the whole [Gyro](../guides/gyro.md) pipeline: gyro-to-stick, gyro-to-mouse, Aim Engage, and the DSU motion server. |
 | **Accelerometer** | Three axes, for tilt and gesture work. |
-| **Buttons** | The face buttons, Start and Select, the PS button, and the Move button. |
-| **Trigger** | Analog, so it maps to a trigger axis rather than collapsing to a press. |
-| **Sphere** | The wand's lamp. |
+| **Buttons** | Eight: Cross, Circle, Square, Triangle, Select, Start, PS, and the big Move button. Move sits on the right shoulder, beside the trigger. |
+| **Trigger** | Analog, on the right-trigger axis, so it maps to a trigger rather than collapsing to a press. |
 
-The Navigation controller reports its stick, its D-pad, and its buttons. It has no motion sensors.
+The wand's sphere is an output, not a source. PadForge drives it from the [Lighting](../features/lighting.md) tab, and it idles at the slot's player color.
+
+The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, PS, and its analog L2. It has no motion sensors.
 
 ---
 
@@ -36,6 +54,7 @@ Because the wand is held rather than gripped in two hands, Aim Engage is usually
 
 - PadForge reads the Move's sensors. It does **not** do camera tracking, so there is no positional data, only rotation and acceleration.
 - The sphere is an output PadForge can drive, not a tracking input.
+- Motion depends on the per-wand calibration captured over USB. A wand that has never been docked reports its buttons and trigger normally, but its gyroscope and accelerometer stay muted. Plug it in once to fix that.
 
 ---
 
@@ -43,6 +62,7 @@ Because the wand is held rather than gripped in two hands, Aim Engage is usually
 
 - [Devices](../features/devices.md)
 - [Gyro](../guides/gyro.md)
+- [Lighting](../features/lighting.md)
 - [DualShock 3](dualshock-3.md)
 
 ---

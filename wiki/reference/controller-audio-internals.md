@@ -98,7 +98,7 @@ A slot whose virtual controller is a composite USB persona has a real Windows en
 
 The speaker channels land in `_personaSpeakerRings` and are summed into each sink's render path inside `SinkSource.Read`, so they ride the same Opus and shared-mode WASAPI transports as macros and the system mirror. The haptic channels land in `_personaHapticRings` and split by transport. On USB they are the pad's UAC channels 2 and 3. On Bluetooth they get their own 142-byte report 0x32 carrying packets 0x11 and 0x12, built by `BuildDs5BtHapticReport`, decimated 16:1 from the 48 kHz tick to 3 kHz stereo s8 by block mean. The 0x32 stream keeps its own sequence and packet counters (`Ds5HapticSeq`, `Ds5HapticPktCounter`), separate from the 0x35 pair, for the same reason the per-device split exists: the firmware tracks sequence per stream. It never folds into the speaker report, because no reference emits packets 0x12 and 0x13 together.
 
-The microphone runs the other way. On USB it is the pad's own container-matched capture endpoint. On Bluetooth a parallel synchronous HID handle reads the pad's input reports, one 71-byte Opus packet per report, decoded as mono at 48 kHz. Decoding it as stereo on the strength of the packet's TOC byte produced full-scale noise on the consumer side, so `BtMicChannels` stays 1. Mic-open is not latched in firmware, so `Ds5MicSessionByte` rides byte 4 of the 0x11 header on every audio report and has to track the live session, otherwise a steady close byte re-closes the mic the persona just opened.
+The microphone runs the other way. On USB it is the pad's own container-matched capture endpoint. On Bluetooth a parallel synchronous HID handle reads the pad's input reports, one 71-byte Opus packet per report, decoded as mono at 48 kHz. Decoding it as stereo on the strength of the packet's TOC byte produced full-scale noise on the consumer side, so `BtMicChannels` stays 1. Mic-open is not latched in firmware, so `Ds5MicSessionByte` rides byte 4 of the 0x11 header on every audio report and has to track the live session, otherwise a steady close byte re-closes the mic the persona just opened. The decoded Bluetooth mic frames also tee to `VoiceMacroService.SubmitPadMic48k` when that pad has a recognition session (#317), pre-gain, so the pad's voice phrases hear what the pad hears rather than what `MicGain` shaped for Windows.
 
 ---
 
@@ -183,4 +183,4 @@ On the owner side `InputService` hands each received frame to `HapticToneService
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

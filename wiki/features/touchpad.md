@@ -60,8 +60,8 @@ Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a K
 | Jitter Reduction | on | Bends motion below a threshold down a power curve instead of cutting it off, so resting-hand tremor is damped while tiny deliberate movements still register. A deadzone would delete the small motion outright. |
 | Momentum | off | The cursor keeps travelling after you lift your finger and coasts to a stop, like a trackball. Flicking across the pad covers ground a finger-length swipe cannot. |
 | Response | Simple | How finger speed becomes cursor speed. `Simple` is a flat gain plus the Acceleration knob below. `Trackpad` is the pointer-acceleration curve ported from libinput's touchpad profile, and it also moves the cursor slower than the finger at low speed, which is where a laptop trackpad's fine positioning comes from. |
-| Speed threshold | 130 | Trackpad response only. Finger speed in mm/s where the cursor starts speeding up, 20–600. Lower accelerates sooner. libinput's own default and its single exposed tunable. |
-| Pad width | 69 | Trackpad response only. Physical width of this touchpad in mm, 20–150. Decides whether slow movement can reach the fine-control range at all, so set it near the real size of the pad. |
+| Speed Threshold | 130 | Trackpad response only. Finger speed in mm/s where the cursor starts speeding up, 20–600. Lower accelerates sooner. libinput's own default and its single exposed tunable. |
+| Pad Width | 69 | Trackpad response only. Physical width of this touchpad in mm, 20–150. Decides whether slow movement can reach the fine-control range at all, so set it near the real size of the pad. |
 | Acceleration | 0.00 | Simple response only. Fast drags cover more screen than slow ones over the same distance, 0–5. 0 keeps the cursor speed flat. |
 | Momentum Glide | 0.90 | How far the cursor coasts, 0.80–1.00. At 1.00 the coast is frictionless: the cursor keeps its speed until you touch the pad again, like a spun trackball. Time-based, so the glide lasts the same at any polling rate. Editable only while Momentum is on. |
 | Fling Boost | 1.00 | Scales how fast a fling launches without changing drag speed, 0.1–5. The sensitivity sliders scale dragging and coasting together, so this is the knob that makes a flick travel further on its own. 1.00 launches at exactly the speed the finger was moving. Momentum only. |
@@ -71,13 +71,13 @@ Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a K
 
 ![The touchpad momentum controls](../images/pad-touchpad-momentum.png)
 
-The same coasting is available on a **stick**. On the Keyboard & Mouse slot the mouse stick carries its own **Momentum** and **Momentum Glide**, so a flick of the stick sends the cursor travelling on the same constant-deceleration physics.
+The same coasting is available on a stick, but only on the **Keyboard + Mouse** slot's mouse stick, which carries its own **Momentum** and **Momentum Glide** so a flick of the stick sends the cursor travelling on the same constant-deceleration physics. A gamepad slot's sticks have no momentum row.
 
 ![Stick momentum on the Keyboard and Mouse slot](../images/pad-sticks-momentum.png)
 
-The Speed threshold and Pad width rows appear only in `Trackpad` response, the Acceleration row only in `Simple`. They are competing models of the same thing, so the card never shows both at once.
+The Speed Threshold and Pad Width rows appear only in `Trackpad` response, the Acceleration row only in `Simple`. They are competing models of the same thing, so the card never shows both at once.
 
-Two plain limitations. First, at the default 69 mm Pad width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.
+Two plain limitations. First, at the default 69 mm Pad Width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad Width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.
 
 Bind **Touchpad 1 Finger 1 X** to KBM Mouse X (and **Touchpad 1 Finger 1 Y** to Mouse Y) to use the surface as a trackpad. Finger entries stay 1-based in the picker, so the first contact is Finger 1. The KBM virtual controller produces real Windows mouse input. The cursor moves in whatever app has focus, games and desktop apps alike.
 
@@ -167,7 +167,7 @@ Each gesture appears as an entry in the mapping picker. Bind **Swipe Up** to a b
 
 Profile-scoped: captured custom gestures travel with whichever profile is active when they're recorded. Each gesture has a name, finger count, and the recorded finger path(s).
 
-Click **+ Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the **Samples to capture** dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
+Click **+ Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the **Samples to Capture** dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
 
 A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn't currently selected as the active mapping device still drives the recorder, so you can capture a gesture on the touchpad while the slot's primary device is something else.
 

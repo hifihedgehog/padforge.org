@@ -8,9 +8,9 @@
 
 ---
 
-## 
+## Which view shows
 
-![The Extended slot's schematic view](../images/pad-extended-schematic.png)Which view shows
+![The Extended slot's schematic view](../images/pad-extended-schematic.png)
 
 PadForge picks the view from the slot's controller type.
 
@@ -49,7 +49,7 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 
 ### Colorways
 
-A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The Xbox Series, DualSense, DualShock 4, and DualSense Edge families have one. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
+A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. In the 3D view that is the Xbox Series, DualSense, and DualShock 4 families. The 2D view carries its own colorway sets, which also cover Xbox 360 and DualSense Edge. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
 
 ### Camera controls
 
@@ -98,7 +98,7 @@ During Map All (from [Button and Axis Mappings](mappings.md)), outputs flash ora
 
 ## 2D overlay
 
-Switch between 3D and 2D with the view-mode button in the top-left corner of the Controller tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlighting, click-to-record, hover previews, and Map All flash.
+Switch between 3D and 2D with the view-mode button in the top-left corner of the Preview tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlighting, click-to-record, hover previews, and Map All flash.
 
 Each controller type has its own 2D layout that places buttons, sticks, triggers, and the touchpad over the base diagram. Click anywhere on a control to record a mapping, the same as in 3D.
 
@@ -243,4 +243,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

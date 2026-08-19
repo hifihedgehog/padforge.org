@@ -1441,6 +1441,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-the-floor-is-applied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the floor is applied
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#picking-a-value" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3443,6 +3454,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-the-floor-is-applied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the floor is applied
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#picking-a-value" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3855,7 +3877,7 @@
 <li><strong>Deadzone.</strong> Zeroes input inside the deadzone shape.</li>
 <li><strong>Range caps.</strong> Cap the input ceiling per direction.</li>
 <li><strong>Sensitivity curve.</strong> Reshapes the response.</li>
-<li><strong>Anti-deadzone.</strong> Adds a minimum output floor.</li>
+<li><strong>Anti-deadzone.</strong> Adds a minimum output floor to the stick pair.</li>
 <li><strong>Linear.</strong> Blends the curve toward a straight line.</li>
 </ol>
 <hr />
@@ -3954,6 +3976,10 @@
 </tbody>
 </table>
 <p>The rest of your stick range squeezes into the space above the anti-deadzone floor. A higher floor leaves less room for fine control near the edge.</p>
+<h3 id="how-the-floor-is-applied">How the floor is applied<a class="headerlink" href="#how-the-floor-is-applied" title="Permanent link">&para;</a></h3>
+<p>Since 4.3.0 the floor acts on the stick pair, not on each axis alone. X and Y scale together so the combined vector magnitude lands on the floor, with the direction preserved. Flooring each axis separately used to cut wedge-shaped gaps at the four cardinals, because the quiet axis jumped from minus the floor to plus the floor as it crossed zero.</p>
+<p>The floor also ramps in across the deadzone region instead of switching on at its edge. Outside the deadzone the result is the plain radial floor. Inside, it scales down toward zero, so resting noise stays at noise scale.</p>
+<p>Axial is the exception. It runs each axis through its own independent chain, so its floor stays per axis.</p>
 <h3 id="picking-a-value">Picking a value<a class="headerlink" href="#picking-a-value" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4484,7 +4510,7 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Dots Per 360°</strong></td>
+<td><strong>Dots per 360°</strong></td>
 <td>14400</td>
 <td>Mouse counts for one full 360° camera turn. This depends on the game's mouse sensitivity: raise it if a flick under-rotates, lower it if it over-rotates.</td>
 </tr>
@@ -4534,7 +4560,7 @@
 <p>Two practical notes:</p>
 <ul>
 <li><strong>Layer hosting.</strong> Put the flick stick row on a <a href="../../guides/shift-layers/">shift layer</a> to switch between flick aim and normal stick aim with one button. Leaving the layer never leaves a half-finished turn running, and re-entering it does not fire a surprise flick unless Allow Flick on Engage is on.</li>
-<li><strong>Steam Workshop imports.</strong> A community config with a flick stick group arrives with the row and the card pre-tuned, including the config's Dots Per 360°. See <a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>.</li>
+<li><strong>Steam Workshop imports.</strong> A community config with a flick stick group arrives with the row and the card pre-tuned, including the config's Dots per 360°. See <a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>.</li>
 </ul>
 <hr />
 <h2 id="custom-directinput-sticks">Custom DirectInput sticks<a class="headerlink" href="#custom-directinput-sticks" title="Permanent link">&para;</a></h2>
@@ -4577,7 +4603,7 @@
 <li><a href="../visualization/">3D and 2D Visualization</a>: watch the stick move on the controller model.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

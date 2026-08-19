@@ -3322,8 +3322,8 @@
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <h3 id="1-turn-on-the-server">1. Turn on the server<a class="headerlink" href="#1-turn-on-the-server" title="Permanent link">&para;</a></h3>
 <ol>
-<li>On the <a href="../../features/dashboard/">Dashboard</a>, check the box in the <strong>Web Controller</strong> section.</li>
-<li>PadForge shows a URL (e.g., <code>http://192.168.1.100:8080</code>).</li>
+<li>On the <a href="../../features/dashboard/">Dashboard</a>, check <strong>Enable Web Controller Server</strong> in the <strong>Web Controller</strong> section.</li>
+<li>PadForge shows a URL (e.g., <code>https://192.168.1.100:8080</code>, or <code>http://</code> when the certificate binding fails).</li>
 <li>The Dashboard shows the server status and how many browser tabs are connected.</li>
 </ol>
 <h3 id="2-open-the-url-on-your-phone">2. Open the URL on your phone<a class="headerlink" href="#2-open-the-url-on-your-phone" title="Permanent link">&para;</a></h3>
@@ -3333,10 +3333,10 @@
 <li>The landing page loads with the layout choices.</li>
 </ol>
 <h3 id="3-pick-a-layout">3. Pick a layout<a class="headerlink" href="#3-pick-a-layout" title="Permanent link">&para;</a></h3>
-<p>Tap <strong>Xbox 360</strong>, <strong>DualShock 4</strong>, or <strong>Touchpad</strong>.</p>
+<p>Tap one of the twelve cards. Ten are gamepad layouts, one is the bare <strong>Touchpad</strong> surface, and <strong>Build Your Own</strong> opens the builder.</p>
 <ul>
-<li>Xbox 360 and DualShock 4 share the same buttons, sticks, and triggers. DualShock 4 adds a touchpad drag area on the controller art, with its own click button.</li>
-<li>Both gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.</li>
+<li>Every gamepad layout uses the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.</li>
+<li>Layouts with a touchpad add a drag surface on the controller art, with its own click pill beside it.</li>
 <li>Touchpad is a multi-touch surface that drives the DS4 touchpad on whichever PlayStation slot it is assigned to.</li>
 </ul>
 <h3 id="4-assign-the-controller-to-a-slot">4. Assign the controller to a slot<a class="headerlink" href="#4-assign-the-controller-to-a-slot" title="Permanent link">&para;</a></h3>
@@ -3365,7 +3365,7 @@
 </tr>
 <tr>
 <td><strong>Firewall</strong></td>
-<td>PadForge creates a Windows Firewall rule on first run. Third-party firewalls may need a manual TCP 8080 allow rule.</td>
+<td>PadForge adds a "PadForge Web Controller" inbound rule when the server starts, if one is not already there. Third-party firewalls may need a manual TCP 8080 allow rule.</td>
 </tr>
 <tr>
 <td><strong>Max clients</strong></td>
@@ -3382,7 +3382,7 @@
 <p>Stopping PadForge stops the server.</p>
 <hr />
 <h2 id="controller-layouts">Controller layouts<a class="headerlink" href="#controller-layouts" title="Permanent link">&para;</a></h2>
-<p>Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full, or drag the analog slider beside it for a partial pull.</p>
+<p>Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full. Keep the finger down and drag it downward to feather the pull, and slide back up for full again.</p>
 <table>
 <thead>
 <tr>
@@ -3436,23 +3436,24 @@
 <td>Multi-touch surface only</td>
 </tr>
 <tr>
-<td><strong>Custom</strong></td>
+<td><strong>Build Your Own</strong></td>
 <td>Drag widgets onto a blank pad</td>
 </tr>
 </tbody>
 </table>
 <p>Switch layouts at any time by going back to the landing page.</p>
 <h3 id="finishes">Finishes<a class="headerlink" href="#finishes" title="Permanent link">&para;</a></h3>
-<p>Layouts that ship in more than one colour carry a row of swatches on their card. Tap one before you open the layout and the controller art is drawn in that finish.</p>
+<p>Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.</p>
 <p><img alt="The layout picker, with finishes" src="../../images/web-landing.png" /></p>
 <h3 id="lights-on-the-page">Lights, on the page<a class="headerlink" href="#lights-on-the-page" title="Permanent link">&para;</a></h3>
-<p>The DualShock 4, DualSense and DualSense Edge layouts draw their lightbar, and the DualSense layouts draw the player LEDs underneath the touchpad. Both follow whatever the slot is doing, so a game that drives the lightbar drives it here too.</p>
+<p>Every gamepad layout carries a slim lightbar strip across the top edge of the page and a row of player pips in the top right corner. Both stay hidden until the slot pushes an LED color or a player number, and both follow whatever the slot is doing, so a game that drives the lightbar drives it here too.</p>
 <p><img alt="The DualSense layout" src="../../images/web-dualsense.png" /></p>
 <h3 id="trackpads-and-grips">Trackpads and grips<a class="headerlink" href="#trackpads-and-grips" title="Permanent link">&para;</a></h3>
-<p>The Steam Deck and Steam Controller layouts carry both trackpads as real touch surfaces, plus the rear grip buttons (L4, L5, R4, R5 on the Deck) as pills beside the shell.</p>
+<p>The Steam Deck carries both trackpads as real touch surfaces, plus its four rear grip buttons as tiles at the outer edges of the shell.</p>
+<p>The 2015 Steam Controller is different, because that is how SDL maps the real hardware. Its left pad is an 8-way D-pad surface, its right pad is the right stick, and it has one physical thumbstick (the left one) plus two rear grips. The two pad-click zones are suppressed on glass, since they would sit on top of the surfaces and steal every touch.</p>
 <p><img alt="The Steam Deck layout" src="../../images/web-steamdeck.png" /></p>
 <h3 id="nintendo-layouts">Nintendo layouts<a class="headerlink" href="#nintendo-layouts" title="Permanent link">&para;</a></h3>
-<p>The Switch Pro layout carries the Capture button, and the Switch 2 Pro adds the C button and its back paddles (GL and GR).</p>
+<p>The Switch Pro layout carries the Capture button, and the Switch 2 Pro adds the C button and its two back paddles.</p>
 <p><img alt="The Switch 2 Pro layout" src="../../images/web-switch2pro.png" /></p>
 <h3 id="touchpad">Touchpad<a class="headerlink" href="#touchpad" title="Permanent link">&para;</a></h3>
 <p>A multi-touch surface that maps straight to the DualShock 4 / DualSense touchpad on the assigned PlayStation slot. Use it as a second input device when a phone or tablet is already in another player's hands and the DS4 / DS5 touchpad is the missing piece. No buttons or sticks, touchpad input only.</p>
@@ -3467,13 +3468,15 @@
 <p><img alt="Web controller in use" src="../../images/web-controller.png" /></p>
 <hr />
 <h2 id="build-your-own-layout">Build your own layout<a class="headerlink" href="#build-your-own-layout" title="Permanent link">&para;</a></h2>
-<p>The <strong>Custom</strong> card opens a builder that starts from a blank pad. Add widgets (sticks, buttons, triggers, D-pads, touch surfaces), drag them where your thumbs actually sit, and save. Saved pads are stored with your PadForge settings, so the phone loads yours the next time it connects.</p>
+<p>The <strong>Build Your Own</strong> card opens a builder that starts from a blank pad. Tap <strong>Edit</strong> to bring up the toolbar, add widgets (buttons, sticks, trigger sliders, a D-pad, a touch area), drag them where your thumbs actually sit, name the pad, and save. A pad holds up to 64 widgets.</p>
+<p>Saved pads live in PadForge's own settings file beside the executable, machine-wide rather than inside a profile, and each one gets its own card on the landing page next to the stock layouts. A saved pad shows up on the <a href="../../features/devices/">Devices</a> page under its own name, and its shape follows its widgets: a pad built from two buttons and a stick offers exactly that in the mapping picker.</p>
 <p><img alt="The custom controller builder" src="../../images/web-custom.png" /></p>
 <hr />
 <h2 id="phone-motion">Phone motion<a class="headerlink" href="#phone-motion" title="Permanent link">&para;</a></h2>
 <p>The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.</p>
 <p>Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over <strong>HTTPS</strong> whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works.</p>
 <p>Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.</p>
+<p>Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a <strong>Motion</strong> button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. On iOS the same tap is what triggers Safari's sensor permission prompt, so the button is required there, not optional. The Touchpad page has no motion button.</p>
 <p>A <strong>QR code</strong> on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.</p>
 <h2 id="touch-controls">Touch controls<a class="headerlink" href="#touch-controls" title="Permanent link">&para;</a></h2>
 <table>
@@ -3498,7 +3501,7 @@
 </tr>
 <tr>
 <td><strong>Triggers</strong></td>
-<td>Tap to send a full press. Release to return to zero.</td>
+<td>Tap to send a full press. Hold and drag down to feather the pull, back up for full. Release to return to zero.</td>
 </tr>
 </tbody>
 </table>
@@ -3530,8 +3533,8 @@
 <p>PadForge forwards vibration to the browser, which uses your device's built-in vibration support. Works on phones and tablets with vibration motors. Chrome on Android handles it well. Safari on iOS does not.</p>
 <hr />
 <h2 id="the-one-time-refresh">The one-time refresh<a class="headerlink" href="#the-one-time-refresh" title="Permanent link">&para;</a></h2>
-<p>Tap a layout and the page refreshes once before the controller appears. That happens on any browser, and it is expected. The controller works normally after it.</p>
-<p>The refresh works around an iOS Safari bug. On iOS, the connection fails on the first load when the page is reached by tapping a link, and a reload clears it. Chrome, Firefox, Edge, and Chrome on Android do not have that bug, but they still do the single refresh.</p>
+<p>Tap a gamepad layout and the page refreshes once before the controller appears. That happens on any browser, and it is expected. The controller works normally after it.</p>
+<p>The refresh works around an iOS Safari bug. On iOS, the connection fails on the first load when the page is reached by tapping a link, and a reload clears it. Chrome, Firefox, Edge, and Chrome on Android do not have that bug, but they still do the single refresh. The Touchpad page and the builder do not do it at all.</p>
 <hr />
 <h2 id="requirements-summary">Requirements summary<a class="headerlink" href="#requirements-summary" title="Permanent link">&para;</a></h2>
 <table>
@@ -3552,7 +3555,7 @@
 </tr>
 <tr>
 <td><strong>Orientation</strong></td>
-<td>The Xbox 360 and DualShock 4 layouts need landscape and show a warning in portrait. The Touchpad layout works in portrait or landscape.</td>
+<td>Every gamepad layout needs landscape and shows a "Rotate to landscape mode" warning in portrait. The Touchpad layout works in portrait or landscape.</td>
 </tr>
 <tr>
 <td><strong>Browser</strong></td>

@@ -51,7 +51,7 @@ The [Devices](../features/devices.md) page shows live gyro and accelerometer val
 
 1. Plug in a controller that reports motion.
 2. Assign it to one of slots 1–4. The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Only those two types carry a motion channel, so an Xbox, Extended, Keyboard + Mouse, MIDI, or VR slot broadcasts no motion.
-3. On the [Dashboard](../features/dashboard.md), tick **Enable DSU motion server (CemuHook Motion Provider protocol)**.
+3. On the [Dashboard](../features/dashboard.md), tick **Enable DSU Motion Server (CemuHook Motion Provider Protocol)**.
 4. Leave the **Port** box at **26760**, or type a different number. The reset button next to it returns the port to 26760.
 5. Start the input engine with the play button.
 6. The status indicator lights up orange and the line beside it reads **Listening on :26760**. Point your emulator at `127.0.0.1` port `26760` (see tables below).
@@ -171,4 +171,4 @@ Motion axes are already oriented for emulators. Tested with DualSense, DualShock
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

@@ -213,7 +213,7 @@ Send a keyboard keystroke. The game sees it as a real key.
 Type a block of plain text as keystrokes. It sends Unicode, so accents, CJK, and emoji all type regardless of keyboard layout. Newlines press Enter. A pasted tab character presses Tab.
 
 - **Text.** The text to type.
-- **Char delay (ms).** Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.
+- **Char Delay (ms).** Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.
 
 Use Key Press for key combos like Ctrl+C. Use Text Block for literal text.
 
@@ -221,7 +221,7 @@ Use Key Press for key combos like Ctrl+C. Use Text Block for literal text.
 
 Keyboard autofire. While the macro's trigger is held, the key presses and releases on a fixed beat.
 
-- **Key.** Picked with the same dropdown as Key Press.
+- **Key Combo.** Picked with the same dropdown as Key Press.
 - **Interval.** Milliseconds between presses, 10 to 1000, default 100. The first press fires the moment the trigger engages, the next each time the interval elapses.
 
 Pair it with the **While Held** fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.
@@ -262,7 +262,7 @@ Launch a program or file. You choose what runs.
 
 - **Program.** The path to the program or file.
 - **Arguments.** Optional command-line arguments.
-- **Working directory.** Optional. The folder the program treats as its current directory, not the folder the program file sits in. Blank uses the default.
+- **Working Directory.** Optional. The folder the program treats as its current directory, not the folder the program file sits in. Blank uses the default.
 
 The launch is fire-and-forget, so the rest of the macro does not wait for it.
 
@@ -320,15 +320,15 @@ Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a *
 Map an axis to Windows master volume. Updates every frame.
 
 - **Axis.** Which axis drives volume.
-- **Invert.** Release-to-louder.
-- **Show volume OSD.** The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.
+- **Invert Axis.** Release-to-louder.
+- **Show Volume OSD.** The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.
 - **Volume Limit.** Caps the maximum. 30 to 50 percent is a safe start for protecting your ears.
 
 ### App Volume
 
 Same as System Volume, but it drives one app in the Windows audio mixer.
 
-- **Process name.** The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.
+- **Process.** The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.
 - The other options match System Volume.
 
 ### Raise Headphone Volume / Lower Headphone Volume
@@ -341,9 +341,9 @@ The write goes to the pad, so the level holds with no app in the loop.
 
 Play a sound file through the slot's audio output. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a single vibrating tone. With no sound-capable device on the slot, it falls back to the PC's default output.
 
-- **Sound.** The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).
+- **Sound File.** The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).
 - **Volume.** Scales the file against the slot's master volume.
-- **Loop.** Repeat until a **Stop Sounds** action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.
+- **Loop Until Stopped.** Repeat until a **Stop Sounds** action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.
 
 **Stop Sounds** ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See [Controller Audio](../features/controller-audio.md) for the output device picker and sound packages.
 
@@ -419,8 +419,8 @@ Push an RGB color to every Sony pad on the slot as a temporary override. The ove
 
 Two hold modes:
 
-- **Reactive.** Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.
-- **Sticky.** Hold the color at full brightness until a **Clear Lightbar Override** action or a fresh override replaces it. Good for armed / disarmed markers.
+- **Reactive (Fade).** Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.
+- **Sticky (Hold).** Hold the color at full brightness until a **Clear Lightbar Override** action or a fresh override replaces it. Good for armed / disarmed markers.
 
 Available on slots that have at least one Sony pad (DualShock 4, DualSense, DualSense Edge).
 
@@ -440,8 +440,8 @@ Step through an ordered list of base lightbar modes. Each fire advances one step
 
 Drive the slot's physical rumble from a macro. Per-motor strength from 0 to 100 percent, so a macro can hit one motor by itself or both together. Two hold modes match Set Lightbar Color:
 
-- **Reactive.** Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.
-- **Sticky.** Hold at full strength until a **Stop Rumble** action runs. Good for armed states and click-and-hold sustain.
+- **Reactive (Fade).** Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.
+- **Sticky (Hold).** Hold at full strength until a **Stop Rumble** action runs. Good for armed states and click-and-hold sustain.
 
 Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand.
 
@@ -513,7 +513,7 @@ Works on Bluetooth controllers only. A USB-wired controller is skipped, and disc
 
 ### Axis source for continuous actions
 
-System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources, picked in the **Axis from** dropdown:
+System Volume, App Volume, Mouse Move, and Mouse Scroll all read from one of two sources, picked in the **Axis From** dropdown:
 
 | Source | What you get |
 |---|---|
@@ -524,8 +524,8 @@ Pick **Assigned Devices** when the axis is unmapped (a throttle lever you want f
 
 ### Axis options
 
-- **Invert axis.** Reverse the direction. Volume: release-to-louder. Mouse: opposite cursor.
-- **Show volume OSD.** The Windows volume flyout. System Volume only. On by default.
+- **Invert Axis.** Reverse the direction. Volume: release-to-louder. Mouse: opposite cursor.
+- **Show Volume OSD.** The Windows volume flyout. System Volume only. On by default.
 
 ### Build the sequence
 
@@ -559,7 +559,7 @@ Stick-to-mouse aiming (Always mode):
 
 Fixed Count and Until Release both have a **Delay** in milliseconds between runs.
 
-In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline **Interval** field beside the fire mode.
+In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline **Interval** field beside the fire mode. On Short Press hides it too, because the trigger is already released when the macro fires and an until-release loop can never run.
 
 Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 50 ms. A presses every 100 ms (about 10 times a second) while held.
 
@@ -670,7 +670,7 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 - Macro lightbar overrides do not override what the game writes at the packet level. A game that drives the lightbar each frame wins.
 - Macro rumble takes the stronger of the macro and game strength, so a game holding a motor at full strength masks a weaker macro pulse.
-- **Consume trigger buttons** strips button-shaped inputs only. An axis-threshold, POV, or gesture trigger stays visible to the game even with Consume on.
+- **Consume Trigger Buttons (Hide from Game)** strips button-shaped inputs only. An axis-threshold, POV, or gesture trigger stays visible to the game even with Consume on.
 
 ---
 

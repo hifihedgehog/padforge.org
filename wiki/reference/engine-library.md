@@ -13,7 +13,7 @@ graph TB
         US[UserSetting<br/>device-to-slot linkage]
         UD[UserDevice<br/>physical device record]
         MT[MappingTranslation<br/>cross-layout Copy From]
-        VJM[ExtendedMappingEntry<br/>custom axis/button/POV maps]
+        VJM[RawMappingEntry<br/>custom axis/button/POV maps]
     end
 
     subgraph "Output State Types. PadForge.Engine"
@@ -135,7 +135,7 @@ graph TB
 - [MenuSelectionMath](#menuselectionmath) (Menus/MenuSelectionMath.cs)
 - [MenuEvaluator](#menuevaluator) (Menus/MenuEvaluator.cs)
 - [PadSetting](#padsetting) (Data/PadSetting.cs)
-- [ExtendedMappingEntry](#extendedmappingentry) (Data/PadSetting.cs)
+- [RawMappingEntry](#rawmappingentry) (Data/PadSetting.cs)
 - [UserSetting](#usersetting) (Data/UserSetting.cs)
 - [UserDevice](#userdevice) (Data/UserDevice.cs)
 - [DeadZoneShape](#deadzoneshape) (Data/DeadZoneShape.cs)
@@ -620,6 +620,7 @@ public interface ISdlInputDevice : IDisposable
     int NumButtons { get; }
     int RawButtonCount { get; }
     int[] SupportedButtonIndices { get; }               // sparse list of exposed button positions
+    int[] SupportedAxisIndices => null;                 // sparse axis positions; null means dense
     int NumHats { get; }
     IntPtr GamepadHandle { get; }                       // SDL_Gamepad pointer, Zero if not gamepad-opened
     bool HasRumble { get; }
@@ -670,6 +671,7 @@ public interface ISdlInputDevice : IDisposable
 | `NumButtons` | `int` | Button count (11 for gamepads) |
 | `RawButtonCount` | `int` | Raw joystick button count before gamepad remapping. May exceed `NumButtons` |
 | `SupportedButtonIndices` | `int[]` | Sparse list of button positions the device actually exposes. Lets the preview skip positions the device lacks (e.g., paddles) |
+| `SupportedAxisIndices` | `int[]` | Sparse list of axis positions the device actually has. Default-interface member returning `null`, which means dense (every index below the axis count is real). Exists because `NumAxes` is the standardized 6-slot gamepad space, not a count of the pad's physical axes |
 | `NumHats` | `int` | POV hat count (1 for gamepads) |
 | `GamepadHandle` | `IntPtr` | Native `SDL_Gamepad` pointer, `IntPtr.Zero` if not opened as a Gamepad. Used by the DualSense passthrough dispatcher for `SDL_SendGamepadEffect` |
 | `HasRumble` | `bool` | Supports simple rumble |
@@ -782,6 +784,8 @@ SDL3 may return a raw VID/PID string (e.g., "0x16c0/0x05e1") for unknown devices
 3. **Constant**. Last resort
 
 Devices with both simple rumble and LeftRight haptic prefer simple rumble (more reliable for gamepads). Gain set to 100 if `SDL_HAPTIC_GAIN` is supported.
+
+Every exit writes one `HAPTICDIAG open VVVV:PPPP ...` line to `SdlDiagLog`, carrying the VID:PID plus the haptic axis count and the spring and constant feature bits (#282 needs all three). A null handle from `SDL_OpenHapticFromJoystick` logs `none (device exposes no SDL haptic interface)`, not FAILED: most gamepads have no SDL haptic interface at all, a DualSense rumbles through the Sony sole-writer path and never reaches this subsystem, and wording it as a failure put two error-class lines into every diagnostics harvest.
 
 ---
 
@@ -1119,6 +1123,7 @@ Integer constants. 18–25 match the DirectInput device type values. 26 and up a
 | `Nfc` | 28 | NFC reader (#150) |
 | `ConsumerControl` | 29 | Consumer Control / media keys (#168) |
 | `HeadsetMotion` | 30 | Sony headset head-tracker IMU over Bluetooth Classic HID (#188). The WH-1000XM5 family exposing the Android Head Tracker sensor collection as a gyro / accel motion source |
+| `Microphone` | 31 | Standalone Windows capture endpoint (#317). Its buttons are registered voice phrases. A mic-bearing controller carries its phrases on its own device instead |
 
 ### MapType
 
@@ -1749,7 +1754,7 @@ Stored separately from UserSettings, linked via `PadSettingChecksum`. Multiple U
 | Property | Type | Serialization | Default | Description |
 |----------|------|---------------|---------|-------------|
 | `AxisToButtonThreshold` | `string` | `[XmlElement]` | `"50"` | Threshold 0–100% for axis-as-button |
-| `MappingDeadZoneEntries` | `ExtendedMappingEntry[]` | `[XmlArray("MappingDeadZones")] [XmlArrayItem("Map")]` | `null` | Per-mapping axis-to-button thresholds. Keys = target names, values = 0–100%. |
+| `MappingDeadZoneEntries` | `RawMappingEntry[]` | `[XmlArray("MappingDeadZones")] [XmlArrayItem("Map")]` | `null` | Per-mapping axis-to-button thresholds. Keys = target names, values = 0–100%. |
 | `LeftThumbAxisXInvert` | `string` | `[XmlElement]` | `"0"` | Invert left stick X. "0" or "1". |
 | `LeftThumbAxisYInvert` | `string` | `[XmlElement]` | `"0"` | |
 | `RightThumbAxisXInvert` | `string` | `[XmlElement]` | `"0"` | |
@@ -1757,17 +1762,17 @@ Stored separately from UserSettings, linked via `PadSettingChecksum`. Multiple U
 
 ### Extended Custom Mappings (Dictionary-based)
 
-For Extended slots with custom HID descriptors (arbitrary axis/button/POV counts). Keys: `"ExtendedAxis0"`, `"ExtendedAxis0Neg"`, `"ExtendedBtn0"`, `"ExtendedPov0Up"`. Values: mapping descriptors.
+For Extended and Nintendo slots on the raw HID surface (arbitrary axis/button/POV counts). Keys: `"RawAxis0"`, `"RawAxis0Neg"`, `"RawBtn0"`, `"RawPov0Up"`. Values: mapping descriptors.
 
 | Property | Type | Serialization | Description |
 |----------|------|---------------|-------------|
-| `ExtendedMappingEntries` | `ExtendedMappingEntry[]` | `[XmlArray("ExtendedMappings")] [XmlArrayItem("Map")]` | Serializable array for XML persistence |
+| `RawMappingEntries` | `RawMappingEntry[]` | `[XmlArray("ExtendedMappings")] [XmlArrayItem("Map")]` | Serializable array for XML persistence. The XML element name kept its pre-4.1.0 spelling for round-trip compatibility |
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `GetExtendedMapping` | `string GetExtendedMapping(string key)` | Gets an Extended mapping value by key. Returns `""` if not found. |
-| `SetExtendedMapping` | `void SetExtendedMapping(string key, string value)` | Sets an Extended mapping value. Empty/null removes the key. |
-| `FlushExtendedMappings` | `void FlushExtendedMappings()` | Flushes in-memory dictionary back to serializable array. |
+| `GetRawMapping` | `string GetRawMapping(string key)` | Gets a raw-surface mapping value by key (`"RawAxis0"`, `"RawBtn5"`, `"RawPov0Up"`). Returns `""` if not found. Reads under `_rawDictLock` because the poll thread reads while the UI thread writes. |
+| `SetRawMapping` | `void SetRawMapping(string key, string value)` | Sets a raw-surface mapping value. Empty/null removes the key. |
+| `FlushRawMappings` | `void FlushRawMappings()` | Flushes in-memory dictionary back to serializable array. |
 
 ### MIDI Custom Mappings (Dictionary-based)
 
@@ -1775,7 +1780,7 @@ Same pattern as Extended. Keys: `"MidiCC0"`, `"MidiCC0Neg"`, `"MidiNote0"`, etc.
 
 | Property | Type | Serialization | Description |
 |----------|------|---------------|-------------|
-| `MidiMappingEntries` | `ExtendedMappingEntry[]` | `[XmlArray("MidiMappings")] [XmlArrayItem("Map")]` | Serializable array |
+| `MidiMappingEntries` | `RawMappingEntry[]` | `[XmlArray("MidiMappings")] [XmlArrayItem("Map")]` | Serializable array |
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
@@ -1789,7 +1794,7 @@ Keys: `"KbmKey41"` (VK_A), `"KbmMouseX"`, `"KbmMouseXNeg"`, `"KbmMBtn0"`, `"KbmS
 
 | Property | Type | Serialization | Description |
 |----------|------|---------------|-------------|
-| `KbmMappingEntries` | `ExtendedMappingEntry[]` | `[XmlArray("KbmMappings")] [XmlArrayItem("Map")]` | Serializable array |
+| `KbmMappingEntries` | `RawMappingEntry[]` | `[XmlArray("KbmMappings")] [XmlArrayItem("Map")]` | Serializable array |
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
@@ -1848,15 +1853,15 @@ Opaque payloads the App-side Copy path fills and the Paste path consumes. `ToJso
 
 ---
 
-## ExtendedMappingEntry
+## RawMappingEntry
 
 **File:** `PadForge.Engine/Data/PadSetting.cs`
 **Namespace:** `PadForge.Engine.Data`
 
-Key-value entry for Extended/MIDI/KBM mapping and per-mapping deadzone XML persistence. Shared by all four dictionary-based systems.
+Key-value entry for raw-surface, MIDI, and KBM mapping and per-mapping deadzone XML persistence. Shared by all four dictionary-based systems.
 
 ```csharp
-public class ExtendedMappingEntry
+public class RawMappingEntry
 {
     [XmlAttribute] public string Key { get; set; } = "";
     [XmlAttribute] public string Value { get; set; } = "";
@@ -1937,6 +1942,8 @@ Data model for a physical input device. Serializable properties (settings-persis
 | `CapAxeCount` | `int` | `[XmlElement]` | 0 | Number of axes |
 | `CapButtonCount` | `int` | `[XmlElement]` | 0 | Button count (gamepad-mapped for gamepads) |
 | `RawButtonCount` | `int` | `[XmlElement]` | 0 | Raw button count before gamepad remapping |
+| `RawAxisCount` | `int` | (default) | 0 | Total raw joystick axes before the gamepad layout caps `CapAxeCount` (#193) |
+| `HasExtraGenericAxes` | `bool` | (default) | `false` | Device carries raw axes past the standard six that should surface as generic "Axis N" sources (#193). Not derivable from the counts: it excludes devices whose extras are already sensor sources. |
 | `CapPovCount` | `int` | `[XmlElement]` | 0 | Number of POV hat switches |
 | `CapType` | `int` | `[XmlElement]` | 0 | `InputDeviceType` constant |
 | `HasGyro` | `bool` | `[XmlElement]` | `false` | Gyroscope support |
@@ -1990,6 +1997,7 @@ Data model for a physical input device. Serializable properties (settings-persis
 | `IsBalanceBoard` | `bool` | `[XmlIgnore]` | Wii Balance Board. VID `0x057E` + name contains "Balance Board" (#146). Gates the corner-load sources. |
 | `HasJoyConIr` | `bool` | `[XmlIgnore]` | Standalone right Joy-Con NIR camera. VID `0x057E` + exact name "Nintendo Switch Joy-Con (R)" (#151). Gates the "IR Brightness" source. |
 | `HasJoyCon2Mouse` | `bool` | `[XmlIgnore]` | Joy-Con 2 (L or R) optical mouse. VID `0x057E` + exact match against the BLE driver's Joy-Con 2 names (#154). Gates the "Mouse Motion X/Y" sources. |
+| `HasVoicePhrases` | `bool` | `[XmlIgnore]` | Voice phrases ride this pad's own surface (#317). VID `0x054C` and PID `0x0CE6` / `0x0DF2` (DualSense / DualSense Edge), the pads with an embedded microphone. Standalone microphone devices are not gated by this: they expose phrases as named raw buttons directly, the PC/SC-reader pattern. |
 | `HasNfcReader` | `bool` | `[XmlIgnore]` | Switch NFC reader (#241). Computed, not stored: VID `0x057E` and PID `0x2007` (right Joy-Con), `0x2008` (combined pair, whose right half carries the MCU), or `0x2009` (Pro Controller). Switch 2 controllers are deliberately excluded, because no reference reads their NFC on PC over any transport. Gates the picker offering the "Any NFC Tag" and per-tag sources. |
 | `HasForceFeedback` | `bool` | `[XmlIgnore]` | `ActuatorCount > 0 || Device.HasRumble || Device.HasHaptic` |
 | `ResolvedName` | `string` | `[XmlIgnore]` | DisplayName if set, then InstanceName, then ProductName, then "(Unknown Device)" |
@@ -2065,18 +2073,19 @@ public record MappingSlot(ControlCategory Category, int Position);
 | Layout | Property Name Examples | Notes |
 |--------|----------------------|-------|
 | **Gamepad** (Xbox / PlayStation / Extended gamepad preset) | `ButtonA`, `LeftThumbAxisX`, `DPadUp` | Xbox and PlayStation share property names. Buttons: A=0..Guide=10. Axes: LX=0..RT=5. |
-| **Extended Custom** | `ExtendedBtn0`, `ExtendedAxis2`, `ExtendedAxis2Neg`, `ExtendedPov0Up` | Indexed by position. POV 0 only maps to D-Pad. |
+| **Raw surface** (Extended Custom and Nintendo, `isExtended=true`) | `RawBtn0`, `RawAxis2`, `RawAxis2Neg`, `RawPov0Up` | Indexed by position. POV 0 only maps to D-Pad. |
 | **MIDI** | `MidiNote0`, `MidiCC3`, `MidiCC3Neg` | No D-Pad support (returns `null`). |
-| **KB+M** | `KbmMBtn0`, `KbmMouseX`, `KbmMouseXNeg`, `KbmKey20`, `KbmScroll` | Mouse buttons 0–4, VK codes, 3 mouse axes. D-Pad mapped to arrow keys. |
+| **KB+M** | `KbmMBtn0`, `KbmMouseX`, `KbmMouseXNeg`, `KbmKey20`, `KbmScroll` | Mouse buttons 0–4, VK codes, 4 mouse axes (`KbmMouseX`, `KbmMouseY`, `KbmScroll`, `KbmScrollH`). D-Pad mapped to arrow keys. |
+| **VR** (#49) | `VrRA`, `VrLStickX`, `VrLStickXNeg`, `VrLGrip` | One slot is the left plus right hand pair. Buttons 0-15, axes mirror the gamepad order (LX0 LY1 LT2 RX3 RY4 RT5) with the two grips as axes 6 and 7. No D-Pad. |
 
 ### Internal Layout Kinds
 
 ```csharp
-private enum LayoutKind { Gamepad, Extended, Midi, Kbm }
+private enum LayoutKind { Gamepad, Extended, Midi, Kbm, Vr }
 ```
 
 - Xbox, PlayStation, and Extended gamepad preset all resolve to `LayoutKind.Gamepad`.
-- Extended with `isExtended=true` (custom HID descriptor) resolves to `LayoutKind.Extended`.
+- Extended or Nintendo with `isExtended=true` (raw HID surface) resolves to `LayoutKind.Extended`. `GetLayoutLabel` prints that kind as "Nintendo" for a Nintendo slot and "Extended" otherwise.
 - `IsSameLayout` compares resolved `LayoutKind` values.
 
 ---
@@ -2161,7 +2170,7 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 
 ### Structs
 
-**SDL_GUID** (16 bytes): `data0` through `data15`. Methods: `ToGuid()` (converts to .NET `Guid`), `ToByteArray()`.
+**SDL_GUID**: one `byte[16] data` field, marshalled `ByValArray`. `SDL_GUIDToString` renders it, and the `GetJoystickGUIDString(IntPtr joystick)` helper wraps the pair into a 32-character string.
 
 **SDL_HapticDirection** (16 bytes): `type` (byte), `dir0`, `dir1`, `dir2` (int).
 
@@ -2281,7 +2290,7 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 
 **Lifecycle**: `SDL_Init`, `SDL_Quit`, `SDL_EnableScreenSaver`, `SDL_GetError`, `SDL_SetHint`, `SDL_free`
 
-**Joystick Enumeration**: `SDL_GetJoysticks`, `SDL_GetJoystickGUIDForID`, `SDL_GetJoystickVendorForID`, `SDL_GetJoystickProductForID`, `SDL_GetJoystickProductVersionForID`, `SDL_GetJoystickTypeForID`, `SDL_GetJoystickNameForID`, `SDL_GetJoystickPathForID`, `SDL_IsGamepad`
+**Joystick Enumeration**: `SDL_GetJoysticks`, `SDL_GetJoystickVendorForID`, `SDL_GetJoystickProductForID`, `SDL_GetJoystickProductVersionForID`, `SDL_GetJoystickTypeForID`, `SDL_GetJoystickNameForID`, `SDL_GetJoystickPathForID`, `SDL_IsGamepad`
 
 **Gamepad Mappings**: `SDL_AddGamepadMappingsFromFile`, `SDL_AddGamepadMapping`, `GetGamepadMapping`
 
@@ -2718,8 +2727,10 @@ All fields are `[XmlAttribute]` except `Items`:
 | `MenuId` | `1` | Stable id unique within the owning slot's menu list. Rides the fired descriptor grammar `Menu {MenuId} Item {k}`. |
 | `Name` | `""` | Display name. |
 | `Kind` | `Radial` | Layout family. |
-| `HostDescriptor` | `"Gamepad RightStick"` | The input surface driving the menu: an abstract stick (`Gamepad LeftStick` / `Gamepad RightStick`) or a touchpad (`Touchpad 0`..`Touchpad 2`). Sticks engage on deflection past `EngageDeadzonePercent`. Touchpads engage on touch. |
+| `HostDescriptor` | `"Gamepad RightStick"` | The input surface driving the menu: an abstract stick (`Gamepad LeftStick` / `Gamepad RightStick`), a touchpad (`Touchpad 0`..`Touchpad 2`), or `"Custom"` with the two raw axis descriptors below. Sticks engage on deflection past `EngageDeadzonePercent`. Touchpads engage on touch. |
 | `HostHalf` | `0` | Horizontal half-window for single-physical-pad hosts (DS4 / DualSense trackpad halves): 0 = whole surface, 1 = left half, 2 = right half. Sticks are always 0. |
+| `CustomXDescriptor` / `CustomYDescriptor` | `""` | Raw axis descriptors (`"Axis 3"`, `"Slider 0"`, ...) that steer the menu when `HostDescriptor` is `"Custom"`. This is what makes joysticks, wheels, and other non-gamepad devices first-class openers, since "Left/Right Stick" means nothing on them. Engage follows the same deadzone rule as sticks. |
+| `ClickDescriptor` | `""` | Assignable Click input for the Click / Click Release fire modes, any button-family descriptor. Empty = the host's default (stick click for stick hosts, pad click for touchpads, none for Custom). |
 | `LayerMask` | `""` | Shift layer the menu belongs to. Empty or `"Base"` = always available. Anything else engages the menu only while that layer is held (imported mode-shift menus). |
 | `FireType` | `Click` | When a hovered item fires. |
 | `CellCount` | `4` | Grid: total cell count (Steam's `touch_menu_button_count`). Radial: ring slot count, center excluded. |
@@ -2736,7 +2747,7 @@ All fields are `[XmlAttribute]` except `Items`:
 
 ### MenuItemDefinition
 
-One cell of a menu, nested in the same file. All four properties are `[XmlAttribute]`:
+One cell of a menu, nested in the same file. All six properties are `[XmlAttribute]`:
 
 | Property | Purpose |
 |---|---|
@@ -2744,6 +2755,8 @@ One cell of a menu, nested in the same file. All four properties are `[XmlAttrib
 | `Label` | Display label rendered by the overlay. |
 | `VirtualKey` | Direct key binding: Win32 virtual-key code, 0 = none. |
 | `XboxButtons` | Direct virtual-controller binding: Xbox button bitmask (`Gamepad.*` constants), 0 = none. |
+| `ExtendedButton` | Direct binding for Extended slots: 1-based raw button number in the slot's custom layout, 0 = none. Extended output is raw HID up to 128 buttons, where an Xbox mask has no meaning. |
+| `Icon` | Steam Input cell icon name, the binding string's third comma field (`"ghost_050_menu_0030.png"`). A bare PNG name in the local Steam client's binding-icon art, resolved at display time and falling back to the text label when Steam or the file is absent. Never a path: only names passing `IsValidIconName` are stored. |
 
 Bindings come in two shapes. Imported Workshop menus leave the direct-binding fields at 0 and deliver through mapping rows / macros keyed on the item's fired descriptor (`Menu {id} Item {k}`). Hand-authored items may instead carry ONE direct binding that the menu runtime fires itself, so authoring a simple item never requires a hidden row.
 
@@ -2798,4 +2811,4 @@ The App-side runtime (`InputManager.MenuRuntime.cs`) ticks these contexts from S
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

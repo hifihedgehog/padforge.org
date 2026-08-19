@@ -63,4 +63,4 @@ when that device has the matching hardware.
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [Headset Head Tracking](headset-motion.md) | Head rotation from a Sony headset as a motion source |
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

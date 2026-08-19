@@ -3089,8 +3089,8 @@
 <hr />
 <h2 id="polling-rate">Polling rate<a class="headerlink" href="#polling-rate" title="Permanent link">&para;</a></h2>
 <p>PadForge reads every connected controller on its own background thread. The default rate is <strong>1000 Hz</strong> (once per millisecond).</p>
-<p>You can change the rate in <strong><a href="../settings/">Settings</a> &gt; Input Engine &gt; Polling interval</strong>. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.</p>
-<p>By default PadForge keeps reading even when its window sits behind the game. The <strong>Continue polling when window loses focus</strong> checkbox, in the same <strong>Input Engine</strong> settings, controls that. Turn it off to pause reads whenever PadForge loses focus.</p>
+<p>You can change the rate in <strong><a href="../settings/">Settings</a> &gt; Input Engine &gt; Polling Interval</strong>. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.</p>
+<p>By default PadForge keeps reading even when its window sits behind the game. The <strong>Continue Polling When Window Loses Focus</strong> checkbox, in the same <strong>Input Engine</strong> settings, controls that. Turn it off to pause reads whenever PadForge loses focus.</p>
 <!-- SCREENSHOT: dashboard-polling-readout -->
 <p><img alt="The Dashboard engine card showing the live polling rate in Hz" src="../../images/dashboard-polling-readout.png" /></p>
 <p>The <a href="../dashboard/">Dashboard</a> shows the live rate next to the engine power button, so you can confirm the reads are landing where you set them.</p>
@@ -3247,7 +3247,7 @@
 <p>Each virtual controller sends one full state update per read. Every button, axis, and hat travels in a single report, so the cost per frame is fixed. It does not grow with how many axes or buttons the slot has.</p>
 <p>There is no per-axis or per-button overhead. At 1000 Hz that is one report per controller per millisecond. Adding more slots scales the work in a straight line.</p>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

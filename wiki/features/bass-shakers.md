@@ -18,7 +18,7 @@ through the audio output. Macro and test rumble stay on the controller.
 
 | Control | What it does |
 | --- | --- |
-| **Route rumble to an audio output** | Plays the game rumble and force feedback this virtual controller receives as low-frequency tones on the selected audio output. Turning it off keeps every setting. |
+| **Route Rumble to an Audio Output** | Plays the game rumble and force feedback this virtual controller receives as low-frequency tones on the selected audio output. Turning it off keeps every setting. |
 | **Output Device** | The playback device that receives the rumble tones. System default follows the Windows default playback device. If the selected device disappears, audio stays off until it returns. |
 | **Channel Mode** | **Mono (All Channels)** plays every voice on all speaker channels. **Controller Stereo** splits them like the controller: low motor and left trigger on the left channel, high motor and right trigger on the right. |
 | **Master Gain** | Overall loudness applied after each voice's own gain. Keep headroom so the four voices do not clip when they play together. |
@@ -66,4 +66,4 @@ carries a **Reset All** for the whole card.
 - [Controller Audio](controller-audio.md) covers the controller's own
   speaker and haptic-tone audio.
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

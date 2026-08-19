@@ -605,4 +605,4 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

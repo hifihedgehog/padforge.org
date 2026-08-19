@@ -75,7 +75,7 @@ Setting frequency to 0 in a vibration mode gives no buzz, and the preview hides 
 
 ### Reset buttons
 
-Every slider has its own reset button. Start and end snap to 0 and 255. Strength snaps to 200. Frequency snaps to 10. A Reset at the top of each trigger card clears every parameter on that trigger and resets the mode.
+Every slider has its own reset button. Start and end snap to 0 and 255. Strength snaps to 200. Frequency snaps to 10. **Reset All** at the top of each trigger card clears every parameter on that trigger and sets the mode back to Off.
 
 ---
 
@@ -111,4 +111,4 @@ The sliders stay editable after loading. It's a one-click loader, not a lock.
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

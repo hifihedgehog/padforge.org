@@ -13,7 +13,7 @@
  },
  {
   "q": "Which controllers work as a source device?",
-  "a": "Anything Windows recognises as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (USB or in-app Bluetooth pairing), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, the Wii Remote and its Nunchuk, Classic Controller, and Wii U Pro Controller (paired in-app), any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads. For unrecognised gamepads, the Devices page has a one-click \"Submit Mapping\" button that opens a pre-filled GitHub issue with the device's VID:PID and SDL GUID. Once merged, the mapping ships to everyone on the next release."
+  "a": "Anything Windows recognizes as a HID input device. Xbox 360, Xbox One, Xbox Elite, Xbox Series, DualShock 3 (USB or in-app Bluetooth pairing), DualShock 4, DualSense, DualSense Edge, Switch Pro, 2026 Steam Controller, the Wii Remote and its Nunchuk, Classic Controller, and Wii U Pro Controller (paired in-app), any DirectInput joystick / flight stick / racing wheel / HOTAS / pedals, keyboards, mice, and even Windows Precision Touchpads. For unrecognized gamepads, the Devices page has a one-click \"Submit Mapping\" button that opens a pre-filled GitHub issue with the device's VID:PID and SDL GUID. Once merged, the mapping ships to everyone on the next release."
  },
  {
   "q": "How do I pair a Wii controller?",
@@ -33,19 +33,19 @@
  },
  {
   "q": "Can I use a phone or tablet as a controller?",
-  "a": "Yes. Enable the Web Controller on the Dashboard, open the URL it shows from any browser on the same Wi-Fi network (no app to install), pick an Xbox 360 layout, a DualShock 4 layout, or a Touchpad-only layout, and start playing. The browser sends input, PadForge feeds it into the slot you assign it to, and rumble feeds back to the phone through the browser's Vibration API where supported."
+  "a": "Yes. Enable the Web Controller on the Dashboard, open the URL it shows from any browser on the same Wi-Fi network (no app to install), pick one of the ten controller layouts, the touchpad surface, or a pad you built yourself, and start playing. The browser sends input, PadForge feeds it into the slot you assign it to, and rumble feeds back to the phone through the browser's Vibration API where supported."
  },
  {
   "q": "What does PadForge need to run?",
   "a": "Windows 10 or 11, 64-bit. The .NET 10 Desktop Runtime is bundled in the single-file release so there is nothing else to install. HIDMaestro auto-installs on first launch. HidHide and Windows MIDI Services are optional and install from Settings when you need them. For best results: a recent Windows 11 build (24H2 or newer). MIDI input and the MIDI virtual controller type need Windows MIDI Services, which is Windows 11 24H2 (build 26100) and later."
  },
  {
-  "q": "I have a controller PadForge doesn't recognise. Can I add it?",
+  "q": "I have a controller PadForge doesn't recognize. Can I add it?",
   "a": "Yes, in two ways. The fast way: turn on Force Raw Joystick Mode on the device card. PadForge stops trying to interpret it as a known gamepad layout and exposes every raw button and axis directly. Map them by hand on the Mappings tab. The better way: click the Submit Mapping button on the device's card. Your browser opens a GitHub issue pre-filled with everything PadForge can read about the device. You fill in which raw input is which named button, and once merged the mapping ships in gamecontrollerdb_padforge.txt for every PadForge user."
  },
  {
   "q": "Can I share a controller across several PCs?",
-  "a": "Yes, across as many as you like. Remote Link pairs PadForge PCs on the same local network. A controller, wheel, or HOTAS plugged into one PC shows up in the others' Devices lists, ready to assign to a slot and map like any local controller. One PC can be linked to several at once, both directions, and the feedback returns to the real hardware: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it is plugged in. Pairing is a one-time six-digit code you match on both screens. After that, trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC from reaching your keyboard, mouse, and macros. Remote Link finds PCs on your local network on its own. To play across the internet, put the PCs on one virtual network with a VPN like ZeroTier and connect by address."
+  "a": "Yes, across as many as you like. Remote Link pairs PadForge PCs on the same local network. A controller, wheel, or HOTAS plugged into one PC shows up in the others' Devices lists, ready to assign to a slot and map like any local controller. One PC can be linked to several at once, both directions, and the feedback returns to the real hardware: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it is plugged in. Pairing is a one-time six-digit code you match on both screens. After that, trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC from reaching your keyboard, mouse, and macros. Remote Link finds PCs on your local network on its own. To play across the internet, swap connection codes with the other PC and connect, no VPN needed. On a network that blocks direct connections, such as a mobile hotspot or carrier-grade NAT, fall back to a VPN and Connect by Address."
  },
  {
   "q": "How does PadForge compare to reWASD, Steam Input, or DS4Windows?",

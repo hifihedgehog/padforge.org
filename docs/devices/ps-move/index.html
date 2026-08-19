@@ -1944,6 +1944,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pairing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pairing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2877,6 +2899,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pairing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pairing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-reports" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2938,10 +2982,22 @@
 
 
 <h1 id="playstation-move">PlayStation Move<a class="headerlink" href="#playstation-move" title="Permanent link">&para;</a></h1>
-<p><em>The Move wand and the Navigation controller as mapping sources, over USB and Bluetooth.</em></p>
-<p>Both PlayStation Move devices report to PadForge without a driver install. The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.</p>
-<p>Plug either in over USB, or pair it over Bluetooth, and it appears on the <a href="../../features/devices/">Devices</a> page under its own name.</p>
+<p><em>The Move wand and the Navigation controller as mapping sources, over Bluetooth.</em></p>
+<p>The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.</p>
+<p>Both connect over Bluetooth through the same signed PlayStation Bluetooth driver the <a href="../dualshock-3/">DualShock 3</a> uses, which PadForge installs at pairing time. They appear on the <a href="../../features/devices/">Devices</a> page as <strong>PS Move Motion Controller</strong> and <strong>PS Move Navigation Controller</strong>.</p>
 <p><img alt="A PS Move Motion Controller on the Devices page, with its live motion readout" src="../../images/devices-move.png" /></p>
+<hr />
+<h2 id="pairing">Pairing<a class="headerlink" href="#pairing" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open the <a href="../../features/devices/">Devices</a> page and click <strong>Pair</strong>.</li>
+<li>Set <strong>Controller Family</strong> to <strong>PlayStation Move / Navigation</strong>.</li>
+<li>Connect the controller with a USB cable and click <strong>Pair</strong>. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.</li>
+<li>Unplug and press the controller's <strong>PS</strong> button. It connects over Bluetooth.</li>
+</ol>
+<p>Docking an original Move over USB also runs this on its own, so a wand that has never been paired pairs the first time you plug it in to charge.</p>
+<hr />
+<h2 id="usb">USB<a class="headerlink" href="#usb" title="Permanent link">&para;</a></h2>
+<p>USB is a pairing and charging dock, not an input path, for the original Move (ZCM1) and for the Navigation controller. Neither streams input over the cable. The PS4-era Move (ZCM2) does stream over USB.</p>
 <hr />
 <h2 id="what-reports">What reports<a class="headerlink" href="#what-reports" title="Permanent link">&para;</a></h2>
 <table>
@@ -2962,19 +3018,16 @@
 </tr>
 <tr>
 <td><strong>Buttons</strong></td>
-<td>The face buttons, Start and Select, the PS button, and the Move button.</td>
+<td>Eight: Cross, Circle, Square, Triangle, Select, Start, PS, and the big Move button. Move sits on the right shoulder, beside the trigger.</td>
 </tr>
 <tr>
 <td><strong>Trigger</strong></td>
-<td>Analog, so it maps to a trigger axis rather than collapsing to a press.</td>
-</tr>
-<tr>
-<td><strong>Sphere</strong></td>
-<td>The wand's lamp.</td>
+<td>Analog, on the right-trigger axis, so it maps to a trigger rather than collapsing to a press.</td>
 </tr>
 </tbody>
 </table>
-<p>The Navigation controller reports its stick, its D-pad, and its buttons. It has no motion sensors.</p>
+<p>The wand's sphere is an output, not a source. PadForge drives it from the <a href="../../features/lighting/">Lighting</a> tab, and it idles at the slot's player color.</p>
+<p>The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, PS, and its analog L2. It has no motion sensors.</p>
 <hr />
 <h2 id="using-the-motion">Using the motion<a class="headerlink" href="#using-the-motion" title="Permanent link">&para;</a></h2>
 <p>The Move's gyro is an ordinary motion source once it is mapped, so everything the <a href="../../guides/gyro/">Gyro guide</a> describes applies: reference frames, real-world calibration, Aim Engage, and Gyro Tilt.</p>
@@ -2984,12 +3037,14 @@
 <ul>
 <li>PadForge reads the Move's sensors. It does <strong>not</strong> do camera tracking, so there is no positional data, only rotation and acceleration.</li>
 <li>The sphere is an output PadForge can drive, not a tracking input.</li>
+<li>Motion depends on the per-wand calibration captured over USB. A wand that has never been docked reports its buttons and trigger normally, but its gyroscope and accelerometer stay muted. Plug it in once to fix that.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../features/devices/">Devices</a></li>
 <li><a href="../../guides/gyro/">Gyro</a></li>
+<li><a href="../../features/lighting/">Lighting</a></li>
 <li><a href="../dualshock-3/">DualShock 3</a></li>
 </ul>
 <hr />

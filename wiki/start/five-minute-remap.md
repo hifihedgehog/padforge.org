@@ -78,4 +78,4 @@ device (a generic joystick, an arcade encoder) from scratch.
   [Shift Layers](../guides/shift-layers.md).
 - Timed sequences on one press: [Macros](../guides/macros.md).
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

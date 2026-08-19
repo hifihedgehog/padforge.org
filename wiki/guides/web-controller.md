@@ -14,8 +14,8 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 
 ### 1. Turn on the server
 
-1. On the [Dashboard](../features/dashboard.md), check the box in the **Web Controller** section.
-2. PadForge shows a URL (e.g., `http://192.168.1.100:8080`).
+1. On the [Dashboard](../features/dashboard.md), check **Enable Web Controller Server** in the **Web Controller** section.
+2. PadForge shows a URL (e.g., `https://192.168.1.100:8080`, or `http://` when the certificate binding fails).
 3. The Dashboard shows the server status and how many browser tabs are connected.
 
 ### 2. Open the URL on your phone
@@ -26,10 +26,10 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 
 ### 3. Pick a layout
 
-Tap **Xbox 360**, **DualShock 4**, or **Touchpad**.
+Tap one of the twelve cards. Ten are gamepad layouts, one is the bare **Touchpad** surface, and **Build Your Own** opens the builder.
 
-- Xbox 360 and DualShock 4 share the same buttons, sticks, and triggers. DualShock 4 adds a touchpad drag area on the controller art, with its own click button.
-- Both gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
+- Every gamepad layout uses the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
+- Layouts with a touchpad add a drag surface on the controller art, with its own click pill beside it.
 - Touchpad is a multi-touch surface that drives the DS4 touchpad on whichever PlayStation slot it is assigned to.
 
 ### 4. Assign the controller to a slot
@@ -49,7 +49,7 @@ The web controller is built into PadForge. Nothing extra to install. The phone o
 | Requirement | Details |
 |-------------|---------|
 | **Port** | TCP 8080 (default), settable on the [Dashboard](../features/dashboard.md) |
-| **Firewall** | PadForge creates a Windows Firewall rule on first run. Third-party firewalls may need a manual TCP 8080 allow rule. |
+| **Firewall** | PadForge adds a "PadForge Web Controller" inbound rule when the server starts, if one is not already there. Third-party firewalls may need a manual TCP 8080 allow rule. |
 | **Max clients** | 16 browser tabs at once |
 
 **Can't reach the URL?**
@@ -64,7 +64,7 @@ Stopping PadForge stops the server.
 
 ## Controller layouts
 
-Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full, or drag the analog slider beside it for a partial pull.
+Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full. Keep the finger down and drag it downward to feather the pull, and slide back up for full again.
 
 | Layout | What it adds |
 |---|---|
@@ -79,31 +79,33 @@ Every layout draws the same 2D controller art the desktop app shows. Tap a trigg
 | **Steam Deck** | Dual trackpads and four grips |
 | **Steam Controller** | Dual trackpads and paddles |
 | **Touchpad** | Multi-touch surface only |
-| **Custom** | Drag widgets onto a blank pad |
+| **Build Your Own** | Drag widgets onto a blank pad |
 
 Switch layouts at any time by going back to the landing page.
 
 ### Finishes
 
-Layouts that ship in more than one colour carry a row of swatches on their card. Tap one before you open the layout and the controller art is drawn in that finish.
+Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.
 
 ![The layout picker, with finishes](../images/web-landing.png)
 
 ### Lights, on the page
 
-The DualShock 4, DualSense and DualSense Edge layouts draw their lightbar, and the DualSense layouts draw the player LEDs underneath the touchpad. Both follow whatever the slot is doing, so a game that drives the lightbar drives it here too.
+Every gamepad layout carries a slim lightbar strip across the top edge of the page and a row of player pips in the top right corner. Both stay hidden until the slot pushes an LED color or a player number, and both follow whatever the slot is doing, so a game that drives the lightbar drives it here too.
 
 ![The DualSense layout](../images/web-dualsense.png)
 
 ### Trackpads and grips
 
-The Steam Deck and Steam Controller layouts carry both trackpads as real touch surfaces, plus the rear grip buttons (L4, L5, R4, R5 on the Deck) as pills beside the shell.
+The Steam Deck carries both trackpads as real touch surfaces, plus its four rear grip buttons as tiles at the outer edges of the shell.
+
+The 2015 Steam Controller is different, because that is how SDL maps the real hardware. Its left pad is an 8-way D-pad surface, its right pad is the right stick, and it has one physical thumbstick (the left one) plus two rear grips. The two pad-click zones are suppressed on glass, since they would sit on top of the surfaces and steal every touch.
 
 ![The Steam Deck layout](../images/web-steamdeck.png)
 
 ### Nintendo layouts
 
-The Switch Pro layout carries the Capture button, and the Switch 2 Pro adds the C button and its back paddles (GL and GR).
+The Switch Pro layout carries the Capture button, and the Switch 2 Pro adds the C button and its two back paddles.
 
 ![The Switch 2 Pro layout](../images/web-switch2pro.png)
 
@@ -126,7 +128,9 @@ Each slot the phone is assigned to carries its own toggles and tuning.
 
 ## Build your own layout
 
-The **Custom** card opens a builder that starts from a blank pad. Add widgets (sticks, buttons, triggers, D-pads, touch surfaces), drag them where your thumbs actually sit, and save. Saved pads are stored with your PadForge settings, so the phone loads yours the next time it connects.
+The **Build Your Own** card opens a builder that starts from a blank pad. Tap **Edit** to bring up the toolbar, add widgets (buttons, sticks, trigger sliders, a D-pad, a touch area), drag them where your thumbs actually sit, name the pad, and save. A pad holds up to 64 widgets.
+
+Saved pads live in PadForge's own settings file beside the executable, machine-wide rather than inside a profile, and each one gets its own card on the landing page next to the stock layouts. A saved pad shows up on the [Devices](../features/devices.md) page under its own name, and its shape follows its widgets: a pad built from two buttons and a stick offers exactly that in the mapping picker.
 
 ![The custom controller builder](../images/web-custom.png)
 
@@ -140,6 +144,8 @@ Browsers only hand out sensor readings over a secure connection. PadForge binds 
 
 Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.
 
+Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a **Motion** button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. On iOS the same tap is what triggers Safari's sensor permission prompt, so the button is required there, not optional. The Touchpad page has no motion button.
+
 A **QR code** on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.
 
 ## Touch controls
@@ -149,7 +155,7 @@ A **QR code** on the Dashboard's Web Controller card gets the phone to the right
 | **Buttons** | Tap to press. Touch zones are larger than the visible art for easier targeting on small screens. |
 | **Analog sticks** | Drag inside the stick zone to move. Release to re-center. **Stick click (L3 / R3):** tap and release within 200 ms with little movement. |
 | **D-pad** | Touch and drag toward a direction. All 8 directions (cardinal and diagonal). |
-| **Triggers** | Tap to send a full press. Release to return to zero. |
+| **Triggers** | Tap to send a full press. Hold and drag down to feather the pull, back up for full. Release to return to zero. |
 
 ---
 
@@ -176,9 +182,9 @@ PadForge forwards vibration to the browser, which uses your device's built-in vi
 
 ## The one-time refresh
 
-Tap a layout and the page refreshes once before the controller appears. That happens on any browser, and it is expected. The controller works normally after it.
+Tap a gamepad layout and the page refreshes once before the controller appears. That happens on any browser, and it is expected. The controller works normally after it.
 
-The refresh works around an iOS Safari bug. On iOS, the connection fails on the first load when the page is reached by tapping a link, and a reload clears it. Chrome, Firefox, Edge, and Chrome on Android do not have that bug, but they still do the single refresh.
+The refresh works around an iOS Safari bug. On iOS, the connection fails on the first load when the page is reached by tapping a link, and a reload clears it. Chrome, Firefox, Edge, and Chrome on Android do not have that bug, but they still do the single refresh. The Touchpad page and the builder do not do it at all.
 
 ---
 
@@ -188,7 +194,7 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 |-------------|---------|
 | **Network** | PC and device on the same local network (Wi-Fi) |
 | **Port** | TCP 8080 (default), not blocked by the firewall |
-| **Orientation** | The Xbox 360 and DualShock 4 layouts need landscape and show a warning in portrait. The Touchpad layout works in portrait or landscape. |
+| **Orientation** | Every gamepad layout needs landscape and shows a "Rotate to landscape mode" warning in portrait. The Touchpad layout works in portrait or landscape. |
 | **Browser** | Any current browser (Chrome, Safari, Firefox, Edge) |
 | **Touch** | Touchscreen recommended for analog stick and multi-touch input |
 | **Max clients** | 16 browser tabs at once |

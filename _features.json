@@ -1,7 +1,7 @@
 [
   {
     "t": "Remote Link",
-    "d": "Share a controller, wheel, or HOTAS with the other PCs on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, player LEDs, and speaker audio return to the real hardware. Pair once with a six-digit code. Works on your home network, or across the internet through a VPN like ZeroTier."
+    "d": "Share a controller, wheel, or HOTAS with the other PCs on your network. Both directions at once. Rumble, force feedback, adaptive triggers, lightbar, player LEDs, and speaker audio return to the real hardware. Pair once with a six-digit code. Works on your home network, and across the internet by swapping connection codes with no VPN needed."
   },
   {
     "t": "Steam Workshop config import",
@@ -9,7 +9,7 @@
   },
   {
     "t": "Native wheel force feedback",
-    "d": "Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs."
+    "d": "Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, inertia, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs."
   },
   {
     "t": "Bass shaker output",
@@ -17,7 +17,7 @@
   },
   {
     "t": "Nintendo virtual controller",
-    "d": "A virtual Switch Pro Controller through HIDMaestro, with gyro passthrough and HOME button LED control. Games and emulators that speak Switch see the real thing."
+    "d": "A virtual Switch Pro Controller through HIDMaestro, with gyro passed through from your physical pad. Games and emulators that speak Switch see the real thing."
   },
   {
     "t": "Virtual VR controllers",
@@ -45,7 +45,7 @@
   },
   {
     "t": "Phone-as-controller",
-    "d": "Browser-based gamepad over Wi-Fi. Xbox 360, DualShock 4, or multi-touch touchpad layout. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install."
+    "d": "Browser-based gamepad over Wi-Fi. Ten controller layouts, a multi-touch touchpad, and a builder for your own. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install."
   },
   {
     "t": "On-screen touchpad overlay",
@@ -65,7 +65,7 @@
   },
   {
     "t": "3D and 2D visualization",
-    "d": "Native art per profile. Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense. Click any button in 3D to record its mapping."
+    "d": "Native 2D art per profile, plus 3D models for Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense, DualSense Edge, and the Switch Pro pads. Click any button in 3D to record its mapping."
   },
   {
     "t": "Six deadzone shapes",
@@ -117,11 +117,11 @@
   },
   {
     "t": "Voice macros",
-    "d": "Register a phrase and speak it to fire a macro. Recognition runs offline through Vosk with no account and no cloud, and the model downloads once on first use. Anything the recognizer hears that is not a registered phrase goes to an unknown bucket rather than firing at random."
+    "d": "Register a phrase and speak it to fire a macro. Recognition runs offline with no account and no cloud. The Vosk model downloads once on first use, and Windows' own recognizer carries the feature until it lands. Anything the recognizer hears that is not a registered phrase goes to an unknown bucket rather than firing at random."
   },
   {
     "t": "PlayStation Move and Navigation",
-    "d": "Both PlayStation Move devices report over USB and Bluetooth. The wand carries a gyroscope, an accelerometer, an analog trigger and its illuminated sphere; the Navigation controller carries a stick, a D-pad and its buttons. PadForge reads the sensors and does no camera tracking, so there is rotation and acceleration but no position."
+    "d": "Both PlayStation Move devices report over Bluetooth, and the PS4-era wand streams over USB as well. The wand carries a gyroscope, an accelerometer, an analog trigger and its illuminated sphere. The Navigation controller carries a stick, a D-pad and its buttons. Motion needs the wand's own calibration data, which PadForge reads once from a USB dock. There is no camera tracking, so you get rotation and acceleration but never position."
   },
   {
     "t": "VR devices as mapping sources",
@@ -137,7 +137,7 @@
   },
   {
     "t": "Trackball momentum",
-    "d": "Flick a stick or a touchpad and the cursor keeps travelling, coasting to a stop on constant-deceleration physics. Momentum Glide sets how far it coasts, and the fling controls tune what a fast flick does."
+    "d": "Flick a stick or a touchpad and the cursor keeps traveling, coasting to a stop on constant-deceleration physics. Momentum Glide sets how far it coasts, and the touchpad adds fling controls for what a fast flick does."
   },
   {
     "t": "Gyro Tilt",

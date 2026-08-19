@@ -25,7 +25,7 @@ So the data flow is: PadForge pairs over Bluetooth, the Microsoft Bluetooth stac
 | File | Role |
 |---|---|
 | `PadForge.App/Services/WiiPairingService.cs` | The pairing ceremony. `public sealed class`, P/Invoke over `bthprops.cpl`. Original C# over the Win32 Bluetooth API, following the sequence Dolphin's `Source/Core/Core/HW/WiimoteReal/IOWin.cpp` documents (no Dolphin GPL code). |
-| `PadForge.App/Views/PairDeviceDialog.xaml.cs` | The Fluent dialog, family-selectable via a Controller Family combo (Nintendo Wii / Sony DualShock 3). The Wii branch loops `RunPairingPass` on a background thread until a controller pairs or the user cancels. Picking DualShock 3 hides the temporary-pairing checkbox and routes `Pair_Click` to `PairDs3` / `Ds3PairingService` instead (out of scope here). |
+| `PadForge.App/Views/PairDeviceDialog.xaml.cs` | The Fluent dialog, family-selectable via a Controller Family combo (index 0 Nintendo Wii, 1 Sony DualShock 3, 2 PS Move / Navigation). The Wii branch loops `RunPairingPass` on a background thread until a controller pairs or the user cancels. Either Sony family hides the temporary-pairing checkbox and the live found-list, and routes `Pair_Click` to `PairDs3` / `Ds3PairingService` instead (out of scope here). |
 | `PadForge.App/Common/Input/InputManager.cs` | The SDL Wii hint in `InitializeSdl` and the `RescanWiiControllers` hint toggle. |
 | `PadForge.App/MainWindow.xaml.cs` | The `PairRequested` handler that opens the dialog then runs the rescan, and the 100 ms `_sdlPumpTimer`. |
 | `PadForge.App/Services/InputService.cs` | `RescanWiiControllers` passthrough to the input manager. |
@@ -256,7 +256,7 @@ for (int i = 0; i < 8 && !_disposed; i++)
 
 Setting the hint to `0` runs `SDL_HIDAPIDriverHintChanged`, which disables the driver. SDL cleans up the stale device, closes the dead handle, and resets its hidapi change count to force a re-enumerate. Setting the hint back to `1` re-opens and re-inits the now-stable device. The toggle repeats eight times over about 11 seconds (`(200 + 1200) * 8`) to cover the post-pair settling window, because the controller only connects on a button press that can come several seconds late.
 
-The work runs on a background thread through `Task.Run` and checks `_disposed` each iteration. It is safe to call from any thread because `SDL_SetHint` is thread-safe. The actual driver re-scan happens on the UI thread: `MainWindow`'s `_sdlPumpTimer` fires `PumpSdlEvents` every 100 ms, and `PumpSdlEvents` runs `SDL_PumpEvents` then `SDL_UpdateJoysticks` on the `SDL_Init` thread, which is where SDL's hidapi posts its device-change messages and where a re-enumerate actually produces joysticks. So the background toggle changes the hint and the UI pump processes each change.
+The work runs on a background thread through `Task.Run` and checks `_disposed` each iteration. It is safe to call from any thread because `SDL_SetHint` is thread-safe. The actual driver re-scan happens on the UI thread: `MainWindow`'s `_sdlPumpTimer` fires `PumpSdlEvents` every 100 ms on the `SDL_Init` thread, which is where SDL's hidapi posts its device-change messages and where a re-enumerate actually produces joysticks. `SDL_PumpEvents` runs on every tick. `SDL_UpdateJoysticks` is throttled to once per 500 ms inside `PumpSdlEvents`, because it shares SDL's joystick lock with the 1 kHz poll thread and the two were convoying into paired ~100 ms stalls. So the background toggle changes the hint and the UI pump processes each change.
 
 ---
 
@@ -266,9 +266,9 @@ The work runs on a background thread through `Task.Run` and checks `_disposed` e
 
 Driving a Bluetooth Wii controller on Windows 8 and later relies on several fixes in PadForge's SDL3 fork, all shipped in the bundled `SDL3.dll`. These three cover pairing and connect stability:
 
-1. **Bluetooth `hid_write` fallback.** A Wii Remote's output reports must go through `HidD_SetOutputReport`, because the Microsoft Bluetooth stack rejects `WriteFile` for an output length at or under 512 bytes (a Wiimote report is 22). The fork keeps the `WriteFile` path and adds a `HidD_SetOutputReport` fallback when `WriteFile` returns error 87 (`ERROR_INVALID_PARAMETER`). This is `hifihedgehog/SDL#2`, referenced in the `InitializeSdl` comment.
-2. **Connect-timeout seed.** `m_ulLastInput` is seeded with `SDL_GetTicks()` in the device's `InitDevice`. Without it, a freshly-paired remote is disconnected after the app's first three-second input timeout before it has sent anything.
-3. **Extension hot-plug.** `UpdateDevice` re-identifies the controller when a Nunchuk or other extension is attached or detached, so the form change is picked up and the device re-added without a restart.
+1. **Bluetooth `hid_write` fallback.** A Wii Remote's output reports must go through `HidD_SetOutputReport`, because the Microsoft in-box Bluetooth stack rejects `WriteFile` for them. Upstream only routes a device to `HidD_SetOutputReport` when `output_report_length > 512` and the host is pre-Windows 8, so a 22-byte Wiimote report never took that path. The fork keeps the `WriteFile` path and adds a per-device `HidD_SetOutputReport` retry when `WriteFile` returns error 87 (`ERROR_INVALID_PARAMETER`), keeping the switch only if the retry succeeds so a device that needs the interrupt-OUT path is not stranded on the control pipe. This is `hifihedgehog/SDL#2`, referenced in the `InitializeSdl` comment.
+2. **Connect-timeout seed.** `m_ulLastInput` is seeded with `SDL_GetTicks()` in the device's `InitDevice`, and again after the re-identify below. Left at 0, `UpdateDevice`'s `now >= m_ulLastInput + INPUT_WAIT_TIMEOUT_MS` check disconnects the remote the moment app uptime passes three seconds, before the app can open it (the "only works right after a restart" bug).
+3. **Extension hot-plug.** The device stays physically present across an extension attach or detach, so the HIDAPI core never tears it down and re-runs `InitDevice`. `UpdateDevice` re-identifies in place: drop the old joystick, re-read the extension type, refresh the name and GUID, clear the now-stale IR-active flag, re-seed `m_ulLastInput`, then re-add with the new capabilities.
 
 A fourth fix feeds the IR pointer above: the driver posts the two IR dots on dedicated joystick axes 6-9 (`hifihedgehog/SDL#6` follow-up `41909fdc4e`), separate from the gamepad sticks so an extension keeps axes 0-3. Further fork fixes handle MotionPlus and D-pad mapping (the MotionPlus identify dead-window, the ~8s MotionPlus presence-churn loop, bare-D-pad POV-hat mapping, IR + MotionPlus coexistence). Those bear on gyro and hat mapping rather than the read path here, so their detail lives on [Gyro](../guides/gyro.md) and in the read-only SDL3 fork.
 
@@ -288,4 +288,4 @@ These live in the SDL3 fork and are read-only from PadForge's side. See [SDL3 In
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

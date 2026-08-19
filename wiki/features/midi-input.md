@@ -64,4 +64,4 @@ PadForge's own MIDI virtual controllers show up in the MIDI input list on purpos
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

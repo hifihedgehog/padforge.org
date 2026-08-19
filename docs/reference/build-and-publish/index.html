@@ -4214,7 +4214,7 @@
 <tbody>
 <tr>
 <td><code>PadForge.exe</code></td>
-<td>~296 MB, single-file self-contained. The only file in the publish directory</td>
+<td>~309 MB, single-file self-contained. The only file in the publish directory</td>
 </tr>
 </tbody>
 </table>
@@ -4389,7 +4389,7 @@
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">&lt;/Compile&gt;</span>
 </code></pre></div>
 <p><code>SharedVersion.cs</code> carries <code>AssemblyVersion</code> and <code>AssemblyFileVersion</code>. The assemblies cannot drift apart because they compile against the same file. <code>Properties/AssemblyInfo.cs</code> in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does <strong>not</strong> carry version attributes. All three projects set <code>&lt;GenerateAssemblyInfo&gt;false&lt;/GenerateAssemblyInfo&gt;</code> so the build does not regenerate either file.</p>
-<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.2.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>4.2.0.0</code>.</p>
+<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.2.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>4.3.0.0</code>.</p>
 <h2 id="nuget-dependencies">NuGet Dependencies<a class="headerlink" href="#nuget-dependencies" title="Permanent link">&para;</a></h2>
 <h3 id="padforgeapp">PadForge.App<a class="headerlink" href="#padforgeapp" title="Permanent link">&para;</a></h3>
 <table>
@@ -4439,6 +4439,18 @@
 <td>Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses)</td>
 </tr>
 <tr>
+<td><strong>System.Speech</strong></td>
+<td>10.0.0</td>
+<td>nuget.org</td>
+<td>SAPI recognizer behind the voice-macro trigger (#317)</td>
+</tr>
+<tr>
+<td><strong>Vosk</strong></td>
+<td>0.3.38</td>
+<td>nuget.org</td>
+<td>Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an <code>[unk]</code> bucket, so non-phrase audio decodes as unknown</td>
+</tr>
+<tr>
 <td><strong>Microsoft.Windows.Devices.Midi2</strong></td>
 <td>1.0.16-rc.3.7</td>
 <td><strong>nuget-local/</strong></td>
@@ -4446,7 +4458,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>HIDMaestro.Core</code> (the virtual Xbox / PlayStation controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. It is currently v1.6.1. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.</p>
+<p><code>HIDMaestro.Core</code> (the virtual Xbox / PlayStation controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. It is currently v1.6.2. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.</p>
 <p>The App also holds <code>&lt;ProjectReference&gt;</code>s to <code>PadForge.Engine</code> and <code>PadForge.SteamWorkshop</code>.</p>
 <h3 id="padforgesteamworkshop">PadForge.SteamWorkshop<a class="headerlink" href="#padforgesteamworkshop" title="Permanent link">&para;</a></h3>
 <table>
@@ -4643,7 +4655,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cm">&lt;!-- Web controller frontend assets (embedded, served by WebControllerServer) --&gt;</span>
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;WebAssets\**\*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
-<p>HTML/CSS/JS for the browser-based virtual controller. Served by the embedded Kestrel web server at runtime.</p>
+<p>HTML/CSS/JS for the browser-based virtual controller. Served at runtime by <code>WebControllerServer</code>, which runs an <code>HttpListener</code> accept loop, not Kestrel.</p>
 <table>
 <thead>
 <tr>
@@ -4920,7 +4932,7 @@
 </tr>
 </tbody>
 </table>
-<p>The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: <code>tools/</code> went from ~128 entries to 16, and has grown back to 25 with the capture and asset-generation scripts). Nothing in <code>tools/</code> targets the deprecated vJoy stack anymore.</p>
+<p>The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: <code>tools/</code> went from ~128 entries to 16, and has grown back to 30 with the capture, tracing, and asset-generation scripts). Nothing in <code>tools/</code> targets the deprecated vJoy stack anymore.</p>
 <h3 id="development-scripts">Development Scripts<a class="headerlink" href="#development-scripts" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5036,7 +5048,7 @@
 <td>Run <code>dotnet restore</code> first</td>
 </tr>
 <tr>
-<td>Large exe size (~296 MB)</td>
+<td>Large exe size (~309 MB)</td>
 <td>Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset</td>
 <td><code>EnableCompressionInSingleFile</code> already enabled</td>
 </tr>
@@ -5064,7 +5076,7 @@
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

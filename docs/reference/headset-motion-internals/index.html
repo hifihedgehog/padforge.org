@@ -2984,7 +2984,7 @@
 <h1 id="headset-head-tracking-internals">Headset Head Tracking: Internals<a class="headerlink" href="#headset-head-tracking-internals" title="Permanent link">&para;</a></h1>
 <p><em>How a pair of headphones becomes a motion source: the descriptor probe, the marker, the rotation-to-rate synthesis, and the frame remap.</em></p>
 <p>The user-facing page is <a href="../../features/headset-motion/">Headset Head Tracking</a>. This one is for whoever has to change the code.</p>
-<p>Two files carry it:</p>
+<p>Four files carry it:</p>
 <table>
 <thead>
 <tr>
@@ -2995,7 +2995,11 @@
 <tbody>
 <tr>
 <td><code>PadForge.App/Common/Input/HeadTrackerHid.cs</code></td>
-<td>The HID usage constants</td>
+<td>The HID usage constants and the pure descriptor decode</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HeadTrackerMath.cs</code></td>
+<td><code>AngularRateFromRotationVectors</code>, the rotation-to-rate math</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/SonyHeadsetHid.cs</code></td>
@@ -3068,8 +3072,9 @@
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// ... f.Kind == GyroVector || f.Kind == GyroScalar  =&gt;  hasGyroUsage = true</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">_synthesizeGyro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">hasGyroUsage</span><span class="p">;</span>
 </code></pre></div>
-<p>When the descriptor exposes no gyro usage, the rate is <strong>synthesized from consecutive rotation vectors</strong> using <code>_prevRotation</code> and <code>_prevRotationTicks</code>. Mappings downstream receive an ordinary gyro rate and need no headset-specific handling anywhere in the pipeline.</p>
-<p>If a firmware exposes the rotation vector but no gyro and the synthesis path is disabled, there is nothing to fall back to. That combination is guarded rather than left to produce silence.</p>
+<p>When the descriptor exposes no gyro usage, the rate is <strong>synthesized from consecutive rotation vectors</strong> using <code>_prevRotation</code> and <code>_prevRotationTicks</code> (<code>SynthesizeGyroFromRotation</code>, which calls <code>HeadTrackerMath.AngularRateFromRotationVectors</code>). Mappings downstream receive an ordinary gyro rate and need no headset-specific handling anywhere in the pipeline.</p>
+<p>Parse time is not the only decision point. A descriptor that does expose a gyro usage but streams an all-zero word falls back to synthesis at runtime, and that fallback is <strong>revocable in both directions</strong>: one nonzero sample marks the field live (<code>_gyroFieldLive</code>), and a sustained zero run of <code>GyroZeroRunToRevoke</code> samples hands the lane back to rotation. A one-way latch here meant a single startup artifact disabled synthesis for the life of the device object.</p>
+<p>A descriptor carrying neither a gyro usage nor a rotation vector has nothing this source can serve, so <code>Open</code> fails it outright rather than attaching a device that would publish silence.</p>
 <p>Accelerometer is advertised <strong>only when the descriptor exposes it</strong>. Some firmware reports orientation without it, and claiming otherwise would put a dead source in the picker.</p>
 <hr />
 <h2 id="the-frame-is-remapped-once-at-ingest">The frame is remapped once, at ingest<a class="headerlink" href="#the-frame-is-remapped-once-at-ingest" title="Permanent link">&para;</a></h2>
@@ -3101,7 +3106,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a> for where external devices register</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

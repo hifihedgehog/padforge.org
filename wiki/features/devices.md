@@ -91,7 +91,7 @@ A row of capability icons sits at the bottom of the card: rumble, gyro, and touc
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, and headset motion trackers. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
+Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, and microphones. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -133,7 +133,7 @@ Drag a card from the left panel onto a sidebar slot card. Same result as clickin
 
 1. The slot's [virtual controller](controller-slots.md) is created if it does not exist yet
 2. A default [mapping](mappings.md) is built for the device type and output type (Xbox, PlayStation, Nintendo, Extended, etc.)
-3. For gamepads and joysticks, "Hide from games" turns on if HidHide is installed
+3. For gamepads and joysticks, **Hide from Games (HidHide)** turns on if HidHide is installed
 4. Slot badges update right away
 
 Unassigning a device from every slot clears both hiding options.
@@ -248,7 +248,7 @@ PadForge reads two kinds of touch surfaces on the Devices page.
 - **Gamepad touchpads.** The touch surfaces on DualShock 4, DualSense, Steam Controller, and Steam Deck. SDL3 reports them as part of the gamepad. They show up in the raw input view with contact position and finger count.
 - **Windows Precision Touchpad.** Laptop trackpads and external precision touchpads. PadForge treats each one as its own device card with a live touch preview. These trackpads have no physical click button, so no click input appears for them in the mapping picker or auto-map.
 
-Surface count comes from SDL. Most pads report one. The Steam Controller 2026 and the Steam Deck report two. The original Steam Controller reports three. A multi-surface device shows a separate live preview per pad, labeled **Touchpad 1** and **Touchpad 2** in the raw input view. The Devices page draws at most those two previews, so a three-surface pad shows only its first two here. Every surface still maps.
+Surface count comes from SDL. Most pads report one. The Steam Controller 2026, the Steam Deck, and the 2015 Steam Controller each report two. A multi-surface device shows a separate live preview per pad, labeled **Touchpad 1** and **Touchpad 2** in the raw input view. The Devices page draws at most those two previews. Every surface still maps.
 
 Pressure maps too. Each finger gets a Touchpad N Finger M Pressure source in the mapping picker, and pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015) can shape it with the per-device **Enable Synthetic Pressure** option on the [Touchpad](touchpad.md) tab.
 
@@ -350,7 +350,7 @@ Click **Cancel** to back out or **Proceed** to confirm.
 
 ### Master switch
 
-The global **"Hide devices from games"** toggle in [Settings](settings.md) (under Input Engine) is the master on / off. With it off, no hiding or suppression runs, no matter what each device is set to. Flipping it back on restores every per-device setting.
+The global **Hide Devices from Games** toggle in [Settings](settings.md) (under Input Engine) is the master on / off. With it off, no hiding or suppression runs, no matter what each device is set to. Flipping it back on restores every per-device setting.
 
 ---
 
@@ -388,8 +388,8 @@ By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translat
 ### How to turn it on
 
 1. Select the device card
-2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for virtual input sources: web controller clients, the touchpad overlay, and NFC readers.)
-3. Check **Force raw joystick mode (bypass gamepad remapping)**
+2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, and pads reaching this PC over Remote Link.)
+3. Check **Force Raw Joystick Mode (Bypass Gamepad Remapping)**
 4. Saved right away. Persists across restarts.
 
 ### What changes
@@ -473,14 +473,14 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 
 ### Buttons missing or mapped wrong
 
-- Turn on **Force Raw Joystick Mode** to skip SDL3's mapping
+- Turn on **Force Raw Joystick Mode (Bypass Gamepad Remapping)** to skip SDL3's mapping
 - Compare PadForge's raw input view with joy.cpl
 - For an unmapped joystick-type device, click **Submit Device Mapping** to contribute a mapping
 
 ### Double input in games
 
-- Turn on **Hide from Games** on the device, or **Consume Mapped Inputs** for keyboards and mice
-- Confirm the master **"Hide devices from games"** toggle in [Settings](settings.md) is on
+- Turn on **Hide from Games (HidHide)** on the device, or **Consume Mapped Inputs (Hooks)** for keyboards and mice
+- Confirm the master **Hide Devices from Games** toggle in [Settings](settings.md) is on
 - Confirm HidHide is installed via [Driver Management](driver-management.md)
 
 ### Settings lost after reconnecting
@@ -520,4 +520,4 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

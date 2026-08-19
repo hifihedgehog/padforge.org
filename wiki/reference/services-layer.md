@@ -2,12 +2,17 @@
 
 *Five ViewModel-bridge services carry engine state to the WPF UI and back, with a bench of smaller workers beside them.*
 
-Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds twelve more residents:
+Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds seventeen more residents:
 
 | Resident | Role |
 |----------|------|
 | `DsuMotionServer` | DSU motion server on its own UDP thread. Lifecycle [below](#dsu-server-lifecycle), protocol on [DSU Protocol Implementation](dsu-protocol.md) |
 | `WebControllerServer` | Phone-as-controller HTTP/WebSocket server. Lifecycle [below](#web-controller-server-lifecycle) |
+| `WebControllerTls` | The HTTPS lane for that server (#296). Generates a self-signed cert, installs it to `LocalMachine\My`, and binds it to the port through `netsh`. Motion sensors exist only in a secure context, so plain HTTP cannot carry gyro |
+| `WebCustomLayoutStore` | The browser-built custom pad layouts (#296), machine-scoped. Holds one validated JSON array that rides `AppSettingsData` in PadForge.xml, deliberately not `ProfileData` |
+| `QrCode` | Byte-mode QR generator ported from the Nayuki reference, used only to render the web controller's URL on the Dashboard card |
+| `VoiceMacroService` | Voice macro recognition (#317). One session per microphone, no shared mic and no voice pseudo-device. Started and shut down by the engine's Step 1 device sweep, not by `InputService.Start()` |
+| `VoskVoiceEngine` | The Vosk recognition engine behind the same session surface SAPI uses (#317). Model is cached under LocalAppData and downloaded on first use, with SAPI as the fallback until it is ready |
 | `NfcReaderService` | PC/SC monitor for NFC macro triggers (#150). [Below](#nfcreaderservice) |
 | `WorkshopProfileMaterializer` | Workshop import to `ProfileData` bridge (#9). [Below](#workshopprofilematerializer-v41-9) |
 | `WorkshopTuningApplier` | Folds a Workshop import's parked tuning stamps into the assigned device's own settings (#9). [Below](#workshoptuningapplier-v41-9) |
@@ -21,7 +26,7 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 
 > **Engine-side subsystems (3.4).** Two more runtime subsystems sit alongside these services. `AudioPassthroughService` drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through `InputService` and documented on their own pages: [Controller Audio Internals](controller-audio-internals.md) and [Remote Link Internals](remote-link-internals.md).
 
-> **App-side helpers (3.6.0).** Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as `static` P/Invoke surfaces. `HapticToneService` and `WiiSpeakerService` turn macro sounds into HD-haptic tones and Wii-speaker PCM. `NfcReaderService` (with `WinScard`) owns the PC/SC monitor for NFC macro triggers. `BluetoothLinkHelper` performs per-family Bluetooth disconnect. They live in `PadForge.Common.Input` (and `PadForge.Services` for `NfcReaderService`), and are documented in [App-Side Services and Helpers (3.6.0)](#app-side-services-and-helpers-360) below. 4.1.0 added three more to the same section: `TouchpadPulseService` (#219), `SwitchHomeLedSetter` (#226), and `RumbleAudioService` (#236, the Bass Shakers renderer).
+> **App-side helpers (3.6.0).** Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as `static` P/Invoke surfaces. `HapticToneService` and `WiiSpeakerService` turn macro sounds into HD-haptic tones and Wii-speaker PCM. `NfcReaderService` (with `WinScard`) owns the PC/SC monitor for NFC macro triggers. `BluetoothLinkHelper` performs per-family Bluetooth disconnect. They live in `PadForge.Common.Input` (and `PadForge.Services` for `NfcReaderService`), and are documented in [App-Side Services and Helpers (3.6.0)](#app-side-services-and-helpers-360) below. 4.1.0 added three more to the same section: `TouchpadPulseService` (#219), `SwitchHomeLedSetter` (#226), and `RumbleAudioService` (#236, the Bass Shakers renderer). 4.3.0 added `SpaceMouseService` (#288), which opens 3Dconnexion 6DoF pucks directly and attaches them to SDL as virtual joysticks, because SDL's raw-input backend subscribes to the gamepad usage only and never turns a multi-axis controller into a joystick. It is owned by `InputManager`, not by `InputService`.
 
 ```mermaid
 graph TB
@@ -552,10 +557,15 @@ Axis detection: 25% threshold, 3-cycle hold confirmation (same as RecorderServic
 
 #### `StartWebServerIfEnabled()` (private)
 
-1. Checks `Dashboard.EnableWebController` and engine existence.
+1. Checks `Dashboard.EnableWebController` and engine existence. Returns early if a server is already running.
 2. Creates `WebControllerServer`, subscribes to `StatusChanged`, `DeviceConnected`, `DeviceDisconnected`.
 3. Device connect/disconnect calls `_inputManager.RegisterExternalDevice()` / `UnregisterExternalDevice()`.
-4. Validates port (1024–65535; default 8080), starts server.
+4. Validates port (1024-65535, default 8080).
+5. Calls `Start(port)` on a `Task.Run`, not on the UI thread. The start runs `netsh` up to three times for the HTTPS binding plus the firewall rule, each capped at five seconds, and this method is reached straight from the checkbox's `PropertyChanged` handler. It then hops back to the dispatcher, and if the start failed or the user has since toggled off or changed the port, it disposes the launching instance and clears `IsWebControllerRunning`.
+
+`OnWebServerStatusChanged` publishes `WebControllerStatus`, `WebControllerClientCount`, and `IsWebControllerRunning` (from the lifecycle, never from the checkbox). It also publishes `WebControllerUrl` and rebuilds `WebControllerQr` through `WebControllerServer.RenderQr`, but only when the URL actually changed, since building a QR matrix is not free.
+
+`WebControllerServer` itself caps at 16 clients, serves its browser assets from embedded resources under the `PadForge.WebAssets.` prefix, and asks `WebControllerTls.EnsureHttpsBinding(port)` for a certificate. That helper never deletes an sslcert binding it does not own (identified by PadForge's own `appid` GUID) and returns null on any failure, in which case the server falls back to plain HTTP. HTTPS matters because `DeviceMotionEvent` exists only in a secure context, so gyro from a phone requires it.
 
 #### `StopWebServer()` (private)
 
@@ -734,6 +744,11 @@ Trigger-motor sibling for Xbox One+ impulse triggers (#74). Sets `VibrationState
 | `SendTestRumble` | `void SendTestRumble(int padIndex, Guid? deviceGuid)` | Sends brief test rumble (both motors 65535) |
 | `SendTestRumble` | `void SendTestRumble(int padIndex, Guid? deviceGuid, bool left, bool right)` | Sends selective test rumble |
 | `SendTestImpulseTrigger` | `void SendTestImpulseTrigger(int padIndex, Guid? deviceGuid, bool left, bool right)` | Test pulse on the impulse-trigger motors (#74) |
+| `IdentifyDevice` | `void IdentifyDevice(Guid instanceGuid)` | Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the `SendTestRumble` lane, an unmapped one gets the direct train |
+| `TestBatteryNotification` | `void TestBatteryNotification()` | Pushes a synthetic low-battery event through the real delivery pipeline (tray balloon, status line, identify buzz) without draining a pad (#293). Leaves the edge state untouched |
+| `BatteryEdgeDecision` | `static (bool Fire, bool Notified) BatteryEdgeDecision(bool hadState, int lastPct, bool notified, int pct, bool charging, int threshold)` | The pure low-battery edge rule (#293). Fires only on a crossing to at-or-below the threshold, never while charging. Charging or a rise past threshold+5 re-arms |
+| `StartMacroActionAxisRecording` | `void StartMacroActionAxisRecording(MacroAction action, int padIndex)` | Records an axis source into a macro action's axis field |
+| `StopMacroActionAxisRecording` | `void StopMacroActionAxisRecording()` | Ends that session |
 | `ApplyPadSettingToCurrentDevice` | `void ApplyPadSettingToCurrentDevice(int padIndex, PadSetting source)` | Applies copied PadSetting |
 | `ApplyPadSettingToCurrentDeviceTranslated` | `void ApplyPadSettingToCurrentDeviceTranslated(int padIndex, PadSetting source, VirtualControllerType sourceType, bool sourceIsCustomExtended, VirtualControllerType targetType, bool targetIsCustomExtended)` | Applies with cross-layout translation |
 | `ApplyPerDeviceSettingsToSlot` | `void ApplyPerDeviceSettingsToSlot(int targetPadIndex, PerDeviceSettingsEntry[] entries, VirtualControllerType sourceLayoutType, bool sourceLayoutIsExtended, VirtualControllerType targetLayoutType, bool targetLayoutIsExtended)` | Reapplies per-device tuning from a copied slot, matched by `InstanceGuid` then `ProductGuid` |
@@ -784,6 +799,8 @@ Trigger-motor sibling for Xbox One+ impulse triggers (#74). Sets `VibrationState
 | `BuildPerDeviceSettingsSnapshot` | `static PerDeviceSettingsEntry[] BuildPerDeviceSettingsSnapshot(int sourcePadIndex, VirtualControllerType layoutType, bool layoutIsExtended)` | Snapshots every assigned device's PadSetting on a slot for the clipboard |
 
 The profile-CRUD, touchpad-gesture, and expression-variable methods are the domain logic behind MainWindow's UI handlers.
+
+Beside them sit a set of `public static` helpers with no instance state, used by the pages and dialogs directly: `FormatExePaths`, `LocalizedDeviceName`, `CloneMappingSetDeep`, `SlotHasAnyMapping`, `ReplaceSlotMappingSet`, `ApplySlotMappingSetFromRows`, and the four snapshot codecs `BuildShiftLayerSnapshotJson` / `ApplyShiftLayerSnapshotJson` / `BuildMenusSnapshotJson` / `ApplyMenusSnapshotJson`.
 
 ### InputService All Events
 
@@ -900,7 +917,7 @@ Search order (all relative to `AppDomain.CurrentDomain.BaseDirectory`):
 
 #### `LoadAppSettings(AppSettingsData)` (private)
 
-Pushes to SettingsViewModel: `AutoStartEngine`, `MinimizeToTray`, `StartMinimized`, `StartAtLogin`, `EnablePollingOnFocusLoss`, `PollingRateMs`, theme, language, input hiding, auto-profile switching, slot types, Extended/MIDI configs, DSU/web server settings.
+Pushes to SettingsViewModel: `AutoStartEngine`, `MinimizeToTray`, `StartMinimized`, `StartAtLogin`, `EnablePollingOnFocusLoss`, `PollingRateMs`, theme, language, input hiding, auto-profile switching, slot types, Extended/MIDI configs, DSU/web server settings. It also seeds the machine-scoped web controller custom layouts with `WebCustomLayoutStore.LoadFrom(appSettings.WebCustomLayoutsJson)` (#296), which `BuildAppSettings` writes back from `WebCustomLayoutStore.Json`.
 
 **Critical load order**: `SlotCreated[]` and `SlotEnabled[]` must load BEFORE `OutputType`, because OutputType fires PropertyChanged which reads SlotCreated.
 
@@ -1557,7 +1574,7 @@ User drags slider on Pad page
 [30Hz tick] ForegroundMonitor.CheckForegroundWindow()
   |-- Detects new foreground matches different profile
   |-- ProfileSwitchRequired event fires
-  |-- InputService.OnProfileSwitchRequired(profileId)
+  |-- InputService.OnAutoProfileSwitchRequired -> OnProfileSwitchRequired(profileId)
         |-- SaveActiveProfileState()        [snapshot outgoing profile]
         |-- ApplyProfile(target)            [load incoming profile]
         |     |-- Set SlotCreated/Enabled/OutputType
@@ -1593,4 +1610,4 @@ User clicks Record button
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

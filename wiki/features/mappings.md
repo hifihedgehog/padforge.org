@@ -11,11 +11,11 @@
 | Column | What it does |
 |--------|--------------|
 | **Output** | The virtual output this row controls ("A", "Left Stick X", "D-Pad Up"). What the game sees. |
-| **Source** | One or more physical inputs that drive this output. Pick by hand, use Record, or click **+ Add source** to add another. Sources get letter tags **a**, **b**, **c**, … in the order you add them. |
+| **Source** | One or more physical inputs that drive this output. Pick by hand, use Record, or click **+ Add Source** to add another. Sources get letter tags **a**, **b**, **c**, … in the order you add them. |
 | **Value** | Live readout of the row's combined output. Updates in real time so you can verify on the spot. |
 | **Record** | Press a button or move an axis on any assigned physical controller. PadForge fills in the source automatically. |
 | **Clear** | Resets the row's primary source: descriptor, **Invert** / **Half** / **Bidirectional**, deadzone back to 50%, the device tag, and **Primary Mode** back to Direct. Extra sources keep their own remove buttons, and the combine mode and custom formula stay until you remove them or run **Clear All**. |
-| **Options** | Per-source controls: **Invert**, **Half**, **Bidirectional**, plus **Flip Output**, **Do not inherit**, **Acceleration**, and **Sensitivity** where they apply. Toggles that cannot act on the current source gray out. See [Per-source options](#per-source-options). |
+| **Options** | Per-source controls: **Invert**, **Half**, **Bidirectional**, plus **Flip Output**, **Do Not Inherit**, **Acceleration**, and **Sensitivity** where they apply. Toggles that cannot act on the current source gray out. See [Per-source options](#per-source-options). |
 | **Axis-to-Button Deadzone** | Slider (0–100%) for how far an axis must move before a discrete output fires. Per source. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
 
 Two more controls live in the strip beneath each row rather than in a column:
@@ -107,7 +107,7 @@ A row can drive its output from any number of physical inputs, across any combin
 
 ### Adding sources
 
-Click **+ Add source** on any existing source to add another. The new source gets the next letter tag (**a** is the first, **b** the second, **c** the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.
+Click **+ Add Source** on any existing source to add another. The new source gets the next letter tag (**a** is the first, **b** the second, **c** the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.
 
 Each extra source renders as its own chip with the same controls the primary carries: a mode dropdown, the input picker, Record and Clear buttons, the option checkboxes, the sliders that apply to it, and a remove button that deletes the source outright.
 
@@ -125,7 +125,7 @@ Each source carries its own settings:
 | **Deadzone** | Per-source axis-to-button activation threshold. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
 | **Acceleration** | Slider 0–5 with a reset button, shown on continuous sources (the same family that can take **Half**). Fast motion is amplified: the value scales by 1 + acceleration × \|value\|, then re-clamps to range. 0 (the default) keeps the response flat. [Steam Workshop imports](../guides/steam-workshop-import.md) land Steam's mouse acceleration here on stick-hosted rows. |
 | **Sensitivity** | A per-source multiplier with a reset button, shown on five source families only: Gyro rate axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Gyro Lean X / Y (0.1–5.0, where 1.0 reaches full deflection at 90° of tilt), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view), and Mouse Motion (0.1–5.0). Gyro Tilt X / Y has no dial: its gain is the degree range on the [Gyro tab's](../guides/gyro.md#rate-versus-tilt) Gyro Tilt card. Plain axis, slider, and Gamepad stick or trigger sources have no grid slider. Shape those on the [Sticks tab](stick-deadzones.md): gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier. |
-| **Do not inherit** | Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See [Shift layers](#shift-layers). |
+| **Do Not Inherit** | Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See [Shift layers](#shift-layers). |
 
 ### Direction badges
 
@@ -163,7 +163,7 @@ A collapsed row with two or more sources shows the current mode as a small chip 
 
 The most common multi-source row: the physical stick for coarse movement, gyro for fine aim, both driving the same axis.
 
-1. On the **Right Stick X** row, keep the stick source and click **+ Add source**.
+1. On the **Right Stick X** row, keep the stick source and click **+ Add Source**.
 2. Set the second source to **Gyro Yaw** (or **Gyro Horizontal**) for rate aiming, or **Gyro Tilt X** for tilt that holds.
 3. The **Combine** picker appears in the detail strip and auto-selects **Strongest**: whichever source pushes harder wins, so the stick takes over the moment you push it and gyro handles fine aim the rest of the time. Steam and DS4Windows arbitrate the same way.
 4. Repeat on **Right Stick Y** with **Gyro Pitch** or **Gyro Tilt Y**.
@@ -259,7 +259,7 @@ Direct sources read the descriptor you assigned. Incremental sources ignore the 
 
 ## Activation modes
 
-A mapping row is stateless: the output follows the source every frame, and nothing latches. Press-pattern behaviors like toggle and turbo belong to [Macros](../guides/macros.md), through each macro's **Fire** picker: **On Press**, **On Release**, **While Held**, **Always**, **On Long Press**, **On Short Press**, **On Double Press**, **Toggle** (the first press latches the actions on, the next press releases), and **Turbo** (the actions repeat at an interval while the trigger is held).
+A mapping row is stateless: the output follows the source every frame, and nothing latches. Press-pattern behaviors like toggle and turbo belong to [Macros](../guides/macros.md), through each macro's **Fire** picker: **On Press**, **On Single Press**, **On Release**, **While Held**, **On Long Press**, **On Short Press**, **On Double Press**, **On Triple Press**, **Toggle** (the first press latches the actions on, the next press releases), **Turbo** (the actions repeat at an interval while the trigger is held), **Always**, and **Custom Expression**.
 
 To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid.
 
@@ -310,11 +310,11 @@ A shift layer is a second mapping table on the same slot, active only while a bu
 
 Each slot can carry any number of shift layers, each with its own activator and its own row set.
 
-By default a layer **replaces** Base: targets without a row on the layer output nothing while the layer is active. Check **Inherit Unmapped Targets From Base** in the activator dialog to overlay instead, so unmapped targets fall through to Base. While you are editing an inheriting layer, a **Do not inherit** checkbox appears in each row's Options column to keep that one target off rather than falling through.
+By default a layer **replaces** Base: targets without a row on the layer output nothing while the layer is active. Check **Inherit Unmapped Targets from Base** in the activator dialog to overlay instead, so unmapped targets fall through to Base. While you are editing an inheriting layer, a **Do Not Inherit** checkbox appears in each row's Options column to keep that one target off rather than falling through.
 
 Activators can also wait for the release edge: the **Fire on Release** option flips the layer when the button is let go instead of when it is pressed (Toggle, Latch, Cycle, and Sticky modes).
 
-Right-click a layer pill for **Configure activator…**, **Rename layer…**, **Copy layer rows**, **Paste rows into layer**, **Clear layer rows**, and **Delete layer**. Copy and Paste move a whole layer's row set between layers, including across slots, and work on the Base pill too.
+Right-click a layer pill for **Configure Activator…**, **Rename Layer…**, **Copy Layer Rows**, **Paste Rows into Layer**, **Clear Layer Rows**, and **Delete Layer**. Copy and Paste move a whole layer's row set between layers, including across slots, and work on the Base pill too.
 
 See [Shift Layers](../guides/shift-layers.md) for the full activator reference, mode list (Hold, Toggle, Latch, Cycle, Sticky, No Button), and per-layer options.
 
@@ -480,13 +480,13 @@ The toolbar above the mapping grid has bulk operations. **Clear All** sits apart
 | **Paste** | Applies a copied table. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit. |
 | **Copy From...** | Same as Paste, sourced from another slot instead of the clipboard. |
 | **Map All** | Starts the [Map All wizard](#3-map-all). |
-| **Clear All** | Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, **Acceleration**, every **Sensitivity**, **Do not inherit**, **Primary Mode** back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping. |
+| **Clear All** | Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, **Acceleration**, every **Sensitivity**, **Do Not Inherit**, **Primary Mode** back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping. |
 
 Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together.
 
 The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.
 
-There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click **Copy layer rows** and **Paste rows into layer** (see [Shift layers](#shift-layers)).
+There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click **Copy Layer Rows** and **Paste Rows into Layer** (see [Shift layers](#shift-layers)).
 
 ### Cross-type translation
 
@@ -574,4 +574,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

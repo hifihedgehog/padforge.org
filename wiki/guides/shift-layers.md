@@ -18,9 +18,9 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 
 **Layer rows.** Each mapping row belongs to one layer. Base rows belong to Base. Shift rows belong to the layer you bound them on. The same target can have a different row on each layer, so one button does one thing on Base and another while a shift layer is engaged.
 
-**Inherit Unmapped Targets From Base.** A checkbox in the activator dialog. Off by default. The active shift layer **replaces** Base. Targets without a row on the layer output zero. Turn it on and the layer **overlays** Base. Targets without a row fall through to Base.
+**Inherit Unmapped Targets from Base.** A checkbox in the activator dialog. Off by default. The active shift layer **replaces** Base. Targets without a row on the layer output zero. Turn it on and the layer **overlays** Base. Targets without a row fall through to Base.
 
-**Do not inherit.** A per-row checkbox in the mapping grid. It appears on a row only when the active layer inherits. Check it to keep one target off on this layer while the rest of the layer falls through to Base. Useful when you want one specific button silenced.
+**Do Not Inherit.** A per-row checkbox in the mapping grid. It appears on a row only when the active layer inherits. Check it to keep one target off on this layer while the rest of the layer falls through to Base. Useful when you want one specific button silenced.
 
 ---
 
@@ -48,7 +48,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Auto-Cancel After Inactivity** | **Toggle** mode only. While the layer is toggled on, it switches itself off after this many milliseconds with none of the layer's own mapped inputs active. The timer starts when the layer engages and restarts on every layer input. `0` keeps the layer on until you toggle it off yourself. |
 | **Fire on Release** | Waits until the button is let go before the activator fires. With a **Delay** set, the press must last that long for the release to count. Appears only for **Toggle**, **Latch**, **Cycle**, and **Sticky (one-shot)**. Hold reacts on both edges by nature and No Button has no input, so neither shows it. |
 | **Also Fire Activator's Own Mapping** | Off by default. On lets the activator input drive its own row alongside the layer change. |
-| **Inherit Unmapped Targets From Base** | Off by default. On = overlay with fallthrough. Off = replace. |
+| **Inherit Unmapped Targets from Base** | Off by default. On = overlay with fallthrough. Off = replace. |
 
 ---
 
@@ -99,12 +99,12 @@ Each tab carries the layer's color. The active tab is the layer you're editing, 
 
 Right-click a tab for per-layer operations:
 
-- **Configure activator…** Reopens the dialog above.
-- **Rename layer…** Edits the display name without breaking the link between each row and its layer.
-- **Copy layer rows.** Copies every row on this layer to the clipboard.
-- **Paste rows into layer.** Pastes copied rows onto the current layer, re-tagging them to it.
-- **Clear layer rows.** Removes every row on this layer. The layer itself stays.
-- **Delete layer.** Removes the layer and every row tagged to it. Confirms first.
+- **Configure Activator…** Reopens the dialog above.
+- **Rename Layer…** Edits the display name without breaking the link between each row and its layer.
+- **Copy Layer Rows.** Copies every row on this layer to the clipboard.
+- **Paste Rows into Layer.** Pastes copied rows onto the current layer, re-tagging them to it.
+- **Clear Layer Rows.** Removes every row on this layer. The layer itself stays.
+- **Delete Layer.** Removes the layer and every row tagged to it. Confirms first.
 
 ---
 
@@ -114,7 +114,7 @@ When a shift layer engages, a Windows-11-style flyout appears at the bottom of t
 
 The flyout scans every slot, not only the currently-viewed pad. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.
 
-The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Shift layer flyout** toggle, on by default. Turn it off and layers still engage, just without the announcement.
+The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Shift Layer Flyout** toggle, on by default. Turn it off and layers still engage, just without the announcement.
 
 ---
 
@@ -150,7 +150,7 @@ Goal. Hold or toggle a side button on the wheel and the face buttons of the slot
 5. **Activator Input:** click **Record**, press the side button on the wheel rim.
 6. **Mode:** Toggle. One tap to open the menu, one tap to close.
 7. **Layer Color:** orange. **Emoji Icon:** 🔧.
-8. **Inherit Unmapped Targets From Base:** on. Steering, brakes, and clutch keep working while the menu is up.
+8. **Inherit Unmapped Targets from Base:** on. Steering, brakes, and clutch keep working while the menu is up.
 9. Click **Save**. The Pit Stop tab appears.
 10. Click the Pit Stop tab. Bind A, B, X, Y to your sim's pit menu commands (tires, fuel, repair, leave).
 
@@ -193,4 +193,4 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

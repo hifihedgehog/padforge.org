@@ -53,7 +53,7 @@ The **Opens With** picker sets the input that opens and steers the menu. It read
 - A **Label**, rendered on the overlay.
 - A binding: **None**, a **Keyboard Key**, or a **Controller Button**.
 
-**Controller Button** speaks the slot's own lettering: Xbox letters on an Xbox slot, DualShock symbols on a PlayStation slot, Nintendo letters on a Nintendo slot, and the custom layout's numbered buttons on an Extended slot. **Keyboard + Mouse** and **MIDI** slots have no controller buttons to press, so the choice is not offered there, and a button binding left behind by a slot-type switch shows as **Controller Button (not on this slot type)**.
+**Controller Button** speaks the slot's own lettering: Xbox letters on an Xbox slot, DualShock symbols on a PlayStation slot, Nintendo letters on a Nintendo slot, and the custom layout's numbered buttons on an Extended slot. Keyboard + Mouse, MIDI, and VR slots have no controller buttons to press, so the choice is not offered there, and a button binding left behind by a slot-type switch shows as **Controller Button (not on this slot type)**.
 
 ### Cells as sources
 
@@ -96,4 +96,4 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

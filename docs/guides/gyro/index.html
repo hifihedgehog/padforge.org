@@ -939,10 +939,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#invert-pitch-y-and-invert-yaw-roll-x" class="md-nav__link">
+  <a href="#invert-pitch-y-invert-yaw-x-invert-roll-x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Invert Pitch (Y) and Invert Yaw / Roll (X)
+        Invert Pitch (Y), Invert Yaw (X), Invert Roll (X)
       
     </span>
   </a>
@@ -3343,10 +3343,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#invert-pitch-y-and-invert-yaw-roll-x" class="md-nav__link">
+  <a href="#invert-pitch-y-invert-yaw-x-invert-roll-x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Invert Pitch (Y) and Invert Yaw / Roll (X)
+        Invert Pitch (Y), Invert Yaw (X), Invert Roll (X)
       
     </span>
   </a>
@@ -3700,7 +3700,7 @@
 <p>Motion Lean is a normal input. Pick it from the input dropdown in the mapping table and bind it to a stick axis. Full tuning and starting values are on <a href="../steering/">Steering</a>.</p>
 <hr />
 <h3 id="gyro-tilt">Gyro Tilt<a class="headerlink" href="#gyro-tilt" title="Permanent link">&para;</a></h3>
-<p>Gyro Tilt is an envelope for the <strong>Gyro Tilt X</strong> and <strong>Gyro Tilt Y</strong> inputs: hold a tilt and the stick holds its deflection, the way Steam's Joystick Deflection mode behaves. <strong>Full Tilt Range</strong> sets the angle that reaches full deflection, and <strong>Gyro Recenter</strong> re-zeroes the resting grip. Yaw, turning the controller flat, is invisible to gravity and does not move these inputs.</p>
+<p>Gyro Tilt is an envelope for the <strong>Gyro Tilt X</strong> and <strong>Gyro Tilt Y</strong> inputs: hold a tilt and the stick holds its deflection, the way Steam's Joystick Deflection mode behaves. <strong>Full Tilt Range</strong> sets the angle that reaches full deflection (1° to 90°, default 25°), <strong>Tilt Deadzone</strong> ignores tilt around the resting grip and subtracts before scaling (default 0), and the <strong>Gyro Recenter</strong> macro action re-zeroes the resting grip. Yaw, turning the controller flat, is invisible to gravity and does not move these inputs.</p>
 <p><img alt="The Gyro Tilt card" src="../../images/pad-gyro-tilt.png" /></p>
 <h2 id="calibration">Calibration<a class="headerlink" href="#calibration" title="Permanent link">&para;</a></h2>
 <p>Zero the at-rest reading so gyro mappings don't drift the mouse or stick while you hold still.</p>
@@ -3738,8 +3738,8 @@
 </tbody>
 </table>
 <p>Both range 0.1×–10×. The two axes are independent. Set Horizontal to 2.5× and Vertical to 1.0× for fast turning with conservative tilt aim.</p>
-<h3 id="invert-pitch-y-and-invert-yaw-roll-x">Invert Pitch (Y) and Invert Yaw / Roll (X)<a class="headerlink" href="#invert-pitch-y-and-invert-yaw-roll-x" title="Permanent link">&para;</a></h3>
-<p>Per-axis flip applied after the reference-frame projection. <strong>Invert Yaw / Roll (X)</strong> covers the Yaw, Roll, and horizontal-blend gyro sources. These run independently from any Invert flags on the mapping table.</p>
+<h3 id="invert-pitch-y-invert-yaw-x-invert-roll-x">Invert Pitch (Y), Invert Yaw (X), Invert Roll (X)<a class="headerlink" href="#invert-pitch-y-invert-yaw-x-invert-roll-x" title="Permanent link">&para;</a></h3>
+<p>Three per-axis flips applied after the reference-frame projection. Since 4.3.0 yaw and roll carry separate checkboxes, so a pad that needs its yaw flipped keeps its roll as it was. Each one also flips the horizontal blend while its axis is the dominant motion. These run independently from any Invert flags on the mapping table.</p>
 <h3 id="real-world-calibration">Real-World Calibration<a class="headerlink" href="#real-world-calibration" title="Permanent link">&para;</a></h3>
 <p>In-game degrees per physical degree of controller rotation. 0 turns the correction off. 1.0 means a 90° wrist rotation produces a 90° camera turn.</p>
 <p>Calibrate once per game: turn the pad a full physical rotation, look at how far the in-game camera turned, and adjust until the two match.</p>
@@ -3773,7 +3773,7 @@
 <h2 id="compass">Compass<a class="headerlink" href="#compass" title="Permanent link">&para;</a></h2>
 <p>A <strong>Compass</strong> card appears between Sensitivity and Response Shaping, and only on a controller that carries a magnetometer. Anchoring yaw to magnetic north removes the slow horizontal drift gyro aiming accumulates.</p>
 <ul>
-<li><strong>Anchor yaw to compass.</strong> Off by default. Turn it on after calibrating.</li>
+<li><strong>Anchor Yaw to Compass.</strong> Off by default. Turn it on after calibrating.</li>
 <li><strong>Calibrate Magnetometer.</strong> Press it, rotate the controller through every orientation in a figure-8 for a few seconds, then press again. The button reads <strong>Finish Calibration</strong> while the sweep runs.</li>
 </ul>
 <p>The card has a per-row reset on the checkbox and no card-level Reset All.</p>
@@ -4083,12 +4083,16 @@
 <td>Apply Gyro Tuning to Motion Passthrough</td>
 </tr>
 <tr>
+<td>Reset Gyro Tilt</td>
+<td>Full Tilt Range, Tilt Deadzone</td>
+</tr>
+<tr>
 <td>Reset Calibration</td>
 <td>Auto-cal bias + timestamp</td>
 </tr>
 <tr>
 <td>Reset Sensitivity</td>
-<td>Units, Space, Horizontal, Vertical, both Invert flags, Real-World Calibration</td>
+<td>Units, Space, Horizontal, Vertical, all three Invert flags, Real-World Calibration</td>
 </tr>
 <tr>
 <td>Reset Response Shaping</td>

@@ -48,7 +48,7 @@ The power control is a flame. Its fill and glow show what the engine is doing.
 | **Stopping** | Gold flame, flashing while it winds down. |
 | **Stopped** | Hollow flame outline in steel. No fill. |
 
-> **Tip:** Turn on **Auto-start engine on launch** in [Settings](settings.md) to skip the manual power click each time.
+> **Tip:** Turn on **Auto-Start Engine on Launch** in [Settings](settings.md) to skip the manual power click each time.
 
 ---
 
@@ -106,7 +106,7 @@ Broadcasts gyroscope and accelerometer data over UDP using the DSU/Cemuhook prot
 
 | Control | Description |
 |---------|-------------|
-| **Enable DSU motion server (CemuHook Motion Provider protocol)** | Starts and stops the server. |
+| **Enable DSU Motion Server (CemuHook Motion Provider Protocol)** | Starts and stops the server. |
 | **Port** | UDP port. Default `26760`. Change only on conflict. Range `1024-65535`. |
 | **Status indicator** | A flame beside the status text. Ember when running, a steel outline when stopped. |
 
@@ -122,7 +122,7 @@ A browser-based controller you can open from any device on the same network.
 
 | Control | Description |
 |---------|-------------|
-| **Enable web controller server** | Starts and stops the web server. |
+| **Enable Web Controller Server** | Starts and stops the web server. |
 | **Port** | HTTP/WebSocket port. Default `8080`. Range `1024-65535`. |
 | **Status indicator** | A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on `<url>`" until clients connect, then "Running (`<n>` clients)". |
 
@@ -136,8 +136,8 @@ Shares controllers with a paired PadForge on another PC over your network. A dev
 
 | Control | Description |
 |---------|-------------|
-| **Enable Remote Link server** | Starts and stops listening for peers. |
-| **Reconnect automatically** | Re-establishes known pairings when they come back online. |
+| **Enable Remote Link Server** | Starts and stops listening for peers. |
+| **Reconnect Automatically** | Re-establishes known pairings when they come back online. |
 | **Port** | Link port with a reset button. Default `27500`. |
 | **Status indicator** | A flame beside the status text: ember and "Listening on `<port>`" when running, steel outline when stopped. |
 
@@ -147,7 +147,7 @@ Sets how this PC stores its pairing identity. **Secure — this PC only** keys i
 
 ### Paired PCs and Nearby PCs
 
-**Paired PCs** lists your established pairings, each with rename, connect, and revoke, plus **Revoke all**. **Nearby PCs (Not Paired)** lists peers discovered on the network. **Or Connect by Address (Advanced)** reaches a peer by IP when discovery can't find it.
+**Paired PCs** lists your established pairings, each with rename, connect, and revoke, plus **Revoke All**. **Nearby PCs (Not Paired)** lists peers discovered on the network. **Or Connect by Address (Advanced)** reaches a peer by IP when discovery can't find it.
 
 See [Remote Link](../guides/remote-link.md) for full details.
 
@@ -160,8 +160,8 @@ The on-screen indicators PadForge shows while you play. Turning one off never ch
 | Checkbox | What it shows |
 |----------|---------------|
 | **Menu Overlay** | The on-screen ring or grid while a radial or touch [menu](../guides/menus.md) is engaged. Menus still fire with the overlay off, so layouts you know by muscle memory can run without the picture. Per-menu position, size, and opacity live on each menu's own settings on the [Menus](../guides/menus.md) tab. |
-| **Shift layer flyout** | A flyout with the engaged shift layer's name and color while any slot holds a non-Base layer, whichever page is open. When several slots hold one at once, the selected pad wins, then the lowest-numbered slot. |
-| **Profile switch overlay** | The new profile's name when a macro switches the active profile. Automatic per-app switches don't show it. They flare the profile pill in the status bar instead. |
+| **Shift Layer Flyout** | A flyout with the engaged shift layer's name and color while any slot holds a non-Base layer, whichever page is open. When several slots hold one at once, the selected pad wins, then the lowest-numbered slot. |
+| **Profile Switch Overlay** | The new profile's name when a macro switches the active profile. Automatic per-app switches don't show it. They flare the profile pill in the status bar instead. |
 
 ---
 
@@ -171,9 +171,9 @@ An on-screen, transparent touch surface you can pin to any monitor. Drives the t
 
 | Control | Description |
 |---------|-------------|
-| **Enable touchpad overlay** | Shows the transparent overlay window. |
+| **Enable Touchpad Overlay** | Shows the transparent overlay window. |
 | **Opacity** | Slider plus percentage box, 0-100%, with a reset button. |
-| **Reset position** | Recenters the overlay on its monitor. |
+| **Reset Position** | Recenters the overlay on its monitor. |
 | **Status indicator** | A flame: ember while the overlay is showing, steel outline when hidden. |
 
 The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.
@@ -207,4 +207,4 @@ When Windows MIDI Services or SteamVR is missing, that type's icon on a slot car
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

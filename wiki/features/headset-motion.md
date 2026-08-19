@@ -12,7 +12,7 @@ Confirmed working on the **WH-1000XM5** family over Bluetooth.
 
 Discovery is by capability, not by a hardcoded model list. PadForge looks for a HID device exposing a **Sensor page (0x20), usage 0xE1** collection whose sensor-description feature report begins with the marker `#AndroidHeadTracker#`. Any headset presenting that collection is a candidate, whatever its name.
 
-Pair the headphones to Windows as you normally would. When PadForge recognises the tracker, it appears on the **Devices** page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.
+Pair the headphones to Windows as you normally would. When PadForge recognizes the tracker, it appears on the **Devices** page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.
 
 Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation.
 
@@ -29,15 +29,15 @@ Assign the headset to a slot on the **Devices** page, then map it like any gyro 
 | Gyro Roll | Lean |
 | Gyro Horizontal (Yaw + Roll) | Yaw and roll blended, for a grip-agnostic turn |
 
-Pair it with **Aim Engage** so head tracking only steers while you hold or toggle a button. Head tracking that is always live is disorienting in most games, and an engage gate is the difference between a novelty and something you keep switched on.
+Pair it with **Aim Engage Button** so head tracking only steers while you hold or toggle a button. Head tracking that is always live is disorienting in most games, and an engage gate is the difference between a novelty and something you keep switched on.
 
 ---
 
 ## What the device actually reports
 
-Worth knowing, because it explains the behaviour you will see:
+Worth knowing, because it explains the behavior you will see:
 
-- **Rotation is the signal.** On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesises an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.
+- **Rotation is the signal.** On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesizes an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.
 - **Accelerometer is advertised only when the descriptor exposes it.** Some firmware reports orientation without it.
 - **The frame is remapped once, at ingest.** The tracker's axes are swapped and signed into the same frame SDL uses for controllers, so a headset and a gamepad both drive a mapping the same way.
 
@@ -60,4 +60,4 @@ Worth knowing, because it explains the behaviour you will see:
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

@@ -3163,7 +3163,7 @@
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge ships with HM 1.6.1 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.6.1.0), which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.</p>
+<p>PadForge ships with HM 1.6.2 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.6.2.0), which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.</p>
 <p>The interim milestones a successor should know, each one PadForge's own call sites still cite by version:</p>
 <table>
 <thead>
@@ -3177,7 +3177,7 @@
 <tr>
 <td>v1.3.18 (HM#33)</td>
 <td>Virtual Switch Pro profile and the IMU submission channel</td>
-<td><code>HMaestroVirtualController.cs:66</code> and <code>:900</code>, <code>MappingSetMigrator.cs:677</code></td>
+<td><code>HMaestroVirtualController.cs:66</code> and <code>:905</code>, <code>MappingSetMigrator.cs:677</code></td>
 </tr>
 <tr>
 <td>v1.3.21 (HM#37)</td>
@@ -3192,12 +3192,12 @@
 <tr>
 <td>v1.4.0 (HM#39)</td>
 <td>Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in)</td>
-<td><code>AudioPassthroughService.cs:993</code>, <code>HMaestroVirtualController.cs:81</code></td>
+<td><code>AudioPassthroughService.cs:1151</code>, <code>HMaestroVirtualController.cs:81</code></td>
 </tr>
 <tr>
 <td>v1.4.1 (HM#41)</td>
 <td>Ring-side audio truncation fixed</td>
-<td><code>AudioPassthroughService.cs:1892</code></td>
+<td><code>AudioPassthroughService.cs:2070</code></td>
 </tr>
 <tr>
 <td>v1.4.3 (HM#42)</td>
@@ -3207,7 +3207,7 @@
 <tr>
 <td>v1.5.1 (HM#48)</td>
 <td>Second DS5 Edge paddle/Fn pair</td>
-<td><code>HMaestroVirtualController.cs:1270</code></td>
+<td><code>HMaestroVirtualController.cs:1275</code></td>
 </tr>
 <tr>
 <td>v1.6.0 (HM#32)</td>
@@ -3434,7 +3434,7 @@
 <li><a href="../../features/force-feedback/">Force Feedback</a>: user-facing rumble/FFB tuning controls.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

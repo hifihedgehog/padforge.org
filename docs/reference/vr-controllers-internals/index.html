@@ -2695,6 +2695,100 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-other-direction-consuming-real-vr-devices-287" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The other direction: consuming real VR devices (#287)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The other direction: consuming real VR devices (#287)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-background-client-that-never-launches-steamvr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One background client that never launches SteamVR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#each-device-becomes-an-sdl-virtual-joystick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Each device becomes an SDL virtual joystick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-roles-and-why-the-fallback-carries-the-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis roles, and why the fallback carries the load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensors-come-from-the-runtimes-velocity-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensors come from the runtime's velocity fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-self-emission-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self-emission filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-handling-worth-keeping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure handling worth keeping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status tiering
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#things-that-will-bite-you" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3055,6 +3149,100 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-other-direction-consuming-real-vr-devices-287" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The other direction: consuming real VR devices (#287)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The other direction: consuming real VR devices (#287)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-background-client-that-never-launches-steamvr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One background client that never launches SteamVR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#each-device-becomes-an-sdl-virtual-joystick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Each device becomes an SDL virtual joystick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axis-roles-and-why-the-fallback-carries-the-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axis roles, and why the fallback carries the load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensors-come-from-the-runtimes-velocity-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensors come from the runtime's velocity fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-self-emission-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self-emission filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-handling-worth-keeping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure handling worth keeping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status tiering
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#things-that-will-bite-you" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3096,6 +3284,7 @@
 <h1 id="virtual-vr-controllers-internals">Virtual VR Controllers: Internals<a class="headerlink" href="#virtual-vr-controllers-internals" title="Permanent link">&para;</a></h1>
 <p><em>How one slot becomes a SteamVR hand pair: the state struct, the mapping targets, the pack, and the haptic return path.</em></p>
 <p>The user-facing page is <a href="../../features/vr-controllers/">Virtual VR Controllers</a>. This one is for whoever has to change the code.</p>
+<p>Two VR lanes ship, and they run in opposite directions. Most of this page covers the <strong>output</strong> lane (#49): a PadForge slot emits a pair of virtual SteamVR hands through HIDMaestro's OpenVR driver. 4.3.0 added the <strong>input</strong> lane (#287): real VR hardware already tracked by SteamVR becomes a PadForge device you can map from. They share no code beyond a self-emission filter that keeps one from eating the other. The input lane has its own section at the end.</p>
 <hr />
 <h2 id="shape-of-the-thing">Shape of the thing<a class="headerlink" href="#shape-of-the-thing" title="Permanent link">&para;</a></h2>
 <p>One VR slot drives <strong>both</strong> hands. There is no left slot and right slot, and there is no second VR slot: <code>SettingsManager.MaxVrSlots</code> is <code>1</code>, and the add-slot gate reads <code>count &lt; MaxVrSlots</code>.</p>
@@ -3204,7 +3393,8 @@
 <p>Without the inner re-check, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and <code>ScheduleExpiryLocked</code> builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.</p>
 <hr />
 <h2 id="availability-and-install">Availability and install<a class="headerlink" href="#availability-and-install" title="Permanent link">&para;</a></h2>
-<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code>, which is why <code>ResetAvailability()</code> exists: after an install the cached answer is stale and the Add Controller tile would stay disabled.</p>
+<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code> for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe walks Steam's library metadata on disk and the sidebar rail rebuild queries once per slot. <code>ResetAvailability()</code> drops the cache so the gates lift right after an install instead of waiting out the TTL.</p>
+<p>The cache's "has a value" flag is an explicit <code>bool</code>, not a sentinel timestamp. Seeding the tick with <code>long.MinValue</code> made <code>now - s_availCheckedTick</code> overflow negative, which always reads as inside the TTL, so the first call returned the default <code>false</code> and SteamVR read as absent forever.</p>
 <p><code>Connect()</code> refuses twice, once on <code>IsSteamVRInstalled</code> and once on <code>EnsureDriverRegistered()</code>, before constructing the pipe.</p>
 <p>Install lives in <code>DriverInstaller</code>:</p>
 <ul>
@@ -3214,12 +3404,74 @@
 <li>Uninstall refuses while <code>vrserver</code> is running.</li>
 </ul>
 <hr />
+<h2 id="the-other-direction-consuming-real-vr-devices-287">The other direction: consuming real VR devices (#287)<a class="headerlink" href="#the-other-direction-consuming-real-vr-devices-287" title="Permanent link">&para;</a></h2>
+<p><em>New in 4.3.0. This is the input lane, and it shares no code with everything above.</em></p>
+<p><code>OpenVrConsumerService</code> (<code>PadForge.App/Common/Input/OpenVrConsumerService.cs</code>, <code>public sealed class</code>) turns the headset and every tracked VR controller into ordinary PadForge devices. <code>InitializeSdl</code> constructs it and calls <code>Start()</code>, wrapped in its own try/catch so a failure never takes the rest of input initialization down. It logs into the SDL diagnostics ring with a <code>VRCONSUME</code> prefix.</p>
+<h3 id="one-background-client-that-never-launches-steamvr">One background client that never launches SteamVR<a class="headerlink" href="#one-background-client-that-never-launches-steamvr" title="Permanent link">&para;</a></h3>
+<p>The service runs a single background thread (<code>OpenVrConsumer</code>, <code>IsBackground = true</code>) polling at about 90 Hz (<code>Thread.Sleep(11)</code>). It initializes OpenVR as <code>VRApplication_Background</code>, which by contract does not start SteamVR and instead returns <code>VRInitError_Init_NoServerForBackgroundApp</code> while the server is down. That error is the quiet retry signal, logged once rather than once per 5-second retry pass.</p>
+<p>The native <code>openvr_api.dll</code> is <strong>not shipped</strong>. It comes from the user's own SteamVR runtime, found through OpenVR's own path registry at <code>%LOCALAPPDATA%\openvr\openvrpaths.vrpath</code> (with <code>VR_PATHREG_OVERRIDE</code> honored first, as the reference does). <code>DiscoverRuntimeDll</code> file-checks the result, so a registry entry pointing at a deleted install reads as absent rather than as a load failure. A <code>NativeLibrary.SetDllImportResolver</code> hook redirects the vendored binding's <code>openvr_api</code> module name to that path. The binding itself is Valve's own C# file, vendored at <code>PadForge.App/ThirdParty/OpenVR/openvr_api.cs</code>.</p>
+<p><code>VREvent_Quit</code> is answered with <code>AcknowledgeQuit_Exiting</code>, or vrserver waits out its force-quit timeout on the PadForge process.</p>
+<h3 id="each-device-becomes-an-sdl-virtual-joystick">Each device becomes an SDL virtual joystick<a class="headerlink" href="#each-device-becomes-an-sdl-virtual-joystick" title="Permanent link">&para;</a></h3>
+<p>Consumed devices enter the pipeline as SDL virtual joysticks, so they need no new <code>InputDeviceType</code> and reach mapping through the normal path. They carry the pid.codes open VID <code>0x1209</code>:</p>
+<table>
+<thead>
+<tr>
+<th>PID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x2870</code></td>
+<td>VR Headset</td>
+</tr>
+<tr>
+<td><code>0x2871</code></td>
+<td>VR Controller (Left Hand)</td>
+</tr>
+<tr>
+<td><code>0x2872</code></td>
+<td>VR Controller (Right Hand)</td>
+</tr>
+<tr>
+<td><code>0x2873</code></td>
+<td>VR Controller <em>n</em> (role unassigned)</td>
+</tr>
+</tbody>
+</table>
+<p>Both shapes declare 8 axes plus accel and gyro sensors at 90 Hz.</p>
+<p><strong>Headset</strong> (<code>axis_mask 0x0F</code>, <code>button_mask 0x01</code>): LX is lean right, LY is lean forward or back, RX is yaw, RY is pitch, generic Axis 6 is vertical lean, Axis 7 is roll. Button 0 (South) is pose validity, usable as an activator. Full scales are <code>LeanFullScaleMeters = 0.35</code>, <code>YawFullScaleDeg = 60</code>, <code>PitchFullScaleDeg = 45</code>, <code>RollFullScaleDeg = 45</code>. Position and yaw are relative to a baseline captured at the first valid pose and re-captured after 5 seconds of invalidity, so taking the headset off and putting it back on does not leave a stale lean.</p>
+<p><strong>Controller</strong> (<code>axis_mask 0x33</code>, <code>button_mask 0x06D1</code>): joystick to LX/LY, analog grip to LT, trigger to RT, trackpad to generic Axes 6 and 7. Buttons walk sequentially: South is A, Back is System, Start is ApplicationMenu, LeftStick is joystick click, LeftShoulder is grip click, RightShoulder is trackpad click.</p>
+<p>The raw values sit at indices 6 and 7 on purpose. The generic-axis surface (<code>HasExtraGenericAxes</code>) only exposes axes past the standardized six, so at index 4 or 5 they would exist on the joystick with no PadForge surface able to read them.</p>
+<h3 id="axis-roles-and-why-the-fallback-carries-the-load">Axis roles, and why the fallback carries the load<a class="headerlink" href="#axis-roles-and-why-the-fallback-carries-the-load" title="Permanent link">&para;</a></h3>
+<p><code>ClassifyAxes</code> reads the five <code>Prop_AxisNType_Int32</code> properties: <code>1</code> is trackpad, <code>2</code> is joystick, <code>3</code> is trigger. The first trigger-typed axis is the trigger, the second is the analog grip.</p>
+<p><strong>Drivers on the modern input system never set those properties, and vrserver's legacy emulation does not synthesize them either.</strong> All five read <code>0</code> on a real bench. So an all-<code>None</code> read falls back to the legacy-binding convention every shipped binding follows: axis 0 is the stick or pad, axis 1 is the trigger pull, axis 2 is the grip pull. That fallback is the path most hardware actually takes.</p>
+<h3 id="sensors-come-from-the-runtimes-velocity-fields">Sensors come from the runtime's velocity fields<a class="headerlink" href="#sensors-come-from-the-runtimes-velocity-fields" title="Permanent link">&para;</a></h3>
+<p><code>PushSensors</code> does not finite-difference position. Gyro is the pose's <code>vAngularVelocity</code> rotated into the device frame by <code>WorldToDevice</code>. Accel is the derivative of <code>vVelocity</code> plus a gravity reaction of <code>9.80665</code> up, also rotated into the device frame, so a still device reads +1 g up like a real IMU.</p>
+<h3 id="the-self-emission-filter">The self-emission filter<a class="headerlink" href="#the-self-emission-filter" title="Permanent link">&para;</a></h3>
+<p>A slot emitting virtual hands must never read them back as input. <code>IsSelfEmitted</code> refuses any device whose <code>Prop_ManufacturerName_String</code> is <code>HIDMaestro</code>, which is exactly what <code>controller_device.cpp</code> sets on the driver's own devices. <code>PADFORGE_VR_CONSUME_SELF=1</code> lifts the filter, which is the hardware-free validation loop: PadForge's own virtual hands, tracked by SteamVR, read back through this lane.</p>
+<p>A transient property-read failure returns an empty manufacturer string, and empty is <strong>not</strong> "not self". That case retries in 1 second rather than deciding. A self-filtered index caches its verdict until the index disconnects, and a failed attach backs off 5 seconds, because both paths used to re-run property reads and allocations at 90 Hz.</p>
+<h3 id="failure-handling-worth-keeping">Failure handling worth keeping<a class="headerlink" href="#failure-handling-worth-keeping" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A failed <code>GetControllerState</code> <strong>neutralizes once</strong> rather than latching: sticks to 0, triggers to <code>short.MinValue + 1</code>, buttons released. Without it a controller that sleeps mid-hold kept its stick deflected indefinitely.</li>
+<li>The shared <code>VRControllerState_t</code> is zeroed before every read, because one struct serves every controller in a tick and the runtime does not clear it on failure.</li>
+<li><code>RunLoop</code> wraps everything in a top-level catch. An unhandled exception on a managed background thread is process-fatal, and this loop calls into two native stacks.</li>
+<li><code>Start()</code> does everything that can throw <strong>before</strong> setting <code>_running</code>, or a resolver throw leaves the instance latched running with no thread and permanently unstartable.</li>
+</ul>
+<h3 id="status-tiering">Status tiering<a class="headerlink" href="#status-tiering" title="Permanent link">&para;</a></h3>
+<p>Two statics feed the UI, which previously could only ever say SteamVR was installed:</p>
+<ul>
+<li><code>OpenVrConsumerService.ServerConnected</code>: whether the background client is attached to a running SteamVR.</li>
+<li><code>HMaestroVRController.GlobalDriverStatus()</code>: whether any live VR slot's OpenVR driver is connected and whether its hands are live. Both reads happen under <code>s_liveLock</code>, and <code>Disconnect</code> disposes under the same lock, because the SDK's status getters dereference mapped shared memory with no disposed guard. A read racing <code>UnmapViewOfFile</code> is an access violation no catch survives.</li>
+</ul>
+<hr />
 <h2 id="things-that-will-bite-you">Things that will bite you<a class="headerlink" href="#things-that-will-bite-you" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Adding a button</strong> means touching the bit table, the key array order, and HIDMaestro's <code>HMVRButton</code> together. The cast hides a mismatch until runtime.</li>
 <li><strong>A second Y flip</strong> anywhere in the VR lane cancels the one in <code>PackHand</code>.</li>
 <li><strong>SteamVR's own Test Controller is not a diagnostic.</strong> Switching it from left to right often shows nothing until you switch back and forth again. Trust the app's Preview tab or the game.</li>
 <li><strong>There is no per-slot VR configuration.</strong> The driver ships one identity, so there is no VR equivalent of the PlayStation or Extended profile pickers.</li>
+<li><strong>The two lanes can eat each other.</strong> If you touch the manufacturer string on either side, the #287 self-emission filter stops matching and a VR slot starts consuming its own hands.</li>
 </ul>
 <hr />
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
@@ -3230,7 +3482,7 @@
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

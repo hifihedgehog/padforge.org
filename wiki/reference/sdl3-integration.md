@@ -288,7 +288,7 @@ public struct SDL_HapticRamp
 } // 44 bytes
 ```
 
-Ramp force effect (linearly changing force from start to end level). Declared in `SDL3Minimal.cs` and included in the `SDL_HapticEffect` union. `HMaestroFfbDecoder` emits ramp from PID `PT_RAMPREP` packets, using `max(abs(Start), abs(End))` as magnitude.
+Ramp force effect (linearly changing force from start to end level). Declared in `SDL3Minimal.cs` and included in the `SDL_HapticEffect` union. `HMaestroFfbDecoder.DecodeSetRamp` handles the PID Set Ramp Force report (output report ID 0x16, `[EBI][Start:2][End:2]`), scaling both endpoints to canonical units and taking `max(abs(start), abs(end))` as magnitude.
 
 ### SDL_HapticEffect Union Struct
 
@@ -380,6 +380,7 @@ private static void LoadEmbeddedGamepadMappings()
 | `SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS` | `"1"` | **Required.** Without this, SDL stops reading input when PadForge loses focus. A remapper must read input while games have focus. |
 | `SDL_HINT_JOYSTICK_XINPUT` | `"1"` | Enables SDL's XInput backend for Xbox controller enumeration. Without this, Xbox controllers (USB or wireless adapter) do not appear in `SDL_GetJoysticks()`. Was `SDL_HINT_XINPUT_ENABLED` in SDL2. |
 | `SDL_HINT_HIDAPI_IGNORE_DEVICES` | `"0x146b/0x0603"` | Devices SDL's hidapi layer must never enumerate or probe. Connecting a Nacon PS4 Compact (146B:0603) froze the app until unplug (#235). The leading explanation, refined by the fork SDL#19 audit, is a Sony third-party capabilities feature-report probe that never returns, on the UI thread that runs enumeration. PID-scoped seatbelt: other Nacon PIDs stay untouched. The value is the `InputManager.HidapiIgnoreDevices` constant. |
+| `SDL_HINT_JOYSTICK_BLACKLIST_DEVICES` | `"0x054c/0x03d5,0x054c/0x0c5e,0x054c/0x042f"` | Devices no SDL joystick backend may enumerate. The PS Move family (#277): a docked Move exposes three HID collections and no SDL driver claims the PIDs, so each collection surfaced as its own dead joystick row. PadForge drives these pads itself (`PsMoveDirectService`, and the DS3 service's navigation profile) and feeds SDL virtual joysticks, which are exempt because the virtual backend never calls `SDL_ShouldIgnoreJoystick`. The value is the `InputManager.JoystickBlacklistDevices` constant. |
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH2` | `"1"` | Activates the HIDAPI driver for the wired Switch 2 Pro Controller (PadForge's custom fork). Gates `SDL_hidapi_switch2.c`. Without it, the controller is ignored even though the driver code is compiled in. |
 | `SDL_HINT_JOYSTICK_HIDAPI_WII` | `"1"` | Enables SDL's Wii HIDAPI driver (#116). Surfaces the Bluetooth-paired Wii Remote / Nunchuk / Classic / Wii U Pro and lights the player LED. Relies on the fork's `hid_write` fix (`hifihedgehog/SDL#2`). |
 | `SDL_HINT_JOYSTICK_BLE_SWITCH2` | `"1"` | Enables the fork's Bluetooth-LE Switch 2 driver (`hifihedgehog/SDL#5`, #153). Switch 2 controllers speak a custom BLE GATT service, not HID-over-Bluetooth, so hidapi can't see them. Runs a BLE advertisement scan while PadForge is open. |
@@ -399,14 +400,14 @@ Two fork HIDAPI hints are toggled at runtime by `InputService.RefreshSwitchNfcAr
 | Hint | ON while | OFF effect |
 |------|----------|------------|
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH_NFC` | An NFC tag registration capture is running, or a Bluetooth-linked reader-capable pad (right Joy-Con `0x2007`, combined pair `0x2008`, Pro Controller `0x2009`) is online and a configured NFC consumer (local or Remote Link peer) polled an NFC descriptor within the demand window | MCU powers down. `ReadNfcTag` reports "no tag" |
-| `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR` | An "IR Brightness" consumer (`hifihedgehog/SDL#7`, #151: a standalone right Joy-Con posts its NIR MCU average-intensity byte on joystick axis 6) polled within the demand window, no NFC registration capture is active, and a standalone right Joy-Con is online | Camera stops, freeing the MCU for NFC |
+| `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR` | An "IR Brightness" consumer (`hifihedgehog/SDL#7`, #151: a right Joy-Con posts its NIR MCU average-intensity byte on joystick axis 6) polled within the demand window, no NFC registration capture is active, and an IR-capable Joy-Con is online (standalone right `0x2007`, or a combined gen-1 pair `0x2008` whose right half runs the same camera machine, fork SDL#26 / #275) | Camera stops, freeing the MCU for NFC |
 
 How the latch works:
 
 - **Demand comes from reads.** `SourceCoercion` stamps `LastNfcReadRequestTick` / `LastJoyConIrReadRequestTick` whenever a configured, enabled mapping evaluates an NFC or IR descriptor. Configured inputs are read every tick, so an active binding keeps the latch continuously fresh. A deleted or disabled one lapses after `McuDemandWindowMs` (10 s).
 - **Why not init-time.** The right Joy-Con camera and the NFC reader share the one MCU (camera = mode 5, NFC = mode 4, and the fork's `UpdateNfc` abandons while the camera streams). A globally-on IR hint silently killed standalone right Joy-Con NFC (#248 audit). Do not move either hint back into the init table.
 - **Registration preempts the camera.** A tag-registration capture with the camera streaming would wait forever for a UID, so `RegistrationCaptureActive` forces IR off. The camera resumes when the dialog closes and IR demand re-latches.
-- **The sensors-enable edge.** The fork decides the camera's fate only at `SetSensorsEnabled`, so after an IR flip the service drives every open standalone right Joy-Con through `SdlDeviceWrapper.BounceMotionSensors()` (all four sensor streams off, then on) on a worker thread. Without the bounce, a runtime flip would only take effect on reconnect.
+- **The sensors-enable edge.** The fork decides the camera's fate only at `SetSensorsEnabled`, so after an IR flip the service drives every open IR-capable Joy-Con (`0x2007` or `0x2008`) through `SdlDeviceWrapper.BounceMotionSensors()` (all four sensor streams off, then on) on a worker thread. Without the bounce, a runtime flip would only take effect on reconnect.
 - **Latch only on success.** The managed flag updates only when `SDL_SetHint` accepts the value. A rejected write retries on the next cadence instead of leaving the flag and the MCU disagreeing.
 - When both the camera and NFC are configured for one standalone right Joy-Con, the camera wins by fork arbitration. That conflict is the mapping author's own choice.
 
@@ -491,7 +492,9 @@ Two paths, depending on whether Step 2 already flipped the device offline.
 
 1. Stops rumble via `ForceFeedbackState.StopDeviceForces()` (best-effort)
 2. Disposes the SDL handle via `ud.Device.Dispose()` (best-effort)
-3. Calls `ud.ClearRuntimeState()` (nulls Device, InputState, ForceFeedbackState, etc.)
+3. Clears the wheel/LED per-device caches keyed on `DevicePath` so a same-path replug re-applies rotation range and auto-center
+4. Calls `NeutralizeMappedOutputsFor(ud)`, which runs `ud.ClearRuntimeState()` (nulls Device, InputState, OldInputState, ForceFeedbackState, sets `IsOnline = false`) and drives the device's per-slot mapped outputs to neutral
+5. Calls `XboxImpulseHidWriter.InvalidateCachedTargets()`, because any confirmed disconnect can reshuffle the synthetic `XInput#N` paths the impulse writer caches handles under
 
 After the loop, a follow-up pass removes every disconnected SDL instance ID from `_openedSdlInstanceIds` (`foreach (sdlId in disconnectedIds) _openedSdlInstanceIds.Remove(sdlId)`).
 
@@ -571,18 +574,18 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `TouchpadFingerCounts` | `int[]` | Per-pad simultaneous-finger count from `SDL_GetNumGamepadTouchpadFingers` |
 | `HasIrCamera` | `bool` | Wii Remote IR camera surfaced as an "IR Pointer" source (#146) |
 | `IsBalanceBoard` | `bool` | Wii Balance Board (#146) |
-| `HasJoyConIr` | `bool` | Standalone right Joy-Con NIR camera surfaced as an "IR Brightness" source (#151) |
+| `HasJoyConIr` | `bool` | Right Joy-Con NIR camera surfaced as an "IR Brightness" source (#151). Standalone right Joy-Con (`0x2007`) or a combined gen-1 pair (`0x2008`), gated on raw axis count >= 7 |
 | `HasJoyCon2Mouse` | `bool` | Joy-Con 2 L/R optical mouse surfaced as "Mouse Motion X/Y" sources (#154) |
 | `HasSwitch2Magnetometer` | `bool` | Switch 2 BLE magnetometer stream (#271 item 5). Raw wire units land on the wrapper-local `Switch2MagX/Y/Z` fields, not on `CustomInputState`, so the Remote Link codec's full Block enum stays untouched |
 | `Switch2MagActive` | `bool` | False until the first nonzero magnetometer sample, because a zero triple must not feed the compass |
 | `HasExtraGenericAxes` | `bool` | Raw axes beyond the standard six, surfaced as generic "Axis N" sources (#193) |
 | `SupportedButtonIndices` | `int[]` | Sparse list of button positions the device actually exposes (Devices preview gating) |
+| `SupportedAxisIndices` | `int[]` | Sparse list of axis positions the device actually has. Null means dense. Exists because `NumAxes` is the standardized 6-slot gamepad space, not a count of physical axes |
 | `GamepadHandle` | `IntPtr` | Alias of `GameController`, used by the DualSense passthrough dispatcher |
 | `SdlGuid` | `string` | SDL joystick GUID (32 hex) for gamecontrollerdb matching and virtual-joystick identity |
 | `Name` | `string` | Human-readable device name |
 | `VendorId` | `ushort` | USB Vendor ID |
 | `ProductId` | `ushort` | USB Product ID |
-| `ProductVersion` | `ushort` | USB Product Version |
 | `DevicePath` | `string` | Device file system path |
 | `JoystickType` | `SDL_JoystickType` | Device classification |
 | `SerialNumber` | `string` | Serial (e.g., BT MAC address) |
@@ -868,12 +871,16 @@ const float RadToDeg = 180f / MathF.PI;
 const float MsToG = 1f / 9.80665f;
 
 // Native frame preserved. No DSU sign flip here.
-AccelX = ax * MsToG;
-AccelY = ay * MsToG;
-AccelZ = az * MsToG;
-GyroPitch = gx * RadToDeg;  // gx = tuned pitch (native)
-GyroYaw   = gy * RadToDeg;
-GyroRoll  = gz * RadToDeg;
+ax = accel[0] * MsToG;      // accel[] is SDL's m/s^2 triple
+ay = accel[1] * MsToG;
+az = accel[2] * MsToG;
+gx = tunedPitch * RadToDeg; // tuned = post-Invert, still native frame
+gy = tunedYaw   * RadToDeg;
+gz = tunedRoll  * RadToDeg;
+
+// ... written straight onto the snapshot:
+AccelX = ax, AccelY = ay, AccelZ = az,
+GyroPitch = gx, GyroYaw = gy, GyroRoll = gz,
 ```
 
 The DSU/cemuhook convention negates accelerometer X/Y/Z and gyro pitch/roll relative to SDL's frame, leaving yaw unchanged. That transform is applied downstream, per DSU packet, in `DsuMotionServer.BuildPadDataPacket()`, so only DSU clients see it:
@@ -934,6 +941,8 @@ Returns `DeviceObjectItem[]` describing each axis, hat, and button. The button c
 | 5 | `ObjectGuid.RzAxis` | "Z Rotation" |
 | 6-23 | `ObjectGuid.ZAxis` | "Axis N" |
 | 24+ | `ObjectGuid.Slider` | "Slider N" |
+
+The names above are the raw-joystick set (`GetStandardAxisName`). An SDL-recognized gamepad gets the gamepad names instead (`GamepadObjectNames.Axis`): "Left Stick X", "Left Stick Y", "Left Trigger", "Right Stick X", "Right Stick Y", "Right Trigger". The GUIDs are the same either way.
 
 For SDL-recognized gamepads the standard axis and button positions are capability-gated before they are emitted, so the table above is the maximum layout, not a guaranteed one. The next subsection covers the axis gate.
 
@@ -1030,7 +1039,7 @@ HidD_GetProductString(handle, buffer, 512);
 Details:
 - Opened with **zero access rights** (`dwDesiredAccess = 0`). `HidD_GetProductString` needs no read/write access
 - `FILE_SHARE_READ | FILE_SHARE_WRITE` allows querying while other processes hold the device
-- 512-byte buffer, decoded as UTF-16; trimmed of null terminators
+- 512-byte buffer, decoded as UTF-16, then run through `DeviceNameSanitizer.Clean` so embedded nulls and control bytes from cheap USB descriptors cannot break `XmlSerializer` at save time (#53)
 - Failures swallowed. Returns `null`, keeping the raw VID/PID name
 - P/Invoke declarations (`CreateFile`, `CloseHandle`, `HidD_GetProductString`) are private to `SdlDeviceWrapper`
 
@@ -1095,7 +1104,7 @@ For each online device:
 1. Save the current state as `OldInputState` (`ud.OldInputState = ud.InputState`) for change detection
 2. Call `ud.Device.GetCurrentState()` (dispatches to `GetGamepadState()` or `GetJoystickState()`)
 3. Atomic reference swap: `ud.InputState = newState` (safe for cross-thread reading)
-4. Tick the touchpad gesture engine via `UpdateGestureContexts(ud, newState)` for every slot the device is assigned to
+4. Tick the touchpad gesture engine via `UpdateGestureContexts(ud, newState)`, once per device per tick, across every touchpad surface the device exposes. `UpdateMouseGestureContexts` (#200) and `UpdateMenuContexts` (#9 B-17) run beside it
 5. Apply force feedback via `ApplyForceFeedback(ud)`
 
 ### Multi-Slot Force Feedback Combining
@@ -1106,11 +1115,14 @@ When a device maps to multiple virtual controller slots, vibration is combined u
 ushort combinedL = 0, combinedR = 0;
 for (int i = 0; i < slotCount; i++)
 {
-    var vib = VibrationStates[padIndex];
-    if (vib.LeftMotorSpeed > combinedL)  combinedL = vib.LeftMotorSpeed;
-    if (vib.RightMotorSpeed > combinedR) combinedR = vib.RightMotorSpeed;
+    // per-slot: VibrationStates[padIndex] -> macro merge -> constant-force
+    // resolve -> ScaleRumbleForDevice -> scaledL / scaledR
+    if (scaledL > combinedL) combinedL = scaledL;
+    if (scaledR > combinedR) combinedR = scaledR;
 }
 ```
+
+The trigger motors (`combinedLT` / `combinedRT`) combine the same way, taking the max across the slot's own trigger rumble, the #102 trigger routing, and the shared-trigger sources.
 
 Rumble from any mapped slot reaches the physical controller. Test rumble targeting via `TestRumbleTargetGuid[padIndex]` is also supported for multi-device slots.
 
@@ -1120,30 +1132,31 @@ Rumble from any mapped slot reaches the physical controller. Test rumble targeti
 
 **Files:** `PadForge.Engine/Common/SDL3Minimal.cs` (virtual joystick P/Invokes), `PadForge.App/Common/Input/InputManager.cs` (`Ds3DirectService` wiring)
 
-The fork build enables `SDL_JOYSTICK_VIRTUAL`. PadForge uses it to surface a device it reads natively as an ordinary SDL joystick, so the rest of the pipeline consumes it with no special-casing. The one current consumer is a Bluetooth DualShock 3 behind BthPS3 (no DsHidMini), read by `Ds3DirectService`.
+The fork build enables `SDL_JOYSTICK_VIRTUAL`. PadForge uses it to surface a device it reads natively as an ordinary SDL joystick, so the rest of the pipeline consumes it with no special-casing. Four services attach virtual joysticks: `Ds3DirectService` (the DualShock 3, and the PS Move Navigation controller on its navigation profile), `PsMoveDirectService` (#277), `OpenVrConsumerService` (#287 VR slots), and `SpaceMouseService` (#288). The DS3 is the reference case below.
 
 ### Attach and feed
 
-`Ds3DirectService.Start()` polls the BthPS3 device interface. When a DS3 connects, it fills an `SDL_VirtualJoystickDesc` (axis/button/hat counts, VID/PID, sensor descriptors, and Cdecl callback pointers for Update / Rumble / SetLED / SetSensorsEnabled) and calls `SDL_AttachVirtualJoystick(ref desc)`. SDL returns an instance ID, and Step 1 opens it on the next enumeration like any real device.
+`Ds3DirectService.Start()` runs a monitor loop that tries USB first (the inbox WinUSB interface) and falls back to the BthPS3 raw PDO. USB takes priority because the BthPS3 PDO node lingers present even after the pad leaves Bluetooth. On connect the service fills an `SDL_VirtualJoystickDesc` (16 axes, 15 buttons, no hats, VID/PID, button and axis masks, sensor descriptors, and Cdecl callback pointers for `Rumble`, `SetLED`, `SetPlayerIndex`, `SetSensorsEnabled`) and calls `SDL_AttachVirtualJoystick(ref desc)`. SDL returns an instance ID, and Step 1 opens it on the next enumeration like any real device.
 
 Each frame the service pushes decoded HID state into SDL:
 
-- `SDL_SetJoystickVirtualAxis` / `SDL_SetJoystickVirtualButton` / `SDL_SetJoystickVirtualHat` for sticks, buttons, and the D-pad
-- `SDL_SendJoystickVirtualSensorData` for the DS3's accelerometer and gyro
+- `SDL_SetJoystickVirtualButton` for the face, shoulder, stick, system, and D-pad buttons. The desc declares no hats, so the D-pad rides buttons 11-14 in SDL's own gamepad button order
+- `SDL_SetJoystickVirtualAxis` for the two sticks, the two analog triggers, and the ten button-pressure axes on 6-15, the same shape upstream SDL's PS3 driver uses, so #193's `HasExtraGenericAxes` surfaces them as "Axis 6" through "Axis 15"
+- `SDL_SendJoystickVirtualSensorData` for the DS3's accelerometer and yaw gyro
 - `SDL_LockJoysticks()` / `SDL_UnlockJoysticks()` batch a whole frame so the poll thread reads one atomic snapshot
 
 ### Telling the two DS3 transports apart
 
-The BT bridge and a USB DS3 in DsHidMini SXS mode share VID/PID `054C:0268`. `SDL_IsJoystickVirtual(instanceId)` distinguishes them: the BT bridge is a virtual joystick owned by `Ds3DirectService`, the USB pad is a real hidapi device owned by SDL's sixaxis driver.
+A DS3 driven by `Ds3DirectService` and a USB DS3 in DsHidMini SXS mode share VID/PID `054C:0268`. `SDL_IsJoystickVirtual(instanceId)` distinguishes them: the bridged pad is a virtual joystick owned by `Ds3DirectService`, the SXS pad is a real hidapi device owned by SDL's sixaxis driver. `SdlDeviceWrapper.SetPlayerIndex` uses exactly this test to keep one player-LED writer per transport, forwarding to `SDL_SetJoystickPlayerIndex` only for the non-virtual case.
 
 ### Filling in what a virtual joystick lacks
 
 A virtual joystick has no SDL device path and no SDL power channel. `SdlDeviceWrapper` falls back to two external providers the service registers so identity, transport display, and battery still resolve:
 
-- `ExternalDevicePathProvider = Ds3DirectService.GetDevicePath` supplies the real BthPS3 interface path for the Dossier view and USB/BT classification
-- `ExternalPowerInfoProvider = Ds3DirectService.GetPowerInfo` supplies battery when SDL reports unknown (#167)
+- `ExternalDevicePathProvider` supplies the real transport interface path (the BthPS3 PDO over Bluetooth, the WinUSB interface over USB) for the Dossier view and USB/BT classification. `InputManager` wires it as `Ds3DirectService.GetDevicePath(id) ?? PsMoveDirectService.GetDevicePath(id)`
+- `ExternalPowerInfoProvider` supplies battery when SDL reports unknown (#167), wired the same way as `Ds3DirectService.GetPowerInfo(id) ?? PsMoveDirectService.GetPowerInfo(id)`
 
-Because the bridge has no path or serial, `BuildInstanceGuid` keys it on the `sdlguid:` tier (tier 4 above), which is stable across reconnects.
+Because the bridge has no path or serial, `BuildInstanceGuid` keys it on the `sdlguid:` tier (tier 4 above), which is stable across reconnects. The service also gives both transports one shared virtual-joystick name, since SDL folds the name into the joystick GUID, so a slot mapping made over USB survives a switch to Bluetooth.
 
 ---
 
@@ -1165,6 +1178,7 @@ public interface ISdlInputDevice : IDisposable
     bool HasExtraGenericAxes { get; }      // extra raw axes as generic "Axis N" sources (#193)
     int NumHats { get; }
     int[] SupportedButtonIndices { get; }  // sparse list of exposed button positions
+    int[] SupportedAxisIndices => null;    // sparse list of exposed axis positions, null = dense
     IntPtr GamepadHandle { get; }          // SDL_Gamepad*, for SDL_SendGamepadEffect (passthrough)
     bool HasRumble { get; }
     bool HasRumbleTriggers { get; }        // Xbox One+ impulse-trigger motors
@@ -1197,7 +1211,7 @@ public interface ISdlInputDevice : IDisposable
 }
 ```
 
-`RawAxisCount`, `HasExtraGenericAxes`, `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, and `TouchpadFingerCounts` have default interface implementations. Keyboard and mouse wrappers inherit those defaults. `SdlDeviceWrapper` overrides all six with live per-device values, and the Remote Link peer (`RemotePeerDevice`) mirrors the owner's `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, and `TouchpadFingerCounts` off the device list so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252).
+`RawAxisCount`, `HasExtraGenericAxes`, `SupportedAxisIndices`, `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, and `TouchpadFingerCounts` have default interface implementations. Keyboard and mouse wrappers inherit those defaults. `SdlDeviceWrapper` overrides all seven with live per-device values, and the Remote Link peer (`RemotePeerDevice`) mirrors the owner's `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, and `TouchpadFingerCounts` off the device list so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252).
 
 ### Implementations
 
@@ -1317,7 +1331,9 @@ Full cleanup on disconnect:
 
 1. **Stop force feedback:** `StopDeviceForces()`. Sends rumble stop before handle close (best-effort, try/catch)
 2. **Dispose SDL handle:** `CloseInternal()`. Closes haptic, gamepad, joystick in order (best-effort)
-3. **Clear runtime state:** `ClearRuntimeState()`. Nulls Device, InputState, ForceFeedbackState, and sets IsOnline=false. The `UserDevice` record remains for settings preservation
+3. **Reset per-device writer caches** keyed on `DevicePath` (wheel settings, LEDs, wheel FFB, the Logitech / Thrustmaster / raw HID writers)
+4. **Neutralize and clear:** `NeutralizeMappedOutputsFor(ud)`, which calls `ClearRuntimeState()`. Nulls Device, InputState, OldInputState, ForceFeedbackState, and sets IsOnline=false, then drives the device's mapped outputs neutral so a held button or engaged trigger cannot freeze into the slot. The `UserDevice` record and its `DeviceObjects` remain for settings preservation
+5. **Invalidate impulse-writer targets:** `XboxImpulseHidWriter.InvalidateCachedTargets()`
 
 The SDL instance ID is removed from `_openedSdlInstanceIds` by the caller, enabling the device to be re-detected if reconnected.
 
@@ -1342,13 +1358,13 @@ The 2026 Steam Controller was originally a candidate fifth patch but Valve's ups
 
 ### Additional v4 fork behaviors
 
-The hints in `InitializeSdl` and the axis readers in `SdlDeviceWrapper` depend on further fork work beyond the original four features. Grounded here in the PadForge code that consumes them (the fork repo is not cloned on disk, so the commit-level detail lives in the fork branch and project memory):
+The hints in `InitializeSdl` and the axis readers in `SdlDeviceWrapper` depend on further fork work beyond the original four features. Grounded here in the PadForge code that consumes them:
 
 | Fork ref | Behavior | Consumed by |
 |----------|----------|-------------|
 | `SDL#5` | Bluetooth-LE Switch 2 driver (Pro Controller 2, Joy-Con 2 L/R, NSO GameCube) over a custom BLE GATT service | `SDL_HINT_JOYSTICK_BLE_SWITCH2` (#153) |
 | `SDL#6` | Wii Remote IR dots on dedicated joystick axes 6-9 | `HasIrCamera`, `ReadIrPointer` (#146) |
-| `SDL#7` | Right Joy-Con NIR MCU intensity on joystick axis 6 | `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR`, `HasJoyConIr`, `ReadJoyConIr` (#151) |
+| `SDL#7` (extended by `SDL#26`) | Right Joy-Con NIR MCU intensity on joystick axis 6, standalone or as the right half of a combined gen-1 pair | `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR`, `HasJoyConIr`, `ReadJoyConIr` (#151, #275) |
 | `SDL#8` | Joy-Con 2 optical-mouse counters on joystick axes 6/7 | `SDL_HINT_JOYSTICK_BLE_SWITCH2_MOUSE`, `HasJoyCon2Mouse`, `ReadJoyCon2Mouse` (#154) |
 | `SDL#9` | `SDL_SendGamepadEffect` output path for DualSense adaptive triggers / lightbar / audio | DualSense passthrough dispatcher |
 | DS3 SixAxis | Correct gyro and accel scaling for a DsHidMini DS3 in SXS mode | `SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER` (#194) |
@@ -1364,23 +1380,22 @@ USB composite device with two interfaces:
 
 | Interface | Protocol | Purpose |
 |-----------|----------|---------|
-| HID Interface 0 | Standard HID reports | Input reading + rumble (output report ID 0x02) |
-| Bulk Interface 1 | WinUSB | Initialization sequence (10 commands via `SendBulkData`) |
+| HID Interface 0 | Standard HID reports | Input reading + rumble (Pro Controller output report ID 0x02, Joy-Con 2 0x01, NSO GameCube 0x03) |
+| Bulk Interface 1 | libusb over WinUSB | Flash calibration reads + initialization sequence (10 commands via `SendBulkData`) |
 
-Interface 1 uses a WinUSB-compatible INF (DeviceInterfaceGUID `{6F13725E-EF0E-4FD3-AE5F-B2DE989EC825}`, MI_01). Must be opened during init to send the bulk command sequence that enables full-featured input mode.
+Windows binds Interface 1 to WinUSB from the controller's own MS OS 2.0 descriptors, so no INF ships with PadForge. The driver opens that interface through libusb (a standalone `libusb_context` of its own, because hidusb.sys holds Interface 0 and hidapi never opened the device over libusb) and claims the bulk endpoints it finds by walking the config descriptor. The bulk command sequence must run during init to put the controller into full-featured input mode.
 
 ### Key Fork Modifications
 
 | File | Change |
 |------|--------|
-| `SDL_hidapi.c` | Filter Switch 2 PIDs from libusb on Windows (libusb cannot open individual interfaces of a composite device). Keep in platform HID backend |
-| `SDL_hidapi_switch2.c` | New HIDAPI driver: WinUSB bulk init, HID input parsing, rumble output, stick/sensor calibration |
+| `SDL_hidapi.c` | Route the Switch 2 PIDs away from libusb on Windows (libusb cannot claim HID interfaces owned by hidusb.sys), keeping input on the platform HID backend while the driver opens Interface 1 for bulk I/O separately |
+| `SDL_hidapi_switch2.c` | New HIDAPI driver: libusb bulk init, HID input parsing, rumble output, stick/sensor calibration |
 
-### WinUSB Details
+### Bulk I/O Details
 
-- `FILE_FLAG_OVERLAPPED` required for `CreateFile` on the WinUSB interface. Without it, `WinUsb_Initialize` fails
-- Init sequence uses overlapped I/O with per-transfer timeouts
-- Calibration via WinUSB bulk transfers. Timeout (-7) after re-plug is non-fatal. Falls back to default calibration
+- `SendBulkData` uses `libusb_bulk_transfer` on the OUT endpoint with a 1000 ms timeout, `RecvBulkData` reads the IN endpoint in 64-byte chunks with a 100 ms timeout
+- Calibration comes from flash blocks read over the same bulk pipes (serial at `0x13000`, gyro and accel bias at `0x13040`, stick calibration at `0x13080` / `0x130C0`, user calibration at `0x1FC040` / `0x1FC080`). A failed read logs a warning and leaves the defaults in place rather than failing the open
 
 ### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_SWITCH2`
 
@@ -1406,9 +1421,9 @@ PadForge needs no code change for the extension swap. `SdlDeviceWrapper.BuildIns
 
 #### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_WII`
 
-Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:695`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:50`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
+Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:716`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:51`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
 
-`InputManager.RescanWiiControllers()` (`InputManager.cs:1045`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it after the `PairDeviceDialog` closes (`MainWindow.xaml.cs:808`).
+`InputManager.RescanWiiControllers()` (`InputManager.cs:1159`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes (`MainWindow.xaml.cs:844`).
 
 ### Build Instructions
 
@@ -1436,4 +1451,4 @@ Copy the output `SDL3.dll` into `PadForge.App/Resources/SDL3/x64/` before publis
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

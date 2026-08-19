@@ -97,15 +97,15 @@ The UAC shield is on the EXE icon as a hint. PadForge prompts once per launch.
 
 ## Start at login
 
-Turn on **Settings > Window > Start at login** to launch PadForge on sign-in.
+Turn on **Settings > Window > Start at Login** to launch PadForge on sign-in.
 
 To run PadForge silently in the background, turn on all three options.
 
 | Option | Effect |
 |--------|--------|
-| **Start at login** | Launches PadForge on sign-in. |
-| **Start minimized** | Skips showing the main window. |
-| **Minimize to system tray** | Keeps PadForge in the notification area instead of the taskbar. |
+| **Start at Login** | Launches PadForge on sign-in. |
+| **Start Minimized** | Skips showing the main window. |
+| **Minimize to System Tray** | Keeps PadForge in the notification area instead of the taskbar. |
 
 With all three on, PadForge runs in the background with only a tray icon.
 
@@ -134,4 +134,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

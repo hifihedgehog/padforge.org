@@ -21,7 +21,7 @@ Six bipolar axes, one per degree of freedom. Push, pull, twist, and tilt read si
 | **Axis 4** | Rotation Y (roll): tilt left / right |
 | **Axis 5** | Rotation Z (yaw): twist |
 
-The puck is spring-centred, so each axis rests at exactly zero and returns there when released. It behaves like a self-centring analog stick, not like a gyro: map the axes on the [Mappings](../features/mappings.md) tab like any stick or trigger, and shape them with the usual [deadzone and curve](../features/stick-deadzones.md) machinery. Directions follow the device's own right-handed convention. If a motion feels backwards for your game, invert that row's axis.
+The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes on the [Mappings](../features/mappings.md) tab like any stick or trigger, and shape them with the usual [deadzone and curve](../features/stick-deadzones.md) machinery. Directions follow the device's own right-handed convention. If a motion feels backwards for your game, invert that row's axis.
 
 Buttons map as ordinary buttons. Every model's buttons fit, from the SpaceNavigator's two up through the SpaceMouse Enterprise's full bank.
 

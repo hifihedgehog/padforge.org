@@ -2026,7 +2026,7 @@
   <a href="#hide-devices-from-games" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Hide devices from games
+        Hide Devices from Games
       
     </span>
   </a>
@@ -2037,7 +2037,7 @@
   <a href="#keep-devices-cloaked-between-launches" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Keep devices cloaked between launches
+        Keep Devices Cloaked Between Launches
       
     </span>
   </a>
@@ -3452,7 +3452,7 @@
   <a href="#hide-devices-from-games" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Hide devices from games
+        Hide Devices from Games
       
     </span>
   </a>
@@ -3463,7 +3463,7 @@
   <a href="#keep-devices-cloaked-between-launches" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Keep devices cloaked between launches
+        Keep Devices Cloaked Between Launches
       
     </span>
   </a>
@@ -3795,8 +3795,8 @@
 <h2 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h2>
 <p>Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.</p>
 <ul>
-<li><strong>HidHide</strong> card: Install and Uninstall buttons.</li>
-<li><strong>HIDMaestro</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.</li>
+<li><strong>HidHide Driver</strong> card: Install and Uninstall buttons.</li>
+<li><strong>HIDMaestro Driver</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.</li>
 <li><strong>Windows MIDI Services</strong> card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).</li>
 <li><strong>SteamVR</strong> card: needed only for <a href="../vr-controllers/">VR slots</a>. It describes itself as <em>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</em></li>
 </ul>
@@ -3841,20 +3841,20 @@
 </ul>
 <h3 id="the-steamvr-card">The SteamVR card<a class="headerlink" href="#the-steamvr-card" title="Permanent link">&para;</a></h3>
 <p><img alt="The SteamVR card with its install location field" src="../../images/settings-steamvr.png" /></p>
-<p>Before installing, the card offers an <strong>install location</strong>. It defaults to <code>C:\SteamVR</code> and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.</p>
+<p>Before installing, the card offers an <strong>Install Location</strong>. It defaults to <code>C:\SteamVR</code> and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.</p>
 <p><strong>Uninstall appears only for an install PadForge itself created.</strong> PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.</p>
-<h3 id="hide-devices-from-games">Hide devices from games<a class="headerlink" href="#hide-devices-from-games" title="Permanent link">&para;</a></h3>
-<p>This checkbox sits inside the <strong>HidHide</strong> card. It only shows when HidHide is installed. Master switch for input hiding. Two pieces sit under it.</p>
+<h3 id="hide-devices-from-games">Hide Devices from Games<a class="headerlink" href="#hide-devices-from-games" title="Permanent link">&para;</a></h3>
+<p>This checkbox sits inside the <strong>HidHide Driver</strong> card. It only shows when HidHide is installed. Master switch for input hiding. Two pieces sit under it.</p>
 <ul>
 <li><strong>HidHide cloaking</strong> makes physical controllers invisible to games at the OS level.</li>
 <li><strong>Input hook suppression</strong> stops mapped raw inputs reaching other input APIs.</li>
 </ul>
 <p>On (default) means the per-device hide toggles on the <a href="../devices/">Devices</a> page do what they say. Off forces every controller visible no matter what the per-device toggles are set to. Use it as a panic button.</p>
-<h3 id="keep-devices-cloaked-between-launches">Keep devices cloaked between launches<a class="headerlink" href="#keep-devices-cloaked-between-launches" title="Permanent link">&para;</a></h3>
-<p>The second checkbox in the <strong>HidHide</strong> card, also shown only when HidHide is installed.</p>
+<h3 id="keep-devices-cloaked-between-launches">Keep Devices Cloaked Between Launches<a class="headerlink" href="#keep-devices-cloaked-between-launches" title="Permanent link">&para;</a></h3>
+<p>The second checkbox in the <strong>HidHide Driver</strong> card, also shown only when HidHide is installed.</p>
 <p>Off (default) clears every HidHide cloak when PadForge exits, so other sessions see your controllers normally.</p>
 <p>On leaves the cloaks in place between launches. Pick this when another app (Steam launching after PadForge exits, for example) scans for pads while PadForge is closed and you want it to keep seeing the physical controllers as hidden. The next PadForge start re-asserts the cloaks with no visible flicker.</p>
-<p>Flipping <strong>Hide devices from games</strong> off still decloaks right away, no matter what this is set to.</p>
+<p>Flipping <strong>Hide Devices from Games</strong> off still decloaks right away, no matter what this is set to.</p>
 <h3 id="hidhide-whitelisted-applications">HidHide Whitelisted Applications<a class="headerlink" href="#hidhide-whitelisted-applications" title="Permanent link">&para;</a></h3>
 <p>When HidHide is installed, a <strong>Whitelisted Applications</strong> section drops in under its card. The whitelist picks which apps can still see hidden controllers.</p>
 <p>PadForge whitelists itself. You may also want to whitelist:</p>
@@ -3961,7 +3961,7 @@
 </tr>
 </tbody>
 </table>
-<p>If unsaved changes exist, an orange <strong>"Unsaved changes"</strong> warning sits under the buttons.</p>
+<p>If unsaved changes exist, an orange <strong>"Unsaved Changes"</strong> warning sits under the buttons.</p>
 <h3 id="auto-save">Auto-save<a class="headerlink" href="#auto-save" title="Permanent link">&para;</a></h3>
 <p>Most settings auto-save inside ~250 ms. You do not need to click <strong>Save</strong> after every change.</p>
 <p>The <strong>Save</strong> button is there for two cases.</p>

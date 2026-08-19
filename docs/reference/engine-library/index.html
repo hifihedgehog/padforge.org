@@ -3661,10 +3661,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#extendedmappingentry" class="md-nav__link">
+  <a href="#rawmappingentry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ExtendedMappingEntry
+        RawMappingEntry
       
     </span>
   </a>
@@ -6595,10 +6595,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#extendedmappingentry" class="md-nav__link">
+  <a href="#rawmappingentry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ExtendedMappingEntry
+        RawMappingEntry
       
     </span>
   </a>
@@ -7525,7 +7525,7 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        US[UserSetting&lt;br/&gt;device-to-slot linkage]
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        UD[UserDevice&lt;br/&gt;physical device record]
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        MT[MappingTranslation&lt;br/&gt;cross-layout Copy From]
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        VJM[ExtendedMappingEntry&lt;br/&gt;custom axis/button/POV maps]
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        VJM[RawMappingEntry&lt;br/&gt;custom axis/button/POV maps]
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    end
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    subgraph &quot;Output State Types. PadForge.Engine&quot;
@@ -7681,7 +7681,7 @@
 <li><a href="#menuselectionmath">MenuSelectionMath</a> (Menus/MenuSelectionMath.cs)</li>
 <li><a href="#menuevaluator">MenuEvaluator</a> (Menus/MenuEvaluator.cs)</li>
 <li><a href="#padsetting">PadSetting</a> (Data/PadSetting.cs)</li>
-<li><a href="#extendedmappingentry">ExtendedMappingEntry</a> (Data/PadSetting.cs)</li>
+<li><a href="#rawmappingentry">RawMappingEntry</a> (Data/PadSetting.cs)</li>
 <li><a href="#usersetting">UserSetting</a> (Data/UserSetting.cs)</li>
 <li><a href="#userdevice">UserDevice</a> (Data/UserDevice.cs)</li>
 <li><a href="#deadzoneshape">DeadZoneShape</a> (Data/DeadZoneShape.cs)</li>
@@ -8436,35 +8436,36 @@
 <a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumButtons</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">RawButtonCount</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">SupportedButtonIndices</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">               </span><span class="c1">// sparse list of exposed button positions</span>
-<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHats</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">GamepadHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                       </span><span class="c1">// SDL_Gamepad pointer, Zero if not gamepad-opened</span>
-<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumble</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumbleTriggers</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                     </span><span class="c1">// per-trigger impulse motors (Xbox One+)</span>
-<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasHaptic</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyro</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccel</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccelAux</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w">                          </span><span class="c1">// aux/left accelerometer (#199)</span>
-<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyroAux</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w">                           </span><span class="c1">// aux/left gyroscope (#252)</span>
-<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumTouchpads</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">            </span><span class="c1">// per-device pad count (SDL wrapper overrides)</span>
-<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadFingerCounts</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Array</span><span class="p">.</span><span class="n">Empty</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span><span class="w">   </span><span class="c1">// per-pad finger counts</span>
-<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsAttached</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>
-<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a><span class="w">    </span><span class="c1">// Haptic</span>
-<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a><span class="w">    </span><span class="n">HapticEffectStrategy</span><span class="w"> </span><span class="n">HapticStrategy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">HapticHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">HapticFeatures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHapticAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a>
-<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a><span class="w">    </span><span class="c1">// State reading</span>
-<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">GetCurrentState</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">forceRaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a><span class="w">    </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">();</span>
-<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetInputDeviceType</span><span class="p">();</span>
-<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>
-<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a><span class="w">    </span><span class="c1">// Force feedback</span>
-<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetRumble</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">low</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">high</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">durationMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uint</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">();</span>
-<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a><span class="p">}</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">SupportedAxisIndices</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w">                 </span><span class="c1">// sparse axis positions; null means dense</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHats</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">GamepadHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                       </span><span class="c1">// SDL_Gamepad pointer, Zero if not gamepad-opened</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumble</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumbleTriggers</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                     </span><span class="c1">// per-trigger impulse motors (Xbox One+)</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasHaptic</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyro</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccel</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccelAux</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w">                          </span><span class="c1">// aux/left accelerometer (#199)</span>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyroAux</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w">                           </span><span class="c1">// aux/left gyroscope (#252)</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumTouchpads</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">            </span><span class="c1">// per-device pad count (SDL wrapper overrides)</span>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadFingerCounts</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Array</span><span class="p">.</span><span class="n">Empty</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span><span class="w">   </span><span class="c1">// per-pad finger counts</span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsAttached</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a><span class="w">    </span><span class="c1">// Haptic</span>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a><span class="w">    </span><span class="n">HapticEffectStrategy</span><span class="w"> </span><span class="n">HapticStrategy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">HapticHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">HapticFeatures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHapticAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a><span class="w">    </span><span class="c1">// State reading</span>
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">GetCurrentState</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">forceRaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a><span class="w">    </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">();</span>
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetInputDeviceType</span><span class="p">();</span>
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a><span class="w">    </span><span class="c1">// Force feedback</span>
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetRumble</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">low</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">high</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">durationMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uint</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">();</span>
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">&para;</a></h3>
 <table>
@@ -8550,6 +8551,11 @@
 <td><code>SupportedButtonIndices</code></td>
 <td><code>int[]</code></td>
 <td>Sparse list of button positions the device actually exposes. Lets the preview skip positions the device lacks (e.g., paddles)</td>
+</tr>
+<tr>
+<td><code>SupportedAxisIndices</code></td>
+<td><code>int[]</code></td>
+<td>Sparse list of axis positions the device actually has. Default-interface member returning <code>null</code>, which means dense (every index below the axis count is real). Exists because <code>NumAxes</code> is the standardized 6-slot gamepad space, not a count of the pad's physical axes</td>
 </tr>
 <tr>
 <td><code>NumHats</code></td>
@@ -8893,6 +8899,7 @@
 2. <strong>Sine</strong>. Periodic fallback
 3. <strong>Constant</strong>. Last resort</p>
 <p>Devices with both simple rumble and LeftRight haptic prefer simple rumble (more reliable for gamepads). Gain set to 100 if <code>SDL_HAPTIC_GAIN</code> is supported.</p>
+<p>Every exit writes one <code>HAPTICDIAG open VVVV:PPPP ...</code> line to <code>SdlDiagLog</code>, carrying the VID:PID plus the haptic axis count and the spring and constant feature bits (#282 needs all three). A null handle from <code>SDL_OpenHapticFromJoystick</code> logs <code>none (device exposes no SDL haptic interface)</code>, not FAILED: most gamepads have no SDL haptic interface at all, a DualSense rumbles through the Sony sole-writer path and never reaches this subsystem, and wording it as a failure put two error-class lines into every diagnostics harvest.</p>
 <hr />
 <h2 id="hapticeffectstrategy">HapticEffectStrategy<a class="headerlink" href="#hapticeffectstrategy" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/SdlDeviceWrapper.cs</code>
@@ -9674,6 +9681,11 @@
 <td><code>HeadsetMotion</code></td>
 <td>30</td>
 <td>Sony headset head-tracker IMU over Bluetooth Classic HID (#188). The WH-1000XM5 family exposing the Android Head Tracker sensor collection as a gyro / accel motion source</td>
+</tr>
+<tr>
+<td><code>Microphone</code></td>
+<td>31</td>
+<td>Standalone Windows capture endpoint (#317). Its buttons are registered voice phrases. A mic-bearing controller carries its phrases on its own device instead</td>
 </tr>
 </tbody>
 </table>
@@ -11368,7 +11380,7 @@
 </tr>
 <tr>
 <td><code>MappingDeadZoneEntries</code></td>
-<td><code>ExtendedMappingEntry[]</code></td>
+<td><code>RawMappingEntry[]</code></td>
 <td><code>[XmlArray("MappingDeadZones")] [XmlArrayItem("Map")]</code></td>
 <td><code>null</code></td>
 <td>Per-mapping axis-to-button thresholds. Keys = target names, values = 0–100%.</td>
@@ -11404,7 +11416,7 @@
 </tbody>
 </table>
 <h3 id="extended-custom-mappings-dictionary-based">Extended Custom Mappings (Dictionary-based)<a class="headerlink" href="#extended-custom-mappings-dictionary-based" title="Permanent link">&para;</a></h3>
-<p>For Extended slots with custom HID descriptors (arbitrary axis/button/POV counts). Keys: <code>"ExtendedAxis0"</code>, <code>"ExtendedAxis0Neg"</code>, <code>"ExtendedBtn0"</code>, <code>"ExtendedPov0Up"</code>. Values: mapping descriptors.</p>
+<p>For Extended and Nintendo slots on the raw HID surface (arbitrary axis/button/POV counts). Keys: <code>"RawAxis0"</code>, <code>"RawAxis0Neg"</code>, <code>"RawBtn0"</code>, <code>"RawPov0Up"</code>. Values: mapping descriptors.</p>
 <table>
 <thead>
 <tr>
@@ -11416,10 +11428,10 @@
 </thead>
 <tbody>
 <tr>
-<td><code>ExtendedMappingEntries</code></td>
-<td><code>ExtendedMappingEntry[]</code></td>
+<td><code>RawMappingEntries</code></td>
+<td><code>RawMappingEntry[]</code></td>
 <td><code>[XmlArray("ExtendedMappings")] [XmlArrayItem("Map")]</code></td>
-<td>Serializable array for XML persistence</td>
+<td>Serializable array for XML persistence. The XML element name kept its pre-4.1.0 spelling for round-trip compatibility</td>
 </tr>
 </tbody>
 </table>
@@ -11433,18 +11445,18 @@
 </thead>
 <tbody>
 <tr>
-<td><code>GetExtendedMapping</code></td>
-<td><code>string GetExtendedMapping(string key)</code></td>
-<td>Gets an Extended mapping value by key. Returns <code>""</code> if not found.</td>
+<td><code>GetRawMapping</code></td>
+<td><code>string GetRawMapping(string key)</code></td>
+<td>Gets a raw-surface mapping value by key (<code>"RawAxis0"</code>, <code>"RawBtn5"</code>, <code>"RawPov0Up"</code>). Returns <code>""</code> if not found. Reads under <code>_rawDictLock</code> because the poll thread reads while the UI thread writes.</td>
 </tr>
 <tr>
-<td><code>SetExtendedMapping</code></td>
-<td><code>void SetExtendedMapping(string key, string value)</code></td>
-<td>Sets an Extended mapping value. Empty/null removes the key.</td>
+<td><code>SetRawMapping</code></td>
+<td><code>void SetRawMapping(string key, string value)</code></td>
+<td>Sets a raw-surface mapping value. Empty/null removes the key.</td>
 </tr>
 <tr>
-<td><code>FlushExtendedMappings</code></td>
-<td><code>void FlushExtendedMappings()</code></td>
+<td><code>FlushRawMappings</code></td>
+<td><code>void FlushRawMappings()</code></td>
 <td>Flushes in-memory dictionary back to serializable array.</td>
 </tr>
 </tbody>
@@ -11463,7 +11475,7 @@
 <tbody>
 <tr>
 <td><code>MidiMappingEntries</code></td>
-<td><code>ExtendedMappingEntry[]</code></td>
+<td><code>RawMappingEntry[]</code></td>
 <td><code>[XmlArray("MidiMappings")] [XmlArrayItem("Map")]</code></td>
 <td>Serializable array</td>
 </tr>
@@ -11509,7 +11521,7 @@
 <tbody>
 <tr>
 <td><code>KbmMappingEntries</code></td>
-<td><code>ExtendedMappingEntry[]</code></td>
+<td><code>RawMappingEntry[]</code></td>
 <td><code>[XmlArray("KbmMappings")] [XmlArrayItem("Map")]</code></td>
 <td>Serializable array</td>
 </tr>
@@ -11729,11 +11741,11 @@
 </tbody>
 </table>
 <hr />
-<h2 id="extendedmappingentry">ExtendedMappingEntry<a class="headerlink" href="#extendedmappingentry" title="Permanent link">&para;</a></h2>
+<h2 id="rawmappingentry">RawMappingEntry<a class="headerlink" href="#rawmappingentry" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Data/PadSetting.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Data</code></p>
-<p>Key-value entry for Extended/MIDI/KBM mapping and per-mapping deadzone XML persistence. Shared by all four dictionary-based systems.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ExtendedMappingEntry</span>
+<p>Key-value entry for raw-surface, MIDI, and KBM mapping and per-mapping deadzone XML persistence. Shared by all four dictionary-based systems.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RawMappingEntry</span>
 <a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="p">{</span>
 <a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Key</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
 <a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
@@ -12026,6 +12038,20 @@
 <td>Raw button count before gamepad remapping</td>
 </tr>
 <tr>
+<td><code>RawAxisCount</code></td>
+<td><code>int</code></td>
+<td>(default)</td>
+<td>0</td>
+<td>Total raw joystick axes before the gamepad layout caps <code>CapAxeCount</code> (#193)</td>
+</tr>
+<tr>
+<td><code>HasExtraGenericAxes</code></td>
+<td><code>bool</code></td>
+<td>(default)</td>
+<td><code>false</code></td>
+<td>Device carries raw axes past the standard six that should surface as generic "Axis N" sources (#193). Not derivable from the counts: it excludes devices whose extras are already sensor sources.</td>
+</tr>
+<tr>
 <td><code>CapPovCount</code></td>
 <td><code>int</code></td>
 <td><code>[XmlElement]</code></td>
@@ -12315,6 +12341,12 @@
 <td>Joy-Con 2 (L or R) optical mouse. VID <code>0x057E</code> + exact match against the BLE driver's Joy-Con 2 names (#154). Gates the "Mouse Motion X/Y" sources.</td>
 </tr>
 <tr>
+<td><code>HasVoicePhrases</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlIgnore]</code></td>
+<td>Voice phrases ride this pad's own surface (#317). VID <code>0x054C</code> and PID <code>0x0CE6</code> / <code>0x0DF2</code> (DualSense / DualSense Edge), the pads with an embedded microphone. Standalone microphone devices are not gated by this: they expose phrases as named raw buttons directly, the PC/SC-reader pattern.</td>
+</tr>
+<tr>
 <td><code>HasNfcReader</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlIgnore]</code></td>
@@ -12485,8 +12517,8 @@
 <td>Xbox and PlayStation share property names. Buttons: A=0..Guide=10. Axes: LX=0..RT=5.</td>
 </tr>
 <tr>
-<td><strong>Extended Custom</strong></td>
-<td><code>ExtendedBtn0</code>, <code>ExtendedAxis2</code>, <code>ExtendedAxis2Neg</code>, <code>ExtendedPov0Up</code></td>
+<td><strong>Raw surface</strong> (Extended Custom and Nintendo, <code>isExtended=true</code>)</td>
+<td><code>RawBtn0</code>, <code>RawAxis2</code>, <code>RawAxis2Neg</code>, <code>RawPov0Up</code></td>
 <td>Indexed by position. POV 0 only maps to D-Pad.</td>
 </tr>
 <tr>
@@ -12497,16 +12529,21 @@
 <tr>
 <td><strong>KB+M</strong></td>
 <td><code>KbmMBtn0</code>, <code>KbmMouseX</code>, <code>KbmMouseXNeg</code>, <code>KbmKey20</code>, <code>KbmScroll</code></td>
-<td>Mouse buttons 0–4, VK codes, 3 mouse axes. D-Pad mapped to arrow keys.</td>
+<td>Mouse buttons 0–4, VK codes, 4 mouse axes (<code>KbmMouseX</code>, <code>KbmMouseY</code>, <code>KbmScroll</code>, <code>KbmScrollH</code>). D-Pad mapped to arrow keys.</td>
+</tr>
+<tr>
+<td><strong>VR</strong> (#49)</td>
+<td><code>VrRA</code>, <code>VrLStickX</code>, <code>VrLStickXNeg</code>, <code>VrLGrip</code></td>
+<td>One slot is the left plus right hand pair. Buttons 0-15, axes mirror the gamepad order (LX0 LY1 LT2 RX3 RY4 RT5) with the two grips as axes 6 and 7. No D-Pad.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="internal-layout-kinds">Internal Layout Kinds<a class="headerlink" href="#internal-layout-kinds" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">private</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">LayoutKind</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Gamepad</span><span class="p">,</span><span class="w"> </span><span class="n">Extended</span><span class="p">,</span><span class="w"> </span><span class="n">Midi</span><span class="p">,</span><span class="w"> </span><span class="n">Kbm</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">private</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">LayoutKind</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Gamepad</span><span class="p">,</span><span class="w"> </span><span class="n">Extended</span><span class="p">,</span><span class="w"> </span><span class="n">Midi</span><span class="p">,</span><span class="w"> </span><span class="n">Kbm</span><span class="p">,</span><span class="w"> </span><span class="n">Vr</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <ul>
 <li>Xbox, PlayStation, and Extended gamepad preset all resolve to <code>LayoutKind.Gamepad</code>.</li>
-<li>Extended with <code>isExtended=true</code> (custom HID descriptor) resolves to <code>LayoutKind.Extended</code>.</li>
+<li>Extended or Nintendo with <code>isExtended=true</code> (raw HID surface) resolves to <code>LayoutKind.Extended</code>. <code>GetLayoutLabel</code> prints that kind as "Nintendo" for a Nintendo slot and "Extended" otherwise.</li>
 <li><code>IsSameLayout</code> compares resolved <code>LayoutKind</code> values.</li>
 </ul>
 <hr />
@@ -12767,7 +12804,7 @@
 </tbody>
 </table>
 <h3 id="structs">Structs<a class="headerlink" href="#structs" title="Permanent link">&para;</a></h3>
-<p><strong>SDL_GUID</strong> (16 bytes): <code>data0</code> through <code>data15</code>. Methods: <code>ToGuid()</code> (converts to .NET <code>Guid</code>), <code>ToByteArray()</code>.</p>
+<p><strong>SDL_GUID</strong>: one <code>byte[16] data</code> field, marshalled <code>ByValArray</code>. <code>SDL_GUIDToString</code> renders it, and the <code>GetJoystickGUIDString(IntPtr joystick)</code> helper wraps the pair into a 32-character string.</p>
 <p><strong>SDL_HapticDirection</strong> (16 bytes): <code>type</code> (byte), <code>dir0</code>, <code>dir1</code>, <code>dir2</code> (int).</p>
 <p><strong>SDL_HapticLeftRight</strong> (12 bytes): <code>type</code>, <code>length</code>, <code>large_magnitude</code>, <code>small_magnitude</code>.</p>
 <p><strong>SDL_HapticConstant</strong> (40 bytes): <code>type</code>, <code>direction</code>, <code>length</code>, <code>delay</code>, <code>button</code>, <code>interval</code>, <code>level</code>, <code>attack_length</code>, <code>attack_level</code>, <code>fade_length</code>, <code>fade_level</code>.</p>
@@ -13181,7 +13218,7 @@
 <p><code>string[256]</code> array of human-readable Windows VK code names. Built by <code>BuildVirtualKeyNames()</code>. Covers standard keys, modifiers, F1–F24, numpad, OEM keys. Used by <code>SdlKeyboardWrapper.GetDeviceObjects()</code> for button naming.</p>
 <h3 id="core-function-categories">Core Function Categories<a class="headerlink" href="#core-function-categories" title="Permanent link">&para;</a></h3>
 <p><strong>Lifecycle</strong>: <code>SDL_Init</code>, <code>SDL_Quit</code>, <code>SDL_EnableScreenSaver</code>, <code>SDL_GetError</code>, <code>SDL_SetHint</code>, <code>SDL_free</code></p>
-<p><strong>Joystick Enumeration</strong>: <code>SDL_GetJoysticks</code>, <code>SDL_GetJoystickGUIDForID</code>, <code>SDL_GetJoystickVendorForID</code>, <code>SDL_GetJoystickProductForID</code>, <code>SDL_GetJoystickProductVersionForID</code>, <code>SDL_GetJoystickTypeForID</code>, <code>SDL_GetJoystickNameForID</code>, <code>SDL_GetJoystickPathForID</code>, <code>SDL_IsGamepad</code></p>
+<p><strong>Joystick Enumeration</strong>: <code>SDL_GetJoysticks</code>, <code>SDL_GetJoystickVendorForID</code>, <code>SDL_GetJoystickProductForID</code>, <code>SDL_GetJoystickProductVersionForID</code>, <code>SDL_GetJoystickTypeForID</code>, <code>SDL_GetJoystickNameForID</code>, <code>SDL_GetJoystickPathForID</code>, <code>SDL_IsGamepad</code></p>
 <p><strong>Gamepad Mappings</strong>: <code>SDL_AddGamepadMappingsFromFile</code>, <code>SDL_AddGamepadMapping</code>, <code>GetGamepadMapping</code></p>
 <p><strong>Joystick Instance</strong>: <code>SDL_OpenJoystick</code>, <code>SDL_CloseJoystick</code>, <code>SDL_GetJoystickID</code>, <code>SDL_JoystickConnected</code></p>
 <p><strong>Gamepad Instance</strong>: <code>SDL_OpenGamepad</code>, <code>SDL_CloseGamepad</code>, <code>SDL_GetGamepadJoystick</code></p>
@@ -13837,12 +13874,22 @@
 <tr>
 <td><code>HostDescriptor</code></td>
 <td><code>"Gamepad RightStick"</code></td>
-<td>The input surface driving the menu: an abstract stick (<code>Gamepad LeftStick</code> / <code>Gamepad RightStick</code>) or a touchpad (<code>Touchpad 0</code>..<code>Touchpad 2</code>). Sticks engage on deflection past <code>EngageDeadzonePercent</code>. Touchpads engage on touch.</td>
+<td>The input surface driving the menu: an abstract stick (<code>Gamepad LeftStick</code> / <code>Gamepad RightStick</code>), a touchpad (<code>Touchpad 0</code>..<code>Touchpad 2</code>), or <code>"Custom"</code> with the two raw axis descriptors below. Sticks engage on deflection past <code>EngageDeadzonePercent</code>. Touchpads engage on touch.</td>
 </tr>
 <tr>
 <td><code>HostHalf</code></td>
 <td><code>0</code></td>
 <td>Horizontal half-window for single-physical-pad hosts (DS4 / DualSense trackpad halves): 0 = whole surface, 1 = left half, 2 = right half. Sticks are always 0.</td>
+</tr>
+<tr>
+<td><code>CustomXDescriptor</code> / <code>CustomYDescriptor</code></td>
+<td><code>""</code></td>
+<td>Raw axis descriptors (<code>"Axis 3"</code>, <code>"Slider 0"</code>, ...) that steer the menu when <code>HostDescriptor</code> is <code>"Custom"</code>. This is what makes joysticks, wheels, and other non-gamepad devices first-class openers, since "Left/Right Stick" means nothing on them. Engage follows the same deadzone rule as sticks.</td>
+</tr>
+<tr>
+<td><code>ClickDescriptor</code></td>
+<td><code>""</code></td>
+<td>Assignable Click input for the Click / Click Release fire modes, any button-family descriptor. Empty = the host's default (stick click for stick hosts, pad click for touchpads, none for Custom).</td>
 </tr>
 <tr>
 <td><code>LayerMask</code></td>
@@ -13903,7 +13950,7 @@
 </table>
 <p><code>Clone()</code> deep-copies, item list included. Every clone site (profile apply, slot copy, editor round-trips) must use it so item lists never alias.</p>
 <h3 id="menuitemdefinition">MenuItemDefinition<a class="headerlink" href="#menuitemdefinition" title="Permanent link">&para;</a></h3>
-<p>One cell of a menu, nested in the same file. All four properties are <code>[XmlAttribute]</code>:</p>
+<p>One cell of a menu, nested in the same file. All six properties are <code>[XmlAttribute]</code>:</p>
 <table>
 <thead>
 <tr>
@@ -13927,6 +13974,14 @@
 <tr>
 <td><code>XboxButtons</code></td>
 <td>Direct virtual-controller binding: Xbox button bitmask (<code>Gamepad.*</code> constants), 0 = none.</td>
+</tr>
+<tr>
+<td><code>ExtendedButton</code></td>
+<td>Direct binding for Extended slots: 1-based raw button number in the slot's custom layout, 0 = none. Extended output is raw HID up to 128 buttons, where an Xbox mask has no meaning.</td>
+</tr>
+<tr>
+<td><code>Icon</code></td>
+<td>Steam Input cell icon name, the binding string's third comma field (<code>"ghost_050_menu_0030.png"</code>). A bare PNG name in the local Steam client's binding-icon art, resolved at display time and falling back to the text label when Steam or the file is absent. Never a path: only names passing <code>IsValidIconName</code> are stored.</td>
 </tr>
 </tbody>
 </table>
@@ -14009,7 +14064,7 @@
 <li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: <code>HMaestroVirtualController</code> lifecycle, FFB through HM PID descriptors, OpenXInput shim</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

@@ -3359,10 +3359,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#winusb-details" class="md-nav__link">
+  <a href="#bulk-io-details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        WinUSB Details
+        Bulk I/O Details
       
     </span>
   </a>
@@ -4897,10 +4897,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#winusb-details" class="md-nav__link">
+  <a href="#bulk-io-details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        WinUSB Details
+        Bulk I/O Details
       
     </span>
   </a>
@@ -5298,7 +5298,7 @@
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">fade_length</span><span class="p">,</span><span class="w"> </span><span class="n">fade_level</span><span class="p">;</span>
 <a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="p">}</span><span class="w"> </span><span class="c1">// 44 bytes</span>
 </code></pre></div>
-<p>Ramp force effect (linearly changing force from start to end level). Declared in <code>SDL3Minimal.cs</code> and included in the <code>SDL_HapticEffect</code> union. <code>HMaestroFfbDecoder</code> emits ramp from PID <code>PT_RAMPREP</code> packets, using <code>max(abs(Start), abs(End))</code> as magnitude.</p>
+<p>Ramp force effect (linearly changing force from start to end level). Declared in <code>SDL3Minimal.cs</code> and included in the <code>SDL_HapticEffect</code> union. <code>HMaestroFfbDecoder.DecodeSetRamp</code> handles the PID Set Ramp Force report (output report ID 0x16, <code>[EBI][Start:2][End:2]</code>), scaling both endpoints to canonical units and taking <code>max(abs(start), abs(end))</code> as magnitude.</p>
 <h3 id="sdl_hapticeffect-union-struct">SDL_HapticEffect Union Struct<a class="headerlink" href="#sdl_hapticeffect-union-struct" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="na">[StructLayout(LayoutKind.Explicit, Size = 72)]</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">SDL_HapticEffect</span>
@@ -5411,6 +5411,11 @@
 <td>Devices SDL's hidapi layer must never enumerate or probe. Connecting a Nacon PS4 Compact (146B:0603) froze the app until unplug (#235). The leading explanation, refined by the fork SDL#19 audit, is a Sony third-party capabilities feature-report probe that never returns, on the UI thread that runs enumeration. PID-scoped seatbelt: other Nacon PIDs stay untouched. The value is the <code>InputManager.HidapiIgnoreDevices</code> constant.</td>
 </tr>
 <tr>
+<td><code>SDL_HINT_JOYSTICK_BLACKLIST_DEVICES</code></td>
+<td><code>"0x054c/0x03d5,0x054c/0x0c5e,0x054c/0x042f"</code></td>
+<td>Devices no SDL joystick backend may enumerate. The PS Move family (#277): a docked Move exposes three HID collections and no SDL driver claims the PIDs, so each collection surfaced as its own dead joystick row. PadForge drives these pads itself (<code>PsMoveDirectService</code>, and the DS3 service's navigation profile) and feeds SDL virtual joysticks, which are exempt because the virtual backend never calls <code>SDL_ShouldIgnoreJoystick</code>. The value is the <code>InputManager.JoystickBlacklistDevices</code> constant.</td>
+</tr>
+<tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH2</code></td>
 <td><code>"1"</code></td>
 <td>Activates the HIDAPI driver for the wired Switch 2 Pro Controller (PadForge's custom fork). Gates <code>SDL_hidapi_switch2.c</code>. Without it, the controller is ignored even though the driver code is compiled in.</td>
@@ -5478,7 +5483,7 @@
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR</code></td>
-<td>An "IR Brightness" consumer (<code>hifihedgehog/SDL#7</code>, #151: a standalone right Joy-Con posts its NIR MCU average-intensity byte on joystick axis 6) polled within the demand window, no NFC registration capture is active, and a standalone right Joy-Con is online</td>
+<td>An "IR Brightness" consumer (<code>hifihedgehog/SDL#7</code>, #151: a right Joy-Con posts its NIR MCU average-intensity byte on joystick axis 6) polled within the demand window, no NFC registration capture is active, and an IR-capable Joy-Con is online (standalone right <code>0x2007</code>, or a combined gen-1 pair <code>0x2008</code> whose right half runs the same camera machine, fork SDL#26 / #275)</td>
 <td>Camera stops, freeing the MCU for NFC</td>
 </tr>
 </tbody>
@@ -5488,7 +5493,7 @@
 <li><strong>Demand comes from reads.</strong> <code>SourceCoercion</code> stamps <code>LastNfcReadRequestTick</code> / <code>LastJoyConIrReadRequestTick</code> whenever a configured, enabled mapping evaluates an NFC or IR descriptor. Configured inputs are read every tick, so an active binding keeps the latch continuously fresh. A deleted or disabled one lapses after <code>McuDemandWindowMs</code> (10 s).</li>
 <li><strong>Why not init-time.</strong> The right Joy-Con camera and the NFC reader share the one MCU (camera = mode 5, NFC = mode 4, and the fork's <code>UpdateNfc</code> abandons while the camera streams). A globally-on IR hint silently killed standalone right Joy-Con NFC (#248 audit). Do not move either hint back into the init table.</li>
 <li><strong>Registration preempts the camera.</strong> A tag-registration capture with the camera streaming would wait forever for a UID, so <code>RegistrationCaptureActive</code> forces IR off. The camera resumes when the dialog closes and IR demand re-latches.</li>
-<li><strong>The sensors-enable edge.</strong> The fork decides the camera's fate only at <code>SetSensorsEnabled</code>, so after an IR flip the service drives every open standalone right Joy-Con through <code>SdlDeviceWrapper.BounceMotionSensors()</code> (all four sensor streams off, then on) on a worker thread. Without the bounce, a runtime flip would only take effect on reconnect.</li>
+<li><strong>The sensors-enable edge.</strong> The fork decides the camera's fate only at <code>SetSensorsEnabled</code>, so after an IR flip the service drives every open IR-capable Joy-Con (<code>0x2007</code> or <code>0x2008</code>) through <code>SdlDeviceWrapper.BounceMotionSensors()</code> (all four sensor streams off, then on) on a worker thread. Without the bounce, a runtime flip would only take effect on reconnect.</li>
 <li><strong>Latch only on success.</strong> The managed flag updates only when <code>SDL_SetHint</code> accepts the value. A rejected write retries on the next cadence instead of leaving the flag and the MCU disagreeing.</li>
 <li>When both the camera and NFC are configured for one standalone right Joy-Con, the camera wins by fork arbitration. That conflict is the mapping author's own choice.</li>
 </ul>
@@ -5557,7 +5562,9 @@
 <ol>
 <li>Stops rumble via <code>ForceFeedbackState.StopDeviceForces()</code> (best-effort)</li>
 <li>Disposes the SDL handle via <code>ud.Device.Dispose()</code> (best-effort)</li>
-<li>Calls <code>ud.ClearRuntimeState()</code> (nulls Device, InputState, ForceFeedbackState, etc.)</li>
+<li>Clears the wheel/LED per-device caches keyed on <code>DevicePath</code> so a same-path replug re-applies rotation range and auto-center</li>
+<li>Calls <code>NeutralizeMappedOutputsFor(ud)</code>, which runs <code>ud.ClearRuntimeState()</code> (nulls Device, InputState, OldInputState, ForceFeedbackState, sets <code>IsOnline = false</code>) and drives the device's per-slot mapped outputs to neutral</li>
+<li>Calls <code>XboxImpulseHidWriter.InvalidateCachedTargets()</code>, because any confirmed disconnect can reshuffle the synthetic <code>XInput#N</code> paths the impulse writer caches handles under</li>
 </ol>
 <p>After the loop, a follow-up pass removes every disconnected SDL instance ID from <code>_openedSdlInstanceIds</code> (<code>foreach (sdlId in disconnectedIds) _openedSdlInstanceIds.Remove(sdlId)</code>).</p>
 <p>Keyboard/mouse disconnection is detected by comparing tracked handles against <code>RawInputListener.EnumerateKeyboards()</code>/<code>EnumerateMice()</code>, using the same <code>MarkDeviceOffline()</code> path.</p>
@@ -5717,7 +5724,7 @@
 <tr>
 <td><code>HasJoyConIr</code></td>
 <td><code>bool</code></td>
-<td>Standalone right Joy-Con NIR camera surfaced as an "IR Brightness" source (#151)</td>
+<td>Right Joy-Con NIR camera surfaced as an "IR Brightness" source (#151). Standalone right Joy-Con (<code>0x2007</code>) or a combined gen-1 pair (<code>0x2008</code>), gated on raw axis count &gt;= 7</td>
 </tr>
 <tr>
 <td><code>HasJoyCon2Mouse</code></td>
@@ -5745,6 +5752,11 @@
 <td>Sparse list of button positions the device actually exposes (Devices preview gating)</td>
 </tr>
 <tr>
+<td><code>SupportedAxisIndices</code></td>
+<td><code>int[]</code></td>
+<td>Sparse list of axis positions the device actually has. Null means dense. Exists because <code>NumAxes</code> is the standardized 6-slot gamepad space, not a count of physical axes</td>
+</tr>
+<tr>
 <td><code>GamepadHandle</code></td>
 <td><code>IntPtr</code></td>
 <td>Alias of <code>GameController</code>, used by the DualSense passthrough dispatcher</td>
@@ -5768,11 +5780,6 @@
 <td><code>ProductId</code></td>
 <td><code>ushort</code></td>
 <td>USB Product ID</td>
-</tr>
-<tr>
-<td><code>ProductVersion</code></td>
-<td><code>ushort</code></td>
-<td>USB Product Version</td>
 </tr>
 <tr>
 <td><code>DevicePath</code></td>
@@ -6278,12 +6285,16 @@
 <a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MsToG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1f</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">9.80665f</span><span class="p">;</span>
 <a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
 <a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1">// Native frame preserved. No DSU sign flip here.</span>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">AccelX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">AccelY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ay</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
-<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="n">AccelZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">az</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
-<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="n">GyroPitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span><span class="w">  </span><span class="c1">// gx = tuned pitch (native)</span>
-<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="n">GyroYaw</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gy</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span>
-<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="n">GyroRoll</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">gz</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">      </span><span class="c1">// accel[] is SDL&#39;s m/s^2 triple</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">ay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="n">az</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="n">gx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tunedPitch</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span><span class="w"> </span><span class="c1">// tuned = post-Invert, still native frame</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="n">gy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tunedYaw</span><span class="w">   </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="n">gz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tunedRoll</span><span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="c1">// ... written straight onto the snapshot:</span>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="n">AccelX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">AccelY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ay</span><span class="p">,</span><span class="w"> </span><span class="n">AccelZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">az</span><span class="p">,</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="n">GyroPitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="p">,</span><span class="w"> </span><span class="n">GyroYaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gy</span><span class="p">,</span><span class="w"> </span><span class="n">GyroRoll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gz</span><span class="p">,</span>
 </code></pre></div>
 <p>The DSU/cemuhook convention negates accelerometer X/Y/Z and gyro pitch/roll relative to SDL's frame, leaving yaw unchanged. That transform is applied downstream, per DSU packet, in <code>DsuMotionServer.BuildPadDataPacket()</code>, so only DSU clients see it:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">WriteFloat</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">56</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">snapshot</span><span class="p">.</span><span class="n">AccelX</span><span class="p">);</span><span class="w">   </span><span class="c1">// Accel X inverted</span>
@@ -6367,6 +6378,7 @@
 </tr>
 </tbody>
 </table>
+<p>The names above are the raw-joystick set (<code>GetStandardAxisName</code>). An SDL-recognized gamepad gets the gamepad names instead (<code>GamepadObjectNames.Axis</code>): "Left Stick X", "Left Stick Y", "Left Trigger", "Right Stick X", "Right Stick Y", "Right Trigger". The GUIDs are the same either way.</p>
 <p>For SDL-recognized gamepads the standard axis and button positions are capability-gated before they are emitted, so the table above is the maximum layout, not a guaranteed one. The next subsection covers the axis gate.</p>
 <h3 id="axis-capability-gating">Axis Capability Gating<a class="headerlink" href="#axis-capability-gating" title="Permanent link">&para;</a></h3>
 <p>How <code>GetDeviceObjects()</code> drops standard gamepad axis positions a controller does not physically have, so the auto-mapper never pins a virtual stick to a phantom axis.</p>
@@ -6507,7 +6519,7 @@
 <p>Details:
 - Opened with <strong>zero access rights</strong> (<code>dwDesiredAccess = 0</code>). <code>HidD_GetProductString</code> needs no read/write access
 - <code>FILE_SHARE_READ | FILE_SHARE_WRITE</code> allows querying while other processes hold the device
-- 512-byte buffer, decoded as UTF-16; trimmed of null terminators
+- 512-byte buffer, decoded as UTF-16, then run through <code>DeviceNameSanitizer.Clean</code> so embedded nulls and control bytes from cheap USB descriptors cannot break <code>XmlSerializer</code> at save time (#53)
 - Failures swallowed. Returns <code>null</code>, keeping the raw VID/PID name
 - P/Invoke declarations (<code>CreateFile</code>, <code>CloseHandle</code>, <code>HidD_GetProductString</code>) are private to <code>SdlDeviceWrapper</code></p>
 <hr />
@@ -6546,7 +6558,7 @@
 <li>Save the current state as <code>OldInputState</code> (<code>ud.OldInputState = ud.InputState</code>) for change detection</li>
 <li>Call <code>ud.Device.GetCurrentState()</code> (dispatches to <code>GetGamepadState()</code> or <code>GetJoystickState()</code>)</li>
 <li>Atomic reference swap: <code>ud.InputState = newState</code> (safe for cross-thread reading)</li>
-<li>Tick the touchpad gesture engine via <code>UpdateGestureContexts(ud, newState)</code> for every slot the device is assigned to</li>
+<li>Tick the touchpad gesture engine via <code>UpdateGestureContexts(ud, newState)</code>, once per device per tick, across every touchpad surface the device exposes. <code>UpdateMouseGestureContexts</code> (#200) and <code>UpdateMenuContexts</code> (#9 B-17) run beside it</li>
 <li>Apply force feedback via <code>ApplyForceFeedback(ud)</code></li>
 </ol>
 <h3 id="multi-slot-force-feedback-combining">Multi-Slot Force Feedback Combining<a class="headerlink" href="#multi-slot-force-feedback-combining" title="Permanent link">&para;</a></h3>
@@ -6554,33 +6566,36 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">ushort</span><span class="w"> </span><span class="n">combinedL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">combinedR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">slotCount</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
 <a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="p">{</span>
-<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">vib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VibrationStates</span><span class="p">[</span><span class="n">padIndex</span><span class="p">];</span>
-<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vib</span><span class="p">.</span><span class="n">LeftMotorSpeed</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedL</span><span class="p">)</span><span class="w">  </span><span class="n">combinedL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vib</span><span class="p">.</span><span class="n">LeftMotorSpeed</span><span class="p">;</span>
-<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vib</span><span class="p">.</span><span class="n">RightMotorSpeed</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedR</span><span class="p">)</span><span class="w"> </span><span class="n">combinedR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vib</span><span class="p">.</span><span class="n">RightMotorSpeed</span><span class="p">;</span>
-<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="p">}</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="c1">// per-slot: VibrationStates[padIndex] -&gt; macro merge -&gt; constant-force</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">    </span><span class="c1">// resolve -&gt; ScaleRumbleForDevice -&gt; scaledL / scaledR</span>
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scaledL</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedL</span><span class="p">)</span><span class="w"> </span><span class="n">combinedL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scaledL</span><span class="p">;</span>
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scaledR</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedR</span><span class="p">)</span><span class="w"> </span><span class="n">combinedR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scaledR</span><span class="p">;</span>
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="p">}</span>
 </code></pre></div>
+<p>The trigger motors (<code>combinedLT</code> / <code>combinedRT</code>) combine the same way, taking the max across the slot's own trigger rumble, the #102 trigger routing, and the shared-trigger sources.</p>
 <p>Rumble from any mapped slot reaches the physical controller. Test rumble targeting via <code>TestRumbleTargetGuid[padIndex]</code> is also supported for multi-device slots.</p>
 <hr />
 <h2 id="sdl-virtual-joysticks-dualshock-3-bridge">SDL Virtual Joysticks (DualShock 3 Bridge)<a class="headerlink" href="#sdl-virtual-joysticks-dualshock-3-bridge" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>PadForge.Engine/Common/SDL3Minimal.cs</code> (virtual joystick P/Invokes), <code>PadForge.App/Common/Input/InputManager.cs</code> (<code>Ds3DirectService</code> wiring)</p>
-<p>The fork build enables <code>SDL_JOYSTICK_VIRTUAL</code>. PadForge uses it to surface a device it reads natively as an ordinary SDL joystick, so the rest of the pipeline consumes it with no special-casing. The one current consumer is a Bluetooth DualShock 3 behind BthPS3 (no DsHidMini), read by <code>Ds3DirectService</code>.</p>
+<p>The fork build enables <code>SDL_JOYSTICK_VIRTUAL</code>. PadForge uses it to surface a device it reads natively as an ordinary SDL joystick, so the rest of the pipeline consumes it with no special-casing. Four services attach virtual joysticks: <code>Ds3DirectService</code> (the DualShock 3, and the PS Move Navigation controller on its navigation profile), <code>PsMoveDirectService</code> (#277), <code>OpenVrConsumerService</code> (#287 VR slots), and <code>SpaceMouseService</code> (#288). The DS3 is the reference case below.</p>
 <h3 id="attach-and-feed">Attach and feed<a class="headerlink" href="#attach-and-feed" title="Permanent link">&para;</a></h3>
-<p><code>Ds3DirectService.Start()</code> polls the BthPS3 device interface. When a DS3 connects, it fills an <code>SDL_VirtualJoystickDesc</code> (axis/button/hat counts, VID/PID, sensor descriptors, and Cdecl callback pointers for Update / Rumble / SetLED / SetSensorsEnabled) and calls <code>SDL_AttachVirtualJoystick(ref desc)</code>. SDL returns an instance ID, and Step 1 opens it on the next enumeration like any real device.</p>
+<p><code>Ds3DirectService.Start()</code> runs a monitor loop that tries USB first (the inbox WinUSB interface) and falls back to the BthPS3 raw PDO. USB takes priority because the BthPS3 PDO node lingers present even after the pad leaves Bluetooth. On connect the service fills an <code>SDL_VirtualJoystickDesc</code> (16 axes, 15 buttons, no hats, VID/PID, button and axis masks, sensor descriptors, and Cdecl callback pointers for <code>Rumble</code>, <code>SetLED</code>, <code>SetPlayerIndex</code>, <code>SetSensorsEnabled</code>) and calls <code>SDL_AttachVirtualJoystick(ref desc)</code>. SDL returns an instance ID, and Step 1 opens it on the next enumeration like any real device.</p>
 <p>Each frame the service pushes decoded HID state into SDL:</p>
 <ul>
-<li><code>SDL_SetJoystickVirtualAxis</code> / <code>SDL_SetJoystickVirtualButton</code> / <code>SDL_SetJoystickVirtualHat</code> for sticks, buttons, and the D-pad</li>
-<li><code>SDL_SendJoystickVirtualSensorData</code> for the DS3's accelerometer and gyro</li>
+<li><code>SDL_SetJoystickVirtualButton</code> for the face, shoulder, stick, system, and D-pad buttons. The desc declares no hats, so the D-pad rides buttons 11-14 in SDL's own gamepad button order</li>
+<li><code>SDL_SetJoystickVirtualAxis</code> for the two sticks, the two analog triggers, and the ten button-pressure axes on 6-15, the same shape upstream SDL's PS3 driver uses, so #193's <code>HasExtraGenericAxes</code> surfaces them as "Axis 6" through "Axis 15"</li>
+<li><code>SDL_SendJoystickVirtualSensorData</code> for the DS3's accelerometer and yaw gyro</li>
 <li><code>SDL_LockJoysticks()</code> / <code>SDL_UnlockJoysticks()</code> batch a whole frame so the poll thread reads one atomic snapshot</li>
 </ul>
 <h3 id="telling-the-two-ds3-transports-apart">Telling the two DS3 transports apart<a class="headerlink" href="#telling-the-two-ds3-transports-apart" title="Permanent link">&para;</a></h3>
-<p>The BT bridge and a USB DS3 in DsHidMini SXS mode share VID/PID <code>054C:0268</code>. <code>SDL_IsJoystickVirtual(instanceId)</code> distinguishes them: the BT bridge is a virtual joystick owned by <code>Ds3DirectService</code>, the USB pad is a real hidapi device owned by SDL's sixaxis driver.</p>
+<p>A DS3 driven by <code>Ds3DirectService</code> and a USB DS3 in DsHidMini SXS mode share VID/PID <code>054C:0268</code>. <code>SDL_IsJoystickVirtual(instanceId)</code> distinguishes them: the bridged pad is a virtual joystick owned by <code>Ds3DirectService</code>, the SXS pad is a real hidapi device owned by SDL's sixaxis driver. <code>SdlDeviceWrapper.SetPlayerIndex</code> uses exactly this test to keep one player-LED writer per transport, forwarding to <code>SDL_SetJoystickPlayerIndex</code> only for the non-virtual case.</p>
 <h3 id="filling-in-what-a-virtual-joystick-lacks">Filling in what a virtual joystick lacks<a class="headerlink" href="#filling-in-what-a-virtual-joystick-lacks" title="Permanent link">&para;</a></h3>
 <p>A virtual joystick has no SDL device path and no SDL power channel. <code>SdlDeviceWrapper</code> falls back to two external providers the service registers so identity, transport display, and battery still resolve:</p>
 <ul>
-<li><code>ExternalDevicePathProvider = Ds3DirectService.GetDevicePath</code> supplies the real BthPS3 interface path for the Dossier view and USB/BT classification</li>
-<li><code>ExternalPowerInfoProvider = Ds3DirectService.GetPowerInfo</code> supplies battery when SDL reports unknown (#167)</li>
+<li><code>ExternalDevicePathProvider</code> supplies the real transport interface path (the BthPS3 PDO over Bluetooth, the WinUSB interface over USB) for the Dossier view and USB/BT classification. <code>InputManager</code> wires it as <code>Ds3DirectService.GetDevicePath(id) ?? PsMoveDirectService.GetDevicePath(id)</code></li>
+<li><code>ExternalPowerInfoProvider</code> supplies battery when SDL reports unknown (#167), wired the same way as <code>Ds3DirectService.GetPowerInfo(id) ?? PsMoveDirectService.GetPowerInfo(id)</code></li>
 </ul>
-<p>Because the bridge has no path or serial, <code>BuildInstanceGuid</code> keys it on the <code>sdlguid:</code> tier (tier 4 above), which is stable across reconnects.</p>
+<p>Because the bridge has no path or serial, <code>BuildInstanceGuid</code> keys it on the <code>sdlguid:</code> tier (tier 4 above), which is stable across reconnects. The service also gives both transports one shared virtual-joystick name, since SDL folds the name into the joystick GUID, so a slot mapping made over USB survives a switch to Bluetooth.</p>
 <hr />
 <h2 id="isdlinputdevice-interface">ISdlInputDevice Interface<a class="headerlink" href="#isdlinputdevice-interface" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/ISdlInputDevice.cs</code></p>
@@ -6596,38 +6611,39 @@
 <a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasExtraGenericAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">      </span><span class="c1">// extra raw axes as generic &quot;Axis N&quot; sources (#193)</span>
 <a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHats</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">SupportedButtonIndices</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c1">// sparse list of exposed button positions</span>
-<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">GamepadHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">          </span><span class="c1">// SDL_Gamepad*, for SDL_SendGamepadEffect (passthrough)</span>
-<a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumble</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-14" name="__codelineno-34-14" href="#__codelineno-34-14"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumbleTriggers</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">        </span><span class="c1">// Xbox One+ impulse-trigger motors</span>
-<a id="__codelineno-34-15" name="__codelineno-34-15" href="#__codelineno-34-15"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasHaptic</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-16" name="__codelineno-34-16" href="#__codelineno-34-16"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyro</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-17" name="__codelineno-34-17" href="#__codelineno-34-17"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccel</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-18" name="__codelineno-34-18" href="#__codelineno-34-18"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccelAux</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">              </span><span class="c1">// auxiliary/left accel, SDL_SENSOR_ACCEL_L (#199)</span>
-<a id="__codelineno-34-19" name="__codelineno-34-19" href="#__codelineno-34-19"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyroAux</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">               </span><span class="c1">// auxiliary/left gyro, SDL_SENSOR_GYRO_L (#252)</span>
-<a id="__codelineno-34-20" name="__codelineno-34-20" href="#__codelineno-34-20"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-21" name="__codelineno-34-21" href="#__codelineno-34-21"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumTouchpads</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">              </span><span class="c1">// touchpad surface count</span>
-<a id="__codelineno-34-22" name="__codelineno-34-22" href="#__codelineno-34-22"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadFingerCounts</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">    </span><span class="c1">// per-pad simultaneous-finger count</span>
-<a id="__codelineno-34-23" name="__codelineno-34-23" href="#__codelineno-34-23"></a><span class="w">    </span><span class="n">HapticEffectStrategy</span><span class="w"> </span><span class="n">HapticStrategy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-24" name="__codelineno-34-24" href="#__codelineno-34-24"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">HapticHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-25" name="__codelineno-34-25" href="#__codelineno-34-25"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">HapticFeatures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-26" name="__codelineno-34-26" href="#__codelineno-34-26"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHapticAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-27" name="__codelineno-34-27" href="#__codelineno-34-27"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsAttached</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-28" name="__codelineno-34-28" href="#__codelineno-34-28"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">VendorId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-29" name="__codelineno-34-29" href="#__codelineno-34-29"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">ProductId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-30" name="__codelineno-34-30" href="#__codelineno-34-30"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">InstanceGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-31" name="__codelineno-34-31" href="#__codelineno-34-31"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">ProductGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-32" name="__codelineno-34-32" href="#__codelineno-34-32"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">DevicePath</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-33" name="__codelineno-34-33" href="#__codelineno-34-33"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SerialNumber</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-34" name="__codelineno-34-34" href="#__codelineno-34-34"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SdlGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                </span><span class="c1">// SDL joystick GUID (gamecontrollerdb / virtual identity)</span>
-<a id="__codelineno-34-35" name="__codelineno-34-35" href="#__codelineno-34-35"></a>
-<a id="__codelineno-34-36" name="__codelineno-34-36" href="#__codelineno-34-36"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">GetCurrentState</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">forceRaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<a id="__codelineno-34-37" name="__codelineno-34-37" href="#__codelineno-34-37"></a><span class="w">    </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">();</span>
-<a id="__codelineno-34-38" name="__codelineno-34-38" href="#__codelineno-34-38"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetInputDeviceType</span><span class="p">();</span>
-<a id="__codelineno-34-39" name="__codelineno-34-39" href="#__codelineno-34-39"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetRumble</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">low</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">high</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">durationMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uint</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-<a id="__codelineno-34-40" name="__codelineno-34-40" href="#__codelineno-34-40"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">();</span>
-<a id="__codelineno-34-41" name="__codelineno-34-41" href="#__codelineno-34-41"></a><span class="p">}</span>
+<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">SupportedAxisIndices</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w">    </span><span class="c1">// sparse list of exposed axis positions, null = dense</span>
+<a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">GamepadHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">          </span><span class="c1">// SDL_Gamepad*, for SDL_SendGamepadEffect (passthrough)</span>
+<a id="__codelineno-34-14" name="__codelineno-34-14" href="#__codelineno-34-14"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumble</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-15" name="__codelineno-34-15" href="#__codelineno-34-15"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasRumbleTriggers</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">        </span><span class="c1">// Xbox One+ impulse-trigger motors</span>
+<a id="__codelineno-34-16" name="__codelineno-34-16" href="#__codelineno-34-16"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasHaptic</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-17" name="__codelineno-34-17" href="#__codelineno-34-17"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyro</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-18" name="__codelineno-34-18" href="#__codelineno-34-18"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccel</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-19" name="__codelineno-34-19" href="#__codelineno-34-19"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasAccelAux</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">              </span><span class="c1">// auxiliary/left accel, SDL_SENSOR_ACCEL_L (#199)</span>
+<a id="__codelineno-34-20" name="__codelineno-34-20" href="#__codelineno-34-20"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasGyroAux</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">               </span><span class="c1">// auxiliary/left gyro, SDL_SENSOR_GYRO_L (#252)</span>
+<a id="__codelineno-34-21" name="__codelineno-34-21" href="#__codelineno-34-21"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-22" name="__codelineno-34-22" href="#__codelineno-34-22"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumTouchpads</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">              </span><span class="c1">// touchpad surface count</span>
+<a id="__codelineno-34-23" name="__codelineno-34-23" href="#__codelineno-34-23"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadFingerCounts</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">    </span><span class="c1">// per-pad simultaneous-finger count</span>
+<a id="__codelineno-34-24" name="__codelineno-34-24" href="#__codelineno-34-24"></a><span class="w">    </span><span class="n">HapticEffectStrategy</span><span class="w"> </span><span class="n">HapticStrategy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-25" name="__codelineno-34-25" href="#__codelineno-34-25"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">HapticHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-26" name="__codelineno-34-26" href="#__codelineno-34-26"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">HapticFeatures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-27" name="__codelineno-34-27" href="#__codelineno-34-27"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHapticAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-28" name="__codelineno-34-28" href="#__codelineno-34-28"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsAttached</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-29" name="__codelineno-34-29" href="#__codelineno-34-29"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">VendorId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-30" name="__codelineno-34-30" href="#__codelineno-34-30"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">ProductId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-31" name="__codelineno-34-31" href="#__codelineno-34-31"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">InstanceGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-32" name="__codelineno-34-32" href="#__codelineno-34-32"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">ProductGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-33" name="__codelineno-34-33" href="#__codelineno-34-33"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">DevicePath</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-34" name="__codelineno-34-34" href="#__codelineno-34-34"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SerialNumber</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-35" name="__codelineno-34-35" href="#__codelineno-34-35"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SdlGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                </span><span class="c1">// SDL joystick GUID (gamecontrollerdb / virtual identity)</span>
+<a id="__codelineno-34-36" name="__codelineno-34-36" href="#__codelineno-34-36"></a>
+<a id="__codelineno-34-37" name="__codelineno-34-37" href="#__codelineno-34-37"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">GetCurrentState</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">forceRaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<a id="__codelineno-34-38" name="__codelineno-34-38" href="#__codelineno-34-38"></a><span class="w">    </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">();</span>
+<a id="__codelineno-34-39" name="__codelineno-34-39" href="#__codelineno-34-39"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetInputDeviceType</span><span class="p">();</span>
+<a id="__codelineno-34-40" name="__codelineno-34-40" href="#__codelineno-34-40"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetRumble</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">low</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">high</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">durationMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uint</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
+<a id="__codelineno-34-41" name="__codelineno-34-41" href="#__codelineno-34-41"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">();</span>
+<a id="__codelineno-34-42" name="__codelineno-34-42" href="#__codelineno-34-42"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>RawAxisCount</code>, <code>HasExtraGenericAxes</code>, <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, and <code>TouchpadFingerCounts</code> have default interface implementations. Keyboard and mouse wrappers inherit those defaults. <code>SdlDeviceWrapper</code> overrides all six with live per-device values, and the Remote Link peer (<code>RemotePeerDevice</code>) mirrors the owner's <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, and <code>TouchpadFingerCounts</code> off the device list so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252).</p>
+<p><code>RawAxisCount</code>, <code>HasExtraGenericAxes</code>, <code>SupportedAxisIndices</code>, <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, and <code>TouchpadFingerCounts</code> have default interface implementations. Keyboard and mouse wrappers inherit those defaults. <code>SdlDeviceWrapper</code> overrides all seven with live per-device values, and the Remote Link peer (<code>RemotePeerDevice</code>) mirrors the owner's <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, and <code>TouchpadFingerCounts</code> off the device list so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252).</p>
 <h3 id="implementations">Implementations<a class="headerlink" href="#implementations" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6736,7 +6752,9 @@
 <ol>
 <li><strong>Stop force feedback:</strong> <code>StopDeviceForces()</code>. Sends rumble stop before handle close (best-effort, try/catch)</li>
 <li><strong>Dispose SDL handle:</strong> <code>CloseInternal()</code>. Closes haptic, gamepad, joystick in order (best-effort)</li>
-<li><strong>Clear runtime state:</strong> <code>ClearRuntimeState()</code>. Nulls Device, InputState, ForceFeedbackState, and sets IsOnline=false. The <code>UserDevice</code> record remains for settings preservation</li>
+<li><strong>Reset per-device writer caches</strong> keyed on <code>DevicePath</code> (wheel settings, LEDs, wheel FFB, the Logitech / Thrustmaster / raw HID writers)</li>
+<li><strong>Neutralize and clear:</strong> <code>NeutralizeMappedOutputsFor(ud)</code>, which calls <code>ClearRuntimeState()</code>. Nulls Device, InputState, OldInputState, ForceFeedbackState, and sets IsOnline=false, then drives the device's mapped outputs neutral so a held button or engaged trigger cannot freeze into the slot. The <code>UserDevice</code> record and its <code>DeviceObjects</code> remain for settings preservation</li>
+<li><strong>Invalidate impulse-writer targets:</strong> <code>XboxImpulseHidWriter.InvalidateCachedTargets()</code></li>
 </ol>
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
@@ -6782,7 +6800,7 @@
 </table>
 <p>The 2026 Steam Controller was originally a candidate fifth patch but Valve's upstream PR has since merged into <code>libsdl-org/SDL</code> mainline, so the fork just rebases against that work.</p>
 <h3 id="additional-v4-fork-behaviors">Additional v4 fork behaviors<a class="headerlink" href="#additional-v4-fork-behaviors" title="Permanent link">&para;</a></h3>
-<p>The hints in <code>InitializeSdl</code> and the axis readers in <code>SdlDeviceWrapper</code> depend on further fork work beyond the original four features. Grounded here in the PadForge code that consumes them (the fork repo is not cloned on disk, so the commit-level detail lives in the fork branch and project memory):</p>
+<p>The hints in <code>InitializeSdl</code> and the axis readers in <code>SdlDeviceWrapper</code> depend on further fork work beyond the original four features. Grounded here in the PadForge code that consumes them:</p>
 <table>
 <thead>
 <tr>
@@ -6803,9 +6821,9 @@
 <td><code>HasIrCamera</code>, <code>ReadIrPointer</code> (#146)</td>
 </tr>
 <tr>
-<td><code>SDL#7</code></td>
-<td>Right Joy-Con NIR MCU intensity on joystick axis 6</td>
-<td><code>SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR</code>, <code>HasJoyConIr</code>, <code>ReadJoyConIr</code> (#151)</td>
+<td><code>SDL#7</code> (extended by <code>SDL#26</code>)</td>
+<td>Right Joy-Con NIR MCU intensity on joystick axis 6, standalone or as the right half of a combined gen-1 pair</td>
+<td><code>SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR</code>, <code>HasJoyConIr</code>, <code>ReadJoyConIr</code> (#151, #275)</td>
 </tr>
 <tr>
 <td><code>SDL#8</code></td>
@@ -6845,16 +6863,16 @@
 <tr>
 <td>HID Interface 0</td>
 <td>Standard HID reports</td>
-<td>Input reading + rumble (output report ID 0x02)</td>
+<td>Input reading + rumble (Pro Controller output report ID 0x02, Joy-Con 2 0x01, NSO GameCube 0x03)</td>
 </tr>
 <tr>
 <td>Bulk Interface 1</td>
-<td>WinUSB</td>
-<td>Initialization sequence (10 commands via <code>SendBulkData</code>)</td>
+<td>libusb over WinUSB</td>
+<td>Flash calibration reads + initialization sequence (10 commands via <code>SendBulkData</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>Interface 1 uses a WinUSB-compatible INF (DeviceInterfaceGUID <code>{6F13725E-EF0E-4FD3-AE5F-B2DE989EC825}</code>, MI_01). Must be opened during init to send the bulk command sequence that enables full-featured input mode.</p>
+<p>Windows binds Interface 1 to WinUSB from the controller's own MS OS 2.0 descriptors, so no INF ships with PadForge. The driver opens that interface through libusb (a standalone <code>libusb_context</code> of its own, because hidusb.sys holds Interface 0 and hidapi never opened the device over libusb) and claims the bulk endpoints it finds by walking the config descriptor. The bulk command sequence must run during init to put the controller into full-featured input mode.</p>
 <h3 id="key-fork-modifications">Key Fork Modifications<a class="headerlink" href="#key-fork-modifications" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6866,19 +6884,18 @@
 <tbody>
 <tr>
 <td><code>SDL_hidapi.c</code></td>
-<td>Filter Switch 2 PIDs from libusb on Windows (libusb cannot open individual interfaces of a composite device). Keep in platform HID backend</td>
+<td>Route the Switch 2 PIDs away from libusb on Windows (libusb cannot claim HID interfaces owned by hidusb.sys), keeping input on the platform HID backend while the driver opens Interface 1 for bulk I/O separately</td>
 </tr>
 <tr>
 <td><code>SDL_hidapi_switch2.c</code></td>
-<td>New HIDAPI driver: WinUSB bulk init, HID input parsing, rumble output, stick/sensor calibration</td>
+<td>New HIDAPI driver: libusb bulk init, HID input parsing, rumble output, stick/sensor calibration</td>
 </tr>
 </tbody>
 </table>
-<h3 id="winusb-details">WinUSB Details<a class="headerlink" href="#winusb-details" title="Permanent link">&para;</a></h3>
+<h3 id="bulk-io-details">Bulk I/O Details<a class="headerlink" href="#bulk-io-details" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>FILE_FLAG_OVERLAPPED</code> required for <code>CreateFile</code> on the WinUSB interface. Without it, <code>WinUsb_Initialize</code> fails</li>
-<li>Init sequence uses overlapped I/O with per-transfer timeouts</li>
-<li>Calibration via WinUSB bulk transfers. Timeout (-7) after re-plug is non-fatal. Falls back to default calibration</li>
+<li><code>SendBulkData</code> uses <code>libusb_bulk_transfer</code> on the OUT endpoint with a 1000 ms timeout, <code>RecvBulkData</code> reads the IN endpoint in 64-byte chunks with a 100 ms timeout</li>
+<li>Calibration comes from flash blocks read over the same bulk pipes (serial at <code>0x13000</code>, gyro and accel bias at <code>0x13040</code>, stick calibration at <code>0x13080</code> / <code>0x130C0</code>, user calibration at <code>0x1FC040</code> / <code>0x1FC080</code>). A failed read logs a warning and leaves the defaults in place rather than failing the open</li>
 </ul>
 <h3 id="sdl-hint-sdl_hint_joystick_hidapi_switch2">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH2</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_switch2" title="Permanent link">&para;</a></h3>
 <p>Gates the Switch 2 driver. Set to <code>"1"</code> before <code>SDL_Init()</code>. Without it, the compiled-in driver is never activated.</p>
@@ -6915,8 +6932,8 @@
 </table>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:695</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:50</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1045</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:808</code>).</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:716</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:51</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1159</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:844</code>).</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git
@@ -6936,7 +6953,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

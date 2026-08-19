@@ -3458,7 +3458,7 @@
 <li><strong>Reset Palette</strong> restores the four default colors (red, green, blue, yellow).</li>
 </ul>
 <p>A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.</p>
-<p>Color Cycle exposes a "Blend smoothly between palette colors" checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.</p>
+<p>Color Cycle exposes a <strong>Blend Smoothly Between Palette Colors</strong> checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.</p>
 <hr />
 <h2 id="audio-driven-settings">Audio-driven settings<a class="headerlink" href="#audio-driven-settings" title="Permanent link">&para;</a></h2>
 <p>Visible for every Audio Pulse and Audio Bands mode.</p>
@@ -3466,7 +3466,7 @@
 <p>Slider 1.0–20.0. Default 4.0. Multiplies the captured system-audio peak before the lightbar reacts, so quiet content can still drive a noticeable response. The lightbar reads the same system-audio capture as Audio Rumble. The lighting path reads the full waveform with no bass-cutoff filter.</p>
 <h3 id="audio-bands">Audio bands<a class="headerlink" href="#audio-bands" title="Permanent link">&para;</a></h3>
 <p>Visible only for the three Audio Bands modes. Three bordered cards side-by-side: <strong>Quiet Color</strong>, <strong>Medium Color</strong>, <strong>Loud Color</strong>. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.</p>
-<p>Above the cards are the <strong>Quiet → Medium at</strong> and <strong>Medium → Loud at</strong> thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a <strong>Crossfade Width</strong> slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.</p>
+<p>Above the cards are the <strong>Low-to-Mid Boundary</strong> and <strong>Mid-to-High Boundary</strong> thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a <strong>Crossfade Width</strong> slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.</p>
 <hr />
 <h2 id="indicator-leds-dualsense">Indicator LEDs (DualSense)<a class="headerlink" href="#indicator-leds-dualsense" title="Permanent link">&para;</a></h2>
 <p>A separate card below the lightbar mode picker. Five small white LEDs below the DualSense touchpad show a player-slot pattern. One mute LED sits above the microphone.</p>
@@ -3484,7 +3484,7 @@
 </tr>
 <tr>
 <td>Mute LED Mode</td>
-<td>Off, Solid, Pulse, Follow audio device</td>
+<td>Off, Solid, Pulse, Follow Audio Device</td>
 </tr>
 <tr>
 <td>LED Brightness</td>
@@ -3493,7 +3493,7 @@
 </tbody>
 </table>
 <p>Player Number lights the pips for the virtual controller's number. It is the default.</p>
-<p>Follow audio device mirrors a chosen audio endpoint's mute state. Picking it reveals an Audio device dropdown that lists the active input and output devices. The mute LED lights when that device is muted and turns off when it is unmuted.</p>
+<p>Follow Audio Device mirrors a chosen audio endpoint's mute state. Picking it reveals an <strong>Audio Device</strong> dropdown that lists the active input and output devices. The mute LED lights when that device is muted and turns off when it is unmuted.</p>
 <p>Each dropdown on this card has a one-click reset button. Player Pattern resets to Player Number, Mute LED Mode to Off, and LED Brightness to High.</p>
 <hr />
 <h2 id="dualshock-4">DualShock 4<a class="headerlink" href="#dualshock-4" title="Permanent link">&para;</a></h2>
@@ -3539,7 +3539,7 @@
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.</li>
-<li>For Color Cycle, "Blend smoothly" looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.</li>
+<li>For Color Cycle, Blend Smoothly looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.</li>
 <li>Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.</li>
 <li>The Audio Bands modes assume the two thresholds are in ascending order. Reversing them produces the wrong band selection.</li>
 </ul>
@@ -3551,7 +3551,7 @@
 <li><a href="../../guides/macros/">Macros</a>: the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, and Set Guide LED Brightness macro action types.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

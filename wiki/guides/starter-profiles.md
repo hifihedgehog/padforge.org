@@ -132,7 +132,7 @@ throttle axis on their HOTAS presets. The triggers are the guns.
 
 What the profile adds over a bare pad is the response shape. Docking
 happens in the first tenth of stick travel, so every flight axis is
-softened near centre and keeps full authority at the rim. Click the right
+softened near center and keeps full authority at the rim. Click the right
 stick for a Precision mode that softens it much further, and click again
 to leave.
 
@@ -218,4 +218,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

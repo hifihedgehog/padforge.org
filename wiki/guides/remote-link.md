@@ -1,10 +1,10 @@
 # Remote Link
 
-*Share a controller, wheel, or HOTAS across the PCs on your network. A device plugged into one drives a game on another, and the feedback comes back to the real hardware.*
+*Share a controller, wheel, or HOTAS between PCs, on your own network or across the internet. A device plugged into one drives a game on another, and the feedback comes back to the real hardware.*
 
 ![Remote Link section on the Dashboard with paired and nearby PCs](../images/remote-link.png)
 
-Remote Link connects the PadForge PCs on your local network. A device plugged into one PC (the owner) shows up in another PC's PadForge (the consumer) as an ordinary input device, ready to assign to a [slot](../features/controller-slots.md) and map like anything else. The game on the consumer sees a virtual controller and never knows the hardware is in another room.
+Remote Link connects two PadForge PCs, on the same network or on opposite sides of the internet. A device plugged into one PC (the owner) shows up in another PC's PadForge (the consumer) as an ordinary input device, ready to assign to a [slot](../features/controller-slots.md) and map like anything else. The game on the consumer sees a virtual controller and never knows the hardware is in another room.
 
 It works both ways at once, and across more than two PCs. Each PC can share its own devices and use the others' at the same time, and one shared controller can drive games on several PCs at once. Pairing is done a pair at a time, but a PC can be linked to many others.
 
@@ -49,11 +49,15 @@ On the [Dashboard](../features/dashboard.md), open the **Remote Link** section a
 
 ### 2. Find the other PC
 
-A PC running Remote Link on the same network shows up under **Nearby PCs (Not Paired)**. If it does not appear (some networks block discovery), open **Or Connect by Address (Advanced)**, type the other PC's address and port, and click **Pair / Connect**.
+On the same network, a PC running Remote Link shows up under **Nearby PCs (Not Paired)**. Click it and pair.
+
+On different networks, or when discovery is blocked, use codes. Each PC shows a **This PC's Code** box, a dash-grouped string like `A7K2M-...`. Copy yours and send it to the other person over any chat. Paste theirs into **Or Connect by Address (Advanced)**. You both click **Pair / Connect**, and the two PCs find each other with no VPN and no port forward. A code lasts an hour and re-mints itself when this PC's public address moves, so copy it fresh at connect time.
+
+The same box still takes a plain address. Type `192.168.1.20:27500` to name a host directly.
 
 ### 3. Pair with a six-digit code
 
-Start pairing from one side. Both screens show a six-digit code. Check that the two codes match, then confirm on both. The match proves the two PCs reached each other directly with no one in the middle.
+Start pairing from one side. Both screens show a six-digit code. Check that the two codes match, then confirm on both. The code is derived from the key exchange itself, so a match rules out anyone sitting in the middle of it.
 
 Pairing only happens once per pair of PCs. To add another PC, pair it the same way. A PC can hold many trusted peers at once.
 
@@ -65,7 +69,7 @@ Once paired, each PC's shareable devices appear in the other's [Devices](../feat
 
 ## Trust and reconnecting
 
-Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they see each other on the network, with no code to re-enter. Auto-reconnect is on by default and can be turned off in the Remote Link settings.
+Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they find each other, on the local network or across the internet, with no code to re-enter. Auto-reconnect is on by default and can be turned off in the Remote Link settings.
 
 Trust is tied to each PC's cryptographic identity, not its name. Renaming a PC does not break a pairing. The display name is only there so you can tell your paired PCs apart.
 
@@ -97,19 +101,27 @@ A portable identity lets a group of PCs that share one install image pair once a
 
 ## Network
 
-Remote Link finds other PCs on your **local network** automatically. Discovery is a same-subnet broadcast, so the PCs being on the same Wi-Fi or switch is the usual setup.
+Remote Link finds other PCs on your **local network** automatically. Discovery is a same-subnet broadcast, so the PCs being on the same Wi-Fi or switch is the usual local setup. Across the internet, codes replace discovery.
 
 | Requirement | Details |
 |---|---|
-| Network | All the PCs on the same local network |
-| Discovery | UDP broadcast on port 27501 (same subnet) |
-| Connection | Direct PC-to-PC on TCP port 27500 by default, encrypted end to end |
+| Discovery | UDP broadcast on port 27501 (same subnet only) |
+| Connection | Direct PC-to-PC on port 27500 by default, encrypted end to end. The port carries both a TCP listener (address dialing) and a UDP socket (hole punching). |
 | Listening port | 27500 by default. Change it per PC in the Remote Link settings (any port from 1024 to 65535). The reset button next to the field restores 27500. |
+| Internet reach | Outbound only. The public-address probe and the relay fallback both dial out, so no inbound rule and no port forward. |
 | Firewall | Allow PadForge through the firewall on each PC |
 
-If you write per-port firewall rules instead of allowing the whole app, open UDP 27501 for discovery and the connection port (TCP 27500 unless you changed it) on each PC.
+If you write per-port firewall rules instead of allowing the whole app, open UDP 27501 for discovery and both TCP and UDP on the connection port (27500 unless you changed it) on each PC.
 
-The **Or Connect by Address (Advanced)** box accepts a host and port directly. PCs joined by a VPN like ZeroTier, which puts them on one virtual network, can connect across the internet that way, even when broadcast discovery does not reach across it.
+### How the internet path works
+
+PadForge probes its own public address, folds it into the code, and punches a direct UDP path to the PC whose code you pasted. Both sides punch, which is why both people paste and both click Connect.
+
+Where a direct path cannot exist, the link falls back to the free public relays run by n0.computer, reached over an outbound WebSocket. The relay forwards opaque bytes. The handshake and session encryption are unchanged, so the relay operator sees ciphertext and nothing else.
+
+After the first pairing, codes are done. Each PC publishes its current endpoints under its long-term identity key, so a paired PC that moves to a new network is found and reconnects on its own.
+
+Some networks cannot be punched at all. On a mobile hotspot or carrier-grade NAT, the Remote Link card says so before you try, and names a VPN like Tailscale as the way around it. The relay still carries the link where the punch fails.
 
 ---
 
@@ -121,7 +133,8 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ## Limits
 
-- **Discovery is automatic on your local network.** For internet play, put the PCs on one virtual network with a VPN like ZeroTier and use **Or Connect by Address (Advanced)**.
+- **Discovery is local only.** It is a subnet broadcast, so it never crosses the internet. Reaching a PC on another network means swapping codes, or naming its address directly.
+- **A code is not a password.** It authenticates nobody. The six-digit pairing check and the mutual key exchange are what gate trust, so a code someone else gets hold of still cannot pair with you.
 - **Input devices only.** Remote Link shares what shows on the [Devices](../features/devices.md) page (controllers, wheels, HOTAS, keyboards, mice, MIDI, NFC readers), not arbitrary USB hardware.
 - **Every PC runs PadForge.** Remote Link is PadForge-to-PadForge.
 
@@ -142,4 +155,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*

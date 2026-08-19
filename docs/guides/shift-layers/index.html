@@ -3201,8 +3201,8 @@
 <p><strong>Base layer.</strong> Always active. Every slot starts with one Base layer holding the rows you bind on the <strong>Mappings</strong> tab. A <strong>Configure Base</strong> dialog sets the Base tab's name, color, and icon.</p>
 <p><strong>Shift layer.</strong> A second (third, fourth) mapping table on the same slot. Active only while its activator is engaged.</p>
 <p><strong>Layer rows.</strong> Each mapping row belongs to one layer. Base rows belong to Base. Shift rows belong to the layer you bound them on. The same target can have a different row on each layer, so one button does one thing on Base and another while a shift layer is engaged.</p>
-<p><strong>Inherit Unmapped Targets From Base.</strong> A checkbox in the activator dialog. Off by default. The active shift layer <strong>replaces</strong> Base. Targets without a row on the layer output zero. Turn it on and the layer <strong>overlays</strong> Base. Targets without a row fall through to Base.</p>
-<p><strong>Do not inherit.</strong> A per-row checkbox in the mapping grid. It appears on a row only when the active layer inherits. Check it to keep one target off on this layer while the rest of the layer falls through to Base. Useful when you want one specific button silenced.</p>
+<p><strong>Inherit Unmapped Targets from Base.</strong> A checkbox in the activator dialog. Off by default. The active shift layer <strong>replaces</strong> Base. Targets without a row on the layer output zero. Turn it on and the layer <strong>overlays</strong> Base. Targets without a row fall through to Base.</p>
+<p><strong>Do Not Inherit.</strong> A per-row checkbox in the mapping grid. It appears on a row only when the active layer inherits. Check it to keep one target off on this layer while the rest of the layer falls through to Base. Useful when you want one specific button silenced.</p>
 <hr />
 <h2 id="make-a-shift-layer">Make a shift layer<a class="headerlink" href="#make-a-shift-layer" title="Permanent link">&para;</a></h2>
 <ol>
@@ -3263,7 +3263,7 @@
 <td>Off by default. On lets the activator input drive its own row alongside the layer change.</td>
 </tr>
 <tr>
-<td><strong>Inherit Unmapped Targets From Base</strong></td>
+<td><strong>Inherit Unmapped Targets from Base</strong></td>
 <td>Off by default. On = overlay with fallthrough. Off = replace.</td>
 </tr>
 </tbody>
@@ -3346,18 +3346,18 @@
 <p>Each tab carries the layer's color. The active tab is the layer you're editing, not the layer currently engaged on the controller.</p>
 <p>Right-click a tab for per-layer operations:</p>
 <ul>
-<li><strong>Configure activator…</strong> Reopens the dialog above.</li>
-<li><strong>Rename layer…</strong> Edits the display name without breaking the link between each row and its layer.</li>
-<li><strong>Copy layer rows.</strong> Copies every row on this layer to the clipboard.</li>
-<li><strong>Paste rows into layer.</strong> Pastes copied rows onto the current layer, re-tagging them to it.</li>
-<li><strong>Clear layer rows.</strong> Removes every row on this layer. The layer itself stays.</li>
-<li><strong>Delete layer.</strong> Removes the layer and every row tagged to it. Confirms first.</li>
+<li><strong>Configure Activator…</strong> Reopens the dialog above.</li>
+<li><strong>Rename Layer…</strong> Edits the display name without breaking the link between each row and its layer.</li>
+<li><strong>Copy Layer Rows.</strong> Copies every row on this layer to the clipboard.</li>
+<li><strong>Paste Rows into Layer.</strong> Pastes copied rows onto the current layer, re-tagging them to it.</li>
+<li><strong>Clear Layer Rows.</strong> Removes every row on this layer. The layer itself stays.</li>
+<li><strong>Delete Layer.</strong> Removes the layer and every row tagged to it. Confirms first.</li>
 </ul>
 <hr />
 <h2 id="the-engaged-layer-flyout">The engaged-layer flyout<a class="headerlink" href="#the-engaged-layer-flyout" title="Permanent link">&para;</a></h2>
 <p>When a shift layer engages, a Windows-11-style flyout appears at the bottom of the screen showing the layer's emoji icon and name. It auto-dismisses after 2 seconds.</p>
 <p>The flyout scans every slot, not only the currently-viewed pad. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.</p>
-<p>The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Shift layer flyout</strong> toggle, on by default. Turn it off and layers still engage, just without the announcement.</p>
+<p>The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Shift Layer Flyout</strong> toggle, on by default. Turn it off and layers still engage, just without the announcement.</p>
 <hr />
 <h2 id="multi-activator-resolution">Multi-activator resolution<a class="headerlink" href="#multi-activator-resolution" title="Permanent link">&para;</a></h2>
 <p>A slot can have many activators. When more than one Hold, Toggle, or Sticky activator is engaged at the same time, the most recently engaged wins. The active layer is whichever of those fired last.</p>
@@ -3383,7 +3383,7 @@
 <li><strong>Activator Input:</strong> click <strong>Record</strong>, press the side button on the wheel rim.</li>
 <li><strong>Mode:</strong> Toggle. One tap to open the menu, one tap to close.</li>
 <li><strong>Layer Color:</strong> orange. <strong>Emoji Icon:</strong> 🔧.</li>
-<li><strong>Inherit Unmapped Targets From Base:</strong> on. Steering, brakes, and clutch keep working while the menu is up.</li>
+<li><strong>Inherit Unmapped Targets from Base:</strong> on. Steering, brakes, and clutch keep working while the menu is up.</li>
 <li>Click <strong>Save</strong>. The Pit Stop tab appears.</li>
 <li>Click the Pit Stop tab. Bind A, B, X, Y to your sim's pit menu commands (tires, fuel, repair, leave).</li>
 </ol>
@@ -3417,7 +3417,7 @@
 <li><a href="../../features/controller-slots/">Controller Slots</a>: every slot keeps its own layers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.2.0.</em></p>
+<p><em>Last updated for PadForge 4.3.0.</em></p>
 
 
 

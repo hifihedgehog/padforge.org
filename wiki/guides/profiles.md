@@ -53,13 +53,13 @@ PadForge watches the foreground window at about 30 Hz. When the app in front mat
 
 The outgoing profile's state saves before the new one loads. The virtual controllers stay connected through the switch.
 
-Turn it on from the **Profiles** page. Check **Auto-switch profiles based on foreground application**.
+Turn it on from the **Profiles** page. Check **Auto-Switch Profiles Based on Foreground Application**.
 
 ### Live foreground readout
 
 With auto-switch on, a **FOREGROUND** line appears under the checkbox. It shows the executable name of whatever app is in front right now. The name lights up with a flame and ember color while that executable matches a profile, so you can confirm matching works without launching the game blind.
 
-If auto-switch is on but no profile carries an executable rule yet, the line reads **No profile has an executable yet**. Nothing can auto-switch until you add an executable to a profile.
+If auto-switch is on but no profile carries an executable rule yet, the line reads **No Profile Has an Executable Yet**. Nothing can auto-switch until you add an executable to a profile.
 
 <!-- SCREENSHOT: profiles-foreground-readout -->
 ![The FOREGROUND readout showing a matched executable](../images/profiles-foreground-readout.png)
@@ -120,6 +120,7 @@ The active profile's card carries a lit flame and an ember-tinted edge, so you c
 | MIDI | MIDI slots. |
 | KB+M | Keyboard+Mouse slots. |
 | Nintendo | Nintendo slots. |
+| VR | VR slots. |
 
 A badge hides when its count is zero. The strip gives you a quick read of the profile's shape without loading it.
 
@@ -223,7 +224,7 @@ An auto-switch on app focus does not raise this flyout. The active profile name 
 
 The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled or disabled) instead of the profile flyout.
 
-The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profile switch overlay** toggle, on by default. Turn it off and shortcuts still switch profiles, just without the flyout.
+The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profile Switch Overlay** toggle, on by default. Turn it off and shortcuts still switch profiles, just without the flyout.
 
 ---
 
@@ -272,4 +273,4 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*
