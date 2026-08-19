@@ -191,6 +191,22 @@ removed. Show the whole program screen. If it is too small to read, the
 layout is wrong, not the screenshot. Split moments bleed their media
 column past the container edge for exactly this reason.
 
+**Trim the capture margin before staging anything.** The harness bakes an
+11px pure-black margin around each window on the left, right and top. It
+is invisible on a dark page right up until the screen is staged as an
+object: the rig rounds its own box and draws a rim light on it, so with
+the margin present that rim traces the edge of the BLACK BORDER rather
+than the edge of the window, and you get a rounded frame with a square
+window floating 11px inside it. `tools/trim_shots.py` measures and crops
+it, is idempotent, and must be run after every capture pass.
+
+**A machine is never cut to buy size.** An earlier version let the split
+moments bleed past the viewport edge to win pixels, which sliced the
+right third off the window and threw away the exact thing the staging
+exists to show. Size comes from a wider column and a wider container,
+and detail comes from click-to-zoom. Nothing on the page may clip a
+window.
+
 **Chips** (`.rig-chip`) pin a short line onto a staged screen. They must
 sit over dead space, never over the UI they describe, and they must say
 something the screenshot cannot say on its own. A chip that repeats a
@@ -339,4 +355,6 @@ Every item here has already happened once.
 - Do not crop the app down to one panel and blur the rest.
 - Do not put a chip over the UI it is describing.
 - Do not put a rig in a stage without bounded width.
+- Do not stage an untrimmed screenshot.
+- Do not clip a window to make it bigger.
 - Do not anchor anything to the hero's bottom edge.

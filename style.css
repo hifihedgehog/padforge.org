@@ -282,7 +282,7 @@ a { color: inherit; text-decoration: none; }
    The finish changes inside the running app, so what morphs is the whole
    program screen. Showing only the extracted controller was the earlier
    mistake: it threw away the product to feature one panel of it.      */
-.morph-stage { position: relative; width: 100%; aspect-ratio: 2582/1550; }
+.morph-stage { position: relative; width: 100%; aspect-ratio: 2560/1539; }
 .morph-stage img {
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
     opacity: 0; transition: opacity 0.55s var(--ease);
@@ -417,19 +417,16 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Feature moments (varied shapes, never a repeated grid) ───────── */
 .moment { display: grid; gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
-.moment-split { grid-template-columns: minmax(0, 4.6fr) minmax(0, 7.4fr); }
-/* The media column carries the WHOLE program screen, so it is allowed to
-   run past the container and off the viewport edge. A full window scaled
-   into 45% of a 1240px column is unreadable, which defeats the point of
-   showing the whole window at all. Bleeding buys back the pixels. */
+/* The media column carries the WHOLE program screen and it stays whole.
+   An earlier version let it bleed past the viewport edge to buy pixels,
+   which sliced the right third off the window and threw away the very
+   thing the staging exists to show. Size is bought with a wider column
+   and a wider container instead, never by cutting the machine. Each
+   screen is also click-to-zoom, which is where real detail lives. */
+.moment-split { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
 .moment-media { width: 100%; }
 .moment-media img { width: 100%; height: auto; }
-.moment-split > .moment-media { width: calc(100% + max(2rem, (100vw - var(--container)) / 2 + 2rem)); }
-.moment-split.flip > .moment-media { order: -1; margin-left: calc(-1 * (max(2rem, (100vw - var(--container)) / 2 + 2rem))); }
-@media (max-width: 940px) {
-    .moment-split > .moment-media { width: 100%; }
-    .moment-split.flip > .moment-media { margin-left: 0; }
-}
+.moment-split.flip > .moment-media { order: -1; }
 @media (max-width: 940px) { .moment-split { grid-template-columns: 1fr; } .moment-split.flip > .moment-media { order: 0; } }
 .moment-copy .display-m { margin-bottom: 1.3rem; }
 
