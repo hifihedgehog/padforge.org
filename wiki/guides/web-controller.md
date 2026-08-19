@@ -64,17 +64,42 @@ Stopping PadForge stops the server.
 
 ## Controller layouts
 
-Both gamepad layouts draw the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full.
+Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full, or drag the analog slider beside it for a partial pull.
 
-### Xbox 360
+| Layout | What it adds |
+|---|---|
+| **Xbox 360** | Classic layout, dual analog sticks |
+| **Xbox One** | Xbox One S layout |
+| **Xbox Series X\|S** | Share button, hybrid D-pad |
+| **DualShock 4** | Touchpad and lightbar |
+| **DualSense** | PS5 layout with mute button |
+| **DualSense Edge** | Fn buttons and back paddles |
+| **Switch Pro** | Nintendo layout with Capture |
+| **Switch 2 Pro** | C button and back paddles |
+| **Steam Deck** | Dual trackpads and four grips |
+| **Steam Controller** | Dual trackpads and paddles |
+| **Touchpad** | Multi-touch surface only |
+| **Custom** | Drag widgets onto a blank pad |
 
-Full layout: A / B / X / Y, LB / RB, Back / Start / Guide, 8-way D-pad, dual analog sticks with L3 / R3 click, LT / RT triggers.
+Switch layouts at any time by going back to the landing page.
 
-### DualShock 4
+### Finishes
 
-Full layout: Cross / Circle / Square / Triangle, L1 / R1, Share / Options / PS, 8-way D-pad, dual analog sticks with L3 / R3 click, L2 / R2 triggers, a touchpad drag area on the controller art, and a touchpad-click button.
+Layouts that ship in more than one colour carry a row of swatches on their card. Tap one before you open the layout and the controller art is drawn in that finish.
 
-The two gamepad layouts share their buttons, sticks, and triggers. DualShock 4 adds the touchpad drag area and its click, which the Xbox 360 layout leaves out. Switch layouts at any time by going back to the landing page.
+![The layout picker, with finishes](../images/web-landing.png)
+
+### Lights, on the page
+
+The DualShock 4, DualSense and DualSense Edge layouts draw their lightbar, and the DualSense layouts draw the player LEDs underneath the touchpad. Both follow whatever the slot is doing, so a game that drives the lightbar drives it here too.
+
+![The DualSense layout](../images/web-dualsense.png)
+
+### Trackpads and grips
+
+The Steam Deck and Steam Controller layouts carry both trackpads as real touch surfaces, plus the rear grip buttons (L4, L5, R4, R5 on the Deck) as pills beside the shell.
+
+![The Steam Deck layout](../images/web-steamdeck.png)
 
 ### Touchpad
 
@@ -82,8 +107,8 @@ A multi-touch surface that maps straight to the DualShock 4 / DualSense touchpad
 
 The same surface also drives every [Touchpad](../features/touchpad.md)-tab feature on the slot it's assigned to:
 
-- **Mouse Output**: relative cursor control. The **Response** row's **Trackpad** mode (new in 4.1.0) slows fine positioning and speeds up fast drags, an acceleration curve ported from libinput.
-- **Absolute Pointer** (new in 4.1.0): the Touchpad Pointer sources warp the cursor to where your finger sits on the pad.
+- **Mouse Output**: relative cursor control. The **Response** row's **Trackpad** mode slows fine positioning and speeds up fast drags, an acceleration curve ported from libinput.
+- **Absolute Pointer**: the Touchpad Pointer sources warp the cursor to where your finger sits on the pad.
 - **Stick / D-Pad Output**: a virtual analog stick or D-pad.
 - The gesture stack: swipes, taps, shapes, and the rest.
 
@@ -92,6 +117,24 @@ Each slot the phone is assigned to carries its own toggles and tuning.
 ![Web controller in use](../images/web-controller.png)
 
 ---
+
+## Build your own layout
+
+The **Custom** card opens a builder that starts from a blank pad. Add widgets (sticks, buttons, triggers, D-pads, touch surfaces), drag them where your thumbs actually sit, and save. Saved pads are stored with your PadForge settings, so the phone loads yours the next time it connects.
+
+![The custom controller builder](../images/web-custom.png)
+
+---
+
+## Phone motion
+
+The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.
+
+Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works.
+
+Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.
+
+A **QR code** on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.
 
 ## Touch controls
 
@@ -156,4 +199,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 4.2.0.*
+*Last updated for PadForge 4.3.0.*
