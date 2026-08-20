@@ -12,7 +12,7 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `WebCustomLayoutStore` | The browser-built custom pad layouts (#296), machine-scoped. Holds one validated JSON array that rides `AppSettingsData` in PadForge.xml, deliberately not `ProfileData` |
 | `QrCode` | Byte-mode QR generator ported from the Nayuki reference, used only to render the web controller's URL on the Dashboard card |
 | `VoiceMacroService` | Voice macro recognition (#317). One session per microphone, no shared mic and no voice pseudo-device. Started and shut down by the engine's Step 1 device sweep, not by `InputService.Start()` |
-| `VoskVoiceEngine` | The Vosk recognition engine behind the same session surface SAPI uses (#317). Model is cached under LocalAppData and downloaded on first use, with SAPI as the fallback until it is ready |
+| `VoskVoiceEngine` | The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes |
 | `NfcReaderService` | PC/SC monitor for NFC macro triggers (#150). [Below](#nfcreaderservice) |
 | `WorkshopProfileMaterializer` | Workshop import to `ProfileData` bridge (#9). [Below](#workshopprofilematerializer-v41-9) |
 | `WorkshopTuningApplier` | Folds a Workshop import's parked tuning stamps into the assigned device's own settings (#9). [Below](#workshoptuningapplier-v41-9) |

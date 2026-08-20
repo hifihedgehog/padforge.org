@@ -32,6 +32,8 @@ The tab is per pad per slot. Pick a different physical device in the assigned-de
 
 ### Priority chain
 
+A [web controller](../guides/web-controller.md) showing the DualShock 4 or DualSense layout gets this tab too, and it behaves the same: the phone draws the pad's own lightbar in whatever color and mode you pick, animations included. The DualSense layout also carries its player indicator row.
+
 Game writes always win at packet level. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar.
 
 ---

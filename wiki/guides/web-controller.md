@@ -91,7 +91,17 @@ Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on the
 
 ### Lights, on the page
 
-Every gamepad layout carries a slim lightbar strip across the top edge of the page and a row of player pips in the top right corner. Both stay hidden until the slot pushes an LED color or a player number, and both follow whatever the slot is doing, so a game that drives the lightbar drives it here too.
+The layouts whose hardware has lighting draw it on the controller itself, where the real one is.
+
+| Layout | What lights up |
+|---|---|
+| **DualShock 4** | The lightbar, front strip and rear glow both |
+| **DualSense**, **DualSense Edge** | The lightbar around the touchpad, plus the player indicator row beneath it |
+| Everything else | Nothing. An Xbox pad and a Switch Pro have no lightbar, so none is drawn |
+
+Both follow whatever the slot is doing, so a game that drives the lightbar drives it here too, and the indicator row lights the same symmetric pattern a DualSense shows: one LED in the middle for player one, the outer pair for player two, outward from there.
+
+A web DualShock 4 or DualSense is configurable from the [Lighting](../features/lighting.md) tab exactly like a physical one. Pick a color, a mode, or an animation and the phone shows it. Animated modes run the same engine the hardware pads use rather than a still approximation of it.
 
 ![The DualSense layout](../images/web-dualsense.png)
 

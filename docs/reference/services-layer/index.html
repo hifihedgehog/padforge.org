@@ -7206,7 +7206,7 @@
 </tr>
 <tr>
 <td><code>VoskVoiceEngine</code></td>
-<td>The Vosk recognition engine behind the same session surface SAPI uses (#317). Model is cached under LocalAppData and downloaded on first use, with SAPI as the fallback until it is ready</td>
+<td>The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes</td>
 </tr>
 <tr>
 <td><code>NfcReaderService</code></td>

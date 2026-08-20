@@ -2,7 +2,7 @@
 
 *Say a phrase and it presses a button. Register phrases once, then bind them like any other input: mappings, macros, shift layers.*
 
-PadForge listens for short spoken phrases on any microphone it can reach, including the one inside a DualSense. Each registered phrase becomes a button that presses for a moment when you say it. Recognition runs fully offline through the Vosk engine (a ~40 MB English model downloads once on first use), and anything that is not a registered phrase decodes as unknown and fires nothing, so a cough or a game sound does not trigger your macros.
+PadForge listens for short spoken phrases on any microphone it can reach, including the one inside a DualSense. Each registered phrase becomes a button that presses for a moment when you say it. Recognition runs fully offline through the Vosk engine, whose English model ships inside PadForge rather than downloading, and anything that is not a registered phrase decodes as unknown and fires nothing, so a cough or a game sound does not trigger your macros.
 
 ---
 
@@ -62,6 +62,6 @@ Every DualSense and Microphone row's details pane carries a **Voice Macros** sec
 - A recognition is a single 175 ms press. Holding a note does not hold the button.
 - The DualShock 4 is not supported. Its microphone is a headset-jack passthrough, not a controller mic.
 - On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.
-- The first enable downloads the model (~40 MB). Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words.
+- The first enable unpacks the model from inside PadForge, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online.
 
 *Last updated for PadForge 4.3.0.*
