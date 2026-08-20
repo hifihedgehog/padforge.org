@@ -3942,7 +3942,7 @@
 </ul>
 <p>Each guard reads the slots you have saved rather than what the engine is currently running, so it holds with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.</p>
 <h3 id="the-steamvr-card">The SteamVR card<a class="headerlink" href="#the-steamvr-card" title="Permanent link">&para;</a></h3>
-<p><img alt="The SteamVR card with its install location field" src="../../images/settings-steamvr.png" /></p>
+<p><img alt="The SteamVR card, installed" src="../../images/settings-steamvr.png" /></p>
 <p>Before installing, the card offers an <strong>Install Location</strong>. It defaults to <code>C:\SteamVR</code> and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.</p>
 <p><strong>Uninstall appears only for an install PadForge itself created.</strong> PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also stays disabled while any VR slot exists, and refuses while SteamVR is running.</p>
 <p>SteamVR keeps its own log and settings inside the folder you chose, as <code>logs</code> and <code>config</code> subfolders. Removing the install takes them with it.</p>

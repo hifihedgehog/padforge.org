@@ -34,7 +34,7 @@ HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the
 Each driver card on the Settings page shows an ember flame next to its status text.
 
 <!-- SCREENSHOT: driver-status-flames -->
-![Lit and unlit driver flames](../images/driver-status-flames.png)
+![Driver cards with their status flames and versions](../images/driver-status-flames.png)
 
 | Flame | Meaning |
 |---|---|

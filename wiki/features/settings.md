@@ -152,7 +152,7 @@ Each guard reads the slots you have saved rather than what the engine is current
 
 ### The SteamVR card
 
-![The SteamVR card with its install location field](../images/settings-steamvr.png)
+![The SteamVR card, installed](../images/settings-steamvr.png)
 
 Before installing, the card offers an **Install Location**. It defaults to `C:\SteamVR` and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.
 
