@@ -78,7 +78,7 @@ Picking an input assigns it on the spot. Same result as recording. The blank ent
 
 Rows that already have a source are still in the sequence. Pressing an input overwrites the existing source. Skipping keeps it.
 
-On PlayStation virtual controllers, **Touchpad Click** is appended to the recording sequence as the final step. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.
+On PlayStation virtual controllers, **Touchpad Click** is appended to the recording sequence after the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.
 
 > **Tip:** Start with Map All to assign everything in one pass, then fine-tune individual rows.
 

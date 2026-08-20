@@ -119,7 +119,7 @@ The lightbar blends linearly from the Low Battery color at 0 % charge to the Ful
 
 ## Color cycle palette
 
-The Color Cycle base mode and the Cycle Through Palette overlay each keep their own palette. The Color Cycle palette shows below the mode dropdown when Color Cycle is the base mode. The overlay palette shows below the Input Reactive dropdown when the overlay is set to Cycle Through Palette. Editing one leaves the other untouched.
+The Color Cycle base mode and the Cycle Through Palette overlay each keep their own palette. The Color Cycle palette shows below the mode dropdown when Color Cycle is the base mode. The overlay palette shows below the Input Reactive dropdown when the overlay is set to Cycle Through Palette and Color Cycle is not the base mode. With Color Cycle as the base only the base palette editor renders, while the overlay keeps stepping its own separate palette, which becomes editable again as soon as the base changes. Editing one leaves the other untouched.
 
 Each palette is a wrapping list of swatches. Each entry has an in-place color picker with hex and RGB sliders, plus a remove button.
 
