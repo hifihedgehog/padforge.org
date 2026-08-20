@@ -29,7 +29,7 @@ Open **Manage Voice Macros** from a Microphone row or a Bluetooth DualSense row 
 - **Enable Voice Macros** turns listening on.
 - **Listening** picks **Always** or **Push to Talk**. Always keeps the microphone open. Push to Talk listens only while a bound **Voice Listen (While Held)** macro is held, which also keeps a Bluetooth DualSense's mic session closed while idle, costing no bandwidth or battery.
 - **Minimum Confidence** sets how sure the recognizer must be before a phrase fires. Raise it if stray speech triggers macros, lower it if your phrases are missed.
-- Type a phrase, give it a name, and press **Register**. The live readout shows each recognition with its confidence, and a registered phrase's row flashes when it is heard.
+- Type a phrase, give it a name, and press **Register**. The live readout shows every recognition with its confidence, whether or not it fired. A registered phrase's row lights only when the recognition actually fires, so a dark row beside a readout line means it fell below **Minimum Confidence** or the talk key was up.
 
 Short, distinct phrases recognize best. Two phrases that rhyme will fight each other.
 

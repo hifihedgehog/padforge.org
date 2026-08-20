@@ -55,11 +55,11 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 **A Nintendo virtual controller is active but the game does not react to it.**
 
 1. Install **HIDMaestro** from [Settings](features/settings.md). The Nintendo output rides the same driver as Xbox, PlayStation, and Extended.
-2. Games see the slot as a **Nintendo Switch Pro Controller**. XInput-only games never read a Pro Controller. Use an Xbox slot for those.
+2. Games see the slot as the picked Nintendo profile, a **Nintendo Switch Pro Controller** or a **Switch 2 Pro Controller**. XInput-only games never read either one. Use an Xbox slot for those.
 3. Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.
 4. Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.
 5. Face buttons follow Nintendo lettering, so A sits on the right and B on the bottom. Prompts that look swapped against an Xbox pad are the Switch layout working as intended.
-6. The Nintendo slot has no Customize surface. It always deploys the Switch Pro catalog profile as-is.
+6. The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers **Switch Pro Controller** (the default) and **Switch 2 Pro Controller**.
 
 ---
 
@@ -96,12 +96,12 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 ---
 
-## Audio Bass Rumble Not Working
+## Audio Rumble Not Working
 
-**Audio Bass Rumble is enabled but the controller does not vibrate, or the Level meter stays flat.**
+**Audio Rumble is enabled but the controller does not vibrate, or the Level meter stays flat.**
 
 1. Confirm audio plays through the system default render device. The Level meter should show activity.
-2. Level meter flat during playback? Toggle Audio Bass Rumble off and on to restart WASAPI capture.
+2. Level meter flat during playback? Toggle **Enable Audio Rumble** off and on to restart WASAPI capture.
 3. Set **Overall Gain** above 0%. It applies to audio rumble too.
 4. Increase **sensitivity** (default 4, try 8-12, range 1-20).
 5. Raise **Bass Cutoff (Hz)** (default 80, range 20-200) to capture more mid-bass.
@@ -262,7 +262,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. Increase the **polling interval** in [Settings](features/settings.md) > Input Engine. Default is 1 ms (~1000 Hz). Try 4 ms (~250 Hz) or 8 ms (~125 Hz) for casual use.
 2. Disable **"Continue Polling When Window Loses Focus"** if PadForge is only needed during gameplay.
 3. Remove unused virtual controller slots.
-4. Disable **Audio Bass Rumble** on unused slots (runs WASAPI capture and real-time DSP).
+4. Disable **Audio Rumble** on unused slots (runs WASAPI capture and real-time DSP).
 
 ---
 
@@ -275,7 +275,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 3. Use `127.0.0.1` as the server address. PadForge binds to loopback only.
 4. Confirm the controller has motion sensors on the [Devices](features/devices.md) page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion.
 5. DSU protocol supports slots 1-4 only. Assign the motion device to one of those slots.
-6. Allow UDP port 26760 through Windows Firewall.
+6. The DSU server binds to loopback only, so no firewall rule is involved. An emulator on another machine cannot reach it at all.
 7. In the emulator's motion settings, add a DSU server at `127.0.0.1` with the matching port and select the correct slot.
 
 ---
@@ -298,7 +298,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **On iPhone or iPad Safari, the web controller shows "Disconnected" after locking the screen, switching tabs, or returning from another app.**
 
-iOS Safari kills WebSocket connections when the page loses focus. The web controller page detects the dropped socket and auto-reloads to reconnect. If reconnection does not happen, do this:
+iOS Safari kills WebSocket connections when the page loses focus. The web controller page detects the dropped socket, shows "Disconnected. Tap to reconnect.", and retries every three seconds, or the moment the tab comes back to the foreground. If it does not come back, do this:
 
 1. Tap the page to bring it back into focus.
 2. Pull down to refresh, or close the tab and reopen the URL.
@@ -315,7 +315,7 @@ iOS Safari kills WebSocket connections when the page loses focus. The web contro
 2. Both PCs must be on the same local network. Discovery is a same-subnet broadcast, so a separate guest network, VLAN, or Wi-Fi band hides them from each other.
 3. Some networks block broadcast. Open **Or Connect by Address (Advanced)**, enter the other PC's address and port, and click **Pair / Connect**.
 4. Allow PadForge through the firewall on each PC. For per-port rules, open UDP 27501 for discovery and TCP 27500 (or your changed listening port) for the connection.
-5. For play across the internet, put both PCs on one virtual network with a VPN like ZeroTier, then connect by address. Broadcast discovery does not cross the internet.
+5. For play across the internet, swap connection codes. Copy **This PC's Code** on the [Dashboard](features/dashboard.md), have the other person paste it into their Connect box while you paste theirs, then you both click **Pair / Connect**. That opens a direct path with no VPN and no port forwarding. Broadcast discovery does not cross the internet, so the code is how the two PCs find each other. If PadForge warns that the network cannot make direct connections (a mobile hotspot or carrier-grade NAT), fall back to a VPN like Tailscale and connect by address.
 
 ---
 
@@ -424,7 +424,7 @@ See [Steam Workshop Config Import](guides/steam-workshop-import.md) for the full
 
 **Two opposite directions held together and one, or both, vanish from the game.**
 
-1. That is SOCD cleaning doing its job. The **Simultaneous Opposite Cardinal Directions (SOCD)** card on the [Mappings](features/mappings.md) tab resolves paired buttons held at once.
+1. That is SOCD cleaning doing its job. The **Simultaneous Opposite Cardinal Directions (SOCD)** card on the **Output** tab resolves paired buttons held at once.
 2. The **Mode** decides the outcome. **Last Wins (Snap Tap)**: the most recent press wins, and releasing it re-presses the still-held partner. **Neutral**: holding both releases both until one is let go. **First Wins**: the earlier press keeps winning until it is released.
 3. The rule applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned.
 4. To turn it off, set the Mode to **Off** or remove the pair under **Button Pairs**.
@@ -582,7 +582,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 1. The IR pointer needs a **sensor bar or any IR light source** in view of the remote's camera. It reads the two sensor-bar dots. With no dots visible it reports centered.
 2. A powered USB sensor bar or a pair of IR emitters both drive it. The bar only needs to emit IR, it carries no data.
 3. Aim the remote at the bar. When the camera loses the dots the source relaxes to center and re-acquires when a dot returns.
-4. Map **IR Pointer X** and **IR Pointer Y** to stick axes. Tune sensor-bar position, vertical offset, smoothing, and sensitivity on the Pointer tab.
+4. Map **IR Pointer X** and **IR Pointer Y** to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.
 5. A right Joy-Con's **IR Brightness** source is different. It reports a single cover/proximity value, not an X/Y pointer.
 
 ---
@@ -626,7 +626,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 1. This is a hardware limit, not a bug. These controllers (Nintendo Joy-Con and Switch Pro, Steam Controller 2015, Steam Deck, Steam Controller 2026) reproduce sound through haptic actuators, not a speaker.
 2. A haptic actuator plays one frequency at a time. PadForge reduces the audio to that one dominant tone plus a volume envelope each tick. Simple alert tones and melodic cues survive. Speech and full music do not.
-3. Joy-Con and Pro tones fold into roughly 41-626 Hz. Content outside that band is lost. The 2015 Steam Controller and Steam Deck play pitch only, with no working volume, so they feel flatter.
+3. Joy-Con and Pro tones fold into roughly 41-626 Hz. A note outside that band is shifted by whole octaves until it fits, so it keeps its pitch class but not its register. The 2015 Steam Controller and Steam Deck play pitch only, with no working volume, so they feel flatter.
 4. DualSense and DualShock 4 do not use this path. They play through their actual speaker. A Wii Remote likewise uses its speaker.
 5. Switch 2 (Joy-Con 2, Pro Controller 2) does not play haptic tones. Its actuator is driven for rumble feel only.
 

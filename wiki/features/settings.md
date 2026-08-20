@@ -80,7 +80,7 @@ A number field with up / down arrows. Range: 1-16 ms.
 
 ### Inactivity Timeout
 
-Seconds a virtual controller stays alive after all of its mapped physical devices go offline. Default: **60 s**. Set to **0** to disable (the controller stays around indefinitely). One timeout governs every virtual controller type: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, and MIDI.
+Seconds a virtual controller stays alive after all of its mapped physical devices go offline. Default: **60 s**. Set to **0** to disable (the controller stays around indefinitely). One timeout governs every virtual controller type: Xbox, PlayStation, Nintendo, Extended, VR, Keyboard + Mouse, and MIDI.
 
 When a slot's mapped pads disconnect (laptop sleeps, USB hub unplugged, battery dies), PadForge holds the virtual controller open for this many seconds. If the devices come back, the controller stays in place. If not, PadForge tears it down to free its kernel slot (the XInput slot, for Xbox types). Surviving controllers of the same type then re-bind to lower kernel slots so the order stays contiguous, and shift back as slots reactivate. Slot configuration is kept either way. Plug the devices back in and the virtual controller comes back on its own.
 
@@ -125,7 +125,7 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.
 
 - **HidHide Driver** card: Install and Uninstall buttons.
-- **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended slot.
+- **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.
 - **Windows MIDI Services** card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).
 - **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
@@ -136,7 +136,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | Driver | What it does | When to install |
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
-| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 225+ device profiles. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, or Extended slot. Required for those four slot types. |
+| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 225+ device profiles. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
 | **Windows MIDI Services** | Sends MIDI virtual-controller output. Needs Windows 11 24H2 (build 26100)+. | You drive a DAW, synth, or other MIDI app from a controller. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
@@ -187,7 +187,7 @@ PadForge whitelists itself. You may also want to whitelist:
 | Button | Action |
 |---|---|
 | **Add...** | Browse for an .exe. That program sees physical controllers even when hidden. |
-| **Remove** | Drops the selected entry. Leave PadForge itself in the list. |
+| **Remove** | Drops the selected entry. PadForge is whitelisted automatically and never appears here, so there is nothing of its own to preserve. |
 
 ![Driver management cards](../images/settings-drivers.png)
 
@@ -253,7 +253,7 @@ If unsaved changes exist, an orange **"Unsaved Changes"** warning sits under the
 
 ### Auto-save
 
-Most settings auto-save inside ~250 ms. You do not need to click **Save** after every change.
+Most settings auto-save on their own. A change reaches the engine within ~250 ms, and the file on disk is written after about 2 seconds of quiet, one write per editing burst. You do not need to click **Save** after every change.
 
 The **Save** button is there for two cases.
 

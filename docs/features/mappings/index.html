@@ -3920,7 +3920,7 @@
 </tr>
 <tr>
 <td><strong>Axis-to-Button Deadzone</strong></td>
-<td>Slider (0–100%) for how far an axis must move before a discrete output fires. Per source. See <a href="#axis-to-button-deadzone">Axis-to-Button Deadzone</a>.</td>
+<td>Slider (1–100%) for how far an axis must move before a discrete output fires. Per source. See <a href="#axis-to-button-deadzone">Axis-to-Button Deadzone</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -3990,7 +3990,7 @@
 <li>A blue prompt shows which output it expects ("Press A").</li>
 <li>Press the matching button or move the matching axis.</li>
 <li>PadForge captures the input and moves to the next row.</li>
-<li>Repeat until done. Click <strong>Stop</strong> (or press Escape) to stop early.</li>
+<li>Repeat until done. Click <strong>Stop</strong> to stop early.</li>
 </ol>
 <p>Rows that already have a source are still in the sequence. Pressing an input overwrites the existing source. Skipping keeps it.</p>
 <p>On PlayStation virtual controllers, <strong>Touchpad Click</strong> is appended to the recording sequence as the final step. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.</p>
@@ -4050,7 +4050,7 @@
 </tr>
 <tr>
 <td><strong>Acceleration</strong></td>
-<td>Slider 0–5 with a reset button, shown on continuous sources (the same family that can take <strong>Half</strong>). Fast motion is amplified: the value scales by 1 + acceleration × |value|, then re-clamps to range. 0 (the default) keeps the response flat. <a href="../../guides/steam-workshop-import/">Steam Workshop imports</a> land Steam's mouse acceleration here on stick-hosted rows.</td>
+<td>Slider 0–5 with a reset button, shown on continuous sources (the family that can take <strong>Half</strong>), except the gravity-tilt pairs <strong>Gyro Lean X / Y</strong> and <strong>Gyro Tilt X / Y</strong>, whose engine path never reads it. Fast motion is amplified: the value scales by 1 + acceleration × |value|, then re-clamps to range. 0 (the default) keeps the response flat. <a href="../../guides/steam-workshop-import/">Steam Workshop imports</a> land Steam's mouse acceleration here on stick-hosted rows.</td>
 </tr>
 <tr>
 <td><strong>Sensitivity</strong></td>
@@ -4380,7 +4380,7 @@
 <h2 id="axis-to-button-deadzone">Axis-to-Button Deadzone<a class="headerlink" href="#axis-to-button-deadzone" title="Permanent link">&para;</a></h2>
 <p>When a source feeds a discrete output (button, D-pad direction, keyboard key, MIDI note, or Extended HID button), the <strong>Axis-to-Button Deadzone</strong> column controls how far the source must travel before the output fires. This stops small joystick movement from triggering button presses by accident.</p>
 <ul>
-<li>Each source has its own slider (0–100%) with an editable text field and a reset button.</li>
+<li>Each source has its own slider (1–100%) with an editable text field and a reset button.</li>
 <li>The default is <strong>50%</strong>. The source must pass the halfway point to fire.</li>
 <li>The column is only enabled when the source is an axis or slider and the target is a discrete output. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the <a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a> tabs for those.</li>
 <li>A higher value (80%) means a firmer push before the button fires. A lower value (20%) makes it more sensitive.</li>
@@ -4634,7 +4634,7 @@
 </tr>
 </tbody>
 </table>
-<p>The source dropdown leads with an <strong>(Any device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Gamepad Left Stick Touch</strong>, <strong>Gamepad Right Stick Touch</strong>, <strong>Gamepad Left Grip Touch</strong>, and <strong>Gamepad Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, the tilt pairs <strong>Gyro Lean X / Y</strong> and <strong>Gyro Tilt X / Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
+<p>The source dropdown leads with an <strong>(Any device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Left Stick Touch</strong>, <strong>Right Stick Touch</strong>, <strong>Left Grip Touch</strong>, and <strong>Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, the tilt pairs <strong>Gyro Lean X / Y</strong> and <strong>Gyro Tilt X / Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
 <p>Profiles imported from the <a href="../../guides/steam-workshop-import/">Steam Workshop</a> are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source <strong>Acceleration</strong> slider.</p>
 <hr />
 <h2 id="named-input-device-sources">Named input-device sources<a class="headerlink" href="#named-input-device-sources" title="Permanent link">&para;</a></h2>

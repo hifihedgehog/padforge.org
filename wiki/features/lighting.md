@@ -12,6 +12,7 @@
 The Lighting tab appears for these devices:
 
 - DualShock 4, DualSense, and DualSense Edge, for full lightbar control
+- A PlayStation Move controller, whose sphere is driven as its lightbar
 - Xbox One and later pads, for the Guide button LED only
 - A 2015 Steam Controller, for the Home button LED only
 - A Switch Pro Controller or right Joy-Con (alone, in a pair, or in the charging grip), for the HOME button LED only
@@ -206,7 +207,7 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
 - For Color Cycle, Blend Smoothly looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.
 - Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.
-- The Audio Bands modes assume the two thresholds are in ascending order. Reversing them produces the wrong band selection.
+- If you drag Mid-to-High below Low-to-Mid, PadForge raises Mid-to-High to match. The Medium color then never shows and the bar switches straight from Quiet to Loud.
 
 ---
 

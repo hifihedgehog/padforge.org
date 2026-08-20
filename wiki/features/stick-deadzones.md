@@ -201,8 +201,8 @@ Each axis has a Center Offset slider from -100% to +100%.
 
 | Value | Effect |
 |---|---|
-| Positive | Shifts center right (X) or up (Y) |
-| Negative | Shifts center left (X) or down (Y) |
+| Positive | Adds to the reading. Cancels a stick that rests left (X) or down (Y). |
+| Negative | Subtracts from the reading. Cancels a stick that rests right (X) or up (Y). |
 | 0% | No correction (default) |
 
 ---
