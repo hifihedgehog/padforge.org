@@ -634,14 +634,21 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 ## Logs and diagnostics
 
-PadForge writes no log files while it runs. A healthy session leaves nothing on disk. Two files can sit next to `PadForge.exe`:
+PadForge writes no log files on its own. A healthy session leaves nothing on disk unless you ask for it. Next to `PadForge.exe`:
 
 - `PadForge.xml` holds your settings.
 - `crash.log` appears only after a crash. It records the error plus a tail of recent internal diagnostics. This is the file to attach to a bug report.
 
 If PadForge has not crashed there is no `crash.log`, and that is normal.
 
-**Deep diagnostics (when asked by support).** For a problem that is hard to reproduce, support may ask for a full trace. Set the `PADFORGE_DIAG` environment variable to a file path before launching PadForge, and every internal diagnostic line is written to that file for the session. Leave the variable unset for normal use, when PadForge writes nothing.
+**Capturing a trace.** For a problem that is hard to reproduce, open **Settings** and find the **Diagnostics** card.
+
+- **Save Snapshot** writes the engine's most recent events to a timestamped file and shows it in Explorer. It works even with logging off, because those events are always held in memory, so it is the right button right after something goes wrong.
+- **Keep a Diagnostics Log** records continuously to `diagnostics.log` instead. It stays on across restarts, so use it for something that only appears minutes into a session or on a PadForge that starts with Windows. Turn it back off when you are done.
+
+Both land in the folder PadForge runs from, and the card shows the path.
+
+`PADFORGE_DIAG` still works for benches: set it to a file path before launching and the same trace goes there for that session only.
 
 ---
 

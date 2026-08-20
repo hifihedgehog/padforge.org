@@ -4514,13 +4514,19 @@
 </ol>
 <hr />
 <h2 id="logs-and-diagnostics">Logs and diagnostics<a class="headerlink" href="#logs-and-diagnostics" title="Permanent link">&para;</a></h2>
-<p>PadForge writes no log files while it runs. A healthy session leaves nothing on disk. Two files can sit next to <code>PadForge.exe</code>:</p>
+<p>PadForge writes no log files on its own. A healthy session leaves nothing on disk unless you ask for it. Next to <code>PadForge.exe</code>:</p>
 <ul>
 <li><code>PadForge.xml</code> holds your settings.</li>
 <li><code>crash.log</code> appears only after a crash. It records the error plus a tail of recent internal diagnostics. This is the file to attach to a bug report.</li>
 </ul>
 <p>If PadForge has not crashed there is no <code>crash.log</code>, and that is normal.</p>
-<p><strong>Deep diagnostics (when asked by support).</strong> For a problem that is hard to reproduce, support may ask for a full trace. Set the <code>PADFORGE_DIAG</code> environment variable to a file path before launching PadForge, and every internal diagnostic line is written to that file for the session. Leave the variable unset for normal use, when PadForge writes nothing.</p>
+<p><strong>Capturing a trace.</strong> For a problem that is hard to reproduce, open <strong>Settings</strong> and find the <strong>Diagnostics</strong> card.</p>
+<ul>
+<li><strong>Save Snapshot</strong> writes the engine's most recent events to a timestamped file and shows it in Explorer. It works even with logging off, because those events are always held in memory, so it is the right button right after something goes wrong.</li>
+<li><strong>Keep a Diagnostics Log</strong> records continuously to <code>diagnostics.log</code> instead. It stays on across restarts, so use it for something that only appears minutes into a session or on a PadForge that starts with Windows. Turn it back off when you are done.</li>
+</ul>
+<p>Both land in the folder PadForge runs from, and the card shows the path.</p>
+<p><code>PADFORGE_DIAG</code> still works for benches: set it to a file path before launching and the same trace goes there for that session only.</p>
 <hr />
 <h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
 <table>

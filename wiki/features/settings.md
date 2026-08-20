@@ -281,7 +281,9 @@ PadForge creates one virtual MIDI device per slot. No port to pick. Different sl
 
 ## Diagnostics
 
-Version info at the bottom of the page, for [bug reports](../troubleshooting.md):
+*Version information, plus engine event logging for troubleshooting.*
+
+### Version info
 
 | Field | Description |
 |---|---|
@@ -290,6 +292,35 @@ Version info at the bottom of the page, for [bug reports](../troubleshooting.md)
 | **SDL Version** | SDL3 library version |
 
 Paste these into any issue you file.
+
+### Keep a Diagnostics Log
+
+Off by default. A healthy install writes no log.
+
+Ticking it writes engine events continuously to `diagnostics.log`, in the
+folder shown under the checkbox, which is the folder PadForge runs from.
+The setting persists, so it survives a restart and covers sessions that
+start with Windows. That matters because a launch-time environment
+variable cannot reach an auto-started session, which is the case this
+was built for.
+
+At 8 MB the file rolls over to `diagnostics.log.old`, so leaving it on
+for days costs one file plus its rollover. Each launch writes a marker
+line, so several sessions in one file stay easy to tell apart.
+
+### Save Snapshot
+
+Writes the engine's most recent events to a new timestamped file and
+opens Explorer with it selected.
+
+PadForge always keeps its recent engine events in memory, whether or not
+the log is on, so this captures the moments around something that just
+happened without having had logging enabled beforehand. Use it right
+after a glitch.
+
+### Open Log Folder
+
+Opens the folder holding `diagnostics.log` and any snapshots.
 
 ---
 
