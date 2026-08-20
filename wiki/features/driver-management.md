@@ -60,7 +60,7 @@ PadForge runs whether or not the optional drivers are installed. Missing drivers
 
 ## Admin rights
 
-PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, the SteamVR install, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.
+PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, the SteamVR install and uninstall, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.
 
 ---
 
@@ -195,7 +195,9 @@ The runtime behind the VR slot type. PadForge installs it Steam-free from Valve'
 
 1. Close SteamVR. The uninstall refuses while it is running.
 2. Open **Settings**. Scroll to **SteamVR**.
-3. Click **Uninstall**. It removes the Steam-free install and frees the space. VR virtual controllers stop working until SteamVR is installed again.
+3. Click **Uninstall**. It removes the Steam-free install and frees the space, including the `logs` and `config` subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.
+
+Reading real VR hardware as an input source pauses for the rest of the session after an uninstall, and comes back the next time PadForge starts. PadForge holds SteamVR's client library open while it is running and lets go of it during the uninstall, so it does not go back to it until a fresh launch. Virtual VR controllers are unaffected by this: they run inside SteamVR's own process, not PadForge's.
 
 For the slot type itself, see [Virtual VR Controllers](vr-controllers.md).
 
@@ -241,9 +243,11 @@ PadForge blocks driver removal while a slot still needs it.
 |---|---|
 | **HidHide** | Any device has **Hide from Games (HidHide)** on. |
 | **MIDI Services** | Any MIDI slot exists. |
-| **SteamVR** | SteamVR is running, or the install did not come from PadForge. |
+| **SteamVR** | Any VR slot exists, SteamVR is running, or the install did not come from PadForge. |
 
 Delete the slots or turn the feature off. Then **Uninstall** becomes available. (HIDMaestro has no Uninstall button, so it needs no guard.)
+
+The slot guards read your saved slots, not what the engine is running, so they hold with the engine stopped. Switching a slot from one type to another releases the type it left and locks the type it joined, immediately.
 
 ---
 
@@ -265,6 +269,7 @@ Delete the slots or turn the feature off. Then **Uninstall** becomes available. 
 |---|---|
 | Xbox / PlayStation / Nintendo / Extended slot picked but no virtual controller appears | HIDMaestro auto-installs on first use. If that install failed, see "HIDMaestro fails to install" under **Install issues** above. |
 | Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)" | Install MIDI Services (needs Windows 11 24H2+). |
+| PadForge disappears when I uninstall Windows MIDI Services | Fixed in 4.3.0. Older builds were closed by Windows Restart Manager, which asks running programs to quit so an installer can reach files they hold open. PadForge now declines that request and stays up through the uninstall. |
 | UAC prompt on every launch | Expected. PadForge needs administrator rights to drive its drivers, so Windows asks at startup. Everything after that runs without a second prompt. |
 | Double input (every press counts twice) | Install HidHide. Turn on **Hide from Games (HidHide)** for the physical controller on the [Devices](devices.md) page. |
 | Double input still there after HidHide | Restart the game. Some games only detect controllers at launch. Restart the PC if the install was new. |

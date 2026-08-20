@@ -142,10 +142,13 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 
 ### Uninstall guards
 
-PadForge blocks two driver uninstalls until you clear what still depends on them.
+PadForge blocks three driver uninstalls until you clear what still depends on them.
 
 - **HidHide** stays locked while any device still has the cloak armed. Disarm the cloak on the [Devices](devices.md) page first.
 - **Windows MIDI Services** stays locked while any slot still outputs MIDI. Delete those slots or switch them to another output on the [Controller Slots](controller-slots.md) page first.
+- **SteamVR** stays locked while any VR slot exists. Delete those slots or switch them to another type first.
+
+Each guard reads the slots you have saved rather than what the engine is currently running, so it holds with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.
 
 ### The SteamVR card
 
@@ -153,7 +156,9 @@ PadForge blocks two driver uninstalls until you clear what still depends on them
 
 Before installing, the card offers an **Install Location**. It defaults to `C:\SteamVR` and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.
 
-**Uninstall appears only for an install PadForge itself created.** PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.
+**Uninstall appears only for an install PadForge itself created.** PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also stays disabled while any VR slot exists, and refuses while SteamVR is running.
+
+SteamVR keeps its own log and settings inside the folder you chose, as `logs` and `config` subfolders. Removing the install takes them with it.
 
 ### Hide Devices from Games
 
@@ -282,6 +287,8 @@ PadForge creates one virtual MIDI device per slot. No port to pick. Different sl
 ## Diagnostics
 
 *Version information, plus engine event logging for troubleshooting.*
+
+![The Diagnostics card in Settings](../images/settings-diagnostics.png)
 
 ### Version info
 

@@ -3717,7 +3717,7 @@
 </table>
 <hr />
 <h2 id="admin-rights">Admin rights<a class="headerlink" href="#admin-rights" title="Permanent link">&para;</a></h2>
-<p>PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, the SteamVR install, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.</p>
+<p>PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, Windows MIDI Services install and uninstall, the SteamVR install and uninstall, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.</p>
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>One driver that publishes the virtual controllers. Each non-MIDI, non-Keyboard+Mouse slot uses one HIDMaestro <strong>device profile</strong>. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.</p>
@@ -3847,8 +3847,9 @@
 <ol>
 <li>Close SteamVR. The uninstall refuses while it is running.</li>
 <li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
-<li>Click <strong>Uninstall</strong>. It removes the Steam-free install and frees the space. VR virtual controllers stop working until SteamVR is installed again.</li>
+<li>Click <strong>Uninstall</strong>. It removes the Steam-free install and frees the space, including the <code>logs</code> and <code>config</code> subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.</li>
 </ol>
+<p>Reading real VR hardware as an input source pauses for the rest of the session after an uninstall, and comes back the next time PadForge starts. PadForge holds SteamVR's client library open while it is running and lets go of it during the uninstall, so it does not go back to it until a fresh launch. Virtual VR controllers are unaffected by this: they run inside SteamVR's own process, not PadForge's.</p>
 <p>For the slot type itself, see <a href="../vr-controllers/">Virtual VR Controllers</a>.</p>
 <hr />
 <h2 id="legacy-driver-cleanup">Legacy driver cleanup<a class="headerlink" href="#legacy-driver-cleanup" title="Permanent link">&para;</a></h2>
@@ -3957,11 +3958,12 @@
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
-<td>SteamVR is running, or the install did not come from PadForge.</td>
+<td>Any VR slot exists, SteamVR is running, or the install did not come from PadForge.</td>
 </tr>
 </tbody>
 </table>
 <p>Delete the slots or turn the feature off. Then <strong>Uninstall</strong> becomes available. (HIDMaestro has no Uninstall button, so it needs no guard.)</p>
+<p>The slot guards read your saved slots, not what the engine is running, so they hold with the engine stopped. Switching a slot from one type to another releases the type it left and locks the type it joined, immediately.</p>
 <hr />
 <h2 id="trouble">Trouble<a class="headerlink" href="#trouble" title="Permanent link">&para;</a></h2>
 <h3 id="install-issues">Install issues<a class="headerlink" href="#install-issues" title="Permanent link">&para;</a></h3>
@@ -4011,6 +4013,10 @@
 <tr>
 <td>Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)"</td>
 <td>Install MIDI Services (needs Windows 11 24H2+).</td>
+</tr>
+<tr>
+<td>PadForge disappears when I uninstall Windows MIDI Services</td>
+<td>Fixed in 4.3.0. Older builds were closed by Windows Restart Manager, which asks running programs to quit so an installer can reach files they hold open. PadForge now declines that request and stays up through the uninstall.</td>
 </tr>
 <tr>
 <td>UAC prompt on every launch</td>

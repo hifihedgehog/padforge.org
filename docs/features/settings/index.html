@@ -3934,15 +3934,18 @@
 </tbody>
 </table>
 <h3 id="uninstall-guards">Uninstall guards<a class="headerlink" href="#uninstall-guards" title="Permanent link">&para;</a></h3>
-<p>PadForge blocks two driver uninstalls until you clear what still depends on them.</p>
+<p>PadForge blocks three driver uninstalls until you clear what still depends on them.</p>
 <ul>
 <li><strong>HidHide</strong> stays locked while any device still has the cloak armed. Disarm the cloak on the <a href="../devices/">Devices</a> page first.</li>
 <li><strong>Windows MIDI Services</strong> stays locked while any slot still outputs MIDI. Delete those slots or switch them to another output on the <a href="../controller-slots/">Controller Slots</a> page first.</li>
+<li><strong>SteamVR</strong> stays locked while any VR slot exists. Delete those slots or switch them to another type first.</li>
 </ul>
+<p>Each guard reads the slots you have saved rather than what the engine is currently running, so it holds with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.</p>
 <h3 id="the-steamvr-card">The SteamVR card<a class="headerlink" href="#the-steamvr-card" title="Permanent link">&para;</a></h3>
 <p><img alt="The SteamVR card with its install location field" src="../../images/settings-steamvr.png" /></p>
 <p>Before installing, the card offers an <strong>Install Location</strong>. It defaults to <code>C:\SteamVR</code> and takes any full path on any drive. A bare drive root is refused, because the uninstall side deletes the recorded directory and pointing that at an entire drive is not a mistake worth allowing.</p>
-<p><strong>Uninstall appears only for an install PadForge itself created.</strong> PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also refuses while SteamVR is running.</p>
+<p><strong>Uninstall appears only for an install PadForge itself created.</strong> PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also stays disabled while any VR slot exists, and refuses while SteamVR is running.</p>
+<p>SteamVR keeps its own log and settings inside the folder you chose, as <code>logs</code> and <code>config</code> subfolders. Removing the install takes them with it.</p>
 <h3 id="hide-devices-from-games">Hide Devices from Games<a class="headerlink" href="#hide-devices-from-games" title="Permanent link">&para;</a></h3>
 <p>This checkbox sits inside the <strong>HidHide Driver</strong> card. It only shows when HidHide is installed. Master switch for input hiding. Two pieces sit under it.</p>
 <ul>
@@ -4110,6 +4113,7 @@
 <hr />
 <h2 id="diagnostics">Diagnostics<a class="headerlink" href="#diagnostics" title="Permanent link">&para;</a></h2>
 <p><em>Version information, plus engine event logging for troubleshooting.</em></p>
+<p><img alt="The Diagnostics card in Settings" src="../../images/settings-diagnostics.png" /></p>
 <h3 id="version-info">Version info<a class="headerlink" href="#version-info" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

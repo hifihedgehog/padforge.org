@@ -38,7 +38,9 @@ USB is a pairing and charging dock, not an input path, for the original Move (ZC
 
 The wand's sphere is an output, not a source. PadForge drives it from the [Lighting](../features/lighting.md) tab, and it idles at the slot's player color.
 
-The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, and PS. It has no motion sensors. Its analog L2 is read from the pad but is not reachable as a mapping source at present, so treat L2 as unavailable on the Navigation controller.
+The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, PS, and its analog L2. It has no motion sensors. L2 is its only analog trigger, and it maps like any other trigger, pressure and all.
+
+Before 4.3.0 that trigger read at rest no matter how hard it was pulled. The pressure was being written to an axis nothing reads: PadForge was numbering the pad's axes by their position in the standard gamepad layout, and the Navigation controller does not carry the axes in between, so every index past its sticks was off by the ones it skips.
 
 ---
 
