@@ -4,9 +4,9 @@
 
 The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.
 
-Both connect over Bluetooth through the same signed PlayStation Bluetooth driver the [DualShock 3](dualshock-3.md) uses, which PadForge installs at pairing time. They appear on the [Devices](../features/devices.md) page as **PS Move Motion Controller** and **PS Move Navigation Controller**.
+Both connect over Bluetooth through the same signed PlayStation Bluetooth driver the [DualShock 3](dualshock-3.md) uses, which PadForge installs at pairing time. They appear on the [Devices](../features/devices.md) page as **PlayStation Move Motion Controller** and **PlayStation Move Navigation Controller**.
 
-![A PS Move Motion Controller on the Devices page, with its live motion readout](../images/devices-move.png)
+![A PlayStation Move Motion Controller on the Devices page, with its live motion readout](../images/devices-move.png)
 
 ---
 
@@ -69,4 +69,4 @@ Because the wand is held rather than gripped in two hands, Aim Engage is usually
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.1.*
