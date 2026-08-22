@@ -824,3 +824,43 @@ a { color: inherit; text-decoration: none; }
     display: block; margin-bottom: 0.2rem; color: var(--text-hi);
     font-family: var(--font-display); font-weight: 600; font-size: 0.98rem;
 }
+
+/* ── Device check ─────────────────────────────────────────────────── */
+.dc { max-width: 780px; margin: 2.5rem auto 0; }
+.dc-field {
+    display: flex; align-items: center; gap: 0.85rem;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 14px; padding: 0.2rem 1.15rem;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.dc-field:focus-within { border-color: var(--ember); box-shadow: 0 0 0 4px var(--ember-glow-soft); }
+.dc-icon { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--telemetry); stroke-width: 2; stroke-linecap: round; }
+.dc-field input {
+    flex: 1; min-width: 0; background: none; border: 0; outline: none;
+    color: var(--text-hi); font: inherit; font-size: 1.06rem; padding: 1rem 0;
+}
+.dc-field input::placeholder { color: var(--text-dim); }
+.dc-field input::-webkit-search-cancel-button { filter: invert(0.6); }
+.dc-out { display: none; margin-top: 0.9rem; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.dc-out.on { display: block; }
+.dc-hit {
+    display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 1rem;
+    padding: 0.85rem 1.15rem; background: var(--panel);
+    border-bottom: 1px solid var(--border-soft);
+}
+.dc-hit:last-child { border-bottom: 0; }
+.dc-hit b { color: var(--text-hi); font-weight: 600; }
+.dc-cat {
+    grid-column: 2; grid-row: 1; align-self: center;
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--telemetry); white-space: nowrap;
+}
+.dc-why { grid-column: 1 / -1; color: var(--text-muted); font-size: 0.92rem; }
+.dc-none { padding: 1.15rem; background: var(--panel); color: var(--text-muted); }
+.dc-none b { color: var(--text-hi); }
+.dc-foot { margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem; text-align: center; }
+.dc-foot a { color: var(--ember-bright); }
+@media (max-width: 620px) {
+    .dc-hit { grid-template-columns: 1fr; }
+    .dc-cat { grid-column: 1; grid-row: auto; }
+}
