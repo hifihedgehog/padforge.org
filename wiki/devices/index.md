@@ -6,6 +6,9 @@ Most controllers work in PadForge with no special setup: plug in, assign to
 a slot, play. The pages in this section exist for the families that have
 extra capabilities or extra setup steps worth their own walkthrough.
 
+Looking for one specific controller, wheel or stick? [**Supported Devices**](supported.md)
+lists every one PadForge knows by name, all 714 of them, grouped by family.
+
 | Family | Why it has a page |
 | --- | --- |
 | [DualShock 3](dualshock-3.md) | Needs a one-time pairing step over USB before Bluetooth works |
@@ -22,4 +25,4 @@ Joy-Con works the same way, except for the extras documented on the
 **IR Brightness** source, the Joy-Con 2 optical mouse, and the per-half
 motion sources on a combined pair.
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.1.*

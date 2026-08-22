@@ -113,6 +113,7 @@ nav:
       - Settings: features/settings.md
   - Devices:
       - devices/index.md
+      - Supported Devices: devices/supported.md
       - DualShock 3: devices/dualshock-3.md
       - PlayStation Move: devices/ps-move.md
       - SpaceMouse: devices/spacemouse.md
