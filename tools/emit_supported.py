@@ -20,6 +20,34 @@ CL = read(SDL + r"\controller_list.h")
 DB = read(SDL + r"\SDL_gamepad_db.h")
 JS = read(SDL + r"\SDL_joystick.c")
 
+
+# SDL annotates entries in the name itself: platform notes like "(Linux)",
+# catalogue notes like "(unlisted)", and whole trailing clauses of commentary.
+# Those read as commentary rather than as a product name, so they are trimmed
+# for display. A short parenthetical that disambiguates a real variant, like
+# Joy-Con (L) or T300RS (PS4 mode), is kept.
+DROP_PAREN = re.compile(r"^(linux|mac|macos|osx|windows|unlisted|unconfirmed|untested|"
+                        r"wired|wireless \(.*|old|new|v\d+ firmware)$", re.I)
+
+
+def display(name):
+    tail = re.split(r"\s+-\s+", name, maxsplit=1)
+    if len(tail) == 2 and (tail[1][:1].islower() or "," in tail[1]
+                           or re.search(r"no|only|hardcoded", tail[1], re.I)):
+        name = tail[0]
+
+    def drop(m):
+        inner = m.group(1).strip()
+        if DROP_PAREN.match(inner):
+            return ""
+        if len(inner) > 14 or "," in inner or re.search(r"no|only|hardcoded", inner, re.I):
+            return ""
+        return m.group(0)
+
+    name = re.sub(r"\s*\(([^)]*)\)", drop, name)
+    return re.sub(r"\s{2,}", " ", name).strip(" ,-")
+
+
 # ── controller_list.h: identity + family + label ────────────────────────────
 FAMILY = {
     "XBox360Controller": "Xbox 360",
@@ -58,6 +86,7 @@ for line in CL.splitlines():
     typ, _, name, comment = m.groups()
     label = (name or "").strip() or (comment or "").strip()
     label = re.sub(r"\s*\(.*?only.*?\)\s*$", "", label, flags=re.I).strip()
+    label = display(label)
     if label:
         fam[FAMILY.get(typ, "Other")].add(label)
 
@@ -67,6 +96,7 @@ for line in DB.splitlines():
     m = re.match(r'\s*"([0-9a-fA-F]{32}),([^,]+),', line)
     if m:
         n = m.group(2).strip()
+        n = display(n)
         if n and n != "*" and not n.lower().startswith("unknown"):
             mapped.add(n)
 

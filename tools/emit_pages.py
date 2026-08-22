@@ -11,6 +11,49 @@ from emit_supported import fam, mapped, CAT, N, FAM_ORDER, lines, SITE
 Q = '"'
 
 
+# ── vendor grouping, so a 148-name family reads as a table instead of a
+#    9,000-character paragraph ────────────────────────────────────────────────
+MULTI = ["Turtle Beach", "Asetek SimSports", "VIRPIL Controls", "Red Octane",
+         "Mad Catz", "Nintendo Switch", "Steam Deck", "Power A", "Performance Designed",
+         "Guitar Hero", "Rock Band", "Real Arcade", "Xbox 360", "Xbox One", "Xbox Series"]
+ALIAS = {"8Bitdo": "8BitDo", "Hori": "HORI", "HORIPAD": "HORI", "Horipad": "HORI",
+         "Powera": "PowerA", "POWER": "PowerA", "Pdp": "PDP", "Nacon": "NACON",
+         "Madcatz": "Mad Catz", "MadCatz": "Mad Catz", "ThrustMaster": "Thrustmaster",
+         "Dragonrise": "DragonRise", "Moza": "MOZA", "Gamesir": "GameSir",
+         "QanBa": "Qanba", "Zeroplus": "ZEROPLUS", "Hyperkin": "Hyperkin"}
+PREFIX = [("HOTAS", "Thrustmaster"), ("T.16000", "Thrustmaster"), ("Gunfighter", "VKB"),
+          ("Real Arcade", "HORI"), ("Street Fighter", "Mad Catz"), ("Afterglow", "PDP"),
+          ("Rock Candy", "PDP"), ("Victrix", "PDP"), ("Faceoff", "PDP")]
+
+
+def vendor_of(name):
+    for pre, v in PREFIX:
+        if name.lower().startswith(pre.lower()):
+            return v
+    for m in MULTI:
+        if name.lower().startswith(m.lower()):
+            return ALIAS.get(m, m)
+    first = name.split()[0].strip(",.")
+    return ALIAS.get(first, first)
+
+
+def vendor_table(names):
+    """Vendors with two or more entries get their own row. Singletons collect in
+    one final row, so every name still appears and the table stays readable."""
+    g = {}
+    for n in names:
+        g.setdefault(vendor_of(n), []).append(n)
+    # Every vendor gets its own row. An "others" bucket looked tidier in the
+    # source and rendered as a single 2,600-character cell, which is the wall
+    # this grouping exists to remove.
+    items = sorted(((v, sorted(set(ns), key=str.lower)) for v, ns in g.items()),
+                   key=lambda kv: (-len(kv[1]), kv[0].lower()))
+    rows = ["| Vendor | Devices |", "| --- | --- |"]
+    for v, ns in items:
+        rows.append("| **" + v + "** | " + ", ".join(ns) + " |")
+    return rows
+
+
 def md():
     L = [
         "# Supported Devices",
@@ -39,14 +82,14 @@ def md():
     ]
     for f in FAM_ORDER:
         if fam.get(f):
-            L += ["### {0} ({1})".format(f, len(fam[f])), "", lines(fam[f]), ""]
+            L += ["### {0} ({1})".format(f, len(fam[f])), ""] + vendor_table(fam[f]) + [""]
     L += [
         "### With a shipped mapping ({0})".format(len(mapped)),
         "",
         "Pads carrying a mapping in the database, so their buttons and axes land in the right places",
         "the moment they are plugged in.",
         "",
-        lines(mapped),
+    ] + vendor_table(mapped) + [
         "",
         "---",
         "",
@@ -57,7 +100,7 @@ def md():
         "recognized as a wheel and takes force feedback through the standard path. See",
         "[Force Feedback](../features/force-feedback.md).",
         "",
-        lines(CAT["wheels"]),
+    ] + vendor_table(CAT["wheels"]) + [
         "",
         "**Pedals.** Fanatec ClubSport V3, CSL Elite, CSL Loadcell and CSL Loadcell V2, each with its",
         "own rumble output. Pedal sets that enumerate separately are read as their own device, so they",
@@ -69,11 +112,11 @@ def md():
         "",
         "### Sticks ({0})".format(len(CAT["sticks"])),
         "",
-        lines(CAT["sticks"]),
+    ] + vendor_table(CAT["sticks"]) + [
         "",
         "### Throttles ({0})".format(len(CAT["throttles"])),
         "",
-        lines(CAT["throttles"]),
+    ] + vendor_table(CAT["throttles"]) + [
         "",
         "A stick, a throttle and a set of pedals each read as their own device and can feed one virtual",
         "controller together, so a button on the throttle chords with a button on the stick.",
@@ -82,13 +125,13 @@ def md():
         "",
         "## Arcade sticks ({0})".format(len(CAT["arcade"])),
         "",
-        lines(CAT["arcade"]),
+    ] + vendor_table(CAT["arcade"]) + [
         "",
         "---",
         "",
         "## GameCube adapters ({0})".format(len(CAT["gamecube"])),
         "",
-        lines(CAT["gamecube"]),
+    ] + vendor_table(CAT["gamecube"]) + [
         "",
         "---",
         "",
@@ -129,6 +172,18 @@ def md():
     return "\n".join(L)
 
 
+def vendor_html(names):
+    """Same grouping as the tables, rendered as bolded vendor runs so a long
+    <dd> reads as grouped runs rather than one undifferentiated block."""
+    g = {}
+    for n in names:
+        g.setdefault(vendor_of(n), []).append(n)
+    items = sorted(((v, sorted(set(ns), key=str.lower)) for v, ns in g.items()),
+                   key=lambda kv: (-len(kv[1]), kv[0].lower()))
+    parts = ["<b>" + v + "</b> " + ", ".join(ns) for v, ns in items]
+    return '<span class="vgrp">' + '</span><span class="vgrp">'.join(parts) + '</span>'
+
+
 def row(dt, dd):
     return ('                <div class="spec-row">\n'
             '                    <dt>' + dt + '</dt>\n'
@@ -153,18 +208,18 @@ def html():
          '            <dl class="spec-list reveal" data-d="1">\n']
     for f in FAM_ORDER:
         if fam.get(f):
-            h.append(row(f + ' pads' + dim(len(fam[f])), lines(fam[f])))
-    h.append(row('Pads with a shipped mapping' + dim(len(mapped)), lines(mapped)))
+            h.append(row(f + ' pads' + dim(len(fam[f])), vendor_html(fam[f])))
+    h.append(row('Pads with a shipped mapping' + dim(len(mapped)), vendor_html(mapped)))
     h.append(row('Racing wheels' + dim(len(CAT['wheels'])),
                  "<b>Driven in the wheel's own protocol:</b> the Logitech, Thrustmaster and Fanatec "
                  "models, with rotation range, autocenter and the LED strip. <b>Recognized and mapped, "
-                 "force feedback through the standard path:</b> everything else. " + lines(CAT['wheels'])))
+                 "force feedback through the standard path:</b> everything else. " + vendor_html(CAT['wheels'])))
     h.append(row('Pedals', 'Fanatec ClubSport V3, CSL Elite, CSL Loadcell and CSL Loadcell V2, each '
                            'with its own rumble output.'))
-    h.append(row('Flight sticks' + dim(len(CAT['sticks'])), lines(CAT['sticks'])))
-    h.append(row('Throttles' + dim(len(CAT['throttles'])), lines(CAT['throttles'])))
-    h.append(row('Arcade sticks' + dim(len(CAT['arcade'])), lines(CAT['arcade'])))
-    h.append(row('GameCube adapters' + dim(len(CAT['gamecube'])), lines(CAT['gamecube'])))
+    h.append(row('Flight sticks' + dim(len(CAT['sticks'])), vendor_html(CAT['sticks'])))
+    h.append(row('Throttles' + dim(len(CAT['throttles'])), vendor_html(CAT['throttles'])))
+    h.append(row('Arcade sticks' + dim(len(CAT['arcade'])), vendor_html(CAT['arcade'])))
+    h.append(row('GameCube adapters' + dim(len(CAT['gamecube'])), vendor_html(CAT['gamecube'])))
     h.append(row('Beyond gamepads',
                  'DualSense and Edge, DualShock 4 and 3, PlayStation Move and Navigation, Switch Pro '
                  'and Switch 2 Pro, Joy-Con and Joy-Con 2, Wii Remote with Nunchuk, Classic and Wii U '

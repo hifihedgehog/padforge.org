@@ -864,3 +864,22 @@ a { color: inherit; text-decoration: none; }
     .dc-hit { grid-template-columns: 1fr; }
     .dc-cat { grid-column: 1; grid-row: auto; }
 }
+
+/* No-match state: mission, then the ask, then the reassurance. */
+.dc-none { text-align: center; }
+.dc-none b { display: block; color: var(--text-hi); font-size: 1.06rem; margin-bottom: 0.5rem; }
+.dc-none p { color: var(--text-muted); max-width: 56ch; margin: 0 auto; }
+.dc-cta {
+    margin: 1.15rem 0 0.9rem;
+    background: var(--grad-ember); color: #fff;
+    box-shadow: 0 8px 30px -10px var(--ember-glow);
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; display: inline-block;
+}
+.dc-cta:hover { box-shadow: 0 14px 40px -12px var(--ember-glow); filter: brightness(1.06); }
+.dc-hint { font-size: 0.88rem; color: var(--text-dim); }
+.dc-hint b { display: inline; font-size: inherit; color: var(--text-muted); margin: 0; }
+
+/* Long device lists: one block per vendor so a 148-name run is scannable. */
+.spec-list .vgrp { display: block; margin-top: 0.5rem; }
+.spec-list .vgrp:first-child { margin-top: 0; }
+.spec-list .vgrp b { color: var(--telemetry); font-weight: 600; margin-right: 0.35rem; }

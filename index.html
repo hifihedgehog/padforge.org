@@ -836,10 +836,20 @@
             if (norm(q).length < 2) { dcout.innerHTML = ""; dcout.className = "dc-out"; return; }
             var hits = search(q, 14);
             if (!hits.length) {
+                var url = "https://github.com/hifihedgehog/PadForge/issues/new" +
+                          "?template=device_mapping.yml&device_name=" + encodeURIComponent(q);
                 dcout.className = "dc-out on";
-                dcout.innerHTML = '<div class="dc-none"><b>Not on the list by name.</b>' +
-                    ' That is not a no. Plug it in and PadForge reads it as a generic controller,' +
-                    ' and you can map every button and axis on it the same way.</div>';
+                dcout.innerHTML = '<div class="dc-none">' +
+                    '<b>Not on the list yet.</b>' +
+                    '<p>The mission is every controller and every input device there is, so a gap' +
+                    ' is a to-do rather than an answer. Ask for it and it gets on the list.</p>' +
+                    '<a class="btn dc-cta" href="' + url + '" target="_blank" rel="noopener">' +
+                    'Ask for ' + esc(q.length > 32 ? q.slice(0, 32) + "…" : q) + '</a>' +
+                    '<p class="dc-hint">You are not waiting on us either. Plug it in today and' +
+                    ' PadForge reads it as a generic controller, so every button and axis on it is' +
+                    ' yours to map. Already own it? The <b>Submit Mapping</b> button on its card' +
+                    ' fills in most of that form for you.</p>' +
+                    '</div>';
                 return;
             }
             var html = "", k;
