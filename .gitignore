@@ -1,1 +1,8 @@
 _capture.html
+
+# Python bytecode from tools/
+__pycache__/
+*.pyc
+
+# Intermediate emitted by tools/emit_pages.py, spliced into specs.html by hand
+tools/_specs_block.html
