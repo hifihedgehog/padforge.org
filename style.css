@@ -883,3 +883,14 @@ a { color: inherit; text-decoration: none; }
 .spec-list .vgrp { display: block; margin-top: 0.5rem; }
 .spec-list .vgrp:first-child { margin-top: 0; }
 .spec-list .vgrp b { color: var(--telemetry); font-weight: 600; margin-right: 0.35rem; }
+
+/* Trust line links (HIDMaestro). */
+.trust a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
+.trust a:hover { color: var(--text-hi); border-bottom-color: var(--ember); }
+
+/* Giving note: no tip jar, point the money somewhere better. */
+.give { max-width: 62ch; margin: 3rem auto 0; text-align: center; }
+.give p { color: var(--text-muted); font-size: 0.95rem; }
+.give b { color: var(--text-hi); }
+.give a { color: var(--ember-bright); }
+.give-small { margin-top: 0.6rem; font-size: 0.88rem; color: var(--text-dim); }
