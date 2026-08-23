@@ -32,6 +32,10 @@
     "d": "Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker."
   },
   {
+    "t": "Headphone DSP chain",
+    "d": "Crossfeed, a parametric EQ, and a limiter on the DualSense and DualShock 4 audio path, upstream of the encoder. bs2b crossfeed with the six classic presets, Jan Meier, the bs2b default, and a custom cutoff and feed. A graphic EQ you drag into shape or load from an AutoEq parametric file for your exact headphones, six band types. A feed-forward limiter so a boosted band never clips the pad."
+  },
+  {
     "t": "MIDI input",
     "d": "Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output."
   },

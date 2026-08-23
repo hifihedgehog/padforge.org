@@ -51,7 +51,8 @@ CATS = [
    "native wheel force feedback", "force feedback both ways", "impulse triggers",
    "trigger motors that feel the game", "adaptive triggers and lightbar",
    "dualsense effects in any game", "guide led brightness", "bass shaker output",
-   "bass shakers", "controller speaker audio", "audio through the controller speaker"]),
+   "bass shakers", "controller speaker audio", "audio through the controller speaker",
+   "headphone dsp chain"]),
  ("motion", "Motion", [
    "gyro at steam input parity", "flick stick", "headset head tracking",
    "dsu motion server", "motion to emulators", "wii pointer modes",
