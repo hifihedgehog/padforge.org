@@ -18,7 +18,7 @@ PadForge recognizes **714** devices by their USB identity: 613 gamepads, 75 raci
 Grouped by the family each pad reports as. A third-party pad in an Xbox 360 or PlayStation 4
 family gets that family's layout and works everywhere that family does.
 
-### Xbox 360 (147)
+### Xbox 360 (146)
 
 | Vendor | Devices |
 | --- | --- |
@@ -63,17 +63,16 @@ family gets that family's layout and works everywhere that family does.
 | **Mortal** | Mortal Kombat Klassic FightStick |
 | **MortalKombat** | MortalKombat FightStick |
 | **NACON** | Nacon GC-100XF |
-| **Nvidia** | Nvidia Shield local controller |
 | **NVIDIA** | NVIDIA Shield streaming controller |
+| **Nvidia** | Nvidia Shield local controller |
 | **Power A** | Power A Mini Pro Elite |
 | **PXN** | PXN V900 |
 | **Super** | Super SFIV FightStick TE S |
 | **Tron** | Tron Xbox 360 controller |
-| **Unknown** | Unknown Controller |
 | **Wooting** | Wooting Two |
 | **Xbox** | Xbox Airflo wired controller |
 
-### Xbox One and Series (80)
+### Xbox One and Series (79)
 
 | Vendor | Devices |
 | --- | --- |
@@ -90,10 +89,9 @@ family gets that family's layout and works everywhere that family does.
 | **HP** | HP HyperX Clutch Gladiate |
 | **Mad Catz** | Mad Catz FightStick TE 2 |
 | **Thrustmaster** | ThrustMaster eSwap PRO Controller Xbox |
-| **Unknown** | Unknown Controller |
 | **Xbox Series** | Xbox Series X Controller |
 
-### PlayStation 3 (71)
+### PlayStation 3 (69)
 
 | Vendor | Devices |
 | --- | --- |
@@ -103,9 +101,7 @@ family gets that family's layout and works everywhere that family does.
 | **PDP** | Afterglow PS3, afterglow ps3, PDP Afterglow Wireless PS3 controller, PDP Versus Fighting Pad, Rock Candy PS3, Rock Candy PS4 |
 | **Mad Catz** | Mad Catz Alpha PS3 mode, Mad Catz Alpha PS4 mode, Mad Catz FightStick TE 2+ PS3, Madcatz Fightstick Pro |
 | **Qanba** | Qanba Dragon, Qanba Drone, Qanba Obsidian, Qanba Q1 fight stick |
-| **PS2** | PS2 ACME GA-D5, PS2 maybe break out later |
-| **actually** | actually ps2 |
-| **Actually** | Actually ps2 -maybe break out later Lakeview Research WiseGroup Ltd, MP-8866 Dual Joypad |
+| **PS2** | PS2, PS2 ACME GA-D5 |
 | **BDA** | BDA Pro Ex |
 | **BTP** | BTP 2163 |
 | **Cyborg** | Cyborg V3 |
@@ -119,7 +115,7 @@ family gets that family's layout and works everywhere that family does.
 | **Logitech** | Logitech Chillstream |
 | **madcats** | madcats fightpad pro ps3 |
 | **Power A** | Power A PS3 |
-| **ps2** | ps2 maybe break out later |
+| **ps2** | ps2 |
 | **Retro** | Retro Controller |
 | **ShanWan** | ShanWan PS3 |
 | **Sony** | Sony PS3 Controller |
@@ -128,12 +124,12 @@ family gets that family's layout and works everywhere that family does.
 | **Thrustmaster** | Thrustmaster wireless 3-1 |
 | **Venom** | Venom Arcade Stick |
 
-### PlayStation 4 (64)
+### PlayStation 4 (63)
 
 | Vendor | Devices |
 | --- | --- |
-| **NACON** | NACON Asymmetric Controller -- on windows this doesn't enumerate, NACON Asymmetric Controller Wireless Dongle -- show up as ps4 until you connect controller to it then it reboots into Xbox controller with different vvid/pid, NACON Daija Arcade Stick, NACON Daija Fight Stick, Nacon PS4 Compact Controller, NACON PS4 controller in Xbox mode, NACON Revolution 5 Pro, NACON Revolution 5 Pro (PS4 mode wired), NACON Revolution Infinite, Nacon Revolution Pro Controller, NACON Revolution Pro Controller 3, Nacon Revolution Pro Controller v2, NACON Revolution Unlimited, NACON Revolution Unlimited Wireless Dongle, NACON Unknown Controller, NACON Wireless Controller for PS4 |
-| **HORI** | HORI Fighting Commander 4 PS4, HORI Fighting Commander OCTA, HORI Fighting Commander PS4, HORI Fighting Stick mini 4, Hori Fighting Stick mini 4 kai, Hori Fighting Stick α, Hori mini wired https://www.playstation.com/en-us/explore/accessories/gaming-controllers/mini-wired-gamepad/, HORI Real Arcade Pro 4, HORI TAC PRO mousething, HORI TAC4 mousething, HORI Wireless Controller Light, HORIPAD 4 FPS, HORIPAD 4 FPS Plus |
+| **NACON** | NACON Asymmetric Controller, NACON Asymmetric Controller Wireless Dongle, NACON Daija Arcade Stick, NACON Daija Fight Stick, Nacon PS4 Compact Controller, NACON PS4 controller in Xbox mode, NACON Revolution 5 Pro, NACON Revolution 5 Pro (PS4 mode wired), NACON Revolution Infinite, Nacon Revolution Pro Controller, NACON Revolution Pro Controller 3, Nacon Revolution Pro Controller v2, NACON Revolution Unlimited, NACON Revolution Unlimited Wireless Dongle, NACON Wireless Controller for PS4 |
+| **HORI** | HORI Fighting Commander 4 PS4, HORI Fighting Commander OCTA, HORI Fighting Commander PS4, HORI Fighting Stick mini 4, Hori Fighting Stick mini 4 kai, Hori Fighting Stick α, Hori mini wired, HORI Real Arcade Pro 4, HORI TAC PRO mousething, HORI TAC4 mousething, HORI Wireless Controller Light, HORIPAD 4 FPS, HORIPAD 4 FPS Plus |
 | **Razer** | Razer Panthera Evo Fightstick, Razer Raiju 2 Tournament edition BT, Razer Raiju 2 Tournament edition USB, Razer Raiju 2 Ultimate BT, Razer Raiju 2 Ultimate USB, Razer Raiju PS4 Controller, Razer RAION Fightpad |
 | **Qanba** | Qanba Dragon, Qanba Dragon Arcade Joystick, Qanba Drone, Qanba Obsidian, Qanba Obsidian Arcade Joystick |
 | **Mad Catz** | Mad Catz FightPad Pro PS4, Mad Catz FightStick TE 2 PS4, Mad Catz FightStick TE 2+ PS4, Mad Catz FightStick TE S+ PS4 |
@@ -149,8 +145,8 @@ family gets that family's layout and works everywhere that family does.
 | **P4** | P4 Wired Gamepad generic knock off |
 | **PowerA** | PowerA Fusion Fight Pad |
 | **STRIKEPAD** | STRIKEPAD PS4 Grip Add-on |
-| **Thrustmaster** | Thrustmaster Eswap Pro - No gyro and lightbar doesn't change color. Works otherwise |
-| **Venom** | Venom Arcade Stick - XXX:this may not work and may need to be called a ps3 controller |
+| **Thrustmaster** | Thrustmaster Eswap Pro |
+| **Venom** | Venom Arcade Stick |
 | **ZEROPLUS** | ZEROPLUS P4 Wired Gamepad |
 
 ### PlayStation 5 (15)
@@ -165,22 +161,22 @@ family gets that family's layout and works everywhere that family does.
 | **Access** | Access Controller for PS5 |
 | **PDP** | Victrix Pro FS PS4/PS5 (PS5 mode) |
 
-### Nintendo Switch (32)
+### Nintendo Switch (33)
 
 | Vendor | Devices |
 | --- | --- |
 | **PDP** | PDP Afterglow Wave Wired/Wireless Controller for Switch, PDP Afterglow Wired Deluxe+ Audio Controller, PDP Afterglow Wireless Switch Controller, PDP Faceoff Deluxe Wired Pro Controller for Nintendo Switch, PDP Faceoff Wired Deluxe+ Audio Controller, PDP Faceoff Wired Pro Controller for Nintendo Switch, PDP REALMz Wireless Controller, PDP Rockcandy Wired Controller, PDP Wired Fight Pad Pro for Nintendo Switch |
 | **Nintendo Switch** | Nintendo Switch 2 Joy-Con, Nintendo Switch 2 Joy-Con (Left), Nintendo Switch 2 Joy-Con (Right), Nintendo Switch Joy-Con, Nintendo Switch Joy-Con (Left), Nintendo Switch Joy-Con (Right), Nintendo Switch Pro Controller |
+| **PowerA** | PowerA Nintendo Switch Fusion Fight Pad, PowerA Nintendo Switch Fusion Pro Controller - USB, PowerA Nintendo Switch Nano Wired Controller, PowerA Nintendo Switch Spectra Controller, PowerA Super Mario Controller, PowerA Wired Controller Nintendo GameCube Style, PowerA Wired Controller Plus |
 | **HORI** | HORI Pokken Tournament DX Pro Pad, HORI Real Arcade Pro V Hayabusa in Switch Mode, HORI Taiko Controller For Switch, HORI Wireless Switch Pad, HORIPAD for Nintendo Switch, HORIPAD S |
-| **PowerA** | PowerA Nintendo Switch Fusion Fight Pad, PowerA Nintendo Switch Fusion Pro Controller - USB requires toggling switch on back of device, PowerA Nintendo Switch Nano Wired Controller, PowerA Nintendo Switch Spectra Controller, PowerA Super Mario Controller, PowerA Wired Controller Plus/PowerA Wired Controller Nintendo GameCube Style |
 | **ZUIKI** | ZUIKI MasCon for Nintendo Switch ??, ZUIKI MasCon for Nintendo Switch Black, ZUIKI MasCon for Nintendo Switch Red |
-| **Power A** | Power A Fusion Wireless Arcade Stick (USB Mode) Over BT is shows up as 057e 2009 |
+| **Power A** | Power A Fusion Wireless Arcade Stick (USB Mode) |
 
-### Nintendo Switch 2 (5)
+### Nintendo Switch 2 (6)
 
 | Vendor | Devices |
 | --- | --- |
-| **Turtle Beach** | Turtle Beach Afterglow Wave Wired Controller for Nintendo Switch 2, Turtle Beach Afterglow Wired Controller for Switch 2, Turtle Beach Afterglow Wireless RGB Gaming Controller for Nintendo Switch 2 and the Turtle Beach Rematch Wireless RGB Gaming Controller for Nintendo Switch 2, Turtle Beach Rematch Wired Controller for Nintendo Switch 2 |
+| **Turtle Beach** | Turtle Beach Afterglow Wave Wired Controller for Nintendo Switch 2, Turtle Beach Afterglow Wired Controller for Switch 2, Turtle Beach Afterglow Wireless RGB Gaming Controller for Nintendo Switch 2, Turtle Beach Rematch Wired Controller for Nintendo Switch 2, Turtle Beach Rematch Wireless RGB Gaming Controller for Nintendo Switch 2 |
 | **Nintendo Switch** | Nintendo Switch 2 Pro Controller |
 
 ### Steam (13)
@@ -212,9 +208,9 @@ the moment they are plugged in.
 | Vendor | Devices |
 | --- | --- |
 | **HORI** | HORI CO. LTD. FIGHTING STICK 3, HORI CO. LTD. Real Arcade Pro.4, HORI CO. LTD. REAL ARCADE Pro.V3, HORI Fighting Commander, Hori Fighting Commander, Hori Fighting Commander 4 (PS3), Hori Fighting Commander 4 (PS4), HORI Fighting Commander 4 PS3, HORI Fighting Commander 4 PS4, HORI Fighting Commander OCTA, Hori Fighting Stick Mini 3, HORI Fighting Stick mini 4 (PS3), HORI Fighting Stick mini 4 (PS4), HORI Gem Pad 3, Hori Pad 3, Hori Pad 3 Turbo, Hori Pad A, Hori Pokken Tournament DX Pro Pad, HORI Real Arcade Pro, HORI Real Arcade Pro S, Horipad, HORIPAD 4 (PS3), HORIPAD 4 (PS4), HORIPAD FPS PLUS 4, HORIPAD mini4, REAL ARCADE PRO.3, Real Arcade Pro.4, REAL ARCADE PRO.4 VLX, REAL ARCADE Pro.V3, Real Arcade Pro.V4 |
-| **8BitDo** | 8BitDo 64 Bluetooth Controller, 8BitDo FC30 Pro, 8BitDo M30 Gamepad, 8BitDo Micro gamepad, 8BitDo N30 Pro 2, 8BitDo NES30 Gamepad, 8BitDo NES30 Pro, 8BitDo Pro 2, 8BitDo Pro 3, 8Bitdo Receiver, 8BitDo SF30 Pro, 8BitDo SFC30 Gamepad, 8BitDo SN30 Gamepad, 8Bitdo SN30 Gamepad, 8BitDo SN30 Pro, 8Bitdo SN30 Pro, 8BitDo SN30 Pro+, 8BitDo SNES30 Gamepad, 8BitDo Ultimate 2C Wireless, 8BitDo Ultimate Wired Controller, 8BitDo Ultimate Wireless Controller, 8BitDo Zero 2, 8BitDo Zero Gamepad |
+| **8BitDo** | 8BitDo 64 Bluetooth Controller, 8BitDo FC30 Pro, 8BitDo M30 Gamepad, 8BitDo Micro gamepad, 8BitDo N30 Pro 2, 8BitDo NES30 Gamepad, 8BitDo NES30 Pro, 8BitDo Pro 2, 8BitDo Pro 3, 8Bitdo Receiver, 8BitDo SF30 Pro, 8BitDo SFC30 Gamepad, 8Bitdo SN30 Gamepad, 8BitDo SN30 Gamepad, 8Bitdo SN30 Pro, 8BitDo SN30 Pro, 8BitDo SN30 Pro+, 8BitDo SNES30 Gamepad, 8BitDo Ultimate 2C Wireless, 8BitDo Ultimate Wired Controller, 8BitDo Ultimate Wireless Controller, 8BitDo Zero 2, 8BitDo Zero Gamepad |
 | **Mad Catz** | Mad Catz C.T.R.L.R, Mad Catz FightPad PRO (PS3), Mad Catz FightPad PRO (PS4), Mad Catz fightstick (PS3), Mad Catz fightstick (PS4), Mad Catz FightStick TE S+ (PS3), Mad Catz FightStick TE S+ (PS4), Mad Catz FightStick TE2+ PS3, Mad Catz FightStick TE2+ PS4, Mad Catz Micro C.T.R.L.R, Mad Catz TE2 PS3 Fightstick, Mad Catz TE2 PS4 Fightstick, Madcatz Arcade Fightstick TE S PS3, Madcatz Arcade Fightstick TE S+ PS3, MadCatz PC USB Wired Stick 8818, MadCatz PC USB Wired Stick 8838, MadCatz SFIV FightStick PS3 |
-| **Logitech** | Logitech Chillstream, Logitech ChillStream, Logitech Cordless Precision, Logitech Cordless RumblePad 2, Logitech Cordless Wingman, Logitech Dual Action, Logitech F310 Gamepad (DInput), Logitech F510 Gamepad, Logitech F510 Gamepad (DInput), Logitech F710 Gamepad, Logitech F710 Gamepad (DInput), Logitech F710 Gamepad (XInput), Logitech Precision Gamepad, Logitech RumblePad 2, Logitech WingMan Cordless RumblePad, Logitech Wireless Gamepad (DInput) |
+| **Logitech** | Logitech ChillStream, Logitech Chillstream, Logitech Cordless Precision, Logitech Cordless RumblePad 2, Logitech Cordless Wingman, Logitech Dual Action, Logitech F310 Gamepad (DInput), Logitech F510 Gamepad, Logitech F510 Gamepad (DInput), Logitech F710 Gamepad, Logitech F710 Gamepad (DInput), Logitech F710 Gamepad (XInput), Logitech Precision Gamepad, Logitech RumblePad 2, Logitech WingMan Cordless RumblePad, Logitech Wireless Gamepad (DInput) |
 | **Saitek** | Saitek Cyborg, Saitek Cyborg V.1 Game pad, Saitek Cyborg V.1 Game Pad, Saitek Dual Analog Pad, Saitek P2500 Force Rumble Pad, Saitek P2900, Saitek P2900 Wireless Pad, Saitek P480 Rumble Pad, Saitek P880, Saitek P990, Saitek P990 Dual Analog Pad, Saitek PLC Saitek P3200 Rumble Pad, Saitek PS1000, Saitek PS2700, Saitek Rumble Pad |
 | **Qanba** | QanBa Arcade JoyStick, QanBa Arcade JoyStick 1008, QanBa Arcade JoyStick 4018, Qanba Dragon Arcade Joystick, Qanba Dragon Arcade Joystick (PS3), Qanba Dragon Arcade Joystick (PS4), Qanba Drone 2 Arcade Joystick (PS4), Qanba Drone 2 Arcade Joystick (PS5), Qanba Drone Arcade Joystick (PS4), QanBa Joystick Plus, QanBa Joystick Q4RAF, Qanba Obsidian Arcade Joystick (PS3), Qanba Obsidian Arcade Joystick (PS4) |
 | **Nintendo** | Nintendo 3DS, Nintendo GameCube Controller, Nintendo N64 Controller, Nintendo NES Controller (L), Nintendo NES Controller (R), Nintendo Retrolink USB Super SNES Classic Controller, Nintendo SEGA Genesis Controller, Nintendo SNES Controller, Nintendo Wii Remote, Nintendo Wii Remote Classic Controller, Nintendo Wii Remote Pro Controller, Nintendo Wiimote |
@@ -249,8 +245,8 @@ the moment they are plugged in.
 | **GameStop** | GameStop Gamepad, GameStop PS4 Fun Controller |
 | **GreenAsia** | GreenAsia Electronics 4Axes 12Keys Gamepad, GreenAsia Inc. USB Joystick |
 | **HitBox** | HitBox (PS3/PC) Analog Mode, HitBox Edition Cthulhu+ |
-| **iBuffalo** | iBuffalo SNES Controller, iBuffalo USB 2-axis 8-button Gamepad |
 | **iBUFFALO** | iBUFFALO BSGP1204 Series, iBUFFALO BSGP1204P Series |
+| **iBuffalo** | iBuffalo SNES Controller, iBuffalo USB 2-axis 8-button Gamepad |
 | **Ipega** | Ipega PG-9023, Ipega PG-9087S |
 | **JC-U3613M** | JC-U3613M (DInput), JC-U3613M - DirectInput Mode |
 | **Jess** | Jess Tech Dual Analog Rumble Pad, Jess Technology USB Game Controller |
@@ -300,8 +296,8 @@ the moment they are plugged in.
 | **Fighting** | Fighting Commander |
 | **Gamecube** | Gamecube Controller |
 | **GameCube** | GameCube {HuiJia USB box} |
-| **Gamepad** | Gamepad Pro USB |
 | **GAMEPAD** | GAMEPAD 3 TURBO |
+| **Gamepad** | Gamepad Pro USB |
 | **GameSir-K1** | GameSir-K1 FLUX |
 | **GameSir-T3** | GameSir-T3 2.02 |
 | **Gamestop** | Gamestop BB-070 X360 Controller |
@@ -319,8 +315,8 @@ the moment they are plugged in.
 | **HRAP2** | HRAP2 on PS/SS/N64 Joypad to USB BOX |
 | **HuiJia** | HuiJia SNES Controller |
 | **idroid:con** | idroid:con |
-| **Impact** | Impact Black |
 | **impact** | impact |
+| **Impact** | Impact Black |
 | **IMS** | IMS PCU#0 Gamepad Interface |
 | **INJUSTICE** | INJUSTICE FightStick PS3 Controller |
 | **InterAct** | InterAct GoPad I-73000 |
@@ -369,9 +365,9 @@ the moment they are plugged in.
 | **SHANWAN** | SHANWAN PS3/PC Gamepad |
 | **SL-6555-SBK** | SL-6555-SBK |
 | **SL-6566** | SL-6566 |
-| **SPEEDLINK** | SPEEDLINK STRIKE Gamepad |
-| **SpeedLink** | SpeedLink Strike FX |
 | **Speedlink** | Speedlink Torid |
+| **SpeedLink** | SpeedLink Strike FX |
+| **SPEEDLINK** | SPEEDLINK STRIKE Gamepad |
 | **SplitFish** | SplitFish Game Controller |
 | **STK-7024X** | STK-7024X |
 | **SVEN** | SVEN X-PAD |
@@ -464,7 +460,7 @@ controller together, so a button on the throttle chords with a button on the sti
 
 | Vendor | Devices |
 | --- | --- |
-| **HORI** | Hori Fighting Stick Alpha in PC Mode, Hori Fighting Stick Alpha in PS4 Mode, Hori Fighting Stick Alpha in PS5 Mode, Hori Fighting Stick mini 4 kai, Hori Real Arcade Pro 4, HORI Real Arcade Pro 4, Hori Real Arcade Pro Hayabusa Xbox One, HORI Real Arcade Pro V Hayabusa in Switch Mode, Hori Real Arcade Pro V Kai 360, Hori Real Arcade Pro V Kai Xbox One, Hori Real Arcade Pro VX, Hori Real Arcade Pro VX-SA, Hori Real Arcade Pro. EX, Hori Real Arcade Pro.EX, Hori Real Arcade Pro.EX Premium VLX, Hori Real Arcade Pro.VX SA, Real Arcade Pro 4 |
+| **HORI** | Hori Fighting Stick Alpha in PC Mode, Hori Fighting Stick Alpha in PS4 Mode, Hori Fighting Stick Alpha in PS5 Mode, Hori Fighting Stick mini 4 kai, HORI Real Arcade Pro 4, Hori Real Arcade Pro 4, Hori Real Arcade Pro Hayabusa Xbox One, HORI Real Arcade Pro V Hayabusa in Switch Mode, Hori Real Arcade Pro V Kai 360, Hori Real Arcade Pro V Kai Xbox One, Hori Real Arcade Pro VX, Hori Real Arcade Pro VX-SA, Hori Real Arcade Pro. EX, Hori Real Arcade Pro.EX, Hori Real Arcade Pro.EX Premium VLX, Hori Real Arcade Pro.VX SA, Real Arcade Pro 4 |
 | **Qanba** | Qanba Dragon Arcade Joystick in PC Mode, Qanba Dragon Arcade Joystick in PS3 Mode, Qanba Dragon Arcade Joystick in PS4 Mode, Qanba Obsidian Arcade Joystick in PC Mode, Qanba Obsidian Arcade Joystick in PS3 Mode, Qanba Obsidian Arcade Joystick in PS4 Mode |
 | **Hitbox** | Hitbox Arcade Stick |
 | **Mad Catz** | Street Fighter IV Arcade Stick TE - Chun Li |

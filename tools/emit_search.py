@@ -116,12 +116,12 @@ def aliases_for(name):
 def display(name):
     tail = re.split(r"\s+-\s+", name, maxsplit=1)
     if len(tail) == 2 and (tail[1][:1].islower() or "," in tail[1]
-                           or re.search(r"no|only|hardcoded", tail[1], re.I)):
+                           or re.search(r"\bno\b|only|hardcoded", tail[1], re.I)):
         name = tail[0]
     name = name.strip()
     def drop(m):
         inner = m.group(1)
-        if len(inner) > 14 or "," in inner or re.search(r"no|only|hardcoded", inner, re.I):
+        if len(inner) > 14 or "," in inner or re.search(r"\bno\b|only|hardcoded", inner, re.I):
             return ""
         return m.group(0)
     name = re.sub(r"\s*\(([^)]*)\)", drop, name).strip()

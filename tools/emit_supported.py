@@ -30,22 +30,61 @@ DROP_PAREN = re.compile(r"^(linux|mac|macos|osx|windows|unlisted|unconfirmed|unt
                         r"wired|wireless \(.*|old|new|v\d+ firmware)$", re.I)
 
 
+# SDL's comments double as a developer scratchpad. Alongside product names they
+# carry URLs, "XXX:" notes, enumeration caveats and placeholders. Those are not
+# device names and must not reach a page that claims to list device names.
+NOTE_LEAD = re.compile(
+    r"\s+(?:--|-)\s*(?:XXX|TODO|FIXME|NOTE)\b.*$|"      # marker notes
+    r"\s*\bXXX\s*:.*$|"                                  # XXX: inline
+    r"\s+(?:Over\s+BT|On\s+windows|Works\s+otherwise)\b.*$|"
+    r"\s+(?:requires|shows\s+up\s+as|this\s+may|maybe)\b.*$",
+    re.I)
+JUNK = re.compile(r"^\s*$|^unknown\b|\bunknown controller\b|^actually\b", re.I)
+
+
 def display(name):
+    # A URL is a reference, never a product name.
+    name = re.sub(r"https?://\S+|\bwww\.\S+", "", name)
+    # A double dash always introduces commentary in this file.
+    name = re.split(r"\s+--\s+", name, maxsplit=1)[0]
+    name = NOTE_LEAD.sub("", name)
+    # A single dash introduces commentary when what follows reads like prose.
     tail = re.split(r"\s+-\s+", name, maxsplit=1)
     if len(tail) == 2 and (tail[1][:1].islower() or "," in tail[1]
-                           or re.search(r"no|only|hardcoded", tail[1], re.I)):
+                           or re.search(r"\bno\b|only|hardcoded|requires|doesn", tail[1], re.I)):
         name = tail[0]
 
     def drop(m):
         inner = m.group(1).strip()
         if DROP_PAREN.match(inner):
             return ""
-        if len(inner) > 14 or "," in inner or re.search(r"no|only|hardcoded", inner, re.I):
+        if len(inner) > 14 or "," in inner or re.search(r"\bno\b|only|hardcoded", inner, re.I):
             return ""
         return m.group(0)
 
     name = re.sub(r"\s*\(([^)]*)\)", drop, name)
-    return re.sub(r"\s{2,}", " ", name).strip(" ,-")
+    name = re.sub(r"\s{2,}", " ", name).strip(" ,-/")
+    return "" if JUNK.search(name) else name
+
+
+
+# A few comments name two products in one breath. Split those, so each lands as
+# its own row rather than as one 157-character entry.
+def expand(name):
+    out = []
+    for part in name.split(" and the "):
+        # Two products only when the vendor is repeated on both sides, as in
+        # "PowerA Wired Controller Plus/PowerA Wired Controller GameCube Style".
+        # A bare alternation like "Victrix Pro FS PS4/PS5 (PS4 mode)" is ONE
+        # label and splitting it produced a row called "PS5 (PS4 mode)".
+        if "/" in part:
+            left, _, right = (x.strip() for x in part.partition("/"))
+            lw, rw = left.split(), right.split()
+            if lw and rw and lw[0].lower() == rw[0].lower() and len(lw) > 1 and len(rw) > 1:
+                out.extend([left, right])
+                continue
+        out.append(part.strip())
+    return [x for x in out if x]
 
 
 # ── controller_list.h: identity + family + label ────────────────────────────
@@ -86,9 +125,8 @@ for line in CL.splitlines():
     typ, _, name, comment = m.groups()
     label = (name or "").strip() or (comment or "").strip()
     label = re.sub(r"\s*\(.*?only.*?\)\s*$", "", label, flags=re.I).strip()
-    label = display(label)
-    if label:
-        fam[FAMILY.get(typ, "Other")].add(label)
+    for one in expand(display(label)):
+        fam[FAMILY.get(typ, "Other")].add(one)
 
 # ── SDL_gamepad_db.h: shipped mappings, by name ─────────────────────────────
 mapped = set()
@@ -96,9 +134,9 @@ for line in DB.splitlines():
     m = re.match(r'\s*"([0-9a-fA-F]{32}),([^,]+),', line)
     if m:
         n = m.group(2).strip()
-        n = display(n)
-        if n and n != "*" and not n.lower().startswith("unknown"):
-            mapped.add(n)
+        for one in expand(display(n)):
+            if one != "*":
+                mapped.add(one)
 
 # ── SDL_joystick.c category tables ──────────────────────────────────────────
 def table(name):
