@@ -9,8 +9,7 @@ shakers and subwoofers.*
 
 The tab is per slot. It works with Xbox, DualShock 4 / DualSense, and
 Nintendo Switch Pro virtual controllers, plus Extended virtual controllers
-with force feedback, such as racing wheels. Only game feedback plays
-through the audio output. Macro and test rumble stay on the controller.
+with force feedback, such as racing wheels. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
 ---
 
@@ -66,4 +65,4 @@ carries a **Reset All** for the whole card.
 - [Controller Audio](controller-audio.md) covers the controller's own
   speaker and haptic-tone audio.
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

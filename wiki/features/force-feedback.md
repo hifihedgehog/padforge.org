@@ -137,7 +137,7 @@ The Extended virtual controller advertises DirectInput force feedback by default
 
 ## PlayStation pads
 
-When a slot outputs **PlayStation** and the physical device you mapped is itself a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble, lightbar, adaptive triggers, and the mic LED together in one update to the pad. Game rumble and your effect settings arrive in sync, so nothing fights over the device.
+When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble, lightbar, adaptive triggers, and the mic LED together in one update to the pad, whatever the slot's output type. Game rumble and your effect settings arrive in sync, so nothing fights over the device.
 
 ---
 
@@ -241,7 +241,7 @@ Every slider has its own reset button. Reset All restores everything in its sect
 <!-- SCREENSHOT: pad-bass-shakers -->
 ![Rumble to Audio routing game feedback to a bass shaker](../images/pad-bass-shakers.png)
 
-The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Only game feedback plays through the audio output. Macro and test rumble stay on the controller.
+The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
 Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the **Force Feedback** toggle with **Customize** on, or a catalog profile that ships with it). Extended slots without force feedback, Keyboard+Mouse, and MIDI hide it.
 
@@ -321,4 +321,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

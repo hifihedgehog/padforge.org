@@ -4063,11 +4063,11 @@
 <p><strong>A Nintendo virtual controller is active but the game does not react to it.</strong></p>
 <ol>
 <li>Install <strong>HIDMaestro</strong> from <a href="../features/settings/">Settings</a>. The Nintendo output rides the same driver as Xbox, PlayStation, and Extended.</li>
-<li>Games see the slot as the picked Nintendo profile, a <strong>Nintendo Switch Pro Controller</strong> or a <strong>Switch 2 Pro Controller</strong>. XInput-only games never read either one. Use an Xbox slot for those.</li>
+<li>Games see the slot as the picked Nintendo profile, a <strong>Nintendo Switch Pro Controller</strong> or a <strong>Nintendo Switch 2 Pro Controller</strong>. XInput-only games never read either one. Use an Xbox slot for those.</li>
 <li>Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.</li>
 <li>Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.</li>
 <li>Face buttons follow Nintendo lettering, so A sits on the right and B on the bottom. Prompts that look swapped against an Xbox pad are the Switch layout working as intended.</li>
-<li>The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers <strong>Switch Pro Controller</strong> (the default) and <strong>Switch 2 Pro Controller</strong>.</li>
+<li>The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers <strong>Nintendo Switch Pro Controller</strong> (the default) and <strong>Nintendo Switch 2 Pro Controller</strong>.</li>
 </ol>
 <hr />
 <h2 id="double-input-in-games">Double Input in Games<a class="headerlink" href="#double-input-in-games" title="Permanent link">&para;</a></h2>
@@ -4113,11 +4113,11 @@
 </ol>
 <hr />
 <h2 id="bass-shakers-output-silent">Bass Shakers Output Silent<a class="headerlink" href="#bass-shakers-output-silent" title="Permanent link">&para;</a></h2>
-<p><strong>"Route rumble to an audio output" is on but nothing plays on the shaker or subwoofer.</strong></p>
+<p><strong>"Route Rumble to an Audio Output" is on but nothing plays on the shaker or subwoofer.</strong></p>
 <ol>
 <li>Check the status line on the <strong>Bass Shakers</strong> tab. "Audio output is not running." means the routing is off or the engine is stopped. "The selected output device is unavailable. Audio stays off until it returns." means the chosen <strong>Output Device</strong> disappeared. Pick another or reconnect it.</li>
 <li>The feature works with Xbox, DualShock 4 / DualSense, and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers with force feedback, such as racing wheels. Other slot types have no game feedback to route.</li>
-<li>Only game feedback plays through the audio output. <strong>Test Rumble</strong> on the Force Feedback tab and macro rumble stay on the controller by design. To test the audio path, use the per-voice <strong>Test</strong> buttons or <strong>Frequency Sweep</strong> on the Bass Shakers tab instead.</li>
+<li>Game feedback and <strong>Test Rumble</strong> play through the audio output. Macro rumble stays on the controller by design. Test Rumble on the Force Feedback tab is therefore a valid audio-path check, as are the per-voice <strong>Test</strong> buttons and <strong>Frequency Sweep</strong> on the Bass Shakers tab.</li>
 <li>Set <strong>Master Gain</strong> above zero and enable at least one voice with its own gain above zero.</li>
 <li>Run <strong>Frequency Sweep</strong> (20 to 120 Hz over eight seconds) and note where the shaker responds strongest, then set the voice frequencies there.</li>
 <li>Bluetooth audio devices add noticeable latency. Use a wired output if the thump lags the game.</li>
@@ -4126,7 +4126,7 @@
 <h2 id="extended-controllers-not-working">Extended Controllers Not Working<a class="headerlink" href="#extended-controllers-not-working" title="Permanent link">&para;</a></h2>
 <p><strong>Extended (HIDMaestro) controllers do not appear in games or <code>joy.cpl</code>.</strong></p>
 <ol>
-<li>Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Cancelling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.</li>
+<li>Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Canceling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.</li>
 <li>Verify the HIDMaestro driver shows "Installed" on the <a href="../features/settings/">Settings</a> page.</li>
 <li>Check <code>joy.cpl</code> (Win+R &gt; <code>joy.cpl</code>). If empty, create an Extended slot on the Dashboard first.</li>
 <li>Restart PadForge after installing HIDMaestro.</li>
@@ -4145,7 +4145,7 @@
 </ol>
 <hr />
 <h2 id="midi-not-available">MIDI Not Available<a class="headerlink" href="#midi-not-available" title="Permanent link">&para;</a></h2>
-<p><strong>The MIDI button does not appear in the "Add Controller" popup.</strong></p>
+<p><strong>The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".</strong></p>
 <ol>
 <li>Install <strong>Windows MIDI Services</strong> from <a href="../features/settings/">Settings</a>.</li>
 <li>Windows MIDI Services requires <strong>Windows 11 24H2 (build 26100) or later</strong>. Earlier Windows 11 builds and any Windows 10 build are unsupported by Microsoft's SDK.</li>
@@ -4308,7 +4308,7 @@
 <p><strong>A shared device drives the game, but rumble, LEDs, or keyboard output do not reach the owner PC.</strong></p>
 <ol>
 <li>Feedback returns only for what the physical device supports: rumble, Xbox trigger rumble, wheel force feedback, adaptive triggers, lightbar, player LEDs, Guide button LED brightness, speaker audio, and HD haptic tones. A device without a given feature shows nothing for it.</li>
-<li>Keyboard, mouse, and macros from a shared device are blocked when <strong>gamepad-only</strong> is on for that paired PC. Untick it in the pairing options if you trust the PC.</li>
+<li>Keyboard, mouse, and macros from a shared device are blocked when <strong>Limit This PC to Gamepad Input Only</strong> was ticked for that paired PC (its row under Paired PCs shows "gamepad only"). To allow them, revoke the PC and pair again with the box unticked.</li>
 <li>See <a href="../features/force-feedback/">Force Feedback</a>, <a href="../features/impulse-triggers/">Impulse Triggers</a>, <a href="../features/lighting/">Lighting</a>, and <a href="../features/controller-audio/">Controller Audio</a> for the per-feature setup, which also applies over the link.</li>
 </ol>
 <hr />
@@ -4319,7 +4319,7 @@
 <li>Verify the executable path matches (case-insensitive, full path). Use the file browser button to avoid typos.</li>
 <li>For games launchable from multiple locations, separate paths with the pipe character (<code>|</code>).</li>
 <li>Add the game's own executable, not the launcher's (Steam, Epic, etc.).</li>
-<li>If the game runs elevated but PadForge does not, foreground detection may fail. Run PadForge as administrator.</li>
+<li>PadForge always runs elevated, so it can read the foreground path of elevated games. If a protected process still is not detected, add the game executable that actually owns the window.</li>
 <li>Save after configuring. Profile data must persist to <code>PadForge.xml</code>.</li>
 </ol>
 <hr />
@@ -4477,12 +4477,12 @@
 </ol>
 <hr />
 <h2 id="nfc-reader-not-detected">NFC Reader Not Detected<a class="headerlink" href="#nfc-reader-not-detected" title="Permanent link">&para;</a></h2>
-<p><strong>A USB NFC reader is plugged in but does not appear as a device, or the Register NFC Tag dialog says no reader is found.</strong></p>
+<p><strong>A USB NFC reader is plugged in but does not appear as a device, or the NFC Tags dialog says no reader is detected.</strong></p>
 <ol>
 <li>PadForge reads through the Windows <strong>Smart Card</strong> service (<code>SCardSvr</code>) over the PC/SC stack. Open <code>services.msc</code> and confirm "Smart Card" is running. Windows stops it automatically when the last reader is unplugged.</li>
 <li>Use a <strong>PC/SC contactless reader (CCID)</strong>, such as the ACR122U. Readers without a PC/SC driver do not enumerate.</li>
 <li>A reader plugged in after launch is picked up automatically. PadForge retries roughly every 5 seconds, so wait a moment.</li>
-<li>Register a tag before mapping it: open the Register NFC Tags dialog, tap the tag on the reader, name it, click Register. Each registered tag becomes a bindable button.</li>
+<li>Register a tag before mapping it: open the <strong>NFC Tags</strong> dialog via <strong>Register / Manage NFC Tags</strong>, tap the tag on the reader, name it, click <strong>Register</strong>. Each registered tag becomes a bindable button.</li>
 <li>An unregistered tag only pulses the "Any NFC Tag" button, not a per-tag button. Register the specific tag to bind it on its own.</li>
 <li>PadForge reads only the tag <strong>UID</strong> (NTAG21x, MIFARE, amiibo all work). It does not read tag memory, authenticate sectors, or write tags.</li>
 </ol>
@@ -4609,7 +4609,7 @@
 </tr>
 <tr>
 <td>Bass shakers silent</td>
-<td>Check the Bass Shakers status line. Only game feedback routes to audio</td>
+<td>Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not</td>
 </tr>
 <tr>
 <td>Extended controller not in joy.cpl</td>
@@ -4620,8 +4620,8 @@
 <td>Game must send HID PID 1.0 effects, check gain</td>
 </tr>
 <tr>
-<td>No MIDI button</td>
-<td>Install Windows MIDI Services (Win 11 only)</td>
+<td>MIDI button dimmed</td>
+<td>Install Windows MIDI Services (Win 11 24H2 or later)</td>
 </tr>
 <tr>
 <td>No MIDI output</td>
@@ -4797,7 +4797,7 @@
 <li><a href="../guides/remote-link/">Remote Link</a>: Share a controller between PCs, on your network or across the internet</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

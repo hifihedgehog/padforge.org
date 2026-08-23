@@ -3136,7 +3136,7 @@
 </tr>
 <tr>
 <td>Pitch Bend (0xE)</td>
-<td>A 14-bit (or 16-bit in MIDI 2.0) centered axis</td>
+<td>A 14-bit (MIDI 1.0) or 32-bit (MIDI 2.0) centered axis, both stored as 0-65535</td>
 <td><code>SetPitchBend(scaled)</code></td>
 </tr>
 </tbody>
@@ -3148,7 +3148,7 @@
 <li><strong>Omni Off/On and Mono/Poly (CCs 124–127)</strong> clear the note lanes too, since each carries All Notes Off semantics per MIDI 1.0. CC 122 (Local Control) clears nothing.</li>
 <li><strong>Reset All Controllers (CC 121)</strong> applies the RP-015 reset to the lanes this state models: pitch bend recenters, the mod wheel (CC 1) and pedals (CCs 64–67) drop to 0, expression (CC 11) returns to 127, and the RPN and NRPN selectors (CCs 98–101) return to null. Each reset lane's encoder pulse machine is cleared in both directions, so queued detent pulses stop with the reset. Bank, volume, pan, and sound lanes stay put, per RP-015. Without this, a keyboard panic (121 plus 123) released mapped notes but left a mapped Pitch Bend axis frozen off-center.</li>
 </ul>
-<p>A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (center 0x40, 0x41 is one step up, 0x3F is one step down). A small positive delta queues an up pulse on lane <code>2*cc</code> and a small negative delta queues a down pulse on <code>2*cc+1</code>. Values outside the band read as an absolute fader and never pulse. The two's-complement and signed-bit encoder styles read as absolute jumps. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. <code>MidiInputState</code> holds the note, CC, encoder up and down, and pitch-bend arrays plus a <code>Clone</code>, and is null on <code>CustomInputState</code> for non-MIDI devices.</p>
+<p>A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (center 0x40, 0x41 is one step up, 0x3F is one step down). A small positive delta queues an up pulse on lane <code>2*cc</code> and a small negative delta queues a down pulse on <code>2*cc+1</code>. Values outside the band read as an absolute fader and never pulse. The two's-complement and signed-bit encoder styles read as absolute jumps. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. <code>MidiInputState</code> holds the note, CC, and encoder up and down arrays plus a single pitch-bend value, with a <code>Clone</code>, and is null on <code>CustomInputState</code> for non-MIDI devices.</p>
 <hr />
 <h2 id="enumeration-and-teardown-phase-1e">Enumeration and teardown (Phase 1e)<a class="headerlink" href="#enumeration-and-teardown-phase-1e" title="Permanent link">&para;</a></h2>
 <p><code>UpdateDevices</code> calls <code>UpdateMidiInputDevices</code> as Phase 1e, alongside the SDL, Raw Input, and Precision Touchpad phases. Enumeration is async. A background task refreshes the cached endpoint list (the WinRT device query is expensive and is kept off the poll loop), and the polling thread consumes the latest snapshot. For each endpoint it either keeps an existing <code>MidiInputDevice</code>, or creates one, opens it, and runs it through <code>FindOrCreateUserDevice</code> then <code>LoadFromExternalDevice</code> then <code>IsOnline = true</code>.</p>
@@ -3177,7 +3177,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: the Windows MIDI Services install.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

@@ -46,7 +46,7 @@ graph TB
     subgraph "External Systems"
         SDL3[SDL3.dll<br/>Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
         OXI[OpenXInput<br/>xinput1_4 shim]
-        HM[HIDMaestro<br/>UMDF2 user-mode driver, 225 profiles<br/>+ native OpenVR driver for the VR slot]
+        HM[HIDMaestro<br/>UMDF2 user-mode driver, 231 profiles<br/>+ native OpenVR driver for the VR slot]
         HH[HidHide Driver]
         WMS[Windows MIDI Services]
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
@@ -111,7 +111,7 @@ Five-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWork
 | **PadForge.Engine** | `net10.0-windows` (Class Library) | Shared data types, SDL3 P/Invoke, device wrappers, input state structures |
 | **PadForge.SteamWorkshop** | `net10.0-windows` (Class Library) | Steam Workshop config import (#9, v4.1): anonymous Steam clients over SteamKit2, VDF parser, Steam Input config model and translator, file cache. References Engine. See [Steam Workshop Config Import Internals](steam-workshop-import-internals.md) |
 | **PadForge.Tests** | `net10.0-windows10.0.26100.0` (xUnit) | Unit tests. References both App and Engine (`Microsoft.NET.Test.Sdk` + `xunit` + `coverlet.collector`) |
-| **PadForge.SteamWorkshop.Tests** | `net10.0-windows` (xUnit) | Parser, client, cache, and translator tests, including 20 golden Workshop fixtures |
+| **PadForge.SteamWorkshop.Tests** | `net10.0-windows` (xUnit) | Parser, client, cache, and translator tests, including 30 golden Workshop fixtures |
 
 `PadForge.App` references `PadForge.Engine` and `PadForge.SteamWorkshop`. The Engine has no WPF dependencies and is reusable. The non-test projects use `GenerateAssemblyInfo=false` and share `AssemblyVersion` / `AssemblyFileVersion` via the repo-root `SharedVersion.cs` linked into each csproj (`<Compile Include="..\SharedVersion.cs" />`). Per-project `Properties/AssemblyInfo.cs` carries no version attributes.
 
@@ -140,7 +140,7 @@ PadForge.App/
     SoundPackageManager.cs            # Sound package install, listing, and lookup for macro sound actions
     SetupApiInterop.cs                # SetupAPI P/Invoke shared by the device-ancestry walks
     SettingsManager.cs                # Slot arrays, profiles, PadSetting defaults, partial class (see below)
-    StartupHelper.cs                  # Run-at-startup registry helper (HKCU\...\Run)
+    StartupHelper.cs                  # Launch-at-logon via a schtasks ONLOGON task (/RL HIGHEST), migrating the legacy HKCU\...\Run entry
     VirtualKey.cs                     # Windows VK code → display name lookup table
 
     Telemetry/                        # Racing-telemetry sources feeding wheel RPM LEDs
@@ -171,7 +171,7 @@ PadForge.App/
       HMaestroProfileCatalog.cs       # HIDMaestro profile lookup (HMProfile per VC subtype)
       HMaestroFfbDescriptor.cs        # Feedback descriptor for HM controllers (rumble + FFB ranges)
       HMaestroFfbDecoder.cs           # Decodes raw HM feedback packets into Vibration / FFB state
-      SonyReportPackers.cs            # DS3 / DS4 / DualSense Report 0x01 input passthrough packers
+      SonyReportPackers.cs            # DS4 / DualSense Report 0x01 input passthrough packers
       UserEffectsDispatcher.cs        # Per-Sony-slot sole writer of effect packets (rumble + lightbar + AT + mic LED)
       PlayStationEffectWriter.cs      # Low-level PlayStation effect packet write helper called by the dispatcher
       TouchpadPulseService.cs         # Sony-side swipe-haptic pulse delivery: 80 ms bursts max-combined into the dispatcher's rumble bytes (#219)
@@ -189,6 +189,7 @@ PadForge.App/
       MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
       KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
       InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
+      MirrorDsp.cs                    # Controller-audio DSP chain for the DualSense speaker/jack mirror: crossfeed, parametric EQ, limiter, AutoEq import (#347)
 
   Services/
     InputService.cs                   # Bridge: InputManager (engine thread) ↔ UI (30Hz timer)
@@ -221,6 +222,7 @@ PadForge.App/
     PadViewModel.cs                   # Per-slot mapping/settings/deadzone/macro configuration
     PadViewModel.Mouse.cs             # Mouse tab state: per-(slot, device) mouse-gesture settings (#200)
     PadViewModel.Touchpad.cs          # Touchpad tab state: per-(slot, device, pad) gesture settings
+    PadViewModel.AudioDsp.cs          # Audio tab state: crossfeed / EQ / limiter settings per (slot, device) (#347)
     DevicesViewModel.cs               # Physical device list with live input visualization
     DeviceRowViewModel.cs             # Single device card in the Devices page
     SettingsViewModel.cs              # App-level settings (polling rate, driver status, etc.)
@@ -298,6 +300,7 @@ PadForge.App/
     CurveEditor.xaml(.cs)             # Interactive sensitivity curve editor (Bezier/linear)
     RangeSlider.cs                    # Dual-thumb range slider (deadzone min/max)
     TriggerTravelArc.xaml(.cs)        # Trigger travel arc visual for the adaptive-trigger surfaces
+    EqCurveControl.cs                 # Graphic EQ response curve for the controller-audio DSP tab (#347)
 
   Views/Controls/
     LabeledShapeIcon.xaml(.cs)        # Labeled shape glyph
@@ -320,6 +323,7 @@ PadForge.App/
     HexToBrushConverter.cs / RgbToBrushConverter.cs  # Color string or RGB triple → Brush
     ExeIconConverter.cs               # Executable path → its shell icon
     UppercaseConverter.cs             # String → upper case
+    EqBandTypeNameConverter.cs        # EQ band type enum → display name (#347)
 
   Resources/
     ControllerIcons.xaml              # XAML resource dictionary with controller icon geometries
@@ -342,7 +346,7 @@ PadForge.App/
       Strings.zh-Hans.resx           # Simplified Chinese
     SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
     SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
-    OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe; SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
+    OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer
 
@@ -353,6 +357,8 @@ PadForge.App/
     css/controller.css                # Responsive dark theme with touch-optimized zones
     js/controller_client.js           # WebSocket client, touch handling, layout renderer
     js/nipplejs.min.js                # Virtual joystick library for analog sticks
+    custom.html                       # Browser-side custom pad builder (#296)
+    js/custom_client.js               # Builder client, persists layouts via /api/custom-layouts (#296)
 
   Themes/
     Generic.xaml                      # Custom control default styles (RangeSlider)
@@ -412,7 +418,7 @@ PadForge.Engine/
     ShapeTemplate.cs            # (v3.3) Pre-processed template: PointCloud + LookupTable, FingerCount, ThresholdOverride, AngularSignature
     AngularMarginRecognizer.cs  # (v3.3) Per-segment angle-direction matcher (GestureSign-style). Runs alongside ShapeRecognizer on single-finger templates and keeps the higher-confidence match
     InBoxShapeTemplates.cs      # (v3.3) Procedural builders for the in-box shapes (Circle, CircleCCW, Square, Triangle, Z, Checkmark)
-    TouchpadCustomGesture.cs    # (v3.3) XML-serializable user-recorded gesture; compiled to a ShapeTemplate at profile load
+    TouchpadCustomGesture.cs    # (v3.3) XML-serializable user-recorded gesture, compiled to a ShapeTemplate at profile load
     TouchpadGestureContext.cs   # (v3.3) Per-(slot, device, padIdx) gesture state: finger paths, timestamps, FiredGesturesThisFrame, cooldown
     TouchpadGestureSettings.cs  # (v3.3) Per-(slot, device, padIdx) toggles + thresholds (every feature off by default)
     TouchpadSettingsEntry.cs    # (v3.3) Serialization wrapper that pairs TouchpadGestureSettings with its (DeviceGuid, TouchpadIndex) key inside PadSetting
@@ -575,7 +581,7 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 
 ```
 PadForge.SteamWorkshop/
-  ISteamWorkshopGate.cs      # Opt-in gate; every client constructor throws when it is off
+  ISteamWorkshopGate.cs      # Opt-in gate. Every client constructor throws when it is off
   Api/                       # SteamWorkshopClient (SteamKit2 anonymous CM), Store / Community /
                              #   RemoteStorage / UGC / Artwork HTTPS clients, shared SteamHttp
   Vdf/                       # Original VDF parser (VdfParser, VdfNode, VdfSyntaxException)
@@ -597,7 +603,7 @@ Added for the Steam Workshop config import (#9, v4.1). Full detail on [Steam Wor
 
 | Advantage | Detail |
 |---|---|
-| Unified API | Gamepad API normalizes button/axis layouts across Xbox, DualSense, Switch Pro, etc.. No per-family code paths |
+| Unified API | Gamepad API normalizes button/axis layouts across Xbox, DualSense, Switch Pro, etc. No per-family code paths |
 | Sensor support | Gyro and accelerometer from DualSense, DS4, Switch Pro, and Joy-Con via one API. DirectInput has no gyro/accel |
 | Background input | `SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS` reads input without window focus |
 | Gamepad database | SDL's `gamecontrollerdb` + PadForge's `gamecontrollerdb_padforge.txt` auto-map hundreds of controllers |
@@ -621,7 +627,7 @@ Virtual Xbox, PlayStation, Nintendo, Extended, and VR controllers all come from 
 | Advantage | Detail |
 |---|---|
 | One driver, two roles | HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side |
-| 225 profiles in the catalog | Pre-built profiles for the long tail of DirectInput devices, plus a profile builder for custom HID descriptors. vJoy was generic-only |
+| 231 profiles in the catalog | Pre-built profiles for the long tail of DirectInput devices, plus a profile builder for custom HID descriptors. vJoy was generic-only |
 | DualSense native | A real virtual DualSense (lightbar, adaptive triggers, mic LED, touchpad). ViGEmBus only emulated Xbox 360, Xbox One, and DS4 |
 | Per-controller `OutputReceived` | One callback per virtual device delivers full game output (rumble, lightbar, AT, FFB). Feeds Sony's `UserEffectsDispatcher` and the FFB decoder |
 | Single bus enumerator | One enumerator GUID, one stack to filter from SDL enumeration. v2's two drivers needed two filters and produced N² phantom controllers at edge cases |
@@ -692,7 +698,7 @@ A **static data container** shared between engine and UI threads:
 - **Slot arrays**: `SlotCreated[]`, `SlotEnabled[]`
 - **Profile data**: `Profiles`, `ActiveProfileId`, `EnableAutoProfileSwitching`
 - **Per-type limits**: `MaxXbox360Slots`, `MaxPlayStationSlots`, `MaxExtendedSlots`, etc.
-- **Helpers**: `CreateDefaultPadSetting()`, `SwapSlots()`, `FindSlotForDevice()`
+- **Helpers**: `CreateDefaultPadSetting()`, `AssignDeviceToSlot()` / `UnassignDevice()`, `GetAssignedSlots()`, `CanSlotTakeType()` (slot swapping is `InputService.SwapSlots()`)
 
 Partial class split across:
 - `Common/SettingsManager.cs`. Profiles, slot arrays, helpers
@@ -761,7 +767,7 @@ Runs the 6-step pipeline (see [Input Pipeline](input-pipeline.md)). Uses a 3-tie
 
 **Drift compensation**: Each cycle accumulates `expectedTicks += targetTicks` and compares against `wallClock.ElapsedTicks`. Late cycles shorten. Early cycles lengthen. Drift exceeding 10 cycles (e.g., after system sleep) resets the wall clock.
 
-`timeBeginPeriod(1)` is set for the polling loop's lifetime. **Auto-idle** (~20 Hz via `Thread.Sleep(50)`) activates when no slots are created. Timing target recalculates each cycle from the adjustable `PollingIntervalMs` (default 1ms, configurable in Settings).
+`timeBeginPeriod(1)` is set for the polling loop's lifetime. **Auto-idle** (~20 Hz via `Thread.Sleep(50)`) activates when no created+enabled slot has an online mapped device, unless a Remote Link peer is connected or a virtual controller is still waiting out its inactivity timeout. Timing target recalculates each cycle from the adjustable `PollingIntervalMs` (default 1ms, configurable in Settings).
 
 ### 2. UI Thread (WPF Dispatcher, ~30 Hz)
 
@@ -779,7 +785,7 @@ All WPF binding occurs on this thread. Engine results use atomic reference swap 
 
 ### 3. WASAPI Audio Thread (AudioBassDetector)
 
-`AudioBassDetector` uses NAudio's `WasapiCapture` in loopback mode. NAudio's internal capture thread delivers audio buffers via `DataAvailable`. The callback runs an 8th-order cascaded IIR low-pass filter (configurable cutoff, default 80 Hz) and updates a volatile `_bassEnergy` float (0.0–1.0). The engine reads this in Step 2 via `AudioBassDetector.BassEnergy` and merges it with game rumble via `max()`.
+`AudioBassDetector` uses NAudio's `WasapiCapture` in loopback mode. NAudio's internal capture thread delivers audio buffers via `DataAvailable`. The callback runs an 8th-order cascaded IIR low-pass filter (configurable cutoff, default 80 Hz) and updates a volatile `_bassEnergy` float (0.0–1.0). The engine reads this in Step 2 via `AudioBassDetector.MotorValue` (the 0..65535 projection of `BassEnergy`) and merges it with game rumble via `max()`. The UI meter reads `BassEnergy`.
 
 Implements `IMMNotificationClient` to restart capture on default audio device change.
 
@@ -798,7 +804,7 @@ Per-device state tracked via `RAWINPUT.header.hDevice` in concurrent dictionarie
 
 **Async enumeration**: Keyboard and mouse device discovery runs on a `Task.Run` background thread during startup, preventing slow HID enumeration from blocking the UI thread. Results merge into the device list when the task completes.
 
-**Mouse path notes:** `lLastX`/`lLastY` are accumulated as relative deltas. Reports whose `usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set are skipped: RDP virtual mice, Wacom tablets in absolute mode, and some KVMs deliver 0..65535 absolute coordinates that would inject huge spurious motion into the gamepad-mapping aim and scroll paths. PadForge's mouse-as-source path is delta-only by design. `RI_MOUSE_HWHEEL` (horizontal scroll) is currently dropped; only `RI_MOUSE_WHEEL` is consumed.
+**Mouse path notes:** `lLastX`/`lLastY` are accumulated as relative deltas. For reports whose `usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set, the `lLastX`/`lLastY` delta is discarded (buttons and wheel in the same report are still consumed): RDP virtual mice, Wacom tablets in absolute mode, and some KVMs deliver 0..65535 absolute coordinates that would inject huge spurious motion into the gamepad-mapping aim and scroll paths. PadForge's mouse-as-source path is delta-only by design. `RI_MOUSE_HWHEEL` (horizontal scroll) is currently dropped. Only `RI_MOUSE_WHEEL` is consumed.
 
 ### 5. Precision Touchpad Reader Thread
 
@@ -826,7 +832,7 @@ _hookThread = new Thread(() => HookThreadProc(ready))
 };
 ```
 
-Created only when "Consume mapped inputs" is enabled. Installs `WH_KEYBOARD_LL` / `WH_MOUSE_LL` hooks and runs a `GetMessageW` pump. Suppression sets update via volatile reference swap from the UI thread. Stopped when the engine stops or hiding is disabled.
+Created when a device has **Consume Mapped Inputs (Hooks)** enabled, or when a global hotkey is registered. Installs `WH_KEYBOARD_LL` / `WH_MOUSE_LL` hooks and runs a `GetMessageW` pump. Suppression sets update via volatile reference swap from the UI thread. Stopped when the engine stops or hiding is disabled.
 
 ### 8. Web Controller Server Thread
 
@@ -851,7 +857,7 @@ _mouseInjectorThread = new Thread(MouseInjectorLoop)
 };
 ```
 
-Started in `Start()` right after the polling thread, so it runs whenever the engine runs. The poll thread and the KBM virtual controller accumulate macro mouse-move deltas with `Interlocked.Add` into `_pendingMouseDx` / `_pendingMouseDy` (scroll into `_pendingScroll` / `_pendingScrollH`). This thread drains them with `Interlocked.Exchange` and issues one `SendInput` per tick, then `Thread.Sleep(2)` (~500 Hz cap, held near 2 ms by the poll loop's `timeBeginPeriod(1)`).
+Started in `Start()` right after the polling thread, so it runs whenever the engine runs. The poll thread and the KBM virtual controller accumulate macro mouse-move deltas with `Interlocked.Add` into `_pendingMouseDx` / `_pendingMouseDy` (scroll into `_pendingScroll` / `_pendingScrollH`). This thread drains them with `Interlocked.Exchange`, issues `SendInput` (one call for movement, one for scroll), then `Thread.Sleep(2)` while input keeps arriving (~500 Hz cap, held near 2 ms by the poll loop's `timeBeginPeriod(1)`). With nothing pending it parks on a wait handle until the poll thread signals a new delta.
 
 Injected mouse movement is processed synchronously: it traverses every process's low-level mouse hook chain. A `SendInput` on the poll thread itself could collapse the 1000 Hz poll rate to ~200 Hz, which is why the syscall is offloaded here. Accumulated delta is batched, never dropped. On shutdown the loop drains one final flush.
 
@@ -1004,7 +1010,7 @@ Native libraries adjacent to `PadForge.exe`:
 | Library | Caller | Notes |
 |---|---|---|
 | `SDL3.dll` | `SDL3Minimal.cs` | Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button support. `Resources/SDL3/x64/` |
-| `xinput1_4.dll` | XInput-consuming code paths | OpenXInput fork. Single-file-embedded; `SetDllDirectory` at launch resolves the extracted copy ahead of System32. Filters HM virtuals from PadForge's own XInput view |
+| `xinput1_4.dll` | XInput-consuming code paths | OpenXInput fork. Single-file-embedded. `SetDllDirectory` at launch resolves the extracted copy ahead of System32. Filters HM virtuals from PadForge's own XInput view |
 
 ---
 
@@ -1176,4 +1182,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

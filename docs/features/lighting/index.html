@@ -3490,7 +3490,7 @@
 <li><strong>Reset Palette</strong> restores the four default colors (red, green, blue, yellow).</li>
 </ul>
 <p>A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.</p>
-<p>Color Cycle exposes a <strong>Blend Smoothly Between Palette Colors</strong> checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.</p>
+<p>Color Cycle exposes a <strong>Blend Smoothly Between Palette Colors</strong> checkbox. On, the bar lerps between consecutive palette entries. Off, it hops to the next entry every Period divided by the palette size (750 ms per color with the default four-color palette at 3000 ms), so one full Period walks the whole palette.</p>
 <hr />
 <h2 id="audio-driven-settings">Audio-driven settings<a class="headerlink" href="#audio-driven-settings" title="Permanent link">&para;</a></h2>
 <p>Visible for every Audio Pulse and Audio Bands mode.</p>
@@ -3512,7 +3512,7 @@
 <tbody>
 <tr>
 <td>Player Pattern</td>
-<td>Player Number (default), Off, Player 1, Player 2, Player 3, Player 4, All</td>
+<td>Player Number (Default), Off, Player 1, Player 2, Player 3, Player 4, All</td>
 </tr>
 <tr>
 <td>Mute LED Mode</td>
@@ -3571,7 +3571,7 @@
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.</li>
-<li>For Color Cycle, Blend Smoothly looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.</li>
+<li>For Color Cycle, Blend Smoothly lerps between neighboring palette entries. With the blend off, the bar holds each entry for Period divided by the palette size, then hops to the next. Either way the dispatcher runs at the same cadence.</li>
 <li>Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.</li>
 <li>If you drag Mid-to-High below Low-to-Mid, PadForge raises Mid-to-High to match. The Medium color then never shows and the bar switches straight from Quiet to Loud.</li>
 </ul>
@@ -3583,7 +3583,7 @@
 <li><a href="../../guides/macros/">Macros</a>: the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, and Set Guide LED Brightness macro action types.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

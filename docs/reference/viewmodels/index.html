@@ -3317,6 +3317,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#audio-dsp-chain-347" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio DSP Chain (#347)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#impulse-triggers-tab-32" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4536,6 +4547,17 @@
     <span class="md-ellipsis">
       
         Persona haptics (#271 item 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audio-dsp-chain-347_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio DSP chain (#347)
       
     </span>
   </a>
@@ -6237,6 +6259,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#audio-dsp-chain-347" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio DSP Chain (#347)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#impulse-triggers-tab-32" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7463,6 +7496,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#audio-dsp-chain-347_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio DSP chain (#347)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#headphone-jack-and-audio-path" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7748,7 +7792,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>XAML binding:</strong> Sidebar <code>ListBox</code> binds to <code>MainViewModel.NavControllerItems</code>. Each template binds <code>SlotNumber</code>, <code>InstanceLabel</code>, <code>IconKey</code> (via <code>DynamicResource</code>), and <code>IsEnabled</code>.</p>
+<p><strong>Sidebar wiring:</strong> MainWindow code-behind rebuilds one wpf-ui <code>NavigationViewItem</code> per <code>NavControllerItems</code> entry on <code>NavControllerItemsRefreshed</code> (<code>RebuildControllerSection</code> / <code>CreateControllerNavItem</code>), and subscribes each item's <code>PropertyChanged</code> so <code>SlotNumber</code>, <code>InstanceLabel</code>, <code>IconKey</code> (matched as a plain string in <code>UpdateControllerNavItemContent</code>), <code>IsEnabled</code>, and the flame-state flags update the card in place.</p>
 <hr />
 <h2 id="mainviewmodel">MainViewModel<a class="headerlink" href="#mainviewmodel" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>MainViewModel.cs</code>
@@ -7804,7 +7848,7 @@
 <tr>
 <td><code>SelectedNavTag</code></td>
 <td><code>string</code></td>
-<td>Current nav tag: <code>"Dashboard"</code>, <code>"Pad1"</code>–<code>"Pad16"</code>, <code>"Devices"</code>, <code>"Settings"</code>, <code>"About"</code>. Also notifies <code>IsPadPageSelected</code> and <code>SelectedPadIndex</code>.</td>
+<td>Current nav tag: <code>"Dashboard"</code>, <code>"Pad1"</code>–<code>"Pad16"</code>, <code>"Profiles"</code>, <code>"Devices"</code>, <code>"Settings"</code>, <code>"About"</code>. Also notifies <code>IsPadPageSelected</code> and <code>SelectedPadIndex</code>.</td>
 </tr>
 <tr>
 <td><code>IsPadPageSelected</code></td>
@@ -8068,7 +8112,7 @@
 <tr>
 <td><code>HidHideStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+<td>Computed: <code>"Installed"</code> / <code>"Not Installed"</code>.</td>
 </tr>
 <tr>
 <td><code>IsMidiServicesInstalled</code></td>
@@ -8078,7 +8122,7 @@
 <tr>
 <td><code>MidiServicesStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+<td>Computed: <code>"Installed"</code> / <code>"Not Installed"</code>.</td>
 </tr>
 <tr>
 <td><code>IsSteamVrInstalled</code></td>
@@ -8103,7 +8147,7 @@
 <tr>
 <td><code>SteamVrStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed, tiered (#287), deepest true state wins: <code>"Not installed"</code>, then <code>Vr_Status_ControllersLive</code>, <code>Vr_Status_DriverConnected</code>, <code>Vr_Status_Running</code>, falling back to <code>"Installed"</code>.</td>
+<td>Computed, tiered (#287), deepest true state wins: <code>"Not Installed"</code>, then <code>Vr_Status_ControllersLive</code>, <code>Vr_Status_DriverConnected</code>, <code>Vr_Status_Running</code>, falling back to <code>"Installed"</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -8612,7 +8656,7 @@
 <td><code>StageLedger</code></td>
 <td><code>ObservableCollection&lt;SlotStageInfo&gt;</code></td>
 <td>empty</td>
-<td>Pipeline stage ledger (#175 item 10): one entry per configuration stage the slot's assigned devices actually have (sticks / triggers / gyro / lighting / touchpad / audio), in that order. Rebuilt by <code>InputService.RefreshSlotStageLedgers</code> on its 1 s slow lane. Entries mutate in place when membership is unchanged so the card doesn't re-template.</td>
+<td>Pipeline stage ledger (#175 item 10): one entry per configuration stage the slot's assigned devices actually have (sticks / triggers / gyro / lighting / touchpad / audio), in that order. Rebuilt per slot by <code>InputService.RefreshSlotStageLedger</code> on its 1 s slow lane. Entries mutate in place when membership is unchanged so the card doesn't re-template.</td>
 </tr>
 </tbody>
 </table>
@@ -8823,7 +8867,7 @@
 <tr>
 <td><code>HidHideStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+<td>Computed: <code>"Installed"</code> / <code>"Not Installed"</code>.</td>
 </tr>
 <tr>
 <td><code>HidHideVersion</code></td>
@@ -8917,7 +8961,7 @@
 <tr>
 <td><code>MidiServicesStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not installed"</code>.</td>
+<td>Computed: <code>"Installed"</code> / <code>"Not Installed"</code>.</td>
 </tr>
 <tr>
 <td><code>MidiServicesVersion</code></td>
@@ -8976,7 +9020,7 @@
 <tr>
 <td><code>SteamVrStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed, tiered like the Dashboard row (#287): <code>"Not installed"</code>, then controllers-live / driver-connected / running read off <code>HMaestroVRController.GlobalDriverStatus()</code> and <code>OpenVrConsumerService.ServerConnected</code>, falling back to <code>"Installed"</code>.</td>
+<td>Computed, tiered like the Dashboard row (#287): <code>"Not Installed"</code>, then controllers-live / driver-connected / running read off <code>HMaestroVRController.GlobalDriverStatus()</code> and <code>OpenVrConsumerService.ServerConnected</code>, falling back to <code>"Installed"</code>.</td>
 </tr>
 <tr>
 <td><code>SteamVrInstallDir</code></td>
@@ -9011,7 +9055,7 @@
 </tr>
 <tr>
 <td><code>UninstallSteamVrCommand</code></td>
-<td><code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned</code></td>
+<td><code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned &amp;&amp; !HasAnyVrSlots()</code></td>
 <td>Raises <code>UninstallSteamVrRequested</code>.</td>
 </tr>
 </tbody>
@@ -9064,6 +9108,11 @@
 <td>Set by MainWindow. True if any slot uses MIDI. Blocks <code>UninstallMidiServicesCommand</code>.</td>
 </tr>
 <tr>
+<td><code>HasAnyVrSlots</code></td>
+<td><code>Func&lt;bool&gt;</code></td>
+<td>Set by MainWindow. True if any created slot is a VR slot. Blocks <code>UninstallSteamVrCommand</code>.</td>
+</tr>
+<tr>
 <td><code>HasAnyHidHideDevices</code></td>
 <td><code>Func&lt;bool&gt;</code></td>
 <td>Set by MainWindow. True if any device has HidHide enabled. Blocks <code>UninstallHidHideCommand</code>.</td>
@@ -9071,7 +9120,7 @@
 <tr>
 <td><code>RefreshDriverGuards()</code></td>
 <td>method</td>
-<td>Re-evaluates uninstall <code>CanExecute</code> for HidHide and MIDI Services. Call after slot creation/deletion/type changes.</td>
+<td>Re-evaluates uninstall <code>CanExecute</code> for HidHide, MIDI Services, and SteamVR. Call after slot creation/deletion/type changes.</td>
 </tr>
 </tbody>
 </table>
@@ -10272,8 +10321,8 @@
 </thead>
 <tbody>
 <tr>
-<td><code>RebuildRawStateCollections(int axisCount, IReadOnlyList&lt;int&gt; buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList&lt;ConsumerButtonDisplayItem&gt; consumerButtons, bool isHeadsetMotion, int voiceButtonBase, bool isMicrophone)</code></td>
-<td>Rebuilds axis/button/POV collections for a new device. <code>buttonIndices</code> is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both <code>Index</code> and <code>DisplayNumber</code>). The class-flag booleans default to <code>false</code>, <code>consumerButtons</code> to <code>null</code>, and <code>voiceButtonBase</code> to <code>-1</code>. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, headset-motion, and voice-phrase cases.</td>
+<td><code>RebuildRawStateCollections(IReadOnlyList&lt;int&gt; axisIndices, IReadOnlyList&lt;int&gt; buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList&lt;ConsumerButtonDisplayItem&gt; consumerButtons, bool isHeadsetMotion, int voiceButtonBase, bool isMicrophone)</code></td>
+<td>Rebuilds axis/button/POV collections for a new device. <code>axisIndices</code> is the sparse list of axis slots the device actually exposes (from <code>SupportedAxisIndices</code> / <code>CapAxisIndices</code> through <code>InputService.ResolveAxisIndices</code>), so each <code>AxisDisplayItem.Index</code> is the real <code>state.Axis[]</code> slot and its label reads <code>Axis {slot}</code>, gaps included. <code>buttonIndices</code> is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both <code>Index</code> and <code>DisplayNumber</code>). The class-flag booleans default to <code>false</code>, <code>consumerButtons</code> to <code>null</code>, and <code>voiceButtonBase</code> to <code>-1</code>. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, headset-motion, and voice-phrase cases.</td>
 </tr>
 <tr>
 <td><code>ClearRawState()</code></td>
@@ -10386,12 +10435,12 @@
 <tr>
 <td><code>Index</code></td>
 <td><code>int</code></td>
-<td>Axis index.</td>
+<td>The real <code>state.Axis[]</code> slot (sparse, gaps preserved).</td>
 </tr>
 <tr>
 <td><code>Name</code></td>
 <td><code>string</code></td>
-<td>Display name (e.g., <code>"Axis 0"</code>).</td>
+<td>Display name from that slot (e.g., <code>"Axis 0"</code>).</td>
 </tr>
 <tr>
 <td><code>NormalizedValue</code></td>
@@ -11125,7 +11174,7 @@
 </table>
 <hr />
 <h2 id="padviewmodel">PadViewModel<a class="headerlink" href="#padviewmodel" title="Permanent link">&para;</a></h2>
-<p><strong>Files:</strong> <code>PadViewModel.cs</code>, <code>PadViewModel.Touchpad.cs</code> (partial added in v3.3 for Touchpad-tab properties), <code>PadViewModel.Mouse.cs</code> (partial added for the #200 mouse-gesture tab)
+<p><strong>Files:</strong> <code>PadViewModel.cs</code>, <code>PadViewModel.Touchpad.cs</code> (partial added in v3.3 for Touchpad-tab properties), <code>PadViewModel.Mouse.cs</code> (partial added for the #200 mouse-gesture tab), <code>PadViewModel.AudioDsp.cs</code> (partial added in 4.3.2 for the #347 Audio DSP chain)
 <strong>DataContext for:</strong> Pad page (one per virtual controller slot)</p>
 <p>The largest ViewModel. One per virtual controller slot (16 total). Handles output type, multi-device selection, mapping grid, deadzone/sensitivity, macros, force feedback, Touchpad-tab settings, and live state display.</p>
 <h3 id="identity-and-type">Identity and Type<a class="headerlink" href="#identity-and-type" title="Permanent link">&para;</a></h3>
@@ -12551,8 +12600,82 @@
 </tr>
 </tbody>
 </table>
+<h3 id="audio-dsp-chain-347">Audio DSP Chain (#347)<a class="headerlink" href="#audio-dsp-chain-347" title="Permanent link">&para;</a></h3>
+<p>Audio-tab surface over the per-device crossfeed / EQ / limiter fields on <code>DeviceSlotConfig</code> (see the DeviceSlotConfig section below). Lives in <code>PadViewModel.AudioDsp.cs</code>. The cards are gated on <code>SelectedDeviceHasDspChain</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SelectedDeviceHasDspChain</code></td>
+<td><code>bool</code> (computed, <code>PadViewModel.cs</code>)</td>
+<td>True when the selected device is a Sony pad whose audio rides an <code>AudioPassthroughService</code> sink, the only place the chain runs: DualSense family, or a DualShock 4 over Bluetooth.</td>
+</tr>
+<tr>
+<td><code>EqBands</code></td>
+<td><code>ObservableCollection&lt;EqBandVm&gt;</code></td>
+<td>Grid rows decoded from <code>DeviceSlotConfig.AudioEqBands</code>. Every row edit re-encodes the whole list back into the config (<code>PushEqBands</code>).</td>
+</tr>
+<tr>
+<td><code>RefreshEqBands()</code></td>
+<td>method</td>
+<td>Rebuilds the rows from the selected device's config on every device switch and clears the import status.</td>
+</tr>
+<tr>
+<td><code>AddEqBandCommand</code> / <code>RemoveEqBandCommand</code> / <code>ClearEqBandsCommand</code></td>
+<td><code>RelayCommand</code> (<code>RemoveEqBandCommand</code> takes the <code>EqBandVm</code> row)</td>
+<td>Add a default band, remove one row, or clear the list. Each pushes the encoded list.</td>
+</tr>
+<tr>
+<td><code>ImportAutoEqFileCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td>Open-file dialog for an AutoEq <code>ParametricEQ.txt</code> / <code>FixedBandEQ.txt</code> and apply its Filter lines plus preamp.</td>
+</tr>
+<tr>
+<td><code>ImportAutoEqCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td>Same parse over the clipboard text.</td>
+</tr>
+<tr>
+<td><code>EqImportStatus</code> / <code>HasEqImportStatus</code></td>
+<td><code>string</code> / <code>bool</code></td>
+<td>What the last import did, shown under the buttons. A Graphic EQ file with no Filter lines says so instead of silently doing nothing.</td>
+</tr>
+<tr>
+<td><code>ResetCrossfeedCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td><code>AudioCrossfeedLevel</code> back to 0.</td>
+</tr>
+<tr>
+<td><code>ResetCrossfeedCutCommand</code> / <code>ResetCrossfeedFeedCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td>Custom knobs back to libbs2b's own defaults, 700 Hz and 4.5 dB.</td>
+</tr>
+<tr>
+<td><code>ResetEqPreampCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td><code>AudioEqPreampDb</code> back to 0.</td>
+</tr>
+<tr>
+<td><code>ResetEqCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td>EQ off, preamp 0, bands cleared.</td>
+</tr>
+<tr>
+<td><code>ResetLimiterCommand</code> / <code>ResetLimiterCeilingCommand</code></td>
+<td><code>RelayCommand</code></td>
+<td>Limiter back on, ceiling back to 98.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>EqBandVm</strong> (one editable row, <code>ObservableObject</code>): <code>Enabled</code>, <code>Type</code> (<code>EqBandType</code>: Peaking, LowShelf, HighShelf, HighPass, LowPass, Notch), <code>FrequencyHz</code> (clamped 10 to <code>EqBand.MaxFrequencyHz()</code>), <code>GainDb</code> (clamped −30..30), <code>Q</code> (clamped 0.05..20). Clamps match the engine's so the grid never accepts a band the DSP would silently reject.</p>
 <h3 id="impulse-triggers-tab-32">Impulse Triggers Tab (3.2)<a class="headerlink" href="#impulse-triggers-tab-32" title="Permanent link">&para;</a></h3>
-<p>Per-pad-per-slot per-trigger-motor effects. Tab visible only when an assigned device exposes <code>SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN</code> (Xbox One+, DualSense).</p>
+<p>Per-pad-per-slot per-trigger-motor effects. Tab visible only when the selected device reports <code>HasRumbleTriggers</code>: SDL's <code>SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN</code> or a Microsoft impulse-trigger PID (<code>XboxControllerIdentity.IsImpulseTriggerDevice</code>). Xbox One and later pads.</p>
 <table>
 <thead>
 <tr>
@@ -14772,7 +14895,7 @@
 <td><code>LayerMask</code></td>
 <td><code>string</code></td>
 <td><code>""</code></td>
-<td>(#253/#254) Per-macro shift-layer scope. Empty = fires on any layer; a layer name limits the macro to that layer, Base included. Bound to the Layer dropdown (<code>Macro_Layer</code> / <code>Macro_Layer_Any</code> strings), gated like mapping rows.</td>
+<td>(#253/#254) Per-macro shift-layer scope. Empty = fires on any layer. A layer name limits the macro to that layer, Base included. Bound to the Layer dropdown (<code>Macro_Layer</code> / <code>Macro_Layer_Any</code> strings), gated like mapping rows.</td>
 </tr>
 <tr>
 <td><code>IsNotAlwaysMode</code></td>
@@ -15087,7 +15210,7 @@
 <td><code>ParsedKeyCodes</code></td>
 <td><code>int[]</code></td>
 <td>-</td>
-<td>Computed: VK codes from <code>KeyString</code>; falls back to <code>KeyCode</code>.</td>
+<td>Computed: VK codes from <code>KeyString</code>, falling back to <code>KeyCode</code>.</td>
 </tr>
 <tr>
 <td><code>SelectedKeyToAdd</code></td>
@@ -15374,7 +15497,7 @@
 </table>
 <hr />
 <h3 id="supporting-enums-macroitemcs">Supporting Enums (MacroItem.cs)<a class="headerlink" href="#supporting-enums-macroitemcs" title="Permanent link">&para;</a></h3>
-<p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253; shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
+<p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253. Shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
 <p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code></p>
 <p><strong>MacroRepeatMode:</strong> <code>Once</code>, <code>FixedCount</code>, <code>UntilRelease</code></p>
 <p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317). The volume pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. The append-only rule is stated in code beside the enum.</p>
@@ -15728,7 +15851,7 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">Action</span><span class="o">&lt;</span><span class="n">ProfileShortcutViewModel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">deleteCallback</span><span class="p">,</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">Action</span><span class="o">&lt;</span><span class="n">ProfileShortcutViewModel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">saveCallback</span><span class="p">)</span>
 </code></pre></div>
-<p><code>deleteCallback</code> removes the row; <code>saveCallback</code> triggers a settings save via <code>SettingsService.MarkDirty()</code>.</p>
+<p><code>deleteCallback</code> removes the row. <code>saveCallback</code> triggers a settings save via <code>SettingsService.MarkDirty()</code>.</p>
 <h3 id="switch-mode">Switch Mode<a class="headerlink" href="#switch-mode" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -15857,7 +15980,7 @@
 <tr>
 <td><code>LearnButtonText</code></td>
 <td><code>string</code> (computed)</td>
-<td>"Learning..." or "Learn"</td>
+<td><code>"Recording..."</code> (<code>Profiles_ShortcutLearning</code>) or <code>"Record"</code> (<code>Profiles_ShortcutLearn</code>)</td>
 </tr>
 <tr>
 <td><code>LearnButtonIcon</code></td>
@@ -15977,7 +16100,7 @@
 <td><code>bool</code></td>
 <td><code>false</code></td>
 <td>-</td>
-<td>Stick trackball (#291): flick the mouse stick and release, and the cursor keeps travelling, coasting to a stop on the same constant-deceleration physics the touchpad's Momentum uses.</td>
+<td>Stick trackball (#291): flick the mouse stick and release, and the cursor keeps traveling, coasting to a stop on the same constant-deceleration physics the touchpad's Momentum uses.</td>
 </tr>
 <tr>
 <td><code>MomentumGlide</code></td>
@@ -17064,6 +17187,74 @@
 </tbody>
 </table>
 <p>Reset commands: <code>ResetPersonaHapticsCommand</code>, <code>ResetPersonaHapticsGainCommand</code> (both on <code>PadViewModel</code>, alongside the Audio tab's other row resets).</p>
+<h3 id="audio-dsp-chain-347_1">Audio DSP chain (#347)<a class="headerlink" href="#audio-dsp-chain-347_1" title="Permanent link">&para;</a></h3>
+<p>Per (slot, device) like the rest of the bag, never gated on OutputType. The chain runs on the <code>AudioPassthroughService</code> sink only, upstream of the Opus encoder. Edited from the <code>PadViewModel.AudioDsp.cs</code> cards.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AudioCrossfeedLevel</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>bs2b crossfeed level, clamped 0–9: 0 off, 1–3 crossfeed, 4–6 easy crossfeed, 7 Jan Meier, 8 the bs2b default, 9 custom. Skipped on the speaker paths, which carry a mono downmix.</td>
+</tr>
+<tr>
+<td><code>AudioCrossfeedIsCustom</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: level 9. Shows the two custom knobs.</td>
+</tr>
+<tr>
+<td><code>AudioCrossfeedCutHz</code></td>
+<td><code>int</code></td>
+<td><code>700</code></td>
+<td>Custom crossover cutoff, clamped 300–2000 (libbs2b's BS2B_MINFCUT / BS2B_MAXFCUT).</td>
+</tr>
+<tr>
+<td><code>AudioCrossfeedFeedDb</code></td>
+<td><code>double</code></td>
+<td><code>4.5</code></td>
+<td>Custom feed level in dB, clamped 1.0–15.0 (libbs2b's BS2B_MINFEED / BS2B_MAXFEED in tenths).</td>
+</tr>
+<tr>
+<td><code>AudioEqEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Master switch for the parametric EQ, separate from an empty band list so a tuned EQ can be muted without being lost.</td>
+</tr>
+<tr>
+<td><code>AudioEqBands</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>The band list as one attribute encoded by <code>EqBandCodec</code>, bridged to grid rows by <code>PadViewModel.AudioDsp.cs</code>.</td>
+</tr>
+<tr>
+<td><code>AudioEqPreampDb</code></td>
+<td><code>double</code></td>
+<td><code>0</code></td>
+<td>Preamp in dB applied before the EQ, clamped −30..12. AutoEq imports carry their negative preamp through here.</td>
+</tr>
+<tr>
+<td><code>AudioLimiterEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>On by default, since a positive EQ band without a limiter clips the Opus encoder.</td>
+</tr>
+<tr>
+<td><code>AudioLimiterCeiling</code></td>
+<td><code>int</code></td>
+<td><code>98</code></td>
+<td>Ceiling as a percent of full scale, clamped 5–100.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="headphone-jack-and-audio-path">Headphone jack and audio path<a class="headerlink" href="#headphone-jack-and-audio-path" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -17421,7 +17612,7 @@
 <p>Each control has a matching <code>Reset…Command</code> (mirroring the Sticks / Triggers per-row reset pattern), plus the palette add/remove commands <code>AddPaletteColorCommand</code>, <code>RemovePaletteColorCommand</code>, <code>AddInputReactivePaletteColorCommand</code>, <code>RemoveInputReactivePaletteColorCommand</code>, <code>ResetInputReactivePaletteCommand</code>, <code>ResetPaletteCommand</code>.</p>
 <h3 id="enums-and-helper-classes-deviceslotconfigcs">Enums and helper classes (DeviceSlotConfig.cs)<a class="headerlink" href="#enums-and-helper-classes-deviceslotconfigcs" title="Permanent link">&para;</a></h3>
 <p><strong>AdaptiveTriggerMode:</strong> <code>Off</code>(0), <code>Feedback</code>(1), <code>Weapon</code>(2), <code>Vibration</code>(3), <code>MultiplePositionFeedback</code>(4), <code>SlopeFeedback</code>(5), <code>MultiplePositionVibration</code>(6). Sony's seven PS5 SDK effect modes.</p>
-<p><strong>AudioOutputPath:</strong> <code>Automatic</code>(0), <code>StereoHeadset</code>(1), <code>MonoHeadset</code>(2), <code>HeadsetAndSpeaker</code>(3), <code>SpeakerOnly</code>(4), <code>FollowHeadphoneJack</code>(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. <code>Automatic</code> writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. <code>FollowHeadphoneJack</code> tracks the pad's own jack detect, which arrives on the Bluetooth raw lane, and resolves to the default when there is no reading. Persisted numerically, so the members are append-only.</p>
+<p><strong>AudioOutputPath:</strong> <code>Automatic</code>(0), <code>StereoHeadset</code>(1), <code>MonoHeadset</code>(2), <code>HeadsetAndSpeaker</code>(3), <code>SpeakerOnly</code>(4), <code>FollowHeadphoneJack</code>(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. <code>Automatic</code> writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. <code>FollowHeadphoneJack</code> tracks the pad's own jack detect. The jack bit is read by <code>AudioPassthroughService</code>'s sink-owned <code>JackWatch</code> on either transport (USB input report 0x01 or Bluetooth 0x31, the duaLib PluggedHeadphones status bit), independent of any persona lane. Plugged resolves to <code>StereoHeadset</code>, unplugged to <code>SpeakerOnly</code>, and no reading to the default. Persisted numerically, so the members are append-only.</p>
 <p><strong>MicLedMode:</strong> <code>Off</code>(0), <code>Solid</code>(1), <code>Pulse</code>(2), <code>FollowDeviceMute</code>(3).</p>
 <p><strong>PlayerLedMode:</strong> <code>Off</code>(0), <code>Player1</code>(1), <code>Player2</code>(2), <code>Player3</code>(3), <code>Player4</code>(4), <code>All</code>(5), <code>PlayerNumber</code>(6, default). Sequential to map 1:1 with the dropdown.</p>
 <p><strong>PlayerLedBrightness:</strong> <code>High</code>(0), <code>Medium</code>(1), <code>Low</code>(2).</p>
@@ -17432,7 +17623,7 @@
 <p><strong>MicLedDeviceItem:</strong> <code>Id</code> (CoreAudio endpoint string), <code>Display</code> (label, prefixed <code>[In]</code> / <code>[Out]</code>).</p>
 <p><strong>LightbarPaletteEntry</strong> (<code>ObservableObject</code>): <code>R</code>, <code>G</code>, <code>B</code> (byte), <code>Hex</code> (two-way <code>"RRGGBB"</code> shim, <code>[XmlIgnore]</code>).</p>
 <h3 id="deviceslotconfigdata">DeviceSlotConfigData<a class="headerlink" href="#deviceslotconfigdata" title="Permanent link">&para;</a></h3>
-<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
+<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>AudioCrossfeedLevel</code> = 0, <code>AudioCrossfeedCutHz</code> = 700, <code>AudioCrossfeedFeedDb</code> = 4.5, <code>AudioEqEnabled</code> = false, <code>AudioEqBands</code> = "", <code>AudioEqPreampDb</code> = 0, <code>AudioLimiterEnabled</code> = true, <code>AudioLimiterCeiling</code> = 98, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
 <hr />
 <h2 id="kbmslotconfig">KbmSlotConfig<a class="headerlink" href="#kbmslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>KbmSlotConfig.cs</code></p>
@@ -17693,7 +17884,7 @@
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> bound to <code>PadViewModel</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

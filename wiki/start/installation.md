@@ -50,7 +50,7 @@ The **About** page, at the bottom of the sidebar, lists the projects PadForge is
 
 HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.
 
-The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card lights its status indicator and shows the version once installation completes. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
+The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
 If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.
 
@@ -134,4 +134,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

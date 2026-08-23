@@ -94,9 +94,9 @@ The **T150** uses a separate protocol and runs through the generic path.
 
 Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard USB PID force-feedback protocol rather than a proprietary one, so they ride the generic path by design. There is no Moza driver to add, and that is not a gap: the same is true of Cammus, VRS, Asetek, Simucube and PXN bases. What the generic path gives them is game force feedback plus the Auto Centering spring. What it cannot give them is vendor-specific rotation range or RPM LEDs, which have no standard command.
 
-### Centering and Constant Force pick one seat
+### Centering and Constant Force pick one seat on the generic path
 
-Both are idle behaviours: each applies its force only while the game is not sending force feedback of its own. A wheel has one force-feedback effect slot, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. Game force outranks both and hands the slot back the moment it goes quiet. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.
+On a wheel driven through the generic path, both are idle behaviors: each applies its force only while the game is not sending force feedback of its own. A generic wheel has one force-feedback effect slot, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. Game force outranks both and hands the slot back the moment it goes quiet. Logitech, Fanatec, and Thrustmaster wheels keep centering as a separate firmware or software spring, so Constant Force and auto centering can run together there. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.
 
 ## Over Remote Link
 
@@ -140,4 +140,4 @@ A supported wheel plugged into another PC and shared over [Remote Link](../guide
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

@@ -21,7 +21,7 @@
 Two more controls live in the strip beneath each row rather than in a column:
 
 - **Primary Mode** picks how the primary source is read (Direct, Incremental, Invert On Hold, Ramp). See [Source kinds](#source-kinds).
-- **Combine** appears once a row has two or more sources. See [Combine modes](#combine-modes).
+- **Combine** appears once a row has two or more sources, or when **Primary Mode** is anything other than Direct. See [Combine modes](#combine-modes).
 
 > **Tip:** The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets.
 
@@ -36,7 +36,7 @@ Rows group by category: **Buttons** (face, shoulder, stick clicks, system), **Le
 The fastest way to assign one source.
 
 1. Click **Record** on the target row.
-2. The button changes to "Recording..." and the row pulses blue.
+2. The button changes to "Recording..." and the row pulses orange.
 3. Press the button or move the axis on any physical controller assigned to this slot.
 4. PadForge detects the input, fills in the source, and stops recording.
 
@@ -53,7 +53,7 @@ Each source has a cascading dropdown: first pick the device, then the input. The
 - **All raw buttons** are listed, including ones past the standard gamepad set of 11. Arcade encoders and multi-button fight sticks that expose a dozen or more buttons show every one in the dropdown for mapping.
 - **Offline devices** keep their last known inputs. If a controller is disconnected, its dropdown still shows the full input list from the previous session. You can edit mappings without the device plugged in.
 
-Picking an input assigns it on the spot. Same result as recording. The blank entry at the top clears the source.
+Picking an input assigns it on the spot. Same result as recording. Use the row's **Clear** button to remove the source.
 
 #### When to use dropdown vs. recording
 
@@ -71,7 +71,7 @@ Picking an input assigns it on the spot. Same result as recording. The blank ent
 
 1. Click **Map All** (on the Controller tab or the Mappings tab toolbar).
 2. PadForge highlights the first row and starts recording.
-3. A blue prompt shows which output it expects ("Press A").
+3. An orange prompt shows which output it expects and where you are in the sequence ("Map: A (1/21)").
 4. Press the matching button or move the matching axis.
 5. PadForge captures the input and moves to the next row.
 6. Repeat until done. Click **Stop** to stop early.
@@ -142,7 +142,7 @@ On a stick-axis row where only the positive direction is mapped from a button-cl
 
 ## Combine modes
 
-The **Combine** picker appears in the row's detail strip as soon as a row has two or more sources. With one source there is nothing to combine.
+The **Combine** picker appears in the row's detail strip once a row has two or more sources, or when **Primary Mode** is anything other than Direct. A single Direct source has nothing to combine.
 
 | Mode | What it does |
 |------|--------------|
@@ -251,7 +251,7 @@ The **Primary Mode** dropdown in the row's detail strip picks how PadForge evalu
 | **Direct** | The source descriptor's raw value. The default. |
 | **Incremental** | Ramps an accumulator via Up / Down buttons you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max). |
 | **Invert On Hold** | The inner source's value, flipped while a modifier button you pick is held. |
-| **Ramp** | A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the **Attack** time. Releasing eases back to center over the **Release** time when **Autocenter** is on, or holds the last position when it is off. **Reverse** scales how fast it returns when you press the opposite key. Stick-axis targets only. |
+| **Ramp** | A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the **Attack** time. Releasing eases back to center over the **Release** time when **Autocenter** is on, or holds the last position when it is off. **Reverse** scales how fast it returns when you press the opposite key. Stick-axis and trigger targets. On a trigger the Up key drives the pull and the Down key reads as released. Button targets get nothing from a Ramp source. |
 
 Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources read the descriptor, then flip while the modifier is held. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row **Record** button captures a kind's own inputs in sequence (Up, then Down).
 
@@ -345,7 +345,7 @@ Flight sticks, racing wheels, and other devices with a centered axis (resting at
 2. **Invert** on the left direction flips the active half. "Left of center" fires "Left". "Right of center" fires "Right".
 3. **Deadzone at 50%** means the source must travel 50% of the half range (25% of the full range) before the button fires. That gives a comfortable deadzone around the center rest position.
 
-Without **Half**, a 50% deadzone would reference the full axis range, requiring 75% total travel to fire. Much less intuitive. With **Half** on, the deadzone percentage applies only within the active half, so the numbers behave the way you expect.
+Without **Half**, the 50% threshold sits at the axis's center, so a centered axis fires the button while at rest. With **Half** on, the deadzone percentage applies only within the active half, so the numbers behave the way you expect.
 
 > **Tip:** Start with 50% deadzone and adjust up or down depending on how much stick travel you want before the button fires. A higher value gives a wider neutral zone around center. A lower value makes the button respond sooner.
 
@@ -391,7 +391,8 @@ For unrecognized devices or Force Raw Joystick Mode, the source picker shows num
 | **Gyro Horizontal (Yaw + Roll)** | Blended horizontal-turn axis that combines yaw and roll, so aiming works the same whether the pad is held flat or upright |
 | **Gyro Lean X**, **Gyro Lean Y** | Sustained tilt from gravity. 90° of tilt from the resting grip reads full scale, the value holds while the tilt holds, and the per-source Sensitivity dial scales it. Gyro Recenter re-zeroes the grip. |
 | **Gyro Tilt X**, **Gyro Tilt Y** | The adjustable-range tilt pair. Full deflection at the range set on the Gyro tab's Gyro Tilt card (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode. |
-| **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll** | The left half's own gyro on a combined Joy-Con pair. The plain Gyro axes read the right half. Offered only when the pair reports the second sensor. |
+| **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's own gyro on a combined Joy-Con pair. Offered only when the pair reports the second sensor. |
+| **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's own gyro on a combined Joy-Con pair. On a pair the plain Gyro axes read both halves averaged, so these keep the raw right half reachable. Offered only when the pair reports the second sensor. |
 | **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar |
 | **IR Offscreen** | Fires when a Wii Remote's camera loses sight of the sensor bar. The lightgun reload input. |
 | **IR Brightness** | Right Joy-Con IR camera. Rises as an object covers or nears the camera window. |
@@ -476,8 +477,8 @@ The toolbar above the mapping grid has bulk operations. **Clear All** sits apart
 
 | Button | Action |
 |--------|--------|
-| **Copy** | Copies the current mapping table and every assigned device's tuning (gyro, touchpad, FFB, impulse triggers, adaptive triggers, lighting) to the clipboard. |
-| **Paste** | Applies a copied table. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit. |
+| **Copy** | Copies the whole slot to the clipboard: the mapping table with every row's sources, shift layers, radial and touch menus, every assigned device's tuning (gyro, touchpad, FFB, impulse triggers, adaptive triggers, lighting, audio), the slot's Bass Shakers, SOCD, and Keep Awake settings, and its macros. |
+| **Paste** | Applies a copied slot. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit. Macros are replaced, not added: the target ends up with the source's list, and pasting a slot that has none clears the target's. |
 | **Copy From...** | Same as Paste, sourced from another slot instead of the clipboard. |
 | **Map All** | Starts the [Map All wizard](#3-map-all). |
 | **Clear All** | Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, **Acceleration**, every **Sensitivity**, **Do Not Inherit**, **Primary Mode** back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping. |
@@ -485,6 +486,8 @@ The toolbar above the mapping grid has bulk operations. **Clear All** sits apart
 Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together.
 
 The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.
+
+Two things travel with conditions. SOCD pairs are named in the slot type's own terms, so they cross only between slots of the same type, and a Bass Shakers setup names an audio output by its Windows endpoint ID, so pasted on another PC it stays selected but plays nothing until you pick an output that exists there (it never falls back to the default output on its own). A macro whose shift-layer scope the target slot does not declare arrives unscoped rather than gated on a layer the target cannot show.
 
 There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click **Copy Layer Rows** and **Paste Rows into Layer** (see [Shift layers](#shift-layers)).
 
@@ -574,4 +577,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

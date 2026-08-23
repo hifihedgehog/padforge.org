@@ -51,7 +51,7 @@ Motion Lean needs a controller with a motion sensor. Without one it produces no 
 
 ## At-lock feedback
 
-When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The **Steering Lock Feedback** card sits at the bottom of the **Sticks** tab. Every channel is per-slot and off by default, and rows the selected device can't play are hidden.
+When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The **Steering Lock Feedback** card sits near the bottom of the **Sticks** tab, below the per-stick cards (on a keyboard and mouse slot the **Flick Stick** card follows it). Every channel is per-slot and off by default, and rows the selected device can't play are hidden.
 
 | Toggle | What it does | Hardware |
 | --- | --- | --- |
@@ -90,4 +90,4 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

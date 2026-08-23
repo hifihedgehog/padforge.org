@@ -3722,7 +3722,7 @@
 <p>The first card carries one checkbox: <strong>Apply Gyro Tuning to Motion Passthrough</strong>.</p>
 <p>Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.</p>
 <p>Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The <a href="#engage-gates">engage gates</a> come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.</p>
-<p>The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense), the Nintendo (virtual Switch Pro) type since 4.1.0, and Extended slots whose HIDMaestro profile exposes an IMU. Xbox types have no motion channel.</p>
+<p>The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense) and the Nintendo (virtual Switch Pro) type since 4.1.0. Xbox, Extended, MIDI, and Keyboard + Mouse slots have no motion channel.</p>
 <p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.</p>
 <hr />
 <h2 id="motion-steering">Motion Steering<a class="headerlink" href="#motion-steering" title="Permanent link">&para;</a></h2>
@@ -4051,7 +4051,7 @@
 <p><strong>Held yaw is not possible.</strong> Gravity points down: it moves when you pitch or roll the controller, and it does not move at all when you turn the controller flat around the vertical axis. So the tilt inputs hold pitch and roll, never yaw. Holding a yaw rotation would need the gyro's rate integrated into an angle, which drifts without something to correct it, and no shipped mode does that today. To turn a camera with gyro, use rate mode.</p>
 <hr />
 <h2 id="left-joy-con-aux-gyro">Left Joy-Con aux gyro<a class="headerlink" href="#left-joy-con-aux-gyro" title="Permanent link">&para;</a></h2>
-<p>On a combined Joy-Con pair, the primary gyro sources read the right Joy-Con. The left half is a second physical sensor, and since 4.1.0 the mapping table's input dropdown exposes it as its own sources.</p>
+<p>On a combined Joy-Con pair, the plain Gyro Pitch / Yaw / Roll sources read both halves averaged, each debiased with its own bias. The right half alone is reachable as <strong>Right Joy-Con Gyro Pitch</strong> / <strong>Right Joy-Con Gyro Yaw</strong> / <strong>Right Joy-Con Gyro Roll</strong>. The left half is a second physical sensor, and since 4.1.0 the mapping table's input dropdown exposes it as its own sources.</p>
 <table>
 <thead>
 <tr>
@@ -4313,7 +4313,7 @@
 <li><a href="../steering/">Steering</a>: tune the Motion Lean tilt-steering input whose card lives on this tab.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

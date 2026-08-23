@@ -23,7 +23,7 @@ Off by default. The virtual controller hands the game a clean, calibrated sensor
 
 Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The [engage gates](#engage-gates) come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.
 
-The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense), the Nintendo (virtual Switch Pro) type since 4.1.0, and Extended slots whose HIDMaestro profile exposes an IMU. Xbox types have no motion channel.
+The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense) and the Nintendo (virtual Switch Pro) type since 4.1.0. Xbox, Extended, MIDI, and Keyboard + Mouse slots have no motion channel.
 
 Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.
 
@@ -280,7 +280,7 @@ All three capture your resting grip as the neutral when the controller connects,
 
 ## Left Joy-Con aux gyro
 
-On a combined Joy-Con pair, the primary gyro sources read the right Joy-Con. The left half is a second physical sensor, and since 4.1.0 the mapping table's input dropdown exposes it as its own sources.
+On a combined Joy-Con pair, the plain Gyro Pitch / Yaw / Roll sources read both halves averaged, each debiased with its own bias. The right half alone is reachable as **Right Joy-Con Gyro Pitch** / **Right Joy-Con Gyro Yaw** / **Right Joy-Con Gyro Roll**. The left half is a second physical sensor, and since 4.1.0 the mapping table's input dropdown exposes it as its own sources.
 
 | Source | Reads |
 |---|---|
@@ -403,4 +403,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

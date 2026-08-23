@@ -73,7 +73,7 @@ Pairing records the other PC as trusted. After that, trusted PCs reconnect on th
 
 Trust is tied to each PC's cryptographic identity, not its name. Renaming a PC does not break a pairing. The display name is only there so you can tell your paired PCs apart.
 
-To end a pairing, find the PC under **Paired PCs** and click **Revoke**. **Revoke all** drops every trusted PC at once. A revoked PC cannot reconnect until it pairs again.
+To end a pairing, find the PC under **Paired PCs** and click **Revoke**. **Revoke All** drops every trusted PC at once. A revoked PC cannot reconnect until it pairs again.
 
 ---
 
@@ -155,4 +155,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

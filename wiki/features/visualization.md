@@ -131,7 +131,7 @@ Turn it on and PadForge draws:
 
 A chip flashes when its input is active, so you can see which mapping fires as you press. Click a chip to jump straight to that mapping's row in the [Button and Axis Mappings](mappings.md) grid.
 
-The overlay hides itself while you rotate or pan the 3D model, then reappears when you let go. Mouse-wheel zoom keeps it visible and moves the chips with the model. Chips whose control is turned away from the camera drop out until you spin it back into view.
+The overlay hides itself while you rotate or pan the 3D model, then reappears when you let go. Mouse-wheel zoom keeps it visible and moves the chips with the model. Chips whose control projects off the edge of the view (or behind the camera) drop out until you bring it back into frame.
 
 ---
 
@@ -243,4 +243,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

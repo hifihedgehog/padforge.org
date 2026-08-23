@@ -25,7 +25,7 @@ So the data flow is: PadForge pairs over Bluetooth, the Microsoft Bluetooth stac
 | File | Role |
 |---|---|
 | `PadForge.App/Services/WiiPairingService.cs` | The pairing ceremony. `public sealed class`, P/Invoke over `bthprops.cpl`. Original C# over the Win32 Bluetooth API, following the sequence Dolphin's `Source/Core/Core/HW/WiimoteReal/IOWin.cpp` documents (no Dolphin GPL code). |
-| `PadForge.App/Views/PairDeviceDialog.xaml.cs` | The Fluent dialog, family-selectable via a Controller Family combo (index 0 Nintendo Wii, 1 Sony DualShock 3, 2 PS Move / Navigation). The Wii branch loops `RunPairingPass` on a background thread until a controller pairs or the user cancels. Either Sony family hides the temporary-pairing checkbox and the live found-list, and routes `Pair_Click` to `PairDs3` / `Ds3PairingService` instead (out of scope here). |
+| `PadForge.App/Views/PairDeviceDialog.xaml.cs` | The Fluent dialog, family-selectable via a Controller Family combo (index 0 Nintendo Wii, 1 Sony DualShock 3, 2 PlayStation Move / Navigation). The Wii branch loops `RunPairingPass` on a background thread until a controller pairs or the user cancels. Either Sony family hides the temporary-pairing checkbox and the live found-list, and routes `Pair_Click` to `PairDs3` / `Ds3PairingService` instead (out of scope here). |
 | `PadForge.App/Common/Input/InputManager.cs` | The SDL Wii hint in `InitializeSdl` and the `RescanWiiControllers` hint toggle. |
 | `PadForge.App/MainWindow.xaml.cs` | The `PairRequested` handler that opens the dialog then runs the rescan, and the 100 ms `_sdlPumpTimer`. |
 | `PadForge.App/Services/InputService.cs` | `RescanWiiControllers` passthrough to the input manager. |
@@ -288,4 +288,4 @@ These live in the SDL3 fork and are read-only from PadForge's side. See [SDL3 In
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

@@ -3957,7 +3957,7 @@
 <p>Two more controls live in the strip beneath each row rather than in a column:</p>
 <ul>
 <li><strong>Primary Mode</strong> picks how the primary source is read (Direct, Incremental, Invert On Hold, Ramp). See <a href="#source-kinds">Source kinds</a>.</li>
-<li><strong>Combine</strong> appears once a row has two or more sources. See <a href="#combine-modes">Combine modes</a>.</li>
+<li><strong>Combine</strong> appears once a row has two or more sources, or when <strong>Primary Mode</strong> is anything other than Direct. See <a href="#combine-modes">Combine modes</a>.</li>
 </ul>
 <blockquote>
 <p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets.</p>
@@ -3969,7 +3969,7 @@
 <p>The fastest way to assign one source.</p>
 <ol>
 <li>Click <strong>Record</strong> on the target row.</li>
-<li>The button changes to "Recording..." and the row pulses blue.</li>
+<li>The button changes to "Recording..." and the row pulses orange.</li>
 <li>Press the button or move the axis on any physical controller assigned to this slot.</li>
 <li>PadForge detects the input, fills in the source, and stops recording.</li>
 </ol>
@@ -3985,7 +3985,7 @@
 <li><strong>All raw buttons</strong> are listed, including ones past the standard gamepad set of 11. Arcade encoders and multi-button fight sticks that expose a dozen or more buttons show every one in the dropdown for mapping.</li>
 <li><strong>Offline devices</strong> keep their last known inputs. If a controller is disconnected, its dropdown still shows the full input list from the previous session. You can edit mappings without the device plugged in.</li>
 </ul>
-<p>Picking an input assigns it on the spot. Same result as recording. The blank entry at the top clears the source.</p>
+<p>Picking an input assigns it on the spot. Same result as recording. Use the row's <strong>Clear</strong> button to remove the source.</p>
 <h4 id="when-to-use-dropdown-vs-recording">When to use dropdown vs. recording<a class="headerlink" href="#when-to-use-dropdown-vs-recording" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -4017,7 +4017,7 @@
 <ol>
 <li>Click <strong>Map All</strong> (on the Controller tab or the Mappings tab toolbar).</li>
 <li>PadForge highlights the first row and starts recording.</li>
-<li>A blue prompt shows which output it expects ("Press A").</li>
+<li>An orange prompt shows which output it expects and where you are in the sequence ("Map: A (1/21)").</li>
 <li>Press the matching button or move the matching axis.</li>
 <li>PadForge captures the input and moves to the next row.</li>
 <li>Repeat until done. Click <strong>Stop</strong> to stop early.</li>
@@ -4102,7 +4102,7 @@
 <p>On a stick-axis row where only the positive direction is mapped from a button-class source, an italic <strong>+ opposite direction</strong> link appears in the Source cell. One click adds a mirrored second source with <strong>Invert</strong> on, covering the negative direction. The link disappears once the row has a second source.</p>
 <hr />
 <h2 id="combine-modes">Combine modes<a class="headerlink" href="#combine-modes" title="Permanent link">&para;</a></h2>
-<p>The <strong>Combine</strong> picker appears in the row's detail strip as soon as a row has two or more sources. With one source there is nothing to combine.</p>
+<p>The <strong>Combine</strong> picker appears in the row's detail strip once a row has two or more sources, or when <strong>Primary Mode</strong> is anything other than Direct. A single Direct source has nothing to combine.</p>
 <table>
 <thead>
 <tr>
@@ -4344,7 +4344,7 @@
 </tr>
 <tr>
 <td><strong>Ramp</strong></td>
-<td>A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the <strong>Attack</strong> time. Releasing eases back to center over the <strong>Release</strong> time when <strong>Autocenter</strong> is on, or holds the last position when it is off. <strong>Reverse</strong> scales how fast it returns when you press the opposite key. Stick-axis targets only.</td>
+<td>A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the <strong>Attack</strong> time. Releasing eases back to center over the <strong>Release</strong> time when <strong>Autocenter</strong> is on, or holds the last position when it is off. <strong>Reverse</strong> scales how fast it returns when you press the opposite key. Stick-axis and trigger targets. On a trigger the Up key drives the pull and the Down key reads as released. Button targets get nothing from a Ramp source.</td>
 </tr>
 </tbody>
 </table>
@@ -4451,7 +4451,7 @@
 <li><strong>Invert</strong> on the left direction flips the active half. "Left of center" fires "Left". "Right of center" fires "Right".</li>
 <li><strong>Deadzone at 50%</strong> means the source must travel 50% of the half range (25% of the full range) before the button fires. That gives a comfortable deadzone around the center rest position.</li>
 </ol>
-<p>Without <strong>Half</strong>, a 50% deadzone would reference the full axis range, requiring 75% total travel to fire. Much less intuitive. With <strong>Half</strong> on, the deadzone percentage applies only within the active half, so the numbers behave the way you expect.</p>
+<p>Without <strong>Half</strong>, the 50% threshold sits at the axis's center, so a centered axis fires the button while at rest. With <strong>Half</strong> on, the deadzone percentage applies only within the active half, so the numbers behave the way you expect.</p>
 <blockquote>
 <p><strong>Tip:</strong> Start with 50% deadzone and adjust up or down depending on how much stick travel you want before the button fires. A higher value gives a wider neutral zone around center. A lower value makes the button respond sooner.</p>
 </blockquote>
@@ -4549,8 +4549,12 @@
 <td>The adjustable-range tilt pair. Full deflection at the range set on the Gyro tab's Gyro Tilt card (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode.</td>
 </tr>
 <tr>
-<td><strong>Left Joy-Con Gyro Pitch</strong>, <strong>Left Joy-Con Gyro Yaw</strong>, <strong>Left Joy-Con Gyro Roll</strong></td>
-<td>The left half's own gyro on a combined Joy-Con pair. The plain Gyro axes read the right half. Offered only when the pair reports the second sensor.</td>
+<td><strong>Left Joy-Con Gyro Pitch</strong>, <strong>Left Joy-Con Gyro Yaw</strong>, <strong>Left Joy-Con Gyro Roll</strong>, <strong>Left Joy-Con Gyro Horizontal (Yaw + Roll)</strong></td>
+<td>The left half's own gyro on a combined Joy-Con pair. Offered only when the pair reports the second sensor.</td>
+</tr>
+<tr>
+<td><strong>Right Joy-Con Gyro Pitch</strong>, <strong>Right Joy-Con Gyro Yaw</strong>, <strong>Right Joy-Con Gyro Roll</strong>, <strong>Right Joy-Con Gyro Horizontal (Yaw + Roll)</strong></td>
+<td>The right half's own gyro on a combined Joy-Con pair. On a pair the plain Gyro axes read both halves averaged, so these keep the raw right half reachable. Offered only when the pair reports the second sensor.</td>
 </tr>
 <tr>
 <td><strong>IR Pointer X</strong>, <strong>IR Pointer Y</strong></td>
@@ -4725,11 +4729,11 @@
 <tbody>
 <tr>
 <td><strong>Copy</strong></td>
-<td>Copies the current mapping table and every assigned device's tuning (gyro, touchpad, FFB, impulse triggers, adaptive triggers, lighting) to the clipboard.</td>
+<td>Copies the whole slot to the clipboard: the mapping table with every row's sources, shift layers, radial and touch menus, every assigned device's tuning (gyro, touchpad, FFB, impulse triggers, adaptive triggers, lighting, audio), the slot's Bass Shakers, SOCD, and Keep Awake settings, and its macros.</td>
 </tr>
 <tr>
 <td><strong>Paste</strong></td>
-<td>Applies a copied table. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit.</td>
+<td>Applies a copied slot. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side tuning when it is the same physical pad, or the same controller model on a different physical unit. Macros are replaced, not added: the target ends up with the source's list, and pasting a slot that has none clears the target's.</td>
 </tr>
 <tr>
 <td><strong>Copy From...</strong></td>
@@ -4747,6 +4751,7 @@
 </table>
 <p>Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together.</p>
 <p>The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.</p>
+<p>Two things travel with conditions. SOCD pairs are named in the slot type's own terms, so they cross only between slots of the same type, and a Bass Shakers setup names an audio output by its Windows endpoint ID, so pasted on another PC it stays selected but plays nothing until you pick an output that exists there (it never falls back to the default output on its own). A macro whose shift-layer scope the target slot does not declare arrives unscoped rather than gated on a layer the target cannot show.</p>
 <p>There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click <strong>Copy Layer Rows</strong> and <strong>Paste Rows into Layer</strong> (see <a href="#shift-layers">Shift layers</a>).</p>
 <h3 id="cross-type-translation">Cross-type translation<a class="headerlink" href="#cross-type-translation" title="Permanent link">&para;</a></h3>
 <p>Copy From and Paste translate mappings between controller types automatically.</p>
@@ -4859,7 +4864,7 @@
 <li><a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>: imported community configs are built from Gamepad sources.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

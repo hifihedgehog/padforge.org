@@ -55,11 +55,11 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 **A Nintendo virtual controller is active but the game does not react to it.**
 
 1. Install **HIDMaestro** from [Settings](features/settings.md). The Nintendo output rides the same driver as Xbox, PlayStation, and Extended.
-2. Games see the slot as the picked Nintendo profile, a **Nintendo Switch Pro Controller** or a **Switch 2 Pro Controller**. XInput-only games never read either one. Use an Xbox slot for those.
+2. Games see the slot as the picked Nintendo profile, a **Nintendo Switch Pro Controller** or a **Nintendo Switch 2 Pro Controller**. XInput-only games never read either one. Use an Xbox slot for those.
 3. Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.
 4. Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.
 5. Face buttons follow Nintendo lettering, so A sits on the right and B on the bottom. Prompts that look swapped against an Xbox pad are the Switch layout working as intended.
-6. The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers **Switch Pro Controller** (the default) and **Switch 2 Pro Controller**.
+6. The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers **Nintendo Switch Pro Controller** (the default) and **Nintendo Switch 2 Pro Controller**.
 
 ---
 
@@ -114,11 +114,11 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 ## Bass Shakers Output Silent
 
-**"Route rumble to an audio output" is on but nothing plays on the shaker or subwoofer.**
+**"Route Rumble to an Audio Output" is on but nothing plays on the shaker or subwoofer.**
 
 1. Check the status line on the **Bass Shakers** tab. "Audio output is not running." means the routing is off or the engine is stopped. "The selected output device is unavailable. Audio stays off until it returns." means the chosen **Output Device** disappeared. Pick another or reconnect it.
 2. The feature works with Xbox, DualShock 4 / DualSense, and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers with force feedback, such as racing wheels. Other slot types have no game feedback to route.
-3. Only game feedback plays through the audio output. **Test Rumble** on the Force Feedback tab and macro rumble stay on the controller by design. To test the audio path, use the per-voice **Test** buttons or **Frequency Sweep** on the Bass Shakers tab instead.
+3. Game feedback and **Test Rumble** play through the audio output. Macro rumble stays on the controller by design. Test Rumble on the Force Feedback tab is therefore a valid audio-path check, as are the per-voice **Test** buttons and **Frequency Sweep** on the Bass Shakers tab.
 4. Set **Master Gain** above zero and enable at least one voice with its own gain above zero.
 5. Run **Frequency Sweep** (20 to 120 Hz over eight seconds) and note where the shaker responds strongest, then set the voice frequencies there.
 6. Bluetooth audio devices add noticeable latency. Use a wired output if the thump lags the game.
@@ -129,7 +129,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **Extended (HIDMaestro) controllers do not appear in games or `joy.cpl`.**
 
-1. Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Cancelling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.
+1. Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Canceling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.
 2. Verify the HIDMaestro driver shows "Installed" on the [Settings](features/settings.md) page.
 3. Check `joy.cpl` (Win+R > `joy.cpl`). If empty, create an Extended slot on the Dashboard first.
 4. Restart PadForge after installing HIDMaestro.
@@ -152,7 +152,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 ## MIDI Not Available
 
-**The MIDI button does not appear in the "Add Controller" popup.**
+**The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".**
 
 1. Install **Windows MIDI Services** from [Settings](features/settings.md).
 2. Windows MIDI Services requires **Windows 11 24H2 (build 26100) or later**. Earlier Windows 11 builds and any Windows 10 build are unsupported by Microsoft's SDK.
@@ -346,7 +346,7 @@ iOS Safari kills WebSocket connections when the page loses focus. The web contro
 **A shared device drives the game, but rumble, LEDs, or keyboard output do not reach the owner PC.**
 
 1. Feedback returns only for what the physical device supports: rumble, Xbox trigger rumble, wheel force feedback, adaptive triggers, lightbar, player LEDs, Guide button LED brightness, speaker audio, and HD haptic tones. A device without a given feature shows nothing for it.
-2. Keyboard, mouse, and macros from a shared device are blocked when **gamepad-only** is on for that paired PC. Untick it in the pairing options if you trust the PC.
+2. Keyboard, mouse, and macros from a shared device are blocked when **Limit This PC to Gamepad Input Only** was ticked for that paired PC (its row under Paired PCs shows "gamepad only"). To allow them, revoke the PC and pair again with the box unticked.
 3. See [Force Feedback](features/force-feedback.md), [Impulse Triggers](features/impulse-triggers.md), [Lighting](features/lighting.md), and [Controller Audio](features/controller-audio.md) for the per-feature setup, which also applies over the link.
 
 ---
@@ -359,7 +359,7 @@ iOS Safari kills WebSocket connections when the page loses focus. The web contro
 2. Verify the executable path matches (case-insensitive, full path). Use the file browser button to avoid typos.
 3. For games launchable from multiple locations, separate paths with the pipe character (`|`).
 4. Add the game's own executable, not the launcher's (Steam, Epic, etc.).
-5. If the game runs elevated but PadForge does not, foreground detection may fail. Run PadForge as administrator.
+5. PadForge always runs elevated, so it can read the foreground path of elevated games. If a protected process still is not detected, add the game executable that actually owns the window.
 6. Save after configuring. Profile data must persist to `PadForge.xml`.
 
 ---
@@ -553,12 +553,12 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 ## NFC Reader Not Detected
 
-**A USB NFC reader is plugged in but does not appear as a device, or the Register NFC Tag dialog says no reader is found.**
+**A USB NFC reader is plugged in but does not appear as a device, or the NFC Tags dialog says no reader is detected.**
 
 1. PadForge reads through the Windows **Smart Card** service (`SCardSvr`) over the PC/SC stack. Open `services.msc` and confirm "Smart Card" is running. Windows stops it automatically when the last reader is unplugged.
 2. Use a **PC/SC contactless reader (CCID)**, such as the ACR122U. Readers without a PC/SC driver do not enumerate.
 3. A reader plugged in after launch is picked up automatically. PadForge retries roughly every 5 seconds, so wait a moment.
-4. Register a tag before mapping it: open the Register NFC Tags dialog, tap the tag on the reader, name it, click Register. Each registered tag becomes a bindable button.
+4. Register a tag before mapping it: open the **NFC Tags** dialog via **Register / Manage NFC Tags**, tap the tag on the reader, name it, click **Register**. Each registered tag becomes a bindable button.
 5. An unregistered tag only pulses the "Any NFC Tag" button, not a per-tag button. Register the specific tag to bind it on its own.
 6. PadForge reads only the tag **UID** (NTAG21x, MIFARE, amiibo all work). It does not read tag memory, authenticate sectors, or write tags.
 
@@ -666,10 +666,10 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Opposite buttons vanish | SOCD cleaning. Set Mode to Off or remove the pair |
 | No rumble | Overall Gain > 0%, motor strength > 0%, Test Rumble |
 | Audio bass rumble flat | Check audio playing, raise sensitivity |
-| Bass shakers silent | Check the Bass Shakers status line. Only game feedback routes to audio |
+| Bass shakers silent | Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not |
 | Extended controller not in joy.cpl | Install HIDMaestro, verify driver status, restart PadForge |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
-| No MIDI button | Install Windows MIDI Services (Win 11 only) |
+| MIDI button dimmed | Install Windows MIDI Services (Win 11 24H2 or later) |
 | No MIDI output | Select "PadForge MIDI N" in DAW input |
 | No motion in emulator | Enable DSU server, match port, use 127.0.0.1 |
 | DSU port in use | Close conflicting app or change port |
@@ -731,4 +731,4 @@ Both land in the folder PadForge runs from, and the card shows the path.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

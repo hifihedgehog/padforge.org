@@ -42,6 +42,10 @@ The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, 
 
 Before 4.3.0 that trigger read at rest no matter how hard it was pulled. The pressure was being written to an axis nothing reads: PadForge was numbering the pad's axes by their position in the standard gamepad layout, and the Navigation controller does not carry the axes in between, so every index past its sticks was off by the ones it skips.
 
+The Navigation controller shares the DualShock 3's report layout, so until 4.3.2 its picker and preview also listed everything a DualShock 3 has: a right stick, R2, Square, Triangle, R1, Select, Start, and R3, none of which exist on the pad. Those read as dead placeholders forever. PadForge now asks the pad which standardized buttons and axes it actually declares and shows only those, the same as every other controller. The numbering stays the DualShock 3's, so a saved mapping keeps its meaning across both pads. Only the phantoms drop out of the lists.
+
+Over Bluetooth, the Navigation controller needs the pairing driver's startup order exactly: the output report first, then the input stream, then a single enable packet about a second later and only if no input has arrived. The DualShock 3 tolerates that enable being sent early and repeated. The Navigation controller answers a repeat by dropping the link, which is why it connected and went silent before 4.3.2.
+
 ---
 
 ## Using the motion
@@ -69,4 +73,4 @@ Because the wand is held rather than gripped in two hands, Aim Engage is usually
 
 ---
 
-*Last updated for PadForge 4.3.1.*
+*Last updated for PadForge 4.3.2.*

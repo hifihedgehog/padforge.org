@@ -7448,7 +7448,7 @@
 <tr>
 <td>Memory -&gt; Settings file</td>
 <td>SettingsService serializes SettingsManager + ViewModel state to XML</td>
-<td>On MarkDirty (250ms debounce)</td>
+<td>On MarkDirty (250 ms engine push, full save after 2 s quiet)</td>
 </tr>
 </tbody>
 </table>
@@ -7820,17 +7820,17 @@
 1. Snapshots under lock.
 2. Updates existing rows, adds new ones (skips virtual/shadow devices).
 3. Removes stale or virtual rows.
-4. Sorts by name, then VID:PID.
+4. Sorts physical devices first and merged <code>aggregate://</code> sources last, then by name, then VID:PID.
 5. Calls <code>devVm.RefreshCounts()</code>.</p>
 <h4 id="isvirtualorshadowdeviceuserdevice-private-static"><code>IsVirtualOrShadowDevice(UserDevice)</code> (private, static)<a class="headerlink" href="#isvirtualorshadowdeviceuserdevice-private-static" title="Permanent link">&para;</a></h4>
-<p>Filters legacy and shadow virtual controllers from the Devices-page list (defense-in-depth; Step 1 already filters HIDMaestro upstream). Returns true when any of these match on an online device: name contains "ViGEm" or "Virtual Gamepad" (case-insensitive), device path lowercase contains "vigem" or "virtual", or the device has <code>IsHidden = true</code>. Offline devices always return false because virtual controllers only exist while the engine is running.</p>
+<p>Filters legacy and shadow virtual controllers from the Devices-page list (defense-in-depth: Step 1 already filters HIDMaestro upstream). Returns true when any of these match on an online device: name contains "ViGEm" or "Virtual Gamepad" (case-insensitive), device path lowercase contains "vigem" or "virtual", or the device has <code>IsHidden = true</code>. Offline devices always return false because virtual controllers only exist while the engine is running.</p>
 <h4 id="populatedevicerowdevicerowviewmodel-userdevice-private"><code>PopulateDeviceRow(DeviceRowViewModel, UserDevice)</code> (private)<a class="headerlink" href="#populatedevicerowdevicerowviewmodel-userdevice-private" title="Permanent link">&para;</a></h4>
 <p>Maps UserDevice properties to the ViewModel row: name, VID/PID, online status, capabilities, device type, slot assignments, HidHide state, instance path.</p>
 <h4 id="updatepaddeviceinfo-public"><code>UpdatePadDeviceInfo()</code> (public)<a class="headerlink" href="#updatepaddeviceinfo-public" title="Permanent link">&para;</a></h4>
 <p>Rebuilds each PadViewModel's <code>MappedDevices</code> from <code>UserSettings.FindByPadIndex()</code>. Handles multi-device slots, auto-selects first device, refreshes sidebar and dashboard.</p>
 <h3 id="per-device-settings-swap">Per-Device Settings Swap<a class="headerlink" href="#per-device-settings-swap" title="Permanent link">&para;</a></h3>
 <h4 id="populateavailableinputspadviewmodel-padvm-userdevice-ud-private"><code>PopulateAvailableInputs(PadViewModel padVm, UserDevice ud)</code> (private)<a class="headerlink" href="#populateavailableinputspadviewmodel-padvm-userdevice-ud-private" title="Permanent link">&para;</a></h4>
-<p>Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract <code>Gamepad *</code> family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from <code>MappingDisplayResolver.BuildInputChoices</code>, which prefers the live wrapper's sparse <code>SupportedButtonIndices</code> so a device that populates only specific slots does not surface phantom "Button N" rows, and falls back to a dense <code>Math.Max(CapButtonCount, RawButtonCount)</code> range when the device is offline. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds <code>padVm.SlotAvailableInputs</code> (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.</p>
+<p>Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract <code>Gamepad *</code> family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from <code>MappingDisplayResolver.BuildInputChoices</code>, which prefers the live wrapper's sparse <code>SupportedButtonIndices</code> / <code>SupportedAxisIndices</code> so a device that populates only specific slots does not surface phantom "Button N" or "Axis N" rows, falls back to the positions <code>UserDevice</code> recorded when the device was last online (<code>CapButtonIndices</code> / <code>CapAxisIndices</code>, discussion #344), and reaches the dense <code>Math.Max(CapButtonCount, RawButtonCount)</code> / <code>CapAxeCount</code> range only for a device never seen online. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds <code>padVm.SlotAvailableInputs</code> (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.</p>
 <h4 id="refreshmappingdropdowns-public"><code>RefreshMappingDropdowns()</code> (public)<a class="headerlink" href="#refreshmappingdropdowns-public" title="Permanent link">&para;</a></h4>
 <p>Called when <code>ForceRawJoystickMode</code> is toggled on a device. Rebuilds the input source dropdown and mapping descriptors for all pad slots using that device, reflecting the change in available raw vs. gamepad inputs.</p>
 <h4 id="onselecteddevicechangedobject-sender-padviewmodelmappeddeviceinfo-newdevice-private"><code>OnSelectedDeviceChanged(object sender, PadViewModel.MappedDeviceInfo newDevice)</code> (private)<a class="headerlink" href="#onselecteddevicechangedobject-sender-padviewmodelmappeddeviceinfo-newdevice-private" title="Permanent link">&para;</a></h4>
@@ -7849,7 +7849,7 @@
 <h4 id="buildperdevicesettingssnapshotint-sourcepadindex-virtualcontrollertype-layouttype-bool-layoutisextended-public-static"><code>BuildPerDeviceSettingsSnapshot(int sourcePadIndex, VirtualControllerType layoutType, bool layoutIsExtended)</code> (public static)<a class="headerlink" href="#buildperdevicesettingssnapshotint-sourcepadindex-virtualcontrollertype-layouttype-bool-layoutisextended-public-static" title="Permanent link">&para;</a></h4>
 <p>Snapshots every assigned device's full PadSetting on the source slot into a <code>PerDeviceSettingsEntry[]</code>. Each entry carries the device's <code>InstanceGuid</code>, <code>ProductGuid</code>, <code>ProductName</code>, and a nested <code>PadSettingJson</code> produced by <code>PadSetting.ToJson()</code> after clearing the outer-only slot-level payloads (<code>SlotDeviceConfigsJson</code>, <code>SlotExtendedConfigJson</code>, <code>SlotMidiConfigJson</code>, <code>SlotKbmConfigJson</code>, <code>SlotPerDeviceSettingsJson</code>, <code>SlotMultiSourceRows</code>, <code>DeviceScopedMultiSourceRows</code>) so the nesting doesn't recurse. Returns null when the source slot has zero UserSettings. The clipboard JSON path serializes the returned array as <code>__SlotPerDeviceSettings</code> on the wrapping PadSetting.</p>
 <h4 id="applyperdevicesettingstoslotint-targetpadindex-perdevicesettingsentry-entries-virtualcontrollertype-sourcelayouttype-bool-sourcelayoutisextended-virtualcontrollertype-targetlayouttype-bool-targetlayoutisextended-public"><code>ApplyPerDeviceSettingsToSlot(int targetPadIndex, PerDeviceSettingsEntry[] entries, VirtualControllerType sourceLayoutType, bool sourceLayoutIsExtended, VirtualControllerType targetLayoutType, bool targetLayoutIsExtended)</code> (public)<a class="headerlink" href="#applyperdevicesettingstoslotint-targetpadindex-perdevicesettingsentry-entries-virtualcontrollertype-sourcelayouttype-bool-sourcelayoutisextended-virtualcontrollertype-targetlayouttype-bool-targetlayoutisextended-public" title="Permanent link">&para;</a></h4>
-<p>Applies the per-device payload to a target slot. Iterates each entry, matches it to a target-slot device by <code>InstanceGuid</code> first (perfect round-trip on the same machine), then <code>ProductGuid</code> as a fallback (same controller model, different physical unit). Entries that match nothing are skipped. Paste never auto-creates devices. Each matched entry's nested PadSetting is reapplied via <code>ApplyPadSettingToCurrentDeviceTranslated</code> per device, so cross-layout pastes (e.g. Xbox→PS) still get the layout translation that single-device paste enjoys. The outer Copy / Paste flow's wholesale MappingSet replacement runs before this helper; this method only carries per-device tuning (deadzones, sensitivity, FFB, gyro, impulse triggers, adaptive triggers, lighting, TouchpadSettings).</p>
+<p>Applies the per-device payload to a target slot. Iterates each entry, matches it to a target-slot device by <code>InstanceGuid</code> first (perfect round-trip on the same machine), then <code>ProductGuid</code> as a fallback (same controller model, different physical unit). Entries that match nothing are skipped. Paste never auto-creates devices. Each matched entry's nested PadSetting is reapplied via <code>ApplyPadSettingToCurrentDeviceTranslated</code> per device, so cross-layout pastes (e.g. Xbox→PS) still get the layout translation that single-device paste enjoys. The outer Copy / Paste flow's wholesale MappingSet replacement runs before this helper. This method only carries per-device tuning (deadzones, sensitivity, FFB, gyro, impulse triggers, adaptive triggers, lighting, TouchpadSettings).</p>
 <h4 id="flushallpadviewmodels-public"><code>FlushAllPadViewModels()</code> (public)<a class="headerlink" href="#flushallpadviewmodels-public" title="Permanent link">&para;</a></h4>
 <p>Flushes all active PadViewModel state to PadSettings. Call before reading PadSettings across slots (e.g., Copy From dialog).</p>
 <h4 id="getcurrentpadsettingint-padindex-public"><code>GetCurrentPadSetting(int padIndex)</code> (public)<a class="headerlink" href="#getcurrentpadsettingint-padindex-public" title="Permanent link">&para;</a></h4>
@@ -7915,7 +7915,7 @@
 <ol>
 <li>Checks <code>Dashboard.EnableDsuMotionServer</code> and engine existence.</li>
 <li>Creates <code>DsuMotionServer</code>, subscribes to <code>StatusChanged</code>.</li>
-<li>Validates port (1024–65535; default 26760).</li>
+<li>Validates port (1024-65535, default 26760).</li>
 <li>Starts server. On success assigns to <code>_inputManager.DsuServer</code>; on failure disposes.</li>
 </ol>
 <h4 id="stopdsuserver-private"><code>StopDsuServer()</code> (private)<a class="headerlink" href="#stopdsuserver-private" title="Permanent link">&para;</a></h4>
@@ -7968,7 +7968,7 @@
 <p>Captures current runtime state:
 1. Flushes all PadViewModel values to PadSettings.
 2. Collects <code>ProfileEntry</code> (InstanceGuid, ProductGuid, MapTo, checksum) and deduplicated <code>PadSetting</code> clones.
-3. Captures <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>SlotControllerTypes[]</code>, <code>SlotProfileIds[]</code> (per-slot HIDMaestro profile slug), a deep clone of every slot's <code>MappingSet</code>, the Extended / MIDI / KBM / per-device slot configs, DSU, web server and Remote Link settings, all seven per-group slot orders (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR), and the overlay settings (touchpad geometry and opacity, menu overlay, shift-layer flyout, profile overlay).
+3. Captures <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>SlotControllerTypes[]</code>, <code>SlotProfileIds[]</code> (per-slot HIDMaestro profile slug), a deep clone of every slot's <code>MappingSet</code>, the Extended / MIDI / KBM / per-device slot configs, DSU and web server settings (Remote Link is app-scoped, not per profile), all seven per-group slot orders (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR), and the overlay settings (touchpad geometry and opacity, menu overlay, shift-layer flyout, profile overlay).
 4. Captures <code>ProfileData.Macros</code> (<code>&lt;ProfileMacros&gt;</code>), a copy of the current macro set. A profile carries its own macros, so switching profiles swaps macros too. A <code>null</code> <code>Macros</code> marks a pre-macro-era profile and leaves the live macros untouched on apply.</p>
 <h4 id="applyprofileprofiledata-profile-public"><code>ApplyProfile(ProfileData profile)</code> (public)<a class="headerlink" href="#applyprofileprofiledata-profile-public" title="Permanent link">&para;</a></h4>
 <p>Restores a profile:
@@ -8009,7 +8009,7 @@
 <li><strong>Destroy mismatched VCs.</strong> Each goes through <code>DestroyVirtualController(oldPad, asyncDispose: true)</code>, which releases OEM override claims and queues HIDMaestro teardown to the thread pool. Per-pad state at these old pads is cleared.</li>
 <li><strong>Re-route reused VCs.</strong> For each reused VC, write the VC pointer plus its per-VC state snapshot into the destination pad's slot in the engine arrays, and update <code>FeedbackPadIndex</code> so vibration callbacks land in the right <code>VibrationStates[]</code> entry. Per-VC state cleared at the old pad if it differs from the new pad.</li>
 </ol>
-<p>Same-profile cycles (Example: insert a Profile-A slot at the top of an all-Profile-A group) collapse to a pure pointer rotation across <code>_virtualControllers[]</code> with no kernel teardown. Zero-flicker for the game side. Different-profile positions go through the regular destroy + recreate path; Pass 2's visual-order gate plus <code>ApplyAscendingIndexPreemption</code> recreate them with the new pad's profile, taking the lowest free kernel slot (which is V, because surviving VCs at positions &lt; V keep theirs). The swap-only path does not engage Pass 2's preemption.</p>
+<p>Same-profile cycles (Example: insert a Profile-A slot at the top of an all-Profile-A group) collapse to a pure pointer rotation across <code>_virtualControllers[]</code> with no kernel teardown. Zero-flicker for the game side. Different-profile positions go through the regular destroy + recreate path. Pass 2's visual-order gate plus <code>ApplyAscendingIndexPreemption</code> recreate them with the new pad's profile, taking the lowest free kernel slot (which is V, because surviving VCs at positions &lt; V keep theirs). The swap-only path does not engage Pass 2's preemption.</p>
 <p>Group types outside the four kernel-slot groups are rejected at the entry. Cross-group moves do not route through here at all. <code>MoveSlotToGroupTail</code> changes <code>SlotControllerTypes[padIndex]</code>, which Pass 1 detects as a type change and destroys the old-group VC. The new group's ordinary creation logic spins up the new VC at the tail.</p>
 <p>This replaced the v2-era <code>ShouldRebuildKernelOrder</code> predicate and the live-subsequence walk that destroyed every live VC at and below the lowest changed position. Reorders now make per-position reuse decisions, so a same-profile rotation involves zero VC destroys.</p>
 <h4 id="moveslottogrouptailint-padindex-public"><code>MoveSlotToGroupTail(int padIndex)</code> (public)<a class="headerlink" href="#moveslottogrouptailint-padindex-public" title="Permanent link">&para;</a></h4>
@@ -8029,10 +8029,10 @@
 <h3 id="bulk-virtual-controller-toggle-32-issue-91">Bulk Virtual Controller toggle (3.2, Issue #91)<a class="headerlink" href="#bulk-virtual-controller-toggle-32-issue-91" title="Permanent link">&para;</a></h3>
 <p><code>InputService.ToggleVCsDisabled</code> is an <code>Action</code> set by <code>MainWindow</code> so the engine can fan out a profile-shortcut combo into <code>DeviceService.SetSlotEnabled</code> calls for every created slot. The flow:</p>
 <ol>
-<li>Engine thread observes <code>_inputManager.PendingToggleVCsDisabled</code> (set by a profile-shortcut activator).</li>
-<li>Marshals <code>ToggleVCsDisabled?.Invoke()</code> to the UI thread inside the polling cycle.</li>
-<li>UI handler reads each <code>SlotCreated[i]</code>; if any <code>SlotEnabled[i]</code> is true, disables them all, else enables them all.</li>
-<li><code>MainViewModel.RefreshNavControllerItems()</code> updates the sidebar; <code>ProfileSwitchOverlay</code> shows a Fluent green / red flyout.</li>
+<li>A profile-shortcut activator on the polling thread (Step 4b) sets <code>_inputManager.PendingToggleVCsDisabled</code>.</li>
+<li><code>UiTimer_Tick</code> (UI thread) consumes the flag, clears it, and calls <code>ToggleVCsDisabled?.Invoke()</code> when at least one slot is created.</li>
+<li>The UI handler reads each <code>SlotCreated[i]</code>. If any <code>SlotEnabled[i]</code> is true it disables them all, else enables them all.</li>
+<li><code>MainViewModel.RefreshNavControllerItems()</code> updates the sidebar and <code>ProfileSwitchOverlay</code> shows a Fluent green / red flyout.</li>
 </ol>
 <h3 id="inputservice-all-public-methods">InputService All Public Methods<a class="headerlink" href="#inputservice-all-public-methods" title="Permanent link">&para;</a></h3>
 <table>
@@ -8367,7 +8367,7 @@
 </tbody>
 </table>
 <p>The profile-CRUD, touchpad-gesture, and expression-variable methods are the domain logic behind MainWindow's UI handlers.</p>
-<p>Beside them sit a set of <code>public static</code> helpers with no instance state, used by the pages and dialogs directly: <code>FormatExePaths</code>, <code>LocalizedDeviceName</code>, <code>CloneMappingSetDeep</code>, <code>SlotHasAnyMapping</code>, <code>ReplaceSlotMappingSet</code>, <code>ApplySlotMappingSetFromRows</code>, and the four snapshot codecs <code>BuildShiftLayerSnapshotJson</code> / <code>ApplyShiftLayerSnapshotJson</code> / <code>BuildMenusSnapshotJson</code> / <code>ApplyMenusSnapshotJson</code>.</p>
+<p>Beside them sit a set of <code>public static</code> helpers with no instance state, used by the pages and dialogs directly: <code>FormatExePaths</code>, <code>LocalizedDeviceName</code>, <code>CloneMappingSetDeep</code>, <code>SlotHasAnyMapping</code>, <code>ReplaceSlotMappingSet</code>, <code>ApplySlotMappingSetFromRows</code>, and the six snapshot codecs <code>BuildShiftLayerSnapshotJson</code> / <code>ApplyShiftLayerSnapshotJson</code>, <code>BuildMenusSnapshotJson</code> / <code>ApplyMenusSnapshotJson</code>, and <code>BuildSlotSetExtrasJson</code> / <code>ApplySlotSetExtrasJson</code> (4.3.2: Bass Shakers, SOCD and Keep Awake ride slot Copy / Paste as <code>PadSetting.SlotSetExtrasJson</code>, and <code>ApplySlotSetExtrasJson</code> gates SOCD on <code>sameLayout</code>). Slot macros travel beside them as <code>PadSetting.SlotMacrosJson</code>.</p>
 <h3 id="inputservice-all-events">InputService All Events<a class="headerlink" href="#inputservice-all-events" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8552,7 +8552,7 @@
 <p><strong>Note</strong>: When a named profile is active, <code>BuildAppSettings()</code> stores the default profile's slot state (from <code>PendingDefaultSnapshot</code>), not the current runtime state. This prevents the named profile's topology from contaminating the default.</p>
 <h3 id="markdirty-and-autosave">MarkDirty and Autosave<a class="headerlink" href="#markdirty-and-autosave" title="Permanent link">&para;</a></h3>
 <h4 id="markdirty-public"><code>MarkDirty()</code> (public)<a class="headerlink" href="#markdirty-public" title="Permanent link">&para;</a></h4>
-<p>Sets <code>IsDirty = true</code>, starts a 250 ms debounce <code>DispatcherTimer</code> (restarted if already running). On tick: calls <code>Save()</code>, raises <code>AutoSaved</code>. The debounce batches rapid changes (e.g., slider drags) into a single save.</p>
+<p>Sets <code>IsDirty = true</code> and, from any thread (off-thread callers are marshalled to the dispatcher), arms a 250 ms <code>DispatcherTimer</code> that is started once and deliberately never restarted. Autosave is two-tier (#331). Every 250 ms tick pushes ViewModel state into the PadSettings and slot MappingSets (<code>UpdatePadSettingsFromViewModels</code> + <code>PushUiExtraSourcesIntoSlotMappingSets</code>), so the engine sees an edit within about 250 ms with no serialization and no disk write. Once 2 s (<code>PersistQuietMs</code>) have passed since the last <code>MarkDirty</code>, the timer stops and the full <code>Save()</code> runs, raising <code>AutoSaved</code>. One save per editing burst (e.g., a slider drag) instead of one per adjustment.</p>
 <h3 id="reset-and-reload">Reset and Reload<a class="headerlink" href="#reset-and-reload" title="Permanent link">&para;</a></h3>
 <h4 id="resettodefaults-public"><code>ResetToDefaults()</code> (public)<a class="headerlink" href="#resettodefaults-public" title="Permanent link">&para;</a></h4>
 <p>Clears all SettingsManager collections, resets all ViewModels to defaults, clears profiles, marks dirty.</p>
@@ -8568,7 +8568,7 @@
 <h4 id="updateactiveprofilesnapshot-private"><code>UpdateActiveProfileSnapshot()</code> (private)<a class="headerlink" href="#updateactiveprofilesnapshot-private" title="Permanent link">&para;</a></h4>
 <p>Called during Save. If a named profile is active, updates its stored snapshot from current state (entries, PadSettings, topology, server settings).</p>
 <h4 id="updatetopologycountsprofilelistitem-bool-int-internal-static"><code>UpdateTopologyCounts(ProfileListItem, bool[], int[])</code> (internal, static)<a class="headerlink" href="#updatetopologycountsprofilelistitem-bool-int-internal-static" title="Permanent link">&para;</a></h4>
-<p>Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM slots and sets topology label (e.g., "2x Xbox, 1x PlayStation").</p>
+<p>Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM/VR slots and sets the topology label (e.g., "2x Xbox, 1x PlayStation").</p>
 <h3 id="settingsservice-all-public-methods">SettingsService All Public Methods<a class="headerlink" href="#settingsservice-all-public-methods" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8602,7 +8602,7 @@
 <tr>
 <td><code>MarkDirty</code></td>
 <td><code>void MarkDirty()</code></td>
-<td>Marks dirty, schedules 250ms autosave</td>
+<td>Marks dirty, arms the 250 ms engine push, full save after 2 s quiet</td>
 </tr>
 <tr>
 <td><code>Reload</code></td>
@@ -8837,7 +8837,7 @@
 <tr>
 <td><code>NavigateToSlotRequested</code></td>
 <td><code>event EventHandler&lt;int&gt; NavigateToSlotRequested</code></td>
-<td>Fired after assignment. MainWindow navigates to the assigned slot's page</td>
+<td>Fired after assignment. MainWindow opens the assigned slot's page</td>
 </tr>
 <tr>
 <td><code>DeviceHidingStateChanged</code></td>
@@ -9651,7 +9651,7 @@
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuMotionServer</code> lifecycle managed by <code>InputService</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

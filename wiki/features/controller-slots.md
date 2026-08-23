@@ -87,7 +87,7 @@ Map a motion source on the slot and it streams into the virtual pad's gyro and a
 
 ### Extended (HIDMaestro)
 
-A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 225+ device profiles (HOTAS, wheels, third-party gamepads). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout.
+A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 231 device profiles (HOTAS, wheels, third-party gamepads). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout.
 
 Sim titles (DCS World, MSFS, X-Plane, iRacing) read DirectInput best. Extended slots also deliver [force feedback](force-feedback.md) to sim titles that support it.
 
@@ -186,7 +186,7 @@ Each slot has a **power flame** on the left of its [Dashboard](dashboard.md) car
 
 | Flame | Meaning |
 |-------|---------|
-| **Ember, with a glow** | Enabled with devices mapped, output live. Stays ember through the inactivity grace period (no inputs for the inactivity timeout, default 60 seconds, set on the [Settings](settings.md) page, 0 disables it). |
+| **Ember, with a glow** | Enabled with devices mapped, output live. Stays ember through the inactivity grace period (all of the slot's mapped devices offline for the **Inactivity Timeout**, default 60 seconds, set on the [Settings](settings.md) page, 0 disables it). |
 | **Gold** | Enabled and mapped, but no live virtual controller. Nothing is connected, the engine is stopped, or the inactivity timeout fired and tore the controller down. The slot config is kept. A device coming back while the engine runs rebuilds the virtual controller. |
 | **Gold, hover reads "Virtual controller failed"** | The driver could not create the virtual controller. Switching the slot's profile or toggling the slot retries the create. |
 | **Steel outline** | Off, or on with no devices mapped. Games cannot see it. Settings are kept. |
@@ -318,4 +318,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

@@ -37,7 +37,7 @@ graph TB
     end
 
     subgraph Drivers["OS / Driver Layer"]
-        HM["HIDMaestro<br/>UMDF2 user-mode driver<br/>(225+ profiles)"]
+        HM["HIDMaestro<br/>UMDF2 user-mode driver<br/>(231 profiles)"]
         HMVRD["HIDMaestro<br/>native OpenVR driver"]
         WIN["Windows<br/>Input Queue"]
         WMS["Windows MIDI<br/>Services"]
@@ -154,11 +154,11 @@ XInput-layout struct used as the universal input format for the Xbox and PlaySta
 | `LeftPaddle`, `RightPaddle` | `bool` | true/false | DualSense Edge back paddles (wire bits `0x40` left, `0x80` right) |
 | `LeftFunction`, `RightFunction` | `bool` | true/false | DualSense Edge front Fn buttons (wire bits `0x10` left, `0x20` right), which SDL exposes as LEFT_PADDLE2 / RIGHT_PADDLE2 |
 
-All five bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carry an explicit -1 for bits a profile does not declare, which is what ended the identity fallthrough that had Share pressing PS on every Sony pad.
+All six bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carry an explicit -1 for bits a profile does not declare, which is what ended the identity fallthrough that had Share pressing PS on every Sony pad.
 
 ### FeedbackPadIndex
 
-Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:379`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:2703` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:932`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
+Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:379`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:2749` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:932`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
 
 ### Type-Specific Submit Methods
 
@@ -194,12 +194,12 @@ New in 4.1.0. A virtual Nintendo Switch Pro Controller as a first-class slot cat
 
 | Aspect | Behavior |
 |---|---|
-| **Preset** | One catalog profile for now: `switch-pro` (VID 0x057E, PID 0x2009). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:307`), deliberately that single id per owner scope. Switch 2 Pro, Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2142`) seeds new slots. |
-| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2194`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2315`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:2575`). |
-| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:5326-5328`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:1741-1769`). |
+| **Preset** | Two catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009) and `switch2-pro-controller` (VID 0x057E, PID 0x2069). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:351`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2188`) seeds new slots with `switch-pro`. |
+| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2240`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2361`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:2621`). |
+| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:5366-5368`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:1769-1815`). |
 | **Gyro passthrough** | The `MotionSnapshot` overload fills the HM v1.3.18 IMU channel: `AccelGX/GY/GZ` (g) and `GyroDpsX/Y/Z` (deg/s) land verbatim in the SDL sensor frame (`HMaestroVirtualController.cs:911-918`). The driver-side packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. Zeroes when the slot maps no motion source. |
-| **Rumble** | The driver decodes the game's 0x01/0x10 HD-rumble writes itself and emits `leftMotor` / `rightMotor` on `OutputDecoded` only for genuine rumble frames. `MotorWriteAllowed` keeps non-Sony vendors on unconditional trust (the validity-flag semantics are Sony's, `:1326`), and a dedicated `NintendoVid` (0x057E) branch feeds the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236) for Bass Shakers (`:1047-1058`). |
-| **Button lettering** | Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the `switch-pro` profile: B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (`MacroItem.cs` `NintendoExtendedLabel`). The descriptor declares 18 buttons, but only the 14 role-mapped indices reach the wire (`NintendoLetteredButtonCount`). The trailing four are the Joy-Con rail SL/SR bits. ZL/ZR digital clicks ride `TriggerClickButtonMask`, derived from the profile layout's trigger-click roles (`InputService.TriggerClickButtonMaskFrom`, `InputService.cs:5248`). |
+| **Rumble** | The driver decodes the game's 0x01/0x10 HD-rumble writes itself and emits `leftMotor` / `rightMotor` on `OutputDecoded` only for genuine rumble frames. `MotorWriteAllowed` keeps non-Sony vendors on unconditional trust (the validity-flag semantics are Sony's, `:1402`), and a dedicated `NintendoVid` (0x057E) branch feeds the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236) for Bass Shakers (`:1047-1058`). |
+| **Button lettering** | Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the `switch-pro` profile: B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (`MacroItem.cs` `NintendoExtendedLabel`). The descriptor declares 18 buttons, but only the 14 role-mapped indices reach the wire (`NintendoLetteredButtonCount`). The trailing four are the Joy-Con rail SL/SR bits. ZL/ZR digital clicks ride `TriggerClickButtonMask`, derived from the profile layout's trigger-click roles (`InputService.TriggerClickButtonMaskFrom`, `InputService.cs:5288`). |
 | **Preview** | Both views, like Xbox and PlayStation. 3D is the Switch 2 Pro mesh, shared with the `switch2-pro` profiles (`HMaestroProfileCatalog.ResolveAssetFolders` maps `switch-pro` to the `Switch2Pro` model and its own `SWITCHPRO` 2D set). The S2-only parts render inert on an original Pro Controller. |
 | **HOME LED** | Physical Switch pads assigned to the slot take Guide LED brightness through the Lighting tab's "Guide Button LED" card ("Device Default" / "Fixed Brightness" / "Battery Level"). The writer is per device, SDL `SDL_SetJoystickLED`, which the Switch HIDAPI driver converts to a subcommand 0x38 Set HOME Light packet with 15 nonzero intensity steps (`SwitchHomeLedSetter.cs`). Works on any connection. This lane is device-scoped, not VC-scoped: it drives the physical pad's LED whatever the slot type. |
 
@@ -250,7 +250,7 @@ public HMaestroVirtualController(HMContext ctx, HMProfile profile, VirtualContro
 
 Stores the three arguments, resolves the cached axis keys, and seeds `_axesScratch`. Throws `ArgumentNullException` on null `ctx` or `profile`. No driver work happens here. The actual virtual device is created in `Connect()`.
 
-`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2294`). It resolves the profile (`:2305`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2373`), then constructs the wrapper (`:2437`).
+`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2340`). It resolves the profile (`:2351`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2419`), then constructs the wrapper (`:2483`).
 
 ### Connect()
 
@@ -323,15 +323,15 @@ The GIP counter is read-rate-bound, not time-bound. A 250 ms keepalive let any c
 
 Trigger values are mirrored to both the canonical key and the trigger row's own wire-field key when they differ, so every HM SDK lane reads live values instead of the 0.5 seed (discussion #130).
 
-**Buttons.** `MapButtons` (`HMaestroVirtualController.cs:1251`) translates 18 buttons to `HMButton` flags: A, B, X, Y, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, Guide, Touchpad (`gp.Buttons & 0x0800`) from the 16-bit mask, plus five separate bools: Share, Misc1 (DualSense mic mute), LeftPaddle / RightPaddle (Edge back paddles), and LeftPaddle2 / RightPaddle2 (Edge front Fn). HM silently drops any of these on profiles whose descriptor doesn't declare that button position, because since v1.5.1 the buttonMaps carry an explicit -1 for undeclared bits.
+**Buttons.** `MapButtons` (`HMaestroVirtualController.cs:1327`) translates 18 buttons to `HMButton` flags: A, B, X, Y, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, Guide, Touchpad (`gp.Buttons & 0x0800`) from the 16-bit mask, plus six separate bools: Share, Misc1 (DualSense mic mute), LeftPaddle / RightPaddle (Edge back paddles), and LeftPaddle2 / RightPaddle2 (Edge front Fn). HM silently drops any of these on profiles whose descriptor doesn't declare that button position, because since v1.5.1 the buttonMaps carry an explicit -1 for undeclared bits.
 
-**Hat.** `MapHat` (`HMaestroVirtualController.cs:1360`) collapses the four D-Pad bits into a single `HMHat` direction (`North`, `NorthEast`, `East`, `SouthEast`, `South`, `SouthWest`, `West`, `NorthWest`, `None`). Diagonals take priority over cardinals.
+**Hat.** `MapHat` (`HMaestroVirtualController.cs:1436`) collapses the four D-Pad bits into a single `HMHat` direction (`North`, `NorthEast`, `East`, `SouthEast`, `South`, `SouthWest`, `West`, `NorthWest`, `None`). Diagonals take priority over cardinals.
 
-**PlayStation overload.** `SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)` (`:594`) performs the same axis/button/hat population, then adds touchpad finger tracking (synthesized tracking IDs), gyro/accel scaled to the Sony int16 wire values (`GyroScale = 16`, `AccelScale = 8192`, the inverse of SDL3's no-calibration HIDAPI decode), sensor timestamp in 0.33 µs ticks, and battery level. Sony BT virtuals depend on it entirely (their Report 0x31 vendor blob is written by HM's encoder from these state fields). This overload does not dedup.
+**PlayStation overload.** `SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)` (`:599`) performs the same axis/button/hat population, then adds touchpad finger tracking (synthesized tracking IDs), gyro/accel scaled to the Sony int16 wire values (`GyroScale = 16`, `AccelScale = 8192`, the inverse of SDL3's no-calibration HIDAPI decode), sensor timestamp in 0.33 µs ticks, and battery level. Sony BT virtuals depend on it entirely (their Report 0x31 vendor blob is written by HM's encoder from these state fields). This overload does not dedup.
 
 ### SubmitRawHidState(RawHidState raw, int sticks, int triggers)
 
-`HMaestroVirtualController.cs:702`, plus the overload taking `in MotionSnapshot` at `:766` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot: `SlotRawHidSurface` is true for both categories (`InputService.cs:5326-5328`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:1761-1769`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
+`HMaestroVirtualController.cs:702`, plus the overload taking `in MotionSnapshot` at `:766` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot: `SlotRawHidSurface` is true for both categories (`InputService.cs:5366-5368`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:1807-1815`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
 
 **Why not just SubmitGamepadState:** `MapButtons` covers a fixed named set, but the XInput-shaped `Gamepad` struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.
 
@@ -364,7 +364,7 @@ The controller-local source for the rumble-to-audio feature (the Pad page's "Bas
 Contract points:
 
 - **Keyed by the VC instance, never by pad index.** The slot-reorder reroute re-points `_virtualControllers[]` and the pack travels with its VC, so a swap can never land slot A's rumble on slot B the way a captured `FeedbackPadIndex` could. The poll thread's feedback lane reads `InboundRumblePack` through the CURRENT array position each tick.
-- **Provenance-clean by construction.** Only the game-write callbacks fill it: the XInput branch (`:1161`), the Xbox Series BT short-HID branch (`:1194`), the Xbox long-HID branch (`:1213`, body motors only, trigger voices preserved), the gated Sony branch (`:1043`), the Nintendo branch (`:1056`), and the PID FFB lane through `TickFfb` (`:474`). Test rumble and macro rumble never cross it, which is what lets the audio path read it without feedback loops.
+- **Provenance-clean by construction.** Only the game-write callbacks fill it: the XInput branch (`:1161`), the Steam Deck persona feature-command branch (`:1174-1248`, 0xEB / 0xEA / 0x8F), the Xbox Series BT short-HID branch (`:1270`), the Xbox long-HID branch (`:1289`, body motors only, trigger voices preserved), the gated Sony branch (`:1043`), the Nintendo branch (`:1055`), and the PID FFB lane through `TickFfb` (`:475`). Test rumble and macro rumble never cross it, which is what lets the audio path read it without feedback loops.
 - **Zeros pass through unfiltered.** Browser Gamepad API dual-rumble is a square wave alternating full/zero. The off phase is part of the duty cycle, not noise.
 - A fresh VC reads 0, so create / recreate starts silent.
 
@@ -384,7 +384,7 @@ The per-slot audio routing UI states the same scope: "Works with Xbox, DualShock
 2. Subscribes to `_controller.OutputDecoded` (`:992`). This carries pre-decoded, transport-agnostic fields, and serves two producers: Sony profiles (DS4 / DS5, either transport) and the virtual Switch Pro (the HM driver decodes the 0x01/0x10 HD-rumble writes itself and emits the motor fields only for genuine rumble frames).
 3. Subscribes to `_controller.OutputReceived` (`:1098`) for the XInput, Xbox HID, and PID FFB paths below.
 
-**OutputDecoded motor gate.** When `leftMotor` / `rightMotor` bytes are present, the write into `vibrationStates[idx]` (`byte * 257`) is allowed by `MotorWriteAllowed(_profile.VendorId, sonyMotorsValid)` (`:1326`): Sony profiles require the full `SonyMotorsValid` trust gate, while any other vendor (Switch Pro's synthesized decode, future flag-less profiles) keeps unconditional trust, because the validity-flag semantics are Sony's. `SonyMotorsValid` (`:1313`) requires all three legs, per linux-hid `hid-playstation.c` (motor bytes are assigned only inside the block that asserts VALID_FLAG0 bit 0, and an audio/lightbar-only report carries motor=0 meaning "ignore", not "stop"):
+**OutputDecoded motor gate.** When `leftMotor` / `rightMotor` bytes are present, the write into `vibrationStates[idx]` (`byte * 257`) is allowed by `MotorWriteAllowed(_profile.VendorId, sonyMotorsValid)` (`:1402`): Sony profiles require the full `SonyMotorsValid` trust gate, while any other vendor (Switch Pro's synthesized decode, future flag-less profiles) keeps unconditional trust, because the validity-flag semantics are Sony's. `SonyMotorsValid` (`:1389`) requires all three legs, per linux-hid `hid-playstation.c` (motor bytes are assigned only inside the block that asserts VALID_FLAG0 bit 0, and an audio/lightbar-only report carries motor=0 meaning "ignore", not "stop"):
 
 1. `declaredSize > 0` and `RawBytes.Length >= declaredSize` (at least, not exactly: Windows sizes every BT host write to the largest declared output report, so an equality was unsatisfiable on Bluetooth and silently killed rumble, lightbar, and triggers on every BT frame).
 2. CRC valid (`CrcValid` alone is insufficient: it initializes true and is skipped when the footer is absent, hence the length leg).
@@ -399,12 +399,13 @@ The `OutputReceived` handler dispatches by `pkt.Source`, `HMaestroProfileCatalog
 | Gate | `pkt.Source` | Length | Meaning | Motor write |
 |---|---|---|---|---|
 | any | `XInput` | >= 5 | XUSB SET_STATE rumble: `data[2]` = L, `data[3]` = R main motors. When `len >= 7`, `data[4]` / `data[5]` are the per-trigger impulse motors (`XINPUT_VIBRATION_EX`). Shorter packets zero the trigger motors. | `* 257` |
+| `ProfileId == steam-deck-composite` | `HidFeature` | >= 1 | Steam Deck persona haptics (#338), decoded per HandheldCompanion's `SteamDeckTarget.HandleOutput`: `data[0]` 0xEB trigger rumble (u16 L/R at bytes 5/7, landed on the main motors), 0xEA haptic (intensity at byte 4 plus signed gain at byte 5, x8, both motors), 0x8F pulse train (period/count u16 at 5/7, gain at 9, both motors, auto-zero when the train ends). Any other command byte returns. | u16 direct (0xEB) / `* 257` |
 | `IsXboxProfile` | `HidOutput` | 4..7 | Xbox Series BT short HID rumble: `data[0]` / `data[1]` = L/R trigger impulse motors, `data[2]` / `data[3]` = L/R main motors, magnitude 0..100 | `* 655` |
 | `IsXboxProfile` | `HidOutput` | >= 8 | Xbox wired / wireless-receiver long rumble: `data[5]` = L, `data[6]` = R | `* 257` |
 | `_ffbDecoder != null` | `HidOutput` | any | HID PID FFB output report. Routes to `_ffbDecoder.OnHidOutput(reportId, data)`, then `_ffbDecoder.Apply(vibrationStates[idx])`. Catalog profiles built with `AddPidFfbBlock` keep their original VID/PID here. | written by decoder |
 | `_ffbDecoder != null` | `HidFeature` | any | HID PID FFB feature report (Create New Effect). Routes to `_ffbDecoder.OnHidFeature(reportId, data)`. | none directly |
 
-Each of the first three branches also packs the decoded pair into the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236).
+Each of the first four branches also packs the decoded pair into the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236).
 
 The Xbox Series BT 0..100 magnitude scaled by 655 was verified against HM's own test app log of `xbox-series-xs-bt` plus `gamepad-tester.com`. Browser Gamepad API square-wave dual-rumble alternates `hi=127` / `hi=0`. The "off" phase is part of the duty cycle, not noise, so packets where both motor bytes are zero must still be forwarded. The Xbox short-HID trigger bytes at `data[0]` / `data[1]` were confirmed from a 1518-capture Game Controller Tester impulse-trigger run (2026-05-19, all `len=7`).
 
@@ -496,7 +497,7 @@ The "where force COMES FROM" to "toward" 180-degree shift is per HID PID 1.0: a 
 
 A SteamVR left + right hand pair (issue #49) served by HIDMaestro's native OpenVR driver (HM#32, v1.6.0). One instance drives BOTH hands through one `HMVRController` pipe. The driver registers the devices with SteamVR only while this consumer is live, so an idle machine shows no phantom controllers.
 
-All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2197`).
+All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2243`).
 
 ### IsAvailable()
 
@@ -987,4 +988,4 @@ Note that mouse movement and scroll do NOT go through `SendInput` here. Those ro
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

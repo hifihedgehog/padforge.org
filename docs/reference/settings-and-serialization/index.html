@@ -5334,42 +5334,46 @@
 <p><strong>v4.1.0 additions.</strong> The raw-surface key grammar renamed from <code>Extended*</code> to <code>Raw*</code> (<code>RawAxis0</code>, <code>RawBtn0</code>, <code>RawPov0Up</code>). On-disk element names stay pinned and legacy keys normalize on load (see <a href="#raw-surface-custom-mappings">Raw-Surface Custom Mappings</a>). <code>VirtualControllerType</code> gains <code>Nintendo</code> (5, the virtual Switch Pro, #215), with <code>NintendoSlotOrder</code>, <code>MaxNintendoSlots</code>, and its own positional raw auto-map. <code>MappingSet</code> gains the Base-layer appearance trio, <code>&lt;RumbleAudio&gt;</code> (bass shakers, #236), button SOCD (<code>SocdMode</code> / <code>SocdPairs</code>), the <code>Authoritative</code> flag, and the Workshop provenance stamps, all gated by <code>HasAuthoredContent</code>. <code>MacroData</code> gains seven activation modes (<code>MacroTriggerMode</code> 5–11, #253) plus <code>TriggerHoldMs</code>, <code>TriggerDoublePressMs</code>, the shift-layer <code>LayerMask</code> gate (#253/#254), <code>PairId</code>, and <code>ReleaseLingerMs</code>. <code>MacroActionType</code> runs through <code>AxisScale</code> (51, #251). <code>MappingSource</code> and <code>ShiftActivator</code> grow the per-source shaping / gating fields and the release / double-press activator fields listed in their tables. <code>DeviceSlotConfigData</code> gains the Guide Button LED pair and the synthetic touchpad pressure pair. <code>TouchpadGestureSettings</code> gains the Pointer Response block (libinput port) and the mouse-feel fields.</p>
 <p><strong>v4.2.0 additions.</strong> <code>VirtualControllerType</code> gains <code>Vr</code> (6, the SteamVR hand pair, #49). It is the one type capped below the global slot count: <code>SettingsManager.MaxVrSlots</code> is 1, enforced centrally by <code>SettingsManager.CanSlotTakeType()</code>. <code>AppSettingsData</code> and <code>ProfileData</code> gain <code>VrSlotOrder</code> (<code>&lt;VrSlotOrder&gt;</code> / <code>&lt;ProfileVrSlotOrder&gt;</code>), and <code>PadSetting</code> gains a fifth dictionary lane, <code>&lt;VrMappings&gt;</code>, keyed on the <code>VrLayout</code> vocabulary. <code>MacroActionType</code> runs through <code>HeadphoneVolumeDown</code> (53). <code>AppSettingsData</code> and <code>ProfileData</code> gain <code>EnableShiftLayerFlyout</code> and <code>EnableProfileOverlay</code>. <code>AppSettingsData</code> alone gains <code>HeadsetTrackerAddresses</code> (#188). <code>MappingSet</code> gains the Keep Awake trio and the Workshop stick-shape / gyro-engage / gyro-ratchet stamps. <code>PadSetting</code> gains the DualSense mic-mute plus Edge paddle / Fn button descriptors, <code>TriggerRumbleFold</code> and <code>AtVibrationToImpulseEnabled</code> (#271), the per-stick <code>LeftThumbSensitivity</code> / <code>RightThumbSensitivity</code>, <code>Model3DAppearances</code>, and the aux-gyro bias / magnetometer calibration block. <code>TouchpadGestureSettings</code> replaces the pointer stretch pair with the four-field pointer region plus <code>PointerRegionAuthored</code> and <code>RegionSchema</code>. <code>PointerStretchX</code> / <code>PointerStretchY</code> survive as deserialize-only aliases.</p>
 <p><strong>v4.3.0 additions.</strong> <code>AppSettingsData</code> gains <code>WebCustomLayoutsJson</code> (#296, the browser-built custom pad layouts as one machine-scoped JSON array, deliberately not profile content), the battery-alert trio <code>BatteryNotifyEnabled</code> / <code>BatteryNotifyThreshold</code> / <code>BatteryNotifyVibrate</code> (#293), the voice-macro block <code>VoicePhrases</code> / <code>VoiceMacrosEnabled</code> / <code>VoiceMinConfidence</code> / <code>VoiceListeningMode</code> (#317), <code>MappingPickerHiddenDevices</code> (#322), and <code>PsMoveCalibrations</code> (#277). <code>MacroActionType</code> runs through <code>VoiceListenWhileHeld</code> (54). <code>ActionData</code> gains the pressure-scaled turbo block (#290). <code>PadSetting</code> splits the gyro invert toggle into <code>GyroInvertPitch</code> / <code>GyroInvertYaw</code> / <code>GyroInvertRoll</code> (#321), taking the checksum's gyro group to 42. <code>MappingSource</code> gains <code>ParamTiltRangeDeg</code> / <code>ParamTiltInnerDz</code> (#292). <code>MappingSet</code> gains <code>KeepAwakeMotion</code> (discussion #263). <code>TouchpadGestureSettings</code> gains four momentum knobs (#291). <code>IsPerDeviceTuningKey</code> gains the <code>KbmMouseMomentum</code> and <code>GyroTilt</code> raw-bag key families.</p>
+<p><strong>v4.3.2 additions.</strong> <code>UserDevice</code> gains the sparse position arrays <code>CapButtonIndices</code> / <code>CapAxisIndices</code> (discussion #344), and <code>LoadFromDevice</code> gates the effective axis count on <code>SupportedAxisIndices</code> when the wrapper produced one. <code>PadSetting</code> gains the clipboard-only <code>SlotSetExtrasJson</code> / <code>SlotMacrosJson</code> payloads (<code>__SlotSetExtras</code> / <code>__SlotMacros</code>), so a slot Copy / Paste carries the MappingSet's Bass Shakers, SOCD and Keep Awake state plus the slot's macros. <code>AppSettingsData</code> gains <code>DiagnosticsLoggingEnabled</code> (#303). Autosave is two-tier (#331): a 250 ms engine-visible push every tick, the full save after 2 s of quiet.</p>
 </blockquote>
 <hr />
 <p>This page is a developer reference for PadForge's settings persistence.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>flowchart TD
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    subgraph &quot;Save Flow&quot;
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        S1[User Action&lt;br/&gt;slider drag · mapping change · toggle] --&gt; S2[SettingsService.MarkDirty]
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        S2 --&gt; S3[250ms Debounce Timer&lt;br/&gt;restarts on each call]
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        S3 --&gt; S4[UpdatePadSettingsFromViewModels&lt;br/&gt;write ViewModel values to PadSettings]
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        S4 --&gt; S5[Flush Mappings + UpdateChecksum&lt;br/&gt;Raw · MIDI · KBM · VR dicts to arrays · MD5]
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        S5 --&gt; S6[UpdateActiveProfileSnapshot&lt;br/&gt;deep clone to active profile if named]
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        S6 --&gt; S7[Collect Data under SyncRoot&lt;br/&gt;Devices · Settings · PadSettings deduplicated]
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        S7 --&gt; S8[Build DTOs&lt;br/&gt;AppSettings · Macros · Profiles]
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        S8 --&gt; S9[XmlSerializer.Serialize&lt;br/&gt;write PadForge.xml]
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        S9 --&gt; S10[IsDirty = false&lt;br/&gt;raise AutoSaved event]
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    end
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    subgraph &quot;Load Flow&quot;
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        L1[LoadFromFile] --&gt; L2[XmlSerializer.Deserialize&lt;br/&gt;stream to SettingsFileData]
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        L2 --&gt; L3[Populate UserDevices&lt;br/&gt;lock · clear · add from XML]
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        L3 --&gt; L4[Populate UserSettings&lt;br/&gt;match PadSetting by checksum · CloneDeep]
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        L4 --&gt; L5[Purge Orphans&lt;br/&gt;remove stale MapTo entries]
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        L5 --&gt; L6[LoadAppSettings&lt;br/&gt;SlotCreated before OutputType]
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        L6 --&gt; L7[LoadPadSettings&lt;br/&gt;deadzones · curves · ranges · mappings]
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        L7 --&gt; L8[LoadMacros&lt;br/&gt;reconstruct from serialized data]
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        L8 --&gt; L9[LoadProfiles&lt;br/&gt;Default profile · restore active profile topology]
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    end
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    style S1 fill:#e1f5fe
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    style S2 fill:#e1f5fe
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    style S3 fill:#fff3e0
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    style S9 fill:#e8f5e9
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    style S10 fill:#e8f5e9
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    style L1 fill:#f3e5f5
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    style L2 fill:#f3e5f5
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    style L4 fill:#fff3e0
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    style L9 fill:#e8f5e9
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        S2 --&gt; S3[250ms DispatcherTimer&lt;br/&gt;starts once, never restarts]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        S3 --&gt; S3b[Tier 1 every tick&lt;br/&gt;UpdatePadSettingsFromViewModels + PushUiExtraSourcesIntoSlotMappingSets&lt;br/&gt;engine-visible, no disk]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        S3b --&gt; S3c{2 s quiet&lt;br/&gt;since last MarkDirty?}
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        S3c -- no --&gt; S3
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        S3c -- yes --&gt; S4[Tier 2: Save&lt;br/&gt;UpdatePadSettingsFromViewModels]
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        S4 --&gt; S5[Flush Mappings + UpdateChecksum&lt;br/&gt;Raw · MIDI · KBM · VR dicts to arrays · MD5]
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        S5 --&gt; S6[UpdateActiveProfileSnapshot&lt;br/&gt;deep clone to active profile if named]
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        S6 --&gt; S7[Collect Data under SyncRoot&lt;br/&gt;Devices · Settings · PadSettings deduplicated]
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        S7 --&gt; S8[Build DTOs&lt;br/&gt;AppSettings · Macros · Profiles]
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        S8 --&gt; S9[XmlSerializer.Serialize&lt;br/&gt;write PadForge.xml]
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        S9 --&gt; S10[IsDirty = false&lt;br/&gt;raise AutoSaved event]
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    end
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    subgraph &quot;Load Flow&quot;
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        L1[LoadFromFile] --&gt; L2[XmlSerializer.Deserialize&lt;br/&gt;stream to SettingsFileData]
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        L2 --&gt; L3[Populate UserDevices&lt;br/&gt;lock · clear · add from XML]
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        L3 --&gt; L4[Populate UserSettings&lt;br/&gt;match PadSetting by checksum · CloneDeep]
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        L4 --&gt; L5[Purge Orphans&lt;br/&gt;remove stale MapTo entries]
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        L5 --&gt; L6[LoadAppSettings&lt;br/&gt;SlotCreated before OutputType]
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        L6 --&gt; L7[LoadPadSettings&lt;br/&gt;deadzones · curves · ranges · mappings]
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        L7 --&gt; L8[LoadMacros&lt;br/&gt;reconstruct from serialized data]
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        L8 --&gt; L9[LoadProfiles&lt;br/&gt;Default profile · restore active profile topology]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    end
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    style S1 fill:#e1f5fe
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    style S2 fill:#e1f5fe
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    style S3 fill:#fff3e0
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    style S9 fill:#e8f5e9
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    style S10 fill:#e8f5e9
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    style L1 fill:#f3e5f5
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    style L2 fill:#f3e5f5
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    style L4 fill:#fff3e0
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    style L9 fill:#e8f5e9
 </code></pre></div>
 <p><strong>Source files:</strong>
 - <code>PadForge.App/Services/SettingsService.cs</code>. XML load/save, serialization DTOs
@@ -5851,6 +5855,18 @@
 <td>Raw joystick axis count, the axis twin of <code>RawButtonCount</code>.</td>
 </tr>
 <tr>
+<td><code>CapButtonIndices</code></td>
+<td><code>int[]</code></td>
+<td><code>&lt;CapButtonIndices&gt;</code></td>
+<td>(v4.3.2, discussion #344) Sparse SDL button positions the device populates, captured while online so the offline listing numbers buttons the same way the live one does. Null/empty on older configs and on devices never seen online. Callers fall back to a dense range.</td>
+</tr>
+<tr>
+<td><code>CapAxisIndices</code></td>
+<td><code>int[]</code></td>
+<td><code>&lt;CapAxisIndices&gt;</code></td>
+<td>(v4.3.2) Axis twin of <code>CapButtonIndices</code>: the populated axis positions (a Move Navigation fills three of the first six and seven of the ten extras). Null/empty = dense fallback.</td>
+</tr>
+<tr>
 <td><code>HasExtraGenericAxes</code></td>
 <td><code>bool</code></td>
 <td><code>&lt;HasExtraGenericAxes&gt;</code></td>
@@ -5866,7 +5882,7 @@
 <td><code>CapType</code></td>
 <td><code>int</code></td>
 <td><code>&lt;CapType&gt;</code></td>
-<td><code>InputDeviceType</code> static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion). 18–25 match DirectInput. 26–30 are PadForge extensions.</td>
+<td><code>InputDeviceType</code> static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone). 18–25 match DirectInput. 26–31 are PadForge extensions.</td>
 </tr>
 <tr>
 <td><code>HasGyro</code></td>
@@ -6122,7 +6138,7 @@
 <tr>
 <td><code>HasJoyConIr</code></td>
 <td><code>bool</code></td>
-<td><code>VendorId == 0x057E</code> and <code>ProductName</code> is exactly "Nintendo Switch Joy-Con (R)". Gates the IR Brightness source (#151).</td>
+<td><code>VendorId == 0x057E</code> and either <code>ProductName</code> is exactly "Nintendo Switch Joy-Con (R)" or <code>ProdId == 0x2008</code> (the combined gen-1 pair, whose right half's camera posts on the pair, #275). Gates the IR Brightness source (#151).</td>
 </tr>
 <tr>
 <td><code>HasJoyCon2Mouse</code></td>
@@ -6160,8 +6176,8 @@
 </code></pre></div>
 <p>Shared logic:
 1. <code>LoadInstance()</code>. Identity (InstanceGuid, Name, ProductGuid)
-2. Compute the gated button count (sparse <code>SupportedButtonIndices</code>, falling back to <code>NumButtons</code>)
-3. Compute the effective axis count (#193: extra generic axes past the standard six)
+2. Compute the gated button count (sparse <code>SupportedButtonIndices</code>, falling back to <code>NumButtons</code>) and clone the positions into <code>CapButtonIndices</code>
+3. Compute the effective axis count (#193: extra generic axes past the standard six), then prefer the sparse <code>SupportedAxisIndices</code> length when the wrapper produced one, cloning the positions into <code>CapAxisIndices</code>
 4. <code>LoadCapabilities()</code>. Axes, buttons, hats, type
 5. <code>RawButtonCount = Math.Max(wrapper.RawButtonCount, wrapper.NumButtons)</code>
 6. Sensor / touchpad caps: <code>HasGyro</code>, <code>HasAccel</code>, <code>HasAccelAux</code>, <code>HasTouchpad</code>, <code>CapTouchpadCount</code>, <code>CapTouchpadFingerCounts</code>, <code>HasRumbleTriggers</code>
@@ -7185,7 +7201,7 @@
 - <code>RawStick{N}DzX</code>, <code>RawStick{N}DzY</code>, <code>RawStick{N}AdzX</code>, etc.. Per-stick deadzone/calibration settings</p>
 <p>Legacy <code>Extended*</code> tokens in older settings files are rewritten at load by <code>MappingSetMigrator.NormalizeRawToken</code> (idempotent, applied to row targets and dictionary keys alike), so pre-4.1.0 files keep loading. The XML ELEMENT names stay pinned (<code>&lt;ExtendedMappings&gt;&lt;Map&gt;</code>), so the on-disk container shape never changed.</p>
 <p>The same dictionary carries the Flick Stick card's per-device tuning (#225, v4.1), regardless of slot type. Nine keys per device: <code>FlickStickDots</code> (default 14400), <code>FlickStickTime</code> (0.1), <code>FlickStickThreshold</code> (0.9), <code>FlickStickSnapMode</code> (<code>"None"</code>), <code>FlickStickSnapStrength</code> (1.0), <code>FlickStickForwardDz</code> (0), <code>FlickStickSmoothing</code> (-1), <code>FlickStickOnEngage</code> (<code>"1"</code> / <code>"0"</code>, default off), <code>FlickStickRotationOffset</code> (0). <code>SaveFlickStickCard</code> writes them (invariant-culture numbers, snap mode as a plain string) and <code>LoadFlickStickCard</code> reads them (both in <code>PadForge.App/Services/SettingsService.cs</code>). The save path also re-stamps the stored values onto every <code>"Flick Stick ..."</code> source's <code>ParamFlick*</code> fields via <code>ApplyFlickStickParamsToRow</code>. An absent <code>FlickStickDots</code> means the card was never stored for that device. The load path then seeds the card from the slot's flick source, so a Workshop import's translator-carried tuning survives until the user tunes the card. The keys ride the normal sorted Extended fold in the checksum (item 18 above) and survive <code>ClearMappingDescriptors()</code> through <code>IsPerDeviceTuningKey</code>'s <code>StartsWith("FlickStick")</code> clause, the same per-device-tuning carve-out the <code>MotionSteer*</code> and steering keys use.</p>
-<p><code>IsPerDeviceTuningKey</code> is the full list of raw-bag keys that survive a descriptor rewrite. At HEAD it covers keys starting with <code>Stick</code>, <code>MotionSteer</code>, <code>FlickStick</code>, <code>KbmMouseMomentum</code> (the Sticks tab's Momentum rows on a KBM slot's mouse stick, #291), <code>GyroTilt</code> (the Gyro tab's tilt card, #292), and <code>RawStick</code>, plus <code>RawTrigger*</code> keys ending in <code>Dz</code>, <code>Adz</code>, <code>Mr</code>, or <code>Curve</code>. Any new per-device tuning key that is not on this list gets wiped by the descriptor rewrite within seconds of being set, which is exactly how the momentum toggle failed before #291 landed here.</p>
+<p><code>IsPerDeviceTuningKey</code> is the full list of raw-bag keys that survive a descriptor rewrite. At HEAD it covers keys starting with <code>Stick</code> that also contain <code>Steer</code> (the stick-steering mode keys), <code>MotionSteer</code>, <code>FlickStick</code>, <code>KbmMouseMomentum</code> (the Sticks tab's Momentum rows on a KBM slot's mouse stick, #291), <code>GyroTilt</code> (the Gyro tab's tilt card, #292), and <code>RawStick</code>, plus <code>RawTrigger*</code> keys ending in <code>Dz</code>, <code>Adz</code>, <code>Mr</code>, or <code>Curve</code>. Any new per-device tuning key that is not on this list gets wiped by the descriptor rewrite within seconds of being set, which is exactly how the momentum toggle failed before #291 landed here.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="na">[XmlArray(&quot;ExtendedMappings&quot;)]</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="na">[XmlArrayItem(&quot;Map&quot;)]</span>
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">public</span><span class="w"> </span><span class="n">RawMappingEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">RawMappingEntries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
@@ -7346,7 +7362,7 @@
 <p>v4.1 adds the swipe-haptics pair <code>EnableSwipeHaptics</code> (default <code>false</code>) / <code>SwipeHapticsIntensity</code> (default <code>0.5</code>), the opt-in per-(device, pad) swipe-haptic ticks (discussion #219, a detent fires each time a finger travels a fixed distance across the pad).</p>
 <p>v4.3 extends the mouse-feel block with four momentum knobs (#291): <code>MouseMomentumMaxSpeed</code> (default <code>0</code>, unset), <code>MouseMomentumMinLift</code> (default <code>0.286</code>, the lift speed below which no glide starts), <code>MouseMomentumFlingGain</code> (default <code>1.0</code>), and <code>MouseMomentumStacking</code> (default <code>false</code>, whether a second fling adds to a live glide). All four ride the <code>TPS:</code> checksum block.</p>
 <p>v4.2 replaces the v4.1 pointer stretch pair with the absolute-pointer region (#9): <code>PointerRegionSizeX</code> / <code>PointerRegionSizeY</code> (default <code>1.0</code>, the screen rectangle this pad maps onto as a fraction of screen width and height) and <code>PointerRegionCenterX</code> / <code>PointerRegionCenterY</code> (default <code>0.5</code>, with Y measured from the TOP edge because the translator flips Steam's bottom-origin <code>position_y</code>). Size supersedes stretch: the two are algebraically identical at the default center, and stretch's floor of <code>1.0</code> could not express a region smaller than the screen, which is what most Steam <code>mouse_region</code> configs author. <code>PointerRegionAuthored</code> marks the pad's region as user-owned so a reset stays honest against an imported mapping source, and <code>RegionSchema</code> is the one-time repair counter. <code>PointerStretchX</code> / <code>PointerStretchY</code> remain as deserialize-only aliases onto the size pair (both <code>ShouldSerialize</code> hooks return false), so an old file converges to the region names after one save.</p>
-<p><strong>Lookup at runtime:</strong> the engine reads through <code>InputManager.TouchpadGestureSettingsProvider</code>, a static <code>Func&lt;int, string, int, TouchpadGestureSettings&gt;</code> the App layer binds at engine start. The Func walks <code>UserSettings</code> to find the slot's <code>PadSetting</code>, then scans its <code>TouchpadSettings</code> array for the matching <code>(deviceGuid, touchpadIndex)</code>. Unbound or missing entries return <code>TouchpadGestureSettings.Default()</code> (every feature off).</p>
+<p><strong>Lookup at runtime:</strong> the engine reads through <code>InputManager.TouchpadGestureSettingsProvider</code>, an instance <code>Func&lt;int, Guid, int, TouchpadGestureSettings&gt;</code> (slot, device <code>InstanceGuid</code>, touchpad index) the App layer binds at engine start. The Func walks <code>UserSettings</code> to find the slot's <code>PadSetting</code>, then scans its <code>TouchpadSettings</code> array for the matching <code>(deviceGuid, touchpadIndex)</code>. Unbound or missing entries return <code>TouchpadGestureSettings.Default()</code> (every feature off).</p>
 <p><strong>Excluded from <code>CopyablePropertyNames</code>:</strong> <code>TouchpadSettings</code> is deep-copied separately in <code>CopyFrom()</code> (a fresh array of <code>TouchpadSettingsEntry</code> clones) so reflection's reference copy doesn't share entries between profiles. JSON key for clipboard round-trip: <code>__TouchpadSettings</code>.</p>
 <h3 id="mousegesturesettings-v4-200">MouseGestureSettings (v4, #200)<a class="headerlink" href="#mousegesturesettings-v4-200" title="Permanent link">&para;</a></h3>
 <p>Per-device mouse-gesture settings, the twin of <code>TouchpadSettings</code> minus the pad index. Persisted as a typed sub-tree on <code>PadSetting</code>. Null or empty means every mouse uses <code>MouseGestureSettings.Default()</code> at runtime.</p>
@@ -7357,7 +7373,7 @@
 <p>Each entry carries a <code>DeviceGuid</code> key and a <code>MouseGestureSettings</code> payload (Enabled, GestureButtons, CustomEngageButton, CustomEngageDeviceGuid, FlickThresholdCounts, CooldownMs), serialized into the <code>MGS:</code> checksum block. <code>GestureButtons</code> is a bitmask over the raw mouse-button indices (bit 0 Left through bit 4 X2) plus bit 5, the Custom activation (v4.1, discussion #216): <code>CustomEngageButton</code> + <code>CustomEngageDeviceGuid</code> name a recorded cross-device input (a keyboard key, a gamepad button, or an axis past the button threshold, the same pair shape as <code>GyroAimEngageButton</code>) that arms the gesture session while held instead of a mouse button. An empty <code>CustomEngageButton</code> keeps the Custom session inert even with bit 5 set. The empty-descriptor pass-through convention of the engage family does not apply here. <strong>Excluded from <code>CopyablePropertyNames</code>:</strong> deep-copied separately in <code>CopyFrom()</code> via <code>DeepCopyMouseGestureSettings</code>, and round-tripped through clipboard JSON under <code>__MouseGestureSettings</code>.</p>
 <h3 id="copyablepropertynames">CopyablePropertyNames<a class="headerlink" href="#copyablepropertynames" title="Permanent link">&para;</a></h3>
 <p>Static array defining which properties participate in <code>CopyFrom()</code>, <code>ToJson()</code>, and <code>FromJson()</code>. Includes all user-facing configuration. Excludes identity and metadata.</p>
-<p><strong>Complete list (181 properties):</strong></p>
+<p><strong>Complete list (182 properties):</strong></p>
 <table>
 <thead>
 <tr>
@@ -7462,11 +7478,11 @@
 - <code>RawMappingEntries</code>, <code>MidiMappingEntries</code>, <code>KbmMappingEntries</code>, <code>VrMappingEntries</code>, <code>MappingDeadZoneEntries</code>, <code>MappingBidirectionalEntries</code>. Deep-copied separately in <code>CopyFrom()</code> and serialized separately in <code>ToJson()</code> / <code>FromJson()</code>.
 - <code>TouchpadSettings</code>. The v3.3 per-(device, padIdx) typed sub-tree. Deep-copied separately in <code>CopyFrom()</code>, serialized as <code>__TouchpadSettings</code> in <code>ToJson()</code> / <code>FromJson()</code>.
 - <code>MouseGestureSettings</code>. The v4 per-device typed sub-tree (#200). Deep-copied separately in <code>CopyFrom()</code>, serialized as <code>__MouseGestureSettings</code>.
-- <code>SlotMultiSourceRows</code>, <code>DeviceScopedMultiSourceRows</code>, <code>SlotPerDeviceSettingsJson</code>, <code>SlotDeviceConfigsJson</code>, <code>SlotExtendedConfigJson</code>, <code>SlotMidiConfigJson</code>, <code>SlotKbmConfigJson</code>, <code>SlotShiftActivatorsJson</code>, <code>SlotMenusJson</code> (v4.1, #9: the slot's <code>MappingSet.Menus</code>, so Copy / Paste carries the Menus-tab state like the shift authoring). Clipboard-only payloads populated by the Copy path on the source side. <code>[XmlIgnore]</code> + <code>[JsonIgnore]</code> so they never reach the on-disk XML.</p>
+- <code>SlotMultiSourceRows</code>, <code>DeviceScopedMultiSourceRows</code>, <code>SlotPerDeviceSettingsJson</code>, <code>SlotDeviceConfigsJson</code>, <code>SlotExtendedConfigJson</code>, <code>SlotMidiConfigJson</code>, <code>SlotKbmConfigJson</code>, <code>SlotShiftActivatorsJson</code>, <code>SlotMenusJson</code> (v4.1, #9: the slot's <code>MappingSet.Menus</code>, so Copy / Paste carries the Menus-tab state like the shift authoring), <code>SlotSetExtrasJson</code> (v4.3.2: the slot MappingSet's non-row state, the <code>&lt;RumbleAudio&gt;</code> Bass Shakers config, <code>SocdMode</code> / <code>SocdPairs</code>, and the Keep Awake quartet), <code>SlotMacrosJson</code> (v4.3.2: the slot's macros, in the same envelope the Macros tab's own clipboard uses). Clipboard-only payloads populated by the Copy path on the source side. <code>[XmlIgnore]</code> + <code>[JsonIgnore]</code> so they never reach the on-disk XML.</p>
 <p><strong>Usage:</strong>
 - <code>CopyFrom()</code>. Copies all properties via reflection, deep-copies mapping arrays (including <code>MappingBidirectionalEntries</code>), deep-copies <code>TouchpadSettings</code> and <code>MouseGestureSettings</code>.
-- <code>ToJson()</code>. Serializes properties + <code>__ExtendedMappings</code> / <code>__MidiMappings</code> / <code>__KbmMappings</code> / <code>__VrMappings</code> / <code>__MappingDeadZones</code> / <code>__MappingBidirectional</code> / <code>__TouchpadSettings</code> / <code>__MouseGestureSettings</code> + layout metadata (<code>__OutputType</code>, <code>__IsExtended</code>) + the clipboard-only payloads (<code>__SlotPerDeviceSettings</code>, <code>__SlotDeviceConfigs</code>, <code>__SlotExtendedConfig</code>, <code>__SlotMidiConfig</code>, <code>__SlotKbmConfig</code>, <code>__SlotShiftActivators</code>, <code>__SlotMenus</code>, <code>__MultiSourceRows</code> from <code>DeviceScopedMultiSourceRows</code>, <code>__SlotRows</code> from <code>SlotMultiSourceRows</code>).
-- <code>FromJson()</code>. Deserializes JSON, extracts layout metadata for cross-layout paste, reattaches the typed sub-trees and the clipboard-only payloads if present. Reads the pre-v4 <code>__SlotPlayStationConfigs</code> key into <code>SlotDeviceConfigsJson</code> for back-compat.</p>
+- <code>ToJson()</code>. Serializes properties + <code>__ExtendedMappings</code> / <code>__MidiMappings</code> / <code>__KbmMappings</code> / <code>__VrMappings</code> / <code>__MappingDeadZones</code> / <code>__MappingBidirectional</code> / <code>__TouchpadSettings</code> / <code>__MouseGestureSettings</code> + layout metadata (<code>__OutputType</code>, <code>__IsExtended</code>) + the clipboard-only payloads (<code>__SlotPerDeviceSettings</code>, <code>__SlotDeviceConfigs</code>, <code>__SlotExtendedConfig</code>, <code>__SlotMidiConfig</code>, <code>__SlotKbmConfig</code>, <code>__SlotShiftActivators</code>, <code>__SlotMenus</code>, <code>__SlotSetExtras</code>, <code>__SlotMacros</code>, <code>__MultiSourceRows</code> from <code>DeviceScopedMultiSourceRows</code>, <code>__SlotRows</code> from <code>SlotMultiSourceRows</code>).
+- <code>FromJson()</code>. Deserializes JSON, extracts layout metadata for cross-layout paste, reattaches the typed sub-trees and the clipboard-only payloads (including <code>__SlotSetExtras</code> and <code>__SlotMacros</code>) if present. Reads the pre-v4 <code>__SlotPlayStationConfigs</code> key into <code>SlotDeviceConfigsJson</code> for back-compat.</p>
 <h3 id="utility-methods">Utility Methods<a class="headerlink" href="#utility-methods" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7897,7 +7913,7 @@
 <td><code>ParamFlickTime</code></td>
 <td><code>double</code></td>
 <td><code>0.1</code></td>
-<td>(#225, v4.1) Flick stick (descriptor family <code>"Flick Stick Left"</code> / <code>"Flick Stick Right"</code> on a <code>KbmMouseX</code> row): easing duration in seconds for a full 180° flick. Shorter turns complete in the same time. Tuning is per-source so a Workshop import's per-group values survive materialization. The pad-page Flick Stick card re-stamps all eight <code>ParamFlick*</code> fields on save (<code>ApplyFlickStickParamsToRow</code>). See the <code>FlickStick*</code> Extended keys.</td>
+<td>(#225, v4.1) Flick stick (descriptor family <code>"Flick Stick Left"</code> / <code>"Flick Stick Right"</code> on a <code>KbmMouseX</code> row): easing duration in seconds for a full 180° flick. Shorter turns complete in the same time. Tuning is per-source so a Workshop import's per-group values survive materialization. The pad-page Flick Stick card re-stamps all nine <code>ParamFlick*</code> fields on save (<code>ApplyFlickStickParamsToRow</code>). See the <code>FlickStick*</code> Extended keys.</td>
 </tr>
 <tr>
 <td><code>ParamFlickCountsPer360</code></td>
@@ -8242,6 +8258,13 @@
 <td>Start minimized</td>
 </tr>
 <tr>
+<td><code>DiagnosticsLoggingEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.3, #303) Persistent mirror of the engine event ring to <code>diagnostics.log</code> beside the exe, for auto-started sessions where a launch flag cannot help.</td>
+</tr>
+<tr>
 <td><code>StartAtLogin</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code></td>
@@ -8435,7 +8458,7 @@
 <td><code>double</code></td>
 <td><code>[XmlElement]</code></td>
 <td><code>-1</code></td>
-<td>(v3.2) Overlay window position; <code>-1</code> = centered on the chosen monitor</td>
+<td>(v3.2) Overlay window position. <code>-1</code> = centered on the chosen monitor</td>
 </tr>
 <tr>
 <td><code>TouchpadOverlayWidth</code> / <code>Height</code></td>
@@ -8449,7 +8472,7 @@
 <td><code>double</code></td>
 <td><code>[XmlElement]</code></td>
 <td><code>-1</code></td>
-<td>Main window position; <code>-1</code> = centered</td>
+<td>Main window position. <code>-1</code> = centered</td>
 </tr>
 <tr>
 <td><code>MainWindowWidth</code> / <code>Height</code></td>
@@ -9092,7 +9115,7 @@
 </tbody>
 </table>
 <h3 id="actiondata">ActionData<a class="headerlink" href="#actiondata" title="Permanent link">&para;</a></h3>
-<p>64 serialized properties, every one an <code>[XmlElement]</code>.</p>
+<p>69 serialized properties, every one an <code>[XmlElement]</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ActionData</span>
 <a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="p">{</span>
 <a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">MacroActionType</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
@@ -9179,20 +9202,27 @@
 <a id="__codelineno-26-84" name="__codelineno-26-84" href="#__codelineno-26-84"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MouseY</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-26-85" name="__codelineno-26-85" href="#__codelineno-26-85"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">IntervalMs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
 <a id="__codelineno-26-86" name="__codelineno-26-86" href="#__codelineno-26-86"></a>
-<a id="__codelineno-26-87" name="__codelineno-26-87" href="#__codelineno-26-87"></a><span class="w">    </span><span class="c1">// v3.6 (#162): DisconnectController action target</span>
-<a id="__codelineno-26-88" name="__codelineno-26-88" href="#__codelineno-26-88"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ViewModels</span><span class="p">.</span><span class="n">MacroDisconnectTarget</span><span class="w"> </span><span class="n">DisconnectTarget</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-89" name="__codelineno-26-89" href="#__codelineno-26-89"></a><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">ViewModels</span><span class="p">.</span><span class="n">MacroDisconnectTarget</span><span class="p">.</span><span class="n">TriggeringDevice</span><span class="p">;</span>
-<a id="__codelineno-26-90" name="__codelineno-26-90" href="#__codelineno-26-90"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">DisconnectDeviceGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-91" name="__codelineno-26-91" href="#__codelineno-26-91"></a>
-<a id="__codelineno-26-92" name="__codelineno-26-92" href="#__codelineno-26-92"></a><span class="w">    </span><span class="c1">// RunProgram action</span>
-<a id="__codelineno-26-93" name="__codelineno-26-93" href="#__codelineno-26-93"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ProgramPath</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-94" name="__codelineno-26-94" href="#__codelineno-26-94"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ProgramArgs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-95" name="__codelineno-26-95" href="#__codelineno-26-95"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ProgramWorkingDir</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-96" name="__codelineno-26-96" href="#__codelineno-26-96"></a>
-<a id="__codelineno-26-97" name="__codelineno-26-97" href="#__codelineno-26-97"></a><span class="w">    </span><span class="c1">// TextBlock action (#201)</span>
-<a id="__codelineno-26-98" name="__codelineno-26-98" href="#__codelineno-26-98"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">TextContent</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-99" name="__codelineno-26-99" href="#__codelineno-26-99"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TextPerCharDelayMs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-26-100" name="__codelineno-26-100" href="#__codelineno-26-100"></a><span class="p">}</span>
+<a id="__codelineno-26-87" name="__codelineno-26-87" href="#__codelineno-26-87"></a><span class="w">    </span><span class="c1">// Pressure-scaled turbo (#290)</span>
+<a id="__codelineno-26-88" name="__codelineno-26-88" href="#__codelineno-26-88"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">PressureScaledRate</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-89" name="__codelineno-26-89" href="#__codelineno-26-89"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">SlowIntervalMs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
+<a id="__codelineno-26-90" name="__codelineno-26-90" href="#__codelineno-26-90"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">TurboRateCurve</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Linear&quot;</span><span class="p">;</span>
+<a id="__codelineno-26-91" name="__codelineno-26-91" href="#__codelineno-26-91"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PressureStartPercent</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-92" name="__codelineno-26-92" href="#__codelineno-26-92"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PressureEndPercent</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<a id="__codelineno-26-93" name="__codelineno-26-93" href="#__codelineno-26-93"></a>
+<a id="__codelineno-26-94" name="__codelineno-26-94" href="#__codelineno-26-94"></a><span class="w">    </span><span class="c1">// v3.6 (#162): DisconnectController action target</span>
+<a id="__codelineno-26-95" name="__codelineno-26-95" href="#__codelineno-26-95"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ViewModels</span><span class="p">.</span><span class="n">MacroDisconnectTarget</span><span class="w"> </span><span class="n">DisconnectTarget</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-96" name="__codelineno-26-96" href="#__codelineno-26-96"></a><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">ViewModels</span><span class="p">.</span><span class="n">MacroDisconnectTarget</span><span class="p">.</span><span class="n">TriggeringDevice</span><span class="p">;</span>
+<a id="__codelineno-26-97" name="__codelineno-26-97" href="#__codelineno-26-97"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">DisconnectDeviceGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-98" name="__codelineno-26-98" href="#__codelineno-26-98"></a>
+<a id="__codelineno-26-99" name="__codelineno-26-99" href="#__codelineno-26-99"></a><span class="w">    </span><span class="c1">// RunProgram action</span>
+<a id="__codelineno-26-100" name="__codelineno-26-100" href="#__codelineno-26-100"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ProgramPath</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-101" name="__codelineno-26-101" href="#__codelineno-26-101"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ProgramArgs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-102" name="__codelineno-26-102" href="#__codelineno-26-102"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ProgramWorkingDir</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-103" name="__codelineno-26-103" href="#__codelineno-26-103"></a>
+<a id="__codelineno-26-104" name="__codelineno-26-104" href="#__codelineno-26-104"></a><span class="w">    </span><span class="c1">// TextBlock action (#201)</span>
+<a id="__codelineno-26-105" name="__codelineno-26-105" href="#__codelineno-26-105"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">TextContent</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-106" name="__codelineno-26-106" href="#__codelineno-26-106"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TextPerCharDelayMs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-26-107" name="__codelineno-26-107" href="#__codelineno-26-107"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong><code>MacroActionType</code></strong> is <strong>APPEND-ONLY</strong> (<code>PadForge.App/ViewModels/MacroItem.cs</code>): the macro clipboard leg writes the enum numerically via <code>System.Text.Json</code> defaults, so inserting a member re-meanings every previously copied clipboard payload. The settings XML writes names and is insertion-safe, the clipboard is not. New members go at the end. The full ordered set (index in parentheses):</p>
 <p><code>ButtonPress</code> (0), <code>ButtonRelease</code> (1), <code>KeyPress</code> (2), <code>KeyRelease</code> (3), <code>Delay</code> (4), <code>AxisSet</code> (5), <code>SystemVolume</code> (6), <code>AppVolume</code> (7), <code>MouseMove</code> (8), <code>MouseButtonPress</code> (9), <code>MouseButtonRelease</code> (10), <code>MouseScroll</code> (11), <code>ToggleTouchpadOverlay</code> (12, v3.2), <code>LightbarColor</code> (13), <code>LightbarColorClear</code> (14), <code>LightbarModeSet</code> (15), <code>LightbarModeCycle</code> (16), <code>SetGyroEngaged</code> (17), <code>Rumble</code> (18), <code>RumbleStop</code> (19), <code>RumbleTrigger</code> (20, #102), <code>RumbleTriggerStop</code> (21, #102), <code>PlaySound</code> (22, #83), <code>SoundStop</code> (23, #83), <code>MouseRecenter</code> (24, #108), <code>MouseFixPosition</code> (25, #109), <code>MouseLimitRegion</code> (26, #110), <code>DisconnectController</code> (27, #162), <code>RunProgram</code> (28), <code>TextBlock</code> (29, #201), <code>PointerModeCycle</code> (30, #203), <code>PointerModeSet</code> (31, #203), <code>GuideLedBrightness</code> (32, #209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40, translator v15), <code>MouseNudge</code> (41, translator v16), <code>CycleTapList</code> (42, translator v16), <code>ToggleMouseButton</code> (43, translator v18), <code>ToggleVcAxis</code> (44, translator v18), <code>RepeatVcAxisWhileHeld</code> (45, translator v18), <code>ToggleWheel</code> (46, translator v18), <code>AxisAdd</code> (47, #237 relative deflection), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317 push-to-talk: while the macro is held, the voice recognizer's listen gate is open).</p>
@@ -9769,7 +9799,7 @@
 <tr>
 <td><code>SlotMappingSets</code></td>
 <td><code>MappingSet[]</code></td>
-<td>(v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed; <code>ApplyProfile</code> falls back to legacy migrator in that case.</td>
+<td>(v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed. <code>ApplyProfile</code> falls back to the legacy migrator in that case.</td>
 </tr>
 <tr>
 <td><code>Macros</code></td>
@@ -10384,59 +10414,62 @@
 <hr />
 <h2 id="serialization-pipeline">Serialization Pipeline<a class="headerlink" href="#serialization-pipeline" title="Permanent link">&para;</a></h2>
 <h3 id="save-flow-detailed">Save Flow (Detailed)<a class="headerlink" href="#save-flow-detailed" title="Permanent link">&para;</a></h3>
-<p><code>SettingsService.MarkDirty()</code> starts a 250 ms debounce timer. On fire, calls <code>Save()</code> then <code>SaveToFile(filePath)</code>:</p>
+<p><code>SettingsService.MarkDirty()</code> starts a 250 ms <code>DispatcherTimer</code> that it never restarts (#331, two-tier autosave). Every tick pushes the ViewModels into the PadSettings and the slot MappingSets, so the engine sees a change within about 250 ms with no serialization and no disk write. Once 2 s have passed with no further <code>MarkDirty()</code> (<code>PersistQuietMs</code>), the timer stops and runs the full <code>Save()</code> then <code>SaveToFile(filePath)</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>User action (slider drag, mapping change, etc.)
 <a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>    |
 <a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>    v
 <a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>SettingsService.MarkDirty()
 <a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>    |-- Sets IsDirty = true
 <a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>    |-- Sets ViewModel.HasUnsavedChanges = true
-<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>    |-- Starts/restarts 250ms DispatcherTimer
-<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a>    |
-<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>    ... (250ms debounce, timer restarts on each MarkDirty call) ...
-<a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a>    |
-<a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a>    v
-<a id="__codelineno-39-12" name="__codelineno-39-12" href="#__codelineno-39-12"></a>Timer fires -&gt; Save() -&gt; SaveToFile(filePath)
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>    |-- Records _lastDirtyTickMs
+<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a>    |-- Starts the 250ms DispatcherTimer if it is not already running (never restarts it)
+<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>    |
+<a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a>    ... every 250ms tick: Tier 1, UpdatePadSettingsFromViewModels() +
+<a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a>    ...   PushUiExtraSourcesIntoSlotMappingSets(), engine-visible, no disk ...
+<a id="__codelineno-39-12" name="__codelineno-39-12" href="#__codelineno-39-12"></a>    ... tick sees 2 s of quiet since the last MarkDirty (PersistQuietMs) ...
 <a id="__codelineno-39-13" name="__codelineno-39-13" href="#__codelineno-39-13"></a>    |
-<a id="__codelineno-39-14" name="__codelineno-39-14" href="#__codelineno-39-14"></a>    v  Step 1: UpdatePadSettingsFromViewModels()
-<a id="__codelineno-39-15" name="__codelineno-39-15" href="#__codelineno-39-15"></a>    |  For each PadViewModel (slot 0-15):
-<a id="__codelineno-39-16" name="__codelineno-39-16" href="#__codelineno-39-16"></a>    |    - Find the selected device&#39;s UserSetting for this slot
-<a id="__codelineno-39-17" name="__codelineno-39-17" href="#__codelineno-39-17"></a>    |    - Write all ViewModel slider/toggle values back to PadSetting:
-<a id="__codelineno-39-18" name="__codelineno-39-18" href="#__codelineno-39-18"></a>    |      ForceOverall, LeftMotorStrength, RightMotorStrength, ForceSwapMotor,
-<a id="__codelineno-39-19" name="__codelineno-39-19" href="#__codelineno-39-19"></a>    |      AudioRumble settings, deadzones (X/Y), anti-deadzones (X/Y),
-<a id="__codelineno-39-20" name="__codelineno-39-20" href="#__codelineno-39-20"></a>    |      linear, sensitivity curves, max ranges (pos + neg), center offsets,
-<a id="__codelineno-39-21" name="__codelineno-39-21" href="#__codelineno-39-21"></a>    |      trigger deadzones, trigger anti-deadzones, trigger max ranges
-<a id="__codelineno-39-22" name="__codelineno-39-22" href="#__codelineno-39-22"></a>    |    - Write raw-surface stick/trigger settings for indices 2+ via SetRawMapping()
-<a id="__codelineno-39-23" name="__codelineno-39-23" href="#__codelineno-39-23"></a>    |    - Write mapping descriptors via SetPadSettingProperty() (reflection or dict)
-<a id="__codelineno-39-24" name="__codelineno-39-24" href="#__codelineno-39-24"></a>    |
-<a id="__codelineno-39-25" name="__codelineno-39-25" href="#__codelineno-39-25"></a>    v  Step 2: Flush dictionaries and recompute checksums
-<a id="__codelineno-39-26" name="__codelineno-39-26" href="#__codelineno-39-26"></a>    |  For each UserSetting&#39;s PadSetting:
-<a id="__codelineno-39-27" name="__codelineno-39-27" href="#__codelineno-39-27"></a>    |    - FlushRawMappings() -- dict -&gt; RawMappingEntries[]
-<a id="__codelineno-39-28" name="__codelineno-39-28" href="#__codelineno-39-28"></a>    |    - FlushMidiMappings() -- dict -&gt; MidiMappingEntries[]
-<a id="__codelineno-39-29" name="__codelineno-39-29" href="#__codelineno-39-29"></a>    |    - FlushKbmMappings() -- dict -&gt; KbmMappingEntries[]
-<a id="__codelineno-39-30" name="__codelineno-39-30" href="#__codelineno-39-30"></a>    |    - FlushVrMappings() -- dict -&gt; VrMappingEntries[]
-<a id="__codelineno-39-31" name="__codelineno-39-31" href="#__codelineno-39-31"></a>    |    - FlushMappingDeadZones() / FlushMappingBidirectional()
-<a id="__codelineno-39-32" name="__codelineno-39-32" href="#__codelineno-39-32"></a>    |    - UpdateChecksum() -- recompute MD5 from all properties
-<a id="__codelineno-39-33" name="__codelineno-39-33" href="#__codelineno-39-33"></a>    |    - Sync: us.PadSettingChecksum = ps.PadSettingChecksum
-<a id="__codelineno-39-34" name="__codelineno-39-34" href="#__codelineno-39-34"></a>    |
-<a id="__codelineno-39-35" name="__codelineno-39-35" href="#__codelineno-39-35"></a>    v  Step 3: UpdateActiveProfileSnapshot()
-<a id="__codelineno-39-36" name="__codelineno-39-36" href="#__codelineno-39-36"></a>    |  If a named profile is active, write current runtime state back to it:
-<a id="__codelineno-39-37" name="__codelineno-39-37" href="#__codelineno-39-37"></a>    |    entries, PadSettings (deep cloned + deduplicated), slot topology,
-<a id="__codelineno-39-38" name="__codelineno-39-38" href="#__codelineno-39-38"></a>    |    Extended/MIDI configs, DSU/web server settings
-<a id="__codelineno-39-39" name="__codelineno-39-39" href="#__codelineno-39-39"></a>    |
-<a id="__codelineno-39-40" name="__codelineno-39-40" href="#__codelineno-39-40"></a>    v  Step 4: Collect data under SyncRoot locks
-<a id="__codelineno-39-41" name="__codelineno-39-41" href="#__codelineno-39-41"></a>    |    data.Devices = UserDevices.Items.ToArray()
-<a id="__codelineno-39-42" name="__codelineno-39-42" href="#__codelineno-39-42"></a>    |    data.Settings = UserSettings.Items.ToArray()
-<a id="__codelineno-39-43" name="__codelineno-39-43" href="#__codelineno-39-43"></a>    |    data.PadSettings = unique PadSettings (deduplicated by checksum via HashSet)
-<a id="__codelineno-39-44" name="__codelineno-39-44" href="#__codelineno-39-44"></a>    |
-<a id="__codelineno-39-45" name="__codelineno-39-45" href="#__codelineno-39-45"></a>    v  Step 5: Build DTOs
-<a id="__codelineno-39-46" name="__codelineno-39-46" href="#__codelineno-39-46"></a>    |    data.AppSettings = BuildAppSettings()  -- from SettingsViewModel
-<a id="__codelineno-39-47" name="__codelineno-39-47" href="#__codelineno-39-47"></a>    |    data.Macros = BuildMacroData()  -- from all PadViewModels
-<a id="__codelineno-39-48" name="__codelineno-39-48" href="#__codelineno-39-48"></a>    |    data.Profiles = SettingsManager.Profiles.ToArray()
-<a id="__codelineno-39-49" name="__codelineno-39-49" href="#__codelineno-39-49"></a>    |
-<a id="__codelineno-39-50" name="__codelineno-39-50" href="#__codelineno-39-50"></a>    v  Step 6: XmlSerializer.Serialize(stream, data)
-<a id="__codelineno-39-51" name="__codelineno-39-51" href="#__codelineno-39-51"></a>    |
-<a id="__codelineno-39-52" name="__codelineno-39-52" href="#__codelineno-39-52"></a>    v  Step 7: IsDirty = false, raise AutoSaved event
+<a id="__codelineno-39-14" name="__codelineno-39-14" href="#__codelineno-39-14"></a>    v
+<a id="__codelineno-39-15" name="__codelineno-39-15" href="#__codelineno-39-15"></a>Timer stops -&gt; Tier 2: Save() -&gt; SaveToFile(filePath)
+<a id="__codelineno-39-16" name="__codelineno-39-16" href="#__codelineno-39-16"></a>    |
+<a id="__codelineno-39-17" name="__codelineno-39-17" href="#__codelineno-39-17"></a>    v  Step 1: UpdatePadSettingsFromViewModels()
+<a id="__codelineno-39-18" name="__codelineno-39-18" href="#__codelineno-39-18"></a>    |  For each PadViewModel (slot 0-15):
+<a id="__codelineno-39-19" name="__codelineno-39-19" href="#__codelineno-39-19"></a>    |    - Find the selected device&#39;s UserSetting for this slot
+<a id="__codelineno-39-20" name="__codelineno-39-20" href="#__codelineno-39-20"></a>    |    - Write all ViewModel slider/toggle values back to PadSetting:
+<a id="__codelineno-39-21" name="__codelineno-39-21" href="#__codelineno-39-21"></a>    |      ForceOverall, LeftMotorStrength, RightMotorStrength, ForceSwapMotor,
+<a id="__codelineno-39-22" name="__codelineno-39-22" href="#__codelineno-39-22"></a>    |      AudioRumble settings, deadzones (X/Y), anti-deadzones (X/Y),
+<a id="__codelineno-39-23" name="__codelineno-39-23" href="#__codelineno-39-23"></a>    |      linear, sensitivity curves, max ranges (pos + neg), center offsets,
+<a id="__codelineno-39-24" name="__codelineno-39-24" href="#__codelineno-39-24"></a>    |      trigger deadzones, trigger anti-deadzones, trigger max ranges
+<a id="__codelineno-39-25" name="__codelineno-39-25" href="#__codelineno-39-25"></a>    |    - Write raw-surface stick/trigger settings for indices 2+ via SetRawMapping()
+<a id="__codelineno-39-26" name="__codelineno-39-26" href="#__codelineno-39-26"></a>    |    - Write mapping descriptors via SetPadSettingProperty() (reflection or dict)
+<a id="__codelineno-39-27" name="__codelineno-39-27" href="#__codelineno-39-27"></a>    |
+<a id="__codelineno-39-28" name="__codelineno-39-28" href="#__codelineno-39-28"></a>    v  Step 2: Flush dictionaries and recompute checksums
+<a id="__codelineno-39-29" name="__codelineno-39-29" href="#__codelineno-39-29"></a>    |  For each UserSetting&#39;s PadSetting:
+<a id="__codelineno-39-30" name="__codelineno-39-30" href="#__codelineno-39-30"></a>    |    - FlushRawMappings() -- dict -&gt; RawMappingEntries[]
+<a id="__codelineno-39-31" name="__codelineno-39-31" href="#__codelineno-39-31"></a>    |    - FlushMidiMappings() -- dict -&gt; MidiMappingEntries[]
+<a id="__codelineno-39-32" name="__codelineno-39-32" href="#__codelineno-39-32"></a>    |    - FlushKbmMappings() -- dict -&gt; KbmMappingEntries[]
+<a id="__codelineno-39-33" name="__codelineno-39-33" href="#__codelineno-39-33"></a>    |    - FlushVrMappings() -- dict -&gt; VrMappingEntries[]
+<a id="__codelineno-39-34" name="__codelineno-39-34" href="#__codelineno-39-34"></a>    |    - FlushMappingDeadZones() / FlushMappingBidirectional()
+<a id="__codelineno-39-35" name="__codelineno-39-35" href="#__codelineno-39-35"></a>    |    - UpdateChecksum() -- recompute MD5 from all properties
+<a id="__codelineno-39-36" name="__codelineno-39-36" href="#__codelineno-39-36"></a>    |    - Sync: us.PadSettingChecksum = ps.PadSettingChecksum
+<a id="__codelineno-39-37" name="__codelineno-39-37" href="#__codelineno-39-37"></a>    |
+<a id="__codelineno-39-38" name="__codelineno-39-38" href="#__codelineno-39-38"></a>    v  Step 3: UpdateActiveProfileSnapshot()
+<a id="__codelineno-39-39" name="__codelineno-39-39" href="#__codelineno-39-39"></a>    |  If a named profile is active, write current runtime state back to it:
+<a id="__codelineno-39-40" name="__codelineno-39-40" href="#__codelineno-39-40"></a>    |    entries, PadSettings (deep cloned + deduplicated), slot topology,
+<a id="__codelineno-39-41" name="__codelineno-39-41" href="#__codelineno-39-41"></a>    |    Extended/MIDI configs, DSU/web server settings
+<a id="__codelineno-39-42" name="__codelineno-39-42" href="#__codelineno-39-42"></a>    |
+<a id="__codelineno-39-43" name="__codelineno-39-43" href="#__codelineno-39-43"></a>    v  Step 4: Collect data under SyncRoot locks
+<a id="__codelineno-39-44" name="__codelineno-39-44" href="#__codelineno-39-44"></a>    |    data.Devices = UserDevices.Items.ToArray()
+<a id="__codelineno-39-45" name="__codelineno-39-45" href="#__codelineno-39-45"></a>    |    data.Settings = UserSettings.Items.ToArray()
+<a id="__codelineno-39-46" name="__codelineno-39-46" href="#__codelineno-39-46"></a>    |    data.PadSettings = unique PadSettings (deduplicated by checksum via HashSet)
+<a id="__codelineno-39-47" name="__codelineno-39-47" href="#__codelineno-39-47"></a>    |
+<a id="__codelineno-39-48" name="__codelineno-39-48" href="#__codelineno-39-48"></a>    v  Step 5: Build DTOs
+<a id="__codelineno-39-49" name="__codelineno-39-49" href="#__codelineno-39-49"></a>    |    data.AppSettings = BuildAppSettings()  -- from SettingsViewModel
+<a id="__codelineno-39-50" name="__codelineno-39-50" href="#__codelineno-39-50"></a>    |    data.Macros = BuildMacroData()  -- from all PadViewModels
+<a id="__codelineno-39-51" name="__codelineno-39-51" href="#__codelineno-39-51"></a>    |    data.Profiles = SettingsManager.Profiles.ToArray()
+<a id="__codelineno-39-52" name="__codelineno-39-52" href="#__codelineno-39-52"></a>    |
+<a id="__codelineno-39-53" name="__codelineno-39-53" href="#__codelineno-39-53"></a>    v  Step 6: XmlSerializer.Serialize(stream, data)
+<a id="__codelineno-39-54" name="__codelineno-39-54" href="#__codelineno-39-54"></a>    |
+<a id="__codelineno-39-55" name="__codelineno-39-55" href="#__codelineno-39-55"></a>    v  Step 7: IsDirty = false, raise AutoSaved event
 </code></pre></div>
 <p>After saving, <code>AutoSaved</code> fires so <code>InputService</code> can refresh the default profile snapshot.</p>
 <h3 id="load-flow-detailed">Load Flow (Detailed)<a class="headerlink" href="#load-flow-detailed" title="Permanent link">&para;</a></h3>
@@ -10497,12 +10530,13 @@
 <p><strong>Critical load order:</strong> <code>SlotCreated</code> must load before <code>OutputType</code>. Setting <code>OutputType</code> fires <code>PropertyChanged</code> which calls <code>RefreshNavControllerItems()</code> which reads <code>SlotCreated[]</code>. Wrong order causes a double-rebuild crash.</p>
 <p><strong>CloneDeep during load is critical:</strong> Without cloning, devices sharing a checksum would share one <code>PadSetting</code> instance. Changing one device's deadzone would silently corrupt the other's.</p>
 <h3 id="autosave-debounce">Autosave Debounce<a class="headerlink" href="#autosave-debounce" title="Permanent link">&para;</a></h3>
-<p>250 ms debounce via <code>DispatcherTimer</code>. Rapid changes (e.g., slider drag) batch into one save:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>MarkDirty() called  --&gt;  start/restart 250ms timer
-<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>MarkDirty() called  --&gt;  restart 250ms timer
-<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>MarkDirty() called  --&gt;  restart 250ms timer
-<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>...250ms passes...
-<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>Timer fires         --&gt;  Save()  --&gt;  AutoSaved event
+<p>Two-tier autosave via <code>DispatcherTimer</code> (#331). <code>MarkDirty()</code> starts a 250 ms timer and deliberately never restarts it: a restart on every change would starve tier 1 for as long as the user keeps dragging. Each tick pushes the ViewModel values into the PadSettings and the slot MappingSets (<code>UpdatePadSettingsFromViewModels()</code> + <code>PushUiExtraSourcesIntoSlotMappingSets()</code>), direct property writes the engine reads immediately, with no serialization and no disk. The full <code>Save()</code> and the <code>AutoSaved</code> event run only after 2 s with no <code>MarkDirty()</code> (<code>PersistQuietMs = 2000</code>), so an editing burst costs one disk write instead of one per adjustment. Direct <code>Save()</code> callers (<code>OnClosing</code>, profile operations) stay synchronous:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>MarkDirty() called  --&gt;  start 250ms timer (if not running)
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>MarkDirty() called  --&gt;  timer keeps ticking, no restart
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>...250ms tick...    --&gt;  Tier 1: push ViewModels into PadSettings + MappingSets
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>...250ms tick...    --&gt;  Tier 1 again, still dirty, not yet 2 s quiet
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>...2 s with no MarkDirty...
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a>Tick                --&gt;  timer stops  --&gt;  Tier 2: Save()  --&gt;  AutoSaved event
 </code></pre></div>
 <hr />
 <h2 id="cross-layout-mapping-translation">Cross-Layout Mapping Translation<a class="headerlink" href="#cross-layout-mapping-translation" title="Permanent link">&para;</a></h2>
@@ -10624,7 +10658,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Per-slot <code>VirtualControllerType</code> and Extended/MIDI config serialization</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

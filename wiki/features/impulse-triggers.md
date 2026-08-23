@@ -116,7 +116,7 @@ Every slider has its own reset button. Each card has a Reset All button.
 | No trigger rumble at all | Check the assigned device is an Xbox One / Elite / Series pad or a DualSense. Xbox 360 and most third-party pads have no trigger motors. |
 | Trigger pulses feel reversed | Turn on **Swap Left and Right Trigger Motors**. |
 | Audio-driven trigger rumble silent | Confirm audio plays through your default output device. Check the Level meter. Raise sensitivity if it barely moves. |
-| Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot is Xbox output and the same slot has an Xbox One+ pad or the game writes impulse triggers natively. |
+| Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox type and that the game actually writes impulse trigger data (the Trigger Motor Activity bars move, or the DualSense's Adaptive Triggers tab shows Vibration taking over). An Xbox One+ pad in the same slot is not required. |
 | Trigger rumble too aggressive on audio | Lower the per-trigger scale or drop the bass cutoff. |
 
 ---
@@ -130,4 +130,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

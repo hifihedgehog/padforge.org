@@ -3475,7 +3475,7 @@
 <p>The raw values sit at indices 6 and 7 on purpose. The generic-axis surface (<code>HasExtraGenericAxes</code>) only exposes axes past the standardized six, so at index 4 or 5 they would exist on the joystick with no PadForge surface able to read them.</p>
 <h3 id="axis-roles-and-why-the-fallback-carries-the-load">Axis roles, and why the fallback carries the load<a class="headerlink" href="#axis-roles-and-why-the-fallback-carries-the-load" title="Permanent link">&para;</a></h3>
 <p><code>ClassifyAxes</code> reads the five <code>Prop_AxisNType_Int32</code> properties: <code>1</code> is trackpad, <code>2</code> is joystick, <code>3</code> is trigger. The first trigger-typed axis is the trigger, the second is the analog grip.</p>
-<p><strong>Drivers on the modern input system never set those properties, and vrserver's legacy emulation does not synthesize them either.</strong> All five read <code>0</code> on a real bench. So an all-<code>None</code> read falls back to the legacy-binding convention every shipped binding follows: axis 0 is the stick or pad, axis 1 is the trigger pull, axis 2 is the grip pull. That fallback is the path most hardware actually takes.</p>
+<p><strong>Drivers on the IVRDriverInput (SteamVR Input) system never set those properties, and vrserver's legacy emulation does not synthesize them either.</strong> All five read <code>0</code> on a real bench. So an all-<code>None</code> read falls back to the legacy-binding convention every shipped binding follows: axis 0 is the stick or pad, axis 1 is the trigger pull, axis 2 is the grip pull. That fallback is the path most hardware actually takes.</p>
 <h3 id="sensors-come-from-the-runtimes-velocity-fields">Sensors come from the runtime's velocity fields<a class="headerlink" href="#sensors-come-from-the-runtimes-velocity-fields" title="Permanent link">&para;</a></h3>
 <p><code>PushSensors</code> does not finite-difference position. Gyro is the pose's <code>vAngularVelocity</code> rotated into the device frame by <code>WorldToDevice</code>. Accel is the derivative of <code>vVelocity</code> plus a gravity reaction of <code>9.80665</code> up, also rotated into the device frame, so a still device reads +1 g up like a real IMU.</p>
 <h3 id="the-self-emission-filter">The self-emission filter<a class="headerlink" href="#the-self-emission-filter" title="Permanent link">&para;</a></h3>
@@ -3512,7 +3512,7 @@
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

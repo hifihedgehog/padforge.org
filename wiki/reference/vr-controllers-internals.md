@@ -165,7 +165,7 @@ The raw values sit at indices 6 and 7 on purpose. The generic-axis surface (`Has
 
 `ClassifyAxes` reads the five `Prop_AxisNType_Int32` properties: `1` is trackpad, `2` is joystick, `3` is trigger. The first trigger-typed axis is the trigger, the second is the analog grip.
 
-**Drivers on the modern input system never set those properties, and vrserver's legacy emulation does not synthesize them either.** All five read `0` on a real bench. So an all-`None` read falls back to the legacy-binding convention every shipped binding follows: axis 0 is the stick or pad, axis 1 is the trigger pull, axis 2 is the grip pull. That fallback is the path most hardware actually takes.
+**Drivers on the IVRDriverInput (SteamVR Input) system never set those properties, and vrserver's legacy emulation does not synthesize them either.** All five read `0` on a real bench. So an all-`None` read falls back to the legacy-binding convention every shipped binding follows: axis 0 is the stick or pad, axis 1 is the trigger pull, axis 2 is the grip pull. That fallback is the path most hardware actually takes.
 
 ### Sensors come from the runtime's velocity fields
 
@@ -212,4 +212,4 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

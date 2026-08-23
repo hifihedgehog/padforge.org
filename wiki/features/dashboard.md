@@ -44,7 +44,7 @@ The power control is a flame. Its fill and glow show what the engine is doing.
 | State | Look |
 |-------|------|
 | **Forging** | Ember (orange) flame with a glow. Running and processing input. |
-| **Idle** | Gold flame. The engine started, but no slot is enabled with a device mapped and no linked PC is sharing input, so there's nothing to process. |
+| **Idle** | Gold flame. The engine started, but no enabled slot has a connected device (a mapped device that is offline does not count once its grace period ends) and no linked PC is sharing input, so there's nothing to process. |
 | **Stopping** | Gold flame, flashing while it winds down. |
 | **Stopped** | Hollow flame outline in steel. No fill. |
 
@@ -74,7 +74,7 @@ Each [virtual controller slot](controller-slots.md) gets a card under the engine
 
 ### Slot status
 
-The power flame and the status text both track the slot's state. Hovering the flame shows the status word.
+The power flame and the status text both track the slot's state. Hovering the flame shows a short state tooltip (Disabled, Forging, Awaiting devices, Engine stopped, Virtual controller failed, Initializing). Cold and Idle have no tooltip of their own: a Cold slot shows "Awaiting devices" and an Idle slot shows "Forging".
 
 | Status text | Flame | Meaning |
 |-------------|-------|---------|
@@ -86,7 +86,7 @@ The power flame and the status text both track the slot's state. Hovering the fl
 | **Initializing** | Flashing ember | The controller is coming up. |
 | **Disabled** | Steel outline | Turned off with the power flame. |
 
-Click anywhere on a card (except the delete or power flame) to open the slot's configuration: [Button and Axis Mappings](mappings.md), [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md), [Force Feedback](force-feedback.md), [Adaptive Triggers](adaptive-triggers.md), [Lighting](lighting.md), and [Macros](../guides/macros.md).
+Click anywhere on a card (except the power flame, the type track icons, or the delete button) to open the slot's configuration: [Button and Axis Mappings](mappings.md), [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md), [Force Feedback](force-feedback.md), [Adaptive Triggers](adaptive-triggers.md), [Lighting](lighting.md), and [Macros](../guides/macros.md).
 
 ### Reordering slots
 
@@ -207,4 +207,4 @@ When Windows MIDI Services or SteamVR is missing, that type's icon on a slot car
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

@@ -5312,7 +5312,7 @@
 <a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">center0</span><span class="p">,</span><span class="w"> </span><span class="n">center1</span><span class="p">,</span><span class="w"> </span><span class="n">center2</span><span class="p">;</span><span class="w">             </span><span class="c1">// Center point</span>
 <a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="p">}</span><span class="w"> </span><span class="c1">// 68 bytes</span>
 </code></pre></div>
-<p>Used for Spring, Damper, Friction, and Inertia effects. Each axis has independent coefficients, saturation, center, and deadband. SDL supports up to 3 axes; PadForge uses 2 (X and Y). Data flows from <code>HMaestroFfbDecoder</code> (parsing PID FFB packets emitted by the HM driver) through <code>Vibration.ConditionAxes[]</code> into <code>ForceFeedbackState.SetConditionHapticForces()</code>, which populates this struct.</p>
+<p>Used for Spring, Damper, Friction, and Inertia effects. Each axis has independent coefficients, saturation, center, and deadband. SDL supports up to 3 axes. PadForge uses 2 (X and Y). Data flows from <code>HMaestroFfbDecoder</code> (parsing PID FFB packets emitted by the HM driver) through <code>Vibration.ConditionAxes[]</code> into <code>ForceFeedbackState.SetConditionHapticForces()</code>, which populates this struct.</p>
 <h3 id="sdl_hapticramp">SDL_HapticRamp<a class="headerlink" href="#sdl_hapticramp" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="na">[StructLayout(LayoutKind.Sequential)]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">SDL_HapticRamp</span>
@@ -5375,7 +5375,7 @@
 <tr>
 <td><code>SDL_INIT_GAMEPAD</code></td>
 <td><code>0x2000</code></td>
-<td>Loads gamecontrollerdb; enables <code>SDL_IsGamepad()</code> / <code>SDL_OpenGamepad()</code></td>
+<td>Loads gamecontrollerdb. Enables <code>SDL_IsGamepad()</code> / <code>SDL_OpenGamepad()</code></td>
 </tr>
 <tr>
 <td><code>SDL_INIT_VIDEO</code></td>
@@ -5639,17 +5639,17 @@
 <tr>
 <td><code>Joystick</code></td>
 <td><code>IntPtr</code></td>
-<td>Raw SDL joystick handle; always valid when open</td>
+<td>Raw SDL joystick handle. Always valid when open</td>
 </tr>
 <tr>
 <td><code>GameController</code></td>
 <td><code>IntPtr</code></td>
-<td>SDL Gamepad handle; <code>IntPtr.Zero</code> if not a gamepad</td>
+<td>SDL Gamepad handle. <code>IntPtr.Zero</code> if not a gamepad</td>
 </tr>
 <tr>
 <td><code>SdlInstanceId</code></td>
 <td><code>uint</code></td>
-<td>SDL instance ID (unique per session); 0 = invalid</td>
+<td>SDL instance ID (unique per session). 0 = invalid</td>
 </tr>
 <tr>
 <td><code>NumAxes</code></td>
@@ -5684,7 +5684,7 @@
 <tr>
 <td><code>Haptic</code></td>
 <td><code>IntPtr</code></td>
-<td>SDL haptic handle; non-zero when FFB is open</td>
+<td>SDL haptic handle. Non-zero when FFB is open</td>
 </tr>
 <tr>
 <td><code>HapticFeatures</code></td>
@@ -6188,7 +6188,7 @@
 <p><strong>Guide button suppression:</strong> When Back+Start+Guide are all pressed, Guide is forced false. This suppresses a Windows/XInput quirk where the system synthesizes Guide from Back+Start.</p>
 <p><strong>Extra raw buttons (22+):</strong> After the 22 standardized SDL gamepad-button positions (0-10 PadForge standard + 11-21 SDL extended), <code>GetGamepadState()</code> appends raw buttons via <code>SDL_GetJoystickButton()</code> for indices 22 through <code>RawButtonCount</code>. This exposes native device buttons that are not part of any SDL gamepad-button enum for use as macro triggers. Already-mapped buttons (raw indices SDL already consumed for the gamepad mapping) are skipped (see <a href="#mapped-button-filtering-parsemappedbuttonindices">Mapped Button Filtering</a>).</p>
 <p><strong>D-pad to POV[0]:</strong> Four D-pad buttons synthesized into a single POV value via <code>DpadToCentidegrees()</code>, supporting all 8 directions.</p>
-<p><strong>Sensors:</strong> <code>SDL_GetGamepadSensorData()</code> populates <code>state.Gyro[3]</code> (rad/s) and <code>state.Accel[3]</code> (m/s^2). Only available via the Gamepad API; must be enabled during <code>Open()</code>.</p>
+<p><strong>Sensors:</strong> <code>SDL_GetGamepadSensorData()</code> populates <code>state.Gyro[3]</code> (rad/s) and <code>state.Accel[3]</code> (m/s^2). Only available via the Gamepad API. Must be enabled during <code>Open()</code>.</p>
 <h3 id="joystick-api-getjoystickstate">Joystick API (<code>GetJoystickState()</code>)<a class="headerlink" href="#joystick-api-getjoystickstate" title="Permanent link">&para;</a></h3>
 <p>Used for unrecognized devices (flight sticks, wheels, generic HID) or when ForceRawMode is enabled. Reads raw axes, buttons, and hats without remapping.</p>
 <ul>
@@ -6356,7 +6356,7 @@
 <h3 id="device-objects-enumeration">Device Objects Enumeration<a class="headerlink" href="#device-objects-enumeration" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">()</span>
 </code></pre></div>
-<p>Returns <code>DeviceObjectItem[]</code> describing each axis, hat, and button. The button count uses <code>Math.Max(NumButtons, RawButtonCount)</code> so that raw buttons 11+ (beyond the standard gamepad set) are exposed in the source dropdown for mapping. Maps to well-known GUIDs matching DirectInput convention:</p>
+<p>Returns <code>DeviceObjectItem[]</code> describing each axis, hat, and button. The button count uses <code>Math.Max(NumButtons, RawButtonCount)</code> so that raw buttons 22+ (beyond the 22 standardized gamepad slots) are exposed in the source dropdown for mapping. Maps to well-known GUIDs matching DirectInput convention:</p>
 <table>
 <thead>
 <tr>
@@ -6412,7 +6412,7 @@
 <p>For SDL-recognized gamepads the standard axis and button positions are capability-gated before they are emitted, so the table above is the maximum layout, not a guaranteed one. The next subsection covers the axis gate.</p>
 <h3 id="axis-capability-gating">Axis Capability Gating<a class="headerlink" href="#axis-capability-gating" title="Permanent link">&para;</a></h3>
 <p>How <code>GetDeviceObjects()</code> drops standard gamepad axis positions a controller does not physically have, so the auto-mapper never pins a virtual stick to a phantom axis.</p>
-<p><code>GetDeviceObjects()</code> is the device's capability list. For an SDL-recognized gamepad (<code>GameController != IntPtr.Zero</code>), each of the six standard axis positions (0-5) is gated on <code>SDL_GamepadHasAxis</code> before it is written, the same way the button loop gates positions 11-21 on <code>SDL_GamepadHasButton</code>. Raw joystick devices (<code>isGamepad == false</code>) keep the flat enumeration unchanged, emitting every axis <code>0..NumAxes-1</code>.</p>
+<p><code>GetDeviceObjects()</code> is the device's capability list. For an SDL-recognized gamepad (<code>GameController != IntPtr.Zero</code>), each of the six standard axis positions (0-5) is gated on <code>SDL_GamepadHasAxis</code> before it is written, the same way the button loop gates positions 0-21 on <code>SDL_GamepadHasButton</code> (every standardized slot, including the standard eleven, since a Move Navigation declares a sparse gamepad mask). Raw joystick devices (<code>isGamepad == false</code>) keep the flat enumeration unchanged, emitting every axis <code>0..NumAxes-1</code>.</p>
 <p>The position-to-enum lookup is <code>GamepadAxisForPosition(int position)</code> (<code>SdlDeviceWrapper.cs</code>), the axis counterpart of <code>GamepadButtonForPosition</code>. It returns the SDL axis enum for a standard position in PadForge's LX/LY/LT/RX/RY/RT order, or -1 for a non-standard position:</p>
 <table>
 <thead>
@@ -6747,7 +6747,7 @@
 <p>Two paths depending on whether you are a user contributing a mapping or a maintainer integrating one.</p>
 <h4 id="user-submission-path-preferred">User submission path (preferred)<a class="headerlink" href="#user-submission-path-preferred" title="Permanent link">&para;</a></h4>
 <ol>
-<li>Plug the device in. The Devices page shows a <strong>Submit Mapping</strong> button on the card for any joystick-class HID that is not already recognized as a gamepad.</li>
+<li>Plug the device in. The Devices page shows a <strong>Submit Device Mapping</strong> button on the card for any joystick-class HID that is not already recognized as a gamepad.</li>
 <li>Click it. A pre-filled GitHub issue opens in the browser. The handler (<code>SubmitMapping_Click</code> in <code>PadForge.App/Views/DevicesPage.xaml.cs</code>) builds a URL against the <code>device_mapping.yml</code> template with <code>device_name</code>, <code>vid</code>, <code>pid</code>, <code>axes</code>, <code>buttons</code>, <code>hats</code>, and <code>sdl_guid</code> populated automatically from the live SDL enumeration. No manual GUID transcription, which is the field most prone to typos.</li>
 <li>The user fills in the per-input mapping tables (raw axis index for each Xbox 360 axis, raw button index for each Xbox 360 button) by reading them off the same Devices page's raw input visualization while pressing each control.</li>
 <li>The user submits the issue.</li>
@@ -6757,8 +6757,8 @@
 <li>Take the merged mapping submission. SDL GUID and raw indices are in the issue body.</li>
 <li>Construct the SDL gamepad mapping string. Format: <code>GUID,Device Name,a:bN,b:bN,x:bN,y:bN,leftshoulder:bN,rightshoulder:bN,leftx:aN,lefty:aN,righttrigger:aN,…,platform:Windows,</code>. The file currently carries one entry, the DS3 DsHidMini line above. Use it as the shape reference.</li>
 <li>Append the line to <code>PadForge.App/gamecontrollerdb_padforge.txt</code>.</li>
-<li>Build and deploy locally. Restart PadForge with the device plugged in and confirm SDL recognizes it as a gamepad on the Devices page (the Submit Mapping button should now disappear, indicating SDL has it mapped).</li>
-<li>Commit and push. The file is an <code>&lt;EmbeddedResource&gt;</code> in <code>PadForge.App.csproj</code>, so it ships inside <code>PadForge.exe</code>; no separate file deployment.</li>
+<li>Build and deploy locally. Restart PadForge with the device plugged in and confirm SDL recognizes it as a gamepad on the Devices page (the <strong>Submit Device Mapping</strong> button should now disappear, indicating SDL has it mapped).</li>
+<li>Commit and push. The file is an <code>&lt;EmbeddedResource&gt;</code> in <code>PadForge.App.csproj</code>, so it ships inside <code>PadForge.exe</code>. No separate file deployment.</li>
 </ol>
 <p>If working from raw indices without the device in hand (e.g., reviewing a community submission), <a href="https://generalarcade.com/gamepadtool/">SDL2 Gamepad Tool</a> is a useful sanity check for the mapping string format.</p>
 <hr />
@@ -6962,8 +6962,8 @@
 </table>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:716</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:51</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1159</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:844</code>).</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:722</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:51</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1165</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:865</code>).</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git
@@ -6983,7 +6983,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

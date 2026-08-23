@@ -51,7 +51,7 @@ Type at least two characters into **Search Games**. The search runs about half a
 
 The game's configs list ranked by rating. A filter row above the list carries an **All** chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, PlayStation, and so on). Click a chip to narrow the list to configs built for that controller.
 
-**Sorted By** re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. **Search These Configs** filters the loaded list by title.
+**Sorted By** re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. **Search These Configs** asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs shortly after you stop typing, or on Enter. Escape clears it.
 
 Each card shows:
 
@@ -81,7 +81,7 @@ Below the stats, one row per binding, grouped by the physical control it came fr
 
 Real examples of each status:
 
-- **Clean**: "Touchpad 1 Click → Left Mouse Button · translated". The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own. A radial or touch menu reports "on-screen menu created (8 bound cells)", and a macro riding a paddle, touchpad, or gyro trigger reports "translated as a macro". Imports from older PadForge versions may still show the retired one-line summary "14 bindings covered by the default automap".
+- **Clean**: "Touchpad 1 Click → Left Mouse Button". A clean row shows source and target only, with no reason text. The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own. A radial or touch menu becomes an on-screen menu row, and a macro riding a paddle, touchpad, or gyro trigger becomes a macro row, both counted as Clean.
 - **Partial**: "circular scroll wheel approximated as a vertical drag" (a touchpad scratch wheel becomes a linear finger drag), or "camera reset approximated as a gyro recenter" (PadForge re-references its own gyro aim state, the equivalent state it owns).
 - **Skipped**: "12 in-game actions, Steam-only, no game-side hook" (bindings that call the game's own action API, which only Steam can deliver), or "player-number change is a Steam-client action, no equivalent".
 
@@ -110,8 +110,8 @@ The profile carries only the virtual controllers the config actually drives. A c
 
 | Pad | Type | Gets | When it exists |
 |---|---|---|---|
-| First | **Xbox** | Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). All become explicit mapping rows. | The config binds any controller output, or carries macros whose triggers read this pad's output. |
-| Next | **Keyboard + Mouse** | Every key, mouse button, mouse move, and scroll binding, including flick stick and absolute-pointer rows. | The config binds any key or mouse output, or carries an on-screen menu. |
+| First | **Xbox** | Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). All become explicit mapping rows. | The config binds any controller output or layer switch, or carries a macro that reads this pad's output or writes a virtual-controller button or axis (turbo, toggle, hold). |
+| Next | **Keyboard + Mouse** | Every key, mouse button, mouse move, and scroll binding, including flick stick and absolute-pointer rows. | The config binds any key or mouse output, or it has no controller-shaped output at all and still carries a macro or an on-screen menu (something has to host them). |
 
 All created pads read the same physical controller. Radial and touch menus land on every created pad, so they follow whichever pad the game reads.
 
@@ -215,4 +215,4 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

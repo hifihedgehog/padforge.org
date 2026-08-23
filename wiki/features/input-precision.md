@@ -30,7 +30,7 @@ The [Dashboard](dashboard.md) shows the live rate next to the engine power butto
 | Jitter | Under a millisecond. A short spin at the end of each cycle holds the boundary tight |
 | Idle rate | About 20 Hz when no slot is active, to save power |
 
-A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake.
+A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the **Inactivity Timeout** (60 seconds by default, in the same **Input Engine** settings). Set the timeout to 0 and the engine idles immediately.
 
 While a [Remote Link](../guides/remote-link.md) peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.
 
@@ -78,7 +78,7 @@ The default profile is Xbox Series X|S Controller (Bluetooth), which declares 10
 
 ### PlayStation slots
 
-A PlayStation slot emits the DualShock 4 or DualSense format, depending on the profile you pick. Both formats set sticks and triggers at 8-bit (256 steps).
+A PlayStation slot emits the DualShock 3, DualShock 4, or DualSense format, depending on the profile you pick. All three formats set sticks at 8-bit (256 steps), and DualShock 4 and DualSense set triggers at 8-bit as well. The DualShock 3 layout declares no analog trigger axes, so L2 and R2 ride its report as buttons.
 
 | Property | Sticks | Triggers |
 |----------|--------|----------|
@@ -130,4 +130,4 @@ There is no per-axis or per-button overhead. At 1000 Hz that is one report per c
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

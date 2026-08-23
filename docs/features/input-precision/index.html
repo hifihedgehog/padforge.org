@@ -3150,7 +3150,7 @@
 </tr>
 </tbody>
 </table>
-<p>A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake.</p>
+<p>A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the <strong>Inactivity Timeout</strong> (60 seconds by default, in the same <strong>Input Engine</strong> settings). Set the timeout to 0 and the engine idles immediately.</p>
 <p>While a <a href="../../guides/remote-link/">Remote Link</a> peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.</p>
 <p>Cursor and scroll speed on a <a href="../controller-slots/">Keyboard + Mouse</a> slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.</p>
 <hr />
@@ -3214,7 +3214,7 @@
 </tbody>
 </table>
 <h3 id="playstation-slots">PlayStation slots<a class="headerlink" href="#playstation-slots" title="Permanent link">&para;</a></h3>
-<p>A PlayStation slot emits the DualShock 4 or DualSense format, depending on the profile you pick. Both formats set sticks and triggers at 8-bit (256 steps).</p>
+<p>A PlayStation slot emits the DualShock 3, DualShock 4, or DualSense format, depending on the profile you pick. All three formats set sticks at 8-bit (256 steps), and DualShock 4 and DualSense set triggers at 8-bit as well. The DualShock 3 layout declares no analog trigger axes, so L2 and R2 ride its report as buttons.</p>
 <table>
 <thead>
 <tr>
@@ -3277,7 +3277,7 @@
 <p>Each virtual controller sends one full state update per read. Every button, axis, and hat travels in a single report, so the cost per frame is fixed. It does not grow with how many axes or buttons the slot has.</p>
 <p>There is no per-axis or per-button overhead. At 1000 Hz that is one report per controller per millisecond. Adding more slots scales the work in a straight line.</p>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

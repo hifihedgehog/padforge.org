@@ -3028,8 +3028,9 @@ ports with Circle and Cross prompts, Nintendo for games with Switch
 prompts (a virtual Switch Pro Controller), Extended for sim titles that
 read DirectInput, Keyboard + Mouse, MIDI, and VR for a SteamVR hand pair.</p>
 <p><img alt="The Add Controller popup" src="../../images/add-controller-popup.png" /></p>
-<p>The first Xbox, PlayStation, Nintendo, or Extended controller you add
-installs the HIDMaestro driver automatically. There is no button to click, and the
+<p>Adding the slot installs nothing yet. The first time you assign a pad to
+an Xbox, PlayStation, Nintendo, or Extended slot (step 3), PadForge installs
+the HIDMaestro driver automatically. There is no button to click, and the
 startup UAC prompt already covered it.</p>
 <h2 id="2-plug-in-your-pad">2. Plug in your pad<a class="headerlink" href="#2-plug-in-your-pad" title="Permanent link">&para;</a></h2>
 <p>Connect the physical controller you want to use, wired or Bluetooth. Open
@@ -3037,8 +3038,10 @@ the <strong><a href="../../features/devices/">Devices</a></strong> page. A card 
 the moment Windows sees it, with its name, type, and capabilities on the
 card.</p>
 <h2 id="3-assign-it-to-the-slot">3. Assign it to the slot<a class="headerlink" href="#3-assign-it-to-the-slot" title="Permanent link">&para;</a></h2>
-<p>Click the slot badge on the device's card. That routes the physical pad
-through the virtual controller you created in step 1.</p>
+<p>Click the pad's card to select it, then under <strong>Virtual Controller
+Assignment</strong> in the detail pane click the slot pill for the controller you
+created in step 1. A slot badge appears on the card, and the physical pad
+now routes through that virtual controller.</p>
 <p>Because your pad is a recognized gamepad, PadForge fills in the default
 mapping on assignment: sticks, triggers, buttons, and D-pad, all
 pre-assigned to their standard positions. The slot is already playable.</p>
@@ -3051,8 +3054,11 @@ exactly what the game gets.</p>
 <p>Start any game with controller support. It sees a standard Xbox pad.</p>
 <p>One thing can go wrong here: if the game reacts twice to every press, it
 is seeing both your physical pad and the virtual one. Install <strong>HidHide</strong>
-from the <a href="../../features/settings/">Settings</a> page to hide the physical pad
-from games. If you do not see double input, you do not need it.</p>
+from the <a href="../../features/settings/">Settings</a> page, then on the
+<a href="../../features/devices/">Devices</a> page select your pad and tick <strong>Hide from
+Games (HidHide)</strong> under <strong>Input Hiding</strong> in the detail pane. Pads assigned
+after HidHide is installed get that box ticked automatically. If you do not
+see double input, you do not need it.</p>
 <hr />
 <h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3063,7 +3069,7 @@ from games. If you do not see double input, you do not need it.</p>
   every tab.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

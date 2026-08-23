@@ -14,6 +14,8 @@
 
 > **v4.3.0 additions.** `AppSettingsData` gains `WebCustomLayoutsJson` (#296, the browser-built custom pad layouts as one machine-scoped JSON array, deliberately not profile content), the battery-alert trio `BatteryNotifyEnabled` / `BatteryNotifyThreshold` / `BatteryNotifyVibrate` (#293), the voice-macro block `VoicePhrases` / `VoiceMacrosEnabled` / `VoiceMinConfidence` / `VoiceListeningMode` (#317), `MappingPickerHiddenDevices` (#322), and `PsMoveCalibrations` (#277). `MacroActionType` runs through `VoiceListenWhileHeld` (54). `ActionData` gains the pressure-scaled turbo block (#290). `PadSetting` splits the gyro invert toggle into `GyroInvertPitch` / `GyroInvertYaw` / `GyroInvertRoll` (#321), taking the checksum's gyro group to 42. `MappingSource` gains `ParamTiltRangeDeg` / `ParamTiltInnerDz` (#292). `MappingSet` gains `KeepAwakeMotion` (discussion #263). `TouchpadGestureSettings` gains four momentum knobs (#291). `IsPerDeviceTuningKey` gains the `KbmMouseMomentum` and `GyroTilt` raw-bag key families.
 
+> **v4.3.2 additions.** `UserDevice` gains the sparse position arrays `CapButtonIndices` / `CapAxisIndices` (discussion #344), and `LoadFromDevice` gates the effective axis count on `SupportedAxisIndices` when the wrapper produced one. `PadSetting` gains the clipboard-only `SlotSetExtrasJson` / `SlotMacrosJson` payloads (`__SlotSetExtras` / `__SlotMacros`), so a slot Copy / Paste carries the MappingSet's Bass Shakers, SOCD and Keep Awake state plus the slot's macros. `AppSettingsData` gains `DiagnosticsLoggingEnabled` (#303). Autosave is two-tier (#331): a 250 ms engine-visible push every tick, the full save after 2 s of quiet.
+
 ---
 
 This page is a developer reference for PadForge's settings persistence.
@@ -22,8 +24,11 @@ This page is a developer reference for PadForge's settings persistence.
 flowchart TD
     subgraph "Save Flow"
         S1[User Action<br/>slider drag · mapping change · toggle] --> S2[SettingsService.MarkDirty]
-        S2 --> S3[250ms Debounce Timer<br/>restarts on each call]
-        S3 --> S4[UpdatePadSettingsFromViewModels<br/>write ViewModel values to PadSettings]
+        S2 --> S3[250ms DispatcherTimer<br/>starts once, never restarts]
+        S3 --> S3b[Tier 1 every tick<br/>UpdatePadSettingsFromViewModels + PushUiExtraSourcesIntoSlotMappingSets<br/>engine-visible, no disk]
+        S3b --> S3c{2 s quiet<br/>since last MarkDirty?}
+        S3c -- no --> S3
+        S3c -- yes --> S4[Tier 2: Save<br/>UpdatePadSettingsFromViewModels]
         S4 --> S5[Flush Mappings + UpdateChecksum<br/>Raw · MIDI · KBM · VR dicts to arrays · MD5]
         S5 --> S6[UpdateActiveProfileSnapshot<br/>deep clone to active profile if named]
         S6 --> S7[Collect Data under SyncRoot<br/>Devices · Settings · PadSettings deduplicated]
@@ -464,9 +469,11 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `CapButtonCount` | `int` | `<CapButtonCount>` | Button count (gamepad-mapped count for gamepads, always 11). |
 | `RawButtonCount` | `int` | `<RawButtonCount>` | Raw joystick button count before gamepad remapping. For gamepads may exceed `CapButtonCount` when the HID descriptor reports more buttons than SDL's 22 standardized slots. Extras surface as raw passthrough indices ≥22 for macro triggers. Equals `CapButtonCount` on non-gamepads. |
 | `RawAxisCount` | `int` | `<RawAxisCount>` | Raw joystick axis count, the axis twin of `RawButtonCount`. |
+| `CapButtonIndices` | `int[]` | `<CapButtonIndices>` | (v4.3.2, discussion #344) Sparse SDL button positions the device populates, captured while online so the offline listing numbers buttons the same way the live one does. Null/empty on older configs and on devices never seen online. Callers fall back to a dense range. |
+| `CapAxisIndices` | `int[]` | `<CapAxisIndices>` | (v4.3.2) Axis twin of `CapButtonIndices`: the populated axis positions (a Move Navigation fills three of the first six and seven of the ten extras). Null/empty = dense fallback. |
 | `HasExtraGenericAxes` | `bool` | `<HasExtraGenericAxes>` | (#193) Device carries raw axes past the standard six that should surface as generic "Axis N" sources. Not derivable from the counts: it excludes devices whose extras are already sensor sources. |
 | `CapPovCount` | `int` | `<CapPovCount>` | POV hat count. |
-| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion). 18–25 match DirectInput. 26–30 are PadForge extensions. |
+| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone). 18–25 match DirectInput. 26–31 are PadForge extensions. |
 | `HasGyro` | `bool` | `<HasGyro>` | Has gyroscope (DualSense, Switch Pro, DS4, Switch 2 Pro, Steam Controller, Steam Deck). |
 | `HasAccel` | `bool` | `<HasAccel>` | Has accelerometer. |
 | `HasAccelAux` | `bool` | `<HasAccelAux>` | (#199) Has an auxiliary (left-side) accelerometer: the Nunchuk's own sensor, or the left half of a combined Joy-Con pair. Mirrors `ISdlInputDevice.HasAccelAux`. |
@@ -523,7 +530,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `IsConsumerControl` | `bool` | `CapType == InputDeviceType.ConsumerControl` (#168) |
 | `HasIrCamera` | `bool` | `VendorId == 0x057E` and `ProductName` starts with "Nintendo Wii Remote". Gates the IR Pointer sources / Pointer tab (#146). |
 | `IsBalanceBoard` | `bool` | `VendorId == 0x057E` and `ProductName` contains "Balance Board". Gates the Balance sources (#146). |
-| `HasJoyConIr` | `bool` | `VendorId == 0x057E` and `ProductName` is exactly "Nintendo Switch Joy-Con (R)". Gates the IR Brightness source (#151). |
+| `HasJoyConIr` | `bool` | `VendorId == 0x057E` and either `ProductName` is exactly "Nintendo Switch Joy-Con (R)" or `ProdId == 0x2008` (the combined gen-1 pair, whose right half's camera posts on the pair, #275). Gates the IR Brightness source (#151). |
 | `HasJoyCon2Mouse` | `bool` | `VendorId == 0x057E` and `ProductName` is a Switch 2 Joy-Con (L)/(R). Gates the Mouse Motion sources (#154). |
 | `HasForceFeedback` | `bool` | `ActuatorCount > 0 \|\| Device.HasRumble \|\| Device.HasHaptic` |
 | `ResolvedName` | `string` | `DisplayName` > `InstanceName` > `ProductName` > "(Unknown Device)" |
@@ -549,8 +556,8 @@ private void LoadFromDevice(ISdlInputDevice wrapper)
 
 Shared logic:
 1. `LoadInstance()`. Identity (InstanceGuid, Name, ProductGuid)
-2. Compute the gated button count (sparse `SupportedButtonIndices`, falling back to `NumButtons`)
-3. Compute the effective axis count (#193: extra generic axes past the standard six)
+2. Compute the gated button count (sparse `SupportedButtonIndices`, falling back to `NumButtons`) and clone the positions into `CapButtonIndices`
+3. Compute the effective axis count (#193: extra generic axes past the standard six), then prefer the sparse `SupportedAxisIndices` length when the wrapper produced one, cloning the positions into `CapAxisIndices`
 4. `LoadCapabilities()`. Axes, buttons, hats, type
 5. `RawButtonCount = Math.Max(wrapper.RawButtonCount, wrapper.NumButtons)`
 6. Sensor / touchpad caps: `HasGyro`, `HasAccel`, `HasAccelAux`, `HasTouchpad`, `CapTouchpadCount`, `CapTouchpadFingerCounts`, `HasRumbleTriggers`
@@ -927,7 +934,7 @@ Legacy `Extended*` tokens in older settings files are rewritten at load by `Mapp
 
 The same dictionary carries the Flick Stick card's per-device tuning (#225, v4.1), regardless of slot type. Nine keys per device: `FlickStickDots` (default 14400), `FlickStickTime` (0.1), `FlickStickThreshold` (0.9), `FlickStickSnapMode` (`"None"`), `FlickStickSnapStrength` (1.0), `FlickStickForwardDz` (0), `FlickStickSmoothing` (-1), `FlickStickOnEngage` (`"1"` / `"0"`, default off), `FlickStickRotationOffset` (0). `SaveFlickStickCard` writes them (invariant-culture numbers, snap mode as a plain string) and `LoadFlickStickCard` reads them (both in `PadForge.App/Services/SettingsService.cs`). The save path also re-stamps the stored values onto every `"Flick Stick ..."` source's `ParamFlick*` fields via `ApplyFlickStickParamsToRow`. An absent `FlickStickDots` means the card was never stored for that device. The load path then seeds the card from the slot's flick source, so a Workshop import's translator-carried tuning survives until the user tunes the card. The keys ride the normal sorted Extended fold in the checksum (item 18 above) and survive `ClearMappingDescriptors()` through `IsPerDeviceTuningKey`'s `StartsWith("FlickStick")` clause, the same per-device-tuning carve-out the `MotionSteer*` and steering keys use.
 
-`IsPerDeviceTuningKey` is the full list of raw-bag keys that survive a descriptor rewrite. At HEAD it covers keys starting with `Stick`, `MotionSteer`, `FlickStick`, `KbmMouseMomentum` (the Sticks tab's Momentum rows on a KBM slot's mouse stick, #291), `GyroTilt` (the Gyro tab's tilt card, #292), and `RawStick`, plus `RawTrigger*` keys ending in `Dz`, `Adz`, `Mr`, or `Curve`. Any new per-device tuning key that is not on this list gets wiped by the descriptor rewrite within seconds of being set, which is exactly how the momentum toggle failed before #291 landed here.
+`IsPerDeviceTuningKey` is the full list of raw-bag keys that survive a descriptor rewrite. At HEAD it covers keys starting with `Stick` that also contain `Steer` (the stick-steering mode keys), `MotionSteer`, `FlickStick`, `KbmMouseMomentum` (the Sticks tab's Momentum rows on a KBM slot's mouse stick, #291), `GyroTilt` (the Gyro tab's tilt card, #292), and `RawStick`, plus `RawTrigger*` keys ending in `Dz`, `Adz`, `Mr`, or `Curve`. Any new per-device tuning key that is not on this list gets wiped by the descriptor rewrite within seconds of being set, which is exactly how the momentum toggle failed before #291 landed here.
 
 ```csharp
 [XmlArray("ExtendedMappings")]
@@ -1084,7 +1091,7 @@ v4.3 extends the mouse-feel block with four momentum knobs (#291): `MouseMomentu
 
 v4.2 replaces the v4.1 pointer stretch pair with the absolute-pointer region (#9): `PointerRegionSizeX` / `PointerRegionSizeY` (default `1.0`, the screen rectangle this pad maps onto as a fraction of screen width and height) and `PointerRegionCenterX` / `PointerRegionCenterY` (default `0.5`, with Y measured from the TOP edge because the translator flips Steam's bottom-origin `position_y`). Size supersedes stretch: the two are algebraically identical at the default center, and stretch's floor of `1.0` could not express a region smaller than the screen, which is what most Steam `mouse_region` configs author. `PointerRegionAuthored` marks the pad's region as user-owned so a reset stays honest against an imported mapping source, and `RegionSchema` is the one-time repair counter. `PointerStretchX` / `PointerStretchY` remain as deserialize-only aliases onto the size pair (both `ShouldSerialize` hooks return false), so an old file converges to the region names after one save.
 
-**Lookup at runtime:** the engine reads through `InputManager.TouchpadGestureSettingsProvider`, a static `Func<int, string, int, TouchpadGestureSettings>` the App layer binds at engine start. The Func walks `UserSettings` to find the slot's `PadSetting`, then scans its `TouchpadSettings` array for the matching `(deviceGuid, touchpadIndex)`. Unbound or missing entries return `TouchpadGestureSettings.Default()` (every feature off).
+**Lookup at runtime:** the engine reads through `InputManager.TouchpadGestureSettingsProvider`, an instance `Func<int, Guid, int, TouchpadGestureSettings>` (slot, device `InstanceGuid`, touchpad index) the App layer binds at engine start. The Func walks `UserSettings` to find the slot's `PadSetting`, then scans its `TouchpadSettings` array for the matching `(deviceGuid, touchpadIndex)`. Unbound or missing entries return `TouchpadGestureSettings.Default()` (every feature off).
 
 **Excluded from `CopyablePropertyNames`:** `TouchpadSettings` is deep-copied separately in `CopyFrom()` (a fresh array of `TouchpadSettingsEntry` clones) so reflection's reference copy doesn't share entries between profiles. JSON key for clipboard round-trip: `__TouchpadSettings`.
 
@@ -1104,7 +1111,7 @@ Each entry carries a `DeviceGuid` key and a `MouseGestureSettings` payload (Enab
 
 Static array defining which properties participate in `CopyFrom()`, `ToJson()`, and `FromJson()`. Includes all user-facing configuration. Excludes identity and metadata.
 
-**Complete list (181 properties):**
+**Complete list (182 properties):**
 
 | Category | Properties |
 |---|---|
@@ -1138,12 +1145,12 @@ The `Gyro tuning` block carries a code comment flagging it as the historical clo
 - `RawMappingEntries`, `MidiMappingEntries`, `KbmMappingEntries`, `VrMappingEntries`, `MappingDeadZoneEntries`, `MappingBidirectionalEntries`. Deep-copied separately in `CopyFrom()` and serialized separately in `ToJson()` / `FromJson()`.
 - `TouchpadSettings`. The v3.3 per-(device, padIdx) typed sub-tree. Deep-copied separately in `CopyFrom()`, serialized as `__TouchpadSettings` in `ToJson()` / `FromJson()`.
 - `MouseGestureSettings`. The v4 per-device typed sub-tree (#200). Deep-copied separately in `CopyFrom()`, serialized as `__MouseGestureSettings`.
-- `SlotMultiSourceRows`, `DeviceScopedMultiSourceRows`, `SlotPerDeviceSettingsJson`, `SlotDeviceConfigsJson`, `SlotExtendedConfigJson`, `SlotMidiConfigJson`, `SlotKbmConfigJson`, `SlotShiftActivatorsJson`, `SlotMenusJson` (v4.1, #9: the slot's `MappingSet.Menus`, so Copy / Paste carries the Menus-tab state like the shift authoring). Clipboard-only payloads populated by the Copy path on the source side. `[XmlIgnore]` + `[JsonIgnore]` so they never reach the on-disk XML.
+- `SlotMultiSourceRows`, `DeviceScopedMultiSourceRows`, `SlotPerDeviceSettingsJson`, `SlotDeviceConfigsJson`, `SlotExtendedConfigJson`, `SlotMidiConfigJson`, `SlotKbmConfigJson`, `SlotShiftActivatorsJson`, `SlotMenusJson` (v4.1, #9: the slot's `MappingSet.Menus`, so Copy / Paste carries the Menus-tab state like the shift authoring), `SlotSetExtrasJson` (v4.3.2: the slot MappingSet's non-row state, the `<RumbleAudio>` Bass Shakers config, `SocdMode` / `SocdPairs`, and the Keep Awake quartet), `SlotMacrosJson` (v4.3.2: the slot's macros, in the same envelope the Macros tab's own clipboard uses). Clipboard-only payloads populated by the Copy path on the source side. `[XmlIgnore]` + `[JsonIgnore]` so they never reach the on-disk XML.
 
 **Usage:**
 - `CopyFrom()`. Copies all properties via reflection, deep-copies mapping arrays (including `MappingBidirectionalEntries`), deep-copies `TouchpadSettings` and `MouseGestureSettings`.
-- `ToJson()`. Serializes properties + `__ExtendedMappings` / `__MidiMappings` / `__KbmMappings` / `__VrMappings` / `__MappingDeadZones` / `__MappingBidirectional` / `__TouchpadSettings` / `__MouseGestureSettings` + layout metadata (`__OutputType`, `__IsExtended`) + the clipboard-only payloads (`__SlotPerDeviceSettings`, `__SlotDeviceConfigs`, `__SlotExtendedConfig`, `__SlotMidiConfig`, `__SlotKbmConfig`, `__SlotShiftActivators`, `__SlotMenus`, `__MultiSourceRows` from `DeviceScopedMultiSourceRows`, `__SlotRows` from `SlotMultiSourceRows`).
-- `FromJson()`. Deserializes JSON, extracts layout metadata for cross-layout paste, reattaches the typed sub-trees and the clipboard-only payloads if present. Reads the pre-v4 `__SlotPlayStationConfigs` key into `SlotDeviceConfigsJson` for back-compat.
+- `ToJson()`. Serializes properties + `__ExtendedMappings` / `__MidiMappings` / `__KbmMappings` / `__VrMappings` / `__MappingDeadZones` / `__MappingBidirectional` / `__TouchpadSettings` / `__MouseGestureSettings` + layout metadata (`__OutputType`, `__IsExtended`) + the clipboard-only payloads (`__SlotPerDeviceSettings`, `__SlotDeviceConfigs`, `__SlotExtendedConfig`, `__SlotMidiConfig`, `__SlotKbmConfig`, `__SlotShiftActivators`, `__SlotMenus`, `__SlotSetExtras`, `__SlotMacros`, `__MultiSourceRows` from `DeviceScopedMultiSourceRows`, `__SlotRows` from `SlotMultiSourceRows`).
+- `FromJson()`. Deserializes JSON, extracts layout metadata for cross-layout paste, reattaches the typed sub-trees and the clipboard-only payloads (including `__SlotSetExtras` and `__SlotMacros`) if present. Reads the pre-v4 `__SlotPlayStationConfigs` key into `SlotDeviceConfigsJson` for back-compat.
 
 ### Utility Methods
 
@@ -1247,7 +1254,7 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 | `ParamMotionInnerDz` | `double` | `15` | MotionLeanX: inner tilt deadzone in degrees. |
 | `ParamMotionOuterDz` | `double` | `135` | MotionLeanX: outer tilt deadzone in degrees. |
 | `ParamControllerOrientation` | `string` | `"Forward"` | MotionLeanX: `Forward` / `Left` / `Right` / `Backward`. |
-| `ParamFlickTime` | `double` | `0.1` | (#225, v4.1) Flick stick (descriptor family `"Flick Stick Left"` / `"Flick Stick Right"` on a `KbmMouseX` row): easing duration in seconds for a full 180° flick. Shorter turns complete in the same time. Tuning is per-source so a Workshop import's per-group values survive materialization. The pad-page Flick Stick card re-stamps all eight `ParamFlick*` fields on save (`ApplyFlickStickParamsToRow`). See the `FlickStick*` Extended keys. |
+| `ParamFlickTime` | `double` | `0.1` | (#225, v4.1) Flick stick (descriptor family `"Flick Stick Left"` / `"Flick Stick Right"` on a `KbmMouseX` row): easing duration in seconds for a full 180° flick. Shorter turns complete in the same time. Tuning is per-source so a Workshop import's per-group values survive materialization. The pad-page Flick Stick card re-stamps all nine `ParamFlick*` fields on save (`ApplyFlickStickParamsToRow`). See the `FlickStick*` Extended keys. |
 | `ParamFlickCountsPer360` | `double` | `14400` | Flick stick: mouse counts emitted per full 360° camera turn (Steam's Dots Per 360°). |
 | `ParamFlickThreshold` | `double` | `0.9` | Flick stick: raw stick deflection (0..1) at which a flick engages. A 0.9× hysteresis applies to the release while flicking. |
 | `ParamFlickSnapMode` | `string` | `"None"` | Flick stick: snap mode. `"None"`, `"Forward"`, `"Half"`, `"Four"`, `"Sixths"`, `"Eight"`. Stored as a string, not a serialized enum, so the value set stays append-only. |
@@ -1326,6 +1333,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `BatteryNotifyThreshold` | `int` | `[XmlElement]` | `15` | (v4.3, #293) Percent at or below which the notification fires. |
 | `BatteryNotifyVibrate` | `bool` | `[XmlElement]` | `false` | (v4.3, #293) Also buzz the device when the notification fires. |
 | `StartMinimized` | `bool` | `[XmlElement]` | `false` | Start minimized |
+| `DiagnosticsLoggingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.3, #303) Persistent mirror of the engine event ring to `diagnostics.log` beside the exe, for auto-started sessions where a launch flag cannot help. |
 | `StartAtLogin` | `bool` | `[XmlElement]` | `false` | Register as startup app |
 | `EnablePollingOnFocusLoss` | `bool` | `[XmlElement]` | `true` | Continue polling on focus loss |
 | `PollingRateMs` | `int` | `[XmlElement]` | `1` | Polling interval in ms (~1000 Hz at 1 ms) |
@@ -1353,9 +1361,9 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `TouchpadOverlayOpacity` | `double` | `[XmlElement]` | `0.25` | (v3.2) 0.0–1.0 |
 | `TouchpadOverlayMonitor` | `int` | `[XmlElement]` | `0` | (v3.2) Monitor index |
 | `TouchpadGestures` | `TouchpadCustomGesture[]` | `[XmlArray("DefaultProfileTouchpadGestures")][XmlArrayItem("Gesture")]` | `null` | (v3.3) The default profile's custom touchpad gestures. Named profiles store theirs under `ProfileData.TouchpadGestures`. This holds the active catalog when the default profile is active. |
-| `TouchpadOverlayLeft` / `Top` | `double` | `[XmlElement]` | `-1` | (v3.2) Overlay window position; `-1` = centered on the chosen monitor |
+| `TouchpadOverlayLeft` / `Top` | `double` | `[XmlElement]` | `-1` | (v3.2) Overlay window position. `-1` = centered on the chosen monitor |
 | `TouchpadOverlayWidth` / `Height` | `double` | `[XmlElement]` | `500` / `250` | (v3.2) Overlay window size |
-| `MainWindowLeft` / `Top` | `double` | `[XmlElement]` | `-1` | Main window position; `-1` = centered |
+| `MainWindowLeft` / `Top` | `double` | `[XmlElement]` | `-1` | Main window position. `-1` = centered |
 | `MainWindowWidth` / `Height` | `double` | `[XmlElement]` | `1100` / `720` | Main window size |
 | `MainWindowState` | `int` | `[XmlElement]` | `0` | 0=Normal, 2=Maximized |
 | `MainWindowFullScreen` | `bool` | `[XmlElement]` | `false` | Borderless full-screen mode |
@@ -1613,7 +1621,7 @@ public class MacroData
 
 ### ActionData
 
-64 serialized properties, every one an `[XmlElement]`.
+69 serialized properties, every one an `[XmlElement]`.
 
 ```csharp
 public class ActionData
@@ -1701,6 +1709,13 @@ public class ActionData
     [XmlElement] public int MouseX { get; set; }
     [XmlElement] public int MouseY { get; set; }
     [XmlElement] public int IntervalMs { get; set; } = 100;
+
+    // Pressure-scaled turbo (#290)
+    [XmlElement] public bool PressureScaledRate { get; set; }
+    [XmlElement] public int SlowIntervalMs { get; set; } = 500;
+    [XmlElement] public string TurboRateCurve { get; set; } = "Linear";
+    [XmlElement] public int PressureStartPercent { get; set; }
+    [XmlElement] public int PressureEndPercent { get; set; } = 100;
 
     // v3.6 (#162): DisconnectController action target
     [XmlElement] public ViewModels.MacroDisconnectTarget DisconnectTarget { get; set; }
@@ -1918,7 +1933,7 @@ public class ProfileData
 | `ExecutableNames` | `string` | Pipe-separated exe paths for auto-switching |
 | `Entries` | `ProfileEntry[]` | Device-to-slot assignments |
 | `PadSettings` | `PadSetting[]` | Deep-cloned, checksum-deduplicated PadSettings |
-| `SlotMappingSets` | `MappingSet[]` | (v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed; `ApplyProfile` falls back to legacy migrator in that case. |
+| `SlotMappingSets` | `MappingSet[]` | (v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed. `ApplyProfile` falls back to the legacy migrator in that case. |
 | `Macros` | `MacroData[]` | Per-slot macros (via PadIndex) |
 | `SlotCreated` | `bool[]` | Slot topology. Null on old profiles (topology skipped). |
 | `SlotEnabled` | `bool[]` | Slot enabled states. Null on old profiles. |
@@ -2238,7 +2253,7 @@ Re-automaps all devices assigned to a slot for the given output type. Called whe
 
 ### Save Flow (Detailed)
 
-`SettingsService.MarkDirty()` starts a 250 ms debounce timer. On fire, calls `Save()` then `SaveToFile(filePath)`:
+`SettingsService.MarkDirty()` starts a 250 ms `DispatcherTimer` that it never restarts (#331, two-tier autosave). Every tick pushes the ViewModels into the PadSettings and the slot MappingSets, so the engine sees a change within about 250 ms with no serialization and no disk write. Once 2 s have passed with no further `MarkDirty()` (`PersistQuietMs`), the timer stops and runs the full `Save()` then `SaveToFile(filePath)`:
 
 ```
 User action (slider drag, mapping change, etc.)
@@ -2247,12 +2262,15 @@ User action (slider drag, mapping change, etc.)
 SettingsService.MarkDirty()
     |-- Sets IsDirty = true
     |-- Sets ViewModel.HasUnsavedChanges = true
-    |-- Starts/restarts 250ms DispatcherTimer
+    |-- Records _lastDirtyTickMs
+    |-- Starts the 250ms DispatcherTimer if it is not already running (never restarts it)
     |
-    ... (250ms debounce, timer restarts on each MarkDirty call) ...
+    ... every 250ms tick: Tier 1, UpdatePadSettingsFromViewModels() +
+    ...   PushUiExtraSourcesIntoSlotMappingSets(), engine-visible, no disk ...
+    ... tick sees 2 s of quiet since the last MarkDirty (PersistQuietMs) ...
     |
     v
-Timer fires -> Save() -> SaveToFile(filePath)
+Timer stops -> Tier 2: Save() -> SaveToFile(filePath)
     |
     v  Step 1: UpdatePadSettingsFromViewModels()
     |  For each PadViewModel (slot 0-15):
@@ -2362,14 +2380,15 @@ LoadFromFile(filePath)
 
 ### Autosave Debounce
 
-250 ms debounce via `DispatcherTimer`. Rapid changes (e.g., slider drag) batch into one save:
+Two-tier autosave via `DispatcherTimer` (#331). `MarkDirty()` starts a 250 ms timer and deliberately never restarts it: a restart on every change would starve tier 1 for as long as the user keeps dragging. Each tick pushes the ViewModel values into the PadSettings and the slot MappingSets (`UpdatePadSettingsFromViewModels()` + `PushUiExtraSourcesIntoSlotMappingSets()`), direct property writes the engine reads immediately, with no serialization and no disk. The full `Save()` and the `AutoSaved` event run only after 2 s with no `MarkDirty()` (`PersistQuietMs = 2000`), so an editing burst costs one disk write instead of one per adjustment. Direct `Save()` callers (`OnClosing`, profile operations) stay synchronous:
 
 ```
-MarkDirty() called  -->  start/restart 250ms timer
-MarkDirty() called  -->  restart 250ms timer
-MarkDirty() called  -->  restart 250ms timer
-...250ms passes...
-Timer fires         -->  Save()  -->  AutoSaved event
+MarkDirty() called  -->  start 250ms timer (if not running)
+MarkDirty() called  -->  timer keeps ticking, no restart
+...250ms tick...    -->  Tier 1: push ViewModels into PadSettings + MappingSets
+...250ms tick...    -->  Tier 1 again, still dirty, not yet 2 s quiet
+...2 s with no MarkDirty...
+Tick                -->  timer stops  -->  Tier 2: Save()  -->  AutoSaved event
 ```
 
 ---
@@ -2477,4 +2496,4 @@ On load, `RemoveAll(us => us.MapTo < 0)` purges stale entries with `MapTo == -1`
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

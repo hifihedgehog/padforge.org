@@ -3141,6 +3141,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#voice-model-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice Model (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#localization-strings-embeddedresource" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3809,6 +3820,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#voice-model-embeddedresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice Model (EmbeddedResource)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#localization-strings-embeddedresource" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4148,40 +4170,43 @@
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── Services/             InputService, SettingsService, DeviceService, etc.
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── Themes/               WPF resource dictionaries
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── WebAssets/             HTML/CSS/JS for browser virtual controller
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   ├── Models3D/             3D model classes (Base, DS4, DualSense, DualSenseEdge,
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   │                         Switch2Pro, Xbox360, XboxSeries)
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── Models2D/             2D overlay layouts (10 classes) + colorway table
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── 2DModels/             PNG overlay images, 12 families
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── 3DModels/             OBJ meshes (DS4/, DualSense/, DualSenseEdge/, Switch2Pro/,
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   │                         XBOX360/, XboxSeries/), most split by colorway subfolder
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   ├── Converter/            WPF value converters
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   ├── Controls/             Custom controls (RangeSlider, CurveEditor, TriggerTravelArc)
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│   ├── Resources/            Icons, SDL3 DLL, embedded driver installers, localization
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   └── Properties/           AssemblyInfo.cs
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>├── PadForge.SteamWorkshop/   Steam Workshop import client (net10.0-windows)
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   ├── Api/                  SteamKit2 anonymous CM session + direct Steam HTTPS clients
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│   ├── Vdf/                  Steam Input VDF parser
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│   ├── Model/                Typed config model
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Translation/          VDF-to-PadForge config translator
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Cache/, Local/        File-system cache, local Steam discovery
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   └── Properties/           AssemblyInfo.cs
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>├── PadForge.Tests/           xunit suite for App + Engine (net10.0-windows10.0.26100.0)
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>├── PadForge.SteamWorkshop.Tests/  xunit suite for the Workshop client (offline fixtures + golden translation snapshots)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   ├── VoiceModels/          Embedded Vosk model zip for voice macros
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   ├── ThirdParty/           OpenVR C# binding (openvr_api.cs)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── Models3D/             3D model classes (Base, DS4, DualSense, DualSenseEdge,
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   │                         Switch2Pro, Xbox360, XboxSeries)
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── Models2D/             2D overlay layouts (10 classes) + colorway table
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   ├── 2DModels/             PNG overlay images, 12 families
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   ├── 3DModels/             OBJ meshes (DS4/, DualSense/, DualSenseEdge/, Switch2Pro/,
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   │                         XBOX360/, XboxSeries/), most split by colorway subfolder
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│   ├── Converter/            WPF value converters
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   ├── Controls/             Custom controls (RangeSlider, CurveEditor, EqCurveControl,
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   │                         TriggerTravelArc)
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── Resources/            Icons, SDL3 DLL, embedded driver installers, localization
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   └── Properties/           AssemblyInfo.cs
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>├── PadForge.SteamWorkshop/   Steam Workshop import client (net10.0-windows)
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Api/                  SteamKit2 anonymous CM session + direct Steam HTTPS clients
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Vdf/                  Steam Input VDF parser
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ├── Model/                Typed config model
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   ├── Translation/          VDF-to-PadForge config translator
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│   ├── Cache/, Local/        File-system cache, local Steam discovery
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│   └── Properties/           AssemblyInfo.cs
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>├── nuget-local/              Local NuGet source (MIDI Services SDK)
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>├── nuget.config               Registers nuget.org + nuget-local/ as package sources
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>├── PadForge.Tests/           xunit suite for App + Engine (net10.0-windows10.0.26100.0)
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>├── PadForge.SteamWorkshop.Tests/  xunit suite for the Workshop client (offline fixtures + golden translation snapshots)
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>└── tools/                    Standalone utilities, NOT part of PadForge.sln
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    ├── DsuDiag/              DSU/Cemuhook diagnostic client
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    ├── Ds4InputDump/         DS4 raw HID input dump (Sony Report 0x01 passthrough debug)
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    ├── PersonaVerify/        WASAPI consumer-side check of HIDMaestro composite USB personas
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    ├── SteamWorkshopSmoke/   Manually-run smoke harness for the live Steam network paths
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, asset generation (see Development Scripts)
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>├── nuget-local/              Local NuGet source (MIDI Services SDK)
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>├── nuget.config               Registers nuget.org + nuget-local/ as package sources
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>└── tools/                    Standalone utilities, NOT part of PadForge.sln
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    ├── DsuDiag/              DSU/Cemuhook diagnostic client
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    ├── Ds4InputDump/         DS4 raw HID input dump (Sony Report 0x01 passthrough debug)
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    ├── PersonaVerify/        WASAPI consumer-side check of HIDMaestro composite USB personas
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    ├── SteamWorkshopSmoke/   Manually-run smoke harness for the live Steam network paths
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, asset generation (see Development Scripts)
 </code></pre></div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <table>
@@ -4211,7 +4236,7 @@
 <tr>
 <td>Visual Studio (optional)</td>
 <td>2022+</td>
-<td>Not required; <code>dotnet</code> CLI suffices</td>
+<td>Not required. <code>dotnet</code> CLI suffices</td>
 </tr>
 </tbody>
 </table>
@@ -4244,7 +4269,7 @@
 <tbody>
 <tr>
 <td><code>PadForge.exe</code></td>
-<td>~309 MB, single-file self-contained. The only file in the publish directory</td>
+<td>~350 MB, single-file self-contained. The only file in the publish directory</td>
 </tr>
 </tbody>
 </table>
@@ -4328,7 +4353,7 @@
 <tr>
 <td><code>DebugType</code></td>
 <td><code>embedded</code></td>
-<td>Embeds debug symbols in assemblies (no <code>.pdb</code> files); preserves stack traces for crash diagnostics</td>
+<td>Embeds debug symbols in assemblies (no <code>.pdb</code> files). Preserves stack traces for crash diagnostics</td>
 </tr>
 </tbody>
 </table>
@@ -4411,7 +4436,7 @@
 <a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="nt">&lt;DebugType&gt;</span>embedded<span class="nt">&lt;/DebugType&gt;</span>
 <a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nt">&lt;/PropertyGroup&gt;</span>
 </code></pre></div>
-<p>The Engine targets <code>net10.0-windows</code> (no specific SDK version needed). SDL3 and system interop use raw <code>[DllImport]</code> P/Invoke; the only NuGet references are the Remote Link crypto packages (see below).</p>
+<p>The Engine targets <code>net10.0-windows</code> (no specific SDK version needed). SDL3 and system interop use raw <code>[DllImport]</code> P/Invoke. The only NuGet references are the Remote Link crypto packages (see below).</p>
 <h3 id="assembly-versioning">Assembly Versioning<a class="headerlink" href="#assembly-versioning" title="Permanent link">&para;</a></h3>
 <p>App, Engine, and SteamWorkshop share one version via <code>SharedVersion.cs</code> at the repo root. All three csproj files link it in:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">&lt;Compile</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\SharedVersion.cs&quot;</span><span class="nt">&gt;</span>
@@ -4419,7 +4444,7 @@
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">&lt;/Compile&gt;</span>
 </code></pre></div>
 <p><code>SharedVersion.cs</code> carries <code>AssemblyVersion</code> and <code>AssemblyFileVersion</code>. The assemblies cannot drift apart because they compile against the same file. <code>Properties/AssemblyInfo.cs</code> in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does <strong>not</strong> carry version attributes. All three projects set <code>&lt;GenerateAssemblyInfo&gt;false&lt;/GenerateAssemblyInfo&gt;</code> so the build does not regenerate either file.</p>
-<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.2.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>4.3.0.0</code>.</p>
+<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.2.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>4.3.2.0</code>.</p>
 <h2 id="nuget-dependencies">NuGet Dependencies<a class="headerlink" href="#nuget-dependencies" title="Permanent link">&para;</a></h2>
 <h3 id="padforgeapp">PadForge.App<a class="headerlink" href="#padforgeapp" title="Permanent link">&para;</a></h3>
 <table>
@@ -4488,7 +4513,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>HIDMaestro.Core</code> (the virtual Xbox / PlayStation controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. It is currently v1.6.2. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.</p>
+<p><code>HIDMaestro.Core</code> (the virtual Xbox / PlayStation controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. It is currently v1.7.0. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.</p>
 <p>The App also holds <code>&lt;ProjectReference&gt;</code>s to <code>PadForge.Engine</code> and <code>PadForge.SteamWorkshop</code>.</p>
 <h3 id="padforgesteamworkshop">PadForge.SteamWorkshop<a class="headerlink" href="#padforgesteamworkshop" title="Permanent link">&para;</a></h3>
 <table>
@@ -4707,6 +4732,10 @@
 <td>Touchpad surface UI</td>
 </tr>
 <tr>
+<td><code>WebAssets/custom.html</code></td>
+<td>Custom controller builder UI</td>
+</tr>
+<tr>
 <td><code>WebAssets/css/controller.css</code></td>
 <td>Gamepad styling</td>
 </tr>
@@ -4715,16 +4744,24 @@
 <td>WebSocket client logic</td>
 </tr>
 <tr>
+<td><code>WebAssets/js/custom_client.js</code></td>
+<td>Custom layout client logic</td>
+</tr>
+<tr>
 <td><code>WebAssets/js/nipplejs.min.js</code></td>
 <td>Virtual joystick library</td>
 </tr>
 </tbody>
 </table>
+<h3 id="voice-model-embeddedresource">Voice Model (EmbeddedResource)<a class="headerlink" href="#voice-model-embeddedresource" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;VoiceModels\*.zip&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p><code>VoiceModels/vosk-model-small-en-us-0.15.zip</code>, the offline Vosk recognizer model behind voice macros (#317), about 39 MB compressed. It ships inside the exe rather than downloading on first use, so voice macros work on a machine with no internet and nothing is written into LocalAppData unasked.</p>
 <h3 id="localization-strings-embeddedresource">Localization Strings (EmbeddedResource)<a class="headerlink" href="#localization-strings-embeddedresource" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Update=</span><span class="s">&quot;Resources\Strings\Strings.resx&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">&lt;Generator&gt;</span>PublicResXFileCodeGenerator<span class="nt">&lt;/Generator&gt;</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">&lt;LastGenOutput&gt;</span>Strings.Designer.cs<span class="nt">&lt;/LastGenOutput&gt;</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Update=</span><span class="s">&quot;Resources\Strings\Strings.resx&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&lt;Generator&gt;</span>PublicResXFileCodeGenerator<span class="nt">&lt;/Generator&gt;</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nt">&lt;LastGenOutput&gt;</span>Strings.Designer.cs<span class="nt">&lt;/LastGenOutput&gt;</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
 </code></pre></div>
 <p>Resource files for multilingual UI support:</p>
 <table>
@@ -4779,15 +4816,15 @@
 </table>
 <p>The default <code>Strings.resx</code> uses <code>PublicResXFileCodeGenerator</code> to produce <code>Strings.Designer.cs</code> for strongly-typed access via <code>Strings.PropertyName</code>. Satellite <code>.resx</code> files follow standard .NET localization conventions and compile into satellite assemblies automatically.</p>
 <h3 id="2d-model-assets-resource">2D Model Assets (Resource)<a class="headerlink" href="#2d-model-assets-resource" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="cm">&lt;!-- 2D controller model assets (Gamepad-Asset-Pack by AL2009man, MIT license) --&gt;</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="cm">&lt;!-- 2D controller model assets (Gamepad-Asset-Pack by AL2009man, MIT license) --&gt;</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
 <p>PNG overlay images for the 2D controller schematic view. Twelve families: <code>DS4/</code>, <code>DualSense/</code>, <code>DUALSENSEEDGE/</code>, <code>MOUSE/</code>, <code>STEAMCONTROLLER/</code>, <code>STEAMDECK/</code>, <code>SWITCH2PRO/</code>, <code>SWITCHPRO/</code>, <code>VRCONTROLLER/</code>, <code>XBOX360/</code>, <code>XBOXONE/</code>, <code>XBOXSERIES/</code>. Uses <code>Resource</code> (not <code>EmbeddedResource</code>) so they load as WPF pack URIs (<code>pack://application:,,,/2DModels/...</code>).</p>
 <p>The matching overlay layouts live in <code>Models2D/ControllerOverlayLayout.cs</code> as ten static classes: <code>Xbox360Layout</code>, <code>DS4Layout</code>, <code>DualSenseLayout</code>, <code>DualSenseEdgeLayout</code>, <code>XboxOneSLayout</code>, <code>XboxSeriesXLayout</code>, <code>SwitchProLayout</code>, <code>Switch2ProLayout</code>, <code>SteamDeckLayout</code>, <code>SteamControllerLayout</code>.</p>
 <h3 id="other-resources">Other Resources<a class="headerlink" href="#other-resources" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge.ico&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-logo.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-icon.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge.ico&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-logo.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-icon.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4818,12 +4855,12 @@
 <h2 id="cicd-github-actions">CI/CD (GitHub Actions)<a class="headerlink" href="#cicd-github-actions" title="Permanent link">&para;</a></h2>
 <p>Workflow: <code>.github/workflows/build.yml</code></p>
 <h3 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">on</span><span class="p">:</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
 </code></pre></div>
 <p>Runs on every push/PR to <code>v4-dev</code> and on manual trigger.</p>
 <h3 id="build-steps">Build Steps<a class="headerlink" href="#build-steps" title="Permanent link">&para;</a></h3>
@@ -4859,9 +4896,9 @@
 <h3 id="artifact-naming">Artifact Naming<a class="headerlink" href="#artifact-naming" title="Permanent link">&para;</a></h3>
 <p>Format: <code>PadForge_r{COMMIT_COUNT}@{7-char COMMIT_SHA}</code> (e.g., <code>PadForge_r342@f35bb36</code>)</p>
 <h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">DOTNET_NOLOGO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">DOTNET_CLI_TELEMETRY_OPTOUT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">DOTNET_NOLOGO</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span><span class="nt">DOTNET_CLI_TELEMETRY_OPTOUT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
 <h3 id="formal-releases">Formal Releases<a class="headerlink" href="#formal-releases" title="Permanent link">&para;</a></h3>
 <p>Created manually via <code>gh release create</code> with a version tag (e.g., <code>v4.2.0</code>, <code>v4.2.0-beta1</code>). See <a href="#release-workflow">Release Workflow</a> below.</p>
@@ -4869,11 +4906,11 @@
 <p>PadForge is portable. No installer required.</p>
 <h3 id="local-deployment">Local Deployment<a class="headerlink" href="#local-deployment" title="Permanent link">&para;</a></h3>
 <p>Copy the publish output to any folder:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>cp<span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe<span class="w"> </span>C:<span class="se">\P</span>adForge<span class="se">\P</span>adForge.exe
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>cp<span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe<span class="w"> </span>C:<span class="se">\P</span>adForge<span class="se">\P</span>adForge.exe
 </code></pre></div></p>
 <p>There are no companion files. <code>SDL3.dll</code>, <code>libusb-1.0.dll</code>, and <code>xinput1_4.dll</code> are folded into the single-file bundle on publish and extracted to <code>%TEMP%\.net\PadForge\&lt;hash&gt;\</code> at first launch. The gamepad mapping database is embedded in the assembly, so no <code>.txt</code> file sits alongside the exe either. A deploy is one <code>PadForge.exe</code>.</p>
 <h3 id="development-deploy-script">Development Deploy Script<a class="headerlink" href="#development-deploy-script" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>tools/deploy.ps1<span class="w">   </span><span class="c1"># Kill running instance, copy the published exe to C:\PadForge, relaunch</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>tools/deploy.ps1<span class="w">   </span><span class="c1"># Kill running instance, copy the published exe to C:\PadForge, relaunch</span>
 </code></pre></div>
 <p>The script does not build. Run <code>dotnet publish -c Release</code> first. It checks for the published exe before stopping anything, so a missing build never leaves the machine without a running PadForge.</p>
 <h3 id="first-run">First Run<a class="headerlink" href="#first-run" title="Permanent link">&para;</a></h3>
@@ -4885,24 +4922,24 @@
 <li>Edit <code>SharedVersion.cs</code> at the repo root. Updates <code>AssemblyVersion</code> and <code>AssemblyFileVersion</code> for App, Engine, and SteamWorkshop in one place.</li>
 </ul>
 <h3 id="2-build">2. Build<a class="headerlink" href="#2-build" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>dotnet<span class="w"> </span>publish<span class="w"> </span>-c<span class="w"> </span>Release
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>dotnet<span class="w"> </span>publish<span class="w"> </span>-c<span class="w"> </span>Release
 </code></pre></div>
 <h3 id="3-deploy-and-test">3. Deploy and Test<a class="headerlink" href="#3-deploy-and-test" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>cp<span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe<span class="w"> </span>C:<span class="se">\P</span>adForge<span class="se">\P</span>adForge.exe
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>cp<span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe<span class="w"> </span>C:<span class="se">\P</span>adForge<span class="se">\P</span>adForge.exe
 </code></pre></div>
 <p>Run <code>C:\PadForge\PadForge.exe</code> and verify functionality.</p>
 <h3 id="4-commit-and-push">4. Commit and Push<a class="headerlink" href="#4-commit-and-push" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>git<span class="w"> </span>add<span class="w"> </span>-A
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release vX.Y.Z&quot;</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>git<span class="w"> </span>push
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>git<span class="w"> </span>add<span class="w"> </span>-A
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release vX.Y.Z&quot;</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>git<span class="w"> </span>push
 </code></pre></div>
 <h3 id="5-create-binary-zip">5. Create Binary Zip<a class="headerlink" href="#5-create-binary-zip" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nb">cd</span><span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>zip<span class="w"> </span>-r<span class="w"> </span>PadForge-vX.Y.Z-win-x64.zip<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nb">cd</span><span class="w"> </span>PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>zip<span class="w"> </span>-r<span class="w"> </span>PadForge-vX.Y.Z-win-x64.zip<span class="w"> </span>.
 </code></pre></div>
 <h3 id="6-create-github-release">6. Create GitHub Release<a class="headerlink" href="#6-create-github-release" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;PadForge vX.Y.Z&quot;</span><span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;Release notes here&quot;</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>gh<span class="w"> </span>release<span class="w"> </span>upload<span class="w"> </span>vX.Y.Z<span class="w"> </span>PadForge-vX.Y.Z-win-x64.zip
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;PadForge vX.Y.Z&quot;</span><span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;Release notes here&quot;</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>gh<span class="w"> </span>release<span class="w"> </span>upload<span class="w"> </span>vX.Y.Z<span class="w"> </span>PadForge-vX.Y.Z-win-x64.zip
 </code></pre></div>
 <p>Use <code>--prerelease</code> for beta/RC releases. Use <code>--latest</code> for the default download.</p>
 <h2 id="diagnostic-tools-tools">Diagnostic Tools (<code>tools/</code>)<a class="headerlink" href="#diagnostic-tools-tools" title="Permanent link">&para;</a></h2>
@@ -5078,7 +5115,7 @@
 <td>Run <code>dotnet restore</code> first</td>
 </tr>
 <tr>
-<td>Large exe size (~309 MB)</td>
+<td>Large exe size (~350 MB)</td>
 <td>Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset</td>
 <td><code>EnableCompressionInSingleFile</code> already enabled</td>
 </tr>
@@ -5106,7 +5143,7 @@
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

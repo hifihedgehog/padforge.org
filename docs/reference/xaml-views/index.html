@@ -6025,7 +6025,7 @@
 <p><strong>v4 (2026-07-12):</strong> Updated for the v4 ember restyle (#175). The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>. If anything here drifts from the live source, the live source wins.</p>
 </blockquote>
 <hr />
-<p>All views live in <code>PadForge.App/Views/</code> (<code>PadForge.Views</code> namespace), except <code>MainWindow.xaml</code> in <code>PadForge.App/</code>. Shared custom controls sit alongside them in <code>PadForge.App/Controls/</code> (<code>CurveEditor</code>, <code>TriggerTravelArc</code>, plus the code-only <code>RangeSlider</code>) and <code>PadForge.App/Views/Controls/</code> (<code>LabeledShapeIcon</code>, <code>ProfilePill</code>, <code>TriggerEffectGraph</code>). Styled with <a href="https://github.com/lepoco/wpfui">WPF UI 4.3 (Lepo.Wpf.Ui)</a> for Fluent 2 design.</p>
+<p>All views live in <code>PadForge.App/Views/</code> (<code>PadForge.Views</code> namespace), except <code>MainWindow.xaml</code> in <code>PadForge.App/</code>. Shared custom controls sit alongside them in <code>PadForge.App/Controls/</code> (<code>CurveEditor</code>, <code>TriggerTravelArc</code>, plus the code-only <code>RangeSlider</code> and <code>EqCurveControl</code>) and <code>PadForge.App/Views/Controls/</code> (<code>LabeledShapeIcon</code>, <code>ProfilePill</code>, <code>TriggerEffectGraph</code>). Styled with <a href="https://github.com/lepoco/wpfui">WPF UI 4.3 (Lepo.Wpf.Ui)</a> for Fluent 2 design.</p>
 <h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="#application-shell-mainwindow">Application Shell (MainWindow)</a></li>
@@ -6261,18 +6261,18 @@
 <td><code>ShutdownOverlay</code></td>
 <td>1001</td>
 <td>App is closing</td>
-<td><code>ProgressRing</code> + "Shutting down" text</td>
+<td><code>ProgressRing</code> + "Closing PadForge..." text (<code>Main_ShuttingDown</code>)</td>
 </tr>
 <tr>
 <td><code>StartupOverlay</code></td>
 <td>1001</td>
 <td>Orphan-sweep task (<code>App.OrphanSweepTask</code>) still running at launch</td>
-<td><code>ProgressRing</code> + "Cleaning previous session" text, auto-hidden on completion</td>
+<td><code>ProgressRing</code> + "Starting PadForge…" headline (<code>Main_StartingUp</code>) + "Cleaning up virtual controllers left from a previous session." detail (<code>Main_CleaningPreviousSession</code>), auto-hidden on completion</td>
 </tr>
 </tbody>
 </table>
 <h3 id="composition-root-code-behind">Composition Root (Code-Behind)<a class="headerlink" href="#composition-root-code-behind" title="Permanent link">&para;</a></h3>
-<p><code>MainWindow.xaml.cs</code> is the service wiring hub (~7880 lines). Constructor:</p>
+<p><code>MainWindow.xaml.cs</code> is the service wiring hub (~8400 lines). Constructor:</p>
 <ol>
 <li>Creates <code>MainViewModel</code> as root and sets <code>DataContext</code>.</li>
 <li>Sets child <code>DataContext</code> on Dashboard, Devices, Settings, Profiles pages.</li>
@@ -6343,12 +6343,12 @@
 <a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>       │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
 <a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>       ├─ &quot;Services&quot; divider (ServicesHeader, ember tick + hairline rule)
 <a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>       ├─ &quot;Motion Server&quot; section (DSU)
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
 <a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>       ├─ &quot;Web Controller&quot; section
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
 <a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>       ├─ &quot;Remote Link&quot; section (#138)
 <a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>       │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>       │      port NumberBox + reset, status dot + RemoteLinkStatus text,
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>       │      port NumberBox + reset, status flame + RemoteLinkStatus text,
 <a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>       │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
 <a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>       │      per peer, Revoke All), nearby-unpaired list, connect-by-address box, footer
 <a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>       ├─ &quot;Overlays&quot; section
@@ -6437,7 +6437,7 @@
 <tr>
 <td><code>IsRemoteLinkRunning</code> / <code>RemoteLinkStatus</code></td>
 <td><code>DashboardViewModel</code></td>
-<td>Remote Link status dot and text</td>
+<td>Remote Link status flame and text</td>
 </tr>
 <tr>
 <td><code>RemoteLink</code></td>
@@ -6509,7 +6509,7 @@
 <tr>
 <td><code>StatusText</code></td>
 <td><code>string</code></td>
-<td>e.g. "Active", "Disabled"</td>
+<td>e.g. "Forging", "Disabled", "Idle", "No mapping"</td>
 </tr>
 <tr>
 <td><code>MappedDeviceCount</code> / <code>ConnectedDeviceCount</code></td>
@@ -6567,22 +6567,22 @@
 <tr>
 <td><code>IsEnabled=True</code>, no mapped devices</td>
 <td>Cold outline</td>
-<td>"Active"</td>
+<td>"Forging"</td>
 </tr>
 <tr>
 <td><code>IsEnabled=True</code> + <code>HasMappedDevices=True</code></td>
 <td><code>EmberBrush</code> + glow</td>
-<td>"Active"</td>
+<td>"Forging"</td>
 </tr>
 <tr>
 <td>above + <code>IsVirtualControllerConnected=False</code></td>
 <td><code>WaitBrush</code> gold</td>
-<td>"Awaiting Controllers"</td>
+<td>"Awaiting devices"</td>
 </tr>
 <tr>
 <td>above + <code>EngineStateKey="Stopped"</code></td>
 <td><code>WaitBrush</code> gold</td>
-<td>"Engine Stopped"</td>
+<td>"Engine stopped"</td>
 </tr>
 <tr>
 <td><code>IsEnabled=True</code> + <code>IsCreateFailed=True</code></td>
@@ -6906,7 +6906,7 @@
 <td>Visible if <code>hasLightbar \|\| hasGuideLed</code></td>
 <td><strong>Hidden</strong></td>
 <td><strong>Hidden</strong></td>
-<td>a lightbar (DS4 / DualSense family) shows the lightbar cards. A Guide/HOME-button LED shows only the <code>GuideLedCard</code>: XInput/GIP Xbox pad over USB or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip)</td>
+<td>a lightbar (DS4 / DualSense family, the PS Move sphere, or a web controller drawing a DS4 / DualSense) shows the lightbar cards. A Guide/HOME-button LED shows only the <code>GuideLedCard</code>: XInput/GIP Xbox pad over USB or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip)</td>
 </tr>
 <tr>
 <td>Gyro</td>
@@ -7225,26 +7225,12 @@
 </tr>
 <tr>
 <td>Extended</td>
-<td>Custom HID layout</td>
+<td>any</td>
 <td>.</td>
 <td>ControllerSchematicView</td>
 <td>No</td>
 </tr>
 <tr>
-<td>Extended</td>
-<td>Xbox / DS4 catalog</td>
-<td>2D</td>
-<td>ControllerModel2DView</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Extended</td>
-<td>Xbox / DS4 catalog</td>
-<td>3D</td>
-<td>ControllerModelView</td>
-<td>Yes</td>
-</tr>
-<tr>
 <td>Xbox</td>
 <td>.</td>
 <td>2D</td>
@@ -7267,6 +7253,20 @@
 </tr>
 <tr>
 <td>PlayStation</td>
+<td>.</td>
+<td>3D</td>
+<td>ControllerModelView</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Nintendo</td>
+<td>.</td>
+<td>2D</td>
+<td>ControllerModel2DView</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Nintendo</td>
 <td>.</td>
 <td>3D</td>
 <td>ControllerModelView</td>
@@ -7303,7 +7303,7 @@
 <a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>            ├─ Add Action / Remove buttons
 <a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>            ├─ Actions ListBox (DisplayMemberPath=&quot;DisplayText&quot;)
 <a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>            └─ Action editor Border (DataContext=SelectedAction)
-<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>                ├─ Action Type ComboBox (34 `MacroActionType` values)
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>                ├─ Action Type ComboBox (55 `MacroActionType` values)
 <a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>                └─ Type-specific panels (conditional visibility):
 </code></pre></div>
 <p><strong>Macro Trigger Section:</strong></p>
@@ -7551,17 +7551,20 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  └─ ItemsControl (ItemsSource=TriggerConfigs, DataType=TriggerConfigItem)
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>      └─ per-trigger StackPanel:
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>          ├─ Title + &quot;Reset All&quot; button
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>          └─ Grid (2 columns)
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>              ├─ Col 0 (*): Controls
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>              │   ├─ Range: RangeSlider (dual-thumb, DeadZone/MaxRange 0-100%)
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>              │   │   + two TextBox edits (dz.max) + two digit edits + reset
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>              │   ├─ Anti-Deadzone (DzSlider 0-100% + % edit + digit edit + reset)
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>              │   ├─ &quot;Sensitivity Curve&quot; header + hint text
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>              │   ├─ Preset ComboBox (`CurvePresetChoices`, the instance accessor
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>              │   │   over the static `CurvePresetNames`) + reset
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>              │   └─ Live value bar (ProgressBar 0-1 + RawDisplay text)
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>              └─ Col 1 (Auto): CurveEditor (120px, IsSigned=False)
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>                  └─ CurveString=SensitivityCurve, DeadZone/MaxRange bindings
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>          └─ Grid (single column) holding one StackPanel
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>              ├─ Range: RangeSlider (dual-thumb, DeadZone/MaxRange 0-100%)
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>              │   + two TextBox edits (dz.max) + two digit edits + reset
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>              ├─ Anti-Deadzone (DzSlider 0-100% + % edit + digit edit + reset)
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>              ├─ Separator
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>              ├─ &quot;Sensitivity Curve&quot; header + hint text
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>              ├─ Preset ComboBox (120px, `CurvePresetChoices`, the instance accessor
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>              │   over the static `CurvePresetNames`) + reset
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>              ├─ CurveEditor (full width, IsFullWidth=True, ChartHeight=150, IsSigned=False)
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>              │   └─ CurveString=SensitivityCurve, DeadZone/MaxRange/LiveInput bindings
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>              └─ Live instrument panel (inset Border, Grid)
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>                  ├─ RAW bar (ProgressBar 0-1, RawNorm, InstrumentBarRaw) + RawDisplay text
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>                  ├─ OUT bar (ProgressBar 0-1, LiveValue, InstrumentBarOut) + OutDisplay text
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>                  └─ TriggerTravelArc (RawValue=RawNorm, OutValue=LiveValue, spans both rows)
 </code></pre></div>
 <p><strong>RangeSlider</strong>. Dual-thumb control for deadzone floor and max range ceiling:
 - <code>LowerValue="{Binding DeadZone}"</code>. Deadzone threshold.
@@ -7574,20 +7577,27 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>      ├─ Overall Gain slider (0-100%, ForceOverallGain)
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>      ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>      ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>      ├─ Swap Motors CheckBox (SwapMotors)
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>      ├─ &quot;Test Rumble&quot; Button (TestRumbleCommand)
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>      ├─ &quot;Motor Activity&quot; header
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>      ├─ Left Motor live bar (ProgressBar 0-1, LeftMotorDisplay)
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      ├─ Right Motor live bar (ProgressBar 0-1, RightMotorDisplay)
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      ├─ Separator
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      └─ Audio Bass Rumble section
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>          ├─ &quot;Audio Rumble&quot; header + &quot;Reset All&quot; button + description
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>          ├─ Enable CheckBox (AudioRumbleEnabled)
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>          ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>          ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>          ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>          ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>          └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>      ├─ &quot;Fold Trigger Rumble into Main Motors&quot; CheckBox (FfbTriggerFoldChk, TriggerRumbleFold)
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>      ├─ &quot;Swap Left and Right Motors&quot; CheckBox (SwapMotors)
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>      ├─ &quot;Test Rumble&quot; Button (TestRumbleCommand)
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>      ├─ &quot;Motor Activity&quot; header
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      ├─ Left Motor live bar (ProgressBar 0-1, LeftMotorDisplay)
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      ├─ Right Motor live bar (ProgressBar 0-1, RightMotorDisplay)
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>      ├─ Audio Bass Rumble section
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>      │   ├─ &quot;Audio Rumble&quot; header + &quot;Reset All&quot; button + description
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>          ├─ Left trigger source ComboBox (LeftTriggerRouteSource) + reset
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>          └─ Right trigger source ComboBox (RightTriggerRouteSource) + reset
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
 <h3 id="gyro-tab-tab-8-engage-stick-gate-120">Gyro Tab (Tab 8). Engage Stick Gate (#120)<a class="headerlink" href="#gyro-tab-tab-8-engage-stick-gate-120" title="Permanent link">&para;</a></h3>
@@ -7733,7 +7743,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <tr>
 <td>CC Count TextBox</td>
 <td><code>MidiConfig.CcCount</code></td>
-<td>0-127 (interdependent with StartCc)</td>
+<td>0 to 128 − StartCc (clamped against StartCc)</td>
 </tr>
 <tr>
 <td>Start CC TextBox</td>
@@ -7743,7 +7753,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <tr>
 <td>Note Count TextBox</td>
 <td><code>MidiConfig.NoteCount</code></td>
-<td>0-127 (interdependent with StartNote)</td>
+<td>0 to 128 − StartNote (clamped against StartNote)</td>
 </tr>
 <tr>
 <td>Start Note TextBox</td>
@@ -8248,45 +8258,54 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>      │   ├─ Minimize to tray (MinimizeToTray)
 <a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>      │   ├─ Start minimized (StartMinimized)
 <a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>      │   └─ Start at login (StartAtLogin)
-<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>      ├─ HidHide Driver card
-<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>      │   ├─ Icon ED1A + title + description
-<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>      │   ├─ Status: dot + HidHideStatusText + HidHideVersion
-<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>      │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
-<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>      │   ├─ Hide devices toggle (EnableInputHiding)
-<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches)
-<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>      │   └─ Whitelist section (only when installed):
-<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>      │       ├─ Title + description
-<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>      │       ├─ ListBox of HidHideWhitelistPaths (Consolas, 12px)
-<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>      │       └─ Add/Remove buttons
-<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>      ├─ HIDMaestro Driver card
-<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>      │   ├─ Icon E7FC + title + description
-<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>      │   └─ Status: green dot + &quot;Installed&quot; + HIDMaestroVersion (no Install/Uninstall
-<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>      │      buttons, because HIDMaestro is embedded in the binary)
-<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>      ├─ Windows MIDI Services card
-<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>      │   ├─ Icon E8D6 + title + description
-<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>      │   ├─ Status: dot + MidiServicesStatusText + MidiServicesVersion
-<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>      │   └─ Install/Uninstall buttons (Install disabled tooltip when IsMidiOsSupported=False)
-<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>      ├─ SteamVR card (#49)
-<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>      │   ├─ Icon F119 + title + description
-<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>      │   ├─ Status: dot + IsSteamVrInstalled state
-<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>      │   ├─ Install directory TextBox + Browse button (SteamVrBrowse_Click → SteamVrInstallDir)
-<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>      │   └─ Install/Uninstall buttons (InstallSteamVrCommand / UninstallSteamVrCommand)
-<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>      ├─ Community Configs card (#9)
-<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
-<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
-<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
-<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
-<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>      ├─ Settings File card
-<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>      │   ├─ Icon E8A5 + title + description
-<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>      │   ├─ SettingsFilePath (Consolas, wrapping)
-<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
-<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
-<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>      └─ Diagnostics card
-<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>          ├─ Icon E9D9 + title + description
-<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>          └─ Grid (140px label + value):
-<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>              ├─ App Version (ApplicationVersion)
-<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>              ├─ .NET Runtime (RuntimeVersion)
-<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>              └─ SDL Version (SdlVersion)
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>      ├─ Battery Alerts card (#293)
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>      │   ├─ Icon E83F + title + description
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>      │   ├─ &quot;Notify When Battery Runs Low&quot; toggle (BatteryNotifyEnabled)
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>      │   ├─ &quot;Notify at or Below&quot; NumberBox 5-50 % (BatteryNotifyThreshold)
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>      │   ├─ &quot;Also Vibrate the Controller&quot; toggle (BatteryNotifyVibrate)
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>      │   └─ &quot;Test Notification&quot; Button (TestBatteryNotify_Click)
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>      ├─ HidHide Driver card
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>      │   ├─ Icon ED1A + title + description
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>      │   ├─ Status: flame + HidHideStatusText + HidHideVersion
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>      │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>      │   ├─ Hide devices toggle (EnableInputHiding)
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches)
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>      │   └─ Whitelist section (only when installed):
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>      │       ├─ Title + description
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>      │       ├─ ListBox of HidHideWhitelistPaths (Consolas, 12px)
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>      │       └─ Add/Remove buttons
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>      ├─ HIDMaestro Driver card
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>      │   ├─ Icon E7FC + title + description
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>      │   └─ Status: always-lit ember flame + &quot;Installed&quot; + HIDMaestroVersion (no Install/Uninstall
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>      │      buttons, because HIDMaestro is embedded in the binary)
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>      ├─ Windows MIDI Services card
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>      │   ├─ Icon E8D6 + title + description
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>      │   ├─ Status: flame + MidiServicesStatusText + MidiServicesVersion
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>      │   └─ Install/Uninstall buttons (Install disabled tooltip when MidiOsSupported=False)
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>      ├─ SteamVR card (#49)
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>      │   ├─ Icon F119 + title + description
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>      │   ├─ Status: flame + IsSteamVrInstalled state
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>      │   ├─ Install directory TextBox + Browse button (SteamVrBrowse_Click → SteamVrInstallDir)
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>      │   └─ Install/Uninstall buttons (InstallSteamVrCommand / UninstallSteamVrCommand)
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>      ├─ Community Configs card (#9)
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>      ├─ Settings File card
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>      │   ├─ Icon E8A5 + title + description
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>      │   ├─ SettingsFilePath (Consolas, wrapping)
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>      └─ Diagnostics card
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>          ├─ Icon E9D9 + title + description
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>          ├─ Grid (140px label + value):
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>          │   ├─ App Version (ApplicationVersion)
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>          │   ├─ .NET Runtime (RuntimeVersion)
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>          │   └─ SDL Version (SdlVersion)
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
+<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
 </code></pre></div>
 <h3 id="key-bindings_2">Key Bindings<a class="headerlink" href="#key-bindings_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -8359,9 +8378,14 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>Start at Windows login</td>
 </tr>
 <tr>
+<td><code>BatteryNotifyEnabled</code> / <code>BatteryNotifyThreshold</code> / <code>BatteryNotifyVibrate</code></td>
+<td>CheckBox, NumberBox (5-50), CheckBox</td>
+<td>Battery Alerts card: low-battery toast on/off, the percent threshold, and the optional controller vibration (#293)</td>
+</tr>
+<tr>
 <td><code>IsHidHideInstalled</code></td>
 <td>bool</td>
-<td>Controls status dot, button visibility, whitelist section</td>
+<td>Controls status flame, button visibility, whitelist section</td>
 </tr>
 <tr>
 <td><code>InstallHidHideCommand</code> / <code>UninstallHidHideCommand</code></td>
@@ -8384,9 +8408,9 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>Whitelist management</td>
 </tr>
 <tr>
-<td><code>IsMidiServicesInstalled</code> / <code>IsMidiOsSupported</code></td>
+<td><code>IsMidiServicesInstalled</code> / <code>MidiOsSupported</code></td>
 <td>bool</td>
-<td>MIDI Services status. Controls Install button visibility and disabled-tooltip</td>
+<td>MIDI Services status. Controls Install button visibility and disabled-tooltip. <code>MidiOsSupported</code> is the instance forwarder of the static <code>IsMidiOsSupported</code>, which a Binding cannot reach</td>
 </tr>
 <tr>
 <td><code>IsSteamVrInstalled</code> / <code>IsSteamVrOwned</code> / <code>SteamVrInstallDir</code></td>
@@ -8418,10 +8442,15 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>bool</td>
 <td>Orange warning visibility</td>
 </tr>
+<tr>
+<td><code>DiagnosticsLoggingEnabled</code> / <code>DiagnosticsFolderPath</code></td>
+<td>CheckBox, string</td>
+<td>Diagnostics card: continuous engine-event log toggle and the folder it writes to (#303)</td>
+</tr>
 </tbody>
 </table>
 <h3 id="code-behind">Code-Behind<a class="headerlink" href="#code-behind" title="Permanent link">&para;</a></h3>
-<p>Two handlers beyond the constructor. Everything else lives in the ViewModel.</p>
+<p>Five handlers beyond the constructor. Everything else lives in the ViewModel.</p>
 <table>
 <thead>
 <tr>
@@ -8431,6 +8460,21 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>TestBatteryNotify_Click</code></td>
+<td>Battery Alerts card button</td>
+<td>Calls <code>InputService.TestBatteryNotification()</code> to fire the low-battery pipeline with a synthetic event (#293)</td>
+</tr>
+<tr>
+<td><code>SaveDiagSnapshot_Click</code></td>
+<td>Diagnostics card button</td>
+<td><code>DiagnosticsLogControl.SaveSnapshot()</code> dumps the in-memory engine event ring to a timestamped file and selects it in Explorer (#303)</td>
+</tr>
+<tr>
+<td><code>OpenDiagFolder_Click</code></td>
+<td>Diagnostics card button</td>
+<td>Creates the diagnostics folder if needed and opens it in Explorer (#303)</td>
+</tr>
 <tr>
 <td><code>ShowTour_Click</code></td>
 <td>Appearance card button</td>
@@ -8472,9 +8516,10 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>          │               ├─ MIDI badge: E8D6 glyph + MidiCount (collapsed when 0)
 <a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>          │               ├─ KB+M badge: E961 glyph + KbmCount (collapsed when 0)
 <a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>          │               ├─ Nintendo badge: Switch SVG + NintendoCount (collapsed when 0)
-<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>          │               └─ &quot;No slots&quot; fallback (visible when HasNoSlots=True)
-<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>          └─ Action buttons: New / Save As / Load / Edit / Export / Import /
-<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>             Browse Starters / Browse Community / Delete
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>          │               ├─ VR badge: F119 glyph + VrCount (collapsed when 0)
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>          │               └─ &quot;No slots&quot; fallback (visible when HasNoSlots=True)
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>          └─ Action buttons: New / Save As / Load / Edit / Export / Import /
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a>             Browse Starters / Browse Community / Delete
 </code></pre></div>
 <h3 id="key-bindings_3">Key Bindings<a class="headerlink" href="#key-bindings_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -8574,12 +8619,12 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>The card renders at most two exe names plus a "+N more" suffix, each collapsed via <code>StringToVisibility</code></td>
 </tr>
 <tr>
-<td><code>XboxCount</code> / <code>PlayStationCount</code> / <code>ExtendedCount</code> / <code>MidiCount</code> / <code>KbmCount</code> / <code>NintendoCount</code></td>
+<td><code>XboxCount</code> / <code>PlayStationCount</code> / <code>ExtendedCount</code> / <code>MidiCount</code> / <code>KbmCount</code> / <code>NintendoCount</code> / <code>VrCount</code></td>
 <td>Per-type counts (badge collapsed when 0)</td>
 </tr>
 <tr>
 <td><code>HasNoSlots</code></td>
-<td>Shows "No slots" badge when all six type counts are zero</td>
+<td>Shows "No slots" badge when all seven type counts are zero</td>
 </tr>
 </tbody>
 </table>
@@ -8754,13 +8799,13 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <tr>
 <td><strong>Active</strong></td>
 <td><code>\uE73E</code> (checkmark, accent color)</td>
-<td>"Active"</td>
+<td>"Forging"</td>
 <td><code>_dismissTimer</code> 2 s → check offline</td>
 </tr>
 <tr>
 <td><strong>Offline</strong></td>
 <td><code>\uE7BA</code> (warning, #FFB900 amber)</td>
-<td>"Controllers Offline"</td>
+<td>"One or more controllers offline"</td>
 <td><code>_dismissTimer</code> 2 s → slide out + hide</td>
 </tr>
 </tbody>
@@ -8817,7 +8862,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>      ├─ &quot;Overview&quot; section header (E7C3 icon)
 <a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>      ├─ Description card (wrapping text, line height 22)
 <a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>      ├─ &quot;Built With&quot; section header (E74C checkmark icon)
-<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>      ├─ Technologies card (Grid, 164px label + description, 47 rows):
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>      ├─ Technologies card (Grid, 164px label + description, 52 rows):
 <a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>      │   ├─ .NET 10
 <a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>      │   ├─ SDL3
 <a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>      │   ├─ Raw Input
@@ -8828,7 +8873,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a>      │   ├─ HelixToolkit
 <a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>      │   ├─ WPF UI
 <a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a>      │   ├─ MVVM Toolkit
-<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>      │   └─ ...37 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
+<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>      │   └─ ...42 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
 <a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a>      ├─ &quot;License&quot; section header (E8D7 icon)
 <a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a>      └─ License card (12px wrapping text, secondary brush)
 </code></pre></div>
@@ -8838,7 +8883,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <h2 id="dialog-windows">Dialog Windows<a class="headerlink" href="#dialog-windows" title="Permanent link">&para;</a></h2>
 <h3 id="copyfromdialog">CopyFromDialog<a class="headerlink" href="#copyfromdialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>CopyFromDialog.xaml</code>, <code>CopyFromDialog.xaml.cs</code></p>
-<p>Modal dialog to copy from another slot (<code>FluentWindow</code>, 420x420). Lists every slot that has at least one assigned device. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through <code>InputService.BuildPerDeviceSettingsSnapshot</code> + <code>ApplyPerDeviceSettingsToSlot</code>, matched by <code>InstanceGuid</code> (perfect round-trip) or <code>ProductGuid</code> (same model, different unit).</p>
+<p>Modal dialog to copy from another slot (<code>FluentWindow</code>, 420x420). Lists one entry per other slot whose mapping table has rows (<code>InputService.SlotHasAnyMapping</code> or the donor <code>PadSetting.HasAnyMapping</code>), plus one entry per unmapped device that still carries a <code>PadSetting</code> with mappings. The target slot itself is skipped. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through <code>InputService.BuildPerDeviceSettingsSnapshot</code> + <code>ApplyPerDeviceSettingsToSlot</code>, matched by <code>InstanceGuid</code> (perfect round-trip) or <code>ProductGuid</code> (same model, different unit).</p>
 <h3 id="profiledialog">ProfileDialog<a class="headerlink" href="#profiledialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>ProfileDialog.xaml</code>, <code>ProfileDialog.xaml.cs</code></p>
 <p>Modal dialog to create/edit profiles (<code>FluentWindow</code>, 500x470). Fields: profile name, executable list (comma-separated).</p>
@@ -8968,7 +9013,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p>The Steam Workshop config browser (#9). <code>FluentWindow</code> (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's <code>AddWorkshopProfile</code> import sink. The config card's pad art is <code>WorkshopControllerPreview</code> (<code>Views/WorkshopControllerPreview.xaml</code>), a <code>UserControl</code> wrapping a <code>Viewbox</code> over a code-built <code>Canvas</code> so callouts stay in the art's own pixel space, which is what <code>ControllerOverlayLayout</code>'s coordinates are expressed in. Full anatomy on <a href="../steam-workshop-import-internals/">Steam Workshop Config Import Internals</a>.</p>
 <hr />
 <h2 id="value-converters">Value Converters<a class="headerlink" href="#value-converters" title="Permanent link">&para;</a></h2>
-<p>All converters in <code>PadForge.App/Converter/</code> (<code>PadForge.Converters</code> namespace). All but one are registered as <code>StaticResource</code> in <code>App.xaml</code> (lines 1044-1061). <code>UppercaseConverter</code> (key <code>UpperConverter</code>) is registered in <code>ControllerIcons.xaml</code> instead.</p>
+<p>All converters in <code>PadForge.App/Converter/</code> (<code>PadForge.Converters</code> namespace). All but one are registered as <code>StaticResource</code> in <code>App.xaml</code> (lines 1044-1062). <code>UppercaseConverter</code> (key <code>UpperConverter</code>) is registered in <code>ControllerIcons.xaml</code> instead.</p>
 <table>
 <thead>
 <tr>
@@ -8986,6 +9031,13 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>int</code> (shape index)</td>
 <td><code>string</code></td>
 <td>Deadzone shape index to localized display name for the Sticks header subtitle.</td>
+</tr>
+<tr>
+<td><code>EqBandTypeNameConverter</code></td>
+<td><code>EqBandTypeNameConverter</code></td>
+<td><code>EqBandType</code></td>
+<td><code>string</code></td>
+<td>Localized EQ band-type name for the Audio tab band picker. Defaults to Peak, the enum's zero (#347).</td>
 </tr>
 <tr>
 <td><code>BoolToVisibilityConverter</code></td>
@@ -9142,7 +9194,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">        </span><span class="cm">&lt;!-- keyed: EmberIconButton(+Hot), EmberAccentButton, EmberPrimaryButton,</span>
 <a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="cm">             EmberDestructiveButton, EmberSelectListItem, EmberSlider,</span>
 <a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="cm">             InstrumentBarRaw / InstrumentBarOut, EmberFocusVisual, EntranceFade --&gt;</span>
-<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="w">        </span><span class="cm">&lt;!-- 18 global converter registrations (lines 1044-1061) --&gt;</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="w">        </span><span class="cm">&lt;!-- 19 global converter registrations (lines 1044-1062) --&gt;</span>
 <a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="w">    </span><span class="nt">&lt;/ResourceDictionary&gt;</span>
 <a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="nt">&lt;/Application.Resources&gt;</span>
 </code></pre></div>
@@ -9504,7 +9556,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide and Windows MIDI Services install/uninstall triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput is unpacked next to <code>PadForge.exe</code> from the single-file bundle)</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

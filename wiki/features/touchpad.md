@@ -36,7 +36,7 @@ Anchors where your finger first lands. Current position relative to that anchor 
 | Knob | Default | Effect |
 |---|---|---|
 | Enable Stick / D-Pad Output | off | Adds **Touchpad Stick X**, **Touchpad Stick Y**, and the four **Touchpad D-Pad Up / Down / Left / Right** entries to the mapping picker. |
-| Max Radius | 30% | Distance from anchor (as a fraction of the pad) at which stick output saturates to ±1, 5–50%. Smaller means twitchier, larger means more travel. At 30%, half the pad sweep in either direction gives full deflection. |
+| Max Radius | 30% | Distance from anchor (as a fraction of the pad) at which stick output saturates to ±1, 5–50%. Smaller means twitchier, larger means more travel. At 30%, moving the finger 30% of the pad width from where it landed gives full deflection. |
 | Inner Deadzone | 2% | Magnitude below this maps stick output to (0, 0), 0–10%. Prevents sub-millimeter finger drift from registering as slow stick input. |
 | D-Pad Mode | 4-Way | `Off` skips D-pad output. `4-Way` emits one cardinal at a time (90° wedges). `8-Way` emits two cardinals on diagonals (matches physical D-pads reporting NE / NW / SE / SW). |
 | D-Pad Activation | 15% | Minimum distance from anchor for any D-pad direction to fire, 5–50%. Independent of the stick inner deadzone so the tactile D-pad snap dials separately from analog feel. |
@@ -71,7 +71,7 @@ Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a K
 
 ![The touchpad momentum controls](../images/pad-touchpad-momentum.png)
 
-The same coasting is available on a stick, but only on the **Keyboard + Mouse** slot's mouse stick, which carries its own **Momentum** and **Momentum Glide** so a flick of the stick sends the cursor travelling on the same constant-deceleration physics. A gamepad slot's sticks have no momentum row.
+The same coasting is available on a stick, but only on the **Keyboard + Mouse** slot's mouse stick, which carries its own **Momentum** and **Momentum Glide** so a flick of the stick sends the cursor traveling on the same constant-deceleration physics. A gamepad slot's sticks have no momentum row.
 
 ![Stick momentum on the Keyboard and Mouse slot](../images/pad-sticks-momentum.png)
 
@@ -89,7 +89,7 @@ The Mouse Output sources above move the cursor relatively, like a laptop touchpa
 
 - Touch the pad and the cursor jumps to the matching spot on the primary monitor. Slide and it follows 1:1.
 - Lift the finger and the cursor stays where it was.
-- The first pad also offers **Touchpad 1 Pointer X (Left Half)** and **(Right Half)** variants (and the same pair on Y) that read one half of the pad as the whole surface.
+- Devices with a single touchpad (a DualShock 4 or DualSense, for example) also offer **Touchpad 1 Pointer X (Left Half)** and **(Right Half)** variants (and the same pair on Y) that read one half of the pad as the whole surface. A device with two pads already has a real pad per half, so it skips these.
 - A row that mixes a pointer source with relative sources (gyro, stick) keeps the relative aim live while no finger is down. The moment a finger lands, the pointer takes over.
 
 The card tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.
@@ -206,4 +206,4 @@ Shape matching runs two open-source gesture recognizers on every single-finger s
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

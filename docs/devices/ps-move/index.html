@@ -3059,6 +3059,8 @@
 <p>The wand's sphere is an output, not a source. PadForge drives it from the <a href="../../features/lighting/">Lighting</a> tab, and it idles at the slot's player color.</p>
 <p>The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, PS, and its analog L2. It has no motion sensors. L2 is its only analog trigger, and it maps like any other trigger, pressure and all.</p>
 <p>Before 4.3.0 that trigger read at rest no matter how hard it was pulled. The pressure was being written to an axis nothing reads: PadForge was numbering the pad's axes by their position in the standard gamepad layout, and the Navigation controller does not carry the axes in between, so every index past its sticks was off by the ones it skips.</p>
+<p>The Navigation controller shares the DualShock 3's report layout, so until 4.3.2 its picker and preview also listed everything a DualShock 3 has: a right stick, R2, Square, Triangle, R1, Select, Start, and R3, none of which exist on the pad. Those read as dead placeholders forever. PadForge now asks the pad which standardized buttons and axes it actually declares and shows only those, the same as every other controller. The numbering stays the DualShock 3's, so a saved mapping keeps its meaning across both pads. Only the phantoms drop out of the lists.</p>
+<p>Over Bluetooth, the Navigation controller needs the pairing driver's startup order exactly: the output report first, then the input stream, then a single enable packet about a second later and only if no input has arrived. The DualShock 3 tolerates that enable being sent early and repeated. The Navigation controller answers a repeat by dropping the link, which is why it connected and went silent before 4.3.2.</p>
 <hr />
 <h2 id="using-the-motion">Using the motion<a class="headerlink" href="#using-the-motion" title="Permanent link">&para;</a></h2>
 <p>The Move's gyro is an ordinary motion source once it is mapped, so everything the <a href="../../guides/gyro/">Gyro guide</a> describes applies: reference frames, real-world calibration, Aim Engage, and Gyro Tilt.</p>
@@ -3079,7 +3081,7 @@
 <li><a href="../dualshock-3/">DualShock 3</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.1.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

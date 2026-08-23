@@ -39,19 +39,32 @@ NOTE_LEAD = re.compile(
     r"\s+(?:Over\s+BT|On\s+windows|Works\s+otherwise)\b.*$|"
     r"\s+(?:requires|shows\s+up\s+as|this\s+may|maybe)\b.*$",
     re.I)
-JUNK = re.compile(r"^\s*$|^unknown\b|\bunknown controller\b|^actually\b", re.I)
+JUNK = re.compile(r"^\s*$|^unknown\b|\bunknown controller\b|^actually\b|^from sdl$", re.I)
+
+# A comment that quotes a name and then says where it came from names the
+# product inside the quotes. The one case in the file is the GameStop PS4 Fun
+# Controller: SDL_gamepad_db.h carries 0x11c0/0x4001 under that full name.
+QUOTED = re.compile(r'^\s*"([^"]+)"\s+added from\b.*$', re.I)
+RENAME = {"PS4 Fun Controller": "GameStop PS4 Fun Controller"}
+# "<Name>. Windows, Android, Switch." is a platform note, not part of the name.
+PLATFORMS = re.compile(r"\.\s+(?:Windows|Android|Switch|Linux|Mac|iOS|PC)"
+                       r"(?:\s*,\s*(?:Windows|Android|Switch|Linux|Mac|iOS|PC))*\.?\s*$")
 
 
 def display(name):
     # A URL is a reference, never a product name.
     name = re.sub(r"https?://\S+|\bwww\.\S+", "", name)
+    m = QUOTED.match(name)
+    if m:
+        name = RENAME.get(m.group(1), m.group(1))
+    name = PLATFORMS.sub("", name)
     # A double dash always introduces commentary in this file.
     name = re.split(r"\s+--\s+", name, maxsplit=1)[0]
     name = NOTE_LEAD.sub("", name)
     # A single dash introduces commentary when what follows reads like prose.
     tail = re.split(r"\s+-\s+", name, maxsplit=1)
     if len(tail) == 2 and (tail[1][:1].islower() or "," in tail[1]
-                           or re.search(r"\bno\b|only|hardcoded|requires|doesn", tail[1], re.I)):
+                           or re.search(r"\bno\b|only|hardcoded|requires|doesn|^at least\b", tail[1], re.I)):
         name = tail[0]
 
     def drop(m):
@@ -63,7 +76,8 @@ def display(name):
         return m.group(0)
 
     name = re.sub(r"\s*\(([^)]*)\)", drop, name)
-    name = re.sub(r"\s{2,}", " ", name).strip(" ,-/")
+    # A trailing "??" is SDL marking the entry unsure, not part of the name.
+    name = re.sub(r"\s{2,}", " ", name).strip(" ,-/?")
     return "" if JUNK.search(name) else name
 
 
@@ -174,8 +188,18 @@ union = cl_ids | ids("initial_wheel_devices") | ids("initial_flightstick_devices
         | ids("initial_throttle_devices") | ids("initial_arcadestick_devices") \
         | ids("initial_gamecube_devices")
 
+# The profile count comes from the HIDMaestro.Core.dll PadForge ships: every
+# embedded HIDMaestro.Profiles.<vendor>\<name>.json is one profile, and
+# HMContext.LoadDefaultProfiles loads all of them. Counting the manifest
+# rather than hardcoding a number means an SDK bump cannot rot it.
+HM_DLL = (r"C:\Users\sonic\OneDrive\Documents\GitHub\PadForge\PadForge.App"
+          r"\Resources\HIDMaestro\HIDMaestro.Core.dll")
+profiles = len(set(re.findall(rb"HIDMaestro\.Profiles\.[^\x00]*?\.json",
+                              io.open(HM_DLL, "rb").read())))
+
 N = {
     "union": len(union),
+    "profiles": profiles,
     "pads": len(cl_ids),
     "wheels": len(ids("initial_wheel_devices")),
     "sticks": len(ids("initial_flightstick_devices")),

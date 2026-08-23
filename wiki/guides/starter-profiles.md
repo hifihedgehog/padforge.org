@@ -72,7 +72,7 @@ hand.
 | --- | --- |
 | **Fighting Games** | 2D fighters, set up to clear the rules |
 | **Emulation** | RetroArch and the frontends built on it |
-| **Racing** | Calmer steering and finer control near centre |
+| **Racing** | Calmer steering and finer control near center |
 | **Space Sim** | Six degrees of freedom on two sticks |
 | **Gyro Aim** | Motion for fine aim, with the stick still live |
 
@@ -218,4 +218,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

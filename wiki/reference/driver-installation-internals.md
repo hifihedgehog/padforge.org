@@ -59,7 +59,7 @@ graph TD
         WU["DS3 WinUSB package<br/>signed on this machine"]
     end
 
-    HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(225+ profiles bundled in the SDK)"]
+    HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(231 profiles bundled in the SDK)"]
     HH -->|"embedded HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi"| HH_DRV["HidHide kernel driver"]
     MS -->|"GitHub /releases -> SDK Runtime x64 EXE -> /install"| MS_SVC["Windows MIDI Services<br/>(Win11 24H2+)"]
     SV -->|"steamcmd.zip -> +app_update 250820<br/>-> HMVR.SetSteamVRPathHint"| SV_DIR["SteamVR payload<br/>(default C:\SteamVR)"]
@@ -88,7 +88,7 @@ The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`) is **not
 
 | Resource | Type | Approximate size | Purpose |
 |---|---|---|---|
-| `HIDMaestro.Core.dll` (referenced via `HintPath`, not embedded) | Managed assembly | varies by version | HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR; `HMContext.InstallDriver()` registers the driver with Windows on first engine start. |
+| `HIDMaestro.Core.dll` (referenced via `HintPath`, not embedded) | Managed assembly | varies by version | HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR. `HMContext.InstallDriver()` registers the driver with Windows the first time an HM-backed slot is created. |
 | `Resources\HidHide_1.5.230_x64.exe` | EXE (WiX Burn bootstrapper) | ~7.7 MB | HidHide kernel driver. Bundled MSI extracted and run silently. |
 | `Resources\OpenXInput\x64\xinput1_4.dll` | DLL (Content) | ~172 KB | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
 | `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~360 KB total | Nefarius BthPS3 (`BthPS3_x64\`) and BthPS3PSM (`BthPS3PSM_x64\`) driver packages plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
@@ -110,7 +110,7 @@ Declared in `PadForge.App.csproj`:
 </EmbeddedResource>
 ```
 
-`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.3.0 ships HIDMaestro 1.6.2. The 1.6 line is the one that carries the native OpenVR driver behind the VR slot type.
+`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.3.2 ships HIDMaestro 1.7.0. The 1.6 line introduced the native OpenVR driver behind the VR slot type.
 
 ---
 
@@ -132,7 +132,7 @@ Private methods reused across HidHide and the MIDI Services flows.
 
 ## HIDMaestro
 
-PadForge does not ship a separate HIDMaestro installer EXE or MSI, and `DriverInstaller` has no `InstallHIDMaestro` / `UninstallHIDMaestro` methods. The HM SDK assembly (`HIDMaestro.Core.dll`) bundles the UMDF2 driver binaries, INF, signing tools, and 225+ device profiles. Driver registration happens at engine-start time via the SDK.
+PadForge does not ship a separate HIDMaestro installer EXE or MSI, and `DriverInstaller` has no `InstallHIDMaestro` / `UninstallHIDMaestro` methods. The HM SDK assembly (`HIDMaestro.Core.dll`) bundles the UMDF2 driver binaries, INF, signing tools, and 231 device profiles. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created (typically during the first engine `Start()` that has such a slot configured).
 
 ### EnsureHMaestroContext()
 
@@ -285,7 +285,7 @@ Parses the GitHub releases JSON to find the SDK Runtime x64 installer URL. Uses 
 public static void UninstallMidiServices()
 ```
 
-Calls `FindMidiServicesUninstallString()` to retrieve the registry `UninstallString`. Parses quoted/unquoted exe paths and any preserved arguments, appends `/quiet /norestart`, launches hidden via `Process.Start`, waits up to 5 minutes. Throws `InvalidOperationException` if no uninstall entry is found.
+Calls `FindMidiServicesUninstallString()` to retrieve the registry `UninstallString`. Parses quoted/unquoted exe paths and any preserved arguments, appends `/quiet /norestart MSIRESTARTMANAGERCONTROL=Disable REBOOT=ReallySuppress` (the two MSI properties keep Restart Manager from asking PadForge to close, so in-use files are scheduled for removal instead), launches hidden via `Process.Start`, waits up to 5 minutes. Throws `InvalidOperationException` if no uninstall entry is found.
 
 ### FindMidiServicesUninstallString()
 
@@ -623,7 +623,7 @@ static string ToDosDevicePathPublic(string filePath)        // C:\... -> \Device
 
 `_managedDeviceIds` (`HashSet<string>`) tracks device IDs PadForge added to the blacklist. `RemoveManagedDevices()` removes only these entries, leaving entries from other tools untouched.
 
-**Startup clear and cloak persistence**: `_managedDeviceIds` is in-memory, so a crashed or force-killed session leaves stale blacklist entries that `RemoveManagedDevices()` can no longer identify. `InputService.Start` resets the driver state with `ClearAll()` at engine start. The clear is conditional: when the Settings toggle "Keep devices cloaked between launches" (`KeepHidHideCloaksBetweenLaunches`, off by default) is on, startup skips `ClearAll()` so persisted cloaks survive into the new session with no visible decloak window, and `ApplyDeviceHiding`'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as `RemoveDeviceHiding(keepCloaks: ...)`.
+**Startup clear and cloak persistence**: `_managedDeviceIds` is in-memory, so a crashed or force-killed session leaves stale blacklist entries that `RemoveManagedDevices()` can no longer identify. `InputService.Start` resets the driver state with `ClearAll()` at engine start. The clear is conditional: when the Settings toggle **Keep Devices Cloaked Between Launches** (`KeepHidHideCloaksBetweenLaunches`, off by default) is on, startup skips `ClearAll()` so persisted cloaks survive into the new session with no visible decloak window, and `ApplyDeviceHiding`'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as `RemoveDeviceHiding(keepCloaks: ...)`.
 
 **Removed methods**: `AddToBlacklist(string)` and `RemoveFromBlacklist(string)` were removed. All blacklist management now goes through `SyncManagedDevices(HashSet<string>)`, which performs an atomic diff-based sync (add missing, remove excess) in a single operation.
 
@@ -671,10 +671,11 @@ The Settings page disables uninstall buttons when a driver/service is in use, pr
 |---|---|---|
 | HidHide | Any device has HidHide hiding enabled | `HasAnyHidHideDevices` |
 | MIDI Services | Any created slot uses MIDI | `HasAnyMidiSlots` |
+| SteamVR | Any created slot is a VR slot | `HasAnyVrSlots` |
 
-Guards are `Func<bool>` delegates on `SettingsViewModel`, injected by `MainWindow.xaml.cs`. `RefreshDriverGuards()` re-evaluates `CanExecute` on those two uninstall commands after slot creation, deletion, or type changes.
+Guards are `Func<bool>` delegates on `SettingsViewModel`, injected by `MainWindow.xaml.cs`. `RefreshDriverGuards()` re-evaluates `CanExecute` on those three uninstall commands after slot creation, deletion, or type changes.
 
-SteamVR uses a different shape. `UninstallSteamVrCommand` is gated on `IsSteamVrInstalled && IsSteamVrOwned`, ownership rather than usage, and `ShowSteamVrUninstall` hides the button entirely when the install is Steam's own. `RefreshDriverGuards()` does not touch it: both properties raise `NotifyCanExecuteChanged` from their own setters, refreshed by `RefreshMidiServicesStatus()`. The runtime refusal is enforced a second time inside `UninstallSteamVR()`, which throws when `vrserver` is running, and `MainWindow` checks the same process before showing the confirm dialog.
+SteamVR adds ownership on top of usage. `UninstallSteamVrCommand` is gated on `IsSteamVrInstalled && IsSteamVrOwned && !HasAnyVrSlots()`, and `ShowSteamVrUninstall` hides the button entirely when the install is Steam's own. `RefreshDriverGuards()` re-evaluates it alongside the other two, and the two ownership properties also raise `NotifyCanExecuteChanged` from their own setters, refreshed by `RefreshMidiServicesStatus()`. The runtime refusal is enforced a second time inside `UninstallSteamVR()`, which throws when `vrserver` is running, and `MainWindow` checks the same process before showing the confirm dialog.
 
 HIDMaestro has no Install or Uninstall command (the SDK assembly is always available), so there is no guard to enforce. The legacy v2 cleanup dialog is single-shot and does not appear on the Settings page, so it has no guard either. The DS3 Bluetooth stack has no uninstall path at all.
 
@@ -755,10 +756,10 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 - [Virtual Controllers](../features/virtual-controllers.md): `HMaestroVirtualController` (Xbox / PlayStation / Nintendo / Extended), `MidiVirtualController`, `KeyboardMouseVirtualController` consuming installed drivers
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface (`HMContext`, `HMProfile`, `HMController`), thread-pool lifecycle, OpenXInput shim, bubble-up cascade, inactivity timeout
 - [Architecture Overview](architecture-overview.md): Elevation strategy (`requireAdministrator` in `app.manifest`)
-- [Build and Publish](build-and-publish.md): Embedded driver resources (HidHide installer; HIDMaestro is referenced as a managed assembly)
+- [Build and Publish](build-and-publish.md): Embedded driver resources (the HidHide installer, while HIDMaestro is referenced as a managed assembly)
 - [Settings and Serialization](settings-and-serialization.md): Driver status display in `SettingsViewModel`
 - [XAML Views](xaml-views.md): `SettingsPage` driver install/uninstall buttons and guards
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

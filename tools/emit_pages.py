@@ -63,7 +63,7 @@ def md():
         "PadForge recognizes **{union}** devices by their USB identity: {pads} gamepads, "
         "{wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} arcade "
         "sticks and {gamecube} GameCube adapters. Behind those sit **{mapped}** shipped gamepad "
-        "mappings and 225 device profiles.".format(**N),
+        "mappings and {profiles} device profiles.".format(**N),
         "",
         '!!! tip "Not on this list?"',
         "    It very likely still works. Anything Windows enumerates as an input device can be read",
@@ -166,7 +166,7 @@ def md():
         "",
         "---",
         "",
-        "*Last updated for PadForge 4.3.1.*",
+        "*Last updated for PadForge 4.3.2.*",
         "",
     ]
     return "\n".join(L)
@@ -202,7 +202,7 @@ def html():
          'PadForge recognizes <b>{union}</b> devices by their USB identity: {pads} gamepads, '
          '{wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} arcade '
          'sticks and {gamecube} GameCube adapters, with <b>{mapped}</b> shipped gamepad mappings '
-         'and 225 device profiles behind them. Anything not named here still works as a generic '
+         'and {profiles} device profiles behind them. Anything not named here still works as a generic '
          'input device, so this is where the names, the correct layout and the extra capabilities '
          'come from rather than the limit of what PadForge reads.</p>\n'.format(**N),
          '            <dl class="spec-list reveal" data-d="1">\n']

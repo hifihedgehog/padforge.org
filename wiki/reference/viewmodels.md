@@ -76,7 +76,7 @@ Sidebar entry for one virtual controller. Shows controller type icon, slot numbe
 | `IsVirtualControllerConnected` | `bool` | Live virtual controller is alive (created + reporting `IsConnected`). Drives the sidebar green-vs-yellow indicator so the slot stays green through the HM-inactivity grace window and only turns yellow once the timeout tears the VC down. |
 | `IsCreateFailed` | `bool` | The slot's latest virtual-controller create attempt failed (engine createFailed latch). Distinct from awaiting devices, so the flame tooltip does not blame absent devices for a failed create. |
 
-**XAML binding:** Sidebar `ListBox` binds to `MainViewModel.NavControllerItems`. Each template binds `SlotNumber`, `InstanceLabel`, `IconKey` (via `DynamicResource`), and `IsEnabled`.
+**Sidebar wiring:** MainWindow code-behind rebuilds one wpf-ui `NavigationViewItem` per `NavControllerItems` entry on `NavControllerItemsRefreshed` (`RebuildControllerSection` / `CreateControllerNavItem`), and subscribes each item's `PropertyChanged` so `SlotNumber`, `InstanceLabel`, `IconKey` (matched as a plain string in `UpdateControllerNavItemContent`), `IsEnabled`, and the flame-state flags update the card in place.
 
 ---
 
@@ -101,7 +101,7 @@ Root ViewModel. Manages navigation state, 16 pad ViewModels, sidebar controller 
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `SelectedNavTag` | `string` | Current nav tag: `"Dashboard"`, `"Pad1"`–`"Pad16"`, `"Devices"`, `"Settings"`, `"About"`. Also notifies `IsPadPageSelected` and `SelectedPadIndex`. |
+| `SelectedNavTag` | `string` | Current nav tag: `"Dashboard"`, `"Pad1"`–`"Pad16"`, `"Profiles"`, `"Devices"`, `"Settings"`, `"About"`. Also notifies `IsPadPageSelected` and `SelectedPadIndex`. |
 | `IsPadPageSelected` | `bool` | True if a Pad page (Pad1–Pad16) is selected. Computed. |
 | `SelectedPadIndex` | `int` | Zero-based pad index for the selected Pad page, or -1. Computed. |
 | `SelectedPad` | `PadViewModel` | PadViewModel for the selected Pad page, or null. Computed. |
@@ -183,14 +183,14 @@ HIDMaestro is bundled with PadForge as a managed SDK and ships with the executab
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsHidHideInstalled` | `bool` | HidHide installed. Notifies `HidHideStatusText`. |
-| `HidHideStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
+| `HidHideStatusText` | `string` | Computed: `"Installed"` / `"Not Installed"`. |
 | `IsMidiServicesInstalled` | `bool` | Windows MIDI Services installed. Notifies `MidiServicesStatusText`. |
-| `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
+| `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not Installed"`. |
 | `IsSteamVrInstalled` | `bool` | SteamVR present, which gates the VR slot type (#49). Kept current by MainWindow's periodic status refresh alongside the MIDI Services flag. Notifies `SteamVrStatusText`. |
 | `IsSteamVrRunning` | `bool` | The background VR consumer is connected to a running SteamVR (#287). Notifies `SteamVrStatusText`. |
 | `IsVrDriverConnected` | `bool` | A VR slot's OpenVR driver is connected in SteamVR (the SDK's `DriverConnected`, #287). Notifies `SteamVrStatusText`. |
 | `AreVrControllersLive` | `bool` | A VR slot's virtual hands are registered and live in SteamVR (the SDK's `ControllersLive`, #287). Notifies `SteamVrStatusText`. |
-| `SteamVrStatusText` | `string` | Computed, tiered (#287), deepest true state wins: `"Not installed"`, then `Vr_Status_ControllersLive`, `Vr_Status_DriverConnected`, `Vr_Status_Running`, falling back to `"Installed"`. |
+| `SteamVrStatusText` | `string` | Computed, tiered (#287), deepest true state wins: `"Not Installed"`, then `Vr_Status_ControllersLive`, `Vr_Status_DriverConnected`, `Vr_Status_Running`, falling back to `"Installed"`. |
 
 ### DSU Motion Server
 
@@ -313,7 +313,7 @@ Summary card for one virtual controller slot on the Dashboard.
 | `SlotNumber` | `int` | `1` | 1-based controller number among active slots. |
 | `TypeInstanceLabel` | `string` | `"1"` | Per-type instance label. |
 | `OutputType` | `VirtualControllerType` | `Xbox` | Virtual controller output type. (XML on-disk name is `"Microsoft"` via `[XmlEnum]` for v2/early-v3 back-compat. In-code identifier is `Xbox`.) |
-| `StageLedger` | `ObservableCollection<SlotStageInfo>` | empty | Pipeline stage ledger (#175 item 10): one entry per configuration stage the slot's assigned devices actually have (sticks / triggers / gyro / lighting / touchpad / audio), in that order. Rebuilt by `InputService.RefreshSlotStageLedgers` on its 1 s slow lane. Entries mutate in place when membership is unchanged so the card doesn't re-template. |
+| `StageLedger` | `ObservableCollection<SlotStageInfo>` | empty | Pipeline stage ledger (#175 item 10): one entry per configuration stage the slot's assigned devices actually have (sticks / triggers / gyro / lighting / touchpad / audio), in that order. Rebuilt per slot by `InputService.RefreshSlotStageLedger` on its 1 s slow lane. Entries mutate in place when membership is unchanged so the card doesn't re-template. |
 
 ### SlotStageInfo
 
@@ -389,7 +389,7 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsHidHideInstalled` | `bool` | HidHide installed. |
-| `HidHideStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
+| `HidHideStatusText` | `string` | Computed: `"Installed"` / `"Not Installed"`. |
 | `HidHideVersion` | `string` | HidHide version. |
 | `HidHideWhitelistPaths` | `ObservableCollection<string>` | Whitelisted application paths. |
 | `SelectedWhitelistPath` | `string` | Selected whitelist path. Refreshes `RemoveWhitelistPathCommand`. |
@@ -413,7 +413,7 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsMidiServicesInstalled` | `bool` | Windows MIDI Services available. |
-| `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not installed"`. |
+| `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not Installed"`. |
 | `MidiServicesVersion` | `string` | MIDI Services version. |
 | `IsMidiOsSupported` | `bool` | Static: `true` if OS build >= 26100 (Win11 24H2). |
 | `MidiOsSupported` | `bool` | Instance forwarder over the static above. A XAML `Binding` path resolves against the DataContext instance and cannot reach a static member, so SettingsPage binds this one. Never raises `PropertyChanged` because the OS build cannot change while the app runs. |
@@ -430,7 +430,7 @@ The VR slot type needs SteamVR present. PadForge can install it Steam-free throu
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsSteamVrInstalled` | `bool` | A SteamVR install of either shape is present (Steam client, or the Steam-free steamcmd one). Notifies `SteamVrStatusText` and `ShowSteamVrUninstall`. |
-| `SteamVrStatusText` | `string` | Computed, tiered like the Dashboard row (#287): `"Not installed"`, then controllers-live / driver-connected / running read off `HMaestroVRController.GlobalDriverStatus()` and `OpenVrConsumerService.ServerConnected`, falling back to `"Installed"`. |
+| `SteamVrStatusText` | `string` | Computed, tiered like the Dashboard row (#287): `"Not Installed"`, then controllers-live / driver-connected / running read off `HMaestroVRController.GlobalDriverStatus()` and `OpenVrConsumerService.ServerConnected`, falling back to `"Installed"`. |
 | `SteamVrInstallDir` | `string` | Where the Steam-free install will land (seeded from `DriverInstaller.SteamVrInstallDir`). Not persisted by PadForge: after a successful install the HIDMaestro path hint is the durable record. |
 | `IsSteamVrOwned` | `bool` | The present install is the Steam-free one PadForge created. A Steam-client install is never PadForge's to remove. |
 | `ShowSteamVrUninstall` | `bool` | Computed: `IsSteamVrInstalled && IsSteamVrOwned`. |
@@ -438,7 +438,7 @@ The VR slot type needs SteamVR present. PadForge can install it Steam-free throu
 | Command | CanExecute | Description |
 |---------|-----------|-------------|
 | `InstallSteamVrCommand` | `!IsSteamVrInstalled` | Raises `InstallSteamVrRequested`. |
-| `UninstallSteamVrCommand` | `IsSteamVrInstalled && IsSteamVrOwned` | Raises `UninstallSteamVrRequested`. |
+| `UninstallSteamVrCommand` | `IsSteamVrInstalled && IsSteamVrOwned && !HasAnyVrSlots()` | Raises `UninstallSteamVrRequested`. |
 
 | Event | Description |
 |-------|-------------|
@@ -454,8 +454,9 @@ The VR slot type needs SteamVR present. PadForge can install it Steam-free throu
 | Member | Type | Description |
 |--------|------|-------------|
 | `HasAnyMidiSlots` | `Func<bool>` | Set by MainWindow. True if any slot uses MIDI. Blocks `UninstallMidiServicesCommand`. |
+| `HasAnyVrSlots` | `Func<bool>` | Set by MainWindow. True if any created slot is a VR slot. Blocks `UninstallSteamVrCommand`. |
 | `HasAnyHidHideDevices` | `Func<bool>` | Set by MainWindow. True if any device has HidHide enabled. Blocks `UninstallHidHideCommand`. |
-| `RefreshDriverGuards()` | method | Re-evaluates uninstall `CanExecute` for HidHide and MIDI Services. Call after slot creation/deletion/type changes. |
+| `RefreshDriverGuards()` | method | Re-evaluates uninstall `CanExecute` for HidHide, MIDI Services, and SteamVR. Call after slot creation/deletion/type changes. |
 
 ### Engine Settings
 
@@ -767,7 +768,7 @@ The ALL chip binds `TotalCount`. `RefreshCounts()` recomputes every facet count 
 
 | Method | Description |
 |--------|-------------|
-| `RebuildRawStateCollections(int axisCount, IReadOnlyList<int> buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList<ConsumerButtonDisplayItem> consumerButtons, bool isHeadsetMotion, int voiceButtonBase, bool isMicrophone)` | Rebuilds axis/button/POV collections for a new device. `buttonIndices` is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both `Index` and `DisplayNumber`). The class-flag booleans default to `false`, `consumerButtons` to `null`, and `voiceButtonBase` to `-1`. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, headset-motion, and voice-phrase cases. |
+| `RebuildRawStateCollections(IReadOnlyList<int> axisIndices, IReadOnlyList<int> buttonIndices, int povCount, bool isKeyboard, bool isMouse, bool isTouchpad, bool isMidi, bool isNfc, IReadOnlyList<ConsumerButtonDisplayItem> consumerButtons, bool isHeadsetMotion, int voiceButtonBase, bool isMicrophone)` | Rebuilds axis/button/POV collections for a new device. `axisIndices` is the sparse list of axis slots the device actually exposes (from `SupportedAxisIndices` / `CapAxisIndices` through `InputService.ResolveAxisIndices`), so each `AxisDisplayItem.Index` is the real `state.Axis[]` slot and its label reads `Axis {slot}`, gaps included. `buttonIndices` is the sparse list of button positions the device actually exposes (each item's value is stored verbatim as both `Index` and `DisplayNumber`). The class-flag booleans default to `false`, `consumerButtons` to `null`, and `voiceButtonBase` to `-1`. Handles keyboard, mouse, touchpad, MIDI, NFC, Consumer Control, headset-motion, and voice-phrase cases. |
 | `ClearRawState()` | Clears all raw state display data, including the class flags and the NFC / voice / Consumer collections. |
 | `RebuildNfcTags()` | Repopulates `NfcTags` from the registered-tag store. |
 | `RebuildVoicePhrases(int)` | Repopulates `VoicePhrases` from `VoicePhraseRegistry` at the passed button base. A negative base clears the list. |
@@ -808,8 +809,8 @@ Display item for a single axis value.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `Index` | `int` | Axis index. |
-| `Name` | `string` | Display name (e.g., `"Axis 0"`). |
+| `Index` | `int` | The real `state.Axis[]` slot (sparse, gaps preserved). |
+| `Name` | `string` | Display name from that slot (e.g., `"Axis 0"`). |
 | `NormalizedValue` | `double` | Value normalized to 0.0–1.0. Bound to ProgressBar. |
 | `RawValue` | `int` | Raw value (0–65535). |
 
@@ -1034,7 +1035,7 @@ Slot assignment badge (icon + number).
 
 ## PadViewModel
 
-**Files:** `PadViewModel.cs`, `PadViewModel.Touchpad.cs` (partial added in v3.3 for Touchpad-tab properties), `PadViewModel.Mouse.cs` (partial added for the #200 mouse-gesture tab)
+**Files:** `PadViewModel.cs`, `PadViewModel.Touchpad.cs` (partial added in v3.3 for Touchpad-tab properties), `PadViewModel.Mouse.cs` (partial added for the #200 mouse-gesture tab), `PadViewModel.AudioDsp.cs` (partial added in 4.3.2 for the #347 Audio DSP chain)
 **DataContext for:** Pad page (one per virtual controller slot)
 
 The largest ViewModel. One per virtual controller slot (16 total). Handles output type, multi-device selection, mapping grid, deadzone/sensitivity, macros, force feedback, Touchpad-tab settings, and live state display.
@@ -1417,9 +1418,30 @@ Per-(slot, device) mouse-gesture settings. Twin of the Touchpad partial's Load/S
 | `ConstantForceX` | `double` | `0` | −1.0–1.0 | X component of the force vector. |
 | `ConstantForceY` | `double` | `0` | −1.0–1.0 | Y component (+ = up in the UI grid). |
 
+### Audio DSP Chain (#347)
+
+Audio-tab surface over the per-device crossfeed / EQ / limiter fields on `DeviceSlotConfig` (see the DeviceSlotConfig section below). Lives in `PadViewModel.AudioDsp.cs`. The cards are gated on `SelectedDeviceHasDspChain`.
+
+| Member | Type | Description |
+|--------|------|-------------|
+| `SelectedDeviceHasDspChain` | `bool` (computed, `PadViewModel.cs`) | True when the selected device is a Sony pad whose audio rides an `AudioPassthroughService` sink, the only place the chain runs: DualSense family, or a DualShock 4 over Bluetooth. |
+| `EqBands` | `ObservableCollection<EqBandVm>` | Grid rows decoded from `DeviceSlotConfig.AudioEqBands`. Every row edit re-encodes the whole list back into the config (`PushEqBands`). |
+| `RefreshEqBands()` | method | Rebuilds the rows from the selected device's config on every device switch and clears the import status. |
+| `AddEqBandCommand` / `RemoveEqBandCommand` / `ClearEqBandsCommand` | `RelayCommand` (`RemoveEqBandCommand` takes the `EqBandVm` row) | Add a default band, remove one row, or clear the list. Each pushes the encoded list. |
+| `ImportAutoEqFileCommand` | `RelayCommand` | Open-file dialog for an AutoEq `ParametricEQ.txt` / `FixedBandEQ.txt` and apply its Filter lines plus preamp. |
+| `ImportAutoEqCommand` | `RelayCommand` | Same parse over the clipboard text. |
+| `EqImportStatus` / `HasEqImportStatus` | `string` / `bool` | What the last import did, shown under the buttons. A Graphic EQ file with no Filter lines says so instead of silently doing nothing. |
+| `ResetCrossfeedCommand` | `RelayCommand` | `AudioCrossfeedLevel` back to 0. |
+| `ResetCrossfeedCutCommand` / `ResetCrossfeedFeedCommand` | `RelayCommand` | Custom knobs back to libbs2b's own defaults, 700 Hz and 4.5 dB. |
+| `ResetEqPreampCommand` | `RelayCommand` | `AudioEqPreampDb` back to 0. |
+| `ResetEqCommand` | `RelayCommand` | EQ off, preamp 0, bands cleared. |
+| `ResetLimiterCommand` / `ResetLimiterCeilingCommand` | `RelayCommand` | Limiter back on, ceiling back to 98. |
+
+**EqBandVm** (one editable row, `ObservableObject`): `Enabled`, `Type` (`EqBandType`: Peaking, LowShelf, HighShelf, HighPass, LowPass, Notch), `FrequencyHz` (clamped 10 to `EqBand.MaxFrequencyHz()`), `GainDb` (clamped −30..30), `Q` (clamped 0.05..20). Clamps match the engine's so the grid never accepts a band the DSP would silently reject.
+
 ### Impulse Triggers Tab (3.2)
 
-Per-pad-per-slot per-trigger-motor effects. Tab visible only when an assigned device exposes `SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN` (Xbox One+, DualSense).
+Per-pad-per-slot per-trigger-motor effects. Tab visible only when the selected device reports `HasRumbleTriggers`: SDL's `SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN` or a Microsoft impulse-trigger PID (`XboxControllerIdentity.IsImpulseTriggerDevice`). Xbox One and later pads.
 
 | Property | Type | Default | Range | Description |
 |----------|------|---------|-------|-------------|
@@ -2026,7 +2048,7 @@ An entry with `DeviceGuid == Guid.Empty` is device-free: the evaluator resolves 
 | `TriggerMode` | `MacroTriggerMode` | `OnPress` | Twelve modes, ordinals pinned: `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253). |
 | `TriggerHoldMs` | `int` | `500` | (#244) Hold threshold shared by `HoldForMs` and `ShortPress`, the tap-vs-hold pair. Has its own Reset command. |
 | `TriggerDoublePressMs` | `int` | `442` | (#244) Multi-press window for the Single / Double / Triple modes. Has its own Reset command. |
-| `LayerMask` | `string` | `""` | (#253/#254) Per-macro shift-layer scope. Empty = fires on any layer; a layer name limits the macro to that layer, Base included. Bound to the Layer dropdown (`Macro_Layer` / `Macro_Layer_Any` strings), gated like mapping rows. |
+| `LayerMask` | `string` | `""` | (#253/#254) Per-macro shift-layer scope. Empty = fires on any layer. A layer name limits the macro to that layer, Base included. Bound to the Layer dropdown (`Macro_Layer` / `Macro_Layer_Any` strings), gated like mapping rows. |
 | `IsNotAlwaysMode` | `bool` | - | Computed: `TriggerMode != Always`. Controls trigger UI visibility. |
 | `ConsumeTriggerButtons` | `bool` | `true` | Remove trigger buttons from Gamepad state on fire. |
 
@@ -2119,7 +2141,7 @@ One `Is*Type` flag per action family, plus the rolled-up families the editor gat
 | `KeyCode` | `int` | `0` | Win32 VK_ code. Notifies `SelectedVirtualKey`. |
 | `SelectedVirtualKey` | `VirtualKey` | `None` | Enum wrapper for ComboBox. Not serialized. |
 | `KeyString` | `string` | `""` | Multi-key combo in x360ce format (`"{Control}{Alt}{Delete}"`). |
-| `ParsedKeyCodes` | `int[]` | - | Computed: VK codes from `KeyString`; falls back to `KeyCode`. |
+| `ParsedKeyCodes` | `int[]` | - | Computed: VK codes from `KeyString`, falling back to `KeyCode`. |
 | `SelectedKeyToAdd` | `VirtualKey` | `None` | Key picker binding. Auto-appends to `KeyString` and resets. |
 
 | Command | Description |
@@ -2200,7 +2222,7 @@ For `MacroActionType.DisconnectController`. The target is set on the action, not
 
 ### Supporting Enums (MacroItem.cs)
 
-**MacroTriggerMode** (ordinals pinned): `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8, deferred single), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253; shares `TriggerHoldMs` with `HoldForMs` to compose tap-vs-hold on one button)
+**MacroTriggerMode** (ordinals pinned): `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8, deferred single), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253. Shares `TriggerHoldMs` with `HoldForMs` to compose tap-vs-hold on one button)
 
 **MacroTriggerSource:** `InputDevice`, `OutputController`
 
@@ -2363,7 +2385,7 @@ public ProfileShortcutViewModel(
     Action<ProfileShortcutViewModel> saveCallback)
 ```
 
-`deleteCallback` removes the row; `saveCallback` triggers a settings save via `SettingsService.MarkDirty()`.
+`deleteCallback` removes the row. `saveCallback` triggers a settings save via `SettingsService.MarkDirty()`.
 
 ### Switch Mode
 
@@ -2412,7 +2434,7 @@ Name resolution helpers:
 |----------|------|-------------|
 | `IsRecording` | `bool` | `true` during Learn mode. Raises `LearnButtonText` and `LearnButtonIcon`. |
 | `RecordingCountdown` | `int` | Seconds remaining. Raises `ButtonComboDisplay` on change. |
-| `LearnButtonText` | `string` (computed) | "Learning..." or "Learn" |
+| `LearnButtonText` | `string` (computed) | `"Recording..."` (`Profiles_ShortcutLearning`) or `"Record"` (`Profiles_ShortcutLearn`) |
 | `LearnButtonIcon` | `string` (computed) | `\uE71A` (Stop) or `\uE7C8` (Record) |
 
 | Method | Description |
@@ -2452,7 +2474,7 @@ One thumbstick section in the Sticks tab. Gamepad presets: 0 = Left, 1 = Right. 
 | Property | Type | Default | Range | Description |
 |----------|------|---------|-------|-------------|
 | `Sensitivity` | `double` | `1.0` | 0.1–5.0 | Flat speed multiplier. Live for the pointer sticks above only. On a gamepad stick the per-axis response curves own the shaping. Reset: `ResetStickSensitivityCommand`. |
-| `MomentumEnabled` | `bool` | `false` | - | Stick trackball (#291): flick the mouse stick and release, and the cursor keeps travelling, coasting to a stop on the same constant-deceleration physics the touchpad's Momentum uses. |
+| `MomentumEnabled` | `bool` | `false` | - | Stick trackball (#291): flick the mouse stick and release, and the cursor keeps traveling, coasting to a stop on the same constant-deceleration physics the touchpad's Momentum uses. |
 | `MomentumGlide` | `double` | `0.90` | 0.80–1.00 | The coast's friction band, identical to the touchpad's Momentum Glide. 0.80 full friction, 1.00 frictionless. |
 
 **Reset commands:** `ResetMomentumCommand`, `ResetMomentumGlideCommand`.
@@ -2768,6 +2790,22 @@ Filters the single (pitch, amplitude) pair the haptic-tone sinks reduce everythi
 
 Reset commands: `ResetPersonaHapticsCommand`, `ResetPersonaHapticsGainCommand` (both on `PadViewModel`, alongside the Audio tab's other row resets).
 
+### Audio DSP chain (#347)
+
+Per (slot, device) like the rest of the bag, never gated on OutputType. The chain runs on the `AudioPassthroughService` sink only, upstream of the Opus encoder. Edited from the `PadViewModel.AudioDsp.cs` cards.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `AudioCrossfeedLevel` | `int` | `0` | bs2b crossfeed level, clamped 0–9: 0 off, 1–3 crossfeed, 4–6 easy crossfeed, 7 Jan Meier, 8 the bs2b default, 9 custom. Skipped on the speaker paths, which carry a mono downmix. |
+| `AudioCrossfeedIsCustom` | `bool` | - | Computed: level 9. Shows the two custom knobs. |
+| `AudioCrossfeedCutHz` | `int` | `700` | Custom crossover cutoff, clamped 300–2000 (libbs2b's BS2B_MINFCUT / BS2B_MAXFCUT). |
+| `AudioCrossfeedFeedDb` | `double` | `4.5` | Custom feed level in dB, clamped 1.0–15.0 (libbs2b's BS2B_MINFEED / BS2B_MAXFEED in tenths). |
+| `AudioEqEnabled` | `bool` | `false` | Master switch for the parametric EQ, separate from an empty band list so a tuned EQ can be muted without being lost. |
+| `AudioEqBands` | `string` | `""` | The band list as one attribute encoded by `EqBandCodec`, bridged to grid rows by `PadViewModel.AudioDsp.cs`. |
+| `AudioEqPreampDb` | `double` | `0` | Preamp in dB applied before the EQ, clamped −30..12. AutoEq imports carry their negative preamp through here. |
+| `AudioLimiterEnabled` | `bool` | `true` | On by default, since a positive EQ band without a limiter clips the Opus encoder. |
+| `AudioLimiterCeiling` | `int` | `98` | Ceiling as a percent of full scale, clamped 5–100. |
+
 ### Headphone jack and audio path
 
 | Property | Type | Default | Description |
@@ -2857,7 +2895,7 @@ Each control has a matching `Reset…Command` (mirroring the Sticks / Triggers p
 
 **AdaptiveTriggerMode:** `Off`(0), `Feedback`(1), `Weapon`(2), `Vibration`(3), `MultiplePositionFeedback`(4), `SlopeFeedback`(5), `MultiplePositionVibration`(6). Sony's seven PS5 SDK effect modes.
 
-**AudioOutputPath:** `Automatic`(0), `StereoHeadset`(1), `MonoHeadset`(2), `HeadsetAndSpeaker`(3), `SpeakerOnly`(4), `FollowHeadphoneJack`(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. `Automatic` writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. `FollowHeadphoneJack` tracks the pad's own jack detect, which arrives on the Bluetooth raw lane, and resolves to the default when there is no reading. Persisted numerically, so the members are append-only.
+**AudioOutputPath:** `Automatic`(0), `StereoHeadset`(1), `MonoHeadset`(2), `HeadsetAndSpeaker`(3), `SpeakerOnly`(4), `FollowHeadphoneJack`(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. `Automatic` writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. `FollowHeadphoneJack` tracks the pad's own jack detect. The jack bit is read by `AudioPassthroughService`'s sink-owned `JackWatch` on either transport (USB input report 0x01 or Bluetooth 0x31, the duaLib PluggedHeadphones status bit), independent of any persona lane. Plugged resolves to `StereoHeadset`, unplugged to `SpeakerOnly`, and no reading to the default. Persisted numerically, so the members are append-only.
 
 **MicLedMode:** `Off`(0), `Solid`(1), `Pulse`(2), `FollowDeviceMute`(3).
 
@@ -2879,7 +2917,7 @@ Each control has a matching `Reset…Command` (mirroring the Sticks / Triggers p
 
 ### DeviceSlotConfigData
 
-Serializable DTO. All scalar properties are `[XmlAttribute]`. The two palettes are `[XmlArray]`. Key defaults: `LeftEndPosition`/`RightEndPosition` = 255, `LeftStrength`/`RightStrength` = 200, `LeftFrequency`/`RightFrequency` = 10, `LightbarBlue` = 0xFF, `AudioMirrorEngageMode` = "Always", `AudioMirrorEngageReleaseMs` = 500, `AudioToneFilterMode` = "Off", `AudioToneLimitHz` = 800, `AudioPersonaHapticsEnabled` = false, `AudioPersonaHapticsGain` = 100, `HeadphoneVolume` = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), `Ds5AudioBufferLength` = 48, `AudioOutputPath` = Automatic, `GuideLedMode` = DeviceDefault, `GuideLedBrightness` = 100, `LightbarMode` = Off (the DTO default, migrated to PlayerNumber via `LightingRev`), `PlayerLedMode` = Off (likewise). It also carries a `DeviceGuid` (per-device key, empty = a legacy slot-level entry the loader fans out) and `LightingRev` (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). `LightbarPaletteEntryData` is the palette element (`R`, `G`, `B` byte attributes).
+Serializable DTO. All scalar properties are `[XmlAttribute]`. The two palettes are `[XmlArray]`. Key defaults: `LeftEndPosition`/`RightEndPosition` = 255, `LeftStrength`/`RightStrength` = 200, `LeftFrequency`/`RightFrequency` = 10, `LightbarBlue` = 0xFF, `AudioMirrorEngageMode` = "Always", `AudioMirrorEngageReleaseMs` = 500, `AudioToneFilterMode` = "Off", `AudioToneLimitHz` = 800, `AudioPersonaHapticsEnabled` = false, `AudioPersonaHapticsGain` = 100, `HeadphoneVolume` = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), `Ds5AudioBufferLength` = 48, `AudioOutputPath` = Automatic, `AudioCrossfeedLevel` = 0, `AudioCrossfeedCutHz` = 700, `AudioCrossfeedFeedDb` = 4.5, `AudioEqEnabled` = false, `AudioEqBands` = "", `AudioEqPreampDb` = 0, `AudioLimiterEnabled` = true, `AudioLimiterCeiling` = 98, `GuideLedMode` = DeviceDefault, `GuideLedBrightness` = 100, `LightbarMode` = Off (the DTO default, migrated to PlayerNumber via `LightingRev`), `PlayerLedMode` = Off (likewise). It also carries a `DeviceGuid` (per-device key, empty = a legacy slot-level entry the loader fans out) and `LightingRev` (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). `LightbarPaletteEntryData` is the palette element (`R`, `G`, `B` byte attributes).
 
 ---
 
@@ -2980,4 +3018,4 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

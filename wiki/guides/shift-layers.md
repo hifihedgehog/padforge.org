@@ -70,7 +70,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Toggle** | Each press flips engagement. Press once to engage. Press again to release. The Caps-Lock model. Set **Auto-Cancel After Inactivity** to have the layer drop itself after a spell with no input of its own. |
 | **Latch** | Press to latch this layer's own mappings on. Press again to return to Base. Pressing a different Latch button switches straight to that layer. Renamed from **Custom**. |
 | **Cycle** | One control steps through a queue of layers. See [Cycle queue](#cycle-queue) for the Next and Previous buttons and the queue options. |
-| **Sticky (one-shot)** | One press engages. The next input that fires on the engaged layer auto-releases the layer. Tap-then-tap muscle memory without holding. |
+| **Sticky (one-shot)** | One press engages. The next input you touch on any device assigned to the slot (button, stick, trigger, D-pad, or touchpad) fires on the layer while held, and the layer releases when you let that input go. Tap-then-tap muscle memory without holding. |
 | **No Button** | A passive layer with no activator of its own. It owns a tab and its mappings but never self-engages. You reach it only by adding it to a Cycle queue. |
 
 Toggle, Latch, Cycle, and Sticky normally fire on the press. Check **Fire on Release** in the activator dialog to move that to the release edge instead, so the layer flips when you let go of the button.
@@ -102,7 +102,7 @@ Right-click a tab for per-layer operations:
 - **Configure Activator…** Reopens the dialog above.
 - **Rename Layer…** Edits the display name without breaking the link between each row and its layer.
 - **Copy Layer Rows.** Copies every row on this layer to the clipboard.
-- **Paste Rows into Layer.** Pastes copied rows onto the current layer, re-tagging them to it.
+- **Paste Rows into Layer.** Replaces the current layer's rows with the copied ones, re-tagging them to it. Rows already on the destination layer are removed first.
 - **Clear Layer Rows.** Removes every row on this layer. The layer itself stays.
 - **Delete Layer.** Removes the layer and every row tagged to it. Confirms first.
 
@@ -110,7 +110,7 @@ Right-click a tab for per-layer operations:
 
 ## The engaged-layer flyout
 
-When a shift layer engages, a Windows-11-style flyout appears at the bottom of the screen showing the layer's emoji icon and name. It auto-dismisses after 2 seconds.
+When a shift layer engages, a Windows-11-style flyout appears at the bottom of the screen showing the layer's emoji icon and name. It stays on screen for as long as the layer is engaged. When the slot returns to Base, the flyout shows the Base tab's name and icon once and slides away 2 seconds later.
 
 The flyout scans every slot, not only the currently-viewed pad. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.
 
@@ -124,7 +124,7 @@ A slot can have many activators. When more than one Hold, Toggle, or Sticky acti
 
 Releasing the winning activator falls back to the next-most-recent still-engaged one. Release them all and the slot returns to Base.
 
-Latch and Cycle override that stack. A latched layer, or a Cycle stopped on a layer, holds the slot there no matter what the Hold, Toggle, and Sticky activators do. Releasing every held activator does not drop it. A Latch clears only on a second press of its own button, or when another Latch takes over. A Cycle moves only on Next or Previous. While a Latch or Cycle layer is active, the slot stays on it until you clear it one of those ways.
+Latch and Cycle override that stack. A latched layer, or a Cycle stopped on a layer, holds the slot there no matter what the Hold, Toggle, and Sticky activators do. Releasing every held activator does not drop it. A Latch clears on a second press of its own button, when another Latch takes over, or when a Cycle on the same slot steps. A Cycle's cursor moves only on Next or Previous, but a Latch press on the same slot displaces the layer the Cycle selected until the Cycle steps again. Latch and Cycle share one override, so use one or the other per slot if you want them to hold unconditionally.
 
 ---
 
@@ -180,7 +180,7 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 - A row's **Combine** setting is fixed per row. If you need a target to combine its sources differently per layer, build separate rows on each layer.
 - The engaged-layer flyout checks engagement about 30 times a second, on its own timer, not at the input polling rate. A very fast tap that engages and releases in under about 33 ms can fall between two checks and skip the flyout. Raising your controller's polling rate does not change this.
-- Latch stays on its layer until you press the same button again (back to Base) or press a different Latch button (switch to that layer). It does not release on its own.
+- Latch stays on its layer until you press the same button again (back to Base), press a different Latch button (switch to that layer), or step a Cycle on the same slot. It does not release on its own.
 
 ---
 
@@ -193,4 +193,4 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

@@ -5155,7 +5155,7 @@
 <a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">OverlayElement</span><span class="p">[]</span><span class="w"> </span><span class="n">Overlays</span><span class="p">;</span><span class="w">  </span><span class="c1">// 19 elements</span>
 <a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="p">}</span>
 </code></pre></div>
-<p>These two are generated into the same file but <code>ControllerModel2DView</code> never dispatches them. Their consumer is <code>WorkshopControllerPreview</code>, which draws the controller a Steam config was authored for, and that is a different device from whatever the user has assigned.</p>
+<p>These two are generated into the same file but <code>ControllerModel2DView</code> never dispatches them. Their consumers are <code>WorkshopControllerPreview</code>, which draws the controller a Steam config was authored for (a different device from whatever the user has assigned), and the web controller server (#296), which serves them as the <code>?type=steamdeck</code> and <code>?type=steamcontroller</code> layouts.</p>
 <p>Both carry dual touchpads (<code>LeftTouchpad</code> / <code>LeftTouchpadClick</code> and the right-hand pair). Steam Deck adds <code>ButtonQuickAccess</code> and four rear paddles. Steam Controller has one stick, so it carries <code>LeftThumbRing</code> with no right-hand counterpart, plus <code>LeftGrip</code> and <code>RightGrip</code>.</p>
 <h3 id="touchpad-click-highlight">Touchpad Click Highlight<a class="headerlink" href="#touchpad-click-highlight" title="Permanent link">&para;</a></h3>
 <p>The touchpad-click visual is a PNG from the asset pack, not a hand-drawn shape. <code>TouchpadClickSprite(folder)</code> names it: <code>DS4_Touchpad_Click.png</code> for <code>DS4</code>, <code>DualSense_Touchpad_Click.png</code> for both <code>DualSense</code> and <code>DUALSENSEEDGE</code>, null everywhere else. That null is the gate. <code>BuildCanvas</code> builds the touchpad preview for any folder the sprite lookup answers for, rather than naming folders inline, which is what silently excluded the Edge the day it got its own folder. The sprite's stem tracks the art family, not the folder, because the Edge folder carries the DualSense sprites.</p>
@@ -5303,7 +5303,7 @@
 <a id="__codelineno-11-116" name="__codelineno-11-116" href="#__codelineno-11-116"></a>    VRController_base.png                 (975x726, the hand pair side by side)
 <a id="__codelineno-11-117" name="__codelineno-11-117" href="#__codelineno-11-117"></a>    VRController_L_/R_ A, B, Grip, Stick, StickCap, System, Trigger.png
 </code></pre></div>
-<p>Steam Deck and Steam Controller ship no <code>*_Rest</code> trigger art, so their triggers are single-image elements rather than the active+base pair the Xbox and Switch layouts use. The Steam Deck's D-pad and face art also serve the Workshop preview only, since no PadForge output type resolves to those folders.</p>
+<p>Steam Deck and Steam Controller ship no <code>*_Rest</code> trigger art, so their triggers are single-image elements rather than the active+base pair the Xbox and Switch layouts use. The Steam Deck's D-pad and face art serve the Workshop preview and the web controller's Steam Deck layout, since no PadForge output type resolves to those folders.</p>
 <p>All PNGs are declared as WPF <code>Resource</code> (not <code>EmbeddedResource</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
@@ -5534,7 +5534,7 @@
 </tbody>
 </table>
 <p>Extended slots route to <code>ControllerSchematicView</code> and VR slots to <code>VRPreviewView</code>, so this control sees Xbox, PlayStation, and Nintendo slots.</p>
-<p><code>SteamDeckLayout</code> and <code>SteamControllerLayout</code> live in the same generated file but are not in this switch. <code>WorkshopControllerPreview</code> owns them.</p>
+<p><code>SteamDeckLayout</code> and <code>SteamControllerLayout</code> live in the same generated file but are not in this switch. <code>WorkshopControllerPreview</code> and <code>WebControllerServer</code> own them.</p>
 <p><code>EnsureModel</code> also resolves the colorway (<code>Controller2DColorways.For(folder)</code> plus the pad's stored appearance) and returns immediately only when both the folder and the colorway match what is already loaded. Otherwise it calls <code>BuildCanvas()</code>.</p>
 <h3 id="colorways">Colorways<a class="headerlink" href="#colorways" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.App/Models2D/Controller2DColorways.cs</code></p>
@@ -6270,7 +6270,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><strong>Parse SVG</strong>. Reads labeled elements from each controller's SVG theme file via lxml. <code>main()</code> runs ten pipelines: <code>process_xbox360</code>, <code>process_ds4</code>, <code>process_dualsense</code>, <code>process_dualsense_edge</code>, <code>process_xbox_one_s</code>, <code>process_xbox_series</code>, <code>process_switchpro</code>, <code>process_switch2pro</code>, <code>process_steamdeck</code>, <code>process_steamcontroller</code>. The two DualSense pipelines share <code>_process_dualsense_family</code>, the Xbox One S and Series pair shares <code>_process_xbox_modern</code>, and the two Switch pipelines share <code>_process_switchpro_family</code>. Each family pair differs only by a margin (the widened base) and a flag for the extra controls. Computes cumulative SVG transforms (translate, scale, matrix) for pixel-space bounding boxes.</li>
 <li><strong>Center and fit overlays</strong>. Loads each PNG overlay and centers it on the SVG bounding box center. <code>fit_overlay_to_bbox</code> scales the overlay to the box where needed, <code>stretch_overlay_to_bbox</code> fills it.</li>
 <li><strong>Alpha-channel refinement</strong>. <code>refine_with_composite</code> runs OpenCV template matching (<code>cv2.matchTemplate</code>, <code>TM_CCOEFF_NORMED</code>) against the composite overlay image, then a <code>refine_via_base_template</code> pass aligns small buttons and bumpers against the base body PNG. (<code>refine_via_alpha_diff</code> is defined for blob-based alignment but is not currently wired into any pipeline.)</li>
-<li><strong>Inject trigger bases</strong>. <code>_add_trigger_base_entries</code> adds a <code>TriggerBase</code> row for each active-press trigger, inheriting its final position and size. Steam Deck and Steam Controller are excluded: their shipped base renders already draw the triggers at rest, and the Steam packs ship no rest-state trigger PNG.</li>
+<li><strong>Inject trigger bases</strong>. <code>_add_trigger_base_entries</code> adds a <code>TriggerBase</code> row for each active-press trigger whose filename carries an <code>_Active</code> or <code>-Active</code> suffix, inheriting its final position and size. The Switch Pro and Switch 2 Pro pipelines append their <code>ZL_Rest</code> / <code>ZR_Rest</code> rows themselves inside <code>_process_switchpro_family</code> at template-diff rects, since the ZL/ZR press art has no suffix. Steam Deck and Steam Controller are excluded: their shipped base renders already draw the triggers at rest, and the Steam packs ship no rest-state trigger PNG.</li>
 <li><strong>Reorder for hit-test precedence</strong>. Trigger and TriggerBase rows are stable-moved to the front of every layout. The view resolves an overlap to the last-added overlay, and every trigger bbox runs tens of pixels down behind its bumper, so triggers emitted after bumpers stole the shared band. Visual stacking is unaffected because Z-indices are explicit in the view.</li>
 <li><strong>Trace hit zones</strong>. <code>_hit_polygons</code> thresholds each overlay's alpha above 25, dilates it (kernel at least 7 px, or 6% of the smaller dimension) so thin strokes keep a grab margin, runs <code>cv2.findContours</code> + <code>approxPolyDP</code>, and emits normalized polygon groups. Results are memoized per file.</li>
 <li><strong>Generate C#</strong>. Outputs <code>ControllerOverlayLayout.cs</code> with layout constants, overlay element arrays, hit paths, and stick travel values for all ten layout classes.</li>
@@ -6510,7 +6510,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><code>BuildInputLayout()</code> lays out the full 0-127 namespace wrapped: CCs at <code>CcPerRow = 32</code> (four rows), notes by octave at <code>OctavesPerRow = 4</code> (11 octaves across three rows).</li>
 <li>Rendering polls <code>source()</code> every frame (no dirty flag, input changes continuously) and indexes widgets by actual note / CC number against the live arrays. That is why <code>CcSliderWidget.CcNumber</code> and <code>PianoKeyWidget.MidiNote</code> exist.</li>
 <li>Relative-encoder detents flood a whole CC bar: green (<code>CcUpPulseBrush</code>) on an up detent, orange (<code>CcDownPulseBrush</code>) on a down detent. A detent's pulse is only ~24 ms, so <code>PulseLatchMs = 180</code> holds the flash long enough to see.</li>
-<li>The repaint is skipped when the control is not visible (<code>if (!IsVisible) return;</code>), so the ~256-widget loop does not run against a collapsed panel.</li>
+<li>The repaint is skipped when the control is not visible or the window is minimized (<code>if (!IsVisible || AmbientMotionProbe.Instance.IsWindowMinimized) return;</code>), so the ~256-widget loop does not run against a collapsed panel.</li>
 </ul>
 <!-- SCREENSHOT: midi-input-mode-devices-page -->
 <p><img alt="MIDI input preview on the Devices page showing live notes and CC bars" src="../../images/midi-input-mode-devices-page.png" /></p>
@@ -6715,7 +6715,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: 2D PNG assets (<code>2DModels/</code>) included as WPF <code>Resource</code> items</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

@@ -3384,7 +3384,7 @@
 </tr>
 <tr>
 <td><strong>Idle</strong></td>
-<td>Gold flame. The engine started, but no slot is enabled with a device mapped and no linked PC is sharing input, so there's nothing to process.</td>
+<td>Gold flame. The engine started, but no enabled slot has a connected device (a mapped device that is offline does not count once its grace period ends) and no linked PC is sharing input, so there's nothing to process.</td>
 </tr>
 <tr>
 <td><strong>Stopping</strong></td>
@@ -3457,7 +3457,7 @@
 </tbody>
 </table>
 <h3 id="slot-status">Slot status<a class="headerlink" href="#slot-status" title="Permanent link">&para;</a></h3>
-<p>The power flame and the status text both track the slot's state. Hovering the flame shows the status word.</p>
+<p>The power flame and the status text both track the slot's state. Hovering the flame shows a short state tooltip (Disabled, Forging, Awaiting devices, Engine stopped, Virtual controller failed, Initializing). Cold and Idle have no tooltip of their own: a Cold slot shows "Awaiting devices" and an Idle slot shows "Forging".</p>
 <table>
 <thead>
 <tr>
@@ -3504,7 +3504,7 @@
 </tr>
 </tbody>
 </table>
-<p>Click anywhere on a card (except the delete or power flame) to open the slot's configuration: <a href="../mappings/">Button and Axis Mappings</a>, <a href="../stick-deadzones/">Stick Deadzones</a>, <a href="../trigger-deadzones/">Trigger Deadzones</a>, <a href="../force-feedback/">Force Feedback</a>, <a href="../adaptive-triggers/">Adaptive Triggers</a>, <a href="../lighting/">Lighting</a>, and <a href="../../guides/macros/">Macros</a>.</p>
+<p>Click anywhere on a card (except the power flame, the type track icons, or the delete button) to open the slot's configuration: <a href="../mappings/">Button and Axis Mappings</a>, <a href="../stick-deadzones/">Stick Deadzones</a>, <a href="../trigger-deadzones/">Trigger Deadzones</a>, <a href="../force-feedback/">Force Feedback</a>, <a href="../adaptive-triggers/">Adaptive Triggers</a>, <a href="../lighting/">Lighting</a>, and <a href="../../guides/macros/">Macros</a>.</p>
 <h3 id="reordering-slots">Reordering slots<a class="headerlink" href="#reordering-slots" title="Permanent link">&para;</a></h3>
 <p>Drag a card by its body to reorder slots inside the same type group. Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, and VR each reorder on their own. Cross-type drops are ignored. The per-type instance number (the <code>#2</code> on the second Xbox slot) updates as soon as you drop.</p>
 <p>Same-profile reorders are a pointer swap. No kernel rebuild, no game disconnection. Different-profile reorders rebuild only the positions whose profile changed. See <a href="../controller-slots/#what-happens-on-reorder">Controller Slots</a>.</p>
@@ -3695,7 +3695,7 @@
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

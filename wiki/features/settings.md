@@ -32,7 +32,7 @@ New translations land as community pull requests.
 
 | Option | Behavior |
 |---|---|
-| **System Default** | Follows your Windows theme. Updates live. |
+| **System Default** | Follows your Windows theme, read at launch and again whenever you re-pick this option. |
 | **Light** | Always light. |
 | **Dark** | Always dark. |
 
@@ -122,7 +122,7 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 
 ## Driver Management
 
-Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not) and the installed version when present.
+Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide, HIDMaestro, and Windows MIDI Services also show the installed version.
 
 - **HidHide Driver** card: Install and Uninstall buttons.
 - **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.
@@ -136,7 +136,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | Driver | What it does | When to install |
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
-| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 225+ device profiles. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
+| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 231 device profiles. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
 | **Windows MIDI Services** | Sends MIDI virtual-controller output. Needs Windows 11 24H2 (build 26100)+. | You drive a DAW, synth, or other MIDI app from a controller. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
@@ -344,4 +344,4 @@ Opens the folder holding `diagnostics.log` and any snapshots.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

@@ -12,13 +12,13 @@
 |------|----------|
 | **Left panel** | One card for each detected device |
 | **Right panel** | Detail pane for the selected device. Identity, slot assignment, hiding, live raw input. |
-| **Header** | **Refresh** button, **Pair** button (Wii controllers and DualShock 3), **Online** count, **Total** count (includes disconnected) |
+| **Header** | **Refresh** button, **Pair** button (Wii controllers, DualShock 3, PS Move / Navigation), **Online** count, **Total** count (includes disconnected) |
 
 ---
 
 ## Device card list
 
-Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchpads) sort to the bottom. Within each group, cards sort alphabetically by name, then by Vendor ID, then by Product ID.
+Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchpads, All Consumer Controls) sort to the bottom. Within each group, cards sort alphabetically by name, then by Vendor ID, then by Product ID.
 
 ### Type filter chips
 
@@ -36,20 +36,20 @@ Top row:
 | Element | Description |
 |---------|-------------|
 | **Status flame** | The same ember flame the driver cards wear. Filled and glowing for connected, outline only for disconnected. |
-| **Device name** | The name the hardware reports (e.g., "Xbox Wireless Controller"). Merged devices show "All Keyboards (Merged)", "All Mice (Merged)", or "All Touchpads (Merged)". |
+| **Device name** | The name the hardware reports (e.g., "Xbox Wireless Controller"). Merged devices show "All Keyboards (Merged)", "All Mice (Merged)", "All Touchpads (Merged)", or "All Consumer Controls (Merged)". |
 | **Slot badges** | [Slot](controller-slots.md) numbers the device is assigned to, each with the slot's controller-type icon (a Nintendo slot wears the Switch mark). No badge shows if the device is unassigned. |
-| **Remove button** | X. Deletes the device and its settings. Revealed on hover or keyboard focus. |
+| **Remove button** | X. Opens a **Remove Device** confirmation, and the device and its settings are deleted once you click **Remove**. Revealed on hover or keyboard focus. |
 
 Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Headset Tracker, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging. |
 
-Wired devices, devices with no battery, and offline devices show no battery indicator. The same percentage appears again as a small suffix next to the device name in a slot's assigned-device list, so you can read a controller's charge without opening its card.
+Devices that report no battery (wired pads without one, most wired sticks and wheels) and offline devices show no battery indicator. A battery-equipped pad on a USB cable shows the charging glyph. The same percentage appears again as a small suffix next to the device name in a slot's assigned-device list, so you can read a controller's charge without opening its card.
 
 ### Selecting a card
 
@@ -57,7 +57,7 @@ Click a card. A vertical accent bar appears on the left edge. The detail pane fi
 
 ### Removing a device
 
-The X button deletes the device and all its settings (mappings, slot assignments, hiding). The [slot](controller-slots.md) stays. It just becomes unassigned.
+The X button opens a **Remove Device** confirmation. Click **Remove** and the device and all its settings (mappings, slot assignments, hiding) are deleted. The [slot](controller-slots.md) stays. It just becomes unassigned.
 
 If the device is still plugged in, it comes back on the next scan as a fresh device with no settings.
 
@@ -165,7 +165,7 @@ Each axis row has:
 
 | Element | Description |
 |---------|-------------|
-| **Name** | Always Axis 0, Axis 1, Axis 2, and so on. The row keeps its number in both input modes. It never switches to friendly names like LX or LT. |
+| **Name** | Always Axis N, numbered by the axis's real slot. In gamepad mode a pad that lacks a stick or trigger skips those numbers, so gaps are normal (a PS Move Navigation reads Axis 0, 1, 2, then 6, 7, 10). Raw mode numbers densely from 0. The row never switches to friendly names like LX or LT. |
 | **Progress bar** | Horizontal, 0-1 range. A centered stick reads ~50%. |
 | **Raw value** | Exact integer (0-65535) in monospace |
 
@@ -184,7 +184,7 @@ Small circles in a wrap layout, labeled by index (0, 1, 2...).
 | Released | Dim recessed cell |
 | Pressed | Outline and number lit in cold blue, with a glow |
 
-Gamepad mode shows the 11 standard buttons (0 is A, 1 is B, on through Guide at 10) plus every extended button the pad actually has: Misc1 at 11, paddles at 12–15, touchpad click at 16, Misc2–6 at 17–21. Physical buttons the mapping leaves unclaimed follow from 22 up. Each circle is numbered by its real index, the same number the mapping picker and recorder use, so gaps are normal. A DualSense shows a button 16 for its touchpad click with nothing at 12–15. Raw mode shows every physical button instead, densely numbered from 0. Either way the circles read as numbers, not letters.
+Gamepad mode shows the standard buttons the pad has (0 is A, 1 is B, on through Guide at 10, and a partial pad such as the PS Move Navigation skips the ones it lacks) plus every extended button the pad actually has: Misc1 at 11, paddles at 12–15, touchpad click at 16, Misc2–6 at 17–21. Physical buttons the mapping leaves unclaimed follow from 22 up. Each circle is numbered by its real index, the same number the mapping picker and recorder use, so gaps are normal. A DualSense shows a button 16 for its touchpad click with nothing at 12–15. Raw mode shows every physical button instead, densely numbered from 0. Either way the circles read as numbers, not letters.
 
 Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags. See their sections below.
 
@@ -290,11 +290,13 @@ The deep how-to (registering, naming, and mapping tags) lives on [NFC Tags](nfc-
 
 ## Pairing a controller
 
-The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers two families: **Nintendo Wii** and **Sony DualShock 3**.
+The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers three families: **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**.
 
 The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See [Wii Controllers](../devices/wii-controllers.md) for the pairing steps and the per-controller button layouts.
 
 The DualShock 3 family pairs over USB: connect the controller with a cable, click **Pair**, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See [DualShock 3](../devices/dualshock-3.md).
+
+The PlayStation Move / Navigation family pairs over USB the same way. PadForge writes this PC into the controller, saves the Move's motion calibration, and registers it. Unplug it and press the PS button to connect over Bluetooth.
 
 Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.
 
@@ -350,7 +352,7 @@ Click **Cancel** to back out or **Proceed** to confirm.
 
 ### Master switch
 
-The global **Hide Devices from Games** toggle in [Settings](settings.md) (under Input Engine) is the master on / off. With it off, no hiding or suppression runs, no matter what each device is set to. Flipping it back on restores every per-device setting.
+The global **Hide Devices from Games** toggle in [Settings](settings.md) (under HidHide Driver) is the master on / off. With it off, no hiding or suppression runs, no matter what each device is set to. Flipping it back on restores every per-device setting.
 
 ---
 
@@ -431,7 +433,7 @@ Disconnected devices stay in the list with an unlit status flame.
 
 - Every mapping, slot assignment, and setting is kept
 - Reconnect with the same GUID and everything comes back
-- Remove with the X button if you no longer need it
+- Remove with the X button if you no longer need it (a **Remove Device** confirmation asks first)
 - Offline cards cost nothing at runtime. Stored settings only.
 
 ---
@@ -496,7 +498,7 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 ### HidHide toggle grayed out or missing
 
 - **Grayed out**: HidHide is not installed. Install via [Driver Management](driver-management.md) and restart PadForge.
-- **Missing**: the device is a virtual input source (PadForge's own virtual controllers, software keyboards, etc.). Hiding a virtual source has no meaning, so the toggle is left out instead of shown disabled.
+- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, pads reaching this PC over Remote Link). HidHide cannot cloak what is not a HID device, so the section is left out instead of shown disabled.
 
 ---
 
@@ -520,4 +522,4 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

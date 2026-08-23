@@ -161,7 +161,7 @@ Each stick has its own Sensitivity X and Sensitivity Y curve. The curve reshapes
 | Instant | Near-digital. Small flick produces almost full output. | Quick 180 turns, quick-scoping |
 | S-Curve | Precision near center and near full, steep ramp mid-travel | Competitive shooters needing fine aim plus fast turns |
 | Delay | Output stays low until ~80% deflection, then surges | Sniping. Very fine aim, slower turns. |
-| Custom | User-defined control points | Appears once you edit the curve |
+| Custom | User-defined control points | Always listed. Becomes the selected entry once you edit the curve. Picking it by hand changes nothing. |
 
 ### Interactive editor
 
@@ -363,7 +363,7 @@ Axial isolates each axis for clean cardinal movement without diagonals. Higher d
 
 On a Keyboard + Mouse slot the two sticks are **Mouse Movement** and **Scroll Wheel**, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a **Sensitivity** row that multiplies that speed.
 
-The Mouse Movement stick also carries a **Momentum** row: trackball mode for the stick. Flick the stick and release, and the cursor keeps travelling on the fling, decelerating to a stop on the same constant-friction physics the [touchpad's Momentum](touchpad.md#mouse-output) uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to centre parks the cursor without a fling. Moving the stick again catches the coast. The **Momentum Glide** slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 the coast is frictionless and only the stick stops it. Off by default, per slot and device.
+The Mouse Movement stick also carries a **Momentum** row: trackball mode for the stick. Flick the stick and release, and the cursor keeps traveling on the fling, decelerating to a stop on the same constant-friction physics the [touchpad's Momentum](touchpad.md#mouse-output) uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to center parks the cursor without a fling. Moving the stick again catches the coast. The **Momentum Glide** slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 the coast is frictionless and only the stick stops it. Off by default, per slot and device.
 
 | Setting | Range | Default |
 |---|---|---|
@@ -431,4 +431,4 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

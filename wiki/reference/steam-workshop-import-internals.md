@@ -151,7 +151,7 @@ The version gate rejects anything below 3 with the exact reason: "Steam Input co
 | 25 | | Wild-corpus round 2: serializer-vocabulary switch members resolve, `always_on_action` lowers onto the constant-true source with `LayerMask` scoping, radial menus host on the physical dpad / face diamond, `deadzone_shape` lands per source. |
 | 26 | | Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise `MobileTouchSurfaceOnly` / `ChordWithoutPartner` classes. |
 
-Versions 8 through 26 land across the 4.1.0 cycle. Commit hashes for each ride the doc comment in `TranslationReport.cs`, one block per bump.
+Versions 8 through 26 land across the 4.1.0 cycle. The doc comment in `TranslationReport.cs` carries one block per bump. It records no commit hashes, so the commit for each lives in git history (`git log -S"CurrentTranslatorVersion = N"`).
 
 The Nintendo face-button folding (`7cfc8be3`, labels folded to positions for Switch-authored configs via `PhysicalSlotResolver.UsesNintendoLabels`) did not bump the version: it changed slot resolution, not report shape.
 
@@ -223,7 +223,7 @@ Same config + same options = identical output, asserted by test. Ordering: prese
 
 `TranslationStatus`: `Clean = 0`, `Partial = 1`, `Skipped = 2`, `Error = 3`. Entries carry `Status`, `ReasonKey`, `ReasonArgs`, `SourcePath`, `Binding` (raw binding text), and `Emitted` (an unlocalized diagnostic trace like `KbmKey57 <- Touchpad 0 DPadUp`). The report also counts rows, macros, menus (`MenuCount`), and activators per set, and `ToSummaryString()` renders the provenance digest (`v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0`).
 
-Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v15 onward a wave that retires a key DELETES the key and its locale strings (each deletion is named in the version changelog above), so the live vocabulary is exactly the `Workshop_Tr_*` set in `Strings.resx` at HEAD. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list. Nineteen of the keys it lists have since been deleted, each marked in place with the version that deleted it. Nine keys that arrived after the snapshot are listed separately below the taxonomy.
+Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v14 onward a wave that retires a key DELETES the key and its locale strings (each deletion is named in the version changelog above), so the live vocabulary is exactly the `Workshop_Tr_*` set in `Strings.resx` at HEAD. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list. Nineteen of the keys it lists have since been deleted, each marked in place with the version that deleted it. Nine keys that arrived after the snapshot are listed separately below the taxonomy.
 
 ### Emission (Clean)
 
@@ -369,7 +369,7 @@ A `FluentWindow` (Mica, 1280×760) with a three-state flow (`WsState`): `Cold` (
 
 ### WorkshopProfileMaterializer
 
-`Materialize(translated, source)` builds the `ProfileData`. It creates only the slots the translation demands (`NeedsXboxSlot` / `NeedsKbmSlot`), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with the default HIDMaestro profile id for its type and its translated mapping set attached. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on `PadIndex = 0` (the Xbox slot, which macros always demand via `NeedsXboxSlot`) with `OutputController` triggers. Name falls back to `"Workshop Profile"`. When provenance is supplied it stamps `ImportedAt` and `TranslationSummary`.
+`Materialize(translated, source)` builds the `ProfileData`. It creates only the slots the translation demands (`NeedsXboxSlot` / `NeedsKbmSlot`), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with the default HIDMaestro profile id for its type and its translated mapping set attached. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on `PadIndex = 0` (the first created slot: Xbox when demanded, otherwise the KbM slot that a macro-only or key-only config creates). Combined-output triggers use `OutputController`, and device-free descriptor triggers use `InputDevice`. Name falls back to `"Workshop Profile"`. When provenance is supplied it stamps `ImportedAt` and `TranslationSummary`.
 
 The import sink (`AddWorkshopProfile` in `MainWindow.xaml.cs`) mirrors the `.pfprofile` import path: dedup the display name, append to `Profiles`, build the list card, `MarkDirty()`, and optionally `LoadProfile` for Save and Apply.
 
@@ -397,11 +397,11 @@ The import sink (`AddWorkshopProfile` in `MainWindow.xaml.cs`) mirrors the `.pfp
 | `Gamepad Paddle2` | `Button 13` | `Gamepad Paddle3` | `Button 14` |
 | `Gamepad Paddle4` | `Button 15` | | |
 
-Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing `Gyro ...` / `Touchpad ...` descriptors, which already resolve per device. The family does not rename them. The picker offers the family only for `CapType == Gamepad` devices not in raw-numbered naming, rendered through `Mapping_Gamepad_Format` ("Gamepad {0}") with the shared `DevObj_*` member labels.
+Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing `Gyro ...` / `Touchpad ...` descriptors, which already resolve per device. The family does not rename them. The picker offers the family in the leading **(Any device)** group (empty guid) on every slot, and per concrete device only for `CapType == Gamepad` devices not in raw-numbered naming, rendered through `Mapping_Gamepad_Format` ("Gamepad {0}") with the shared `DevObj_*` member labels.
 
 **Empty-DeviceGuid contract.** `MappingSource.DeviceGuid` defaults to `""`, documented as "first available device on the VC," resolved per frame in Step 3. The Workshop translator emits every source with an empty guid. Two seams enforce the contract off the happy path:
 
-- The multi-source contribution builders in `InputManager.Step3.MappingSetEval.cs` (`BuildCustomContribsForBipolarAxis` / `Trigger` / `Button`, plus `EvaluateStickTrim`) resolve an empty guid to the state of the device currently being evaluated instead of a null lookup that silently contributed 0.
+- The multi-source contribution builders in `PadForge.App/Common/Input/InputManager.Step3.MappingSetEval.cs` (`BuildCustomContribsForBipolarAxis` / `Trigger` / `Button`) resolve an empty guid across every device on the slot (`GetSlotDeviceStates`, per-device read, max-abs across devices) instead of reading only the device being evaluated or a null lookup that contributed 0. `EvaluateStickTrim` still resolves an empty guid to the device currently being evaluated.
 - The gesture-provider invocations in `SourceCoercion` (`ReadAsBool` / `ReadAsBipolar` / `ReadAsUnipolar`) pass the caller-resolved guid, because the gesture providers key on a concrete `(slot, device, pad)` triple and a bare empty guid always missed.
 
 ### Generic per-source Sensitivity
@@ -416,11 +416,11 @@ Three generic-read application sites in `SourceCoercion`, all clamped after scal
 
 The family readers that own their own scaling call `PerSourceSensitivity` themselves: the three touchpad axis reads (`TryReadTouchpadAxis`, `TryReadTouchpadAxisAbsolute`, `TryReadTouchpadAxisRaw`), the trackball emitter `EmitBallCounts`, and `ReadGyroLean`.
 
-The editor slider runs 0.1–5.0 (`MappingItem` clamps), label `Mapping_Sensitivity`.
+The field clamps 0.1–5.0 in `MappingItem`. The grid no longer shows a generic slider for plain analog sources (2026-07-27): the field is surfaced only on Gyro Lean rows (label `Mapping_GyroSensitivity`) and as the pointer-stick speed on a keyboard-and-mouse slot's Sticks tab (label `Macro_Sensitivity`). `Mapping_Sensitivity` remains in the resx unused.
 
 ### Touchpad finger pressure
 
-The `Touchpad {p} Finger {f} Pressure` descriptor existed in the engine. Phase A put it in the picker (`Mapping_TouchpadFingerPressure_Format`, one entry per pad × finger, gated on `HasTouchpad || IsTouchpad`, finger counts from the live SDL snapshot or the persisted capability). It reads `FingerPressure[f]` as a unipolar 0..1 level and bypasses the touchpad delta path. Values arrive from SDL's per-finger pressure on gamepad touchpads (pads without a force sensor report full on contact). The PTP reader and the touchpad overlay report binary 0/1 while a finger is down. The Workshop translator never emits this descriptor (its trackpad `soft_press` rides the click and touch descriptors as `SoftPressApproximated`). It exists for hand-built mappings.
+The `Touchpad {p} Finger {f} Pressure` descriptor existed in the engine. Phase A put it in the picker (`Mapping_TouchpadFingerPressure_Format`, one entry per pad × finger, gated on `HasTouchpad || IsTouchpad` and withheld for PTP system touchpads, whose reader synthesizes pressure as a 0/1 contact flag, finger counts from the live SDL snapshot or the persisted capability). It reads `FingerPressure[f]` as a unipolar 0..1 level and bypasses the touchpad delta path. Values arrive from SDL's per-finger pressure on gamepad touchpads (pads without a force sensor report full on contact). The PTP reader and the touchpad overlay report binary 0/1 while a finger is down. The Workshop translator never emits this descriptor (its trackpad `soft_press` rides the click and touch descriptors, reporting Clean since v17). It exists for hand-built mappings.
 
 ### The macro-action family
 
@@ -457,4 +457,4 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

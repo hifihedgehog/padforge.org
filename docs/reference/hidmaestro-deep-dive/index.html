@@ -3193,7 +3193,7 @@
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge ships with HM 1.6.2 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.6.2.0), which covers 225 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.</p>
+<p>PadForge ships with HM 1.7.0 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.7.0.0), which covers 231 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro, Logitech G-series wheels, Thrustmaster / Fanatec wheels, HOTAS / flight sticks, third-party gamepads (Hori, 8BitDo, PowerA, PXN, etc.), and a "Custom" profile that lets the Extended slot type build a HID descriptor from scratch.</p>
 <p>The interim milestones a successor should know, each one PadForge's own call sites still cite by version:</p>
 <table>
 <thead>
@@ -3222,12 +3222,12 @@
 <tr>
 <td>v1.4.0 (HM#39)</td>
 <td>Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in)</td>
-<td><code>AudioPassthroughService.cs:1151</code>, <code>HMaestroVirtualController.cs:81</code></td>
+<td><code>AudioPassthroughService.cs:1405</code>, <code>HMaestroVirtualController.cs:81</code></td>
 </tr>
 <tr>
 <td>v1.4.1 (HM#41)</td>
 <td>Ring-side audio truncation fixed</td>
-<td><code>AudioPassthroughService.cs:2070</code></td>
+<td><code>AudioPassthroughService.cs:2324</code></td>
 </tr>
 <tr>
 <td>v1.4.3 (HM#42)</td>
@@ -3237,12 +3237,17 @@
 <tr>
 <td>v1.5.1 (HM#48)</td>
 <td>Second DS5 Edge paddle/Fn pair</td>
-<td><code>HMaestroVirtualController.cs:1275</code></td>
+<td><code>HMaestroVirtualController.cs:1351</code></td>
 </tr>
 <tr>
 <td>v1.6.0 (HM#32)</td>
 <td>Native OpenVR driver behind <code>HMVRController</code></td>
 <td><code>HMaestroVRController.cs:9</code></td>
+</tr>
+<tr>
+<td>v1.7.0 (HM#56)</td>
+<td>Per-instance usbip serials and the three Valve composite persona profiles (<code>steam-deck-composite</code>, <code>steam-controller-composite</code>, <code>steam-controller-2</code>), withheld from PadForge's pickers pending artwork (#338)</td>
+<td><code>HMaestroProfileCatalog.cs:297</code> (<code>WithheldProfileIds</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -3300,7 +3305,7 @@
 <p>The relevant assembly is <code>HIDMaestro.Core</code> (bundled at <code>PadForge.App/Resources/HIDMaestro/HIDMaestro.Core.dll</code>). Three primary types:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// HMContext: process-wide entry point. One instance.</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HMContext</span><span class="p">();</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load the 225 embedded profile JSONs</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load the 231 embedded profile JSONs</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">context</span><span class="p">.</span><span class="n">InstallDriver</span><span class="p">();</span><span class="w">          </span><span class="c1">// register HM with Windows (idempotent)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// HMProfile: handle to a profile (Xbox 360 wired, DualSense Edge, etc.).</span>
@@ -3336,7 +3341,7 @@
 <p>The same filter logic exists in three other places PadForge owns:</p>
 <ol>
 <li><strong>SDL3 fork</strong>, branch <code>feat/hidmaestro-filter</code> of <code>hifihedgehog/SDL</code>. Stops SDL from opening the HM virtuals as joysticks during <code>SDL_OpenJoystick</code>. The classifier (<code>hid_internal_is_hidmaestro_device</code> + a 256-entry path cache) lives in <code>src/hidapi/windows/hid.c</code>. The DirectInput and Raw Input enumeration paths each carry one <code>SDL_HidmaestroIsAnsiHidPathHm</code> call site in <code>src/joystick/windows/SDL_dinputjoystick.c</code> and <code>SDL_rawinputjoystick.c</code>. The XInput backend is pristine upstream. XInput-side filtering happens through the OpenXInput fork PadForge ships next to SDL3.</li>
-<li><strong><code>XboxImpulseHidWriter</code> raw-HID enumeration</strong>, in <code>PadForge.App/Common/Input/XboxImpulseHidWriter.cs</code>. When PadForge writes rumble + impulse-trigger reports directly to a physical Xbox One+ pad, it walks <code>HidD_GetHidGuid</code> + <code>DIGCF_DEVICEINTERFACE</code> and rejects any interface whose path contains <code>HIDMAESTRO</code> or whose <code>StableXInputInstance.FindAll</code> lookup misses (substring + 16-level PnP parent walk against hardware IDs).</li>
+<li><strong><code>XboxImpulseHidWriter</code> XUSB interface enumeration</strong>, in <code>PadForge.App/Common/Input/XboxImpulseHidWriter.cs</code>. When PadForge writes rumble + impulse-trigger reports directly to a physical Xbox One+ pad, it enumerates the XUSB interface class (<code>XUSB_INTERFACE_CLASS_GUID</code> + <code>DIGCF_PRESENT | DIGCF_DEVICEINTERFACE</code>) in SetupAPI order, skips any interface whose path contains <code>hidmaestro</code> (case-insensitive, the same fast path OpenXInput uses), and takes the Nth survivor where N is the slot parsed from SDL's <code>XInput#N</code> device path.</li>
 <li><strong><code>HidHideController</code></strong> also classifies HM devices through a hardware-ID PnP walk (<code>IsHidMaestroDevice</code>), so the HidHide cloak whitelist treatment is consistent with the joystick-enumeration filters.</li>
 </ol>
 <p>Step 1's <code>UpdateDevices</code> carries a fourth, narrower check of its own: the <strong>self-readback guard</strong> (<code>InputManager.Step1.UpdateDevices.cs:160</code>). It is a backstop, not a replacement for the fork filter. A driver upgrade recreates the virtual devnodes with fresh instance paths and can slip past both the fork enumeration filter and the cloak, and when it does, SDL's Switch driver fights the virtual Switch Pro's protocol responder, cyclically resetting its inputs and interleaving rumble. The guard suppresses a wrapper when any of three markers hits:</p>
@@ -3431,7 +3436,7 @@
 <p>This cascade fires on <em>destroy</em> transitions. Intra-group <em>reorder</em> is a separate flow that does not go through it. A drag-reorder within Xbox / PlayStation / Extended calls <code>InputManager.RerouteVirtualControllersForReorder</code>, which keeps the kernel VC at each visual position in place and just moves pad-index pointers. Same-profile positions reuse via pointer swap (zero teardown). Different-profile positions destroy and recreate. See <a href="../services-layer/#slot-reordering">Services Layer</a> for the full per-position decision.</p>
 <hr />
 <h2 id="ffb-through-hm-pid-descriptors">FFB through HM PID descriptors<a class="headerlink" href="#ffb-through-hm-pid-descriptors" title="Permanent link">&para;</a></h2>
-<p>For Extended (and Custom HID) slots that expose force feedback, PadForge wires a HID PID (Physical Interface Device) descriptor inside the HM profile's HID report descriptor. Games using DirectInput discover the FFB device and write PID effect reports; <code>HMController.OutputReceived</code> delivers those raw output packets to PadForge, which feeds them into <code>HMaestroFfbDecoder</code> for parsing.</p>
+<p>For Extended (and Custom HID) slots that expose force feedback, PadForge wires a HID PID (Physical Interface Device) descriptor inside the HM profile's HID report descriptor. Games using DirectInput discover the FFB device and write PID effect reports. <code>HMController.OutputReceived</code> delivers those raw output packets to PadForge, which feeds them into <code>HMaestroFfbDecoder</code> for parsing.</p>
 <p>Decoder internals (all in <code>PadForge.App/Common/Input/HMaestroFfbDecoder.cs</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">HMaestroFfbDecoder</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span>
@@ -3464,7 +3469,7 @@
 <li><a href="../../features/force-feedback/">Force Feedback</a>: user-facing rumble/FFB tuning controls.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

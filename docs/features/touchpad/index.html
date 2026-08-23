@@ -3207,7 +3207,7 @@
 <tr>
 <td>Max Radius</td>
 <td>30%</td>
-<td>Distance from anchor (as a fraction of the pad) at which stick output saturates to ±1, 5–50%. Smaller means twitchier, larger means more travel. At 30%, half the pad sweep in either direction gives full deflection.</td>
+<td>Distance from anchor (as a fraction of the pad) at which stick output saturates to ±1, 5–50%. Smaller means twitchier, larger means more travel. At 30%, moving the finger 30% of the pad width from where it landed gives full deflection.</td>
 </tr>
 <tr>
 <td>Inner Deadzone</td>
@@ -3318,7 +3318,7 @@
 </tbody>
 </table>
 <p><img alt="The touchpad momentum controls" src="../../images/pad-touchpad-momentum.png" /></p>
-<p>The same coasting is available on a stick, but only on the <strong>Keyboard + Mouse</strong> slot's mouse stick, which carries its own <strong>Momentum</strong> and <strong>Momentum Glide</strong> so a flick of the stick sends the cursor travelling on the same constant-deceleration physics. A gamepad slot's sticks have no momentum row.</p>
+<p>The same coasting is available on a stick, but only on the <strong>Keyboard + Mouse</strong> slot's mouse stick, which carries its own <strong>Momentum</strong> and <strong>Momentum Glide</strong> so a flick of the stick sends the cursor traveling on the same constant-deceleration physics. A gamepad slot's sticks have no momentum row.</p>
 <p><img alt="Stick momentum on the Keyboard and Mouse slot" src="../../images/pad-sticks-momentum.png" /></p>
 <p>The Speed Threshold and Pad Width rows appear only in <code>Trackpad</code> response, the Acceleration row only in <code>Simple</code>. They are competing models of the same thing, so the card never shows both at once.</p>
 <p>Two plain limitations. First, at the default 69 mm Pad Width (libinput's assumed size for a pad that reports no physical dimensions) a DualShock 4 pad cannot report motion slow enough to reach the curve's fine-control half, so it only ever accelerates. Lowering Pad Width below roughly 54 mm brings the fine-control range within reach. No manufacturer publishes the pad's true size, so this is a calibration you make by feel. Second, the Simple-mode Acceleration slider is the value Steam Workshop imports used to write invisibly: Steam's mouse acceleration landed in the mapping data with no card showing it, so an imported pad felt accelerated with nothing on screen to turn off. It is now a visible knob.</p>
@@ -3329,7 +3329,7 @@
 <ul>
 <li>Touch the pad and the cursor jumps to the matching spot on the primary monitor. Slide and it follows 1:1.</li>
 <li>Lift the finger and the cursor stays where it was.</li>
-<li>The first pad also offers <strong>Touchpad 1 Pointer X (Left Half)</strong> and <strong>(Right Half)</strong> variants (and the same pair on Y) that read one half of the pad as the whole surface.</li>
+<li>Devices with a single touchpad (a DualShock 4 or DualSense, for example) also offer <strong>Touchpad 1 Pointer X (Left Half)</strong> and <strong>(Right Half)</strong> variants (and the same pair on Y) that read one half of the pad as the whole surface. A device with two pads already has a real pad per half, so it skips these.</li>
 <li>A row that mixes a pointer source with relative sources (gyro, stick) keeps the relative aim live while no finger is down. The moment a finger lands, the pointer takes over.</li>
 </ul>
 <p>The card tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.</p>
@@ -3481,7 +3481,7 @@
 <li><a href="../devices/">Devices</a> for enumerating a laptop trackpad as a touchpad source.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

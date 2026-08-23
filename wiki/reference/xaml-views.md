@@ -6,7 +6,7 @@
 
 ---
 
-All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` (`CurveEditor`, `TriggerTravelArc`, plus the code-only `RangeSlider`) and `PadForge.App/Views/Controls/` (`LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph`). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
+All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` (`CurveEditor`, `TriggerTravelArc`, plus the code-only `RangeSlider` and `EqCurveControl`) and `PadForge.App/Views/Controls/` (`LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph`). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
 
 ## Contents
 
@@ -172,12 +172,12 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 |-------|--------|-----------|----------|
 | `SteelLayer` | (bottom, hit-test off) | Dark theme always | Ember steel ground under all content |
 | `FirstRunOverlay` | 900 | First-run marker file absent, or re-run from Settings | Welcome panel (`WelcomePanel`) + spotlight tour (`TourCanvas`: `TourHighlight` + `TourTip`) |
-| `ShutdownOverlay` | 1001 | App is closing | `ProgressRing` + "Shutting down" text |
-| `StartupOverlay` | 1001 | Orphan-sweep task (`App.OrphanSweepTask`) still running at launch | `ProgressRing` + "Cleaning previous session" text, auto-hidden on completion |
+| `ShutdownOverlay` | 1001 | App is closing | `ProgressRing` + "Closing PadForge..." text (`Main_ShuttingDown`) |
+| `StartupOverlay` | 1001 | Orphan-sweep task (`App.OrphanSweepTask`) still running at launch | `ProgressRing` + "Starting PadForge…" headline (`Main_StartingUp`) + "Cleaning up virtual controllers left from a previous session." detail (`Main_CleaningPreviousSession`), auto-hidden on completion |
 
 ### Composition Root (Code-Behind)
 
-`MainWindow.xaml.cs` is the service wiring hub (~7880 lines). Constructor:
+`MainWindow.xaml.cs` is the service wiring hub (~8400 lines). Constructor:
 
 1. Creates `MainViewModel` as root and sets `DataContext`.
 2. Sets child `DataContext` on Dashboard, Devices, Settings, Profiles pages.
@@ -235,12 +235,12 @@ ScrollViewer
        │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
        ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
        ├─ "Motion Server" section (DSU)
-       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
        ├─ "Web Controller" section
-       │   └─ CardBorder: Enable toggle, port NumberBox, status dot, footer
+       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
        ├─ "Remote Link" section (#138)
        │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
-       │      port NumberBox + reset, status dot + RemoteLinkStatus text,
+       │      port NumberBox + reset, status flame + RemoteLinkStatus text,
        │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
        │      per peer, Revoke All), nearby-unpaired list, connect-by-address box, footer
        ├─ "Overlays" section
@@ -273,7 +273,7 @@ ScrollViewer
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
 | `WebControllerPort` / `WebControllerStatus` | `DashboardViewModel` | Web controller port and status text |
 | `EnableRemoteLink` / `RemoteLinkPort` / `RemoteLinkConnectHost` | `DashboardViewModel` | Remote Link enable, port, and connect-by-address host (#138) |
-| `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status dot and text |
+| `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status flame and text |
 | `RemoteLink` | `DashboardViewModel` | Sub-ViewModel: identity-protection modes, trusted peers, nearby-unpaired list, revoke commands |
 | `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
 | `EnableTouchpadOverlay` / `TouchpadOverlayOpacity` / `TouchpadOverlayStatus` | `DashboardViewModel` | Touchpad overlay enable, opacity, and status text |
@@ -290,7 +290,7 @@ ScrollViewer
 | `TypeInstanceLabel` | `string` | Per-type instance number |
 | `MappedDevices` | `ObservableCollection<PadViewModel.MappedDeviceInfo>` | Row 2 device roster (name + battery glyph, marquee on overflow) |
 | `DeviceName` | `string` | Empty-state line, shown only when `MappedDevices.Count` is 0 |
-| `StatusText` | `string` | e.g. "Active", "Disabled" |
+| `StatusText` | `string` | e.g. "Forging", "Disabled", "Idle", "No mapping" |
 | `MappedDeviceCount` / `ConnectedDeviceCount` | `int` | Mapped/connected counts |
 | `HasMappedDevices` | `bool` | `MappedDeviceCount > 0`. Gates the ember flame and the card's warm rim |
 | `IsVirtualControllerConnected` | `bool` | Live VC present. Drops the flame to gold when false |
@@ -306,10 +306,10 @@ The slot power toggle is a flame `Path` (`FlameOuterGeometry`), not a glyph. It 
 | Condition | Flame fill | Tooltip |
 |-----------|-----------|---------|
 | `IsEnabled=False` | Cold outline (`TextFillColorTertiaryBrush`) | "Disabled" |
-| `IsEnabled=True`, no mapped devices | Cold outline | "Active" |
-| `IsEnabled=True` + `HasMappedDevices=True` | `EmberBrush` + glow | "Active" |
-| above + `IsVirtualControllerConnected=False` | `WaitBrush` gold | "Awaiting Controllers" |
-| above + `EngineStateKey="Stopped"` | `WaitBrush` gold | "Engine Stopped" |
+| `IsEnabled=True`, no mapped devices | Cold outline | "Forging" |
+| `IsEnabled=True` + `HasMappedDevices=True` | `EmberBrush` + glow | "Forging" |
+| above + `IsVirtualControllerConnected=False` | `WaitBrush` gold | "Awaiting devices" |
+| above + `EngineStateKey="Stopped"` | `WaitBrush` gold | "Engine stopped" |
 | `IsEnabled=True` + `IsCreateFailed=True` | (fill unchanged) | "Virtual controller failed" |
 | `IsInitializing=True` | `EmberBrush` (flashing) | "Initializing" |
 
@@ -439,7 +439,7 @@ Tabs hidden by output type and by source-device capability:
 | Force Feedback | Visible if `hasForceFeedback` | **Hidden** | **Hidden** | selected device's CapType is stick-class (Gamepad / Joystick / Driving / Flight / FirstPerson). Hidden for keyboard / mouse / touchpad / MIDI even on an Xbox/PS/Extended slot |
 | Impulse Triggers | Visible if `hasImpulseTriggers` | **Hidden** | **Hidden** | source device has impulse-trigger motors (Xbox One / One S / Elite / Elite Series 2 / Series X\|S, Microsoft VID). Xbox 360 and DualSense excluded |
 | Adaptive Triggers | Visible if `hasAdaptiveTriggers` | **Hidden** | **Hidden** | source device is a DualSense or DualSense Edge |
-| Lighting | Visible if `hasLightbar \|\| hasGuideLed` | **Hidden** | **Hidden** | a lightbar (DS4 / DualSense family) shows the lightbar cards. A Guide/HOME-button LED shows only the `GuideLedCard`: XInput/GIP Xbox pad over USB or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip) |
+| Lighting | Visible if `hasLightbar \|\| hasGuideLed` | **Hidden** | **Hidden** | a lightbar (DS4 / DualSense family, the PS Move sphere, or a web controller drawing a DS4 / DualSense) shows the lightbar cards. A Guide/HOME-button LED shows only the `GuideLedCard`: XInput/GIP Xbox pad over USB or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip) |
 | Gyro | Visible if `hasGyro` | **Hidden** | **Hidden** | source device has a gyro sensor |
 | Pointer | Visible if `hasIrPointer` | **Hidden** | **Hidden** | source device is an IR-capable Wii Remote (#146) |
 | Touchpad | Visible if `hasTouchpad` | **Hidden** | **Hidden** | source device has a touchpad (DualSense family, DS4, Steam Controller) |
@@ -544,13 +544,13 @@ Grid (3 rows)
 | KeyboardMouse |. |. | KBMPreviewView | No |
 | Midi |. |. | MidiPreviewView | No |
 | Vr |. |. | VRPreviewView | No |
-| Extended | Custom HID layout |. | ControllerSchematicView | No |
-| Extended | Xbox / DS4 catalog | 2D | ControllerModel2DView | Yes |
-| Extended | Xbox / DS4 catalog | 3D | ControllerModelView | Yes |
+| Extended | any |. | ControllerSchematicView | No |
 | Xbox |. | 2D | ControllerModel2DView | Yes |
 | Xbox |. | 3D | ControllerModelView | Yes |
 | PlayStation |. | 2D | ControllerModel2DView | Yes |
 | PlayStation |. | 3D | ControllerModelView | Yes |
+| Nintendo |. | 2D | ControllerModel2DView | Yes |
+| Nintendo |. | 3D | ControllerModelView | Yes |
 
 **`BindActiveModelView()`**: Unbinds all six views, subscribes the active view's `ControllerElementRecordRequested` event, then calls `Bind(vm)`. All views fire `ControllerElementRecordRequested` with a PadSetting target name for click-to-record. The 2D view additionally wires `AnnotationChipNavigateRequested` and `AnnotationsToggled`.
 
@@ -585,7 +585,7 @@ Grid (3 columns)
             ├─ Add Action / Remove buttons
             ├─ Actions ListBox (DisplayMemberPath="DisplayText")
             └─ Action editor Border (DataContext=SelectedAction)
-                ├─ Action Type ComboBox (34 `MacroActionType` values)
+                ├─ Action Type ComboBox (55 `MacroActionType` values)
                 └─ Type-specific panels (conditional visibility):
 ```
 
@@ -741,17 +741,20 @@ ScrollViewer
   └─ ItemsControl (ItemsSource=TriggerConfigs, DataType=TriggerConfigItem)
       └─ per-trigger StackPanel:
           ├─ Title + "Reset All" button
-          └─ Grid (2 columns)
-              ├─ Col 0 (*): Controls
-              │   ├─ Range: RangeSlider (dual-thumb, DeadZone/MaxRange 0-100%)
-              │   │   + two TextBox edits (dz.max) + two digit edits + reset
-              │   ├─ Anti-Deadzone (DzSlider 0-100% + % edit + digit edit + reset)
-              │   ├─ "Sensitivity Curve" header + hint text
-              │   ├─ Preset ComboBox (`CurvePresetChoices`, the instance accessor
-              │   │   over the static `CurvePresetNames`) + reset
-              │   └─ Live value bar (ProgressBar 0-1 + RawDisplay text)
-              └─ Col 1 (Auto): CurveEditor (120px, IsSigned=False)
-                  └─ CurveString=SensitivityCurve, DeadZone/MaxRange bindings
+          └─ Grid (single column) holding one StackPanel
+              ├─ Range: RangeSlider (dual-thumb, DeadZone/MaxRange 0-100%)
+              │   + two TextBox edits (dz.max) + two digit edits + reset
+              ├─ Anti-Deadzone (DzSlider 0-100% + % edit + digit edit + reset)
+              ├─ Separator
+              ├─ "Sensitivity Curve" header + hint text
+              ├─ Preset ComboBox (120px, `CurvePresetChoices`, the instance accessor
+              │   over the static `CurvePresetNames`) + reset
+              ├─ CurveEditor (full width, IsFullWidth=True, ChartHeight=150, IsSigned=False)
+              │   └─ CurveString=SensitivityCurve, DeadZone/MaxRange/LiveInput bindings
+              └─ Live instrument panel (inset Border, Grid)
+                  ├─ RAW bar (ProgressBar 0-1, RawNorm, InstrumentBarRaw) + RawDisplay text
+                  ├─ OUT bar (ProgressBar 0-1, LiveValue, InstrumentBarOut) + OutDisplay text
+                  └─ TriggerTravelArc (RawValue=RawNorm, OutValue=LiveValue, spans both rows)
 ```
 
 **RangeSlider**. Dual-thumb control for deadzone floor and max range ceiling:
@@ -768,20 +771,27 @@ ScrollViewer
       ├─ Overall Gain slider (0-100%, ForceOverallGain)
       ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
       ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
-      ├─ Swap Motors CheckBox (SwapMotors)
+      ├─ "Fold Trigger Rumble into Main Motors" CheckBox (FfbTriggerFoldChk, TriggerRumbleFold)
+      ├─ "Swap Left and Right Motors" CheckBox (SwapMotors)
       ├─ "Test Rumble" Button (TestRumbleCommand)
       ├─ "Motor Activity" header
       ├─ Left Motor live bar (ProgressBar 0-1, LeftMotorDisplay)
       ├─ Right Motor live bar (ProgressBar 0-1, RightMotorDisplay)
-      ├─ Separator
-      └─ Audio Bass Rumble section
-          ├─ "Audio Rumble" header + "Reset All" button + description
-          ├─ Enable CheckBox (AudioRumbleEnabled)
-          ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
-          ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
-          ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
-          ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
-          └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+      ├─ "Constant Force" card (F0AD icon + "Reset All" ResetConstantForceCommand + description)
+      │   ├─ "Apply Constant Force" CheckBox (ConstantForceEnabled)
+      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
+      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
+      ├─ Audio Bass Rumble section
+      │   ├─ "Audio Rumble" header + "Reset All" button + description
+      │   ├─ Enable CheckBox (AudioRumbleEnabled)
+      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
+      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
+      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
+      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
+      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+      └─ "Trigger Routing" card (E72A icon + "Reset All" ResetTriggerRouteCardCommand + description)
+          ├─ Left trigger source ComboBox (LeftTriggerRouteSource) + reset
+          └─ Right trigger source ComboBox (RightTriggerRouteSource) + reset
 ```
 
 All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Grayed out when off.
@@ -882,9 +892,9 @@ Visible when `OutputType == Midi`. Centered horizontal `StackPanel`:
 | Control | Binding | Range |
 |---------|---------|-------|
 | Channel TextBox | `MidiConfig.Channel` | 1-16 |
-| CC Count TextBox | `MidiConfig.CcCount` | 0-127 (interdependent with StartCc) |
+| CC Count TextBox | `MidiConfig.CcCount` | 0 to 128 − StartCc (clamped against StartCc) |
 | Start CC TextBox | `MidiConfig.StartCc` | 0-127 |
-| Note Count TextBox | `MidiConfig.NoteCount` | 0-127 (interdependent with StartNote) |
+| Note Count TextBox | `MidiConfig.NoteCount` | 0 to 128 − StartNote (clamped against StartNote) |
 | Start Note TextBox | `MidiConfig.StartNote` | 0-127 |
 | Velocity TextBox | `MidiConfig.Velocity` | 0-127 |
 
@@ -1214,9 +1224,15 @@ ScrollViewer (Padding="24,0")
       │   ├─ Minimize to tray (MinimizeToTray)
       │   ├─ Start minimized (StartMinimized)
       │   └─ Start at login (StartAtLogin)
+      ├─ Battery Alerts card (#293)
+      │   ├─ Icon E83F + title + description
+      │   ├─ "Notify When Battery Runs Low" toggle (BatteryNotifyEnabled)
+      │   ├─ "Notify at or Below" NumberBox 5-50 % (BatteryNotifyThreshold)
+      │   ├─ "Also Vibrate the Controller" toggle (BatteryNotifyVibrate)
+      │   └─ "Test Notification" Button (TestBatteryNotify_Click)
       ├─ HidHide Driver card
       │   ├─ Icon ED1A + title + description
-      │   ├─ Status: dot + HidHideStatusText + HidHideVersion
+      │   ├─ Status: flame + HidHideStatusText + HidHideVersion
       │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
       │   ├─ Hide devices toggle (EnableInputHiding)
       │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches)
@@ -1226,15 +1242,15 @@ ScrollViewer (Padding="24,0")
       │       └─ Add/Remove buttons
       ├─ HIDMaestro Driver card
       │   ├─ Icon E7FC + title + description
-      │   └─ Status: green dot + "Installed" + HIDMaestroVersion (no Install/Uninstall
+      │   └─ Status: always-lit ember flame + "Installed" + HIDMaestroVersion (no Install/Uninstall
       │      buttons, because HIDMaestro is embedded in the binary)
       ├─ Windows MIDI Services card
       │   ├─ Icon E8D6 + title + description
-      │   ├─ Status: dot + MidiServicesStatusText + MidiServicesVersion
-      │   └─ Install/Uninstall buttons (Install disabled tooltip when IsMidiOsSupported=False)
+      │   ├─ Status: flame + MidiServicesStatusText + MidiServicesVersion
+      │   └─ Install/Uninstall buttons (Install disabled tooltip when MidiOsSupported=False)
       ├─ SteamVR card (#49)
       │   ├─ Icon F119 + title + description
-      │   ├─ Status: dot + IsSteamVrInstalled state
+      │   ├─ Status: flame + IsSteamVrInstalled state
       │   ├─ Install directory TextBox + Browse button (SteamVrBrowse_Click → SteamVrInstallDir)
       │   └─ Install/Uninstall buttons (InstallSteamVrCommand / UninstallSteamVrCommand)
       ├─ Community Configs card (#9)
@@ -1249,10 +1265,13 @@ ScrollViewer (Padding="24,0")
       │   └─ "Unsaved changes" warning (orange, HasUnsavedChanges)
       └─ Diagnostics card
           ├─ Icon E9D9 + title + description
-          └─ Grid (140px label + value):
-              ├─ App Version (ApplicationVersion)
-              ├─ .NET Runtime (RuntimeVersion)
-              └─ SDL Version (SdlVersion)
+          ├─ Grid (140px label + value):
+          │   ├─ App Version (ApplicationVersion)
+          │   ├─ .NET Runtime (RuntimeVersion)
+          │   └─ SDL Version (SdlVersion)
+          ├─ "Keep a Diagnostics Log" toggle (DiagnosticsLoggingEnabled) (#303)
+          ├─ Log folder path readout (DiagnosticsFolderPath)
+          └─ "Save Snapshot" + "Open Log Folder" buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
 ```
 
 ### Key Bindings
@@ -1271,25 +1290,30 @@ ScrollViewer (Padding="24,0")
 | `MinimizeToTray` | CheckBox | Minimize to system tray |
 | `StartMinimized` | CheckBox | Start app minimized |
 | `StartAtLogin` | CheckBox | Start at Windows login |
-| `IsHidHideInstalled` | bool | Controls status dot, button visibility, whitelist section |
+| `BatteryNotifyEnabled` / `BatteryNotifyThreshold` / `BatteryNotifyVibrate` | CheckBox, NumberBox (5-50), CheckBox | Battery Alerts card: low-battery toast on/off, the percent threshold, and the optional controller vibration (#293) |
+| `IsHidHideInstalled` | bool | Controls status flame, button visibility, whitelist section |
 | `InstallHidHideCommand` / `UninstallHidHideCommand` | ICommand | Driver install/uninstall |
 | `HidHideWhitelistPaths` | Collection | Whitelist ListBox items |
 | `SelectedWhitelistPath` | object | Selected whitelist item |
 | `AddWhitelistPathCommand` / `RemoveWhitelistPathCommand` | ICommand | Whitelist management |
-| `IsMidiServicesInstalled` / `IsMidiOsSupported` | bool | MIDI Services status. Controls Install button visibility and disabled-tooltip |
+| `IsMidiServicesInstalled` / `MidiOsSupported` | bool | MIDI Services status. Controls Install button visibility and disabled-tooltip. `MidiOsSupported` is the instance forwarder of the static `IsMidiOsSupported`, which a Binding cannot reach |
 | `IsSteamVrInstalled` / `IsSteamVrOwned` / `SteamVrInstallDir` | bool, bool, string | SteamVR card status, whether PadForge created the Steam-free install, and its directory (#49) |
 | `InstallSteamVrCommand` / `UninstallSteamVrCommand` | ICommand | SteamVR install/uninstall |
 | `SaveCommand` / `ReloadCommand` / `ResetCommand` / `OpenSettingsFolderCommand` | ICommand | Settings file operations |
 | `EnableCommunityConfigLookup` / `ShowLegacyWorkshopConfigs` | CheckBox | Steam Workshop opt-in + legacy sub-toggle (#9) |
 | `ClearWorkshopCacheCommand` / `CheckWorkshopUpdatesCommand` | ICommand | Workshop cache clear and imported-profile update check |
 | `HasUnsavedChanges` | bool | Orange warning visibility |
+| `DiagnosticsLoggingEnabled` / `DiagnosticsFolderPath` | CheckBox, string | Diagnostics card: continuous engine-event log toggle and the folder it writes to (#303) |
 
 ### Code-Behind
 
-Two handlers beyond the constructor. Everything else lives in the ViewModel.
+Five handlers beyond the constructor. Everything else lives in the ViewModel.
 
 | Handler | Trigger | Action |
 |---------|---------|--------|
+| `TestBatteryNotify_Click` | Battery Alerts card button | Calls `InputService.TestBatteryNotification()` to fire the low-battery pipeline with a synthetic event (#293) |
+| `SaveDiagSnapshot_Click` | Diagnostics card button | `DiagnosticsLogControl.SaveSnapshot()` dumps the in-memory engine event ring to a timestamped file and selects it in Explorer (#303) |
+| `OpenDiagFolder_Click` | Diagnostics card button | Creates the diagnostics folder if needed and opens it in Explorer (#303) |
 | `ShowTour_Click` | Appearance card button | Calls `MainWindow.StartFirstRunTour()` to re-run the welcome tour (#175) |
 | `SteamVrBrowse_Click` | SteamVR card button | `OpenFolderDialog` for the Steam-free SteamVR install directory, writes `SettingsViewModel.SteamVrInstallDir` (#49) |
 
@@ -1328,6 +1352,7 @@ ScrollViewer (Padding="24,0")
           │               ├─ MIDI badge: E8D6 glyph + MidiCount (collapsed when 0)
           │               ├─ KB+M badge: E961 glyph + KbmCount (collapsed when 0)
           │               ├─ Nintendo badge: Switch SVG + NintendoCount (collapsed when 0)
+          │               ├─ VR badge: F119 glyph + VrCount (collapsed when 0)
           │               └─ "No slots" fallback (visible when HasNoSlots=True)
           └─ Action buttons: New / Save As / Load / Edit / Export / Import /
              Browse Starters / Browse Community / Delete
@@ -1358,8 +1383,8 @@ ScrollViewer (Padding="24,0")
 | `IsDefault` | Marks the built-in Default profile. Blocks Edit and Delete |
 | `Executables` | Comma-separated exe list backing the card. `HasExecutables` gates the auto-switch hint |
 | `FirstExecutableName` / `SecondExecutableName` / `ExtraExecutablesSuffix` | The card renders at most two exe names plus a "+N more" suffix, each collapsed via `StringToVisibility` |
-| `XboxCount` / `PlayStationCount` / `ExtendedCount` / `MidiCount` / `KbmCount` / `NintendoCount` | Per-type counts (badge collapsed when 0) |
-| `HasNoSlots` | Shows "No slots" badge when all six type counts are zero |
+| `XboxCount` / `PlayStationCount` / `ExtendedCount` / `MidiCount` / `KbmCount` / `NintendoCount` / `VrCount` | Per-type counts (badge collapsed when 0) |
+| `HasNoSlots` | Shows "No slots" badge when all seven type counts are zero |
 
 ### Controller Shortcuts Card
 
@@ -1459,8 +1484,8 @@ Profile Name (2s) → Initializing (polling) → Active (2s) → Offline (2s) �
 |-------|------|------|-------|
 | **Profile** | `\uE8F1` (people) | Profile name | `_dismissTimer` 2 s → start init monitor |
 | **Initializing** | `\uE895` (sync) | "Initializing" | `_initMonitorTimer` 33 ms polling `CheckInitState` |
-| **Active** | `\uE73E` (checkmark, accent color) | "Active" | `_dismissTimer` 2 s → check offline |
-| **Offline** | `\uE7BA` (warning, #FFB900 amber) | "Controllers Offline" | `_dismissTimer` 2 s → slide out + hide |
+| **Active** | `\uE73E` (checkmark, accent color) | "Forging" | `_dismissTimer` 2 s → check offline |
+| **Offline** | `\uE7BA` (warning, #FFB900 amber) | "One or more controllers offline" | `_dismissTimer` 2 s → slide out + hide |
 
 During the Initializing phase, `StatusIcon` plays a `DoubleAnimation` opacity flash (1.0 → 0.3, 600 ms, `AutoReverse`, `RepeatBehavior.Forever`).
 
@@ -1502,7 +1527,7 @@ ScrollViewer (Padding="24,0")
       ├─ "Overview" section header (E7C3 icon)
       ├─ Description card (wrapping text, line height 22)
       ├─ "Built With" section header (E74C checkmark icon)
-      ├─ Technologies card (Grid, 164px label + description, 47 rows):
+      ├─ Technologies card (Grid, 164px label + description, 52 rows):
       │   ├─ .NET 10
       │   ├─ SDL3
       │   ├─ Raw Input
@@ -1513,7 +1538,7 @@ ScrollViewer (Padding="24,0")
       │   ├─ HelixToolkit
       │   ├─ WPF UI
       │   ├─ MVVM Toolkit
-      │   └─ ...37 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
+      │   └─ ...42 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
       ├─ "License" section header (E8D7 icon)
       └─ License card (12px wrapping text, secondary brush)
 ```
@@ -1530,7 +1555,7 @@ Constructor only. All text from localized string bindings.
 
 **Files:** `CopyFromDialog.xaml`, `CopyFromDialog.xaml.cs`
 
-Modal dialog to copy from another slot (`FluentWindow`, 420x420). Lists every slot that has at least one assigned device. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through `InputService.BuildPerDeviceSettingsSnapshot` + `ApplyPerDeviceSettingsToSlot`, matched by `InstanceGuid` (perfect round-trip) or `ProductGuid` (same model, different unit).
+Modal dialog to copy from another slot (`FluentWindow`, 420x420). Lists one entry per other slot whose mapping table has rows (`InputService.SlotHasAnyMapping` or the donor `PadSetting.HasAnyMapping`), plus one entry per unmapped device that still carries a `PadSetting` with mappings. The target slot itself is skipped. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through `InputService.BuildPerDeviceSettingsSnapshot` + `ApplyPerDeviceSettingsToSlot`, matched by `InstanceGuid` (perfect round-trip) or `ProductGuid` (same model, different unit).
 
 ### ProfileDialog
 
@@ -1662,11 +1687,12 @@ The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080
 
 ## Value Converters
 
-All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 1044-1061). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
+All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 1044-1062). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
 
 | Converter | Key | Input | Output | Description |
 |-----------|-----|-------|--------|-------------|
 | `DzShapeNameConverter` | `DzShapeNameConverter` | `int` (shape index) | `string` | Deadzone shape index to localized display name for the Sticks header subtitle. |
+| `EqBandTypeNameConverter` | `EqBandTypeNameConverter` | `EqBandType` | `string` | Localized EQ band-type name for the Audio tab band picker. Defaults to Peak, the enum's zero (#347). |
 | `BoolToVisibilityConverter` | `BoolToVisibilityConverter` | `bool` | `Visibility` | `true` = Visible, `false` = Collapsed. Parameter `"Invert"` reverses. Supports `ConvertBack`. |
 | `HexToBrushConverter` | `HexToBrushConverter` | `string` (ARGB/RGB hex) | `SolidColorBrush` | Parses `#FF8E44AD` / `#8E44AD` to a brush. Empty/invalid falls back to muted gray `#555555` (frozen). Used by the shift-layer tab colored dots. |
 | `NormToCanvasConverter` | `NormToCanvasConverter` | `double` (0-1) | `double` | Canvas position, dot-centered. Parameter: `"canvasDim"` or `"canvasDim,dotSize"` (default dot 14). |
@@ -1718,7 +1744,7 @@ The #175 ember restyle grew `App.xaml` well past the old two-dictionary shell. M
         <!-- keyed: EmberIconButton(+Hot), EmberAccentButton, EmberPrimaryButton,
              EmberDestructiveButton, EmberSelectListItem, EmberSlider,
              InstrumentBarRaw / InstrumentBarOut, EmberFocusVisual, EntranceFade -->
-        <!-- 18 global converter registrations (lines 1044-1061) -->
+        <!-- 19 global converter registrations (lines 1044-1062) -->
     </ResourceDictionary>
 </Application.Resources>
 ```
@@ -2002,4 +2028,4 @@ private void CustomizeToggle_Changed(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

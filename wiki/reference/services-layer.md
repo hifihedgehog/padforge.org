@@ -170,7 +170,7 @@ graph TB
 | UI -> PadSetting | InputService pushes deadzone, force feedback, mapping values to PadSetting objects | 30 Hz (SyncViewModelToPadSettings) |
 | Engine event -> UI | `DevicesUpdated`, `FrequencyUpdated`, `ErrorOccurred` marshalled via `Dispatcher.BeginInvoke` | On engine event |
 | Settings file -> Memory | SettingsService deserializes XML into SettingsManager collections | On load |
-| Memory -> Settings file | SettingsService serializes SettingsManager + ViewModel state to XML | On MarkDirty (250ms debounce) |
+| Memory -> Settings file | SettingsService serializes SettingsManager + ViewModel state to XML | On MarkDirty (250 ms engine push, full save after 2 s quiet) |
 
 > **Button SOCD (4.1.0, discussion #240).** KB+M slots get keyboard SOCD (#205) through the `_kbmConfigs[]` sync above. Controller slots (Xbox / PlayStation / Nintendo / Extended) have their own SOCD lane that bypasses the 30 Hz sync entirely: `MappingSet.SocdMode` / `SocdPairs` on the slot's MappingSet, read directly by the engine from `SettingsManager.SlotMappingSets` and applied to the slot's final combined output right before the Step 5 submit (`SlotButtonSocd`). Gamepad-surface slots pair buttons by mapping target name ("ButtonA:ButtonB"). Raw-surface slots (Extended, Nintendo) pair flat button indices ("12:13"). Pair semantics are the #205 `SocdCleaner` state machine: LastWins, Neutral, or FirstWins, with the winner's release re-pressing the still-held partner the same frame.
 
@@ -440,12 +440,12 @@ Synchronizes `DevicesViewModel.Devices` with `SettingsManager.UserDevices`:
 1. Snapshots under lock.
 2. Updates existing rows, adds new ones (skips virtual/shadow devices).
 3. Removes stale or virtual rows.
-4. Sorts by name, then VID:PID.
+4. Sorts physical devices first and merged `aggregate://` sources last, then by name, then VID:PID.
 5. Calls `devVm.RefreshCounts()`.
 
 #### `IsVirtualOrShadowDevice(UserDevice)` (private, static)
 
-Filters legacy and shadow virtual controllers from the Devices-page list (defense-in-depth; Step 1 already filters HIDMaestro upstream). Returns true when any of these match on an online device: name contains "ViGEm" or "Virtual Gamepad" (case-insensitive), device path lowercase contains "vigem" or "virtual", or the device has `IsHidden = true`. Offline devices always return false because virtual controllers only exist while the engine is running.
+Filters legacy and shadow virtual controllers from the Devices-page list (defense-in-depth: Step 1 already filters HIDMaestro upstream). Returns true when any of these match on an online device: name contains "ViGEm" or "Virtual Gamepad" (case-insensitive), device path lowercase contains "vigem" or "virtual", or the device has `IsHidden = true`. Offline devices always return false because virtual controllers only exist while the engine is running.
 
 #### `PopulateDeviceRow(DeviceRowViewModel, UserDevice)` (private)
 
@@ -459,7 +459,7 @@ Rebuilds each PadViewModel's `MappedDevices` from `UserSettings.FindByPadIndex()
 
 #### `PopulateAvailableInputs(PadViewModel padVm, UserDevice ud)` (private)
 
-Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract `Gamepad *` family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from `MappingDisplayResolver.BuildInputChoices`, which prefers the live wrapper's sparse `SupportedButtonIndices` so a device that populates only specific slots does not surface phantom "Button N" rows, and falls back to a dense `Math.Max(CapButtonCount, RawButtonCount)` range when the device is offline. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds `padVm.SlotAvailableInputs` (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.
+Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract `Gamepad *` family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from `MappingDisplayResolver.BuildInputChoices`, which prefers the live wrapper's sparse `SupportedButtonIndices` / `SupportedAxisIndices` so a device that populates only specific slots does not surface phantom "Button N" or "Axis N" rows, falls back to the positions `UserDevice` recorded when the device was last online (`CapButtonIndices` / `CapAxisIndices`, discussion #344), and reaches the dense `Math.Max(CapButtonCount, RawButtonCount)` / `CapAxeCount` range only for a device never seen online. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds `padVm.SlotAvailableInputs` (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.
 
 #### `RefreshMappingDropdowns()` (public)
 
@@ -493,7 +493,7 @@ Snapshots every assigned device's full PadSetting on the source slot into a `Per
 
 #### `ApplyPerDeviceSettingsToSlot(int targetPadIndex, PerDeviceSettingsEntry[] entries, VirtualControllerType sourceLayoutType, bool sourceLayoutIsExtended, VirtualControllerType targetLayoutType, bool targetLayoutIsExtended)` (public)
 
-Applies the per-device payload to a target slot. Iterates each entry, matches it to a target-slot device by `InstanceGuid` first (perfect round-trip on the same machine), then `ProductGuid` as a fallback (same controller model, different physical unit). Entries that match nothing are skipped. Paste never auto-creates devices. Each matched entry's nested PadSetting is reapplied via `ApplyPadSettingToCurrentDeviceTranslated` per device, so cross-layout pastes (e.g. Xbox→PS) still get the layout translation that single-device paste enjoys. The outer Copy / Paste flow's wholesale MappingSet replacement runs before this helper; this method only carries per-device tuning (deadzones, sensitivity, FFB, gyro, impulse triggers, adaptive triggers, lighting, TouchpadSettings).
+Applies the per-device payload to a target slot. Iterates each entry, matches it to a target-slot device by `InstanceGuid` first (perfect round-trip on the same machine), then `ProductGuid` as a fallback (same controller model, different physical unit). Entries that match nothing are skipped. Paste never auto-creates devices. Each matched entry's nested PadSetting is reapplied via `ApplyPadSettingToCurrentDeviceTranslated` per device, so cross-layout pastes (e.g. Xbox→PS) still get the layout translation that single-device paste enjoys. The outer Copy / Paste flow's wholesale MappingSet replacement runs before this helper. This method only carries per-device tuning (deadzones, sensitivity, FFB, gyro, impulse triggers, adaptive triggers, lighting, TouchpadSettings).
 
 #### `FlushAllPadViewModels()` (public)
 
@@ -545,7 +545,7 @@ Axis detection: 25% threshold, 3-cycle hold confirmation (same as RecorderServic
 
 1. Checks `Dashboard.EnableDsuMotionServer` and engine existence.
 2. Creates `DsuMotionServer`, subscribes to `StatusChanged`.
-3. Validates port (1024–65535; default 26760).
+3. Validates port (1024-65535, default 26760).
 4. Starts server. On success assigns to `_inputManager.DsuServer`; on failure disposes.
 
 #### `StopDsuServer()` (private)
@@ -626,7 +626,7 @@ Sets `_inputManager.IsIdle`. A slot counts as active when it is created, enabled
 Captures current runtime state:
 1. Flushes all PadViewModel values to PadSettings.
 2. Collects `ProfileEntry` (InstanceGuid, ProductGuid, MapTo, checksum) and deduplicated `PadSetting` clones.
-3. Captures `SlotCreated[]`, `SlotEnabled[]`, `SlotControllerTypes[]`, `SlotProfileIds[]` (per-slot HIDMaestro profile slug), a deep clone of every slot's `MappingSet`, the Extended / MIDI / KBM / per-device slot configs, DSU, web server and Remote Link settings, all seven per-group slot orders (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR), and the overlay settings (touchpad geometry and opacity, menu overlay, shift-layer flyout, profile overlay).
+3. Captures `SlotCreated[]`, `SlotEnabled[]`, `SlotControllerTypes[]`, `SlotProfileIds[]` (per-slot HIDMaestro profile slug), a deep clone of every slot's `MappingSet`, the Extended / MIDI / KBM / per-device slot configs, DSU and web server settings (Remote Link is app-scoped, not per profile), all seven per-group slot orders (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR), and the overlay settings (touchpad geometry and opacity, menu overlay, shift-layer flyout, profile overlay).
 4. Captures `ProfileData.Macros` (`<ProfileMacros>`), a copy of the current macro set. A profile carries its own macros, so switching profiles swaps macros too. A `null` `Macros` marks a pre-macro-era profile and leaves the live macros untouched on apply.
 
 #### `ApplyProfile(ProfileData profile)` (public)
@@ -687,7 +687,7 @@ Walks `oldOrder` against `newOrder` position by position and decides per visual 
 2. **Destroy mismatched VCs.** Each goes through `DestroyVirtualController(oldPad, asyncDispose: true)`, which releases OEM override claims and queues HIDMaestro teardown to the thread pool. Per-pad state at these old pads is cleared.
 3. **Re-route reused VCs.** For each reused VC, write the VC pointer plus its per-VC state snapshot into the destination pad's slot in the engine arrays, and update `FeedbackPadIndex` so vibration callbacks land in the right `VibrationStates[]` entry. Per-VC state cleared at the old pad if it differs from the new pad.
 
-Same-profile cycles (Example: insert a Profile-A slot at the top of an all-Profile-A group) collapse to a pure pointer rotation across `_virtualControllers[]` with no kernel teardown. Zero-flicker for the game side. Different-profile positions go through the regular destroy + recreate path; Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate them with the new pad's profile, taking the lowest free kernel slot (which is V, because surviving VCs at positions < V keep theirs). The swap-only path does not engage Pass 2's preemption.
+Same-profile cycles (Example: insert a Profile-A slot at the top of an all-Profile-A group) collapse to a pure pointer rotation across `_virtualControllers[]` with no kernel teardown. Zero-flicker for the game side. Different-profile positions go through the regular destroy + recreate path. Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate them with the new pad's profile, taking the lowest free kernel slot (which is V, because surviving VCs at positions < V keep theirs). The swap-only path does not engage Pass 2's preemption.
 
 Group types outside the four kernel-slot groups are rejected at the entry. Cross-group moves do not route through here at all. `MoveSlotToGroupTail` changes `SlotControllerTypes[padIndex]`, which Pass 1 detects as a type change and destroys the old-group VC. The new group's ordinary creation logic spins up the new VC at the tail.
 
@@ -724,10 +724,10 @@ Trigger-motor sibling for Xbox One+ impulse triggers (#74). Sets `VibrationState
 
 `InputService.ToggleVCsDisabled` is an `Action` set by `MainWindow` so the engine can fan out a profile-shortcut combo into `DeviceService.SetSlotEnabled` calls for every created slot. The flow:
 
-1. Engine thread observes `_inputManager.PendingToggleVCsDisabled` (set by a profile-shortcut activator).
-2. Marshals `ToggleVCsDisabled?.Invoke()` to the UI thread inside the polling cycle.
-3. UI handler reads each `SlotCreated[i]`; if any `SlotEnabled[i]` is true, disables them all, else enables them all.
-4. `MainViewModel.RefreshNavControllerItems()` updates the sidebar; `ProfileSwitchOverlay` shows a Fluent green / red flyout.
+1. A profile-shortcut activator on the polling thread (Step 4b) sets `_inputManager.PendingToggleVCsDisabled`.
+2. `UiTimer_Tick` (UI thread) consumes the flag, clears it, and calls `ToggleVCsDisabled?.Invoke()` when at least one slot is created.
+3. The UI handler reads each `SlotCreated[i]`. If any `SlotEnabled[i]` is true it disables them all, else enables them all.
+4. `MainViewModel.RefreshNavControllerItems()` updates the sidebar and `ProfileSwitchOverlay` shows a Fluent green / red flyout.
 
 ### InputService All Public Methods
 
@@ -800,7 +800,7 @@ Trigger-motor sibling for Xbox One+ impulse triggers (#74). Sets `VibrationState
 
 The profile-CRUD, touchpad-gesture, and expression-variable methods are the domain logic behind MainWindow's UI handlers.
 
-Beside them sit a set of `public static` helpers with no instance state, used by the pages and dialogs directly: `FormatExePaths`, `LocalizedDeviceName`, `CloneMappingSetDeep`, `SlotHasAnyMapping`, `ReplaceSlotMappingSet`, `ApplySlotMappingSetFromRows`, and the four snapshot codecs `BuildShiftLayerSnapshotJson` / `ApplyShiftLayerSnapshotJson` / `BuildMenusSnapshotJson` / `ApplyMenusSnapshotJson`.
+Beside them sit a set of `public static` helpers with no instance state, used by the pages and dialogs directly: `FormatExePaths`, `LocalizedDeviceName`, `CloneMappingSetDeep`, `SlotHasAnyMapping`, `ReplaceSlotMappingSet`, `ApplySlotMappingSetFromRows`, and the six snapshot codecs `BuildShiftLayerSnapshotJson` / `ApplyShiftLayerSnapshotJson`, `BuildMenusSnapshotJson` / `ApplyMenusSnapshotJson`, and `BuildSlotSetExtrasJson` / `ApplySlotSetExtrasJson` (4.3.2: Bass Shakers, SOCD and Keep Awake ride slot Copy / Paste as `PadSetting.SlotSetExtrasJson`, and `ApplySlotSetExtrasJson` gates SOCD on `sameLayout`). Slot macros travel beside them as `PadSetting.SlotMacrosJson`.
 
 ### InputService All Events
 
@@ -959,7 +959,7 @@ Calls `SaveToFile(_settingsFilePath)`.
 
 #### `MarkDirty()` (public)
 
-Sets `IsDirty = true`, starts a 250 ms debounce `DispatcherTimer` (restarted if already running). On tick: calls `Save()`, raises `AutoSaved`. The debounce batches rapid changes (e.g., slider drags) into a single save.
+Sets `IsDirty = true` and, from any thread (off-thread callers are marshalled to the dispatcher), arms a 250 ms `DispatcherTimer` that is started once and deliberately never restarted. Autosave is two-tier (#331). Every 250 ms tick pushes ViewModel state into the PadSettings and slot MappingSets (`UpdatePadSettingsFromViewModels` + `PushUiExtraSourcesIntoSlotMappingSets`), so the engine sees an edit within about 250 ms with no serialization and no disk write. Once 2 s (`PersistQuietMs`) have passed since the last `MarkDirty`, the timer stops and the full `Save()` runs, raising `AutoSaved`. One save per editing burst (e.g., a slider drag) instead of one per adjustment.
 
 ### Reset and Reload
 
@@ -985,7 +985,7 @@ Called during Save. If a named profile is active, updates its stored snapshot fr
 
 #### `UpdateTopologyCounts(ProfileListItem, bool[], int[])` (internal, static)
 
-Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM slots and sets topology label (e.g., "2x Xbox, 1x PlayStation").
+Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM/VR slots and sets the topology label (e.g., "2x Xbox, 1x PlayStation").
 
 ### SettingsService All Public Methods
 
@@ -995,7 +995,7 @@ Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM slots and sets topology label
 | `LoadFromFile` | `void LoadFromFile(string filePath)` | Loads settings from XML |
 | `Save` | `void Save()` | Saves to active settings file |
 | `SaveToFile` | `void SaveToFile(string filePath)` | Saves to specified XML file |
-| `MarkDirty` | `void MarkDirty()` | Marks dirty, schedules 250ms autosave |
+| `MarkDirty` | `void MarkDirty()` | Marks dirty, arms the 250 ms engine push, full save after 2 s quiet |
 | `Reload` | `void Reload()` | Reloads from disk |
 | `ResetToDefaults` | `void ResetToDefaults()` | Resets all settings to defaults |
 | `ApplyDeviceSlotConfigsToSlot` | `void ApplyDeviceSlotConfigsToSlot(int slotIndex, DeviceSlotConfigData[] configs)` | Applies per-device slot config (lighting, adaptive triggers, audio) to a slot |
@@ -1130,7 +1130,7 @@ Sets default hiding for newly assigned devices. Gamepads: auto-enables HidHide (
 | Event | Signature | Description |
 |-------|-----------|-------------|
 | `DeviceAssignmentChanged` | `event EventHandler DeviceAssignmentChanged` | Fired after assign/unassign. MainWindow refreshes PadViewModel device info |
-| `NavigateToSlotRequested` | `event EventHandler<int> NavigateToSlotRequested` | Fired after assignment. MainWindow navigates to the assigned slot's page |
+| `NavigateToSlotRequested` | `event EventHandler<int> NavigateToSlotRequested` | Fired after assignment. MainWindow opens the assigned slot's page |
 | `DeviceHidingStateChanged` | `event EventHandler DeviceHidingStateChanged` | Fired when hiding toggles change. InputService re-applies device hiding |
 
 ---
@@ -1610,4 +1610,4 @@ User clicks Record button
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

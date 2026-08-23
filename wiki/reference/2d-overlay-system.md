@@ -259,7 +259,7 @@ public static class SteamControllerLayout
 }
 ```
 
-These two are generated into the same file but `ControllerModel2DView` never dispatches them. Their consumer is `WorkshopControllerPreview`, which draws the controller a Steam config was authored for, and that is a different device from whatever the user has assigned.
+These two are generated into the same file but `ControllerModel2DView` never dispatches them. Their consumers are `WorkshopControllerPreview`, which draws the controller a Steam config was authored for (a different device from whatever the user has assigned), and the web controller server (#296), which serves them as the `?type=steamdeck` and `?type=steamcontroller` layouts.
 
 Both carry dual touchpads (`LeftTouchpad` / `LeftTouchpadClick` and the right-hand pair). Steam Deck adds `ButtonQuickAccess` and four rear paddles. Steam Controller has one stick, so it carries `LeftThumbRing` with no right-hand counterpart, plus `LeftGrip` and `RightGrip`.
 
@@ -402,7 +402,7 @@ PadForge.App/2DModels/
     VRController_L_/R_ A, B, Grip, Stick, StickCap, System, Trigger.png
 ```
 
-Steam Deck and Steam Controller ship no `*_Rest` trigger art, so their triggers are single-image elements rather than the active+base pair the Xbox and Switch layouts use. The Steam Deck's D-pad and face art also serve the Workshop preview only, since no PadForge output type resolves to those folders.
+Steam Deck and Steam Controller ship no `*_Rest` trigger art, so their triggers are single-image elements rather than the active+base pair the Xbox and Switch layouts use. The Steam Deck's D-pad and face art serve the Workshop preview and the web controller's Steam Deck layout, since no PadForge output type resolves to those folders.
 
 All PNGs are declared as WPF `Resource` (not `EmbeddedResource`):
 
@@ -516,7 +516,7 @@ Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(Profil
 
 Extended slots route to `ControllerSchematicView` and VR slots to `VRPreviewView`, so this control sees Xbox, PlayStation, and Nintendo slots.
 
-`SteamDeckLayout` and `SteamControllerLayout` live in the same generated file but are not in this switch. `WorkshopControllerPreview` owns them.
+`SteamDeckLayout` and `SteamControllerLayout` live in the same generated file but are not in this switch. `WorkshopControllerPreview` and `WebControllerServer` own them.
 
 `EnsureModel` also resolves the colorway (`Controller2DColorways.For(folder)` plus the pad's stored appearance) and returns immediately only when both the folder and the colorway match what is already loaded. Otherwise it calls `BuildCanvas()`.
 
@@ -1137,7 +1137,7 @@ pip install svgpathtools lxml opencv-python numpy
 1. **Parse SVG**. Reads labeled elements from each controller's SVG theme file via lxml. `main()` runs ten pipelines: `process_xbox360`, `process_ds4`, `process_dualsense`, `process_dualsense_edge`, `process_xbox_one_s`, `process_xbox_series`, `process_switchpro`, `process_switch2pro`, `process_steamdeck`, `process_steamcontroller`. The two DualSense pipelines share `_process_dualsense_family`, the Xbox One S and Series pair shares `_process_xbox_modern`, and the two Switch pipelines share `_process_switchpro_family`. Each family pair differs only by a margin (the widened base) and a flag for the extra controls. Computes cumulative SVG transforms (translate, scale, matrix) for pixel-space bounding boxes.
 2. **Center and fit overlays**. Loads each PNG overlay and centers it on the SVG bounding box center. `fit_overlay_to_bbox` scales the overlay to the box where needed, `stretch_overlay_to_bbox` fills it.
 3. **Alpha-channel refinement**. `refine_with_composite` runs OpenCV template matching (`cv2.matchTemplate`, `TM_CCOEFF_NORMED`) against the composite overlay image, then a `refine_via_base_template` pass aligns small buttons and bumpers against the base body PNG. (`refine_via_alpha_diff` is defined for blob-based alignment but is not currently wired into any pipeline.)
-4. **Inject trigger bases**. `_add_trigger_base_entries` adds a `TriggerBase` row for each active-press trigger, inheriting its final position and size. Steam Deck and Steam Controller are excluded: their shipped base renders already draw the triggers at rest, and the Steam packs ship no rest-state trigger PNG.
+4. **Inject trigger bases**. `_add_trigger_base_entries` adds a `TriggerBase` row for each active-press trigger whose filename carries an `_Active` or `-Active` suffix, inheriting its final position and size. The Switch Pro and Switch 2 Pro pipelines append their `ZL_Rest` / `ZR_Rest` rows themselves inside `_process_switchpro_family` at template-diff rects, since the ZL/ZR press art has no suffix. Steam Deck and Steam Controller are excluded: their shipped base renders already draw the triggers at rest, and the Steam packs ship no rest-state trigger PNG.
 5. **Reorder for hit-test precedence**. Trigger and TriggerBase rows are stable-moved to the front of every layout. The view resolves an overlap to the last-added overlay, and every trigger bbox runs tens of pixels down behind its bumper, so triggers emitted after bumpers stole the shared band. Visual stacking is unaffected because Z-indices are explicit in the view.
 6. **Trace hit zones**. `_hit_polygons` thresholds each overlay's alpha above 25, dilates it (kernel at least 7 px, or 6% of the smaller dimension) so thin strokes keep a grab margin, runs `cv2.findContours` + `approxPolyDP`, and emits normalized polygon groups. Results are memoized per file.
 7. **Generate C#**. Outputs `ControllerOverlayLayout.cs` with layout constants, overlay element arrays, hit paths, and stick travel values for all ten layout classes.
@@ -1356,7 +1356,7 @@ The same control is reused on the Devices page to visualize a MIDI input device'
 - `BuildInputLayout()` lays out the full 0-127 namespace wrapped: CCs at `CcPerRow = 32` (four rows), notes by octave at `OctavesPerRow = 4` (11 octaves across three rows).
 - Rendering polls `source()` every frame (no dirty flag, input changes continuously) and indexes widgets by actual note / CC number against the live arrays. That is why `CcSliderWidget.CcNumber` and `PianoKeyWidget.MidiNote` exist.
 - Relative-encoder detents flood a whole CC bar: green (`CcUpPulseBrush`) on an up detent, orange (`CcDownPulseBrush`) on a down detent. A detent's pulse is only ~24 ms, so `PulseLatchMs = 180` holds the flash long enough to see.
-- The repaint is skipped when the control is not visible (`if (!IsVisible) return;`), so the ~256-widget loop does not run against a collapsed panel.
+- The repaint is skipped when the control is not visible or the window is minimized (`if (!IsVisible || AmbientMotionProbe.Instance.IsWindowMinimized) return;`), so the ~256-widget loop does not run against a collapsed panel.
 
 <!-- SCREENSHOT: midi-input-mode-devices-page -->
 ![MIDI input preview on the Devices page showing live notes and CC bars](../images/midi-input-mode-devices-page.png)
@@ -1444,4 +1444,4 @@ Key differences:
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

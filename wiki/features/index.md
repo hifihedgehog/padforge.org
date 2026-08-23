@@ -15,7 +15,7 @@ touch.
 | [Controller Slots](controller-slots.md) | The 16 slots, assignment, per-slot output type |
 | [Virtual Controllers](virtual-controllers.md) | What games see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR |
 | [Settings](settings.md) | Application-wide options |
-| [Driver Management](driver-management.md) | HIDMaestro and HidHide install, repair, removal |
+| [Driver Management](driver-management.md) | The driver cards on the **Settings** page: HIDMaestro status and version, plus **Install** and **Uninstall** for HidHide, Windows MIDI Services, and SteamVR |
 
 ## The Pad page, tab by tab
 
@@ -63,4 +63,4 @@ when that device has the matching hardware.
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [Headset Head Tracking](headset-motion.md) | Head rotation from a Sony headset as a motion source |
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

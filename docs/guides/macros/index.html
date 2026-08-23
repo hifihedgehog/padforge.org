@@ -4744,7 +4744,7 @@
 <li>Add one or more <strong>actions</strong>. The steps that run when the trigger fires.</li>
 <li>Pick a <strong>fire mode</strong> and a <strong>repeat mode</strong>.</li>
 </ol>
-<p>Each row has an enable checkbox. Unchecked macros stay in your settings but do not fire.</p>
+<p>Each macro has an <strong>Enabled</strong> checkbox at the top of its editor. Unchecked macros stay in your settings but do not fire.</p>
 <hr />
 <h2 id="manage-macros">Manage macros<a class="headerlink" href="#manage-macros" title="Permanent link">&para;</a></h2>
 <p>A toolbar on the <strong>Macros</strong> tab moves macros around.</p>
@@ -4766,10 +4766,11 @@
 </tr>
 <tr>
 <td><strong>Copy From...</strong></td>
-<td>Pull every macro from another virtual controller in one step.</td>
+<td>Pull every macro from another virtual controller in one step, adding them to the ones already here.</td>
 </tr>
 </tbody>
 </table>
+<p>The Mappings tab's own <strong>Copy</strong> and <strong>Paste</strong> buttons carry the slot's macros as well, alongside its mappings and every other slot setting. That paste replaces the target's macro list with the source's rather than adding to it, so use the buttons here when you mean to merge and the Mappings-tab pair when you mean to make one slot look like another.</p>
 <p>A macro fires only from the physical devices assigned to its own virtual controller. A macro copied from another controller no longer fires off a device that controller does not own.</p>
 <hr />
 <h2 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h2>
@@ -4859,7 +4860,7 @@
 <li>An <strong>Assigned Devices</strong> input: any button, POV direction, or axis on any physical device assigned to the slot.</li>
 <li>A <strong>Virtual Controller</strong> channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.</li>
 </ul>
-<p>Click <strong>Record</strong> on a variable row, push the input you want it to follow, and PadForge fills it in. Click <strong>Clear</strong> to wipe a binding.</p>
+<p>Click the record icon (tooltip <strong>Record Trigger</strong>) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip <strong>Clear</strong>) to wipe a binding.</p>
 <h3 id="trigger-formula">Trigger Formula<a class="headerlink" href="#trigger-formula" title="Permanent link">&para;</a></h3>
 <p>The <strong>Trigger Formula</strong> text box accepts:</p>
 <ul>
@@ -5059,12 +5060,12 @@
 <p>Each fire latches or unlatches a controller button or a key. A latched output stays held until the next fire or until the macro is disabled. Imported Steam configs use these for their toggle presses.</p>
 <p>All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a <strong>Pulse While Latched</strong> checkbox: while latched, the output pulses on and off at the repeat interval instead of holding solid.</p>
 <h3 id="pressure-scaled-rate">Pressure-Scaled Rate<a class="headerlink" href="#pressure-scaled-rate" title="Permanent link">&para;</a></h3>
-<p>Every action that shows the Interval field also carries a <strong>Pressure-Scaled Rate</strong> checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the <strong>Slow Interval</strong>, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on modern pads and works with any analog input.</p>
+<p>Every action that shows the Interval field also carries a <strong>Pressure-Scaled Rate</strong> checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the <strong>Slow Interval</strong>, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on current pads and works with any analog input.</p>
 <ul>
 <li><strong>Slow Interval.</strong> The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.</li>
 <li><strong>Rate Curve.</strong> Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.</li>
 <li><strong>Ramp Start / Ramp End.</strong> The pressure window the ramp lives in, default 0 to 100 percent. Below the start the rate stays at the Slow Interval, at the end it reaches the full-press rate. Raise the start to ignore a trigger's resting slack, lower the end to hit full speed without bottoming out.</li>
-<li><strong>Device and Axis.</strong> The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. <strong>Record</strong> captures the next axis you move, <strong>Clear</strong> empties the pair.</li>
+<li><strong>Device and Axis.</strong> The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. The record icon (tooltip <strong>Record Trigger</strong>) captures the next axis you move, the clear icon (tooltip <strong>Clear</strong>) empties the pair.</li>
 </ul>
 <p>A DualShock 3 example: trigger the macro on Cross, set the source to the Cross pressure axis, and the button becomes a fire-rate dial. Squeeze lightly for single aimed shots, press through for full auto.</p>
 <h3 id="cycle-tap-list">Cycle Tap List<a class="headerlink" href="#cycle-tap-list" title="Permanent link">&para;</a></h3>
@@ -5132,7 +5133,7 @@
 <li>The other options match System Volume.</li>
 </ul>
 <h3 id="raise-headphone-volume-lower-headphone-volume">Raise Headphone Volume / Lower Headphone Volume<a class="headerlink" href="#raise-headphone-volume-lower-headphone-volume" title="Permanent link">&para;</a></h3>
-<p>Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same <strong>Headphone Volume</strong> the <a href="../../features/controller-audio/">Controller Audio</a> tab carries, so the change sticks the way any Audio-tab edit does.</p>
+<p>Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same <strong>Headphone Volume</strong> the <strong>Audio</strong> tab carries (see <a href="../../features/controller-audio/">Controller Audio</a>), so the change sticks the way any Audio-tab edit does.</p>
 <p>The write goes to the pad, so the level holds with no app in the loop.</p>
 <h3 id="play-sound-stop-sounds">Play Sound / Stop Sounds<a class="headerlink" href="#play-sound-stop-sounds" title="Permanent link">&para;</a></h3>
 <p>Play a sound file through the slot's audio output. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a single vibrating tone. With no sound-capable device on the slot, it falls back to the PC's default output.</p>
@@ -5141,12 +5142,12 @@
 <li><strong>Volume.</strong> Scales the file against the slot's master volume.</li>
 <li><strong>Loop Until Stopped.</strong> Repeat until a <strong>Stop Sounds</strong> action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.</li>
 </ul>
-<p><strong>Stop Sounds</strong> ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See <a href="../../features/controller-audio/">Controller Audio</a> for the output device picker and sound packages.</p>
+<p><strong>Stop Sounds</strong> ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See <a href="../../features/controller-audio/">Controller Audio</a> for how sounds route to the selected controller, the <strong>Output Path</strong> setting, and sound packages.</p>
 <h3 id="mouse-move">Mouse Move<a class="headerlink" href="#mouse-move" title="Permanent link">&para;</a></h3>
 <p>Map an axis to cursor movement. Updates every frame.</p>
 <ul>
 <li><strong>Sensitivity</strong> (1 to 100). Pixels per frame at full deflection. 10 to 15 is a good start.</li>
-<li>X axes move horizontally, Y axes move vertically.</li>
+<li>With the Virtual Controller source, X axes move horizontally and Y axes move vertically. With the Assigned Devices source the picked device axis always moves the cursor horizontally.</li>
 <li>Sub-pixel accumulation keeps the cursor smooth at low sensitivity.</li>
 </ul>
 <h3 id="mouse-button-press-mouse-button-release">Mouse Button Press / Mouse Button Release<a class="headerlink" href="#mouse-button-press-mouse-button-release" title="Permanent link">&para;</a></h3>
@@ -5247,7 +5248,7 @@
 <h3 id="gyro-recenter">Gyro Recenter<a class="headerlink" href="#gyro-recenter" title="Permanent link">&para;</a></h3>
 <p>Zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Imported Steam configs use it for their camera-reset bindings.</p>
 <h3 id="cycle-pointer-modes-set-pointer-mode">Cycle Pointer Modes / Set Pointer Mode<a class="headerlink" href="#cycle-pointer-modes-set-pointer-mode" title="Permanent link">&para;</a></h3>
-<p>Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the <a href="../../devices/wii-controllers/">Wii Controllers</a> tab.</p>
+<p>Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the <strong>Pointer</strong> tab (see <a href="../../devices/wii-controllers/">Wii Controllers</a>).</p>
 <ul>
 <li><strong>Cycle Pointer Modes.</strong> Check the modes you want in the list. Each fire advances to the next checked mode. The list wraps at the end. The cycle position resets on app restart.</li>
 <li><strong>Set Pointer Mode.</strong> Sets one fixed mode.</li>
@@ -5509,7 +5510,7 @@
 <ul>
 <li><a href="../../features/mappings/">Button and Axis Mappings</a>: set up base mappings before you add macros.</li>
 <li><a href="../../features/controller-slots/">Controller Slots</a>: every slot has its own macro list.</li>
-<li><a href="../../features/controller-audio/">Controller Audio</a>: the Play Sound action, output device picker, and sound packages.</li>
+<li><a href="../../features/controller-audio/">Controller Audio</a>: the Play Sound action, how sounds route to the selected controller, and sound packages.</li>
 <li><a href="../../features/devices/">Devices</a>: pick the physical device for Assigned Devices triggers.</li>
 <li><a href="../shift-layers/">Shift Layers</a>: the layers the macro <strong>Layer</strong> dropdown scopes to.</li>
 <li><a href="../../features/force-feedback/">Force Feedback</a>: rumble and vibration settings the macro layers over.</li>
@@ -5518,7 +5519,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: fixes for macros that do not fire.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

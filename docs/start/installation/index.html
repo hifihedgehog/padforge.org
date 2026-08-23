@@ -3254,7 +3254,7 @@
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.</p>
-<p>The driver ships embedded in <code>PadForge.exe</code>. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the <a href="../../features/settings/">Settings</a> page, the HIDMaestro card lights its status indicator and shows the version once installation completes. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.</p>
+<p>The driver ships embedded in <code>PadForge.exe</code>. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the <a href="../../features/settings/">Settings</a> page, the HIDMaestro card always reads <strong>Installed</strong> and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.</p>
 <p>If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.</p>
 <p>See <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a> for how PadForge talks to the driver under the hood.</p>
 <hr />
@@ -3323,7 +3323,7 @@
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro under the hood.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

@@ -4275,7 +4275,7 @@
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        WU[&quot;DS3 WinUSB package&lt;br/&gt;signed on this machine&quot;]
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    end
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(225+ profiles bundled in the SDK)&quot;]
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(231 profiles bundled in the SDK)&quot;]
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    HH --&gt;|&quot;embedded HidHide_1.5.230_x64.exe&lt;br/&gt;/extract -&gt; msiexec /i HidHide.msi&quot;| HH_DRV[&quot;HidHide kernel driver&quot;]
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    MS --&gt;|&quot;GitHub /releases -&gt; SDK Runtime x64 EXE -&gt; /install&quot;| MS_SVC[&quot;Windows MIDI Services&lt;br/&gt;(Win11 24H2+)&quot;]
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    SV --&gt;|&quot;steamcmd.zip -&gt; +app_update 250820&lt;br/&gt;-&gt; HMVR.SetSteamVRPathHint&quot;| SV_DIR[&quot;SteamVR payload&lt;br/&gt;(default C:\SteamVR)&quot;]
@@ -4310,7 +4310,7 @@
 <td><code>HIDMaestro.Core.dll</code> (referenced via <code>HintPath</code>, not embedded)</td>
 <td>Managed assembly</td>
 <td>varies by version</td>
-<td>HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR; <code>HMContext.InstallDriver()</code> registers the driver with Windows on first engine start.</td>
+<td>HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR. <code>HMContext.InstallDriver()</code> registers the driver with Windows the first time an HM-backed slot is created.</td>
 </tr>
 <tr>
 <td><code>Resources\HidHide_1.5.230_x64.exe</code></td>
@@ -4344,7 +4344,7 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&lt;LogicalName&gt;</span>BthPS3.%(RecursiveDir)%(Filename)%(Extension)<span class="nt">&lt;/LogicalName&gt;</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
 </code></pre></div>
-<p><code>HIDMaestro.Core.dll</code> is a <code>&lt;Reference&gt;</code>, not a <code>&lt;ProjectReference&gt;</code>. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of <code>HIDMaestro.Core.dll</code> from the HIDMaestro repo into <code>Resources\HIDMaestro\</code> after a tag is cut there. PadForge 4.3.0 ships HIDMaestro 1.6.2. The 1.6 line is the one that carries the native OpenVR driver behind the VR slot type.</p>
+<p><code>HIDMaestro.Core.dll</code> is a <code>&lt;Reference&gt;</code>, not a <code>&lt;ProjectReference&gt;</code>. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of <code>HIDMaestro.Core.dll</code> from the HIDMaestro repo into <code>Resources\HIDMaestro\</code> after a tag is cut there. PadForge 4.3.2 ships HIDMaestro 1.7.0. The 1.6 line introduced the native OpenVR driver behind the VR slot type.</p>
 <hr />
 <h2 id="shared-helpers">Shared Helpers<a class="headerlink" href="#shared-helpers" title="Permanent link">&para;</a></h2>
 <p>Private methods reused across HidHide and the MIDI Services flows.</p>
@@ -4396,7 +4396,7 @@
 </table>
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
-<p>PadForge does not ship a separate HIDMaestro installer EXE or MSI, and <code>DriverInstaller</code> has no <code>InstallHIDMaestro</code> / <code>UninstallHIDMaestro</code> methods. The HM SDK assembly (<code>HIDMaestro.Core.dll</code>) bundles the UMDF2 driver binaries, INF, signing tools, and 225+ device profiles. Driver registration happens at engine-start time via the SDK.</p>
+<p>PadForge does not ship a separate HIDMaestro installer EXE or MSI, and <code>DriverInstaller</code> has no <code>InstallHIDMaestro</code> / <code>UninstallHIDMaestro</code> methods. The HM SDK assembly (<code>HIDMaestro.Core.dll</code>) bundles the UMDF2 driver binaries, INF, signing tools, and 231 device profiles. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created (typically during the first engine <code>Start()</code> that has such a slot configured).</p>
 <h3 id="ensurehmaestrocontext">EnsureHMaestroContext()<a class="headerlink" href="#ensurehmaestrocontext" title="Permanent link">&para;</a></h3>
 <p><code>InputManager.Step5.VirtualDevices.cs</code> owns the HM lifecycle:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">EnsureHMaestroContext</span><span class="p">()</span>
@@ -4518,7 +4518,7 @@
 <h3 id="uninstallmidiservices">UninstallMidiServices()<a class="headerlink" href="#uninstallmidiservices" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UninstallMidiServices</span><span class="p">()</span>
 </code></pre></div>
-<p>Calls <code>FindMidiServicesUninstallString()</code> to retrieve the registry <code>UninstallString</code>. Parses quoted/unquoted exe paths and any preserved arguments, appends <code>/quiet /norestart</code>, launches hidden via <code>Process.Start</code>, waits up to 5 minutes. Throws <code>InvalidOperationException</code> if no uninstall entry is found.</p>
+<p>Calls <code>FindMidiServicesUninstallString()</code> to retrieve the registry <code>UninstallString</code>. Parses quoted/unquoted exe paths and any preserved arguments, appends <code>/quiet /norestart MSIRESTARTMANAGERCONTROL=Disable REBOOT=ReallySuppress</code> (the two MSI properties keep Restart Manager from asking PadForge to close, so in-use files are scheduled for removal instead), launches hidden via <code>Process.Start</code>, waits up to 5 minutes. Throws <code>InvalidOperationException</code> if no uninstall entry is found.</p>
 <h3 id="findmidiservicesuninstallstring">FindMidiServicesUninstallString()<a class="headerlink" href="#findmidiservicesuninstallstring" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">FindMidiServicesUninstallString</span><span class="p">()</span>
 </code></pre></div>
@@ -4872,7 +4872,7 @@
 </code></pre></div>
 <h3 id="managed-device-tracking">Managed Device Tracking<a class="headerlink" href="#managed-device-tracking" title="Permanent link">&para;</a></h3>
 <p><code>_managedDeviceIds</code> (<code>HashSet&lt;string&gt;</code>) tracks device IDs PadForge added to the blacklist. <code>RemoveManagedDevices()</code> removes only these entries, leaving entries from other tools untouched.</p>
-<p><strong>Startup clear and cloak persistence</strong>: <code>_managedDeviceIds</code> is in-memory, so a crashed or force-killed session leaves stale blacklist entries that <code>RemoveManagedDevices()</code> can no longer identify. <code>InputService.Start</code> resets the driver state with <code>ClearAll()</code> at engine start. The clear is conditional: when the Settings toggle "Keep devices cloaked between launches" (<code>KeepHidHideCloaksBetweenLaunches</code>, off by default) is on, startup skips <code>ClearAll()</code> so persisted cloaks survive into the new session with no visible decloak window, and <code>ApplyDeviceHiding</code>'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as <code>RemoveDeviceHiding(keepCloaks: ...)</code>.</p>
+<p><strong>Startup clear and cloak persistence</strong>: <code>_managedDeviceIds</code> is in-memory, so a crashed or force-killed session leaves stale blacklist entries that <code>RemoveManagedDevices()</code> can no longer identify. <code>InputService.Start</code> resets the driver state with <code>ClearAll()</code> at engine start. The clear is conditional: when the Settings toggle <strong>Keep Devices Cloaked Between Launches</strong> (<code>KeepHidHideCloaksBetweenLaunches</code>, off by default) is on, startup skips <code>ClearAll()</code> so persisted cloaks survive into the new session with no visible decloak window, and <code>ApplyDeviceHiding</code>'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as <code>RemoveDeviceHiding(keepCloaks: ...)</code>.</p>
 <p><strong>Removed methods</strong>: <code>AddToBlacklist(string)</code> and <code>RemoveFromBlacklist(string)</code> were removed. All blacklist management now goes through <code>SyncManagedDevices(HashSet&lt;string&gt;)</code>, which performs an atomic diff-based sync (add missing, remove excess) in a single operation.</p>
 <p><strong>Merge-based cache</strong>: <code>ApplyDeviceHiding</code> uses a merge-based approach for its resolved instance ID cache. New IDs are added but previously cached IDs are never discarded. This ensures offline devices that were resolved in a prior cycle remain in the blacklist even if they are not currently enumerable.</p>
 <h3 id="vidpid-format-matching">VID/PID Format Matching<a class="headerlink" href="#vidpid-format-matching" title="Permanent link">&para;</a></h3>
@@ -4920,10 +4920,15 @@
 <td>Any created slot uses MIDI</td>
 <td><code>HasAnyMidiSlots</code></td>
 </tr>
+<tr>
+<td>SteamVR</td>
+<td>Any created slot is a VR slot</td>
+<td><code>HasAnyVrSlots</code></td>
+</tr>
 </tbody>
 </table>
-<p>Guards are <code>Func&lt;bool&gt;</code> delegates on <code>SettingsViewModel</code>, injected by <code>MainWindow.xaml.cs</code>. <code>RefreshDriverGuards()</code> re-evaluates <code>CanExecute</code> on those two uninstall commands after slot creation, deletion, or type changes.</p>
-<p>SteamVR uses a different shape. <code>UninstallSteamVrCommand</code> is gated on <code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned</code>, ownership rather than usage, and <code>ShowSteamVrUninstall</code> hides the button entirely when the install is Steam's own. <code>RefreshDriverGuards()</code> does not touch it: both properties raise <code>NotifyCanExecuteChanged</code> from their own setters, refreshed by <code>RefreshMidiServicesStatus()</code>. The runtime refusal is enforced a second time inside <code>UninstallSteamVR()</code>, which throws when <code>vrserver</code> is running, and <code>MainWindow</code> checks the same process before showing the confirm dialog.</p>
+<p>Guards are <code>Func&lt;bool&gt;</code> delegates on <code>SettingsViewModel</code>, injected by <code>MainWindow.xaml.cs</code>. <code>RefreshDriverGuards()</code> re-evaluates <code>CanExecute</code> on those three uninstall commands after slot creation, deletion, or type changes.</p>
+<p>SteamVR adds ownership on top of usage. <code>UninstallSteamVrCommand</code> is gated on <code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned &amp;&amp; !HasAnyVrSlots()</code>, and <code>ShowSteamVrUninstall</code> hides the button entirely when the install is Steam's own. <code>RefreshDriverGuards()</code> re-evaluates it alongside the other two, and the two ownership properties also raise <code>NotifyCanExecuteChanged</code> from their own setters, refreshed by <code>RefreshMidiServicesStatus()</code>. The runtime refusal is enforced a second time inside <code>UninstallSteamVR()</code>, which throws when <code>vrserver</code> is running, and <code>MainWindow</code> checks the same process before showing the confirm dialog.</p>
 <p>HIDMaestro has no Install or Uninstall command (the SDK assembly is always available), so there is no guard to enforce. The legacy v2 cleanup dialog is single-shot and does not appear on the Settings page, so it has no guard either. The DS3 Bluetooth stack has no uninstall path at all.</p>
 <hr />
 <h2 id="elevation-strategy">Elevation Strategy<a class="headerlink" href="#elevation-strategy" title="Permanent link">&para;</a></h2>
@@ -5091,12 +5096,12 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: <code>HMaestroVirtualController</code> (Xbox / PlayStation / Nintendo / Extended), <code>MidiVirtualController</code>, <code>KeyboardMouseVirtualController</code> consuming installed drivers</li>
 <li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: HM SDK surface (<code>HMContext</code>, <code>HMProfile</code>, <code>HMController</code>), thread-pool lifecycle, OpenXInput shim, bubble-up cascade, inactivity timeout</li>
 <li><a href="../architecture-overview/">Architecture Overview</a>: Elevation strategy (<code>requireAdministrator</code> in <code>app.manifest</code>)</li>
-<li><a href="../build-and-publish/">Build and Publish</a>: Embedded driver resources (HidHide installer; HIDMaestro is referenced as a managed assembly)</li>
+<li><a href="../build-and-publish/">Build and Publish</a>: Embedded driver resources (the HidHide installer, while HIDMaestro is referenced as a managed assembly)</li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: Driver status display in <code>SettingsViewModel</code></li>
 <li><a href="../xaml-views/">XAML Views</a>: <code>SettingsPage</code> driver install/uninstall buttons and guards</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

@@ -5182,7 +5182,7 @@
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">        </span><span class="c1">// Found it</span>
 </code></pre></div>
 <h3 id="texture-and-decal-helpers">Texture and Decal Helpers<a class="headerlink" href="#texture-and-decal-helpers" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">protected</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="nf">LoadTexturedMaterial</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">opacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span><span class="w">     </span><span class="c1">// flat grey fallback</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">protected</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="nf">LoadTexturedMaterial</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">opacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span><span class="w">     </span><span class="c1">// flat gray fallback</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">protected</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="nf">TryLoadTexturedMaterial</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">opacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span><span class="w">  </span><span class="c1">// null when absent</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">protected</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="nf">AddGloss</span><span class="p">(</span><span class="n">Material</span><span class="w"> </span><span class="n">baseMaterial</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">intensity</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">power</span><span class="p">)</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="k">protected</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">AttachRiderDecal</span><span class="p">(</span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="n">material</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">covering</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
@@ -5431,7 +5431,7 @@
 <h3 id="materials">Materials<a class="headerlink" href="#materials" title="Permanent link">&para;</a></h3>
 <p>Two atlases per colorway: <code>Body.png</code> for every solid part, <code>Decal.png</code> for the art. There is no flat color palette. <code>MaterialBody</code> paints every <code>ButtonMap</code> group first, then every remaining child of <code>model3DGroup</code>, then <code>DrawAccentHighlights()</code> runs.</p>
 <h3 id="rider-decals">Rider Decals<a class="headerlink" href="#rider-decals" title="Permanent link">&para;</a></h3>
-<p>The face-button symbols (<code>B1-Symbol.obj</code> through <code>B4-Symbol.obj</code>) are decal art: their UVs address the decal atlas, not the body atlas. Giving them the body material skinned the buttons with whatever the body atlas holds at those coordinates. They attach as riders into their own button groups, so a press moves and lights the symbol with the button. <code>Decal-Shoulder-Left/Right-Trigger.obj</code> ride the triggers, <code>Decal-L1.obj</code> / <code>Decal-R1.obj</code> ride the bumpers so the lettering glows with a bumper press instead of staying grey in the static overlay.</p>
+<p>The face-button symbols (<code>B1-Symbol.obj</code> through <code>B4-Symbol.obj</code>) are decal art: their UVs address the decal atlas, not the body atlas. Giving them the body material skinned the buttons with whatever the body atlas holds at those coordinates. They attach as riders into their own button groups, so a press moves and lights the symbol with the button. <code>Decal-Shoulder-Left/Right-Trigger.obj</code> ride the triggers, <code>Decal-L1.obj</code> / <code>Decal-R1.obj</code> ride the bumpers so the lettering glows with a bumper press instead of staying gray in the static overlay.</p>
 <p>The constructor also asks for d-pad arrow riders (<code>DPadUpArrow.obj</code> and siblings) and stick-ring knurl riders (<code>Decal-Joystick-Left/Right-Ring.obj</code>). Neither DS4 colorway folder ships those files, so <code>AttachRiderDecal</code> no-ops on them. That art comes from the body and decal atlases instead.</p>
 <h3 id="touchpad-mapping">Touchpad Mapping<a class="headerlink" href="#touchpad-mapping" title="Permanent link">&para;</a></h3>
 <p>The DS4 exposes <code>Screen.obj</code> as <code>Touchpad</code> and registers <code>ClickMap[Screen] = "TouchpadClick"</code>, so the surface is a click-to-record hit target. <code>Touchpad</code> is the base-class property the view reads for the touchpad click highlight and finger-sphere preview. DS4 does not override the touchpad inset fractions, so the view uses the defaults (<code>TouchpadXInsetFrac = 0.03</code>, <code>TouchpadZTopInsetFrac = 0.12</code>, <code>TouchpadZBottomInsetFrac = 0.12</code>).</p>
@@ -6333,9 +6333,14 @@
 <td><code>ControllerModelSwitch2Pro</code></td>
 </tr>
 <tr>
-<td>Xbox 360, and the fallback</td>
+<td>Xbox 360, and the fallback for non-PlayStation slots</td>
 <td><code>XBOX360</code></td>
 <td><code>ControllerModelXbox360</code></td>
+</tr>
+<tr>
+<td>Fallback for an unrecognized profile on a PlayStation slot</td>
+<td><code>DS4</code></td>
+<td><code>ControllerModelDS4</code></td>
 </tr>
 </tbody>
 </table>
@@ -6400,7 +6405,7 @@
 <a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="p">};</span>
 </code></pre></div>
 <p>Seven of those resolve to a mesh on only some models: <code>ButtonShare</code> on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), <code>ButtonMute</code> on DualSense and Edge, <code>LeftFunction</code> / <code>RightFunction</code> on the Edge alone, and <code>ButtonC</code> / <code>LeftPaddle</code> / <code>RightPaddle</code> on Switch 2 Pro when the extra controls are wired, with the paddles also on the Edge. Everywhere else <code>ButtonMap.TryGetValue</code> misses and the entry is skipped. <code>GetButtonState()</code> carries a matching case for all 22.</p>
-<p>For each button, iterates all <code>Model3DGroup</code> entries in <code>ButtonMap</code> (multi-mesh support). The <code>DiffuseMaterial</code> type guard is bypassed for the stick rings, the stick clicks, and the bumpers, because mid-deflection those carry a graded <code>MaterialGroup</code> and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.</p>
+<p>For each button, iterates all <code>Model3DGroup</code> entries in <code>ButtonMap</code> (multi-mesh support). The pass drives a group only when its current material is one the view set (the registered default or the registered highlight), so a glossy or textured default such as the DualSense mute button still lights on press. The stick rings, the stick clicks, and the bumpers bypass that check, because mid-deflection they carry a graded <code>MaterialGroup</code> and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.</p>
 <h4 id="updatejoystick">UpdateJoystick()<a class="headerlink" href="#updatejoystick" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateJoystick</span><span class="p">(</span>
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">rawX</span><span class="p">,</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">rawY</span><span class="p">,</span>
@@ -6452,7 +6457,7 @@
 </tr>
 <tr>
 <td><code>PreviewMouseLeftButtonUp</code></td>
-<td>Drag &lt; 5 px -&gt; hit-test for click-to-record; otherwise end drag</td>
+<td>Drag &lt; 5 px -&gt; hit-test for click-to-record. Otherwise end drag.</td>
 </tr>
 <tr>
 <td><code>PreviewMouseRightButtonDown</code></td>
@@ -6480,7 +6485,7 @@
 </tr>
 <tr>
 <td><code>PreviewTouchUp</code></td>
-<td>Release touch; demote second finger to first if needed</td>
+<td>Release touch. Demote the second finger to first if needed.</td>
 </tr>
 <tr>
 <td><code>PreviewStylusSystemGesture</code></td>
@@ -6816,7 +6821,7 @@
 <li><a href="../build-and-publish/">Build and Publish</a>: 3D OBJ meshes (<code>3DModels/</code>) included as <code>EmbeddedResource</code> items</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

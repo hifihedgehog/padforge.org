@@ -2856,10 +2856,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed-capabilities" class="md-nav__link">
+  <a href="#capabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fixed Capabilities
+        Capabilities
       
     </span>
   </a>
@@ -3642,10 +3642,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#vr-custom-mappings-dictionary-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VR Custom Mappings (Dictionary-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-mapping-deadzones-dictionary-based" class="md-nav__link">
     <span class="md-ellipsis">
       
         Per-Mapping Deadzones (Dictionary-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-mapping-bidirectional-dictionary-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-Mapping Bidirectional (Dictionary-based)
       
     </span>
   </a>
@@ -5790,10 +5812,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed-capabilities" class="md-nav__link">
+  <a href="#capabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fixed Capabilities
+        Capabilities
       
     </span>
   </a>
@@ -6576,10 +6598,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#vr-custom-mappings-dictionary-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VR Custom Mappings (Dictionary-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-mapping-deadzones-dictionary-based" class="md-nav__link">
     <span class="md-ellipsis">
       
         Per-Mapping Deadzones (Dictionary-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-mapping-bidirectional-dictionary-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-Mapping Bidirectional (Dictionary-based)
       
     </span>
   </a>
@@ -7626,7 +7670,7 @@
 </tr>
 <tr>
 <td><code>PadForge.Engine.Common</code></td>
-<td><code>InputHookManager</code> (LL hook host), (v3.6) <code>ConsumerUsageTable</code>, <code>IdleInputDetector</code></td>
+<td><code>InputHookManager</code> (LL hook host), (v3.6) <code>ConsumerUsageTable</code>, <code>IdleInputDetector</code>, <code>GlobalHotkeyParser</code>, <code>LfeOutputState</code> (#234), <code>RelativeVelocityWindow</code>, <code>ShiftCycleStepper</code></td>
 </tr>
 <tr>
 <td><code>PadForge.Engine.Common.Mapping</code></td>
@@ -7650,7 +7694,7 @@
 </tr>
 <tr>
 <td><code>PadForge.Engine.RemoteLink</code></td>
-<td>(v4) Device sharing between PCs (#138): <code>LinkDiscovery</code>, <code>LinkServer</code>, <code>LinkConnection</code> (+ <code>ILinkControlChannel</code>), <code>LinkSession</code>, <code>LinkHandshake</code>, <code>PeerCrypto</code>, <code>PeerIdentity</code>, <code>IdentityProtector</code>, <code>PeerTrust</code> / <code>PeerTrustStore</code>, <code>RemotePeerDevice</code>, <code>CustomInputStateCodec</code>, <code>OutputEffectCodec</code>, <code>AntiReplayWindow</code>, <code>TcpControlChannel</code>. See <a href="../remote-link-internals/">Remote Link Internals</a></td>
+<td>(v4) Device sharing between PCs (#138): <code>LinkDiscovery</code>, <code>LinkServer</code>, <code>LinkConnection</code> (+ <code>ILinkControlChannel</code>), <code>LinkSession</code>, <code>LinkHandshake</code>, <code>PeerCrypto</code>, <code>PeerIdentity</code>, <code>IdentityProtector</code>, <code>PeerTrust</code> / <code>PeerTrustStore</code>, <code>RemotePeerDevice</code>, <code>CustomInputStateCodec</code>, <code>OutputEffectCodec</code>, <code>AntiReplayWindow</code>, <code>TcpControlChannel</code>, and the (#294 internet) lane: <code>LinkCode</code>, <code>IrohRelayClient</code>, <code>StunClient</code>, <code>NatProfile</code>, <code>PortPredictor</code>, <code>HolePuncher</code>, <code>PunchedConnection</code>, <code>RendezvousProtocol</code>, <code>UdpControlChannel</code>, plus the <code>Dht/</code> folder. See <a href="../remote-link-internals/">Remote Link Internals</a></td>
 </tr>
 <tr>
 <td><code>SDL3</code></td>
@@ -7954,9 +7998,10 @@
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Povs</span><span class="p">;</span><span class="w">       </span><span class="c1">// Total POV (hat) report fields</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Sticks</span><span class="p">;</span><span class="w">     </span><span class="c1">// Number of thumbsticks (each consumes 2 of Axes)</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Triggers</span><span class="p">;</span><span class="w">   </span><span class="c1">// Number of triggers (each consumes 1 of Axes)</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsTriggerSlot</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">axisIndex</span><span class="p">);</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TriggerClickButtonMask</span><span class="p">;</span><span class="w"> </span><span class="c1">// bit i = raw button i is a LeftTriggerClick/RightTriggerClick role (e.g. ZL/ZR), derived at slot sync from the HM profile layout</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsTriggerSlot</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">axisIndex</span><span class="p">);</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>IsTriggerSlot</code> resolves the interleaved-then-trailing axis layout that <code>ExtendedSlotConfig.ComputeAxisLayout</code> produces. Sticks and triggers need different rest-state and combine rules. Centralizing the index → role formula here keeps Step 3 (mapping), Step 4 (multi-device merge), and the deadzone pipeline in agreement even when the layout edits.</p>
 <hr />
@@ -7994,14 +8039,23 @@
 <a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w">  </span><span class="n">MouseAbsXValid</span><span class="p">;</span><span class="w">    </span><span class="c1">// Per-axis validity (mixed IR/stick mappings)</span>
 <a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w">  </span><span class="n">MouseAbsYValid</span><span class="p">;</span>
 <a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
-<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="c1">// Methods</span>
-<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetKey</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">vk</span><span class="p">);</span>
-<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetKey</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">vk</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
-<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetMouseButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
-<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetMouseButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
-<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
-<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">KbmRawState</span><span class="w"> </span><span class="nf">Combine</span><span class="p">(</span><span class="n">KbmRawState</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">KbmRawState</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
-<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="p">}</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="c1">// Exact-count mouse lanes (bypass the MouseDelta velocity lane&#39;s scale and clamp)</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w">   </span><span class="n">MouseFlickX</span><span class="p">;</span><span class="w">       </span><span class="c1">// Flick stick counts this frame (#225), calibrated by counts-per-360, + = rightward turn</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseGyroX</span><span class="p">;</span><span class="w">        </span><span class="c1">// Gyro mouse motion in exact counts this poll (fractional, remainder carried)</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseGyroY</span><span class="p">;</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseTouchX</span><span class="p">;</span><span class="w">       </span><span class="c1">// Touchpad mouse motion in exact counts this poll</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseTouchY</span><span class="p">;</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseStickCoastX</span><span class="p">;</span><span class="w">  </span><span class="c1">// Stick trackball coast in exact counts this poll (#291), KBM sign convention</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">MouseStickCoastY</span><span class="p">;</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="w">    </span><span class="c1">// Methods</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetKey</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">vk</span><span class="p">);</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetKey</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">vk</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetMouseButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetMouseButton</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">pressed</span><span class="p">);</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Clear</span><span class="p">();</span>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">KbmRawState</span><span class="w"> </span><span class="nf">Combine</span><span class="p">(</span><span class="n">KbmRawState</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">KbmRawState</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="methods_2">Methods<a class="headerlink" href="#methods_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -8036,12 +8090,12 @@
 <tr>
 <td><code>Clear</code></td>
 <td><code>void Clear()</code></td>
-<td>Zeros all keys, mouse deltas, both scroll axes, mouse buttons, pre-deadzone fields, and the absolute-pointer fields.</td>
+<td>Zeros all keys, mouse deltas, both scroll axes, mouse buttons, pre-deadzone fields, the absolute-pointer fields, and the flick / gyro / touch / coast count lanes.</td>
 </tr>
 <tr>
 <td><code>Combine</code></td>
 <td><code>static KbmRawState Combine(KbmRawState a, KbmRawState b)</code></td>
-<td>Merges two KBM states. Keys and mouse buttons OR'd. Deltas and both scroll axes take largest absolute magnitude. Absolute-pointer coordinates take the tracking side per axis, and the <code>MouseAbs*Valid</code> flags OR.</td>
+<td>Merges two KBM states. Keys and mouse buttons OR'd. Deltas and both scroll axes take largest absolute magnitude. Absolute-pointer coordinates take the tracking side per axis, and the <code>MouseAbs*Valid</code> flags OR. <code>MouseFlickX</code> takes the larger magnitude. <code>MouseGyro*</code>, <code>MouseTouch*</code>, and <code>MouseStickCoast*</code> sum, so two gyros aimed at one slot each contribute their real motion.</td>
 </tr>
 </tbody>
 </table>
@@ -8570,7 +8624,7 @@
 <tr>
 <td><code>NumButtons</code></td>
 <td><code>int</code></td>
-<td>Button count (11 for gamepads)</td>
+<td>Button count (22 standardized slots for SDL gamepads: 0–10 XInput, 11 Misc1, 12–15 paddles, 16 touchpad click, 17–21 Misc2–6. Raw count for joysticks)</td>
 </tr>
 <tr>
 <td><code>RawButtonCount</code></td>
@@ -8825,7 +8879,7 @@
 <tr>
 <td><code>GetDeviceObjects</code></td>
 <td><code>DeviceObjectItem[] GetDeviceObjects()</code></td>
-<td>Builds <code>DeviceObjectItem[]</code> for each axis, hat, button. Uses <code>Math.Max(NumButtons, RawButtonCount)</code> for button count so extra raw buttons (beyond gamepad 11) are included with generic "Button N" names. First 6 axes use standard GUIDs; extras use Slider.</td>
+<td>Builds <code>DeviceObjectItem[]</code> for each axis, hat, button. Uses <code>Math.Max(NumButtons, RawButtonCount)</code> for button count so extra raw buttons (beyond the 22 standardized gamepad slots) are included with generic "Button N" names. First 6 axes use standard GUIDs; extras use Slider.</td>
 </tr>
 <tr>
 <td><code>GetInputDeviceType</code></td>
@@ -8902,7 +8956,7 @@
 </tr>
 <tr>
 <td>Buttons</td>
-<td>[0]=A, [1]=B, [2]=X, [3]=Y, [4]=LB, [5]=RB, [6]=Back, [7]=Start, [8]=LS, [9]=RS, [10]=Guide</td>
+<td>[0]=A, [1]=B, [2]=X, [3]=Y, [4]=LB, [5]=RB, [6]=Back, [7]=Start, [8]=LS, [9]=RS, [10]=Guide, [11]=Misc1, [12]=RPaddle1, [13]=LPaddle1, [14]=RPaddle2, [15]=LPaddle2, [16]=Touchpad click, [17]–[21]=Misc2–6</td>
 </tr>
 <tr>
 <td>POV[0]</td>
@@ -8915,14 +8969,14 @@
 </tbody>
 </table>
 <p><strong>Guide suppression:</strong> When Back+Start+Guide are all pressed, Guide is suppressed (Windows/XInput synthesizes Guide from this combo).</p>
-<p><strong>Extra raw buttons:</strong> Raw joystick buttons beyond index 10 are appended (e.g., DualSense touchpad click), excluding indices consumed by the gamepad mapping (<code>ParseMappedButtonIndices()</code>).</p>
+<p><strong>Extra raw buttons:</strong> Raw joystick buttons at index 22 and above are appended, excluding indices consumed by the gamepad mapping (<code>ParseMappedButtonIndices()</code>). The DualSense touchpad click is not one of them: it lands at <code>Buttons[16]</code> through the gamepad API.</p>
 <h3 id="joystick-state-reading">Joystick State Reading<a class="headerlink" href="#joystick-state-reading" title="Permanent link">&para;</a></h3>
 <p><code>GetJoystickState()</code> reads raw joystick input (no gamepad remapping):
 - <strong>Axes:</strong> SDL signed (&minus;32768..32767) converted to unsigned (0..65535) via <code>- short.MinValue</code>. First <code>MaxAxis</code> go to <code>Axis[]</code>, overflow to <code>Sliders[]</code>.
 - <strong>Hats:</strong> SDL bitmask to centidegrees via <code>HatToCentidegrees</code>.
 - <strong>Buttons:</strong> Uses <code>RawButtonCount</code> (not <code>NumButtons</code>) for full raw coverage.</p>
 <h3 id="hid-product-string-fallback">HID Product String Fallback<a class="headerlink" href="#hid-product-string-fallback" title="Permanent link">&para;</a></h3>
-<p>SDL3 may return a raw VID/PID string (e.g., "0x16c0/0x05e1") for unknown devices. <code>IsRawVidPidName()</code> detects this; <code>TryGetHidProductString()</code> queries the HID product string via <code>CreateFile</code> + <code>HidD_GetProductString</code> P/Invoke.</p>
+<p>SDL3 may return a raw VID/PID string (e.g., "0x16c0/0x05e1") for unknown devices. <code>IsRawVidPidName()</code> detects this. <code>TryGetHidProductString()</code> queries the HID product string via <code>CreateFile</code> + <code>HidD_GetProductString</code> P/Invoke.</p>
 <h3 id="haptic-open-strategy">Haptic Open Strategy<a class="headerlink" href="#haptic-open-strategy" title="Permanent link">&para;</a></h3>
 <p><code>OpenHaptic()</code> opens <code>SDL_OpenHapticFromJoystick</code> and selects the best strategy:
 1. <strong>LeftRight</strong>. Best for dual-motor
@@ -9307,7 +9361,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="fixed-capabilities">Fixed Capabilities<a class="headerlink" href="#fixed-capabilities" title="Permanent link">&para;</a></h3>
+<h3 id="capabilities">Capabilities<a class="headerlink" href="#capabilities" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -9322,15 +9376,15 @@
 </tr>
 <tr>
 <td>Buttons</td>
-<td>11 (standard Xbox layout: A, B, X, Y, LB, RB, Back, Start, LS, RS, Guide)</td>
+<td>11 gamepad slots (standard Xbox layout: A, B, X, Y, LB, RB, Back, Start, LS, RS, Guide). 17 when the layout has a touchpad, with <code>Buttons[16]</code> = touchpad click. Extended surfaces raise it to <code>max(extendedMax + 1, 17 if touchpad)</code>.</td>
 </tr>
 <tr>
 <td>POV Hats</td>
-<td>1</td>
+<td>1 (0 for touchpad-only clients)</td>
 </tr>
 <tr>
 <td>HasRumble</td>
-<td><code>true</code> (via browser Vibration API)</td>
+<td>Client-reported (browser Vibration API). Defaults <code>true</code>, fires <code>CapabilitiesChanged</code> when the client says otherwise.</td>
 </tr>
 <tr>
 <td>HasHaptic</td>
@@ -9338,18 +9392,18 @@
 </tr>
 <tr>
 <td>HasGyro</td>
-<td><code>false</code></td>
+<td><code>false</code> until <code>EnableMotionCaps()</code> flips it on the first motion message (#296), then <code>true</code></td>
 </tr>
 <tr>
 <td>HasAccel</td>
-<td><code>false</code></td>
+<td>Flips together with <code>HasGyro</code></td>
 </tr>
 </tbody>
 </table>
 <h3 id="constructor_1">Constructor<a class="headerlink" href="#constructor_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">public</span><span class="w"> </span><span class="nf">WebControllerDevice</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">clientId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">displayName</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isTouchpad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">layoutKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;xbox360&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Creates a web controller. <code>clientId</code> is a unique browser localStorage identifier. <code>InstanceGuid</code> derived from client ID via MD5. <code>SdlInstanceId</code> is the client ID hash code. Stick axes init to center (32767), trigger axes to 0. <code>isTouchpad</code> reports the device as a touchpad. <code>layoutKey</code> (<code>"xbox360"</code> / <code>"ds4"</code> / <code>"touchpad"</code>) is MD5-mixed into <code>ProductGuid</code> so different layouts read as different products.</p>
+<p>Creates a web controller. <code>clientId</code> is a unique browser localStorage identifier. <code>InstanceGuid</code> derived from client ID via MD5. <code>SdlInstanceId</code> comes from <code>SyntheticInstanceId.From(clientId)</code> (FNV-1a in the reserved <code>0x80000000</code> band, stable across sessions). Stick axes init to center (32767), trigger axes to 0. <code>isTouchpad</code> reports the device as a touchpad. <code>layoutKey</code> (<code>"xbox360"</code> / <code>"ds4"</code> / <code>"touchpad"</code>) is MD5-mixed into <code>ProductGuid</code> so different layouts read as different products.</p>
 <h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9391,6 +9445,16 @@
 <td><code>UpdatePov</code></td>
 <td><code>void UpdatePov(int value)</code></td>
 <td>Sets POV hat (centidegrees or &minus;1). Thread-safe.</td>
+</tr>
+<tr>
+<td><code>UpdateTouchpadFinger</code></td>
+<td><code>void UpdateTouchpadFinger(int finger, float x, float y, bool down)</code></td>
+<td>Single-pad two-finger virtual touchpad from phone clients. Contact IDs are synthesized on rising / falling edges. Copy-on-write under the state lock.</td>
+</tr>
+<tr>
+<td><code>UpdateMotion</code></td>
+<td><code>void UpdateMotion(float gx, float gy, float gz, float ax, float ay, float az)</code></td>
+<td>Gyro rates + accelerometer from the phone's DeviceMotionEvent (#296). Copy-on-write. Rates go stale (zero) after 500 ms without a sample, the accelerometer keeps its last value. <code>EnableMotionCaps()</code> flips <code>HasGyro</code> / <code>HasAccel</code> on the first message and notifies once.</td>
 </tr>
 <tr>
 <td><code>SetConnected</code></td>
@@ -9755,6 +9819,16 @@
 <td>Last sent right (high-freq) motor speed, 0–65535. Read-only.</td>
 </tr>
 <tr>
+<td><code>LeftTriggerMotorSpeed</code></td>
+<td><code>ushort</code></td>
+<td>Last sent left impulse-trigger motor speed, 0–65535 (Xbox One+ raw HID lane). Read-only.</td>
+</tr>
+<tr>
+<td><code>RightTriggerMotorSpeed</code></td>
+<td><code>ushort</code></td>
+<td>Last sent right impulse-trigger motor speed, 0–65535. Read-only.</td>
+</tr>
+<tr>
 <td><code>IsActive</code></td>
 <td><code>bool</code></td>
 <td>Whether FFB is active on the device. Read-only.</td>
@@ -9780,6 +9854,16 @@
 <td><code>_cachedRightMotorSpeed</code></td>
 <td><code>ushort</code></td>
 <td>Last sent right motor speed</td>
+</tr>
+<tr>
+<td><code>_cachedLeftTriggerMotorSpeed</code></td>
+<td><code>ushort</code></td>
+<td>Last sent left impulse-trigger speed</td>
+</tr>
+<tr>
+<td><code>_cachedRightTriggerMotorSpeed</code></td>
+<td><code>ushort</code></td>
+<td>Last sent right impulse-trigger speed</td>
 </tr>
 <tr>
 <td><code>_hapticEffectId</code></td>
@@ -9842,6 +9926,11 @@
 <td><code>StopDeviceForces</code></td>
 <td><code>void StopDeviceForces(ISdlInputDevice device)</code></td>
 <td>Stops all rumble/haptic and resets cached state.</td>
+</tr>
+<tr>
+<td><code>TryRecordXboxImpulseSnapshot</code></td>
+<td><code>bool TryRecordXboxImpulseSnapshot(ushort leftMotor, ushort rightMotor, ushort leftTrigger, ushort rightTrigger)</code></td>
+<td>Change-detection bookkeeping for the Xbox One+ skip-SDL path (<code>XboxImpulseHidWriter</code>). Returns <code>true</code> when any of the four speeds differs from the last write (caller issues a fresh HID write). Always updates the public motor-speed properties and <code>IsActive</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -10285,9 +10374,10 @@
 <a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">Handle</span><span class="p">;</span><span class="w">       </span><span class="c1">// Raw Input device handle</span>
 <a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="p">;</span><span class="w">         </span><span class="c1">// Device display name</span>
 <a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">DevicePath</span><span class="p">;</span><span class="w">   </span><span class="c1">// Device interface path</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">VendorId</span><span class="p">;</span><span class="w">     </span><span class="c1">// USB VID</span>
-<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">ProductId</span><span class="p">;</span><span class="w">    </span><span class="c1">// USB PID</span>
-<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="p">}</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">uint</span><span class="w">   </span><span class="n">Type</span><span class="p">;</span><span class="w">         </span><span class="c1">// 0 = mouse, 1 = keyboard</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">VendorId</span><span class="p">;</span><span class="w">     </span><span class="c1">// USB VID</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">ProductId</span><span class="p">;</span><span class="w">    </span><span class="c1">// USB PID</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="static-fields">Static Fields<a class="headerlink" href="#static-fields" title="Permanent link">&para;</a></h3>
 <table>
@@ -10520,7 +10610,7 @@
 <p>The PTP spec sends one final report for each contact with <code>tip-switch = 0</code> at lift, then drops the contact slot from subsequent reports. Without checking the bit, a lifted contact reads as still touching, inflates the apparent contact count, and corrupts the engine-side path the gesture recognizer builds.</p>
 <p><code>ReadTipSwitch</code> calls <code>HidP_GetUsages</code> on each per-finger link collection and scans the returned usage list for <code>HID_USAGE_DIGITIZER_TIP_SWITCH</code>. Touching iff the usage is present. HID-call failure falls back to "treat as touching" so non-conformant devices that don't expose the usage retain the legacy behavior.</p>
 <h4 id="multi-report-frame-assembly">Multi-report frame assembly<a class="headerlink" href="#multi-report-frame-assembly" title="Permanent link">&para;</a></h4>
-<p>Most certified PTP hardware caps each HID report at 2 contacts; a 5-finger frame arrives as three reports (2 + 2 + 1). The PTP spec carries the total contact count on the first report's contact-count usage; continuation reports carry zero.</p>
+<p>Most certified PTP hardware caps each HID report at 2 contacts. A 5-finger frame arrives as three reports (2 + 2 + 1). The PTP spec carries the total contact count on the first report's contact-count usage. Continuation reports carry zero.</p>
 <p>The reader accumulates contacts into <code>FrameBuf*</code> across reports and only commits <code>ds.Down</code> when the buffer reaches <code>FrameExpected</code>. Out-of-spec devices that never set contact-count (FrameExpected stays 0) fall back to per-report commit. Each fragment's contact append is bounded by <code>FrameExpected - FrameSeen</code> so that a descriptor with more contact link-collections than the frame actually carries (empty slots parse as zero-X/Y "contacts" with stale IDs) doesn't inflate the buffer past the spec-declared total.</p>
 <h4 id="stable-slot-assignment-by-hid-contact-id">Stable slot assignment by HID contact ID<a class="headerlink" href="#stable-slot-assignment-by-hid-contact-id" title="Permanent link">&para;</a></h4>
 <p>Each contact in the assembled frame buffer carries the HID contact ID parsed from the report. Commit-time slot assignment runs in two passes:</p>
@@ -10621,11 +10711,11 @@
 <td>Steam Controller 2026 (Triton)</td>
 <td>0x83 LFO-tone output</td>
 <td><code>EncodeTritonTone(haptic, freqHz, amp)</code></td>
-<td>10-byte output report. Byte 2 is a signed int8 <code>gain_db</code> (0 dB at amp=1, floored at &minus;40, never positive). Actuator index 0/1/3/4. Grips driven through the per-note trackpad&rarr;grip frequency map so both sound the same pitch.</td>
+<td>10-byte output report. Byte 2 is a signed int8 <code>gain_db</code> (0 dB at amp=1, floored at &minus;40, never positive). Actuator index 0/1/3/4 over BLE. Wired (PID 0x1302) and the puck relay drive the <code>TritonActuatorsWired</code> {0, 3} pad+grip pair, because four simultaneous actuators garble on serialized delivery (bench 2026-07-27). Grips driven through the per-note trackpad&rarr;grip frequency map so both sound the same pitch.</td>
 </tr>
 </tbody>
 </table>
-<p>Supporting members: <code>MidiNoteToFrequency</code> (melodic cue helper), <code>TritonActuators</code> / <code>TritonIsGrip</code> / <code>TritonGripDriveHz</code> (Triton actuator addressing and grip drive), <code>EncodeTritonRumbleClear</code> (0x80 zero-rumble sent before arming a fresh tone), <code>AmpToGainDb</code> (shared amplitude-to-dB map). Switch 2 was dropped from the tone scope: no reference plays an audible tone on a Switch 2 actuator.</p>
+<p>Supporting members: <code>MidiNoteToFrequency</code> (melodic cue helper), <code>TritonActuators</code> / <code>TritonActuatorsWired</code> / <code>TritonIsGrip</code> / <code>TritonGripDriveHz</code> (Triton actuator addressing and grip drive), <code>EncodeTritonRumbleClear</code> (0x80 zero-rumble sent before arming a fresh tone over BLE only, never on the wired pad), <code>AmpToGainDb</code> (shared amplitude-to-dB map). Switch 2 was dropped from the tone scope: no reference plays an audible tone on a Switch 2 actuator.</p>
 <hr />
 <h2 id="haptictonereducer">HapticToneReducer<a class="headerlink" href="#haptictonereducer" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Haptics/HapticToneReducer.cs</code>
@@ -11583,6 +11673,52 @@
 </tr>
 </tbody>
 </table>
+<h3 id="vr-custom-mappings-dictionary-based">VR Custom Mappings (Dictionary-based)<a class="headerlink" href="#vr-custom-mappings-dictionary-based" title="Permanent link">&para;</a></h3>
+<p>(#49) Same pattern as Extended/MIDI/KBM, for VR slots. Keys: the <code>VrLayout</code> vocabulary (<code>"VrLTrigger"</code>, <code>"VrRStickXNeg"</code>, <code>"VrLA"</code>, <code>"VrLATouch"</code>, ...). Values: mapping descriptors.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Serialization</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VrMappingEntries</code></td>
+<td><code>RawMappingEntry[]</code></td>
+<td><code>[XmlArray("VrMappings")] [XmlArrayItem("Map")]</code></td>
+<td>Serializable array</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetVrMapping</code></td>
+<td><code>string GetVrMapping(string key)</code></td>
+<td>Gets a VR mapping value. Reads under the VR dict lock.</td>
+</tr>
+<tr>
+<td><code>SetVrMapping</code></td>
+<td><code>void SetVrMapping(string key, string value)</code></td>
+<td>Sets a VR mapping value. Empty/null removes the key.</td>
+</tr>
+<tr>
+<td><code>FlushVrMappings</code></td>
+<td><code>void FlushVrMappings()</code></td>
+<td>Flushes dictionary to array.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="per-mapping-deadzones-dictionary-based">Per-Mapping Deadzones (Dictionary-based)<a class="headerlink" href="#per-mapping-deadzones-dictionary-based" title="Permanent link">&para;</a></h3>
 <p>Same pattern as Extended/MIDI/KBM mappings. Keys = target mapping names (e.g. <code>"LeftThumbAxisX"</code>), values = 0–100% threshold for axis-to-button activation. Default removal values: <code>"0"</code> or <code>"50"</code>.</p>
 <table>
@@ -11608,6 +11744,52 @@
 <td><code>FlushMappingDeadZones</code></td>
 <td><code>void FlushMappingDeadZones()</code></td>
 <td>Syncs in-memory dictionary to <code>MappingDeadZoneEntries</code> array for serialization.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-mapping-bidirectional-dictionary-based">Per-Mapping Bidirectional (Dictionary-based)<a class="headerlink" href="#per-mapping-bidirectional-dictionary-based" title="Permanent link">&para;</a></h3>
+<p>Twin of the deadzone family. Bidirectional is the third independent axis-to-button flag and lives in its own dictionary so the descriptor string stays unchanged. Keys = target mapping names, values <code>"1"</code> / <code>"0"</code> / <code>""</code> (missing = false).</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Serialization</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MappingBidirectionalEntries</code></td>
+<td><code>RawMappingEntry[]</code></td>
+<td><code>[XmlArray("MappingBidirectional")] [XmlArrayItem("Map")]</code></td>
+<td>Serializable array</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetMappingBidirectional</code></td>
+<td><code>string GetMappingBidirectional(string key)</code></td>
+<td>Gets the flag for a target. Returns <code>""</code> if not found.</td>
+</tr>
+<tr>
+<td><code>SetMappingBidirectional</code></td>
+<td><code>void SetMappingBidirectional(string key, string value)</code></td>
+<td>Sets or removes the flag. Empty, null, or <code>"0"</code> removes the key.</td>
+</tr>
+<tr>
+<td><code>FlushMappingBidirectional</code></td>
+<td><code>void FlushMappingBidirectional()</code></td>
+<td>Syncs in-memory dictionary to <code>MappingBidirectionalEntries</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -11679,6 +11861,18 @@
 <td>(4.1.0) Slot radial / touch menu definitions (#9 B-17, <code>MappingSet.Menus</code>), so Copy / Paste carries the Menus-tab state like the shift authoring above.</td>
 </tr>
 <tr>
+<td><code>SlotSetExtrasJson</code></td>
+<td><code>string</code></td>
+<td><code>__SlotSetExtras</code></td>
+<td>(4.3.2) The rest of the slot's own MappingSet state: rumble-audio config (#236), gamepad SOCD authoring (#240), Keep Awake (#270). The KBM SOCD twin lives on <code>KbmSlotConfig</code> and crosses via <code>SlotKbmConfigJson</code>.</td>
+</tr>
+<tr>
+<td><code>SlotMacrosJson</code></td>
+<td><code>string</code></td>
+<td><code>__SlotMacros</code></td>
+<td>(4.3.2) The slot's macros, in the same envelope the Macros tab's own clipboard uses (#112), so a slot Copy / Paste and a macro Copy / Paste agree on wire shape and re-scoping rules.</td>
+</tr>
+<tr>
 <td><code>SlotPerDeviceSettingsJson</code></td>
 <td><code>string</code></td>
 <td><code>__SlotPerDeviceSettings</code></td>
@@ -11741,7 +11935,7 @@
 <tr>
 <td><code>ToJson</code></td>
 <td><code>string ToJson(VirtualControllerType outputType, bool isExtended)</code></td>
-<td>JSON for clipboard. Embeds <code>__OutputType</code> / <code>__IsExtended</code> layout metadata, the mapping dicts (<code>__ExtendedMappings</code>, <code>__MidiMappings</code>, <code>__KbmMappings</code>, <code>__MappingDeadZones</code>, <code>__MappingBidirectional</code>), the typed touchpad and mouse-gesture sub-trees (<code>__TouchpadSettings</code>, <code>__MouseGestureSettings</code>), and the clipboard-only per-slot payloads written only when set on the source: <code>__SlotDeviceConfigs</code> (was <code>__SlotPlayStationConfigs</code> before the DeviceSlotConfig rename), <code>__SlotExtendedConfig</code>, <code>__SlotMidiConfig</code>, <code>__SlotKbmConfig</code> (#205 SOCD), <code>__SlotShiftActivators</code> (#119 shift authoring), <code>__SlotMenus</code> (#9 B-17 menus), <code>__SlotPerDeviceSettings</code>, <code>__MultiSourceRows</code> (device-scoped rows), and <code>__SlotRows</code> (whole-slot rows).</td>
+<td>JSON for clipboard. Embeds <code>__OutputType</code> / <code>__IsExtended</code> layout metadata, the mapping dicts (<code>__ExtendedMappings</code>, <code>__MidiMappings</code>, <code>__KbmMappings</code>, <code>__VrMappings</code>, <code>__MappingDeadZones</code>, <code>__MappingBidirectional</code>), the typed touchpad and mouse-gesture sub-trees (<code>__TouchpadSettings</code>, <code>__MouseGestureSettings</code>), and the clipboard-only per-slot payloads written only when set on the source: <code>__SlotDeviceConfigs</code> (was <code>__SlotPlayStationConfigs</code> before the DeviceSlotConfig rename), <code>__SlotExtendedConfig</code>, <code>__SlotMidiConfig</code>, <code>__SlotKbmConfig</code> (#205 SOCD), <code>__SlotShiftActivators</code> (#119 shift authoring), <code>__SlotMenus</code> (#9 B-17 menus), <code>__SlotSetExtras</code> (#236 / #240 / #270), <code>__SlotMacros</code> (#112), <code>__SlotPerDeviceSettings</code>, <code>__MultiSourceRows</code> (device-scoped rows), and <code>__SlotRows</code> (whole-slot rows).</td>
 </tr>
 <tr>
 <td><code>FromJson</code></td>
@@ -11774,7 +11968,7 @@
 <h2 id="rawmappingentry">RawMappingEntry<a class="headerlink" href="#rawmappingentry" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Data/PadSetting.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Data</code></p>
-<p>Key-value entry for raw-surface, MIDI, and KBM mapping and per-mapping deadzone XML persistence. Shared by all four dictionary-based systems.</p>
+<p>Key-value entry for raw-surface, MIDI, KBM, and VR mapping plus per-mapping deadzone and bidirectional XML persistence. Shared by all six dictionary-based lanes.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RawMappingEntry</span>
 <a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="p">{</span>
 <a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Key</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
@@ -12066,6 +12260,20 @@
 <td><code>[XmlElement]</code></td>
 <td>0</td>
 <td>Raw button count before gamepad remapping</td>
+</tr>
+<tr>
+<td><code>CapButtonIndices</code></td>
+<td><code>int[]</code></td>
+<td>(default)</td>
+<td><code>null</code></td>
+<td>Sparse button positions the device populates, as SDL places them in the 22-slot space, recorded while online so the offline listing shows the same numbers (discussion #344). Null/empty on pre-field saves, callers fall back to dense.</td>
+</tr>
+<tr>
+<td><code>CapAxisIndices</code></td>
+<td><code>int[]</code></td>
+<td>(default)</td>
+<td><code>null</code></td>
+<td>Axis twin of <code>CapButtonIndices</code>, mirrored from <code>SdlDeviceWrapper.SupportedAxisIndices</code>: <code>SDL_GamepadHasAxis</code> for the standard six, real extras past them. A Move Navigation has three of the first six and seven of the ten extras. Null/empty on pre-field saves, callers fall back to dense.</td>
 </tr>
 <tr>
 <td><code>RawAxisCount</code></td>
@@ -12362,7 +12570,7 @@
 <td><code>HasJoyConIr</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlIgnore]</code></td>
-<td>Standalone right Joy-Con NIR camera. VID <code>0x057E</code> + exact name "Nintendo Switch Joy-Con (R)" (#151). Gates the "IR Brightness" source.</td>
+<td>Right Joy-Con NIR camera. VID <code>0x057E</code> + exact name "Nintendo Switch Joy-Con (R)" (#151), or PID <code>0x2008</code> (combined gen-1 pair, whose right half posts the camera, #275). The PID leg exists because SDL names the gen-1 and gen-2 pairs identically. Gates the "IR Brightness" source.</td>
 </tr>
 <tr>
 <td><code>HasJoyCon2Mouse</code></td>
@@ -12689,6 +12897,11 @@
 <td><code>SDL_HINT_HIDAPI_IGNORE_DEVICES</code></td>
 <td><code>"SDL_HIDAPI_IGNORE_DEVICES"</code></td>
 <td>Comma-separated <code>0xVVVV/0xPPPP</code> list hidapi must never enumerate or probe (#235)</td>
+</tr>
+<tr>
+<td><code>SDL_HINT_JOYSTICK_BLACKLIST_DEVICES</code></td>
+<td><code>"SDL_JOYSTICK_BLACKLIST_DEVICES"</code></td>
+<td>Joystick-layer blacklist. Set to <code>InputManager.JoystickBlacklistDevices</code> to suppress the PS Move family junk rows (#277)</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH2</code></td>
@@ -13372,7 +13585,7 @@
 <li><strong><code>CloudMatch(template, candidate)</code></strong>: runs <code>CloudDistance</code> in both directions (template→candidate and candidate→template), <code>floor(sqrt(n))</code> starting indices each way, takes the minimum. Matches the canonical implementation.</li>
 <li><strong><code>CloudDistance(c1, c2, startIdx)</code></strong>: greedy nearest-unmatched matching with a <code>matched[]</code> exclusion array. Weight starts at <code>n</code> and decrements per step, biasing the score toward the earliest correspondences. Early-abandons when the running sum exceeds the current best.</li>
 </ol>
-<p>The <code>matched[]</code> tracking is mandatory; an earlier PadForge revision dropped it on the assumption that the LUT replaced it, and an M-shape custom gesture matched a horizontal swipe.</p>
+<p>The <code>matched[]</code> tracking is mandatory. An earlier PadForge revision dropped it on the assumption that the LUT replaced it, and an M-shape custom gesture matched a horizontal swipe.</p>
 <h3 id="threshold-semantics">Threshold semantics<a class="headerlink" href="#threshold-semantics" title="Permanent link">&para;</a></h3>
 <p>Lower threshold = stricter match (fewer false positives). Default <code>GestureMatchThreshold</code> is 3.0, preserved across the $P → $Q migration so user-tuned values transfer.</p>
 <hr />
@@ -13469,7 +13682,7 @@
 <h2 id="touchpadcustomgesture">TouchpadCustomGesture<a class="headerlink" href="#touchpadcustomgesture" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Touchpad/TouchpadCustomGesture.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Touchpad</code></p>
-<p>XML-serializable representation of a user-recorded custom gesture. Stored in the profile's gesture library; compiled to a <code>ShapeTemplate</code> at profile load.</p>
+<p>XML-serializable representation of a user-recorded custom gesture. Stored in the profile's gesture library and compiled to a <code>ShapeTemplate</code> at profile load.</p>
 <table>
 <thead>
 <tr>
@@ -13565,7 +13778,7 @@
 <h3 id="continuous-axis-state">Continuous-axis state<a class="headerlink" href="#continuous-axis-state" title="Permanent link">&para;</a></h3>
 <p><code>CurrentPinchAxis</code> and <code>CurrentRotateAxis</code> hold the live bipolar -1..+1 values for the <code>PinchAxis</code> / <code>RotateAxis</code> mapping sources. Captured baselines (<code>TwoFingerInitialDistance</code>, <code>TwoFingerInitialAngle</code>) anchor pinch and rotate to the session's opening geometry. <code>FiredPinchThisSession</code> / <code>FiredSpreadThisSession</code> / <code>FiredRotateCWThisSession</code> / <code>FiredRotateCCWThisSession</code> are one-shot-per-session latches.</p>
 <h3 id="radial-zone-state">Radial-zone state<a class="headerlink" href="#radial-zone-state" title="Permanent link">&para;</a></h3>
-<p><code>CurrentRadialZone</code> is the most-recently-fired zone index (-1 = none held). Re-entering the same zone doesn't re-fire; crossing to a different zone releases the old fire and presses the new one.</p>
+<p><code>CurrentRadialZone</code> is the most-recently-fired zone index (-1 = none held). Re-entering the same zone doesn't re-fire. Crossing to a different zone releases the old fire and presses the new one.</p>
 <hr />
 <h2 id="touchpadgesturesettings">TouchpadGestureSettings<a class="headerlink" href="#touchpadgesturesettings" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Touchpad/TouchpadGestureSettings.cs</code>
@@ -13685,7 +13898,7 @@
 <h2 id="touchpadsettingsentry">TouchpadSettingsEntry<a class="headerlink" href="#touchpadsettingsentry" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Touchpad/TouchpadSettingsEntry.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Touchpad</code></p>
-<p>XML-serializable wrapper that pairs a <code>TouchpadGestureSettings</code> instance with its <code>(DeviceGuid, TouchpadIndex)</code> key. Lives under <code>PadSetting.TouchpadSettings</code> as a <code>List&lt;TouchpadSettingsEntry&gt;</code> so a single slot can carry independent toggles + thresholds for each touchpad surface it sees (DualSense's one pad, a Steam Controller's three pads, a Steam Deck's two pads, plus a PTP system touchpad sharing the slot all at once).</p>
+<p>XML-serializable wrapper that pairs a <code>TouchpadGestureSettings</code> instance with its <code>(DeviceGuid, TouchpadIndex)</code> key. Lives under <code>PadSetting.TouchpadSettings</code> as a <code>List&lt;TouchpadSettingsEntry&gt;</code> so a single slot can carry independent toggles + thresholds for each touchpad surface it sees (DualSense's one pad, a Steam Controller's two pads, a Steam Deck's two pads, plus a PTP system touchpad sharing the slot all at once).</p>
 <table>
 <thead>
 <tr>
@@ -13706,7 +13919,7 @@
 <td><code>TouchpadIndex</code></td>
 <td><code>int</code></td>
 <td><code>[XmlAttribute]</code></td>
-<td>Touchpad index within the device. 0 for single-pad devices; 0..N-1 for multi-pad devices like the original Steam Controller (3 pads) or Steam Deck (2 pads).</td>
+<td>Touchpad index within the device. 0 for single-pad devices; 0..N-1 for multi-pad devices like the original Steam Controller (2 pads) or Steam Deck (2 pads).</td>
 </tr>
 <tr>
 <td><code>Settings</code></td>
@@ -13716,7 +13929,7 @@
 </tr>
 </tbody>
 </table>
-<p>The runtime engine reads entries via <code>InputManager.TouchpadGestureSettingsProvider</code>, a static <code>Func&lt;int, string, int, TouchpadGestureSettings&gt;</code> keyed by <code>(slotIndex, deviceGuid, touchpadIndex)</code>. The App layer binds the provider against the active profile's <code>PadSetting.TouchpadSettings</code> collection at engine start.</p>
+<p>The runtime engine reads entries via <code>InputManager.TouchpadGestureSettingsProvider</code>, an instance <code>Func&lt;int, Guid, int, TouchpadGestureSettings&gt;</code> property keyed by <code>(slotIndex, deviceGuid, touchpadIndex)</code>. The App layer binds the provider against the active profile's <code>PadSetting.TouchpadSettings</code> collection at engine start.</p>
 <hr />
 <h2 id="swipehapticsevaluator">SwipeHapticsEvaluator<a class="headerlink" href="#swipehapticsevaluator" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Touchpad/SwipeHapticsEvaluator.cs</code>
@@ -13967,6 +14180,11 @@
 <td>Stick engage / radial center deadzone as percent of full deflection. The default sits between sc-controller's engage (1/3 deflection) and cancel (1/8) thresholds. Imported groups carrying <code>deadzone_inner_radius</code> override it.</td>
 </tr>
 <tr>
+<td><code>SensitivityPercent</code></td>
+<td><code>100</code></td>
+<td>In-Menu Sensitivity percent (Steam <code>sensitivity</code>, translator v26): scales the hover vector before selection, so a higher value reaches the ring or crosses the engage deadzone with less deflection. 100 = identity. Absent in older files = 100.</td>
+</tr>
+<tr>
 <td><code>Enabled</code></td>
 <td><code>true</code></td>
 <td>Per-menu switch.</td>
@@ -14094,7 +14312,7 @@
 <li><a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: <code>HMaestroVirtualController</code> lifecycle, FFB through HM PID descriptors, OpenXInput shim</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

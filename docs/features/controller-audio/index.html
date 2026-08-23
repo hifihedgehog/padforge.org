@@ -1581,6 +1581,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#crossfeed-eq-and-limiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossfeed, EQ, and limiter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Crossfeed, EQ, and limiter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crossfeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossfeed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametric-eq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parametric EQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#macro-sounds" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3101,6 +3151,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#crossfeed-eq-and-limiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossfeed, EQ, and limiter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Crossfeed, EQ, and limiter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crossfeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossfeed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametric-eq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parametric EQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#macro-sounds" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3297,7 +3397,7 @@
 <p>Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a <strong>Haptics Gain</strong> slider, 25 to 300%, default 100%.</p>
 <hr />
 <h2 id="dualsense-headset-jack">DualSense headset jack<a class="headerlink" href="#dualsense-headset-jack" title="Permanent link">&para;</a></h2>
-<p>A DualSense or DualSense Edge adds two more rows under Master Volume.</p>
+<p>A DualSense or DualSense Edge adds three more rows under Master Volume.</p>
 <table>
 <thead>
 <tr>
@@ -3308,7 +3408,11 @@
 <tbody>
 <tr>
 <td>Headphone Volume</td>
-<td>Hardware volume of the pad's headset jack, 0-100. Written into the pad's firmware register, so it holds with no app in the loop. The HeadphoneVolumeUp / HeadphoneVolumeDown macro actions step the same setting.</td>
+<td>Hardware volume of the pad's headset jack, 0-100. Written into the pad's firmware register, so it holds with no app in the loop. The <strong>Raise Headphone Volume</strong> and <strong>Lower Headphone Volume</strong> macro actions step the same setting by 10% each.</td>
+</tr>
+<tr>
+<td>Audio Buffer Length</td>
+<td>The Bluetooth audio buffer, 16 to 255, default 48. One buffer carries the speaker, the haptics, and the microphone together, so it is not a speaker knob on its own. Lower is less delay and more dropouts. A change takes effect a few seconds later.</td>
 </tr>
 <tr>
 <td>Output Path</td>
@@ -3316,8 +3420,62 @@
 </tr>
 </tbody>
 </table>
-<p>Headphones + Speaker plays mono on the headset side, a firmware limit. Over Bluetooth that mode plays through the headphones only. Follow Headphone Jack switches to headphones when something is plugged in and back to the speaker when unplugged. With no jack reading available it behaves like Default.</p>
+<p>Headphones + Speaker plays mono on the headset side, a firmware limit. Over Bluetooth that mode plays through the headphones only. Follow Headphone Jack switches to headphones when something is plugged in and back to the speaker when unplugged. PadForge reads the jack state from the pad itself whenever the slot has audio to play, over USB or Bluetooth, so the switch works with or without a virtual DualSense on the slot.</p>
 <p>A DualShock 4 does not get these rows.</p>
+<hr />
+<h2 id="crossfeed-eq-and-limiter">Crossfeed, EQ, and limiter<a class="headerlink" href="#crossfeed-eq-and-limiter" title="Permanent link">&para;</a></h2>
+<p><img alt="Audio tab scrolled to the crossfeed picker, the graphic EQ, and the limiter" src="../../images/pad-audio-dsp.png" /></p>
+<p>Under Output Path, the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.</p>
+<h3 id="crossfeed">Crossfeed<a class="headerlink" href="#crossfeed" title="Permanent link">&para;</a></h3>
+<p>Headphones hand each ear one channel and nothing of the other, which never happens with speakers and is part of why hard-panned game audio over the DualSense jack wears on you. Crossfeed mixes a little of each channel into the other, the way a room does. The picker carries the classic bs2b presets, each shown with the cutoff and feed it stores:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Cutoff, feed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Off</td>
+<td></td>
+</tr>
+<tr>
+<td>Low, Medium, High</td>
+<td>360 Hz at 6.0 dB, 500 Hz at 4.5 dB, 700 Hz at 3.0 dB</td>
+</tr>
+<tr>
+<td>Low (easy), Medium (easy), High (easy)</td>
+<td>360 Hz at 8.4 dB, 500 Hz at 7.2 dB, 700 Hz at 6.0 dB. High (easy) is the C. Moy setting.</td>
+</tr>
+<tr>
+<td>Jan Meier</td>
+<td>650 Hz at 9.5 dB, the preset most headphone listeners reach for</td>
+</tr>
+<tr>
+<td>bs2b default</td>
+<td>700 Hz at 4.5 dB</td>
+</tr>
+<tr>
+<td>Custom</td>
+<td>Your own Cutoff (300 to 2000 Hz) and Feed (1.0 to 15.0 dB) on two sliders</td>
+</tr>
+</tbody>
+</table>
+<p>Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how much of the opposite channel arrives below the cutoff. The ranges are libbs2b's own.</p>
+<p>Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack with something plugged in. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing.</p>
+<h3 id="parametric-eq">Parametric EQ<a class="headerlink" href="#parametric-eq" title="Permanent link">&para;</a></h3>
+<p>Turn on <strong>Parametric EQ</strong> and a graphic EQ appears: a log-frequency curve from 20 Hz to 20 kHz with the summed response drawn across it and one handle per band. Drag a handle to move its frequency and gain together. Roll the wheel over a handle to widen or narrow it (Q). Under the curve, each band has a row with an on switch, a type picker, and Freq (Hz), Gain (dB), and Q boxes you can type into. Band types are Peak, Low Shelf, High Shelf, High Pass, Low Pass, and Notch. <strong>Add band</strong> appends a 1 kHz peak, <strong>Clear</strong> removes them all, and the <strong>Preamp</strong> row sets the overall level before the bands.</p>
+<p>For a correction matched to a specific pair of headphones, use AutoEq:</p>
+<ol>
+<li>Open <a href="https://autoeq.app">autoeq.app</a> and choose your headphone model.</li>
+<li>Pick <strong>Custom Parametric Eq</strong> and download it. You get a <code>.txt</code>.</li>
+<li>Back in PadForge, click <strong>Import from file</strong> and pick that <code>.txt</code>.</li>
+</ol>
+<p>The import replaces the bands, sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip), and turns the EQ on. A status line under the buttons says what it did, naming the band count, the preamp, and the file. <strong>Import from clipboard</strong> does the same for a profile that arrived as text, from the AutoEq repo or a forum post.</p>
+<p>Do not use AutoEq's Graphic Eq download. It carries no filter lines and cannot be imported. If you pick it, the status line says so and your current EQ is left alone, which is also what happens for anything else unreadable.</p>
+<h3 id="limiter">Limiter<a class="headerlink" href="#limiter" title="Permanent link">&para;</a></h3>
+<p>On by default, with a Ceiling slider. The chain sits upstream of the pad's audio encoder, so a band boosted by a few dB without a limiter clips the encoder, and encoder clipping sounds far worse than the boost sounds better. Leave it on whenever any band is above 0 dB.</p>
 <hr />
 <h2 id="macro-sounds">Macro sounds<a class="headerlink" href="#macro-sounds" title="Permanent link">&para;</a></h2>
 <p>A <a href="../../guides/macros/">macro</a> <strong>Play Sound</strong> action fans out to every sound sink the slot's assigned devices provide. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a vibrating tone. If the slot has no sound-capable device, the sound falls back to the PC's default output.</p>
@@ -3379,7 +3537,7 @@
 <li><a href="../../guides/remote-link/">Remote Link</a>: send the pad speaker audio to a pad on another PC.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

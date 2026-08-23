@@ -16,7 +16,7 @@ Each slot has its own macro list. Open a slot, switch to the **Macros** tab, and
 4. Add one or more **actions**. The steps that run when the trigger fires.
 5. Pick a **fire mode** and a **repeat mode**.
 
-Each row has an enable checkbox. Unchecked macros stay in your settings but do not fire.
+Each macro has an **Enabled** checkbox at the top of its editor. Unchecked macros stay in your settings but do not fire.
 
 ---
 
@@ -28,7 +28,9 @@ A toolbar on the **Macros** tab moves macros around.
 |---|---|
 | **Duplicate** | Clones the selected macro inside the same virtual controller. The copy is named `<name> (Copy)`. |
 | **Copy** / **Paste** | Copy puts a macro on the system clipboard. Paste drops it into another virtual controller. This works across controllers and survives a restart. |
-| **Copy From...** | Pull every macro from another virtual controller in one step. |
+| **Copy From...** | Pull every macro from another virtual controller in one step, adding them to the ones already here. |
+
+The Mappings tab's own **Copy** and **Paste** buttons carry the slot's macros as well, alongside its mappings and every other slot setting. That paste replaces the target's macro list with the source's rather than adding to it, so use the buttons here when you mean to merge and the Mappings-tab pair when you mean to make one slot look like another.
 
 A macro fires only from the physical devices assigned to its own virtual controller. A macro copied from another controller no longer fires off a device that controller does not own.
 
@@ -107,7 +109,7 @@ Each variable binds to one of two things:
 - An **Assigned Devices** input: any button, POV direction, or axis on any physical device assigned to the slot.
 - A **Virtual Controller** channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.
 
-Click **Record** on a variable row, push the input you want it to follow, and PadForge fills it in. Click **Clear** to wipe a binding.
+Click the record icon (tooltip **Record Trigger**) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip **Clear**) to wipe a binding.
 
 ### Trigger Formula
 
@@ -243,12 +245,12 @@ All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle 
 
 ### Pressure-Scaled Rate
 
-Every action that shows the Interval field also carries a **Pressure-Scaled Rate** checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the **Slow Interval**, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on modern pads and works with any analog input.
+Every action that shows the Interval field also carries a **Pressure-Scaled Rate** checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the **Slow Interval**, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on current pads and works with any analog input.
 
 - **Slow Interval.** The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.
 - **Rate Curve.** Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.
 - **Ramp Start / Ramp End.** The pressure window the ramp lives in, default 0 to 100 percent. Below the start the rate stays at the Slow Interval, at the end it reaches the full-press rate. Raise the start to ignore a trigger's resting slack, lower the end to hit full speed without bottoming out.
-- **Device and Axis.** The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. **Record** captures the next axis you move, **Clear** empties the pair.
+- **Device and Axis.** The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. The record icon (tooltip **Record Trigger**) captures the next axis you move, the clear icon (tooltip **Clear**) empties the pair.
 
 A DualShock 3 example: trigger the macro on Cross, set the source to the Cross pressure axis, and the button becomes a fire-rate dial. Squeeze lightly for single aimed shots, press through for full auto.
 
@@ -333,7 +335,7 @@ Same as System Volume, but it drives one app in the Windows audio mixer.
 
 ### Raise Headphone Volume / Lower Headphone Volume
 
-Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same **Headphone Volume** the [Controller Audio](../features/controller-audio.md) tab carries, so the change sticks the way any Audio-tab edit does.
+Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same **Headphone Volume** the **Audio** tab carries (see [Controller Audio](../features/controller-audio.md)), so the change sticks the way any Audio-tab edit does.
 
 The write goes to the pad, so the level holds with no app in the loop.
 
@@ -345,14 +347,14 @@ Play a sound file through the slot's audio output. A Sony pad or Wii Remote play
 - **Volume.** Scales the file against the slot's master volume.
 - **Loop Until Stopped.** Repeat until a **Stop Sounds** action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.
 
-**Stop Sounds** ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See [Controller Audio](../features/controller-audio.md) for the output device picker and sound packages.
+**Stop Sounds** ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See [Controller Audio](../features/controller-audio.md) for how sounds route to the selected controller, the **Output Path** setting, and sound packages.
 
 ### Mouse Move
 
 Map an axis to cursor movement. Updates every frame.
 
 - **Sensitivity** (1 to 100). Pixels per frame at full deflection. 10 to 15 is a good start.
-- X axes move horizontally, Y axes move vertically.
+- With the Virtual Controller source, X axes move horizontally and Y axes move vertically. With the Assigned Devices source the picked device axis always moves the cursor horizontally.
 - Sub-pixel accumulation keeps the cursor smooth at low sensitivity.
 
 ### Mouse Button Press / Mouse Button Release
@@ -479,7 +481,7 @@ Zeroes the pad's accumulated gyro aim references on press. Smoothing history cle
 
 ### Cycle Pointer Modes / Set Pointer Mode
 
-Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the [Wii Controllers](../devices/wii-controllers.md) tab.
+Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the **Pointer** tab (see [Wii Controllers](../devices/wii-controllers.md)).
 
 - **Cycle Pointer Modes.** Check the modes you want in the list. Each fire advances to the next checked mode. The list wraps at the end. The cycle position resets on app restart.
 - **Set Pointer Mode.** Sets one fixed mode.
@@ -678,7 +680,7 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 - [Button and Axis Mappings](../features/mappings.md): set up base mappings before you add macros.
 - [Controller Slots](../features/controller-slots.md): every slot has its own macro list.
-- [Controller Audio](../features/controller-audio.md): the Play Sound action, output device picker, and sound packages.
+- [Controller Audio](../features/controller-audio.md): the Play Sound action, how sounds route to the selected controller, and sound packages.
 - [Devices](../features/devices.md): pick the physical device for Assigned Devices triggers.
 - [Shift Layers](shift-layers.md): the layers the macro **Layer** dropdown scopes to.
 - [Force Feedback](../features/force-feedback.md): rumble and vibration settings the macro layers over.
@@ -688,4 +690,4 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

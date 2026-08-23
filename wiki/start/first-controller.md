@@ -23,8 +23,9 @@ read DirectInput, Keyboard + Mouse, MIDI, and VR for a SteamVR hand pair.
 
 ![The Add Controller popup](../images/add-controller-popup.png)
 
-The first Xbox, PlayStation, Nintendo, or Extended controller you add
-installs the HIDMaestro driver automatically. There is no button to click, and the
+Adding the slot installs nothing yet. The first time you assign a pad to
+an Xbox, PlayStation, Nintendo, or Extended slot (step 3), PadForge installs
+the HIDMaestro driver automatically. There is no button to click, and the
 startup UAC prompt already covered it.
 
 ## 2. Plug in your pad
@@ -36,8 +37,10 @@ card.
 
 ## 3. Assign it to the slot
 
-Click the slot badge on the device's card. That routes the physical pad
-through the virtual controller you created in step 1.
+Click the pad's card to select it, then under **Virtual Controller
+Assignment** in the detail pane click the slot pill for the controller you
+created in step 1. A slot badge appears on the card, and the physical pad
+now routes through that virtual controller.
 
 Because your pad is a recognized gamepad, PadForge fills in the default
 mapping on assignment: sticks, triggers, buttons, and D-pad, all
@@ -56,8 +59,11 @@ Start any game with controller support. It sees a standard Xbox pad.
 
 One thing can go wrong here: if the game reacts twice to every press, it
 is seeing both your physical pad and the virtual one. Install **HidHide**
-from the [Settings](../features/settings.md) page to hide the physical pad
-from games. If you do not see double input, you do not need it.
+from the [Settings](../features/settings.md) page, then on the
+[Devices](../features/devices.md) page select your pad and tick **Hide from
+Games (HidHide)** under **Input Hiding** in the detail pane. Pads assigned
+after HidHide is installed get that box ticked automatically. If you do not
+see double input, you do not need it.
 
 ---
 
@@ -71,4 +77,4 @@ from games. If you do not see double input, you do not need it.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

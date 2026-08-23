@@ -23,7 +23,7 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 | Adaptive triggers | DualSense [Adaptive Triggers](../features/adaptive-triggers.md) modes and curves. |
 | Lighting | [Lighting](../features/lighting.md) modes for DualSense and DualShock 4 lightbars, plus Guide Button LED brightness for Xbox One and later controllers, Steam Controllers, Switch Pro Controllers, and right Joy-Cons. |
 | Gyro | Per-pad-per-slot [Gyro](gyro.md) tuning. Reference frame, sensitivity, smoothing, real-world calibration, Aim Engage button. |
-| Flick Stick | Per-pad-per-slot [Flick Stick](../features/stick-deadzones.md#flick-stick) tuning. Dots Per 360°, Flick Time, Flick Threshold, Snap Angle, Snap Strength, Front Angle Deadzone, Sweep Smoothing. |
+| Flick Stick | Per-pad-per-slot [Flick Stick](../features/stick-deadzones.md#flick-stick) tuning. Dots per 360°, Flick Time, Flick Threshold, Snap Angle, Snap Strength, Front Angle Deadzone, Sweep Smoothing. |
 | Macros | All [Macros](macros.md). Triggers, actions, repeat modes. |
 | Menus | Per-slot radial and touch [Menus](menus.md): cells, host input, fire mode, and overlay placement. |
 | Touchpad outputs and gestures | Per-slot [Touchpad](../features/touchpad.md) toggles (Stick / D-Pad, Mouse, absolute pointer, swipe haptics, gesture detection) plus custom shape templates recorded with the recorder dialog. Different games can carry different gesture catalogs. |
@@ -188,7 +188,7 @@ Record a controller button combo and have it switch profiles, toggle the window,
 | **Next Profile** | Move forward one step in the profile list. |
 | **Previous Profile** | Move backward one step. |
 | **Specific Profile** | Jump straight to a named profile. |
-| **Toggle Window** | Minimize PadForge when it is in front. Restore and raise it when it is minimized, hidden, or in the background. Honors the "Minimize to tray" setting and fullscreen. |
+| **Toggle Window** | Minimize PadForge when it is in front. Restore and raise it when it is minimized, hidden, or in the background. Honors the **Minimize to System Tray** setting and fullscreen. |
 | **Toggle Virtual Controllers Disabled** | Turn every created controller on or off with one combo. If any slot is enabled, the combo disables all of them. If every slot is already disabled, the combo enables them all. A bottom-of-screen flyout confirms the new state. |
 
 ### Add a shortcut
@@ -216,7 +216,7 @@ A small flyout slides up from the taskbar when a controller shortcut switches th
 | Profile name | The new profile's name. Two seconds. |
 | Initializing | Flashing icon while the virtual controllers start up. |
 | Active | Accent-colored checkmark. The controllers are ready. |
-| Offline warning | If one or more controllers have no online physical devices, a warning icon and "One or more controllers offline" message replace the Active state. |
+| Offline warning | After the Active stage, if one or more controllers have no online physical devices, a warning icon and "One or more controllers offline" message show for another two seconds. |
 
 The flyout matches the Windows 11 volume OSD styling and follows your light or dark theme.
 
@@ -266,11 +266,11 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 - [Dashboard](../features/dashboard.md): shows the currently active profile.
 - [Controller Slots](../features/controller-slots.md): a profile switch updates every slot in the configuration.
 - [Devices](../features/devices.md): physical device connections stay open across switches.
-- [Settings](../features/settings.md): turn auto-switch on or off globally.
+- [Settings](../features/settings.md): **Check Imported Profiles for Updates** for profiles imported from the Steam Workshop.
 - [Button and Axis Mappings](../features/mappings.md): stored per profile.
 - [Macros](macros.md): stored per profile.
 - [Steam Workshop Config Import](steam-workshop-import.md): import community configs as profiles.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

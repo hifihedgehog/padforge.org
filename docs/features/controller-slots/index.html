@@ -3702,7 +3702,7 @@
 <p>Map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to the virtual pad is decoded, so <a href="../force-feedback/">Force Feedback</a> to the mapped device and the Bass Shakers tab both work. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.</p>
 <p><img alt="Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below" src="../../images/pad-nintendo-configbar.png" /></p>
 <h3 id="extended-hidmaestro">Extended (HIDMaestro)<a class="headerlink" href="#extended-hidmaestro" title="Permanent link">&para;</a></h3>
-<p>A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 225+ device profiles (HOTAS, wheels, third-party gamepads). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout.</p>
+<p>A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 231 device profiles (HOTAS, wheels, third-party gamepads). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout.</p>
 <p>Sim titles (DCS World, MSFS, X-Plane, iRacing) read DirectInput best. Extended slots also deliver <a href="../force-feedback/">force feedback</a> to sim titles that support it.</p>
 <p><img alt="Extended (HIDMaestro) Controller view: profile / customize bar at top, procedural schematic of the live HID layout below" src="../../images/pad-extended-configbar.png" /></p>
 <h3 id="keyboardmouse">Keyboard+Mouse<a class="headerlink" href="#keyboardmouse" title="Permanent link">&para;</a></h3>
@@ -3854,7 +3854,7 @@
 <tbody>
 <tr>
 <td><strong>Ember, with a glow</strong></td>
-<td>Enabled with devices mapped, output live. Stays ember through the inactivity grace period (no inputs for the inactivity timeout, default 60 seconds, set on the <a href="../settings/">Settings</a> page, 0 disables it).</td>
+<td>Enabled with devices mapped, output live. Stays ember through the inactivity grace period (all of the slot's mapped devices offline for the <strong>Inactivity Timeout</strong>, default 60 seconds, set on the <a href="../settings/">Settings</a> page, 0 disables it).</td>
 </tr>
 <tr>
 <td><strong>Gold</strong></td>
@@ -4018,7 +4018,7 @@
 <li><a href="../driver-management/">Driver Management</a>: driver requirements per controller type.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

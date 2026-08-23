@@ -84,7 +84,7 @@ Each trigger has its own Sensitivity Curve. It runs after the floor and ceiling,
 | Instant | Near-digital. Almost a step function. | Triggers used as binary buttons. |
 | S-Curve | Flat at both ends, steep through the middle. Eases in, ramps fast, then softens near full press. | Driving. Fine control at light and hard press, quick ramp in between. |
 | Delay | Flat at the bottom, steep later. | Larger dead area before the trigger kicks in. |
-| Custom | Appears once you edit any control point. | When no preset fits. |
+| Custom | Selected automatically once you edit any control point. | When no preset fits. |
 
 ### Interactive editor
 
@@ -201,7 +201,7 @@ When a slot uses Extended output with the **Customize** toggle on, the Triggers 
 
 | Triggers | Display |
 |---|---|
-| 0 | Triggers tab is empty |
+| 0 | Triggers tab is hidden |
 | 1 | Trigger 1 only |
 | 2 | Trigger 1 and 2 (same as Xbox or PlayStation) |
 | 3–8 | Each extra trigger gets its own row. Each uses 1 of the 8 axes shared with sticks. |
@@ -254,4 +254,4 @@ Stick Trim shows only on trigger outputs.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

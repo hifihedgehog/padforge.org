@@ -130,7 +130,7 @@ Each palette is a wrapping list of swatches. Each entry has an in-place color pi
 
 A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.
 
-Color Cycle exposes a **Blend Smoothly Between Palette Colors** checkbox. On, the bar lerps between consecutive palette entries. Off, it hops at the period boundary.
+Color Cycle exposes a **Blend Smoothly Between Palette Colors** checkbox. On, the bar lerps between consecutive palette entries. Off, it hops to the next entry every Period divided by the palette size (750 ms per color with the default four-color palette at 3000 ms), so one full Period walks the whole palette.
 
 ---
 
@@ -156,7 +156,7 @@ A separate card below the lightbar mode picker. Five small white LEDs below the 
 
 | Control | Values |
 |---|---|
-| Player Pattern | Player Number (default), Off, Player 1, Player 2, Player 3, Player 4, All |
+| Player Pattern | Player Number (Default), Off, Player 1, Player 2, Player 3, Player 4, All |
 | Mute LED Mode | Off, Solid, Pulse, Follow Audio Device |
 | LED Brightness | High, Medium, Low. Affects the player row. Firmware exposes no separate brightness register for the mute LED. |
 
@@ -207,7 +207,7 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 ## Tips
 
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
-- For Color Cycle, Blend Smoothly looks better but costs more dispatch cycles. With the blend off, the bar hops between palette entries at the period boundary.
+- For Color Cycle, Blend Smoothly lerps between neighboring palette entries. With the blend off, the bar holds each entry for Period divided by the palette size, then hops to the next. Either way the dispatcher runs at the same cadence.
 - Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.
 - If you drag Mid-to-High below Low-to-Mid, PadForge raises Mid-to-High to match. The Medium color then never shows and the bar switches straight from Quiet to Loud.
 
@@ -221,4 +221,4 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

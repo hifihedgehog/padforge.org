@@ -3297,7 +3297,7 @@
 <p>Type at least two characters into <strong>Search Games</strong>. The search runs about half a second after you stop typing and shows the top matches with their cover art and a config count per game. Click a game (or press Enter for the first match) to open its config list.</p>
 <h3 id="read-the-config-cards">Read the config cards<a class="headerlink" href="#read-the-config-cards" title="Permanent link">&para;</a></h3>
 <p>The game's configs list ranked by rating. A filter row above the list carries an <strong>All</strong> chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, PlayStation, and so on). Click a chip to narrow the list to configs built for that controller.</p>
-<p><strong>Sorted By</strong> re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. <strong>Search These Configs</strong> filters the loaded list by title.</p>
+<p><strong>Sorted By</strong> re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. <strong>Search These Configs</strong> asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs shortly after you stop typing, or on Enter. Escape clears it.</p>
 <p>Each card shows:</p>
 <table>
 <thead>
@@ -3358,7 +3358,7 @@
 <p>Below the stats, one row per binding, grouped by the physical control it came from (left touchpad, button diamond, gyro, and so on). Each row shows a status dot, the source, the target, and a reason for anything that is not a plain translation.</p>
 <p>Real examples of each status:</p>
 <ul>
-<li><strong>Clean</strong>: "Touchpad 1 Click → Left Mouse Button · translated". The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own. A radial or touch menu reports "on-screen menu created (8 bound cells)", and a macro riding a paddle, touchpad, or gyro trigger reports "translated as a macro". Imports from older PadForge versions may still show the retired one-line summary "14 bindings covered by the default automap".</li>
+<li><strong>Clean</strong>: "Touchpad 1 Click → Left Mouse Button". A clean row shows source and target only, with no reason text. The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own. A radial or touch menu becomes an on-screen menu row, and a macro riding a paddle, touchpad, or gyro trigger becomes a macro row, both counted as Clean.</li>
 <li><strong>Partial</strong>: "circular scroll wheel approximated as a vertical drag" (a touchpad scratch wheel becomes a linear finger drag), or "camera reset approximated as a gyro recenter" (PadForge re-references its own gyro aim state, the equivalent state it owns).</li>
 <li><strong>Skipped</strong>: "12 in-game actions, Steam-only, no game-side hook" (bindings that call the game's own action API, which only Steam can deliver), or "player-number change is a Steam-client action, no equivalent".</li>
 </ul>
@@ -3403,13 +3403,13 @@
 <td>First</td>
 <td><strong>Xbox</strong></td>
 <td>Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). All become explicit mapping rows.</td>
-<td>The config binds any controller output, or carries macros whose triggers read this pad's output.</td>
+<td>The config binds any controller output or layer switch, or carries a macro that reads this pad's output or writes a virtual-controller button or axis (turbo, toggle, hold).</td>
 </tr>
 <tr>
 <td>Next</td>
 <td><strong>Keyboard + Mouse</strong></td>
 <td>Every key, mouse button, mouse move, and scroll binding, including flick stick and absolute-pointer rows.</td>
-<td>The config binds any key or mouse output, or carries an on-screen menu.</td>
+<td>The config binds any key or mouse output, or it has no controller-shaped output at all and still carries a macro or an on-screen menu (something has to host them).</td>
 </tr>
 </tbody>
 </table>
@@ -3532,7 +3532,7 @@
 <li><a href="../../features/devices/">Devices</a>: assign your controller to the imported pads, and cloak it from games.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.3.2.</em></p>
 
 
 

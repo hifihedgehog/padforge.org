@@ -11,7 +11,7 @@
 
 | Component | Status | What it does |
 |---|---|---|
-| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). 225+ device profiles. |
+| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). 231 device profiles. |
 | **Keyboard+Mouse** | Built in. No driver. | Maps controller inputs to keyboard and mouse presses. |
 | **HidHide** | Optional. Install when games show double input. | Hides physical controllers from games so they only see the virtual ones. |
 | **Windows MIDI Services** | Optional. Install for MIDI input or the MIDI controller type. | Virtual MIDI endpoints for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Needs Windows 11 24H2 (build 26100) or later. |
@@ -38,10 +38,10 @@ Each driver card on the Settings page shows an ember flame next to its status te
 
 | Flame | Meaning |
 |---|---|
-| **Lit flame** (orange, glowing) "Installed" | Driver ready. Version number below. |
+| **Lit flame** (orange, glowing) "Installed" | Driver ready. HidHide, HIDMaestro, and Windows MIDI Services show their version number below. The SteamVR card has no version line, and its text changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active. |
 | **Unlit flame** (outline only) "Not Installed" | Install before the matching slot type works. |
 
-HIDMaestro auto-installs, so its flame stays lit. The [Dashboard](dashboard.md) shows the same flames as a compact row.
+HIDMaestro auto-installs, so its flame stays lit. The [Dashboard](dashboard.md) repeats the HidHide, MIDI Services, and SteamVR status as a compact text row under **Drivers**, with no flames and no HIDMaestro entry.
 
 ---
 
@@ -66,11 +66,11 @@ PadForge always runs as administrator. The UAC prompt fires once per launch, whe
 
 ## HIDMaestro
 
-One driver that publishes the virtual controllers. Each non-MIDI, non-Keyboard+Mouse slot uses one HIDMaestro **device profile**. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.
+One driver that publishes the virtual controllers. Each Xbox, PlayStation, Nintendo, and Extended slot uses one HIDMaestro **device profile**. VR slots ride HIDMaestro's OpenVR driver instead and have no profile. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.
 
 The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Switch 2 Pro. Pick between them from the slot's preset dropdown. Neither can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
 
-### The 225+ profiles cover
+### The 231 profiles cover
 
 - Xbox 360, Xbox One, Xbox Series, Elite, Adaptive
 - DualShock 3, DualShock 4, DualSense, DualSense Edge
@@ -129,7 +129,7 @@ PadForge runs HidHide on its own. You do not need the HidHide Configuration Clie
 
 Other controller utilities (Steam Input, for example) need their own whitelist entry to see hidden controllers.
 
-- **Add** browses for an .exe.
+- **Add...** browses for an .exe.
 - **Remove** drops the selected entry.
 
 ### Install steps
@@ -297,4 +297,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*

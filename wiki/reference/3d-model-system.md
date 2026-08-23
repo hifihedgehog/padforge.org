@@ -180,7 +180,7 @@ foreach (var name in assembly.GetManifestResourceNames())
 ### Texture and Decal Helpers
 
 ```csharp
-protected Material LoadTexturedMaterial(string filename, double opacity = 1.0)     // flat grey fallback
+protected Material LoadTexturedMaterial(string filename, double opacity = 1.0)     // flat gray fallback
 protected Material TryLoadTexturedMaterial(string filename, double opacity = 1.0)  // null when absent
 protected static Material AddGloss(Material baseMaterial, double intensity, double power)
 protected void AttachRiderDecal(Model3DGroup host, string filename, Material material, bool covering = false)
@@ -306,7 +306,7 @@ Two atlases per colorway: `Body.png` for every solid part, `Decal.png` for the a
 
 ### Rider Decals
 
-The face-button symbols (`B1-Symbol.obj` through `B4-Symbol.obj`) are decal art: their UVs address the decal atlas, not the body atlas. Giving them the body material skinned the buttons with whatever the body atlas holds at those coordinates. They attach as riders into their own button groups, so a press moves and lights the symbol with the button. `Decal-Shoulder-Left/Right-Trigger.obj` ride the triggers, `Decal-L1.obj` / `Decal-R1.obj` ride the bumpers so the lettering glows with a bumper press instead of staying grey in the static overlay.
+The face-button symbols (`B1-Symbol.obj` through `B4-Symbol.obj`) are decal art: their UVs address the decal atlas, not the body atlas. Giving them the body material skinned the buttons with whatever the body atlas holds at those coordinates. They attach as riders into their own button groups, so a press moves and lights the symbol with the button. `Decal-Shoulder-Left/Right-Trigger.obj` ride the triggers, `Decal-L1.obj` / `Decal-R1.obj` ride the bumpers so the lettering glows with a bumper press instead of staying gray in the static overlay.
 
 The constructor also asks for d-pad arrow riders (`DPadUpArrow.obj` and siblings) and stick-ring knurl riders (`Decal-Joystick-Left/Right-Ring.obj`). Neither DS4 colorway folder ships those files, so `AttachRiderDecal` no-ops on them. That art comes from the body and decal atlases instead.
 
@@ -835,7 +835,8 @@ Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(Profil
 | Xbox One, Xbox Elite, Xbox Adaptive | `XboxSeries` | `ControllerModelXboxSeries` |
 | Switch 2 Pro | `Switch2Pro` | `ControllerModelSwitch2Pro` |
 | Switch Pro | `Switch2Pro` | `ControllerModelSwitch2Pro` |
-| Xbox 360, and the fallback | `XBOX360` | `ControllerModelXbox360` |
+| Xbox 360, and the fallback for non-PlayStation slots | `XBOX360` | `ControllerModelXbox360` |
+| Fallback for an unrecognized profile on a PlayStation slot | `DS4` | `ControllerModelDS4` |
 
 The Edge check runs before the plain DualSense one, because Edge profile ids start with `dualsense` too and must never get a plain DualSense mesh.
 
@@ -899,7 +900,7 @@ private static readonly string[] ButtonProperties =
 
 Seven of those resolve to a mesh on only some models: `ButtonShare` on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), `ButtonMute` on DualSense and Edge, `LeftFunction` / `RightFunction` on the Edge alone, and `ButtonC` / `LeftPaddle` / `RightPaddle` on Switch 2 Pro when the extra controls are wired, with the paddles also on the Edge. Everywhere else `ButtonMap.TryGetValue` misses and the entry is skipped. `GetButtonState()` carries a matching case for all 22.
 
-For each button, iterates all `Model3DGroup` entries in `ButtonMap` (multi-mesh support). The `DiffuseMaterial` type guard is bypassed for the stick rings, the stick clicks, and the bumpers, because mid-deflection those carry a graded `MaterialGroup` and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.
+For each button, iterates all `Model3DGroup` entries in `ButtonMap` (multi-mesh support). The pass drives a group only when its current material is one the view set (the registered default or the registered highlight), so a glossy or textured default such as the DualSense mute button still lights on press. The stick rings, the stick clicks, and the bumpers bypass that check, because mid-deflection they carry a graded `MaterialGroup` and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.
 
 #### UpdateJoystick()
 
@@ -954,14 +955,14 @@ Turntable rotation (left-drag) and camera panning (right-drag) via Preview (tunn
 | Event | Action |
 |-------|--------|
 | `PreviewMouseLeftButtonDown` | Record start position, capture mouse for rotation |
-| `PreviewMouseLeftButtonUp` | Drag < 5 px -> hit-test for click-to-record; otherwise end drag |
+| `PreviewMouseLeftButtonUp` | Drag < 5 px -> hit-test for click-to-record. Otherwise end drag. |
 | `PreviewMouseRightButtonDown` | Capture mouse, store start position for panning |
 | `PreviewMouseRightButtonUp` | Release capture |
 | `PreviewMouseMove` | Left-drag: rotate; right-drag: pan; no button: hover highlight |
 | `PreviewMouseWheel` | Zoom camera along look direction |
 | `PreviewTouchDown` | First finger: rotation. Second finger: pinch-to-zoom + pan. |
 | `PreviewTouchMove` | One finger: rotation. Two fingers: pinch-to-zoom + midpoint pan. |
-| `PreviewTouchUp` | Release touch; demote second finger to first if needed |
+| `PreviewTouchUp` | Release touch. Demote the second finger to first if needed. |
 | `PreviewStylusSystemGesture` | Block WPF press-and-hold / flick gestures |
 | `ManipulationStarting` | Cancel WPF manipulation HelixToolkit may re-enable |
 
@@ -1222,4 +1223,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.3.2.*
