@@ -292,6 +292,7 @@ One physical controller can feed multiple slots at once.
 
 1. **[Devices](devices.md) page.** Each device card shows numbered slot toggles. Click a number to assign or unassign.
 2. **Sidebar.** Drag a device onto a sidebar controller entry.
+3. **The offer banner.** Connect a device while the slot's page is open and, with the [Assignment Prompts](settings.md#assignment-prompts) settings on, a banner offers to assign it. Click **Assign**.
 
 Each slot-device pairing has its own mappings, deadzones, and settings. The same controller in slot 1 and slot 3 can have completely different configs.
 
