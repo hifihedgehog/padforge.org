@@ -124,8 +124,8 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 
 When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an **Assign** button, and **Not Now**. Nothing is assigned until you click Assign. Keyboards, mice, touchpads, and media keys are never offered.
 
-- **Offer New Devices to the Open Virtual Controller** fires only for a device PadForge has never seen before. A pad you plugged in last week connects quietly.
-- **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** fires for any device, new or already known, as long as the open virtual controller has nothing assigned yet. Once it has a device, this prompt stays quiet.
+- **Offer New Devices to the Open Virtual Controller** fires only for a device PadForge has never seen before. Devices it already knows connect without a prompt.
+- **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** fires for any device, new or already known, as long as the open virtual controller has nothing assigned yet. Once it has a device, this prompt no longer appears.
 
 Assign runs the same path as dragging the device onto the slot: the auto-map, input hiding defaults, and the Mappings tab refresh all happen exactly as they do for a dropped device. Not Now dismisses that device for that slot until PadForge restarts. Neither prompt fires on startup or when the engine restarts, since both re-enumerate every device at once.
 
