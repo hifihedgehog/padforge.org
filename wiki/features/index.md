@@ -63,5 +63,6 @@ when that device has the matching hardware.
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [Headset Head Tracking](headset-motion.md) | Head rotation from a Sony headset as a motion source |
+| [Head Tracking (OpenTrack)](head-tracking.md) | A head pose from OpenTrack or FreeTrack as six mappable axes |
 
 *Last updated for PadForge 4.3.2.*

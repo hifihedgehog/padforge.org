@@ -108,6 +108,7 @@ nav:
       - MIDI Input: features/midi-input.md
       - Virtual VR Controllers: features/vr-controllers.md
       - Headset Head Tracking: features/headset-motion.md
+      - Head Tracking (OpenTrack): features/head-tracking.md
       - 2D and 3D Visualization: features/visualization.md
       - Input Precision: features/input-precision.md
       - Driver Management: features/driver-management.md
