@@ -2,7 +2,7 @@
 
 *The rear paddles, menu keys, and wheels a handheld gaming PC hides from every game. Press each one once to learn it, then map it like any other button.*
 
-Handheld gaming PCs (Legion Go, ROG Ally, GPD Win, OneXPlayer, AYANEO, AYN, Zotac Zone, MSI Claw) carry buttons the operating system never presents as part of a controller. The firmware delivers them one of two ways: as a keyboard combination typed by an embedded keyboard (Ctrl+Win+F17, Win+D, F21 through F24), or as bits and codes inside a vendor-defined HID report on the same USB device as the gamepad. Either way a game sees a keystroke at best, and the vendor's own tool is the only thing that can remap them.
+Handheld gaming PCs (Legion Go, ROG Ally, GPD Win, OneXPlayer, AYANEO, AYN, Zotac Zone, MSI Claw) and gaming laptops carry buttons the operating system never presents as part of a controller. The firmware delivers them one of three ways: as a keyboard combination typed by an embedded keyboard (Ctrl+Win+F17, Win+D, F21 through F24), as bits and codes inside a vendor-defined HID report on the same USB device as the gamepad, or as a vendor WMI event (a Legion laptop's Vantage key). Either way a game sees a keystroke at best, and the vendor's own tool is the only thing that can remap them.
 
 PadForge learns them on your machine. There is no table of models inside the app and no release needed for a handheld that ships tomorrow.
 
@@ -41,6 +41,8 @@ Repeat for every paddle and key. Each learned button keeps the index it was give
 
 **Report fields** are read from the vendor HID collection directly, with shared access, so the vendor's own tool keeps working beside PadForge. A bit that flips on press and flips back on release is a held button, whichever way it flips. A code that appears only while the key is down (the ROG Ally shape) is a button that releases 150 ms after its last report. Only the collections your learned buttons name are kept open. During a learn pass, every vendor collection on the machine is watched.
 
+**System events** cover the third kind of key: one the firmware reports to the vendor's WMI provider rather than to any keyboard or HID device. Lenovo's Vantage and Smart Connect keys on a Legion laptop arrive only this way, as a `LENOVO_UTILITY_EVENT` with a press code. During a learn pass PadForge subscribes to every event class the machine's providers expose, and an event that fires during the press and never at rest becomes a button. An event is a press with no release, so the button pulses for 175 ms. The same rule covers laptops as well as handhelds: a special key is a special key.
+
 A learned button asserts for at least 175 ms, so a firmware tap that lasts two milliseconds still registers on a macro poll.
 
 ---
@@ -69,7 +71,6 @@ The **Motion** row feeds the same gyro pipeline every controller uses: gyro aim,
 
 - Learning needs the vendor's own tool to leave the buttons alone during the press. On some machines (ROG Ally M1 and M2, Zotac paddles) the vendor tool reprograms which keys the buttons type, so learn them with that tool in the state you will play in.
 - A vendor report that only arrives while its tool holds the device open exclusively cannot be read. PadForge opens with shared access and reports a collection it could not open in the diagnostics log.
-- Buttons delivered by WMI events rather than keys or HID (the MSI Claw's front keys on some firmware) are not reachable by learning.
 - Firmware-side mode commands (gyro enable, controller reset) are not sent. The machine is read as the vendor's driver leaves it.
 - The frame mapping for the Motion row follows the Windows sensor axes for a machine held upright facing you. It has not been validated on handheld hardware.
 
