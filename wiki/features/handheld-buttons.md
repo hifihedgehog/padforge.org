@@ -39,7 +39,7 @@ Repeat for every paddle and key. Each learned button keeps the index it was give
 
 **Key combinations** go through PadForge's low-level keyboard and mouse hooks. A learned combination is swallowed before the shell sees it, so Win+D no longer minimizes your desktop and F24 no longer reaches the game as a key. A key that is only the start of a combination is held back for 100 ms. If the rest never arrives, it is replayed, so typing F11 by itself still types F11. Modifier keys are never held back. A combination containing Win gets the AutoHotkey treatment (a reserved mask key) so releasing Win does not open the Start menu.
 
-**Report fields** are read from the vendor HID collection directly, with shared access, so the vendor's own tool keeps working beside PadForge. A bit that sets on press and clears on release is a held button. A code that appears only while the key is down (the ROG Ally shape) is a button that releases 150 ms after its last report. Only the collections your learned buttons name are kept open. During a learn pass, every vendor collection on the machine is watched.
+**Report fields** are read from the vendor HID collection directly, with shared access, so the vendor's own tool keeps working beside PadForge. A bit that flips on press and flips back on release is a held button, whichever way it flips. A code that appears only while the key is down (the ROG Ally shape) is a button that releases 150 ms after its last report. Only the collections your learned buttons name are kept open. During a learn pass, every vendor collection on the machine is watched.
 
 A learned button asserts for at least 175 ms, so a firmware tap that lasts two milliseconds still registers on a macro poll.
 
