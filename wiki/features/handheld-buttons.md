@@ -26,8 +26,8 @@ With the toggle off, nothing runs: no device rows, no keyboard hook, no vendor H
 Select the **Hidden Buttons** row and click **Learn / Manage Hidden Buttons**. The dialog walks one press:
 
 1. **Start Learning**. For one second, keep your hands off the machine while PadForge reads the idle state of every vendor report, so bytes that move on their own (motion sensor words, counters) can never become a button.
-2. **Press and hold the hidden button** when asked, for about two seconds.
-3. **Release** it.
+2. **Press the hidden button** when asked, then let go. A tap or a hold both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.
+3. **Release** it if you were holding it.
 
 Whatever the press changed is shown under **Source**: the key combination the firmware typed, the report field that flipped, or both. Some buttons do both (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a report changed in more than one place, pick the field from the list. Give the button a name and click **Register**.
 
@@ -41,7 +41,7 @@ Repeat for every paddle and key. Each learned button keeps the index it was give
 
 **Report fields** are read from the vendor HID collection directly, with shared access, so the vendor's own tool keeps working beside PadForge. A bit that flips on press and flips back on release is a held button, whichever way it flips. A code that appears only while the key is down (the ROG Ally shape) is a button that releases 150 ms after its last report. Only the collections your learned buttons name are kept open. During a learn pass, every vendor collection on the machine is watched.
 
-**System events** cover the third kind of key: one the firmware reports to the vendor's WMI provider rather than to any keyboard or HID device. Lenovo's Vantage and Smart Connect keys on a Legion laptop arrive only this way, as a `LENOVO_UTILITY_EVENT` with a press code. During a learn pass PadForge subscribes to the event classes the firmware itself declares (the ACPI-WMI `_WDG` table lists every event GUID the machine's firmware can raise, on any brand), and an event that fires while the key is held or when it is released becomes a button, unless it keeps firing at rest (a periodic status event). Some keys report on release (the Legion laptop's Smart Connect key), so hold through the press prompt and let go when asked. One early press does not spoil the pass. Event classes owned by other drivers are never touched. An event is a press with no release, so the button pulses for 175 ms. The same rule covers laptops as well as handhelds: a special key is a special key.
+**System events** cover the third kind of key: one the firmware reports to the vendor's WMI provider rather than to any keyboard or HID device. Lenovo's Vantage and Smart Connect keys on a Legion laptop arrive only this way, as a `LENOVO_UTILITY_EVENT` with a press code. During a learn pass PadForge subscribes to the event classes the firmware itself declares (the ACPI-WMI `_WDG` table lists every event GUID the machine's firmware can raise, on any brand), and an event that fires while the key is held or when it is released becomes a button, unless it keeps firing at rest (a periodic status event). Some keys report on release (the Legion laptop's Smart Connect key), so a short press when asked is what learns them. One early press does not spoil the pass. Event classes owned by other drivers are never touched. An event is a press with no release, so the button pulses for 175 ms. The same rule covers laptops as well as handhelds: a special key is a special key.
 
 A learned button asserts for at least 175 ms, so a firmware tap that lasts two milliseconds still registers on a macro poll.
 
