@@ -27,7 +27,7 @@ Select the **Hidden Buttons** row and click **Learn / Manage Hidden Buttons**. T
 
 1. **Start Learning**. For one second, keep your hands off the machine while PadForge reads the idle state of every vendor report, so bytes that move on their own (motion sensor words, counters) can never become a button.
 2. **Press the hidden button** when asked, then let go. A tap or a hold both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.
-3. **Release** it if you were holding it.
+3. **One moment.** PadForge listens a second longer for a key that reports late.
 
 Whatever the press changed is shown under **Source**: the key combination the firmware typed, the report field that flipped, or both. Some buttons do both (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a report changed in more than one place, pick the field from the list. Give the button a name and click **Register**.
 
