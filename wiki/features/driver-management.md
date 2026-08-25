@@ -91,10 +91,6 @@ The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Sw
 
 HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the **Settings** page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The flame lights up once install finishes, and Xbox, PlayStation, Nintendo, and Extended slots become available.
 
-### USB transport for PlayStation slots
-
-A virtual DualSense carries more than buttons and sticks: controller audio, the microphone, and the voice-coil haptics are USB audio endpoints, and Windows only creates those for a real device on the USB bus. HIDMaestro bundles a USB transport for this, usbip-win2 (a signed, BSD-licensed virtual USB host controller), inside its own library. It installs itself the first time a PlayStation slot is created. That one-time install takes a few seconds and every USB device on the machine blinks once while Windows re-enumerates its root hubs. Xbox, Nintendo, and Extended slots never use it. It shows up in Windows as a usbip-win2 device and has its own entry under installed apps, which is where it can be removed if you never create PlayStation slots again.
-
 ### Uninstall
 
 There is no in-app Uninstall button for HIDMaestro. Removing it through Device Manager is not supported. If you stop using PadForge, deleting the program leaves HIDMaestro installed but idle. It only acts when PadForge asks it to create a virtual controller.

@@ -1908,17 +1908,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#usb-transport-for-playstation-slots" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        USB transport for PlayStation slots
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#uninstall" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3386,17 +3375,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#usb-transport-for-playstation-slots" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        USB transport for PlayStation slots
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#uninstall" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3823,8 +3801,6 @@
 </ul>
 <h3 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h3>
 <p>HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the <strong>Settings</strong> page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The flame lights up once install finishes, and Xbox, PlayStation, Nintendo, and Extended slots become available.</p>
-<h3 id="usb-transport-for-playstation-slots">USB transport for PlayStation slots<a class="headerlink" href="#usb-transport-for-playstation-slots" title="Permanent link">&para;</a></h3>
-<p>A virtual DualSense carries more than buttons and sticks: controller audio, the microphone, and the voice-coil haptics are USB audio endpoints, and Windows only creates those for a real device on the USB bus. HIDMaestro bundles a USB transport for this, usbip-win2 (a signed, BSD-licensed virtual USB host controller), inside its own library. It installs itself the first time a PlayStation slot is created. That one-time install takes a few seconds and every USB device on the machine blinks once while Windows re-enumerates its root hubs. Xbox, Nintendo, and Extended slots never use it. It shows up in Windows as a usbip-win2 device and has its own entry under installed apps, which is where it can be removed if you never create PlayStation slots again.</p>
 <h3 id="uninstall">Uninstall<a class="headerlink" href="#uninstall" title="Permanent link">&para;</a></h3>
 <p>There is no in-app Uninstall button for HIDMaestro. Removing it through Device Manager is not supported. If you stop using PadForge, deleting the program leaves HIDMaestro installed but idle. It only acts when PadForge asks it to create a virtual controller.</p>
 <p>For the contract between PadForge and HIDMaestro, see <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
