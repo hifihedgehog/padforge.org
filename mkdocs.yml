@@ -104,6 +104,7 @@ nav:
       - Wheels: features/wheel.md
       - NFC Tags: features/nfc-tags.md
       - Voice Macros: features/voice-macros.md
+      - Handheld PC Buttons: features/handheld-buttons.md
       - MIDI Input: features/midi-input.md
       - Virtual VR Controllers: features/vr-controllers.md
       - Headset Head Tracking: features/headset-motion.md

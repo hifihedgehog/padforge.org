@@ -58,6 +58,7 @@ when that device has the matching hardware.
 | --- | --- |
 | [NFC Tags](nfc-tags.md) | Tag registration on the Devices page, taps as macro triggers |
 | [Voice Macros](voice-macros.md) | Spoken phrases as buttons: offline recognition on any microphone, the DualSense’s included |
+| [Handheld PC Buttons](handheld-buttons.md) | Rear paddles and menu keys on a handheld gaming PC, learned by pressing them, plus the machine's own gyroscope |
 | [MIDI Input](midi-input.md) | MIDI devices on the Devices page: notes, knobs, and pitch bend as mapping sources |
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
