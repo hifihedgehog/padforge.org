@@ -552,7 +552,7 @@ The trusted-peer list and identity-protection mode live here. The Dashboard's Re
 | `UpdatePeerOnlineStatus(IReadOnlyCollection<string>)` | Updates each peer's online dot in place from the live connection set. |
 | `UpdatePeerReachability(IReadOnlyDictionary<string,string>)` | Updates each paired peer's reachable host:port in place from LAN discovery. |
 | `SetNearbyUnpaired(IEnumerable<RemoteLinkNearbyPeer>)` | Replaces the nearby-unpaired list. |
-| `SetIdentityProtectionModeSilently(int)` | Sets the mode without raising the change request (init from settings, or revert a cancelled switch). |
+| `SetIdentityProtectionModeSilently(int)` | Sets the mode without raising the change request (init from settings, or revert a canceled switch). |
 
 ### First-Run, Window, and Foreground State
 

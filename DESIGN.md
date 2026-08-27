@@ -73,9 +73,9 @@ Rules:
 
 ---
 
-## 4. Colour
+## 4. Color
 
-Defined once in `:root`. Do not introduce new colours in a section.
+Defined once in `:root`. Do not introduce new colors in a section.
 
 - **Canvas**: `--bg #06080c`, alternating with `--bg-alt #0d1117`. The
   alternation is what separates sections. Borders are a last resort.
@@ -86,7 +86,7 @@ Defined once in `:root`. Do not introduce new colours in a section.
   eyebrow text, the diagram's kicker). Never for a call to action.
 - Text runs `--text-hi` → `--text` → `--text-muted` → `--text-dim`. Use
   the dimmest one that still reads.
-- **Colour in a product shot comes from the product**, never from a
+- **Color in a product shot comes from the product**, never from a
   filter or an overlay.
 
 ## 5. Light and depth
@@ -110,34 +110,34 @@ hard drop shadow.
 ## 6. Rhythm and composition
 
 **The failure mode this replaced: five identical chapters in a row.**
-Kicker, headline, one screenshot, three columns of grey text, repeat. It
+Kicker, headline, one screenshot, three columns of gray text, repeat. It
 made a rich product read as a spec dump.
 
 The rule now: **no two consecutive sections share a shape.** The current
 order alternates deliberately:
 
-1. Hero: centred headline, one large staged program screen
+1. Hero: centered headline, one large staged program screen
 2. Manifest: sticky copy left, a long accent-barred capability list right
 3. Chapter band: one word, full bleed, poster scale
-4. Finishes: centred, the program screen morphing its finish
+4. Finishes: centered, the program screen morphing its finish
 5. The controller: asymmetric two-column, copy left / diagram right
 6. Stats: four-up typographic band
 7. Remap: split, copy left / media bleeding off the right edge
-8. Feel: centred headline, full-bleed media
+8. Feel: centered headline, full-bleed media
 9. Motion: split, **flipped** (media bleeding off the left)
-10. Anywhere: centred, full-bleed media
+10. Anywhere: centered, full-bleed media
 11. Compare: table
 12. Gallery: grid
-13. Download: centred
+13. Download: centered
 14. FAQ: list
 
 Chapter bands (`.chapter`) separate the acts: MAP, FEEL, MOVE, REACH.
 One word at poster scale on a saturated full-bleed band, alternating
 ember, cyan and steel. They are the reason a long scroll reads as
 chapters rather than an unbroken list, and they are the one place a
-saturated field of accent colour is correct.
+saturated field of accent color is correct.
 
-If you add a section, look at its neighbours and pick a shape neither of
+If you add a section, look at its neighbors and pick a shape neither of
 them uses.
 
 Vertical rhythm comes from `--pad-section` (6-13rem). Do not reduce it to
@@ -311,14 +311,14 @@ the whole window.**
   reads expensive. Fast reads cheap.
 - **Nothing that contains an image may move on hover or click.** Lifting
   a screenshot on hover, or zooming a product render on selection, reads
-  as the page twitching. Hover changes colour, border, or brightness.
+  as the page twitching. Hover changes color, border, or brightness.
   Selection cross-fades opacity only. Small chips (swatches) may scale
   slightly; images never do.
 - Reveal-on-scroll is staggered with `data-d="1..5"` (90ms steps).
 - **`.reveal` is gated on `.js`.** Content is visible by default and JS
   opts into animating it. The opposite order ships a blank page the one
   time a script fails. Never invert this.
-- `prefers-reduced-motion` is honoured. Keep it that way.
+- `prefers-reduced-motion` is honored. Keep it that way.
 - Auto-advancing components (colourway morph, diagram tour) pause when
   off-screen and stop on interaction.
 
@@ -352,7 +352,7 @@ the whole window.**
    `specs.html`, and compare word counts and distinctive terms. Loss must
    be deliberate and stated, never accidental.
 4. **Check div balance** after any structural edit. An unbalanced tag
-   silently nests a column inside its neighbour and the layout collapses
+   silently nests a column inside its neighbor and the layout collapses
    to one column, which looks like a CSS bug and is not.
 5. **Check it at 780px and 400px.** The callouts stand down, the diagram
    moves above the copy, the nav links collapse.
@@ -367,7 +367,7 @@ Every item here has already happened once.
 - Do not put a full app window in a small figure.
 - Do not use the light 2D plate art on a dark section.
 - Do not let a second paragraph creep in under a `.lede`.
-- Do not introduce a colour, a font, or an easing curve that is not in
+- Do not introduce a color, a font, or an easing curve that is not in
   `:root`.
 - Do not hand-edit `specs.html`.
 - Do not hide content behind JS by default.

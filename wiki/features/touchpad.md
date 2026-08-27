@@ -58,7 +58,7 @@ Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a K
 | Invert Mouse X | off | Finger right moves the cursor left. |
 | Invert Mouse Y | off | Finger down moves the cursor up. |
 | Jitter Reduction | on | Bends motion below a threshold down a power curve instead of cutting it off, so resting-hand tremor is damped while tiny deliberate movements still register. A deadzone would delete the small motion outright. |
-| Momentum | off | The cursor keeps travelling after you lift your finger and coasts to a stop, like a trackball. Flicking across the pad covers ground a finger-length swipe cannot. |
+| Momentum | off | The cursor keeps traveling after you lift your finger and coasts to a stop, like a trackball. Flicking across the pad covers ground a finger-length swipe cannot. |
 | Response | Simple | How finger speed becomes cursor speed. `Simple` is a flat gain plus the Acceleration knob below. `Trackpad` is the pointer-acceleration curve ported from libinput's touchpad profile, and it also moves the cursor slower than the finger at low speed, which is where a laptop trackpad's fine positioning comes from. |
 | Speed Threshold | 130 | Trackpad response only. Finger speed in mm/s where the cursor starts speeding up, 20–600. Lower accelerates sooner. libinput's own default and its single exposed tunable. |
 | Pad Width | 69 | Trackpad response only. Physical width of this touchpad in mm, 20–150. Decides whether slow movement can reach the fine-control range at all, so set it near the real size of the pad. |

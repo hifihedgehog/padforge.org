@@ -17,7 +17,7 @@
        window containing a product is not a product shot.
      - One idea per viewport, and never the same section shape twice.
        The old page ran five identical chapters: title, one screenshot,
-       three columns of grey body text. That is a spec sheet wearing a
+       three columns of gray body text. That is a spec sheet wearing a
        landing page's clothes.
      - Detail survives behind progressive disclosure instead of being
        shouted. Nothing was deleted; it is one click away.
@@ -49,7 +49,7 @@
     --telemetry:     #6fc3d6;
     --telemetry-dim: #4d8a9a;
 
-    /* Device-brand accents. Not decoration: PadForge colours its own
+    /* Device-brand accents. Not decoration: PadForge colors its own
        device icons this way, so the manifest reads as the app's own
        vocabulary rather than an imported palette. */
     --brand-xbox:    #4bd05f;
@@ -333,7 +333,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ASUS-style callout: a hairline leader from the hotspot out to a label.
    Only ONE is visible at a time, which is what lets each sit close to its
-   own control without colliding with its neighbours. The label carries a
+   own control without colliding with its neighbors. The label carries a
    blurred panel so it stays legible over the product as well as over the
    backdrop, rather than depending on what happens to be behind it. */
 .callout {

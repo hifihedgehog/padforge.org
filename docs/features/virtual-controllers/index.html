@@ -5982,7 +5982,7 @@
 <p><strong>5. Touchpad exact counts (<code>:293-310</code>):</strong></p>
 <p>The gyro lane's twin (<code>MouseTouchX/Y</code>), with NEITHER axis negated. A finger on a pad is already screen-aligned: SDL reports raw_y = 0 at the top, so a finger moving down yields a positive delta and screen-Y is positive-down too. Net parity with the old deflection lane is preserved (that path negated twice and arrived at the same sign this arrives at with none).</p>
 <p><strong>6. Stick trackball coast exact counts (issue #291, <code>:312-323</code>):</strong></p>
-<p><code>MouseStickCoastX/Y</code> is the fling a released mouse stick keeps travelling on. Its own accumulator pair, stepped through the same <code>StepExactCounts</code> helper the gyro and touchpad lanes use. Y negates into screen space exactly as the deflection lane's spend does, because the coast launched from that lane.</p>
+<p><code>MouseStickCoastX/Y</code> is the fling a released mouse stick keeps traveling on. Its own accumulator pair, stepped through the same <code>StepExactCounts</code> helper the gyro and touchpad lanes use. Y negates into screen space exactly as the deflection lane's spend does, because the coast launched from that lane.</p>
 <p><strong>7. Flick stick exact counts (issue #225, <code>:332-333</code>):</strong></p>
 <p><code>raw.MouseFlickX</code> forwards to the injector 1:1. NOT scaled by the cursor rate and NOT run through an accumulator: the engine tick already calibrated the value in mouse counts (counts-per-360 on the source) and carries its own sub-count residual. Scaling here would break the flick = exact camera angle contract.</p>
 <p><strong>8. Absolute pointer (Wii IR pointing, issue #146):</strong></p>

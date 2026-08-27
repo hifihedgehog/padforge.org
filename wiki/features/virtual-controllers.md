@@ -887,7 +887,7 @@ The gyro lane's twin (`MouseTouchX/Y`), with NEITHER axis negated. A finger on a
 
 **6. Stick trackball coast exact counts (issue #291, `:312-323`):**
 
-`MouseStickCoastX/Y` is the fling a released mouse stick keeps travelling on. Its own accumulator pair, stepped through the same `StepExactCounts` helper the gyro and touchpad lanes use. Y negates into screen space exactly as the deflection lane's spend does, because the coast launched from that lane.
+`MouseStickCoastX/Y` is the fling a released mouse stick keeps traveling on. Its own accumulator pair, stepped through the same `StepExactCounts` helper the gyro and touchpad lanes use. Y negates into screen space exactly as the deflection lane's spend does, because the coast launched from that lane.
 
 **7. Flick stick exact counts (issue #225, `:332-333`):**
 
