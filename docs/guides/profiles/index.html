@@ -1173,6 +1173,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#external-control-from-launchers-and-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External control from launchers and scripts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="External control from launchers and scripts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powershell-one-liner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PowerShell one-liner
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playnite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playnite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#launchbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LaunchBox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-line-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command-line form
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#switch-flyout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3412,6 +3484,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#external-control-from-launchers-and-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External control from launchers and scripts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="External control from launchers and scripts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powershell-one-liner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PowerShell one-liner
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playnite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playnite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#launchbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LaunchBox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-line-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command-line form
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#switch-flyout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3557,6 +3701,10 @@
 <tr>
 <td>Extended slot shape</td>
 <td>Per-slot Sticks, Triggers, POVs, and Buttons counts for Extended (HIDMaestro) slots.</td>
+</tr>
+<tr>
+<td>Polling rate override</td>
+<td>Optional. A profile can carry its own polling rate (1000 down to 62.5 Hz), set in the profile dialog. While that profile is active it replaces the global Settings value, and the Settings page says so under the knob.</td>
 </tr>
 </tbody>
 </table>
@@ -3784,6 +3932,59 @@
 <li>Axes. Triggers and sticks count as inputs, with direction (left-stick-left can be Previous, left-stick-right can be Next).</li>
 <li>Cross-device combos. Buttons from different controllers can combine into one shortcut.</li>
 </ul>
+<h2 id="external-control-from-launchers-and-scripts">External control from launchers and scripts<a class="headerlink" href="#external-control-from-launchers-and-scripts" title="Permanent link">&para;</a></h2>
+<p>A launcher, script, or automation tool can activate and deactivate profiles from outside PadForge. Playnite and LaunchBox are the two everyone asks about, and both work the same way: run one command before the game starts and another after it closes.</p>
+<p>Turn it on from the <strong>Profiles</strong> page. Check <strong>Allow External Control by Launchers and Scripts</strong>. PadForge then serves a local named pipe, <code>PadForge.Control</code>, while the engine is running. Local machine only, off by default.</p>
+<h3 id="the-commands">The commands<a class="headerlink" href="#the-commands" title="Permanent link">&para;</a></h3>
+<p>One line in, one line out:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activate &lt;name&gt;</code></td>
+<td>Load the profile with that name (or id) and hold it.</td>
+<td><code>ok &lt;name&gt;</code> or <code>error unknown-profile</code></td>
+</tr>
+<tr>
+<td><code>deactivate</code></td>
+<td>Release the hold and go back to Default.</td>
+<td><code>ok default</code></td>
+</tr>
+<tr>
+<td><code>query</code></td>
+<td>Report the active profile and whether it is held.</td>
+<td><code>ok &lt;name&gt; pinned</code> or <code>ok &lt;name&gt; unpinned</code></td>
+</tr>
+</tbody>
+</table>
+<p>An externally activated profile is <strong>held</strong>: auto-switch cannot replace it while the hold lasts, so the same game can run under different profiles depending on how it was launched. The hold ends when the script sends <code>deactivate</code>, when you switch profiles yourself in PadForge, or when PadForge restarts.</p>
+<h3 id="powershell-one-liner">PowerShell one-liner<a class="headerlink" href="#powershell-one-liner" title="Permanent link">&para;</a></h3>
+<p>Everything below builds on this line. It works from a normal, unelevated process, with no UAC prompt:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">$p</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">IO</span><span class="p">.</span><span class="n">Pipes</span><span class="p">.</span><span class="n">NamedPipeClientStream</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;PadForge.Control&#39;</span><span class="p">,</span> <span class="n">InOut</span><span class="p">;</span> <span class="nv">$p</span><span class="p">.</span><span class="n">Connect</span><span class="p">(</span><span class="n">2000</span><span class="p">);</span> <span class="nv">$w</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">IO</span><span class="p">.</span><span class="n">StreamWriter</span> <span class="nv">$p</span><span class="p">;</span> <span class="nv">$w</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s1">&#39;activate Racing&#39;</span><span class="p">);</span> <span class="nv">$w</span><span class="p">.</span><span class="n">Flush</span><span class="p">();</span> <span class="nv">$p</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</code></pre></div>
+<p>Swap <code>activate Racing</code> for <code>deactivate</code> in the after-close command.</p>
+<h3 id="playnite">Playnite<a class="headerlink" href="#playnite" title="Permanent link">&para;</a></h3>
+<p>In a game's settings, add two script actions (or use a plugin):</p>
+<ul>
+<li><strong>Before starting a game</strong>: the one-liner with <code>activate &lt;profile&gt;</code>.</li>
+<li><strong>After exiting a game</strong>: the one-liner with <code>deactivate</code>.</li>
+</ul>
+<p>Two Playnite entries for the same game can activate two different profiles, which is exactly the "Play with Controller" versus "Play with Keyboard &amp; Mouse" split. Plugin authors can skip PowerShell and open the pipe directly with <code>NamedPipeClientStream</code>, write one UTF-8 line ending in <code></code>, and read one line back.</p>
+<h3 id="launchbox">LaunchBox<a class="headerlink" href="#launchbox" title="Permanent link">&para;</a></h3>
+<p>Add two Additional Applications to the game:</p>
+<ol>
+<li><strong>Application path</strong>: <code>powershell.exe</code>. <strong>Parameters</strong>: <code>-WindowStyle Hidden -Command "&lt;the one-liner with activate&gt;"</code>. Check <strong>Automatically run before main application</strong>.</li>
+<li>The same with <code>deactivate</code>, checking <strong>Automatically run after main application</strong>.</li>
+</ol>
+<h3 id="command-line-form">Command-line form<a class="headerlink" href="#command-line-form" title="Permanent link">&para;</a></h3>
+<p><code>PadForge.exe --profile "Name"</code> and <code>PadForge.exe --default-profile</code> do the same thing. A running instance receives the command through the pipe. A cold start applies the profile once the engine is up, so a launcher can start PadForge straight into a profile. PadForge always runs elevated, so this form pops a UAC prompt when called from a normal process. Use the pipe one-liner from launchers and keep the exe form for elevated scripts and Task Scheduler jobs.</p>
+<hr />
 <hr />
 <h2 id="switch-flyout">Switch flyout<a class="headerlink" href="#switch-flyout" title="Permanent link">&para;</a></h2>
 <p>A small flyout slides up from the taskbar when a controller shortcut switches the profile.</p>

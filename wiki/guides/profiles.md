@@ -28,6 +28,7 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 | Menus | Per-slot radial and touch [Menus](menus.md): cells, host input, fire mode, and overlay placement. |
 | Touchpad outputs and gestures | Per-slot [Touchpad](../features/touchpad.md) toggles (Stick / D-Pad, Mouse, absolute pointer, swipe haptics, gesture detection) plus custom shape templates recorded with the recorder dialog. Different games can carry different gesture catalogs. |
 | Extended slot shape | Per-slot Sticks, Triggers, POVs, and Buttons counts for Extended (HIDMaestro) slots. |
+| Polling rate override | Optional. A profile can carry its own polling rate (1000 down to 62.5 Hz), set in the profile dialog. While that profile is active it replaces the global Settings value, and the Settings page says so under the knob. |
 
 A profile switch changes all of these at once. Physical controllers stay connected. Only the virtual side changes.
 
@@ -204,6 +205,57 @@ Record a controller button combo and have it switch profiles, toggle the window,
 - Buttons. Press one or more at the same time to make a combo.
 - Axes. Triggers and sticks count as inputs, with direction (left-stick-left can be Previous, left-stick-right can be Next).
 - Cross-device combos. Buttons from different controllers can combine into one shortcut.
+
+## External control from launchers and scripts
+
+A launcher, script, or automation tool can activate and deactivate profiles from outside PadForge. Playnite and LaunchBox are the two everyone asks about, and both work the same way: run one command before the game starts and another after it closes.
+
+Turn it on from the **Profiles** page. Check **Allow External Control by Launchers and Scripts**. PadForge then serves a local named pipe, `PadForge.Control`, while the engine is running. Local machine only, off by default.
+
+### The commands
+
+One line in, one line out:
+
+| Command | What it does | Response |
+|---|---|---|
+| `activate <name>` | Load the profile with that name (or id) and hold it. | `ok <name>` or `error unknown-profile` |
+| `deactivate` | Release the hold and go back to Default. | `ok default` |
+| `query` | Report the active profile and whether it is held. | `ok <name> pinned` or `ok <name> unpinned` |
+
+An externally activated profile is **held**: auto-switch cannot replace it while the hold lasts, so the same game can run under different profiles depending on how it was launched. The hold ends when the script sends `deactivate`, when you switch profiles yourself in PadForge, or when PadForge restarts.
+
+### PowerShell one-liner
+
+Everything below builds on this line. It works from a normal, unelevated process, with no UAC prompt:
+
+```powershell
+$p = New-Object IO.Pipes.NamedPipeClientStream '.', 'PadForge.Control', InOut; $p.Connect(2000); $w = New-Object IO.StreamWriter $p; $w.WriteLine('activate Racing'); $w.Flush(); $p.Close()
+```
+
+Swap `activate Racing` for `deactivate` in the after-close command.
+
+### Playnite
+
+In a game's settings, add two script actions (or use a plugin):
+
+- **Before starting a game**: the one-liner with `activate <profile>`.
+- **After exiting a game**: the one-liner with `deactivate`.
+
+Two Playnite entries for the same game can activate two different profiles, which is exactly the "Play with Controller" versus "Play with Keyboard & Mouse" split. Plugin authors can skip PowerShell and open the pipe directly with `NamedPipeClientStream`, write one UTF-8 line ending in `
+`, and read one line back.
+
+### LaunchBox
+
+Add two Additional Applications to the game:
+
+1. **Application path**: `powershell.exe`. **Parameters**: `-WindowStyle Hidden -Command "<the one-liner with activate>"`. Check **Automatically run before main application**.
+2. The same with `deactivate`, checking **Automatically run after main application**.
+
+### Command-line form
+
+`PadForge.exe --profile "Name"` and `PadForge.exe --default-profile` do the same thing. A running instance receives the command through the pipe. A cold start applies the profile once the engine is up, so a launcher can start PadForge straight into a profile. PadForge always runs elevated, so this form pops a UAC prompt when called from a normal process. Use the pipe one-liner from launchers and keep the exe form for elevated scripts and Task Scheduler jobs.
+
+---
 
 ---
 
