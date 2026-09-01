@@ -532,6 +532,20 @@ a { color: inherit; text-decoration: none; }
 .footer-links a:hover { color: var(--text-hi); }
 .footer-note { margin-top: 2.6rem; padding-top: 1.8rem; border-top: 1px solid var(--hairline); font-size: 0.8rem; color: var(--text-dim); display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
 
+/* ── Witness ──────────────────────────────────────────────────────────
+   The site's counterpart to the README's opening lines: the scripture,
+   the testimony, and the invitation. It lives between the footer links
+   and the license line, centered and quiet, hairline-ruled like the
+   note below it. Keep it understated: muted italics for the words,
+   the ember accent only on the invitation link. */
+.witness { max-width: 62ch; margin: 2.6rem auto 0; padding-top: 1.8rem; border-top: 1px solid var(--hairline); text-align: center; }
+.witness-verse { font-style: italic; font-size: 0.92rem; line-height: 1.75; color: var(--text-muted); }
+.witness-ref { margin-top: 0.55rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+.witness-testimony { margin-top: 1.3rem; font-style: italic; font-size: 0.92rem; line-height: 1.7; color: var(--text-muted); }
+.witness-invite { margin-top: 1.3rem; font-size: 0.88rem; color: var(--text-dim); }
+.witness-invite a { color: var(--ember-bright); }
+.witness-invite a:hover { text-decoration: underline; }
+
 /* ── Utility ──────────────────────────────────────────────────────── */
 .center { text-align: center; }
 .mono-tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--telemetry-dim); }
