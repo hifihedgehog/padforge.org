@@ -9,23 +9,22 @@
 
 ## Sections
 
-Eleven sections, stacked top to bottom.
+Ten sections, stacked top to bottom: the engine and its slots, then input services, output services, and overlays.
 
 | Section | Purpose |
 |---------|---------|
 | **Input Engine** | Master power switch and live polling readout. |
 | **Virtual Controllers** | One card per [slot](controller-slots.md), plus an Add card. |
-| **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Web Controller** | [Browser-based controller](../guides/web-controller.md) for phones, tablets, and other PCs. |
-| **Head Tracking** | [OpenTrack head pose](head-tracking.md) as six mappable axes. |
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
-| **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
-| **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
+| **Head Tracking** | [OpenTrack head pose](head-tracking.md) as six mappable axes. |
+| **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Lightbar Mirrors** | Forward a virtual PlayStation pad's lightbar color to Razer Chroma and Logitech LIGHTSYNC devices. |
 | **Razer Sensa HD Haptics** | Translate controller rumble into Razer Sensa HD haptics. |
-| **Drivers** | Install status for [HidHide, MIDI Services, and SteamVR](driver-management.md). |
+| **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
+| **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
 
-Missing drivers, disconnected controllers, and a stopped engine all surface here.
+Disconnected controllers and a stopped engine surface here. Driver install status lives on the [Settings](settings.md) page under Driver Management.
 
 Every on/off toggle on this page is saved with the active [profile](../guides/profiles.md). A profile records a toggle only once you change it while that profile is active, so profiles you have never touched keep whatever the global setting is. Remote Link is the one exception: a link between two PCs is not a per-game setting.
 

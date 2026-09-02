@@ -46,6 +46,26 @@ The 2D-versus-3D controller view is set on the [Pad](controller-slots.md) page, 
 
 ---
 
+## Window
+
+Controls how PadForge acts as a Windows app. Three switches here. Combine them with **Auto-start engine** (in the Input Engine card above) for a fully background install.
+
+### Minimize to System Tray
+
+Sends PadForge to the notification area instead of the taskbar when you minimize. Double-click the tray icon to bring the window back.
+
+### Start Minimized
+
+Opens PadForge with the window hidden. Combine with **Minimize to system tray** for a launch with only a tray icon.
+
+### Start at Login
+
+Registers a logon scheduled task so PadForge runs when you log into Windows. PadForge is elevated, and Windows will not launch an elevated app from a Startup-folder shortcut, so the task runs it at highest privileges with no UAC prompt.
+
+> **Hands-off setup:** turn on **Auto-start engine**, **Start minimized**, **Minimize to system tray**, and **Start at login**. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.
+
+---
+
 ## Input Engine
 
 Controls the polling loop that reads physical controllers, runs mappings and deadzones, and writes the virtual controllers.
@@ -88,25 +108,17 @@ Range: 0–3600 seconds.
 
 ---
 
-## Window
+## Assignment Prompts
 
-Controls how PadForge acts as a Windows app. Three switches here. Combine them with **Auto-start engine** (in the Input Engine card above) for a fully background install.
+When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an **Assign** button, and **Not Now**. Nothing is assigned until you click Assign. Keyboards, mice, touchpads, and media keys are never offered.
 
-### Minimize to System Tray
+- **Offer New Devices to the Open Virtual Controller** fires only for a device PadForge has never seen before. Devices it already knows connect without a prompt.
+- **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** fires for any device, new or already known, as long as the open virtual controller has nothing assigned yet. Once it has a device, this prompt no longer appears.
 
-Sends PadForge to the notification area instead of the taskbar when you minimize. Double-click the tray icon to bring the window back.
+Assign runs the same path as dragging the device onto the slot: the auto-map, input hiding defaults, and the Mappings tab refresh all happen exactly as they do for a dropped device. Not Now dismisses that device for that slot until PadForge restarts. Neither prompt fires on startup or when the engine restarts, since both re-enumerate every device at once.
 
-### Start Minimized
+PadForge never assigns a device on its own. Sim rigs and arcade setups carry many devices with no obvious home for each, so the app only ever offers, and both offers can be switched off here.
 
-Opens PadForge with the window hidden. Combine with **Minimize to system tray** for a launch with only a tray icon.
-
-### Start at Login
-
-Registers a logon scheduled task so PadForge runs when you log into Windows. PadForge is elevated, and Windows will not launch an elevated app from a Startup-folder shortcut, so the task runs it at highest privileges with no UAC prompt.
-
-> **Hands-off setup:** turn on **Auto-start engine**, **Start minimized**, **Minimize to system tray**, and **Start at login**. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.
-
----
 
 ## Battery Alerts
 
@@ -119,18 +131,6 @@ Get notified when a controller's battery runs low, before it dies mid-game.
 The same rumble drives **identify**: buzzing a device is how you tell which of several identical pads is which.
 
 ![The Battery Alerts card](../images/settings-battery-alerts.png)
-
-## Assignment Prompts
-
-When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an **Assign** button, and **Not Now**. Nothing is assigned until you click Assign. Keyboards, mice, touchpads, and media keys are never offered.
-
-- **Offer New Devices to the Open Virtual Controller** fires only for a device PadForge has never seen before. Devices it already knows connect without a prompt.
-- **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** fires for any device, new or already known, as long as the open virtual controller has nothing assigned yet. Once it has a device, this prompt no longer appears.
-
-Assign runs the same path as dragging the device onto the slot: the auto-map, input hiding defaults, and the Mappings tab refresh all happen exactly as they do for a dropped device. Not Now dismisses that device for that slot until PadForge restarts. Neither prompt fires on startup or when the engine restarts, since both re-enumerate every device at once.
-
-PadForge never assigns a device on its own. Sim rigs and arcade setups carry many devices with no obvious home for each, so the app only ever offers, and both offers can be switched off here.
-
 
 ## Driver Management
 
@@ -214,6 +214,23 @@ For full driver detail see [Driver Management](driver-management.md).
 
 ---
 
+## MIDI Configuration
+
+When a [slot](controller-slots.md) outputs **MIDI**, its config bar shows:
+
+| Setting | What it does |
+|---|---|
+| **Channel** | MIDI channel (1-16). |
+| **CC Count** | Number of Control Change outputs. How many axes send CC. Clamped so the highest CC stays within range, so the max is 128 minus **Start CC** (128 only when Start CC is 0). |
+| **Start CC** | Base CC number (0-127). Axis CCs count up from here. |
+| **Note Count** | Number of Note outputs. How many buttons send Note messages. Clamped so the highest note stays within range, so the max is 128 minus **Start Note** (128 only when Start Note is 0). |
+| **Start Note** | Base note (0-127, 60 = Middle C). Button notes count up from here. |
+| **Velocity** | Note On velocity (0-127). Higher = louder. |
+
+PadForge creates one virtual MIDI device per slot. No port to pick. Different slots can target different channels.
+
+---
+
 ## Community Configs
 
 ![The Community Configs card in Settings](../images/settings-community-configs.png)
@@ -276,23 +293,6 @@ The **Save** button is there for two cases.
 
 1. Force-save before a risky operation.
 2. Batch-save after a rapid run of changes.
-
----
-
-## MIDI Configuration
-
-When a [slot](controller-slots.md) outputs **MIDI**, its config bar shows:
-
-| Setting | What it does |
-|---|---|
-| **Channel** | MIDI channel (1-16). |
-| **CC Count** | Number of Control Change outputs. How many axes send CC. Clamped so the highest CC stays within range, so the max is 128 minus **Start CC** (128 only when Start CC is 0). |
-| **Start CC** | Base CC number (0-127). Axis CCs count up from here. |
-| **Note Count** | Number of Note outputs. How many buttons send Note messages. Clamped so the highest note stays within range, so the max is 128 minus **Start Note** (128 only when Start Note is 0). |
-| **Start Note** | Base note (0-127, 60 = Middle C). Button notes count up from here. |
-| **Velocity** | Note On velocity (0-127). Higher = louder. |
-
-PadForge creates one virtual MIDI device per slot. No port to pick. Different slots can target different channels.
 
 ---
 
