@@ -1266,32 +1266,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#motion-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Motion Server
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#web-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
         Web Controller
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#head-tracking" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Head Tracking
       
     </span>
   </a>
@@ -1338,10 +1316,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#overlays" class="md-nav__link">
+  <a href="#head-tracking" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overlays
+        Head Tracking
       
     </span>
   </a>
@@ -1349,10 +1327,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#touchpad-overlay" class="md-nav__link">
+  <a href="#motion-server" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Touchpad Overlay
+        Motion Server
       
     </span>
   </a>
@@ -1382,10 +1360,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#drivers" class="md-nav__link">
+  <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Drivers
+        Overlays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchpad-overlay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpad Overlay
       
     </span>
   </a>
@@ -3261,32 +3250,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#motion-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Motion Server
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#web-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
         Web Controller
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#head-tracking" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Head Tracking
       
     </span>
   </a>
@@ -3333,10 +3300,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#overlays" class="md-nav__link">
+  <a href="#head-tracking" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overlays
+        Head Tracking
       
     </span>
   </a>
@@ -3344,10 +3311,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#touchpad-overlay" class="md-nav__link">
+  <a href="#motion-server" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Touchpad Overlay
+        Motion Server
       
     </span>
   </a>
@@ -3377,10 +3344,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#drivers" class="md-nav__link">
+  <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Drivers
+        Overlays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchpad-overlay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touchpad Overlay
       
     </span>
   </a>
@@ -3650,33 +3628,6 @@
 <h3 id="add-controller">Add Controller<a class="headerlink" href="#add-controller" title="Permanent link">&para;</a></h3>
 <p>An <strong>Add Controller</strong> card sits at the bottom when at least one type still has room. Click it to pick a type. The card disappears when every type is at capacity. See <a href="../controller-slots/">Controller Slots</a> for limits.</p>
 <hr />
-<h2 id="motion-server">Motion Server<a class="headerlink" href="#motion-server" title="Permanent link">&para;</a></h2>
-<p>Broadcasts gyroscope and accelerometer data over UDP using the DSU/Cemuhook protocol. Cemu, Dolphin, Yuzu, and Ryujinx read it for motion controls like gyro aiming.</p>
-<table>
-<thead>
-<tr>
-<th>Control</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Enable DSU Motion Server (CemuHook Motion Provider Protocol)</strong></td>
-<td>Starts and stops the server.</td>
-</tr>
-<tr>
-<td><strong>Port</strong></td>
-<td>UDP port. Default <code>26760</code>. Change only on conflict. Range <code>1024-65535</code>.</td>
-</tr>
-<tr>
-<td><strong>Status indicator</strong></td>
-<td>A flame beside the status text. Ember when running, a steel outline when stopped.</td>
-</tr>
-</tbody>
-</table>
-<p>The DSU protocol caps at 4 slots, so only the first 4 virtual controllers broadcast motion data.</p>
-<p>See <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for full details.</p>
-<hr />
 <h2 id="web-controller">Web Controller<a class="headerlink" href="#web-controller" title="Permanent link">&para;</a></h2>
 <p>A browser-based controller you can open from any device on the same network.</p>
 <table>
@@ -3702,6 +3653,40 @@
 </tbody>
 </table>
 <p>See <a href="../../guides/web-controller/">Web Controller</a> for full details.</p>
+<hr />
+<h2 id="remote-link">Remote Link<a class="headerlink" href="#remote-link" title="Permanent link">&para;</a></h2>
+<p>Shares controllers with a paired PadForge on another PC over your network. A device on one PC shows up as an ordinary input device on the other.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enable Remote Link Server</strong></td>
+<td>Starts and stops listening for peers.</td>
+</tr>
+<tr>
+<td><strong>Reconnect Automatically</strong></td>
+<td>Re-establishes known pairings when they come back online.</td>
+</tr>
+<tr>
+<td><strong>Port</strong></td>
+<td>Link port with a reset button. Default <code>27500</code>.</td>
+</tr>
+<tr>
+<td><strong>Status indicator</strong></td>
+<td>A flame beside the status text: ember and "Listening on <code>&lt;port&gt;</code>" when running, steel outline when stopped.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="identity-protection">Identity Protection<a class="headerlink" href="#identity-protection" title="Permanent link">&para;</a></h3>
+<p>Sets how this PC stores its pairing identity. <strong>Secure: This PC Only</strong> keys it to the machine. The portable modes carry your pairings on a thumb drive between machines.</p>
+<h3 id="paired-pcs-and-nearby-pcs">Paired PCs and Nearby PCs<a class="headerlink" href="#paired-pcs-and-nearby-pcs" title="Permanent link">&para;</a></h3>
+<p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, and revoke, plus <strong>Revoke All</strong>. <strong>Nearby PCs (Not Paired)</strong> lists peers discovered on the network. <strong>Or Connect by Address (Advanced)</strong> reaches a peer by IP when discovery can't find it.</p>
+<p>See <a href="../../guides/remote-link/">Remote Link</a> for full details.</p>
 <hr />
 <h2 id="head-tracking">Head Tracking<a class="headerlink" href="#head-tracking" title="Permanent link">&para;</a></h2>
 <p>Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 shared memory, and exposes it as six axes on a <strong>Head Tracker</strong> row on the Devices page.</p>
@@ -3741,8 +3726,8 @@
 </table>
 <p>See <a href="../head-tracking/">Head Tracking</a> for the OpenTrack setup.</p>
 <hr />
-<h2 id="remote-link">Remote Link<a class="headerlink" href="#remote-link" title="Permanent link">&para;</a></h2>
-<p>Shares controllers with a paired PadForge on another PC over your network. A device on one PC shows up as an ordinary input device on the other.</p>
+<h2 id="motion-server">Motion Server<a class="headerlink" href="#motion-server" title="Permanent link">&para;</a></h2>
+<p>Broadcasts gyroscope and accelerometer data over UDP using the DSU/Cemuhook protocol. Cemu, Dolphin, Yuzu, and Ryujinx read it for motion controls like gyro aiming.</p>
 <table>
 <thead>
 <tr>
@@ -3752,28 +3737,45 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Enable Remote Link Server</strong></td>
-<td>Starts and stops listening for peers.</td>
-</tr>
-<tr>
-<td><strong>Reconnect Automatically</strong></td>
-<td>Re-establishes known pairings when they come back online.</td>
+<td><strong>Enable DSU Motion Server (CemuHook Motion Provider Protocol)</strong></td>
+<td>Starts and stops the server.</td>
 </tr>
 <tr>
 <td><strong>Port</strong></td>
-<td>Link port with a reset button. Default <code>27500</code>.</td>
+<td>UDP port. Default <code>26760</code>. Change only on conflict. Range <code>1024-65535</code>.</td>
 </tr>
 <tr>
 <td><strong>Status indicator</strong></td>
-<td>A flame beside the status text: ember and "Listening on <code>&lt;port&gt;</code>" when running, steel outline when stopped.</td>
+<td>A flame beside the status text. Ember when running, a steel outline when stopped.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="identity-protection">Identity Protection<a class="headerlink" href="#identity-protection" title="Permanent link">&para;</a></h3>
-<p>Sets how this PC stores its pairing identity. <strong>Secure: This PC Only</strong> keys it to the machine. The portable modes carry your pairings on a thumb drive between machines.</p>
-<h3 id="paired-pcs-and-nearby-pcs">Paired PCs and Nearby PCs<a class="headerlink" href="#paired-pcs-and-nearby-pcs" title="Permanent link">&para;</a></h3>
-<p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, and revoke, plus <strong>Revoke All</strong>. <strong>Nearby PCs (Not Paired)</strong> lists peers discovered on the network. <strong>Or Connect by Address (Advanced)</strong> reaches a peer by IP when discovery can't find it.</p>
-<p>See <a href="../../guides/remote-link/">Remote Link</a> for full details.</p>
+<p>The DSU protocol caps at 4 slots, so only the first 4 virtual controllers broadcast motion data.</p>
+<p>See <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for full details.</p>
+<hr />
+<h2 id="lightbar-mirrors">Lightbar Mirrors<a class="headerlink" href="#lightbar-mirrors" title="Permanent link">&para;</a></h2>
+<p>Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works.</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Razer Chroma</strong></td>
+<td>Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads <em>Razer Synapse not detected. Retrying.</em> until Synapse answers, then <em>Connected to Razer Chroma</em>.</td>
+</tr>
+<tr>
+<td><strong>Logitech LIGHTSYNC</strong></td>
+<td>Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads <em>Logitech G HUB not detected. Retrying.</em> until the engine answers, then <em>Connected to Logitech LIGHTSYNC</em>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="razer-sensa-hd-haptics">Razer Sensa HD Haptics<a class="headerlink" href="#razer-sensa-hd-haptics" title="Permanent link">&para;</a></h2>
+<p>Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line and the Kraken V4 Pro play the rumble of any slot. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads <em>Razer Sensa runtime not found. Retrying.</em> until the runtime answers, then <em>Streaming rumble to Sensa HD Haptics</em>.</p>
 <hr />
 <h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
 <p>The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.</p>
@@ -3829,60 +3831,6 @@
 </tbody>
 </table>
 <p>The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.</p>
-<hr />
-<h2 id="lightbar-mirrors">Lightbar Mirrors<a class="headerlink" href="#lightbar-mirrors" title="Permanent link">&para;</a></h2>
-<p>Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works.</p>
-<table>
-<thead>
-<tr>
-<th>Row</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Razer Chroma</strong></td>
-<td>Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads <em>Razer Synapse not detected. Retrying.</em> until Synapse answers, then <em>Connected to Razer Chroma</em>.</td>
-</tr>
-<tr>
-<td><strong>Logitech LIGHTSYNC</strong></td>
-<td>Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads <em>Logitech G HUB not detected. Retrying.</em> until the engine answers, then <em>Connected to Logitech LIGHTSYNC</em>.</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="razer-sensa-hd-haptics">Razer Sensa HD Haptics<a class="headerlink" href="#razer-sensa-hd-haptics" title="Permanent link">&para;</a></h2>
-<p>Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line and the Kraken V4 Pro play the rumble of any slot. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads <em>Razer Sensa runtime not found. Retrying.</em> until the runtime answers, then <em>Streaming rumble to Sensa HD Haptics</em>.</p>
-<hr />
-<h2 id="drivers">Drivers<a class="headerlink" href="#drivers" title="Permanent link">&para;</a></h2>
-<p>Install status for each driver. Name on the left, status on the right.</p>
-<table>
-<thead>
-<tr>
-<th>Driver / Service</th>
-<th>Purpose</th>
-<th>When to install</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>HidHide</strong></td>
-<td>Hides physical controllers from games to prevent double input.</td>
-<td>Games see both the physical and the virtual controller.</td>
-</tr>
-<tr>
-<td><strong>MIDI Services</strong></td>
-<td>MIDI virtual controller output through Windows MIDI Services. Requires Windows 11 24H2 (build 26100) or later.</td>
-<td>You want to send MIDI to DAWs, synths, or VJ tools.</td>
-</tr>
-<tr>
-<td><strong>SteamVR</strong></td>
-<td>The VR runtime the <a href="../vr-controllers/">VR slot type</a> drives.</td>
-<td>You want a VR virtual controller.</td>
-</tr>
-</tbody>
-</table>
-<p>When Windows MIDI Services or SteamVR is missing, that type's icon on a slot card shows a no-entry cursor and a tooltip saying what it needs. Install or remove drivers from <a href="../settings/">Settings</a>. HIDMaestro and the full driver list live on the <a href="../driver-management/">Driver Management</a> page.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
