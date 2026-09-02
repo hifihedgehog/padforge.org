@@ -165,7 +165,7 @@ Shares controllers with a paired PadForge on another PC over your network. A dev
 
 ### Identity Protection
 
-Sets how this PC stores its pairing identity. **Secure — this PC only** keys it to the machine. The portable modes carry your pairings on a thumb drive between machines.
+Sets how this PC stores its pairing identity. **Secure: This PC Only** keys it to the machine. The portable modes carry your pairings on a thumb drive between machines.
 
 ### Paired PCs and Nearby PCs
 
