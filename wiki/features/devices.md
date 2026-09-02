@@ -308,7 +308,11 @@ When a physical device feeds a [slot](controller-slots.md), games can see both d
 
 ### Hide from Games (HidHide)
 
-Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). The whole device disappears from every non-whitelisted app the moment you toggle the option. PadForge is whitelisted automatically. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from [Driver Management](driver-management.md).
+Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). The device disappears from every non-whitelisted app the moment you toggle the option. PadForge is whitelisted automatically. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from [Driver Management](driver-management.md).
+
+PadForge hides every interface of the device that HidHide can filter, including the XInput node of a controller built into a USB composite device, such as a handheld PC's controller or a pad on the Xbox 360 wireless receiver. An interface that appears on this page as its own device, such as a handheld's touchpad, follows its own checkbox. Leave that checkbox off and the interface stays visible while the pad is hidden.
+
+Hiding is not permanent and does not reach into Windows itself. HidHide blocks only programs that open the device after the entry lands, and only programs that are not on the whitelist. Windows' own drivers keep using a hidden touchpad or keyboard, so the cursor still moves. A game that opened the controller before you hid it keeps it until the controller reconnects. PadForge removes its entries when it exits and puts them back when its engine starts. On a handheld the built-in controller never reconnects, so turn on **Keep devices cloaked between launches** in [Settings](settings.md) and reboot once to have the controller hidden before any game or launcher can open it.
 
 You can whitelist more apps in [Settings](settings.md) so they can still see hidden devices (streaming overlays, secondary remappers, etc.).
 
