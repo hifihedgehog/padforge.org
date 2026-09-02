@@ -9,7 +9,7 @@
 
 ## Sections
 
-Eight sections, stacked top to bottom.
+Eleven sections, stacked top to bottom.
 
 | Section | Purpose |
 |---------|---------|
@@ -17,12 +17,17 @@ Eight sections, stacked top to bottom.
 | **Virtual Controllers** | One card per [slot](controller-slots.md), plus an Add card. |
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Web Controller** | [Browser-based controller](../guides/web-controller.md) for phones, tablets, and other PCs. |
+| **Head Tracking** | [OpenTrack head pose](head-tracking.md) as six mappable axes. |
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
+| **Lightbar Mirrors** | Forward a virtual PlayStation pad's lightbar color to Razer Chroma and Logitech LIGHTSYNC devices. |
+| **Razer Sensa HD Haptics** | Translate controller rumble into Razer Sensa HD haptics. |
 | **Drivers** | Install status for [HidHide, MIDI Services, and SteamVR](driver-management.md). |
 
 Missing drivers, disconnected controllers, and a stopped engine all surface here.
+
+Every on/off toggle on this page is saved with the active [profile](../guides/profiles.md). A profile records a toggle only once you change it while that profile is active, so profiles you have never touched keep whatever the global setting is. Remote Link is the one exception: a link between two PCs is not a per-game setting.
 
 ---
 
@@ -130,6 +135,23 @@ See [Web Controller](../guides/web-controller.md) for full details.
 
 ---
 
+## Head Tracking
+
+Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 shared memory, and exposes it as six axes on a **Head Tracker** row on the Devices page.
+
+| Control | Description |
+|---------|-------------|
+| **Enable Head Tracking Input** | Adds the Head Tracker row and opens the listener. |
+| **Also Read FreeTrack 2.0 Shared Memory** | Reads the FreeTrack mapping too, so a game that already reads FreeTrack keeps working. |
+| **UDP Port** | The port OpenTrack's *UDP over network* output sends to. Default `4242`. |
+| **Rotation Range (Degrees)** | Head rotation that moves yaw, pitch, and roll to full deflection. Default 90. |
+| **Translation Range (cm)** | Head travel that moves X, Y, and Z to full deflection. Default 30. |
+| **Status** | Waiting for a tracker on the port, receiving over UDP from an address, receiving from FreeTrack, or the port is in use by another program. |
+
+See [Head Tracking](head-tracking.md) for the OpenTrack setup.
+
+---
+
 ## Remote Link
 
 Shares controllers with a paired PadForge on another PC over your network. A device on one PC shows up as an ordinary input device on the other.
@@ -177,6 +199,23 @@ An on-screen, transparent touch surface you can pin to any monitor. Drives the t
 | **Status indicator** | A flame: ember while the overlay is showing, steel outline when hidden. |
 
 The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.
+
+---
+
+## Lightbar Mirrors
+
+Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works.
+
+| Row | Description |
+|-----|-------------|
+| **Razer Chroma** | Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads *Razer Synapse not detected. Retrying.* until Synapse answers, then *Connected to Razer Chroma*. |
+| **Logitech LIGHTSYNC** | Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads *Logitech G HUB not detected. Retrying.* until the engine answers, then *Connected to Logitech LIGHTSYNC*. |
+
+---
+
+## Razer Sensa HD Haptics
+
+Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line and the Kraken V4 Pro play the rumble of any slot. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads *Razer Sensa runtime not found. Retrying.* until the runtime answers, then *Streaming rumble to Sensa HD Haptics*.
 
 ---
 

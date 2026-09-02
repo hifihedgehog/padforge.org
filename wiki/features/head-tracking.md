@@ -8,7 +8,7 @@
 
 ## Turning it on
 
-Open **Settings** and turn on **Enable Head Tracking Input**. A **Head Tracker** row appears on the [Devices](devices.md) page with six axes:
+Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and turn on **Enable Head Tracking Input**. The section shows the tracker's live status, and the toggle is saved with the active profile, so a flight sim profile can keep it on while every other profile leaves it off. A **Head Tracker** row appears on the [Devices](devices.md) page with six axes:
 
 | Axis | What it reads | Full deflection |
 | --- | --- | --- |

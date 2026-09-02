@@ -1288,6 +1288,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#head-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Head Tracking
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#remote-link" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1342,6 +1353,28 @@
     <span class="md-ellipsis">
       
         Touchpad Overlay
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lightbar-mirrors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Mirrors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#razer-sensa-hd-haptics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razer Sensa HD Haptics
       
     </span>
   </a>
@@ -3250,6 +3283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#head-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Head Tracking
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#remote-link" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3311,6 +3355,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#lightbar-mirrors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lightbar Mirrors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#razer-sensa-hd-haptics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razer Sensa HD Haptics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#drivers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3355,7 +3421,7 @@
 <p><img alt="Dashboard overview showing engine status, virtual controllers, and driver health" src="../../images/dashboard.png" /></p>
 <hr />
 <h2 id="sections">Sections<a class="headerlink" href="#sections" title="Permanent link">&para;</a></h2>
-<p>Eight sections, stacked top to bottom.</p>
+<p>Eleven sections, stacked top to bottom.</p>
 <table>
 <thead>
 <tr>
@@ -3381,6 +3447,10 @@
 <td><a href="../../guides/web-controller/">Browser-based controller</a> for phones, tablets, and other PCs.</td>
 </tr>
 <tr>
+<td><strong>Head Tracking</strong></td>
+<td><a href="../head-tracking/">OpenTrack head pose</a> as six mappable axes.</td>
+</tr>
+<tr>
 <td><strong>Remote Link</strong></td>
 <td><a href="../../guides/remote-link/">Share controllers</a> with a paired PadForge on another PC.</td>
 </tr>
@@ -3393,12 +3463,21 @@
 <td>On-screen touch surface that drives a PlayStation slot's touchpad.</td>
 </tr>
 <tr>
+<td><strong>Lightbar Mirrors</strong></td>
+<td>Forward a virtual PlayStation pad's lightbar color to Razer Chroma and Logitech LIGHTSYNC devices.</td>
+</tr>
+<tr>
+<td><strong>Razer Sensa HD Haptics</strong></td>
+<td>Translate controller rumble into Razer Sensa HD haptics.</td>
+</tr>
+<tr>
 <td><strong>Drivers</strong></td>
 <td>Install status for <a href="../driver-management/">HidHide, MIDI Services, and SteamVR</a>.</td>
 </tr>
 </tbody>
 </table>
 <p>Missing drivers, disconnected controllers, and a stopped engine all surface here.</p>
+<p>Every on/off toggle on this page is saved with the active <a href="../../guides/profiles/">profile</a>. A profile records a toggle only once you change it while that profile is active, so profiles you have never touched keep whatever the global setting is. Remote Link is the one exception: a link between two PCs is not a per-game setting.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -3624,6 +3703,44 @@
 </table>
 <p>See <a href="../../guides/web-controller/">Web Controller</a> for full details.</p>
 <hr />
+<h2 id="head-tracking">Head Tracking<a class="headerlink" href="#head-tracking" title="Permanent link">&para;</a></h2>
+<p>Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 shared memory, and exposes it as six axes on a <strong>Head Tracker</strong> row on the Devices page.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enable Head Tracking Input</strong></td>
+<td>Adds the Head Tracker row and opens the listener.</td>
+</tr>
+<tr>
+<td><strong>Also Read FreeTrack 2.0 Shared Memory</strong></td>
+<td>Reads the FreeTrack mapping too, so a game that already reads FreeTrack keeps working.</td>
+</tr>
+<tr>
+<td><strong>UDP Port</strong></td>
+<td>The port OpenTrack's <em>UDP over network</em> output sends to. Default <code>4242</code>.</td>
+</tr>
+<tr>
+<td><strong>Rotation Range (Degrees)</strong></td>
+<td>Head rotation that moves yaw, pitch, and roll to full deflection. Default 90.</td>
+</tr>
+<tr>
+<td><strong>Translation Range (cm)</strong></td>
+<td>Head travel that moves X, Y, and Z to full deflection. Default 30.</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Waiting for a tracker on the port, receiving over UDP from an address, receiving from FreeTrack, or the port is in use by another program.</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../head-tracking/">Head Tracking</a> for the OpenTrack setup.</p>
+<hr />
 <h2 id="remote-link">Remote Link<a class="headerlink" href="#remote-link" title="Permanent link">&para;</a></h2>
 <p>Shares controllers with a paired PadForge on another PC over your network. A device on one PC shows up as an ordinary input device on the other.</p>
 <table>
@@ -3712,6 +3829,30 @@
 </tbody>
 </table>
 <p>The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.</p>
+<hr />
+<h2 id="lightbar-mirrors">Lightbar Mirrors<a class="headerlink" href="#lightbar-mirrors" title="Permanent link">&para;</a></h2>
+<p>Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works.</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Razer Chroma</strong></td>
+<td>Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads <em>Razer Synapse not detected. Retrying.</em> until Synapse answers, then <em>Connected to Razer Chroma</em>.</td>
+</tr>
+<tr>
+<td><strong>Logitech LIGHTSYNC</strong></td>
+<td>Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads <em>Logitech G HUB not detected. Retrying.</em> until the engine answers, then <em>Connected to Logitech LIGHTSYNC</em>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="razer-sensa-hd-haptics">Razer Sensa HD Haptics<a class="headerlink" href="#razer-sensa-hd-haptics" title="Permanent link">&para;</a></h2>
+<p>Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line and the Kraken V4 Pro play the rumble of any slot. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads <em>Razer Sensa runtime not found. Retrying.</em> until the runtime answers, then <em>Streaming rumble to Sensa HD Haptics</em>.</p>
 <hr />
 <h2 id="drivers">Drivers<a class="headerlink" href="#drivers" title="Permanent link">&para;</a></h2>
 <p>Install status for each driver. Name on the left, status on the right.</p>
