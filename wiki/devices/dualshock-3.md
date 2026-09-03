@@ -5,7 +5,7 @@
 <!-- SCREENSHOT: ds3-pair -->
 ![The Pair a Controller dialog set to Sony DualShock 3](../images/ds3-pair.png)
 
-Windows can't pair a DualShock 3 from its own Bluetooth screen. The controller connects in a way the built-in Bluetooth stack turns away, so a normal "Add a device" pairing never completes. PadForge handles it with a short USB step and a signed Bluetooth driver, so you pair from inside the app. Over a cable, no pairing is needed at all.
+Windows can't pair a DualShock 3 from its own Bluetooth screen. The controller connects in a way the built-in Bluetooth stack turns away, so a normal "Add a device" pairing never completes. PadForge handles it with a short USB step and a bundled Bluetooth driver, so you pair from inside the app. Over a cable, no pairing is needed at all.
 
 ---
 
@@ -25,7 +25,7 @@ Bluetooth needs a one-time pairing. The controller has to be on a USB cable for 
 2. Connect the DualShock 3 to the PC with a USB cable.
 3. Click **Pair**, next to **Refresh**. The **Pair a Controller** dialog opens.
 4. Set **Controller Family** to **Sony DualShock 3**.
-5. Click **Pair** in the dialog. The status line shows each step. The first time, a signed PlayStation Bluetooth driver installs on its own.
+5. Click **Pair** in the dialog. The status line shows each step. The first time, PadForge's bundled PlayStation Bluetooth driver installs on its own.
 6. When it finishes, unplug the controller and press the **PS** button. It connects over Bluetooth and appears in the device list.
 7. Click **Done** to close.
 
@@ -93,7 +93,7 @@ Remove the controller from the [Devices](../features/devices.md) list and its Bl
 
 ## Coexisting with other Bluetooth devices
 
-The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3. PadForge arms it when a DS3 is paired, and also when Windows still has a record of a DS3 that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen a DualShock 3 it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.
+The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3 or a PlayStation Move family controller. PadForge arms it when one of them is paired, and also when Windows still has a record of one that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen one of these controllers it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.
 
 One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.
 
@@ -123,4 +123,4 @@ One exception: with another DualShock 3 driver such as DsHidMini installed, the 
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

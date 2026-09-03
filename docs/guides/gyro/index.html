@@ -855,6 +855,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#grip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grip
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#motion-passthrough" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1507,6 +1518,8 @@
       
         
       
+        
+      
     
     
     
@@ -1884,6 +1897,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2606,6 +2647,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3031,6 +3084,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -3087,6 +3168,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -3123,6 +3288,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -3207,6 +3400,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3342,6 +3563,17 @@
     <span class="md-ellipsis">
       
         When the tab shows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grip
       
     </span>
   </a>
@@ -3770,20 +4002,71 @@
 
 
 <h1 id="gyro">Gyro<a class="headerlink" href="#gyro" title="Permanent link">&para;</a></h1>
-<p><em>Per-pad motion-sensor mapping with calibration, sensitivity, smoothing, and engage gates.</em></p>
+<p><em>Per-pad motion-sensor mapping with grip, calibration, sensitivity, smoothing, and engage gates.</em></p>
 <!-- SCREENSHOT: pad-gyro -->
-<p><img alt="Gyro tab with Motion Passthrough, Motion Steering, Calibration, Sensitivity, Response Shaping, and Engage cards" src="../../images/pad-gyro.png" /></p>
-<p>The Gyro tab appears when the slot's assigned physical device exposes a gyroscope. Tuning saves per pad per slot, so the same pad on two different slots can carry two different feels.</p>
+<p><img alt="Gyro tab with Grip, Motion Passthrough, Motion Steering, Calibration, Sensitivity, Response Shaping, and Engage cards" src="../../images/pad-gyro.png" /></p>
+<p>The Gyro tab appears when the slot's assigned physical device exposes a gyroscope or an accelerometer. Tuning saves per pad per slot, so the same pad on two different slots can carry two different feels.</p>
 <hr />
 <h2 id="when-the-tab-shows">When the tab shows<a class="headerlink" href="#when-the-tab-shows" title="Permanent link">&para;</a></h2>
-<p>The tab is visible only when the selected mapped device reports a gyro sensor. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, and any Extended profile that wires gyro axes all qualify. Pads with no gyro never see the tab.</p>
+<p>The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, and any Extended profile that wires gyro axes all qualify. Pads with no motion sensor never see the tab.</p>
+<p>On a device with an accelerometer and no gyroscope, such as a Wii Remote without Motion Plus, the tab shows only the cards that read the accelerometer: Grip, Motion Steering, and Gyro Tilt. The five rate cards (Motion Passthrough, Calibration, Sensitivity, Response Shaping, Engage) stay hidden. Before 4.4.0 the whole tab was gated on a gyroscope, so those three cards were unreachable on such a remote.</p>
+<hr />
+<h2 id="grip">Grip<a class="headerlink" href="#grip" title="Permanent link">&para;</a></h2>
+<!-- SCREENSHOT: pad-gyro-grip -->
+<!-- pending capture: ![The Grip card with the Held As dropdown](../images/pad-gyro-grip.png) -->
+
+<p>The first card on the tab is <strong>Grip</strong>. Its one row, <strong>Held As</strong>, tells PadForge how the controller sits in your hands. The driver delivers every controller's motion in the frame of its natural hold, which for a Wii Remote is aimed at the screen. Hold the remote sideways and every axis a game reads is a quarter turn off. Held As rotates the gyro, the accelerometer, and the gravity estimate together into the frame of the hold, for the mapping rows, for the motion the virtual controller reports, and for the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
+<p>The four holds name the face (the button side) and the top edge (the pointer end) so there is no guessing which "sideways" is meant.</p>
+<table>
+<thead>
+<tr>
+<th>Held As</th>
+<th>Face points</th>
+<th>Top edge points</th>
+<th>Rotation, (x, y, z) becomes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pointing</td>
+<td>Up</td>
+<td>At the screen</td>
+<td>(x, y, z), unchanged. The default.</td>
+</tr>
+<tr>
+<td>Sideways, Face Up</td>
+<td>Up</td>
+<td>Left</td>
+<td>(z, y, -x)</td>
+</tr>
+<tr>
+<td>Wii Wheel, Face Toward You</td>
+<td>Toward you</td>
+<td>Left</td>
+<td>(z, x, y)</td>
+</tr>
+<tr>
+<td>Upright</td>
+<td>Toward you</td>
+<td>Up, at the ceiling</td>
+<td>(x, -z, y)</td>
+</tr>
+</tbody>
+</table>
+<p>Sideways, Face Up is the NES-style hold, and its rotation is the same swap SDL applies to a single left Joy-Con held sideways. Wii Wheel, Face Toward You is the hold the wheel shell puts the remote in. In that hold the steering motion is a turn about the remote's face, which is body yaw, and the table turns it into the roll a flat pad reports when tipped like a wheel. The two sideways holds differ only in which way the face points, and they need different tables: the face-up table steers on yaw in the wheel hold.</p>
+<p>All three rotations are proper rotations, so one table serves the gyro, the accelerometer, and gravity alike, and the motion the virtual controller reports stays consistent with the mapping rows.</p>
+<p><strong>The D-pad follows the grip.</strong> Under Sideways, Face Up and Wii Wheel, Face Toward You the hat turns a quarter turn with the sensors, so the remote's physical Right reads as Up, Up as Left, Left as Down, and Down as Right, with the diagonals in between. Upright leaves the hat alone. The rotated hat feeds mapping rows, macro triggers, and the Record button, so a press recorded in the hold fires on that same press. The Devices page keeps showing the physical direction.</p>
+<p><strong>A grip change recenters.</strong> Switching Held As re-references that device's motion state on the slot: the gravity estimate re-seeds from the next accelerometer sample, and the lean, tilt, and shake neutrals re-capture. Hold the controller in the new grip for a moment after switching. Calibration is not affected, because the gyro bias is sampled in the sensor's own frame and subtracted there before the rotation. Calibrating and changing the grip stay independent.</p>
+<p>Held As is per pad per slot like the rest of the tab, and it rotates the body sensor only. A Nunchuk or a standalone left Joy-Con is a separate body in the other hand and keeps its own frame. On a combined Joy-Con pair, the fused Gyro Pitch / Yaw / Roll rows rotate both halves together, while the Left Joy-Con rows keep the left half's frame.</p>
+<p>The row's reset button (<strong>Reset Grip</strong>) returns Held As to Pointing.</p>
 <hr />
 <h2 id="motion-passthrough">Motion Passthrough<a class="headerlink" href="#motion-passthrough" title="Permanent link">&para;</a></h2>
 <p>The first card carries one checkbox: <strong>Apply Gyro Tuning to Motion Passthrough</strong>.</p>
 <p>Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.</p>
 <p>Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The <a href="#engage-gates">engage gates</a> come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.</p>
 <p>The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense) and the Nintendo (virtual Switch Pro) type since 4.1.0. Xbox, Extended, MIDI, and Keyboard + Mouse slots have no motion channel.</p>
-<p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.</p>
+<p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice.</p>
+<p><strong>Leave it off for emulators.</strong> An emulator integrates the gyro rate into an orientation. With the box checked, the tab's default tuning runs the tightening and smoothing thresholds and then a 3°/s deadzone on that rate before it leaves. A rate that reads zero below 3°/s and three degrees short above it accumulates orientation error the emulator cannot see, so steering drifts after a tilt and breaks on a sharp turn. The live readouts on this tab show the calibrated rate, not the tuned passthrough, so the distortion is invisible there as well. If motion in an emulator drifts or turns the wrong way, this box is the first thing to check.</p>
 <hr />
 <h2 id="motion-steering">Motion Steering<a class="headerlink" href="#motion-steering" title="Permanent link">&para;</a></h2>
 <p>A Motion Steering card sits between Motion Passthrough and Calibration. It tunes the <strong>Motion Lean</strong> input: tilt the whole controller like a wheel to drive a steering axis. Inner and outer tilt deadzones (in degrees) and controller orientation live here.</p>
@@ -3800,7 +4083,7 @@
 <li>PadForge samples for about 1.5 seconds. The averaged reading becomes the device bias.</li>
 <li>The bias is subtracted from every raw sample going forward.</li>
 </ol>
-<p>The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g.</p>
+<p>The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g. Both readouts are in the held frame set by <a href="#grip">Grip</a>, the same values the mapping rows and the virtual controller get.</p>
 <p>On a combined Joy-Con pair, the left half's gyro keeps its own bias. <strong>Calibrate Gyro</strong> samples both halves in the same pass, and a profile calibrated before 4.1.0 gets an automatic aux-only pass on connect that measures the left sensor without touching the stored primary bias.</p>
 <p><strong>Reset Calibration</strong> clears the bias (both halves on a pair) and the timestamp. The next polling cycle re-runs the auto-calibration.</p>
 <hr />
@@ -3866,6 +4149,7 @@
 <li><strong>Anchor Yaw to Compass.</strong> Off by default. Turn it on after calibrating.</li>
 <li><strong>Calibrate Magnetometer.</strong> Press it, rotate the controller through every orientation in a figure-8 for a few seconds, then press again. The button reads <strong>Finish Calibration</strong> while the sweep runs.</li>
 </ul>
+<p>The correction is measured on the body's yaw axis, so it applies only while <a href="#grip">Held As</a> leaves yaw on the yaw lane (Pointing or Sideways, Face Up). Wii Wheel and Upright feed yaw from another body axis and skip it.</p>
 <p>The card has a per-row reset on the checkbox and no card-level Reset All.</p>
 <hr />
 <h2 id="response-shaping">Response Shaping<a class="headerlink" href="#response-shaping" title="Permanent link">&para;</a></h2>
@@ -4107,7 +4391,7 @@
 <li><strong>Gyro Lean X / Gyro Lean Y</strong> are the fixed-envelope originals: 90° of tilt is full scale, and the per-source Sensitivity dial on the mapping row scales the read.</li>
 <li><strong>Motion Lean</strong> is the steering-oriented tilt input with its own inner/outer deadzones and grip orientation on the <a href="#motion-steering">Motion Steering</a> card.</li>
 </ul>
-<p>All three capture your resting grip as the neutral when the controller connects, and the <strong>Gyro Recenter</strong> <a href="../macros/">macro action</a> re-zeroes it mid-session. Because gravity is the reference, these inputs cannot drift and need no recalibration.</p>
+<p>All three capture your resting grip as the neutral when the controller connects, and the <strong>Gyro Recenter</strong> <a href="../macros/">macro action</a> re-zeroes it mid-session. A change of <a href="#grip">Held As</a> re-zeroes it as well. Because gravity is the reference, these inputs cannot drift and need no recalibration.</p>
 <p><strong>Held yaw is not possible.</strong> Gravity points down: it moves when you pitch or roll the controller, and it does not move at all when you turn the controller flat around the vertical axis. So the tilt inputs hold pitch and roll, never yaw. Holding a yaw rotation would need the gyro's rate integrated into an angle, which drifts without something to correct it, and no shipped mode does that today. To turn a camera with gyro, use rate mode.</p>
 <hr />
 <h2 id="left-joy-con-aux-gyro">Left Joy-Con aux gyro<a class="headerlink" href="#left-joy-con-aux-gyro" title="Permanent link">&para;</a></h2>
@@ -4138,7 +4422,7 @@
 </tr>
 </tbody>
 </table>
-<p>The aux sources appear only when the paired device reports the second sensor. They run through the same pipeline as the primary sources: this tab's sensitivity, response shaping, and engage gates all apply. Player and World space project against the left half's own gravity, and <a href="#calibration">Calibration</a> keeps a separate bias for the left sensor.</p>
+<p>The aux sources appear only when the paired device reports the second sensor. They run through the same pipeline as the primary sources: this tab's sensitivity, response shaping, and engage gates all apply. Player and World space project against the left half's own gravity, and <a href="#calibration">Calibration</a> keeps a separate bias for the left sensor. The <a href="#grip">Grip</a> rotation does not reach these rows. The left half is its own body and keeps its own frame.</p>
 <p>On a Wii Remote with a Nunchuk, the lean and accelerometer rows carry Nunchuk names instead. The Nunchuk has no gyro, so the three rate sources stay Joy-Con only.</p>
 <hr />
 <h2 id="pairing-with-flick-stick">Pairing with Flick Stick<a class="headerlink" href="#pairing-with-flick-stick" title="Permanent link">&para;</a></h2>
@@ -4159,7 +4443,7 @@
 <p>The values save automatically to your profile whenever you change anything on this tab.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
-<p>Every row has a reset button (circular arrow icon). Each card except Compass has a <strong>Reset All</strong> button next to its title that snaps every value in the card back to defaults.</p>
+<p>Every row has a reset button (circular arrow icon). Each card except Grip and Compass has a <strong>Reset All</strong> button next to its title that snaps every value in the card back to defaults.</p>
 <table>
 <thead>
 <tr>
@@ -4168,6 +4452,10 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Reset Grip</td>
+<td>Held As back to Pointing</td>
+</tr>
 <tr>
 <td>Reset Motion Passthrough</td>
 <td>Apply Gyro Tuning to Motion Passthrough</td>
@@ -4371,9 +4659,10 @@
 <li><a href="../macros/">Macros</a>: the Set Gyro Engaged and Gyro Recenter actions.</li>
 <li><a href="../../reference/dsu-motion-server/">DSU Motion Server</a>: broadcast the calibrated gyro and accelerometer feed to Cemu, Dolphin, Yuzu, and Ryujinx over UDP.</li>
 <li><a href="../steering/">Steering</a>: tune the Motion Lean tilt-steering input whose card lives on this tab.</li>
+<li><a href="../../devices/wii-controllers/">Wii Controllers</a>: the Wii Remote's holds and the emulator setup that goes with them.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

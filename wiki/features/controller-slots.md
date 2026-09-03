@@ -87,11 +87,44 @@ Map a motion source on the slot and it streams into the virtual pad's gyro and a
 
 ### Extended (HIDMaestro)
 
-A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 231 device profiles (HOTAS, wheels, third-party gamepads). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout.
+A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 231 device profiles (HOTAS, wheels, third-party gamepads, and Valve's controllers). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout, except on the Valve profiles, which draw the pad itself.
 
 Sim titles (DCS World, MSFS, X-Plane, iRacing) read DirectInput best. Extended slots also deliver [force feedback](force-feedback.md) to sim titles that support it.
 
 ![Extended (HIDMaestro) Controller view: profile / customize bar at top, procedural schematic of the live HID layout below](../images/pad-extended-configbar.png)
+
+#### Valve personas
+
+Five profiles in the Extended picker are Valve pads. Pick one and the slot takes that pad's identity, its control names in the mapping grid, and its body in the Preview tab.
+
+| Profile | Identity | Input frame |
+|---|---|---|
+| **Steam Deck Controller** | Valve `28DE:1205`, product string "Steam Deck", a standard HID gamepad (6 axes, 21 buttons, 1 hat) | Field-encoded HID, like any other Extended profile |
+| **Steam Deck Controller (Composite)** | Valve `28DE:1205` on a USB persona, product string "Steam Controller", five interfaces taken from a real unit's USB dump: the lizard-mode mouse and keyboard, the vendor controller interface, and a CDC pair | The Deck's native 64-byte state report |
+| **Steam Controller (Wired)** | Valve `28DE:1102`, product string "Steam Controller", the 2015 pad's vendor-page descriptor | The 2015 pad's native 64-byte report |
+| **Steam Controller (Composite)** | Valve `28DE:1102` on a USB persona, product string "Wired Controller", three interfaces from a real unit's dump | The same 2015 frame |
+| **Steam Controller (2026)** | Valve `28DE:1302` on a USB persona, one HID interface carrying the mouse, keyboard, and controller state as separate report ids | The 2026 pad's native 54-byte report |
+
+A composite persona rides the real USB stack, so Steam and SDL see Valve hardware and run their own handshake against it. On the bench, live Steam claimed the Steam Controller (Composite) persona: it opened the device, reserved an XInput slot, took the input stream, and loaded its Steam Controller configuration. Stock SDL3 claims it as a Steam Controller with two touchpads, a gyro, and an accelerometer. What Steam does with the persona's motion data and haptics has not been checked on a live session.
+
+<!-- pending capture: ![Extended slot on the Steam Controller profile: the Valve row names in the grid and the 2015 pad's own body in the preview](../images/pad-extended-steam-controller.png) -->
+
+<!-- pending capture: ![Extended slot on the Steam Deck profile: the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png) -->
+
+The mapping grid uses Valve's names. Buttons are A, B, X, Y, L1, R1, L3, R3, Steam, and the pad clicks (Left Pad Click, Right Pad Click) on every profile, then per pad:
+
+| Control | Steam Deck | Steam Controller (2015) | Steam Controller (2026) |
+|---|---|---|---|
+| Center buttons | View, Menu, Quick Access | Back, Start | View, Menu, Quick Access |
+| Rear buttons | R4, L4, R5, L5 | Left Grip, Right Grip | R4, L4, R5, L5 |
+| D-Pad | POV hat | POV hat, which the pad reports from the left trackpad's four click zones | Four discrete buttons |
+| Right stick | Real stick | The right trackpad, ridden as a stick | Real stick |
+
+Every profile carries Left Stick X / Y, Right Stick X / Y, Left Trigger, Right Trigger, both trackpads as Left Pad X, Left Pad Y, Left Pad Touch, Right Pad X, Right Pad Y, Right Pad Touch, and the Motion Gyro and Motion Accelerometer rows. The virtual pad carries one finger per trackpad, so the left pad follows the slot's first touch finger and the right pad the second.
+
+Assign a Steam Deck, a Steam Controller, or any other gamepad and the slot auto-maps it: the face buttons, bumpers, sticks, triggers, View / Menu, Steam, and Quick Access from the pad's buttons, the rear buttons from SDL's four paddle positions (the two grips on the 2015 wire), the D-Pad from the device's hat, each trackpad from the device's matching touchpad (a one-pad device lands on the left pad), the pad clicks from the click buttons the device advertises, and gyro and accelerometer from the device's sensors.
+
+Switching one Valve profile to another moves every binding to the same control on the new pad, drops bindings for controls the new pad lacks, and auto-maps the controls the old pad never had, such as the 2026 pad's D-Pad buttons after a Steam Deck. A profile restored at launch changes nothing. The same rule covers the two Nintendo presets.
 
 ### Keyboard+Mouse
 
@@ -292,7 +325,7 @@ One physical controller can feed multiple slots at once.
 
 1. **[Devices](devices.md) page.** Each device card shows numbered slot toggles. Click a number to assign or unassign.
 2. **Sidebar.** Drag a device onto a sidebar controller entry.
-3. **The offer banner.** Connect a device while the slot's page is open and, with the [Assignment Prompts](settings.md#assignment-prompts) settings on, a banner offers to assign it. Click **Assign**.
+3. **The offer banner.** With [Assignment Prompts](settings.md#assignment-prompts) on, a slot's page shows a banner when a game-input device is online and not yet on that slot: "*Device name* just connected. Assign it to this virtual controller?" with **Assign** and **Not Now**. Two settings decide who is offered, both on by default. **Offer New Devices to the Open Virtual Controller** covers devices PadForge has never seen before. **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** covers any device, new or known, while the open slot has nothing assigned. The banner is a standing condition, not a one-shot event: it appears whether the device connected before or after you opened the page, and it stays until you assign the device, click Not Now (which dismisses that device for that slot for the rest of the session), or the device goes offline. Keyboards, mice, touchpads, and media-key devices are never offered, and nothing is offered on the first device walk after the engine starts.
 
 Each slot-device pairing has its own mappings, deadzones, and settings. The same controller in slot 1 and slot 3 can have completely different configs.
 
@@ -319,4 +352,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

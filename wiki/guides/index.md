@@ -13,10 +13,10 @@ device.
 | [Macros](macros.md) | Multi-step sequences on a button, with timing, loops, and layer scoping |
 | [Shift Layers](shift-layers.md) | A second (or eighth) set of mappings behind a held or toggled button |
 | [Radial and Grid Menus](menus.md) | On-screen menus driven by a stick or touchpad |
-| [Per-game Profiles](profiles.md) | Mappings that switch automatically when a game gains focus |
+| [Per-game Profiles](profiles.md) | Mappings that switch when a game gains focus, on a controller combo, or on a command from your launcher |
 | [Remote Link](remote-link.md) | A controller on one PC driving games on another, on your network or across the internet |
 | [Steering with any stick](steering.md) | Winding-wheel steering on a stick, d-pad, or motion |
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

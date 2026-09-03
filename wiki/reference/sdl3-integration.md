@@ -1341,7 +1341,7 @@ The SDL instance ID is removed from `_openedSdlInstanceIds` by the caller, enabl
 
 ## SDL3 Fork
 
-PadForge ships a custom SDL3 fork at [hifihedgehog/SDL](https://github.com/hifihedgehog/SDL) on branch `feat/hidmaestro-filter`. The built binary lands at `PadForge.App/Resources/SDL3/x64/SDL3.dll`.
+PadForge ships a custom SDL3 fork at [hifihedgehog/SDL](https://github.com/hifihedgehog/SDL) on branch `feat/hidmaestro-filter`. The built binary lands at `PadForge.App/Resources/SDL3/x64/SDL3.dll`. PadForge 4.4.0 ships the fork's Release build at commit `d98c5804a9` (2026-08-10), the same build 4.3.2 shipped. No fork commit landed between the two releases.
 
 ### Why a Fork
 
@@ -1351,7 +1351,7 @@ The branch began with six commits spanning four logical features. v4 consumes su
 |---|---------|--------------|---------------------|
 | 1 | **Switch 2 Pro Controller**: WinUSB bulk I/O on Windows. The controller is a USB composite device with two interfaces. SDL needs to drive HID Interface 0 for input and WinUSB Interface 1 for the bulk init sequence. | `7c4118c49` | None |
 | 2 | **HIDMaestro virtual-controller filter** (PadForge-specific): `SDL_GetJoysticks` walks each device's PnP parent chain and drops any device whose hardware-ID list contains the `HIDMAESTRO` substring, with a fast-path substring match on the interface symlink. Stops SDL from re-enumerating the virtual controllers PadForge just created. | `60d06e2f4` (main filter) + `14f883872` (HMXINPUT dead-branch cleanup) | None |
-| 3 | **16 XInput controllers**: bumps `XUSER_MAX_COUNT` from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, not just the first four. | `ba25d3671` | [`hifihedgehog/OpenXinput`](https://github.com/hifihedgehog/OpenXinput) branch `OpenXinput1_4` commit `45c91b1` (CMake default bump) |
+| 3 | **16 XInput controllers**: bumps `XUSER_MAX_COUNT` from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, rather than the first four alone. | `ba25d3671` | [`hifihedgehog/OpenXinput`](https://github.com/hifihedgehog/OpenXinput) branch `OpenXinput1_4` commit `45c91b1` (CMake default bump) |
 | 4 | **XInput Share button**: reads OpenXInput's `XInputGetSystemButtons` ordinal 109 and exposes Share at raw button 11 + the gamepad-db `misc1` mapping. | `1b266767c` (loader + dispatch) + `3fbf1429f` (gamepad-db `misc1:b11` mapping) | Uses an existing OpenXInput export. No OpenXInput change needed. |
 
 The 2026 Steam Controller was originally a candidate fifth patch but Valve's upstream PR has since merged into `libsdl-org/SDL` mainline, so the fork just rebases against that work.
@@ -1369,8 +1369,19 @@ The hints in `InitializeSdl` and the axis readers in `SdlDeviceWrapper` depend o
 | `SDL#9` | `SDL_SendGamepadEffect` output path for DualSense adaptive triggers / lightbar / audio | DualSense passthrough dispatcher |
 | DS3 SixAxis | Correct gyro and accel scaling for a DsHidMini DS3 in SXS mode | `SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER` (#194) |
 | `SDL#11` / `SDL#12` / `SDL#13` | Wii MotionPlus coexistence, identify dead-window, and presence-churn fixes | `hidapi_wii` driver (#198, #208, #210) |
+| `SDL#27` (fork commit `d98c5804a9`) | Five second-generation MOZA wheelbase IDs in `initial_wheel_devices` (`SDL_joystick.c:613-617`: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed `SDL_JOYSTICK_TYPE_WHEEL` like the first-generation IDs at `:608-612` | `SdlDeviceWrapper` wheel typing, the Wheel tab (#282) |
 
 The three Wii Bluetooth fixes (`SDL#2` / `SDL#3` / `SDL#4`) are covered in the [Wii Controllers](#wii-controllers-hidapi_wii) subsection below.
+
+### Upstream drivers the fork carries
+
+The fork rebases on `libsdl-org/SDL` mainline, so every upstream HIDAPI driver is compiled in and registered in `SDL_hidapijoystick.c`. Three matter for devices this page is asked about. None needs a PadForge hint: each driver reads its own `SDL_HINT_JOYSTICK_HIDAPI_*` hint with `SDL_HINT_JOYSTICK_HIDAPI` as the default, and PadForge sets neither, so they are on.
+
+| Driver | Registered at | Devices | Notes |
+|--------|---------------|---------|-------|
+| `SDL_HIDAPI_DriverFlydigi` (`SDL_hidapi_flydigi.c`) | `SDL_hidapijoystick.c:104`, enabled by `SDL_JOYSTICK_HIDAPI_FLYDIGI` at `SDL_hidapijoystick_c.h:49` | `SDL_IsJoystickFlydigiController` (`SDL_joystick.c:3413`) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2401 (second generation, any interface), from `usb_ids.h:38-39` and `:94-96`. The model comes from the controller's device ID (`HIDAPI_DriverFlydigi_UpdateDeviceIdentity`): Apex 2, 3, 4, 5 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro | The gamepad mapping (`SDL_gamepad.c:1298-1307`) puts the four paddles at `b11-b14`, the Vader C/Z and Apex 5 shoulder macros at `misc2:b15,misc3:b16`, and the Vader 5 Pro's three extra buttons at `misc4:b17,misc5:b18,misc6:b19`. `SdlDeviceWrapper` carries MISC2-MISC6 at `CustomInputState` button indices 17-21 (`SdlDeviceWrapper.cs:2393-2397`), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (`PhysicalSlotResolver.cs`). Apex 5, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream change carried: `eb340388fc` (2026-05-14, Vader 5 Pro fix) |
+| `SDL_HIDAPI_DriverSteamDeck` (`SDL_hidapi_steamdeck.c`) | `SDL_hidapijoystick.c:71` | 28DE:1205 (`controller_list.h:669`) | Trackpads, gyro, haptics. PadForge also drives the Deck as a virtual-controller persona (`steam-deck-composite`), which is HIDMaestro work, not SDL's |
+| `SDL_HIDAPI_DriverSteamTriton` (`SDL_hidapi_steam_triton.c`) | `SDL_hidapijoystick.c:74` | 28DE:1302 wired, 1303 BLE, 1304 Proteus dongle, 1305 Nereid dongle (`controller_list.h:670-673`) | The 2026 Steam Controller. Upstream added the driver in May 2026 (`f7a8801227`, `f6ffa69890`, `634dff3725`). PadForge's PCM haptic stream (reports 0x86 / 0x88) is written by PadForge itself, outside SDL (`TritonPcmSupport.cs`) |
 
 If you change HM's enumerator name, hardware ID, or `ContainerID`, the filter substring on `feat/hidmaestro-filter` (commit 2 above) plus the same substring in the OpenXInput fork, `XboxImpulseHidWriter`'s HID-interface enumeration, and `HidHideController.IsHidMaestroDevice` all have to be kept in sync. See `hidmaestro-fork-resync-recipe.md` in project memory.
 
@@ -1417,13 +1428,15 @@ Reading a Wii Remote, Wii Remote Plus, Nunchuk, Classic Controller / Classic Con
 | **Connect-timeout seed** (`hifihedgehog/SDL#3`) | `SDL_hidapi_wii.c` | `HIDAPI_DriverWii_UpdateDevice` disconnects a device once `SDL_GetTicks() >= m_ulLastInput + INPUT_WAIT_TIMEOUT_MS` (3000 ms). `HIDAPI_DriverWii_InitDevice` `calloc`'d the context, leaving `m_ulLastInput = 0`, so a remote paired after the app's first three seconds was dropped before its first report (a Wii Remote does not stream until `OpenJoystick`). The fix seeds `ctx->m_ulLastInput = SDL_GetTicks()` in `InitDevice`. |
 | **Extension hot-plug** (`hifihedgehog/SDL#4`) | `SDL_hidapi_wii.c` | Attaching or detaching a Nunchuk or Classic Controller on a connected remote was detected (`HandleStatus` set `m_bDisconnected`) but only disconnected the joystick. The extension type was read once at connect time. The fix re-identifies inside `UpdateDevice`: re-read `ReadExtensionControllerType`, re-run `UpdateDeviceIdentity`, re-seed `m_ulLastInput` (otherwise fix #3's timeout flaps), and re-add via `HIDAPI_JoystickConnected`. |
 
+**Motion Plus, as the driver leaves it.** The driver identifies a Motion Plus through the extension register (`0xA600FE` before activation, `0xA400FE` once a mode is set, `SDL_hidapi_wii.c:574`, `:638`, `:1991`) and converts its gyro words with fixed constants: 8192 counts per degree per second, times 440 in slow mode or 2000 in fast mode, per axis (`:1622-1650`). It reads no Motion Plus calibration block from the remote. The stick calibration and the Balance Board calibration (`ReadBalanceBoardCalibration`, register `0xA40024`) are the only calibration reads. The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them, and no Wii commit landed in the fork after the July Motion Plus fixes (`d3916fceed`, `dc24c1531e`, `db4acef28b`, the `SDL#11` / `SDL#12` / `SDL#13` rows above).
+
 PadForge needs no code change for the extension swap. `SdlDeviceWrapper.BuildInstanceGuid` keys the device on `serial:VID:PID:<BT-MAC>`, which stays stable across the extension change, and the device's capabilities and `DeviceObjects` refresh when SDL re-adds it.
 
 #### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_WII`
 
-Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:722`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:51`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
+Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:732`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:51`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
 
-`InputManager.RescanWiiControllers()` (`InputManager.cs:1165`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes (`MainWindow.xaml.cs:865`).
+`InputManager.RescanWiiControllers()` (`InputManager.cs:1175`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes (`MainWindow.xaml.cs:880`).
 
 ### Build Instructions
 
@@ -1451,4 +1464,4 @@ Copy the output `SDL3.dll` into `PadForge.App/Resources/SDL3/x64/` before publis
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

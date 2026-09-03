@@ -13,6 +13,8 @@ The Adaptive Triggers tab follows the device picked in the assigned-devices drop
 
 These settings drive the trigger when no game is writing to it. Game-driven effects (Returnal, Astro, Gran Turismo 7) pass through a separate path and override these settings while the game runs.
 
+A DualSense holds its trigger program in firmware with no timeout, so an exiting game would otherwise leave its last effect loaded. After fifteen seconds with no packet from the game, PadForge sends a release frame that sets both triggers to Off and claims nothing else. Reconnecting the pad, or restarting PadForge, also reasserts this tab: a configured effect reloads and Off ships a release.
+
 ---
 
 ## Effect modes
@@ -69,7 +71,7 @@ A 0 to 255 slider for how hard the effect pushes back, or how strong the buzz is
 
 ### Frequency (Hz)
 
-A 0 to 255 slider. Vibration and Multiple-Position Vibration use it to set the buzz rate. Only the low end does anything. Values above about 15 don't feel different from each other. Default is 10.
+A 0 to 255 slider. Vibration and Multiple-Position Vibration use it to set the buzz rate. The byte reaches the trigger firmware as written. Default is 10. PadForge's own impulse-trigger translation buzzes at 15.
 
 Setting frequency to 0 in a vibration mode gives no buzz, and the preview hides the wave.
 
@@ -111,4 +113,4 @@ The sliders stay editable after loading. It's a one-click loader, not a lock.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2224,6 +2254,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2649,6 +2691,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2705,6 +2775,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2741,6 +2895,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2825,6 +3007,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3046,7 +3256,7 @@
 </tr>
 </tbody>
 </table>
-<p>The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes on the <a href="../../features/mappings/">Mappings</a> tab like any stick or trigger, and shape them with the usual <a href="../../features/stick-deadzones/">deadzone and curve</a> machinery. Directions follow the device's own right-handed convention. If a motion feels backwards for your game, invert that row's axis.</p>
+<p>The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes on the <a href="../../features/mappings/">Mappings</a> tab like any stick or trigger, and shape them with the usual <a href="../../features/stick-deadzones/">deadzone and curve</a> machinery. PadForge passes the puck's raw axis values through with no sign correction, so each direction is whatever the hardware reports. If a motion feels backwards for your game, invert that row's axis.</p>
 <p>Buttons map as ordinary buttons. Every model's buttons fit, from the SpaceNavigator's two up through the SpaceMouse Enterprise's full bank.</p>
 <hr />
 <h2 id="supported-models">Supported models<a class="headerlink" href="#supported-models" title="Permanent link">&para;</a></h2>
@@ -3061,7 +3271,7 @@
 <tbody>
 <tr>
 <td>Current (VID 256F)</td>
-<td>SpaceMouse Compact, SpaceMouse Wireless, SpaceMouse Pro, SpaceMouse Pro Wireless (USB or Bluetooth), SpaceMouse Enterprise, SpaceMouse Module, the Universal Receiver</td>
+<td>SpaceMouse Compact, SpaceMouse Wireless (USB or Bluetooth), SpaceMouse Pro Wireless (USB or Bluetooth), SpaceMouse Enterprise, SpaceMouse Module, the Universal Receiver</td>
 </tr>
 <tr>
 <td>Logitech era (VID 046D)</td>
@@ -3073,7 +3283,7 @@
 <hr />
 <h2 id="alongside-3dxware">Alongside 3DxWare<a class="headerlink" href="#alongside-3dxware" title="Permanent link">&para;</a></h2>
 <p>3Dconnexion's own driver can stay installed. Windows delivers the puck's input to every application that opens it, so PadForge and 3DxWare read the same motion side by side. CAD keeps working while a game takes the mapped output.</p>
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

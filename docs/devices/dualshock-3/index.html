@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2318,6 +2348,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2743,6 +2785,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2799,6 +2869,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2835,6 +2989,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2919,6 +3101,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3197,7 +3407,7 @@
 <p><em>Use a PlayStation 3 controller over USB or Bluetooth, with motion, pressure-sensitive buttons, rumble, and battery.</em></p>
 <!-- SCREENSHOT: ds3-pair -->
 <p><img alt="The Pair a Controller dialog set to Sony DualShock 3" src="../../images/ds3-pair.png" /></p>
-<p>Windows can't pair a DualShock 3 from its own Bluetooth screen. The controller connects in a way the built-in Bluetooth stack turns away, so a normal "Add a device" pairing never completes. PadForge handles it with a short USB step and a signed Bluetooth driver, so you pair from inside the app. Over a cable, no pairing is needed at all.</p>
+<p>Windows can't pair a DualShock 3 from its own Bluetooth screen. The controller connects in a way the built-in Bluetooth stack turns away, so a normal "Add a device" pairing never completes. PadForge handles it with a short USB step and a bundled Bluetooth driver, so you pair from inside the app. Over a cable, no pairing is needed at all.</p>
 <hr />
 <h2 id="usb-plug-in-and-play">USB: plug in and play<a class="headerlink" href="#usb-plug-in-and-play" title="Permanent link">&para;</a></h2>
 <p>Connect the controller with a USB cable and it works right away. PadForge claims the pad and reads it as a standard gamepad. No pairing, no setup.</p>
@@ -3210,7 +3420,7 @@
 <li>Connect the DualShock 3 to the PC with a USB cable.</li>
 <li>Click <strong>Pair</strong>, next to <strong>Refresh</strong>. The <strong>Pair a Controller</strong> dialog opens.</li>
 <li>Set <strong>Controller Family</strong> to <strong>Sony DualShock 3</strong>.</li>
-<li>Click <strong>Pair</strong> in the dialog. The status line shows each step. The first time, a signed PlayStation Bluetooth driver installs on its own.</li>
+<li>Click <strong>Pair</strong> in the dialog. The status line shows each step. The first time, PadForge's bundled PlayStation Bluetooth driver installs on its own.</li>
 <li>When it finishes, unplug the controller and press the <strong>PS</strong> button. It connects over Bluetooth and appears in the device list.</li>
 <li>Click <strong>Done</strong> to close.</li>
 </ol>
@@ -3327,7 +3537,7 @@
 <p>Remove the controller from the <a href="../../features/devices/">Devices</a> list and its Bluetooth pairing clears too, so it won't reconnect on its own later. To use it again, run the pairing above once more.</p>
 <hr />
 <h2 id="coexisting-with-other-bluetooth-devices">Coexisting with other Bluetooth devices<a class="headerlink" href="#coexisting-with-other-bluetooth-devices" title="Permanent link">&para;</a></h2>
-<p>The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3. PadForge arms it when a DS3 is paired, and also when Windows still has a record of a DS3 that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen a DualShock 3 it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.</p>
+<p>The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3 or a PlayStation Move family controller. PadForge arms it when one of them is paired, and also when Windows still has a record of one that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen one of these controllers it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.</p>
 <p>One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.</p>
 <hr />
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
@@ -3351,7 +3561,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

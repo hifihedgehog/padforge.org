@@ -28,7 +28,7 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 | Menus | Per-slot radial and touch [Menus](menus.md): cells, host input, fire mode, and overlay placement. |
 | Touchpad outputs and gestures | Per-slot [Touchpad](../features/touchpad.md) toggles (Stick / D-Pad, Mouse, absolute pointer, swipe haptics, gesture detection) plus custom shape templates recorded with the recorder dialog. Different games can carry different gesture catalogs. |
 | Extended slot shape | Per-slot Sticks, Triggers, POVs, and Buttons counts for Extended (HIDMaestro) slots. |
-| Polling rate override | Optional. A profile can carry its own polling rate (1000 down to 62.5 Hz), set in the profile dialog. While that profile is active it replaces the global Settings value, and the Settings page says so under the knob. |
+| Polling rate override | Optional. A profile can carry its own polling rate, set in the profile dialog. While that profile is active it replaces the global Settings value. See [Polling rate override](#polling-rate-override). |
 
 A profile switch changes all of these at once. Physical controllers stay connected. Only the virtual side changes.
 
@@ -143,6 +143,36 @@ A badge hides when its count is zero. The strip gives you a quick read of the pr
 
 ---
 
+## Polling rate override
+
+A profile can carry its own polling rate. Open **New**, **Save As**, or **Edit**
+and pick a value from the **Polling Rate** dropdown in the profile dialog.
+
+| Choice | Interval |
+|---|---|
+| **Default (Global Setting)** | Follows the **Polling Interval** value on the [Settings](../features/settings.md) page. |
+| **1000 Hz (1 ms)** | 1 ms |
+| **500 Hz (2 ms)** | 2 ms |
+| **250 Hz (4 ms)** | 4 ms |
+| **125 Hz (8 ms)** | 8 ms |
+| **62.5 Hz (16 ms)** | 16 ms |
+
+While a profile that carries an override is active, the override sets the loop
+interval and the global Settings value does nothing. Every other profile,
+Default included, falls back to the global value.
+
+The Settings page names the profile in charge under the knob, in ember text:
+**Overridden while profile “Racing” is active: 8 ms**. The line is hidden while
+the global value rules.
+
+<!-- SCREENSHOT: profile-polling-override -->
+<!-- pending capture: ![The Polling Rate dropdown in the profile dialog](../images/profile-polling-override.png) -->
+
+The poll loop stays global and nothing restarts on a switch. The loop recomputes
+its target every cycle, so a new rate takes effect on the next tick.
+
+---
+
 ## Share and back up profiles
 
 Export writes a profile to a `.pfprofile` file. That file is one archive holding the profile plus any sound packages its macros use, so a profile with custom macro sounds travels complete. Send it to someone else, or keep it as a backup.
@@ -206,33 +236,75 @@ Record a controller button combo and have it switch profiles, toggle the window,
 - Axes. Triggers and sticks count as inputs, with direction (left-stick-left can be Previous, left-stick-right can be Next).
 - Cross-device combos. Buttons from different controllers can combine into one shortcut.
 
+---
+
 ## External control from launchers and scripts
 
-A launcher, script, or automation tool can activate and deactivate profiles from outside PadForge. Playnite and LaunchBox are the two everyone asks about, and both work the same way: run one command before the game starts and another after it closes.
+A launcher, script, or automation tool can activate and deactivate profiles from
+outside PadForge. Playnite and LaunchBox are the two everyone asks about, and
+both work the same way: run one command before the game starts and another after
+it closes.
 
-Turn it on from the **Profiles** page. Check **Allow External Control by Launchers and Scripts**. PadForge then serves a local named pipe, `PadForge.Control`, while the engine is running. Local machine only, off by default.
+Turn it on from the **Profiles** page. Check **Allow External Control by
+Launchers and Scripts**. PadForge then serves a local named pipe,
+`PadForge.Control`, while the engine is running. Local machine only, off by
+default.
+
+<!-- SCREENSHOT: profiles-external-control -->
+<!-- pending capture: ![The Allow External Control checkbox under the auto-switch checkbox on the Profiles page](../images/profiles-external-control.png) -->
 
 ### The commands
 
-One line in, one line out:
+One UTF-8 line in, one line out, one command per connection. Verbs and replies
+are fixed ASCII and never translate.
 
-| Command | What it does | Response |
+| Command | What it does | Reply |
 |---|---|---|
-| `activate <name>` | Load the profile with that name (or id) and hold it. | `ok <name>` or `error unknown-profile` |
-| `deactivate` | Release the hold and go back to Default. | `ok default` |
-| `query` | Report the active profile and whether it is held. | `ok <name> pinned` or `ok <name> unpinned` |
+| `activate <name>` | Loads the profile with that name (or its id) and holds it. Name matching ignores case. | `ok <name>` |
+| `deactivate` | Releases the hold and goes back to Default. | `ok default` |
+| `query` | Reports the active profile and whether it is held. | `ok <name> pinned` or `ok <name> unpinned`. The name reads `default` when no profile is active. |
 
-An externally activated profile is **held**: auto-switch cannot replace it while the hold lasts, so the same game can run under different profiles depending on how it was launched. The hold ends when the script sends `deactivate`, when you switch profiles yourself in PadForge, or when PadForge restarts.
+Four replies cover the failures:
+
+| Reply | Cause |
+|---|---|
+| `error unknown-profile` | No profile matches that name or id. |
+| `error unknown-command` | The verb is not `activate`, `deactivate`, or `query`. |
+| `error empty` | The line was blank, or `activate` arrived with no name. |
+| `error internal` | The command threw. |
+
+PadForge answers every connection, a blank line included, so a client waiting on
+a reply never hangs.
+
+### The hold
+
+An externally activated profile is **held**. Auto-switch on app focus cannot
+replace it while the hold lasts, so the same game can run under different
+profiles depending on how it was launched. The hold is never written to disk. It
+ends when:
+
+- the script sends `deactivate`,
+- you switch profiles yourself, by the status-bar switcher, the **Load** or
+  **Revert to Default** button on this page, or a controller shortcut,
+- you uncheck **Allow External Control by Launchers and Scripts**,
+- the engine stops, or PadForge restarts.
+
+A `deactivate` and an unchecked box both tell the foreground monitor to re-read
+the window in front, so a still-focused game picks its own rule back up on the
+next check.
 
 ### PowerShell one-liner
 
-Everything below builds on this line. It works from a normal, unelevated process, with no UAC prompt:
+Everything below builds on this line. It runs from a normal, unelevated process,
+with no UAC prompt:
 
 ```powershell
 $p = New-Object IO.Pipes.NamedPipeClientStream '.', 'PadForge.Control', InOut; $p.Connect(2000); $w = New-Object IO.StreamWriter $p; $w.WriteLine('activate Racing'); $w.Flush(); $p.Close()
 ```
 
-Swap `activate Racing` for `deactivate` in the after-close command.
+Swap `activate Racing` for `deactivate` in the after-close command. A script that
+wants to check for `error unknown-profile` reads one line from the same pipe with
+a `StreamReader` before closing it.
 
 ### Playnite
 
@@ -241,8 +313,11 @@ In a game's settings, add two script actions (or use a plugin):
 - **Before starting a game**: the one-liner with `activate <profile>`.
 - **After exiting a game**: the one-liner with `deactivate`.
 
-Two Playnite entries for the same game can activate two different profiles, which is exactly the "Play with Controller" versus "Play with Keyboard & Mouse" split. Plugin authors can skip PowerShell and open the pipe directly with `NamedPipeClientStream`, write one UTF-8 line ending in `
-`, and read one line back.
+Two Playnite entries for the same game can activate two different profiles, which
+is exactly the "Play with Controller" versus "Play with Keyboard & Mouse" split.
+Plugin authors can skip PowerShell and open the pipe directly with
+`NamedPipeClientStream`, write one UTF-8 line ending in a newline, and read one
+line back.
 
 ### LaunchBox
 
@@ -253,9 +328,18 @@ Add two Additional Applications to the game:
 
 ### Command-line form
 
-`PadForge.exe --profile "Name"` and `PadForge.exe --default-profile` do the same thing. A running instance receives the command through the pipe. A cold start applies the profile once the engine is up, so a launcher can start PadForge straight into a profile. PadForge always runs elevated, so this form pops a UAC prompt when called from a normal process. Use the pipe one-liner from launchers and keep the exe form for elevated scripts and Task Scheduler jobs.
+`PadForge.exe --profile "Name"` and `PadForge.exe --default-profile` map onto
+`activate` and `deactivate`. Which path they take depends on whether PadForge is
+already up.
 
----
+| State | What happens |
+|---|---|
+| Already running | The second instance forwards the command over the pipe, prints the reply, and exits with no window. This needs **Allow External Control by Launchers and Scripts** checked. With the pipe off it prints `error not-connected` and changes nothing. |
+| Not running | PadForge starts and applies the profile once the engine is up, so a launcher can start it straight into a profile. This one is an in-process apply and works with the pipe off. |
+
+PadForge always runs elevated, so this form pops a UAC prompt when called from a
+normal process. Use the pipe one-liner from launchers and keep the exe form for
+elevated scripts and Task Scheduler jobs.
 
 ---
 
@@ -322,7 +406,8 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 - [Button and Axis Mappings](../features/mappings.md): stored per profile.
 - [Macros](macros.md): stored per profile.
 - [Steam Workshop Config Import](steam-workshop-import.md): import community configs as profiles.
+- [External Control Internals](../reference/external-control-internals.md): the pipe, its security descriptor, and the held-profile state machine.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

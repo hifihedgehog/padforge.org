@@ -1042,6 +1042,8 @@
       
         
       
+        
+      
     
     
     
@@ -1805,6 +1807,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../controller-audio/" class="md-nav__link">
         
   
@@ -2507,6 +2537,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2932,6 +2974,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2988,6 +3058,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -3024,6 +3178,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -3108,6 +3290,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3576,7 +3786,7 @@
 <p><img alt="Force feedback settings with motor strength sliders and test button" src="../../images/pad-forcefeedback.png" /></p>
 <p>The Force Feedback tab is <strong>per pad per slot</strong>. Every physical pad mapped to the slot keeps its own Overall, Left, Right, Swap, Audio Rumble, and Constant Force values. Pick a different device in the assigned-devices dropdown and the tab rebinds to that device.</p>
 <p>See <a href="../impulse-triggers/">Impulse Triggers</a> for trigger-motor effects.</p>
-<p>The tab appears on every slot type, including Keyboard+Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, or flight stick). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard+Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.</p>
+<p>The tab appears on every slot type, including Keyboard+Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, flight, or first-person controller). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard+Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.</p>
 <p>To send the same rumble stream to speakers or a tactile transducer instead of motors, see <a href="#bass-shakers">Bass Shakers</a> below. That tab lives at the slot level and has its own settings.</p>
 <hr />
 <h2 id="how-rumble-works">How rumble works<a class="headerlink" href="#how-rumble-works" title="Permanent link">&para;</a></h2>
@@ -3613,6 +3823,7 @@
 <li><strong>PadForge</strong> forwards the adjusted rumble to your physical controller.</li>
 </ol>
 <p>This runs at PadForge's polling rate (hundreds of times per second), so feedback feels instant.</p>
+<p>The same slot rumble can also drive a Razer Sensa HD device from the Dashboard. See <a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>.</p>
 <h3 id="multi-slot-rumble">Multi-slot rumble<a class="headerlink" href="#multi-slot-rumble" title="Permanent link">&para;</a></h3>
 <p>When one physical controller is assigned to several virtual slots, PadForge takes the highest motor value from any active slot. No rumble signals are lost.</p>
 <hr />
@@ -3650,6 +3861,12 @@
 <td>On/Off</td>
 <td>Off</td>
 <td>Flips which physical motor receives the left vs. right signal. Use when rumble feels backwards.</td>
+</tr>
+<tr>
+<td>Fold Trigger Rumble into Main Motors</td>
+<td>On/Off</td>
+<td>Off</td>
+<td>Sends each trigger channel to the body motor on the same side. Shows only on a pad that rumbles but has no trigger motors, where impulse trigger data would otherwise go unfelt.</td>
 </tr>
 </tbody>
 </table>
@@ -3910,7 +4127,7 @@
 <h2 id="reset-controls">Reset controls<a class="headerlink" href="#reset-controls" title="Permanent link">&para;</a></h2>
 <p>Every slider has its own reset button. Reset All restores everything in its section.</p>
 <ul>
-<li><strong>Rumble Reset All</strong>: Gain 100%, both motors 100%, Swap Motors off. This top button also clears the Constant Force and Audio Rumble sections below it.</li>
+<li><strong>Rumble Reset All</strong>: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Constant Force and Audio Rumble sections below it.</li>
 <li><strong>Constant Force Reset All</strong>: Toggle off, X = 0, Y = 0.</li>
 <li><strong>Audio Rumble Reset All</strong>: Disabled, sensitivity 4.0, cutoff 80 Hz, both motors 100%.</li>
 <li><strong>Trigger Routing Reset All</strong>: every trigger back to Source None (off), Mode Duplicate, Scale 100%, activator cleared, Activator Mode Hold.</li>
@@ -4000,7 +4217,7 @@
 <li><strong>Start with defaults.</strong> 100% gain passes through exactly what the game sends. Only reduce if vibration is too strong.</li>
 <li><strong>Watch the motor activity bars</strong> during gameplay to see which motor a game favors, then adjust.</li>
 <li><strong>Lower the right motor for less buzz.</strong> 60–80% keeps deep thumps while softening high-frequency buzz.</li>
-<li><strong>Tune during gameplay, not just Test Rumble.</strong> Real games use varied patterns the test pulse cannot replicate.</li>
+<li><strong>Tune during gameplay rather than on Test Rumble alone.</strong> Real games use varied patterns the test pulse cannot replicate.</li>
 <li><strong>Audio rumble runs alongside game rumble.</strong> It activates when bass exceeds the game's own signal.</li>
 <li><strong>Each device gets its own settings.</strong> Tune force feedback per controller on each slot.</li>
 <li><strong>Use Extended output for racing wheels.</strong> Condition effects and directional forces are only available through the DirectInput pipeline.</li>
@@ -4071,7 +4288,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: wider help with rumble issues.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

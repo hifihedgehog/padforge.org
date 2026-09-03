@@ -110,7 +110,7 @@ Declared in `PadForge.App.csproj`:
 </EmbeddedResource>
 ```
 
-`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.3.2 ships HIDMaestro 1.7.0. The 1.6 line introduced the native OpenVR driver behind the VR slot type.
+`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.4.0 ships HIDMaestro 1.7.2. The 1.6 line introduced the native OpenVR driver behind the VR slot type.
 
 ---
 
@@ -325,7 +325,19 @@ After the guards, `steamcmd.zip` is downloaded from `steamcdn-a.akamaihd.net/cli
 
 That command line runs up to three times, and the loop is not defensive padding. The first `steamcmd` run self-updates, prints "Update complete, launching...", and exits with code 7 without executing any of the `+` commands, because the relaunch detaches. Exit codes are not trusted at all. The only install verdict is `bin\win64\vrpathreg.exe` existing under the target directory. Each attempt gets a 60-minute cancellation token, after which the process tree is killed and a `TimeoutException` is thrown. When `vrpathreg.exe` is still absent after the third attempt, the failure carries the last 400 characters of `steamcmd`'s output.
 
-On success it calls `HIDMaestro.HMVR.SetSteamVRPathHint(targetDir)`, because a Steam-free install writes no registry keys of its own and HIDMaestro's discovery has nothing else to find, then `HMaestroVRController.ResetAvailability()` so the VR slot gate lifts without waiting out the 5-second availability TTL. Temp cleanup in `finally`.
+On success it calls `HIDMaestro.HMVR.SetSteamVRPathHint(targetDir)`, because a Steam-free install writes no registry keys of its own and HIDMaestro's discovery has nothing else to find. Then `ContainOwnedSteamVrDataPaths()`, then `HMaestroVRController.ResetAvailability()` so the VR slot gate lifts without waiting out the 5-second availability TTL. Temp cleanup in `finally`.
+
+### ContainOwnedSteamVrDataPaths()
+
+```csharp
+public static bool ContainOwnedSteamVrDataPaths()
+```
+
+Valve's tooling writes `openvrpaths.vrpath` with the config and log directories as siblings of the runtime, named by appending `-config` and `-logs`. At the default install that drops two folders at the root of the system drive, and every OpenVR process reads the same file, so a per-process environment override would only move PadForge's copy.
+
+`ShouldContainDataPaths` is the pure decision, testable without the registry or the file. It answers true only when a PadForge-owned install exists, the registry's `runtime` entry names that same directory, and the config and log entries are not already inside it. Past that, the method rewrites `%LOCALAPPDATA%\openvr\openvrpaths.vrpath`, copying every other key through untouched: `external_drivers` carries HIDMaestro's own driver registration and dropping it would unregister the VR slots. It also creates the two directories whenever it runs, because `steamcmd` finishes with `validate`, which deletes anything in the install that Valve's manifest does not list.
+
+A SteamVR that PadForge did not install is left alone.
 
 `SteamVrInstallStopAfterGuards` is an internal test seam that throws right after the guards and before any network or process work. Without it, a regressed guard makes the guard tests launch a live `steamcmd`.
 
@@ -350,7 +362,11 @@ A Steam-client install therefore never reads as owned, which is exactly what gat
 public static void UninstallSteamVR()
 ```
 
-Throws when no owned install exists, when `vrserver` is running, and when the recorded path is a drive root. The drive-root check is deliberately independent of the install-side refusal, because the hint is a plain registry value anyone can edit and this is the line that calls `Directory.Delete(dir, recursive: true)`. It then clears the `SteamVRPath` value and calls `HMaestroVRController.ResetAvailability()`. The HM driver registration needs no separate cleanup, because `vrpathreg`'s record lives inside the SteamVR install's own config and dies with the directory.
+Throws when no owned install exists, when `vrserver` is running, and when the recorded path is a drive root. The drive-root check is deliberately independent of the install-side refusal, because the hint is a plain registry value anyone can edit and this is the line that calls `Directory.Delete(dir, recursive: true)`.
+
+Past the refusals it calls `OpenVrConsumerService.ReleaseRuntime()` first. PadForge loads SteamVR's own `openvr_api.dll` into this process and caches the handle, so the recursive delete used to skip that one file, report success anyway, and leave `openvr_api.dll` on disk under a directory the user believed was gone. Windows drops a freed module's lock asynchronously, so the delete retries up to ten times at 300 ms. It then re-checks `Directory.Exists(dir)` and throws `IOException` when anything survived, because "uninstalled" has to mean the directory is gone.
+
+It clears the `SteamVRPath` value last and calls `HMaestroVRController.ResetAvailability()`. The HM driver registration needs no separate cleanup, because `vrpathreg`'s record lives inside the SteamVR install's own config and dies with the directory.
 
 ---
 
@@ -359,7 +375,7 @@ Throws when no owned install exists, when `vrserver` is running, and when the re
 **File:** `PadForge.App/Services/Ds3DriverInstaller.cs`
 **Namespace:** `PadForge.Services`
 
-An `internal static` class that installs the Nefarius BthPS3 profile driver and the BthPS3PSM lower class filter so a DualShock 3 can connect over the shared radio, and binds a docked DS3 to inbox WinUSB so its sixpair reports (`0xF2`, `0xF4`, `0xF5`) can be sent. Same sequence BthPS3's own MSI performs, driven from the always-elevated app with the drivers embedded. No MSI, no DsHidMini.
+An `internal static` class that installs the Nefarius BthPS3 profile driver and the BthPS3PSM lower class filter so a DualShock 3 can connect over the shared radio, and binds a docked DS3 to WinUSB so its magic reports can be sent. Three of those reports are missing from the pad's HID descriptor, so `HidUsb` cannot carry them: `0xF4` enables reporting, and `0xF2` and `0xF5` are the sixpair pair (read the pad's own MAC, write the radio's). Same sequence BthPS3's own MSI performs, driven from the always-elevated app with the drivers embedded. No MSI, no DsHidMini.
 
 ### EnsureInstalled()
 
@@ -412,13 +428,17 @@ PadForge signs the DS3 WinUSB package on the machine that installs it, the same 
 
 ```csharp
 public static bool EnsureWinUsbBound(Action<string> log, CancellationToken ct)
+public static bool EnsureWinUsbBound(
+    Action<string> log, CancellationToken ct, string pidToken, string padLabel)
 ```
+
+The two-argument overload delegates to the four-argument one with `Ds3PidToken` (`PID_0268`) and the label `"DS3"`. The Navigation controller (`NavPidToken`, `PID_042F`) takes the same ceremony through the same code: it is a DS3 in a smaller shell, with the same `0xF2` / `0xF5` reports equally absent from its descriptor. One call binds only the pad it names, so the ceremony for one never drags the other off its inbox driver.
 
 The docked pad decides, never the interface registry. A DS3 carries no USB serial, so every port is its own devnode, and an interface registration living on some other node kept the GUID present while the live pad sat on `HidUsb`.
 
-`ListDs3UsbNodes()` enumerates present `USB\VID_054C&PID_0268` nodes across all four classes a DS3 can occupy (`Ds3HostClasses`: HIDCLASS on inbox HidUsb, UNKNOWN with no driver, USBDEVICE under a WinUSB-class INF, USB for composite parents) and reads each one's `DEVPKEY_Device_Service`. A node on any service other than `HidUsb`, `WINUSB`, or empty belongs to a third-party driver and is left strictly alone. When every node already reports `WINUSB` and `HasActiveDs3WinUsbInterface()` sees an `SPINT_ACTIVE` registration of `{B35924D6-3E16-4A9E-9782-5524A4B79BAC}`, the pad is already ours and the call returns `true`.
+`ListSonyUsbNodes(pidToken)` enumerates present `USB\VID_054C&{pidToken}` nodes across all four classes such a pad can occupy (`Ds3HostClasses`: HIDCLASS on inbox HidUsb, UNKNOWN with no driver, USBDEVICE under a WinUSB-class INF, USB for composite parents) and reads each one's `DEVPKEY_Device_Service`. A node on any service other than `HidUsb`, `WINUSB`, or empty belongs to a third-party driver and is left strictly alone. When every node already reports `WINUSB` and `HasActiveWinUsbInterface(pidToken)` sees an `SPINT_ACTIVE` registration of `{B35924D6-3E16-4A9E-9782-5524A4B79BAC}`, the pad is already ours and the call returns `true`.
 
-Otherwise it signs the package, verifies trust, `InstallInf`s `ds3_winusb.inf`, then forces the bind with `UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, "USB\\VID_054C&PID_0268", infPath, INSTALLFLAG_FORCE | INSTALLFLAG_NONINTERACTIVE, out _)`. The forced call is required because the store install applies by driver ranking, and ranking prefers inbox WHQL `HidUsb` over an Authenticode-only package, so on a strict-ranking machine the plain install silently applies nothing. It then polls up to 20 times at 250 ms for the live nodes to report `WINUSB` with an active interface. `LastWinUsbFailure` records `"sign-failed"` or `"driver-untrusted"` so the pairing dialog reports the actual cause.
+Otherwise it signs the package, verifies trust, `InstallInf`s `ds3_winusb.inf`, then forces the bind with `UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, @"USB\VID_054C&" + pidToken, infPath, INSTALLFLAG_FORCE | INSTALLFLAG_NONINTERACTIVE, out _)`. The forced call is required because the store install applies by driver ranking, and ranking prefers inbox WHQL `HidUsb` over an Authenticode-only package, so on a strict-ranking machine the plain install silently applies nothing. It then polls up to 20 times at 250 ms for the live nodes to report `WINUSB` with an active interface. `LastWinUsbFailure` records `"sign-failed"` or `"driver-untrusted"` so the pairing dialog reports the actual cause.
 
 ### PSM patching
 
@@ -603,21 +623,39 @@ GET/SET list operations use **Multi-SZ** format: null-separated UTF-16 strings w
 
 ```csharp
 static bool IsAvailable()                                   // Can open \\.\HidHide
-static List<string> GetBlacklist()                          // Device instance IDs
-static void SetBlacklist(List<string> ids)                  // Replace entire blacklist
-static List<string> GetWhitelist()                          // DOS device paths
-static void SetWhitelist(List<string> paths)                // Replace entire whitelist
+static bool TryProbe(out int win32Error)                    // The same open, with the Win32 error on failure
+static List<string> GetBlacklist()                          // Device instance IDs, or NULL when the driver could not be read
+static bool SetBlacklist(List<string> ids)                  // Replace entire blacklist, false when the driver refused
+static List<string> GetWhitelist()                          // DOS device paths, or NULL on a failed read
+static bool SetWhitelist(List<string> paths)                // Replace entire whitelist, false when the driver refused
 static bool GetActive()                                     // Cloaking enabled?
 static void SetActive(bool active)                          // Enable/disable cloaking
 static void RemoveManagedDevices()                          // Remove only PadForge's entries
-static void SyncManagedDevices(HashSet<string> desiredIds)  // Atomic diff-based blacklist sync
+static bool SyncManagedDevices(HashSet<string> desiredIds)  // Diff-based blacklist sync against the driver's own list
+static bool SyncManagedDevices(HashSet<string> desiredIds,
+                               out List<string> added,
+                               out List<string> removed)    // The same sync, reporting what changed
+static List<string> MissingFromBlacklist(IEnumerable<string> desiredIds) // Read-back: what the driver does not carry
 static void ClearAll()                                      // Clear blacklist + disable cloaking
 static List<string> FindInstanceIdsByVidPid(ushort, ushort) // Enumerate HID-class devices by VID/PID (USB + BLE + BT Classic)
-static List<string> ExpandToBaseContainerAndChildren(string hidInstanceId) // Walk Container ID to the base container, add it + every HID child
+static List<string> ExpandToBaseContainerAndChildren(string hidInstanceId)
+static List<string> ExpandToBaseContainerAndChildren(
+    string hidInstanceId, Func<string, bool> keepOut,
+    ICollection<string> keptOut)                            // The expansion with the keep-out set applied
 static bool IsHidMaestroDeviceInstance(string id)           // True if instance (or an ancestor) is a HIDMaestro virtual
 static string DevicePathToInstanceId(string p)              // \\?\HID#... -> HID\VID_...\...
 static string ToDosDevicePathPublic(string filePath)        // C:\... -> \Device\HarddiskVolumeN\...
 ```
+
+`GetBlacklist` and `GetWhitelist` return `null` for a failed read and an empty list for a successful read of an empty list. Callers must not conflate the two: every consumer does read-modify-write, so treating a failed read as "the list is empty" writes an empty list back and destroys entries the user set outside PadForge.
+
+### Reading the Driver's List
+
+`GetMultiSzList` makes two calls, the shape HidHideCLI's `FilterDriverProxy.cpp` uses. The first passes no output buffer, which the driver answers with the byte count it needs. The second reads into a buffer of exactly that size.
+
+The earlier guess-and-grow read (4096 bytes, then 65536) failed on every list past 2048 characters. The driver copies with `RtlStringCchCopyUnicodeStringEx`, whose validator rejects any destination over `NTSTRSAFE_UNICODE_STRING_MAX_CCH` (32767 characters) with `STATUS_INVALID_PARAMETER`, and 65536 bytes is 32768 characters. A few pads' worth of expanded instance paths therefore read as "driver unreadable", and the null-bail consumers hid nothing.
+
+An empty list is a two-byte reply, one `L'\0'`. Zero bytes or an odd count is malformed and reads as a failure.
 
 ### Managed Device Tracking
 
@@ -625,7 +663,11 @@ static string ToDosDevicePathPublic(string filePath)        // C:\... -> \Device
 
 **Startup clear and cloak persistence**: `_managedDeviceIds` is in-memory, so a crashed or force-killed session leaves stale blacklist entries that `RemoveManagedDevices()` can no longer identify. `InputService.Start` resets the driver state with `ClearAll()` at engine start. The clear is conditional: when the Settings toggle **Keep Devices Cloaked Between Launches** (`KeepHidHideCloaksBetweenLaunches`, off by default) is on, startup skips `ClearAll()` so persisted cloaks survive into the new session with no visible decloak window, and `ApplyDeviceHiding`'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as `RemoveDeviceHiding(keepCloaks: ...)`.
 
-**Removed methods**: `AddToBlacklist(string)` and `RemoveFromBlacklist(string)` were removed. All blacklist management now goes through `SyncManagedDevices(HashSet<string>)`, which performs an atomic diff-based sync (add missing, remove excess) in a single operation.
+**The diff is taken against the driver, not the managed set**. All blacklist management goes through `SyncManagedDevices`, which reads the driver's list, adds every desired id the driver lacks, removes every managed id that left the desired set and the driver still carries, and writes the whole list once. The managed set moves to the desired set only after a write the driver accepted, or when there was nothing to write.
+
+Diffing against the in-process managed set alone had two holes. An entry another tool dropped was never re-added, because the managed set still listed it (the HidHide client saves its whole list, and the driver's `SET` is a full replace). And a `SET` the driver refused was recorded as landed all the same. Either way the read-back printed `MISSING` on every apply and nothing fixed it.
+
+A failed read returns `false` without writing. This method's contract is that it never clears the entire blacklist, and a failed read falling through to `SetBlacklist` did precisely that.
 
 **Merge-based cache**: `ApplyDeviceHiding` uses a merge-based approach for its resolved instance ID cache. New IDs are added but previously cached IDs are never discarded. This ensures offline devices that were resolved in a prior cycle remain in the blacklist even if they are not currently enumerable.
 
@@ -643,15 +685,48 @@ The match requires the `PID&XXXX` fragment plus any one of the four Bluetooth VI
 
 ### Base-Container Blacklist Expansion
 
-`ExpandToBaseContainerAndChildren(string hidInstanceId)` widens a single HID instance ID into the full set of instance paths HidHide needs to hide a device at its container boundary. It mirrors HidHide's own `BlacklistDlg.cpp`:
+`ExpandToBaseContainerAndChildren` widens a single HID instance ID into the full set of instance paths HidHide needs to hide a device at its container boundary. It follows HidHide's own `BlacklistDlg.cpp:294-345` and adds one step the client cannot express:
 
 1. Start with the passed HID instance ID.
-2. Read its Container ID, then walk parents while the Container ID stays the same. The last matching parent is the base container.
-3. Enumerate the base container's immediate children, counting how many are HID-class.
-4. If the base container is HID-class or XUSB-class **and** every child is a HID, add the base-container instance path too. This lets HidHide block the device at the parent boundary so XInput / WGI can't reach it through a sibling child path.
+2. Read its Container ID, then walk parents while the Container ID stays the same, recording each node passed. The last matching parent is the base container.
+3. Blacklist every recorded node between the HID node and the base container whose class HidHide filters.
+4. Enumerate the base container's immediate children, counting how many are HID-class. If the base container is HIDClass, XUSB, or XboxComposite **and** every child is a HID, add the base-container instance path too. This blocks the device at the parent boundary so XInput and WGI cannot reach it through a sibling child path.
 5. Always add every HID-child instance path.
 
+`IsHidHideFilteredClass` names the three setup classes HidHide's installer registers its upper filter on (`HidHideMSI.wxs`): HIDClass, XnaComposite (the XUSB class), and XboxComposite (the Xbox One and Series GIP class, `05f5cfe2-4733-4950-a6bb-07aad01a3a84`). A blacklisted instance path of any other class is inert, because the driver is not on that stack to see the create.
+
+Step 3 is what the client's own tree cannot name, since it lists HID devices only. On a pad whose XUSB node is an *interface* of a USB composite parent (the Legion Go's built-in controller, a pad on the Xbox 360 wireless receiver) that node is neither the base container nor an immediate HID child. Without step 3, XInput opened it freely while every HID interface beside it was hidden. The driver honors the path all the same: it is an upper filter on XnaComposite and matches the device's own path on create.
+
 For an Xbox 360 wired controller the base container is XUSB-class with one HID child, so the base container is blocked. A USB-class root with mixed children (a controller that also exposes audio) keeps the base container unblocked and only its HID interfaces are filtered.
+
+`ComposeBlacklist` is the pure rule behind the walk, taking the chain, the base container, and the children as data so the trees can be pinned in tests without cfgmgr32.
+
+### Keep-Out: Rows the User Left Visible
+
+A handheld's built-in controller is one USB composite device whose touchpad is a separate row on the Devices page. When the pad's row had hiding on and the touchpad's had it off, the pad's expansion hid the touchpad's interface along with every other HID sibling, then the VID/PID sweep hid its HID node again.
+
+`InputService.BuildHidHideKeepOut` builds the set once per apply from the device snapshot. Every row with **Hide from Games** off, that is online, and whose `DevicePath` resolves to a real HID instance ID contributes `HidHideController.ChainInstanceIds(id)`: its own HID node plus its same-container ancestors. The expansion of any other record then skips those nodes, and never blocks a base container while one of its HID children is kept out, since blocking the parent would hide that row too.
+
+The gates are deliberate. An offline record is a memory, and letting one veto a live pad's sweep would reopen the transport-switch double input. Synthetic paths (`XInput#N`, `web://`, `overlay://`) resolve to no HID node and contribute nothing. Interfaces PadForge does not show as rows at all stay with the pad, exactly as before.
+
+Every id the keep-out predicate removed is reported back through `keptOut` and lands in the apply's diag line.
+
+### Apply Diagnostics
+
+`InputService.ApplyDeviceHiding` logs its whole decision through `SdlDiagLog`, every line prefixed `HIDHIDE`. The path used to be silent end to end, so a "the physical was not hidden" report could not be adjudicated from a trace, and a driver whose control device did not open skipped the block with nothing said while the Settings page read **Installed** off the MSI registry scan.
+
+| Line | Content |
+|---|---|
+| `HIDHIDE UNAVAILABLE` | `TryProbe` failed while at least one device wanted hiding. Carries the Win32 error. |
+| `HIDHIDE apply` | Device count and how many want hiding. |
+| `HIDHIDE keepout` | The keep-out set, when non-empty. |
+| `HIDHIDE dev` | Per device: VID:PID, the resolved instance id, the expansion, the sibling sweep, the sweep decision, and anything the keep-out held back. |
+| `HIDHIDE sync` | Desired count, added, removed, cloaking state, `write=REFUSED` on a refused `SET`, and the read-back verdict (`readback=ok`, `readback=FAILED`, or `readback=MISSING` with the ids). |
+| `HIDHIDE apply unchanged` | The heartbeat, at most once a minute. |
+
+The block prints only when the desired set moved, or once a minute while the sync or the read-back reports trouble. `DevicesUpdated` fires on every device-list flip, and an idle bench flipped something every enumeration interval: in one owner trace 215 of 305 diag lines were this block, five seconds apart, all identical.
+
+**Sibling sweep, scoped by serial.** The persisted `DevicePath` names the transport a pad was *last* seen on, so the first apply after a transport switch can hide the wrong node while the live one stays open to games. The sweep hides every present node of the record's VID/PID as well, and scopes the selection to the pad's own identity: `HidHideSerialScopes` reads a Bluetooth address out of the record's serial, and `SelectHidHideSweepNodes` keeps only present nodes reporting that same serial. A second pad of the same model is never touched, not even before it has a record of its own. Nodes with no readable serial, and records with no serial, fall back to the sole-present-record gate. `HidHideSweepDecision` writes which rule chose and which way the gate went, because `gate=off(same=N)` used to be silence, and silence could not be told from a sweep that found nothing.
 
 ### DOS Device Path Conversion
 
@@ -739,7 +814,7 @@ The temp-dir install flows (HidHide, MIDI Services, SteamVR) use `try/finally` s
 | HidHide install/uninstall | MSI installer handles its own rollback. PadForge surfaces no specific error UI, so failures bubble up as exceptions. |
 | MIDI Services | WiX Burn bootstrapper handles rollback. PadForge surfaces no specific error UI. HTTP and process timeouts both throw. |
 | SteamVR install | No rollback. The install is verdicted on `vrpathreg.exe` rather than on exit codes, retried up to three times, and throws `InvalidOperationException` carrying the tail of `steamcmd`'s output when the payload never lands. A partial payload is left in place, since the next attempt resumes it. Temp staging is still cleaned in `finally`. |
-| SteamVR uninstall | Three refusals before anything is deleted: no owned install, `vrserver` running, recorded path is a drive root. Past those, `Directory.Delete` is not undoable. |
+| SteamVR uninstall | Three refusals before anything is deleted: no owned install, `vrserver` running, recorded path is a drive root. Past those, `Directory.Delete` is not undoable, so the method proves the result instead: it unloads the cached `openvr_api.dll`, retries the delete ten times at 300 ms against the asynchronous lock release, and throws `IOException` when the directory survives. |
 | DS3 driver install | `EnsureInstalled` returns `false` rather than throwing, and every failure mode logs its own cause. Partial states are repairable rather than rolled back: `HasOrphanedBthPs3Key()` clears the service shell an interrupted install leaves, and `RepairPsmFilter` re-runs the filter half when its control device is missing. |
 | DS3 WinUSB bind | `LastWinUsbFailure` distinguishes `sign-failed` from `driver-untrusted` so the pairing dialog names the actual cause. A pad owned by a third-party driver is never rebound. |
 | Legacy ViGEmBus uninstall | No-op when no ProductCode found. Otherwise relies on MSI rollback. |
@@ -762,4 +837,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

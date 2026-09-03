@@ -1042,6 +1042,8 @@
       
         
       
+        
+      
     
     
     
@@ -1442,6 +1444,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../controller-audio/" class="md-nav__link">
         
   
@@ -1791,6 +1821,17 @@
     <span class="md-ellipsis">
       
         What it does not do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -2187,6 +2228,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -2660,6 +2713,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2716,6 +2797,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2752,6 +2917,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2836,6 +3029,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3010,6 +3231,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3032,11 +3264,59 @@
 <p><a href="https://github.com/opentrack/opentrack">OpenTrack</a> turns a webcam, an IR clip, a phone, or an eye tracker into a head pose: three rotations and three translations. On Windows its outputs are FreeTrack, TrackIR emulation, mouse movement, UDP, and a few sim-specific bridges. None of them is a gamepad. PadForge reads two of those outputs and turns the pose into a device row with six axes, so head yaw can drive a virtual controller's right stick while both thumbs stay on the face buttons.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open the <a href="../dashboard/">Dashboard</a>, find the <strong>Head Tracking</strong> section, and turn on <strong>Enable Head Tracking Input</strong>. The section shows the tracker's live status, and the toggle is saved with the active profile, so a flight sim profile can keep it on while every other profile leaves it off. A <strong>Head Tracker</strong> row appears on the <a href="../devices/">Devices</a> page with six axes:</p>
+<p>Open the <a href="../dashboard/">Dashboard</a>, find the <strong>Head Tracking</strong> section, and turn on <strong>Enable Head Tracking Input</strong>.</p>
+<!-- SCREENSHOT: dashboard-head-tracking -->
+<!-- pending capture: ![Dashboard, Head Tracking section with its toggles, port, ranges, and status line](../images/dashboard-head-tracking.png) -->
+
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Default</th>
+<th>Range</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enable Head Tracking Input</strong></td>
+<td>Off</td>
+<td></td>
+<td>Adds the Head Tracker row and opens the listener. Rides profiles: a profile saved with an opinion sets it on apply, and a profile with none leaves the global setting alone.</td>
+</tr>
+<tr>
+<td><strong>Also Read FreeTrack 2.0 Shared Memory</strong></td>
+<td>On</td>
+<td></td>
+<td>Reads the <code>FT_SharedMem</code> block as well. Global.</td>
+</tr>
+<tr>
+<td><strong>UDP Port</strong></td>
+<td>4242</td>
+<td>1 to 65535</td>
+<td>The port OpenTrack's "UDP over network" output sends to. Global.</td>
+</tr>
+<tr>
+<td><strong>Rotation Range (Degrees)</strong></td>
+<td>90</td>
+<td>1 to 180</td>
+<td>Head rotation that moves yaw, pitch, and roll to full deflection. Global, applied live.</td>
+</tr>
+<tr>
+<td><strong>Translation Range (cm)</strong></td>
+<td>30</td>
+<td>1 to 500</td>
+<td>Head travel that moves X, Y, and Z to full deflection. Global, applied live.</td>
+</tr>
+</tbody>
+</table>
+<p>Each numeric field has a reset button. Changing the port or the FreeTrack toggle reopens the row. The status line under the controls reads <strong>Stopped</strong> while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.</p>
+<p>A <strong>Head Tracker (OpenTrack)</strong> row appears on the <a href="../devices/">Devices</a> page, typed Head Tracker, with six axes:</p>
 <table>
 <thead>
 <tr>
 <th>Axis</th>
+<th>Raw view</th>
 <th>What it reads</th>
 <th>Full deflection</th>
 </tr>
@@ -3044,53 +3324,74 @@
 <tbody>
 <tr>
 <td>Head Yaw</td>
+<td>Axis 0</td>
 <td>turning left and right</td>
 <td>Rotation Range</td>
 </tr>
 <tr>
 <td>Head Pitch</td>
+<td>Axis 1</td>
 <td>nodding up and down</td>
 <td>Rotation Range</td>
 </tr>
 <tr>
 <td>Head Roll</td>
+<td>Axis 2</td>
 <td>tilting toward a shoulder</td>
 <td>Rotation Range</td>
 </tr>
 <tr>
 <td>Head X</td>
+<td>Axis 3</td>
 <td>sliding left and right</td>
 <td>Translation Range</td>
 </tr>
 <tr>
 <td>Head Y</td>
+<td>Axis 4</td>
 <td>rising and ducking</td>
 <td>Translation Range</td>
 </tr>
 <tr>
 <td>Head Z</td>
+<td>Axis 5</td>
 <td>leaning in and back</td>
 <td>Translation Range</td>
 </tr>
 </tbody>
 </table>
-<p>Every axis rests at center. <strong>Rotation Range</strong> (degrees, default 90) and <strong>Translation Range</strong> (centimeters, default 30) set how far the head has to move for an axis to reach its end. The vertical axes are stored the way a stick reports them, up at the low end, so mapping Head Pitch onto a stick's Y axis needs no inversion.</p>
+<p>Every axis rests at center. Yaw right and X right read high, like a stick pushed right. The vertical axes are stored the way a stick reports them, up at the low end, so mapping Head Pitch onto a stick's Y axis needs no inversion. Roll and the translations pass through with the sign OpenTrack sends.</p>
+<!-- SCREENSHOT: devices-head-tracking -->
+<!-- pending capture: ![Devices page, Head Tracker row selected, with the status line and six axes](../images/devices-head-tracking.png) -->
+
+<p>The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map covers gamepads only, so each axis is bound by hand.</p>
 <p>With the toggle off, nothing runs: no device row, no socket, no shared memory, no thread.</p>
 <hr />
 <h2 id="setting-up-opentrack">Setting up OpenTrack<a class="headerlink" href="#setting-up-opentrack" title="Permanent link">&para;</a></h2>
 <p>Two outputs work, and both can be on at once.</p>
-<p><strong>UDP over network.</strong> In OpenTrack's Output list choose <em>UDP over network</em>, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under <strong>UDP Port</strong> in PadForge (default 4242). Click Start. The Head Tracker row's details pane changes from "Waiting for a tracker" to "Receiving over UDP from 127.0.0.1".</p>
-<p><strong>freetrack 2.0 Enhanced.</strong> If a game already reads FreeTrack from OpenTrack, keep that output and leave <strong>Also Read FreeTrack 2.0 Shared Memory</strong> on in PadForge. PadForge reads the same <code>FT_SharedMem</code> block the game does, so both see the pose. The details pane says "Receiving from FreeTrack shared memory".</p>
-<p>Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule for the port when the row opens.</p>
-<p>When OpenTrack stops, or the camera loses the face for a second, the axes return to center so a stick is never left pinned. The row stays online, so mappings can be made before the tracker is started.</p>
+<p><strong>UDP over network.</strong> In OpenTrack's Output list choose <em>UDP over network</em>, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under <strong>UDP Port</strong> in PadForge (default 4242). Click Start. The status line changes from <em>Waiting for a tracker on UDP port 4242.</em> to <em>Receiving over UDP from 127.0.0.1:port.</em>, where the port is the one OpenTrack sent from.</p>
+<p><strong>freetrack 2.0 Enhanced.</strong> If a game already reads FreeTrack from OpenTrack, keep that output and leave <strong>Also Read FreeTrack 2.0 Shared Memory</strong> on in PadForge. PadForge reads the same <code>FT_SharedMem</code> block the game does, so both see the pose. The status line says <em>Receiving from FreeTrack shared memory.</em> PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.</p>
+<p>Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named <strong>PadForge Head Tracking</strong> for the port when the row opens.</p>
+<p>When OpenTrack stops, or the camera loses the face, the axes return to center after one second without a pose, so a stick is never left pinned. The row stays online, so mappings can be made before the tracker is started.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
 <p>On the Pad page, pick <strong>Head Yaw</strong> as the source of the right stick's X axis and set a deadzone on that mapping for the angle you want ignored. Deadzone, curve, and inversion are the ordinary per-mapping controls, the same ones a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.</p>
-<p>The six axes bind anywhere an axis does: stick and trigger outputs, mouse movement, macro triggers, formulas, and auto-profile conditions.</p>
+<p>The six axes bind anywhere an axis does.</p>
 <hr />
 <h2 id="what-it-does-not-do">What it does not do<a class="headerlink" href="#what-it-does-not-do" title="Permanent link">&para;</a></h2>
 <p>TrackIR's NPClient interface is a DLL the game loads by game ID, not a stream anything can subscribe to. Games that only speak TrackIR keep using OpenTrack's own output for that.</p>
-<p>Two listeners cannot share one UDP port. If OpenTrack's own <em>UDP</em> tracker input is set to the same port, the details pane says the port is in use, and one of them needs a different port.</p>
+<p>Two listeners cannot share one UDP port. If OpenTrack's own <em>UDP</em> tracker input is set to the same port, the status line says <em>UDP port 4242 is in use by another program.</em>, and one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.</p>
+<p>Nothing here has run against a live OpenTrack yet. The wire formats come from OpenTrack's source, and the decoders are pinned by replay tests, but the sign of roll and of the three translations on real hardware is unconfirmed.</p>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../dashboard/">Dashboard</a>: the Head Tracking section.</li>
+<li><a href="../devices/">Devices</a>: the Head Tracker row.</li>
+<li><a href="../../reference/head-tracking-internals/">Head Tracking Internals</a>: the UDP and FreeTrack wire facts, for whoever has to change the code.</li>
+<li><a href="../headset-motion/">Headset Head Tracking</a>: head rotation from a Sony headset, a different source.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

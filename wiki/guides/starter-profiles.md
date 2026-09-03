@@ -20,7 +20,7 @@ Browse Community Configs.
 A starter profile never names hardware. Its rows bind abstract inputs
 like *Gamepad ButtonA* and *Gamepad LeftStickX*, which resolve to
 whatever the assigned controller actually has, and every row is set to
-"(Any device)". Assign a DualSense, an Xbox pad, or a Switch Pro
+"(Any Device)". Assign a DualSense, an Xbox pad, or a Switch Pro
 Controller to the slot and the same profile drives all three.
 
 ### Touchpad and stick both drive the mouse
@@ -93,13 +93,11 @@ the double-tap tier is a real activator rather than a macro workaround.
 SOCD cleaning is set to Neutral on both axes, so pressing left and right
 together produces no movement, and the same for up and down.
 
-Street Fighter League's rules, section 2.6, say a controller must either
-maintain both opposing inputs or reject both, on each axis. Neutral is
-the reject-both case, so it complies, and the implementations the rule
-rules out are the selective ones: last-input priority, first-input
-priority, and the older up-priority. Evo's baseline is looser and permits
-those too, which makes Neutral the setting that satisfies both without
-having to check which ruleset a given event runs.
+Capcom's tournament rules require opposing directions pressed together to
+produce no movement, on the horizontal and the vertical axis alike. Only
+neutral cleaning, or no cleaning at all, does that. Evo's baseline is
+looser and also permits first- and last-input priority, so Neutral is the
+one setting legal under both rulesets, whichever a given event runs.
 
 The profile also binds only **one** directional surface. The D-pad
 drives and the left stick is left unbound on purpose, because the rules
@@ -118,9 +116,9 @@ Back is the modifier and nothing else. A shift-layer activator eats its
 own input, so while Back is held the pad's own Back output is suppressed
 and the emulator never sees a stray press.
 
-The left stick also drives the D-pad, because NES, SNES and Mega Drive
-cores have no analog sticks at all. Without that, a stick-first player
-gets nothing.
+The left stick also drives the D-pad, because NES, SNES and Genesis cores
+have no analog sticks at all. Without that, a stick-first player gets
+nothing.
 
 ### Space Sim is Frontier's own layout
 
@@ -170,7 +168,7 @@ because the recenter rides a macro that does not consume its trigger.
 
 Every profile has a quiet layer. Hold **Guide and Start together** for
 600 ms and the controller stops sending anything at all. Hold them again
-to bring it back. The layer is named **Quiet (nothing sends)** on the
+to bring it back. The layer is named **Quiet (Nothing Sends)** on the
 flyout.
 
 This is for the moment you alt-tab away and do not want the pad typing
@@ -218,4 +216,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

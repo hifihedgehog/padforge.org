@@ -1,6 +1,6 @@
 # Dashboard
 
-*PadForge's home screen. Engine status, virtual controllers, motion server, web controller, and driver health on one page.*
+*PadForge's home screen. Engine status, virtual controllers, and every service PadForge runs beside them, on one page.*
 
 <!-- SCREENSHOT: dashboard -->
 ![Dashboard overview showing engine status, virtual controllers, and driver health](../images/dashboard.png)
@@ -9,7 +9,7 @@
 
 ## Sections
 
-Ten sections, stacked top to bottom: the engine and its slots, then input services, output services, and overlays.
+Ten sections, stacked top to bottom: the engine and its slots, then a **Services** header, then input services, output services, and overlays.
 
 | Section | Purpose |
 |---------|---------|
@@ -19,14 +19,14 @@ Ten sections, stacked top to bottom: the engine and its slots, then input servic
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
 | **Head Tracking** | [OpenTrack head pose](head-tracking.md) as six mappable axes. |
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
-| **Lightbar Mirrors** | Forward a virtual PlayStation pad's lightbar color to Razer Chroma and Logitech LIGHTSYNC devices. |
-| **Razer Sensa HD Haptics** | Translate controller rumble into Razer Sensa HD haptics. |
+| **Lightbar Mirrors** | Forward a virtual PlayStation pad's lightbar color to [Razer Chroma and Logitech LIGHTSYNC](lightbar-mirrors.md) devices. |
+| **Razer Sensa HD Haptics** | Translate controller rumble into [Razer Sensa HD haptics](lightbar-mirrors.md#razer-sensa-hd-haptics). |
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the [Settings](settings.md) page under Driver Management.
 
-Every on/off toggle on this page is saved with the active [profile](../guides/profiles.md). A profile records a toggle only once you change it while that profile is active, so profiles you have never touched keep whatever the global setting is. Remote Link is the one exception: a link between two PCs is not a per-game setting.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The four newer toggles (Head Tracking, the two Lightbar Mirrors, and Razer Sensa HD Haptics) are stored as an opinion: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.
 
 ---
 
@@ -152,7 +152,9 @@ Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 share
 | **UDP Port** | The port OpenTrack's *UDP over network* output sends to. Default `4242`. |
 | **Rotation Range (Degrees)** | Head rotation that moves yaw, pitch, and roll to full deflection. Default 90. |
 | **Translation Range (cm)** | Head travel that moves X, Y, and Z to full deflection. Default 30. |
-| **Status** | Waiting for a tracker on the port, receiving over UDP from an address, receiving from FreeTrack, or the port is in use by another program. |
+| **Status** | *Stopped* while the toggle is off or the engine is stopped. Otherwise *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, or *UDP port `<port>` is in use by another program.* |
+
+Only **Enable Head Tracking Input** rides the profile. The port, the FreeTrack toggle, and the two ranges are global.
 
 See [Head Tracking](head-tracking.md) for the OpenTrack setup.
 
@@ -176,18 +178,22 @@ See [DSU Motion Server](../reference/dsu-motion-server.md) for full details.
 
 ## Lightbar Mirrors
 
-Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works.
+Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works. One section, two rows, each with its own checkbox and status line. Both are off by default.
 
-| Row | Description |
-|-----|-------------|
-| **Razer Chroma** | Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads *Razer Synapse not detected. Retrying.* until Synapse answers, then *Connected to Razer Chroma*. |
-| **Logitech LIGHTSYNC** | Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads *Logitech G HUB not detected. Retrying.* until the engine answers, then *Connected to Logitech LIGHTSYNC*. |
+| Row | Checkbox | Description |
+|-----|----------|-------------|
+| **Razer Chroma** | **Mirror Lightbar to Razer Chroma** | Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads *Razer Synapse not detected. Retrying.* until Synapse answers, then *Connected to Razer Chroma*. |
+| **Logitech LIGHTSYNC** | **Mirror Lightbar to Logitech LIGHTSYNC** | Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads *Logitech G HUB not detected. Retrying.* until the engine answers, then *Connected to Logitech LIGHTSYNC*. |
+
+See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md) for what feeds them and their limits.
 
 ---
 
 ## Razer Sensa HD Haptics
 
-Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line and the Kraken V4 Pro play the rumble of any slot. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads *Razer Sensa runtime not found. Retrying.* until the runtime answers, then *Streaming rumble to Sensa HD Haptics*.
+Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja shake with your games. One checkbox, **Send Rumble to Sensa HD Haptics**, off by default. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads *Razer Sensa runtime not found. Retrying.* until the runtime answers, then *Streaming rumble to Sensa HD Haptics*.
+
+See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md#razer-sensa-hd-haptics) for the translation and its limits.
 
 ---
 
@@ -228,7 +234,9 @@ The overlay tracks up to five finger contacts, the Windows Precision Touchpad ce
 - [DSU Motion Server](../reference/dsu-motion-server.md): gyro streaming for emulators.
 - [Web Controller](../guides/web-controller.md): browser-based virtual controller.
 - [Menus](../guides/menus.md): the radial and touch menus the Menu Overlay draws.
+- [Head Tracking](head-tracking.md): OpenTrack setup for the Head Tracking section.
+- [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md): the Razer Chroma, Logitech LIGHTSYNC, and Sensa HD sections.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

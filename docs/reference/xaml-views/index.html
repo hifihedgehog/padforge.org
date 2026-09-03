@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2093,6 +2123,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -2836,10 +2878,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gyro-tab-tab-8-engage-stick-gate-120" class="md-nav__link">
+  <a href="#gyro-tab-tab-8-detailed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Gyro Tab (Tab 8). Engage Stick Gate (#120)
+        Gyro Tab (Tab 8). Detailed
       
     </span>
   </a>
@@ -4186,6 +4228,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -4242,6 +4312,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -4278,6 +4432,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -4362,6 +4544,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -4924,10 +5134,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gyro-tab-tab-8-engage-stick-gate-120" class="md-nav__link">
+  <a href="#gyro-tab-tab-8-detailed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Gyro Tab (Tab 8). Engage Stick Gate (#120)
+        Gyro Tab (Tab 8). Detailed
       
     </span>
   </a>
@@ -6332,7 +6542,7 @@
 </tbody>
 </table>
 <h3 id="composition-root-code-behind">Composition Root (Code-Behind)<a class="headerlink" href="#composition-root-code-behind" title="Permanent link">&para;</a></h3>
-<p><code>MainWindow.xaml.cs</code> is the service wiring hub (~8400 lines). Constructor:</p>
+<p><code>MainWindow.xaml.cs</code> is the service wiring hub (~8500 lines). Constructor:</p>
 <ol>
 <li>Creates <code>MainViewModel</code> as root and sets <code>DataContext</code>.</li>
 <li>Sets child <code>DataContext</code> on Dashboard, Devices, Settings, Profiles pages.</li>
@@ -6364,7 +6574,7 @@
 <tr>
 <td><code>_driverStatusTimer</code></td>
 <td>5s</td>
-<td>Polls HidHide, Windows MIDI Services, and SteamVR presence for hot-plug detection, and runs the status-bar message decay sweep. HIDMaestro is embedded so it has no install/uninstall poll</td>
+<td><code>RefreshHidHideStatus()</code>, <code>RefreshMidiServicesStatus()</code>, and <code>SweepStatusMessage()</code>. Started in the constructor and never stopped, so the status-bar decay keeps running after the engine stops. HIDMaestro is embedded so it has no install/uninstall poll</td>
 </tr>
 <tr>
 <td><code>CompositionTarget.Rendering</code></td>
@@ -6376,18 +6586,19 @@
 <hr />
 <h2 id="dashboardpage">DashboardPage<a class="headerlink" href="#dashboardpage" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>DashboardPage.xaml</code>, <code>DashboardPage.xaml.cs</code></p>
-<p>Engine toggle, slot summary cards, DSU/Web settings, and driver status.</p>
+<p>Engine toggle, slot summary cards, and the service sections.</p>
+<p>Section order is pinned by <code>PadForge.Tests/PageOrderContractTests.cs</code>. <code>Dashboard_SectionsRunInTheDecidedOrder</code> asserts each section title's binding appears once and after the one before it, and that the Services header sits between the slot cards and the Web Controller card. <code>Dashboard_DriverStatusStripIsGone</code> asserts the page carries no <code>ED5D</code> glyph, no <code>Dashboard_Drivers</code> key in the XAML or any of the ten resx files, and no <code>HidHideStatusText</code> / <code>MidiServicesStatusText</code> / <code>SteamVrStatusText</code> in the page or <code>DashboardViewModel</code>. Those three rows live on the Settings page only.</p>
 <h3 id="layout-structure">Layout Structure<a class="headerlink" href="#layout-structure" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ScrollViewer
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  └─ StackPanel (Margin=&quot;24,16,24,16&quot;)
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>       ├─ Page header (icon + title)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>       ├─ &quot;Input Engine&quot; section header
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>       ├─ &quot;Input Engine&quot; section header (E9F5 glyph)
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>       ├─ CardBorder: Engine status card (EngineCard, Grid, 4 columns)
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>       │   ├─ Col 0: Engine toggle flame `Path` (FlameOuterGeometry, ember when Running, gold when Idle/Stopping, else outline)
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>       │   ├─ Col 1: EngineStatus text
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>       │   ├─ Col 2: PollingFrequencyText
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>       │   └─ Col 3: Online/Total devices count
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>       ├─ &quot;Virtual Controllers&quot; section header
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>       ├─ &quot;Virtual Controllers&quot; section header (E7FC glyph)
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>       ├─ ItemsControl (SlotsItemsControl, WrapPanel over a CompositeCollection:
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>       │   SlotSummaries plus the Add Controller tile in the same wrap flow)
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>       │   ├─ DataTemplate: slot card Border (252px wide, 5 rows)
@@ -6401,28 +6612,40 @@
 <a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>       │   │   └─ Row 4: StageLedger chips (per-stage glyphs with hover readout)
 <a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>       │   └─ Add Controller tile (AddControllerCard, 252px, dashed steel outline,
 <a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>       │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>       ├─ &quot;Services&quot; divider (ServicesHeader, ember tick + hairline rule)
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>       ├─ &quot;Motion Server&quot; section (DSU)
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>       ├─ &quot;Web Controller&quot; section
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>       ├─ &quot;Remote Link&quot; section (#138)
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>       │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>       │      port NumberBox + reset, status flame + RemoteLinkStatus text,
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>       │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>       │      per peer, Revoke All), nearby-unpaired list, connect-by-address box, footer
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>       ├─ &quot;Overlays&quot; section
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>       │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>       │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>       ├─ &quot;Touchpad Overlay&quot; section
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>       │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>       │      NumberBox + reset, reset-position button, status flame +
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>       │      TouchpadOverlayStatus
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>       └─ &quot;Drivers&quot; section
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>           └─ CardBorder (Grid, 3 rows × 2 cols)
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>               ├─ Row 0: HidHide status (ED1A glyph)
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>               ├─ Row 1: MIDI Services status (E8D6 glyph)
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>               └─ Row 2: SteamVR status (F119 glyph, SteamVrStatusText, #49)
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>       └─ ServicesSection StackPanel (one panel so the welcome tour can ring
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>            the whole group as a single target)
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>            ├─ &quot;Services&quot; divider (ServicesHeader, ember tick + hairline rule)
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>            ├─ &quot;Web Controller&quot; section (E774 glyph)
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>            │   └─ CardBorder: Enable toggle (EnableWebControllerCheckBox), port
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>            │      NumberBox + reset, status flame + WebControllerStatus, QR image +
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>            │      URL box + copy button (shown on HasWebControllerQr, #296), footer
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>            ├─ &quot;Remote Link&quot; section (E969 glyph, #138)
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>            │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>            │      port NumberBox + reset, status flame + RemoteLinkStatus text,
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>            │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>            │      per peer, Revoke All), nearby-unpaired list, my-code readout,
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>            │      connect-by-address box, footer
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>            ├─ &quot;Head Tracking&quot; section (E77B glyph, #355)
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>            │   └─ CardBorder: Enable toggle (HeadTrackingEnabled), FreeTrack toggle
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>            │      (HeadTrackingFreeTrack), a three-row Grid of port / rotation range /
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>            │      translation range NumberBoxes each with a reset button,
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>            │      HeadTrackingStatus source line, footer
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>            ├─ &quot;Motion Server&quot; section (E7AD glyph, DSU)
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>            │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>            ├─ &quot;Lightbar Mirrors&quot; section (E781 glyph)
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>            │   └─ CardBorder holding two divider-separated rows that forward the same
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>            │      virtual-pad lightbar color, each with its own strings and status line
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>            │      ├─ Razer Chroma (EnableChromaLightbar, ChromaStatus, #373)
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>            │      └─ Logitech LIGHTSYNC (EnableLightsyncLightbar, LightsyncStatus, #382)
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>            ├─ &quot;Razer Sensa HD Haptics&quot; section (E877 glyph, #374)
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>            │   └─ CardBorder: Enable toggle (EnableSensaHaptics), SensaStatus, footer
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>            ├─ &quot;Overlays&quot; section (E700 glyph)
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>            │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>            │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>            └─ &quot;Touchpad Overlay&quot; section (EDA4 glyph)
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>                   NumberBox + reset, reset-position button, status flame +
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>                   TouchpadOverlayStatus
 </code></pre></div>
 <h3 id="key-bindings">Key Bindings<a class="headerlink" href="#key-bindings" title="Permanent link">&para;</a></h3>
 <table>
@@ -6490,9 +6713,19 @@
 <td>Web controller port and status text</td>
 </tr>
 <tr>
+<td><code>HasWebControllerQr</code> / <code>WebControllerQr</code> / <code>WebControllerUrl</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>QR panel visibility, the QR bitmap, and the URL shown beside it (#296)</td>
+</tr>
+<tr>
 <td><code>EnableRemoteLink</code> / <code>RemoteLinkPort</code> / <code>RemoteLinkConnectHost</code></td>
 <td><code>DashboardViewModel</code></td>
 <td>Remote Link enable, port, and connect-by-address host (#138)</td>
+</tr>
+<tr>
+<td><code>AutoReconnect</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Remote Link auto-reconnect toggle</td>
 </tr>
 <tr>
 <td><code>IsRemoteLinkRunning</code> / <code>RemoteLinkStatus</code></td>
@@ -6502,7 +6735,37 @@
 <tr>
 <td><code>RemoteLink</code></td>
 <td><code>DashboardViewModel</code></td>
-<td>Sub-ViewModel: identity-protection modes, trusted peers, nearby-unpaired list, revoke commands</td>
+<td>Sub-ViewModel: identity-protection modes and hint, trusted peers, nearby-unpaired list, revoke commands</td>
+</tr>
+<tr>
+<td><code>HeadTrackingEnabled</code> / <code>HeadTrackingFreeTrack</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Head Tracking enable and FreeTrack toggles (#355)</td>
+</tr>
+<tr>
+<td><code>HeadTrackingUdpPort</code> / <code>HeadTrackingRotationRange</code> / <code>HeadTrackingTranslationRange</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>NumberBoxes ranged 1-65535, 1-180, and 1-500, each with a reset command</td>
+</tr>
+<tr>
+<td><code>HeadTrackingStatus</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Which head-tracking source is live, or why neither is</td>
+</tr>
+<tr>
+<td><code>EnableChromaLightbar</code> / <code>ChromaStatus</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Razer Chroma mirror row (#373)</td>
+</tr>
+<tr>
+<td><code>EnableLightsyncLightbar</code> / <code>LightsyncStatus</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Logitech LIGHTSYNC mirror row (#382)</td>
+</tr>
+<tr>
+<td><code>EnableSensaHaptics</code> / <code>SensaStatus</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Razer Sensa HD haptics translation (#374)</td>
 </tr>
 <tr>
 <td><code>EnableMenuOverlay</code> / <code>EnableShiftLayerFlyout</code> / <code>EnableProfileOverlay</code></td>
@@ -6513,11 +6776,6 @@
 <td><code>EnableTouchpadOverlay</code> / <code>TouchpadOverlayOpacity</code> / <code>TouchpadOverlayStatus</code></td>
 <td><code>DashboardViewModel</code></td>
 <td>Touchpad overlay enable, opacity, and status text</td>
-</tr>
-<tr>
-<td><code>HidHideStatusText</code> / <code>MidiServicesStatusText</code> / <code>SteamVrStatusText</code></td>
-<td><code>DashboardViewModel</code></td>
-<td>Driver status text shown on the Dashboard. HIDMaestro is embedded, with status shown on the Settings page only</td>
 </tr>
 </tbody>
 </table>
@@ -6770,6 +7028,11 @@
 <td>PreviewKeyDown</td>
 <td>Cancels drag on Escape</td>
 </tr>
+<tr>
+<td><code>OnDragCaptureLost</code></td>
+<td>LostMouseCapture</td>
+<td>Cancels the drag when capture is taken away</td>
+</tr>
 </tbody>
 </table>
 <h3 id="dashboard-card-drag-reordering">Dashboard Card Drag Reordering<a class="headerlink" href="#dashboard-card-drag-reordering" title="Permanent link">&para;</a></h3>
@@ -6799,16 +7062,16 @@
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   │        Visibility bound to OutputTabVisible, #270 follow-up)
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   └─ Tier 2 (device scope, cold underline): scope label + device ComboBox on the left,
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│      capability tabs pushed right in a WrapPanel (TabStripButtonCold, GroupName=&quot;PadTabDevice&quot;)
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│       ├─ ComboBox (MappedDevices; item = LivenessFlame Path + Name + battery)
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│       ├─ ComboBox (MappedDevices, item = LivenessFlame Path + Name + battery)
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│       ├─ RadioButton &quot;Sticks&quot; (Tag=3, x:Name=&quot;TabSticks&quot;)
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│       ├─ RadioButton &quot;Triggers&quot; (Tag=4, x:Name=&quot;TabTriggers&quot;)
 <a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│       ├─ RadioButton &quot;Force Feedback&quot; (Tag=5, x:Name=&quot;TabForceFeedback&quot;, gated on hasForceFeedback)
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│       ├─ RadioButton &quot;Adaptive Triggers&quot; (Tag=6, x:Name=&quot;TabAdaptiveTriggers&quot;, gated on hasAdaptiveTriggers)
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│       ├─ RadioButton &quot;Lighting&quot; (Tag=7, x:Name=&quot;TabLighting&quot;, gated on hasLightbar || hasGuideLed)
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>│       ├─ RadioButton &quot;Gyro&quot; (Tag=8, x:Name=&quot;TabGyro&quot;, gated on hasGyro)
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>│       ├─ RadioButton &quot;Impulse Triggers&quot; (Tag=9, x:Name=&quot;TabImpulseTriggers&quot;, gated on hasRumbleTriggers)
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>│       ├─ RadioButton &quot;Touchpad&quot; (Tag=10, x:Name=&quot;TabTouchpad&quot;, gated on hasTouchpad)
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>│       ├─ RadioButton &quot;Wheel&quot; (Tag=11, x:Name=&quot;TabWheel&quot;, gated on wheel VID/PID)
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│       ├─ RadioButton &quot;Wheel&quot; (Tag=11, x:Name=&quot;TabWheel&quot;, gated on wheel VID/PID)
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│       ├─ RadioButton &quot;Impulse Triggers&quot; (Tag=9, x:Name=&quot;TabImpulseTriggers&quot;, gated on hasRumbleTriggers)
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>│       ├─ RadioButton &quot;Adaptive Triggers&quot; (Tag=6, x:Name=&quot;TabAdaptiveTriggers&quot;, gated on hasAdaptiveTriggers)
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>│       ├─ RadioButton &quot;Lighting&quot; (Tag=7, x:Name=&quot;TabLighting&quot;, gated on hasLightbar || hasGuideLed)
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>│       ├─ RadioButton &quot;Gyro&quot; (Tag=8, x:Name=&quot;TabGyro&quot;, gated on any motion sensor, #392)
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>│       ├─ RadioButton &quot;Touchpad&quot; (Tag=10, x:Name=&quot;TabTouchpad&quot;, gated on hasTouchpad)
 <a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>│       ├─ RadioButton &quot;Audio&quot; (Tag=12, x:Name=&quot;TabAudio&quot;, gated on hasAudio)
 <a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>│       ├─ RadioButton &quot;Pointer&quot; (Tag=13, x:Name=&quot;TabPointer&quot;, gated on hasIrPointer, #146)
 <a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>│       └─ RadioButton &quot;Mouse&quot; (Tag=14, x:Name=&quot;TabMouse&quot;, gated on mouse device, #200)
@@ -6973,7 +7236,7 @@
 <td>Visible if <code>hasGyro</code></td>
 <td><strong>Hidden</strong></td>
 <td><strong>Hidden</strong></td>
-<td>source device has a gyro sensor</td>
+<td>source device has any motion sensor (<code>ud.HasGyro \|\| ud.HasAccel</code>). On an accelerometer-only device the tab shows with its five gyro-rate cards collapsed (#392)</td>
 </tr>
 <tr>
 <td>Pointer</td>
@@ -7363,9 +7626,10 @@
 <a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>            ├─ Add Action / Remove buttons
 <a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>            ├─ Actions ListBox (DisplayMemberPath=&quot;DisplayText&quot;)
 <a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>            └─ Action editor Border (DataContext=SelectedAction)
-<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>                ├─ Action Type ComboBox (55 `MacroActionType` values)
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>                ├─ Action Type ComboBox (grouped, `MacroTypeCatalog.View`)
 <a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>                └─ Type-specific panels (conditional visibility):
 </code></pre></div>
+<p><strong>Grouped Action Type Picker.</strong> The picker binds <code>ItemsSource="{Binding Source={x:Static vm:MacroTypeCatalog.View}}"</code> with <code>SelectedValuePath="Type"</code> and <code>DisplayMemberPath="Label"</code>. <code>MacroTypeCatalog</code> (<code>PadForge.App/ViewModels/MacroTypeCatalog.cs</code>) carries all 56 <code>MacroActionType</code> values exactly once, in display order, across eleven category shelves: Virtual Buttons, Virtual Axes &amp; Wheel, Keyboard &amp; Text, Mouse, Timing &amp; Flow, Rumble, Lightbar &amp; LEDs, Sound &amp; Volume, Motion &amp; Pointer, Layers &amp; Overlays, System &amp; Apps. <code>MacroTypeCatalog.View</code> is a <code>ListCollectionView</code> grouped on <code>Category</code>, and the ComboBox draws each shelf through a <code>GroupStyle.HeaderTemplate</code>, the arrangement the cross-device input picker uses. Item tooltips ride the <code>ItemContainerStyle</code>. The list is one instance for the process lifetime, refilled in place on <code>Strings.CultureChanged</code> so an <code>x:Static</code>-bound view never strands on a stale list. <code>PadForge.Tests/MacroTypeCatalogTests.cs</code> pins the census: every enum member appears exactly once, <code>Choices.Count</code> equals <code>Enum.GetValues&lt;MacroActionType&gt;().Length</code>, the categories stay eleven contiguous blocks, and the picker still binds <code>MacroTypeCatalog.View</code>.</p>
 <p><strong>Macro Trigger Section:</strong></p>
 <table>
 <thead>
@@ -7413,7 +7677,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Action Type Editor Panels:</strong></p>
+<p><strong>Action Type Editor Panels.</strong> One <code>Visibility</code> branch per shape, each bound to an <code>Is*Type</code> predicate on <code>MacroAction</code>. Some branches cover a family (<code>IsAnyRumbleSetType</code>, <code>IsAnyAxisValueType</code>, <code>IsAnyMouseButtonType</code>). The ones below are the shapes worth naming. Grep <code>Is[A-Za-z]*Type</code> in <code>PadPage.xaml</code> for the full set.</p>
 <table>
 <thead>
 <tr>
@@ -7468,6 +7732,11 @@
 <td><code>IsDisconnectControllerType</code></td>
 <td>Target-mode ComboBox (<code>DisconnectTarget</code>: Triggering Device / Specific Device / Slot Devices / All Devices) + specific-device picker ComboBox (<code>DisconnectDeviceOptions</code>, gated on <code>IsDisconnectSpecificDevice</code>)</td>
 </tr>
+<tr>
+<td><code>SwitchLayer</code></td>
+<td><code>IsSwitchLayerType</code></td>
+<td>A <code>CardBorder</code> with <code>MacroAction_Type_SwitchLayer</code> as its title, the <code>Macro_SwitchLayer_Hint</code> line, and a 240px ComboBox over the slot's own <code>LayerTabs</code> (<code>SelectedValuePath="LayerMask"</code>, <code>DisplayMemberPath="LayerName"</code>) writing <code>SwitchLayerMask</code>. Choices are Base plus every authored layer, the same name/mask pairs the layer-scope picker uses (#377)</td>
+</tr>
 </tbody>
 </table>
 <p><strong>Device Axis Picker (shared by SystemVolume, AppVolume, MouseMove):</strong>
@@ -7511,7 +7780,7 @@
 One search box and one device-visibility popup filter the slot's shared choice view, so every picker on the tab reflects them when opened. Ctrl+F focuses the box through <code>MappingsTabRoot_PreviewKeyDown</code> on the tab root.</p>
 <ul>
 <li><code>MappingInputSearch</code> is find-as-you-type and session-only, never persisted. Its setter calls <code>ApplyMappingPickerFilter()</code>.</li>
-<li>The search also <strong>filters the grid rows</strong>, not just the dropdown contents: <code>RowMatchesSearch</code> matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.</li>
+<li>The search also <strong>filters the grid rows</strong> as well as the dropdown contents: <code>RowMatchesSearch</code> matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.</li>
 <li><code>PickerDeviceFilterEntries</code> drives the popup's per-device checkboxes. <code>HiddenPickerDeviceKeys</code> (device guids plus <code>"any"</code> for the device-agnostic group) persists per slot in the settings root, not in profiles.</li>
 <li><code>MappingPickerFilterActive</code> is true while either filter narrows the list, so the funnel reads as engaged.</li>
 </ul>
@@ -7656,12 +7925,93 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
 <a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
 <a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>          ├─ Left trigger source ComboBox (LeftTriggerRouteSource) + reset
-<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>          └─ Right trigger source ComboBox (RightTriggerRouteSource) + reset
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>          │   and activator-mode ComboBox, each with its own reset
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
-<h3 id="gyro-tab-tab-8-engage-stick-gate-120">Gyro Tab (Tab 8). Engage Stick Gate (#120)<a class="headerlink" href="#gyro-tab-tab-8-engage-stick-gate-120" title="Permanent link">&para;</a></h3>
-<p>Below the Easy-Aim stick threshold, two ComboBoxes gate gyro engagement per stick and per direction. Both use <code>SelectedValuePath="Tag"</code> and reset buttons.</p>
+<h3 id="gyro-tab-tab-8-detailed">Gyro Tab (Tab 8). Detailed<a class="headerlink" href="#gyro-tab-tab-8-detailed" title="Permanent link">&para;</a></h3>
+<p>The tab opens on the E7AD page header (<code>Pad_Gyro_Header</code> + <code>Pad_Gyro_Subtitle</code>), then nine <code>CardBorder</code> cards in this order:</p>
+<table>
+<thead>
+<tr>
+<th>Order</th>
+<th>Card</th>
+<th>x:Name</th>
+<th>Glyph</th>
+<th>Shown when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Grip (#392)</td>
+<td>(unnamed)</td>
+<td><code>E815</code></td>
+<td>always</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Motion Passthrough</td>
+<td><code>GyroPassthroughCard</code></td>
+<td><code>E72A</code></td>
+<td>gyro rate</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Motion Steering (#94)</td>
+<td>(unnamed)</td>
+<td>inline <code>Path</code></td>
+<td>always</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Tilt</td>
+<td>(unnamed)</td>
+<td><code>E99A</code></td>
+<td>always</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Calibration</td>
+<td><code>GyroCalibrationCard</code></td>
+<td><code>F272</code></td>
+<td>gyro rate</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Sensitivity</td>
+<td><code>GyroSensitivityCard</code></td>
+<td><code>E9E9</code></td>
+<td>gyro rate</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Compass Yaw (#271)</td>
+<td><code>CompassYawCard</code></td>
+<td><code>E707</code></td>
+<td>Switch 2 magnetometer</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Response</td>
+<td><code>GyroResponseCard</code></td>
+<td><code>F1CB</code></td>
+<td>gyro rate</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Engage (#120)</td>
+<td><code>GyroEngageCard</code></td>
+<td><code>E7E8</code></td>
+<td>gyro rate</td>
+</tr>
+</tbody>
+</table>
+<p>The tab raises for any motion sensor, so an accelerometer-only remote reaches Grip, Tilt, and Motion Steering. <code>SyncTabVisibility()</code> keeps two flags apart for that: <code>hasGyro</code> is <code>ud.HasGyro || ud.HasAccel</code> and drives <code>TabGyro.Visibility</code>, while <code>hasGyroRate</code> is <code>ud.HasGyro</code> alone and collapses the five rate cards named above. Before #392 the tab itself was gyro-gated, so an accelerometer-only Wii Remote never saw Tilt.</p>
+<p><strong>Grip card.</strong> One row: a <code>MotionGripOptions</code> ComboBox on <code>MotionGrip</code> (<code>SelectedValuePath="Value"</code>, <code>DisplayMemberPath="Display"</code>, 260px) plus <code>ResetMotionGripCommand</code>. The four holds are <code>Pointing</code> (the default), <code>Sideways</code>, <code>WiiWheel</code>, and <code>Upright</code>, stored as those canonical English identifiers. The grip rotates gyro, accelerometer, and gravity into the game's frame, and the D-pad follows it.</p>
+<p><strong>Engage card (#120).</strong> Below the Easy-Aim stick threshold, two ComboBoxes gate gyro engagement per stick and per direction. Both use <code>SelectedValuePath="Tag"</code> and reset buttons.</p>
 <table>
 <thead>
 <tr>
@@ -7711,26 +8061,43 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>            ├─ Host Input ComboBox (HostOptions → SelectedHost)
 <a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>            │   + Record button (MenuHostRecordCommand from the TabItem DataContext,
 <a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>            │     glyph = HostRecordIcon) + Reset (ResetHostCommand)
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>            ├─ Pad Half ComboBox (HostHalfOptions → HostHalfIndex,
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>            │   visible on HostIsTouchpad)
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>            ├─ Fire Mode ComboBox (FireOptions → FireTypeIndex) + Reset
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>            ├─ Cells NumberBox (1-20 → CellCount)
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>            │   + Center Cell CheckBox (HasCenter, radial only) + Reset
-<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>            ├─ Engage Deadzone Slider + NumberBox (1-95 → EngageDeadzonePercent) + Reset
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>            ├─ Menu Overlay geometry card (CardBorder, header + ResetGeometryCommand)
-<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>            │   ├─ Show Labels CheckBox (ShowLabels)
-<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>            │   ├─ Screen Position NumberBox pair (0-100 → PosXPercent / PosYPercent)
-<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>            │   ├─ Size NumberBox (10-400 → ScalePercent) + &quot;%&quot;
-<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>            │   └─ Opacity NumberBox (5-100 → OpacityPercent) + &quot;%&quot;
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>            └─ Cell Bindings ItemsControl (Cells)
-<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>                └─ per cell: Header + Label TextBox (LostFocus)
-<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>                    + Binding ComboBox (BindingKindOptions → BindingKind)
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>                    + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>                    OR button picker (ButtonOptions → SelectedButtonFlag,
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>                       visible on ShowButtonPicker)
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>                    + Reset (ResetCellCommand)
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>            ├─ Host Input caption (Menu_HostInput_Caption, always shown)
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>            ├─ Custom X / Custom Y steer-axis rows (visible on IsCustomHost,
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>            │   ResetCustomXCommand / ResetCustomYCommand)
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>            ├─ Click Input row (visible on IsCustomHost, ResetClickCommand)
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>            ├─ Pad Half ComboBox (HostHalfOptions → HostHalfIndex,
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>            │   visible on HostIsTouchpad)
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>            ├─ Fire Mode ComboBox (FireOptions → FireTypeIndex) + Reset
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>            ├─ Cells NumberBox (1-20 → CellCount)
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>            │   + Center Cell CheckBox (HasCenter, radial only) + Reset
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>            ├─ Engage Deadzone Slider + NumberBox (1-95 → EngageDeadzonePercent) + Reset
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>            ├─ Menu Overlay geometry card (CardBorder, header + ResetGeometryCommand)
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>            │   ├─ Show Labels CheckBox (ShowLabels)
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>            │   ├─ Screen Position NumberBox pair (0-100 → PosXPercent / PosYPercent)
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>            │   ├─ Size NumberBox (10-400 → ScalePercent) + &quot;%&quot;
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>            │   └─ Opacity NumberBox (5-100 → OpacityPercent) + &quot;%&quot;
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>            ├─ Cell Bindings ItemsControl (Cells)
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>            │   └─ per cell: Header + icon indicator (IconImage, or the E8B9
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>            │       picture glyph on ShowIconGlyph) + Label TextBox (LostFocus)
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>            │       + Binding ComboBox (BindingKindOptions → BindingKind)
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>            │       + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>            │       OR button picker (ButtonOptions → SelectedButtonFlag,
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>            │          visible on ShowButtonPicker)
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>            │       OR macro picker (MacroOptions → SelectedMacroName,
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>            │          visible on ShowMacroPicker, #390)
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>            │       + Choose Icon button (EB9F, MenuCellChooseIcon_Click, #390)
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>            │       + Reset (ResetCellCommand)
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>            └─ Icon Packages card (CardBorder, EB9F glyph, #390)
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>                ├─ Pad_Menus_IconPackages_Header + description
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>                ├─ Add (IconPackageAdd_Click) / Create (IconPackageCreate_Click) /
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>                │   Remove (IconPackageRemove_Click) buttons
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>                ├─ IconPackagesEmptyText (Pad_Menus_IconPackages_Empty)
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>                └─ IconPackagesList ListBox (MaxHeight 170, EmberSelectListItem,
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>                    per row: EB9F glyph + Name + Path)
 </code></pre></div>
 <p>Every setting row carries the canonical Reset button, and the host row carries Record too (the Aim Engage cluster shape). The record button binds <code>MenuHostRecordCommand</code> on the PadViewModel through the TabItem's DataContext because the editor panel's own DataContext is the selected <code>MenuEditorItem</code>.</p>
+<p>The four cell pickers each use <code>ComboBoxWidthBehavior.SizeToItems</code> with a per-column <code>WidthGroup</code> (<code>MenuCellKindCombos</code>, <code>MenuCellKeyCombos</code>, <code>MenuCellButtonCombos</code>, <code>MenuCellMacroCombos</code>), so rows stay in column across selections and long locales do not clip.</p>
+<p><strong>Icon Packages block (#390).</strong> Takes the Sound Packages card's shape. A pack is one zip file with the <code>.pficons</code> extension holding image entries plus an optional <code>manifest.json</code> display name (<code>PadForge.App/Common/IconPackageManager.cs</code>). PadForge never extracts a pack: importing one registers its path, and cells reference entries as <code>pficon://PackName/entry.png</code> beside loose image paths and Steam binding-icon names. The list and its empty-state text are filled from code-behind (<code>RefreshIconPackages</code> sets <code>IconPackagesList.ItemsSource</code> from <code>IconPackageManager.Packages</code>), and <code>IconPackageManager.RegistryChanged</code> re-runs it.</p>
 <h3 id="hidmaestro-profile-bar">HIDMaestro Profile Bar<a class="headerlink" href="#hidmaestro-profile-bar" title="Permanent link">&para;</a></h3>
 <p><code>HMaestroProfileBar</code> is a <code>ChipGhost</code> preset chip inline in tier 1, shown for <code>Xbox</code>, <code>PlayStation</code>, and <code>Nintendo</code> slots. Its visibility is <code>HasHMaestroProfileBar &amp;&amp; !isExtended</code>. <code>HasHMaestroProfileBar</code> is true for Xbox, PlayStation, Nintendo, and Extended, but Extended slots hide this compact chip and use the separate <code>ExtendedConfigBar</code> (with its own <code>ExtendedProfileCombo</code>) instead. It contains the profile picker only:</p>
 <table>
@@ -7838,65 +8205,81 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Grid (Margin=&quot;24,16&quot;)
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>├─ Row 0 (Auto): Header
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>│   ├─ Icon (E772) + Title
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>│   ├─ Refresh Button (RefreshCommand)
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>│   └─ Online/Total count display
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>└─ Row 1 (*): Main content (Grid, 2 columns)
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    ├─ Col 0 (*): Facet chips + device card ListBox + drag-assign hint
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    │   ├─ Row 0: Type facet chips (ALL / GAMEPAD / JOYSTICK / WHEEL / KEYBOARD /
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    │   │    MOUSE / OTHER, MouseLeftButtonUp=&quot;FacetChip_Click&quot;, count per chip)
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    │   ├─ Row 1: ListBoxItem with custom ControlTemplate (4px accent left bar on selection)
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    │   │   └─ Card Border (CornerRadius=8, Padding=&quot;12,10&quot;)
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    │   │       ├─ Row 0, Col 0: LivenessFlame Path + DeviceName (SemiBold, 13px)
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    │   │       ├─ Row 0-1, Col 1: Slot badges (WrapPanel of numbered badges).
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    │   │       │    No badges means unassigned. There is no fallback pill
-<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>    │   │       ├─ Row 0-1, Col 2: Remove device Button (E711 × icon)
-<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    │   │       └─ Row 1: DeviceType + VID:PID + CapabilitiesSummary
-<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    │   └─ Row 2: Devices_DragAssignHint text
-<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    └─ Col 1 (340px): Detail panel (Border with ScrollViewer)
-<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>        ├─ DeviceName headline (CardTitle, wrapping)
-<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>        ├─ Device Dossier (#175 competitor item 7): eyebrow + copy Button
-<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>        │   (CopyDossier_Click, E8C8) over a recessed telemetry-mono card whose
-<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>        │   token rows are PRODUCT / TYPE / CAPS / VID:PID / APP GUID / SDL GUID /
-<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>        │   PATH / LINK / BT / SERIAL / BATT. Rows whose fact is absent collapse
-<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>        ├─ Submit Mapping Button (joysticks only, opens GitHub issue template)
-<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>        ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag, #150)
-<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>        ├─ Separator
-<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>        ├─ VC Assignment section
-<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>        │   └─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
-<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>        ├─ Separator
-<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>        ├─ Input Mode section (ShowInputModeSection)
-<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
-<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>        ├─ Input Hiding section (ShowInputHidingSection)
-<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>        │   ├─ &quot;Hide from games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click)
-<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>        │   └─ &quot;Consume mapped inputs&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>│   ├─ Refresh Button (E72C, RefreshCommand)
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>│   ├─ Pair Button (E702, PairCommand → PairDeviceDialog)
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>│   └─ Online/Total count display (telemetry mono)
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>└─ Row 1 (*): Main content (Grid, 2 columns)
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    ├─ Col 0 (*): Facet chips + device card ListBox + drag-assign hint
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    │   ├─ Row 0: Type facet chips (ALL / GAMEPAD / JOYSTICK / WHEEL / KEYBOARD /
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    │   │    MOUSE / OTHER, MouseLeftButtonUp=&quot;FacetChip_Click&quot;, count per chip)
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    │   ├─ Row 1: ListBoxItem with custom ControlTemplate (4px accent left bar on selection)
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    │   │   └─ Card Border (CornerRadius=8, Padding=&quot;12,10&quot;)
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    │   │       ├─ Row 0, Col 0: LivenessFlame Path + DeviceName (SemiBold, 13px)
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    │   │       ├─ Row 0-1, Col 1: Slot badges (WrapPanel of numbered badges).
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>    │   │       │    No badges means unassigned. There is no fallback pill
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    │   │       ├─ Row 0-1, Col 2: Remove device Button (E711 × icon)
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    │   │       └─ Row 1: DeviceType + VID:PID + CapabilitiesSummary
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    │   └─ Row 2: Devices_DragAssignHint text
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    └─ Col 1 (340px): Detail panel (Border with ScrollViewer)
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>        ├─ DeviceName headline (CardTitle, wrapping)
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>        ├─ Device Dossier (#175 competitor item 7): eyebrow + copy Button
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>        │   (CopyDossier_Click, E8C8) over a recessed telemetry-mono card whose
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>        │   token rows run PRODUCT / TYPE / CAPS / APP GUID / SDL GUID /
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>        │   PATH (HidHideInstancePath) / PATH (DossierConnectionPath) / VID:PID /
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>        │   LINK / SERIAL / BATT. Rows whose fact is absent collapse. LINK reads
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>        │   &quot;BT&quot; and shows only on IsBluetoothLink
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>        ├─ Capability chip strip (HasCapabilityIcons): rumble (E877, doubles as the
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>        │   identify button via IdentifyChip_Click, #293), gyro (E7AD), touchpad (EFA5)
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>        ├─ Submit Mapping Button (joysticks only, opens GitHub issue template)
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>        ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag, #150)
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>        ├─ Manage Voice Macros Button (ManageVoicePhrases_Click, ShowManageVoicePhrases, #317)
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>        ├─ Learn Handheld Buttons Button (LearnHandheldButton_Click,
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>        │   ShowLearnHandheldButton, #343) + HandheldDaemonWarning line
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
 <a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>        ├─ Separator
-<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>        ├─ Power section (#162, wireless controllers only, ShowIdleDisconnect)
-<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>        │   └─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes)
-<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>        └─ Raw Input State section
-<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
-<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
-<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>            ├─ Buttons (joysticks/gamepads, hidden for keyboard/mouse)
-<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
-<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
-<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
-<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
-<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
-<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a>            ├─ Keyboard layout (keyboard devices only)
-<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
-<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a>            ├─ Mouse preview (mouse devices only)
-<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>            │   └─ Viewbox → MousePreviewControl
-<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>            ├─ MIDI preview (MIDI input devices)
-<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
-<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
-<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a>            │   └─ Horizontal StackPanel of compass indicators
-<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a>            │       ├─ 36×36 Ellipse background + center dot
-<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
-<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
-<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
-<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
-<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
-<a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>            └─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
-<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>                TouchpadPreviewBorder and Touchpad2PreviewBorder)
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>        ├─ VC Assignment section
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>        │   └─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>        ├─ Input Mode section (ShowInputModeSection)
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a>        ├─ Input Hiding section (ShowInputHidingSection)
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>        │   ├─ &quot;Hide from games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click)
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a>        │   └─ &quot;Consume mapped inputs&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a>        ├─ Separator (ShowInputModeOrHidingSection)
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a>        ├─ Power section (ShowPowerSection)
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>        │   │   ShowIdleDisconnect, #162)
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>        │       QuickCharge_Click, #372)
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a>        ├─ Separator (ShowRawInputDivider)
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>        └─ Raw Input State section
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
+<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
+<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a>            ├─ Buttons (joysticks/gamepads, hidden for keyboard/mouse)
+<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
+<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
+<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
+<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
+<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
+<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>            ├─ Keyboard layout (keyboard devices only)
+<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
+<a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>            ├─ Mouse preview (mouse devices only)
+<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>            │   └─ Viewbox → MousePreviewControl
+<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a>            ├─ MIDI preview (MIDI input devices)
+<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
+<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
+<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a>            │   └─ Horizontal StackPanel of compass indicators
+<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a>            │       ├─ 36×36 Ellipse background + center dot
+<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
+<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
+<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
+<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
+<a id="__codelineno-11-72" name="__codelineno-11-72" href="#__codelineno-11-72"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
+<a id="__codelineno-11-73" name="__codelineno-11-73" href="#__codelineno-11-73"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+<a id="__codelineno-11-74" name="__codelineno-11-74" href="#__codelineno-11-74"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
+<a id="__codelineno-11-75" name="__codelineno-11-75" href="#__codelineno-11-75"></a>            ├─ Handheld hidden buttons (#343, IsHandheldDevice)
+<a id="__codelineno-11-76" name="__codelineno-11-76" href="#__codelineno-11-76"></a>            │   └─ Learned button chips, or the Handheld_NoneLearned line
+<a id="__codelineno-11-77" name="__codelineno-11-77" href="#__codelineno-11-77"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
+<a id="__codelineno-11-78" name="__codelineno-11-78" href="#__codelineno-11-78"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
 </code></pre></div>
 <h3 id="key-bindings_1">Key Bindings<a class="headerlink" href="#key-bindings_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -8056,12 +8439,28 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>Consume toggle</td>
 </tr>
 <tr>
-<td><code>ShowIdleDisconnect</code></td>
-<td>Power section visibility (wireless controllers, #162)</td>
+<td><code>ShowPowerSection</code></td>
+<td>Power section visibility. True when either row below draws</td>
 </tr>
 <tr>
-<td><code>IdleDisconnectMinutes</code></td>
-<td>Idle-disconnect countdown minutes</td>
+<td><code>ShowIdleDisconnect</code> / <code>IdleDisconnectMinutes</code></td>
+<td>Idle-disconnect row visibility and its countdown minutes (#162)</td>
+</tr>
+<tr>
+<td><code>ShowQuickCharge</code> / <code>QuickChargeEnabled</code></td>
+<td>Quick Charge row visibility and toggle (#372). Also true on a Sony record the USB cable rebound to its wired path, which is not a disconnect target and is exactly when the feature fires</td>
+</tr>
+<tr>
+<td><code>ShowInputModeOrHidingSection</code> / <code>ShowRawInputDivider</code></td>
+<td>The two conditional separators around the Power section</td>
+</tr>
+<tr>
+<td><code>HasCapabilityIcons</code> / <code>HasRumble</code> / <code>HasGyro</code> / <code>ShowTouchpadCapability</code></td>
+<td>Capability chip strip and its three chips</td>
+</tr>
+<tr>
+<td><code>ShowLearnHandheldButton</code> / <code>HandheldDaemonWarning</code> / <code>HasHandheldDaemonWarning</code></td>
+<td>Learn Handheld Buttons button and the vendor-daemon notice (#343)</td>
 </tr>
 <tr>
 <td><code>ShowRegisterNfcTag</code></td>
@@ -8100,12 +8499,12 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>Motion sensor values (aux accel is #199, aux gyro is #252)</td>
 </tr>
 <tr>
-<td><code>HasTouchpadData</code> / <code>TouchpadLabel</code></td>
-<td>Touchpad preview visibility and caption</td>
+<td><code>HasTouchpadData</code> / <code>HasSecondTouchpadData</code> / <code>TouchpadLabel</code></td>
+<td>Touchpad preview visibility for each pad, and the caption</td>
 </tr>
 </tbody>
 </table>
-<p>The raw-state rows above bind to the page DataContext (<code>DevicesViewModel</code>), which republishes the selected device's live state. The NFC, Voice, and Consumer previews do the same: <code>IsNfcDevice</code> / <code>NfcTags</code>, <code>ShowVoicePhrases</code> / <code>VoicePhrases</code> (#317, the voice twin of the NFC tag rows), and <code>IsConsumerDevice</code> / <code>ConsumerButtons</code>. <code>ShowRegisterNfcTag</code>, <code>ShowIdleDisconnect</code>, and <code>IdleDisconnectMinutes</code> are <code>SelectedDevice</code>-scoped and bind through the <code>SelectedDevice.</code> prefix.</p>
+<p>The raw-state rows above bind to the page DataContext (<code>DevicesViewModel</code>), which republishes the selected device's live state. The NFC, Voice, Consumer, and handheld previews do the same: <code>IsNfcDevice</code> / <code>NfcTags</code>, <code>ShowVoicePhrases</code> / <code>VoicePhrases</code> (#317, the voice twin of the NFC tag rows), <code>IsConsumerDevice</code> / <code>ConsumerButtons</code>, and <code>IsHandheldDevice</code> (#343). <code>HeadTrackerStatus</code> is page-scoped too. Everything under the dossier and the sections below it, including <code>ShowRegisterNfcTag</code>, <code>ShowQuickCharge</code>, and <code>IdleDisconnectMinutes</code>, is <code>SelectedDevice</code>-scoped and binds through the <code>SelectedDevice.</code> prefix.</p>
 <h3 id="selection-highlighting">Selection Highlighting<a class="headerlink" href="#selection-highlighting" title="Permanent link">&para;</a></h3>
 <p>Custom <code>ListBoxItem</code> <code>ControlTemplate</code>:
 - <code>SelectionBar</code>. 4px <code>Border</code> with accent brush on left edge, <code>CornerRadius="2"</code>.
@@ -8160,6 +8559,21 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>ManageVoicePhrases_Click</code></td>
 <td>Button.Click</td>
 <td>Opens <code>RegisterVoicePhraseDialog</code> for the selected microphone-carrying device (#317)</td>
+</tr>
+<tr>
+<td><code>LearnHandheldButton_Click</code></td>
+<td>Button.Click</td>
+<td>Opens <code>LearnHandheldButtonDialog</code> for the machine's hidden buttons (#343)</td>
+</tr>
+<tr>
+<td><code>IdentifyChip_Click</code></td>
+<td>Border.MouseLeftButtonUp</td>
+<td>Forwards to <code>IdentifyDevice_Click</code>, which calls <code>InputService.IdentifyDevice(SelectedDevice.InstanceGuid)</code> to vibrate the pad (#293)</td>
+</tr>
+<tr>
+<td><code>QuickCharge_Click</code></td>
+<td>CheckBox.Click</td>
+<td>Persists the Quick Charge toggle. Click, not Checked, so the binding-driven refresh on a selection change never writes (#372)</td>
 </tr>
 <tr>
 <td><code>IdleDisconnect_LostFocus</code></td>
@@ -8294,6 +8708,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <h2 id="settingspage">SettingsPage<a class="headerlink" href="#settingspage" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>SettingsPage.xaml</code>, <code>SettingsPage.xaml.cs</code></p>
 <p>Application settings in vertical <code>CardBorder</code> sections.</p>
+<p>Card order is pinned by <code>Settings_CardsRunInTheDecidedOrder</code> in <code>PadForge.Tests/PageOrderContractTests.cs</code>, which asserts each card title's binding appears once and after the one before it.</p>
 <h3 id="layout-structure_3">Layout Structure<a class="headerlink" href="#layout-structure_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ScrollViewer (Padding=&quot;24,0&quot;)
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  └─ StackPanel (Margin=&quot;0,16,0,16&quot;)
@@ -8306,66 +8721,76 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>      │   ├─ &quot;Theme&quot; label
 <a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>      │   ├─ ComboBox (System Default / Light / Dark, SelectedIndex=SelectedThemeIndex)
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>      │   └─ &quot;Show Tour&quot; Button (Settings_ShowTour, ShowTour_Click) → re-runs the first-run spotlight tour
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>      ├─ Input Engine card
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>      │   ├─ Icon E9F5 + title + description
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>      │   ├─ Auto-start toggle (AutoStartEngine)
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>      │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>      │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs)
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>      │   └─ HM inactivity timeout: NumberBox 0-3600s
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>      ├─ Window card
-<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>      │   ├─ Icon E737 + title + description
-<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>      │   ├─ Minimize to tray (MinimizeToTray)
-<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>      │   ├─ Start minimized (StartMinimized)
-<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>      │   └─ Start at login (StartAtLogin)
-<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>      ├─ Battery Alerts card (#293)
-<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>      │   ├─ Icon E83F + title + description
-<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>      │   ├─ &quot;Notify When Battery Runs Low&quot; toggle (BatteryNotifyEnabled)
-<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>      │   ├─ &quot;Notify at or Below&quot; NumberBox 5-50 % (BatteryNotifyThreshold)
-<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>      │   ├─ &quot;Also Vibrate the Controller&quot; toggle (BatteryNotifyVibrate)
-<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>      │   └─ &quot;Test Notification&quot; Button (TestBatteryNotify_Click)
-<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>      ├─ HidHide Driver card
-<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>      │   ├─ Icon ED1A + title + description
-<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>      │   ├─ Status: flame + HidHideStatusText + HidHideVersion
-<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>      │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
-<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>      │   ├─ Hide devices toggle (EnableInputHiding)
-<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches)
-<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>      │   └─ Whitelist section (only when installed):
-<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>      │       ├─ Title + description
-<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>      │       ├─ ListBox of HidHideWhitelistPaths (Consolas, 12px)
-<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>      │       └─ Add/Remove buttons
-<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>      ├─ HIDMaestro Driver card
-<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>      │   ├─ Icon E7FC + title + description
-<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>      │   └─ Status: always-lit ember flame + &quot;Installed&quot; + HIDMaestroVersion (no Install/Uninstall
-<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>      │      buttons, because HIDMaestro is embedded in the binary)
-<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>      ├─ Windows MIDI Services card
-<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>      │   ├─ Icon E8D6 + title + description
-<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>      │   ├─ Status: flame + MidiServicesStatusText + MidiServicesVersion
-<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>      │   └─ Install/Uninstall buttons (Install disabled tooltip when MidiOsSupported=False)
-<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>      ├─ SteamVR card (#49)
-<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>      │   ├─ Icon F119 + title + description
-<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>      │   ├─ Status: flame + IsSteamVrInstalled state
-<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>      │   ├─ Install directory TextBox + Browse button (SteamVrBrowse_Click → SteamVrInstallDir)
-<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>      │   └─ Install/Uninstall buttons (InstallSteamVrCommand / UninstallSteamVrCommand)
-<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>      ├─ Community Configs card (#9)
-<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
-<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
-<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
-<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
-<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>      ├─ Settings File card
-<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>      │   ├─ Icon E8A5 + title + description
-<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>      │   ├─ SettingsFilePath (Consolas, wrapping)
-<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
-<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
-<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>      └─ Diagnostics card
-<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>          ├─ Icon E9D9 + title + description
-<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>          ├─ Grid (140px label + value):
-<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>          │   ├─ App Version (ApplicationVersion)
-<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>          │   ├─ .NET Runtime (RuntimeVersion)
-<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>          │   └─ SDL Version (SdlVersion)
-<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
-<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
-<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>      ├─ Window card
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>      │   ├─ Icon E737 + title + description
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>      │   ├─ Minimize to tray (MinimizeToTray)
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>      │   ├─ Start minimized (StartMinimized)
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>      │   └─ Start at login (StartAtLogin)
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>      ├─ Input Engine card
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>      │   ├─ Icon E9F5 + title + description
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>      │   ├─ Auto-start toggle (AutoStartEngine)
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>      │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>      │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs) + &quot;ms&quot;
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>      │   ├─ PollingOverrideNote (ember, shown only while the active profile
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>      │   │   overrides the global value, #365)
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>      │   └─ HM inactivity timeout: NumberBox 0-3600s
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>      ├─ Assignment Prompts card
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>      │   ├─ Icon E8DE + title + description
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>      │   ├─ Offer on a new device (AssignOfferNewDevice)
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>      │   └─ Offer on an empty slot (AssignOfferEmptySlot)
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>      ├─ Handheld PC Buttons card (#343)
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>      │   ├─ Icon E7F8 + title + description
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>      │   └─ Enable toggle (HandheldButtonsEnabled). On, the Devices page gains
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>      │      the machine&#39;s Hidden Buttons row and its System Motion row
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>      ├─ Battery Alerts card (#293)
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>      │   ├─ Icon E83F + title + description
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>      │   ├─ &quot;Notify When Battery Runs Low&quot; toggle (BatteryNotifyEnabled)
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>      │   ├─ &quot;Notify at or Below&quot; NumberBox 5-50 % (BatteryNotifyThreshold)
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>      │   ├─ &quot;Also Vibrate the Controller&quot; toggle (BatteryNotifyVibrate)
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>      │   └─ &quot;Test Notification&quot; Button (TestBatteryNotify_Click)
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>      ├─ HidHide Driver card
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>      │   ├─ Icon ED1A + title + description
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>      │   ├─ Status: flame + HidHideStatusText + HidHideVersion
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>      │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>      │   ├─ Hide devices toggle (EnableInputHiding)
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches)
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>      │   └─ Whitelist section (only when installed):
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>      │       ├─ Title + description
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>      │       ├─ ListBox of HidHideWhitelistPaths (Consolas, 12px)
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>      │       └─ Add/Remove buttons
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>      ├─ HIDMaestro Driver card
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>      │   ├─ Icon E7FC + title + description
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>      │   └─ Status: always-lit ember flame + &quot;Installed&quot; + HIDMaestroVersion (no Install/Uninstall
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>      │      buttons, because HIDMaestro is embedded in the binary)
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>      ├─ Windows MIDI Services card
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>      │   ├─ Icon E8D6 + title + description
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>      │   ├─ Status: flame + MidiServicesStatusText + MidiServicesVersion
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>      │   └─ Install/Uninstall buttons (Install disabled tooltip when MidiOsSupported=False)
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>      ├─ SteamVR card (#49)
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>      │   ├─ Icon F119 + title + description
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>      │   ├─ Status: flame + IsSteamVrInstalled state
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>      │   ├─ Install directory TextBox + Browse button (SteamVrBrowse_Click → SteamVrInstallDir)
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>      │   └─ Install/Uninstall buttons (InstallSteamVrCommand / UninstallSteamVrCommand)
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>      ├─ Community Configs card (#9)
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>      ├─ Settings File card
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>      │   ├─ Icon E8A5 + title + description
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>      │   ├─ SettingsFilePath (Consolas, wrapping)
+<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
+<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
+<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>      └─ Diagnostics card
+<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>          ├─ Icon E9D9 + title + description
+<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>          ├─ Grid (140px label + value):
+<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>          │   ├─ App Version (ApplicationVersion)
+<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>          │   ├─ .NET Runtime (RuntimeVersion)
+<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>          │   └─ SDL Version (SdlVersion)
+<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
+<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
+<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
 </code></pre></div>
 <h3 id="key-bindings_2">Key Bindings<a class="headerlink" href="#key-bindings_2" title="Permanent link">&para;</a></h3>
 <table>

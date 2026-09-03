@@ -8,7 +8,7 @@ The Force Feedback tab is **per pad per slot**. Every physical pad mapped to the
 
 See [Impulse Triggers](impulse-triggers.md) for trigger-motor effects.
 
-The tab appears on every slot type, including Keyboard+Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, or flight stick). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard+Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.
+The tab appears on every slot type, including Keyboard+Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, flight, or first-person controller). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard+Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.
 
 To send the same rumble stream to speakers or a tactile transducer instead of motors, see [Bass Shakers](#bass-shakers) below. That tab lives at the slot level and has its own settings.
 
@@ -38,6 +38,8 @@ Games never talk to your physical controller directly.
 
 This runs at PadForge's polling rate (hundreds of times per second), so feedback feels instant.
 
+The same slot rumble can also drive a Razer Sensa HD device from the Dashboard. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
+
 ### Multi-slot rumble
 
 When one physical controller is assigned to several virtual slots, PadForge takes the highest motor value from any active slot. No rumble signals are lost.
@@ -52,6 +54,7 @@ When one physical controller is assigned to several virtual slots, PadForge take
 | Left Motor | 0–100% | 100% | Low-frequency motor strength. |
 | Right Motor | 0–100% | 100% | High-frequency motor strength. |
 | Swap Left and Right Motors | On/Off | Off | Flips which physical motor receives the left vs. right signal. Use when rumble feels backwards. |
+| Fold Trigger Rumble into Main Motors | On/Off | Off | Sends each trigger channel to the body motor on the same side. Shows only on a pad that rumbles but has no trigger motors, where impulse trigger data would otherwise go unfelt. |
 
 ---
 
@@ -229,7 +232,7 @@ See [Impulse Triggers](impulse-triggers.md) for game-driven impulse passthrough,
 
 Every slider has its own reset button. Reset All restores everything in its section.
 
-- **Rumble Reset All**: Gain 100%, both motors 100%, Swap Motors off. This top button also clears the Constant Force and Audio Rumble sections below it.
+- **Rumble Reset All**: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Constant Force and Audio Rumble sections below it.
 - **Constant Force Reset All**: Toggle off, X = 0, Y = 0.
 - **Audio Rumble Reset All**: Disabled, sensitivity 4.0, cutoff 80 Hz, both motors 100%.
 - **Trigger Routing Reset All**: every trigger back to Source None (off), Mode Duplicate, Scale 100%, activator cleared, Activator Mode Hold.
@@ -283,7 +286,7 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 - **Start with defaults.** 100% gain passes through exactly what the game sends. Only reduce if vibration is too strong.
 - **Watch the motor activity bars** during gameplay to see which motor a game favors, then adjust.
 - **Lower the right motor for less buzz.** 60–80% keeps deep thumps while softening high-frequency buzz.
-- **Tune during gameplay, not just Test Rumble.** Real games use varied patterns the test pulse cannot replicate.
+- **Tune during gameplay rather than on Test Rumble alone.** Real games use varied patterns the test pulse cannot replicate.
 - **Audio rumble runs alongside game rumble.** It activates when bass exceeds the game's own signal.
 - **Each device gets its own settings.** Tune force feedback per controller on each slot.
 - **Use Extended output for racing wheels.** Condition effects and directional forces are only available through the DirectInput pipeline.
@@ -321,4 +324,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

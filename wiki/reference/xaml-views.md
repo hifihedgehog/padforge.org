@@ -177,7 +177,7 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 
 ### Composition Root (Code-Behind)
 
-`MainWindow.xaml.cs` is the service wiring hub (~8400 lines). Constructor:
+`MainWindow.xaml.cs` is the service wiring hub (~8500 lines). Constructor:
 
 1. Creates `MainViewModel` as root and sets `DataContext`.
 2. Sets child `DataContext` on Dashboard, Devices, Settings, Profiles pages.
@@ -196,7 +196,7 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 | Timer | Interval | Purpose |
 |-------|----------|---------|
 | `DispatcherTimer` | 33ms (~30Hz) | `InputService._uiTimer` fires `UiTimer_Tick` to push engine state into ViewModels |
-| `_driverStatusTimer` | 5s | Polls HidHide, Windows MIDI Services, and SteamVR presence for hot-plug detection, and runs the status-bar message decay sweep. HIDMaestro is embedded so it has no install/uninstall poll |
+| `_driverStatusTimer` | 5s | `RefreshHidHideStatus()`, `RefreshMidiServicesStatus()`, and `SweepStatusMessage()`. Started in the constructor and never stopped, so the status-bar decay keeps running after the engine stops. HIDMaestro is embedded so it has no install/uninstall poll |
 | `CompositionTarget.Rendering` | ~60fps | Used by all visualization views (3D, 2D, Schematic, MIDI, KBM, MousePreview) for per-frame visual updates |
 
 ---
@@ -205,7 +205,9 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 
 **Files:** `DashboardPage.xaml`, `DashboardPage.xaml.cs`
 
-Engine toggle, slot summary cards, DSU/Web settings, and driver status.
+Engine toggle, slot summary cards, and the service sections.
+
+Section order is pinned by `PadForge.Tests/PageOrderContractTests.cs`. `Dashboard_SectionsRunInTheDecidedOrder` asserts each section title's binding appears once and after the one before it, and that the Services header sits between the slot cards and the Web Controller card. `Dashboard_DriverStatusStripIsGone` asserts the page carries no `ED5D` glyph, no `Dashboard_Drivers` key in the XAML or any of the ten resx files, and no `HidHideStatusText` / `MidiServicesStatusText` / `SteamVrStatusText` in the page or `DashboardViewModel`. Those three rows live on the Settings page only.
 
 ### Layout Structure
 
@@ -213,13 +215,13 @@ Engine toggle, slot summary cards, DSU/Web settings, and driver status.
 ScrollViewer
   └─ StackPanel (Margin="24,16,24,16")
        ├─ Page header (icon + title)
-       ├─ "Input Engine" section header
+       ├─ "Input Engine" section header (E9F5 glyph)
        ├─ CardBorder: Engine status card (EngineCard, Grid, 4 columns)
        │   ├─ Col 0: Engine toggle flame `Path` (FlameOuterGeometry, ember when Running, gold when Idle/Stopping, else outline)
        │   ├─ Col 1: EngineStatus text
        │   ├─ Col 2: PollingFrequencyText
        │   └─ Col 3: Online/Total devices count
-       ├─ "Virtual Controllers" section header
+       ├─ "Virtual Controllers" section header (E7FC glyph)
        ├─ ItemsControl (SlotsItemsControl, WrapPanel over a CompositeCollection:
        │   SlotSummaries plus the Add Controller tile in the same wrap flow)
        │   ├─ DataTemplate: slot card Border (252px wide, 5 rows)
@@ -233,28 +235,40 @@ ScrollViewer
        │   │   └─ Row 4: StageLedger chips (per-stage glyphs with hover readout)
        │   └─ Add Controller tile (AddControllerCard, 252px, dashed steel outline,
        │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
-       ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
-       ├─ "Motion Server" section (DSU)
-       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
-       ├─ "Web Controller" section
-       │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
-       ├─ "Remote Link" section (#138)
-       │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
-       │      port NumberBox + reset, status flame + RemoteLinkStatus text,
-       │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
-       │      per peer, Revoke All), nearby-unpaired list, connect-by-address box, footer
-       ├─ "Overlays" section
-       │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
-       │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
-       ├─ "Touchpad Overlay" section
-       │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
-       │      NumberBox + reset, reset-position button, status flame +
-       │      TouchpadOverlayStatus
-       └─ "Drivers" section
-           └─ CardBorder (Grid, 3 rows × 2 cols)
-               ├─ Row 0: HidHide status (ED1A glyph)
-               ├─ Row 1: MIDI Services status (E8D6 glyph)
-               └─ Row 2: SteamVR status (F119 glyph, SteamVrStatusText, #49)
+       └─ ServicesSection StackPanel (one panel so the welcome tour can ring
+            the whole group as a single target)
+            ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
+            ├─ "Web Controller" section (E774 glyph)
+            │   └─ CardBorder: Enable toggle (EnableWebControllerCheckBox), port
+            │      NumberBox + reset, status flame + WebControllerStatus, QR image +
+            │      URL box + copy button (shown on HasWebControllerQr, #296), footer
+            ├─ "Remote Link" section (E969 glyph, #138)
+            │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
+            │      port NumberBox + reset, status flame + RemoteLinkStatus text,
+            │      identity-protection mode ComboBox, Paired PCs list (rename / connect / revoke
+            │      per peer, Revoke All), nearby-unpaired list, my-code readout,
+            │      connect-by-address box, footer
+            ├─ "Head Tracking" section (E77B glyph, #355)
+            │   └─ CardBorder: Enable toggle (HeadTrackingEnabled), FreeTrack toggle
+            │      (HeadTrackingFreeTrack), a three-row Grid of port / rotation range /
+            │      translation range NumberBoxes each with a reset button,
+            │      HeadTrackingStatus source line, footer
+            ├─ "Motion Server" section (E7AD glyph, DSU)
+            │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
+            ├─ "Lightbar Mirrors" section (E781 glyph)
+            │   └─ CardBorder holding two divider-separated rows that forward the same
+            │      virtual-pad lightbar color, each with its own strings and status line
+            │      ├─ Razer Chroma (EnableChromaLightbar, ChromaStatus, #373)
+            │      └─ Logitech LIGHTSYNC (EnableLightsyncLightbar, LightsyncStatus, #382)
+            ├─ "Razer Sensa HD Haptics" section (E877 glyph, #374)
+            │   └─ CardBorder: Enable toggle (EnableSensaHaptics), SensaStatus, footer
+            ├─ "Overlays" section (E700 glyph)
+            │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
+            │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
+            └─ "Touchpad Overlay" section (EDA4 glyph)
+                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
+                   NumberBox + reset, reset-position button, status flame +
+                   TouchpadOverlayStatus
 ```
 
 ### Key Bindings
@@ -272,12 +286,19 @@ ScrollViewer
 | `DsuServerStatus` | `DashboardViewModel` | DSU status text |
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
 | `WebControllerPort` / `WebControllerStatus` | `DashboardViewModel` | Web controller port and status text |
+| `HasWebControllerQr` / `WebControllerQr` / `WebControllerUrl` | `DashboardViewModel` | QR panel visibility, the QR bitmap, and the URL shown beside it (#296) |
 | `EnableRemoteLink` / `RemoteLinkPort` / `RemoteLinkConnectHost` | `DashboardViewModel` | Remote Link enable, port, and connect-by-address host (#138) |
+| `AutoReconnect` | `DashboardViewModel` | Remote Link auto-reconnect toggle |
 | `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status flame and text |
-| `RemoteLink` | `DashboardViewModel` | Sub-ViewModel: identity-protection modes, trusted peers, nearby-unpaired list, revoke commands |
+| `RemoteLink` | `DashboardViewModel` | Sub-ViewModel: identity-protection modes and hint, trusted peers, nearby-unpaired list, revoke commands |
+| `HeadTrackingEnabled` / `HeadTrackingFreeTrack` | `DashboardViewModel` | Head Tracking enable and FreeTrack toggles (#355) |
+| `HeadTrackingUdpPort` / `HeadTrackingRotationRange` / `HeadTrackingTranslationRange` | `DashboardViewModel` | NumberBoxes ranged 1-65535, 1-180, and 1-500, each with a reset command |
+| `HeadTrackingStatus` | `DashboardViewModel` | Which head-tracking source is live, or why neither is |
+| `EnableChromaLightbar` / `ChromaStatus` | `DashboardViewModel` | Razer Chroma mirror row (#373) |
+| `EnableLightsyncLightbar` / `LightsyncStatus` | `DashboardViewModel` | Logitech LIGHTSYNC mirror row (#382) |
+| `EnableSensaHaptics` / `SensaStatus` | `DashboardViewModel` | Razer Sensa HD haptics translation (#374) |
 | `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
 | `EnableTouchpadOverlay` / `TouchpadOverlayOpacity` / `TouchpadOverlayStatus` | `DashboardViewModel` | Touchpad overlay enable, opacity, and status text |
-| `HidHideStatusText` / `MidiServicesStatusText` / `SteamVrStatusText` | `DashboardViewModel` | Driver status text shown on the Dashboard. HIDMaestro is embedded, with status shown on the Settings page only |
 
 ### Slot Card DataTemplate Bindings (SlotSummary)
 
@@ -344,6 +365,7 @@ The slot power toggle is a flame `Path` (`FlameOuterGeometry`), not a glyph. It 
 | `OnDragMove` | PreviewMouseMove | Begins/updates card drag with ghost adorner |
 | `OnDragEnd` | PreviewMouseLeftButtonUp | Completes swap/insert or fires `SlotCardClicked` for navigation |
 | `OnDragKeyDown` | PreviewKeyDown | Cancels drag on Escape |
+| `OnDragCaptureLost` | LostMouseCapture | Cancels the drag when capture is taken away |
 
 ### Dashboard Card Drag Reordering
 
@@ -380,16 +402,16 @@ Grid (3 rows)
 │   │        Visibility bound to OutputTabVisible, #270 follow-up)
 │   └─ Tier 2 (device scope, cold underline): scope label + device ComboBox on the left,
 │      capability tabs pushed right in a WrapPanel (TabStripButtonCold, GroupName="PadTabDevice")
-│       ├─ ComboBox (MappedDevices; item = LivenessFlame Path + Name + battery)
+│       ├─ ComboBox (MappedDevices, item = LivenessFlame Path + Name + battery)
 │       ├─ RadioButton "Sticks" (Tag=3, x:Name="TabSticks")
 │       ├─ RadioButton "Triggers" (Tag=4, x:Name="TabTriggers")
 │       ├─ RadioButton "Force Feedback" (Tag=5, x:Name="TabForceFeedback", gated on hasForceFeedback)
+│       ├─ RadioButton "Wheel" (Tag=11, x:Name="TabWheel", gated on wheel VID/PID)
+│       ├─ RadioButton "Impulse Triggers" (Tag=9, x:Name="TabImpulseTriggers", gated on hasRumbleTriggers)
 │       ├─ RadioButton "Adaptive Triggers" (Tag=6, x:Name="TabAdaptiveTriggers", gated on hasAdaptiveTriggers)
 │       ├─ RadioButton "Lighting" (Tag=7, x:Name="TabLighting", gated on hasLightbar || hasGuideLed)
-│       ├─ RadioButton "Gyro" (Tag=8, x:Name="TabGyro", gated on hasGyro)
-│       ├─ RadioButton "Impulse Triggers" (Tag=9, x:Name="TabImpulseTriggers", gated on hasRumbleTriggers)
+│       ├─ RadioButton "Gyro" (Tag=8, x:Name="TabGyro", gated on any motion sensor, #392)
 │       ├─ RadioButton "Touchpad" (Tag=10, x:Name="TabTouchpad", gated on hasTouchpad)
-│       ├─ RadioButton "Wheel" (Tag=11, x:Name="TabWheel", gated on wheel VID/PID)
 │       ├─ RadioButton "Audio" (Tag=12, x:Name="TabAudio", gated on hasAudio)
 │       ├─ RadioButton "Pointer" (Tag=13, x:Name="TabPointer", gated on hasIrPointer, #146)
 │       └─ RadioButton "Mouse" (Tag=14, x:Name="TabMouse", gated on mouse device, #200)
@@ -440,7 +462,7 @@ Tabs hidden by output type and by source-device capability:
 | Impulse Triggers | Visible if `hasImpulseTriggers` | **Hidden** | **Hidden** | source device has impulse-trigger motors (Xbox One / One S / Elite / Elite Series 2 / Series X\|S, Microsoft VID). Xbox 360 and DualSense excluded |
 | Adaptive Triggers | Visible if `hasAdaptiveTriggers` | **Hidden** | **Hidden** | source device is a DualSense or DualSense Edge |
 | Lighting | Visible if `hasLightbar \|\| hasGuideLed` | **Hidden** | **Hidden** | a lightbar (DS4 / DualSense family, the PS Move sphere, or a web controller drawing a DS4 / DualSense) shows the lightbar cards. A Guide/HOME-button LED shows only the `GuideLedCard`: XInput/GIP Xbox pad over USB or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip) |
-| Gyro | Visible if `hasGyro` | **Hidden** | **Hidden** | source device has a gyro sensor |
+| Gyro | Visible if `hasGyro` | **Hidden** | **Hidden** | source device has any motion sensor (`ud.HasGyro \|\| ud.HasAccel`). On an accelerometer-only device the tab shows with its five gyro-rate cards collapsed (#392) |
 | Pointer | Visible if `hasIrPointer` | **Hidden** | **Hidden** | source device is an IR-capable Wii Remote (#146) |
 | Touchpad | Visible if `hasTouchpad` | **Hidden** | **Hidden** | source device has a touchpad (DualSense family, DS4, Steam Controller) |
 | Wheel | Visible if `hasWheel \|\| hasGenericWheel` | **Hidden** | **Hidden** | source device is a force-feedback wheel |
@@ -585,9 +607,11 @@ Grid (3 columns)
             ├─ Add Action / Remove buttons
             ├─ Actions ListBox (DisplayMemberPath="DisplayText")
             └─ Action editor Border (DataContext=SelectedAction)
-                ├─ Action Type ComboBox (55 `MacroActionType` values)
+                ├─ Action Type ComboBox (grouped, `MacroTypeCatalog.View`)
                 └─ Type-specific panels (conditional visibility):
 ```
+
+**Grouped Action Type Picker.** The picker binds `ItemsSource="{Binding Source={x:Static vm:MacroTypeCatalog.View}}"` with `SelectedValuePath="Type"` and `DisplayMemberPath="Label"`. `MacroTypeCatalog` (`PadForge.App/ViewModels/MacroTypeCatalog.cs`) carries all 56 `MacroActionType` values exactly once, in display order, across eleven category shelves: Virtual Buttons, Virtual Axes & Wheel, Keyboard & Text, Mouse, Timing & Flow, Rumble, Lightbar & LEDs, Sound & Volume, Motion & Pointer, Layers & Overlays, System & Apps. `MacroTypeCatalog.View` is a `ListCollectionView` grouped on `Category`, and the ComboBox draws each shelf through a `GroupStyle.HeaderTemplate`, the arrangement the cross-device input picker uses. Item tooltips ride the `ItemContainerStyle`. The list is one instance for the process lifetime, refilled in place on `Strings.CultureChanged` so an `x:Static`-bound view never strands on a stale list. `PadForge.Tests/MacroTypeCatalogTests.cs` pins the census: every enum member appears exactly once, `Choices.Count` equals `Enum.GetValues<MacroActionType>().Length`, the categories stay eleven contiguous blocks, and the picker still binds `MacroTypeCatalog.View`.
 
 **Macro Trigger Section:**
 
@@ -601,7 +625,7 @@ Grid (3 columns)
 | Axis direction | `TriggerAxisDirectionIndex` (Any/Positive/Negative) | `UsesAxisTrigger` |
 | Consume trigger | `ConsumeTriggerButtons` (CheckBox) | Hidden in Always mode |
 
-**Action Type Editor Panels:**
+**Action Type Editor Panels.** One `Visibility` branch per shape, each bound to an `Is*Type` predicate on `MacroAction`. Some branches cover a family (`IsAnyRumbleSetType`, `IsAnyAxisValueType`, `IsAnyMouseButtonType`). The ones below are the shapes worth naming. Grep `Is[A-Za-z]*Type` in `PadPage.xaml` for the full set.
 
 | Action Type | Visible Panel | Key Controls |
 |-------------|---------------|-------------|
@@ -614,6 +638,7 @@ Grid (3 columns)
 | `MouseMove` / `MouseScroll` | `IsMouseMoveType` | Axis source (Output/Input), axis selector, device picker, sensitivity slider |
 | `MouseButtonPress` / `MouseButtonRelease` | `IsMouseButtonType` | Mouse button ComboBox (Left/Right/Middle/X1/X2) |
 | `DisconnectController` | `IsDisconnectControllerType` | Target-mode ComboBox (`DisconnectTarget`: Triggering Device / Specific Device / Slot Devices / All Devices) + specific-device picker ComboBox (`DisconnectDeviceOptions`, gated on `IsDisconnectSpecificDevice`) |
+| `SwitchLayer` | `IsSwitchLayerType` | A `CardBorder` with `MacroAction_Type_SwitchLayer` as its title, the `Macro_SwitchLayer_Hint` line, and a 240px ComboBox over the slot's own `LayerTabs` (`SelectedValuePath="LayerMask"`, `DisplayMemberPath="LayerName"`) writing `SwitchLayerMask`. Choices are Base plus every authored layer, the same name/mask pairs the layer-scope picker uses (#377) |
 
 **Device Axis Picker (shared by SystemVolume, AppVolume, MouseMove):**
 - Device ComboBox: `DropDownOpened` populates from devices assigned to current slot.
@@ -663,7 +688,7 @@ Grid (4 rows, x:Name="MappingDataGrid" at Row 3)
 One search box and one device-visibility popup filter the slot's shared choice view, so every picker on the tab reflects them when opened. Ctrl+F focuses the box through `MappingsTabRoot_PreviewKeyDown` on the tab root.
 
 - `MappingInputSearch` is find-as-you-type and session-only, never persisted. Its setter calls `ApplyMappingPickerFilter()`.
-- The search also **filters the grid rows**, not just the dropdown contents: `RowMatchesSearch` matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.
+- The search also **filters the grid rows** as well as the dropdown contents: `RowMatchesSearch` matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.
 - `PickerDeviceFilterEntries` drives the popup's per-device checkboxes. `HiddenPickerDeviceKeys` (device guids plus `"any"` for the device-agnostic group) persists per slot in the settings root, not in profiles.
 - `MappingPickerFilterActive` is true while either filter narrows the list, so the funnel reads as engaged.
 
@@ -790,15 +815,35 @@ ScrollViewer
       │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
       │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
       └─ "Trigger Routing" card (E72A icon + "Reset All" ResetTriggerRouteCardCommand + description)
-          ├─ Left trigger source ComboBox (LeftTriggerRouteSource) + reset
-          └─ Right trigger source ComboBox (RightTriggerRouteSource) + reset
+          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
+          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
+          │   and activator-mode ComboBox, each with its own reset
+          └─ Right: the same five rows on the RightTriggerRoute* bindings
 ```
 
 All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Grayed out when off.
 
-### Gyro Tab (Tab 8). Engage Stick Gate (#120)
+### Gyro Tab (Tab 8). Detailed
 
-Below the Easy-Aim stick threshold, two ComboBoxes gate gyro engagement per stick and per direction. Both use `SelectedValuePath="Tag"` and reset buttons.
+The tab opens on the E7AD page header (`Pad_Gyro_Header` + `Pad_Gyro_Subtitle`), then nine `CardBorder` cards in this order:
+
+| Order | Card | x:Name | Glyph | Shown when |
+|-------|------|--------|-------|-----------|
+| 1 | Grip (#392) | (unnamed) | `E815` | always |
+| 2 | Motion Passthrough | `GyroPassthroughCard` | `E72A` | gyro rate |
+| 3 | Motion Steering (#94) | (unnamed) | inline `Path` | always |
+| 4 | Tilt | (unnamed) | `E99A` | always |
+| 5 | Calibration | `GyroCalibrationCard` | `F272` | gyro rate |
+| 6 | Sensitivity | `GyroSensitivityCard` | `E9E9` | gyro rate |
+| 7 | Compass Yaw (#271) | `CompassYawCard` | `E707` | Switch 2 magnetometer |
+| 8 | Response | `GyroResponseCard` | `F1CB` | gyro rate |
+| 9 | Engage (#120) | `GyroEngageCard` | `E7E8` | gyro rate |
+
+The tab raises for any motion sensor, so an accelerometer-only remote reaches Grip, Tilt, and Motion Steering. `SyncTabVisibility()` keeps two flags apart for that: `hasGyro` is `ud.HasGyro || ud.HasAccel` and drives `TabGyro.Visibility`, while `hasGyroRate` is `ud.HasGyro` alone and collapses the five rate cards named above. Before #392 the tab itself was gyro-gated, so an accelerometer-only Wii Remote never saw Tilt.
+
+**Grip card.** One row: a `MotionGripOptions` ComboBox on `MotionGrip` (`SelectedValuePath="Value"`, `DisplayMemberPath="Display"`, 260px) plus `ResetMotionGripCommand`. The four holds are `Pointing` (the default), `Sideways`, `WiiWheel`, and `Upright`, stored as those canonical English identifiers. The grip rotates gyro, accelerometer, and gravity into the game's frame, and the D-pad follows it.
+
+**Engage card (#120).** Below the Easy-Aim stick threshold, two ComboBoxes gate gyro engagement per stick and per direction. Both use `SelectedValuePath="Tag"` and reset buttons.
 
 | Control | Binding | Items (Tag) |
 |---------|---------|-------------|
@@ -840,6 +885,10 @@ Grid (3 columns)
             ├─ Host Input ComboBox (HostOptions → SelectedHost)
             │   + Record button (MenuHostRecordCommand from the TabItem DataContext,
             │     glyph = HostRecordIcon) + Reset (ResetHostCommand)
+            ├─ Host Input caption (Menu_HostInput_Caption, always shown)
+            ├─ Custom X / Custom Y steer-axis rows (visible on IsCustomHost,
+            │   ResetCustomXCommand / ResetCustomYCommand)
+            ├─ Click Input row (visible on IsCustomHost, ResetClickCommand)
             ├─ Pad Half ComboBox (HostHalfOptions → HostHalfIndex,
             │   visible on HostIsTouchpad)
             ├─ Fire Mode ComboBox (FireOptions → FireTypeIndex) + Reset
@@ -851,16 +900,31 @@ Grid (3 columns)
             │   ├─ Screen Position NumberBox pair (0-100 → PosXPercent / PosYPercent)
             │   ├─ Size NumberBox (10-400 → ScalePercent) + "%"
             │   └─ Opacity NumberBox (5-100 → OpacityPercent) + "%"
-            └─ Cell Bindings ItemsControl (Cells)
-                └─ per cell: Header + Label TextBox (LostFocus)
-                    + Binding ComboBox (BindingKindOptions → BindingKind)
-                    + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
-                    OR button picker (ButtonOptions → SelectedButtonFlag,
-                       visible on ShowButtonPicker)
-                    + Reset (ResetCellCommand)
+            ├─ Cell Bindings ItemsControl (Cells)
+            │   └─ per cell: Header + icon indicator (IconImage, or the E8B9
+            │       picture glyph on ShowIconGlyph) + Label TextBox (LostFocus)
+            │       + Binding ComboBox (BindingKindOptions → BindingKind)
+            │       + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
+            │       OR button picker (ButtonOptions → SelectedButtonFlag,
+            │          visible on ShowButtonPicker)
+            │       OR macro picker (MacroOptions → SelectedMacroName,
+            │          visible on ShowMacroPicker, #390)
+            │       + Choose Icon button (EB9F, MenuCellChooseIcon_Click, #390)
+            │       + Reset (ResetCellCommand)
+            └─ Icon Packages card (CardBorder, EB9F glyph, #390)
+                ├─ Pad_Menus_IconPackages_Header + description
+                ├─ Add (IconPackageAdd_Click) / Create (IconPackageCreate_Click) /
+                │   Remove (IconPackageRemove_Click) buttons
+                ├─ IconPackagesEmptyText (Pad_Menus_IconPackages_Empty)
+                └─ IconPackagesList ListBox (MaxHeight 170, EmberSelectListItem,
+                    per row: EB9F glyph + Name + Path)
 ```
 
 Every setting row carries the canonical Reset button, and the host row carries Record too (the Aim Engage cluster shape). The record button binds `MenuHostRecordCommand` on the PadViewModel through the TabItem's DataContext because the editor panel's own DataContext is the selected `MenuEditorItem`.
+
+The four cell pickers each use `ComboBoxWidthBehavior.SizeToItems` with a per-column `WidthGroup` (`MenuCellKindCombos`, `MenuCellKeyCombos`, `MenuCellButtonCombos`, `MenuCellMacroCombos`), so rows stay in column across selections and long locales do not clip.
+
+**Icon Packages block (#390).** Takes the Sound Packages card's shape. A pack is one zip file with the `.pficons` extension holding image entries plus an optional `manifest.json` display name (`PadForge.App/Common/IconPackageManager.cs`). PadForge never extracts a pack: importing one registers its path, and cells reference entries as `pficon://PackName/entry.png` beside loose image paths and Steam binding-icon names. The list and its empty-state text are filled from code-behind (`RefreshIconPackages` sets `IconPackagesList.ItemsSource` from `IconPackageManager.Packages`), and `IconPackageManager.RegistryChanged` re-runs it.
 
 ### HIDMaestro Profile Bar
 
@@ -918,8 +982,9 @@ All detected input devices with raw input state visualization.
 Grid (Margin="24,16")
 ├─ Row 0 (Auto): Header
 │   ├─ Icon (E772) + Title
-│   ├─ Refresh Button (RefreshCommand)
-│   └─ Online/Total count display
+│   ├─ Refresh Button (E72C, RefreshCommand)
+│   ├─ Pair Button (E702, PairCommand → PairDeviceDialog)
+│   └─ Online/Total count display (telemetry mono)
 └─ Row 1 (*): Main content (Grid, 2 columns)
     ├─ Col 0 (*): Facet chips + device card ListBox + drag-assign hint
     │   ├─ Row 0: Type facet chips (ALL / GAMEPAD / JOYSTICK / WHEEL / KEYBOARD /
@@ -936,22 +1001,33 @@ Grid (Margin="24,16")
         ├─ DeviceName headline (CardTitle, wrapping)
         ├─ Device Dossier (#175 competitor item 7): eyebrow + copy Button
         │   (CopyDossier_Click, E8C8) over a recessed telemetry-mono card whose
-        │   token rows are PRODUCT / TYPE / CAPS / VID:PID / APP GUID / SDL GUID /
-        │   PATH / LINK / BT / SERIAL / BATT. Rows whose fact is absent collapse
+        │   token rows run PRODUCT / TYPE / CAPS / APP GUID / SDL GUID /
+        │   PATH (HidHideInstancePath) / PATH (DossierConnectionPath) / VID:PID /
+        │   LINK / SERIAL / BATT. Rows whose fact is absent collapse. LINK reads
+        │   "BT" and shows only on IsBluetoothLink
+        ├─ Capability chip strip (HasCapabilityIcons): rumble (E877, doubles as the
+        │   identify button via IdentifyChip_Click, #293), gyro (E7AD), touchpad (EFA5)
         ├─ Submit Mapping Button (joysticks only, opens GitHub issue template)
         ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag, #150)
+        ├─ Manage Voice Macros Button (ManageVoicePhrases_Click, ShowManageVoicePhrases, #317)
+        ├─ Learn Handheld Buttons Button (LearnHandheldButton_Click,
+        │   ShowLearnHandheldButton, #343) + HandheldDaemonWarning line
+        ├─ HeadTrackerStatus line (#355, collapsed when empty)
         ├─ Separator
         ├─ VC Assignment section
         │   └─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
-        ├─ Separator
         ├─ Input Mode section (ShowInputModeSection)
         │   └─ "Force raw joystick mode" CheckBox (ForceRawJoystickMode)
         ├─ Input Hiding section (ShowInputHidingSection)
         │   ├─ "Hide from games (HidHide)" CheckBox (HidHideEnabled, HidingToggle_Click)
         │   └─ "Consume mapped inputs" CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
-        ├─ Separator
-        ├─ Power section (#162, wireless controllers only, ShowIdleDisconnect)
-        │   └─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes)
+        ├─ Separator (ShowInputModeOrHidingSection)
+        ├─ Power section (ShowPowerSection)
+        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
+        │   │   ShowIdleDisconnect, #162)
+        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
+        │       QuickCharge_Click, #372)
+        ├─ Separator (ShowRawInputDivider)
         └─ Raw Input State section
             ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
             │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
@@ -975,8 +1051,12 @@ Grid (Margin="24,16")
             ├─ Accelerometer (HasAccelData, same layout as gyro)
             ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair's left-half accel, #199)
             ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair's left Joy-Con, #252)
-            └─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
-                TouchpadPreviewBorder and Touchpad2PreviewBorder)
+            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
+            ├─ Handheld hidden buttons (#343, IsHandheldDevice)
+            │   └─ Learned button chips, or the Handheld_NoneLearned line
+            └─ Voice phrases (#317, ShowVoicePhrases)
+                └─ ItemsControl → VoicePhrases (registered phrase chips)
 ```
 
 ### Key Bindings
@@ -1022,8 +1102,12 @@ Grid (Margin="24,16")
 | `HidHideEnabled` | HidHide toggle |
 | `ShowConsumeToggle` | Consume toggle visibility (mouse/keyboard devices) |
 | `ConsumeInputEnabled` | Consume toggle |
-| `ShowIdleDisconnect` | Power section visibility (wireless controllers, #162) |
-| `IdleDisconnectMinutes` | Idle-disconnect countdown minutes |
+| `ShowPowerSection` | Power section visibility. True when either row below draws |
+| `ShowIdleDisconnect` / `IdleDisconnectMinutes` | Idle-disconnect row visibility and its countdown minutes (#162) |
+| `ShowQuickCharge` / `QuickChargeEnabled` | Quick Charge row visibility and toggle (#372). Also true on a Sony record the USB cable rebound to its wired path, which is not a disconnect target and is exactly when the feature fires |
+| `ShowInputModeOrHidingSection` / `ShowRawInputDivider` | The two conditional separators around the Power section |
+| `HasCapabilityIcons` / `HasRumble` / `HasGyro` / `ShowTouchpadCapability` | Capability chip strip and its three chips |
+| `ShowLearnHandheldButton` / `HandheldDaemonWarning` / `HasHandheldDaemonWarning` | Learn Handheld Buttons button and the vendor-daemon notice (#343) |
 | `ShowRegisterNfcTag` | Register/Manage NFC Tags button visibility (#150) |
 | `ShowManageVoicePhrases` | Manage Voice Macros button visibility (#317): a standalone microphone row, or a DualSense / DualSense Edge over Bluetooth where the pad itself carries the phrases. Never for a `peer://` path, since recognition runs on the owner |
 | `RawAxes` | Axis ProgressBar items |
@@ -1033,9 +1117,9 @@ Grid (Margin="24,16")
 | `RawPovs` | POV compass items |
 | `HasGyroData` / `HasAccelData` / `HasAccelAuxData` / `HasGyroAuxData` | Gyro / accel / aux-accel / aux-gyro section visibility |
 | `GyroX/Y/Z` / `AccelX/Y/Z` / `AccelAuxX/Y/Z` | Motion sensor values (aux accel is #199, aux gyro is #252) |
-| `HasTouchpadData` / `TouchpadLabel` | Touchpad preview visibility and caption |
+| `HasTouchpadData` / `HasSecondTouchpadData` / `TouchpadLabel` | Touchpad preview visibility for each pad, and the caption |
 
-The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC, Voice, and Consumer previews do the same: `IsNfcDevice` / `NfcTags`, `ShowVoicePhrases` / `VoicePhrases` (#317, the voice twin of the NFC tag rows), and `IsConsumerDevice` / `ConsumerButtons`. `ShowRegisterNfcTag`, `ShowIdleDisconnect`, and `IdleDisconnectMinutes` are `SelectedDevice`-scoped and bind through the `SelectedDevice.` prefix.
+The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC, Voice, Consumer, and handheld previews do the same: `IsNfcDevice` / `NfcTags`, `ShowVoicePhrases` / `VoicePhrases` (#317, the voice twin of the NFC tag rows), `IsConsumerDevice` / `ConsumerButtons`, and `IsHandheldDevice` (#343). `HeadTrackerStatus` is page-scoped too. Everything under the dossier and the sections below it, including `ShowRegisterNfcTag`, `ShowQuickCharge`, and `IdleDisconnectMinutes`, is `SelectedDevice`-scoped and binds through the `SelectedDevice.` prefix.
 
 ### Selection Highlighting
 
@@ -1056,6 +1140,9 @@ Custom `ListBoxItem` `ControlTemplate`:
 | `CopyDossier_Click` | Button.Click | Copies the device dossier's token rows to the clipboard |
 | `RegisterNfcTag_Click` | Button.Click | Opens `RegisterNfcTagDialog` for the selected NFC reader (#150) |
 | `ManageVoicePhrases_Click` | Button.Click | Opens `RegisterVoicePhraseDialog` for the selected microphone-carrying device (#317) |
+| `LearnHandheldButton_Click` | Button.Click | Opens `LearnHandheldButtonDialog` for the machine's hidden buttons (#343) |
+| `IdentifyChip_Click` | Border.MouseLeftButtonUp | Forwards to `IdentifyDevice_Click`, which calls `InputService.IdentifyDevice(SelectedDevice.InstanceGuid)` to vibrate the pad (#293) |
+| `QuickCharge_Click` | CheckBox.Click | Persists the Quick Charge toggle. Click, not Checked, so the binding-driven refresh on a selection change never writes (#372) |
 | `IdleDisconnect_LostFocus` | TextBox.LostFocus | Applies the clamped idle-disconnect minutes (#162) |
 | `DeviceCard_MouseDown` | PreviewMouseLeftButtonDown | Records drag start position. Skips if inside a Button |
 | `DeviceCard_MouseMove` | PreviewMouseMove | Initiates `DragDrop.DoDragDrop` with `DeviceInstanceGuid` data when threshold exceeded |
@@ -1198,6 +1285,8 @@ Uses `CompositionTarget.Rendering` (no dirty flag. Every frame). Reads from `Dev
 
 Application settings in vertical `CardBorder` sections.
 
+Card order is pinned by `Settings_CardsRunInTheDecidedOrder` in `PadForge.Tests/PageOrderContractTests.cs`, which asserts each card title's binding appears once and after the one before it.
+
 ### Layout Structure
 
 ```
@@ -1212,18 +1301,28 @@ ScrollViewer (Padding="24,0")
       │   ├─ "Theme" label
       │   ├─ ComboBox (System Default / Light / Dark, SelectedIndex=SelectedThemeIndex)
       │   └─ "Show Tour" Button (Settings_ShowTour, ShowTour_Click) → re-runs the first-run spotlight tour
-      ├─ Input Engine card
-      │   ├─ Icon E9F5 + title + description
-      │   ├─ Auto-start toggle (AutoStartEngine)
-      │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
-      │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs)
-      │   └─ HM inactivity timeout: NumberBox 0-3600s
-      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
       ├─ Window card
       │   ├─ Icon E737 + title + description
       │   ├─ Minimize to tray (MinimizeToTray)
       │   ├─ Start minimized (StartMinimized)
       │   └─ Start at login (StartAtLogin)
+      ├─ Input Engine card
+      │   ├─ Icon E9F5 + title + description
+      │   ├─ Auto-start toggle (AutoStartEngine)
+      │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
+      │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs) + "ms"
+      │   ├─ PollingOverrideNote (ember, shown only while the active profile
+      │   │   overrides the global value, #365)
+      │   └─ HM inactivity timeout: NumberBox 0-3600s
+      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
+      ├─ Assignment Prompts card
+      │   ├─ Icon E8DE + title + description
+      │   ├─ Offer on a new device (AssignOfferNewDevice)
+      │   └─ Offer on an empty slot (AssignOfferEmptySlot)
+      ├─ Handheld PC Buttons card (#343)
+      │   ├─ Icon E7F8 + title + description
+      │   └─ Enable toggle (HandheldButtonsEnabled). On, the Devices page gains
+      │      the machine's Hidden Buttons row and its System Motion row
       ├─ Battery Alerts card (#293)
       │   ├─ Icon E83F + title + description
       │   ├─ "Notify When Battery Runs Low" toggle (BatteryNotifyEnabled)

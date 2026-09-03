@@ -1042,6 +1042,8 @@
       
         
       
+        
+      
     
     
     
@@ -1630,6 +1632,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2352,6 +2382,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2777,6 +2819,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2833,6 +2903,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2869,6 +3023,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2953,6 +3135,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3275,6 +3485,7 @@
 <hr />
 <h2 id="impulse-triggers_1">Impulse Triggers<a class="headerlink" href="#impulse-triggers_1" title="Permanent link">&para;</a></h2>
 <p>Game-driven passthrough. Forza, Gears, Halo, and any other game that writes Xbox impulse trigger motor commands reach the real trigger motors on the assigned pad. No setup. The card lets you scale all trigger output at once, scale each trigger on its own, and swap the two trigger motors if a game writes them backwards.</p>
+<p>The impulse data arrives on the virtual controller's HID lane, so the slot needs an Xbox One, Elite, or Series virtual controller. A Virtual Xbox 360 slot rides the older XUSB path, whose vibration write carries the two body motors and nothing else.</p>
 <h3 id="settings">Settings<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3472,7 +3683,7 @@
 </tr>
 <tr>
 <td>Game-driven trigger rumble missing on DualSense</td>
-<td>The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox type and that the game actually writes impulse trigger data (the Trigger Motor Activity bars move, or the DualSense's Adaptive Triggers tab shows Vibration taking over). An Xbox One+ pad in the same slot is not required.</td>
+<td>The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox One, Elite, or Series type, not a Virtual Xbox 360, and that the game actually writes impulse trigger data (the Trigger Motor Activity bars move, or the DualSense's Adaptive Triggers tab shows Vibration taking over). An Xbox One+ pad in the same slot is not required.</td>
 </tr>
 <tr>
 <td>Trigger rumble too aggressive on audio</td>
@@ -3489,7 +3700,7 @@
 <li><a href="../controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

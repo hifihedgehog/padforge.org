@@ -48,16 +48,16 @@ A single dropdown selects the active base mode. Fourteen entries. Player Number 
 | Off | Paints the lightbar fully dark on every dispatch. A deliberate hard-off with no idle color and no game color showing. The Input Reactive overlay can still flash on the black base. |
 | Static Color | Solid color from the configured RGB. |
 | Breathing (Single Color Fades) | One color fades in and out at the configured period. |
-| Strobe — Square-Wave Flash | Hard on/off square-wave flash at the configured period. |
+| Strobe: Square-Wave Flash | Hard on/off square-wave flash at the configured period. |
 | Rainbow Cycle | Smooth hue rotation through the full color wheel. |
 | Color Cycle | Steps through the configured palette. Smooth blend is a toggle. |
-| Battery — Gradient by Charge Level | A linear blend between the configured Low Battery and Full Battery colors, driven by the pad's reported battery percent. Defaults red at 0 % and green at 100 %. DualSense and DualShock 4 battery reads. |
-| Audio Pulse — Static Color | Modulates the configured base color by the system audio peak. |
-| Audio Pulse — Random Color per Beat | A new random hue on each detected onset. |
-| Audio Pulse — Rainbow Cycle | Hue rotation modulated by audio peak. |
-| Audio Bands — Three Colors, Hard Transitions | Three colors (Quiet / Medium / Loud) with instant switching at thresholds. |
-| Audio Bands — Three Colors, Smooth Gradient | Same three colors with linear blending between thresholds. |
-| Audio Bands — Three Colors, Crossfade at Boundaries | Same three colors with a configurable crossfade width at each threshold. |
+| Battery: Gradient by Charge Level | A linear blend between the configured Low Battery and Full Battery colors, driven by the pad's reported battery percent. Defaults red at 0 % and green at 100 %. DualSense and DualShock 4 battery reads. |
+| Audio Pulse: Static Color | Modulates the configured base color by the system audio peak. |
+| Audio Pulse: Random Color per Beat | A new random hue on each detected onset. |
+| Audio Pulse: Rainbow Cycle | Hue rotation modulated by audio peak. |
+| Audio Bands: Three Colors, Hard Transitions | Three colors (Quiet / Medium / Loud) with instant switching at thresholds. |
+| Audio Bands: Three Colors, Smooth Gradient | Same three colors with linear blending between thresholds. |
+| Audio Bands: Three Colors, Crossfade at Boundaries | Same three colors with a configurable crossfade width at each threshold. |
 
 Sub-sections below the picker show only the controls the active mode needs (period, palette, audio bands, and so on).
 
@@ -113,7 +113,7 @@ Visible for Rainbow Cycle only. Range 0–100. Default 100. Scales the hue rotat
 
 ## Battery colors
 
-Visible for Battery — Gradient by Charge Level only. Two bordered cards side-by-side: Low Battery and Full Battery, laid out like the audio-band cards. Each has a color picker, a swatch preview, and R/G/B sliders with per-channel reset buttons. These cards have no hex input.
+Visible for Battery: Gradient by Charge Level only. Two bordered cards side-by-side: Low Battery and Full Battery, laid out like the audio-band cards. Each has a color picker, a swatch preview, and R/G/B sliders with per-channel reset buttons. These cards have no hex input.
 
 The lightbar blends linearly from the Low Battery color at 0 % charge to the Full Battery color at 100 %, following the pad's reported battery level. Defaults are red at empty and green at full. The blend is a straight linear mix with no separately configurable midpoint.
 
@@ -204,6 +204,12 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ---
 
+## Mirroring the game's color to other RGB gear
+
+The color a game writes to a virtual PlayStation controller can also light Razer Chroma and Logitech LIGHTSYNC devices, and the game's rumble can drive Razer Sensa HD haptics. Both are Dashboard toggles, off by default, and they read the virtual pad the game paints rather than anything on this tab. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
+
+---
+
 ## Tips
 
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
@@ -218,7 +224,8 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 - [Force Feedback](force-feedback.md): rumble and audio bass body rumble (the audio capture is shared with the lightbar's Audio modes).
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger effects on the same physical pads that drive the lightbar.
 - [Macros](../guides/macros.md): the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, and Set Guide LED Brightness macro action types.
+- [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md): the game's lightbar color on Razer Chroma and Logitech LIGHTSYNC gear.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

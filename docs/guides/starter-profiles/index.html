@@ -1275,6 +1275,8 @@
       
         
       
+        
+      
     
     
     
@@ -1652,6 +1654,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2374,6 +2404,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2799,6 +2841,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2855,6 +2925,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2891,6 +3045,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2975,6 +3157,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3320,7 +3530,7 @@ Browse Community Configs.</p>
 <p>A starter profile never names hardware. Its rows bind abstract inputs
 like <em>Gamepad ButtonA</em> and <em>Gamepad LeftStickX</em>, which resolve to
 whatever the assigned controller actually has, and every row is set to
-"(Any device)". Assign a DualSense, an Xbox pad, or a Switch Pro
+"(Any Device)". Assign a DualSense, an Xbox pad, or a Switch Pro
 Controller to the slot and the same profile drives all three.</p>
 <h3 id="touchpad-and-stick-both-drive-the-mouse">Touchpad and stick both drive the mouse<a class="headerlink" href="#touchpad-and-stick-both-drive-the-mouse" title="Permanent link">&para;</a></h3>
 <p>Every profile that moves a cursor offers the touchpad <em>and</em> the stick at
@@ -3430,13 +3640,11 @@ the double-tap tier is a real activator rather than a macro workaround.</p>
 <h3 id="fighting-games-clears-the-tournament-rules">Fighting Games clears the tournament rules<a class="headerlink" href="#fighting-games-clears-the-tournament-rules" title="Permanent link">&para;</a></h3>
 <p>SOCD cleaning is set to Neutral on both axes, so pressing left and right
 together produces no movement, and the same for up and down.</p>
-<p>Street Fighter League's rules, section 2.6, say a controller must either
-maintain both opposing inputs or reject both, on each axis. Neutral is
-the reject-both case, so it complies, and the implementations the rule
-rules out are the selective ones: last-input priority, first-input
-priority, and the older up-priority. Evo's baseline is looser and permits
-those too, which makes Neutral the setting that satisfies both without
-having to check which ruleset a given event runs.</p>
+<p>Capcom's tournament rules require opposing directions pressed together to
+produce no movement, on the horizontal and the vertical axis alike. Only
+neutral cleaning, or no cleaning at all, does that. Evo's baseline is
+looser and also permits first- and last-input priority, so Neutral is the
+one setting legal under both rulesets, whichever a given event runs.</p>
 <p>The profile also binds only <strong>one</strong> directional surface. The D-pad
 drives and the left stick is left unbound on purpose, because the rules
 cap movement at one input system per direction. It ships no macros,
@@ -3450,9 +3658,9 @@ remapping. That mirrors how RetroArch's hotkey modifier works.</p>
 <p>Back is the modifier and nothing else. A shift-layer activator eats its
 own input, so while Back is held the pad's own Back output is suppressed
 and the emulator never sees a stray press.</p>
-<p>The left stick also drives the D-pad, because NES, SNES and Mega Drive
-cores have no analog sticks at all. Without that, a stick-first player
-gets nothing.</p>
+<p>The left stick also drives the D-pad, because NES, SNES and Genesis cores
+have no analog sticks at all. Without that, a stick-first player gets
+nothing.</p>
 <h3 id="space-sim-is-frontiers-own-layout">Space Sim is Frontier's own layout<a class="headerlink" href="#space-sim-is-frontiers-own-layout" title="Permanent link">&para;</a></h3>
 <p>Roll on the left stick's X, pitch on its Y, vertical thrust on the right
 stick's Y. Those three are unanimous across every gamepad preset Elite
@@ -3489,7 +3697,7 @@ because the recenter rides a macro that does not consume its trigger.</p>
 <h2 id="silencing-the-pad">Silencing the pad<a class="headerlink" href="#silencing-the-pad" title="Permanent link">&para;</a></h2>
 <p>Every profile has a quiet layer. Hold <strong>Guide and Start together</strong> for
 600 ms and the controller stops sending anything at all. Hold them again
-to bring it back. The layer is named <strong>Quiet (nothing sends)</strong> on the
+to bring it back. The layer is named <strong>Quiet (Nothing Sends)</strong> on the
 flyout.</p>
 <p>This is for the moment you alt-tab away and do not want the pad typing
 into whatever now has focus.</p>
@@ -3530,7 +3738,7 @@ and taking one back is the thing this design exists to avoid.</p>
 <li><a href="../shift-layers/">Shift Layers</a> explains the mechanism the Hotbar and
   Emulation profiles are built on.</li>
 </ul>
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

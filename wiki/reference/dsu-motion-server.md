@@ -50,7 +50,7 @@ The [Devices](../features/devices.md) page shows live gyro and accelerometer val
 ## Turn it on
 
 1. Plug in a controller that reports motion.
-2. Assign it to one of slots 1–4. The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Only those two types carry a motion channel, so an Xbox, Extended, Keyboard + Mouse, MIDI, or VR slot broadcasts no motion.
+2. Assign it to one of slots 1–4. The slot's virtual controller type has to be **PlayStation** or **Nintendo**, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), whose native frame carries an IMU of its own. Xbox, Keyboard + Mouse, MIDI, VR, and any other Extended slot broadcast no motion.
 3. On the [Dashboard](../features/dashboard.md), tick **Enable DSU Motion Server (CemuHook Motion Provider Protocol)**.
 4. Leave the **Port** box at **26760**, or type a different number. The reset button next to it returns the port to 26760.
 5. Start the input engine with the play button.
@@ -60,15 +60,17 @@ Motion data flows the moment both ends are running.
 
 ### Per-slot tuning lives on the Gyro tab
 
-The DSU broadcast starts from the calibrated gyro stream. The [Gyro](../guides/gyro.md) tab holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the **Easy Aim Threshold** stick gate, and the **Aim Engage Button** picker. Both gates zero gyro output while their condition is not met.
+The DSU broadcast starts from the calibrated gyro stream. The [Gyro](../guides/gyro.md) tab holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the **Grip** hold, the **Compass** magnetometer anchor on controllers that carry one, the **Easy Aim Threshold** stick gate, and the **Aim Engage Button** picker. Both gates zero gyro output while their condition is not met.
 
 Whether those controls reach the broadcast depends on one switch. The Gyro tab's **Apply Gyro Tuning to Motion Passthrough** toggle, under the **Motion Passthrough** header, is off by default. Left off, the broadcast sends the calibrated reading straight through. Sensitivity, smoothing, and both gates stay out of it, so emulators see motion whether or not the engage button is held. Turn it on and the broadcast follows the full tab tuning, the Easy Aim and Aim Engage gates included. With a gate configured and the toggle on, the DSU gyro reads zero while the gate is not satisfied, the same as a Gyro mapping row. Calibration drift correction applies either way.
 
-The accelerometer stream skips all of this. The Gyro tab knobs are gyro-only, so the broadcast always carries the raw scaled accelerometer reading.
+The accelerometer stream skips the tuning chain. Sensitivity, deadzone, smoothing, curve, and both gates are gyro-only, so the broadcast carries the scaled accelerometer reading.
+
+Two things still reach it. **Grip** rotates the body gyro, the body accelerometer, and gravity together in both states of the passthrough toggle, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. And the Motion Accelerometer row's own **Invert** checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.
 
 ### The Mappings grid picks the source device
 
-Motion is not implicit in the device assignment. Each PlayStation or Nintendo slot carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.
+Motion is not implicit in the device assignment. Each motion-capable slot carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.
 
 - Several motion devices on one slot stack as sources on the same row. The first source whose device is online wins, and the walk falls through to the next source when that device goes offline.
 - The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.
@@ -120,7 +122,7 @@ The DSU format only carries 4 slots. PadForge supports 16. Slots 5–16 do not a
 - Single player: put the motion controller in slot 1.
 - Local multiplayer with motion: up to 4 controllers.
 - Motion controller in slot 5 or later does not show up in the emulator. Move it to slots 1–4.
-- The cap sits on top of the slot-type rule: the slot still has to be a PlayStation or Nintendo virtual controller.
+- The cap sits on top of the slot-type rule: the slot still has to carry a motion channel.
 
 ---
 
@@ -143,7 +145,9 @@ If the status line reads **Port 26760 in use**, another DSU server holds the por
 
 ## Axis convention
 
-Motion axes are already oriented for emulators. Tested with DualSense, DualShock 4, and Switch Pro Controller. No manual axis flipping needed.
+PadForge orients the axes for the emulator. The packet negates accelerometer X, Y, and Z and gyro pitch and roll against the sensor frame it reads, and keeps yaw. Nothing to flip by hand.
+
+If a direction reads backward on your controller, say which one on the [issue tracker](https://github.com/hifihedgehog/PadForge/issues) with the model. Do not compensate inside the emulator: that hides the report the fix needs.
 
 ---
 
@@ -157,7 +161,7 @@ Motion axes are already oriented for emulators. Tested with DualSense, DualShock
 | Only one controller has motion | DSU caps at 4 slots. Move the motion device to slots 1–4. |
 | Device has no motion sensors | Some controllers (Xbox) ship without a gyro. Check the [Devices](../features/devices.md) page. |
 | Emulator says "connected" but no values | The physical controller has to be assigned to a slot, not only detected on the Devices page. |
-| Emulator connected, controller assigned, still no motion | The slot's virtual controller type has to be **PlayStation** or **Nintendo**. Xbox, Extended, Keyboard + Mouse, MIDI, and VR slots send no motion. |
+| Emulator connected, controller assigned, still no motion | The slot's virtual controller type has to be **PlayStation**, **Nintendo**, or **Extended** on a Valve profile. Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots send no motion. |
 
 ---
 
@@ -171,4 +175,4 @@ Motion axes are already oriented for emulators. Tested with DualSense, DualShock
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

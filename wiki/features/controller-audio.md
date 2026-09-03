@@ -1,6 +1,6 @@
 # Controller Audio
 
-*Play sound through a controller: a real pad speaker on Sony and Wii pads, or a vibrating haptic tone on Joy-Con, Pro, Steam, and Deck pads.*
+*Play sound through a controller: a real pad speaker on Sony and Wii pads, a vibrating haptic tone on Joy-Con, Pro, Steam, and Deck pads, or a real haptic audio stream on the Steam Controller 2026 over USB or its dongle.*
 
 ![Audio tab with mirror source picker and master volume](../images/pad-audio.png)
 
@@ -14,7 +14,9 @@ The Audio tab appears when the selected mapped device is a model that supports p
 
 - **Sony pads with a speaker:** DualSense, DualSense Edge, DualShock 4.
 - **Wii Remote:** its built-in speaker.
-- **Haptic-tone pads:** Joy-Con (left, right, or the combined pair), Switch Pro Controller, Steam Controller (2015), the Steam Deck built-in pads, and the Steam Controller 2026.
+- **Haptic-tone pads:** Joy-Con (left, right, or the combined pair), Switch Pro Controller, Steam Controller (2015), the Steam Deck built-in pads, and the Steam Controller 2026 over Bluetooth.
+
+The Steam Controller 2026 is a fourth case when it is on a USB cable or its wireless dongle. There PadForge streams real audio into its four actuators instead of reducing the sound to one tone. See [Steam Controller 2026 over USB or the dongle](#steam-controller-2026-over-usb-or-the-dongle).
 
 Switch 2 controllers are not included: no known method plays an audible tone on them.
 
@@ -24,6 +26,7 @@ Inside the tab, the mirror controls appear for any device with a reachable speak
 - **DualShock 4:** Bluetooth, or the Sony USB wireless adaptor. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
 - **Wii Remote:** mirrors into its built-in speaker at the same low rate as its macro sounds.
 - **Haptic-tone pads:** mirror the captured audio as a tracking haptic tone, the same reduction a macro sound gets. Expect a pitch-following buzz, not the source audio.
+- **Steam Controller 2026 over USB or the dongle:** mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Everything above the cutoff you set is filtered out.
 
 Macro sounds do not depend on the mirror toggle. They play on whatever the slot's assigned devices can produce, whenever a macro fires.
 
@@ -80,6 +83,29 @@ Decide what happens to pitches above a limit you set. This applies to the mirror
 
 Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a **Haptics Gain** slider, 25 to 300%, default 100%.
 
+On a Steam Controller 2026 over USB or the dongle the same toggle feeds the haptic track into the actuator stream as audio rather than as a tone, so the game's authored haptics play as the designer mixed them, below the low-pass cutoff.
+
+### Actuator Low-Pass Cutoff
+
+Shown only for a Steam Controller 2026 on a USB cable or its dongle. Keeps the haptic stream below this frequency so the pads vibrate instead of audibly playing sound. Around 250 Hz the actuators start to become audible. Raise it for sharper detail, lower it for quieter play. Range 60 to 1000 Hz, default 250, with a **Reset to 250 Hz** button. The High Tones setting does nothing on this pad over those two transports. The cutoff takes its place.
+
+---
+
+## Steam Controller 2026 over USB or the dongle
+
+The Steam Controller 2026's firmware accepts a continuous audio stream for its actuators, two trackpads and two grips, over the USB cable and over the wireless dongle. PadForge uses it. On those two transports the pad is no longer a haptic-tone pad. Everything the slot plays, the system mirror, macro sounds, the Test button, the touchpad swipe ticks, and a virtual DualSense's authored haptics when the toggle above is on, is mixed into one stream and sent to the actuators as audio at 8 kHz. Nothing has to be turned on. Assign the pad, and the Audio tab's mirror and macro sounds start using the stream.
+
+Several sources play at once without one silencing another. A game's haptics keep playing while a macro sound fires or the mirror runs.
+
+What to expect:
+
+- Low frequencies are what the actuators render well. The cutoff above defaults to 250 Hz, so bass, engine rumble, and impacts come through as vibration and higher content is filtered off before it reaches the pad.
+- Over Bluetooth the pad falls back to the single-tone path described on this page, since no known implementation streams audio to it over a direct Bluetooth link.
+- The stream starts when there is something to play and stops about two seconds after the last sound, so an idle pad sends nothing.
+- Over the dongle the audio is 8-bit companded (G.711 mu-law), a dongle bandwidth limit. Over the cable it is 16-bit.
+
+The stream was confirmed working by the requester on their own pad. Detail on the protocol is on [Steam Controller Haptics Internals](../reference/steam-controller-haptics-internals.md).
+
 ---
 
 ## DualSense headset jack
@@ -95,6 +121,12 @@ A DualSense or DualSense Edge adds three more rows under Master Volume.
 Headphones + Speaker plays mono on the headset side, a firmware limit. Over Bluetooth that mode plays through the headphones only. Follow Headphone Jack switches to headphones when something is plugged in and back to the speaker when unplugged. PadForge reads the jack state from the pad itself whenever the slot has audio to play, over USB or Bluetooth, so the switch works with or without a virtual DualSense on the slot.
 
 A DualShock 4 does not get these rows.
+
+### A DualSense on Bluetooth and USB at once
+
+Plug a cable into a DualSense that is already paired over Bluetooth and the pad holds both links for a while. Its firmware mutes the USB audio interface in both directions while the Bluetooth link stands: the speaker endpoint still shows up in Windows and plays without error, and nothing comes out. When PadForge builds the wired audio path for such a pad it drops the stale Bluetooth link itself, once per plug-in, so the speaker plays. Input had already moved to USB. This finishes the switch for audio.
+
+The drop runs once for each time you plug the cable in. If you re-link Bluetooth on purpose while the cable stays in, PadForge leaves that link alone until the next unplug. A pad that was never on Bluetooth is unaffected. The fix was verified end to end on a DualSense: the dual state formed live, the drop fired within five seconds, and the mirror measured on the pad's own microphone at the same level as a USB-only pad.
 
 ---
 
@@ -157,6 +189,8 @@ The two kinds of output sound very different.
 
 **Haptic tone (lower fidelity).** Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads have no speaker, only haptic actuators. PadForge reduces the sound to a single vibrating tone: one dominant pitch with a volume envelope. Beeps, alerts, and simple melodic cues come through. Speech and music do not. A haptic actuator plays one frequency at a time, so however many a pad has (one on a lone Joy-Con, two on a Pro or Steam Controller, four on the Steam Controller 2026) it still plays that one mono tone. A combined Joy-Con pair plays it through both Joy-Cons, and while a game is rumbling, the tone follows the side the rumble drives: left motor plays the left Joy-Con, right motor the right, both or neither play both. Pick short, distinct sounds for these pads.
 
+**Haptic stream (the Steam Controller 2026 over USB or the dongle).** The sound itself goes to the actuators, low-passed at the cutoff you set. Bass-heavy cues land as felt vibration. A high beep is filtered out unless you raise the cutoff, at which point the pad starts to be audible as a small speaker.
+
 ---
 
 ## Sound packages and macros on this tab
@@ -187,7 +221,9 @@ Every setting row has its own reset button that returns just that setting to its
 - **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads. Each macro's Play Sound action still carries its own volume.
 - **The mirror is endpoint-level, not per-app.** It mirrors a Windows output device, not one program's sound.
 - **The pad speaker is small.** It suits voice, prompts, and effects more than music.
-- **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.
+- **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and the Steam Controller 2026 over Bluetooth reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.
+- **The Steam Controller 2026 stream is low-passed.** Over USB or the dongle the pad gets real audio, but only what sits under the Actuator Low-Pass Cutoff. It is a vibration channel, not a speaker.
+- **A dual-connected DualSense needs the radio dropped.** The pad's own firmware mutes USB audio while a Bluetooth link stands. PadForge drops that link when it builds the wired audio path. A DualSense whose radio was dropped while the cable is in does not re-link on the PS button until you unplug it.
 - **The Wii Remote speaker is low-rate.** Expect beeps and short cues, not clean playback.
 - **Switch 2 controllers have no audio output here.** They do not appear in the Audio tab.
 
@@ -202,7 +238,8 @@ Every setting row has its own reset button that returns just that setting to its
 - [Controller Slots](controller-slots.md): assign a DualSense or DualShock 4 to a slot.
 - [Devices](devices.md): confirm the pad and its connection (USB or Bluetooth).
 - [Remote Link](../guides/remote-link.md): send the pad speaker audio to a pad on another PC.
+- [Steam Controller Haptics Internals](../reference/steam-controller-haptics-internals.md): the actuator stream protocol.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

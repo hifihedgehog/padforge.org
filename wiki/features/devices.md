@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging. |
@@ -91,7 +91,7 @@ A row of capability icons sits at the bottom of the card: rumble, gyro, and touc
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, and microphones. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
+Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, and the Hidden Buttons, System Motion, and Head Tracker rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -288,6 +288,20 @@ The deep how-to (registering, naming, and mapping tags) lives on [NFC Tags](nfc-
 
 ---
 
+## Machine and tracker rows
+
+Three rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers **Submit Device Mapping**.
+
+| Row | Type | Where it is turned on | What it carries |
+|-----|------|----------------------|-----------------|
+| *Your machine* **Hidden Buttons** | Handheld Buttons | **Enable Handheld PC Buttons** in [Settings](settings.md) | One button per paddle or key you have learned, at a stable index. The detail pane lists them by name and lights each one while it is down. A **Learn / Manage Hidden Buttons** button opens the learn dialog. |
+| *Your machine* **Motion** | System Motion | The same Settings toggle. Appears only when Windows reports a gyroscope. | The machine's gyroscope and accelerometer as a motion source |
+| **Head Tracker (OpenTrack)** | Head Tracker | **Enable Head Tracking Input** on the [Dashboard](dashboard.md) | Six absolute axes, Head Yaw through Head Z, with a status line that says which source is live |
+
+The machine name in the first two rows is the product name the firmware reports, or the family name when the product name is a bare model code. See [Handheld PC Buttons](handheld-buttons.md) and [Head Tracking](head-tracking.md) for setup.
+
+---
+
 ## Pairing a controller
 
 The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers three families: **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**.
@@ -310,9 +324,9 @@ When a physical device feeds a [slot](controller-slots.md), games can see both d
 
 Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). The device disappears from every non-whitelisted app the moment you toggle the option. PadForge is whitelisted automatically. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from [Driver Management](driver-management.md).
 
-PadForge hides every interface of the device that HidHide can filter, including the XInput node of a controller built into a USB composite device, such as a handheld PC's controller or a pad on the Xbox 360 wireless receiver. An interface that appears on this page as its own device, such as a handheld's touchpad, follows its own checkbox. Leave that checkbox off and the interface stays visible while the pad is hidden.
+PadForge hides every interface of the device that HidHide can filter, including the XInput node of a controller built into a USB composite device, such as a handheld PC's controller or a pad on the Xbox 360 wireless receiver. An interface that appears on this page as its own connected device, such as a handheld's touchpad, follows its own checkbox. Leave that checkbox off and the interface stays visible while the pad is hidden. An offline card does not count: only a connected row with hiding off keeps its interface out of the pad's hide list.
 
-Hiding is not permanent and does not reach into Windows itself. HidHide blocks only programs that open the device after the entry lands, and only programs that are not on the whitelist. Windows' own drivers keep using a hidden touchpad or keyboard, so the cursor still moves. A game that opened the controller before you hid it keeps it until the controller reconnects. PadForge removes its entries when it exits and puts them back when its engine starts. On a handheld the built-in controller never reconnects, so turn on **Keep devices cloaked between launches** in [Settings](settings.md) and reboot once to have the controller hidden before any game or launcher can open it.
+Hiding is not permanent and does not reach into Windows itself. HidHide blocks only programs that open the device after the entry lands, and only programs that are not on the whitelist. Windows' own drivers keep using a hidden touchpad or keyboard, so the cursor still moves. A game that opened the controller before you hid it keeps it until the controller reconnects. PadForge removes its entries when it exits and puts them back when its engine starts. On a handheld the built-in controller never reconnects, so turn on **Keep Devices Cloaked Between Launches** in [Settings](settings.md) and reboot once to have the controller hidden before any game or launcher can open it.
 
 You can whitelist more apps in [Settings](settings.md) so they can still see hidden devices (streaming overlays, secondary remappers, etc.).
 
@@ -362,7 +376,7 @@ The global **Hide Devices from Games** toggle in [Settings](settings.md) (under 
 
 ## Power
 
-Wireless (Bluetooth) controllers get a **Power** section in the detail pane.
+Wireless controllers get a **Power** section in the detail pane. It draws when either of its two controls applies to the device: **Idle Disconnect** for any pad PadForge can tell to disconnect, and **Disconnect Bluetooth When Plugged In over USB** for a pad that reports its Bluetooth address as its serial number, which keeps that checkbox on the card while the pad is on a cable.
 
 ![Power section with Idle Disconnect timer and battery indicator](../images/devices-power.png)
 
@@ -371,6 +385,26 @@ Wireless (Bluetooth) controllers get a **Power** section in the detail pane.
 Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes, and the suffix reads **minutes (0 = never)**. Set it to 0 to leave the controller on.
 
 Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link to drop, so nothing happens. Charging doesn't hold it off. Dropping Bluetooth doesn't interrupt the charge, so an idle pad left on a charger still disconnects. It targets any Bluetooth-linked pad (Sony, gen-1 Switch Pro and Joy-Cons, Wii Remote, and the rest), Xbox controllers on the XInput driver, the Switch 2 family, and the combined gen-1 Joy-Con pair, where PadForge drops both halves' links. A pad reaching this PC through [Remote Link](../guides/remote-link.md) is excluded. This machine holds no radio link to it.
+
+### Quick Charge
+
+A Bluetooth pad that you plug in to charge keeps its radio link up, and the radio keeps drawing from the battery you are trying to fill. **Disconnect Bluetooth When Plugged In over USB** drops that link the moment the pad reports it is charging. Off by default, saved per device.
+
+<!-- SCREENSHOT: devices-quick-charge -->
+<!-- pending capture: ![Power section with the Quick Charge checkbox under Idle Disconnect](../images/devices-quick-charge.png) -->
+
+The trigger is the pad's own charging report, read from SDL's battery state about once a second. Any power source that makes the pad report charging counts, a PC port and a wall charger alike. The drop fires once, on the change from not charging to charging:
+
+| Situation | What happens |
+|-----------|--------------|
+| Pad is on Bluetooth, cable goes in | The Bluetooth link is dropped. On a PC port the pad carries on over USB. On a wall charger it goes quiet and charges. |
+| You re-pair Bluetooth while the cable stays in | Left alone. The pad already reads charging, so there is no change to act on until the next unplug. |
+| You turn the checkbox on while already plugged in | Nothing until the next unplug and replug. |
+| PadForge starts with the cable already in | Nothing. The first reading only seeds the check. |
+
+A Sony pad reports the same Bluetooth address as its serial number over both links, so PadForge holds one device card for it, and a cable rebinds that card to the USB path. That is why the checkbox stays on the card while the pad is wired, and why the drop can still find the radio link: it is addressed by that serial. A pad that was never paired makes that a lookup that finds nothing.
+
+The checkbox appears for any pad Idle Disconnect can target, plus any device whose serial number parses as a nonzero Bluetooth address. In a diagnostics log every outcome prints a `QUICKCHARGE` line, so a silent log means the charging change never arrived or the checkbox was off.
 
 ---
 
@@ -394,7 +428,7 @@ By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translat
 ### How to turn it on
 
 1. Select the device card
-2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, and pads reaching this PC over Remote Link.)
+2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, and Head Tracker rows, and pads reaching this PC over Remote Link.)
 3. Check **Force Raw Joystick Mode (Bypass Gamepad Remapping)**
 4. Saved right away. Persists across restarts.
 
@@ -502,7 +536,7 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 ### HidHide toggle grayed out or missing
 
 - **Grayed out**: HidHide is not installed. Install via [Driver Management](driver-management.md) and restart PadForge.
-- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, pads reaching this PC over Remote Link). HidHide cannot cloak what is not a HID device, so the section is left out instead of shown disabled.
+- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, and Head Tracker rows, pads reaching this PC over Remote Link). HidHide cannot cloak what is not a HID device, so the section is left out instead of shown disabled.
 
 ---
 
@@ -517,6 +551,8 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 - [Force Feedback](force-feedback.md): device rumble and haptic capabilities.
 - [MIDI Input](midi-input.md): map a MIDI keyboard or control surface that appears here.
 - [NFC Tags](nfc-tags.md): register, name, and map tags read by an NFC Reader device.
+- [Handheld PC Buttons](handheld-buttons.md): learn the paddles and keys behind the Hidden Buttons row.
+- [Head Tracking](head-tracking.md): set up OpenTrack for the Head Tracker row.
 - [DSU Motion Server](../reference/dsu-motion-server.md): Gyro and accel data for motion-enabled emulators.
 - [Profiles](../guides/profiles.md): device connections persist across profile switches.
 - [Dashboard](dashboard.md): connected device counts at a glance.
@@ -526,4 +562,4 @@ Sets the maximum physical travel (0-100%) that maps to full output. If the stick
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

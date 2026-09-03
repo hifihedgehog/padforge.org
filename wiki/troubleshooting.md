@@ -632,6 +632,53 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 ---
 
+## Wii Remote Motion Drifts or Turns the Wrong Way in an Emulator
+
+**A Wii Remote feeds an emulator through a Nintendo or PlayStation slot or the DSU server. Steering drifts after a tilt, the orientation is off, or a sharp turn goes the wrong way.**
+
+1. On the Gyro tab, uncheck **Apply Gyro Tuning to Motion Passthrough**. It is off by default. With it on, the tab's defaults run smoothing and a 3°/s deadzone on the rate the emulator integrates, and the integrated orientation walks away from the real one. The tab's live readouts show the calibrated rate, not the tuned one, so they look fine while this happens.
+2. Set **Held As** on the Grip card to the hold you are using: **Pointing** for aiming at the screen, **Sideways, Face Up** for the NES-style hold, **Wii Wheel, Face Toward You** for the wheel shell, **Upright** for the pointer at the ceiling. The two sideways holds use different rotations, so a wheel played with Sideways, Face Up selected steers on the wrong axis.
+3. Hold the remote still for a moment after changing the grip. The change recenters the gravity estimate and the tilt neutrals.
+4. If the remote still drifts at rest, set it down and click **Calibrate Gyro**. The zero is calibrated on connect. The driver applies a fixed Motion Plus scale and reads no calibration block from the remote, so a fast turn can read a little short. That is a known limitation, not a setting.
+5. In both sideways holds the D-pad turns with the grip, so Up on the mapping table is up in the hold. Re-record a D-pad row if it was recorded in a different hold.
+
+---
+
+## Hide from Games Leaves a Handheld's XInput Pad Visible or Hides Its Touchpad
+
+**On a handheld PC such as the Legion Go, Hide from Games (HidHide) on the built-in controller hides its touchpad but games still see the XInput pad, or the pad is hidden and the touchpad went with it.**
+
+1. Update to 4.4.0. The built-in controller is a USB composite device whose XInput node is an interface under the composite parent, and earlier builds never blacklisted the nodes between the HID child and the parent. 4.4.0 hides every interface of the device that HidHide can filter, the XInput node included. The Xbox 360 wireless receiver has the same shape.
+2. An interface that shows on the [Devices](features/devices.md) page as its own row, such as the touchpad, follows its own **Hide from Games (HidHide)** checkbox. Leave it off and the touchpad stays visible while the pad is hidden. Turn it on to hide the touchpad too.
+3. A program that opened the pad before the entry landed keeps it until the pad reconnects. A built-in pad never reconnects, so a game or launcher started before you hid the pad keeps seeing it. Turn on **Keep Devices Cloaked Between Launches** in [Settings](features/settings.md) and reboot once, so the entry is in place before anything opens the pad.
+4. **Hide Devices from Games** in [Settings](features/settings.md) is the master switch. With it off, no per-device checkbox does anything.
+5. Add any emulator or tool that must still see the physical pad under **Whitelisted Applications** in [Settings](features/settings.md). PadForge whitelists itself.
+
+---
+
+## Dual-Connected DualSense Goes Silent over USB
+
+**A DualSense paired over Bluetooth is plugged in by USB. Input moves to the cable, but the pad's speaker, headphone jack, and microphone go silent while Windows shows the audio endpoint as active.**
+
+1. This is the pad's firmware. While a DualSense holds a Bluetooth link and a USB link at once, it mutes its USB audio interface in both directions. Windows reports the endpoint as active and playback runs without error, so no mixer shows the mute.
+2. 4.4.0 finishes the transport switch. When PadForge opens the pad's USB audio (controller audio passthrough, or a persona that plays through the pad), it drops the stale Bluetooth link once for that cable session. The drop lands within a few seconds. With no PadForge audio feature in use on the pad, nothing drops the link: connect the pad by one transport instead.
+3. A pad whose radio was dropped while the cable is in does not re-link on a PS press. To go back to Bluetooth, unplug the cable, then press PS.
+4. Unplugging, using the pad over Bluetooth, and plugging in again earns a fresh drop.
+5. The DualShock 4 is not affected. It has no USB audio interface.
+
+---
+
+## GameMaker Game Drops to 5 FPS (Sonic UltraSaturn)
+
+**A GameMaker game such as Sonic UltraSaturn falls to about 5 fps within minutes while PadForge runs, and its handle count in Task Manager climbs by the thousand every second.**
+
+1. The game's runtime polls `joyGetPosEx` for unplugged joystick ids every frame, and Windows answers each call with a full HID rescan. When two HID devices carry the same vendor and product id, that rescan leaks a DirectInput calibration registry key handle per device per call, about 1,200 handles a second, until the game crawls. The game does this with or without PadForge. PadForge's part is the second identity.
+2. The Xbox slot's default profile, Xbox Series X|S Controller (Bluetooth), carries the same id (045E:0B13) as a real Xbox Series pad connected over Bluetooth. With such a pad present, pick another Xbox profile in the slot's profile picker. The Xbox 360 wired and Xbox Elite Series 2 profiles ran flat on the bench.
+3. A DualSense connected over Bluetooth and USB at once is also two devices with one id. Connect it by one transport, or let 4.4.0's dual-link drop finish the switch (see the entry above).
+4. Two real pads of the same model trigger the same path. Nothing in PadForge changes that.
+
+---
+
 ## Logs and diagnostics
 
 PadForge writes no log files on its own. A healthy session leaves nothing on disk unless you ask for it. Next to `PadForge.exe`:
@@ -708,6 +755,10 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Custom Expression macro silent | Watch live preview value. Rising-edge means it must cross 0.5 |
 | Touchpad Overlay no input in game | Slot must be PlayStation type. A real DualSense or DS4 in the slot overrides the overlay |
 | Touchpad pressure in steps | Synthetic Pressure is on. Turn it off for raw readings |
+| Wii Remote drifts or turns wrong in an emulator | Uncheck Apply Gyro Tuning to Motion Passthrough, set Held As to the hold |
+| Handheld XInput pad still visible after hiding | 4.4.0 hides composite interfaces. Keep Devices Cloaked Between Launches, reboot once |
+| Dual-connected DualSense silent over USB | Firmware mute. 4.4.0 drops the stale Bluetooth link, or connect by one transport |
+| GameMaker game at 5 fps | Two devices share one id. Pick another Xbox profile, one transport per pad |
 
 ---
 
@@ -728,7 +779,8 @@ Both land in the folder PadForge runs from, and the card shows the path.
 - [DSU Motion Server](reference/dsu-motion-server.md): Motion data for emulators
 - [Web Controller](guides/web-controller.md): Browser-based virtual controller
 - [Remote Link](guides/remote-link.md): Share a controller between PCs, on your network or across the internet
+- [Wii Controllers](devices/wii-controllers.md): Holds, emulator setup, and the Motion Plus limitation
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

@@ -52,8 +52,10 @@ triggers. Every voice starts enabled at 100% gain. Master Gain starts at
 the low motor routing. Note where your shaker responds strongest and set
 the voice frequencies there. **Stop** ends a running test or sweep.
 
-Every control has a reset button, and the Rumble to Audio card header
-carries a **Reset All** for the whole card.
+The enable, output device, channel mode, and master gain rows each carry a
+reset button, and each voice row carries one that restores that voice to
+enabled, 100% gain, and its default frequency. The Rumble to Audio card
+header carries a **Reset All** for the whole card.
 
 ---
 
@@ -65,4 +67,4 @@ carries a **Reset All** for the whole card.
 - [Controller Audio](controller-audio.md) covers the controller's own
   speaker and haptic-tone audio.
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

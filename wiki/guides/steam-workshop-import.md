@@ -115,11 +115,11 @@ The profile carries only the virtual controllers the config actually drives. A c
 
 All created pads read the same physical controller. Radial and touch menus land on every created pad, so they follow whichever pad the game reads.
 
-Imported mapping tables are **authoritative**: they spell out the whole layout, so assigning a controller to an imported pad adds no automap rows on top. Your pad drives exactly what the config authored, nothing doubled. One exception: a macro-only config imports with an empty mapping table, and an empty table still rides the standard automap wholesale, which is what its macro triggers listen to.
+Imported mapping tables are **authoritative**: they spell out the whole layout, so assigning a controller to an imported pad adds no automap rows on top. Your pad drives exactly what the config authored, nothing doubled. That holds for every pad the import creates, an empty table included.
 
 Where everything lands:
 
-- **Mappings** go into each pad's [Button and Axis Mappings](../features/mappings.md) table. They use device-portable **Gamepad** sources ("Gamepad A", "Gamepad Left Stick X"), so they work on any recognized controller without rework. Secondary sources on imported rows show **(Any device)** until you assign a controller.
+- **Mappings** go into each pad's [Button and Axis Mappings](../features/mappings.md) table. They use device-portable **Gamepad** sources ("Gamepad A", "Gamepad Left Stick X"), so they work on any recognized controller without rework. Imported rows name no device, so their device column reads **(Any Device)** and each row follows whichever controller the slot holds.
 - **Action sets and layers** become [Shift Layers](shift-layers.md): hold-style mode shifts become Hold layers, add-layer commands become Toggle layers, and set-switch buttons become layer jumps or cycles.
 - **Radial and touch menus** become on-screen [Menus](menus.md) with the config's cell labels, fire mode, and screen placement.
 - **Cursor warps, key autofire, turbo, toggles, long presses, double presses, haptic pulses, and lighting commands** become [Macros](macros.md). A double-press activator rides the macro's **On Double Press** fire mode with the config's press window. A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.
@@ -215,4 +215,4 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

@@ -43,6 +43,8 @@ Attach or detach a Nunchuk while the remote stays connected and PadForge re-iden
 
 Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.
 
+The hat turns with the remote's hold. Set **Held As** on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See [Holds](#holds).
+
 ---
 
 ## Motion
@@ -52,6 +54,27 @@ The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the sam
 A Nunchuk carries its own accelerometer. When one is attached, two more sources appear in the picker: **Nunchuk Accelerometer** and **Nunchuk Lean**. They read the Nunchuk's own tilt, separate from the remote's motion, so you can map each hand independently.
 
 The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.
+
+### Holds
+
+The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The **Grip** card on the [Gyro](../guides/gyro.md#grip) tab, row **Held As**, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the [DSU Motion Server](../reference/dsu-motion-server.md) feed.
+
+| Held As | The hold |
+|---|---|
+| Pointing | Aimed at the screen, buttons up. The default. |
+| Sideways, Face Up | The NES-style hold. Top edge left, buttons up. |
+| Wii Wheel, Face Toward You | The wheel shell. Top edge left, buttons toward you. |
+| Upright | Pointer at the ceiling, buttons toward you. |
+
+The two sideways holds differ only in which way the buttons face, and they need different rotations, so pick the one that matches. The D-pad turns with the grip in both sideways holds. Changing the hold recenters the motion neutrals, so hold the remote still for a moment afterward. The Nunchuk is its own body in the other hand and keeps its own frame.
+
+Since 4.4.0 the Gyro tab shows for a remote without Motion Plus as well. On an accelerometer-only remote it carries the Grip, Motion Steering, and Gyro Tilt cards and hides the gyro-rate cards.
+
+### Emulators
+
+Keep **Apply Gyro Tuning to Motion Passthrough** on the Gyro tab off. It is off by default. An emulator integrates the rate it receives, and with the box checked the tab's default tuning runs smoothing and a 3°/s deadzone on that rate first, which leaves the integrated orientation drifting after a tilt and wrong after a sharp turn. Details on [Gyro](../guides/gyro.md#motion-passthrough).
+
+The Motion Plus zero is calibrated when the remote connects. The scale is fixed in the driver, which reads no calibration block from the remote, so a fast turn can read a little short. See [Wii Controllers Internals](../reference/wii-controllers-internals.md#motion-plus-calibration-known-limitation).
 
 ---
 
@@ -183,9 +206,10 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 ## Related pages
 
 - [Devices](../features/devices.md): the Pair button and the paired controller's device card.
-- [Gyro](../guides/gyro.md): tune the Wii Remote's motion sensors.
+- [Gyro](../guides/gyro.md): tune the Wii Remote's motion sensors and set the hold.
+- [Wii Controllers Internals](../reference/wii-controllers-internals.md): the pairing ceremony, the sensor frame, and the Motion Plus calibration limitation.
 - [Driver Management](../features/driver-management.md): HIDMaestro and HidHide driver setup.
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

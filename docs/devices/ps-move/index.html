@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2257,6 +2287,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2682,6 +2724,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2738,6 +2808,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2774,6 +2928,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2858,6 +3040,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3074,7 +3284,7 @@
 <h1 id="playstation-move">PlayStation Move<a class="headerlink" href="#playstation-move" title="Permanent link">&para;</a></h1>
 <p><em>The Move wand and the Navigation controller as mapping sources, over Bluetooth.</em></p>
 <p>The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.</p>
-<p>Both connect over Bluetooth through the same signed PlayStation Bluetooth driver the <a href="../dualshock-3/">DualShock 3</a> uses, which PadForge installs at pairing time. They appear on the <a href="../../features/devices/">Devices</a> page as <strong>PlayStation Move Motion Controller</strong> and <strong>PlayStation Move Navigation Controller</strong>.</p>
+<p>Both connect over Bluetooth through the same bundled PlayStation Bluetooth driver the <a href="../dualshock-3/">DualShock 3</a> uses, which PadForge installs at pairing time. They appear on the <a href="../../features/devices/">Devices</a> page as <strong>PlayStation Move Motion Controller</strong> and <strong>PlayStation Move Navigation Controller</strong>.</p>
 <p><img alt="A PlayStation Move Motion Controller on the Devices page, with its live motion readout" src="../../images/devices-move.png" /></p>
 <hr />
 <h2 id="pairing">Pairing<a class="headerlink" href="#pairing" title="Permanent link">&para;</a></h2>
@@ -3084,10 +3294,10 @@
 <li>Connect the controller with a USB cable and click <strong>Pair</strong>. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.</li>
 <li>Unplug and press the controller's <strong>PS</strong> button. It connects over Bluetooth.</li>
 </ol>
-<p>Docking an original Move over USB also runs this on its own, so a wand that has never been paired pairs the first time you plug it in to charge.</p>
+<p>Docking an original Move or a Navigation controller over USB also runs this on its own, so a controller that has never been paired pairs the first time you plug it in.</p>
 <hr />
 <h2 id="usb">USB<a class="headerlink" href="#usb" title="Permanent link">&para;</a></h2>
-<p>USB is a pairing and charging dock, not an input path, for the original Move (ZCM1) and for the Navigation controller. Neither streams input over the cable. The PS4-era Move (ZCM2) does stream over USB.</p>
+<p>USB is a pairing and charging dock, not an input path, for the original Move (ZCM1). It does not stream input over the cable. The PS4-era Move (ZCM2) and the Navigation controller do stream over USB.</p>
 <hr />
 <h2 id="what-reports">What reports<a class="headerlink" href="#what-reports" title="Permanent link">&para;</a></h2>
 <table>
@@ -3141,7 +3351,7 @@
 <li><a href="../dualshock-3/">DualShock 3</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

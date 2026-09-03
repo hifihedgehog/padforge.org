@@ -94,6 +94,20 @@ A trigger can be a touchpad gesture or a mouse gesture instead of a button combo
 
 Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the [Touchpad](../features/touchpad.md) tab. Mouse gestures (flick left, right, up, down, or a plain click) appear once you enable them for that mouse, including the gestures armed by a **Custom** activation input. Gesture triggers work with every fire mode, including On Release.
 
+### Menu cells as triggers
+
+A cell on an on-screen [menu](menus.md) can name a macro. While the cell is fired, the macro counts as triggered, on top of whatever trigger it already has. The macro's own fire mode still applies: a **While Held** macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. A macro with no trigger of its own can be driven this way alone. The **Layer** scope and the rest of the macro's settings apply as usual, since the cell feeds the same evaluator.
+
+Set it up on the **Menus** tab: pick **Macro** as the cell's binding and choose the macro by name. The **Macro** choice appears once the slot has at least one macro.
+
+### Shake as a trigger
+
+**Motion Shake** and **Nunchuk Shake** are sources on the [Mappings](../features/mappings.md) tab, not entries in the macro trigger list. To fire a macro from a shake, bind the shake to a virtual button on a mapping row, then trigger the macro from the **Virtual Controller** source on that button.
+
+- **Motion Shake** is listed for every assigned device with an accelerometer. It reads the strength of a shake and ignores slow tilting.
+- **Nunchuk Shake** is the Nunchuk's own accelerometer on a Wii Remote. On a combined Joy-Con pair the same entry is **Left Joy-Con Shake**. On any other two-sensor device it is **Aux Motion Shake**.
+- On a button target the row fires past 25 percent of a shake by default. A deadzone value on the row replaces that threshold. On an axis target the row reads the shake strength from 0 to 1.
+
 ---
 
 ## Custom Expression trigger mode
@@ -196,6 +210,24 @@ The dropdown appears once the slot has at least one shift layer. A macro that ar
 
 Actions run in list order, top to bottom, each time the macro fires.
 
+### The action-type picker
+
+Click **Add Action** and the type dropdown opens grouped by what the action acts on. Each group is a header in the list, and every type carries its tooltip.
+
+| Group | Types |
+|---|---|
+| **Virtual Buttons** | Button Press, Button Release, Toggle Button, Repeat Button While Held |
+| **Virtual Axes & Wheel** | Set Axis, Hold Axis, Axis Add (Relative), Scale Axis, Set Axis (Latched), Release Axis Latches, Toggle Axis, Repeat Axis While Held, Toggle Wheel Scroll |
+| **Keyboard & Text** | Key Press, Key Release, Toggle Key, Repeat Key While Held, Text Block |
+| **Mouse** | Mouse Move, Mouse Button Press, Mouse Button Release, Toggle Mouse Button, Mouse Scroll, Mouse Wheel Tick, Nudge Cursor, Recenter Mouse, Fix Mouse Position, Limit Mouse Region, Move Mouse to Position |
+| **Timing & Flow** | Delay, Combo Break, Cycle Tap List |
+| **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration |
+| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness |
+| **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
+| **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
+| **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay |
+| **System & Apps** | Run Program, Voice Listen (While Held), Disconnect Controller |
+
 ### Button Press / Button Release
 
 Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.
@@ -228,8 +260,7 @@ Keyboard autofire. While the macro's trigger is held, the key presses and releas
 
 Pair it with the **While Held** fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.
 
-
-**Pressure-Scaled Rate** ties the repeat rate to how hard the input is pressed. Tick it and pick the analog source the rate follows: a trigger, or a DualShock 3 pressure axis. A light press repeats slowly, a full press repeats at the Interval.
+**Pressure-Scaled Rate** ties the repeat rate to how hard the input is pressed. Tick it and pick the analog source the rate follows: a trigger, a DualShock 3 pressure axis, or the stick the macro triggers on. A light press repeats slowly, a full press repeats at the Interval. See [Pressure-Scaled Rate](#pressure-scaled-rate) for the settings and the direction rule.
 
 ![The Repeat Key While Held editor with Pressure-Scaled Rate](../images/macro-turbo.png)
 
@@ -250,9 +281,26 @@ Every action that shows the Interval field also carries a **Pressure-Scaled Rate
 - **Slow Interval.** The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.
 - **Rate Curve.** Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.
 - **Ramp Start / Ramp End.** The pressure window the ramp lives in, default 0 to 100 percent. Below the start the rate stays at the Slow Interval, at the end it reaches the full-press rate. Raise the start to ignore a trigger's resting slack, lower the end to hit full speed without bottoming out.
-- **Device and Axis.** The analog source the rate follows. Pick a trigger, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. The record icon (tooltip **Record Trigger**) captures the next axis you move, the clear icon (tooltip **Clear**) empties the pair.
+- **Device and Axis.** The analog source the rate follows. Pick a trigger, a stick axis, or on a DualShock 3 one of the pressure-sensitive button axes (Axis 6 through 15), so the same button that fires can also set how fast. The record icon (tooltip **Record Trigger**) captures the next axis you move, the clear icon (tooltip **Clear**) empties the pair.
 
 A DualShock 3 example: trigger the macro on Cross, set the source to the Cross pressure axis, and the button becomes a fire-rate dial. Squeeze lightly for single aimed shots, press through for full auto.
+
+#### Which way is "harder"
+
+A trigger reads 0 released and 1 fully pulled, so pressure is obvious. A stick axis is a position: center at rest, one end at full push each way. When the pressure source is the same axis the macro triggers on, the pressure follows the trigger's direction, so a stick reads 0 at center and 1 at full push whichever way the trigger points.
+
+| Trigger entry on that axis | Pressure reads |
+|---|---|
+| **Half** | Deflection from center into the entry's half. The other half reads 0. |
+| **Half** + **Invert** | Deflection from center into the lower half. |
+| **Half** + **Bidirectional** | Deflection from center on either side. |
+| Full axis (no **Half**) | Absolute position, 0 at one end and 1 at the other. **Invert** flips it. |
+| Legacy **Direction** on a Virtual Controller axis | **Positive** and **Negative** read deflection from center on that side. **Any** reads absolute position. |
+| The source is not the trigger's axis | Absolute position, 0 at one end and 1 at the other. |
+
+The last row is what a trigger or DualShock 3 pressure axis gets on a button-triggered macro, which is the case the feature shipped with.
+
+A stick example: trigger the macro on the left stick's Y axis with **Half** and **Invert** (stick up), set the pressure source to the same stick axis, and a gentle push up repeats slowly while a full push runs at the Interval.
 
 ### Cycle Tap List
 
@@ -463,6 +511,17 @@ End any active Rumble Trigger Override on the slot. Pair it with a Rumble Trigge
 
 Toggles the on-screen [Touchpad Overlay](../features/dashboard.md#touchpad-overlay) visibility. Each fire flips it: open if closed, close if open. Useful for binding a controller chord to "show me a touchpad on screen for the next gesture" without leaving the game.
 
+### Switch Layer
+
+Jumps the slot to a chosen [shift layer](shift-layers.md) in one fire. The dropdown lists **Base** and every layer on the slot.
+
+<!-- pending capture: ![The Switch Layer action with its layer dropdown](../images/macro-switch-layer.png) -->
+
+- The layer stays engaged until another Switch Layer fires, a Latch or Cycle activator takes over, or the profile switches. It holds the same way a Latch activator holds.
+- **Base** returns to the base layer. It also releases every toggled and sticky activator on the slot. A Hold activator still physically held re-engages on the next tick.
+- Renaming a layer updates the action. An action that names a deleted layer does nothing.
+- Scope the macro to a layer with the **Layer** dropdown to make one button jump somewhere different on each layer. The activator dialog's **Only While in Layer** setting does the same for activators without a macro.
+
 ### Set Gyro Engaged
 
 Drives the slot's macro gyro-engage bit, OR-combined with the [Gyro](gyro.md) tab's Aim Engage button at the evaluator. Three modes:
@@ -584,7 +643,7 @@ Consume works for virtual controller buttons, raw device buttons, and touchpad o
 
 | Type | Actions | Behavior |
 |---|---|---|
-| Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis | One at a time, top to bottom. |
+| Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis, Switch Layer | One at a time, top to bottom. |
 | Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held | Every frame, all in parallel. |
 | Latched | Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis, Toggle Wheel Scroll, Set Axis (Latched) | Fire in sequence, then the latched output persists until the next fire or a release. |
 
@@ -682,7 +741,8 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 - [Controller Slots](../features/controller-slots.md): every slot has its own macro list.
 - [Controller Audio](../features/controller-audio.md): the Play Sound action, how sounds route to the selected controller, and sound packages.
 - [Devices](../features/devices.md): pick the physical device for Assigned Devices triggers.
-- [Shift Layers](shift-layers.md): the layers the macro **Layer** dropdown scopes to.
+- [Shift Layers](shift-layers.md): the layers the macro **Layer** dropdown scopes to and the Switch Layer action jumps to.
+- [Menus](menus.md): a menu cell can name a macro and fire it.
 - [Force Feedback](../features/force-feedback.md): rumble and vibration settings the macro layers over.
 - [Profiles](profiles.md): Macros save per profile, so each game can have its own set.
 - [Steam Workshop Config Import](steam-workshop-import.md): imported community configs arrive with cursor-warp, autofire, toggle, and long-press macros pre-built.
@@ -690,4 +750,4 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

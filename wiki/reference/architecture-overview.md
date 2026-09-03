@@ -269,6 +269,9 @@ PadForge.App/
     ControllerModelDualSense.cs       # DualSense 3D model
     ControllerModelDualSenseEdge.cs   # DualSense Edge: DualSense body against the DualSenseEdge asset folder
     ControllerModelSwitch2Pro.cs      # Switch 2 Pro mesh, serves every Nintendo slot (switch-pro and switch2-pro profile families)
+    ControllerModelSteamDeck.cs       # Steam Deck mesh (#337/#338)
+    ControllerModelSteamController.cs # 2015 Steam Controller mesh (#337/#338)
+    ControllerModelSteamController2.cs # 2026 Steam Controller mesh (#337/#338)
 
   Models2D/
     ControllerOverlayLayout.cs        # 2D overlay positioning data (button/stick coordinates)
@@ -284,7 +287,7 @@ PadForge.App/
     XBOXSERIES/                       # Xbox Series sprites (adds Share button overlay)
     SWITCHPRO/                        # Switch Pro sprites
     SWITCH2PRO/                       # Switch 2 Pro sprites
-    STEAMDECK/ STEAMCONTROLLER/       # Workshop preview only, never dispatched by ControllerModel2DView
+    STEAMDECK/ STEAMCONTROLLER/ STEAMCONTROLLER2/  # Valve family sprites, dispatched by ControllerModel2DView like every other family
     VRCONTROLLER/                     # VR slot preview art (#49)
     MOUSE/                            # Mouse layers for the KBM preview
 
@@ -295,6 +298,9 @@ PadForge.App/
     XBOX360/                          # Xbox 360 meshes (Handheld Companion, CC BY-NC-SA 4.0)
     XboxSeries/                       # Xbox Series meshes, also serve Xbox One / Elite / Adaptive profiles
     Switch2Pro/                       # Switch 2 Pro meshes (every Nintendo slot)
+    SteamDeck/                        # Steam Deck meshes, flat (#337/#338)
+    SteamController/                  # 2015 Steam Controller meshes, flat, from Valve's STEP (#337/#338)
+    SteamController2/                 # 2026 Steam Controller meshes, flat, from Valve's STEP (#337/#338)
 
   Controls/
     CurveEditor.xaml(.cs)             # Interactive sensitivity curve editor (Bezier/linear)
@@ -347,7 +353,9 @@ PadForge.App/
     SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
     SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
+    Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.7.2 (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer
 
   WebAssets/
@@ -455,6 +463,11 @@ PadForge.Engine/
     RendezvousProtocol.cs       # Candidate exchange over the rendezvous lane (#294)
     IrohRelayClient.cs          # iroh relay client, the guaranteed lane when a punch cannot land (#294)
     LinkCode.cs                 # Short shareable link code that carries the peer identity (#294)
+    Dht/                        # First-contact signaling over the public BitTorrent DHT (#294), because
+                                #   an idle host's router drops the caller's probes and neither side can
+                                #   punch first: Bencode, Krpc, UdpKrpcTransport, Bep44Record (BEP 44
+                                #   mutable items), CodeRendezvous, IPresenceStore, DhtPresenceStore,
+                                #   PresenceRecord, PresenceService, RemoteLinkInternetService
 ```
 
 ### tools/
@@ -466,17 +479,23 @@ tools/
   PersonaVerify/                # Composite USB persona audio verification harness
   SteamWorkshopSmoke/           # Manually-run live-network smoke harness for the Workshop client
   SteamWorkshopSweep/           # Wild-corpus regression sweep for the Workshop config translator
+  WdgProbe/                     # Runs the handheld learner's ACPI _WDG / WMI path outside the app (#343)
   combomeasure/                 # WPF width-measurement harness for the Indicator LEDs combos
   capture_all.ps1               # Full screenshot capture orchestration (+ _wrapper for elevation)
-  capture_vr.ps1 / capture_web.ps1 / capture_colorways.ps1
+  capture_vr.ps1 / capture_web.ps1 / capture_colorways.ps1 / capture_mouse_gestures.ps1
   prep_xml_for_capture.ps1      # Preps PadForge.xml with sample slots and macros for capture runs
   convert_screenshots.ps1 / add_slots_via_ui.ps1 / probe_macro_list.ps1
+  mirror_screenshots.py         # Mirrors captured shots into the repo and the site, erroring on any gap
   diag-sweep.ps1                # Runtime self-diagnostics harvest via UI Automation, must run elevated
+  btaudio-trace.ps1 / button-trace.ps1 / effect-trace.ps1  # Diag-mirror tails: DualSense BT audio,
+                                #   button surface and edges, DS5 effect lane
   deploy.ps1                    # Copy the published exe to C:\PadForge and relaunch
   kill_padforge.ps1             # Elevated kill of a running instance
   verify_site_carousel.ps1      # Site carousel check
   overlay_positions.py          # 2D controller overlay coordinate generator
   gen_mouse_art.py / gen_2d_colorways.py / gen_dualsense_edge_art.py / gen_switchpro_s2_art.py
+  steam_controller_2015_mesh.py / steam_controller_2026_mesh.py  # Valve STEP to per-part OBJs
+  steam_controller_2026_pads.py / steam_deck_stick_well.py       # Mesh fix-ups on those sets
 ```
 
 ### New since the initial trees (through 4.0.0)
@@ -516,9 +535,9 @@ The `Common/Input/`, `Services/`, `Engine/Data/`, and `Engine/RemoteLink/` trees
 
 **Engine namespaces**
 
-- `Haptics/` (`HapticToneEncoder`, `HapticToneReducer`, `WiiSpeakerAdpcm`). Since 4.1.0: `Menus/` (`MenuDefinitionEntry`, `MenuEvaluator`, `MenuSelectionMath`) and `Touchpad/SwipeHapticsEvaluator.cs`. The `RemoteLink/` subtree is listed in full above.
+- `Haptics/` (`HapticToneEncoder`, `HapticToneReducer`, `WiiSpeakerAdpcm`, and since 4.4.0 `TritonPcmEncoder` for the 2026 Steam Controller's native PCM haptics, #381). Since 4.1.0: `Menus/` (`MenuDefinitionEntry`, `MenuEvaluator`, `MenuSelectionMath`) and `Touchpad/SwipeHapticsEvaluator.cs`. The `RemoteLink/` subtree is listed in full above.
 
-New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
+New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, and `HeadTracker = 34` under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
 
 ### Since 4.1.0
 
@@ -745,7 +764,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## Threading Model
 
-Eleven documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads:
+Eleven documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: `HeadTrackingRuntime` is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its master switch has two legs, the global `AppSettingsData.HeadTrackingEnabled` and the nullable per-profile `ProfileData.EnableHeadTracking`, and the global value stands whenever the active profile has no opinion. The port, the FreeTrack toggle, and the two ranges are global only. With the switch off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
 
 ### 1. Engine Thread (InputManager, 1000 Hz)
 
@@ -1003,14 +1022,20 @@ Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio pa
 | **System.Security.Cryptography.ProtectedData** | 10.0.9 | Engine | DPAPI wrap of the Remote Link private identity key at rest (#138) |
 | **SteamKit2** | 3.4.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL 2.1. protobuf-net and ZstdSharp.Port arrive transitively |
 
-`HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
+The App also references `System.Management` 10.0.11 for the WMI queries behind the handheld hidden-button learner.
 
-Native libraries adjacent to `PadForge.exe`:
+`HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `1.7.2.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
+
+Native libraries folded into `PadForge.exe` and extracted beside it at first launch:
 
 | Library | Caller | Notes |
 |---|---|---|
 | `SDL3.dll` | `SDL3Minimal.cs` | Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button support. `Resources/SDL3/x64/` |
+| `libusb-1.0.dll` | SDL3's HIDAPI backend | WinUSB access for the Switch 2 Pro Controller. `Resources/SDL3/x64/` |
 | `xinput1_4.dll` | XInput-consuming code paths | OpenXInput fork. Single-file-embedded. `SetDllDirectory` at launch resolves the extracted copy ahead of System32. Filters HM virtuals from PadForge's own XInput view |
+| `HAR.dll` | `SensaHapticsService` (#374) | Interhaptics engine, P/Invoked lazily, so a missing DLL degrades to a diagnostics line. `Resources/Interhaptics/x64/` |
+| `Interhaptics.RazerProvider.dll` | `HAR.dll` | The Razer Sensa backend `HAR.dll` loads. `Resources/Interhaptics/x64/` |
+| `libvosk.dll` + `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | Added by the Vosk 0.3.38 package's own targets file, not by the csproj. The three MinGW DLLs are what `libvosk.dll` links against |
 
 ---
 
@@ -1034,7 +1059,7 @@ Key publish properties (`PadForge.App.csproj`):
 
 Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe`
 
-`SDL3.dll` and `libusb-1.0.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root). With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely.
+`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root). With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely. `libvosk.dll` and the three MinGW runtime DLLs ride in the same way, added by the Vosk package's targets file rather than by the csproj.
 
 `UseWindowsForms=true` is set in the csproj. Required for `System.Windows.Forms.NotifyIcon` (system tray). WinForms implicit usings are removed to avoid WPF type ambiguities.
 
@@ -1182,4 +1207,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

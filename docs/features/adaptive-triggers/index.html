@@ -1042,6 +1042,8 @@
       
         
       
+        
+      
     
     
     
@@ -1596,6 +1598,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2318,6 +2348,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2743,6 +2785,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2799,6 +2869,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2835,6 +2989,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2919,6 +3101,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3201,6 +3411,7 @@
 <h2 id="when-the-tab-shows">When the tab shows<a class="headerlink" href="#when-the-tab-shows" title="Permanent link">&para;</a></h2>
 <p>The Adaptive Triggers tab follows the device picked in the assigned-devices dropdown, the same way the <a href="../lighting/">Lighting</a> tab does. It appears when that device is a DualSense or DualSense Edge and hides for anything else. On a slot with a DualSense plus another pad, the tab hides while the other pad is selected. Switch the dropdown back to the DualSense and the tab reappears.</p>
 <p>These settings drive the trigger when no game is writing to it. Game-driven effects (Returnal, Astro, Gran Turismo 7) pass through a separate path and override these settings while the game runs.</p>
+<p>A DualSense holds its trigger program in firmware with no timeout, so an exiting game would otherwise leave its last effect loaded. After fifteen seconds with no packet from the game, PadForge sends a release frame that sets both triggers to Off and claims nothing else. Reconnecting the pad, or restarting PadForge, also reasserts this tab: a configured effect reloads and Off ships a release.</p>
 <hr />
 <h2 id="effect-modes">Effect modes<a class="headerlink" href="#effect-modes" title="Permanent link">&para;</a></h2>
 <p>Pick a mode by clicking its card in the mode grid. Seven modes:</p>
@@ -3295,7 +3506,7 @@
 <h3 id="strength">Strength<a class="headerlink" href="#strength" title="Permanent link">&para;</a></h3>
 <p>A 0 to 255 slider for how hard the effect pushes back, or how strong the buzz is on the vibration modes. Default is 200 (firm but not maxed). Setting strength to 0 gives no effect in any mode, and the preview goes blank.</p>
 <h3 id="frequency-hz">Frequency (Hz)<a class="headerlink" href="#frequency-hz" title="Permanent link">&para;</a></h3>
-<p>A 0 to 255 slider. Vibration and Multiple-Position Vibration use it to set the buzz rate. Only the low end does anything. Values above about 15 don't feel different from each other. Default is 10.</p>
+<p>A 0 to 255 slider. Vibration and Multiple-Position Vibration use it to set the buzz rate. The byte reaches the trigger firmware as written. Default is 10. PadForge's own impulse-trigger translation buzzes at 15.</p>
 <p>Setting frequency to 0 in a vibration mode gives no buzz, and the preview hides the wave.</p>
 <h3 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h3>
 <p>Every slider has its own reset button. Start and end snap to 0 and 255. Strength snaps to 200. Frequency snaps to 10. <strong>Reset All</strong> at the top of each trigger card clears every parameter on that trigger and sets the mode back to Off.</p>
@@ -3327,7 +3538,7 @@
 <li><a href="../mappings/">Button and Axis Mappings</a>: the trigger axis source picker.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

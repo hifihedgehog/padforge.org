@@ -32,16 +32,22 @@ Nothing here is required reading for using the app.
 | [DSU Motion Server](dsu-motion-server.md) | The Cemuhook motion server |
 | [DSU Protocol](dsu-protocol.md) | The wire protocol itself |
 | [Remote Link Internals](remote-link-internals.md) | Cross-PC device sharing on the wire |
+| [External Control Internals](external-control-internals.md) | The profile control pipe, its command grammar, and the held-profile state |
 | [Steam Workshop Import Internals](steam-workshop-import-internals.md) | The VDF parser and config translator |
 | [Controller Audio Internals](controller-audio-internals.md) | Speaker and haptic audio paths |
+| [Steam Controller Haptics Internals](steam-controller-haptics-internals.md) | The 2026 pad's PCM actuator stream and the tone lane it falls back to |
+| [Sensa Haptics Internals](sensa-haptics-internals.md) | Controller rumble as a Razer Sensa HD effect through Interhaptics |
+| [Lightbar Mirrors Internals](lightbar-mirrors-internals.md) | A game's lightbar write out to Razer Chroma and Logitech LIGHTSYNC |
 | [Virtual VR Controllers Internals](vr-controllers-internals.md) | One slot, a SteamVR hand pair, and the haptic return path |
 | [Headset Head Tracking Internals](headset-motion-internals.md) | The descriptor probe and rotation-to-rate synthesis |
+| [Head Tracking Internals](head-tracking-internals.md) | The OpenTrack datagram, the FreeTrack heap, and the scaling into six axes |
 | [Wheel Force Feedback Internals](wheel-ffb-internals.md) | DirectInput FFB effects |
 | [MIDI Input Internals](midi-input-internals.md) | MIDI parsing and routing |
+| [Handheld PC Buttons Internals](handheld-buttons-internals.md) | The three delivery paths a hidden button can arrive on, and the learners |
 | [Wii Controllers Internals](wii-controllers-internals.md) | Extensions, Motion Plus, IR camera |
 | [2D Overlay System](2d-overlay-system.md) | The overlay renderer |
 | [3D Model System](3d-model-system.md) | The 3D controller models |
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

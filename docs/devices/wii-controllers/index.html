@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2154,6 +2184,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Motion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#holds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Holds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emulators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emulators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2343,6 +2401,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -2816,6 +2886,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2872,6 +2970,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2908,6 +3090,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2992,6 +3202,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3186,6 +3424,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Motion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#holds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Holds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emulators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Emulators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3389,11 +3655,45 @@
 <p>Attach or detach a Nunchuk while the remote stays connected and PadForge re-identifies the controller without a restart.</p>
 <h3 id="d-pad-mapping">D-pad mapping<a class="headerlink" href="#d-pad-mapping" title="Permanent link">&para;</a></h3>
 <p>Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.</p>
+<p>The hat turns with the remote's hold. Set <strong>Held As</strong> on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See <a href="#holds">Holds</a>.</p>
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See <a href="../../guides/gyro/">Gyro</a> for calibration, sensitivity, and the engage controls.</p>
 <p>A Nunchuk carries its own accelerometer. When one is attached, two more sources appear in the picker: <strong>Nunchuk Accelerometer</strong> and <strong>Nunchuk Lean</strong>. They read the Nunchuk's own tilt, separate from the remote's motion, so you can map each hand independently.</p>
 <p>The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.</p>
+<h3 id="holds">Holds<a class="headerlink" href="#holds" title="Permanent link">&para;</a></h3>
+<p>The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The <strong>Grip</strong> card on the <a href="../../guides/gyro/#grip">Gyro</a> tab, row <strong>Held As</strong>, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
+<table>
+<thead>
+<tr>
+<th>Held As</th>
+<th>The hold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pointing</td>
+<td>Aimed at the screen, buttons up. The default.</td>
+</tr>
+<tr>
+<td>Sideways, Face Up</td>
+<td>The NES-style hold. Top edge left, buttons up.</td>
+</tr>
+<tr>
+<td>Wii Wheel, Face Toward You</td>
+<td>The wheel shell. Top edge left, buttons toward you.</td>
+</tr>
+<tr>
+<td>Upright</td>
+<td>Pointer at the ceiling, buttons toward you.</td>
+</tr>
+</tbody>
+</table>
+<p>The two sideways holds differ only in which way the buttons face, and they need different rotations, so pick the one that matches. The D-pad turns with the grip in both sideways holds. Changing the hold recenters the motion neutrals, so hold the remote still for a moment afterward. The Nunchuk is its own body in the other hand and keeps its own frame.</p>
+<p>Since 4.4.0 the Gyro tab shows for a remote without Motion Plus as well. On an accelerometer-only remote it carries the Grip, Motion Steering, and Gyro Tilt cards and hides the gyro-rate cards.</p>
+<h3 id="emulators">Emulators<a class="headerlink" href="#emulators" title="Permanent link">&para;</a></h3>
+<p>Keep <strong>Apply Gyro Tuning to Motion Passthrough</strong> on the Gyro tab off. It is off by default. An emulator integrates the rate it receives, and with the box checked the tab's default tuning runs smoothing and a 3°/s deadzone on that rate first, which leaves the integrated orientation drifting after a tilt and wrong after a sharp turn. Details on <a href="../../guides/gyro/#motion-passthrough">Gyro</a>.</p>
+<p>The Motion Plus zero is calibrated when the remote connects. The scale is fixed in the driver, which reads no calibration block from the remote, so a fast turn can read a little short. See <a href="../../reference/wii-controllers-internals/#motion-plus-calibration-known-limitation">Wii Controllers Internals</a>.</p>
 <hr />
 <h2 id="ir-pointer">IR pointer<a class="headerlink" href="#ir-pointer" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's IR camera can drive an on-screen pointer. Point the remote at the screen and the camera tracks the sensor bar. Three mapping sources appear in the picker for a Wii Remote: <strong>IR Pointer X</strong>, <strong>IR Pointer Y</strong>, and <strong>IR Offscreen</strong>. They only show up when the assigned device is a Wii Remote.</p>
@@ -3509,11 +3809,12 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../features/devices/">Devices</a>: the Pair button and the paired controller's device card.</li>
-<li><a href="../../guides/gyro/">Gyro</a>: tune the Wii Remote's motion sensors.</li>
+<li><a href="../../guides/gyro/">Gyro</a>: tune the Wii Remote's motion sensors and set the hold.</li>
+<li><a href="../../reference/wii-controllers-internals/">Wii Controllers Internals</a>: the pairing ceremony, the sensor frame, and the Motion Plus calibration limitation.</li>
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2093,6 +2123,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3121,6 +3163,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -3177,6 +3247,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -3213,6 +3367,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -3297,6 +3479,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3985,57 +4195,51 @@
 </tbody>
 </table>
 <h3 id="sdl-to-dsu-axis-mapping">SDL-to-DSU Axis Mapping<a class="headerlink" href="#sdl-to-dsu-axis-mapping" title="Permanent link">&para;</a></h3>
-<p>SDL uses a right-handed coordinate system. The DS4/DSU protocol expects different sign conventions. Mapping derived from Switch Pro Controller's BetterJoy-to-DSU mapping, translated through SDL standard coordinates, and verified with DualSense (all axes match across DualSense and Switch 2 Pro Controller).</p>
+<p>SDL reports sensors in its own right-handed frame. The DSU packet negates five of the six axes relative to that frame. This is what <code>BuildPadDataPacket</code> writes today:</p>
 <table>
 <thead>
 <tr>
 <th>DSU Field</th>
 <th>SDL Source</th>
-<th>Sign</th>
-<th>Derivation</th>
+<th>Sign written</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>AccelX</code></td>
 <td><code>ax</code></td>
-<td>Inverted (<code>-ax</code>)</td>
-<td>DS4 X-accel is opposite to SDL X</td>
+<td>Negated (<code>-ax</code>)</td>
 </tr>
 <tr>
 <td><code>AccelY</code></td>
 <td><code>ay</code></td>
-<td>Inverted (<code>-ay</code>)</td>
-<td>DS4 Y-accel is opposite to SDL Y</td>
+<td>Negated (<code>-ay</code>)</td>
 </tr>
 <tr>
 <td><code>AccelZ</code></td>
 <td><code>az</code></td>
-<td>Inverted (<code>-az</code>)</td>
-<td>DS4 Z-accel is opposite to SDL Z</td>
+<td>Negated (<code>-az</code>)</td>
 </tr>
 <tr>
 <td><code>GyroPitch</code></td>
 <td><code>gx</code></td>
-<td>Inverted (<code>-gx</code>)</td>
-<td>DS4 pitch is opposite to SDL gyro X</td>
+<td>Negated (<code>-gx</code>)</td>
 </tr>
 <tr>
 <td><code>GyroYaw</code></td>
 <td><code>gy</code></td>
-<td><strong>Not inverted</strong> (<code>gy</code>)</td>
-<td>Same sign in both coordinate systems</td>
+<td>Kept (<code>gy</code>)</td>
 </tr>
 <tr>
 <td><code>GyroRoll</code></td>
 <td><code>gz</code></td>
-<td>Inverted (<code>-gz</code>)</td>
-<td>DS4 roll is opposite to SDL gyro Z</td>
+<td>Negated (<code>-gz</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>Accel and gyro must be in the same coordinate frame. <code>AccelX</code> and <code>GyroPitch</code> must reference the same physical axis. Five of six axes are inverted. Only <code>GyroYaw</code> preserves sign.</p>
-<p>The sign transform lives in <code>BuildPadDataPacket</code>, not in <code>MotionSnapshot</code>. The snapshot stays in SDL's native sensor frame, so the Sony HID report packers read a faithful controller frame. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.</p>
+<p>Accel and gyro must be in the same coordinate frame. <code>AccelX</code> and <code>GyroPitch</code> reference the same physical axis. Only <code>GyroYaw</code> keeps its sign.</p>
+<p>The sign transform lives in <code>BuildPadDataPacket</code>, not in <code>MotionSnapshot</code>. The snapshot carries no protocol frame of its own, so the Sony HID report packers read the same values and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.</p>
+<p>One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. <code>UpdateMotionSnapshots</code> calls <code>SourceCoercion.ApplyMotionGrip</code> on the body accelerometer, and <code>GetPassthroughGyro</code> applies the same rotation inside its calibrated read.</p>
 <hr />
 <h2 id="dsumotionserver">DsuMotionServer<a class="headerlink" href="#dsumotionserver" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DsuMotionServer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
@@ -4332,7 +4536,7 @@
 <h3 id="snapshot-source">Snapshot Source<a class="headerlink" href="#snapshot-source" title="Permanent link">&para;</a></h3>
 <p><code>InputManager.UpdateMotionSnapshots()</code> fills <code>MotionSnapshots[padIndex]</code> each poll cycle, immediately before <code>BroadcastDsuMotion()</code> fans the values out to <code>BroadcastMotion()</code>. Two gates decide whether a broadcast ever carries <code>HasMotion = true</code>:</p>
 <ul>
-<li><strong>Slot type</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows only on PlayStation and Nintendo slot types. Every other slot type has no motion rows, resolves no motion source, and broadcasts <code>HasMotion = false</code>.</li>
+<li><strong>Slot type</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its <code>motionCapableProfile</code> argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. <code>SettingsService.EnsureMotionRowsForAllSlots</code> sets that argument from <code>NintendoPreviewMap.IsValve(ProfileId)</code> on an Extended slot. Every other slot type has no motion rows, resolves no motion source, and broadcasts <code>HasMotion = false</code>.</li>
 <li><strong>Row source</strong>: the row's source descriptor picks the sensor stream. <code>Motion Gyro</code> and <code>Motion Accel</code> read the body IMU. The aux variants <code>Motion Gyro L</code> (#252) and <code>Motion Accel L</code> (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".</li>
 </ul>
 <hr />
@@ -4804,7 +5008,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

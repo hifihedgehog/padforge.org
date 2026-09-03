@@ -6,7 +6,7 @@
 
 ## Quick start (2 minutes)
 
-1. Download `PadForge-v{version}-win-x64.zip` from the [Releases page](https://github.com/hifihedgehog/PadForge/releases).
+1. Download `PadForge-v4.4.0-win-x64.zip` from the [Releases page](https://github.com/hifihedgehog/PadForge/releases). Every release ships one zip with `PadForge.exe` inside.
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
@@ -52,6 +52,9 @@ HIDMaestro is the user-mode driver that creates the virtual controllers. PadForg
 
 The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
+!!! note "The very first launch may need one relaunch"
+    The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on **Hide from Games**, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.
+
 If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.
 
 See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForge talks to the driver under the hood.
@@ -60,7 +63,9 @@ See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForg
 
 ## Optional add-ons
 
-Three optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**.
+Three optional installs live on **[Settings](../features/settings.md)**. HidHide (1.5.230) is bundled inside `PadForge.exe`. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**.
+
+One more driver installs outside Settings. Pairing a [DualShock 3](../devices/dualshock-3.md) over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it.
 
 <!-- SCREENSHOT: settings-driver-cards -->
 ![The Settings drivers section: HIDMaestro, HidHide, and Windows MIDI Services cards](../images/settings-driver-cards.png)
@@ -134,4 +139,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

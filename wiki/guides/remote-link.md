@@ -91,9 +91,9 @@ Each PadForge install has a Remote Link identity, the key that pairings trust. Y
 
 | Mode | Stored as | Use when |
 |---|---|---|
-| Secure — this PC only | Encrypted to this PC | The normal choice. The identity never leaves this machine, and any Windows user on it can use it. |
-| Portable — password protected | Encrypted with a password you set | You want to carry one identity across installs. Pair once, then clone. |
-| Portable — no password | Plain, no password | A throwaway or test identity. |
+| Secure: This PC Only | Encrypted to this PC | The normal choice. The identity never leaves this machine, and any Windows user on it can use it. |
+| Portable: Password Protected | Encrypted with a password you set | You want to carry one identity across installs. Pair once, then clone. |
+| Portable: No Password | Plain, no password | A throwaway or test identity. |
 
 A portable identity lets a group of PCs that share one install image pair once and then recognize each other everywhere. Most people never need to change this from Secure.
 

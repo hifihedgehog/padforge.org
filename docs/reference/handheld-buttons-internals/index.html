@@ -1,0 +1,4043 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/handheld-buttons-internals/">
+      
+      
+        <link rel="prev" href="../wii-controllers-internals/">
+      
+      
+        <link rel="next" href="../2d-overlay-system/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Handheld PC Buttons Internals - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#handheld-pc-buttons-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Handheld PC Buttons Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/first-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Your First Controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A Five-Minute Remap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/starter-profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start from a starter profile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/voice-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/handheld-buttons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/headset-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/head-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking (OpenTrack)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/supported/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supported Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/ps-move/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PlayStation Move
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/spacemouse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpaceMouse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle-phase-1h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle: Phase 1h
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-registry-and-the-stable-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The registry and the stable index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-one-key-combinations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path one: key combinations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-two-vendor-hid-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path two: vendor HID reports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-three-wmi-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path three: WMI events
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Path three: WMI events">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-firmware-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The firmware gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-learners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The learners
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-rows-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The row's state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-motion-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Motion row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-daemon-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The daemon scan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostics-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostics lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle-phase-1h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle: Phase 1h
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-registry-and-the-stable-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The registry and the stable index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-one-key-combinations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path one: key combinations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-two-vendor-hid-reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path two: vendor HID reports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-three-wmi-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path three: WMI events
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Path three: WMI events">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-firmware-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The firmware gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-learners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The learners
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-rows-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The row's state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-motion-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Motion row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-daemon-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The daemon scan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostics-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostics lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="handheld-pc-buttons-internals">Handheld PC Buttons: Internals<a class="headerlink" href="#handheld-pc-buttons-internals" title="Permanent link">&para;</a></h1>
+<p><em>How a paddle nobody can see becomes a button: the three delivery paths, the learners, the firmware gate, and the row that carries them.</em></p>
+<p>The user-facing page is <a href="../../features/handheld-buttons/">Handheld PC Buttons</a>. This one is for whoever has to change the code.</p>
+<p>There is no per-model table anywhere in this feature. A learned button is data, and a wrong layout is a data fix.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.App/Common/Input/HandheldButtonsDevice.cs</code></td>
+<td>The Hidden Buttons row: state, readers, WMI matching, learn hand-off</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HandheldButtonRegistry.cs</code></td>
+<td>Persisted entries, stable indices, the feature and capture flags</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HandheldLearnSession.cs</code></td>
+<td>One learn pass: three phases, buckets, <code>Finish</code></td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/HandheldChords.cs</code></td>
+<td><code>HandheldChordEngine</code>, the pure key-combination state machine</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HandheldChordRuntime.cs</code></td>
+<td>Hosts the engine, runs the replay worker</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/InputHookManager.cs</code></td>
+<td>The low-level hooks, <code>ChordSwallows</code>, <code>InjectReplay</code>, <code>InjectWinMask</code></td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/VendorReportLearner.cs</code></td>
+<td><code>NoiseMask</code>, <code>FindBits</code>, <code>FindValues</code>, <code>Learn</code>, and <code>VendorButtonDefinition</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/VendorHidRuntime.cs</code></td>
+<td>Vendor collection enumeration and <code>VendorHidReader</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/WmiEventRuntime.cs</code></td>
+<td>WMI event subscriptions behind the firmware gate</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/AcpiWmi.cs</code></td>
+<td><code>_WDG</code> parser over the DSDT and SSDT</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/SystemMotionDevice.cs</code></td>
+<td>The Motion row over <code>Windows.Devices.Sensors</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HandheldDaemonWatch.cs</code></td>
+<td>The vendor daemon scan</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HandheldKeyNames.cs</code></td>
+<td>Source descriptions for the preview and the dialog</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Common/MachineIdentity.cs</code></td>
+<td>The DMI identity</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/LearnHandheldButtonDialog.xaml.cs</code></td>
+<td>The dialog, export, import</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.Step1.UpdateDevices.cs</code></td>
+<td>Phase 1h: <code>UpdateHandheldDevices</code>, <code>HandheldSweep</code>, <code>RetireHandheldRows</code>, <code>ShutdownHandheldInputs</code></td>
+</tr>
+<tr>
+<td><code>tools/WdgProbe/Program.cs</code></td>
+<td>Runs the WMI learner path outside the app</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="lifecycle-phase-1h">Lifecycle: Phase 1h<a class="headerlink" href="#lifecycle-phase-1h" title="Permanent link">&para;</a></h2>
+<p><code>UpdateHandheldDevices</code> runs on the poll thread inside Step 1. With <code>HandheldButtonRegistry.FeatureEnabled</code> false and nothing to retire, it returns after two volatile reads. Turning the feature off retires both rows, neutralizes their mapped outputs, and stops the chord worker (<code>HandheldChordRuntime.Stop</code>) outside the handheld lock, since <code>Stop</code> joins its worker and the poll thread must not block on a join under a nested lock.</p>
+<p>The button row opens on the poll thread with no I/O (<code>HandheldButtonsDevice.Open</code> only wires events and pushes the registry). Everything that blocks lives in <code>HandheldSweep</code>, a worker task every <code>_handheldSweepIntervalMs</code> = 4000 ms:</p>
+<ol>
+<li><code>HandheldDaemonWatch.Refresh</code> scans the process list (3 ms measured across 335 processes).</li>
+<li><code>VendorHidRuntime.Enumerate</code> lists vendor collections and <code>SyncReaders</code> opens or closes readers.</li>
+<li><code>SyncWmi</code> subscribes the wanted WMI classes.</li>
+<li>Once, <code>SystemMotionDevice.IsAvailable</code> probes for a gyrometer and opens the Motion row, which the next poll registers from <code>_systemMotionPending</code>.</li>
+</ol>
+<p>A row the user removes from the Devices page is recreated on the next poll (the NFC recreate pattern). <code>ShutdownHandheldInputs</code> runs in the same teardown window as the NFC, microphone, and headset shutdowns.</p>
+<hr />
+<h2 id="identity">Identity<a class="headerlink" href="#identity" title="Permanent link">&para;</a></h2>
+<p><code>MachineIdentity.Read</code> reads <code>HKLM\HARDWARE\DESCRIPTION\System\BIOS</code>: <code>SystemManufacturer</code>, <code>SystemProductName</code>, <code>SystemFamily</code>, <code>BaseBoardProduct</code>, <code>SystemSKU</code>. No WMI, so the poll side never pays a COM round trip.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Key</code></td>
+<td><code>MANUFACTURER|PRODUCTNAME</code>, trimmed and upper-cased</td>
+</tr>
+<tr>
+<td><code>DisplayName</code></td>
+<td>Family when the product name is empty or a bare model code (12 characters or fewer, no spaces, letters and digits mixed, such as <code>83RU</code>), product name otherwise, <code>This PC</code> when both are empty</td>
+</tr>
+</tbody>
+</table>
+<p>The row identity follows from the key:</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th><code>DevicePath</code></th>
+<th><code>InstanceGuid</code></th>
+<th>VID:PID</th>
+<th><code>InputDeviceType</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hidden Buttons</td>
+<td><code>handheld://&lt;key lower-cased&gt;</code></td>
+<td>MD5 of <code>pfhandheld:&lt;key&gt;</code></td>
+<td><code>4850:4842</code> ("HP", "HB")</td>
+<td><code>HandheldButtons</code> = 32</td>
+</tr>
+<tr>
+<td>Motion</td>
+<td><code>sensor://motion</code></td>
+<td>MD5 of <code>pfsysmotion:&lt;key&gt;</code></td>
+<td><code>5359:4D4F</code> ("SY", "MO")</td>
+<td><code>SystemMotion</code> = 33</td>
+</tr>
+</tbody>
+</table>
+<p>The registry stamps <code>MachineKey</code> when the first button is learned. Definitions still apply on a different machine of the same model, which is what export and import rely on.</p>
+<hr />
+<h2 id="the-registry-and-the-stable-index">The registry and the stable index<a class="headerlink" href="#the-registry-and-the-stable-index" title="Permanent link">&para;</a></h2>
+<p><code>HandheldButtonRegistry.Entry</code> carries whichever paths the press produced, and one entry can carry more than one:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Keys</code></td>
+<td>Chord: VK codes 0 to 255, or <code>0x1000</code> + button id for mouse buttons (0 left, 1 middle, 2 right, 3 X1, 4 X2). Modifiers are stored as the left and right specific codes the hook reports (<code>0xA0</code> to <code>0xA5</code>, <code>0x5B</code>, <code>0x5C</code>), never the generic <code>0x10</code>, <code>0x11</code>, <code>0x12</code>.</td>
+</tr>
+<tr>
+<td><code>Collection</code>, <code>ReportId</code>, <code>ByteIndex</code>, <code>Mask</code>, <code>Value</code>, <code>ValueKind</code></td>
+<td>Report field. <code>Collection</code> is <code>VID:PID:PAGE:USAGE</code>. <code>ByteIndex</code> counts the report id byte at index 0.</td>
+</tr>
+<tr>
+<td><code>WmiClass</code>, <code>WmiProperty</code>, <code>WmiValue</code></td>
+<td>WMI event, value as invariant text</td>
+</tr>
+</tbody>
+</table>
+<p><code>Register</code> assigns the lowest free button index (from 0, there is no "any" button on this row) unless the entry already carries a free one, which is how import keeps indices. <code>Remove</code> never renumbers survivors. <code>LoadRegistry</code> honors stored indices and reassigns collisions. Names are deduplicated with <code>(2)</code>, <code>(3)</code> suffixes.</p>
+<p>Persistence is <code>AppSettingsData.HandheldButtons</code>, an array of <code>HandheldButtonData</code> with every field as an XML attribute (<code>Keys</code> is comma-joined), plus <code>HandheldMachineKey</code> and <code>HandheldButtonsEnabled</code>. The registry loads before the toggle. The export file is the same DTO under <code>{"padforgeHandheldButtons": 1, "machine": "...", "buttons": [...]}</code>.</p>
+<p>Two flags on the registry drive the hooks: <code>FeatureEnabled</code> (the Settings toggle) and <code>LearnCaptureActive</code> (the dialog is open). Either flipping raises <code>ActivityChanged</code>, which sends <code>InputService.ApplyDeviceHiding</code> back through <code>ApplyInputHooks</code>, where <code>HandheldChordRuntime.NeedsHooks</code> is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.</p>
+<hr />
+<h2 id="path-one-key-combinations">Path one: key combinations<a class="headerlink" href="#path-one-key-combinations" title="Permanent link">&para;</a></h2>
+<p><code>HandheldChordEngine</code> is pure. Both low-level hooks feed every key and mouse-button event through <code>InputHookManager.ChordSwallows</code>, which calls <code>engine.OnEvent(code, down, now)</code> and swallows or passes on its answer. The rules, each locked by a test in <code>HandheldChordEngineTests</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Constant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A key in no chord passes untouched and ends any prefix in flight (the held keys replay first)</td>
+<td></td>
+</tr>
+<tr>
+<td>Modifiers are never held back on the way down</td>
+<td></td>
+</tr>
+<tr>
+<td>A non-modifier key that is a strict prefix of a chord is swallowed and held. If the chord completes, the held keys are consumed. If not, they replay in order.</td>
+<td><code>HoldMs</code> = 100</td>
+</tr>
+<tr>
+<td>A prefix is judged in the learned order, so D alone is typing for a Win+D chord</td>
+<td></td>
+</tr>
+<tr>
+<td>Completion swallows the completing key and asserts the button. The longest completing chord wins when two complete at once.</td>
+<td></td>
+</tr>
+<tr>
+<td>The button releases when any key of the chord goes up. Ups of consumed keys are swallowed.</td>
+<td></td>
+</tr>
+<tr>
+<td>A completed chord containing Win or Alt sets <code>WinMaskRequested</code></td>
+<td>mask key VK <code>0xFF</code></td>
+</tr>
+<tr>
+<td>Auto-repeat of a key keeps the first decision</td>
+<td></td>
+</tr>
+<tr>
+<td>Capture mode swallows everything and reports the set of codes pressed once all are released. An up whose down it never saw passes (the Enter that clicked Start). Idle capture ends empty.</td>
+<td><code>CaptureIdleTimeoutMs</code> = 10000</td>
+</tr>
+<tr>
+<td><code>SetChords</code> releases a button whose definition vanished or changed, with the event. <code>Reset</code> (hooks detached) releases everything and forgets held prefixes.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. <code>HandheldChordRuntime</code>'s worker handles only timed work, ticking every 10 ms while <code>HasPendingWork</code> (hold expiry, capture idle). Every injected event carries <code>ReplayTag</code> = <code>0x50464843</code> ("PFHC") in <code>dwExtraInfo</code>, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying <code>LLKHF_INJECTED</code> or <code>LLMHF_INJECTED</code> bypass the engine too.</p>
+<p>The device turns <code>ButtonChanged</code> into <code>_chordDown[button]</code> plus a pulse.</p>
+<hr />
+<h2 id="path-two-vendor-hid-reports">Path two: vendor HID reports<a class="headerlink" href="#path-two-vendor-hid-reports" title="Permanent link">&para;</a></h2>
+<p><code>VendorHidRuntime.Enumerate</code> walks every present HID interface and keeps the ones whose top-level usage page is <code>0xFF00</code> or higher with a nonzero input report length. The probe opens with no access rights, so a collection another program holds exclusively is still listed and named. Verdicts are cached per interface path until the path disappears. The collection key is <code>VID:PID:PAGE:USAGE</code>, stable across reboots and between two machines of one model, unlike the interface path.</p>
+<p><code>VendorHidReader</code> opens <code>GENERIC_READ</code> with both share flags and reads overlapped on its own thread (<code>PadForge.VendorHid</code>), the headset reader's shape: bounded 100 ms waits, <code>CancelIoEx</code> on teardown, a 2 s join, and a leaked handle rather than a free under a stuck native call.</p>
+<p><code>HandheldButtonsDevice.SyncReaders</code> keeps open exactly <code>RequiredCollections</code> (the collections learned entries name), or every present collection while <code>LearnCaptureActive</code>. A collection that fails to open logs once, not once per sweep. The dialog calls <code>SyncReadersNow</code> so it does not wait out the sweep cadence.</p>
+<p><code>OnReport</code> evaluates each definition for the report's collection. A definition for another report id says nothing about this report and leaves its state alone.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Evaluate</th>
+<th>Release</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Bit</code></td>
+<td><code>(byte &amp; Mask) == (Value &amp; Mask)</code>, so an active-low bit learns its pressed pattern and evaluates pressed when clear</td>
+<td>The report reads the idle pattern again</td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td><code>byte == Value</code></td>
+<td><code>ValueHoldMs</code> = 150 after the last matching report</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="path-three-wmi-events">Path three: WMI events<a class="headerlink" href="#path-three-wmi-events" title="Permanent link">&para;</a></h2>
+<p><code>WmiEventRuntime</code> subscribes <code>SELECT * FROM &lt;class&gt;</code> in <code>root\WMI</code> through <code>ManagementEventWatcher</code>. <code>Sync(wanted)</code> drops watchers no longer wanted and starts the rest. Outside a capture the wanted set is <code>RequiredWmiClasses</code>. During one it is every class <code>EnumerateEventClasses</code> returns. An event's data properties arrive as invariant strings with <code>SECURITY_DESCRIPTOR</code>, <code>TIME_CREATED</code>, <code>InstanceName</code>, and <code>Active</code> stripped, and <code>OnWmiEvent</code> on the device pulses the button whose <code>(class, property, value)</code> matches.</p>
+<h3 id="the-firmware-gate">The firmware gate<a class="headerlink" href="#the-firmware-gate" title="Permanent link">&para;</a></h3>
+<p>Subscribing every <code>WmiEvent</code> subclass on the bench machine bug-checked it (0x44, <code>MULTIPLE_IRP_COMPLETE_REQUESTS</code>, a miniport double-completing the enable IRP). A user-mode subscription to a kernel driver's WMI class can crash the kernel, and the culprit class was unrecoverable from the dump. The gate is therefore the mechanism, never a vendor allowlist: firmware hotkeys reach Windows through the ACPI-WMI mapper (<code>ACPI\PNP0C14</code>), and the firmware's <code>_WDG</code> object lists every GUID it serves.</p>
+<p><code>AcpiWmi.ReadBlocks</code> reads the DSDT and the first SSDT through <code>GetSystemFirmwareTable</code> and scans for <code>_WDG</code> followed by <code>BufferOp</code> (<code>0x11</code>). Each 20-byte block (Linux <code>drivers/platform/x86/wmi.c</code>, <code>struct guid_block</code>) is a 16-byte GUID, a notify id, a reserved byte, an instance count, and flags, where <code>0x08</code> marks an event. <code>EnumerateEventClasses</code> keeps only <code>WmiEvent</code> subclasses whose <code>guid</code> qualifier appears in that set, caches a non-empty answer for 60 s, and <code>Sync</code> applies the gate to every class it is about to start, so a class named by a hand-edited <code>PadForge.xml</code> or an imported set is refused the same way. Refusals are remembered until <code>StopAll</code>.</p>
+<p>Two facts about the read. <code>GetSystemFirmwareTable</code> returns the first table with a given signature, so every SSDT collapses to one read and a <code>_WDG</code> in a later SSDT is unreachable. That fails closed: no event GUIDs, no class watched. And the buffer contents are bounded by the enclosing <code>PkgLength</code>, or a declared <code>BufferSize</code> larger than its package would read adjacent AML as blocks.</p>
+<p><code>tools/WdgProbe &lt;seconds&gt;</code> prints the <code>_WDG</code> table, the classes that pass the gate, and every event for the given number of seconds, using the app's own code.</p>
+<hr />
+<h2 id="the-learners">The learners<a class="headerlink" href="#the-learners" title="Permanent link">&para;</a></h2>
+<p><code>HandheldLearnSession</code> runs three timed phases (<code>IdleMs</code> = 1000, <code>PressMs</code> = 3000, <code>ReleaseMs</code> = 1000) driven by the dialog's timer. Reports from every open reader are bucketed by <code>(collection, report id)</code> per phase, up to 256 samples per bucket, and WMI events per phase in arrival order. The chord engine's capture runs alongside and lands in <code>ChordKeys</code>. <code>Finish</code> produces candidates:</p>
+<p><strong>WMI first.</strong> A <code>(class, property, value)</code> seen during the press or the release is a candidate unless it appeared two or more times while idle. One idle copy is an early press. Press-window events list before release-window ones, and arrival order is candidate order (on the Legion Pro 7 the utility event that names the key lands 3 ms before the lighting side event both keys share).</p>
+<p><strong>Reports next</strong>, per bucket that received a press sample, with the baseline chosen in this order: the first idle sample with <code>NoiseMask</code> over all idle samples, else the last report seen before the press (an event-style collection that is silent while idle), else all zeros. A candidate at byte 0 is the report id flipping between layouts and is dropped.</p>
+<p><code>VendorReportLearner</code> is pure over byte arrays:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NoiseMask(idle)</code></td>
+<td>Bit set wherever any idle sample disagreed with the first. Unequal lengths compare over the shorter prefix, tail volatile.</td>
+</tr>
+<tr>
+<td><code>MinPressRun(n)</code></td>
+<td><code>max(min(2, n), n / 40)</code>: a run of 2.5% of the press samples, never fewer than two when two exist, a single sample its own run</td>
+</tr>
+<tr>
+<td><code>FindBits</code></td>
+<td>Outside the mask, a bit that reads the opposite of idle for a run of at least <code>MinPressRun</code> press samples and is back at idle in the last sample seen (last release sample, else last press sample). A hold and a tap both qualify. One candidate per byte, <code>Value</code> = the pressed pattern (idle inverted under the mask).</td>
+</tr>
+<tr>
+<td><code>FindValues</code></td>
+<td>Outside the mask, a byte whose first differing press sample carries a value no release sample carries. A single-bit difference is left to <code>FindBits</code>.</td>
+</tr>
+<tr>
+<td><code>Learn</code></td>
+<td><code>FindBits</code> first. A bit candidate whose mask has more than one bit set is a code, not a flag (the ROG Ally writes 166 for one button and 167 for its neighbor, and a mask match on <code>0xA6</code> would fire on both), so it becomes a <code>Value</code> candidate with the exact byte. <code>FindValues</code> only when no bit was found.</td>
+</tr>
+</tbody>
+</table>
+<p>More than one candidate means the press changed several things (two buttons, or a byte plus its mirror). The dialog lists them and the user picks, or presses again.</p>
+<hr />
+<h2 id="the-rows-state">The row's state<a class="headerlink" href="#the-rows-state" title="Permanent link">&para;</a></h2>
+<p><code>HandheldButtonsDevice.GetCurrentState</code> runs on the poll thread under the state lock and writes every button every poll, true or false, so a released button produces its falling edge. A button reads pressed while any of these holds:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Held while</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_chordDown[b]</code></td>
+<td>The chord is active in the engine</td>
+</tr>
+<tr>
+<td><code>_reportDown[b]</code></td>
+<td>The last matching report read the pressed pattern (Bit kind)</td>
+</tr>
+<tr>
+<td><code>_pulseUntil[b]</code></td>
+<td><code>PulseMs</code> = 175 after a chord down, a Bit rising edge, or a WMI match</td>
+</tr>
+<tr>
+<td><code>_valueUntil[b]</code></td>
+<td><code>ValueHoldMs</code> = 150 after the last matching Value report</td>
+</tr>
+</tbody>
+</table>
+<p><code>NumButtons</code> spans the range of indices in use, <code>1 + MaxButtonInUse</code>, not the count, so a removed middle entry leaves a gap instead of renumbering. <code>GetDeviceObjects</code> lists each entry as a <code>PushButton</code> at its stable <code>InputIndex</code>, which is what the picker shows. <code>ApplyRegistry</code> on every registry change rebuilds the frozen definition maps and clears the state of any index no longer defined.</p>
+<hr />
+<h2 id="the-motion-row">The Motion row<a class="headerlink" href="#the-motion-row" title="Permanent link">&para;</a></h2>
+<p><code>SystemMotionDevice</code> subscribes <code>Gyrometer.GetDefault()</code> and <code>Accelerometer.GetDefault()</code> at their minimum report interval and publishes under a lock, the headset motion device's shape without its stale window.</p>
+<table>
+<thead>
+<tr>
+<th>Sensor</th>
+<th>Conversion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gyrometer, degrees per second</td>
+<td>× π/180, identity axes</td>
+</tr>
+<tr>
+<td>Accelerometer, g</td>
+<td>negated and × 9.80665. Windows reports the gravity direction (a face-up device at rest reads −1 g on Z), SDL reports the reaction (+9.8 on the up axis).</td>
+</tr>
+</tbody>
+</table>
+<p>The frame is the identity map: Windows X toward the screen's right edge, Y toward its top, Z out of the screen, which for a handheld held facing the player is SDL's X right, Y up, Z toward the player. <code>Unsubscribe</code> hands the report interval back (0 = the driver's default) off the caller's thread, since Dispose reaches it from the poll thread and the property write is a WinRT call.</p>
+<hr />
+<h2 id="the-daemon-scan">The daemon scan<a class="headerlink" href="#the-daemon-scan" title="Permanent link">&para;</a></h2>
+<p><code>HandheldDaemonWatch.Names</code> lists process image names as the vendors ship them: <code>LegionSpace</code>, <code>LSDaemon</code>, <code>LegionGoQuickSettings</code>, <code>ArmouryCrate</code> and its service, socket server, and session helper, <code>MSI_Center_M_Server</code>, <code>MSI Center M</code>, <code>MCMOSDInfo</code>, <code>MSI Center OSD Info</code>, <code>ZotacHandheldQuickSetting</code>, <code>AYASpace</code>. <code>Running</code> is the comma-joined sorted set, refreshed on the sweep cadence, shown on the Devices row and in the dialog.</p>
+<hr />
+<h2 id="diagnostics-lines">Diagnostics lines<a class="headerlink" href="#diagnostics-lines" title="Permanent link">&para;</a></h2>
+<p>All through <code>SdlDiagLog</code>, so they ride the diagnostics mirror.</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Handheld: reading vendor collection &lt;key&gt; (&lt;name&gt;), &lt;n&gt;-byte reports</code></td>
+<td>A reader opened</td>
+</tr>
+<tr>
+<td><code>Handheld: could not open vendor collection &lt;key&gt; (&lt;name&gt;)</code></td>
+<td>Open failed, once per collection</td>
+</tr>
+<tr>
+<td><code>Handheld: firmware declares &lt;n&gt; ACPI-WMI event GUIDs, &lt;m&gt; event classes match</code></td>
+<td>The gate enumerated</td>
+</tr>
+<tr>
+<td><code>Handheld: firmware declares no ACPI-WMI event GUIDs; no WMI class is watched</code></td>
+<td>Empty <code>_WDG</code> read</td>
+</tr>
+<tr>
+<td><code>Handheld: refusing to watch WMI class &lt;cls&gt;, the firmware does not declare its GUID as an ACPI-WMI event</code></td>
+<td>A named class failed the gate</td>
+</tr>
+<tr>
+<td><code>Handheld: watching WMI event class &lt;cls&gt;</code></td>
+<td>A watcher started</td>
+</tr>
+<tr>
+<td><code>Handheld: cannot watch WMI class &lt;cls&gt;: &lt;message&gt;</code></td>
+<td>Subscription threw</td>
+</tr>
+<tr>
+<td><code>Handheld: stopped watching &lt;n&gt; WMI event classes; still watching &lt;list&gt;</code></td>
+<td>Watchers dropped</td>
+</tr>
+<tr>
+<td><code>Handheld: WMI event &lt;cls&gt; &lt;prop&gt;=&lt;value&gt; ...</code></td>
+<td>Every event received</td>
+</tr>
+<tr>
+<td><code>Handheld: WMI event &lt;cls&gt; pulses button &lt;n&gt; (span &lt;s&gt;, attached &lt;bool&gt;)</code></td>
+<td>A match</td>
+</tr>
+<tr>
+<td><code>Handheld: WMI event &lt;cls&gt; matched no value on its &lt;n&gt; learned button(s)</code></td>
+<td>Class known, value not</td>
+</tr>
+<tr>
+<td><code>Handheld: WMI event &lt;cls&gt; matches no learned button</code></td>
+<td>Class unknown</td>
+</tr>
+<tr>
+<td><code>Handheld learn: watched &lt;c&gt; collections, &lt;w&gt; WMI classes; reports idle/press/release a/b/c, events d/e/f, chord &lt;keys&gt;, candidates &lt;n&gt;</code></td>
+<td>A learn pass finished</td>
+</tr>
+<tr>
+<td><code>Handheld chords: worker error &lt;message&gt;</code></td>
+<td>SendInput failed in the worker</td>
+</tr>
+<tr>
+<td><code>System motion: gyrometer at &lt;n&gt; ms, accelerometer present/absent</code></td>
+<td>The Motion row opened</td>
+</tr>
+<tr>
+<td><code>System motion: sample #&lt;n&gt; gyro=(...) accel=(...)</code></td>
+<td>Samples 1, 2, 4, ... 64, then every 4096th</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p><code>HandheldChordEngineTests</code> (36) replays the engine rules with a fake clock. <code>HandheldButtonsTests</code> (33) covers the registry, the device state (minimum press, value hold, other report ids, two bits in one byte, span growth), the WMI pulse and the pinned Step 3 path, the learners over Legion-style, active-low, Ally-style, and GPD Win 5 fixtures, the WMI candidate rules, the motion conversions, and the <code>_WDG</code> parser over a synthetic table.</p>
+<hr />
+<h2 id="evidence-status">Evidence status<a class="headerlink" href="#evidence-status" title="Permanent link">&para;</a></h2>
+<p>The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage (<code>LENOVO_UTILITY_EVENT</code>, <code>PressTypeDataVal</code> = 72, fires on press) and Smart Connect (value 1, fires only on a short tap) keys and triggered their mapped outputs. The chord and report paths have no handheld bench yet. Their contracts are the replay tests, built from byte-for-byte agreements between Handheld Companion and InputPlumber on the same hardware (Legion Go byte 20 paddle bits, the Ally <code>0x5A</code> key-code byte, the OneXPlayer frame). Where those two references disagreed on a layout, which happened fifteen times, a table would have shipped one of them wrong, and that is why there is no table.</p>
+<hr />
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../features/handheld-buttons/">Handheld PC Buttons</a> for the user-facing page</li>
+<li><a href="../input-pipeline/">Input Pipeline</a> for where Phase 1h sits</li>
+<li><a href="../settings-and-serialization/">Settings and Serialization</a> for <code>AppSettingsData</code></li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 4.4.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../wii-controllers-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Wii Controllers Internals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Wii Controllers Internals
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../2d-overlay-system/" class="md-footer__link md-footer__link--next" aria-label="Next: 2D Overlay System">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                2D Overlay System
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

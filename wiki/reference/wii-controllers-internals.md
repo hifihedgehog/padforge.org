@@ -30,7 +30,8 @@ So the data flow is: PadForge pairs over Bluetooth, the Microsoft Bluetooth stac
 | `PadForge.App/MainWindow.xaml.cs` | The `PairRequested` handler that opens the dialog then runs the rescan, and the 100 ms `_sdlPumpTimer`. |
 | `PadForge.App/Services/InputService.cs` | `RescanWiiControllers` passthrough to the input manager. |
 | `PadForge.Engine/Common/SdlDeviceWrapper.cs` | The capability gate that stops a stickless Wii Remote from advertising phantom stick axes, the `HasIrCamera` / `IsBalanceBoard` detection, and the IR-pointer read (`ReadIrPointer`). |
-| `PadForge.Engine/Common/Mapping/SourceCoercion.cs` | `ReadTunedBalanceBoard`: the Lean X / Lean Y / Total Weight coercions from the four corner load cells. |
+| `PadForge.Engine/Common/Mapping/SourceCoercion.cs` | `ReadTunedBalanceBoard`: the Lean X / Lean Y / Total Weight coercions from the four corner load cells. The grip rotation (#392): `RotateForGrip`, `GripAxis`, `GripPov`, `ApplyMotionGrip`, `ReadGravity`. |
+| `PadForge.App/Services/GyroCalibratorService.cs` | The at-rest Motion Plus zero: a 1500 ms sample at connect, subtracted in both passthrough toggle states. |
 | `PadForge.App/Common/Input/WiiSpeakerService.cs` | The Wii Remote speaker output sink. `internal static class`, 8-bit PCM at 2 kHz over the raw HID handle. |
 | `PadForge.Engine/Haptics/WiiSpeakerAdpcm.cs` | Yamaha 4-bit ADPCM codec. Compiled and unit-tested, off the live speaker path. |
 
@@ -44,7 +45,7 @@ The pairing service depends only on `bthprops.cpl` and `kernel32.dll`. No manage
 
 `RunPairingPass(bool temporary, CancellationToken ct)` runs a single Bluetooth inquiry and tries to bond every Wii controller it finds in pairing mode. The sequence is `BluetoothFindFirstRadio` to get the host radio handle, `BluetoothGetRadioInfo` to read the host address and name, then `BluetoothFindFirstDevice` and `BluetoothFindNextDevice` to walk the inquiry results. The inquiry uses `cTimeoutMultiplier = 2`, about 2.5 seconds per pass. The call blocks for that duration, so the dialog runs it on a background thread through `Task.Run`.
 
-The search parameters set every return flag, not just unknown devices:
+The search parameters set every return flag, unknown devices included:
 
 | `BLUETOOTH_DEVICE_SEARCH_PARAMS` field | Value | Reason |
 |---|---|---|
@@ -52,7 +53,7 @@ The search parameters set every return flag, not just unknown devices:
 | `fReturnRemembered` | 1 | See a stale half-paired record so it can be reset. |
 | `fReturnUnknown` | 1 | See a fresh, never-paired controller. |
 | `fReturnConnected` | 1 | See a controller that is already live. |
-| `fIssueInquiry` | 1 | Actually scan the air, not just read cached state. |
+| `fIssueInquiry` | 1 | Scan the air rather than read cached state. |
 | `cTimeoutMultiplier` | 2 | About 2.5 s of inquiry. |
 
 Filtering out the remembered state would hide a controller left half-paired by an earlier attempt, so it could never be reset and re-paired. Returning all four states is what makes that record visible to the cleanup step.
@@ -276,16 +277,69 @@ These live in the SDL3 fork and are read-only from PadForge's side. See [SDL3 In
 
 ---
 
+## Sensor frame and grip (#392)
+
+*Where the Wii Remote's motion frame comes from, what the grip rotation does to it, and every place it lands.*
+
+The remote's accelerometer reports in its own hardware frame. SDL's `hidapi_wii` driver permutes it into the standard controller frame for the aiming hold in `HandleWiiRemoteAccelData`, and PadForge keeps that frame end to end.
+
+| Axis | Hardware accelerometer | SDL frame (`values = (-x, z, y)`) |
+|---|---|---|
+| X | Left | Right |
+| Y | Toward the player | Up |
+| Z | Up | Toward the player |
+
+The Motion Plus report carries its three rates in the order yaw, roll, pitch. `HandleMotionPlusData` posts them as `(-pitch, +yaw, +roll)`, the same rotation applied to the gyro. The signs are consistent with the accelerometer. Dolphin's emulated calibration block sets the yaw and pitch scales below zero, so a game reading through the block sees negative gain on those two axes, while raw counts under a fixed positive scale, which is what SDL uses, follow the right-hand rule in the hardware frame on all three axes. SDL's permutation is the proper rotation of that into its frame. There is no sign bug in the decode.
+
+That frame is the aiming hold. The **Held As** row on the Gyro tab (`PadSetting.MotionGrip`, default `"Pointing"`) supplies a body-to-game rotation for the other three holds, all proper rotations (determinant +1), so one table serves the gyro, the accelerometer, and the gravity estimate:
+
+| Grip value | Label | (x, y, z) becomes | Grounding |
+|---|---|---|---|
+| `Pointing` | Pointing | (x, y, z) | Identity. |
+| `Sideways` | Sideways, Face Up | (z, y, -x) | The swap `SDL_hidapi_switch.c` applies to a single left Joy-Con held sideways. Dolphin's `RotateZ` sideways orientation, inverted. |
+| `WiiWheel` | Wii Wheel, Face Toward You | (z, x, y) | Bench-derived on a real remote: with the face-up table, the wheel hold steered on yaw. Body yaw becomes roll, body pitch becomes yaw. |
+| `Upright` | Upright | (x, -z, y) | Resting gravity moves from the body's -Z onto +Y, where a flat pad reports it. Dolphin's `RotateX`, inverted. |
+
+`RotateForGrip` is the vector form. `GripAxis(grip, axis)` is the per-axis form (source axis plus sign), used by `ReadCalibratedGyroRate` so that a single-axis read debiases the source axis in the frame the calibrator sampled and then applies the sign. Calibration and grip are independent. `ReadGravity(guid, slot, aux)` replaced the seven inline gravity fetches (the four space projections, the Motion Lean reads, `ReadGyroLean`, `SourceKindRuntime.TickMotionLean`) and rotates the body sensor's gravity only. The aux sensor (Nunchuk, left Joy-Con) is a separate body and keeps its frame, except inside the fused Joy-Con pair read, where both halves are one body and rotate together.
+
+Where the rotation lands:
+
+- `ApplyMotionGrip` on the accelerometer copy of the motion snapshot (`InputManager.cs`), which feeds the virtual controller's motion report and the DSU server, in both states of the passthrough tuning toggle. The gyro copy gets it inside `GetPassthroughGyro`'s calibrated read.
+- The Gyro tab's live rate and accelerometer readouts (`InputService.cs`), so they show the held frame.
+- `GripPov(guid, slot, centidegrees)`: for `Sideways` and `WiiWheel`, `(cd - 9000) mod 36000`, so a physical 9000 (Right) reads 0 (Up). Dolphin's `dpad_sideways_bitmasks` table, with the diagonals carried by the angle arithmetic. `Upright` and `Pointing` are the identity, and a centered hat (negative) passes through. Applied at the evaluator's `PovDirection` reads (`SourceEvaluator`, `SourceKindRuntime`, `SourceCoercion`), the legacy `PadSetting` mapper in `InputManager.Step3`, the macro trigger reads in `Step4b`, and `RecorderService`, so a press recorded in the hold fires on that same press. Output-side hats (the HIDMaestro raw POVs, the Valve packers, the Step 4 combine) are untouched, and the Devices page stays physical.
+- The Compass yaw correction is gated on `GripAxis(grip, 1).source == 1`: it is measured on the body's yaw axis and only belongs on a hold that keeps yaw on the yaw lane.
+
+A user edit of Held As runs `InputService.RecenterMotionForSelectedDevice` from the `MainWindow` property hook, guarded by `ShouldRecenterOnGripChange` so a `PadSetting` load (device selection, profile switch) does not drop every device's estimate on the slot. It re-seeds that one device's gravity estimate from the next accelerometer sample and drops its lean, tilt, and shake neutrals.
+
+The tab itself was gated on `HasGyro` before 4.4.0, so an accelerometer-only remote never saw it and the Gyro Tilt card was unreachable. `PadPage.xaml.cs` now shows the tab for `HasGyro || HasAccel` and hides the five rate cards (`GyroPassthroughCard`, `GyroCalibrationCard`, `GyroSensitivityCard`, `GyroResponseCard`, `GyroEngageCard`) unless `HasGyro`.
+
+---
+
+## Motion Plus calibration (known limitation)
+
+*The fork's Motion Plus decode applies fixed constants and reads no calibration block.*
+
+A Motion Plus carries a 32-byte calibration block at register `0xA60020` (`0xA40020` when passthrough is active) with a per-axis zero and scale for the slow and fast ranges. Dolphin reads it (`MotionPlus.cpp`, `GetRelevantCalibration`). The SDL fork's `HandleMotionPlusData` does not. It subtracts a fixed zero of 8192 counts on every axis and applies a fixed scale of 8192/440 counts per degree per second in the slow range and 8192/2000 in the fast range, chosen per axis by the report's slow/fast flag bits.
+
+Two consequences follow:
+
+- **The zero is PadForge's.** `GyroCalibratorService` auto-runs a 1500 ms at-rest sample the first time a slot sees the remote, and `GetPassthroughGyro` subtracts the measured bias in both passthrough toggle states. The calibrator rejects a bias above `MaxPlausibleBias` (0.15 rad/s) and writes nothing, so a remote whose true zero sits further from 8192 than that stays uncorrected. Whether a real Motion Plus zero can exceed that gate has not been measured.
+- **The scale is fixed.** Against the calibration block of Dolphin's reference unit (0x4400 >> 2 = 4352 counts per 270 degrees per second), the fixed slow scale reads about 13% low, and the yaw axis is a different sensor chip with its own scale. Derived from source, not measured on a remote.
+
+A fork patch would read the block once after activation, use the per-axis zero and scale, and fall back to today's constants when the checksum fails. It is not filed.
+
+---
+
 ## Related pages
 
 - [Wii Controllers](../devices/wii-controllers.md): the user guide for this feature.
 - [Input Pipeline](input-pipeline.md): the six-step pipeline that maps the controller once SDL surfaces it.
 - [SDL3 Integration](sdl3-integration.md): the `hidapi_wii` driver, the fork fixes, and the axis capability gate.
 - [Devices](../features/devices.md): the Pair button and the paired controller's device card.
-- [Gyro](../guides/gyro.md): the Wii Remote's accelerometer and Motion Plus path.
+- [Gyro](../guides/gyro.md): the Wii Remote's accelerometer and Motion Plus path, and the Grip card.
 - [Controller Audio Internals](controller-audio-internals.md): the shared sink model the Wii Remote speaker follows, and the HD-haptic tone path.
 - [Driver Management](../features/driver-management.md): HIDMaestro and HidHide setup.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

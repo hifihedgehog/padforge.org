@@ -1042,6 +1042,8 @@
       
         
       
+        
+      
     
     
     
@@ -1442,6 +1444,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../controller-audio/" class="md-nav__link">
         
   
@@ -1817,6 +1847,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Polling rate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-profile-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-profile override
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2307,6 +2354,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2732,6 +2791,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2788,6 +2875,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2824,6 +2995,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2908,6 +3107,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3047,6 +3274,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Polling rate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-profile-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-profile override
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3179,7 +3423,7 @@
 <hr />
 <h2 id="polling-rate">Polling rate<a class="headerlink" href="#polling-rate" title="Permanent link">&para;</a></h2>
 <p>PadForge reads every connected controller on its own background thread. The default rate is <strong>1000 Hz</strong> (once per millisecond).</p>
-<p>You can change the rate in <strong><a href="../settings/">Settings</a> &gt; Input Engine &gt; Polling Interval</strong>. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.</p>
+<p>You can change the rate in <strong><a href="../settings/">Settings</a> &gt; Input Engine &gt; Polling Interval (Unless a Profile Overrides It)</strong>. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.</p>
 <p>By default PadForge keeps reading even when its window sits behind the game. The <strong>Continue Polling When Window Loses Focus</strong> checkbox, in the same <strong>Input Engine</strong> settings, controls that. Turn it off to pause reads whenever PadForge loses focus.</p>
 <!-- SCREENSHOT: dashboard-polling-readout -->
 <p><img alt="The Dashboard engine card showing the live polling rate in Hz" src="../../images/dashboard-polling-readout.png" /></p>
@@ -3213,6 +3457,9 @@
 <p>A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the <strong>Inactivity Timeout</strong> (60 seconds by default, in the same <strong>Input Engine</strong> settings). Set the timeout to 0 and the engine idles immediately.</p>
 <p>While a <a href="../../guides/remote-link/">Remote Link</a> peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.</p>
 <p>Cursor and scroll speed on a <a href="../controller-slots/">Keyboard + Mouse</a> slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.</p>
+<h3 id="per-profile-override">Per-profile override<a class="headerlink" href="#per-profile-override" title="Permanent link">&para;</a></h3>
+<p>A profile can carry its own rate. The New Profile and Edit Profile dialogs have a <strong>Polling Rate</strong> dropdown with six entries: <strong>Default (Global Setting)</strong>, 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms), and 62.5 Hz (16 ms). Pick anything but Default and that rate applies whenever the profile is active. See <a href="../../guides/profiles/">Profiles</a>.</p>
+<p>The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override under the slider: Overridden while profile “Name” is active: 4 ms. Deactivate the profile and the global value returns.</p>
 <hr />
 <h2 id="stick-resolution">Stick resolution<a class="headerlink" href="#stick-resolution" title="Permanent link">&para;</a></h2>
 <p>A stick sends a value between two extremes. PadForge treats that value as a 16-bit number, which means 65,536 possible positions from one edge to the other. That resolution is held through the whole read, so nothing is thrown away before the game sees it.</p>

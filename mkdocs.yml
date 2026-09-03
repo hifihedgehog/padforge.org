@@ -99,6 +99,7 @@ nav:
       - Adaptive Triggers: features/adaptive-triggers.md
       - Impulse Triggers: features/impulse-triggers.md
       - Lighting: features/lighting.md
+      - Lightbar Mirrors and Sensa Haptics: features/lightbar-mirrors.md
       - Controller Audio: features/controller-audio.md
       - Bass Shakers: features/bass-shakers.md
       - Wheels: features/wheel.md
@@ -136,13 +137,19 @@ nav:
       - DSU Motion Server: reference/dsu-motion-server.md
       - DSU Protocol: reference/dsu-protocol.md
       - Remote Link Internals: reference/remote-link-internals.md
+      - External Control Internals: reference/external-control-internals.md
       - Steam Workshop Import Internals: reference/steam-workshop-import-internals.md
       - Controller Audio Internals: reference/controller-audio-internals.md
+      - Steam Controller Haptics Internals: reference/steam-controller-haptics-internals.md
+      - Lightbar Mirrors Internals: reference/lightbar-mirrors-internals.md
+      - Sensa Haptics Internals: reference/sensa-haptics-internals.md
       - Virtual VR Controllers Internals: reference/vr-controllers-internals.md
       - Headset Head Tracking Internals: reference/headset-motion-internals.md
+      - Head Tracking Internals: reference/head-tracking-internals.md
       - Wheel Force Feedback Internals: reference/wheel-ffb-internals.md
       - MIDI Input Internals: reference/midi-input-internals.md
       - Wii Controllers Internals: reference/wii-controllers-internals.md
+      - Handheld PC Buttons Internals: reference/handheld-buttons-internals.md
       - 2D Overlay System: reference/2d-overlay-system.md
       - 3D Model System: reference/3d-model-system.md
       - Build and Publish: reference/build-and-publish.md

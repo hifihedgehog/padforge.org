@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2141,6 +2171,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2810,6 +2852,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2866,6 +2936,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2902,6 +3056,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2986,6 +3168,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3427,7 +3637,7 @@
 <h2 id="turn-it-on">Turn it on<a class="headerlink" href="#turn-it-on" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Plug in a controller that reports motion.</li>
-<li>Assign it to one of slots 1–4. The slot's virtual controller type has to be <strong>PlayStation</strong> or <strong>Nintendo</strong>. Only those two types carry a motion channel, so an Xbox, Extended, Keyboard + Mouse, MIDI, or VR slot broadcasts no motion.</li>
+<li>Assign it to one of slots 1–4. The slot's virtual controller type has to be <strong>PlayStation</strong> or <strong>Nintendo</strong>, or an <strong>Extended</strong> slot running a Valve profile (Steam Deck, or either Steam Controller), whose native frame carries an IMU of its own. Xbox, Keyboard + Mouse, MIDI, VR, and any other Extended slot broadcast no motion.</li>
 <li>On the <a href="../../features/dashboard/">Dashboard</a>, tick <strong>Enable DSU Motion Server (CemuHook Motion Provider Protocol)</strong>.</li>
 <li>Leave the <strong>Port</strong> box at <strong>26760</strong>, or type a different number. The reset button next to it returns the port to 26760.</li>
 <li>Start the input engine with the play button.</li>
@@ -3435,11 +3645,12 @@
 </ol>
 <p>Motion data flows the moment both ends are running.</p>
 <h3 id="per-slot-tuning-lives-on-the-gyro-tab">Per-slot tuning lives on the Gyro tab<a class="headerlink" href="#per-slot-tuning-lives-on-the-gyro-tab" title="Permanent link">&para;</a></h3>
-<p>The DSU broadcast starts from the calibrated gyro stream. The <a href="../../guides/gyro/">Gyro</a> tab holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the <strong>Easy Aim Threshold</strong> stick gate, and the <strong>Aim Engage Button</strong> picker. Both gates zero gyro output while their condition is not met.</p>
+<p>The DSU broadcast starts from the calibrated gyro stream. The <a href="../../guides/gyro/">Gyro</a> tab holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the <strong>Grip</strong> hold, the <strong>Compass</strong> magnetometer anchor on controllers that carry one, the <strong>Easy Aim Threshold</strong> stick gate, and the <strong>Aim Engage Button</strong> picker. Both gates zero gyro output while their condition is not met.</p>
 <p>Whether those controls reach the broadcast depends on one switch. The Gyro tab's <strong>Apply Gyro Tuning to Motion Passthrough</strong> toggle, under the <strong>Motion Passthrough</strong> header, is off by default. Left off, the broadcast sends the calibrated reading straight through. Sensitivity, smoothing, and both gates stay out of it, so emulators see motion whether or not the engage button is held. Turn it on and the broadcast follows the full tab tuning, the Easy Aim and Aim Engage gates included. With a gate configured and the toggle on, the DSU gyro reads zero while the gate is not satisfied, the same as a Gyro mapping row. Calibration drift correction applies either way.</p>
-<p>The accelerometer stream skips all of this. The Gyro tab knobs are gyro-only, so the broadcast always carries the raw scaled accelerometer reading.</p>
+<p>The accelerometer stream skips the tuning chain. Sensitivity, deadzone, smoothing, curve, and both gates are gyro-only, so the broadcast carries the scaled accelerometer reading.</p>
+<p>Two things still reach it. <strong>Grip</strong> rotates the body gyro, the body accelerometer, and gravity together in both states of the passthrough toggle, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. And the Motion Accelerometer row's own <strong>Invert</strong> checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.</p>
 <h3 id="the-mappings-grid-picks-the-source-device">The Mappings grid picks the source device<a class="headerlink" href="#the-mappings-grid-picks-the-source-device" title="Permanent link">&para;</a></h3>
-<p>Motion is not implicit in the device assignment. Each PlayStation or Nintendo slot carries a <strong>Motion Gyro</strong> row and a <strong>Motion Accelerometer</strong> row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.</p>
+<p>Motion is not implicit in the device assignment. Each motion-capable slot carries a <strong>Motion Gyro</strong> row and a <strong>Motion Accelerometer</strong> row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.</p>
 <ul>
 <li>Several motion devices on one slot stack as sources on the same row. The first source whose device is online wins, and the walk falls through to the next source when that device goes offline.</li>
 <li>The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.</li>
@@ -3486,7 +3697,7 @@
 <li>Single player: put the motion controller in slot 1.</li>
 <li>Local multiplayer with motion: up to 4 controllers.</li>
 <li>Motion controller in slot 5 or later does not show up in the emulator. Move it to slots 1–4.</li>
-<li>The cap sits on top of the slot-type rule: the slot still has to be a PlayStation or Nintendo virtual controller.</li>
+<li>The cap sits on top of the slot-type rule: the slot still has to carry a motion channel.</li>
 </ul>
 <hr />
 <h2 id="port">Port<a class="headerlink" href="#port" title="Permanent link">&para;</a></h2>
@@ -3502,7 +3713,8 @@
 <p>If the status line reads <strong>Port 26760 in use</strong>, another DSU server holds the port. Stop it, or set a different number in the Port box (try <code>26761</code>) and update the emulator to match.</p>
 <hr />
 <h2 id="axis-convention">Axis convention<a class="headerlink" href="#axis-convention" title="Permanent link">&para;</a></h2>
-<p>Motion axes are already oriented for emulators. Tested with DualSense, DualShock 4, and Switch Pro Controller. No manual axis flipping needed.</p>
+<p>PadForge orients the axes for the emulator. The packet negates accelerometer X, Y, and Z and gyro pitch and roll against the sensor frame it reads, and keeps yaw. Nothing to flip by hand.</p>
+<p>If a direction reads backward on your controller, say which one on the <a href="https://github.com/hifihedgehog/PadForge/issues">issue tracker</a> with the model. Do not compensate inside the emulator: that hides the report the fix needs.</p>
 <hr />
 <h2 id="trouble">Trouble<a class="headerlink" href="#trouble" title="Permanent link">&para;</a></h2>
 <table>
@@ -3539,7 +3751,7 @@
 </tr>
 <tr>
 <td>Emulator connected, controller assigned, still no motion</td>
-<td>The slot's virtual controller type has to be <strong>PlayStation</strong> or <strong>Nintendo</strong>. Xbox, Extended, Keyboard + Mouse, MIDI, and VR slots send no motion.</td>
+<td>The slot's virtual controller type has to be <strong>PlayStation</strong>, <strong>Nintendo</strong>, or <strong>Extended</strong> on a Valve profile. Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots send no motion.</td>
 </tr>
 </tbody>
 </table>
@@ -3553,7 +3765,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

@@ -4,7 +4,7 @@
 
 The wand carries a gyroscope, an accelerometer, its trigger and face buttons, and the illuminated sphere on its head. The Navigation controller is the one-handed companion pad: a stick, a D-pad, and its own set of buttons.
 
-Both connect over Bluetooth through the same signed PlayStation Bluetooth driver the [DualShock 3](dualshock-3.md) uses, which PadForge installs at pairing time. They appear on the [Devices](../features/devices.md) page as **PlayStation Move Motion Controller** and **PlayStation Move Navigation Controller**.
+Both connect over Bluetooth through the same bundled PlayStation Bluetooth driver the [DualShock 3](dualshock-3.md) uses, which PadForge installs at pairing time. They appear on the [Devices](../features/devices.md) page as **PlayStation Move Motion Controller** and **PlayStation Move Navigation Controller**.
 
 ![A PlayStation Move Motion Controller on the Devices page, with its live motion readout](../images/devices-move.png)
 
@@ -17,13 +17,13 @@ Both connect over Bluetooth through the same signed PlayStation Bluetooth driver
 3. Connect the controller with a USB cable and click **Pair**. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.
 4. Unplug and press the controller's **PS** button. It connects over Bluetooth.
 
-Docking an original Move over USB also runs this on its own, so a wand that has never been paired pairs the first time you plug it in to charge.
+Docking an original Move or a Navigation controller over USB also runs this on its own, so a controller that has never been paired pairs the first time you plug it in.
 
 ---
 
 ## USB
 
-USB is a pairing and charging dock, not an input path, for the original Move (ZCM1) and for the Navigation controller. Neither streams input over the cable. The PS4-era Move (ZCM2) does stream over USB.
+USB is a pairing and charging dock, not an input path, for the original Move (ZCM1). It does not stream input over the cable. The PS4-era Move (ZCM2) and the Navigation controller do stream over USB.
 
 ---
 
@@ -73,4 +73,4 @@ Because the wand is held rather than gripped in two hands, Aim Engage is usually
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

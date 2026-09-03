@@ -7,7 +7,7 @@ a slot, play. The pages in this section exist for the families that have
 extra capabilities or extra setup steps worth their own walkthrough.
 
 Looking for one specific controller, wheel or stick? [**Supported Devices**](supported.md)
-lists every one PadForge knows by name, all 714 of them, grouped by family.
+lists every one PadForge knows by name, all 711 of them, grouped by family.
 
 | Family | Why it has a page |
 | --- | --- |
@@ -25,4 +25,8 @@ Joy-Con works the same way, except for the extras documented on the
 **IR Brightness** source, the Joy-Con 2 optical mouse, and the per-half
 motion sources on a combined pair.
 
-*Last updated for PadForge 4.3.1.*
+A handheld gaming PC's hidden paddles and menu keys have their own feature
+page, [Handheld PC Buttons](../features/handheld-buttons.md), because they
+are learned on the machine rather than recognized by USB identity.
+
+*Last updated for PadForge 4.4.0.*

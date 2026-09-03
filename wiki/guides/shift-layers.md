@@ -41,12 +41,13 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Layer Name** | The label on the tab and the engaged-layer flyout (e.g. `Pit Stop`). |
 | **Activator Input** | Cross-device picker with **Record** and **Clear**. The input that engages the layer. Can live on a different physical controller than the slot it shifts. Optional for **Cycle** and **No Button**, so you can wire a queue up incrementally. |
 | **Activator Kind** | Button, Chord (A + B), or Axis Past Threshold. See the table below. |
-| **Mode** | Hold, Toggle, Latch, Cycle, Sticky (one-shot), or No Button. See the table below. |
+| **Mode** | Hold, Toggle, Latch, Cycle, Sticky (One-Shot), or No Button. See the table below. |
+| **Only While in Layer** | The layer the slot must be on for the activator's input to count. **Any Layer** (default) means the input always counts. The list holds Base and every layer on the slot. Hidden for **No Button**. See [Per-layer activators](#per-layer-activators). |
 | **Layer Color** | Full color picker. Tints the tab and the flyout. Reset to clear. |
 | Emoji icon | Not a labeled field. The square button to the left of the **Layer Name** box shows the layer's emoji and opens a picker when clicked. The emoji appears on the flyout when the layer engages. Defaults to ⇧. |
 | **Delay** | Milliseconds the activator must stay held before the layer reacts. For **Hold**, a debounce. For **Toggle**, **Latch**, and **Sticky**, a long-press threshold: the layer flips once when the hold crosses this time, and a shorter tap does nothing. `0` reacts instantly. |
 | **Auto-Cancel After Inactivity** | **Toggle** mode only. While the layer is toggled on, it switches itself off after this many milliseconds with none of the layer's own mapped inputs active. The timer starts when the layer engages and restarts on every layer input. `0` keeps the layer on until you toggle it off yourself. |
-| **Fire on Release** | Waits until the button is let go before the activator fires. With a **Delay** set, the press must last that long for the release to count. Appears only for **Toggle**, **Latch**, **Cycle**, and **Sticky (one-shot)**. Hold reacts on both edges by nature and No Button has no input, so neither shows it. |
+| **Fire on Release** | Waits until the button is let go before the activator fires. With a **Delay** set, the press must last that long for the release to count. Appears only for **Toggle**, **Latch**, **Cycle**, and **Sticky (One-Shot)**. Hold reacts on both edges by nature and No Button has no input, so neither shows it. |
 | **Also Fire Activator's Own Mapping** | Off by default. On lets the activator input drive its own row alongside the layer change. |
 | **Inherit Unmapped Targets from Base** | Off by default. On = overlay with fallthrough. Off = replace. |
 
@@ -70,7 +71,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Toggle** | Each press flips engagement. Press once to engage. Press again to release. The Caps-Lock model. Set **Auto-Cancel After Inactivity** to have the layer drop itself after a spell with no input of its own. |
 | **Latch** | Press to latch this layer's own mappings on. Press again to return to Base. Pressing a different Latch button switches straight to that layer. Renamed from **Custom**. |
 | **Cycle** | One control steps through a queue of layers. See [Cycle queue](#cycle-queue) for the Next and Previous buttons and the queue options. |
-| **Sticky (one-shot)** | One press engages. The next input you touch on any device assigned to the slot (button, stick, trigger, D-pad, or touchpad) fires on the layer while held, and the layer releases when you let that input go. Tap-then-tap muscle memory without holding. |
+| **Sticky (One-Shot)** | One press engages. The next input you touch on any device assigned to the slot (button, stick, trigger, D-pad, or touchpad) fires on the layer while held, and the layer releases when you let that input go. Tap-then-tap muscle memory without holding. |
 | **No Button** | A passive layer with no activator of its own. It owns a tab and its mappings but never self-engages. You reach it only by adding it to a Cycle queue. |
 
 Toggle, Latch, Cycle, and Sticky normally fire on the press. Check **Fire on Release** in the activator dialog to move that to the release edge instead, so the layer flips when you let go of the button.
@@ -88,6 +89,30 @@ A Cycle activator holds a queue of layers and two buttons that walk it.
 - **Include Base.** Off by default. With it off, the cycle walks the checked layers only, and Base is the resting state. Turn it on to fold Base into the queue.
 
 Next and Previous drive one shared cursor, so they read as forward and backward through the same queue.
+
+---
+
+## Per-layer activators
+
+**Only While in Layer** in the activator dialog makes an activator's input count only while the slot is on the chosen layer. The check happens when the input goes down and holds for the whole press.
+
+- A press that opens with the slot on the right layer keeps counting until it releases, even when the layer changes under it.
+- A press that opens on the wrong layer stays dead until it releases, even if the slot reaches the right layer mid-hold. Its button's rows on the engaged layer fire as normal.
+- A Cycle activator's **Previous Button** carries the same check on its own.
+- **Any Layer** is the default, and every layer made before this setting existed behaves that way.
+- Deleting the named layer leaves the condition inert. The dialog keeps showing the old name rather than quietly widening the activator to every layer.
+
+The setting lets one button mean something different per layer. Author each layer's exits on that layer, with another activator or a [Switch Layer](macros.md#switch-layer) macro.
+
+A three-way example on one button, all three activators bound to the same input:
+
+| Activator | Mode | Only While in Layer | Result |
+|---|---|---|---|
+| Combat | Latch | Base | From Base, the button opens Combat. |
+| Vehicle | Latch | Combat | From Combat, the same button opens Vehicle. |
+| Switch Layer macro to Base, scoped to Vehicle | (macro) | | From Vehicle, the same button returns to Base. |
+
+Without the condition, both Latch activators would fire on every press.
 
 ---
 
@@ -134,7 +159,7 @@ Layers carry more than button rows:
 
 - **Any output type.** Layer rows drive every virtual output the slot has: Xbox and PlayStation outputs, Extended buttons, MIDI notes, keyboard keys, mouse moves, and touchpad outputs all follow the active layer.
 - **Flick stick.** A [flick stick](../features/stick-deadzones.md#flick-stick) row hosted on a layer arms when the layer engages and goes quiet when it drops, with no half-finished turn left running.
-- **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any layer** fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row.
+- **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any layer** fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row. A macro can also change the layer: the [Switch Layer](macros.md#switch-layer) action jumps the slot to any layer or back to Base and holds it there the way a Latch does.
 - **Menus.** An on-screen [menu](menus.md) imported from a Steam action layer engages only while that layer is held, and releasing the layer commits an On Touch Release menu's hovered cell.
 
 ---
@@ -187,10 +212,10 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 ## Related pages
 
 - [Button and Axis Mappings](../features/mappings.md): the layer tab strip sits above the mapping grid. Base rows are bound there too.
-- [Macros](macros.md): every macro carries a **Layer** scope. Leave it on **Any layer**, or pin the macro to one layer so it fires only while that layer is engaged.
+- [Macros](macros.md): every macro carries a **Layer** scope. Leave it on **Any layer**, or pin the macro to one layer so it fires only while that layer is engaged. The Switch Layer action moves the slot between layers from a macro.
 - [Profiles](profiles.md): shift layers save per profile, so each game can run its own layer set.
 - [Controller Slots](../features/controller-slots.md): every slot keeps its own layers.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

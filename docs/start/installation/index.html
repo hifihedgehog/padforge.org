@@ -1252,6 +1252,8 @@
       
         
       
+        
+      
     
     
     
@@ -1629,6 +1631,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2351,6 +2381,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2776,6 +2818,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2832,6 +2902,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2868,6 +3022,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2952,6 +3134,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3264,7 +3474,7 @@
 <p><img alt="Add Controller popup: pick a virtual controller type" src="../../images/add-controller-popup.png" /></p>
 <h2 id="quick-start-2-minutes">Quick start (2 minutes)<a class="headerlink" href="#quick-start-2-minutes" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Download <code>PadForge-v{version}-win-x64.zip</code> from the <a href="https://github.com/hifihedgehog/PadForge/releases">Releases page</a>.</li>
+<li>Download <code>PadForge-v4.4.0-win-x64.zip</code> from the <a href="https://github.com/hifihedgehog/PadForge/releases">Releases page</a>. Every release ships one zip with <code>PadForge.exe</code> inside.</li>
 <li>Extract the zip to any folder (e.g. <code>C:\PadForge\</code>).</li>
 <li>Run <code>PadForge.exe</code>.</li>
 <li>Approve the one UAC prompt at startup. PadForge needs administrator rights to run.</li>
@@ -3315,11 +3525,16 @@
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.</p>
 <p>The driver ships embedded in <code>PadForge.exe</code>. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the <a href="../../features/settings/">Settings</a> page, the HIDMaestro card always reads <strong>Installed</strong> and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.</p>
+<div class="admonition note">
+<p class="admonition-title">The very first launch may need one relaunch</p>
+<p>The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on <strong>Hide from Games</strong>, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.</p>
+</div>
 <p>If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.</p>
 <p>See <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a> for how PadForge talks to the driver under the hood.</p>
 <hr />
 <h2 id="optional-add-ons">Optional add-ons<a class="headerlink" href="#optional-add-ons" title="Permanent link">&para;</a></h2>
-<p>Three optional installs live on <strong><a href="../../features/settings/">Settings</a></strong>. HidHide is bundled. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its <strong>Install</strong> button for <strong>Uninstall</strong>.</p>
+<p>Three optional installs live on <strong><a href="../../features/settings/">Settings</a></strong>. HidHide (1.5.230) is bundled inside <code>PadForge.exe</code>. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its <strong>Install</strong> button for <strong>Uninstall</strong>.</p>
+<p>One more driver installs outside Settings. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a> over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it.</p>
 <!-- SCREENSHOT: settings-driver-cards -->
 <p><img alt="The Settings drivers section: HIDMaestro, HidHide, and Windows MIDI Services cards" src="../../images/settings-driver-cards.png" /></p>
 <h3 id="hidhide">HidHide<a class="headerlink" href="#hidhide" title="Permanent link">&para;</a></h3>
@@ -3383,7 +3598,7 @@
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro under the hood.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

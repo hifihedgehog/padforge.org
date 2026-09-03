@@ -25,11 +25,14 @@ PadForge.sln
 │   ├── VoiceModels/          Embedded Vosk model zip for voice macros
 │   ├── ThirdParty/           OpenVR C# binding (openvr_api.cs)
 │   ├── Models3D/             3D model classes (Base, DS4, DualSense, DualSenseEdge,
+│   │                         SteamController, SteamController2, SteamDeck,
 │   │                         Switch2Pro, Xbox360, XboxSeries)
-│   ├── Models2D/             2D overlay layouts (10 classes) + colorway table
-│   ├── 2DModels/             PNG overlay images, 12 families
-│   ├── 3DModels/             OBJ meshes (DS4/, DualSense/, DualSenseEdge/, Switch2Pro/,
-│   │                         XBOX360/, XboxSeries/), most split by colorway subfolder
+│   ├── Models2D/             2D overlay layouts (11 classes) + colorway table
+│   ├── 2DModels/             PNG overlay images, 13 families
+│   ├── 3DModels/             OBJ meshes (DS4/, DualSense/, DualSenseEdge/,
+│   │                         SteamController/, SteamController2/, SteamDeck/,
+│   │                         Switch2Pro/, XBOX360/, XboxSeries/), the Sony and
+│   │                         Xbox sets split by colorway subfolder
 │   ├── Converter/            WPF value converters
 │   ├── Controls/             Custom controls (RangeSlider, CurveEditor, EqCurveControl,
 │   │                         TriggerTravelArc)
@@ -49,6 +52,7 @@ PadForge.sln
 │
 ├── nuget-local/              Local NuGet source (MIDI Services SDK)
 ├── nuget.config               Registers nuget.org + nuget-local/ as package sources
+├── .gitattributes             `* text=auto`: every text file is stored with LF
 │
 └── tools/                    Standalone utilities, NOT part of PadForge.sln
     ├── DsuDiag/              DSU/Cemuhook diagnostic client
@@ -56,10 +60,14 @@ PadForge.sln
     ├── PersonaVerify/        WASAPI consumer-side check of HIDMaestro composite USB personas
     ├── SteamWorkshopSmoke/   Manually-run smoke harness for the live Steam network paths
     ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
+    ├── WdgProbe/             Runs the app's own ACPI _WDG / WMI learner path outside the app
     ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
     ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
-    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, asset generation (see Development Scripts)
+    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, runtime traces, asset
+                              generation (see Development Scripts)
 ```
+
+Line endings are repo-enforced. `.gitattributes` carries a single `* text=auto` rule, so a text file committed from a CRLF working tree is still stored with LF. A CRLF copy of one file once turned a 167-line change into a 12,000-line diff.
 
 ## Prerequisites
 
@@ -108,9 +116,9 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 
 | File | Description |
 |------|-------------|
-| `PadForge.exe` | ~350 MB, single-file self-contained. The only file in the publish directory |
+| `PadForge.exe` | ~355 MB, single-file self-contained. The only file in the publish directory |
 
-`SDL3.dll`, `libusb-1.0.dll`, and `xinput1_4.dll` are `<Content>` items, so a plain `dotnet build` drops them beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
+`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain `dotnet build` drops all eight beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
 
 The custom gamepad mapping database ships embedded in the assembly, not as a loose file. See [gamecontrollerdb_padforge.txt](#gamecontrollerdb_padforgetxt) under Embedded Resources.
 
@@ -156,7 +164,7 @@ The App csproj defines these publish properties:
 | `EnableCompressionInSingleFile` | `true` | Compresses the bundle to reduce exe size |
 | `DebugType` | `embedded` | Embeds debug symbols in assemblies (no `.pdb` files). Preserves stack traces for crash diagnostics |
 
-**Note:** `RuntimeIdentifier` is set unconditionally (not only during publish), so `dotnet build` also targets `win-x64` and produces a RID-specific output folder.
+**Note:** `RuntimeIdentifier` sits in a plain `PropertyGroup` with no publish-only condition, so `dotnet build` also targets `win-x64` and produces a RID-specific output folder.
 
 ## Project Configuration Details
 
@@ -228,7 +236,7 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 
 `SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. All three projects set `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
 
-**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.2.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.3.2.0`.
+**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.4.0.0`.
 
 ## NuGet Dependencies
 
@@ -243,10 +251,11 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 | **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI loopback audio capture for bass-driven rumble detection |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) |
 | **System.Speech** | 10.0.0 | nuget.org | SAPI recognizer behind the voice-macro trigger (#317) |
-| **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown |
+| **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown. Its targets file also copies `libvosk.dll` and the MinGW runtime into the output |
+| **System.Management** | 10.0.11 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Windows MIDI Services SDK for virtual MIDI device creation |
 
-`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. It is currently v1.7.0. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts.
+`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.7.2.0`. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts: at this commit that comment still says v1.7.1.
 
 The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
 
@@ -295,6 +304,18 @@ Both `nuget.config` and `nuget-local/` must be present alongside `PadForge.sln` 
 ## Native DLLs (Content Items)
 
 Declared as `<Content>` + `CopyToOutputDirectory`, which puts them in `bin/.../publish/` alongside `PadForge.exe` during a non-single-file build. With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` (both set in the csproj) the same files get folded into the single-file bundle and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. Either way the user never has to drop a DLL alongside the EXE. Single-file deploy is one file.
+
+The full native set in the bundle:
+
+| Library | Origin | Caller |
+|---|---|---|
+| `SDL3.dll` | `<Content>`, `Resources/SDL3/x64/` | `SDL3Minimal.cs` |
+| `libusb-1.0.dll` | `<Content>`, `Resources/SDL3/x64/` | SDL3's HIDAPI backend |
+| `xinput1_4.dll` | `<Content>`, `Resources/OpenXInput/x64/` | SDL3's XInput backend, and `BluetoothLinkHelper` for ordinals 108 / 103 |
+| `HAR.dll` | `<Content>`, `Resources/Interhaptics/x64/` | `SensaHapticsService` (#374), P/Invoked lazily |
+| `Interhaptics.RazerProvider.dll` | `<Content>`, `Resources/Interhaptics/x64/` | Loaded by `HAR.dll` as its Razer Sensa backend |
+| `libvosk.dll` | Vosk 0.3.38 package targets | `Vosk.dll`, behind `VoskVoiceEngine` (#317) |
+| `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | Vosk 0.3.38 package targets | MinGW runtime `libvosk.dll` links against |
 
 ### SDL3.dll and libusb-1.0.dll
 
@@ -386,7 +407,7 @@ Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUS
 
 OBJ mesh files for 3D controller visualization, plus the PNG textures some sets carry. Loaded at runtime via `ControllerModelBase.LoadModel()`.
 
-Most families are split one folder per colorway, and each colorway holds a full part set. The counts below are per colorway.
+The Sony and Xbox families are split one folder per colorway, and each colorway holds a full part set. The counts below are per colorway.
 
 | Directory | Colorways | Contents |
 |-----------|-----------|----------|
@@ -396,6 +417,11 @@ Most families are split one folder per colorway, and each colorway holds a full 
 | `3DModels/DualSense/` | 10 (White, Midnight, SpiderMan2, and so on) | 32 OBJ files each, Touchpad split for click-mapping |
 | `3DModels/DualSenseEdge/` | 1 (Edge) | 40 OBJ files |
 | `3DModels/Switch2Pro/` | none, flat | 32 OBJ files |
+| `3DModels/SteamDeck/` | none, flat | 46 OBJ files |
+| `3DModels/SteamController/` | none, flat | 33 OBJ files (2015 Steam Controller) |
+| `3DModels/SteamController2/` | none, flat | 29 OBJ files (2026 Steam Controller) |
+
+The two Steam Controller sets are meshed from Valve's own STEP releases by `tools/steam_controller_2015_mesh.py` and `tools/steam_controller_2026_mesh.py`. Two follow-up scripts fix up what the conversion left wrong: `steam_controller_2026_pads.py` gives each 2026 trackpad only its own surface, and `steam_deck_stick_well.py` opens the Deck's capped stick wells.
 
 There is no Xbox One mesh set and no `ControllerModelXboxOne` class. The Series mesh serves Xbox One, Elite, and Adaptive, and the Switch 2 Pro mesh serves both Switch generations. `ControllerModelView` passes a `wantExtraControls` flag so a borrowing profile gets inert meshes for controls it does not have.
 
@@ -451,7 +477,7 @@ Resource files for multilingual UI support:
 | `Strings.pt-BR.resx` | Brazilian Portuguese |
 | `Strings.zh-Hans.resx` | Simplified Chinese |
 
-The default `Strings.resx` uses `PublicResXFileCodeGenerator` to produce `Strings.Designer.cs` for strongly-typed access via `Strings.PropertyName`. Satellite `.resx` files follow standard .NET localization conventions and compile into satellite assemblies automatically.
+The csproj carries `PublicResXFileCodeGenerator` metadata on `Strings.resx`, but the checked-in `Strings.Designer.cs` is hand-written. It implements `INotifyPropertyChanged` and a weak `CultureChanged` event so live language switching refreshes XAML bindings, which no generator emits. Access is through the singleton: `Strings.Instance.PropertyName`. Satellite `.resx` files follow standard .NET localization conventions and compile into satellite assemblies automatically.
 
 ### 2D Model Assets (Resource)
 
@@ -460,9 +486,9 @@ The default `Strings.resx` uses `PublicResXFileCodeGenerator` to produce `String
 <Resource Include="2DModels\**\*.png" />
 ```
 
-PNG overlay images for the 2D controller schematic view. Twelve families: `DS4/`, `DualSense/`, `DUALSENSEEDGE/`, `MOUSE/`, `STEAMCONTROLLER/`, `STEAMDECK/`, `SWITCH2PRO/`, `SWITCHPRO/`, `VRCONTROLLER/`, `XBOX360/`, `XBOXONE/`, `XBOXSERIES/`. Uses `Resource` (not `EmbeddedResource`) so they load as WPF pack URIs (`pack://application:,,,/2DModels/...`).
+PNG overlay images for the 2D controller schematic view. Thirteen families: `DS4/`, `DualSense/`, `DUALSENSEEDGE/`, `MOUSE/`, `STEAMCONTROLLER/`, `STEAMCONTROLLER2/`, `STEAMDECK/`, `SWITCH2PRO/`, `SWITCHPRO/`, `VRCONTROLLER/`, `XBOX360/`, `XBOXONE/`, `XBOXSERIES/`. Uses `Resource` (not `EmbeddedResource`) so they load as WPF pack URIs (`pack://application:,,,/2DModels/...`).
 
-The matching overlay layouts live in `Models2D/ControllerOverlayLayout.cs` as ten static classes: `Xbox360Layout`, `DS4Layout`, `DualSenseLayout`, `DualSenseEdgeLayout`, `XboxOneSLayout`, `XboxSeriesXLayout`, `SwitchProLayout`, `Switch2ProLayout`, `SteamDeckLayout`, `SteamControllerLayout`.
+The matching overlay layouts live in `Models2D/ControllerOverlayLayout.cs` as eleven static classes: `Xbox360Layout`, `DS4Layout`, `DualSenseLayout`, `DualSenseEdgeLayout`, `XboxOneSLayout`, `XboxSeriesXLayout`, `SwitchProLayout`, `Switch2ProLayout`, `SteamDeckLayout`, `SteamControllerLayout`, `SteamController2Layout`.
 
 ### Other Resources
 
@@ -531,7 +557,7 @@ env:
 
 ### Formal Releases
 
-Created manually via `gh release create` with a version tag (e.g., `v4.2.0`, `v4.2.0-beta1`). See [Release Workflow](#release-workflow) below.
+Created manually via `gh release create` with a version tag (e.g., `v4.4.0`, `v4.4.0-beta1`). See [Release Workflow](#release-workflow) below.
 
 ## Deployment
 
@@ -544,7 +570,7 @@ Copy the publish output to any folder:
 cp PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe C:\PadForge\PadForge.exe
 ```
 
-There are no companion files. `SDL3.dll`, `libusb-1.0.dll`, and `xinput1_4.dll` are folded into the single-file bundle on publish and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe either. A deploy is one `PadForge.exe`.
+There are no companion files. Every native library (`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `libvosk.dll`, and the MinGW runtime) is folded into the single-file bundle on publish and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe either. A deploy is one `PadForge.exe`.
 
 ### Development Deploy Script
 
@@ -595,6 +621,8 @@ cd PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish
 zip -r PadForge-vX.Y.Z-win-x64.zip .
 ```
 
+The publish directory holds one file, so the 4.4.0 asset is `PadForge-v4.4.0-win-x64.zip` containing `PadForge.exe` and nothing else.
+
 ### 6. Create GitHub Release
 
 ```bash
@@ -616,8 +644,9 @@ Standalone diagnostic utilities and development scripts. None of the tool projec
 | **SteamWorkshopSweep** | `cd tools/SteamWorkshopSweep && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Mass wild-corpus regression sweep for the Workshop config translator: harvests top-by-vote configs for every game in `games.csv`, caches the VDFs, translates everything, and reports reason keys outside the lockdown-approved set |
 | **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option per locale for the Indicator LEDs card combos |
 | **PersonaVerify** | `dotnet run --project tools/PersonaVerify -- [diagLogPath]` | net10.0-windows10.0.26100.0 | NAudio 2.2.1 | Consumer-side integration check for HIDMaestro composite USB personas. Measures at the persona's own WASAPI endpoints instead of trusting PadForge's internal counters, which read healthy while Windows received full-scale noise. Also renders four channels (speaker on 1/2, authored haptics on 3/4) so the haptics lane is exercised with no game running. Pass a `PADFORGE_DIAG` log path for the log-backed checks. The audio checks run without it |
+| **WdgProbe** | `dotnet run --project tools/WdgProbe -- [seconds]` | net10.0-windows | PadForge.Engine, System.Management 10.0.11 | Runs the handheld hidden-button learner's own path outside the app (#343): dumps the firmware ACPI `_WDG` table, lists the WMI event classes that pass the gate, then subscribes and prints every event for the given seconds. Compiles the app's `AcpiWmi.cs` and `WmiEventRuntime.cs` directly, so it cannot drift from what PadForge does |
 
-The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 30 with the capture, tracing, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
+The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 35 with the capture, tracing, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
 
 ### Development Scripts
 
@@ -633,6 +662,15 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `capture_colorways.ps1` | Captures the themed-colorway shots by writing `PadForge.xml` state (`Model3DAppearances`, `Use2DControllerView`, slot types) rather than driving the appearance picker, which is one of the two least reliable UI paths for automation |
 | `capture_vr.ps1` | Same state-injection approach, for the VR controller shots |
 | `capture_web.ps1` | Recaptures the two Web Controller shots against a proven-live server. Refuses to capture until an HTTP 200 comes back, after both shots shipped as Edge's "localhost refused to connect" page |
+| `capture_mouse_gestures.ps1` | Recaptures the Mouse tab shot alone, with the same seven-slot topology the rest of the gallery shows. Two minutes instead of the full run's twenty five |
+| `mirror_screenshots.py` | Mirrors captured screenshots into the repo and the website. Any destination without a source is an error, not a note, because every stale picture this project shipped came from a mirror step that skipped one silently |
+| `btaudio-trace.ps1` | Launches the deployed build with the diagnostic mirror armed and tails the `BTAUDIO` heartbeat, one line per second per pad while the DualSense Bluetooth stream thread lives. Its absence is a finding: the thread stopped |
+| `button-trace.ps1` | Tails `BTNSURFACE` and `BTNEDGE` to answer why a mapped button does nothing. `gp=0 raw=1` is SDL's gamepad mapping dropping it, `gp=0 raw=0` is nothing arriving from the pad |
+| `effect-trace.ps1` | Tails `DS5EFFECT` for ghost adaptive triggers after a game exits: enqueues, queue depth and drops, and whether writes are still going out |
+| `steam_controller_2015_mesh.py` | Converts Valve's 2015 Steam Controller STEP assembly into PadForge's per-part OBJs. Meshes the CAD rather than decimating the vendor STLs |
+| `steam_controller_2026_mesh.py` | Converts Valve's 2026 Steam Controller STEP into per-part OBJs. Valve shipped one merged solid, so the parts are found in the geometry |
+| `steam_controller_2026_pads.py` | Splits the 2026 trackpad meshes into connected components and keeps only each pad's own surface, so hovering a trackpad stops lighting a rear paddle |
+| `steam_deck_stick_well.py` | Cuts the disc capping each Steam Deck stick well and drops a dark socket behind it, so the stick has an opening under it |
 | `probe_macro_list.ps1` | Dumps control type, class, and name of everything on the Macros tab, so the capture harness's macro-presence gate can match on what UI Automation really exposes |
 | `verify_site_carousel.ps1` | Opens padforge.org in a visible browser and screenshots the finish carousel twice seconds apart to prove it advances. Headless cannot answer this, because the carousel pauses on `document.hidden` |
 | `overlay_positions.py` | Generates 2D overlay positions from labeled Gamepad-Asset-Pack SVGs. Positions are generated, never placed by eye |
@@ -668,4 +706,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

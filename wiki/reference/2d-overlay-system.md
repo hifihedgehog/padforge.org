@@ -1104,7 +1104,7 @@ Fill on each art layer belongs to the render loop and the flash animation, so ho
 - **Movement dot:** the cursor lanes mapped to circle position, accent when non-zero. The rate lanes (gyro, touchpad, flick) report mouse counts rather than a [-1..+1] deflection, so they are normalized by the counts one full deflection is worth before being summed in
 - **Scroll arrows:** `kbm.ScrollDelta` -> accent fill on up/down arrow
 
-Each surface is skipped while its own target is mid-flash. The wheel fill is also the flash surface for `KbmScroll` and `KbmScrollNeg`, not just `KbmMBtn2`, so its guard names all three.
+Each surface is skipped while its own target is mid-flash. The wheel fill is also the flash surface for `KbmScroll` and `KbmScrollNeg` as well as `KbmMBtn2`, so its guard names all three.
 
 ### Flash Animation
 
@@ -1391,7 +1391,7 @@ A private `Elem(File, X, Y, W, H, Target)` record table lists twelve elements, s
 | Trigger | `VrLTrigger` | `VrRTrigger` |
 | Grip | `VrLGrip` | `VrRGrip` |
 
-Tinting uses the `Rectangle` + `ImageBrush` `OpacityMask` idiom: the cutout supplies the shape, one brush supplies the color, so lit, hover, and flash all drive the same layer instead of needing a second "-Active" bitmap per element. Trigger rects cover the whole housing, not just the blade face.
+Tinting uses the `Rectangle` + `ImageBrush` `OpacityMask` idiom: the cutout supplies the shape, one brush supplies the color, so lit, hover, and flash all drive the same layer instead of needing a second "-Active" bitmap per element. Trigger rects cover the whole housing, rather than the blade face alone.
 
 ### Regions
 
@@ -1406,6 +1406,134 @@ Every element except System carries more than one mapping target, so every one o
 No arrows. Arrows are the schematic view's grammar, not the drawn packs'. Sticks translate their cap, overlay, and region highlight together through one `TranslateTransform` at `StickTravel = 14` px, the branded 25-per-100px-ring ratio at 64 px. Triggers and grips fill from the bottom through a `RectangleGeometry` clip, the same gas-tank convention `ControllerModel2DView` uses.
 
 The flash timer is 450 ms here, not the 400 ms the other five views share.
+
+---
+
+## Menu Overlay: Macro Cells and Icon Packs (#390)
+
+The on-screen menu overlay (`PadForge.App/Views/MenuOverlayWindow.xaml.cs`) draws the ring or grid a `MenuDefinitionEntry` describes. Two cell-level additions shipped in 4.4.0: a cell can fire a macro by name, and a cell's icon can come from a user-supplied `.pficons` package or a loose image file.
+
+### MenuItemDefinition
+
+**File:** `PadForge.Engine/Menus/MenuDefinitionEntry.cs`
+
+```csharp
+public sealed class MenuItemDefinition
+{
+    [XmlAttribute] public int Index { get; set; }
+    [XmlAttribute] public string Label { get; set; } = "";
+    [XmlAttribute] public int VirtualKey { get; set; }      // direct key binding
+    [XmlAttribute] public int XboxButtons { get; set; }     // direct Xbox mask
+    [XmlAttribute] public int ExtendedButton { get; set; }  // direct raw button number
+    [XmlAttribute] public string MacroName { get; set; } = "";  // #390 macro cell
+    [XmlAttribute] public string Icon { get; set; } = "";       // pficon://, path, or Steam name
+    public static bool IsValidIconName(string name);
+}
+```
+
+Both new attributes are append-only and default to empty when absent from an older file. `MenuDefinitionEntry.Clone()` copies them, and the menus clipboard serializes the live entry list with `System.Text.Json` (`InputService.BuildMenusSnapshotJson`), so new public properties ride the copy and paste wire with no DTO change.
+
+### Macro cells: an additional trigger source
+
+A macro cell is not a separate execution path. The cell is one more trigger source for the named macro, so every macro trigger mode, layer gate, restriction, and pacing rule applies because nothing bypasses `EvaluateMacros`.
+
+| Step | File | Function |
+|------|------|----------|
+| Stamp | `PadForge.App/Common/Input/InputManager.MenuRuntime.cs` | `CollectMenuDirectOutputs()` runs before the slot evaluators. For every enabled menu item with a non-empty `MacroName` that `IsMenuItemFired` reports fired, it resolves the name in `MacroSnapshots[slot]` (`OrdinalIgnoreCase`, first match wins) and writes `mac.MenuTriggerTick = MacroPassTick`. |
+| Pass counter | `PadForge.App/Common/Input/InputManager.Step4b.EvaluateMacros.cs` | `internal long MacroPassTick`, incremented once per `EvaluateMacros` pass. |
+| Read | same file, both evaluator twins (gamepad and raw Extended) | `menuCellHeld = macro.MenuTriggerTick == MacroPassTick`. A macro with no trigger of its own uses `menuCellHeld` as its whole trigger. Custom Expression ORs it into the formula result. The combo path ORs it into `triggerActive` beside the button, POV, gesture, descriptor, and axis tests. |
+| Skip guard | same | A macro is skipped when `!hasOwnTrigger && !menuCellHeld && !macro.IsExecuting && macro.MenuTriggerTick < 0`. The `!macro.IsExecuting` leg keeps evaluating a cell-started run so it completes and releases its latches, since a stamp is one tick wide. The `< 0` sentinel keeps a never-stamped, trigger-less macro free. |
+
+Identity is the macro name. Macros carry no id and names are not unique on a slot, so an undeclared name is an inert no-op, the same convention the Switch Layer action uses for a stale layer mask. Renames retag: `MacroItem.Name`'s setter raises the static `MacroItem.Renamed` event (`PadForge.App/ViewModels/MacroItem.cs`), each `PadViewModel` subscribes for its lifetime and `OnMacroRenamed` (`PadForge.App/ViewModels/PadViewModel.cs`) filters on `PadIndex`, rewrites the slot's cells, refreshes the editors, and marks the config dirty.
+
+Editor side (`PadForge.App/ViewModels/MenuEditorItem.cs`): binding kinds are `0` none, `1` key, `2` button, `3` the read-only row-bound sentinel, `4` macro (`MacroKind`). `BindingKindOptions` offers **Macro** only while `MacroNamesProvider` returns at least one name or the cell already carries a `MacroName`. `MacroOptions` is built per read from the slot's macro names and appends a stale name as a marked entry (`Menu_Macro_Missing_Format`, "{0} (no such macro)") so the selection never lies. Setting `SelectedMacroName` clears `VirtualKey`, `XboxButtons`, and `ExtendedButton`, and setting any of those clears `MacroName`. `DropItemIfEmpty` counts `MacroName` as data. The picker's XAML lives in `PadForge.App/Views/PadPage.xaml` next to the key and button pickers, bound to `ShowMacroPicker` and `Menu_MacroPicker_Tip`.
+
+### IconPackageManager
+
+**File:** `PadForge.App/Common/IconPackageManager.cs`
+
+Mirrors `SoundPackageManager` leg for leg.
+
+| Member | Value or behavior |
+|--------|-------------------|
+| `Scheme` | `"pficon://"` |
+| `FileExtension` | `".pficons"` |
+| `ImageExtensions` | `.png`, `.jpg`, `.jpeg`, `.bmp`, `.gif` (WPF's stock decoder set, shared by the pack probe, the entry lister, and the editor's loose-file gate) |
+| `Packages` / `PackageRef { Name, Path }` | The registry. `Path` is exe-relative when the file sits under the application directory, absolute otherwise. |
+| `RegistryChanged` | Raised on every `LoadRegistry`, `Register`, and `Unregister`. The Menus tab refreshes its list on it, and `MenuIconResolver` drops its cache. |
+| `Register(filePath, out probedName)` | Probes the pack, dedups the display name against other entries with a `" (n)"` suffix, refreshes an existing entry for the same file. Returns null for a zip with no image entry. |
+| `Unregister(name)` | Removes the entry. The file stays. |
+| `ResolvePackageFile(name)` | Registered name to the resolved file path. |
+| `IsPackageRef` / `MakeRef` / `TryParseRef` | The `pficon://Package/entry` grammar. The first `/` after the scheme splits package from entry, so a package name never carries a slash. |
+| `TryReadIcon(iconRef)` | Reads one entry's bytes from the zip. Pre-sizes from the declared length up to 1 MB and bounds the copy at 16 MB (`MaxIconBytes`), both because archive metadata is under the pack author's control. |
+| `ListIcons(name)` / `ListIconsInFile(path)` | Every entry whose extension is in `ImageExtensions`, as full entry names. |
+| `ExportPackage(dest, displayName, imageFiles)` | Builds a pack in a `.tmp` beside the destination and moves it into place. Writes `manifest.json` first, then each image under its file name with a `" (2)"` suffix on collisions. |
+| `MakeStoredPath` / `ResolvePath` | The portability rule: relative under the exe directory, absolute elsewhere. Public because the editor's loose-image pick stores through the same rule. |
+
+**Manifest format.** A pack is a zip. Any entry named `manifest.json` (case-insensitive, the shallowest when several exist, `FindManifestEntry`) may carry a display name:
+
+```json
+{"name":"My Icons","generator":"PadForge"}
+```
+
+`ProbePackageName` reads at most 64 KB of it (`MaxManifestChars`), takes the `name` string, replaces `/` and `\` with spaces so the reference grammar survives, and falls back to the file name without extension when the manifest is absent, malformed, or nameless. A zip with no image entry probes to null and is refused.
+
+### MenuIconResolver
+
+**File:** `PadForge.App/Common/MenuIconResolver.cs`
+
+`Resolve(string iconName)` returns a frozen, cached `BitmapImage` or null. Three forms, tested in this order:
+
+| Form | Test | Loader |
+|------|------|--------|
+| Pack reference | `IconPackageManager.IsPackageRef` | `LoadFromPack`: `TryReadIcon` bytes into a `MemoryStream` as `StreamSource` |
+| Loose image path | `IsLooseImagePath`: a `/`, `\`, or `:` in the string plus an `ImageExtensions` extension, at most 1024 characters. A shape test only. | `LoadFromFile(IconPackageManager.ResolvePath(name))` |
+| Steam binding-icon name | `MenuItemDefinition.IsValidIconName` | `Load`: probes `IconSubdirs` under the Steam install |
+
+Every loader sets `DecodePixelWidth = 96` and `BitmapCacheOption.OnLoad`, then freezes. Misses cache as null so a menu rebuild never re-probes the disk, which is why the whole cache clears on `IconPackageManager.RegistryChanged`. No loader throws: each catches the decoder's exception set (including `FileFormatException`) and returns null.
+
+SVG was declined. The overlay renders icons at 30 DIP from a 96 px decode, where a 256 px raster is indistinguishable from vector.
+
+### Overlay rendering
+
+`MenuOverlayWindow.PlaceCellContent(item, showLabels, index, cx, cy, maxLabelWidth, fontSize, scale)` resolves `item.Icon` through `MenuIconResolver.Resolve`. A resolved icon is an `Image` of `30 * Math.Max(scale, 0.7)` pixels centered on the cell, raised by `iconSize * 0.45` when a label is also shown, with the label placed `iconSize * 0.55` below center. A null result renders the label alone, the pre-icon behavior. Icons are not hit-test visible and do not restyle on hover, so only labels register in `_cellLabels`.
+
+### Editor UI
+
+**File:** `PadForge.App/Views/PadPage.xaml.cs`
+
+| Handler | What it does |
+|---------|--------------|
+| `MenuCellChooseIcon_Click` | Builds a `PickSoundDialog` item list: `Menu_Icon_None` when the cell has an icon, then every `ListIcons` entry of every registered package as `pficon://` references. `allowBrowse: true` adds the file-browser entry. An empty list skips the dialog and browses directly. |
+| `BrowseMenuIconFromDisk` | `OpenFileDialog` filtered to the image extensions plus `*.pficons`. A `.pficons` pick registers the pack and binds its single icon, or prompts with `PromptPickFromList` when it holds several. An image pick stores `IconPackageManager.MakeStoredPath(file)`. |
+| `IconPackageAdd_Click` | `OpenFileDialog` for `.pficons`, then `Register`. |
+| `IconPackageCreate_Click` | `OpenFileDialog` (multi-select images, title `Pad_Menus_IconPackages_PickImages`), `SaveFileDialog` for the destination, `ExportPackage`, then `Register`. |
+| `IconPackageRemove_Click` | `Unregister` on the selected `PackageRef`. |
+| `RefreshIconPackages` | Rebinds `IconPackagesList` and toggles `IconPackagesEmptyText`. Subscribed to `RegistryChanged` on load, marshaled through the dispatcher. |
+
+The Icon Packages card sits on the Menus tab (`PadPage.xaml`, strings `Pad_Menus_IconPackages_*`) and mirrors the Sound Packages card. The per-cell icon preview binds `MenuCellItem.IconImage`, which calls `MenuIconResolver.Resolve` when `HasIcon`.
+
+### Persistence
+
+`PadForge.App/Services/SettingsService.cs` carries `IconPackageData { Name, Path }` and `AppSettings.IconPackages` (`[XmlArray("IconPackages")]`) beside `SoundPackages`. Load calls `IconPackageManager.LoadRegistry` from the array. Save calls `SaveRegistry` and writes it back. The registry is app-wide, not per profile. Profiles carry only the `pficon://` references in their cells.
+
+### Profile transfer
+
+**File:** `PadForge.App/Common/ProfileTransfer.cs`
+
+A `.pfprofile` archive bundles icon packs under `icons/` with an alias map at `icons/_aliases.txt`, the same layout sound packages use under `packages/`.
+
+| Function | Role |
+|----------|------|
+| `ReferencedIconPackages(profile)` | Distinct package names parsed from every `SlotMappingSets[].Menus[].Items[].Icon`. |
+| `Export` | Adds each referenced pack's file as `icons/<file>` and one `alias\tfile` line per package name to the alias map, so a dedup-suffixed name on the exporting machine still maps to its file. |
+| `TryLandEntry(entry, appDir, fileName, fileExtension)` | The shared landing helper, extracted from the sound path and now used by both package families. Rejects a target outside `appDir` (ZipSlip). Reuses an existing file only when `EntryMatchesFile` proves byte-identical content, never name plus size. Renames on a clash with a `" (n)"` suffix. Copies with a 512 MB bound (`MaxPackageBytes`) and deletes the partial file on overrun or failure. Returns the landed path or null. |
+| `Import` | For each `icons/*.pficons` entry: `TryLandEntry`, then `IconPackageManager.Register(target, out probedName)`. When the alias map names this file, every alias not equal to the registered name is rewritten. Without a map entry, the probed name is rewritten when it differs. |
+| `RewriteIconPackageRefs(profile, from, to, alreadyRewritten)` | Walks `SlotMappingSets` to `Menus` to `Items`, rewrites `Icon` references whose package matches `from` to `MakeRef(to, entry)`, and marks each item so a later alias in the same import cannot re-match a reference already moved. |
+
+### Tests
+
+`PadForge.Tests/IconPackageTests.cs` drives real zips in temp directories through the production code. The sound-package layer has no equivalent test.
 
 ---
 
@@ -1444,4 +1572,4 @@ Key differences:
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

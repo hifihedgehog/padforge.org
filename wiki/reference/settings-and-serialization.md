@@ -16,6 +16,8 @@
 
 > **v4.3.2 additions.** `UserDevice` gains the sparse position arrays `CapButtonIndices` / `CapAxisIndices` (discussion #344), and `LoadFromDevice` gates the effective axis count on `SupportedAxisIndices` when the wrapper produced one. `PadSetting` gains the clipboard-only `SlotSetExtrasJson` / `SlotMacrosJson` payloads (`__SlotSetExtras` / `__SlotMacros`), so a slot Copy / Paste carries the MappingSet's Bass Shakers, SOCD and Keep Awake state plus the slot's macros. `AppSettingsData` gains `DiagnosticsLoggingEnabled` (#303). Autosave is two-tier (#331): a 250 ms engine-visible push every tick, the full save after 2 s of quiet.
 
+> **v4.4.0 additions.** `ProfileData` gains `PollingRateOverrideMs` (#365, `0` = follow the global knob) and four nullable legs, `EnableChromaLightbar` (#373), `EnableLightsyncLightbar` (#382), `EnableSensaHaptics` (#374), and `EnableHeadTracking` (#355), where `null` = no opinion. Every one of the five is authored, never snapshotted, and every profile saved before the field reads as no opinion. `AppSettingsData` gains their global legs (`EnableChromaLightbar`, `EnableSensaHaptics`, `EnableLightsyncLightbar`, the `HeadTracking*` quintet), `EnableExternalControl` (#366), the handheld trio `HandheldButtons` / `HandheldMachineKey` / `HandheldButtonsEnabled` (#353), `IconPackages` (#390), and the assignment-prompt pair `AssignOfferNewDevice` / `AssignOfferEmptySlot`. `UserDevice` gains `QuickChargeEnabled` (#372). `PadSetting` gains `MotionGrip` (#392), taking the checksum's gyro group to 43. `MenuItemDefinition` gains `MacroName` (#390). `DeviceSlotConfigData` gains `AudioTritonLowPassHz` (#381, default 250).
+
 ---
 
 This page is a developer reference for PadForge's settings persistence.
@@ -496,6 +498,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `HidHideEnabled` | `bool` | `<HidHideEnabled>` | Hide from games via HidHide driver (default: false). |
 | `ConsumeInputEnabled` | `bool` | `<ConsumeInputEnabled>` | Suppress mapped inputs via low-level hooks (default: false). Keyboards/mice only. |
 | `IdleDisconnectSeconds` | `int` | `<IdleDisconnectSeconds>` | (v3.6, #162) Bluetooth idle-disconnect timeout in seconds. When the device is Bluetooth-connected and its input stays idle this long, the host radio drops the link so the controller sleeps. `0` disables (default). Over USB there is no radio link to drop. Unlike DS4Windows there is no charging gate: an idle pad on a charger still disconnects, because dropping Bluetooth does not interrupt charging. |
+| `QuickChargeEnabled` | `bool` | `<QuickChargeEnabled>` | (v4.4, #372) Drop the Bluetooth link when the pad reports charging, so it charges without powering the radio. Default false. Fires on the false-to-true charging edge only. A Sony pad carries the same MAC on both transports, so a cable rebinds this one record to the USB wrapper rather than creating a twin: a Bluetooth-pathed record drops through the idle timeout's lane, a wired-rebound record drops the radio by its own MAC serial. |
 
 ### Input Hiding
 
@@ -517,6 +520,8 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `LastActiveTick` | `long` | (#162) `Environment.TickCount64` of the last non-idle input, for the idle-disconnect countdown. Polling thread only. `0` = not yet tracked this connection. |
 | `IdleTrackedConnection` | `object` | (#162) The wrapper instance the idle countdown last stamped against. A mismatch marks a fresh connection and restarts the countdown. Polling thread only. |
 | `LastIdleCheckTick` | `long` | (#162) Last tick the idle countdown was checked, so the check runs about once a second instead of at poll rate. Polling thread only. |
+| `QuickChargePrevCharging` | `bool` | (#372) The last charging read, so the drop fires on the edge only. Not reset on a fresh connection: a user who re-links Bluetooth while the cable stays in is left alone until an unplug re-arms it. Seeded from live state on the first observation, never compared against the default. |
+| `LastQuickChargeCheckTick` | `long` | (#372) Same ~1 Hz discipline as the idle countdown. Zero means the check has not observed this record yet: that observation seeds `QuickChargePrevCharging` and is never an edge. |
 | `ActuatorCount` | `int` | FFB actuator axis count. Computed from `DeviceObjects` in `LoadFromDevice`. |
 | `ForceFeedbackState` | `ForceFeedbackState` | FFB/haptic state tracker. Created for devices with rumble or haptic. |
 
@@ -657,7 +662,7 @@ public string PadSettingChecksum { get; set; } = string.Empty;
 10. **Audio bass trigger rumble** (5, v3.2): AudioRumbleTriggersEnabled, AudioRumbleTriggersSensitivity, AudioRumbleTriggersCutoffHz, AudioRumbleLeftTrigger, AudioRumbleRightTrigger
 11. **Audio bass rumble** (5): AudioRumbleEnabled, AudioRumbleSensitivity, AudioRumbleCutoffHz, AudioRumbleLeftMotor, AudioRumbleRightMotor
 12. **Constant force** (3): ConstantForceEnabled, ConstantForceX, ConstantForceY
-13. **Gyro tuning, IR pointer, and 3D appearance** (42, v3.2–v4.3): GyroSensitivityH/V, GyroDeadZoneDegPerSec, GyroSmoothingAlpha, GyroAcceleration, GyroOutputCurve, GyroSensitivityUnits, GyroEasyAimStickThreshold, GyroEngageStickSide (v3.6, #120), GyroEngageStickDirection (v3.6, #120), IrSensorBarPos (v3.6, #146/#151), IrSensorBarComp (v3.6, #146/#151), IrSmoothing (v3.6, #146/#151), PointerMode (v4, #203), PointerFpsSpeed (v4, #203), Model3DAppearances (the per-model-family 3D preview colorway, cosmetic but checksummed so CloneDeep does not drop it), GyroBiasPitch/Yaw/Roll, GyroAuxBiasPitch, GyroCompassYaw, MagBiasX/Y/Z, MagFieldNorm, GyroAuxBiasYaw, GyroAuxBiasRoll, GyroCalibratedAtUtc, GyroSpace, GyroPlayerSpaceYawRelaxFactor, GyroWorldSpaceSideReductionThreshold, GyroTighteningThresholdDegPerSec, GyroSmoothingThresholdDegPerSec, GyroSmoothingWindowMs, GyroRealWorldCalibration, GyroAimEngageButton, GyroAimEngageDeviceGuid, GyroAimEngageMode, GyroInvertPitch, GyroInvertYaw, GyroInvertRoll (#321 split the combined toggle. The XML element name for yaw is unchanged, and an empty GyroInvertRoll is a sentinel meaning "saved before the split", resolved through `GyroInvertRollEffective` to the yaw value), GyroApplyTuningToPassthrough. The eight fields from GyroEngageStickSide through Model3DAppearances append between GyroEasyAimStickThreshold and GyroBiasPitch in checksum order. The aux-bias and magnetometer fields interleave as written above, not in name order.
+13. **Gyro tuning, IR pointer, and 3D appearance** (43, v3.2–v4.4): GyroSensitivityH/V, GyroDeadZoneDegPerSec, GyroSmoothingAlpha, GyroAcceleration, GyroOutputCurve, GyroSensitivityUnits, GyroEasyAimStickThreshold, GyroEngageStickSide (v3.6, #120), GyroEngageStickDirection (v3.6, #120), IrSensorBarPos (v3.6, #146/#151), IrSensorBarComp (v3.6, #146/#151), IrSmoothing (v3.6, #146/#151), PointerMode (v4, #203), PointerFpsSpeed (v4, #203), Model3DAppearances (the per-model-family 3D preview colorway, cosmetic but checksummed so CloneDeep does not drop it), GyroBiasPitch/Yaw/Roll, GyroAuxBiasPitch, GyroCompassYaw, MagBiasX/Y/Z, MagFieldNorm, GyroAuxBiasYaw, GyroAuxBiasRoll, GyroCalibratedAtUtc, GyroSpace, MotionGrip (v4.4, #392), GyroPlayerSpaceYawRelaxFactor, GyroWorldSpaceSideReductionThreshold, GyroTighteningThresholdDegPerSec, GyroSmoothingThresholdDegPerSec, GyroSmoothingWindowMs, GyroRealWorldCalibration, GyroAimEngageButton, GyroAimEngageDeviceGuid, GyroAimEngageMode, GyroInvertPitch, GyroInvertYaw, GyroInvertRoll (#321 split the combined toggle. The XML element name for yaw is unchanged, and an empty GyroInvertRoll is a sentinel meaning "saved before the split", resolved through `GyroInvertRollEffective` to the yaw value), GyroApplyTuningToPassthrough. The eight fields from GyroEngageStickSide through Model3DAppearances append between GyroEasyAimStickThreshold and GyroBiasPitch in checksum order. The aux-bias and magnetometer fields interleave as written above, not in name order.
 14. **Trigger rumble routing** (12, v4, #102): LeftTriggerRouteSource, RightTriggerRouteSource, LeftTriggerRouteMode, RightTriggerRouteMode, LeftTriggerRouteScale, RightTriggerRouteScale, LeftTriggerRouteActivator, RightTriggerRouteActivator, LeftTriggerRouteActivatorDeviceGuid, RightTriggerRouteActivatorDeviceGuid, LeftTriggerRouteActivatorMode, RightTriggerRouteActivatorMode. Emitted inside the gyro region, between GyroAimEngageMode and GyroInvertPitch.
 15. **Axis inversion** (4): LeftThumbAxisXInvert, LeftThumbAxisYInvert, RightThumbAxisXInvert, RightThumbAxisYInvert
 16. **Threshold** (1): AxisToButtonThreshold
@@ -917,6 +922,7 @@ All `[XmlElement]`, all `string`, all in `ComputeChecksum()` and `CopyableProper
 | `IrSmoothing` | `"0"` | (#146/#151) Wii IR pointer smoothing, `0..1`. `0` = raw (no lag), higher = heavier low-pass on the camera. |
 | `PointerMode` | `"Mouse"` | (v4, #203) Wii pointer mode: `Mouse` (absolute aim, default), `FpsMouse` (aim offset from center drives cursor velocity), `Mouse43` / `Mouse169` (cursor confined to an aspect region with border pin). Shapes the cursor drive only. The "IR Pointer X/Y" mapping sources read raw regardless. Per (device, slot). |
 | `PointerFpsSpeed` | `"35"` | (v4, #203) FPS-Mouse speed knob, pixels per 10 ms at full deflection. |
+| `MotionGrip` | `"Pointing"` | (v4.4, #392) How the controller is held: `Pointing` (the frame the driver delivers), `Sideways` (top edge left, face up), `WiiWheel` (top edge left, face toward the player), or `Upright` (top edge up). One rotation applied to the body gyro, the accelerometer, and gravity together, for mapping sources and for the motion the virtual controller reports. The D-pad follows the same frame. Per (device, slot). Sits between `GyroSpace` and `GyroPlayerSpaceYawRelaxFactor` in checksum order. |
 
 ### Dictionary-Based Mapping Systems
 
@@ -1132,7 +1138,7 @@ Static array defining which properties participate in `CopyFrom()`, `ToJson()`, 
 | **Trigger rumble routing** (12, #102) | `LeftTriggerRouteSource`, `RightTriggerRouteSource`, `LeftTriggerRouteMode`, `RightTriggerRouteMode`, `LeftTriggerRouteScale`, `RightTriggerRouteScale`, `LeftTriggerRouteActivator`, `RightTriggerRouteActivator`, `LeftTriggerRouteActivatorDeviceGuid`, `RightTriggerRouteActivatorDeviceGuid`, `LeftTriggerRouteActivatorMode`, `RightTriggerRouteActivatorMode` |
 | **Audio bass rumble** (5) | `AudioRumbleEnabled`, `AudioRumbleSensitivity`, `AudioRumbleCutoffHz`, `AudioRumbleLeftMotor`, `AudioRumbleRightMotor` |
 | **Constant force** (3) | `ConstantForceEnabled`, `ConstantForceX`, `ConstantForceY` |
-| **Gyro tuning, IR pointer, 3D appearance** (42, v3.2–v4.3) | `GyroSensitivityH`, `GyroSensitivityV`, `GyroDeadZoneDegPerSec`, `GyroSmoothingAlpha`, `GyroAcceleration`, `GyroOutputCurve`, `GyroSensitivityUnits`, `GyroEasyAimStickThreshold`, `GyroEngageStickSide`, `GyroEngageStickDirection`, `IrSensorBarPos`, `IrSensorBarComp`, `IrSmoothing`, `PointerMode`, `PointerFpsSpeed`, `Model3DAppearances`, `GyroBiasPitch`, `GyroBiasYaw`, `GyroBiasRoll`, `GyroAuxBiasPitch`, `GyroAuxBiasYaw`, `GyroAuxBiasRoll`, `GyroCompassYaw`, `MagBiasX`, `MagBiasY`, `MagBiasZ`, `MagFieldNorm`, `GyroCalibratedAtUtc`, `GyroSpace`, `GyroPlayerSpaceYawRelaxFactor`, `GyroWorldSpaceSideReductionThreshold`, `GyroTighteningThresholdDegPerSec`, `GyroSmoothingThresholdDegPerSec`, `GyroSmoothingWindowMs`, `GyroRealWorldCalibration`, `GyroAimEngageButton`, `GyroAimEngageDeviceGuid`, `GyroAimEngageMode`, `GyroInvertPitch`, `GyroInvertYaw`, `GyroInvertRoll`, `GyroApplyTuningToPassthrough` |
+| **Gyro tuning, IR pointer, 3D appearance** (43, v3.2–v4.4) | `GyroSensitivityH`, `GyroSensitivityV`, `GyroDeadZoneDegPerSec`, `GyroSmoothingAlpha`, `GyroAcceleration`, `GyroOutputCurve`, `GyroSensitivityUnits`, `GyroEasyAimStickThreshold`, `GyroEngageStickSide`, `GyroEngageStickDirection`, `IrSensorBarPos`, `IrSensorBarComp`, `IrSmoothing`, `PointerMode`, `PointerFpsSpeed`, `Model3DAppearances`, `GyroBiasPitch`, `GyroBiasYaw`, `GyroBiasRoll`, `GyroAuxBiasPitch`, `GyroAuxBiasYaw`, `GyroAuxBiasRoll`, `GyroCompassYaw`, `MagBiasX`, `MagBiasY`, `MagBiasZ`, `MagFieldNorm`, `GyroCalibratedAtUtc`, `GyroSpace`, `MotionGrip`, `GyroPlayerSpaceYawRelaxFactor`, `GyroWorldSpaceSideReductionThreshold`, `GyroTighteningThresholdDegPerSec`, `GyroSmoothingThresholdDegPerSec`, `GyroSmoothingWindowMs`, `GyroRealWorldCalibration`, `GyroAimEngageButton`, `GyroAimEngageDeviceGuid`, `GyroAimEngageMode`, `GyroInvertPitch`, `GyroInvertYaw`, `GyroInvertRoll`, `GyroApplyTuningToPassthrough` |
 | **Axis inversion** (4) | `LeftThumbAxisXInvert`, `LeftThumbAxisYInvert`, `RightThumbAxisXInvert`, `RightThumbAxisYInvert` |
 | **Threshold** (1) | `AxisToButtonThreshold` |
 | **Touchpad descriptors** (7) | `TouchpadX1`, `TouchpadY1`, `TouchpadX2`, `TouchpadY2`, `TouchpadContact1`, `TouchpadContact2`, `TouchpadClick` |
@@ -1193,7 +1199,7 @@ Per-virtual-controller mapping store. One `MappingSet` per slot, persisted under
 | `WorkshopGyroRatchetDescriptors` | attribute | (4.2.0, #9) Steam `gyro_ratchet_button_mask` as pipe-joined device-free descriptors. While any of them is held on any slot device the slot's gyro reads are clutched, Steam's ratchet. A separate AND-NOT lane beside the engage stamp, never a replacement, so it composes with an authored engage button, the user's own engage PadSetting, and the `SetGyroEngaged` macro bit alike. |
 | `<Row>` | `MappingRow[]` | Every row across every layer, tagged by `MappingRow.LayerMask`. Base rows tag `Base`; shift-layer rows tag the activator's mask. A single target can have multiple rows when more than one layer is configured. |
 | `<ShiftActivator>` | `ShiftActivator[]` | One entry per non-Base shift layer. Names the layer (`LayerMask`), the input that engages it, the mode, color, emoji, and debounce. Empty list = Base-only slot. |
-| `<Menu>` | `List<MenuDefinitionEntry>` | (v4.1, #9) Radial / touch menus authored for or imported onto this slot (`PadForge.Engine/Menus/MenuDefinitionEntry.cs`). Every scalar field serializes as an `[XmlAttribute]`: per-entry `DeviceGuid` (`""` = any device on the slot, the Workshop-import form), `MenuId` (default 1), `Name`, `Kind` (`Radial` / `Grid`), `HostDescriptor` (an abstract stick, default `"Gamepad RightStick"`, or `"Touchpad N"`), `HostHalf`, the custom host pair `CustomXDescriptor` / `CustomYDescriptor`, `ClickDescriptor`, `LayerMask`, `FireType` (default `Click`), `CellCount` (default 4), `HasCenter`, `ShowLabels` (default true), the overlay geometry (`PosXPercent` / `PosYPercent` default 50, `ScalePercent` default 100, `OpacityPercent` default 90), `EngageDeadzonePercent` (default 25), `SensitivityPercent` (default 100), `Enabled` (default true). Cells serialize as `<Item>` child elements (`MenuItemDefinition`: `Index`, `Label`, `Icon`, and the optional direct bindings `VirtualKey` / `XboxButtons` / `ExtendedButton`, all attributes). Items without a direct binding deliver through rows / macros keyed on the fired descriptor `"Menu {MenuId} Item {k}"`. Empty list = no menus. |
+| `<Menu>` | `List<MenuDefinitionEntry>` | (v4.1, #9) Radial / touch menus authored for or imported onto this slot (`PadForge.Engine/Menus/MenuDefinitionEntry.cs`). Every scalar field serializes as an `[XmlAttribute]`: per-entry `DeviceGuid` (`""` = any device on the slot, the Workshop-import form), `MenuId` (default 1), `Name`, `Kind` (`Radial` / `Grid`), `HostDescriptor` (an abstract stick, default `"Gamepad RightStick"`, or `"Touchpad N"`), `HostHalf`, the custom host pair `CustomXDescriptor` / `CustomYDescriptor`, `ClickDescriptor`, `LayerMask`, `FireType` (default `Click`), `CellCount` (default 4), `HasCenter`, `ShowLabels` (default true), the overlay geometry (`PosXPercent` / `PosYPercent` default 50, `ScalePercent` default 100, `OpacityPercent` default 90), `EngageDeadzonePercent` (default 25), `SensitivityPercent` (default 100), `Enabled` (default true). Cells serialize as `<Item>` child elements (`MenuItemDefinition`: `Index`, `Label`, `Icon`, `MacroName`, and the optional direct bindings `VirtualKey` / `XboxButtons` / `ExtendedButton`, all attributes). `MacroName` (v4.4, #390) names a macro on the same slot the cell triggers while fired. The cell is an additional trigger source, so the macro's own trigger mode keeps its meaning. A name the slot no longer declares is an inert no-op, and renames retag through the macro name-change hook. `Icon` resolves in order as a `pficon://Package/entry` icon-pack reference (#390), a loose image path (exe-relative preferred), or a bare Steam binding-icon file name. Both are append-only: absent in older files = empty. Items without a direct binding or macro deliver through rows / macros keyed on the fired descriptor `"Menu {MenuId} Item {k}"`. Empty list = no menus. |
 
 Last-engaged-wins resolves conflicts between simultaneously-active activators (the most recently engaged activator's layer is the active one).
 
@@ -1332,6 +1338,8 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `BatteryNotifyEnabled` | `bool` | `[XmlElement]` | `true` | (v4.3, #293) Low-battery notification: edge-triggered balloon plus status line. |
 | `BatteryNotifyThreshold` | `int` | `[XmlElement]` | `15` | (v4.3, #293) Percent at or below which the notification fires. |
 | `BatteryNotifyVibrate` | `bool` | `[XmlElement]` | `false` | (v4.3, #293) Also buzz the device when the notification fires. |
+| `AssignOfferNewDevice` | `bool` | `[XmlElement]` | `true` | (v4.4) Offer a never-seen device to the open virtual controller when it connects. |
+| `AssignOfferEmptySlot` | `bool` | `[XmlElement]` | `true` | (v4.4) Offer any connecting device when the open virtual controller has nothing assigned. |
 | `StartMinimized` | `bool` | `[XmlElement]` | `false` | Start minimized |
 | `DiagnosticsLoggingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.3, #303) Persistent mirror of the engine event ring to `diagnostics.log` beside the exe, for auto-started sessions where a launch flag cannot help. |
 | `StartAtLogin` | `bool` | `[XmlElement]` | `false` | Register as startup app |
@@ -1341,6 +1349,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `ThemeIndex` | `int` | `[XmlElement]` | `0` | UI theme index |
 | `Language` | `string` | `[XmlElement]` | `""` | Language code (`"en"`, `"fr"`, `"ja"`). Empty = system default. |
 | `EnableAutoProfileSwitching` | `bool` | `[XmlElement]` | `false` | Foreground-based auto profile switching |
+| `EnableExternalControl` | `bool` | `[XmlElement]` | `false` | (v4.4, #366) Serve the `PadForge.Control` named pipe while the engine runs. The held-profile pin is runtime only and never written. See [External Control Internals](external-control-internals.md). |
 | `ActiveProfileId` | `string` | `[XmlElement]` | `null` | Active named profile ID (null = default) |
 | `SlotControllerTypes` | `int[]` | `[XmlArray][XmlArrayItem("Type")]` | `null` | Per-slot `VirtualControllerType` (0=Xbox, 1=PlayStation, 2=Extended, 3=Midi, 4=KeyboardMouse, 5=Nintendo, 6=Vr). Numeric values preserved from v2 so existing files load. Only created slots load a type. Uncreated slots keep the Xbox default so stale values cannot leak. |
 | `SlotSoundVolumes` | `int[]` | `[XmlArray("SlotSoundVolumes")][XmlArrayItem("Volume")]` | `null` | (#83) Per-slot master volume for macro sounds (0–100). |
@@ -1353,6 +1362,14 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `DsuMotionServerPort` | `int` | `[XmlElement]` | `26760` | DSU server port |
 | `EnableWebController` | `bool` | `[XmlElement]` | `false` | Embedded web controller server |
 | `WebControllerPort` | `int` | `[XmlElement]` | `8080` | Web controller port |
+| `EnableChromaLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #373) Razer Chroma lightbar mirror, the global leg. Stands when the active profile's nullable `ProfileData.EnableChromaLightbar` is null. |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]` | `false` | (v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: `ProfileData.EnableSensaHaptics`. |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, the global leg. Per-profile leg: `ProfileData.EnableLightsyncLightbar`. |
+| `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) Head tracking master switch, the global leg. Off means no device row, no UDP socket, no FreeTrack mapping. Per-profile leg: `ProfileData.EnableHeadTracking`. |
+| `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
+| `HeadTrackingFreeTrack` | `bool` | `[XmlElement]` | `true` | (v4.4, #355) Also read the FreeTrack 2.0 shared memory. Global only. |
+| `HeadTrackingRotationRange` | `int` | `[XmlElement]` | `90` | (v4.4, #355) Degrees of head rotation at full axis deflection. Global only. |
+| `HeadTrackingTranslationRange` | `int` | `[XmlElement]` | `30` | (v4.4, #355) Centimeters of head travel at full axis deflection. Global only. |
 | `WebCustomLayoutsJson` | `string` | `[XmlElement]` | `"[]"` | (v4.3, #296) Custom web-controller layouts built in the browser, as one JSON array. Machine-scoped by design: a custom pad is this machine's hardware definition, not profile content, so it rides here and never in `ProfileData`. `WebCustomLayoutStore` validates it on load and on every mutation. |
 | `EnableTouchpadOverlay` | `bool` | `[XmlElement]` | `false` | (v3.2) On-screen touchpad overlay window |
 | `EnableMenuOverlay` | `bool` | `[XmlElement]` | `true` | (v4.1, #9) Radial / touch menu overlay window. Default on. Menus still hover and commit blind when disabled. |
@@ -1387,6 +1404,10 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `VoiceMacrosEnabled` | `bool` | `[XmlElement]` | `false` | (v4.3, #317) Voice macro master switch. |
 | `VoiceMinConfidence` | `float` | `[XmlElement]` | `0.80` | (v4.3, #317) Confidence floor a recognition must clear, 0..1. |
 | `VoiceListeningMode` | `int` | `[XmlElement]` | `0` | (v4.3, #317) 0 = always listening, 1 = push-to-talk. |
+| `HandheldButtons` | `HandheldButtonData[]` | `[XmlArray("HandheldButtons")][XmlArrayItem("Button")]` | `null` | (v4.4, #353) Learned handheld hidden buttons, each a named stable raw-button index plus its delivery path. See [HandheldButtonData](#handheldbuttondata-v44). |
+| `HandheldMachineKey` | `string` | `[XmlElement]` | `""` | (v4.4, #353) The machine the learned buttons belong to. |
+| `HandheldButtonsEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #353) The Settings card's **Enable Handheld PC Buttons**. Off means no device rows, no keyboard hook, no vendor HID handles, no sensor subscription. |
+| `IconPackages` | `IconPackageData[]` | `[XmlArray("IconPackages")][XmlArrayItem("Package")]` | `null` | (v4.4, #390) Registered `.pficons` menu icon packs: Name + stored path (exe-relative when the pack sits in the application directory). Same shape as `SoundPackages`. |
 | `MappingPickerHiddenDevices` | `string[]` | `[XmlArray("MappingPickerHiddenDevices")][XmlArrayItem("Slot")]` | `null` | (v4.3, #322) Per-slot hidden picker device keys. Index is the slot, value is semicolon-joined device GUIDs plus the `any` token for the device-agnostic group. A view preference, so it lives in the settings root and never in a profile. |
 | `PsMoveCalibrations` | `string[]` | `[XmlArray("PsMoveCalibrations")][XmlArrayItem("Pad")]` | `null` | (v4.3, #277) PS Move per-pad calibration blobs as `mac=hex` entries, captured over USB at pair time and consumed by the Bluetooth lane for sensor scaling. |
 | `HeadsetTrackerAddresses` | `string` | `[XmlElement]` | `""` | (#188) Bluetooth addresses (12-hex, comma-joined) of headsets that ever qualified as Android Head Trackers. Lets the sweep re-request a dropped tracker's HID service after an app restart, when no live node exists to re-qualify from. |
@@ -1528,6 +1549,31 @@ public class VoicePhraseData
 | `Name` | `string` (attribute) | User-chosen display name. |
 | `Button` | `int` (attribute) | Stable raw-button index the phrase occupies. |
 
+### HandheldButtonData (v4.4)
+
+**File:** `PadForge.App/Services/SettingsService.cs` (top-level class co-located in the service file)
+
+A learned handheld hidden button (issue #353). Stored in `<HandheldButtons>` on `AppSettings`, one `<Button>` per entry. Every member is an `[XmlAttribute]`. A button carries whichever delivery paths the learner saw: a keyboard chord, a vendor HID report field, or a WMI event.
+
+| Property | Type | Description |
+|---|---|---|
+| `Name` | `string` | User-chosen display name. |
+| `Button` | `int` | Stable raw-button index. Default `-1`. |
+| `Keys` | `string` | Keyboard chord, comma-joined key codes. |
+| `Collection` | `string` | Vendor report collection as `VID:PID:PAGE:USAGE`. |
+| `ReportId` | `byte` | Vendor report id. |
+| `ByteIndex` | `int` | Byte within the report. |
+| `Mask` | `byte` | Bit mask (kind 0). |
+| `Value` | `byte` | Match value (kind 1). |
+| `Kind` | `int` | `0` = bit, `1` = value. |
+| `WmiClass` / `WmiProperty` / `WmiValue` | `string` | The WMI event class, property, and value for a vendor event key. |
+
+### IconPackageData (v4.4)
+
+**File:** `PadForge.App/Services/SettingsService.cs` (top-level class co-located in the service file)
+
+A registered menu icon pack (issue #390). Stored in `<IconPackages>` on `AppSettings`, one `<Package>` per entry, both members `[XmlAttribute]`: `Name` and `Path` (exe-relative when under the application directory). Menu cells reference an entry as `pficon://Package/entry` in `MenuItemDefinition.Icon`.
+
 ---
 
 ## MacroData and ActionData
@@ -1607,7 +1653,7 @@ public class MacroData
 | `TriggerMode` | `MacroTriggerMode` | `OnPress` (0), `OnRelease` (1), `WhileHeld` (2), `Always` (3), `CustomExpression` (4, v3.2), `HoldForMs` (5, On Long Press), `DoublePress` (6), `TriplePress` (7), `SinglePress` (8, deferred single), `Toggle` (9), `Turbo` (10), `ShortPress` (11, On Short Press, #253). `ShortPress` and `HoldForMs` share `TriggerHoldMs` to compose tap-vs-hold on one button. |
 | `TriggerHoldMs` | `int` | (#244) Hold threshold for `HoldForMs` / `ShortPress`, reset default 500. |
 | `TriggerDoublePressMs` | `int` | (#244) Multi-press window for `SinglePress` / `DoublePress` / `TriplePress`, reset default 442. |
-| `LayerMask` | `string` | (#253/#254) Per-macro shift-layer scope. Empty = any layer. Stamped at the add funnel; migrator pins legacy macros to Base semantics via Any. |
+| `LayerMask` | `string` | (#253/#254) Per-macro shift-layer scope. Empty = any layer. Stamped at the add funnel. The migrator pins legacy macros to Base semantics via Any. |
 | `ConsumeTriggerButtons` | `bool` | Remove trigger buttons from output. Default `true`. |
 | `RepeatMode` | `MacroRepeatMode` | `Once`, `FixedCount`, or `UntilRelease` |
 | `RepeatCount` | `int` | Number of repeats for `FixedCount`. Default `1`. |
@@ -1837,6 +1883,10 @@ public class ProfileData
     [XmlElement] public string Name { get; set; } = "New Profile";
     [XmlElement] public string ExecutableNames { get; set; } = string.Empty;
 
+    // v4.4 (#365): per-profile polling interval. 0 = follow the global knob.
+    // Authored like Name and ExecutableNames, skipped by the state-save copy.
+    [XmlElement] public int PollingRateOverrideMs { get; set; }
+
     // Device-to-slot assignments captured with the profile
     [XmlArray("Entries")][XmlArrayItem("Entry")]
     public ProfileEntry[] Entries { get; set; }
@@ -1913,6 +1963,13 @@ public class ProfileData
     // v4.2: per-profile copies of the two display-only overlays.
     [XmlElement] public bool EnableShiftLayerFlyout { get; set; } = true;
     [XmlElement] public bool EnableProfileOverlay { get; set; } = true;
+
+    // v4.4: nullable, authored legs of four global toggles. null = no opinion.
+    [XmlElement] public bool? EnableChromaLightbar { get; set; }
+    [XmlElement] public bool? EnableLightsyncLightbar { get; set; }
+    [XmlElement] public bool? EnableSensaHaptics { get; set; }
+    [XmlElement] public bool? EnableHeadTracking { get; set; }
+
     [XmlElement] public double TouchpadOverlayOpacity { get; set; } = 0.25;
     [XmlElement] public int TouchpadOverlayMonitor { get; set; }
     [XmlElement] public double TouchpadOverlayLeft { get; set; } = -1;
@@ -1931,6 +1988,7 @@ public class ProfileData
 | `Id` | `string` (attribute) | GUID without hyphens |
 | `Name` | `string` | Display name |
 | `ExecutableNames` | `string` | Pipe-separated exe paths for auto-switching |
+| `PollingRateOverrideMs` | `int` | (v4.4, #365) Per-profile polling interval in ms, 1..16. `0` = no opinion, follow the global `PollingRateMs`, which is what every pre-#365 profile deserializes to. Authored, not snapshotted: `SaveActiveProfileState`'s field copy skips it like `Name` and `ExecutableNames`, and the default profile never carries one. Resolved by `InputService.ResolvePollingMs(override, global)`, the single writer of the live rate, from `ResetRuntimeStateForProfileSwitch`. |
 | `Entries` | `ProfileEntry[]` | Device-to-slot assignments |
 | `PadSettings` | `PadSetting[]` | Deep-cloned, checksum-deduplicated PadSettings |
 | `SlotMappingSets` | `MappingSet[]` | (v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed. `ApplyProfile` falls back to the legacy migrator in that case. |
@@ -1953,6 +2011,10 @@ public class ProfileData
 | `EnableMenuOverlay` | `bool` | (v4.1, #9) Menu overlay enable state. Default `true`. |
 | `EnableShiftLayerFlyout` | `bool` | (v4.2) Shift-layer flyout enable state. Default `true`. |
 | `EnableProfileOverlay` | `bool` | (v4.2) Profile-switch overlay enable state. Default `true`. |
+| `EnableChromaLightbar` | `bool?` | (v4.4, #373) The profile's leg of the Razer Chroma lightbar mirror. `null` = no opinion, the global `AppSettings.EnableChromaLightbar` stands, and every profile saved before the field reads as `null`. A plain `bool` here read as `false` in every pre-existing profile and the first profile switch turned the mirror off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. |
+| `EnableLightsyncLightbar` | `bool?` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, same nullable authored contract. |
+| `EnableSensaHaptics` | `bool?` | (v4.4, #374) Razer Sensa HD haptics translation, same contract. |
+| `EnableHeadTracking` | `bool?` | (v4.4, #355) Head tracking, same contract. Only the enable rides profiles: the port, the FreeTrack toggle, and the two ranges stay global. |
 | `TouchpadOverlayOpacity` | `double` | (v3.2) 0.0–1.0. Default 0.25. |
 | `TouchpadOverlayMonitor` | `int` | (v3.2) Monitor index the overlay is pinned to |
 | `TouchpadOverlayLeft` / `Top` / `Width` / `Height` | `double` | (v3.2) Overlay window position and size. `-1` defaults to centered. |
@@ -2088,7 +2150,7 @@ Called during `Save()` after checksum recomputation, so profiles always reflect 
 
 **File:** `PadForge.App/Common/SettingsManager.cs`
 **Namespace:** `PadForge.Common.Input`
-**Static partial class** (canonical partial in `SettingsManager.cs`; additional declarations in `InputManager.Step1.UpdateDevices.cs` for `UserDevices`/`UserSettings` and collection class definitions)
+**Static partial class** (canonical partial in `SettingsManager.cs`, with additional declarations in `InputManager.Step1.UpdateDevices.cs` for `UserDevices`/`UserSettings` and collection class definitions)
 
 Central manager for device records and mapping settings. Shared between engine thread and UI thread.
 
@@ -2496,4 +2558,4 @@ On load, `RemoveAll(us => us.MapTo < 0)` purges stale entries with `MapTo == -1`
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

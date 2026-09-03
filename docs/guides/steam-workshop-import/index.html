@@ -1275,6 +1275,8 @@
       
         
       
+        
+      
     
     
     
@@ -1652,6 +1654,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2374,6 +2404,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2799,6 +2841,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2855,6 +2925,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2891,6 +3045,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2975,6 +3157,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3474,10 +3684,10 @@
 </tbody>
 </table>
 <p>All created pads read the same physical controller. Radial and touch menus land on every created pad, so they follow whichever pad the game reads.</p>
-<p>Imported mapping tables are <strong>authoritative</strong>: they spell out the whole layout, so assigning a controller to an imported pad adds no automap rows on top. Your pad drives exactly what the config authored, nothing doubled. One exception: a macro-only config imports with an empty mapping table, and an empty table still rides the standard automap wholesale, which is what its macro triggers listen to.</p>
+<p>Imported mapping tables are <strong>authoritative</strong>: they spell out the whole layout, so assigning a controller to an imported pad adds no automap rows on top. Your pad drives exactly what the config authored, nothing doubled. That holds for every pad the import creates, an empty table included.</p>
 <p>Where everything lands:</p>
 <ul>
-<li><strong>Mappings</strong> go into each pad's <a href="../../features/mappings/">Button and Axis Mappings</a> table. They use device-portable <strong>Gamepad</strong> sources ("Gamepad A", "Gamepad Left Stick X"), so they work on any recognized controller without rework. Secondary sources on imported rows show <strong>(Any device)</strong> until you assign a controller.</li>
+<li><strong>Mappings</strong> go into each pad's <a href="../../features/mappings/">Button and Axis Mappings</a> table. They use device-portable <strong>Gamepad</strong> sources ("Gamepad A", "Gamepad Left Stick X"), so they work on any recognized controller without rework. Imported rows name no device, so their device column reads <strong>(Any Device)</strong> and each row follows whichever controller the slot holds.</li>
 <li><strong>Action sets and layers</strong> become <a href="../shift-layers/">Shift Layers</a>: hold-style mode shifts become Hold layers, add-layer commands become Toggle layers, and set-switch buttons become layer jumps or cycles.</li>
 <li><strong>Radial and touch menus</strong> become on-screen <a href="../menus/">Menus</a> with the config's cell labels, fire mode, and screen placement.</li>
 <li><strong>Cursor warps, key autofire, turbo, toggles, long presses, double presses, haptic pulses, and lighting commands</strong> become <a href="../macros/">Macros</a>. A double-press activator rides the macro's <strong>On Double Press</strong> fire mode with the config's press window. A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.</li>
@@ -3592,7 +3802,7 @@
 <li><a href="../../features/devices/">Devices</a>: assign your controller to the imported pads, and cloak it from games.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

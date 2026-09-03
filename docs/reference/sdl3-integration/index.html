@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2093,6 +2123,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3427,6 +3469,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#upstream-drivers-the-fork-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upstream drivers the fork carries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3692,6 +3745,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -3748,6 +3829,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -3784,6 +3949,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -3868,6 +4061,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -4958,6 +5179,17 @@
     <span class="md-ellipsis">
       
         Additional v4 fork behaviors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upstream-drivers-the-fork-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upstream drivers the fork carries
       
     </span>
   </a>
@@ -6849,7 +7081,7 @@
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
 <h2 id="sdl3-fork">SDL3 Fork<a class="headerlink" href="#sdl3-fork" title="Permanent link">&para;</a></h2>
-<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binary lands at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code>.</p>
+<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binary lands at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code>. PadForge 4.4.0 ships the fork's Release build at commit <code>d98c5804a9</code> (2026-08-10), the same build 4.3.2 shipped. No fork commit landed between the two releases.</p>
 <h3 id="why-a-fork">Why a Fork<a class="headerlink" href="#why-a-fork" title="Permanent link">&para;</a></h3>
 <p>The branch began with six commits spanning four logical features. v4 consumes substantially more fork work on top. The original four are listed first, the v4 additions in the next subsection.</p>
 <table>
@@ -6876,7 +7108,7 @@
 </tr>
 <tr>
 <td>3</td>
-<td><strong>16 XInput controllers</strong>: bumps <code>XUSER_MAX_COUNT</code> from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, not just the first four.</td>
+<td><strong>16 XInput controllers</strong>: bumps <code>XUSER_MAX_COUNT</code> from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, rather than the first four alone.</td>
 <td><code>ba25d3671</code></td>
 <td><a href="https://github.com/hifihedgehog/OpenXinput"><code>hifihedgehog/OpenXinput</code></a> branch <code>OpenXinput1_4</code> commit <code>45c91b1</code> (CMake default bump)</td>
 </tr>
@@ -6935,9 +7167,46 @@
 <td>Wii MotionPlus coexistence, identify dead-window, and presence-churn fixes</td>
 <td><code>hidapi_wii</code> driver (#198, #208, #210)</td>
 </tr>
+<tr>
+<td><code>SDL#27</code> (fork commit <code>d98c5804a9</code>)</td>
+<td>Five second-generation MOZA wheelbase IDs in <code>initial_wheel_devices</code> (<code>SDL_joystick.c:613-617</code>: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed <code>SDL_JOYSTICK_TYPE_WHEEL</code> like the first-generation IDs at <code>:608-612</code></td>
+<td><code>SdlDeviceWrapper</code> wheel typing, the Wheel tab (#282)</td>
+</tr>
 </tbody>
 </table>
 <p>The three Wii Bluetooth fixes (<code>SDL#2</code> / <code>SDL#3</code> / <code>SDL#4</code>) are covered in the <a href="#wii-controllers-hidapi_wii">Wii Controllers</a> subsection below.</p>
+<h3 id="upstream-drivers-the-fork-carries">Upstream drivers the fork carries<a class="headerlink" href="#upstream-drivers-the-fork-carries" title="Permanent link">&para;</a></h3>
+<p>The fork rebases on <code>libsdl-org/SDL</code> mainline, so every upstream HIDAPI driver is compiled in and registered in <code>SDL_hidapijoystick.c</code>. Three matter for devices this page is asked about. None needs a PadForge hint: each driver reads its own <code>SDL_HINT_JOYSTICK_HIDAPI_*</code> hint with <code>SDL_HINT_JOYSTICK_HIDAPI</code> as the default, and PadForge sets neither, so they are on.</p>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>Registered at</th>
+<th>Devices</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SDL_HIDAPI_DriverFlydigi</code> (<code>SDL_hidapi_flydigi.c</code>)</td>
+<td><code>SDL_hidapijoystick.c:104</code>, enabled by <code>SDL_JOYSTICK_HIDAPI_FLYDIGI</code> at <code>SDL_hidapijoystick_c.h:49</code></td>
+<td><code>SDL_IsJoystickFlydigiController</code> (<code>SDL_joystick.c:3413</code>) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2401 (second generation, any interface), from <code>usb_ids.h:38-39</code> and <code>:94-96</code>. The model comes from the controller's device ID (<code>HIDAPI_DriverFlydigi_UpdateDeviceIdentity</code>): Apex 2, 3, 4, 5 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro</td>
+<td>The gamepad mapping (<code>SDL_gamepad.c:1298-1307</code>) puts the four paddles at <code>b11-b14</code>, the Vader C/Z and Apex 5 shoulder macros at <code>misc2:b15,misc3:b16</code>, and the Vader 5 Pro's three extra buttons at <code>misc4:b17,misc5:b18,misc6:b19</code>. <code>SdlDeviceWrapper</code> carries MISC2-MISC6 at <code>CustomInputState</code> button indices 17-21 (<code>SdlDeviceWrapper.cs:2393-2397</code>), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (<code>PhysicalSlotResolver.cs</code>). Apex 5, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream change carried: <code>eb340388fc</code> (2026-05-14, Vader 5 Pro fix)</td>
+</tr>
+<tr>
+<td><code>SDL_HIDAPI_DriverSteamDeck</code> (<code>SDL_hidapi_steamdeck.c</code>)</td>
+<td><code>SDL_hidapijoystick.c:71</code></td>
+<td>28DE:1205 (<code>controller_list.h:669</code>)</td>
+<td>Trackpads, gyro, haptics. PadForge also drives the Deck as a virtual-controller persona (<code>steam-deck-composite</code>), which is HIDMaestro work, not SDL's</td>
+</tr>
+<tr>
+<td><code>SDL_HIDAPI_DriverSteamTriton</code> (<code>SDL_hidapi_steam_triton.c</code>)</td>
+<td><code>SDL_hidapijoystick.c:74</code></td>
+<td>28DE:1302 wired, 1303 BLE, 1304 Proteus dongle, 1305 Nereid dongle (<code>controller_list.h:670-673</code>)</td>
+<td>The 2026 Steam Controller. Upstream added the driver in May 2026 (<code>f7a8801227</code>, <code>f6ffa69890</code>, <code>634dff3725</code>). PadForge's PCM haptic stream (reports 0x86 / 0x88) is written by PadForge itself, outside SDL (<code>TritonPcmSupport.cs</code>)</td>
+</tr>
+</tbody>
+</table>
 <p>If you change HM's enumerator name, hardware ID, or <code>ContainerID</code>, the filter substring on <code>feat/hidmaestro-filter</code> (commit 2 above) plus the same substring in the OpenXInput fork, <code>XboxImpulseHidWriter</code>'s HID-interface enumeration, and <code>HidHideController.IsHidMaestroDevice</code> all have to be kept in sync. See <code>hidmaestro-fork-resync-recipe.md</code> in project memory.</p>
 <h3 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h3>
 <p>USB composite device with two interfaces:</p>
@@ -7020,10 +7289,11 @@
 </tr>
 </tbody>
 </table>
+<p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus through the extension register (<code>0xA600FE</code> before activation, <code>0xA400FE</code> once a mode is set, <code>SDL_hidapi_wii.c:574</code>, <code>:638</code>, <code>:1991</code>) and converts its gyro words with fixed constants: 8192 counts per degree per second, times 440 in slow mode or 2000 in fast mode, per axis (<code>:1622-1650</code>). It reads no Motion Plus calibration block from the remote. The stick calibration and the Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) are the only calibration reads. The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them, and no Wii commit landed in the fork after the July Motion Plus fixes (<code>d3916fceed</code>, <code>dc24c1531e</code>, <code>db4acef28b</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above).</p>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:722</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:51</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1165</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:865</code>).</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:732</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:51</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1175</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:880</code>).</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git
@@ -7043,7 +7313,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

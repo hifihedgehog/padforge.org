@@ -1,6 +1,8 @@
 # 3D Model System
 
-Renders interactive Xbox, PlayStation, and Nintendo controller models from Wavefront OBJ meshes using [HelixToolkit.WPF](https://github.com/helix-toolkit/helix-toolkit). The loader, view, and animation code are adapted from [Handheld Companion](https://github.com/Valkirie/HandheldCompanion) (CC BY-NC-SA 4.0), as is the Xbox 360 mesh. Every other family runs on purchased hado CGTrader meshes split per-part, with per-colorway texture atlases.
+Renders interactive Xbox, PlayStation, Nintendo, and Valve controller models from Wavefront OBJ meshes using [HelixToolkit.WPF](https://github.com/helix-toolkit/helix-toolkit). The loader, view, and animation code are adapted from [Handheld Companion](https://github.com/Valkirie/HandheldCompanion) (CC BY-NC-SA 4.0), as are the Xbox 360 and Steam Deck meshes. Both Steam Controller bodies are meshed from Valve's own published CAD. The Xbox Series, DS4, DualSense, Edge, and Switch 2 Pro families run on purchased hado CGTrader meshes split per-part, with per-colorway texture atlases.
+
+Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not associated with or endorsed by Valve.
 
 **Namespace:** `PadForge.Models3D` (model classes), `PadForge.Views` (view)
 
@@ -19,7 +21,10 @@ ControllerModelBase (abstract)
     |     |
     |     +-- ControllerModelDualSenseEdge  (Edge asset folder, own family)
     +-- ControllerModelSwitch2Pro     (Switch 2 Pro mesh; also serves the
-                                       original Switch Pro profile)
+    |                                  original Switch Pro profile)
+    +-- ControllerModelSteamDeck         (Handheld Companion per-part OBJs)
+    +-- ControllerModelSteamController   (2015 Steam Controller, Valve STEP)
+    +-- ControllerModelSteamController2  (2026 Steam Controller, Valve STEP)
 
 ControllerModelView (UserControl)
     |
@@ -28,7 +33,9 @@ ControllerModelView (UserControl)
     +-- CompositionTarget.Rendering  (per-frame visual updates)
 ```
 
-Model classes own geometry and materials. The view class owns the viewport, input handling, and animation. `ControllerModelView.EnsureModel()` instantiates the correct model class and assigns it to `ModelVisual3D.Content`.
+Model classes own geometry and materials. The view class owns the viewport, input handling, and animation.
+
+`ControllerModelBase.Create(family, appearance, extraControls)` is the one construction path. `ControllerModelView.EnsureModel()` calls it and assigns the result to `ModelVisual3D.Content`, and the interaction tests call it too, so the two cannot drift. It ends in `EnsureHighlightMaterials()`, because a model reaching the viewport with no glow materials is the defect that path exists to prevent.
 
 ---
 
@@ -50,6 +57,8 @@ public abstract class ControllerModelBase : IDisposable
 | `ClickMap` | `Dictionary<Model3DGroup, string>` | Model3DGroup to PadSetting name for hit-test click-to-record. Reverse of ButtonMap. |
 | `DefaultMaterials` | `Dictionary<Model3DGroup, Material>` | Original material per group. Restored after highlight/flash. |
 | `HighlightMaterials` | `Dictionary<Model3DGroup, Material>` | Accent-colored material per group. Applied on press or flash. |
+| `QuadrantMap` | `Dictionary<Model3DGroup, string[]>` | Surfaces whose hover resolves by quadrant instead of as one target. Four names in up, down, left, right order, in model space (X across the face, +Z toward its top edge). See [Quadrant surfaces](#quadrant-surfaces). |
+| `StickRiders` | `Dictionary<Model3DGroup, List<Model3DGroup>>` | Parts that lean with a stick without lighting with it, keyed on that stick's ring. Tilting and glowing are different sets: the Steam Deck's stem has to lean with the cap and must not light, because the glow belongs on the base. |
 
 ### Scene Graph
 
@@ -58,7 +67,10 @@ public abstract class ControllerModelBase : IDisposable
 | `model3DGroup` | `Model3DGroup` | Root scene group containing all child meshes. Assigned to `ModelVisual3D.Content`. |
 | `ModelName` | `string` | Embedded-resource folder. `"XBOX360"` or `"Switch2Pro"` for the single-appearance families, `"{family}.{appearance}"` for the rest (`"DS4.JetBlack"`, `"DualSense.White"`, `"DualSenseEdge.Edge"`, `"XboxSeries.Carbon"`). |
 | `ModelFamily` | `string` | Everything before the first `.` in `ModelName`, or `ModelName` when there is no dot. The identity `EnsureModel()` compares against, so a colorway swap does not read as a family swap. |
-| `Touchpad` | `Model3DGroup` | Touch surface, or null on models without one. DS4 points it at `Screen.obj`, DualSense at `Touchpad.obj`. |
+| `Touchpad` | `Model3DGroup` | First touch surface, or null on models without one. DS4 points it at `Screen.obj`, DualSense at `Touchpad.obj`, every Valve model at `LeftPadTouch.obj`. |
+| `TouchpadRight` | `Model3DGroup` | The second touch surface, on a pad that has two. Null on a one-pad model, where both fingers ride `Touchpad`. Every Valve model sets it, and the split matches the frame packers: finger 0 is the left pad, finger 1 the right. |
+| `TouchParts0`, `TouchParts1` | `virtual Model3DGroup[]` | The parts whose front faces make up each pad. One mesh on nearly every model. The 2015 Steam Controller overrides both, because each of its pads is four direction quarters around a center disc and the disc alone is 40% of the pad. The 2026 pad overrides them to point at `{side}PadFace.obj` rather than the whole assembly. |
+| `TouchpadSurface0`, `TouchpadSurface1` | `TouchSurface` | The fitted face of each pad: center, normal, in-plane axes, extents, and a radius for a round pad. Lazily measured from `TouchParts`. See [Touch surfaces](#touch-surfaces). |
 | `RiderDecals` | `HashSet<GeometryModel3D>` | Decal geometries appended into a moving host group. The view masks its accent overlay by the rider's own texture alpha for these. |
 | `CoveringRiderDecals` | `HashSet<GeometryModel3D>` | Riders whose art covers the whole host face (the Xbox guide emblem). Highlight tints the rider's own texels instead of hiding it. |
 
@@ -71,7 +83,15 @@ public abstract class ControllerModelBase : IDisposable
 | `TouchpadZTopInsetFrac` | `0.12` | Top inset. |
 | `TouchpadZBottomInsetFrac` | `0.12` | Bottom inset. |
 
-The defaults match the DS4 `Screen.obj`. DualSense overrides all three and `ModelScale`. Switch 2 Pro overrides `ModelScale` only.
+The defaults match the DS4 `Screen.obj`. DualSense overrides all three and `ModelScale`. Switch 2 Pro overrides `ModelScale` only. Every Valve model sets all three insets to zero, because its pad meshes are the measured touch face with no bezel left to crop, and each overrides `ModelScale`.
+
+`ModelScale` brings a model's authoring size to the framing the fixed camera expects, against the Xbox 360 mesh at 151.45 mm across:
+
+| Model | Body width | `ModelScale` |
+|-------|-----------|--------------|
+| Steam Controller (2015) | 161.17 mm | `151.45 / 161.17` |
+| Steam Controller (2026) | 158.70 mm | `151.45 / 158.70` |
+| Steam Deck | 298.30 mm | `151.45 / 298.30` |
 
 ### Common Geometry Groups
 
@@ -86,6 +106,8 @@ The defaults match the DS4 `Screen.obj`. DualSense overrides all three and `Mode
 | `RightShoulderTrigger` | `Shoulder-Right-Trigger.obj` | Right shoulder trigger mesh |
 | `LeftMotor` | `MotorLeft.obj` | Left rumble motor mesh |
 | `RightMotor` | `MotorRight.obj` | Right rumble motor mesh |
+
+`MainBody.obj` is the only mandatory file. Everything else here loads through `TryLoadModel` and stays null when absent, for the same reason the button table does: a pad that does not have the control does not ship the mesh. The 2015 Steam Controller has one stick and no separate ring solid, its bezel being a hole in the case rather than a part.
 
 ### Rotation Parameters
 
@@ -137,11 +159,13 @@ Steps are order-dependent:
 2. **Load common geometry** via `LoadModel()`: MainBody, stick rings, motors, triggers.
 3. **Register trigger ClickMap entries**: `LeftShoulderTrigger` -> `"LeftTrigger"`, `RightShoulderTrigger` -> `"RightTrigger"`. Triggers use ClickMap (not ButtonMap) because they are continuous axes, not toggle buttons.
 4. **Iterate ButtonFileMap**: Calls `TryLoadModel()` per entry, then `RegisterButton()` to populate both `ButtonMap` and `ClickMap`. Special cases: `LeftStickClick.obj` and `RightStickClick.obj` also set `LeftThumb`/`RightThumb` references for tilt animation.
-5. **Join the rings to the stick-button lists**. `LeftThumbRing` is appended to `ButtonMap["LeftThumbButton"]` and `RightThumbRing` to `ButtonMap["RightThumbButton"]`, directly rather than through `RegisterButton()`. A stick press glows the cap and the ring as one piece, and the ring stays out of `ClickMap` so it remains a quadrant target.
+5. **Register each stick's cap as a quadrant surface**. `RegisterQuadrants(LeftThumbRing ?? LeftThumb, ...)` puts the cap in `QuadrantMap` under the four axis directions, and the same for the right side. A pad with no separate cap solid falls back to its click mesh, so every stick has a direction target whatever its mesh split looks like.
 6. **Add all parts to `model3DGroup.Children`**. Assigned to `ModelVisual3D.Content`.
 7. **Subclass constructor continues**. Loads extra meshes, applies texture atlases or flat colors, calls `DrawAccentHighlights()`, then attaches rider decals and adds the static decal and transparent overlays last.
 
-**Note:** Stick rings are NOT in ClickMap. The view handles ring clicks via `IsStickRingHit()` with quadrant-based axis detection, since ring clicks must determine axis direction from click position.
+**The stick button does not own the cap.** Step 5 used to append the ring into `ButtonMap["LeftThumbButton"]` instead, so pressing or hovering the click lit the whole stick and the two controls a stick carries read as one. The Steam Deck showed it plainly, its cap and its collar being separate solids. The button now glows its own click mesh. Physical deflection still grades cap and body together in `UpdateJoystick`, which is a different signal.
+
+A cap that is in `QuadrantMap` alone reads as directions edge to edge. A cap that is also in `ClickMap` splits by radius: the outer half is a direction and the middle stays the click (`IsOuterCapHit`).
 
 ### RegisterButton
 
@@ -150,6 +174,49 @@ protected void RegisterButton(string padSettingName, Model3DGroup group)
 ```
 
 Adds `group` to `ButtonMap[padSettingName]` (creates list if needed) and sets `ClickMap[group] = padSettingName`. This bidirectional mapping enables highlighting (name -> groups) and click detection (group -> name).
+
+### Quadrant surfaces
+
+```csharp
+protected void RegisterQuadrants(Model3DGroup group, string up, string down, string left, string right)
+protected void RegisterDirection(Model3DGroup group, string target)
+```
+
+`RegisterQuadrants` writes the four names into `QuadrantMap` in up, down, left, right order. Four consumers read it: the hover wedge, the recording ring overlay, the recording arrow, and the flash resolver. All four used to parse target names for "AxisX" and a "Left" prefix, which could never serve a pad whose quadrants are D-pad directions.
+
+`RegisterDirection` is for a group whose whole surface is one direction, the way a D-pad key is. It goes into `ClickMap` only. Hover and click-to-record resolve through that map, while `ButtonMap` drives the per-frame press glow, and an axis direction has no pressed state to drive it with.
+
+Two rules that a new mesh set has to satisfy:
+
+- Every quadrant target must survive `NintendoPreviewMap.ToRaw(target, profileId)`, or clicking it records nothing. A hat-encoded D-pad resolves to `RawPov0Up` and its siblings.
+- A group that leaves `ButtonMap` also leaves `PaintTarget`'s reach. `EveryQuadrantSurfaceIsPaintedAndCanGlow` in `PadForge.Tests/ControllerModel3DHoverTests.cs` catches the unpainted result, which renders in the OBJ loader's default yellow.
+
+**The wedge builder is for tori only.** `BuildClippedQuadrantMesh` offsets each clipped point away from a skeleton circle at the part's own center, which suits a torus exactly. Every stick cap in this tree is one: hollow to 0.49 of its radius on the Xbox 360, 0.66 on the 2026 Steam Controller, 0.74 on the Steam Deck. A direction surface that is not a torus gets its own mesh instead. The 2015 Steam Controller's pads are 42 mm bowls 7.6 mm deep, where the torus offset drove half of each face sideways across the bowl rather than off it, so `tools/steam_controller_2015_mesh.py` quarters each pad face on its two diagonals and emits every quarter as its own mesh.
+
+When one model's wedge looks wrong and the rest look right, the defect is in that model's asset. The shared builder was changed four times chasing the 2015 pad's solid dome cap, each change degraded pads that were already correct, and it was restored verbatim. The mesh tool splits the dome at 0.55 of its radius into a ring and a middle instead.
+
+### Touch surfaces
+
+```csharp
+public readonly struct TouchSurface   // Center, Normal, AxisU, AxisV, ExtentU, ExtentV, Radius
+public Point3D At(double u, double v, double lift)
+protected static TouchSurface MeasureTouchSurface(Model3DGroup[] parts)
+```
+
+A pad's touchable face: where it sits, which way it faces, and how far it runs across and up its own plane. An axis-aligned bounding box cannot describe one. Every Valve pad is canted, the 2026's by 15 degrees off the controller's front and the 2015's by 19, so a point placed on the box lands beside the pad and the box's corners reach past the pad's outline entirely.
+
+`MeasureTouchSurface` takes the outward-facing triangles for a rough normal, keeps the ones lying within 5 mm of the frontmost point along it, and re-fits. That 5 mm separates a face from its mounting: the 2026's pad mesh runs 38 mm deep and its front face is a 3 mm slab carrying 1775 of the 1800 outward-facing triangles, with the boss more than 20 mm behind. All three Valve faces come out flat to half a millimeter. The axes are built from the normal rather than fitted, so they cannot come out arbitrary: U is the normal crossed with the model's up, which points to the controller's right, and V is U crossed back.
+
+`Radius` is set for a round pad and clamps `At()` to the disc, so a finger dot cannot travel into a corner the pad does not have.
+
+### Painting
+
+```csharp
+protected void Paint(Model3DGroup group, Material material)
+protected void PaintTarget(string padSettingName, Material material)
+```
+
+`Paint` applies a material AND registers it in `DefaultMaterials`. `PaintTarget` does the same for every group under a `ButtonMap` name. Applying without registering leaves the part HelixToolkit-default yellow again the moment a press or hover restores it. `ExtendedPreviewRoutingTests.EveryValveModelConstructs` fails the build if any drawn part lacks a resting material.
 
 ### DrawAccentHighlights
 
@@ -539,6 +606,250 @@ ZL and ZR are short-travel digital paddles that snap to full pull, which is why 
 
 ---
 
+## Valve CAD to OBJ
+
+The two Steam Controller bodies come from Valve's own published CAD, meshed at the B-rep surface. Nothing is decimated from a vendor STL. The rules below were paid for once and hold for any new CAD source.
+
+| Body | Source | Converter | Triangles |
+|------|--------|-----------|-----------|
+| Steam Controller (2015) | Valve's March 2016 SteamControllerWorkshop03 archive, its STEP file. A 50-solid assembly in millimeters with every part named. | `tools/steam_controller_2015_mesh.py` | 193k |
+| Steam Controller (2026) | Valve's `SC_solid_stp_20260429.stp` from the SteamHardware/SteamController repository. One merged solid, 848 unnamed faces. | `tools/steam_controller_2026_mesh.py` | 169k |
+| Steam Deck | Handheld Companion's per-part OBJ set, used as shipped. It needed no splitting, because HC authored it against this same per-part contract. Cross-checked for proportion against Valve's official Steam Deck CAD. | none | n/a |
+
+Both converters need `OCP` (`pip install cadquery`).
+
+**Mesh the B-rep once, at preview density, with a size floor, with surface normals, and decimate nothing.** Each clause was learned separately:
+
+- **Surface normals, never triangle normals.** Geometry-derived normals need a crease threshold, and on a curved grip some facet pairs cross it and some do not, which reads as random edges on the handles. OCCT's `BRepLib_ToolTriangulatedShape.ComputeNormals` gives the exact surface normal per node, flipped on `TopAbs_REVERSED` faces. Nodes are per B-rep face, so they are never welded.
+- **A size floor makes a fine angular bound affordable.** At 0.3 mm / 0.15 rad with no floor the 2015 case is 1.6M triangles, nearly all of it on fillets and knurl ridges. `IMeshTools_Parameters.MinSize = 1.0` brings the same settings to 108k. Glyph solids use 0.4, their strokes being about a millimeter wide.
+- **Never decimate parts separately.** Every part boundary becomes a seam where the two sides collapsed differently, which is what cracked the 2026 D-pad. Adjacent parts must share boundary vertices to the micron.
+- **Never cluster vertices.** Clustering moves the surface, so no normal can rescue it.
+- **Write `vn` lines.** HelixToolkit averages across every face at a vertex without them, and both Steam sets shipped that way once and read as clay.
+
+The 2015 archive also ships per-part STLs, and they are unstitched: about 30,000 non-manifold edges, on which quadric decimation stalls at roughly 314k on the case top alone. Voxel reconstruction cleared the interior and rounded every molded edge by a voxel. The STEP has neither problem.
+
+**Part names are recovered differently per source.** Valve named every solid in the 2015 STEP, so its mapping is read off the source. The 2026 release is one anonymous solid: the tool splits it along sharp dihedrals into patches, then names each patch by projecting it onto the front elevation of Valve's reference drawing, which is the same drawing the 2D art is built from. The tool refuses to run if the STEP drifts from the drawing registration, measured at 0.05 mm. The bumpers, triggers, and four rear buttons have no silhouette in a front view and are named by position.
+
+**Axes differ between Valve's two releases.** The 2015 STEP has X across, Y up, Z depth with the front at +Z, mapped `(x, -z, y)`. The 2026 has X across, Y depth with the front at +Y, Z height downward, mapped `(x, -y, -z)`. Both are rotations, winding kept. Verify against the Xbox 360 set, whose A button runs Y -19 to -2. A screenshot is not evidence of handedness: the viewport's yaw persists across model swaps and once produced a wrongly flipped build. Only Z is auto-recentered by `ControllerModelView`, so X and Y have to be right in the mesh.
+
+### Split a shared solid on the plane
+
+`cut_at_x` and `cut_at_radius` in the 2015 tool cut straddling triangles at the plane and interpolate position and normal at the crossings, so triangles sharing an edge cross at the same point and the seam is a continuous polyline. Assigning whole triangles by centroid instead left the cover-wing seam jagged by a triangle's width.
+
+Culling has the same rule: cull on any corner of a triangle, not the centroid. The centroid test left 228 straddling triangles reaching 2.3 mm up into the 2015 cap.
+
+### 2015 parts are not what their CAD names say
+
+Valve's names describe the molding, not the control:
+
+| CAD solid | What it actually is |
+|-----------|--------------------|
+| `BatteryDoorMkVI` | One bat-shaped rear cover: a central battery panel carrying the Valve logo, with a wing flaring out over each handle. **Those wings are the grip paddles.** The tool splits them off at the molded crease, which sits at abs(x) = 30 mm, where the cover stops being flat and starts wrapping the handle. |
+| `BatteryLeverLeft` / `Right` | The levers behind the paddles, 38 x 12 x 31 mm, mostly inside the handle. Same control, so each rides its wing's group. They are not the paddle face on their own. |
+| `ThumbTopGrip.01` | The 17.7 mm knurled cap: the direction surface, the ring every other model has. |
+| `ThumbTopBase.01` | The 24.2 mm base under it: the click. Folding both into `LeftStickClick.obj` left the pad with no cap group at all. |
+| `TrackPadCoverDirectional.01` | The **left** pad, with a D-pad cross molded into its face. |
+| `TrackPadCoverSmooth.01` | The **right** pad. |
+| `SteamButton_Label` | The in-mold label film, 12.2 mm on a 12.3 mm cap: the whole button face, not a logo. There is no logo geometry to color, so it is painted as a dark button face. |
+| `BumperGPrime` | One solid spanning both shoulders, split on the centerline into L1 and R1. |
+
+`BRepBndLib.Add_s` on an unmeshed B-rep boxes the surface poles, so `CaseTopGPrime` reads 2396 x 5302 x 1256 mm and `BatteryDoorMkVI` reads 479 mm deep. Mesh the solid first and measure the triangles. Meshed, the door is 96 x 61 x 30 mm.
+
+Two earlier readings of the grip paddle shipped and were both wrong, and a render settled each in one pass. Render before concluding.
+
+### Stick anatomy
+
+`Joystick-*-Ring.obj` is the stick **head**: the frontmost slab, a dish whose floor reaches the axis and whose rim widens going back. `*StickClick.obj` is the **stem and base cone**, entirely behind it. The DualSense, the Xbox Series, and the Switch 2 Pro agree within a few percent. In units of the head's outer radius, 8.78 mm on the DualSense, measured from the cap face backward:
+
+| Depth | Radius | What |
+|-------|--------|------|
+| 0.00 | 0 to 0.88 | the dish floor, reaching the axis |
+| 0.07 | 0.91 | the rim starts |
+| 0.40 | 1.00 | the rim at its widest, at the head's back |
+| 0.40 to 0.80 | 0.52 | the stem |
+| 0.80 to 1.61 | 0.54 out to 1.36 | the base cone |
+
+So the widest part of the ring sits behind the face and the base is 1.36 times the head. Total depth is 1.61 head radii, and the base is normally buried in the shell, which is why only the head and a sliver of collar show.
+
+What follows from it: the ring tilts with the stick, the ring carries the four directions by quadrant, and the click mesh carries the button. A ring that is not in `QuadrantMap` is inert, and hovering the head resolves nothing.
+
+How far the click reaches into the cap is the mesh's answer, not a preference, and the family splits both ways:
+
+| Pad | Click reach into the cap | Cap top |
+|-----|--------------------------|---------|
+| Xbox 360 | 2.37 mm of a 3.35 mm cap | lights |
+| Steam Deck | its stem reaches within 0.22 mm of the face | lights |
+| DualSense | 0.00 mm, stops at the ring's back | stays dark |
+| Xbox Series | 0.13 mm | stays dark |
+| Switch 2 Pro | 0.00 mm | stays dark |
+
+Measure before deciding. The Deck shipped both ways wrong first: stem alone, which glowed the face and no collar, then base alone, which lit everything but the cap top and read as half a stick.
+
+### Mesh ownership
+
+A highlight that covers part of a control, or spills onto another one, is a mesh-ownership defect. Find it with a connected-component scan, not by reading code. Vendor OBJ sets put a part's pieces in the wrong file, and the 2026 Steam Controller shipped with three of these, each found only after the last symptom pointed at it:
+
+1. `RightPadTouch.obj` carried 737 vertices sitting on R4 and R5, and `LeftPadTouch.obj` 169 on L4 and L5, more than 20 mm behind the pad's front face. Hovering a trackpad lit part of the back, and the paddles never lit whole.
+2. Both pad meshes were assemblies: the touch face, four corner blocks, and a rim. Fitting a plane across the whole thing put the finger dot past the pad's edge. The face came out as `{side}PadFace.obj`.
+3. `MainBody.obj` carried the engraved glyphs for R5 and L5, 1707 triangles in dozens of components under 3 mm. They stayed shell-colored while the paddle lit.
+
+**The scan.** For every OBJ in a model folder, union-find the vertices sharing a face to get connected components, then test each component's bounds against every control's. A component wholly inside a control's bounds belongs to that control, while the shell around a control straddles those bounds. A component on the wrong side of the body's mid-depth belongs to the other face of the controller. Take mid-depth from `MainBody`, never from y = 0: the Steam Deck's body runs -4.5 to 37.6 mm, so its front face sits near zero.
+
+`tools/steam_controller_2026_pads.py` is that scan wired to move what it finds. `MeshOwnershipTests` pins the side-of-the-body rule, which is general. It does not pin the inside-the-bounds rule, because a paddle's well wall wraps its cap and lands inside its bounding box within 0.7 mm of the cap's outer face, and bounding-box containment fails outright on face buttons, whose boxes legitimately hold the wells they sit in.
+
+### Judging a mesh change
+
+Render through the app's real viewport, not a model of it. Three consecutive Steam Deck stick-highlight fixes were reasoned out from mesh bounds in the XZ plane and all three were backwards, because the preview's camera looks at the pad from below its face, where the stick's base skirt is plainly visible under the cap. A scratchpad rasterizer that claims to match the rig still gets the framing wrong: the app applies `ModelScale` (0.508 on the Deck, so its stick is half a DualSense stick on screen) and a Z recenter, and it frames the whole controller.
+
+A render rig has to reproduce exactly the lights in [Lighting](#lighting) and the camera in [Camera Setup](#camera-setup), with the transform order recenter then scale. Render the model under test beside a model already accepted, at the same size.
+
+Colors are judged through that rig or not at all. A front-facing surface shows at about 1.3 times its hex under it. The three approved dark textures (DS4 Jet Black `#202020`, Switch 2 Pro `#202224`, DualSense Midnight `#202129`) put black plastic at `#202224`, which is where the Valve palette starts. Two earlier Valve palettes were wrong: one sampled the 2D art and came out blue-gray, and one used the Xbox 360 class's `#707477`, which is that model's mid-gray trim on a white controller rather than black.
+
+---
+
+## ControllerModelSteamDeck
+
+**File:** `PadForge.App/Models3D/ControllerModelSteamDeck.cs`
+
+```csharp
+public class ControllerModelSteamDeck : ControllerModelBase
+public ControllerModelSteamDeck() : base("SteamDeck")
+```
+
+Serves the `steam-deck` and `steam-deck-composite` profiles. One appearance.
+
+### Controls the standard table has no slot for
+
+| Field | Loaded from | Registered as |
+|-------|-------------|---------------|
+| `QuickAccess` | `OEM1.obj` | `ButtonQuickAccess`. The 16.25 mm key, not `ThreeDots.obj`, which is the 9.32 mm glyph printed on it and rides it. Registering the glyph lit three dots and nothing under them. |
+| `LeftPad` | `LeftPadTouch.obj` | `LeftTouchpadClick`, and `Touchpad` |
+| `RightPad` | `RightPadTouch.obj` | `RightTouchpadClick`, and `TouchpadRight` |
+| `R4`, `L4`, `R5`, `L5` | `R4.obj`, `L4.obj`, `R5.obj`, `L5.obj` | `Paddle1`, `Paddle2`, `Paddle3`, `Paddle4` |
+
+Paddle handedness follows the 2D layout and the wire table, where the odd paddles are the right pair.
+
+### Cosmetic geometry
+
+`MainBodyLeftOver.obj`, `Screen.obj`, `PowerButton.obj`, `VolumeUp.obj`, and `VolumeDown.obj` are drawn and painted through `AddCosmetic`, and deliberately never registered, so they cannot become click-to-record targets.
+
+`LeftStickWell.obj` and `RightStickWell.obj` are generated by `tools/steam_deck_stick_well.py`. The shell shipped with both wells capped by a flat disc of plastic at the plane the base bulb's back sits on, so the stick stood on a solid surface with no opening under it and appeared to slide across it when it leaned. The cups are near black (`#08090A`) so any part of the well the bulb uncovers reads as a cavity: 1.2 mm shows at rest, and a 2.7 mm crescent at full deflection.
+
+### The stick is three solids
+
+| Mesh | Size | Role |
+|------|------|------|
+| `Joystick-Left-Ring.obj` | 15.99 mm wide, outermost | the cap ring, the direction surface |
+| `LeftStickTouch.obj` | 12.24 mm wide | the stem |
+| `LeftStickClick.obj` | 15.22 x 2.62 mm | the base |
+
+The stem fills the ring's middle and reaches to within 0.22 mm of the cap's face, so it is the top of the cap. It is registered under `LeftThumbButton` / `RightThumbButton` and lights with the base. Only the ring stays dark. See [Stick anatomy](#stick-anatomy).
+
+### Rotation points and colors
+
+| Parameter | Value |
+|-----------|-------|
+| `JoystickRotationPointCenterLeftMillimeter` | `(-102.83, 6.15, 34.50)` |
+| `JoystickRotationPointCenterRightMillimeter` | `(102.83, 6.15, 34.50)` |
+| `JoystickMaxAngleDeg` | `14.0` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-131.63, 16.66, 53.01)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(131.63, 16.66, 53.01)` |
+| `TriggerMaxAngleDeg` | `14.0` |
+| `ModelScale` | `151.45 / 298.30` |
+
+The stick pivots are Handheld Companion's own, from the model written against this mesh set, and sit 18.3 mm behind the cap face, which is where the family sits (17.1 on the DualSense, 19.4 on the Switch 2 Pro, 19.8 on the Xbox Series, 22.1 on the Xbox 360). A pivot read off the rear edge of the click mesh gave 8.6 mm, and the cap swung like a hinged lid.
+
+The trigger hinges at its front-rear edge, the corner nearest the shell, the same place the Xbox 360 model puts its own. Taking the rear edge swung it up and out through the top of the shoulder.
+
+Flat colors, no atlas: `#202224` shell, `#2E2F31` triggers and bumpers and D-pad and face keys, `#3A3B3D` stick buttons, `#26272A` rings and motors and pad clicks and paddles, `#0C0D10` screen. Glyph riders (`B1-Symbol.obj` through `B4-Symbol.obj`, `BackIcon.obj`, `StartIcon.obj`, `SteamText.obj`, `ThreeDots.obj`) are `#D4D4D4` and are attached **after** the paint pass, because a rider joins its host's `ButtonMap` list and `PaintTarget` would otherwise repaint every letter in its own cap's color.
+
+---
+
+## ControllerModelSteamController
+
+**File:** `PadForge.App/Models3D/ControllerModelSteamController.cs`
+
+```csharp
+public class ControllerModelSteamController : ControllerModelBase
+public ControllerModelSteamController() : base("SteamController")
+```
+
+Serves the `steam-controller` and `steam-controller-composite` profiles. Two departures from the standard part table, both physical.
+
+**One analog stick.** There is no right stick and no `RightStickClick.obj`.
+
+**The D-pad is the left trackpad.** SDL drives that pad as the D-pad and the right one as the right thumbstick, and Valve molds a D-pad cross into the left cover. The mesh tool quarters each pad face and the quarters arrive as their own meshes. The left pad's four are `DPadUp/Down/Left/Right.obj` and register through the standard table like any D-pad key. The right pad's four (`RightPadUp.obj` and siblings) carry the right stick's axis directions through `RegisterDirection`, not `RegisterButton`, because an axis direction has no pressed state for the press loop to drive.
+
+| Field | Loaded from | Registered as |
+|-------|-------------|---------------|
+| `LeftPad` | `LeftPadTouch.obj` | `LeftTouchpadClick`, and `Touchpad` |
+| `RightPad` | `RightPadTouch.obj` | `RightTouchpadClick`, and `TouchpadRight` |
+| `LeftGripButton` | `LeftGrip.obj` | `LeftGrip` |
+| `RightGripButton` | `RightGrip.obj` | `RightGrip` |
+
+`TouchParts0` is the center disc plus the four D-pad quarters, and `TouchParts1` the right disc plus its four quarters. The disc alone measures 16.9 mm against a pad about 42 mm across, so a finger dot fitted to it would crawl around the middle 40% and never reach an edge.
+
+### The right stick ghost
+
+The right pad is the right thumbstick, and nothing on the controller looks like one. `BuildRightStickGhost` revolves the measured stick profile from [Stick anatomy](#stick-anatomy) into a translucent stick and stands it on the pad's own face, taking center, normal, and radius from `TouchpadSurface1` so it stands square to a pad canted 19 degrees and scales with it. The pivot sits 19 mm behind the cap.
+
+It is two pieces, split at the stem, because a stick is two controls. The head becomes `RightThumbRing` and takes the four axis directions through `RegisterQuadrants`, the stem and base become `RightThumb` and take the button. The base is registered twice, as `RightTouchpadClick` and then as `RightThumbButton`: the press loop reads roles and needs the base under `RightThumbButton`, while the Map All flash translates the grid's `RawBtn13` back through the wire table, which names it `RightTouchpadClick`. `RightThumbButton` goes last so `ClickMap` keeps it.
+
+It is built **after** `PaintEverything()`, the same rule the glyph riders follow: it registers as the pad's click, so `PaintTarget` would reach it and repaint the ghost in the pad's solid color. Its material is a dim `#8FA0B4` at alpha `0x55`, because a brighter ghost reads as a lit control and this one is never lit at rest.
+
+### Glyph riders
+
+Valve's CAD carries each button as a two-shot mold, so the printed glyph is its own solid. The riders take the printed colors, which are the Xbox 360 class's already-calibrated hexes: `B1-Symbol.obj` green `#7cb63b`, `B2` red `#ff5f4b`, `B3` blue `#6ac4f6`, `B4` yellow `#faa51f`, `StartIcon.obj` and `BackIcon.obj` white `#D4D4D4`, and `SpecialIcon.obj` a dark `#2E2F31` button face. The face caps themselves stay dark, unlike the Xbox 360's colored shells.
+
+### Rotation points
+
+| Parameter | Value |
+|-----------|-------|
+| `JoystickRotationPointCenterLeftMillimeter` | `(-18.45, -8.10, -14.15)` |
+| `JoystickRotationPointCenterRightMillimeter` | filled in by `BuildRightStickGhost` from the pad's measured face |
+| `JoystickMaxAngleDeg` | `18.0` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-47.10, -6.60, 31.10)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(47.10, -6.60, 31.10)` |
+| `TriggerMaxAngleDeg` | `16.0` |
+| `ModelScale` | `151.45 / 161.17` |
+
+---
+
+## ControllerModelSteamController2
+
+**File:** `PadForge.App/Models3D/ControllerModelSteamController2.cs`
+
+```csharp
+public class ControllerModelSteamController2 : ControllerModelBase
+public ControllerModelSteamController2() : base("SteamController2")
+```
+
+Serves the `steam-controller-2` profile. Where the 2015 pad has one stick, two round trackpads, and no D-pad, this one has two sticks, two square trackpads, a real D-pad, and four rear buttons, which is why the two generations get separate meshes rather than sharing one.
+
+| Field | Loaded from | Registered as |
+|-------|-------------|---------------|
+| `LeftPad`, `LeftPadFace` | `LeftPadTouch.obj`, `LeftPadFace.obj` | both `LeftTouchpadClick` |
+| `RightPad`, `RightPadFace` | `RightPadTouch.obj`, `RightPadFace.obj` | both `RightTouchpadClick` |
+| `QuickAccess` | `ThreeDots.obj` | `ButtonQuickAccess` |
+| `R4`, `L4`, `R5`, `L5` | `R4.obj`, `L4.obj`, `R5.obj`, `L5.obj` | `Paddle1`, `Paddle2`, `Paddle3`, `Paddle4` |
+
+`{side}PadFace.obj` is the pad's touch face, cut out of the assembly by `tools/steam_controller_2026_pads.py`. It registers to the same click, so it lights with the pad, and `TouchParts0` / `TouchParts1` point at it rather than the assembly. The assembly's four corner blocks and rim put its fitted plane about 2 mm past the pad's edge on every side, which is what pushed the finger dot off the pad.
+
+### Rotation points and colors
+
+| Parameter | Value |
+|-----------|-------|
+| `JoystickRotationPointCenterLeftMillimeter` | `(-23.13, -28.26, -31.35)` |
+| `JoystickRotationPointCenterRightMillimeter` | `(23.08, -28.26, -31.34)` |
+| `JoystickMaxAngleDeg` | `18.0` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-47.73, 15.11, -6.25)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(47.73, 15.11, -6.24)` |
+| `TriggerMaxAngleDeg` | `14.0` |
+| `ModelScale` | `151.45 / 158.70` |
+
+Flat colors, the same Valve palette the 2015 model uses: `#202224` body, `#26272A` triggers and bumpers and rear buttons, `#3A3B3D` pads and stick buttons and D-pad, `#2E2F31` stick rings and View and Menu and Quick Access, `#1A1B1D` face caps and Steam. Face buttons stay dark for the same reason as the 2015 pad, Valve printing the glyph on a black cap, and this CAD carries no glyph mesh to color.
+
+---
 ## OBJ Mesh Files
 
 ### Directory Structure
@@ -586,6 +897,62 @@ PadForge.App/3DModels/
     GL.obj, GR.obj                           (grip buttons, Switch 2 only)
     LED1.obj .. LED4.obj                     (player-indicator LEDs)
     Switch2Pro_Diffuse.png                   (baked base color x AO atlas)
+  SteamController/ (33 meshes, no textures)
+    MainBody.obj                             (body shell)
+    LeftPadTouch.obj, RightPadTouch.obj      (trackpad center discs)
+    DPadUp.obj, DPadDown.obj,                (LEFT pad quarters: this pad's
+      DPadLeft.obj, DPadRight.obj             D-pad)
+    RightPadUp.obj, RightPadDown.obj,        (RIGHT pad quarters: the right
+      RightPadLeft.obj, RightPadRight.obj     stick's axis directions)
+    Joystick-Left-Ring.obj                   (knurled cap, split at 0.55 r)
+    LeftStickClick.obj                       (stem + base + cap middle)
+    LeftGrip.obj, RightGrip.obj              (rear cover wings + levers)
+    L1.obj, R1.obj                           (bumpers, split off one solid)
+    Shoulder-Left-Trigger.obj                (left trigger)
+    Shoulder-Right-Trigger.obj               (right trigger)
+    B1.obj .. B4.obj                         (A, B, X, Y caps)
+    B1-Symbol.obj .. B4-Symbol.obj           (printed letter riders)
+    Back.obj, Start.obj, Special.obj         (Back, Start, Steam)
+    BackIcon.obj, StartIcon.obj,             (glyph riders)
+      SpecialIcon.obj
+  SteamController2/ (29 meshes, no textures)
+    MainBody.obj                             (body shell)
+    LeftPadTouch.obj, RightPadTouch.obj      (pad assemblies)
+    LeftPadFace.obj, RightPadFace.obj        (touch faces cut out of them)
+    Joystick-Left-Ring.obj                   (left stick cap head)
+    Joystick-Right-Ring.obj                  (right stick cap head)
+    LeftStickClick.obj, RightStickClick.obj
+    Shoulder-Left-Trigger.obj                (left trigger)
+    Shoulder-Right-Trigger.obj               (right trigger)
+    L1.obj, R1.obj                           (bumpers)
+    B1.obj .. B4.obj                         (A, B, X, Y)
+    DPadUp.obj .. DPadRight.obj              (real D-pad, four buttons)
+    Back.obj, Start.obj                      (View, Menu)
+    Special.obj                              (Steam)
+    ThreeDots.obj                            (Quick Access)
+    L4.obj, L5.obj, R4.obj, R5.obj           (rear buttons)
+  SteamDeck/       (46 meshes, no textures)
+    MainBody.obj, MainBodyLeftOver.obj       (body shell + leftover pieces)
+    Screen.obj, PowerButton.obj,             (cosmetic: drawn, unregistered)
+      VolumeUp.obj, VolumeDown.obj
+    LeftPadTouch.obj, RightPadTouch.obj      (trackpads)
+    Joystick-Left-Ring.obj                   (left stick cap ring)
+    Joystick-Right-Ring.obj                  (right stick cap ring)
+    LeftStickTouch.obj, RightStickTouch.obj  (stems, light with the base)
+    LeftStickClick.obj, RightStickClick.obj  (bases)
+    LeftStickWell.obj, RightStickWell.obj    (generated well cups)
+    MotorLeft.obj, MotorRight.obj            (rumble motors)
+    Shoulder-Left-Trigger.obj                (L2)
+    Shoulder-Right-Trigger.obj               (R2)
+    L1.obj, R1.obj                           (L1, R1)
+    B1.obj .. B4.obj                         (A, B, X, Y)
+    B1-Symbol.obj .. B4-Symbol.obj           (letter riders)
+    DPadUp.obj .. DPadRight.obj              (D-pad directions)
+    Back.obj, Start.obj, Special.obj         (View, Menu, Steam)
+    BackIcon.obj, StartIcon.obj,             (glyph riders)
+      SteamText.obj
+    OEM1.obj, ThreeDots.obj                  (Quick Access key + its dots)
+    L4.obj, L5.obj, R4.obj, R5.obj           (back grips)
   DS4/
     JetBlack/, MagmaRed/                     (37 meshes + Body.png, Decal.png each)
       MainBody.obj, MainBodyBack.obj         (body, back panel)
@@ -742,7 +1109,7 @@ The camera is wrapped in `<helix:HelixViewport3D.Camera>` rather than being a ba
 
 ### Colorway Picker
 
-`AppearancePicker` shows only when the current model family ships more than one appearance, which `UpdateAppearancePicker()` decides from `AppearanceRegistry(family)`. The registry is a switch over `"XboxSeries"`, `"DualSense"`, `"DS4"`, and `"DualSenseEdge"`, reading each model class's static `AppearanceIds` / `AppearanceNames`. `DualSenseEdge` has one entry, so its picker stays collapsed. Xbox 360 and Switch 2 Pro are not in the registry at all.
+`AppearancePicker` shows only when the current model family ships more than one appearance, which `UpdateAppearancePicker()` decides from `AppearanceRegistry(family)`. The registry is a switch over `"XboxSeries"`, `"DualSense"`, `"DS4"`, and `"DualSenseEdge"`, reading each model class's static `AppearanceIds` / `AppearanceNames`. `DualSenseEdge` has one entry, so its picker stays collapsed. Xbox 360, Switch 2 Pro, and the three Valve models are not in the registry at all, so their pickers never appear.
 
 Selection writes `PadViewModel.SetModelAppearance(family, id)`, which raises `Model3DAppearances`, which re-enters `EnsureModel()` and rebuilds against the new atlas set. The choice is per virtual controller, persisted on the pad's `PadSetting`, so two VCs of the same family can wear different colorways.
 
@@ -835,10 +1202,15 @@ Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(Profil
 | Xbox One, Xbox Elite, Xbox Adaptive | `XboxSeries` | `ControllerModelXboxSeries` |
 | Switch 2 Pro | `Switch2Pro` | `ControllerModelSwitch2Pro` |
 | Switch Pro | `Switch2Pro` | `ControllerModelSwitch2Pro` |
+| Steam Controller (2026) | `SteamController2` | `ControllerModelSteamController2` |
+| Steam Controller (2015), plain and composite | `SteamController` | `ControllerModelSteamController` |
+| Steam Deck, plain and composite | `SteamDeck` | `ControllerModelSteamDeck` |
 | Xbox 360, and the fallback for non-PlayStation slots | `XBOX360` | `ControllerModelXbox360` |
 | Fallback for an unrecognized profile on a PlayStation slot | `DS4` | `ControllerModelDS4` |
 
-The Edge check runs before the plain DualSense one, because Edge profile ids start with `dualsense` too and must never get a plain DualSense mesh.
+The Edge check runs before the plain DualSense one, because Edge profile ids start with `dualsense` too and must never get a plain DualSense mesh. `steam-controller-2` is tested before `steam-controller` for the same reason.
+
+`ResolveAssetFolders` also reports whether the match was real art or the fallback body, which `HMaestroProfileCatalog.HasDedicatedArt` exposes. `PadPage` uses it to decide whether an Extended slot draws the schematic or a body, so the Valve profiles get their own bodies while a wheel or a flight stick still gets the generic view.
 
 Two meshes are shared by profiles that do not all have every control. `wantExtraControls` decides whether the borrowed-but-absent controls get wired into the hover, click-to-record, and highlight maps. The meshes draw either way.
 
@@ -853,7 +1225,7 @@ The rebuild is skipped when `_currentModel.ModelFamily`, `_currentModelExtraCont
 
 On a real rebuild: `_stickTransforms3D` is cleared and both retained trigger angles reset to zero, because both key on the outgoing model. Without the reset a switch carried the old model's pull angles into the new one and the triggers rendered part-pressed at rest. The arrow overlay is removed, the old model disposed, the new one constructed and assigned to `ModelVisual3D.Content`, then `ModelScale` is pushed into `_modelScaleTransform`, `_modelRecenter.OffsetZ` is computed from the fresh static bounds, and the finger visuals and annotations are rebuilt.
 
-`PadPage.ApplyViewMode()` routes Extended slots to `ControllerSchematicView`, MIDI to `MidiPreviewView`, KB+Mouse to `KBMPreviewView`, and VR to `VRPreview`. This control serves the gamepad presets, which means Xbox, PlayStation, and Nintendo slots.
+`PadPage.ApplyViewMode()` routes MIDI to `MidiPreviewView`, KB+Mouse to `KBMPreviewView`, VR to `VRPreview`, and an Extended slot to `ControllerSchematicView` unless `HasDedicatedArt` says PadForge ships that controller's own body. This control serves the gamepad presets, which means Xbox, PlayStation, Nintendo, and the five Valve profiles under Extended. A profile change re-runs `ApplyViewMode`.
 
 ### Render-Frame Update Pipeline
 
@@ -865,7 +1237,7 @@ OnRendering()
     +-> visibility gate (skip if !IsVisible or the window is minimized)
     +-> _dirty check (skip if clean)
     |
-    +-> HighlightButtons()          -- swap materials for 22 button targets
+    +-> HighlightButtons()          -- swap materials for 31 button roles
     +-> UpdateJoystick() x2         -- tilt left/right stick meshes
     +-> UpdateTrigger() x2          -- rotate left/right trigger meshes
     +-> UpdateTouchpadPreview3D()   -- touchpad highlight + finger spheres
@@ -878,27 +1250,31 @@ The visibility gate is a retained-page guard. Pages are eagerly instantiated and
 
 #### HighlightButtons()
 
-Iterates the 22-element `ButtonProperties` array, reads each `PadViewModel` bool via `GetButtonState()`, and swaps between `DefaultMaterials` and `HighlightMaterials`:
+Iterates `ButtonReaders`, a 31-entry table pairing each button role with the reader that pulls its state off the view model, and swaps between `DefaultMaterials` and `HighlightMaterials`:
 
 ```csharp
-private static readonly string[] ButtonProperties =
+private static readonly (string Name, Func<PadViewModel, bool> Read)[] ButtonReaders =
 {
-    "ButtonA", "ButtonB", "ButtonX", "ButtonY",
-    "LeftShoulder", "RightShoulder",
-    "ButtonBack", "ButtonStart", "ButtonGuide",
-    "ButtonShare",
-    "ButtonMute",
-    "LeftFunction",
-    "RightFunction",
-    "ButtonC",
-    "LeftPaddle",
-    "RightPaddle",
-    "DPadUp", "DPadDown", "DPadLeft", "DPadRight",
-    "LeftThumbButton", "RightThumbButton"
+    ("ButtonA", vm => vm.ButtonA),
+    // ...the 20 other shared roles...
+    ("ButtonQuickAccess", vm => vm.ButtonQuickAccess),
+    ("Paddle1", vm => vm.Paddle1),
+    ("Paddle2", vm => vm.Paddle2),
+    ("Paddle3", vm => vm.Paddle3),
+    ("Paddle4", vm => vm.Paddle4),
+    ("LeftGrip", vm => vm.LeftGrip),
+    ("RightGrip", vm => vm.RightGrip),
+    ("LeftTouchpadClick", vm => vm.LeftTouchpadClick),
+    ("RightTouchpadClick", vm => vm.RightTouchpadClick),
 };
+
+private static readonly string[] ButtonProperties =
+    ButtonReaders.Select(r => r.Name).ToArray();
 ```
 
-Seven of those resolve to a mesh on only some models: `ButtonShare` on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), `ButtonMute` on DualSense and Edge, `LeftFunction` / `RightFunction` on the Edge alone, and `ButtonC` / `LeftPaddle` / `RightPaddle` on Switch 2 Pro when the extra controls are wired, with the paddles also on the Edge. Everywhere else `ButtonMap.TryGetValue` misses and the entry is skipped. `GetButtonState()` carries a matching case for all 22.
+One table, because two hand-kept lists drifted and the drift shipped: the reader switch grew the Valve roles while the array the press loop iterates did not, so Quick Access, the four rear buttons, the grips, and the two pad clicks were read by nothing and never lit on any Valve model. `ButtonProperties` and the by-name lookup are both derived from `ButtonReaders`, so adding a role reaches every half at once.
+
+Many roles resolve to a mesh on only some models: `ButtonShare` on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), `ButtonMute` on DualSense and Edge, `LeftFunction` / `RightFunction` on the Edge alone, `ButtonC` / `LeftPaddle` / `RightPaddle` on Switch 2 Pro when the extra controls are wired with the paddles also on the Edge, `LeftGrip` / `RightGrip` on the 2015 Steam Controller, and the four `PaddleN` roles on the Steam Deck and the 2026 Steam Controller. Everywhere else `ButtonMap.TryGetValue` misses and the entry is skipped.
 
 For each button, iterates all `Model3DGroup` entries in `ButtonMap` (multi-mesh support). The pass drives a group only when its current material is one the view set (the registered default or the registered highlight), so a glossy or textured default such as the DualSense mute button still lights on press. The stick rings, the stick clicks, and the bumpers bypass that check, because mid-deflection they carry a graded `MaterialGroup` and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.
 
@@ -984,27 +1360,29 @@ private void Viewport_PreviewMouseLeftButtonUp(object sender, MouseButtonEventAr
 
 1. `Viewport3DHelper.FindHits()` at click position.
 2. For each hit `GeometryModel3D`:
-   - **Stick ring**: `IsStickRingHit()` checks `LeftThumbRing`/`RightThumbRing`, delegates to `DetermineAxisFromQuadrant()`.
+   - **Quadrant surface**: `TryResolveQuadrantHit()` walks `QuadrantMap` for the containing group and resolves the hit position to one of its four names.
    - **ClickMap**: Walks entries to find the containing `Model3DGroup`.
 3. Fires `ControllerElementRecordRequested` with the PadSetting target name.
 
-### Quadrant Detection (Stick Rings)
+### Quadrant Detection
 
 ```csharp
-private bool IsStickRingHit(GeometryModel3D hitGeo, Point3D hitPos, out string axis)
+private bool TryResolveQuadrantHit(GeometryModel3D hitGeo, Point3D hitPos, out string target)
+private static bool IsOuterCapHit(Model3DGroup cap, Point3D localHitPos)
 ```
 
-Checks if hit geometry belongs to a stick ring, then calls:
+`TryResolveQuadrantHit` finds the `QuadrantMap` group holding the hit geometry, then picks a quadrant from the hit position relative to the group's bounding-box center, not its rotation pivot, which sits off-center on the DualSense. The frame is model space, X across the face and +Z toward its top edge, and `QuadrantSlot` returns 0 up, 1 down, 2 left, 3 right:
 
-```csharp
-private static string DetermineAxisFromQuadrant(
-    Point3D hitPos, Vector3D center, string xAxis, string yAxis)
-```
+- **Dominant X** (`|deltaX| > |deltaZ|`): the left or right name by deltaX sign.
+- **Dominant Z**: the up or down name by deltaZ sign.
 
-Uses hit position relative to the stick ring's mesh centroid (`IsStickRingHit` passes `MeshCentroid(ring)`, the ring's bounding-box center, not the rotation pivot, which sits off-center on DualSense):
-- **Dominant X** (`|deltaX| > |deltaZ|`): Returns `xAxis` or `xAxis + "Neg"` by deltaX sign.
-- **Dominant Z**: Returns `yAxis` or `yAxis + "Neg"` by deltaZ sign.
-- **Y-axis inversion**: Model Z-up = stick up. `deltaZ >= 0` maps to `yAxis + "Neg"` because Step 3's NegateAxis inverts Y output, so stick-up in-game maps to the positive direction.
+Model Z-up is stick-up, and the up slot holds the `Neg` name (`RegisterQuadrants(cap, "LeftThumbAxisYNeg", "LeftThumbAxisY", ...)`), because Step 3's `NegateAxis` inverts Y output, so stick-up in game is the positive direction.
+
+A group that is in `ClickMap` as well splits by radius. `IsOuterCapHit` sends the outer half to a direction and keeps the middle on the click, which is how a stick cap reaches both of the controls it carries. A group that is in `QuadrantMap` alone is directions edge to edge, which is how an ordinary stick cap has always behaved.
+
+`TryFindQuadrantSurface` is the reverse lookup, from a target name back to its surface plus a wedge direction (slots 2 and 3 are the X pair, slots 0 and 2 are the negative ones). The hover wedge, the recording ring, the arrow, and the flash resolver all ask it, so a surface carrying directions is served by the same code the sticks are. All four used to parse target names for "AxisX" and a "Left" prefix instead.
+
+A direction that is not on a torus does not go through this path at all. It gets its own mesh and `RegisterDirection`, which is how the 2015 Steam Controller's pad quarters work.
 
 ### Hover Highlighting
 
@@ -1055,23 +1433,24 @@ Builds a highlight overlay from the ring's mesh triangles:
 3. **Torus-outward offset**: `OffsetTorusOutward()` pushes vertices 0.8 mm outward along the tube's radial direction to prevent z-fighting (computes nearest point on torus center circle, offsets along tube normal).
 4. Triangulates clipped polygons as fans.
 
-### Touchpad Preview (PlayStation slots)
+### Touchpad Preview
 
-The view renders a live touchpad preview for any model that exposes a `Touchpad` mesh: DualSense and Edge via `Touchpad.obj`, DS4 via `Screen.obj`.
+The view renders a live touchpad preview for any model that exposes a `Touchpad` mesh: DualSense and Edge via `Touchpad.obj`, DS4 via `Screen.obj`, and every Valve model via `LeftPadTouch.obj` plus a `TouchpadRight` from `RightPadTouch.obj`.
 
 ```csharp
 private void BuildTouchpadFingerVisuals()
 private static (ModelVisual3D, TranslateTransform3D) CreateFingerSphere(Color color)
 private void UpdateTouchpadPreview3D()
 private static void PositionFingerSphere(
-    TranslateTransform3D t, bool down, float normX, float normY, Rect3D bounds,
-    ControllerModelBase model)
+    TranslateTransform3D t, bool down, float normX, float normY,
+    ControllerModelBase.TouchSurface surface, ControllerModelBase model)
 ```
 
 - **Build** (`BuildTouchpadFingerVisuals`, called from `EnsureModel()`): tears down any prior finger visuals, then, if `_currentModel.Touchpad != null`, builds two finger spheres and the click-highlight material. Skipped for Xbox 360, Xbox Series, and Switch 2 Pro models, which have no `Touchpad`.
 - **Finger spheres** (`CreateFingerSphere`): a `MeshBuilder.AddSphere` of radius 2.5 (12 slices, 8 stacks). Finger 0 is orange `#FF6600`, finger 1 is blue `#0066FF` (both alpha `0xE6`), matching the 2D touchpad dots. Each sphere is a `ModelVisual3D` child of `ModelVisual3D`, so the model's uniform scale and rotation apply to it. Parked at `OffsetY = -10000` while its finger is up.
-- **Click highlight** (`UpdateTouchpadPreview3D`, called every dirty frame): while `TouchpadClickPressed` is true, the touchpad surface geometry's material swaps to `_touchpadHighlightMaterial`, the app accent color at full opacity, from `ResolveAccentColor()` reading `AccentFillColorDefaultBrush` with a `#2196F3` fallback. The old `0xC0` alpha let interior geometry show through the pressed pad on the hado meshes, so the material is now solid and matches every other pressed button. Restored to `DefaultMaterials[Touchpad]` on release. The swap is gated by `_touchpadCurrentlyHighlighted` so it does not churn every frame.
-- **Finger position** (`PositionFingerSphere`): maps the normalized `TouchpadFingerN(X,Y)` into the `Touchpad.Bounds` box. `normX 0..1` → model X left→right, `normY 0=top` → high model Z, and Y floats the sphere just in front of the surface (`bounds.Y - 1.5`). The touchpad mesh overshoots the real touch-sensitive area, so each model's `TouchpadXInsetFrac` / `TouchpadZTopInsetFrac` / `TouchpadZBottomInsetFrac` inset the mapped rectangle. DualSense and the Edge override these (see [Touchpad Inset Region](#touchpad-inset-region)). DS4 uses the defaults `0.03 / 0.12 / 0.12`.
+- **Click highlight** (`UpdateTouchpadPreview3D`, called every dirty frame): on a **one-pad** model, while `TouchpadClickPressed` is true, the touchpad surface geometry's material swaps to `_touchpadHighlightMaterial`, the app accent color at full opacity, from `ResolveAccentColor()` reading `AccentFillColorDefaultBrush` with a `#2196F3` fallback. The old `0xC0` alpha let interior geometry show through the pressed pad on the hado meshes, so the material is now solid and matches every other pressed button. Restored to `DefaultMaterials[Touchpad]` on release. The swap is gated by `_touchpadCurrentlyHighlighted` so it does not churn every frame. A model with `TouchpadRight` set is excluded, because each of its clicks is its own registered button (`LeftTouchpadClick` / `RightTouchpadClick`) and already lights through the button path. Swapping here as well lit the left pad for either click.
+- **Finger position** (`PositionFingerSphere`): each finger rides its own pad. Finger 0 takes `TouchpadSurface0` and finger 1 `TouchpadSurface1`, which on a one-pad model are the same face. The normalized `TouchpadFingerN(X,Y)` goes through `TouchSurface.At(u, v, 1.5)`, which walks the pad's own in-plane axes and lifts the sphere 1.5 mm off the face. Model axes would not do: every Valve pad is canted, the 2026's by 15 degrees and the 2015's by 19, so a point placed on the world-aligned bounding box sits beside the pad and runs past its outline at the corners.
+- **Insets**: a mesh can carry more than the touch area, and the DualSense's is the whole central front-face panel, 9.7% wider each side than the pad it draws, so `TouchpadXInsetFrac` / `TouchpadZTopInsetFrac` / `TouchpadZBottomInsetFrac` crop the mapped rectangle. DualSense and the Edge override these (see [Touchpad Inset Region](#touchpad-inset-region)), DS4 uses the defaults `0.03 / 0.12 / 0.12`, and every Valve model sets all three to zero because its faces are measured.
 
 ---
 
@@ -1130,11 +1509,11 @@ The 150 ms `AnnotationTick` is the primary re-projection trigger. `CameraChanged
 
 ## Material System
 
-Xbox 360 and Switch 2 Pro's generated parts use `DiffuseMaterial` over a `SolidColorBrush`. Every other family uses `DiffuseMaterial` over a frozen `ImageBrush` atlas, sometimes inside a `MaterialGroup` with a `SpecularMaterial` on top. Three categories:
+Xbox 360, all three Valve models, and Switch 2 Pro's generated parts use `DiffuseMaterial` over a `SolidColorBrush`. The hado families use `DiffuseMaterial` over a frozen `ImageBrush` atlas, sometimes inside a `MaterialGroup` with a `SpecularMaterial` on top. Three categories:
 
 | Category | Source | Storage | Usage |
 |----------|--------|---------|-------|
-| **Default** | Per-colorway PNG atlases (`Body.png`, `Decal.png`, `Transparent.png`, `StickModule.png`), or static `Color` fields on Xbox 360 and Switch 2 Pro. Xbox 360 face overlays use `Alpha = 150`. | `DefaultMaterials[group]` | Restored after highlight/flash |
+| **Default** | Per-colorway PNG atlases (`Body.png`, `Decal.png`, `Transparent.png`, `StickModule.png`), or flat hex colors on Xbox 360, Switch 2 Pro, and the Valve models. Xbox 360 face overlays use `Alpha = 150`. Registered by `Paint` / `PaintTarget`, never by assigning a geometry's material alone. | `DefaultMaterials[group]` | Restored after highlight/flash |
 | **Highlight** | `DrawAccentHighlights()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. One shared material for every group in the scene at the time it runs. | `HighlightMaterials[group]` | Applied on press or flash |
 | **Gradient** | `GradientHighlight()` interpolates ARGB for solid defaults, or layers an alpha-scaled accent overlay for textured ones. | `ConditionalWeakTable` keyed on the `GeometryModel3D` | Sticks and triggers (proportional) |
 
@@ -1179,7 +1558,7 @@ Recenter runs first, in model units, so the scale and both rotations see a model
 1. **X tilt**: Around Z axis, proportional to stick X, centered at `JoystickRotationPointCenter{Left/Right}Millimeter`.
 2. **Y tilt**: Around X axis, proportional to stick Y, same center.
 
-Both capped at `JoystickMaxAngleDeg`: 19 degrees on Xbox 360 and DS4, 14 on Xbox Series, DualSense, and Switch 2 Pro.
+Both capped at `JoystickMaxAngleDeg`: 19 degrees on Xbox 360 and DS4, 18 on both Steam Controllers, 14 on Xbox Series, DualSense, Switch 2 Pro, and the Steam Deck.
 
 ### Trigger Rotation Transform
 
@@ -1201,7 +1580,7 @@ Three light sources in XAML:
 | Technique | Detail |
 |-----------|--------|
 | **Visibility gate** | `OnRendering` returns before any work when the control is not visible or the window is minimized. |
-| **Dirty flag batching** | 22 button targets + 4 axes + 2 triggers + touchpad preview + annotation bars coalesced into one render-frame update. |
+| **Dirty flag batching** | 31 button roles + 4 axes + 2 triggers + touchpad preview + annotation bars coalesced into one render-frame update. |
 | **High-churn property skip** | The six gyro and accel readout properties never set `_dirty`, so a motion pad at rest does not re-arm the refresh every tick. |
 | **Trigger change detection** | Skips rotation if angle delta < 0.01 degrees. |
 | **Visual deadzones** | Stick grading below 0.05 deflection and trigger grading below 0.03 restore the rest material instead of grading, so sensor noise does not hold the glow lit. |
@@ -1223,4 +1602,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

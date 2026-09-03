@@ -37,7 +37,7 @@ graph TB
     end
 
     subgraph Drivers["OS / Driver Layer"]
-        HM["HIDMaestro<br/>UMDF2 user-mode driver<br/>(231 profiles)"]
+        HM["HIDMaestro<br/>user-mode driver<br/>UMDF2 + USB/IP backends"]
         HMVRD["HIDMaestro<br/>native OpenVR driver"]
         WIN["Windows<br/>Input Queue"]
         WMS["Windows MIDI<br/>Services"]
@@ -74,7 +74,7 @@ graph TB
 | **Class** | `HMaestroVirtualController` | `HMaestroVRController` | `KeyboardMouseVirtualController` | `MidiVirtualController` |
 | **Backend** | HIDMaestro (UMDF2 user-mode driver) | HIDMaestro's native OpenVR driver | Win32 SendInput (no driver) | Windows MIDI Services SDK |
 | **Required driver** | HIDMaestro | HIDMaestro OpenVR driver plus SteamVR | None | Windows MIDI Services |
-| **Submit methods** | `SubmitGamepadState(Gamepad)` for Xbox slots. A PlayStation overload adds touchpad / IMU / battery. `SubmitRawHidState(RawHidState, sticks, triggers)` (plus a `MotionSnapshot` overload) for Nintendo and Extended slots. `SubmitRawReport(byte[])` for the Sony USB Report 0x01 layout | `SubmitVrState(in VrRawState)` | `SubmitKbmState(KbmRawState)` | `SubmitMidiRawState(MidiRawState)` |
+| **Submit methods** | `SubmitGamepadState(Gamepad)` for Xbox slots. A PlayStation overload adds touchpad / IMU / battery. `SubmitRawHidState(RawHidState, sticks, triggers)` (plus a `MotionSnapshot` overload) for Nintendo and Extended slots. `SubmitRawReport(byte[])` for the Sony USB Report 0x01 layout and for the Valve personas' native frames | `SubmitVrState(in VrRawState)` | `SubmitKbmState(KbmRawState)` | `SubmitMidiRawState(MidiRawState)` |
 | **Axis format at the SDK boundary** | `HMGamepadState.Axes` = `Dictionary<HMAxis, float>` normalized to [0, 1] (0.5 = stick center, 0 = released trigger). Y flipped to HID convention (up = 0.0) | `HMVRHandState` floats: sticks -1..1 (Y flipped to OpenVR's Y-up), trigger and grip 0..1 | short delta (mouse) | byte CC (0..127) |
 | **Button format** | `HMButton` `[Flags]` enum. The raw path passes all 32 bits | `HMVRButton` flags, 8 bits per hand, identical by construction to `VrHandRaw.Buttons` | Per-VK `SendInput` | MIDI Note On/Off |
 | **Rumble/FFB** | `HMController.OutputDecoded` (Sony and Switch Pro motors + DS5 effect passthrough) and `HMController.OutputReceived` (XInput / Xbox HID rumble, full PID FFB for Extended) | `HMVRController.HapticReceived`: OpenVR pulses fan into the slot's `Vibration` (left hand to left motor, right to right) with a per-hand expiry timer | No | No |
@@ -205,6 +205,92 @@ New in 4.1.0. A virtual Nintendo Switch Pro Controller as a first-class slot cat
 
 Acceptance was hardware-verified: SDL3's `HIDAPI_DriverSwitch` opens the virtual pad, completes init, reads calibrated sticks and buttons, reports gyro + accel through `SDL_GetGamepadSensorData`, and Steam Input shows a Pro Controller with Nintendo glyphs.
 
+### Valve personas (issues #337 / #338)
+
+New in 4.4.0. Five HIDMaestro profiles in the **Extended** category present as Valve hardware. Steam and any SDL game read the real device's USB identity, and the slot submits that device's own input frame instead of the field-encoded raw surface.
+
+<!-- pending capture: ![Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below](../images/pad-extended-steam-deck.png) -->
+
+| Profile id | Catalog name | USB identity | Presents as |
+|---|---|---|---|
+| `steam-controller` | Steam Controller (Wired) | 28DE:1102 | One vendor-page HID interface, 64-byte reports |
+| `steam-controller-composite` | Steam Controller (Composite) | 28DE:1102 | The wired 2015 pad's whole USB configuration: lizard-mode mouse, boot keyboard, vendor controller on interface 2 |
+| `steam-controller-2` | Steam Controller (2026) | 28DE:1302 | One HID interface carrying everything by report id: mouse 0x40, keyboard 0x41, controller state 0x42 |
+| `steam-deck` | Steam Deck Controller | 28DE:1205 | A plain HID gamepad descriptor, 6 axes / 21 buttons / 1 hat |
+| `steam-deck-composite` | Steam Deck Controller (Composite) | 28DE:1205 | The Deck's five-interface configuration, down to the CDC ACM pair |
+
+Ids, names and USB identities are HIDMaestro's, from the profile JSON embedded in `HIDMaestro.Core.dll` (`HIDMaestro.Profiles.valve\*.json`). The three composite profiles run on HIDMaestro's USB/IP backend, because the identity Steam inspects is the whole configuration rather than the controller interface alone. `HMaestroProfileCatalog.WithheldProfileIds` is empty, and `ValveProfileArtworkTests` fails the build if an id is put back into it.
+
+Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not associated with or endorsed by Valve.
+
+**What a client sees.** On a headless bench, stock SDL3 with `SDL_JOYSTICK_HIDAPI_STEAM=1` claimed `steam-controller-composite` as "Steam Controller" with two touchpads, gyro and accelerometer, and a live Steam client opened it, reserved XInput slot 0, took the input stream and loaded the `gordon` configuration set. Nothing has run against real Valve hardware.
+
+#### Native input frames
+
+`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:1823-1834`).
+
+| Profile | Report | Size | Source |
+|---|---|---|---|
+| `steam-deck-composite` | `ValveInReport` type 0x09, header `01 00 09 40` | 64 | SDL `controller_structs.h` `SteamDeckStatePacket_t` plus `SDL_hidapi_steamdeck.c` |
+| `steam-controller`, `steam-controller-composite` | `ValveInReport` type 0x01, header `01 00 01 3C` | 64 | SDL `SDL_hidapi_steam.c` masks 118-140, `ValveControllerStatePacket_t` |
+| `steam-controller-2` | Report `0x42`, `TritonMTUFull_t` | 54 | SDL `controller_structs.h`, cross-checked against sc2-research `docs/HID_REPORT_FORMAT.md` |
+
+Both 2015 profiles share one frame: the plain UMDF2 profile exposes the wired controller's 64-byte vendor report, and the composite persona's extended report is that same `ValveInReport`. Plain `steam-deck` has no packer and rides `SubmitRawHidState` like any other Extended profile.
+
+Every slot in a frame resolves through `NintendoPreviewMap.IndexOf(profileId, role)`, so the packers, the mapping grid, the labels and the preview bridge all read one table. Four frame details the structs do not give away:
+
+- **Packet number.** `unPacketNum` advances on every submit. SDL's own struct comment licenses a consumer to skip a frame whose number has not changed, so a constant freezes it.
+- **Triggers.** The engine stores a trigger bipolar, rest at `short.MinValue`. Every Valve wire carries it unsigned 0..32767, which SDL decodes back with `* 2 - 32768`, so the packers rescale with `(raw + 32768) / 2`. An earlier clamp to `[0, 32767]` got rest and full pull right and read the whole lower half of the travel as zero.
+- **Deck View and Menu.** `STEAMDECK_LBUTTON_VIEW` is bit 12 and `_MENU` is bit 14 (`SDL_hidapi_steamdeck.c:61-63`). The Deck packer had the two swapped and its own test pinned the swap. `ValveWireTests.Packer_PutsEveryNamedSpecButtonOnItsBit`, which reads HIDMaestro's `ExtendedReport` spec off the SDK, found it.
+- **IMU.** `MotionSnapshot` maps into the Valve sensor frame as accel `(X, -Z, Y)` and gyro `(pitch, -roll, yaw)`, scaled to +/-2 g and +/-2000 deg/s. The quaternion field stays zero, because the slot has no fused orientation.
+
+#### Descriptors that lead with a mouse
+
+The 2026 pad carries its lizard-mode mouse (report 0x40) and keyboard (0x41) ahead of its controller state (0x42) on one interface. `HMController.SubmitRawReport` takes data bytes only and the driver prepends the descriptor's first report id, so a 54-byte 0x42 frame shifted one byte and came back out as a mouse report. The rolling sequence number landed on relative X at 250 Hz and the cursor tore sideways until the slot was deleted.
+
+HIDMaestro v1.7.1 fixed it (HIDMaestro#58): a profile that declares an input report id and is always armed now emits verbatim. `HMaestroVirtualController` resolves that pairing once at construction into `_extendedFrameCarriesItsOwnId` and calls `SubmitRawExtendedReport`, rather than letting the driver infer it from frame length, where a one-byte change to either size would flip the branch silently (`HMaestroVirtualController.cs:439-470`).
+
+`HMaestroProfileCatalog.LeadsWithAPointingReport` (`:339`) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. It is a tripwire. Nothing in the app refuses a profile on it, and `PointingReportProfileGuardTests` uses it to require that every pointing-led profile carrying a packer is on the verbatim path.
+
+#### Mapping grid
+
+Valve slots keep the raw surface, and their rows carry Valve's own control names instead of "Button N". Labels come from `MacroButtonNames.ValveRoleLabel` (`MacroItem.cs:7239`) over the family's wire table.
+
+Axes interleave as `[LX LY LT RX RY RT]`, which is what `ComputeAxisLayout` produces for two sticks and two analog triggers. The Nintendo families pack `[LX LY RX RY]`, having no analog triggers at all.
+
+Buttons get one index space per family, all of them in `NintendoPreviewMap`:
+
+| Family | Wire order |
+|---|---|
+| `SteamDeck` (`steam-deck`, `-composite`) | A B X Y, L1 R1, View Menu, L3 R3, Steam, Quick Access, R4 L4 R5 L5, Left Pad Click, Right Pad Click. D-pad is a hat |
+| `SteamController` (`steam-controller`, `-composite`) | A B X Y, L1 R1, Back Start, L3, Steam, Left Grip, Right Grip, Left Pad Click, Right Pad Click. D-pad is a hat, and it is the left trackpad's quadrant bits |
+| `SteamController2` (`steam-controller-2`) | A B X Y, L1 R1, View Menu, L3 R3, Steam, Quick Access, R4 L4 R5 L5, Left Pad Click, Right Pad Click, then the D-pad as four discrete buttons |
+
+Row strings live in `Strings.resx`: `Btn_View`, `Btn_Menu`, `Btn_Steam`, `Btn_QuickAccess`, `Btn_LeftGrip`, `Btn_RightGrip`, `Btn_LeftPadClick`, `Btn_RightPadClick`, plus `Mapping_LeftPadX` / `Y` / `Touch` and their right-pad twins. R4, L4, R5 and L5 are printed on the hardware, so they are literals and are not localized.
+
+The 2015 pad has one physical stick and rides its right trackpad as the right stick, which is why `StickCount` is 2 on every family. Its right pad click is one wire bit doing two jobs: SDL reports it as `SDL_GAMEPAD_BUTTON_RIGHT_STICK` (`SDL_hidapi_steam.c:1627`) and as the right pad's click on the touchpad surface (`:1677`), both from `STEAM_BUTTON_RIGHTPAD_CLICKED_MASK`. The table names the slot once as `RightTouchpadClick`, and `NintendoPreviewMap.Aliases` lets `RightThumbButton` reach the same row.
+
+<!-- pending capture: ![Extended slot on the Pad page with the Steam Controller (2026) profile: the config bar with the Extended type chip and the Preset picker, and the 2026 Steam Controller body in the 3D preview below](../images/pad-extended-steam-controller.png) -->
+
+#### Both trackpads
+
+`InputManager.SlotCarriesTouchpad(slot)` (`InputManager.cs:196`) is true for every PlayStation slot, and for an Extended slot on a raw surface whose profile is Valve. Step 3 computes the touch surface and Step 4 combines it only when it is true. Before that predicate existed both steps gated on PlayStation alone, so every Valve packer received a zeroed `TouchpadState` and no pad on a virtual Deck or Steam Controller could be touched.
+
+Every Valve frame carries one finger per pad, so the slot's two-finger `TouchpadState` splits as finger 0 = left pad, finger 1 = right pad (`ValveReportPackers.Pads`). The grid lists Left / Right Pad X, Y and Touch on those two fingers. Pad clicks stay raw buttons, so a Valve grid has no `TouchpadClick` row. A click arriving with no per-pad source lands on whichever pad is touched, and on the left pad when neither is.
+
+Automap binds the advertised gamepad buttons for the two clicks: "Button 16" is SDL's `TOUCHPAD` (`touchpad:b17`, the left click) and "Button 17" is `MISC2` (`misc2:b16`, the right). The pressure descriptors are the fallback for a pad that advertises neither, which is the 2015 controller. A slot automapped by an earlier build keeps its old rows until the pad is reassigned.
+
+#### Switching Extended profiles
+
+The three Valve wires share almost no indices, so a profile change has to move the existing bindings and then fill what the new wire added. The `PadViewModel.ProfileId` setter does both (`PadViewModel.cs:257`):
+
+1. **Translate.** `SettingsManager.TranslateNintendoRawMappings` moves every raw target by role. Deck to 2015 without it left Steam on `RawBtn10`, which is the left grip over there, and a left pad click on `RawBtn16`, past the end of that 14-button wire. Both sides must be lettered: `NintendoPreviewMap.ButtonTable` falls back to the Switch Pro table for an id it does not know, so a numbered Extended profile is never translated.
+2. **Automap the additions.** `DeviceService.FillEmptyAutoMappingsForSlot` fills the targets the outgoing wire never had. The 2026 pad's D-pad is four discrete buttons at 18-21 and the Deck's wire ends at 17. The fill is additive, so a binding the user authored or deliberately cleared on this wire survives.
+
+Both halves key on the wire stamp, never on the setter's previous value. Every restore, apply and import path calls `SettingsManager.StampNintendoWire` before assigning the view model, so `stamp == incoming` means the data already belongs to that profile and neither step runs. `PadForge.Tests/ValveProfileSwitchTests.cs` pins it.
+
+A Valve slot also draws its own body instead of the Extended schematic. `PadPage`'s Extended test defers to `HMaestroProfileCatalog.HasDedicatedArt` (`PadPage.xaml.cs:228-233`), and a profile change re-runs `ApplyViewMode`. The meshes are covered on [3D Model System](../reference/3d-model-system.md).
+
 ### Fields
 
 | Field | Type | Description |
@@ -333,7 +419,7 @@ Trigger values are mirrored to both the canonical key and the trigger row's own 
 
 `HMaestroVirtualController.cs:702`, plus the overload taking `in MotionSnapshot` at `:766` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot: `SlotRawHidSurface` is true for both categories (`InputService.cs:5366-5368`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:1807-1815`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
 
-**Why not just SubmitGamepadState:** `MapButtons` covers a fixed named set, but the XInput-shaped `Gamepad` struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.
+**Why SubmitGamepadState is not enough:** `MapButtons` covers a fixed named set, but the XInput-shaped `Gamepad` struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.
 
 **Idle dedup:** the exact basic-path shape (16 ms keepalive), with a content compare on the pooled arrays (`RawFrameUnchanged`, `:719-736`). An identical frame within the window skips the seqlock publish + `SetEvent`. Motion frames never dedup: `SensorTimestamp` must advance for downstream fusion, so while `motion.HasMotion` is set every frame submits (`:778-799`). `PADFORGE_NO_RAWDEDUP=1` disables this path's dedup at launch (`:716-717`).
 
@@ -355,7 +441,16 @@ Values write into `_axesScratch` keyed by the cached profile stick/trigger rows.
 
 ### SubmitRawReport(ReadOnlySpan<byte> report)
 
-`HMaestroVirtualController.cs:439`. Pass-through to `_controller.SubmitRawReport(report)` (after a `TickFfb()`). Step 5 calls this for PlayStation slots whose profile carries DS4-extended fields (touchpad, gyro, accel, battery) that `HMGamepadState` doesn't model. On USB Sony slots this is the only submit per poll now that Step 5 skips the redundant extended leg when a raw packer exists.
+`HMaestroVirtualController.cs:439`. Submits a pre-packed frame (after a `TickFfb()`). Step 5 calls it for PlayStation slots whose profile carries DS4-extended fields (touchpad, gyro, accel, battery) that `HMGamepadState` doesn't model, and for every Extended slot on a Valve profile that has a packer. On USB Sony slots this is the only submit per poll now that Step 5 skips the redundant extended leg when a raw packer exists.
+
+Two driver-side paths, chosen once at construction by `_extendedFrameCarriesItsOwnId` (true when the profile declares a non-zero input report id and is always armed):
+
+| Frame | Call | Driver behavior |
+|---|---|---|
+| Data bytes only | `_controller.SubmitRawReport` | The driver prepends the descriptor's first report id |
+| Carries its own id | `_controller.SubmitRawExtendedReport` | Emitted verbatim (HIDMaestro v1.7.1, HIDMaestro#58) |
+
+HIDMaestro can infer the second case from frame length, but PadForge says it outright, because the inference flips silently the day a packer size or a declared size moves by one byte. On the 2026 Steam Controller the prepend branch means that pad's lizard-mode mouse. See [Descriptors that lead with a mouse](#descriptors-that-lead-with-a-mouse). `PackerFramesCarryTheirOwnReportId` pins the pairing.
 
 ### Inbound game-feedback pack (issue #236)
 
@@ -988,4 +1083,4 @@ Note that mouse movement and scroll do NOT go through `SendInput` here. Those ro
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

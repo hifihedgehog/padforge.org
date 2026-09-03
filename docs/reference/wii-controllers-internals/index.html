@@ -16,7 +16,7 @@
         <link rel="prev" href="../midi-input-internals/">
       
       
-        <link rel="next" href="../2d-overlay-system/">
+        <link rel="next" href="../handheld-buttons-internals/">
       
       
         
@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2141,6 +2171,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2569,6 +2611,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2625,6 +2695,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2661,6 +2815,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2973,6 +3155,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sensor-frame-and-grip-392" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensor frame and grip (#392)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motion-plus-calibration-known-limitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Plus calibration (known limitation)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#related-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2987,6 +3191,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -3286,6 +3518,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sensor-frame-and-grip-392" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensor frame and grip (#392)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motion-plus-calibration-known-limitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Plus calibration (known limitation)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#related-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3359,7 +3613,11 @@
 </tr>
 <tr>
 <td><code>PadForge.Engine/Common/Mapping/SourceCoercion.cs</code></td>
-<td><code>ReadTunedBalanceBoard</code>: the Lean X / Lean Y / Total Weight coercions from the four corner load cells.</td>
+<td><code>ReadTunedBalanceBoard</code>: the Lean X / Lean Y / Total Weight coercions from the four corner load cells. The grip rotation (#392): <code>RotateForGrip</code>, <code>GripAxis</code>, <code>GripPov</code>, <code>ApplyMotionGrip</code>, <code>ReadGravity</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/GyroCalibratorService.cs</code></td>
+<td>The at-rest Motion Plus zero: a 1500 ms sample at connect, subtracted in both passthrough toggle states.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/WiiSpeakerService.cs</code></td>
@@ -3376,7 +3634,7 @@
 <h2 id="wiipairingservice-one-inquiry-and-pair-pass">WiiPairingService: one inquiry-and-pair pass<a class="headerlink" href="#wiipairingservice-one-inquiry-and-pair-pass" title="Permanent link">&para;</a></h2>
 <p><em>The <code>RunPairingPass</code> flow, the inquiry parameters, and why a pass returns every device state.</em></p>
 <p><code>RunPairingPass(bool temporary, CancellationToken ct)</code> runs a single Bluetooth inquiry and tries to bond every Wii controller it finds in pairing mode. The sequence is <code>BluetoothFindFirstRadio</code> to get the host radio handle, <code>BluetoothGetRadioInfo</code> to read the host address and name, then <code>BluetoothFindFirstDevice</code> and <code>BluetoothFindNextDevice</code> to walk the inquiry results. The inquiry uses <code>cTimeoutMultiplier = 2</code>, about 2.5 seconds per pass. The call blocks for that duration, so the dialog runs it on a background thread through <code>Task.Run</code>.</p>
-<p>The search parameters set every return flag, not just unknown devices:</p>
+<p>The search parameters set every return flag, unknown devices included:</p>
 <table>
 <thead>
 <tr>
@@ -3409,7 +3667,7 @@
 <tr>
 <td><code>fIssueInquiry</code></td>
 <td>1</td>
-<td>Actually scan the air, not just read cached state.</td>
+<td>Scan the air rather than read cached state.</td>
 </tr>
 <tr>
 <td><code>cTimeoutMultiplier</code></td>
@@ -3647,18 +3905,106 @@
 <p>A fourth fix feeds the IR pointer above: the driver posts the two IR dots on dedicated joystick axes 6-9 (<code>hifihedgehog/SDL#6</code> follow-up <code>41909fdc4e</code>), separate from the gamepad sticks so an extension keeps axes 0-3. Further fork fixes handle MotionPlus and D-pad mapping (the MotionPlus identify dead-window, the ~8s MotionPlus presence-churn loop, bare-D-pad POV-hat mapping, IR + MotionPlus coexistence). Those bear on gyro and hat mapping rather than the read path here, so their detail lives on <a href="../../guides/gyro/">Gyro</a> and in the read-only SDL3 fork.</p>
 <p>These live in the SDL3 fork and are read-only from PadForge's side. See <a href="../sdl3-integration/">SDL3 Integration</a>.</p>
 <hr />
+<h2 id="sensor-frame-and-grip-392">Sensor frame and grip (#392)<a class="headerlink" href="#sensor-frame-and-grip-392" title="Permanent link">&para;</a></h2>
+<p><em>Where the Wii Remote's motion frame comes from, what the grip rotation does to it, and every place it lands.</em></p>
+<p>The remote's accelerometer reports in its own hardware frame. SDL's <code>hidapi_wii</code> driver permutes it into the standard controller frame for the aiming hold in <code>HandleWiiRemoteAccelData</code>, and PadForge keeps that frame end to end.</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Hardware accelerometer</th>
+<th>SDL frame (<code>values = (-x, z, y)</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td>Left</td>
+<td>Right</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>Toward the player</td>
+<td>Up</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>Up</td>
+<td>Toward the player</td>
+</tr>
+</tbody>
+</table>
+<p>The Motion Plus report carries its three rates in the order yaw, roll, pitch. <code>HandleMotionPlusData</code> posts them as <code>(-pitch, +yaw, +roll)</code>, the same rotation applied to the gyro. The signs are consistent with the accelerometer. Dolphin's emulated calibration block sets the yaw and pitch scales below zero, so a game reading through the block sees negative gain on those two axes, while raw counts under a fixed positive scale, which is what SDL uses, follow the right-hand rule in the hardware frame on all three axes. SDL's permutation is the proper rotation of that into its frame. There is no sign bug in the decode.</p>
+<p>That frame is the aiming hold. The <strong>Held As</strong> row on the Gyro tab (<code>PadSetting.MotionGrip</code>, default <code>"Pointing"</code>) supplies a body-to-game rotation for the other three holds, all proper rotations (determinant +1), so one table serves the gyro, the accelerometer, and the gravity estimate:</p>
+<table>
+<thead>
+<tr>
+<th>Grip value</th>
+<th>Label</th>
+<th>(x, y, z) becomes</th>
+<th>Grounding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pointing</code></td>
+<td>Pointing</td>
+<td>(x, y, z)</td>
+<td>Identity.</td>
+</tr>
+<tr>
+<td><code>Sideways</code></td>
+<td>Sideways, Face Up</td>
+<td>(z, y, -x)</td>
+<td>The swap <code>SDL_hidapi_switch.c</code> applies to a single left Joy-Con held sideways. Dolphin's <code>RotateZ</code> sideways orientation, inverted.</td>
+</tr>
+<tr>
+<td><code>WiiWheel</code></td>
+<td>Wii Wheel, Face Toward You</td>
+<td>(z, x, y)</td>
+<td>Bench-derived on a real remote: with the face-up table, the wheel hold steered on yaw. Body yaw becomes roll, body pitch becomes yaw.</td>
+</tr>
+<tr>
+<td><code>Upright</code></td>
+<td>Upright</td>
+<td>(x, -z, y)</td>
+<td>Resting gravity moves from the body's -Z onto +Y, where a flat pad reports it. Dolphin's <code>RotateX</code>, inverted.</td>
+</tr>
+</tbody>
+</table>
+<p><code>RotateForGrip</code> is the vector form. <code>GripAxis(grip, axis)</code> is the per-axis form (source axis plus sign), used by <code>ReadCalibratedGyroRate</code> so that a single-axis read debiases the source axis in the frame the calibrator sampled and then applies the sign. Calibration and grip are independent. <code>ReadGravity(guid, slot, aux)</code> replaced the seven inline gravity fetches (the four space projections, the Motion Lean reads, <code>ReadGyroLean</code>, <code>SourceKindRuntime.TickMotionLean</code>) and rotates the body sensor's gravity only. The aux sensor (Nunchuk, left Joy-Con) is a separate body and keeps its frame, except inside the fused Joy-Con pair read, where both halves are one body and rotate together.</p>
+<p>Where the rotation lands:</p>
+<ul>
+<li><code>ApplyMotionGrip</code> on the accelerometer copy of the motion snapshot (<code>InputManager.cs</code>), which feeds the virtual controller's motion report and the DSU server, in both states of the passthrough tuning toggle. The gyro copy gets it inside <code>GetPassthroughGyro</code>'s calibrated read.</li>
+<li>The Gyro tab's live rate and accelerometer readouts (<code>InputService.cs</code>), so they show the held frame.</li>
+<li><code>GripPov(guid, slot, centidegrees)</code>: for <code>Sideways</code> and <code>WiiWheel</code>, <code>(cd - 9000) mod 36000</code>, so a physical 9000 (Right) reads 0 (Up). Dolphin's <code>dpad_sideways_bitmasks</code> table, with the diagonals carried by the angle arithmetic. <code>Upright</code> and <code>Pointing</code> are the identity, and a centered hat (negative) passes through. Applied at the evaluator's <code>PovDirection</code> reads (<code>SourceEvaluator</code>, <code>SourceKindRuntime</code>, <code>SourceCoercion</code>), the legacy <code>PadSetting</code> mapper in <code>InputManager.Step3</code>, the macro trigger reads in <code>Step4b</code>, and <code>RecorderService</code>, so a press recorded in the hold fires on that same press. Output-side hats (the HIDMaestro raw POVs, the Valve packers, the Step 4 combine) are untouched, and the Devices page stays physical.</li>
+<li>The Compass yaw correction is gated on <code>GripAxis(grip, 1).source == 1</code>: it is measured on the body's yaw axis and only belongs on a hold that keeps yaw on the yaw lane.</li>
+</ul>
+<p>A user edit of Held As runs <code>InputService.RecenterMotionForSelectedDevice</code> from the <code>MainWindow</code> property hook, guarded by <code>ShouldRecenterOnGripChange</code> so a <code>PadSetting</code> load (device selection, profile switch) does not drop every device's estimate on the slot. It re-seeds that one device's gravity estimate from the next accelerometer sample and drops its lean, tilt, and shake neutrals.</p>
+<p>The tab itself was gated on <code>HasGyro</code> before 4.4.0, so an accelerometer-only remote never saw it and the Gyro Tilt card was unreachable. <code>PadPage.xaml.cs</code> now shows the tab for <code>HasGyro || HasAccel</code> and hides the five rate cards (<code>GyroPassthroughCard</code>, <code>GyroCalibrationCard</code>, <code>GyroSensitivityCard</code>, <code>GyroResponseCard</code>, <code>GyroEngageCard</code>) unless <code>HasGyro</code>.</p>
+<hr />
+<h2 id="motion-plus-calibration-known-limitation">Motion Plus calibration (known limitation)<a class="headerlink" href="#motion-plus-calibration-known-limitation" title="Permanent link">&para;</a></h2>
+<p><em>The fork's Motion Plus decode applies fixed constants and reads no calibration block.</em></p>
+<p>A Motion Plus carries a 32-byte calibration block at register <code>0xA60020</code> (<code>0xA40020</code> when passthrough is active) with a per-axis zero and scale for the slow and fast ranges. Dolphin reads it (<code>MotionPlus.cpp</code>, <code>GetRelevantCalibration</code>). The SDL fork's <code>HandleMotionPlusData</code> does not. It subtracts a fixed zero of 8192 counts on every axis and applies a fixed scale of 8192/440 counts per degree per second in the slow range and 8192/2000 in the fast range, chosen per axis by the report's slow/fast flag bits.</p>
+<p>Two consequences follow:</p>
+<ul>
+<li><strong>The zero is PadForge's.</strong> <code>GyroCalibratorService</code> auto-runs a 1500 ms at-rest sample the first time a slot sees the remote, and <code>GetPassthroughGyro</code> subtracts the measured bias in both passthrough toggle states. The calibrator rejects a bias above <code>MaxPlausibleBias</code> (0.15 rad/s) and writes nothing, so a remote whose true zero sits further from 8192 than that stays uncorrected. Whether a real Motion Plus zero can exceed that gate has not been measured.</li>
+<li><strong>The scale is fixed.</strong> Against the calibration block of Dolphin's reference unit (0x4400 &gt;&gt; 2 = 4352 counts per 270 degrees per second), the fixed slow scale reads about 13% low, and the yaw axis is a different sensor chip with its own scale. Derived from source, not measured on a remote.</li>
+</ul>
+<p>A fork patch would read the block once after activation, use the per-axis zero and scale, and fall back to today's constants when the checksum fails. It is not filed.</p>
+<hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../devices/wii-controllers/">Wii Controllers</a>: the user guide for this feature.</li>
 <li><a href="../input-pipeline/">Input Pipeline</a>: the six-step pipeline that maps the controller once SDL surfaces it.</li>
 <li><a href="../sdl3-integration/">SDL3 Integration</a>: the <code>hidapi_wii</code> driver, the fork fixes, and the axis capability gate.</li>
 <li><a href="../../features/devices/">Devices</a>: the Pair button and the paired controller's device card.</li>
-<li><a href="../../guides/gyro/">Gyro</a>: the Wii Remote's accelerometer and Motion Plus path.</li>
+<li><a href="../../guides/gyro/">Gyro</a>: the Wii Remote's accelerometer and Motion Plus path, and the Grip card.</li>
 <li><a href="../controller-audio-internals/">Controller Audio Internals</a>: the shared sink model the Wii Remote speaker follows, and the HD-haptic tone path.</li>
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 
@@ -3713,13 +4059,13 @@
         
         
           
-          <a href="../2d-overlay-system/" class="md-footer__link md-footer__link--next" aria-label="Next: 2D Overlay System">
+          <a href="../handheld-buttons-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Handheld PC Buttons Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                2D Overlay System
+                Handheld PC Buttons Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

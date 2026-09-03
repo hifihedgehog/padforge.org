@@ -16,7 +16,7 @@
         <link rel="prev" href="../impulse-triggers/">
       
       
-        <link rel="next" href="../controller-audio/">
+        <link rel="next" href="../lightbar-mirrors/">
       
       
         
@@ -1042,6 +1042,8 @@
       
         
       
+        
+      
     
     
     
@@ -1668,6 +1670,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mirroring-the-games-color-to-other-rgb-gear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mirroring the game's color to other RGB gear
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1693,6 +1706,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2407,6 +2448,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2832,6 +2885,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2888,6 +2969,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2924,6 +3089,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -3008,6 +3201,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3333,6 +3554,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mirroring-the-games-color-to-other-rgb-gear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mirroring the game's color to other RGB gear
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3427,7 +3659,7 @@
 <td>One color fades in and out at the configured period.</td>
 </tr>
 <tr>
-<td>Strobe — Square-Wave Flash</td>
+<td>Strobe: Square-Wave Flash</td>
 <td>Hard on/off square-wave flash at the configured period.</td>
 </tr>
 <tr>
@@ -3439,31 +3671,31 @@
 <td>Steps through the configured palette. Smooth blend is a toggle.</td>
 </tr>
 <tr>
-<td>Battery — Gradient by Charge Level</td>
+<td>Battery: Gradient by Charge Level</td>
 <td>A linear blend between the configured Low Battery and Full Battery colors, driven by the pad's reported battery percent. Defaults red at 0 % and green at 100 %. DualSense and DualShock 4 battery reads.</td>
 </tr>
 <tr>
-<td>Audio Pulse — Static Color</td>
+<td>Audio Pulse: Static Color</td>
 <td>Modulates the configured base color by the system audio peak.</td>
 </tr>
 <tr>
-<td>Audio Pulse — Random Color per Beat</td>
+<td>Audio Pulse: Random Color per Beat</td>
 <td>A new random hue on each detected onset.</td>
 </tr>
 <tr>
-<td>Audio Pulse — Rainbow Cycle</td>
+<td>Audio Pulse: Rainbow Cycle</td>
 <td>Hue rotation modulated by audio peak.</td>
 </tr>
 <tr>
-<td>Audio Bands — Three Colors, Hard Transitions</td>
+<td>Audio Bands: Three Colors, Hard Transitions</td>
 <td>Three colors (Quiet / Medium / Loud) with instant switching at thresholds.</td>
 </tr>
 <tr>
-<td>Audio Bands — Three Colors, Smooth Gradient</td>
+<td>Audio Bands: Three Colors, Smooth Gradient</td>
 <td>Same three colors with linear blending between thresholds.</td>
 </tr>
 <tr>
-<td>Audio Bands — Three Colors, Crossfade at Boundaries</td>
+<td>Audio Bands: Three Colors, Crossfade at Boundaries</td>
 <td>Same three colors with a configurable crossfade width at each threshold.</td>
 </tr>
 </tbody>
@@ -3539,7 +3771,7 @@
 <p>Visible for Rainbow Cycle only. Range 0–100. Default 100. Scales the hue rotation's brightness so you can dim Rainbow without touching any other mode's colors. Separate from Period, which sets the rotation speed.</p>
 <hr />
 <h2 id="battery-colors">Battery colors<a class="headerlink" href="#battery-colors" title="Permanent link">&para;</a></h2>
-<p>Visible for Battery — Gradient by Charge Level only. Two bordered cards side-by-side: Low Battery and Full Battery, laid out like the audio-band cards. Each has a color picker, a swatch preview, and R/G/B sliders with per-channel reset buttons. These cards have no hex input.</p>
+<p>Visible for Battery: Gradient by Charge Level only. Two bordered cards side-by-side: Low Battery and Full Battery, laid out like the audio-band cards. Each has a color picker, a swatch preview, and R/G/B sliders with per-channel reset buttons. These cards have no hex input.</p>
 <p>The lightbar blends linearly from the Low Battery color at 0 % charge to the Full Battery color at 100 %, following the pad's reported battery level. Defaults are red at empty and green at full. The blend is a straight linear mix with no separately configurable midpoint.</p>
 <hr />
 <h2 id="color-cycle-palette">Color cycle palette<a class="headerlink" href="#color-cycle-palette" title="Permanent link">&para;</a></h2>
@@ -3628,6 +3860,9 @@
 </ul>
 <p>Guide and Home LED brightness also reaches a pad shared from another PC over Remote Link. The Xbox USB-only limit still applies at that pad's own PC.</p>
 <hr />
+<h2 id="mirroring-the-games-color-to-other-rgb-gear">Mirroring the game's color to other RGB gear<a class="headerlink" href="#mirroring-the-games-color-to-other-rgb-gear" title="Permanent link">&para;</a></h2>
+<p>The color a game writes to a virtual PlayStation controller can also light Razer Chroma and Logitech LIGHTSYNC devices, and the game's rumble can drive Razer Sensa HD haptics. Both are Dashboard toggles, off by default, and they read the virtual pad the game paints rather than anything on this tab. See <a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>.</p>
+<hr />
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.</li>
@@ -3641,9 +3876,10 @@
 <li><a href="../force-feedback/">Force Feedback</a>: rumble and audio bass body rumble (the audio capture is shared with the lightbar's Audio modes).</li>
 <li><a href="../adaptive-triggers/">Adaptive Triggers</a>: DualSense trigger effects on the same physical pads that drive the lightbar.</li>
 <li><a href="../../guides/macros/">Macros</a>: the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, and Set Guide LED Brightness macro action types.</li>
+<li><a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>: the game's lightbar color on Razer Chroma and Logitech LIGHTSYNC gear.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 
@@ -3698,13 +3934,13 @@
         
         
           
-          <a href="../controller-audio/" class="md-footer__link md-footer__link--next" aria-label="Next: Controller Audio">
+          <a href="../lightbar-mirrors/" class="md-footer__link md-footer__link--next" aria-label="Next: Lightbar Mirrors and Sensa Haptics">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Controller Audio
+                Lightbar Mirrors and Sensa Haptics
               </div>
             </div>
             <div class="md-footer__button md-icon">

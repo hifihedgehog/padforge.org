@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2093,6 +2123,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3196,6 +3238,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#handheldbuttondata-v44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HandheldButtonData (v4.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iconpackagedata-v44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IconPackageData (v4.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3839,6 +3903,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -3895,6 +3987,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -3931,6 +4107,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -4015,6 +4219,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -4909,6 +5141,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#handheldbuttondata-v44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HandheldButtonData (v4.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iconpackagedata-v44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IconPackageData (v4.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5395,6 +5649,7 @@
 <p><strong>v4.2.0 additions.</strong> <code>VirtualControllerType</code> gains <code>Vr</code> (6, the SteamVR hand pair, #49). It is the one type capped below the global slot count: <code>SettingsManager.MaxVrSlots</code> is 1, enforced centrally by <code>SettingsManager.CanSlotTakeType()</code>. <code>AppSettingsData</code> and <code>ProfileData</code> gain <code>VrSlotOrder</code> (<code>&lt;VrSlotOrder&gt;</code> / <code>&lt;ProfileVrSlotOrder&gt;</code>), and <code>PadSetting</code> gains a fifth dictionary lane, <code>&lt;VrMappings&gt;</code>, keyed on the <code>VrLayout</code> vocabulary. <code>MacroActionType</code> runs through <code>HeadphoneVolumeDown</code> (53). <code>AppSettingsData</code> and <code>ProfileData</code> gain <code>EnableShiftLayerFlyout</code> and <code>EnableProfileOverlay</code>. <code>AppSettingsData</code> alone gains <code>HeadsetTrackerAddresses</code> (#188). <code>MappingSet</code> gains the Keep Awake trio and the Workshop stick-shape / gyro-engage / gyro-ratchet stamps. <code>PadSetting</code> gains the DualSense mic-mute plus Edge paddle / Fn button descriptors, <code>TriggerRumbleFold</code> and <code>AtVibrationToImpulseEnabled</code> (#271), the per-stick <code>LeftThumbSensitivity</code> / <code>RightThumbSensitivity</code>, <code>Model3DAppearances</code>, and the aux-gyro bias / magnetometer calibration block. <code>TouchpadGestureSettings</code> replaces the pointer stretch pair with the four-field pointer region plus <code>PointerRegionAuthored</code> and <code>RegionSchema</code>. <code>PointerStretchX</code> / <code>PointerStretchY</code> survive as deserialize-only aliases.</p>
 <p><strong>v4.3.0 additions.</strong> <code>AppSettingsData</code> gains <code>WebCustomLayoutsJson</code> (#296, the browser-built custom pad layouts as one machine-scoped JSON array, deliberately not profile content), the battery-alert trio <code>BatteryNotifyEnabled</code> / <code>BatteryNotifyThreshold</code> / <code>BatteryNotifyVibrate</code> (#293), the voice-macro block <code>VoicePhrases</code> / <code>VoiceMacrosEnabled</code> / <code>VoiceMinConfidence</code> / <code>VoiceListeningMode</code> (#317), <code>MappingPickerHiddenDevices</code> (#322), and <code>PsMoveCalibrations</code> (#277). <code>MacroActionType</code> runs through <code>VoiceListenWhileHeld</code> (54). <code>ActionData</code> gains the pressure-scaled turbo block (#290). <code>PadSetting</code> splits the gyro invert toggle into <code>GyroInvertPitch</code> / <code>GyroInvertYaw</code> / <code>GyroInvertRoll</code> (#321), taking the checksum's gyro group to 42. <code>MappingSource</code> gains <code>ParamTiltRangeDeg</code> / <code>ParamTiltInnerDz</code> (#292). <code>MappingSet</code> gains <code>KeepAwakeMotion</code> (discussion #263). <code>TouchpadGestureSettings</code> gains four momentum knobs (#291). <code>IsPerDeviceTuningKey</code> gains the <code>KbmMouseMomentum</code> and <code>GyroTilt</code> raw-bag key families.</p>
 <p><strong>v4.3.2 additions.</strong> <code>UserDevice</code> gains the sparse position arrays <code>CapButtonIndices</code> / <code>CapAxisIndices</code> (discussion #344), and <code>LoadFromDevice</code> gates the effective axis count on <code>SupportedAxisIndices</code> when the wrapper produced one. <code>PadSetting</code> gains the clipboard-only <code>SlotSetExtrasJson</code> / <code>SlotMacrosJson</code> payloads (<code>__SlotSetExtras</code> / <code>__SlotMacros</code>), so a slot Copy / Paste carries the MappingSet's Bass Shakers, SOCD and Keep Awake state plus the slot's macros. <code>AppSettingsData</code> gains <code>DiagnosticsLoggingEnabled</code> (#303). Autosave is two-tier (#331): a 250 ms engine-visible push every tick, the full save after 2 s of quiet.</p>
+<p><strong>v4.4.0 additions.</strong> <code>ProfileData</code> gains <code>PollingRateOverrideMs</code> (#365, <code>0</code> = follow the global knob) and four nullable legs, <code>EnableChromaLightbar</code> (#373), <code>EnableLightsyncLightbar</code> (#382), <code>EnableSensaHaptics</code> (#374), and <code>EnableHeadTracking</code> (#355), where <code>null</code> = no opinion. Every one of the five is authored, never snapshotted, and every profile saved before the field reads as no opinion. <code>AppSettingsData</code> gains their global legs (<code>EnableChromaLightbar</code>, <code>EnableSensaHaptics</code>, <code>EnableLightsyncLightbar</code>, the <code>HeadTracking*</code> quintet), <code>EnableExternalControl</code> (#366), the handheld trio <code>HandheldButtons</code> / <code>HandheldMachineKey</code> / <code>HandheldButtonsEnabled</code> (#353), <code>IconPackages</code> (#390), and the assignment-prompt pair <code>AssignOfferNewDevice</code> / <code>AssignOfferEmptySlot</code>. <code>UserDevice</code> gains <code>QuickChargeEnabled</code> (#372). <code>PadSetting</code> gains <code>MotionGrip</code> (#392), taking the checksum's gyro group to 43. <code>MenuItemDefinition</code> gains <code>MacroName</code> (#390). <code>DeviceSlotConfigData</code> gains <code>AudioTritonLowPassHz</code> (#381, default 250).</p>
 </blockquote>
 <hr />
 <p>This page is a developer reference for PadForge's settings persistence.</p>
@@ -6059,6 +6314,12 @@
 <td><code>&lt;IdleDisconnectSeconds&gt;</code></td>
 <td>(v3.6, #162) Bluetooth idle-disconnect timeout in seconds. When the device is Bluetooth-connected and its input stays idle this long, the host radio drops the link so the controller sleeps. <code>0</code> disables (default). Over USB there is no radio link to drop. Unlike DS4Windows there is no charging gate: an idle pad on a charger still disconnects, because dropping Bluetooth does not interrupt charging.</td>
 </tr>
+<tr>
+<td><code>QuickChargeEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>&lt;QuickChargeEnabled&gt;</code></td>
+<td>(v4.4, #372) Drop the Bluetooth link when the pad reports charging, so it charges without powering the radio. Default false. Fires on the false-to-true charging edge only. A Sony pad carries the same MAC on both transports, so a cable rebinds this one record to the USB wrapper rather than creating a twin: a Bluetooth-pathed record drops through the idle timeout's lane, a wired-rebound record drops the radio by its own MAC serial.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="input-hiding">Input Hiding<a class="headerlink" href="#input-hiding" title="Permanent link">&para;</a></h3>
@@ -6142,6 +6403,16 @@
 <td><code>LastIdleCheckTick</code></td>
 <td><code>long</code></td>
 <td>(#162) Last tick the idle countdown was checked, so the check runs about once a second instead of at poll rate. Polling thread only.</td>
+</tr>
+<tr>
+<td><code>QuickChargePrevCharging</code></td>
+<td><code>bool</code></td>
+<td>(#372) The last charging read, so the drop fires on the edge only. Not reset on a fresh connection: a user who re-links Bluetooth while the cable stays in is left alone until an unplug re-arms it. Seeded from live state on the first observation, never compared against the default.</td>
+</tr>
+<tr>
+<td><code>LastQuickChargeCheckTick</code></td>
+<td><code>long</code></td>
+<td>(#372) Same ~1 Hz discipline as the idle countdown. Zero means the check has not observed this record yet: that observation seeds <code>QuickChargePrevCharging</code> and is never an edge.</td>
 </tr>
 <tr>
 <td><code>ActuatorCount</code></td>
@@ -6423,7 +6694,7 @@
 <li><strong>Audio bass trigger rumble</strong> (5, v3.2): AudioRumbleTriggersEnabled, AudioRumbleTriggersSensitivity, AudioRumbleTriggersCutoffHz, AudioRumbleLeftTrigger, AudioRumbleRightTrigger</li>
 <li><strong>Audio bass rumble</strong> (5): AudioRumbleEnabled, AudioRumbleSensitivity, AudioRumbleCutoffHz, AudioRumbleLeftMotor, AudioRumbleRightMotor</li>
 <li><strong>Constant force</strong> (3): ConstantForceEnabled, ConstantForceX, ConstantForceY</li>
-<li><strong>Gyro tuning, IR pointer, and 3D appearance</strong> (42, v3.2–v4.3): GyroSensitivityH/V, GyroDeadZoneDegPerSec, GyroSmoothingAlpha, GyroAcceleration, GyroOutputCurve, GyroSensitivityUnits, GyroEasyAimStickThreshold, GyroEngageStickSide (v3.6, #120), GyroEngageStickDirection (v3.6, #120), IrSensorBarPos (v3.6, #146/#151), IrSensorBarComp (v3.6, #146/#151), IrSmoothing (v3.6, #146/#151), PointerMode (v4, #203), PointerFpsSpeed (v4, #203), Model3DAppearances (the per-model-family 3D preview colorway, cosmetic but checksummed so CloneDeep does not drop it), GyroBiasPitch/Yaw/Roll, GyroAuxBiasPitch, GyroCompassYaw, MagBiasX/Y/Z, MagFieldNorm, GyroAuxBiasYaw, GyroAuxBiasRoll, GyroCalibratedAtUtc, GyroSpace, GyroPlayerSpaceYawRelaxFactor, GyroWorldSpaceSideReductionThreshold, GyroTighteningThresholdDegPerSec, GyroSmoothingThresholdDegPerSec, GyroSmoothingWindowMs, GyroRealWorldCalibration, GyroAimEngageButton, GyroAimEngageDeviceGuid, GyroAimEngageMode, GyroInvertPitch, GyroInvertYaw, GyroInvertRoll (#321 split the combined toggle. The XML element name for yaw is unchanged, and an empty GyroInvertRoll is a sentinel meaning "saved before the split", resolved through <code>GyroInvertRollEffective</code> to the yaw value), GyroApplyTuningToPassthrough. The eight fields from GyroEngageStickSide through Model3DAppearances append between GyroEasyAimStickThreshold and GyroBiasPitch in checksum order. The aux-bias and magnetometer fields interleave as written above, not in name order.</li>
+<li><strong>Gyro tuning, IR pointer, and 3D appearance</strong> (43, v3.2–v4.4): GyroSensitivityH/V, GyroDeadZoneDegPerSec, GyroSmoothingAlpha, GyroAcceleration, GyroOutputCurve, GyroSensitivityUnits, GyroEasyAimStickThreshold, GyroEngageStickSide (v3.6, #120), GyroEngageStickDirection (v3.6, #120), IrSensorBarPos (v3.6, #146/#151), IrSensorBarComp (v3.6, #146/#151), IrSmoothing (v3.6, #146/#151), PointerMode (v4, #203), PointerFpsSpeed (v4, #203), Model3DAppearances (the per-model-family 3D preview colorway, cosmetic but checksummed so CloneDeep does not drop it), GyroBiasPitch/Yaw/Roll, GyroAuxBiasPitch, GyroCompassYaw, MagBiasX/Y/Z, MagFieldNorm, GyroAuxBiasYaw, GyroAuxBiasRoll, GyroCalibratedAtUtc, GyroSpace, MotionGrip (v4.4, #392), GyroPlayerSpaceYawRelaxFactor, GyroWorldSpaceSideReductionThreshold, GyroTighteningThresholdDegPerSec, GyroSmoothingThresholdDegPerSec, GyroSmoothingWindowMs, GyroRealWorldCalibration, GyroAimEngageButton, GyroAimEngageDeviceGuid, GyroAimEngageMode, GyroInvertPitch, GyroInvertYaw, GyroInvertRoll (#321 split the combined toggle. The XML element name for yaw is unchanged, and an empty GyroInvertRoll is a sentinel meaning "saved before the split", resolved through <code>GyroInvertRollEffective</code> to the yaw value), GyroApplyTuningToPassthrough. The eight fields from GyroEngageStickSide through Model3DAppearances append between GyroEasyAimStickThreshold and GyroBiasPitch in checksum order. The aux-bias and magnetometer fields interleave as written above, not in name order.</li>
 <li><strong>Trigger rumble routing</strong> (12, v4, #102): LeftTriggerRouteSource, RightTriggerRouteSource, LeftTriggerRouteMode, RightTriggerRouteMode, LeftTriggerRouteScale, RightTriggerRouteScale, LeftTriggerRouteActivator, RightTriggerRouteActivator, LeftTriggerRouteActivatorDeviceGuid, RightTriggerRouteActivatorDeviceGuid, LeftTriggerRouteActivatorMode, RightTriggerRouteActivatorMode. Emitted inside the gyro region, between GyroAimEngageMode and GyroInvertPitch.</li>
 <li><strong>Axis inversion</strong> (4): LeftThumbAxisXInvert, LeftThumbAxisYInvert, RightThumbAxisXInvert, RightThumbAxisYInvert</li>
 <li><strong>Threshold</strong> (1): AxisToButtonThreshold</li>
@@ -7249,6 +7520,11 @@
 <td><code>"35"</code></td>
 <td>(v4, #203) FPS-Mouse speed knob, pixels per 10 ms at full deflection.</td>
 </tr>
+<tr>
+<td><code>MotionGrip</code></td>
+<td><code>"Pointing"</code></td>
+<td>(v4.4, #392) How the controller is held: <code>Pointing</code> (the frame the driver delivers), <code>Sideways</code> (top edge left, face up), <code>WiiWheel</code> (top edge left, face toward the player), or <code>Upright</code> (top edge up). One rotation applied to the body gyro, the accelerometer, and gravity together, for mapping sources and for the motion the virtual controller reports. The D-pad follows the same frame. Per (device, slot). Sits between <code>GyroSpace</code> and <code>GyroPlayerSpaceYawRelaxFactor</code> in checksum order.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="dictionary-based-mapping-systems">Dictionary-Based Mapping Systems<a class="headerlink" href="#dictionary-based-mapping-systems" title="Permanent link">&para;</a></h3>
@@ -7511,8 +7787,8 @@
 <td><code>ConstantForceEnabled</code>, <code>ConstantForceX</code>, <code>ConstantForceY</code></td>
 </tr>
 <tr>
-<td><strong>Gyro tuning, IR pointer, 3D appearance</strong> (42, v3.2–v4.3)</td>
-<td><code>GyroSensitivityH</code>, <code>GyroSensitivityV</code>, <code>GyroDeadZoneDegPerSec</code>, <code>GyroSmoothingAlpha</code>, <code>GyroAcceleration</code>, <code>GyroOutputCurve</code>, <code>GyroSensitivityUnits</code>, <code>GyroEasyAimStickThreshold</code>, <code>GyroEngageStickSide</code>, <code>GyroEngageStickDirection</code>, <code>IrSensorBarPos</code>, <code>IrSensorBarComp</code>, <code>IrSmoothing</code>, <code>PointerMode</code>, <code>PointerFpsSpeed</code>, <code>Model3DAppearances</code>, <code>GyroBiasPitch</code>, <code>GyroBiasYaw</code>, <code>GyroBiasRoll</code>, <code>GyroAuxBiasPitch</code>, <code>GyroAuxBiasYaw</code>, <code>GyroAuxBiasRoll</code>, <code>GyroCompassYaw</code>, <code>MagBiasX</code>, <code>MagBiasY</code>, <code>MagBiasZ</code>, <code>MagFieldNorm</code>, <code>GyroCalibratedAtUtc</code>, <code>GyroSpace</code>, <code>GyroPlayerSpaceYawRelaxFactor</code>, <code>GyroWorldSpaceSideReductionThreshold</code>, <code>GyroTighteningThresholdDegPerSec</code>, <code>GyroSmoothingThresholdDegPerSec</code>, <code>GyroSmoothingWindowMs</code>, <code>GyroRealWorldCalibration</code>, <code>GyroAimEngageButton</code>, <code>GyroAimEngageDeviceGuid</code>, <code>GyroAimEngageMode</code>, <code>GyroInvertPitch</code>, <code>GyroInvertYaw</code>, <code>GyroInvertRoll</code>, <code>GyroApplyTuningToPassthrough</code></td>
+<td><strong>Gyro tuning, IR pointer, 3D appearance</strong> (43, v3.2–v4.4)</td>
+<td><code>GyroSensitivityH</code>, <code>GyroSensitivityV</code>, <code>GyroDeadZoneDegPerSec</code>, <code>GyroSmoothingAlpha</code>, <code>GyroAcceleration</code>, <code>GyroOutputCurve</code>, <code>GyroSensitivityUnits</code>, <code>GyroEasyAimStickThreshold</code>, <code>GyroEngageStickSide</code>, <code>GyroEngageStickDirection</code>, <code>IrSensorBarPos</code>, <code>IrSensorBarComp</code>, <code>IrSmoothing</code>, <code>PointerMode</code>, <code>PointerFpsSpeed</code>, <code>Model3DAppearances</code>, <code>GyroBiasPitch</code>, <code>GyroBiasYaw</code>, <code>GyroBiasRoll</code>, <code>GyroAuxBiasPitch</code>, <code>GyroAuxBiasYaw</code>, <code>GyroAuxBiasRoll</code>, <code>GyroCompassYaw</code>, <code>MagBiasX</code>, <code>MagBiasY</code>, <code>MagBiasZ</code>, <code>MagFieldNorm</code>, <code>GyroCalibratedAtUtc</code>, <code>GyroSpace</code>, <code>MotionGrip</code>, <code>GyroPlayerSpaceYawRelaxFactor</code>, <code>GyroWorldSpaceSideReductionThreshold</code>, <code>GyroTighteningThresholdDegPerSec</code>, <code>GyroSmoothingThresholdDegPerSec</code>, <code>GyroSmoothingWindowMs</code>, <code>GyroRealWorldCalibration</code>, <code>GyroAimEngageButton</code>, <code>GyroAimEngageDeviceGuid</code>, <code>GyroAimEngageMode</code>, <code>GyroInvertPitch</code>, <code>GyroInvertYaw</code>, <code>GyroInvertRoll</code>, <code>GyroApplyTuningToPassthrough</code></td>
 </tr>
 <tr>
 <td><strong>Axis inversion</strong> (4)</td>
@@ -7685,7 +7961,7 @@
 <tr>
 <td><code>&lt;Menu&gt;</code></td>
 <td><code>List&lt;MenuDefinitionEntry&gt;</code></td>
-<td>(v4.1, #9) Radial / touch menus authored for or imported onto this slot (<code>PadForge.Engine/Menus/MenuDefinitionEntry.cs</code>). Every scalar field serializes as an <code>[XmlAttribute]</code>: per-entry <code>DeviceGuid</code> (<code>""</code> = any device on the slot, the Workshop-import form), <code>MenuId</code> (default 1), <code>Name</code>, <code>Kind</code> (<code>Radial</code> / <code>Grid</code>), <code>HostDescriptor</code> (an abstract stick, default <code>"Gamepad RightStick"</code>, or <code>"Touchpad N"</code>), <code>HostHalf</code>, the custom host pair <code>CustomXDescriptor</code> / <code>CustomYDescriptor</code>, <code>ClickDescriptor</code>, <code>LayerMask</code>, <code>FireType</code> (default <code>Click</code>), <code>CellCount</code> (default 4), <code>HasCenter</code>, <code>ShowLabels</code> (default true), the overlay geometry (<code>PosXPercent</code> / <code>PosYPercent</code> default 50, <code>ScalePercent</code> default 100, <code>OpacityPercent</code> default 90), <code>EngageDeadzonePercent</code> (default 25), <code>SensitivityPercent</code> (default 100), <code>Enabled</code> (default true). Cells serialize as <code>&lt;Item&gt;</code> child elements (<code>MenuItemDefinition</code>: <code>Index</code>, <code>Label</code>, <code>Icon</code>, and the optional direct bindings <code>VirtualKey</code> / <code>XboxButtons</code> / <code>ExtendedButton</code>, all attributes). Items without a direct binding deliver through rows / macros keyed on the fired descriptor <code>"Menu {MenuId} Item {k}"</code>. Empty list = no menus.</td>
+<td>(v4.1, #9) Radial / touch menus authored for or imported onto this slot (<code>PadForge.Engine/Menus/MenuDefinitionEntry.cs</code>). Every scalar field serializes as an <code>[XmlAttribute]</code>: per-entry <code>DeviceGuid</code> (<code>""</code> = any device on the slot, the Workshop-import form), <code>MenuId</code> (default 1), <code>Name</code>, <code>Kind</code> (<code>Radial</code> / <code>Grid</code>), <code>HostDescriptor</code> (an abstract stick, default <code>"Gamepad RightStick"</code>, or <code>"Touchpad N"</code>), <code>HostHalf</code>, the custom host pair <code>CustomXDescriptor</code> / <code>CustomYDescriptor</code>, <code>ClickDescriptor</code>, <code>LayerMask</code>, <code>FireType</code> (default <code>Click</code>), <code>CellCount</code> (default 4), <code>HasCenter</code>, <code>ShowLabels</code> (default true), the overlay geometry (<code>PosXPercent</code> / <code>PosYPercent</code> default 50, <code>ScalePercent</code> default 100, <code>OpacityPercent</code> default 90), <code>EngageDeadzonePercent</code> (default 25), <code>SensitivityPercent</code> (default 100), <code>Enabled</code> (default true). Cells serialize as <code>&lt;Item&gt;</code> child elements (<code>MenuItemDefinition</code>: <code>Index</code>, <code>Label</code>, <code>Icon</code>, <code>MacroName</code>, and the optional direct bindings <code>VirtualKey</code> / <code>XboxButtons</code> / <code>ExtendedButton</code>, all attributes). <code>MacroName</code> (v4.4, #390) names a macro on the same slot the cell triggers while fired. The cell is an additional trigger source, so the macro's own trigger mode keeps its meaning. A name the slot no longer declares is an inert no-op, and renames retag through the macro name-change hook. <code>Icon</code> resolves in order as a <code>pficon://Package/entry</code> icon-pack reference (#390), a loose image path (exe-relative preferred), or a bare Steam binding-icon file name. Both are append-only: absent in older files = empty. Items without a direct binding or macro deliver through rows / macros keyed on the fired descriptor <code>"Menu {MenuId} Item {k}"</code>. Empty list = no menus.</td>
 </tr>
 </tbody>
 </table>
@@ -8311,6 +8587,20 @@
 <td>(v4.3, #293) Also buzz the device when the notification fires.</td>
 </tr>
 <tr>
+<td><code>AssignOfferNewDevice</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>true</code></td>
+<td>(v4.4) Offer a never-seen device to the open virtual controller when it connects.</td>
+</tr>
+<tr>
+<td><code>AssignOfferEmptySlot</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>true</code></td>
+<td>(v4.4) Offer any connecting device when the open virtual controller has nothing assigned.</td>
+</tr>
+<tr>
 <td><code>StartMinimized</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code></td>
@@ -8372,6 +8662,13 @@
 <td><code>[XmlElement]</code></td>
 <td><code>false</code></td>
 <td>Foreground-based auto profile switching</td>
+</tr>
+<tr>
+<td><code>EnableExternalControl</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.4, #366) Serve the <code>PadForge.Control</code> named pipe while the engine runs. The held-profile pin is runtime only and never written. See <a href="../external-control-internals/">External Control Internals</a>.</td>
 </tr>
 <tr>
 <td><code>ActiveProfileId</code></td>
@@ -8456,6 +8753,62 @@
 <td><code>[XmlElement]</code></td>
 <td><code>8080</code></td>
 <td>Web controller port</td>
+</tr>
+<tr>
+<td><code>EnableChromaLightbar</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.4, #373) Razer Chroma lightbar mirror, the global leg. Stands when the active profile's nullable <code>ProfileData.EnableChromaLightbar</code> is null.</td>
+</tr>
+<tr>
+<td><code>EnableSensaHaptics</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: <code>ProfileData.EnableSensaHaptics</code>.</td>
+</tr>
+<tr>
+<td><code>EnableLightsyncLightbar</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.4, #382) Logitech LIGHTSYNC lightbar mirror, the global leg. Per-profile leg: <code>ProfileData.EnableLightsyncLightbar</code>.</td>
+</tr>
+<tr>
+<td><code>HeadTrackingEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.4, #355) Head tracking master switch, the global leg. Off means no device row, no UDP socket, no FreeTrack mapping. Per-profile leg: <code>ProfileData.EnableHeadTracking</code>.</td>
+</tr>
+<tr>
+<td><code>HeadTrackingUdpPort</code></td>
+<td><code>int</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>4242</code></td>
+<td>(v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only.</td>
+</tr>
+<tr>
+<td><code>HeadTrackingFreeTrack</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>true</code></td>
+<td>(v4.4, #355) Also read the FreeTrack 2.0 shared memory. Global only.</td>
+</tr>
+<tr>
+<td><code>HeadTrackingRotationRange</code></td>
+<td><code>int</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>90</code></td>
+<td>(v4.4, #355) Degrees of head rotation at full axis deflection. Global only.</td>
+</tr>
+<tr>
+<td><code>HeadTrackingTranslationRange</code></td>
+<td><code>int</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>30</code></td>
+<td>(v4.4, #355) Centimeters of head travel at full axis deflection. Global only.</td>
 </tr>
 <tr>
 <td><code>WebCustomLayoutsJson</code></td>
@@ -8694,6 +9047,34 @@
 <td><code>[XmlElement]</code></td>
 <td><code>0</code></td>
 <td>(v4.3, #317) 0 = always listening, 1 = push-to-talk.</td>
+</tr>
+<tr>
+<td><code>HandheldButtons</code></td>
+<td><code>HandheldButtonData[]</code></td>
+<td><code>[XmlArray("HandheldButtons")][XmlArrayItem("Button")]</code></td>
+<td><code>null</code></td>
+<td>(v4.4, #353) Learned handheld hidden buttons, each a named stable raw-button index plus its delivery path. See <a href="#handheldbuttondata-v44">HandheldButtonData</a>.</td>
+</tr>
+<tr>
+<td><code>HandheldMachineKey</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>""</code></td>
+<td>(v4.4, #353) The machine the learned buttons belong to.</td>
+</tr>
+<tr>
+<td><code>HandheldButtonsEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(v4.4, #353) The Settings card's <strong>Enable Handheld PC Buttons</strong>. Off means no device rows, no keyboard hook, no vendor HID handles, no sensor subscription.</td>
+</tr>
+<tr>
+<td><code>IconPackages</code></td>
+<td><code>IconPackageData[]</code></td>
+<td><code>[XmlArray("IconPackages")][XmlArrayItem("Package")]</code></td>
+<td><code>null</code></td>
+<td>(v4.4, #390) Registered <code>.pficons</code> menu icon packs: Name + stored path (exe-relative when the pack sits in the application directory). Same shape as <code>SoundPackages</code>.</td>
 </tr>
 <tr>
 <td><code>MappingPickerHiddenDevices</code></td>
@@ -8977,6 +9358,73 @@
 </tr>
 </tbody>
 </table>
+<h3 id="handheldbuttondata-v44">HandheldButtonData (v4.4)<a class="headerlink" href="#handheldbuttondata-v44" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>PadForge.App/Services/SettingsService.cs</code> (top-level class co-located in the service file)</p>
+<p>A learned handheld hidden button (issue #353). Stored in <code>&lt;HandheldButtons&gt;</code> on <code>AppSettings</code>, one <code>&lt;Button&gt;</code> per entry. Every member is an <code>[XmlAttribute]</code>. A button carries whichever delivery paths the learner saw: a keyboard chord, a vendor HID report field, or a WMI event.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td><code>string</code></td>
+<td>User-chosen display name.</td>
+</tr>
+<tr>
+<td><code>Button</code></td>
+<td><code>int</code></td>
+<td>Stable raw-button index. Default <code>-1</code>.</td>
+</tr>
+<tr>
+<td><code>Keys</code></td>
+<td><code>string</code></td>
+<td>Keyboard chord, comma-joined key codes.</td>
+</tr>
+<tr>
+<td><code>Collection</code></td>
+<td><code>string</code></td>
+<td>Vendor report collection as <code>VID:PID:PAGE:USAGE</code>.</td>
+</tr>
+<tr>
+<td><code>ReportId</code></td>
+<td><code>byte</code></td>
+<td>Vendor report id.</td>
+</tr>
+<tr>
+<td><code>ByteIndex</code></td>
+<td><code>int</code></td>
+<td>Byte within the report.</td>
+</tr>
+<tr>
+<td><code>Mask</code></td>
+<td><code>byte</code></td>
+<td>Bit mask (kind 0).</td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td><code>byte</code></td>
+<td>Match value (kind 1).</td>
+</tr>
+<tr>
+<td><code>Kind</code></td>
+<td><code>int</code></td>
+<td><code>0</code> = bit, <code>1</code> = value.</td>
+</tr>
+<tr>
+<td><code>WmiClass</code> / <code>WmiProperty</code> / <code>WmiValue</code></td>
+<td><code>string</code></td>
+<td>The WMI event class, property, and value for a vendor event key.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="iconpackagedata-v44">IconPackageData (v4.4)<a class="headerlink" href="#iconpackagedata-v44" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>PadForge.App/Services/SettingsService.cs</code> (top-level class co-located in the service file)</p>
+<p>A registered menu icon pack (issue #390). Stored in <code>&lt;IconPackages&gt;</code> on <code>AppSettings</code>, one <code>&lt;Package&gt;</code> per entry, both members <code>[XmlAttribute]</code>: <code>Name</code> and <code>Path</code> (exe-relative when under the application directory). Menu cells reference an entry as <code>pficon://Package/entry</code> in <code>MenuItemDefinition.Icon</code>.</p>
 <hr />
 <h2 id="macrodata-and-actiondata">MacroData and ActionData<a class="headerlink" href="#macrodata-and-actiondata" title="Permanent link">&para;</a></h2>
 <h3 id="macrodata">MacroData<a class="headerlink" href="#macrodata" title="Permanent link">&para;</a></h3>
@@ -9120,7 +9568,7 @@
 <tr>
 <td><code>LayerMask</code></td>
 <td><code>string</code></td>
-<td>(#253/#254) Per-macro shift-layer scope. Empty = any layer. Stamped at the add funnel; migrator pins legacy macros to Base semantics via Any.</td>
+<td>(#253/#254) Per-macro shift-layer scope. Empty = any layer. Stamped at the add funnel. The migrator pins legacy macros to Base semantics via Any.</td>
 </tr>
 <tr>
 <td><code>ConsumeTriggerButtons</code></td>
@@ -9734,93 +10182,104 @@
 <a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;New Profile&quot;</span><span class="p">;</span>
 <a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">ExecutableNames</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
 <a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">    </span><span class="c1">// Device-to-slot assignments captured with the profile</span>
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">    </span><span class="na">[XmlArray(&quot;Entries&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Entry&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ProfileEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">Entries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">    </span><span class="c1">// v4.4 (#365): per-profile polling interval. 0 = follow the global knob.</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">    </span><span class="c1">// Authored like Name and ExecutableNames, skipped by the state-save copy.</span>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PollingRateOverrideMs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>
-<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfilePadSettings&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadSetting&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">PadSetting</span><span class="p">[]</span><span class="w"> </span><span class="n">PadSettings</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a>
-<a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a><span class="w">    </span><span class="c1">// v3.2: per-VC mapping tables (multi-source rows + shift layers)</span>
-<a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotMappingSets&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;MappingSet&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">MappingSet</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotMappingSets</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="w">    </span><span class="c1">// Device-to-slot assignments captured with the profile</span>
+<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="w">    </span><span class="na">[XmlArray(&quot;Entries&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Entry&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ProfileEntry</span><span class="p">[]</span><span class="w"> </span><span class="n">Entries</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a>
+<a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfilePadSettings&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadSetting&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">PadSetting</span><span class="p">[]</span><span class="w"> </span><span class="n">PadSettings</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a>
-<a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMacros&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Macro&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">MacroData</span><span class="p">[]</span><span class="w"> </span><span class="n">Macros</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-20" name="__codelineno-27-20" href="#__codelineno-27-20"></a>
-<a id="__codelineno-27-21" name="__codelineno-27-21" href="#__codelineno-27-21"></a><span class="w">    </span><span class="c1">// Slot topology</span>
-<a id="__codelineno-27-22" name="__codelineno-27-22" href="#__codelineno-27-22"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotCreated&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Created&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-23" name="__codelineno-27-23" href="#__codelineno-27-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotCreated</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-24" name="__codelineno-27-24" href="#__codelineno-27-24"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotEnabled&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Enabled&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-25" name="__codelineno-27-25" href="#__codelineno-27-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotEnabled</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-26" name="__codelineno-27-26" href="#__codelineno-27-26"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotControllerTypes&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Type&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-27" name="__codelineno-27-27" href="#__codelineno-27-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotControllerTypes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-28" name="__codelineno-27-28" href="#__codelineno-27-28"></a>
-<a id="__codelineno-27-29" name="__codelineno-27-29" href="#__codelineno-27-29"></a><span class="w">    </span><span class="c1">// v3.0+: per-slot HM profile slug</span>
-<a id="__codelineno-27-30" name="__codelineno-27-30" href="#__codelineno-27-30"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotProfileIds&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Id&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-31" name="__codelineno-27-31" href="#__codelineno-27-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotProfileIds</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a><span class="w">    </span><span class="c1">// v3.2: per-VC mapping tables (multi-source rows + shift layers)</span>
+<a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotMappingSets&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;MappingSet&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-20" name="__codelineno-27-20" href="#__codelineno-27-20"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">MappingSet</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotMappingSets</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-21" name="__codelineno-27-21" href="#__codelineno-27-21"></a>
+<a id="__codelineno-27-22" name="__codelineno-27-22" href="#__codelineno-27-22"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMacros&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Macro&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-23" name="__codelineno-27-23" href="#__codelineno-27-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">MacroData</span><span class="p">[]</span><span class="w"> </span><span class="n">Macros</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-24" name="__codelineno-27-24" href="#__codelineno-27-24"></a>
+<a id="__codelineno-27-25" name="__codelineno-27-25" href="#__codelineno-27-25"></a><span class="w">    </span><span class="c1">// Slot topology</span>
+<a id="__codelineno-27-26" name="__codelineno-27-26" href="#__codelineno-27-26"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotCreated&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Created&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-27" name="__codelineno-27-27" href="#__codelineno-27-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotCreated</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-28" name="__codelineno-27-28" href="#__codelineno-27-28"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotEnabled&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Enabled&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-29" name="__codelineno-27-29" href="#__codelineno-27-29"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotEnabled</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-30" name="__codelineno-27-30" href="#__codelineno-27-30"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotControllerTypes&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Type&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-31" name="__codelineno-27-31" href="#__codelineno-27-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotControllerTypes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-27-32" name="__codelineno-27-32" href="#__codelineno-27-32"></a>
-<a id="__codelineno-27-33" name="__codelineno-27-33" href="#__codelineno-27-33"></a><span class="w">    </span><span class="c1">// Per-slot type-specific config</span>
-<a id="__codelineno-27-34" name="__codelineno-27-34" href="#__codelineno-27-34"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileExtendedConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;ExtendedConfig&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-35" name="__codelineno-27-35" href="#__codelineno-27-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ExtendedSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">ExtendedConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-36" name="__codelineno-27-36" href="#__codelineno-27-36"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMidiConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;MidiConfig&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-37" name="__codelineno-27-37" href="#__codelineno-27-37"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">MidiSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">MidiConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-38" name="__codelineno-27-38" href="#__codelineno-27-38"></a><span class="w">    </span><span class="c1">// v4 (#205): per-slot KB+M SOCD / Snap-Tap captured per slot</span>
-<a id="__codelineno-27-39" name="__codelineno-27-39" href="#__codelineno-27-39"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileKbmConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;KbmConfig&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-40" name="__codelineno-27-40" href="#__codelineno-27-40"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">KbmSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">KbmConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-41" name="__codelineno-27-41" href="#__codelineno-27-41"></a><span class="w">    </span><span class="c1">// Per-(slot, device) config (adaptive triggers, lighting, audio, tone</span>
-<a id="__codelineno-27-42" name="__codelineno-27-42" href="#__codelineno-27-42"></a><span class="w">    </span><span class="c1">// filter). Renamed from ProfilePlayStationConfigs in v4.</span>
-<a id="__codelineno-27-43" name="__codelineno-27-43" href="#__codelineno-27-43"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileDeviceSlotConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Config&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-44" name="__codelineno-27-44" href="#__codelineno-27-44"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DeviceSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">DeviceSlotConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-45" name="__codelineno-27-45" href="#__codelineno-27-45"></a><span class="w">    </span><span class="c1">// Read-only pre-v4 spelling. Migrated forward on load, never serialized.</span>
-<a id="__codelineno-27-46" name="__codelineno-27-46" href="#__codelineno-27-46"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfilePlayStationConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PlayStationConfig&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-47" name="__codelineno-27-47" href="#__codelineno-27-47"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DeviceSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">LegacyDeviceSlotConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-48" name="__codelineno-27-48" href="#__codelineno-27-48"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">ShouldSerializeLegacyDeviceSlotConfigs</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
-<a id="__codelineno-27-49" name="__codelineno-27-49" href="#__codelineno-27-49"></a><span class="w">    </span><span class="c1">// v3.3: per-profile custom touchpad gestures</span>
-<a id="__codelineno-27-50" name="__codelineno-27-50" href="#__codelineno-27-50"></a><span class="w">    </span><span class="na">[XmlArray(&quot;TouchpadGestures&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Gesture&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-51" name="__codelineno-27-51" href="#__codelineno-27-51"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">TouchpadCustomGesture</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadGestures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-52" name="__codelineno-27-52" href="#__codelineno-27-52"></a>
-<a id="__codelineno-27-53" name="__codelineno-27-53" href="#__codelineno-27-53"></a><span class="w">    </span><span class="c1">// Per-group visual slot order (XmlArray name kept as</span>
-<a id="__codelineno-27-54" name="__codelineno-27-54" href="#__codelineno-27-54"></a><span class="w">    </span><span class="c1">// &quot;ProfileMicrosoftSlotOrder&quot; for v2 back-compat)</span>
-<a id="__codelineno-27-55" name="__codelineno-27-55" href="#__codelineno-27-55"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMicrosoftSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-56" name="__codelineno-27-56" href="#__codelineno-27-56"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">XboxSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-57" name="__codelineno-27-57" href="#__codelineno-27-57"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfilePlayStationSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-58" name="__codelineno-27-58" href="#__codelineno-27-58"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">PlayStationSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-59" name="__codelineno-27-59" href="#__codelineno-27-59"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileNintendoSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-60" name="__codelineno-27-60" href="#__codelineno-27-60"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">NintendoSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-61" name="__codelineno-27-61" href="#__codelineno-27-61"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileExtendedSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-62" name="__codelineno-27-62" href="#__codelineno-27-62"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">ExtendedSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-63" name="__codelineno-27-63" href="#__codelineno-27-63"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileKeyboardMouseSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-64" name="__codelineno-27-64" href="#__codelineno-27-64"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">KeyboardMouseSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-65" name="__codelineno-27-65" href="#__codelineno-27-65"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMidiSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-66" name="__codelineno-27-66" href="#__codelineno-27-66"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">MidiSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-67" name="__codelineno-27-67" href="#__codelineno-27-67"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileVrSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
-<a id="__codelineno-27-68" name="__codelineno-27-68" href="#__codelineno-27-68"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">VrSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-69" name="__codelineno-27-69" href="#__codelineno-27-69"></a>
-<a id="__codelineno-27-70" name="__codelineno-27-70" href="#__codelineno-27-70"></a><span class="w">    </span><span class="c1">// Server toggles</span>
-<a id="__codelineno-27-71" name="__codelineno-27-71" href="#__codelineno-27-71"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableDsuMotionServer</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-72" name="__codelineno-27-72" href="#__codelineno-27-72"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">DsuMotionServerPort</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">26760</span><span class="p">;</span>
-<a id="__codelineno-27-73" name="__codelineno-27-73" href="#__codelineno-27-73"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableWebController</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-74" name="__codelineno-27-74" href="#__codelineno-27-74"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">WebControllerPort</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8080</span><span class="p">;</span>
-<a id="__codelineno-27-75" name="__codelineno-27-75" href="#__codelineno-27-75"></a>
-<a id="__codelineno-27-76" name="__codelineno-27-76" href="#__codelineno-27-76"></a><span class="w">    </span><span class="c1">// v3.2: on-screen touchpad overlay per-profile state</span>
-<a id="__codelineno-27-77" name="__codelineno-27-77" href="#__codelineno-27-77"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableTouchpadOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-78" name="__codelineno-27-78" href="#__codelineno-27-78"></a><span class="w">    </span><span class="c1">// v4.1 (#9): radial / touch menu overlay, per-profile copy. Default on.</span>
-<a id="__codelineno-27-79" name="__codelineno-27-79" href="#__codelineno-27-79"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableMenuOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<a id="__codelineno-27-80" name="__codelineno-27-80" href="#__codelineno-27-80"></a><span class="w">    </span><span class="c1">// v4.2: per-profile copies of the two display-only overlays.</span>
-<a id="__codelineno-27-81" name="__codelineno-27-81" href="#__codelineno-27-81"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableShiftLayerFlyout</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<a id="__codelineno-27-82" name="__codelineno-27-82" href="#__codelineno-27-82"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableProfileOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<a id="__codelineno-27-83" name="__codelineno-27-83" href="#__codelineno-27-83"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayOpacity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
-<a id="__codelineno-27-84" name="__codelineno-27-84" href="#__codelineno-27-84"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TouchpadOverlayMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-85" name="__codelineno-27-85" href="#__codelineno-27-85"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayLeft</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<a id="__codelineno-27-86" name="__codelineno-27-86" href="#__codelineno-27-86"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayTop</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<a id="__codelineno-27-87" name="__codelineno-27-87" href="#__codelineno-27-87"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayWidth</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
-<a id="__codelineno-27-88" name="__codelineno-27-88" href="#__codelineno-27-88"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayHeight</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
-<a id="__codelineno-27-89" name="__codelineno-27-89" href="#__codelineno-27-89"></a>
-<a id="__codelineno-27-90" name="__codelineno-27-90" href="#__codelineno-27-90"></a><span class="w">    </span><span class="c1">// v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.</span>
-<a id="__codelineno-27-91" name="__codelineno-27-91" href="#__codelineno-27-91"></a><span class="w">    </span><span class="na">[XmlElement(&quot;SteamWorkshopSource&quot;)]</span>
-<a id="__codelineno-27-92" name="__codelineno-27-92" href="#__codelineno-27-92"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">SteamWorkshopSource</span><span class="w"> </span><span class="n">WorkshopSource</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-93" name="__codelineno-27-93" href="#__codelineno-27-93"></a><span class="p">}</span>
+<a id="__codelineno-27-33" name="__codelineno-27-33" href="#__codelineno-27-33"></a><span class="w">    </span><span class="c1">// v3.0+: per-slot HM profile slug</span>
+<a id="__codelineno-27-34" name="__codelineno-27-34" href="#__codelineno-27-34"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileSlotProfileIds&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Id&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-35" name="__codelineno-27-35" href="#__codelineno-27-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">SlotProfileIds</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-36" name="__codelineno-27-36" href="#__codelineno-27-36"></a>
+<a id="__codelineno-27-37" name="__codelineno-27-37" href="#__codelineno-27-37"></a><span class="w">    </span><span class="c1">// Per-slot type-specific config</span>
+<a id="__codelineno-27-38" name="__codelineno-27-38" href="#__codelineno-27-38"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileExtendedConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;ExtendedConfig&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-39" name="__codelineno-27-39" href="#__codelineno-27-39"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ExtendedSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">ExtendedConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-40" name="__codelineno-27-40" href="#__codelineno-27-40"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMidiConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;MidiConfig&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-41" name="__codelineno-27-41" href="#__codelineno-27-41"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">MidiSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">MidiConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-42" name="__codelineno-27-42" href="#__codelineno-27-42"></a><span class="w">    </span><span class="c1">// v4 (#205): per-slot KB+M SOCD / Snap-Tap captured per slot</span>
+<a id="__codelineno-27-43" name="__codelineno-27-43" href="#__codelineno-27-43"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileKbmConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;KbmConfig&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-44" name="__codelineno-27-44" href="#__codelineno-27-44"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">KbmSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">KbmConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-45" name="__codelineno-27-45" href="#__codelineno-27-45"></a><span class="w">    </span><span class="c1">// Per-(slot, device) config (adaptive triggers, lighting, audio, tone</span>
+<a id="__codelineno-27-46" name="__codelineno-27-46" href="#__codelineno-27-46"></a><span class="w">    </span><span class="c1">// filter). Renamed from ProfilePlayStationConfigs in v4.</span>
+<a id="__codelineno-27-47" name="__codelineno-27-47" href="#__codelineno-27-47"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileDeviceSlotConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Config&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-48" name="__codelineno-27-48" href="#__codelineno-27-48"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DeviceSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">DeviceSlotConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-49" name="__codelineno-27-49" href="#__codelineno-27-49"></a><span class="w">    </span><span class="c1">// Read-only pre-v4 spelling. Migrated forward on load, never serialized.</span>
+<a id="__codelineno-27-50" name="__codelineno-27-50" href="#__codelineno-27-50"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfilePlayStationConfigs&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PlayStationConfig&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-51" name="__codelineno-27-51" href="#__codelineno-27-51"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DeviceSlotConfigData</span><span class="p">[]</span><span class="w"> </span><span class="n">LegacyDeviceSlotConfigs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-52" name="__codelineno-27-52" href="#__codelineno-27-52"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">ShouldSerializeLegacyDeviceSlotConfigs</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<a id="__codelineno-27-53" name="__codelineno-27-53" href="#__codelineno-27-53"></a><span class="w">    </span><span class="c1">// v3.3: per-profile custom touchpad gestures</span>
+<a id="__codelineno-27-54" name="__codelineno-27-54" href="#__codelineno-27-54"></a><span class="w">    </span><span class="na">[XmlArray(&quot;TouchpadGestures&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;Gesture&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-55" name="__codelineno-27-55" href="#__codelineno-27-55"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">TouchpadCustomGesture</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadGestures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-56" name="__codelineno-27-56" href="#__codelineno-27-56"></a>
+<a id="__codelineno-27-57" name="__codelineno-27-57" href="#__codelineno-27-57"></a><span class="w">    </span><span class="c1">// Per-group visual slot order (XmlArray name kept as</span>
+<a id="__codelineno-27-58" name="__codelineno-27-58" href="#__codelineno-27-58"></a><span class="w">    </span><span class="c1">// &quot;ProfileMicrosoftSlotOrder&quot; for v2 back-compat)</span>
+<a id="__codelineno-27-59" name="__codelineno-27-59" href="#__codelineno-27-59"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMicrosoftSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-60" name="__codelineno-27-60" href="#__codelineno-27-60"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">XboxSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-61" name="__codelineno-27-61" href="#__codelineno-27-61"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfilePlayStationSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-62" name="__codelineno-27-62" href="#__codelineno-27-62"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">PlayStationSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-63" name="__codelineno-27-63" href="#__codelineno-27-63"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileNintendoSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-64" name="__codelineno-27-64" href="#__codelineno-27-64"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">NintendoSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-65" name="__codelineno-27-65" href="#__codelineno-27-65"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileExtendedSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-66" name="__codelineno-27-66" href="#__codelineno-27-66"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">ExtendedSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-67" name="__codelineno-27-67" href="#__codelineno-27-67"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileKeyboardMouseSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-68" name="__codelineno-27-68" href="#__codelineno-27-68"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">KeyboardMouseSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-69" name="__codelineno-27-69" href="#__codelineno-27-69"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileMidiSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-70" name="__codelineno-27-70" href="#__codelineno-27-70"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">MidiSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-71" name="__codelineno-27-71" href="#__codelineno-27-71"></a><span class="w">    </span><span class="na">[XmlArray(&quot;ProfileVrSlotOrder&quot;)]</span><span class="p">[</span><span class="n">XmlArrayItem</span><span class="p">(</span><span class="s">&quot;PadIndex&quot;</span><span class="p">)]</span>
+<a id="__codelineno-27-72" name="__codelineno-27-72" href="#__codelineno-27-72"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">VrSlotOrder</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-73" name="__codelineno-27-73" href="#__codelineno-27-73"></a>
+<a id="__codelineno-27-74" name="__codelineno-27-74" href="#__codelineno-27-74"></a><span class="w">    </span><span class="c1">// Server toggles</span>
+<a id="__codelineno-27-75" name="__codelineno-27-75" href="#__codelineno-27-75"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableDsuMotionServer</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-76" name="__codelineno-27-76" href="#__codelineno-27-76"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">DsuMotionServerPort</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">26760</span><span class="p">;</span>
+<a id="__codelineno-27-77" name="__codelineno-27-77" href="#__codelineno-27-77"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableWebController</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-78" name="__codelineno-27-78" href="#__codelineno-27-78"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">WebControllerPort</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8080</span><span class="p">;</span>
+<a id="__codelineno-27-79" name="__codelineno-27-79" href="#__codelineno-27-79"></a>
+<a id="__codelineno-27-80" name="__codelineno-27-80" href="#__codelineno-27-80"></a><span class="w">    </span><span class="c1">// v3.2: on-screen touchpad overlay per-profile state</span>
+<a id="__codelineno-27-81" name="__codelineno-27-81" href="#__codelineno-27-81"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableTouchpadOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-82" name="__codelineno-27-82" href="#__codelineno-27-82"></a><span class="w">    </span><span class="c1">// v4.1 (#9): radial / touch menu overlay, per-profile copy. Default on.</span>
+<a id="__codelineno-27-83" name="__codelineno-27-83" href="#__codelineno-27-83"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableMenuOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<a id="__codelineno-27-84" name="__codelineno-27-84" href="#__codelineno-27-84"></a><span class="w">    </span><span class="c1">// v4.2: per-profile copies of the two display-only overlays.</span>
+<a id="__codelineno-27-85" name="__codelineno-27-85" href="#__codelineno-27-85"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableShiftLayerFlyout</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<a id="__codelineno-27-86" name="__codelineno-27-86" href="#__codelineno-27-86"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableProfileOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<a id="__codelineno-27-87" name="__codelineno-27-87" href="#__codelineno-27-87"></a>
+<a id="__codelineno-27-88" name="__codelineno-27-88" href="#__codelineno-27-88"></a><span class="w">    </span><span class="c1">// v4.4: nullable, authored legs of four global toggles. null = no opinion.</span>
+<a id="__codelineno-27-89" name="__codelineno-27-89" href="#__codelineno-27-89"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableChromaLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-90" name="__codelineno-27-90" href="#__codelineno-27-90"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableLightsyncLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-91" name="__codelineno-27-91" href="#__codelineno-27-91"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableSensaHaptics</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-92" name="__codelineno-27-92" href="#__codelineno-27-92"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTracking</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-93" name="__codelineno-27-93" href="#__codelineno-27-93"></a>
+<a id="__codelineno-27-94" name="__codelineno-27-94" href="#__codelineno-27-94"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayOpacity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
+<a id="__codelineno-27-95" name="__codelineno-27-95" href="#__codelineno-27-95"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TouchpadOverlayMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-96" name="__codelineno-27-96" href="#__codelineno-27-96"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayLeft</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-27-97" name="__codelineno-27-97" href="#__codelineno-27-97"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayTop</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-27-98" name="__codelineno-27-98" href="#__codelineno-27-98"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayWidth</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
+<a id="__codelineno-27-99" name="__codelineno-27-99" href="#__codelineno-27-99"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayHeight</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
+<a id="__codelineno-27-100" name="__codelineno-27-100" href="#__codelineno-27-100"></a>
+<a id="__codelineno-27-101" name="__codelineno-27-101" href="#__codelineno-27-101"></a><span class="w">    </span><span class="c1">// v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.</span>
+<a id="__codelineno-27-102" name="__codelineno-27-102" href="#__codelineno-27-102"></a><span class="w">    </span><span class="na">[XmlElement(&quot;SteamWorkshopSource&quot;)]</span>
+<a id="__codelineno-27-103" name="__codelineno-27-103" href="#__codelineno-27-103"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">SteamWorkshopSource</span><span class="w"> </span><span class="n">WorkshopSource</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-104" name="__codelineno-27-104" href="#__codelineno-27-104"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -9845,6 +10304,11 @@
 <td><code>ExecutableNames</code></td>
 <td><code>string</code></td>
 <td>Pipe-separated exe paths for auto-switching</td>
+</tr>
+<tr>
+<td><code>PollingRateOverrideMs</code></td>
+<td><code>int</code></td>
+<td>(v4.4, #365) Per-profile polling interval in ms, 1..16. <code>0</code> = no opinion, follow the global <code>PollingRateMs</code>, which is what every pre-#365 profile deserializes to. Authored, not snapshotted: <code>SaveActiveProfileState</code>'s field copy skips it like <code>Name</code> and <code>ExecutableNames</code>, and the default profile never carries one. Resolved by <code>InputService.ResolvePollingMs(override, global)</code>, the single writer of the live rate, from <code>ResetRuntimeStateForProfileSwitch</code>.</td>
 </tr>
 <tr>
 <td><code>Entries</code></td>
@@ -9955,6 +10419,26 @@
 <td><code>EnableProfileOverlay</code></td>
 <td><code>bool</code></td>
 <td>(v4.2) Profile-switch overlay enable state. Default <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>EnableChromaLightbar</code></td>
+<td><code>bool?</code></td>
+<td>(v4.4, #373) The profile's leg of the Razer Chroma lightbar mirror. <code>null</code> = no opinion, the global <code>AppSettings.EnableChromaLightbar</code> stands, and every profile saved before the field reads as <code>null</code>. A plain <code>bool</code> here read as <code>false</code> in every pre-existing profile and the first profile switch turned the mirror off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion.</td>
+</tr>
+<tr>
+<td><code>EnableLightsyncLightbar</code></td>
+<td><code>bool?</code></td>
+<td>(v4.4, #382) Logitech LIGHTSYNC lightbar mirror, same nullable authored contract.</td>
+</tr>
+<tr>
+<td><code>EnableSensaHaptics</code></td>
+<td><code>bool?</code></td>
+<td>(v4.4, #374) Razer Sensa HD haptics translation, same contract.</td>
+</tr>
+<tr>
+<td><code>EnableHeadTracking</code></td>
+<td><code>bool?</code></td>
+<td>(v4.4, #355) Head tracking, same contract. Only the enable rides profiles: the port, the FreeTrack toggle, and the two ranges stay global.</td>
 </tr>
 <tr>
 <td><code>TouchpadOverlayOpacity</code></td>
@@ -10145,7 +10629,7 @@
 <h2 id="settingsmanager">SettingsManager<a class="headerlink" href="#settingsmanager" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Common/SettingsManager.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Common.Input</code>
-<strong>Static partial class</strong> (canonical partial in <code>SettingsManager.cs</code>; additional declarations in <code>InputManager.Step1.UpdateDevices.cs</code> for <code>UserDevices</code>/<code>UserSettings</code> and collection class definitions)</p>
+<strong>Static partial class</strong> (canonical partial in <code>SettingsManager.cs</code>, with additional declarations in <code>InputManager.Step1.UpdateDevices.cs</code> for <code>UserDevices</code>/<code>UserSettings</code> and collection class definitions)</p>
 <p>Central manager for device records and mapping settings. Shared between engine thread and UI thread.</p>
 <h3 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h3>
 <ol>
@@ -10718,7 +11202,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Per-slot <code>VirtualControllerType</code> and Extended/MIDI config serialization</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

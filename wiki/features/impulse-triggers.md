@@ -25,6 +25,8 @@ For body-motor rumble, the FFB pipeline for wheels and sticks, and audio bass ru
 
 Game-driven passthrough. Forza, Gears, Halo, and any other game that writes Xbox impulse trigger motor commands reach the real trigger motors on the assigned pad. No setup. The card lets you scale all trigger output at once, scale each trigger on its own, and swap the two trigger motors if a game writes them backwards.
 
+The impulse data arrives on the virtual controller's HID lane, so the slot needs an Xbox One, Elite, or Series virtual controller. A Virtual Xbox 360 slot rides the older XUSB path, whose vibration write carries the two body motors and nothing else.
+
 ### Settings
 
 | Setting | Range | Default | What it does |
@@ -116,7 +118,7 @@ Every slider has its own reset button. Each card has a Reset All button.
 | No trigger rumble at all | Check the assigned device is an Xbox One / Elite / Series pad or a DualSense. Xbox 360 and most third-party pads have no trigger motors. |
 | Trigger pulses feel reversed | Turn on **Swap Left and Right Trigger Motors**. |
 | Audio-driven trigger rumble silent | Confirm audio plays through your default output device. Check the Level meter. Raise sensitivity if it barely moves. |
-| Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox type and that the game actually writes impulse trigger data (the Trigger Motor Activity bars move, or the DualSense's Adaptive Triggers tab shows Vibration taking over). An Xbox One+ pad in the same slot is not required. |
+| Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox One, Elite, or Series type, not a Virtual Xbox 360, and that the game actually writes impulse trigger data (the Trigger Motor Activity bars move, or the DualSense's Adaptive Triggers tab shows Vibration taking over). An Xbox One+ pad in the same slot is not required. |
 | Trigger rumble too aggressive on audio | Lower the per-trigger scale or drop the bass cutoff. |
 
 ---
@@ -130,4 +132,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

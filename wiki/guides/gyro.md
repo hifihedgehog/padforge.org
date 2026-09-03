@@ -1,17 +1,49 @@
 # Gyro
 
-*Per-pad motion-sensor mapping with calibration, sensitivity, smoothing, and engage gates.*
+*Per-pad motion-sensor mapping with grip, calibration, sensitivity, smoothing, and engage gates.*
 
 <!-- SCREENSHOT: pad-gyro -->
-![Gyro tab with Motion Passthrough, Motion Steering, Calibration, Sensitivity, Response Shaping, and Engage cards](../images/pad-gyro.png)
+![Gyro tab with Grip, Motion Passthrough, Motion Steering, Calibration, Sensitivity, Response Shaping, and Engage cards](../images/pad-gyro.png)
 
-The Gyro tab appears when the slot's assigned physical device exposes a gyroscope. Tuning saves per pad per slot, so the same pad on two different slots can carry two different feels.
+The Gyro tab appears when the slot's assigned physical device exposes a gyroscope or an accelerometer. Tuning saves per pad per slot, so the same pad on two different slots can carry two different feels.
 
 ---
 
 ## When the tab shows
 
-The tab is visible only when the selected mapped device reports a gyro sensor. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, and any Extended profile that wires gyro axes all qualify. Pads with no gyro never see the tab.
+The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, and any Extended profile that wires gyro axes all qualify. Pads with no motion sensor never see the tab.
+
+On a device with an accelerometer and no gyroscope, such as a Wii Remote without Motion Plus, the tab shows only the cards that read the accelerometer: Grip, Motion Steering, and Gyro Tilt. The five rate cards (Motion Passthrough, Calibration, Sensitivity, Response Shaping, Engage) stay hidden. Before 4.4.0 the whole tab was gated on a gyroscope, so those three cards were unreachable on such a remote.
+
+---
+
+## Grip
+
+<!-- SCREENSHOT: pad-gyro-grip -->
+<!-- pending capture: ![The Grip card with the Held As dropdown](../images/pad-gyro-grip.png) -->
+
+The first card on the tab is **Grip**. Its one row, **Held As**, tells PadForge how the controller sits in your hands. The driver delivers every controller's motion in the frame of its natural hold, which for a Wii Remote is aimed at the screen. Hold the remote sideways and every axis a game reads is a quarter turn off. Held As rotates the gyro, the accelerometer, and the gravity estimate together into the frame of the hold, for the mapping rows, for the motion the virtual controller reports, and for the [DSU Motion Server](../reference/dsu-motion-server.md) feed.
+
+The four holds name the face (the button side) and the top edge (the pointer end) so there is no guessing which "sideways" is meant.
+
+| Held As | Face points | Top edge points | Rotation, (x, y, z) becomes |
+|---|---|---|---|
+| Pointing | Up | At the screen | (x, y, z), unchanged. The default. |
+| Sideways, Face Up | Up | Left | (z, y, -x) |
+| Wii Wheel, Face Toward You | Toward you | Left | (z, x, y) |
+| Upright | Toward you | Up, at the ceiling | (x, -z, y) |
+
+Sideways, Face Up is the NES-style hold, and its rotation is the same swap SDL applies to a single left Joy-Con held sideways. Wii Wheel, Face Toward You is the hold the wheel shell puts the remote in. In that hold the steering motion is a turn about the remote's face, which is body yaw, and the table turns it into the roll a flat pad reports when tipped like a wheel. The two sideways holds differ only in which way the face points, and they need different tables: the face-up table steers on yaw in the wheel hold.
+
+All three rotations are proper rotations, so one table serves the gyro, the accelerometer, and gravity alike, and the motion the virtual controller reports stays consistent with the mapping rows.
+
+**The D-pad follows the grip.** Under Sideways, Face Up and Wii Wheel, Face Toward You the hat turns a quarter turn with the sensors, so the remote's physical Right reads as Up, Up as Left, Left as Down, and Down as Right, with the diagonals in between. Upright leaves the hat alone. The rotated hat feeds mapping rows, macro triggers, and the Record button, so a press recorded in the hold fires on that same press. The Devices page keeps showing the physical direction.
+
+**A grip change recenters.** Switching Held As re-references that device's motion state on the slot: the gravity estimate re-seeds from the next accelerometer sample, and the lean, tilt, and shake neutrals re-capture. Hold the controller in the new grip for a moment after switching. Calibration is not affected, because the gyro bias is sampled in the sensor's own frame and subtracted there before the rotation. Calibrating and changing the grip stay independent.
+
+Held As is per pad per slot like the rest of the tab, and it rotates the body sensor only. A Nunchuk or a standalone left Joy-Con is a separate body in the other hand and keeps its own frame. On a combined Joy-Con pair, the fused Gyro Pitch / Yaw / Roll rows rotate both halves together, while the Left Joy-Con rows keep the left half's frame.
+
+The row's reset button (**Reset Grip**) returns Held As to Pointing.
 
 ---
 
@@ -25,7 +57,9 @@ Check the box to route the rest of the Gyro tab's tuning through the motion the 
 
 The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense) and the Nintendo (virtual Switch Pro) type since 4.1.0. Xbox, Extended, MIDI, and Keyboard + Mouse slots have no motion channel.
 
-Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning.
+Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice.
+
+**Leave it off for emulators.** An emulator integrates the gyro rate into an orientation. With the box checked, the tab's default tuning runs the tightening and smoothing thresholds and then a 3°/s deadzone on that rate before it leaves. A rate that reads zero below 3°/s and three degrees short above it accumulates orientation error the emulator cannot see, so steering drifts after a tilt and breaks on a sharp turn. The live readouts on this tab show the calibrated rate, not the tuned passthrough, so the distortion is invisible there as well. If motion in an emulator drifts or turns the wrong way, this box is the first thing to check.
 
 ---
 
@@ -52,7 +86,7 @@ Zero the at-rest reading so gyro mappings don't drift the mouse or stick while y
 3. PadForge samples for about 1.5 seconds. The averaged reading becomes the device bias.
 4. The bias is subtracted from every raw sample going forward.
 
-The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g.
+The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g. Both readouts are in the held frame set by [Grip](#grip), the same values the mapping rows and the virtual controller get.
 
 On a combined Joy-Con pair, the left half's gyro keeps its own bias. **Calibrate Gyro** samples both halves in the same pass, and a profile calibrated before 4.1.0 gets an automatic aux-only pass on connect that measures the left sensor without touching the stored primary bias.
 
@@ -109,6 +143,8 @@ A **Compass** card appears between Sensitivity and Response Shaping, and only on
 
 - **Anchor Yaw to Compass.** Off by default. Turn it on after calibrating.
 - **Calibrate Magnetometer.** Press it, rotate the controller through every orientation in a figure-8 for a few seconds, then press again. The button reads **Finish Calibration** while the sweep runs.
+
+The correction is measured on the body's yaw axis, so it applies only while [Held As](#grip) leaves yaw on the yaw lane (Pointing or Sideways, Face Up). Wii Wheel and Upright feed yaw from another body axis and skip it.
 
 The card has a per-row reset on the checkbox and no card-level Reset All.
 
@@ -272,7 +308,7 @@ Steam's separate "Joystick Camera" is a stick-group mode in its schema, not a gy
 - **Gyro Lean X / Gyro Lean Y** are the fixed-envelope originals: 90° of tilt is full scale, and the per-source Sensitivity dial on the mapping row scales the read.
 - **Motion Lean** is the steering-oriented tilt input with its own inner/outer deadzones and grip orientation on the [Motion Steering](#motion-steering) card.
 
-All three capture your resting grip as the neutral when the controller connects, and the **Gyro Recenter** [macro action](macros.md) re-zeroes it mid-session. Because gravity is the reference, these inputs cannot drift and need no recalibration.
+All three capture your resting grip as the neutral when the controller connects, and the **Gyro Recenter** [macro action](macros.md) re-zeroes it mid-session. A change of [Held As](#grip) re-zeroes it as well. Because gravity is the reference, these inputs cannot drift and need no recalibration.
 
 **Held yaw is not possible.** Gravity points down: it moves when you pitch or roll the controller, and it does not move at all when you turn the controller flat around the vertical axis. So the tilt inputs hold pitch and roll, never yaw. Holding a yaw rotation would need the gyro's rate integrated into an angle, which drifts without something to correct it, and no shipped mode does that today. To turn a camera with gyro, use rate mode.
 
@@ -289,7 +325,7 @@ On a combined Joy-Con pair, the plain Gyro Pitch / Yaw / Roll sources read both 
 | Left Joy-Con Lean | Tilt steering from the left half's accelerometer. |
 | Left Joy-Con Accelerometer | Bundled accelerometer passthrough from the left half. |
 
-The aux sources appear only when the paired device reports the second sensor. They run through the same pipeline as the primary sources: this tab's sensitivity, response shaping, and engage gates all apply. Player and World space project against the left half's own gravity, and [Calibration](#calibration) keeps a separate bias for the left sensor.
+The aux sources appear only when the paired device reports the second sensor. They run through the same pipeline as the primary sources: this tab's sensitivity, response shaping, and engage gates all apply. Player and World space project against the left half's own gravity, and [Calibration](#calibration) keeps a separate bias for the left sensor. The [Grip](#grip) rotation does not reach these rows. The left half is its own body and keeps its own frame.
 
 On a Wii Remote with a Nunchuk, the lean and accelerometer rows carry Nunchuk names instead. The Nunchuk has no gyro, so the three rate sources stay Joy-Con only.
 
@@ -325,10 +361,11 @@ The values save automatically to your profile whenever you change anything on th
 
 ## Reset buttons
 
-Every row has a reset button (circular arrow icon). Each card except Compass has a **Reset All** button next to its title that snaps every value in the card back to defaults.
+Every row has a reset button (circular arrow icon). Each card except Grip and Compass has a **Reset All** button next to its title that snaps every value in the card back to defaults.
 
 | Button | Resets |
 |---|---|
+| Reset Grip | Held As back to Pointing |
 | Reset Motion Passthrough | Apply Gyro Tuning to Motion Passthrough |
 | Reset Gyro Tilt | Full Tilt Range, Tilt Deadzone |
 | Reset Calibration | Auto-cal bias + timestamp |
@@ -400,7 +437,8 @@ Starting values only. Tune against the live rate readout and in-game feel.
 - [Macros](macros.md): the Set Gyro Engaged and Gyro Recenter actions.
 - [DSU Motion Server](../reference/dsu-motion-server.md): broadcast the calibrated gyro and accelerometer feed to Cemu, Dolphin, Yuzu, and Ryujinx over UDP.
 - [Steering](steering.md): tune the Motion Lean tilt-steering input whose card lives on this tab.
+- [Wii Controllers](../devices/wii-controllers.md): the Wii Remote's holds and the emulator setup that goes with them.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

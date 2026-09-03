@@ -972,6 +972,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#per-layer-activators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-layer activators
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-layer-tab-strip" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1209,6 +1220,8 @@
       
         
           
+        
+      
         
       
         
@@ -1640,6 +1653,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2362,6 +2403,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2787,6 +2840,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2843,6 +2924,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2879,6 +3044,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -2963,6 +3156,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3166,6 +3387,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#per-layer-activators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-layer activators
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-layer-tab-strip" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3326,7 +3558,11 @@
 </tr>
 <tr>
 <td><strong>Mode</strong></td>
-<td>Hold, Toggle, Latch, Cycle, Sticky (one-shot), or No Button. See the table below.</td>
+<td>Hold, Toggle, Latch, Cycle, Sticky (One-Shot), or No Button. See the table below.</td>
+</tr>
+<tr>
+<td><strong>Only While in Layer</strong></td>
+<td>The layer the slot must be on for the activator's input to count. <strong>Any Layer</strong> (default) means the input always counts. The list holds Base and every layer on the slot. Hidden for <strong>No Button</strong>. See <a href="#per-layer-activators">Per-layer activators</a>.</td>
 </tr>
 <tr>
 <td><strong>Layer Color</strong></td>
@@ -3346,7 +3582,7 @@
 </tr>
 <tr>
 <td><strong>Fire on Release</strong></td>
-<td>Waits until the button is let go before the activator fires. With a <strong>Delay</strong> set, the press must last that long for the release to count. Appears only for <strong>Toggle</strong>, <strong>Latch</strong>, <strong>Cycle</strong>, and <strong>Sticky (one-shot)</strong>. Hold reacts on both edges by nature and No Button has no input, so neither shows it.</td>
+<td>Waits until the button is let go before the activator fires. With a <strong>Delay</strong> set, the press must last that long for the release to count. Appears only for <strong>Toggle</strong>, <strong>Latch</strong>, <strong>Cycle</strong>, and <strong>Sticky (One-Shot)</strong>. Hold reacts on both edges by nature and No Button has no input, so neither shows it.</td>
 </tr>
 <tr>
 <td><strong>Also Fire Activator's Own Mapping</strong></td>
@@ -3409,7 +3645,7 @@
 <td>One control steps through a queue of layers. See <a href="#cycle-queue">Cycle queue</a> for the Next and Previous buttons and the queue options.</td>
 </tr>
 <tr>
-<td><strong>Sticky (one-shot)</strong></td>
+<td><strong>Sticky (One-Shot)</strong></td>
 <td>One press engages. The next input you touch on any device assigned to the slot (button, stick, trigger, D-pad, or touchpad) fires on the layer while held, and the layer releases when you let that input go. Tap-then-tap muscle memory without holding.</td>
 </tr>
 <tr>
@@ -3430,6 +3666,49 @@
 <li><strong>Include Base.</strong> Off by default. With it off, the cycle walks the checked layers only, and Base is the resting state. Turn it on to fold Base into the queue.</li>
 </ul>
 <p>Next and Previous drive one shared cursor, so they read as forward and backward through the same queue.</p>
+<hr />
+<h2 id="per-layer-activators">Per-layer activators<a class="headerlink" href="#per-layer-activators" title="Permanent link">&para;</a></h2>
+<p><strong>Only While in Layer</strong> in the activator dialog makes an activator's input count only while the slot is on the chosen layer. The check happens when the input goes down and holds for the whole press.</p>
+<ul>
+<li>A press that opens with the slot on the right layer keeps counting until it releases, even when the layer changes under it.</li>
+<li>A press that opens on the wrong layer stays dead until it releases, even if the slot reaches the right layer mid-hold. Its button's rows on the engaged layer fire as normal.</li>
+<li>A Cycle activator's <strong>Previous Button</strong> carries the same check on its own.</li>
+<li><strong>Any Layer</strong> is the default, and every layer made before this setting existed behaves that way.</li>
+<li>Deleting the named layer leaves the condition inert. The dialog keeps showing the old name rather than quietly widening the activator to every layer.</li>
+</ul>
+<p>The setting lets one button mean something different per layer. Author each layer's exits on that layer, with another activator or a <a href="../macros/#switch-layer">Switch Layer</a> macro.</p>
+<p>A three-way example on one button, all three activators bound to the same input:</p>
+<table>
+<thead>
+<tr>
+<th>Activator</th>
+<th>Mode</th>
+<th>Only While in Layer</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Combat</td>
+<td>Latch</td>
+<td>Base</td>
+<td>From Base, the button opens Combat.</td>
+</tr>
+<tr>
+<td>Vehicle</td>
+<td>Latch</td>
+<td>Combat</td>
+<td>From Combat, the same button opens Vehicle.</td>
+</tr>
+<tr>
+<td>Switch Layer macro to Base, scoped to Vehicle</td>
+<td>(macro)</td>
+<td></td>
+<td>From Vehicle, the same button returns to Base.</td>
+</tr>
+</tbody>
+</table>
+<p>Without the condition, both Latch activators would fire on every press.</p>
 <hr />
 <h2 id="the-layer-tab-strip">The layer tab strip<a class="headerlink" href="#the-layer-tab-strip" title="Permanent link">&para;</a></h2>
 <p>A horizontal strip sits above the mapping grid on the <strong>Mappings</strong> tab. It appears once the slot has its first shift layer. A slot with only Base shows the plain grid with no strip. <strong>Base</strong> is always the leftmost tab. Shift layers fill the rest in creation order. The strip wraps to a second row when there are more layers than fit.</p>
@@ -3459,7 +3738,7 @@
 <ul>
 <li><strong>Any output type.</strong> Layer rows drive every virtual output the slot has: Xbox and PlayStation outputs, Extended buttons, MIDI notes, keyboard keys, mouse moves, and touchpad outputs all follow the active layer.</li>
 <li><strong>Flick stick.</strong> A <a href="../../features/stick-deadzones/#flick-stick">flick stick</a> row hosted on a layer arms when the layer engages and goes quiet when it drops, with no half-finished turn left running.</li>
-<li><strong>Macros.</strong> Every <a href="../macros/">macro</a> has a <strong>Layer</strong> picker. <strong>Any layer</strong> fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row.</li>
+<li><strong>Macros.</strong> Every <a href="../macros/">macro</a> has a <strong>Layer</strong> picker. <strong>Any layer</strong> fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row. A macro can also change the layer: the <a href="../macros/#switch-layer">Switch Layer</a> action jumps the slot to any layer or back to Base and holds it there the way a Latch does.</li>
 <li><strong>Menus.</strong> An on-screen <a href="../menus/">menu</a> imported from a Steam action layer engages only while that layer is held, and releasing the layer commits an On Touch Release menu's hovered cell.</li>
 </ul>
 <hr />
@@ -3502,12 +3781,12 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../features/mappings/">Button and Axis Mappings</a>: the layer tab strip sits above the mapping grid. Base rows are bound there too.</li>
-<li><a href="../macros/">Macros</a>: every macro carries a <strong>Layer</strong> scope. Leave it on <strong>Any layer</strong>, or pin the macro to one layer so it fires only while that layer is engaged.</li>
+<li><a href="../macros/">Macros</a>: every macro carries a <strong>Layer</strong> scope. Leave it on <strong>Any layer</strong>, or pin the macro to one layer so it fires only while that layer is engaged. The Switch Layer action moves the slot between layers from a macro.</li>
 <li><a href="../profiles/">Profiles</a>: shift layers save per profile, so each game can run its own layer set.</li>
 <li><a href="../../features/controller-slots/">Controller Slots</a>: every slot keeps its own layers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

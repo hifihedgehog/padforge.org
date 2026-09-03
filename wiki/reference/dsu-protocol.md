@@ -31,20 +31,22 @@ Single slot's motion data, ready for DSU transmission. Units already in DSU conv
 
 ### SDL-to-DSU Axis Mapping
 
-SDL uses a right-handed coordinate system. The DS4/DSU protocol expects different sign conventions. Mapping derived from Switch Pro Controller's BetterJoy-to-DSU mapping, translated through SDL standard coordinates, and verified with DualSense (all axes match across DualSense and Switch 2 Pro Controller).
+SDL reports sensors in its own right-handed frame. The DSU packet negates five of the six axes relative to that frame. This is what `BuildPadDataPacket` writes today:
 
-| DSU Field | SDL Source | Sign | Derivation |
-|---|---|---|---|
-| `AccelX` | `ax` | Inverted (`-ax`) | DS4 X-accel is opposite to SDL X |
-| `AccelY` | `ay` | Inverted (`-ay`) | DS4 Y-accel is opposite to SDL Y |
-| `AccelZ` | `az` | Inverted (`-az`) | DS4 Z-accel is opposite to SDL Z |
-| `GyroPitch` | `gx` | Inverted (`-gx`) | DS4 pitch is opposite to SDL gyro X |
-| `GyroYaw` | `gy` | **Not inverted** (`gy`) | Same sign in both coordinate systems |
-| `GyroRoll` | `gz` | Inverted (`-gz`) | DS4 roll is opposite to SDL gyro Z |
+| DSU Field | SDL Source | Sign written |
+|---|---|---|
+| `AccelX` | `ax` | Negated (`-ax`) |
+| `AccelY` | `ay` | Negated (`-ay`) |
+| `AccelZ` | `az` | Negated (`-az`) |
+| `GyroPitch` | `gx` | Negated (`-gx`) |
+| `GyroYaw` | `gy` | Kept (`gy`) |
+| `GyroRoll` | `gz` | Negated (`-gz`) |
 
-Accel and gyro must be in the same coordinate frame. `AccelX` and `GyroPitch` must reference the same physical axis. Five of six axes are inverted. Only `GyroYaw` preserves sign.
+Accel and gyro must be in the same coordinate frame. `AccelX` and `GyroPitch` reference the same physical axis. Only `GyroYaw` keeps its sign.
 
-The sign transform lives in `BuildPadDataPacket`, not in `MotionSnapshot`. The snapshot stays in SDL's native sensor frame, so the Sony HID report packers read a faithful controller frame. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.
+The sign transform lives in `BuildPadDataPacket`, not in `MotionSnapshot`. The snapshot carries no protocol frame of its own, so the Sony HID report packers read the same values and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.
+
+One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. `UpdateMotionSnapshots` calls `SourceCoercion.ApplyMotionGrip` on the body accelerometer, and `GetPassthroughGyro` applies the same rotation inside its calibrated read.
 
 ---
 
@@ -232,7 +234,7 @@ Called from the InputManager polling thread at ~1000 Hz. Primary data path.
 
 `InputManager.UpdateMotionSnapshots()` fills `MotionSnapshots[padIndex]` each poll cycle, immediately before `BroadcastDsuMotion()` fans the values out to `BroadcastMotion()`. Two gates decide whether a broadcast ever carries `HasMotion = true`:
 
-- **Slot type**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows only on PlayStation and Nintendo slot types. Every other slot type has no motion rows, resolves no motion source, and broadcasts `HasMotion = false`.
+- **Slot type**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its `motionCapableProfile` argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. `SettingsService.EnsureMotionRowsForAllSlots` sets that argument from `NintendoPreviewMap.IsValve(ProfileId)` on an Extended slot. Every other slot type has no motion rows, resolves no motion source, and broadcasts `HasMotion = false`.
 - **Row source**: the row's source descriptor picks the sensor stream. `Motion Gyro` and `Motion Accel` read the body IMU. The aux variants `Motion Gyro L` (#252) and `Motion Accel L` (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".
 
 ---
@@ -605,4 +607,4 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

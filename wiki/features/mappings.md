@@ -136,7 +136,7 @@ When a button, a D-pad direction, or a touchpad click feeds a stick axis, the ro
 
 Toggling **Invert** on the source flips the badge, so it always matches what the press does at runtime. Axis and slider sources carry their own sign and get no badge. Trigger rows get no badge either.
 
-On a stick-axis row where only the positive direction is mapped from a button-class source, an italic **+ opposite direction** link appears in the Source cell. One click adds a mirrored second source with **Invert** on, covering the negative direction. The link disappears once the row has a second source.
+On a stick-axis row where only the positive direction is mapped from a button-class source, an italic **+ Opposite Direction** link appears in the Source cell. One click adds a mirrored second source with **Invert** on, covering the negative direction. The link disappears once the row has a second source.
 
 ---
 
@@ -151,7 +151,7 @@ The **Combine** picker appears in the row's detail strip once a row has two or m
 | **Average** | Halfway between the sources |
 | **Either** | Fire when any source is active (good for buttons) |
 | **Both** | Fire only when all sources are active |
-| **Only one** | Fire only when exactly one source is active |
+| **Only One** | Fire only when exactly one source is active |
 | **Custom** | Build your own with the [formula editor](#custom-formula-editor) |
 | **Stick Trim** | The last source trims the held trigger level up or down. Trigger rows only. See [Stick Trim](#stick-trim) |
 
@@ -220,20 +220,20 @@ Under the formula box, PadForge shows:
 
 ### Starter recipes
 
-The **Starter recipes** section lists ready-made formulas you can drop into the box and tweak.
+The **Starter Recipes** section lists ready-made formulas you can drop into the box and tweak.
 
 | Recipe | What it does |
 |--------|--------------|
-| **Half scale** | `a` at half strength. |
-| **Quarter scale** | `a` at quarter strength. |
+| **Half Scale** | `a` at half strength. |
+| **Quarter Scale** | `a` at quarter strength. |
 | **Reverse a** | Flip `a`'s sign. |
 | **Cap to ±1** | Sum `a + b` but never exceed ±1. |
-| **Weighted blend** | 70% of `a` plus 30% of `b`. |
+| **Weighted Blend** | 70% of `a` plus 30% of `b`. |
 | **Difference** | `a` minus `b`. |
-| **a unless idle** | Use `a`. If `a` is at rest, fall back to `b`. |
-| **Threshold gate** | Fire fully if `a` is past halfway, otherwise zero. Turns an axis into a button. |
-| **Both pressed** | Fire only when `a` and `b` are both pushed. |
-| **Stronger wins** | Whichever of `a` or `b` is pushed harder, with sign. |
+| **a Unless Idle** | Use `a`. If `a` is at rest, fall back to `b`. |
+| **Threshold Gate** | Fire fully if `a` is past halfway, otherwise zero. Turns an axis into a button. |
+| **Both Pressed** | Fire only when `a` and `b` are both pushed. |
+| **Stronger Wins** | Whichever of `a` or `b` is pushed harder, with sign. |
 | **a alone** | Fire when `a` goes from rest to active. |
 | **a and b** | Fire only when both `a` and `b` are active. A chord. |
 | **a or b** | Fire when either `a` or `b` is active. |
@@ -456,7 +456,7 @@ Both also work as [Macros](../guides/macros.md) Input Device triggers.
 
 ## Motion sources
 
-Pads with a motion sensor add whole-sensor and tilt sources to the picker, separate from the individual **Gyro Pitch / Yaw / Roll** axes.
+Pads with a motion sensor add whole-sensor, tilt, and shake sources to the picker, separate from the individual **Gyro Pitch / Yaw / Roll** axes.
 
 | Source | What it feeds |
 |--------|---------------|
@@ -466,6 +466,8 @@ Pads with a motion sensor add whole-sensor and tilt sources to the picker, separ
 | **Nunchuk Accelerometer** / **Left Joy-Con Accelerometer** | The accelerometer on an attached Nunchuk or left Joy-Con instead of the main body. Shows as **Aux Motion Accelerometer** on other devices. |
 | **Motion Lean** | Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the Gyro tab's Motion Steering card, per assigned device. |
 | **Nunchuk Lean** / **Left Joy-Con Lean** | The aux sensor's tilt: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Lean** on other devices. |
+| **Motion Shake** | How far the accelerometer's magnitude leaves 1 g, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis the read is unsigned and **Invert** does nothing. On a button the Axis-to-Button Deadzone is the threshold, and its default there is 25% (about 0.5 g) rather than the usual 50%. Offered on any device with an accelerometer. |
+| **Nunchuk Shake** / **Left Joy-Con Shake** | The aux sensor's shake: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Shake** on other devices. |
 
 Auto-mapping adds the motion passthrough rows for pads that report a sensor. Delete a motion row and you can re-add it from the source dropdown. See [Gyro](../guides/gyro.md) for calibration and tuning, and [DSU Motion Server](../reference/dsu-motion-server.md) for broadcasting the feed to emulators.
 
@@ -533,6 +535,17 @@ For Extended (HIDMaestro) slots, the mapping grid adjusts to match the active HI
 | **POVs** | Four directions per POV hat (0–4 hats) | . |
 
 Sticks and triggers share a pool of 8 axes. Example: 2 sticks (4 axes) + 2 triggers (2 axes) = 6 of 8 used. Changing the DirectInput config rebuilds the mapping grid automatically.
+
+### Valve profiles carry lettered rows
+
+Five Extended profiles name their buttons instead of numbering them: **Steam Deck Controller**, **Steam Controller (Wired)**, **Steam Controller (2026)**, and the Composite variants of the first two. Their rows read **A**, **B**, **View**, **Menu**, **Steam**, **Quick Access**, **L3** / **R3**, **Left Pad Click** / **Right Pad Click**, and the rear buttons by their printed names: **R4** / **L4** / **R5** / **L5** on the Deck and the 2026 pad, **Left Grip** / **Right Grip** on the 2015 Steam Controller, which has no rear paddles. The wired and composite Steam Controller profiles say **Back** and **Start** where the Deck and the 2026 pad say View and Menu, matching each controller's own labels. Every other Extended profile keeps "Button 1", "Button 2", and so on.
+
+They fall into three wire families, one per controller generation, and each family has its own raw index space. None is shared. Switching a slot from one to another does two things:
+
+- **Translates.** Rows already bound move to the index that means the same control on the new wire. Without it, Steam sat on raw button 10, which is the left grip on the 2015 Steam Controller, and a left pad click sat on raw button 16, past the end of that 14-button wire.
+- **Fills what the new wire adds.** Translation moves what exists. It cannot bind a control the outgoing wire never had, so auto-mapping fills those rows in. The 2026 pad's D-pad is four discrete buttons at indices 18-21 and the Deck's wire stops at 17.
+
+Both steps run only on a live profile change you make. Loading a profile, applying one, or importing one leaves the rows alone, including any row you deliberately cleared. Switching between a lettered profile and a numbered one translates nothing, because a numbered wire has no roles to match.
 
 ### Clone Device 1:1
 

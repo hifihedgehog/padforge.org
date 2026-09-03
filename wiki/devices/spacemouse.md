@@ -21,7 +21,7 @@ Six bipolar axes, one per degree of freedom. Push, pull, twist, and tilt read si
 | **Axis 4** | Rotation Y (roll): tilt left / right |
 | **Axis 5** | Rotation Z (yaw): twist |
 
-The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes on the [Mappings](../features/mappings.md) tab like any stick or trigger, and shape them with the usual [deadzone and curve](../features/stick-deadzones.md) machinery. Directions follow the device's own right-handed convention. If a motion feels backwards for your game, invert that row's axis.
+The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes on the [Mappings](../features/mappings.md) tab like any stick or trigger, and shape them with the usual [deadzone and curve](../features/stick-deadzones.md) machinery. PadForge passes the puck's raw axis values through with no sign correction, so each direction is whatever the hardware reports. If a motion feels backwards for your game, invert that row's axis.
 
 Buttons map as ordinary buttons. Every model's buttons fit, from the SpaceNavigator's two up through the SpaceMouse Enterprise's full bank.
 
@@ -33,7 +33,7 @@ Both 3Dconnexion vendor generations are covered.
 
 | Generation | Models |
 |---|---|
-| Current (VID 256F) | SpaceMouse Compact, SpaceMouse Wireless, SpaceMouse Pro, SpaceMouse Pro Wireless (USB or Bluetooth), SpaceMouse Enterprise, SpaceMouse Module, the Universal Receiver |
+| Current (VID 256F) | SpaceMouse Compact, SpaceMouse Wireless (USB or Bluetooth), SpaceMouse Pro Wireless (USB or Bluetooth), SpaceMouse Enterprise, SpaceMouse Module, the Universal Receiver |
 | Logitech era (VID 046D) | SpaceNavigator, SpaceNavigator for Notebooks, SpaceMouse Pro, SpaceMouse Classic, SpaceMouse Plus XT, SpaceExplorer, SpaceTraveller, SpacePilot, SpacePilot Pro, Spaceball 5000, CadMan, NuLOOQ |
 
 The CadMouse and Keyboard Pro families share 3Dconnexion's vendor ID but are pointing and typing devices, not 6DoF pucks. PadForge tells them apart by how the hardware describes itself and leaves them alone.
@@ -44,4 +44,4 @@ The CadMouse and Keyboard Pro families share 3Dconnexion's vendor ID but are poi
 
 3Dconnexion's own driver can stay installed. Windows delivers the puck's input to every application that opens it, so PadForge and 3DxWare read the same motion side by side. CAD keeps working while a game takes the mapped output.
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

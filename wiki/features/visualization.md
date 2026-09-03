@@ -19,18 +19,20 @@ PadForge picks the view from the slot's controller type.
 | **Xbox** | 3D model | Yes |
 | **PlayStation** | 3D model | Yes |
 | **Nintendo** | 3D model | Yes |
-| **Extended** | Procedural schematic | No |
+| **Extended** | Procedural schematic. On a Valve profile (Steam Deck, Steam Controller 2015 or 2026), that pad's 3D model | Valve profiles only |
 | **Keyboard + Mouse** | Keyboard and mouse layout | No |
 | **MIDI** | Piano keyboard and CC sliders | No |
 | **VR** | Both SteamVR hands side by side | No |
 
-On Xbox, PlayStation, and Nintendo slots a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads **Switch to 2D view** or **Switch to 3D view** depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.
+On Xbox, PlayStation, and Nintendo slots, and on an Extended slot running a Valve profile, a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads **Switch to 2D view** or **Switch to 3D view** depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.
+
+The schematic stays the default for Extended because a profile there can be a wheel, a flight stick, or an arcade panel, and a gamepad drawn under those would be wrong. PadForge ships art for every Valve profile, so those draw the pad. Change the profile and the view follows.
 
 ---
 
 ## 3D model
 
-The active model swaps with the assigned profile. Six meshes cover the Xbox, PlayStation, and Nintendo slots:
+The active model swaps with the assigned profile. Nine meshes cover the Xbox, PlayStation, and Nintendo slots and the Valve profiles on Extended slots:
 
 | Mesh | Profiles it serves |
 |---|---|
@@ -40,6 +42,11 @@ The active model swaps with the assigned profile. Six meshes cover the Xbox, Pla
 | DualSense | `dualsense*` |
 | DualSense Edge | `dualsense-edge*` |
 | Switch 2 Pro | `switch2-pro*`, and also the original `switch-pro` |
+| Steam Deck | `steam-deck`, `steam-deck-composite` |
+| Steam Controller (2015) | `steam-controller`, `steam-controller-composite` |
+| Steam Controller (2026) | `steam-controller-2` |
+
+The Steam Deck body is Handheld Companion's per-part model. The two Steam Controller bodies are meshed from Valve's own CAD: the 2015 pad from the STEP file in Valve's 2016 design release, the 2026 pad from the STEP file in Valve's SteamController hardware repository. Both are meshed at the exact surface, so the edges are true molded edges rather than a decimated scan.
 
 Two meshes are shared by profiles that do not all carry every control. The Series mesh serves the whole Xbox One / Elite / Series / Adaptive family, and only `xbox-series-*` profiles get a live Share button. The Switch 2 Pro mesh serves both Switch generations, and the S2-only parts (C button, GL / GR, the four player LEDs) render on an original Pro Controller as inert meshes. Borrowed-but-absent controls draw either way, but they are wired into the hover, click-to-record, and highlight maps only for the profile that actually has them, so nothing maps or flashes wrong.
 
@@ -49,7 +56,7 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 
 ### Colorways
 
-A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. In the 3D view that is the Xbox Series, DualSense, and DualShock 4 families. The 2D view carries its own colorway sets, which also cover Xbox 360 and DualSense Edge. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
+A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. In the 3D view that is the Xbox Series, DualSense, and DualShock 4 families. The 2D view carries its own colorway sets, which also cover Xbox 360 and DualSense Edge. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker. The Xbox 360, Switch 2 Pro, and the three Valve pads each ship one appearance.
 
 ### Camera controls
 
@@ -135,9 +142,9 @@ The overlay hides itself while you rotate or pan the 3D model, then reappears wh
 
 ---
 
-## PlayStation touchpad preview
+## Touchpad preview
 
-PlayStation slots (DualShock 4, DualSense) show a live touchpad preview on both views.
+PlayStation slots (DualShock 4, DualSense) and Extended slots on a Valve profile show a live touchpad preview on both views.
 
 | View | Touchpad rendering |
 |---|---|
@@ -146,7 +153,9 @@ PlayStation slots (DualShock 4, DualSense) show a live touchpad preview on both 
 
 The touchpad surface is a click target for mapping. Click anywhere on the touchpad in either view to start recording a Touchpad Click mapping. During Map All on PlayStation outputs, Touchpad Click comes after the buttons and axes, then the Motion Gyro and Motion Accelerometer rows finish the sequence.
 
-The spheres and dots follow the slot's Touchpad mapping rows (**Touchpad 1 Finger 1 X** through **Touchpad 1 Finger 2 Touch**). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.
+On a PlayStation slot the spheres and dots follow the Touchpad mapping rows (**Touchpad 1 Finger 1 X** through **Touchpad 1 Finger 2 Touch**). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.
+
+A Valve pad has two trackpads and the preview draws both. The first finger rides the left pad and the second the right, following the **Left Pad X**, **Left Pad Y**, **Left Pad Touch**, **Right Pad X**, **Right Pad Y**, and **Right Pad Touch** rows. Each pad's click is its own button row, **Left Pad Click** and **Right Pad Click**, and lights its own pad. On the 2015 Steam Controller the pads are round, so a finger dot never leaves the circle.
 
 ---
 
@@ -159,6 +168,26 @@ Nintendo slots get both views, like Xbox and PlayStation. The 3D model is the Sw
 The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.
 
 A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.
+
+---
+
+## Valve preview
+
+An Extended slot on a Valve profile gets both views, like the console families. The three pads differ enough that each has its own body and its own 2D set.
+
+<!-- pending capture: ![Extended slot on the Steam Controller profile, the 2015 pad's body in the preview](../images/pad-extended-steam-controller.png) -->
+
+<!-- pending capture: ![Extended slot on the Steam Deck profile, the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png) -->
+
+| Pad | What the 3D model carries |
+|---|---|
+| Steam Deck | Two sticks, two square trackpads, D-Pad, A B X Y, View, Menu, Steam, Quick Access, L1 R1, the two triggers, and R4 L4 R5 L5 on the back. The screen, volume rocker, power button, and Steam wordmark are drawn and never mappable. Each stick's cap ring carries the four directions and the stem and base under it carry the stick button, so a press lights the whole stick below the ring. |
+| Steam Controller (2015) | One stick, two round trackpads, A B X Y, Back, Start, Steam, L1 R1, the two triggers, and the two grip paddles, which are the flared wings of the rear battery cover. The left trackpad is this pad's D-Pad: its face is cut into four direction quarters around a center click. The right trackpad is the right stick: its four quarters are the right stick's directions, and a translucent stick stands on the pad and leans with the axes to say what the pad does. The A B X Y letters and the Back and Start arrows are the printed glyphs from Valve's molds, in their printed colors. |
+| Steam Controller (2026) | Two sticks, two square trackpads, a real D-Pad, A B X Y, View, Menu, Steam, Quick Access, L1 R1, the two triggers, and R4 L4 R5 L5 on the back. |
+
+The 2D overlays follow one rule: a control the front art cannot show still gets a place to hover, click, and flash. The Steam Deck's R4 L4 R5 L5 and the 2026 pad's bumpers, triggers, and four rear buttons sit as labeled tiles in a column on each side of the body. The 2015 pad's D-Pad wedges are cut out of the left trackpad and its right stick is drawn over the right trackpad, with printed zone lines marking the wedges and each grip's outline. Those printed marks are decals: always visible, never a click target.
+
+Live highlighting, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See [Controller Slots](controller-slots.md#valve-personas) for the row list per pad.
 
 ---
 
@@ -182,7 +211,7 @@ No direction arrows here. Arrows are the schematic view's grammar, not the drawn
 
 ## Extended schematic
 
-Extended slots show a procedurally generated schematic instead of a controller model, regardless of which HIDMaestro profile is active. The layout rebuilds when the active profile or count overrides change.
+Extended slots show a procedurally generated schematic instead of a controller model, on every HIDMaestro profile except the five Valve ones. The layout rebuilds when the active profile or count overrides change.
 
 | Element | Appearance | Max |
 |---|---|---|
@@ -195,7 +224,7 @@ Sticks and triggers share a pool of 8 axes.
 
 Click-to-record, Map All flash, stick quadrant detection, and POV cardinal detection all work the same as in the 3D and 2D views.
 
-The schematic always represents the live HID layout for the Extended slot, no matter which HIDMaestro profile is selected. Xbox or PlayStation visuals render for actual Xbox or PlayStation slots, not for Extended slots that happen to be running an Xbox- or PlayStation-style HIDMaestro profile.
+The schematic represents the live HID layout for the Extended slot. Xbox or PlayStation visuals render for actual Xbox or PlayStation slots, not for Extended slots that happen to be running an Xbox- or PlayStation-style HIDMaestro profile. The Valve profiles are the one exception, because PadForge ships their own bodies (see [Valve preview](#valve-preview)).
 
 ---
 
@@ -243,4 +272,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

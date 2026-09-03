@@ -16,7 +16,7 @@
         <link rel="prev" href="../steam-workshop-import-internals/">
       
       
-        <link rel="next" href="../vr-controllers-internals/">
+        <link rel="next" href="../steam-controller-haptics-internals/">
       
       
         
@@ -1040,6 +1040,8 @@
       
         
       
+        
+      
     
     
     
@@ -1417,6 +1419,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors and Sensa Haptics
   
 
     
@@ -2141,6 +2171,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2569,6 +2611,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
@@ -2719,6 +2789,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="USB transport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-dual-link-drop-387" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dual-link drop (#387)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2882,6 +2969,90 @@
   
   
     <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightbar Mirrors Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -2918,6 +3089,34 @@
     
   
     Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
   
 
     
@@ -3002,6 +3201,34 @@
     
   
     Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
   
 
     
@@ -3195,6 +3422,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="USB transport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-dual-link-drop-387" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dual-link drop (#387)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3409,6 +3653,18 @@
 <td>Per-family wire-byte encoders for the tone requests.</td>
 </tr>
 <tr>
+<td><code>PadForge.Engine/Haptics/TritonPcmEncoder.cs</code></td>
+<td>(#381) The Steam Controller 2026 PCM stream bytes: the 0x86 command, the 0x88 stereo packet, G.711 mu-law. See <a href="../steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/TritonPcmSupport.cs</code></td>
+<td>(#381) <code>TritonPcmLowPassProvider</code> and the eight-slot <code>TritonPcmWriteRing</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/BluetoothLinkHelper.cs</code></td>
+<td><code>TryDisconnect(serial)</code>, the radio-drop lane the dual-link fix (#387) and Quick Charge (#372) share.</td>
+</tr>
+<tr>
 <td><code>PadForge.App/Common/Input/UserEffectsDispatcher.cs</code></td>
 <td>Asserts the DualSense firmware speaker path and the master-volume byte on each output report.</td>
 </tr>
@@ -3449,7 +3705,11 @@
 <p><code>PlayTestBeep(slot, deviceGuid)</code> routes an 880 Hz, 200 ms tone through <code>StartPlacements</code> with a device filter, so the Audio-tab test hits only the selected device and never fans out to the slot's other pads.</p>
 <hr />
 <h2 id="usb-transport">USB transport<a class="headerlink" href="#usb-transport" title="Permanent link">&para;</a></h2>
-<p>The USB branch of <code>BuildTransportOnWorker</code> reads the HID interface's PnP container ID through cfgmgr32, then matches a render <code>MMDevice</code> whose container ID is the same. If that endpoint is disabled in Windows it re-enables it through <code>IPolicyConfig</code>, then restores the prior default if Windows promoted the pad to default. <code>UsbFrameProvider</code> shapes each frame through <code>MapMirrorChannels</code>, which reads the device's Audio Output Path once per <code>Read</code>. Default (enum <code>AudioOutputPath.Automatic</code>) and Speaker Only silence channel 0 and put the mono program mix <code>(L+R) * 0.5</code> on channel 1 (the firmware speaker tap). Headphones (Stereo) puts L on channel 0 and R on channel 1. The mono headset paths put the downmix on channel 0, with channel 1 either silent or a copy for the split path. Follow Headphone Jack resolves to one of the others in <code>ResolveOutputPath</code> before the shaper sees it. Channels 2 and 3 are the pad's voice-coil actuators: zero unless a composite persona is feeding them. Playback is <code>WasapiOut</code> in shared mode with event sync at 30 ms latency.</p>
+<p>The USB branch of <code>BuildTransportOnWorker</code> first drops a stale Bluetooth link (#387, below), then reads the HID interface's PnP container ID through cfgmgr32 and matches a render <code>MMDevice</code> whose container ID is the same. If that endpoint is disabled in Windows it re-enables it through <code>IPolicyConfig</code>, then restores the prior default if Windows promoted the pad to default. <code>UsbFrameProvider</code> shapes each frame through <code>MapMirrorChannels</code>, which reads the device's Audio Output Path once per <code>Read</code>. Default (enum <code>AudioOutputPath.Automatic</code>) and Speaker Only silence channel 0 and put the mono program mix <code>(L+R) * 0.5</code> on channel 1 (the firmware speaker tap). Headphones (Stereo) puts L on channel 0 and R on channel 1. The mono headset paths put the downmix on channel 0, with channel 1 either silent or a copy for the split path. Follow Headphone Jack resolves to one of the others in <code>ResolveOutputPath</code> before the shaper sees it. Channels 2 and 3 are the pad's voice-coil actuators: zero unless a composite persona is feeding them. Playback is <code>WasapiOut</code> in shared mode with event sync at 30 ms latency.</p>
+<h3 id="the-dual-link-drop-387">The dual-link drop (#387)<a class="headerlink" href="#the-dual-link-drop-387" title="Permanent link">&para;</a></h3>
+<p>A DualSense that holds Bluetooth and USB at once mutes its USB audio interface in both directions in firmware. This was instrument-confirmed on the owner's pad with PadForge bypassed: a tone played straight into the pad's Windows render endpoint was silent in dual mode and measured 0.50 amplitude on the pad's own microphone in USB-only mode, and the pad's capture endpoint delivered zero buffers (not silence) while dual. The endpoint enumerates Active and <code>WasapiOut</code> plays without error, so no counter shows the mute. SDL's USB init de-dups the Bluetooth joystick and moves input to USB, but leaves the radio link up. That lingering link is the mute.</p>
+<p><code>TryDropStaleBtLinkOnce(sink)</code> runs at the top of the USB branch, before endpoint resolution. Two gates: the record's serial must parse as a nonzero MAC (an all-zero MAC parses, the #372 lesson), and <code>DualDropWanted(guid, path, map)</code> must return true, which it does exactly once per (device, wired path) under <code>_dualDropLock</code>. The drop itself is <code>Task.Run(BluetoothLinkHelper.TryDisconnect(serial))</code>, the hardware-proven #162 idle-disconnect lane. The reconcile removes the device's map entry whenever its record is Bluetooth-pathed, so unplug, Bluetooth session, replug earns a fresh drop, while a deliberate re-link with the cable still in is never fought. A pad that was never on Bluetooth makes this a radio query that finds nothing. A wired DualShock 4 never reaches the site, because it has no USB audio interface and its sink never builds. The diagnostic line is <code>SINK dual-link ... dropping stale radio</code>. <code>DualLinkAudioDropTests</code> pins the edge decision and the site.</p>
+<p>Verified end to end on hardware: the dual state formed live, the drop fired in 5 s, SDL removed the Bluetooth device, and the mirror measured 0.49 on the pad mic against a 0.50 USB-only baseline. Residuals on record: DualShock 4 dual mode is untested and its fix would run the opposite way (its audio is Bluetooth-only), and <code>BluetoothSetServiceState</code> disable-then-enable destroys the pairing, so it is never used as a reconnect lever.</p>
 <hr />
 <h2 id="dualsense-bluetooth-opus-over-report-0x35">DualSense Bluetooth (Opus over report 0x35)<a class="headerlink" href="#dualsense-bluetooth-opus-over-report-0x35" title="Permanent link">&para;</a></h2>
 <p>Constants: 480 samples per Opus frame (10 ms at 48 kHz), 200 bytes per frame (hard CBR at 160 kbps), and a 334-byte report. <code>CreateDs5OpusEncoder</code> builds a Concentus encoder configured <code>OPUS_APPLICATION_AUDIO</code>, 160000 bps, CBR, pre-created at transport build so the first frame does not pay construction cost.</p>
@@ -3511,9 +3771,14 @@
 <td><code>EncodeSteamClassic</code>: period and repeat from the note frequency. Pitch-only, no gain byte. The Deck reuses the 2015 encoder.</td>
 </tr>
 <tr>
-<td>Steam Controller 2026 (Triton)</td>
+<td>Steam Controller 2026 (Triton), Bluetooth <code>0x1303</code></td>
 <td><code>0x83</code> LFO-tone OUTPUT report, 10 bytes</td>
 <td><code>EncodeTritonTone</code>: frequency <code>u16</code> LE plus a signed <code>gain_db</code> byte (0 dB unity, floored at -40). Never the 2015 <code>0x8F</code> feature report. Grips are driven through a per-note map so they match trackpad pitch.</td>
+</tr>
+<tr>
+<td>Steam Controller 2026, USB <code>0x1302</code> and dongle <code>0x1304</code> / <code>0x1305</code></td>
+<td><code>0x86</code> configure plus <code>0x88</code> stereo PCM, 64 bytes</td>
+<td>(#381) Not a tone at all. The sink reads the stereo mix through a Butterworth low-pass and a sinc downsample to 8 kHz and streams it, s16 wired and G.711 mu-law over the dongle. Cut and Fold are not applied. Falls back to <code>0x83</code> when the write ring cannot build. Full detail on <a href="../steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -3524,9 +3789,10 @@
 <li><strong>Cut</strong> zeroes the amplitude above the limit. It re-emits the last passing pitch rather than the cut pitch. The pitch-only <code>0x8F</code> square (Steam 2015 and Deck) never reads amplitude, so a cut tick carrying the beep pitch would re-arm the square at the exact frequency the user cut.</li>
 <li><strong>Fold</strong> octave-halves the pitch into the pass band, keeping the pitch class.</li>
 </ul>
-<p><code>ApplyToneFilter</code> clamps the user limit to <code>100..1300</code> Hz and carries a boundary-hysteresis latch (a Schmitt trigger). The reducer measures pitch on the integer-lag grid <code>ReduceRate / lag</code>, so a tone near the limit lands on one of two adjacent grid pitches, and per-tick noise flips which one wins. A bare <code>&gt;</code> turns that flip into an octave flap at the tick rate. Once engaged, the tie's lower grid member stays engaged, so the pair folds together instead of alternating folded and unfolded. Disengage needs the measurement a full grid step below the limit. The filter runs on the Test button too, so the test never lies about the setting. Owner-side Remote Link frames are exempt, because the consumer applied its own filter before shipping.</p>
+<p>The filter runs only on the tone branch. A PCM-capable Triton sink never calls it, since the stream's low-pass cutoff replaces its purpose. <code>ApplyToneFilter</code> clamps the user limit to <code>100..1300</code> Hz and carries a boundary-hysteresis latch (a Schmitt trigger). The reducer measures pitch on the integer-lag grid <code>ReduceRate / lag</code>, so a tone near the limit lands on one of two adjacent grid pitches, and per-tick noise flips which one wins. A bare <code>&gt;</code> turns that flip into an octave flap at the tick rate. Once engaged, the tie's lower grid member stays engaged, so the pair folds together instead of alternating folded and unfolded. Disengage needs the measurement a full grid step below the limit. The filter runs on the Test button too, so the test never lies about the setting. Owner-side Remote Link frames are exempt, because the consumer applied its own filter before shipping.</p>
 <h3 id="system-audio-mirror-and-engage-gate-185">System-audio mirror and engage gate (#185)<a class="headerlink" href="#system-audio-mirror-and-engage-gate-185" title="Permanent link">&para;</a></h3>
 <p>Like the Sony sink, the Wii and haptic-tone sinks carry their own system-audio mirror. <code>WiiSpeakerService.ReconcileMirrors</code> and <code>HapticToneService.ReconcileMirrors</code> read the same <code>PassthroughConfigProvider</code> and add a <code>WasapiLoopbackCapture</code> onto the sink's <code>MacroMixer</code>, so a mirrored Windows output plays through the Wii speaker, or through a haptic pad reduced to a pitch-following tone.</p>
+<p>The mirror's <code>BufferedWaveProvider</code> is 500 ms deep with <code>DiscardOnBufferOverflow</code>, and the persona haptic feed's is 250 ms. Both are filled in wall-clock time by other threads and read by the sink thread, so at idle the sink's coarse 15 ms sleep let them fill to cap and every onset queued behind stale audio (#371 follow-up). The idle catch-up drain in <code>StreamLoop</code> holds both at one tick of depth. The mechanism is described with the PCM lane on <a href="../steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>, and it runs on every haptic sink that has a persona feed or a mirror, tone sinks included.</p>
 <p>On the haptic path that mirror can gate. When <code>ReconcileMirrors</code> starts a mirror, <code>StartMirror</code> wraps only the mirror's sample provider in a <code>GatedMirrorSampleProvider</code> bound to a per-(slot, device) <code>EngageCell</code>. The gate has three modes: Always (default, the cell stays engaged), Input (engaged while a chosen descriptor is held, an empty descriptor reads as always-on), and Rumble (engaged while any of the slot's four vibration motors is nonzero). <code>InputManager.UpdateHapticMirrorEngageStates</code> settles every cell once per poll and applies a release-delay hold through <code>HoldEngaged</code>, clamped to <code>0..10000</code> ms, so the tone does not clip off the instant the source drops. The gate wraps the mirror input alone. Macro sounds and the Test button bypass it and always play.</p>
 <hr />
 <h2 id="wii-remote-speaker">Wii Remote speaker<a class="headerlink" href="#wii-remote-speaker" title="Permanent link">&para;</a></h2>
@@ -3547,10 +3813,11 @@
 <li><a href="../input-pipeline/">Input Pipeline</a>: the polling loop that feeds device state, and the Sony effect dispatch.</li>
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: the relay that carries this audio between two PCs.</li>
 <li><a href="../wii-controllers-internals/">Wii Controllers Internals</a>: the Wii Remote speaker sink and its PCM protocol.</li>
+<li><a href="../steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>: the Steam Controller 2026 PCM stream and the 0x83 tone lane.</li>
 <li><a href="../../guides/macros/">Macros</a>: the Play Sound action that feeds the sink mixers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 
@@ -3605,13 +3872,13 @@
         
         
           
-          <a href="../vr-controllers-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Virtual VR Controllers Internals">
+          <a href="../steam-controller-haptics-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Steam Controller Haptics Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Virtual VR Controllers Internals
+                Steam Controller Haptics Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

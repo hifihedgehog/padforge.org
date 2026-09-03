@@ -14,7 +14,7 @@ Related pages: [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigge
 
 PadForge reads every connected controller on its own background thread. The default rate is **1000 Hz** (once per millisecond).
 
-You can change the rate in **[Settings](settings.md) > Input Engine > Polling Interval**. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.
+You can change the rate in **[Settings](settings.md) > Input Engine > Polling Interval (Unless a Profile Overrides It)**. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.
 
 By default PadForge keeps reading even when its window sits behind the game. The **Continue Polling When Window Loses Focus** checkbox, in the same **Input Engine** settings, controls that. Turn it off to pause reads whenever PadForge loses focus.
 
@@ -35,6 +35,12 @@ A slot counts as active once it is turned on and at least one of its assigned co
 While a [Remote Link](../guides/remote-link.md) peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.
 
 Cursor and scroll speed on a [Keyboard + Mouse](controller-slots.md) slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.
+
+### Per-profile override
+
+A profile can carry its own rate. The New Profile and Edit Profile dialogs have a **Polling Rate** dropdown with six entries: **Default (Global Setting)**, 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms), and 62.5 Hz (16 ms). Pick anything but Default and that rate applies whenever the profile is active. See [Profiles](../guides/profiles.md).
+
+The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override under the slider: Overridden while profile “Name” is active: 4 ms. Deactivate the profile and the global value returns.
 
 ---
 
