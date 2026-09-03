@@ -391,7 +391,7 @@ Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link
 A Bluetooth pad that you plug in to charge keeps its radio link up, and the radio keeps drawing from the battery you are trying to fill. **Disconnect Bluetooth When Plugged In over USB** drops that link the moment the pad reports it is charging. Off by default, saved per device.
 
 <!-- SCREENSHOT: devices-quick-charge -->
-<!-- pending capture: ![Power section with the Quick Charge checkbox under Idle Disconnect](../images/devices-quick-charge.png) -->
+![Power section with the Disconnect Bluetooth When Plugged In over USB checkbox](../images/devices-quick-charge.png)
 
 The trigger is the pad's own charging report, read from SDL's battery state about once a second. Any power source that makes the pad report charging counts, a PC port and a wall charger alike. The drop fires once, on the change from not charging to charging:
 

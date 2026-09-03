@@ -112,6 +112,9 @@ Range: 0–3600 seconds.
 
 When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an **Assign** button, and **Not Now**. Nothing is assigned until you click Assign. Keyboards, mice, touchpads, and media keys are never offered.
 
+<!-- SCREENSHOT: settings-assignment-prompts -->
+![Settings page, Assignment Prompts card with both offer checkboxes](../images/settings-assignment-prompts.png)
+
 - **Offer New Devices to the Open Virtual Controller** fires only for a device PadForge has never seen before. Devices it already knows connect without a prompt.
 - **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** fires for any device, new or already known, as long as the open virtual controller has nothing assigned yet. Once it has a device, this prompt no longer appears.
 

@@ -166,7 +166,7 @@ The Settings page names the profile in charge under the knob, in ember text:
 the global value rules.
 
 <!-- SCREENSHOT: profile-polling-override -->
-<!-- pending capture: ![The Polling Rate dropdown in the profile dialog](../images/profile-polling-override.png) -->
+![The Polling Rate dropdown in the profile dialog](../images/profile-polling-override.png)
 
 The poll loop stays global and nothing restarts on a switch. The loop recomputes
 its target every cycle, so a new rate takes effect on the next tick.
@@ -251,7 +251,7 @@ Launchers and Scripts**. PadForge then serves a local named pipe,
 default.
 
 <!-- SCREENSHOT: profiles-external-control -->
-<!-- pending capture: ![The Allow External Control checkbox under the auto-switch checkbox on the Profiles page](../images/profiles-external-control.png) -->
+![The Allow External Control checkbox under the auto-switch checkbox on the Profiles page](../images/profiles-external-control.png)
 
 ### The commands
 

@@ -5098,8 +5098,7 @@
 <h3 id="quick-charge">Quick Charge<a class="headerlink" href="#quick-charge" title="Permanent link">&para;</a></h3>
 <p>A Bluetooth pad that you plug in to charge keeps its radio link up, and the radio keeps drawing from the battery you are trying to fill. <strong>Disconnect Bluetooth When Plugged In over USB</strong> drops that link the moment the pad reports it is charging. Off by default, saved per device.</p>
 <!-- SCREENSHOT: devices-quick-charge -->
-<!-- pending capture: ![Power section with the Quick Charge checkbox under Idle Disconnect](../images/devices-quick-charge.png) -->
-
+<p><img alt="Power section with the Disconnect Bluetooth When Plugged In over USB checkbox" src="../../images/devices-quick-charge.png" /></p>
 <p>The trigger is the pad's own charging report, read from SDL's battery state about once a second. Any power source that makes the pad report charging counts, a PC port and a wall charger alike. The drop fires once, on the change from not charging to charging:</p>
 <table>
 <thead>

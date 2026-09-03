@@ -515,7 +515,7 @@ Toggles the on-screen [Touchpad Overlay](../features/dashboard.md#touchpad-overl
 
 Jumps the slot to a chosen [shift layer](shift-layers.md) in one fire. The dropdown lists **Base** and every layer on the slot.
 
-<!-- pending capture: ![The Switch Layer action with its layer dropdown](../images/macro-switch-layer.png) -->
+![The Switch Layer action with its layer dropdown](../images/macro-switch-layer.png)
 
 - The layer stays engaged until another Switch Layer fires, a Latch or Cycle activator takes over, or the profile switches. It holds the same way a Latch activator holds.
 - **Base** returns to the base layer. It also releases every toggled and sticky activator on the slot. A Hold activator still physically held re-engages on the next tick.

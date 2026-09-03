@@ -3,7 +3,7 @@
 *Three Dashboard toggles that send what a game paints on a virtual controller to gear PadForge does not drive itself: the lightbar color to Razer Chroma and Logitech LIGHTSYNC devices, and the rumble to Razer Sensa HD haptics.*
 
 <!-- SCREENSHOT: dashboard-lightbar-mirrors -->
-<!-- pending capture: ![The Lightbar Mirrors and Razer Sensa HD Haptics sections on the Dashboard](../images/dashboard-lightbar-mirrors.png) -->
+![The Lightbar Mirrors and Razer Sensa HD Haptics sections on the Dashboard](../images/dashboard-lightbar-mirrors.png)
 
 ---
 

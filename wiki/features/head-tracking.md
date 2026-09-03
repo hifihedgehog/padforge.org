@@ -11,7 +11,7 @@
 Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and turn on **Enable Head Tracking Input**.
 
 <!-- SCREENSHOT: dashboard-head-tracking -->
-<!-- pending capture: ![Dashboard, Head Tracking section with its toggles, port, ranges, and status line](../images/dashboard-head-tracking.png) -->
+![Dashboard, Head Tracking section with its toggles, port, ranges, and status line](../images/dashboard-head-tracking.png)
 
 | Control | Default | Range | Notes |
 | --- | --- | --- | --- |
@@ -37,7 +37,7 @@ A **Head Tracker (OpenTrack)** row appears on the [Devices](devices.md) page, ty
 Every axis rests at center. Yaw right and X right read high, like a stick pushed right. The vertical axes are stored the way a stick reports them, up at the low end, so mapping Head Pitch onto a stick's Y axis needs no inversion. Roll and the translations pass through with the sign OpenTrack sends.
 
 <!-- SCREENSHOT: devices-head-tracking -->
-<!-- pending capture: ![Devices page, Head Tracker row selected, with the status line and six axes](../images/devices-head-tracking.png) -->
+![Devices page, Head Tracker row selected, with the status line and six axes](../images/devices-head-tracking.png)
 
 The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map covers gamepads only, so each axis is bound by hand.
 

@@ -13,7 +13,7 @@ PadForge learns them on your machine. There is no table of models inside the app
 Open **Settings**, find the **Handheld PC Buttons** card, and turn on **Enable Handheld PC Buttons**.
 
 <!-- SCREENSHOT: settings-handheld-buttons -->
-<!-- pending capture: ![Settings page, Handheld PC Buttons card with its toggle](../images/settings-handheld-buttons.png) -->
+![Settings page, Handheld PC Buttons card with its toggle](../images/settings-handheld-buttons.png)
 
 Two rows appear on the [Devices](devices.md) page, both named after your machine (the firmware's product name, or its family name when the product name is a bare model code such as 83RU):
 
