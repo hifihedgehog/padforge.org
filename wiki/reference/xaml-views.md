@@ -134,7 +134,7 @@ Drag devices from the Devices page to a sidebar controller card:
 
 ### Add Controller Popup
 
-`Popup` with one button per output type, built in `ShowControllerTypePopup`. The seven buttons follow `VirtualControllerGroups.InOrder`:
+`Popup` with one button per output type, built in `ShowControllerTypePopup`. Re-invoking the method while the popup is open closes it rather than opening a duplicate, and a reopen inside 300 ms of the last close is suppressed, so the same click cannot dismiss and re-raise it. The seven buttons follow `VirtualControllerGroups.InOrder`:
 
 | Button | AutomationId | Icon | Per-type cap |
 |--------|--------------|------|--------------|
@@ -196,7 +196,7 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 | Timer | Interval | Purpose |
 |-------|----------|---------|
 | `DispatcherTimer` | 33ms (~30Hz) | `InputService._uiTimer` fires `UiTimer_Tick` to push engine state into ViewModels |
-| `_driverStatusTimer` | 5s | `RefreshHidHideStatus()`, `RefreshMidiServicesStatus()`, and `SweepStatusMessage()`. Started in the constructor and never stopped, so the status-bar decay keeps running after the engine stops. HIDMaestro is embedded so it has no install/uninstall poll |
+| `_driverStatusTimer` | 5s | `RefreshHidHideStatus()`, `RefreshMidiServicesStatus()`, and `SweepStatusMessage()`. Started in the constructor and stopped only in `OnClosing`, so the status-bar decay keeps running after the engine stops. Hosting the decay on the engine 30 Hz timer would have burned in "Engine stopped." HIDMaestro is embedded so it has no install/uninstall poll |
 | `CompositionTarget.Rendering` | ~60fps | Used by all visualization views (3D, 2D, Schematic, MIDI, KBM, MousePreview) for per-frame visual updates |
 
 ---
@@ -207,7 +207,7 @@ Four more full-window layers sit over the content, each a `Grid` with `Grid.RowS
 
 Engine toggle, slot summary cards, and the service sections.
 
-Section order is pinned by `PadForge.Tests/PageOrderContractTests.cs`. `Dashboard_SectionsRunInTheDecidedOrder` asserts each section title's binding appears once and after the one before it, and that the Services header sits between the slot cards and the Web Controller card. `Dashboard_DriverStatusStripIsGone` asserts the page carries no `ED5D` glyph, no `Dashboard_Drivers` key in the XAML or any of the ten resx files, and no `HidHideStatusText` / `MidiServicesStatusText` / `SteamVrStatusText` in the page or `DashboardViewModel`. Those three rows live on the Settings page only.
+Section order is pinned by `PadForge.Tests/PageOrderContractTests.cs`. `Dashboard_SectionsRunInTheDecidedOrder` asserts each section title's binding appears once and after the one before it, and that the Services header sits between the slot cards and the Web Controller card. `Dashboard_DriverStatusStripIsGone` asserts the page carries no `ED5D` glyph, no `Dashboard_Drivers` key in the XAML, in `Strings.Designer.cs`, or in any of the ten resx files, and no `HidHideStatusText` / `MidiServicesStatusText` / `SteamVrStatusText` in the page or `DashboardViewModel`. It also asserts the Settings page still binds all three. Those rows live there only.
 
 ### Layout Structure
 
@@ -290,7 +290,7 @@ ScrollViewer
 | `EnableRemoteLink` / `RemoteLinkPort` / `RemoteLinkConnectHost` | `DashboardViewModel` | Remote Link enable, port, and connect-by-address host (#138) |
 | `AutoReconnect` | `DashboardViewModel` | Remote Link auto-reconnect toggle |
 | `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status flame and text |
-| `RemoteLink` | `DashboardViewModel` | Sub-ViewModel: identity-protection modes and hint, trusted peers, nearby-unpaired list, revoke commands |
+| `RemoteLink` | `DashboardViewModel` | `DashboardViewModel.RemoteLink` is a second reference to the same `SettingsViewModel` instance, not a separate object. It carries the identity-protection modes and hint, the trusted peers, the nearby-unpaired list, and the revoke commands |
 | `HeadTrackingEnabled` / `HeadTrackingFreeTrack` | `DashboardViewModel` | Head Tracking enable and FreeTrack toggles (#355) |
 | `HeadTrackingUdpPort` / `HeadTrackingRotationRange` / `HeadTrackingTranslationRange` | `DashboardViewModel` | NumberBoxes ranged 1-65535, 1-180, and 1-500, each with a reset command |
 | `HeadTrackingStatus` | `DashboardViewModel` | Which head-tracking source is live, or why neither is |
@@ -512,6 +512,9 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `ViewModeToggle` | Button | 2D/3D preview toggle |
 | `MacroAddButton` / `MacroRemoveButton` | ui:Button | Macro list add and remove |
 | `MenuAddButton` / `MenuRemoveButton` | ui:Button | Menu list add and remove (#9) |
+| `MacrosTab` / `MenusTab` / `BassShakersTab` / `OutputTab` | RadioButton | The remaining slot-tier tabs |
+| `AssignOfferBanner` | Border | The assign-offer banner raised when a newly seen device matches the slot |
+| `AssignOfferAccept` / `AssignOfferDismiss` | ui:Button | Its two answers |
 
 ### Event Handlers (Code-Behind)
 
@@ -1436,6 +1439,7 @@ ScrollViewer (Padding="24,0")
           ├─ FOREGROUND live readout (visible only while auto-switch is on):
           │   mono token + lit flame when IsForegroundMatched + ForegroundExeName,
           │   plus the no-rules hint when NoProfileHasExecutables
+          ├─ External Control CheckBox (EnableExternalControl, #366), off by default
           ├─ Drop-zone Grid (AllowDrop, ProfileList_DragEnter/DragOver/DragLeave/Drop
           │   for .pfprofile import, ProfileDropOverlay cue)
           │   └─ Profile card ListBox (ProfileListBox, WrapPanel of steel cards,
@@ -1462,6 +1466,7 @@ ScrollViewer (Padding="24,0")
 | Binding | Target | Description |
 |---------|--------|-------------|
 | `EnableAutoProfileSwitching` | CheckBox | Enables foreground app monitoring |
+| `EnableExternalControl` | CheckBox | Opens the named pipe that lets a launcher or script activate a profile (#366). It sits with the auto-switch and shortcut controls because it is a third way a profile activates, not a global engine service. The `SettingsViewModel` setter mirrors into `SettingsManager.EnableExternalControl`, which `InputService` watches to start or stop `ExternalControlService`. Switching profiles by hand releases the hold a script placed |
 | `ForegroundExeName` / `IsForegroundMatched` / `NoProfileHasExecutables` | TextBlock, flame, hint | The FOREGROUND live readout. `SettingsViewModel.ActiveProfileInfo` is set by the services but is not bound on this page. The status bar's `ProfilePill` carries the active-profile name |
 | `ProfileItems` | ListBox ItemsSource | Profile list |
 | `SelectedProfile` | ListBox SelectedItem | Selected profile. `SelectedProfile.IsDefault` disables Edit and Delete |
@@ -1626,7 +1631,7 @@ ScrollViewer (Padding="24,0")
       ├─ "Overview" section header (E7C3 icon)
       ├─ Description card (wrapping text, line height 22)
       ├─ "Built With" section header (E74C checkmark icon)
-      ├─ Technologies card (Grid, 164px label + description, 52 rows):
+      ├─ Technologies card (Grid, 164px label + description, 62 rows):
       │   ├─ .NET 10
       │   ├─ SDL3
       │   ├─ Raw Input
@@ -1637,10 +1642,12 @@ ScrollViewer (Padding="24,0")
       │   ├─ HelixToolkit
       │   ├─ WPF UI
       │   ├─ MVVM Toolkit
-      │   └─ ...42 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
+      │   └─ ...52 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
       ├─ "License" section header (E8D7 icon)
       └─ License card (12px wrapping text, secondary brush)
 ```
+
+The 4.4.0 cycle added ten rows at the tail, `Grid.Row` 52 through 61: Interhaptics (Wyvrn), Valve Steam Controller CAD, the MinGW-w64 runtime, TritonLib and Steam Controller haptics research, Colore, the Logitech LED SDK references, opentrack, Lenovo Legion Toolkit, InputPlumber, and linuxmotehook / WiimoteHook.
 
 ### Code-Behind
 
@@ -1683,6 +1690,25 @@ While open, the dialog subscribes to two capture paths: `NfcReaderService.TagDet
 | `NameBox` | `NameBox_KeyDown` | Tag name entry. Enter registers |
 | `RegisterBtn` | `RegisterButton_Click` | Registers the captured tag |
 | `TagListBox` | `NfcTagRegistry.Tags` | Registered tags with per-row Remove (`RemoveButton_Click`) |
+
+### LearnHandheldButtonDialog
+
+**Files:** `LearnHandheldButtonDialog.xaml`, `LearnHandheldButtonDialog.xaml.cs`
+
+Learner for a handheld PC's hidden buttons (#343), sharing the NFC dialog's head chrome. `FluentWindow` (`ExtendsContentIntoTitleBar`, `WindowBackdropType="Mica"`, 560x640, `ResizeMode="NoResize"`) opened from the Devices page `LearnHandheldButton_Click`.
+
+A learn run is a three-phase timed pass driven by `_phaseTimer` over `HandheldLearnSession`: Idle (the noise floor), Press, then Release, each phase lasting the session's own `IdleMs` / `PressMs` / `ReleaseMs`. `FinishLearn` reads the candidates and the chord keys the session collected, and the user names the winner and registers it. There is no per-model table: the machine teaches the app what its buttons are.
+
+| Element | Binding / Handler | Purpose |
+|---------|-------------------|---------|
+| `MachineText` / `DaemonText` | code-behind | The detected handheld and the vendor-daemon notice |
+| `StartBtn` | `StartButton_Click` | Begins the three-phase pass. Disabled when the row has been retired mid-dialog |
+| `StatusText` | phase strings | Which phase is running, or why none can |
+| `ChordText` / `CandidateBox` | learn results | The chord the press produced, and the candidate list when the pass finds more than one |
+| `NameBox` | `NameBox_KeyDown` | Display name. Enter registers |
+| `RegisterBtn` | `RegisterButton_Click` | Adds the learned button to `HandheldButtonRegistry` |
+| `ButtonListBox` / `EmptyText` | `RefreshList` | Learned buttons with per-row Remove (`RemoveButton_Click`), and the empty-state line |
+| Export / Import | `ExportButton_Click` / `ImportButton_Click` | Carries a learned set between machines |
 
 ### RegisterVoicePhraseDialog
 
@@ -1983,7 +2009,7 @@ The engine-state indicator in the status bar uses the same flame with DataTrigge
 <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
 ```
 
-Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `EC05` broadcast, `E774` globe, `ED5D` driver, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning.
+Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `E774` globe, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning, and the section and card glyphs named on this page: `E702` Pair, `E707` Compass Yaw, `E716` Community Configs, `E767` volume, `E77B` Head Tracking, `E781` Lightbar Mirrors, `E7F8` Handheld PC Buttons, `E815` Grip, `E83F` Battery Alerts, `E877` Sensa haptics and the rumble chip, `E8DE` Assignment Prompts, `E969` Remote Link, `E99A` Tilt, `E9E9` Gyro Sensitivity, `EB9F` Icon Packages, `EFA5` touchpad chip, `F0AD` Constant Force, `F1CB` Gyro Response, `F272` Gyro Calibration. `EC05` (broadcast) and `ED5D` (driver) left with the Dashboard's driver status strip and appear nowhere in the app.
 
 ### WPF UI NumberBox
 
@@ -2127,4 +2153,4 @@ private void CustomizeToggle_Changed(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

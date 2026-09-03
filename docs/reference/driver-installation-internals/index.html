@@ -4865,7 +4865,7 @@
 <a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    G[&quot;MidiVirtualController.ResetAvailability()&lt;br/&gt;Clear cached SDK check&quot;] --&gt; H
 <a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    H[Cleanup temp directory]
 </code></pre></div>
-<p><strong>Why <code>/releases</code> not <code>/releases/latest</code></strong>: the <code>microsoft/MIDI</code> repo only publishes pre-releases. <code>/releases/latest</code> returns 404 without a stable release; <code>/releases</code> returns all releases (first = most recent).</p>
+<p><strong>Why <code>/releases</code> not <code>/releases/latest</code></strong>: the <code>microsoft/MIDI</code> repo only publishes pre-releases. <code>/releases/latest</code> returns 404 without a stable release. <code>/releases</code> returns all of them, most recent first.</p>
 <p><strong>Why no <code>runas</code></strong>: PadForge is already elevated via <code>app.manifest</code>. Using <code>Verb = "runas"</code> when already elevated throws <code>Win32Exception</code> on some systems, so MIDI uses a direct <code>Process.Start</code>.</p>
 <p><strong>Post-install</strong>: calls <code>MidiVirtualController.ResetAvailability()</code> so the cached SDK availability check re-evaluates.</p>
 <h3 id="findmidiservicesdownloadurl">FindMidiServicesDownloadUrl()<a class="headerlink" href="#findmidiservicesdownloadurl" title="Permanent link">&para;</a></h3>

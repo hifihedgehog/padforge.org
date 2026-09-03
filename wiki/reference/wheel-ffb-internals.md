@@ -17,9 +17,9 @@ Both write the single aggregation buffer `_combinedVibration` in `InputManager.S
 
 A third destination joined in 4.1.0: the Bass Shakers lane (#236) turns the same game force into low-frequency audio. It bypasses `_combinedVibration` and the writers:
 
-- `HMaestroFfbDecoder.Apply` stores the game-authored motor pair in `LastComputedMotors`, computed purely from the uploaded PID effect set. Test and macro rumble stay out by construction.
+- `HMaestroFfbDecoder.Apply` stores the game-authored motor pair in `LastComputedMotors`, computed purely from the uploaded PID effect set, so macro rumble (a downstream per-device merge) never reaches it.
 - `TickFfb` packs the pair into the virtual controller's inbound rumble pack via `LfeOutputState.Pack`.
-- `UpdateRumbleAudioLane` in `InputManager.Step5.VirtualDevices.cs` publishes each slot's pack once per poll tick through `RumbleAudioService.PublishIfCurrent`.
+- `UpdateRumbleAudioLane` in `InputManager.Step5.VirtualDevices.cs` publishes each slot's pack once per poll tick through `RumbleAudioService.PublishIfCurrent`. It runs after `UpdateVirtualDevices` so a slot destroyed on this tick publishes zeros on the same tick, and it max-merges the slot's live `VibrationStates` onto the pack, which is what makes the preview's test-rumble buttons audible on the shakers. A voice the config disables is masked out of the pack by its 16-bit lane.
 
 So game force feedback reaches vendor wheels, scalar rumble devices, and bass-shaker audio endpoints. The slot's **Bass Shakers** tab configures the endpoint. See [Force Feedback](../features/force-feedback.md#bass-shakers) for the user-facing side.
 
@@ -36,6 +36,7 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 | `PadForge.App/Common/Input/FanatecRawHidWriter.cs` | Fanatec native HID (from `hid-fanatecff`, clean-room). |
 | `PadForge.App/Common/Input/ThrustmasterRawHidWriter.cs` | Thrustmaster native HID (from `hid-tmff2`, clean-room). |
 | `PadForge.Engine/Common/ForceFeedbackState.cs` | The `Vibration` carrier, the host-sampled and software paths, the SDL writer for generic devices. |
+| `PadForge.App/Common/Input/InputManager.Step3.SteeringLockFeedback.cs` | The at-lock feedback channels for a steering source. |
 | `PadForge.App/Common/Telemetry/` | The RPM-LED telemetry sources, hub, and LED map. |
 
 ---
@@ -107,6 +108,23 @@ The tab-visibility gate is `PadPage.SyncTabVisibility`. `hasWheel` is the OR of 
 
 ---
 
+## Steering at-lock feedback
+
+This lane is separate from the force path above and runs in Step 3, not Step 2. `ApplySteeringLockFeedback` fires once per assigned device per tick from `InputManager.Step3.UpdateOutputStates.cs`, walking the slot's rows for a steering target driven by a steering Kind (winding or angle) or by a Motion Lean descriptor, whose lock state lives in the same `SourceKindRuntime` machine.
+
+Four channels, each with its own `PadSetting` toggle, all off by default:
+
+- **Rumble pulse** (`SteeringLockRumbleEnabled`): a reactive grip-motor pulse on the lock-entry edge through `MacroRumbleOverrides`.
+- **Trigger pulse** (`SteeringLockTriggerVibEnabled`): the same edge on `SteeringTrigVibOverrides`, a separate override whose scalar routes to the trigger actuators. Xbox impulse triggers pick it up in `ApplyForceFeedback` through `GetSteeringTrigVib`, DualSense trigger haptics through the dispatcher. Firing the grip override here would duplicate channel 1 and never reach the trigger actuators.
+- **Lightbar pulse** (`SteeringLockLightbarEnabled`): every per-device lightbar on the slot pulses to the lock color, with its own hold and fade windows.
+- **Adaptive-trigger resistance** (`SteeringLockATResistanceEnabled`): continuous, not an edge. `SteeringAtResistance[slot]` holds the maximum lock approach across the slot's steering rows, read by `UserEffectsDispatcher` through `SteeringAtResistanceProvider`.
+
+Timings parse from the same settings: `SteeringLockPulseMs` (default 80) for the rumble and trigger pulses, `SteeringLockLightbarHoldMs` (80) and `SteeringLockLightbarFadeMs` (250) for the lightbar.
+
+Two ordering rules are load-bearing. `TryGetLockEdgeTransition` clears the pending edge as it reads, so the test-target scoping check has to return before the row loop, or a non-target device consumes the edge the test target was about to act on. And that early return deliberately leaves `SteeringAtResistance` alone rather than zeroing it, except when nothing on the slot is the test target at all, in which case no pass would write the value and the last nonzero reading would stick.
+
+---
+
 ## RPM-LED telemetry
 
 When `WheelRpmLeds` is on and the device is a vendor wheel, Step 2 requests telemetry, computes the rev fraction, and writes the matching `WriteRpmLeds` mask only when it changes.
@@ -148,4 +166,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

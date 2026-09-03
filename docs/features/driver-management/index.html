@@ -3915,7 +3915,6 @@
 
 <h1 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h1>
 <p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers three optional ones (HidHide, Windows MIDI Services, and SteamVR) that install and uninstall from </em><em>Settings</em><em>.</em></p>
-<!-- SCREENSHOT: settings-drivers -->
 <p><img alt="Driver management cards" src="../../images/settings-drivers.png" /></p>
 <hr />
 <h2 id="whats-required-vs-optional">What's required vs optional<a class="headerlink" href="#whats-required-vs-optional" title="Permanent link">&para;</a></h2>
@@ -3965,7 +3964,6 @@
 <hr />
 <h2 id="status-indicators">Status indicators<a class="headerlink" href="#status-indicators" title="Permanent link">&para;</a></h2>
 <p>Each driver card on the Settings page shows an ember flame next to its status text.</p>
-<!-- SCREENSHOT: driver-status-flames -->
 <p><img alt="Driver cards with their status flames and versions" src="../../images/driver-status-flames.png" /></p>
 <table>
 <thead>
@@ -3985,7 +3983,7 @@
 </tr>
 </tbody>
 </table>
-<p>HIDMaestro auto-installs, so its flame stays lit. The <a href="../dashboard/">Dashboard</a> repeats the HidHide, MIDI Services, and SteamVR status as a compact text row under <strong>Drivers</strong>, with no flames and no HIDMaestro entry.</p>
+<p>HIDMaestro auto-installs, so its flame stays lit. Driver status lives on the Settings page and nowhere else. The <a href="../dashboard/">Dashboard</a> carried a <strong>Drivers</strong> text row through 4.3.2 and no longer does.</p>
 <hr />
 <h2 id="what-happens-with-a-driver-missing">What happens with a driver missing<a class="headerlink" href="#what-happens-with-a-driver-missing" title="Permanent link">&para;</a></h2>
 <p>PadForge runs whether or not the optional drivers are installed. Missing drivers only limit the features that need them.</p>
@@ -4079,6 +4077,18 @@
 <td>By default, hiding holds only while the engine runs. Stop the engine or close PadForge and the controllers reappear.</td>
 </tr>
 <tr>
+<td><strong>Hides the whole device</strong></td>
+<td>One toggle covers the device, not one interface. PadForge blacklists every HID interface under the controller's base container, the nodes between that interface and the base on classes HidHide filters, and the base container itself when it is one of those classes and all of its children are HID. XInput and WGI cannot then reach the pad through a sibling path.</td>
+</tr>
+<tr>
+<td><strong>Visible rows keep their interface</strong></td>
+<td>A device PadForge lists as its own row with hiding off is left alone, and no other device's hide blocks a parent above it. A handheld whose built-in pad and touchpad are separate rows can hide one and keep the other.</td>
+</tr>
+<tr>
+<td><strong>Transport switches</strong></td>
+<td>A pad that moves between USB and Bluetooth is hidden on the first pass either way. The hide also sweeps present nodes reporting that pad's serial number, so a second pad of the same model is never touched.</td>
+</tr>
+<tr>
 <td><strong>Master switch</strong></td>
 <td><strong>Settings &gt; HidHide Driver &gt; Hide Devices from Games</strong> (global on/off). Turning it off mid-session unhides every controller right away.</td>
 </tr>
@@ -4100,6 +4110,7 @@
 <li>Click <strong>Install</strong>. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.</li>
 <li>A restart may be needed for full effect. Restart if hiding does not work right away.</li>
 </ol>
+<p>Turn on <strong>Keep a Diagnostics Log</strong> under <strong>Settings</strong> to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, and which rule the transport sweep used. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.</p>
 <h3 id="uninstall-steps">Uninstall steps<a class="headerlink" href="#uninstall-steps" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Turn off <strong>Hide from Games (HidHide)</strong> on every device. <strong>Uninstall</strong> stays disabled while any device has hiding on.</li>
@@ -4139,7 +4150,7 @@
 <h3 id="install-steps_2">Install steps<a class="headerlink" href="#install-steps_2" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
-<li>Set <strong>Install Location</strong> if you do not want the default path. The box only shows while SteamVR is missing.</li>
+<li>Set <strong>Install Location</strong> if you do not want the default path, by typing a path or using <strong>Browse</strong>. The row only shows while SteamVR is missing.</li>
 <li>Click <strong>Install</strong>. The download runs from Valve's servers and the flame lights when it finishes.</li>
 </ol>
 <h3 id="uninstall-steps_2">Uninstall steps<a class="headerlink" href="#uninstall-steps_2" title="Permanent link">&para;</a></h3>
@@ -4364,14 +4375,13 @@
 <ul>
 <li><a href="../../start/installation/">Installation</a>: first-time setup and driver install.</li>
 <li><a href="../settings/">Settings</a>: where the driver cards live.</li>
-<li><a href="../dashboard/">Dashboard</a>: at-a-glance driver status.</li>
 <li><a href="../controller-slots/">Controller Slots</a>: which driver each slot type needs.</li>
 <li><a href="../devices/">Devices</a>: per-device hiding with HidHide.</li>
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro.</li>
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

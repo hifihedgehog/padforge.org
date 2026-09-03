@@ -155,4 +155,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

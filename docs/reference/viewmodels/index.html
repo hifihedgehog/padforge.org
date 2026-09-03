@@ -4689,6 +4689,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#synthetic-touchpad-pressure-239" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthetic touchpad pressure (#239)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#haptic-mirror-engage-gate-185" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4715,6 +4726,17 @@
     <span class="md-ellipsis">
       
         Persona haptics (#271 item 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steam-controller-2026-pcm-haptics-381" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steam Controller 2026 PCM haptics (#381)
       
     </span>
   </a>
@@ -7865,6 +7887,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#synthetic-touchpad-pressure-239" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthetic touchpad pressure (#239)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#haptic-mirror-engage-gate-185" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7891,6 +7924,17 @@
     <span class="md-ellipsis">
       
         Persona haptics (#271 item 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steam-controller-2026-pcm-haptics-381" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steam Controller 2026 PCM haptics (#381)
       
     </span>
   </a>
@@ -8080,6 +8124,7 @@
 <p><strong>v4.1 (2026-07-30):</strong> The Nintendo output type (#215) joins the family. <code>PadViewModel</code> gains the Bass Shakers tab (#236), the slot SOCD card (#240), the flick rotation offset, gyro Acceleration, and the macro Layer dropdown. <code>MacroItem</code> carries the #238 / #253 fire-mode wave and per-macro layer scope (#254). Mapping rows and sources gain Flip Output, per-source Acceleration, and the #251 axis-latch macro actions. The Touchpad partial grows the libinput pointer Response, momentum, and pointer-region cards. <code>DeviceSlotConfig</code> adds synthetic touch pressure (#239) and the Switch home-LED lane (#226).</p>
 <p><strong>v4.2:</strong> The VR output type (#49) lands as <code>VirtualControllerType.Vr</code> (6), with a <code>VrControllerIcon</code> sidebar entry, a <code>VrOutputSnapshot</code>, and a SteamVR row in both driver-status surfaces (<code>DashboardViewModel.IsSteamVrInstalled</code>, plus the install / uninstall pair on <code>SettingsViewModel</code>). The pad page grows two slot-tier tabs: Bass Shakers at index 16 and Output at index 17 (SOCD plus Keep Controller Awake). <code>DeviceSlotConfig</code> gains headphone-jack volume, the DualSense audio-output path, and persona haptics, with <code>MacroActionType.HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> (52 / 53) driving the volume. Sony headset head trackers get their own device class (<code>HeadsetMotion</code>, #188). <code>RawHidState</code> replaced the old <code>ExtendedRawState</code>, so the Extended snapshot is now <code>RawHidOutputSnapshot</code>.</p>
 <p><strong>v4.3:</strong> The mapping picker gains one shared per-slot choice list plus a search box and device-visibility filter (#322 / discussion #302), both on <code>PadViewModel</code>. Voice macros (#317) add the <code>"Microphone"</code> device class, the Voice Macros preview on <code>DevicesViewModel</code>, <code>DeviceRowViewModel.ShowManageVoicePhrases</code>, and <code>MacroActionType.VoiceListenWhileHeld</code> (54). <code>MacroAction</code> grows the pressure-scaled turbo block (#290). <code>StickConfigItem</code> grows stick trackball momentum (#291), the touchpad partial grows the shared momentum knobs, and <code>PadViewModel</code> grows the Gyro Tilt envelope (#292). The Dashboard's web-controller card gains a URL and QR (#296), its SteamVR row goes tiered (#287), and Settings gains the low-battery notification trio (#293).</p>
+<p><strong>v4.4:</strong> Head tracking moves from <code>SettingsViewModel</code> to <code>DashboardViewModel</code>, which also gains the Razer Chroma (#373), Logitech LIGHTSYNC (#382) and Razer Sensa (#374) enable-plus-status pairs. The Dashboard's driver-status strip is gone, leaving three bare installed flags and the full cards on Settings. <code>DeviceRowViewModel</code> gains <code>ShowQuickCharge</code> (#372), and <code>IsInternalVirtual</code> grows the <code>handheld://</code>, <code>sensor://</code> and <code>headtrack://</code> schemes. <code>PadViewModel</code> gains the <code>ExtendedConfig</code> reseed on a profile switch, the Grip option list and <code>IsLoadingPadSetting</code> (#392), the grouped <code>MacroTypeCatalog</code> picker, menu macro cells and <code>.pficons</code> icon packages (#390). The Profiles page gains external control (#366) and the per-profile polling override (#365).</p>
 </blockquote>
 <hr />
 <p>All ViewModels live in <code>PadForge.App/ViewModels/</code> (<code>PadForge.ViewModels</code> namespace). Built on <a href="https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/">CommunityToolkit.Mvvm</a> (<code>ObservableObject</code>, <code>RelayCommand</code>).</p>
@@ -8575,7 +8620,7 @@
 </tbody>
 </table>
 <h3 id="head-tracking-355">Head Tracking (#355)<a class="headerlink" href="#head-tracking-355" title="Permanent link">&para;</a></h3>
-<p>A UDP listener on OpenTrack's port plus a FreeTrack 2.0 shared-memory reader, surfaced as the Head Tracker device row. Each setter mirrors into the static <code>PadForge.Common.Input.HeadTrackingRuntime</code> that the poll thread's device sweep reads, so a write lands whatever its source (global load, profile apply, the user). The enable rides profiles as a nullable leg (<code>ProfileData.EnableHeadTracking</code>). Port, FreeTrack toggle, and the two ranges are global. These properties moved here from <code>SettingsViewModel</code> on 2026-09-02.</p>
+<p>A UDP listener on OpenTrack's port plus a FreeTrack 2.0 shared-memory reader, surfaced as the Head Tracker device row. Each setter mirrors into the static <code>PadForge.Common.Input.HeadTrackingRuntime</code> that the poll thread's device sweep reads, so a write lands whatever its source (global load, profile apply, the user). The enable rides profiles as a nullable leg (<code>ProfileData.EnableHeadTracking</code>). Port, FreeTrack toggle, and the two ranges are global. These properties moved here from <code>SettingsViewModel</code> on 2026-09-02. MainWindow's Dashboard dirty-gate allowlist moved with them, so a head-tracking edit still marks the settings file dirty.</p>
 <table>
 <thead>
 <tr>
@@ -9514,7 +9559,7 @@
 <tr>
 <td><code>SteamVrStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed, tiered (#287), deepest true state wins: <code>"Not Installed"</code>, then controllers-live / driver-connected / running read off <code>HMaestroVRController.GlobalDriverStatus()</code> and <code>OpenVrConsumerService.ServerConnected</code>, falling back to <code>"Installed"</code>. The only SteamVR status row in the app since the Dashboard's driver strip was removed.</td>
+<td>Computed, tiered (#287), deepest true state wins: <code>"Not Installed"</code>, then controllers-live / driver-connected / running read off <code>HMaestroVRController.GlobalDriverStatus()</code> and <code>OpenVrConsumerService.ServerConnected</code>, falling back to <code>"Installed"</code>. This is where the SteamVR status reads now that the Dashboard's driver strip is gone.</td>
 </tr>
 <tr>
 <td><code>SteamVrInstallDir</code></td>
@@ -11931,9 +11976,9 @@
 </table>
 <p>The <code>ProfileId</code> setter, in order, on a live re-target only (it reads <code>SettingsManager.GetWireStamp</code> before translating, so restore, apply, and import paths, which stamp the incoming wire first, no-op through it):</p>
 <ol>
-<li>Translates existing raw bindings by role when both wires are lettered, <code>StampNintendoWire</code> otherwise. Raw targets are wire-relative and the lettered families share almost no indices, so without this every binding keeps its index and silently changes meaning.</li>
+<li>Translates existing raw bindings by role on a Nintendo slot, or on any slot where both the outgoing and incoming wires are lettered (<code>NintendoPreviewMap.IsLettered</code>). Every other live re-target only re-stamps the wire (<code>StampNintendoWire</code>). Raw targets are wire-relative and the lettered families share almost no indices, so without the translation every binding keeps its index and silently changes meaning.</li>
 <li>On an Extended or Nintendo slot, fills empty auto-mappings for what the new profile added (<code>DeviceService.FillEmptyAutoMappingsForSlot</code>, then <code>SettingsService.RefreshMappingSetsFromLegacy</code>), merged into the slot's <code>MappingSet</code> before the rebuild, since the grid rebuilds from the set and the save pipeline regenerates settings from the grid. Fill is additive, so a binding the user authored or deliberately cleared survives.</li>
-<li>Reseeds <code>ExtendedConfig</code> from the profile (<code>SyncExtendedConfigFromProfile</code>): <code>ThumbstickCount</code> and <code>TriggerCount</code> from <code>HMProfile.StickCount</code> / <code>TriggerCount</code>, <code>PovCount</code> from <code>HasHat</code>, <code>ButtonCount</code> from the profile's own lettered count. That count is authoritative rather than a <code>Min</code> against the SDK-reported one: taking a <code>Min</code> let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid.</li>
+<li>Reseeds <code>ExtendedConfig</code> from the profile (<code>SyncExtendedConfigFromProfile</code>): <code>ThumbstickCount</code> and <code>TriggerCount</code> from <code>HMProfile.StickCount</code> / <code>TriggerCount</code>, <code>PovCount</code> from <code>HasHat</code>, <code>ButtonCount</code> from the profile's own lettered count. That count is authoritative rather than a <code>Min</code> against the SDK-reported one: taking a <code>Min</code> let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from <code>NintendoPreviewMap</code> instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces <code>ExtendedConfig.Customize</code> on.</li>
 <li>Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (<code>SyncMacroButtonStyle</code>), and re-gates the Bass Shakers tab.</li>
 </ol>
 <p>Xbox and PlayStation slots have fixed layouts, so they skip the reseed and only rebuild mappings. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs), so a profile change within the category still has to rebuild the row list.</p>
@@ -12149,10 +12194,11 @@
 </tbody>
 </table>
 <h3 id="xinput-output-state-controller-visualizer">XInput Output State (Controller Visualizer)<a class="headerlink" href="#xinput-output-state-controller-visualizer" title="Permanent link">&para;</a></h3>
-<p>Combined slot output values, updated at 30 Hz by <code>UpdateFromEngineState()</code>. Bound to the 2D/3D controller visualizer.</p>
+<p>Combined slot output values, updated at 30 Hz by <code>UpdateFromEngineState()</code>. Bound to the 2D/3D controller visualizer. On a slot whose preview rides the raw surface, <code>UpdateNintendoPreviewFromRaw</code> owns the button and stick properties instead, and <code>UpdateFromEngineState</code> writes only the vibration bars.</p>
 <p><strong>Buttons (all <code>bool</code>):</strong></p>
 <p><code>ButtonA</code>, <code>ButtonB</code>, <code>ButtonX</code>, <code>ButtonY</code>, <code>LeftShoulder</code>, <code>RightShoulder</code>, <code>ButtonBack</code>, <code>ButtonStart</code>, <code>LeftThumbButton</code>, <code>RightThumbButton</code>, <code>ButtonGuide</code>, <code>DPadUp</code>, <code>DPadDown</code>, <code>DPadLeft</code>, <code>DPadRight</code></p>
-<p>Family extras on the same lane, each driving the 2D overlay and 3D mesh accent for the pads that carry the button: <code>ButtonShare</code> (Xbox Series), <code>ButtonMute</code> (DualSense mic mute), <code>LeftFunction</code> / <code>RightFunction</code> (DualSense Edge Fn), <code>ButtonC</code>, <code>LeftPaddle</code> / <code>RightPaddle</code> (Switch 2 Pro C, GL, GR, written by the raw bridge from wire indices 20, 19, 18).</p>
+<p>Family extras on the same lane, each driving the 2D overlay and 3D mesh accent for the pads that carry the button: <code>ButtonShare</code> (Xbox Series), <code>ButtonMute</code> (DualSense mic mute), <code>LeftFunction</code> / <code>RightFunction</code> (DualSense Edge Fn), <code>ButtonC</code> / <code>LeftPaddle</code> / <code>RightPaddle</code> (Switch 2 Pro C, GL and GR, with <code>UpdateFromGamepad</code> writing the paddle pair on PlayStation slots too, so both surfaces share it), and the Valve set <code>ButtonQuickAccess</code>, <code>Paddle1</code>-<code>Paddle4</code> (translator handedness: R4, L4, R5, L5), <code>LeftGrip</code> / <code>RightGrip</code> (the 2015 pad's rear grips), and <code>LeftTouchpadClick</code> / <code>RightTouchpadClick</code>.</p>
+<p>On a Nintendo or Valve slot these come from <code>UpdateNintendoPreviewFromRaw</code>, which walks <code>Models2D.NintendoPreviewMap.ButtonTable(ProfileId)</code> and assigns by name. It is table-driven off the same wire table the mapping grid and the click-to-record path use, so the two directions cannot disagree. The hardcoded index list it replaced was the original Pro Controller's, and it lit the wrong art for eleven of the Switch 2 Pro's twenty-one buttons. Two details fall out of the table: on the 2015 Steam Controller the right pad click is also the right stick button, so <code>RightThumbButton</code> follows <code>RightTouchpadClick</code>, and a profile that spends real buttons on the D-pad (Switch 2 Pro) skips the hat read entirely.</p>
 <p><strong>Axes (combined slot values):</strong></p>
 <table>
 <thead>
@@ -14059,7 +14105,7 @@
 <p>The per-slot Bass Shakers tab surface, MappingSet-backed like Menus and persisted through the same dirty callback. <code>RumbleAudioTabVisible</code> gates the tab on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback (Customize on: the ForceFeedbackEnabled checkbox decides; Customize off: the catalog profile descriptor must carry a PID FFB block). The card binds <code>RumbleAudioEnabled</code>, <code>RumbleAudioEndpointId</code> (output device picker), <code>RumbleAudioChannelMode</code> (Mono / Controller Stereo), <code>RumbleAudioMasterGain</code>, and <code>RumbleAudioVoices</code>, an <code>ObservableCollection</code> of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into <code>MappingSet.RumbleAudio</code> (<code>RumbleAudioConfig</code>), so the routing travels with profiles and Copy / Paste.</p>
 <h3 id="output-tab-slot-socd-245-and-keep-controller-awake">Output tab: Slot SOCD (#245) and Keep Controller Awake<a class="headerlink" href="#output-tab-slot-socd-245-and-keep-controller-awake" title="Permanent link">&para;</a></h3>
 <p>Both cards live on the Output tab (index 17). <code>OutputTabVisible</code> is a slot-type gate: every type except MIDI and VR, the two with no output-behavior surface at all.</p>
-<p>Controller-button SOCD is distinct from <code>KbmSlotConfig</code>'s key SOCD (#205). <code>SocdCardVisible</code> and <code>KbmSocdCardVisible</code> are mutually exclusive by slot type. The card binds <code>SocdMode</code> over <code>MappingSet.SocdMode</code> (<code>AvailableSlotSocdModes</code>: Off / Last Wins / First Wins / Neutral), and <code>SocdPairItems</code> (<code>SlotSocdPairItem</code>) edits the opposing button pairs from <code>SocdButtonOptions</code>. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.</p>
+<p>Controller-button SOCD is distinct from <code>KbmSlotConfig</code>'s key SOCD (#205). <code>SocdCardVisible</code> and <code>KbmSocdCardVisible</code> are mutually exclusive by slot type. The card binds <code>SocdMode</code> over <code>MappingSet.SocdMode</code> (<code>AvailableSlotSocdModes</code>, in dropdown order: Off / Last Wins / Neutral / First Wins), and <code>SocdPairItems</code> (<code>SlotSocdPairItem</code>) edits the opposing button pairs from <code>SocdButtonOptions</code>. <code>SocdUsesRawIndices</code> says which pair grammar the slot stores: Extended and Nintendo slots write flat raw indices (<code>"12:13"</code>), Xbox and PlayStation slots write the <code>WriteBoolTarget</code> names, mirroring the engine's own raw-surface gate. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.</p>
 <p>Keep Controller Awake holds a stick off-center so a console-style pad never idles out. Like the Bass Shakers config, it lives on the slot's <code>MappingSet</code> and every setter fires <code>ConfigItemDirtyCallback</code>.</p>
 <table>
 <thead>
@@ -14082,6 +14128,12 @@
 <td><code>bool</code></td>
 <td><code>false</code></td>
 <td>Card master switch, over <code>MappingSet.KeepAwakeEnabled</code>.</td>
+</tr>
+<tr>
+<td><code>KeepAwakeMotion</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Sweep the hold instead of parking it, over <code>MappingSet.KeepAwakeMotion</code>. For titles that gate vibration on the stick moving rather than on where it sits.</td>
 </tr>
 <tr>
 <td><code>KeepAwakeAxis</code></td>
@@ -14111,6 +14163,14 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>ResetKeepAwakeEnabledCommand</code></td>
+<td>Card switch back off.</td>
+</tr>
+<tr>
+<td><code>ResetKeepAwakeMotionCommand</code></td>
+<td>Sweep back off.</td>
+</tr>
 <tr>
 <td><code>ResetKeepAwakeAxisCommand</code></td>
 <td>Back to <code>"LX"</code>.</td>
@@ -14306,6 +14366,11 @@
 <td><code>HasSelectedDevice &amp;&amp; !IsMapAllActive &amp;&amp; SelectedMappedDevice.IsOnline</code></td>
 <td>Starts sequential "Map All" recording.</td>
 </tr>
+<tr>
+<td><code>StopMapAllCommand</code></td>
+<td><code>IsMapAllActive</code></td>
+<td>Raises <code>MapAllCancelRequested</code>, ending a sweep in progress. The Map All button swaps its own caption and tooltip through <code>MapAllButtonText</code> / <code>MapAllButtonTooltip</code> while a sweep runs.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="map-all-system">Map All System<a class="headerlink" href="#map-all-system" title="Permanent link">&para;</a></h3>
@@ -14424,7 +14489,7 @@
 </tr>
 <tr>
 <td><code>UpdateFromRawHidState(RawHidState)</code></td>
-<td>Publishes the combined raw-HID output for the Extended schematic. Skips the notification when axes, hardware axes, buttons, and POVs all match the last snapshot, so an idle slot does not re-arm a repaint at 30 Hz. On a Nintendo slot it also projects the raw state onto the Gamepad-shaped preview properties.</td>
+<td>Publishes the combined raw-HID output for the Extended schematic. Skips the notification when axes, hardware axes, buttons, and POVs all match the last snapshot, so an idle slot does not re-arm a repaint at 30 Hz. On a slot whose preview rides the raw surface (<code>PreviewRidesRawSurface</code>: any Nintendo slot, and an Extended slot on a Valve lettered profile) it also projects the raw state onto the Gamepad-shaped preview properties, and <code>UpdateFromEngineState</code> skips writing them so the two paths cannot fight.</td>
 </tr>
 <tr>
 <td><code>UpdateFromMidiRawState(MidiRawState)</code></td>
@@ -15538,7 +15603,7 @@
 <td><code>UsesRawTrigger</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: any <code>TriggerInputs</code> entry has <code>RawButton &gt;= 0</code>, or the legacy pair <code>TriggerDeviceGuid != Empty &amp;&amp; TriggerRawButtons.Length &gt; 0</code>. The legacy half alone reads false for every modern entry-list macro.</td>
+<td>Computed: any <code>TriggerInputs</code> entry has <code>RawButton &gt;= 0</code>, or the legacy pair <code>TriggerDeviceGuid != Empty &amp;&amp; TriggerRawButtons.Length &gt; 0</code>. The legacy half alone reads false for every entry-list macro.</td>
 </tr>
 </tbody>
 </table>
@@ -17742,7 +17807,7 @@
 </tr>
 </tbody>
 </table>
-<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from the 225+ HIDMaestro profile catalog instead, with <code>Customize</code> as the single boolean that gates user overrides on top of the catalog profile.</p>
+<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead (225 profiles across 32 vendors), with <code>Customize</code> as the single boolean that gates user overrides on top of the catalog profile.</p>
 <h3 id="extendedslotconfigdata">ExtendedSlotConfigData<a class="headerlink" href="#extendedslotconfigdata" title="Permanent link">&para;</a></h3>
 <p>Serializable DTO for persisting in PadForge.xml. All properties have <code>[XmlAttribute]</code>.</p>
 <table>
@@ -18042,6 +18107,31 @@
 </tr>
 </tbody>
 </table>
+<h3 id="synthetic-touchpad-pressure-239">Synthetic touchpad pressure (#239)<a class="headerlink" href="#synthetic-touchpad-pressure-239" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TouchpadSyntheticPressure</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Synthesize a pressure reading on pads whose hardware reports none (DualShock 4, DualSense, Steam Controller 2015). No touch reads 0, a resting touch reads <code>TouchpadSyntheticTouchPercent</code>, a pad click reads 100%. Valve pads with true analog pressure keep their raw readings while this is off.</td>
+</tr>
+<tr>
+<td><code>TouchpadSyntheticTouchPercent</code></td>
+<td><code>int</code></td>
+<td><code>50</code></td>
+<td>The touch stop of that curve, percent of full pressure a resting unclicked touch reads. Clamped 0-100.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="haptic-mirror-engage-gate-185">Haptic mirror engage gate (#185)<a class="headerlink" href="#haptic-mirror-engage-gate-185" title="Permanent link">&para;</a></h3>
 <p>Applies to haptic-tone sinks only (Joy-Con, Switch Pro, Steam family). Sony/Wii speaker mirrors stay ungated.</p>
 <table>
@@ -18132,6 +18222,25 @@
 </tbody>
 </table>
 <p>Reset commands: <code>ResetPersonaHapticsCommand</code>, <code>ResetPersonaHapticsGainCommand</code> (both on <code>PadViewModel</code>, alongside the Audio tab's other row resets).</p>
+<h3 id="steam-controller-2026-pcm-haptics-381">Steam Controller 2026 PCM haptics (#381)<a class="headerlink" href="#steam-controller-2026-pcm-haptics-381" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AudioTritonLowPassHz</code></td>
+<td><code>int</code></td>
+<td><code>250</code></td>
+<td>Low-pass cutoff in Hz for the Steam Controller 2026 PCM haptic stream, clamped 60-1000. Past roughly 250 Hz the pad's actuators start behaving like small speakers. 250 is one requester's hardware-measured threshold on their own unit, not a device specification, which is why it stays tunable.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="audio-dsp-chain-347_1">Audio DSP chain (#347)<a class="headerlink" href="#audio-dsp-chain-347_1" title="Permanent link">&para;</a></h3>
 <p>Per (slot, device) like the rest of the bag, never gated on OutputType. The chain runs on the <code>AudioPassthroughService</code> sink only, upstream of the Opus encoder. Edited from the <code>PadViewModel.AudioDsp.cs</code> cards.</p>
 <table>
@@ -18386,7 +18495,7 @@
 <td><code>GuideLedMode</code></td>
 <td><code>GuideLedMode</code></td>
 <td><code>DeviceDefault</code></td>
-<td>DeviceDefault never writes, Fixed holds <code>GuideLedBrightness</code>, Battery tracks battery percent. Xbox One+ pads take the GIP LED command over <code>\\.\XboxGIP</code> (USB only). The 2015 Steam Controller takes SDL's home-LED hint. Notifies <code>IsGuideLedFixed</code>.</td>
+<td>DeviceDefault never writes, Fixed holds <code>GuideLedBrightness</code>, Battery re-maps battery percent to brightness on a slow cadence with a floor of 10 so a low battery stays visible. Xbox One and later pads take the GIP LED command over <code>\\.\XboxGIP</code> (USB only, <code>XboxGipGuideLedWriter</code>). The 2015 Steam Controller takes SDL's process-global home-LED hint (<code>SteamHomeLedSetter</code>). Switch Pro Controllers, right Joy-Cons, the combined pair, and the charging grip take per-device <code>SDL_SetJoystickLED</code> (<code>SwitchHomeLedSetter</code>, #226). Notifies <code>IsGuideLedFixed</code>.</td>
 </tr>
 <tr>
 <td><code>IsGuideLedFixed</code></td>
@@ -18398,7 +18507,7 @@
 <td><code>GuideLedBrightness</code></td>
 <td><code>int</code></td>
 <td><code>100</code></td>
-<td>Fixed-mode brightness percent. Clamped 0–100. Writers scale it onto each device's range.</td>
+<td>Fixed-mode brightness percent. Clamped 0–100. Writers scale it onto each device's own range: 0-47 for GIP per MS-GIPUSB, 0..1 for the SDL hint, and a 4-bit subcommand 0x38 intensity for the Switch home LED.</td>
 </tr>
 </tbody>
 </table>
@@ -18568,7 +18677,7 @@
 <p><strong>MicLedDeviceItem:</strong> <code>Id</code> (CoreAudio endpoint string), <code>Display</code> (label, prefixed <code>[In]</code> / <code>[Out]</code>).</p>
 <p><strong>LightbarPaletteEntry</strong> (<code>ObservableObject</code>): <code>R</code>, <code>G</code>, <code>B</code> (byte), <code>Hex</code> (two-way <code>"RRGGBB"</code> shim, <code>[XmlIgnore]</code>).</p>
 <h3 id="deviceslotconfigdata">DeviceSlotConfigData<a class="headerlink" href="#deviceslotconfigdata" title="Permanent link">&para;</a></h3>
-<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>AudioCrossfeedLevel</code> = 0, <code>AudioCrossfeedCutHz</code> = 700, <code>AudioCrossfeedFeedDb</code> = 4.5, <code>AudioEqEnabled</code> = false, <code>AudioEqBands</code> = "", <code>AudioEqPreampDb</code> = 0, <code>AudioLimiterEnabled</code> = true, <code>AudioLimiterCeiling</code> = 98, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
+<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>TouchpadSyntheticPressure</code> = false, <code>TouchpadSyntheticTouchPercent</code> = 50, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>AudioTritonLowPassHz</code> = 250, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>AudioCrossfeedLevel</code> = 0, <code>AudioCrossfeedCutHz</code> = 700, <code>AudioCrossfeedFeedDb</code> = 4.5, <code>AudioEqEnabled</code> = false, <code>AudioEqBands</code> = "", <code>AudioEqPreampDb</code> = 0, <code>AudioLimiterEnabled</code> = true, <code>AudioLimiterCeiling</code> = 98, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
 <hr />
 <h2 id="kbmslotconfig">KbmSlotConfig<a class="headerlink" href="#kbmslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>KbmSlotConfig.cs</code></p>
@@ -18829,7 +18938,7 @@
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> bound to <code>PadViewModel</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

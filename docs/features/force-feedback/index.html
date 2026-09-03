@@ -3976,10 +3976,10 @@
 </blockquote>
 <hr />
 <h2 id="playstation-pads">PlayStation pads<a class="headerlink" href="#playstation-pads" title="Permanent link">&para;</a></h2>
-<p>When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble, lightbar, adaptive triggers, and the mic LED together in one update to the pad, whatever the slot's output type. Game rumble and your effect settings arrive in sync, so nothing fights over the device.</p>
+<p>When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble and lightbar together in one update to the pad, whatever the slot's output type. On the DualSense family that same update carries the adaptive triggers, the player row, and the mic LED. A DualShock 4 has none of those. Game rumble and your effect settings arrive in sync, so nothing fights over the device.</p>
 <hr />
 <h2 id="constant-force">Constant Force<a class="headerlink" href="#constant-force" title="Permanent link">&para;</a></h2>
-<p>A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. Its angle sets direction (0 → +1 vertical is forward, 0 → +1 horizontal is right).</p>
+<p>A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. Its angle sets direction: Y at +1 points forward, X at +1 points right.</p>
 <p><strong>Override-with-resume rule.</strong> While the toggle is on, PadForge keeps applying the configured force as long as no game or program is sending non-zero force to that device/slot pair. The moment a game sends any non-zero rumble or force feedback effect, the game's force takes over. The moment the game returns to silence, the constant force resumes. Macro rumble counts as game force here, so a macro pulse takes over the same way, and the constant force resumes once the pulse ends.</p>
 <h3 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link">&para;</a></h3>
 <ul>
@@ -4278,6 +4278,7 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
+<li><a href="../bass-shakers/">Bass Shakers</a>: the slot-level tab in full, voice by voice.</li>
 <li><a href="../wheel/">Wheel</a>: native force feedback for Logitech, Fanatec, and Thrustmaster wheels, plus rotation range, auto-center, and RPM LEDs.</li>
 <li><a href="../mappings/">Button and Axis Mappings</a>: map physical inputs.</li>
 <li><a href="../stick-deadzones/">Stick Deadzones</a>: thumbstick deadzone and response curves.</li>

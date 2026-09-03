@@ -37,7 +37,7 @@ The outer deadzone is measured from 90°, so the default reaches full lock at 80
 
 Motion Lean is not a stick mode. It's an input you pick from the input dropdown, like any gyro source, and map to a steering axis. Its tuning lives on the **Gyro** tab's Motion Steering card, not the Sticks tab. Gravity, read through the same source the Gyro tab uses, drives the axis. **Controller Orientation** tells PadForge which way the controller is held (Forward, Left, Right, Backward) so the lean axis is correct.
 
-With the default deadzones, lock lands near 45° of tilt from neutral. The inner deadzone covers small neutral wobble.
+With the default deadzones, lock lands at 45° of tilt from neutral. The inner 15° is dead, so small neutral wobble does nothing, and the 30° above it carries the full sweep.
 
 | Setting | Default | Range |
 | --- | --- | --- |
@@ -90,4 +90,4 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

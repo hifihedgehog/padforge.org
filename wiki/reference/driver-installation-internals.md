@@ -263,7 +263,7 @@ flowchart TD
     H[Cleanup temp directory]
 ```
 
-**Why `/releases` not `/releases/latest`**: the `microsoft/MIDI` repo only publishes pre-releases. `/releases/latest` returns 404 without a stable release; `/releases` returns all releases (first = most recent).
+**Why `/releases` not `/releases/latest`**: the `microsoft/MIDI` repo only publishes pre-releases. `/releases/latest` returns 404 without a stable release. `/releases` returns all of them, most recent first.
 
 **Why no `runas`**: PadForge is already elevated via `app.manifest`. Using `Verb = "runas"` when already elevated throws `Win32Exception` on some systems, so MIDI uses a direct `Process.Start`.
 

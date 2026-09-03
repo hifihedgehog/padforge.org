@@ -1600,7 +1600,7 @@
   <a href="#calibrate-boundary-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Calibrate boundary (recommended)
+        Calibrate Boundary (recommended)
       
     </span>
   </a>
@@ -3907,7 +3907,7 @@
   <a href="#calibrate-boundary-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Calibrate boundary (recommended)
+        Calibrate Boundary (recommended)
       
     </span>
   </a>
@@ -4444,17 +4444,17 @@
 <hr />
 <h2 id="range">Range<a class="headerlink" href="#range" title="Permanent link">&para;</a></h2>
 <p>The Range section sets how far you push a stick to reach full output. It has a boundary calibration tool and four directional caps.</p>
-<h3 id="calibrate-boundary-recommended">Calibrate boundary (recommended)<a class="headerlink" href="#calibrate-boundary-recommended" title="Permanent link">&para;</a></h3>
+<h3 id="calibrate-boundary-recommended">Calibrate Boundary (recommended)<a class="headerlink" href="#calibrate-boundary-recommended" title="Permanent link">&para;</a></h3>
 <p><img alt="Boundary calibration button with a circularity readout and the measured edge drawn on the stick preview" src="../../images/pad-sticks-boundary-calibration.png" /></p>
 <p>No stick reaches a perfect circle. The corners fall short, and worn sticks lose reach unevenly. Boundary calibration measures the exact edge your stick can physically reach, then rescales every position so your full motion maps onto a clean circle. Nothing gets clipped, at any angle.</p>
 <p>This is the recommended way to true up a stick. The four sliders below only cap the cardinal directions. Use them to limit range on purpose, not to correct it.</p>
 <ol>
-<li>Click <strong>Calibrate boundary</strong> for the stick.</li>
+<li>Click <strong>Calibrate Boundary</strong> for the stick.</li>
 <li>Sweep the stick slowly around its outer rim. The button counts down the sectors still left to cover.</li>
 <li>Once every sector is covered, the button asks for one more lap to sharpen the measurement. Keep sweeping.</li>
 <li>The button commits on its own once the rim is fully mapped. Clicking it again mid-sweep commits early.</li>
 </ol>
-<p>As you sweep, the measured edge draws on the preview as an outline, and a circularity percentage shows next to the button. Higher means rounder. Once calibrated the button reads <strong>Recalibrate boundary</strong>. The reset button beside it clears the calibration.</p>
+<p>As you sweep, the measured edge draws on the preview as an outline, and a circularity percentage shows next to the button. Higher means rounder. Once calibrated the button reads <strong>Recalibrate Boundary</strong>. The reset button beside it clears the calibration.</p>
 <h3 id="directional-range-caps">Directional range caps<a class="headerlink" href="#directional-range-caps" title="Permanent link">&para;</a></h3>
 <p>Each direction has its own cap. Lower a cap and a smaller physical push in that direction counts as full output.</p>
 <table>
@@ -4510,7 +4510,7 @@
 </tr>
 </tbody>
 </table>
-<p>Use the caps to shorten the throw on a direction deliberately. To fix a stick that reaches unevenly or falls short in the corners, run Calibrate boundary instead.</p>
+<p>Use the caps to shorten the throw on a direction deliberately. To fix a stick that reaches unevenly or falls short in the corners, run Calibrate Boundary instead.</p>
 <hr />
 <h2 id="live-preview">Live preview<a class="headerlink" href="#live-preview" title="Permanent link">&para;</a></h2>
 <p>A circular preview next to the sliders shows the stick in real time.</p>
@@ -4518,7 +4518,7 @@
 <li><strong>RAW dot.</strong> The stick's position before any processing, in cold blue.</li>
 <li><strong>OUT dot.</strong> The fully processed position, in ember. The gap between RAW and OUT is what your settings do.</li>
 <li><strong>Deadzone region.</strong> Shaded shape in the center matching the selected geometry (circle, cross, or wedges).</li>
-<li><strong>Measured boundary.</strong> After you run Calibrate boundary, the mapped edge draws as an outline. The gap between it and the outer ring is what the reshape corrects.</li>
+<li><strong>Measured boundary.</strong> After you run Calibrate Boundary, the mapped edge draws as an outline. The gap between it and the outer ring is what the reshape corrects.</li>
 </ul>
 <h3 id="what-the-preview-tells-you">What the preview tells you<a class="headerlink" href="#what-the-preview-tells-you" title="Permanent link">&para;</a></h3>
 <table>
@@ -4543,7 +4543,7 @@
 </tr>
 <tr>
 <td>Testing range</td>
-<td>Push to the physical limit. OUT dot not reaching the edge? Run Calibrate boundary or lower a range cap.</td>
+<td>Push to the physical limit. OUT dot not reaching the edge? Run Calibrate Boundary or lower a range cap.</td>
 </tr>
 </tbody>
 </table>
@@ -4599,8 +4599,8 @@
 </tr>
 <tr>
 <td>Range</td>
-<td>Calibrate boundary</td>
-<td>Calibrate boundary</td>
+<td>Calibrate Boundary</td>
+<td>Calibrate Boundary</td>
 </tr>
 </tbody>
 </table>
@@ -4642,7 +4642,7 @@
 </tr>
 <tr>
 <td>Range</td>
-<td>Calibrate boundary</td>
+<td>Calibrate Boundary</td>
 <td>100%</td>
 </tr>
 </tbody>
@@ -4685,8 +4685,8 @@
 </tr>
 <tr>
 <td>Range</td>
-<td>Calibrate boundary</td>
-<td>Calibrate boundary</td>
+<td>Calibrate Boundary</td>
+<td>Calibrate Boundary</td>
 </tr>
 </tbody>
 </table>
@@ -4773,7 +4773,7 @@
 <hr />
 <h2 id="mouse-and-scroll-speed">Mouse and scroll speed<a class="headerlink" href="#mouse-and-scroll-speed" title="Permanent link">&para;</a></h2>
 <p>On a Keyboard + Mouse slot the two sticks are <strong>Mouse Movement</strong> and <strong>Scroll Wheel</strong>, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a <strong>Sensitivity</strong> row that multiplies that speed.</p>
-<p>The Mouse Movement stick also carries a <strong>Momentum</strong> row: trackball mode for the stick. Flick the stick and release, and the cursor keeps traveling on the fling, decelerating to a stop on the same constant-friction physics the <a href="../touchpad/#mouse-output">touchpad's Momentum</a> uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to center parks the cursor without a fling. Moving the stick again catches the coast. The <strong>Momentum Glide</strong> slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 the coast is frictionless and only the stick stops it. Off by default, per slot and device.</p>
+<p>The Mouse Movement stick also carries a <strong>Momentum</strong> row: trackball mode for the stick. Flick the stick and release, and the cursor keeps traveling on the fling, decelerating to a stop on the same constant-friction physics the <a href="../touchpad/#mouse-output">touchpad's Momentum</a> uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to center parks the cursor without a fling. Moving the stick again catches the coast. The <strong>Momentum Glide</strong> slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 nothing slows the coast, and only the stick stops it. Off by default, per slot and device.</p>
 <table>
 <thead>
 <tr>
@@ -4797,7 +4797,7 @@
 <p>Flick stick turns a thumbstick into a compass for mouse-driven camera control. Deflect the stick past the threshold and the camera snaps to the direction you point, easing over the flick time. Hold the stick at the rim and sweep it to keep turning 1:1. Release and the camera stays put. Horizontal turns only, so most players pair it with <a href="../../guides/gyro/">Gyro</a> aiming for the vertical.</p>
 <p>Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:</p>
 <ol>
-<li>On the <strong>Mappings</strong> tab, map <strong>Flick Stick (Right Stick)</strong> (or <strong>Flick Stick (Left Stick)</strong>) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, <strong>Flick Stick (Touchpad 1)</strong> works the same way: the finger's position plays the stick's role, and lifting the finger releases. A split pad adds <strong>Left Half</strong> and <strong>Right Half</strong> variants.</li>
+<li>On the <strong>Mappings</strong> tab, map <strong>Flick Stick (Right Stick)</strong> (or <strong>Flick Stick (Left Stick)</strong>) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, <strong>Flick Stick (Touchpad 1)</strong> works the same way: the finger's position plays the stick's role, and lifting the finger releases. It sits in the source picker's <strong>(Any device)</strong> group, next to <strong>Left Half</strong> and <strong>Right Half</strong> variants that read one half of a single pad as the whole surface.</li>
 <li>Tune the <strong>Flick Stick</strong> card, which appears on the Sticks tab of a Keyboard + Mouse slot.</li>
 </ol>
 <table>
@@ -4903,7 +4903,7 @@
 <li><a href="../visualization/">3D and 2D Visualization</a>: watch the stick move on the controller model.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

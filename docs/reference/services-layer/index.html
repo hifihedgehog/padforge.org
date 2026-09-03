@@ -3337,6 +3337,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#onautoprofileswitchrequiredstring-profileid-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OnAutoProfileSwitchRequired(string profileId) (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#saveactiveprofilestate-public" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4279,6 +4290,17 @@
     <span class="md-ellipsis">
       
         ForegroundMonitorService All Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-manual-switch-funnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manual-switch funnel
       
     </span>
   </a>
@@ -6239,6 +6261,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#onautoprofileswitchrequiredstring-profileid-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OnAutoProfileSwitchRequired(string profileId) (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#saveactiveprofilestate-public" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7187,6 +7220,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#the-manual-switch-funnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manual-switch funnel
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -7550,15 +7594,15 @@
 </tr>
 <tr>
 <td><code>ExternalControlService</code></td>
-<td>Named-pipe profile control for launchers and scripts (#366). <a href="#externalcontrolservice-366">Below</a></td>
+<td>Named-pipe profile control for launchers and scripts (#366). Detail on <a href="../external-control-internals/">External Control Internals</a></td>
 </tr>
 <tr>
 <td><code>ChromaLightbarService</code></td>
-<td>Mirrors a virtual Sony pad's lightbar into Razer Chroma (#373). <a href="#chromalightbarservice-373">Below</a></td>
+<td>Mirrors a virtual Sony pad's lightbar into Razer Chroma (#373). Detail on <a href="../lightbar-mirrors-internals/">Lightbar Mirrors Internals</a></td>
 </tr>
 <tr>
 <td><code>LightsyncLightbarService</code></td>
-<td>The same mirror into Logitech LIGHTSYNC (#382). <a href="#lightsynclightbarservice-and-logiledenginenative-382">Below</a></td>
+<td>The same mirror into Logitech LIGHTSYNC (#382). Detail on <a href="../lightbar-mirrors-internals/">Lightbar Mirrors Internals</a></td>
 </tr>
 <tr>
 <td><code>LogiLedEngineNative</code></td>
@@ -7566,13 +7610,13 @@
 </tr>
 <tr>
 <td><code>SensaHapticsService</code></td>
-<td>Streams rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). <a href="#sensahapticsservice-374">Below</a></td>
+<td>Streams rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). Detail on <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a></td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Engine-side subsystems (3.4).</strong> Two more runtime subsystems sit alongside these services. <code>AudioPassthroughService</code> drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through <code>InputService</code> and documented on their own pages: <a href="../controller-audio-internals/">Controller Audio Internals</a> and <a href="../remote-link-internals/">Remote Link Internals</a>.</p>
-<p><strong>Head tracking (4.4.0, #355).</strong> <code>HeadTrackingRuntime</code> and <code>HeadTrackerDevice</code> live in <code>PadForge.App/Common/Input/</code>, not in <code>Services/</code>, and <code>InputService</code> starts nothing for them. See <a href="#head-tracking-runtime-355">Head tracking runtime</a> below for why.</p>
+<p><strong>Head tracking (4.4.0, #355).</strong> <code>HeadTrackingRuntime</code> and <code>HeadTrackerDevice</code> live in <code>PadForge.App/Common/Input/</code>, not in <code>Services/</code>, and <code>InputService</code> starts nothing for them. See <a href="../head-tracking-internals/">Head Tracking Internals</a> for the runtime.</p>
 <p><strong>App-side helpers (3.6.0).</strong> Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as <code>static</code> P/Invoke surfaces. <code>HapticToneService</code> and <code>WiiSpeakerService</code> turn macro sounds into HD-haptic tones and Wii-speaker PCM. <code>NfcReaderService</code> (with <code>WinScard</code>) owns the PC/SC monitor for NFC macro triggers. <code>BluetoothLinkHelper</code> performs per-family Bluetooth disconnect. They live in <code>PadForge.Common.Input</code> (and <code>PadForge.Services</code> for <code>NfcReaderService</code>), and are documented in <a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a> below. 4.1.0 added three more to the same section: <code>TouchpadPulseService</code> (#219), <code>SwitchHomeLedSetter</code> (#226), and <code>RumbleAudioService</code> (#236, the Bass Shakers renderer). 4.3.0 added <code>SpaceMouseService</code> (#288), which opens 3Dconnexion 6DoF pucks directly and attaches them to SDL as virtual joysticks, because SDL's raw-input backend subscribes to the gamepad usage only and never turns a multi-axis controller into a joystick. It is owned by <code>InputManager</code>, not by <code>InputService</code>.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TB
@@ -7667,6 +7711,7 @@
 <li><a href="#how-it-works">How It Works</a></li>
 <li><a href="#foregroundmonitorservice-all-public-methods">All Public Methods</a></li>
 <li><a href="#foregroundmonitorservice-all-events">All Events</a></li>
+<li><a href="#the-manual-switch-funnel">The manual-switch funnel</a></li>
 <li><a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a></li>
 <li><a href="#haptictoneservice">HapticToneService</a></li>
 <li><a href="#touchpadpulseservice">TouchpadPulseService</a></li>
@@ -7831,15 +7876,16 @@
 <li><strong>Heal the slot topology</strong>. <code>CompactSlotsForGaps()</code> closes pad-index gaps left by saves taken before compaction-on-delete landed, before the engine or the default snapshot sees the layout.</li>
 <li><strong>Rebuild shift-layer tabs</strong>. Each pad's tab strip is rebuilt from its loaded <code>MappingSet.ShiftActivators</code>, because PadViewModel constructors run before <code>SettingsService</code> parsed PadForge.xml.</li>
 <li><strong>Reset macro runtime latches</strong>. Every macro's trigger latches and every action's toggle latches are cleared, so a Toggle left latched at the previous stop cannot re-fire with no input.</li>
-<li><strong>Create InputManager</strong>. Sets <code>PollingIntervalMs</code> from <code>SettingsViewModel.PollingRateMs</code> and <code>HmInactivityTimeoutSeconds</code> from <code>HmInactivityDestroyTimeoutSeconds</code>.</li>
+<li><strong>Create InputManager</strong>. <code>ApplyEffectivePollingRate()</code> sets <code>PollingIntervalMs</code> through the #365 resolver, so an active profile's polling override outranks <code>SettingsViewModel.PollingRateMs</code>. <code>HmInactivityTimeoutSeconds</code> comes from <code>HmInactivityDestroyTimeoutSeconds</code>.</li>
 <li><strong>Copy slot config</strong>. Copies <code>SlotControllerTypes[]</code>, <code>SlotProfileIds[]</code>, Extended/MIDI/KBM configs, and the per-slot and per-device config bags from PadViewModels to the engine.</li>
-<li><strong>Subscribe to the NFC tag registry (#150)</strong>. <code>NfcTagRegistry.RegistryChanged += OnNfcTagRegistryChanged</code>. On a tag register/remove, the handler re-reads each NFC reader's <code>DeviceObjects</code> under <code>UserDevices.SyncRoot</code>, rebuilds every pad's input picker off the lock so the named tag appears or disappears as a bindable row, and refreshes the Devices-page tag preview if a reader is selected. Subscribed here, after settings load, so the load-time registry fan-out is not double-handled. Torn down in <code>Stop()</code>.</li>
+<li><strong>Subscribe to the source registries</strong>. <code>NfcTagRegistry.RegistryChanged</code> (#150), <code>VoicePhraseRegistry.RegistryChanged</code> (#317), and both <code>HandheldButtonRegistry.RegistryChanged</code> and <code>HandheldButtonRegistry.ActivityChanged</code> (#353). On an NFC tag register or remove, the handler re-reads each reader's <code>DeviceObjects</code> under <code>UserDevices.SyncRoot</code>, rebuilds every pad's input picker off the lock so the named tag appears or disappears as a bindable row, and refreshes the Devices-page tag preview if a reader is selected. Subscribed here, after settings load, so the load-time registry fan-out is not double-handled. <code>SdlDeviceWrapper.ExternalVoiceAugment</code> is pointed at <code>VoicePulse.Apply</code> in the same block. All four subscriptions are torn down in <code>Stop()</code>.</li>
 <li><strong>Subscribe to engine events</strong>. <code>DevicesUpdated</code>, <code>FrequencyUpdated</code>, <code>ErrorOccurred</code>, <code>HmVcInactivityDestroyed</code>, <code>HmVcWentNonActive</code>.</li>
 <li><strong>Wire the static providers</strong>. The <code>UserEffectsDispatcher</code> rumble / trigger / battery / test-target lambdas, the <code>SourceCoercion</code> gyro, gravity, balance, IR, gesture and menu providers, the <code>AudioPassthroughService</code> and <code>HapticToneService</code> hooks, and <code>InputManager.PointerModeCycleApply</code> / <code>GuideLedApply</code> / <code>GyroRecenterApply</code>. All are cleared again in <code>Stop()</code>.</li>
 <li><strong>Create CursorControlService</strong>. The 200 Hz cursor sampler backing the Mouse Position sources (#107).</li>
-<li><strong>Start the self-healing sink reconcilers</strong>, unconditionally (cheap when nothing is configured): <code>RumbleAudioService.EnsureStarted()</code> (#236), <code>WiiSpeakerService.EnsureStarted()</code>, <code>HapticToneService.EnsureStarted()</code>.</li>
+<li><strong>Start the self-healing sink workers</strong>, unconditionally (cheap when nothing is configured): <code>RumbleAudioService.EnsureStarted()</code> (#236), <code>WiiSpeakerService.EnsureStarted()</code>, <code>HapticToneService.EnsureStarted()</code>. A one-shot <code>Reconcile()</code> on <code>AudioPassthroughService</code>, <code>WiiSpeakerService</code> and <code>HapticToneService</code> runs between them, and only when some device already has <code>AudioPassthroughEnabled</code>, so the audio threads stay off for users who never turn a mirror on.</li>
 <li><strong>Subscribe to ViewModel changes</strong>. <code>SettingsViewModel.PropertyChanged</code>, <code>DashboardViewModel.PropertyChanged</code>, and the touchpad-gesture provider / applier hooks on <code>SettingsService</code>.</li>
 <li><strong>Create ForegroundMonitorService</strong>. Subscribes <code>ProfileSwitchRequired</code> to <code>OnAutoProfileSwitchRequired</code>.</li>
+<li><strong>Start the opt-in side services</strong>, each behind its own setting: <code>StartExternalControlIfEnabled()</code> (#366), <code>StartChromaIfEnabled()</code> (#373), <code>StartLightsyncIfEnabled()</code> (#382), <code>StartSensaIfEnabled()</code> (#374).</li>
 <li><strong>Capture default profile snapshot</strong>. Uses <code>PendingDefaultSnapshot</code> (from prior XML) or creates one via <code>SnapshotCurrentProfile()</code>.</li>
 <li><strong>Start engine</strong>. <code>_inputManager.Start()</code> launches the polling thread.</li>
 <li><strong>Start subsystems</strong>. DSU, web controller, Remote Link, touchpad overlay, and the audio bass detector, each conditional on its Dashboard setting.</li>
@@ -7847,6 +7893,7 @@
 <li><strong>Apply device hiding</strong>. HidHide blacklist + input hooks.</li>
 <li><strong>Start UI timer</strong>. 30 Hz <code>DispatcherTimer</code> at <code>DispatcherPriority.Render</code> (<code>UiTimerIntervalMs</code> = 33).</li>
 <li><strong>Update state</strong>. Sets <code>IsEngineRunning = true</code>, refreshes commands, and runs <code>UpdateIdleState()</code> so an empty config starts idle.</li>
+<li><strong>Run a pending command-line profile command</strong>. <code>App.PendingProfileCommand</code> is cleared and handed to <code>ExecuteExternalControlCommand</code>. <code>App.ParseProfileCommand</code> maps <code>--profile "Name"</code> to <code>activate Name</code> and <code>--default-profile</code> to <code>deactivate</code>, so a cold start carrying either argument applies it once the engine exists (#366). A second instance forwards the same string over the pipe instead.</li>
 </ol>
 <p>Raw Input enumeration is not part of this sequence. Keyboards, mice, and consumer-control devices are enumerated by the engine's Step 1 (<code>InputManager.Step1.UpdateDevices.cs</code>): synchronously on the first cycle so devices exist before Step 2, then on a <code>Task.Run</code> worker whose results the next 2-second cycle consumes.</p>
 <h4 id="stop"><code>Stop()</code><a class="headerlink" href="#stop" title="Permanent link">&para;</a></h4>
@@ -7855,9 +7902,9 @@
 <li>On the dispatcher: stops the UI timer and unsubscribes its Tick, clears every mapping row's <code>IsInputActive</code> and each pad's pipeline liveness flags, unsubscribes <code>SettingsViewModel.PropertyChanged</code> and <code>DashboardViewModel.PropertyChanged</code>, and closes the touchpad, VC-toggle, shift-layer, and menu overlay windows.</li>
 <li>Leaves the constructor-only handlers subscribed on purpose: <code>Devices.PropertyChanged</code> and the per-pad <code>SelectedDeviceChanged</code> / <code>MappingsRebuilt</code> / <code>LayerActivated</code>. <code>Start()</code> never re-adds them, so tearing them down on an engine stop would break device selection and mapping rebuilds until the app restarts.</li>
 <li>Unsubscribes <code>ForegroundMonitorService.ProfileSwitchRequired</code> and drops the instance.</li>
-<li>Stops the DSU server, the web controller server, Remote Link, and the audio bass detector.</li>
+<li>Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa), then the DSU server, the web controller server, Remote Link, and the audio bass detector.</li>
 <li>Calls <code>RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)</code>, so the persistent-cloaks setting is honored on shutdown while a mid-session <code>EnableInputHiding</code> toggle still decloaks immediately.</li>
-<li>Unsubscribes <code>NfcTagRegistry.RegistryChanged</code> (#150) and the engine events, calls <code>_inputManager.Stop()</code> and <code>_inputManager.Dispose()</code>, then nulls every static provider it wired in <code>Start()</code>, disarms the Switch NFC and Joy-Con IR hints, and disposes <code>CursorControlService</code>.</li>
+<li>Unsubscribes all four source registries (<code>NfcTagRegistry.RegistryChanged</code>, <code>VoicePhraseRegistry.RegistryChanged</code>, <code>HandheldButtonRegistry.RegistryChanged</code> and <code>.ActivityChanged</code>) and the engine events, drops the per-pad device-config and assign-offer handlers, calls <code>_inputManager.Stop()</code> and <code>_inputManager.Dispose()</code>, then nulls every static provider it wired in <code>Start()</code>, disarms the Switch NFC and Joy-Con IR hints, and disposes <code>CursorControlService</code>. <code>UpdateHeadTrackingStatus()</code> is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.</li>
 <li>Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.</li>
 </ol>
 <p>The v2 <code>preserveExtendedNodes</code> parameter is gone. HIDMaestro creates and destroys virtual devices dynamically, so there's no need for the v2-era "keep the vJoy node alive across a restart" path.</p>
@@ -8085,7 +8132,7 @@
 <tbody>
 <tr>
 <td><code>OnDevicesUpdated</code></td>
-<td><code>SyncDevicesList()</code>, <code>UpdatePadDeviceInfo()</code>, <code>ApplyDeviceHiding()</code>, <code>ReseedPlayerIdentities(applySonyDispatchers: false)</code> (#191), <code>ApplyGuideLeds()</code> (#209), then a re-attach + <code>ReApplyUserEffects()</code> pass over every HM VC plus <code>ReApplyNonHmUserEffects()</code>, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose</td>
+<td><code>SyncDevicesList()</code>, <code>RefreshVoiceObjects()</code>, <code>UpdatePadDeviceInfo()</code>, <code>EvaluateAssignOffers()</code> (after the rosters, so "slot has devices" reads this walk's truth), a <code>BuildDeviceRegistrySignature()</code> diff that calls <code>MarkDirty()</code> only when the registry actually changed, <code>ApplyDeviceHiding()</code>, <code>ReseedPlayerIdentities(applySonyDispatchers: false)</code> (#191), <code>ApplyGuideLeds()</code> (#209), then a re-attach + <code>ReApplyUserEffects()</code> pass over every HM VC plus <code>ReApplyNonHmUserEffects()</code>, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose</td>
 </tr>
 <tr>
 <td><code>OnFrequencyUpdated</code></td>
@@ -8221,7 +8268,7 @@
 <li>Creates <code>WebControllerServer</code>, subscribes to <code>StatusChanged</code>, <code>DeviceConnected</code>, <code>DeviceDisconnected</code>.</li>
 <li>Device connect/disconnect calls <code>_inputManager.RegisterExternalDevice()</code> / <code>UnregisterExternalDevice()</code>.</li>
 <li>Validates port (1024-65535, default 8080).</li>
-<li>Calls <code>Start(port)</code> on a <code>Task.Run</code>, not on the UI thread. The start runs <code>netsh</code> up to three times for the HTTPS binding plus the firewall rule, each capped at five seconds, and this method is reached straight from the checkbox's <code>PropertyChanged</code> handler. It then hops back to the dispatcher, and if the start failed or the user has since toggled off or changed the port, it disposes the launching instance and clears <code>IsWebControllerRunning</code>.</li>
+<li>Calls <code>Start(port)</code> on a <code>Task.Run</code>, not on the UI thread. <code>WebControllerTls.EnsureHttpsBinding</code> spawns <code>netsh</code> up to four times (show, delete, add, show), each capped at five seconds, and this method is reached straight from the checkbox's <code>PropertyChanged</code> handler. The firewall rule's own two spawns already run on the thread pool. It then hops back to the dispatcher, and if the start failed or the user has since toggled off or changed the port, it disposes the launching instance and clears <code>IsWebControllerRunning</code>.</li>
 </ol>
 <p><code>OnWebServerStatusChanged</code> publishes <code>WebControllerStatus</code>, <code>WebControllerClientCount</code>, and <code>IsWebControllerRunning</code> (from the lifecycle, never from the checkbox). It also publishes <code>WebControllerUrl</code> and rebuilds <code>WebControllerQr</code> through <code>WebControllerServer.RenderQr</code>, but only when the URL actually changed, since building a QR matrix is not free.</p>
 <p><code>WebControllerServer</code> itself caps at 16 clients, serves its browser assets from embedded resources under the <code>PadForge.WebAssets.</code> prefix, and asks <code>WebControllerTls.EnsureHttpsBinding(port)</code> for a certificate. That helper never deletes an sslcert binding it does not own (identified by PadForge's own <code>appid</code> GUID) and returns null on any failure, in which case the server falls back to plain HTTP. HTTPS matters because <code>DeviceMotionEvent</code> exists only in a secure context, so gyro from a phone requires it.</p>
@@ -8253,7 +8300,7 @@
 <p>Converts Windows paths to DOS device paths. Only modifies PadForge-managed entries. Entries from HidHide Client or other tools are left untouched. Tracked via <code>_managedWhitelistDosPaths</code>.</p>
 <h3 id="auto-idle">Auto-Idle<a class="headerlink" href="#auto-idle" title="Permanent link">&para;</a></h3>
 <h4 id="updateidlestate-private-30hz"><code>UpdateIdleState()</code> (private, 30Hz)<a class="headerlink" href="#updateidlestate-private-30hz" title="Permanent link">&para;</a></h4>
-<p>Sets <code>_inputManager.IsIdle</code>. A slot counts as active when it is created, enabled, and has an <strong>online</strong> mapped device, so a slot whose every assigned pad is asleep idles the engine instead of reading as "Forging". Two overrides keep the engine awake with no active slot: a Remote Link server with live connections, and a pending HM teardown inside the inactivity window. Idle mode skips input/mapping/output and sleeps at ~20 Hz, reducing CPU to ~0%. Device enumeration continues at a reduced rate so new controllers still appear on the Devices page.</p>
+<p>Sets <code>_inputManager.IsIdle</code>. A slot counts as active when it is created, enabled, and has an <strong>online</strong> mapped device, so a slot whose every assigned pad is asleep idles the engine instead of reading as "Forging". Two overrides keep the engine awake with no active slot: a Remote Link server with live connections, and a pending HM teardown inside the inactivity window. Idle mode skips input/mapping/output and sleeps at ~20 Hz, reducing CPU to ~0%. Device enumeration continues at a reduced rate, every 5000 ms against the running loop's <code>EnumerationIntervalMs</code> of 2000, so new controllers still appear on the Devices page.</p>
 <h3 id="profile-switching">Profile Switching<a class="headerlink" href="#profile-switching" title="Permanent link">&para;</a></h3>
 <h4 id="snapshotcurrentprofile-public-profiledata"><code>SnapshotCurrentProfile()</code> (public) -&gt; <code>ProfileData</code><a class="headerlink" href="#snapshotcurrentprofile-public-profiledata" title="Permanent link">&para;</a></h4>
 <p>Captures current runtime state:
@@ -8262,15 +8309,26 @@
 3. Captures <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>SlotControllerTypes[]</code>, <code>SlotProfileIds[]</code> (per-slot HIDMaestro profile slug), a deep clone of every slot's <code>MappingSet</code>, the Extended / MIDI / KBM / per-device slot configs, DSU and web server settings (Remote Link is app-scoped, not per profile), all seven per-group slot orders (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR), and the overlay settings (touchpad geometry and opacity, menu overlay, shift-layer flyout, profile overlay).
 4. Captures <code>ProfileData.Macros</code> (<code>&lt;ProfileMacros&gt;</code>), a copy of the current macro set. A profile carries its own macros, so switching profiles swaps macros too. A <code>null</code> <code>Macros</code> marks a pre-macro-era profile and leaves the live macros untouched on apply.</p>
 <h4 id="applyprofileprofiledata-profile-public"><code>ApplyProfile(ProfileData profile)</code> (public)<a class="headerlink" href="#applyprofileprofiledata-profile-public" title="Permanent link">&para;</a></h4>
-<p>Restores a profile:
-1. <strong>Topology</strong>. Sets <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>OutputType</code>, <code>ProfileId</code> (per-slot HM profile slug), and unassigns devices from destroyed slots. The HM slug update gates Step 5's per-slot diff: <code>UpdateVirtualDevices()</code> Pass 1 in <code>InputManager.Step5.VirtualDevices.cs</code> compares each slot's <code>SlotProfileIds[]</code> against the live <code>HMaestroVirtualController.ProfileId</code>. Slots whose new slug matches stay live untouched. Slots whose slug differs are destroyed and recreated with the new identity.
-2. <strong>Device assignments (single-pass transition)</strong>. Builds the desired final assignment map from <code>profile.Entries</code> first, then transitions each <code>UserSetting</code> directly old → new <code>MapTo</code> (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe <code>HasAnyDeviceMapped == false</code> for surviving slots and fall into the <code>!HasAnyDeviceMapped</code> immediate-destroy branch of <code>UpdateVirtualDevices()</code> in <code>InputManager.Step5.VirtualDevices.cs</code>. Slots whose mapping is unchanged across profiles transition with zero teardown.
-3. <strong>Extended/MIDI configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string) and MIDI config (channel, CC/note ranges, velocity).
-4. <strong>Server settings</strong>. Sets DSU and web controller enable/port.
-5. <strong>Macros</strong>. When <code>profile.Macros</code> is non-null, replaces the live macro set via <code>LoadMacros(profile.Macros)</code>. A null value leaves the current macros in place (pre-macro-era profile).
-6. <strong>Rebuilds UI</strong>. <code>UpdatePadDeviceInfo()</code>, reloads PadSettings, refreshes Devices page.</p>
+<p>Restores a profile, in this order:</p>
+<ol>
+<li><strong>Clear the carried runtime.</strong> <code>InputManager.ClearAllShiftRuntime()</code> drops toggle latches, was-down markers, the engagement stack and custom-layer state, so a held activator at swap time cannot leave the new profile mid-engagement. <code>SourceCoercion.ResetMcuDemandLatches()</code> frees the camera for NFC immediately instead of after a stale latch lapses (#248). <code>_inputManager?.ResetMenuRuntime()</code> drops menu contexts keyed on (slot, device, menu id), which would otherwise let the new profile's cell actions fire from the old profile's in-flight gesture.</li>
+<li><strong>Restore the MappingSets by deep clone.</strong> <code>SettingsManager.SlotMappingSets[s] = CloneMappingSetDeep(profile.SlotMappingSets[s])</code> (#61), so live mutations (auto-map on reassignment, in-tab edits) cannot poison the stored snapshot. A null <code>SlotMappingSets</code> marks a profile saved before multi-source rows landed and leaves the live array alone.</li>
+<li><strong>Rebuild the gesture catalog.</strong> <code>ApplyProfileTouchpadGestures(profile)</code> compiles the in-box templates plus this profile's recorded ones and swaps them onto the InputManager atomically.</li>
+<li><strong>Topology</strong>. Sets <code>SlotCreated[]</code>, <code>SlotEnabled[]</code>, <code>OutputType</code>, <code>ProfileId</code> (per-slot HM profile slug), and unassigns devices from destroyed slots. The HM slug update gates Step 5's per-slot diff: <code>UpdateVirtualDevices()</code> Pass 1 in <code>InputManager.Step5.VirtualDevices.cs</code> compares each slot's <code>SlotProfileIds[]</code> against the live <code>HMaestroVirtualController.ProfileId</code>. Slots whose new slug matches stay live untouched. Slots whose slug differs are destroyed and recreated with the new identity.</li>
+<li><strong>Device assignments (single-pass transition)</strong>. Builds the desired final assignment map from <code>profile.Entries</code> first, then transitions each <code>UserSetting</code> directly old → new <code>MapTo</code> (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe <code>HasAnyDeviceMapped == false</code> for surviving slots and fall into the <code>!HasAnyDeviceMapped</code> immediate-destroy branch of <code>UpdateVirtualDevices()</code> in <code>InputManager.Step5.VirtualDevices.cs</code>. Slots whose mapping is unchanged across profiles transition with zero teardown.</li>
+<li><strong>Device-GUID remap for same-product reconnects</strong>. When an entry binds by <code>ProductGuid</code> rather than <code>InstanceGuid</code>, the pairing is recorded and <code>RemapDeviceGuidsInSlotMappingSets</code> re-points the just-cloned rows at the instance that actually bound. The macro half of the map is held back and applied after <code>LoadMacros</code>, because that call clears and repopulates every pad's macros. <code>RekeyDeviceConfig</code> carries the same remap into the stored PadSetting device pins (gyro Aim Engage, both trigger-route activators, the per-device touchpad and mouse-gesture catalogs).</li>
+<li><strong>Slot orders</strong>. <code>SlotOrders.RebuildFromCurrentTopology</code> rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.</li>
+<li><strong>Extended, MIDI and KB+M configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity), and the KB+M slot's <code>SocdMode</code> / <code>SocdPairs</code> (#205).</li>
+<li><strong>Macros</strong>. When <code>profile.Macros</code> is non-null, replaces the live macro set via <code>LoadMacros(profile.Macros)</code>. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.</li>
+<li><strong>Service toggles</strong>. <code>SettingsService.ApplyProfileServiceToggles(profile)</code> starts or stops the mirrors a profile has an opinion about. A null leg leaves the global value alone.</li>
+<li><strong>Server and overlay settings</strong>. DSU and web controller enable and port (ports validated to 1024-65535), plus <code>EnableTouchpadOverlay</code>, <code>EnableMenuOverlay</code>, <code>EnableShiftLayerFlyout</code>, <code>EnableProfileOverlay</code> and the touchpad overlay's monitor, position, size and opacity.</li>
+<li><strong>Rebuilds UI</strong>. <code>UpdatePadDeviceInfo()</code>, reloads PadSettings, refreshes mapping rows per pad through <code>RefreshMappingsToViewModel</code> and <code>PopulateAvailableInputs</code>, then <code>SyncDevicesList()</code>. The whole reconciliation runs under <code>VmMappingsStale = true</code> in a <code>try</code> / <code>finally</code>. That window closes only when the last pad has re-read its rows: clearing it earlier left every pad stale-but-pushable, and an autosave landing inside the window rebuilt the incoming profile's MappingSet from the outgoing profile's MappingItems.</li>
+</ol>
 <h4 id="onprofileswitchrequiredstring-profileid-private"><code>OnProfileSwitchRequired(string profileId)</code> (private)<a class="headerlink" href="#onprofileswitchrequiredstring-profileid-private" title="Permanent link">&para;</a></h4>
-<p>Called by <code>ForegroundMonitorService</code> when the foreground process matches a different profile. Skips if same profile already active. Saves outgoing state via <code>SaveActiveProfileState()</code>, then applies the target profile (or reverts to default if <code>profileId</code> is null).</p>
+<p>The single switch funnel. Returns immediately when <code>profileId</code> already equals <code>SettingsManager.ActiveProfileId</code>. Saves outgoing state via <code>SaveActiveProfileState()</code>, sets <code>ActiveProfileId</code> before <code>ApplyProfile</code> so the topology label updates the right profile, applies the target profile (or <code>_defaultProfileSnapshot</code> when <code>profileId</code> is null), then runs <code>ResetRuntimeStateForProfileSwitch()</code>.</p>
+<p><code>ResetRuntimeStateForProfileSwitch()</code> is the one owner of the accumulators a switch must not carry: source-kind runtime (Incremental cruise, ramp throttle), shift-toggle latches, gyro engage stickies, trigger-route engage, and gesture contexts. It exists as one method because the set had drifted three ways, with the manual lanes running none of it while the foreground-monitor lane doing the same switch ran all five.</p>
+<h4 id="onautoprofileswitchrequiredstring-profileid-private"><code>OnAutoProfileSwitchRequired(string profileId)</code> (private)<a class="headerlink" href="#onautoprofileswitchrequiredstring-profileid-private" title="Permanent link">&para;</a></h4>
+<p>The <code>ForegroundMonitorService</code> shim. Records the active profile id, calls <code>OnProfileSwitchRequired</code>, and raises <code>AutoProfileSwitchApplied</code> only when the id actually changed (#175). Manual paths call <code>OnProfileSwitchRequired</code> directly and never flare the pills.</p>
 <h4 id="saveactiveprofilestate-public"><code>SaveActiveProfileState()</code> (public)<a class="headerlink" href="#saveactiveprofilestate-public" title="Permanent link">&para;</a></h4>
 <p>Snapshots current state. Default profile: updates <code>_defaultProfileSnapshot</code> and <code>PendingDefaultSnapshot</code>. Named profile: updates stored data in <code>SettingsManager.Profiles</code>.</p>
 <h4 id="refreshdefaultsnapshot-public"><code>RefreshDefaultSnapshot()</code> (public)<a class="headerlink" href="#refreshdefaultsnapshot-public" title="Permanent link">&para;</a></h4>
@@ -8650,7 +8708,7 @@
 <tr>
 <td><code>NoteManualProfileSwitch</code></td>
 <td><code>void NoteManualProfileSwitch()</code></td>
-<td>Records a manual switch so auto-switching won't re-trigger it</td>
+<td>Records the foreground-monitor override and releases an external control hold. Every manual switch lane calls it. See <a href="#the-manual-switch-funnel">The manual-switch funnel</a></td>
 </tr>
 <tr>
 <td><code>ShutdownMidiInputs</code></td>
@@ -8670,7 +8728,7 @@
 <tr>
 <td><code>SeedIdentityProtectionDisplay</code></td>
 <td><code>void SeedIdentityProtectionDisplay()</code></td>
-<td>Reflects the persisted Remote Link identity-protection mode in the Settings dropdown. Must run after <code>SettingsService.Initialize()</code></td>
+<td>Reflects the persisted Remote Link identity-protection mode in the Dashboard Remote Link card dropdown, through <code>SettingsViewModel.SetIdentityProtectionModeSilently</code> so no change event re-fires. Must run after <code>SettingsService.Initialize()</code>, the only point at which <code>RemoteLink.IdentityProtection</code> holds the stored choice</td>
 </tr>
 <tr>
 <td><code>RefreshMappingDropdowns</code></td>
@@ -8983,6 +9041,76 @@
 <td>Copies per-slot configs that live on PadViewModel between two slots</td>
 </tr>
 <tr>
+<td><code>BuildDeviceConfigSnapshotForSlot</code></td>
+<td><code>DeviceSlotConfigData[] BuildDeviceConfigSnapshotForSlot(int slotIndex)</code></td>
+<td>The read half of the per-device slot config, used by profile capture and Copy</td>
+</tr>
+<tr>
+<td><code>BuildExtendedConfigSnapshotForSlot</code></td>
+<td><code>ExtendedSlotConfigData BuildExtendedConfigSnapshotForSlot(int slotIndex)</code></td>
+<td>Same for the Extended custom-layout config</td>
+</tr>
+<tr>
+<td><code>BuildMidiConfigSnapshotForSlot</code></td>
+<td><code>MidiSlotConfigData BuildMidiConfigSnapshotForSlot(int slotIndex)</code></td>
+<td>Same for the MIDI slot config</td>
+</tr>
+<tr>
+<td><code>BuildKbmConfigSnapshotForSlot</code></td>
+<td><code>KbmSlotConfigData BuildKbmConfigSnapshotForSlot(int slotIndex)</code></td>
+<td>Same for the KB+M slot config</td>
+</tr>
+<tr>
+<td><code>IsDeviceSlotConfigDataConfigured</code></td>
+<td><code>static bool IsDeviceSlotConfigDataConfigured(DeviceSlotConfigData c)</code></td>
+<td>Whether a serialized per-device config differs from defaults, so untouched slots serialize nothing</td>
+</tr>
+<tr>
+<td><code>IsDeviceConfigConfigured</code></td>
+<td><code>static bool IsDeviceConfigConfigured(DeviceSlotConfig c)</code></td>
+<td>The live-object form of the same test</td>
+</tr>
+<tr>
+<td><code>RefreshMappingSetsFromLegacy</code></td>
+<td><code>static void RefreshMappingSetsFromLegacy()</code></td>
+<td>Re-merges legacy per-device mappings into the slot MappingSets and raises <code>AfterMappingSetsRefreshed</code></td>
+</tr>
+<tr>
+<td><code>StripDeviceFromAllSlots</code></td>
+<td><code>static void StripDeviceFromAllSlots(Guid instanceGuid)</code></td>
+<td>Removes one device's rows from every slot's MappingSet</td>
+</tr>
+<tr>
+<td><code>LoadMacroFromData</code></td>
+<td><code>static MacroItem LoadMacroFromData(MacroData md, VirtualControllerType outputType, int? extendedButtonCount, string extendedProfileId = null)</code></td>
+<td>Builds a live <code>MacroItem</code> from its serialized form</td>
+</tr>
+<tr>
+<td><code>BuildMacroDataForMacro</code></td>
+<td><code>static MacroData BuildMacroDataForMacro(MacroItem macro, int padIndex)</code></td>
+<td>The reverse</td>
+</tr>
+<tr>
+<td><code>BuildMacroAction</code> / <code>BuildActionData</code></td>
+<td><code>static MacroAction BuildMacroAction(ActionData ad)</code> / <code>static ActionData BuildActionData(MacroAction a)</code></td>
+<td>The per-action halves of the same pair</td>
+</tr>
+<tr>
+<td><code>SerializeMacrosToClipboard</code></td>
+<td><code>static string SerializeMacrosToClipboard(MacroData[] macros)</code></td>
+<td>Macro clipboard envelope writer</td>
+</tr>
+<tr>
+<td><code>TryParseMacroClipboard</code></td>
+<td><code>static MacroClipboardEnvelope TryParseMacroClipboard(string json)</code></td>
+<td>Reader. Returns null on anything unparseable</td>
+</tr>
+<tr>
+<td><code>GetUserProfileRows</code></td>
+<td><code>IReadOnlyList&lt;ImportedProfileRow&gt; GetUserProfileRows()</code></td>
+<td>The imported-HIDMaestro-profile rows behind Manage Profiles</td>
+</tr>
+<tr>
 <td><code>AddUserProfile</code></td>
 <td><code>string AddUserProfile(string extractedJson)</code></td>
 <td>Imports a user profile from JSON, suffixing its id. Returns the stored id</td>
@@ -9160,8 +9288,14 @@
 <td><code>void SetSlotEnabled(int slotIndex, bool enabled)</code></td>
 <td>Enables/disables a slot</td>
 </tr>
+<tr>
+<td><code>FillEmptyAutoMappingsForSlot</code></td>
+<td><code>static void FillEmptyAutoMappingsForSlot(int padIndex, VirtualControllerType outputType, string profileId)</code></td>
+<td>Fills in the auto-map rows a slot is missing. Snapshots the slot under <code>UserSettings.SyncRoot</code> and resolves devices outside it, because <code>FindDeviceByInstanceGuid</code> takes <code>UserDevices</code> and the reverse order is an ABBA deadlock with the disconnect and migration paths</td>
+</tr>
 </tbody>
 </table>
+<p><code>SlotDeletionInfo</code> is a <code>public readonly record struct (VirtualControllerType Type, int OldGroupPosition)</code> declared beside the service.</p>
 <h3 id="deviceservice-all-events">DeviceService All Events<a class="headerlink" href="#deviceservice-all-events" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9438,11 +9572,11 @@
 <h4 id="checkforegroundwindow-public"><code>CheckForegroundWindow()</code> (public)<a class="headerlink" href="#checkforegroundwindow-public" title="Permanent link">&para;</a></h4>
 <p>Called at 30 Hz by <code>UiTimer_Tick</code>:</p>
 <ol>
-<li>Bails if <code>EnableAutoProfileSwitching</code> is false or no profiles exist.</li>
-<li>Gets foreground window handle via <code>GetForegroundWindow()</code>, then process ID and <code>MainModule.FileName</code>.</li>
+<li>Bails if <code>EnableAutoProfileSwitching</code> is false, if <code>SettingsManager.ExternalProfilePinActive</code> is set (a script holds the profile, #366), or if no profiles exist.</li>
+<li>Gets foreground window handle via <code>GetForegroundWindow()</code>, then process ID and <code>MainModule.FileName</code>. The (hwnd, pid) pair is cached, so the same window costs no <code>Process.GetProcessById</code>.</li>
 <li>Skips if exe path unchanged (<code>_lastExePath</code> deduplication).</li>
 <li>Matches against all profiles' <code>ExecutableNames</code> (pipe-separated full paths, case-insensitive).</li>
-<li>Fires <code>ProfileSwitchRequired</code> only when the matched profile changes (<code>_lastMatchedProfileId</code>). Null signals reversion to default.</li>
+<li>Fires <code>ProfileSwitchRequired</code> only when the matched profile changes (<code>_lastMatchedProfileId</code>). Null signals reversion to default. While a manual override is active, a match on the overridden profile returns without firing, and a match on anything else clears the override first.</li>
 </ol>
 <h3 id="foregroundmonitorservice-all-public-methods">ForegroundMonitorService All Public Methods<a class="headerlink" href="#foregroundmonitorservice-all-public-methods" title="Permanent link">&para;</a></h3>
 <table>
@@ -9462,7 +9596,12 @@
 <tr>
 <td><code>SetManualOverride</code></td>
 <td><code>void SetManualOverride(string currentProfileId)</code></td>
-<td>Sets the manual-override flag so auto-switching won't re-trigger the profile the user just overrode</td>
+<td>Sets the manual-override flag so auto-switching won't re-trigger the profile the user just overrode. Called only through <code>InputService.NoteManualProfileSwitch</code></td>
+</tr>
+<tr>
+<td><code>InvalidateCache</code></td>
+<td><code>void InvalidateCache()</code></td>
+<td>Drops <code>_lastExePath</code> and <code>_lastMatchedProfileId</code> so the next tick re-evaluates the current foreground window from scratch</td>
 </tr>
 </tbody>
 </table>
@@ -9484,7 +9623,7 @@
 <tr>
 <td><code>LastForegroundExePath</code></td>
 <td><code>string</code> (get)</td>
-<td>Last foreground exe path observed. Read-only UI feed (#175), tracked only while auto-switching is enabled</td>
+<td>Last foreground exe path observed. Read-only UI feed (#175). Only updated on a tick that gets past the bails in step 1</td>
 </tr>
 <tr>
 <td><code>LastMatchedProfileId</code></td>
@@ -9510,6 +9649,35 @@
 </tr>
 </tbody>
 </table>
+<h3 id="the-manual-switch-funnel">The manual-switch funnel<a class="headerlink" href="#the-manual-switch-funnel" title="Permanent link">&para;</a></h3>
+<p>Four lanes switch the profile by hand, and all four call <code>InputService.NoteManualProfileSwitch()</code> before the switch, so the recorded override id is the pre-switch active profile:</p>
+<table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Call site</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Status-bar profile switcher</td>
+<td><code>MainWindow.ActivateProfileFromSwitcher</code></td>
+</tr>
+<tr>
+<td>Profiles page Load button</td>
+<td><code>MainWindow.OnLoadProfile</code></td>
+</tr>
+<tr>
+<td>Revert to Default</td>
+<td><code>MainWindow.OnRevertToDefault</code></td>
+</tr>
+<tr>
+<td>Controller shortcut</td>
+<td><code>InputService.UiTimer_Tick</code>, when the engine sets <code>PendingProfileSwitchIsManual</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>NoteManualProfileSwitch</code> does two things: <code>_foregroundMonitor.SetManualOverride(SettingsManager.ActiveProfileId)</code> records the override, and <code>SettingsManager.ExternalProfilePinActive = false</code> releases a hold an external script placed over the pipe (#366). The user outranks the script. The shortcut lane no longer calls <code>SetManualOverride</code> directly, and <code>PadForge.Tests/ExternalControlTests.cs</code> pins that: <code>EveryManualSwitchLaneGoesThroughThatChokePoint</code> reads all four call sites and asserts the tick body carries no direct <code>SetManualOverride</code>. Until it was funneled here, a controller shortcut switched the profile while the script's pin stayed set, so the foreground monitor stayed suppressed and the tooltip's promise that switching by hand releases the hold was false on that lane.</p>
 <hr />
 <h2 id="app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)<a class="headerlink" href="#app-side-services-and-helpers-360" title="Permanent link">&para;</a></h2>
 <p>These do not live in <code>PadForge.App/Services/</code> (except <code>NfcReaderService</code>) and do not run on the WPF dispatcher. The two speaker/haptic services and <code>NfcReaderService</code> reconcile off slot assignments like <code>AudioPassthroughService</code>. <code>WinScard</code> is a pure P/Invoke surface.</p>
@@ -9884,6 +10052,7 @@
 </tr>
 </tbody>
 </table>
+<p>A configured-but-unresolved endpoint fails closed, with no fallback device. The renderer dies with the engine (<code>StopAll</code> in <code>InputManager.Stop</code>), deliberately not with <code>SoundMacroService.StopAll</code>, which runs on every profile apply.</p>
 <table>
 <thead>
 <tr>
@@ -10255,7 +10424,7 @@
 <a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>  |     |-- InputService.SeedIdentityProtectionDisplay()  [needs the parsed value]
 <a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>  |     |-- LoadProfileShortcuts(), window placement restore, sidebar + dashboard rebuild
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>  |     |-- if (Settings.AutoStartEngine) InputService.Start()
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>  |     |     |-- reconcilers: RumbleAudioService / WiiSpeakerService / HapticToneService
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>  |     |     |-- EnsureStarted: RumbleAudioService / WiiSpeakerService / HapticToneService
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>  |     |     |-- InputManager.Start()          [launches polling thread]
 <a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>  |     |     |-- StartDsuServerIfEnabled()
 <a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>  |     |     |-- StartWebServerIfEnabled()
@@ -10286,7 +10455,7 @@
 <a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>  |-- _shutdownComplete = true, Close()
 </code></pre></div>
 <h3 id="device-connected-flow">Device Connected Flow<a class="headerlink" href="#device-connected-flow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>InputManager.UpdateDevices()              [polling thread, every 2s]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>InputManager.UpdateDevices()              [polling thread, every 2s; 5s while idle]
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  |-- SDL enumerates devices
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  |-- DevicesUpdated event fires
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  |-- Dispatcher.BeginInvoke:             [UI thread]
@@ -10337,7 +10506,7 @@
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuMotionServer</code> lifecycle managed by <code>InputService</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

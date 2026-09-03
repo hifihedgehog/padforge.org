@@ -2,7 +2,6 @@
 
 *PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers three optional ones (HidHide, Windows MIDI Services, and SteamVR) that install and uninstall from **Settings**.*
 
-<!-- SCREENSHOT: settings-drivers -->
 ![Driver management cards](../images/settings-drivers.png)
 
 ---
@@ -33,7 +32,6 @@ HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the
 
 Each driver card on the Settings page shows an ember flame next to its status text.
 
-<!-- SCREENSHOT: driver-status-flames -->
 ![Driver cards with their status flames and versions](../images/driver-status-flames.png)
 
 | Flame | Meaning |
@@ -41,7 +39,7 @@ Each driver card on the Settings page shows an ember flame next to its status te
 | **Lit flame** (orange, glowing) "Installed" | Driver ready. HidHide, HIDMaestro, and Windows MIDI Services show their version number below. The SteamVR card has no version line, and its text changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active. |
 | **Unlit flame** (outline only) "Not Installed" | Install before the matching slot type works. |
 
-HIDMaestro auto-installs, so its flame stays lit. The [Dashboard](dashboard.md) repeats the HidHide, MIDI Services, and SteamVR status as a compact text row under **Drivers**, with no flames and no HIDMaestro entry.
+HIDMaestro auto-installs, so its flame stays lit. Driver status lives on the Settings page and nowhere else. The [Dashboard](dashboard.md) carried a **Drivers** text row through 4.3.2 and no longer does.
 
 ---
 
@@ -122,6 +120,9 @@ PadForge runs HidHide on its own. You do not need the HidHide Configuration Clie
 | **Per-device hiding** | Toggle **Hide from Games (HidHide)** on each device card ([Devices](devices.md) page). |
 | **Automatic whitelist** | PadForge adds itself so it can still read hidden controllers. The entry stays in the driver's whitelist between sessions. Harmless, and it keeps hidden controllers readable when **Keep Devices Cloaked Between Launches** is on. |
 | **Engine-aware** | By default, hiding holds only while the engine runs. Stop the engine or close PadForge and the controllers reappear. |
+| **Hides the whole device** | One toggle covers the device, not one interface. PadForge blacklists every HID interface under the controller's base container, the nodes between that interface and the base on classes HidHide filters, and the base container itself when it is one of those classes and all of its children are HID. XInput and WGI cannot then reach the pad through a sibling path. |
+| **Visible rows keep their interface** | A device PadForge lists as its own row with hiding off is left alone, and no other device's hide blocks a parent above it. A handheld whose built-in pad and touchpad are separate rows can hide one and keep the other. |
+| **Transport switches** | A pad that moves between USB and Bluetooth is hidden on the first pass either way. The hide also sweeps present nodes reporting that pad's serial number, so a second pad of the same model is never touched. |
 | **Master switch** | **Settings > HidHide Driver > Hide Devices from Games** (global on/off). Turning it off mid-session unhides every controller right away. |
 | **Keep Devices Cloaked Between Launches** | **Settings > HidHide Driver** checkbox, off by default. Leaves physical controllers hidden even while PadForge is closed. Turn it on when another app (Steam, for example) scans for controllers between PadForge sessions and should keep seeing only the virtual ones. |
 
@@ -137,6 +138,8 @@ Other controller utilities (Steam Input, for example) need their own whitelist e
 1. Open **Settings**. Scroll to **HidHide Driver**.
 2. Click **Install**. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.
 3. A restart may be needed for full effect. Restart if hiding does not work right away.
+
+Turn on **Keep a Diagnostics Log** under **Settings** to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, and which rule the transport sweep used. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.
 
 ### Uninstall steps
 
@@ -186,7 +189,7 @@ The runtime behind the VR slot type. PadForge installs it Steam-free from Valve'
 ### Install steps
 
 1. Open **Settings**. Scroll to **SteamVR**.
-2. Set **Install Location** if you do not want the default path. The box only shows while SteamVR is missing.
+2. Set **Install Location** if you do not want the default path, by typing a path or using **Browse**. The row only shows while SteamVR is missing.
 3. Click **Install**. The download runs from Valve's servers and the flame lights when it finishes.
 
 ### Uninstall steps
@@ -289,7 +292,6 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 - [Installation](../start/installation.md): first-time setup and driver install.
 - [Settings](settings.md): where the driver cards live.
-- [Dashboard](dashboard.md): at-a-glance driver status.
 - [Controller Slots](controller-slots.md): which driver each slot type needs.
 - [Devices](devices.md): per-device hiding with HidHide.
 - [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md): how PadForge talks to HIDMaestro.
@@ -297,4 +299,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

@@ -2,7 +2,7 @@
 
 *Tap an NFC tag on a contactless reader or on a Switch controller to fire a macro or press a mapped button.*
 
-![Register / Manage NFC Tags dialog](../images/nfc-register.png)
+![The NFC Tags dialog](../images/nfc-register.png)
 
 PadForge reads NFC tags from two kinds of hardware: a contactless smart-card reader (PC/SC class, such as an ACR122U) and the tag reader built into Switch controllers. Amiibo-style figures, tag stickers, and cards all work. Register a tag once, give it a name, and bind it like any other button. Both paths share one tag registry, so a tag registered on either binds on either.
 
@@ -17,7 +17,7 @@ The reader exposes buttons you can map:
 - **Any NFC Tag**. Fires whenever any tag touches the reader, registered or not.
 - One button per tag you have named. Only that tag fires it.
 
-A single tap fires the button once.
+A tap fires the button for 175 ms, then releases it.
 
 ---
 
@@ -33,7 +33,9 @@ Since PadForge 4.1.0, the tag reader built into a Switch controller works too:
 
 The controller's card shows an **NFC** chip in its capabilities line. The controller exposes the same sources the PC/SC reader does: **Any NFC Tag** plus one source per named tag.
 
-The reader powers on only while an NFC source is bound or the **Register / Manage NFC Tags** dialog is open. Unused, it costs nothing.
+The reader powers on only while an NFC source is bound or the **NFC Tags** dialog is open. Unused, it costs nothing.
+
+A tag left resting on a controller's reader holds its button down. The button releases 175 ms after you lift the tag.
 
 Limitations, stated plainly:
 
@@ -62,7 +64,6 @@ Tags are keyed by UID, not by reader. They carry over when you swap readers, fro
 
 With the NFC reader selected, the Devices page lists your named tags, plus an **Any NFC Tag** row. Tap a tag and its row highlights, so you can confirm the reader sees it and check which tag you just touched.
 
-<!-- SCREENSHOT: nfc-live-preview -->
 ![NFC reader named-tag list with a tapped tag row highlighted](../images/nfc-live-preview.png)
 
 ---
@@ -86,4 +87,4 @@ Bindings follow the tag itself, not its name. Rename a tag and its bindings stay
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

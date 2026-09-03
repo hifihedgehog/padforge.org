@@ -211,7 +211,7 @@ Each axis has a Center Offset slider from -100% to +100%.
 
 The Range section sets how far you push a stick to reach full output. It has a boundary calibration tool and four directional caps.
 
-### Calibrate boundary (recommended)
+### Calibrate Boundary (recommended)
 
 ![Boundary calibration button with a circularity readout and the measured edge drawn on the stick preview](../images/pad-sticks-boundary-calibration.png)
 
@@ -219,12 +219,12 @@ No stick reaches a perfect circle. The corners fall short, and worn sticks lose 
 
 This is the recommended way to true up a stick. The four sliders below only cap the cardinal directions. Use them to limit range on purpose, not to correct it.
 
-1. Click **Calibrate boundary** for the stick.
+1. Click **Calibrate Boundary** for the stick.
 2. Sweep the stick slowly around its outer rim. The button counts down the sectors still left to cover.
 3. Once every sector is covered, the button asks for one more lap to sharpen the measurement. Keep sweeping.
 4. The button commits on its own once the rim is fully mapped. Clicking it again mid-sweep commits early.
 
-As you sweep, the measured edge draws on the preview as an outline, and a circularity percentage shows next to the button. Higher means rounder. Once calibrated the button reads **Recalibrate boundary**. The reset button beside it clears the calibration.
+As you sweep, the measured edge draws on the preview as an outline, and a circularity percentage shows next to the button. Higher means rounder. Once calibrated the button reads **Recalibrate Boundary**. The reset button beside it clears the calibration.
 
 ### Directional range caps
 
@@ -246,7 +246,7 @@ All four go from 1% to 100% and default to 100%.
 | 70% | Full output at 70%. Short-throw feel. |
 | 50% | Full output at half deflection. Very sensitive. |
 
-Use the caps to shorten the throw on a direction deliberately. To fix a stick that reaches unevenly or falls short in the corners, run Calibrate boundary instead.
+Use the caps to shorten the throw on a direction deliberately. To fix a stick that reaches unevenly or falls short in the corners, run Calibrate Boundary instead.
 
 ---
 
@@ -257,7 +257,7 @@ A circular preview next to the sliders shows the stick in real time.
 - **RAW dot.** The stick's position before any processing, in cold blue.
 - **OUT dot.** The fully processed position, in ember. The gap between RAW and OUT is what your settings do.
 - **Deadzone region.** Shaded shape in the center matching the selected geometry (circle, cross, or wedges).
-- **Measured boundary.** After you run Calibrate boundary, the mapped edge draws as an outline. The gap between it and the outer ring is what the reshape corrects.
+- **Measured boundary.** After you run Calibrate Boundary, the mapped edge draws as an outline. The gap between it and the outer ring is what the reshape corrects.
 
 ### What the preview tells you
 
@@ -266,7 +266,7 @@ A circular preview next to the sliders shows the stick in real time.
 | Testing drift | Release the stick. Dot off-center? Raise deadzone or calibrate center offset. |
 | Testing shape | Push slowly outward in different directions. The dot starts moving at the deadzone edge. |
 | Testing sensitivity | Push from center to edge. Watch how fast the dot accelerates. |
-| Testing range | Push to the physical limit. OUT dot not reaching the edge? Run Calibrate boundary or lower a range cap. |
+| Testing range | Push to the physical limit. OUT dot not reaching the edge? Run Calibrate Boundary or lower a range cap. |
 
 ---
 
@@ -301,7 +301,7 @@ Starting points only. Use the preview and in-game testing to fine-tune.
 | Linear | 50–75% | 25–50% |
 | Shape | Scaled Radial | Hybrid or Scaled Radial |
 | Sensitivity | Linear or Smooth | S-Curve or Smooth |
-| Range | Calibrate boundary | Calibrate boundary |
+| Range | Calibrate Boundary | Calibrate Boundary |
 
 Movement sticks are forgiving. Aim sticks need the tightest deadzone for micro-adjustments. Anti-deadzone on the aim stick defeats the game's internal deadzone. S-Curve gives precision near center and fast turns at the edge. Hybrid helps hold pure horizontal tracking.
 
@@ -314,7 +314,7 @@ Movement sticks are forgiving. Aim sticks need the tightest deadzone for micro-a
 | Linear | 0–25% | 50% |
 | Shape | Sloped Scaled Axial or Scaled Radial | Scaled Radial |
 | Sensitivity | Smooth or Delay | Linear |
-| Range | Calibrate boundary | 100% |
+| Range | Calibrate Boundary | 100% |
 
 Zero anti-deadzone avoids sudden jumps. Smooth or Delay curves add precision near center for gentle corrections. Sloped Scaled Axial locks pure left and right without vertical wobble.
 
@@ -327,7 +327,7 @@ Zero anti-deadzone avoids sudden jumps. Smooth or Delay curves add precision nea
 | Linear | 0–25% | 25–50% |
 | Shape | Scaled Radial | Scaled Radial or Axial |
 | Sensitivity | Smooth or Delay | Smooth |
-| Range | Calibrate boundary | Calibrate boundary |
+| Range | Calibrate Boundary | Calibrate Boundary |
 
 Flight controls run on small corrections most of the time. Low deadzones keep the full analog range. Smooth or Delay curves widen the precision zone near center.
 
@@ -363,7 +363,7 @@ Axial isolates each axis for clean cardinal movement without diagonals. Higher d
 
 On a Keyboard + Mouse slot the two sticks are **Mouse Movement** and **Scroll Wheel**, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a **Sensitivity** row that multiplies that speed.
 
-The Mouse Movement stick also carries a **Momentum** row: trackball mode for the stick. Flick the stick and release, and the cursor keeps traveling on the fling, decelerating to a stop on the same constant-friction physics the [touchpad's Momentum](touchpad.md#mouse-output) uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to center parks the cursor without a fling. Moving the stick again catches the coast. The **Momentum Glide** slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 the coast is frictionless and only the stick stops it. Off by default, per slot and device.
+The Mouse Movement stick also carries a **Momentum** row: trackball mode for the stick. Flick the stick and release, and the cursor keeps traveling on the fling, decelerating to a stop on the same constant-friction physics the [touchpad's Momentum](touchpad.md#mouse-output) uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to center parks the cursor without a fling. Moving the stick again catches the coast. The **Momentum Glide** slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 nothing slows the coast, and only the stick stops it. Off by default, per slot and device.
 
 | Setting | Range | Default |
 |---|---|---|
@@ -381,7 +381,7 @@ Flick stick turns a thumbstick into a compass for mouse-driven camera control. D
 
 Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:
 
-1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. A split pad adds **Left Half** and **Right Half** variants.
+1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. It sits in the source picker's **(Any device)** group, next to **Left Half** and **Right Half** variants that read one half of a single pad as the whole surface.
 2. Tune the **Flick Stick** card, which appears on the Sticks tab of a Keyboard + Mouse slot.
 
 | Setting | Default | What it does |
@@ -431,4 +431,4 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

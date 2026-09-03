@@ -97,7 +97,7 @@ On Xbox One, Elite, and Series pads, PadForge drives the trigger motors directly
 
 When the physical pad is plugged into another PC and shared over [Remote Link](../guides/remote-link.md), the same trigger output crosses the link. Game passthrough, constant trigger force, and audio bass trigger rumble all reach the remote pad's trigger motors.
 
-The slot-tier **Bass Shakers** tab ([Controller Slots](controller-slots.md)) can also play game trigger feedback as audio tones: its **Left Trigger** and **Right Trigger** voices each get a tone, and **Controller Stereo** mode splits them to the left and right speaker channels.
+The slot-tier [Bass Shakers](bass-shakers.md) tab can also play game trigger feedback as audio tones: its **Left Trigger** and **Right Trigger** voices each get a tone, and **Controller Stereo** mode splits them to the left and right speaker channels.
 
 ---
 
@@ -128,6 +128,7 @@ Every slider has its own reset button. Each card has a Reset All button.
 - [Force Feedback](force-feedback.md): body-motor rumble, audio bass rumble on body motors, Trigger Routing (routes the main motors into the trigger channel), FFB for wheels and sticks, Constant Force.
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger resistance, weapon, vibration, slope, and multi-position effects.
 - [Devices](devices.md): check trigger-motor capability per device.
+- [Bass Shakers](bass-shakers.md): play the trigger feedback channels as audio tones.
 - [Controller Slots](controller-slots.md): create and configure virtual controllers.
 
 ---

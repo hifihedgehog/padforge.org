@@ -40,6 +40,7 @@ Worth knowing, because it explains the behavior you will see:
 - **Rotation is the signal.** On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesizes an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.
 - **Accelerometer is advertised only when the descriptor exposes it.** Some firmware reports orientation without it.
 - **The frame is remapped once, at ingest.** The tracker's axes are swapped and signed into the same frame SDL uses for controllers, so a headset and a gamepad both drive a mapping the same way.
+- **The headset drops the tracker channel on its own.** The XM5 closes the sensor channel after a minute or two while staying connected for audio, and Windows removes the HID node with it. PadForge re-requests the Bluetooth HID service for that headset and the tracker comes back. Nothing to click.
 
 ---
 
@@ -60,4 +61,4 @@ Worth knowing, because it explains the behavior you will see:
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

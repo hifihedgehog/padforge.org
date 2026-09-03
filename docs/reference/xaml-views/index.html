@@ -3620,6 +3620,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#learnhandheldbuttondialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LearnHandheldButtonDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#registervoicephrasedialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5876,6 +5887,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#learnhandheldbuttondialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LearnHandheldButtonDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#registervoicephrasedialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6435,7 +6457,7 @@
 - <code>DevicesPage</code> initiates <code>DragDrop.DoDragDrop()</code> with a <code>DataObject</code> keyed <code>"DeviceInstanceGuid"</code> carrying the device's <code>InstanceGuid</code> (a <code>Guid</code>).
 - Sidebar <code>NavigationViewItem</code> handlers (<code>DragOver</code>, <code>Drop</code>) accept the drop and assign the device.</p>
 <h3 id="add-controller-popup">Add Controller Popup<a class="headerlink" href="#add-controller-popup" title="Permanent link">&para;</a></h3>
-<p><code>Popup</code> with one button per output type, built in <code>ShowControllerTypePopup</code>. The seven buttons follow <code>VirtualControllerGroups.InOrder</code>:</p>
+<p><code>Popup</code> with one button per output type, built in <code>ShowControllerTypePopup</code>. Re-invoking the method while the popup is open closes it rather than opening a duplicate, and a reopen inside 300 ms of the last close is suppressed, so the same click cannot dismiss and re-raise it. The seven buttons follow <code>VirtualControllerGroups.InOrder</code>:</p>
 <table>
 <thead>
 <tr>
@@ -6574,7 +6596,7 @@
 <tr>
 <td><code>_driverStatusTimer</code></td>
 <td>5s</td>
-<td><code>RefreshHidHideStatus()</code>, <code>RefreshMidiServicesStatus()</code>, and <code>SweepStatusMessage()</code>. Started in the constructor and never stopped, so the status-bar decay keeps running after the engine stops. HIDMaestro is embedded so it has no install/uninstall poll</td>
+<td><code>RefreshHidHideStatus()</code>, <code>RefreshMidiServicesStatus()</code>, and <code>SweepStatusMessage()</code>. Started in the constructor and stopped only in <code>OnClosing</code>, so the status-bar decay keeps running after the engine stops. Hosting the decay on the engine 30 Hz timer would have burned in "Engine stopped." HIDMaestro is embedded so it has no install/uninstall poll</td>
 </tr>
 <tr>
 <td><code>CompositionTarget.Rendering</code></td>
@@ -6587,7 +6609,7 @@
 <h2 id="dashboardpage">DashboardPage<a class="headerlink" href="#dashboardpage" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>DashboardPage.xaml</code>, <code>DashboardPage.xaml.cs</code></p>
 <p>Engine toggle, slot summary cards, and the service sections.</p>
-<p>Section order is pinned by <code>PadForge.Tests/PageOrderContractTests.cs</code>. <code>Dashboard_SectionsRunInTheDecidedOrder</code> asserts each section title's binding appears once and after the one before it, and that the Services header sits between the slot cards and the Web Controller card. <code>Dashboard_DriverStatusStripIsGone</code> asserts the page carries no <code>ED5D</code> glyph, no <code>Dashboard_Drivers</code> key in the XAML or any of the ten resx files, and no <code>HidHideStatusText</code> / <code>MidiServicesStatusText</code> / <code>SteamVrStatusText</code> in the page or <code>DashboardViewModel</code>. Those three rows live on the Settings page only.</p>
+<p>Section order is pinned by <code>PadForge.Tests/PageOrderContractTests.cs</code>. <code>Dashboard_SectionsRunInTheDecidedOrder</code> asserts each section title's binding appears once and after the one before it, and that the Services header sits between the slot cards and the Web Controller card. <code>Dashboard_DriverStatusStripIsGone</code> asserts the page carries no <code>ED5D</code> glyph, no <code>Dashboard_Drivers</code> key in the XAML, in <code>Strings.Designer.cs</code>, or in any of the ten resx files, and no <code>HidHideStatusText</code> / <code>MidiServicesStatusText</code> / <code>SteamVrStatusText</code> in the page or <code>DashboardViewModel</code>. It also asserts the Settings page still binds all three. Those rows live there only.</p>
 <h3 id="layout-structure">Layout Structure<a class="headerlink" href="#layout-structure" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ScrollViewer
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  └─ StackPanel (Margin=&quot;24,16,24,16&quot;)
@@ -6735,7 +6757,7 @@
 <tr>
 <td><code>RemoteLink</code></td>
 <td><code>DashboardViewModel</code></td>
-<td>Sub-ViewModel: identity-protection modes and hint, trusted peers, nearby-unpaired list, revoke commands</td>
+<td><code>DashboardViewModel.RemoteLink</code> is a second reference to the same <code>SettingsViewModel</code> instance, not a separate object. It carries the identity-protection modes and hint, the trusted peers, the nearby-unpaired list, and the revoke commands</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code> / <code>HeadTrackingFreeTrack</code></td>
@@ -7376,6 +7398,21 @@
 <td><code>MenuAddButton</code> / <code>MenuRemoveButton</code></td>
 <td>ui:Button</td>
 <td>Menu list add and remove (#9)</td>
+</tr>
+<tr>
+<td><code>MacrosTab</code> / <code>MenusTab</code> / <code>BassShakersTab</code> / <code>OutputTab</code></td>
+<td>RadioButton</td>
+<td>The remaining slot-tier tabs</td>
+</tr>
+<tr>
+<td><code>AssignOfferBanner</code></td>
+<td>Border</td>
+<td>The assign-offer banner raised when a newly seen device matches the slot</td>
+</tr>
+<tr>
+<td><code>AssignOfferAccept</code> / <code>AssignOfferDismiss</code></td>
+<td>ui:Button</td>
+<td>Its two answers</td>
 </tr>
 </tbody>
 </table>
@@ -8986,25 +9023,26 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>          ├─ FOREGROUND live readout (visible only while auto-switch is on):
 <a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>          │   mono token + lit flame when IsForegroundMatched + ForegroundExeName,
 <a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>          │   plus the no-rules hint when NoProfileHasExecutables
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>          ├─ Drop-zone Grid (AllowDrop, ProfileList_DragEnter/DragOver/DragLeave/Drop
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>          │   for .pfprofile import, ProfileDropOverlay cue)
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>          │   └─ Profile card ListBox (ProfileListBox, WrapPanel of steel cards,
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>          │       MinHeight=92, MaxHeight=452, MouseDoubleClick loads)
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>          │       └─ ItemTemplate:
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>          │           ├─ Profile Name (SemiBold) + &quot;Built in&quot; tag on the default
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>          │           ├─ Executable names (FirstExecutableName, SecondExecutableName,
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>          │           │   ExtraExecutablesSuffix, each collapsed when empty)
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>          │           └─ Type count badges (horizontal StackPanel):
-<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>          │               ├─ Xbox badge: Xbox SVG + XboxCount (collapsed when 0)
-<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>          │               ├─ PlayStation badge: PS SVG + PlayStationCount (collapsed when 0)
-<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>          │               ├─ Extended badge: Joystick SVG + ExtendedCount (collapsed when 0)
-<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>          │               ├─ MIDI badge: E8D6 glyph + MidiCount (collapsed when 0)
-<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>          │               ├─ KB+M badge: E961 glyph + KbmCount (collapsed when 0)
-<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>          │               ├─ Nintendo badge: Switch SVG + NintendoCount (collapsed when 0)
-<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>          │               ├─ VR badge: F119 glyph + VrCount (collapsed when 0)
-<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>          │               └─ &quot;No slots&quot; fallback (visible when HasNoSlots=True)
-<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>          └─ Action buttons: New / Save As / Load / Edit / Export / Import /
-<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a>             Browse Starters / Browse Community / Delete
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>          ├─ External Control CheckBox (EnableExternalControl, #366), off by default
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>          ├─ Drop-zone Grid (AllowDrop, ProfileList_DragEnter/DragOver/DragLeave/Drop
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>          │   for .pfprofile import, ProfileDropOverlay cue)
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>          │   └─ Profile card ListBox (ProfileListBox, WrapPanel of steel cards,
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>          │       MinHeight=92, MaxHeight=452, MouseDoubleClick loads)
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>          │       └─ ItemTemplate:
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>          │           ├─ Profile Name (SemiBold) + &quot;Built in&quot; tag on the default
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>          │           ├─ Executable names (FirstExecutableName, SecondExecutableName,
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>          │           │   ExtraExecutablesSuffix, each collapsed when empty)
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>          │           └─ Type count badges (horizontal StackPanel):
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>          │               ├─ Xbox badge: Xbox SVG + XboxCount (collapsed when 0)
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>          │               ├─ PlayStation badge: PS SVG + PlayStationCount (collapsed when 0)
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>          │               ├─ Extended badge: Joystick SVG + ExtendedCount (collapsed when 0)
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>          │               ├─ MIDI badge: E8D6 glyph + MidiCount (collapsed when 0)
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>          │               ├─ KB+M badge: E961 glyph + KbmCount (collapsed when 0)
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>          │               ├─ Nintendo badge: Switch SVG + NintendoCount (collapsed when 0)
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>          │               ├─ VR badge: F119 glyph + VrCount (collapsed when 0)
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>          │               └─ &quot;No slots&quot; fallback (visible when HasNoSlots=True)
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a>          └─ Action buttons: New / Save As / Load / Edit / Export / Import /
+<a id="__codelineno-13-29" name="__codelineno-13-29" href="#__codelineno-13-29"></a>             Browse Starters / Browse Community / Delete
 </code></pre></div>
 <h3 id="key-bindings_3">Key Bindings<a class="headerlink" href="#key-bindings_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -9020,6 +9058,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>EnableAutoProfileSwitching</code></td>
 <td>CheckBox</td>
 <td>Enables foreground app monitoring</td>
+</tr>
+<tr>
+<td><code>EnableExternalControl</code></td>
+<td>CheckBox</td>
+<td>Opens the named pipe that lets a launcher or script activate a profile (#366). It sits with the auto-switch and shortcut controls because it is a third way a profile activates, not a global engine service. The <code>SettingsViewModel</code> setter mirrors into <code>SettingsManager.EnableExternalControl</code>, which <code>InputService</code> watches to start or stop <code>ExternalControlService</code>. Switching profiles by hand releases the hold a script placed</td>
 </tr>
 <tr>
 <td><code>ForegroundExeName</code> / <code>IsForegroundMatched</code> / <code>NoProfileHasExecutables</code></td>
@@ -9347,7 +9390,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>      ├─ &quot;Overview&quot; section header (E7C3 icon)
 <a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>      ├─ Description card (wrapping text, line height 22)
 <a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>      ├─ &quot;Built With&quot; section header (E74C checkmark icon)
-<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>      ├─ Technologies card (Grid, 164px label + description, 52 rows):
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>      ├─ Technologies card (Grid, 164px label + description, 62 rows):
 <a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>      │   ├─ .NET 10
 <a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>      │   ├─ SDL3
 <a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>      │   ├─ Raw Input
@@ -9358,10 +9401,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a>      │   ├─ HelixToolkit
 <a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>      │   ├─ WPF UI
 <a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a>      │   ├─ MVVM Toolkit
-<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>      │   └─ ...42 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
+<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>      │   └─ ...52 more open-source attributions ($Q / GestureSign recognizers, Concentus, NAudio, BouncyCastle, BthPS3, DsHidMini, libusb, SDL_GameControllerDB, JoyShockMapper, SteamKit2, protobuf-net, ZstdSharp, Hitboxer, Dolphin, DS4Windows, WiimoteLib, and others)
 <a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a>      ├─ &quot;License&quot; section header (E8D7 icon)
 <a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a>      └─ License card (12px wrapping text, secondary brush)
 </code></pre></div>
+<p>The 4.4.0 cycle added ten rows at the tail, <code>Grid.Row</code> 52 through 61: Interhaptics (Wyvrn), Valve Steam Controller CAD, the MinGW-w64 runtime, TritonLib and Steam Controller haptics research, Colore, the Logitech LED SDK references, opentrack, Lenovo Legion Toolkit, InputPlumber, and linuxmotehook / WiimoteHook.</p>
 <h3 id="code-behind_1">Code-Behind<a class="headerlink" href="#code-behind_1" title="Permanent link">&para;</a></h3>
 <p>Constructor only. All text from localized string bindings.</p>
 <hr />
@@ -9412,6 +9456,61 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>TagListBox</code></td>
 <td><code>NfcTagRegistry.Tags</code></td>
 <td>Registered tags with per-row Remove (<code>RemoveButton_Click</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="learnhandheldbuttondialog">LearnHandheldButtonDialog<a class="headerlink" href="#learnhandheldbuttondialog" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong> <code>LearnHandheldButtonDialog.xaml</code>, <code>LearnHandheldButtonDialog.xaml.cs</code></p>
+<p>Learner for a handheld PC's hidden buttons (#343), sharing the NFC dialog's head chrome. <code>FluentWindow</code> (<code>ExtendsContentIntoTitleBar</code>, <code>WindowBackdropType="Mica"</code>, 560x640, <code>ResizeMode="NoResize"</code>) opened from the Devices page <code>LearnHandheldButton_Click</code>.</p>
+<p>A learn run is a three-phase timed pass driven by <code>_phaseTimer</code> over <code>HandheldLearnSession</code>: Idle (the noise floor), Press, then Release, each phase lasting the session's own <code>IdleMs</code> / <code>PressMs</code> / <code>ReleaseMs</code>. <code>FinishLearn</code> reads the candidates and the chord keys the session collected, and the user names the winner and registers it. There is no per-model table: the machine teaches the app what its buttons are.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Binding / Handler</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MachineText</code> / <code>DaemonText</code></td>
+<td>code-behind</td>
+<td>The detected handheld and the vendor-daemon notice</td>
+</tr>
+<tr>
+<td><code>StartBtn</code></td>
+<td><code>StartButton_Click</code></td>
+<td>Begins the three-phase pass. Disabled when the row has been retired mid-dialog</td>
+</tr>
+<tr>
+<td><code>StatusText</code></td>
+<td>phase strings</td>
+<td>Which phase is running, or why none can</td>
+</tr>
+<tr>
+<td><code>ChordText</code> / <code>CandidateBox</code></td>
+<td>learn results</td>
+<td>The chord the press produced, and the candidate list when the pass finds more than one</td>
+</tr>
+<tr>
+<td><code>NameBox</code></td>
+<td><code>NameBox_KeyDown</code></td>
+<td>Display name. Enter registers</td>
+</tr>
+<tr>
+<td><code>RegisterBtn</code></td>
+<td><code>RegisterButton_Click</code></td>
+<td>Adds the learned button to <code>HandheldButtonRegistry</code></td>
+</tr>
+<tr>
+<td><code>ButtonListBox</code> / <code>EmptyText</code></td>
+<td><code>RefreshList</code></td>
+<td>Learned buttons with per-row Remove (<code>RemoveButton_Click</code>), and the empty-state line</td>
+</tr>
+<tr>
+<td>Export / Import</td>
+<td><code>ExportButton_Click</code> / <code>ImportButton_Click</code></td>
+<td>Carries a learned set between machines</td>
 </tr>
 </tbody>
 </table>
@@ -9935,7 +10034,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p><code>Segoe MDL2 Assets</code> font glyphs instead of image resources:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">&lt;TextBlock</span><span class="w"> </span><span class="na">Text=</span><span class="s">&quot;&amp;#xE713;&quot;</span><span class="w"> </span><span class="na">FontFamily=</span><span class="s">&quot;Segoe MDL2 Assets&quot;</span><span class="w"> </span><span class="na">FontSize=</span><span class="s">&quot;20&quot;</span><span class="nt">/&gt;</span>
 </code></pre></div>
-<p>Codes used: <code>E713</code> settings, <code>E790</code> personalization, <code>E9F5</code> processing, <code>E737</code> star, <code>ED1A</code> shield, <code>E7FC</code> gamepad, <code>E8A5</code> save, <code>E9D9</code> bug, <code>E8F1</code> group, <code>E8B7</code> library, <code>E8B9</code> photo, <code>F158</code> 3D, <code>E946</code> info, <code>E772</code> devices, <code>E7E8</code> power, <code>E740</code> full screen, <code>E710</code> add, <code>E711</code> close, <code>E72A</code> forward, <code>E72C</code> undo, <code>E700</code> global nav (hamburger), <code>E8D6</code> music, <code>EC4F</code> MIDI, <code>E961</code> keyboard, <code>EC05</code> broadcast, <code>E774</code> globe, <code>ED5D</code> driver, <code>EDA4</code> touchpad, <code>F119</code> VR headset, <code>F2B7</code> language, <code>E8C8</code> copy, <code>E8D7</code> document, <code>E7C3</code> page, <code>E74C</code> checkmark, <code>E71B</code> link, <code>E75C</code> clear, <code>E74D</code> delete, <code>F404</code> home, <code>E7BA</code> warning.</p>
+<p>Codes used: <code>E713</code> settings, <code>E790</code> personalization, <code>E9F5</code> processing, <code>E737</code> star, <code>ED1A</code> shield, <code>E7FC</code> gamepad, <code>E8A5</code> save, <code>E9D9</code> bug, <code>E8F1</code> group, <code>E8B7</code> library, <code>E8B9</code> photo, <code>F158</code> 3D, <code>E946</code> info, <code>E772</code> devices, <code>E7E8</code> power, <code>E740</code> full screen, <code>E710</code> add, <code>E711</code> close, <code>E72A</code> forward, <code>E72C</code> undo, <code>E700</code> global nav (hamburger), <code>E8D6</code> music, <code>EC4F</code> MIDI, <code>E961</code> keyboard, <code>E774</code> globe, <code>EDA4</code> touchpad, <code>F119</code> VR headset, <code>F2B7</code> language, <code>E8C8</code> copy, <code>E8D7</code> document, <code>E7C3</code> page, <code>E74C</code> checkmark, <code>E71B</code> link, <code>E75C</code> clear, <code>E74D</code> delete, <code>F404</code> home, <code>E7BA</code> warning, and the section and card glyphs named on this page: <code>E702</code> Pair, <code>E707</code> Compass Yaw, <code>E716</code> Community Configs, <code>E767</code> volume, <code>E77B</code> Head Tracking, <code>E781</code> Lightbar Mirrors, <code>E7F8</code> Handheld PC Buttons, <code>E815</code> Grip, <code>E83F</code> Battery Alerts, <code>E877</code> Sensa haptics and the rumble chip, <code>E8DE</code> Assignment Prompts, <code>E969</code> Remote Link, <code>E99A</code> Tilt, <code>E9E9</code> Gyro Sensitivity, <code>EB9F</code> Icon Packages, <code>EFA5</code> touchpad chip, <code>F0AD</code> Constant Force, <code>F1CB</code> Gyro Response, <code>F272</code> Gyro Calibration. <code>EC05</code> (broadcast) and <code>ED5D</code> (driver) left with the Dashboard's driver status strip and appear nowhere in the app.</p>
 <h3 id="wpf-ui-numberbox">WPF UI NumberBox<a class="headerlink" href="#wpf-ui-numberbox" title="Permanent link">&para;</a></h3>
 <p>Numeric input with inline spin buttons:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">&lt;ui:NumberBox</span><span class="w"> </span><span class="na">Value=</span><span class="s">&quot;{Binding PollingRateMs, Mode=TwoWay}&quot;</span>
@@ -10041,7 +10140,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide and Windows MIDI Services install/uninstall triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput is unpacked next to <code>PadForge.exe</code> from the single-file bundle)</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

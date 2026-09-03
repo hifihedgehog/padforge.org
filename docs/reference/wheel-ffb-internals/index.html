@@ -3039,6 +3039,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#steering-at-lock-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steering at-lock feedback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#rpm-led-telemetry" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3398,6 +3409,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#steering-at-lock-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steering at-lock feedback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#rpm-led-telemetry" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3460,9 +3482,9 @@
 <p>Both write the single aggregation buffer <code>_combinedVibration</code> in <code>InputManager.Step2.UpdateInputStates.cs</code>. Everything downstream reads from it.</p>
 <p>A third destination joined in 4.1.0: the Bass Shakers lane (#236) turns the same game force into low-frequency audio. It bypasses <code>_combinedVibration</code> and the writers:</p>
 <ul>
-<li><code>HMaestroFfbDecoder.Apply</code> stores the game-authored motor pair in <code>LastComputedMotors</code>, computed purely from the uploaded PID effect set. Test and macro rumble stay out by construction.</li>
+<li><code>HMaestroFfbDecoder.Apply</code> stores the game-authored motor pair in <code>LastComputedMotors</code>, computed purely from the uploaded PID effect set, so macro rumble (a downstream per-device merge) never reaches it.</li>
 <li><code>TickFfb</code> packs the pair into the virtual controller's inbound rumble pack via <code>LfeOutputState.Pack</code>.</li>
-<li><code>UpdateRumbleAudioLane</code> in <code>InputManager.Step5.VirtualDevices.cs</code> publishes each slot's pack once per poll tick through <code>RumbleAudioService.PublishIfCurrent</code>.</li>
+<li><code>UpdateRumbleAudioLane</code> in <code>InputManager.Step5.VirtualDevices.cs</code> publishes each slot's pack once per poll tick through <code>RumbleAudioService.PublishIfCurrent</code>. It runs after <code>UpdateVirtualDevices</code> so a slot destroyed on this tick publishes zeros on the same tick, and it max-merges the slot's live <code>VibrationStates</code> onto the pack, which is what makes the preview's test-rumble buttons audible on the shakers. A voice the config disables is masked out of the pack by its 16-bit lane.</li>
 </ul>
 <p>So game force feedback reaches vendor wheels, scalar rumble devices, and bass-shaker audio endpoints. The slot's <strong>Bass Shakers</strong> tab configures the endpoint. See <a href="../../features/force-feedback/#bass-shakers">Force Feedback</a> for the user-facing side.</p>
 <hr />
@@ -3502,6 +3524,10 @@
 <tr>
 <td><code>PadForge.Engine/Common/ForceFeedbackState.cs</code></td>
 <td>The <code>Vibration</code> carrier, the host-sampled and software paths, the SDL writer for generic devices.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.Step3.SteeringLockFeedback.cs</code></td>
+<td>The at-lock feedback channels for a steering source.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Telemetry/</code></td>
@@ -3550,6 +3576,18 @@
 <h2 id="wheel-tab-settings">Wheel-tab settings<a class="headerlink" href="#wheel-tab-settings" title="Permanent link">&para;</a></h2>
 <p><code>PadSetting.RotationRange</code> (default 900), <code>AutoCenterStrength</code> (default 0), and <code>WheelRpmLeds</code> (default 0) all participate in the settings checksum. The <code>PadViewModel</code> bridges them through <code>InputService</code>. In <code>ApplyForceFeedback</code>, range and auto-center are one-shot, re-sent only when the cached <code>_appliedWheelSettings</code> changes, with each writer clamping range to its own hardware maximum.</p>
 <p>The tab-visibility gate is <code>PadPage.SyncTabVisibility</code>. <code>hasWheel</code> is the OR of the three <code>IsXxxWheel</code> gates on the selected device's VID and PID. <code>hasGenericWheel</code> covers a non-vendor SDL wheel that can only self-center: not <code>hasWheel</code>, <code>CapType == InputDeviceType.Driving</code>, and <code>ForceFeedbackState.IsGenericWheelSpringCapable(ud.Device)</code>. Moza bases land here, not in a vendor writer. The Wheel tab shows when either is true, but the rotation-range and RPM-LED rows show only for <code>hasWheel</code>. See <a href="../../features/wheel/">Wheel</a> for the user-facing behavior.</p>
+<hr />
+<h2 id="steering-at-lock-feedback">Steering at-lock feedback<a class="headerlink" href="#steering-at-lock-feedback" title="Permanent link">&para;</a></h2>
+<p>This lane is separate from the force path above and runs in Step 3, not Step 2. <code>ApplySteeringLockFeedback</code> fires once per assigned device per tick from <code>InputManager.Step3.UpdateOutputStates.cs</code>, walking the slot's rows for a steering target driven by a steering Kind (winding or angle) or by a Motion Lean descriptor, whose lock state lives in the same <code>SourceKindRuntime</code> machine.</p>
+<p>Four channels, each with its own <code>PadSetting</code> toggle, all off by default:</p>
+<ul>
+<li><strong>Rumble pulse</strong> (<code>SteeringLockRumbleEnabled</code>): a reactive grip-motor pulse on the lock-entry edge through <code>MacroRumbleOverrides</code>.</li>
+<li><strong>Trigger pulse</strong> (<code>SteeringLockTriggerVibEnabled</code>): the same edge on <code>SteeringTrigVibOverrides</code>, a separate override whose scalar routes to the trigger actuators. Xbox impulse triggers pick it up in <code>ApplyForceFeedback</code> through <code>GetSteeringTrigVib</code>, DualSense trigger haptics through the dispatcher. Firing the grip override here would duplicate channel 1 and never reach the trigger actuators.</li>
+<li><strong>Lightbar pulse</strong> (<code>SteeringLockLightbarEnabled</code>): every per-device lightbar on the slot pulses to the lock color, with its own hold and fade windows.</li>
+<li><strong>Adaptive-trigger resistance</strong> (<code>SteeringLockATResistanceEnabled</code>): continuous, not an edge. <code>SteeringAtResistance[slot]</code> holds the maximum lock approach across the slot's steering rows, read by <code>UserEffectsDispatcher</code> through <code>SteeringAtResistanceProvider</code>.</li>
+</ul>
+<p>Timings parse from the same settings: <code>SteeringLockPulseMs</code> (default 80) for the rumble and trigger pulses, <code>SteeringLockLightbarHoldMs</code> (80) and <code>SteeringLockLightbarFadeMs</code> (250) for the lightbar.</p>
+<p>Two ordering rules are load-bearing. <code>TryGetLockEdgeTransition</code> clears the pending edge as it reads, so the test-target scoping check has to return before the row loop, or a non-target device consumes the edge the test target was about to act on. And that early return deliberately leaves <code>SteeringAtResistance</code> alone rather than zeroing it, except when nothing on the slot is the test target at all, in which case no pass would write the value and the last nonzero reading would stick.</p>
 <hr />
 <h2 id="rpm-led-telemetry">RPM-LED telemetry<a class="headerlink" href="#rpm-led-telemetry" title="Permanent link">&para;</a></h2>
 <p>When <code>WheelRpmLeds</code> is on and the device is a vendor wheel, Step 2 requests telemetry, computes the rev fraction, and writes the matching <code>WriteRpmLeds</code> mask only when it changes.</p>
@@ -3630,7 +3668,7 @@
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: relaying a shared wheel's force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

@@ -3568,39 +3568,39 @@
 <tbody>
 <tr>
 <td>Constant force</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<td>native</td>
+<td>native</td>
+<td>native</td>
 </tr>
 <tr>
 <td>Spring</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<td>native</td>
+<td>native</td>
+<td>native</td>
 </tr>
 <tr>
 <td>Damper</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<td>native</td>
+<td>native</td>
+<td>native</td>
 </tr>
 <tr>
 <td>Friction</td>
-<td>✅ on G27 / G25 / DFGT / DFP, else damper</td>
-<td>✅</td>
+<td>native on G27 / G25 / DFGT / DFP, else damper</td>
+<td>native</td>
 <td>as damper</td>
 </tr>
 <tr>
 <td>Inertia</td>
 <td>as damper</td>
-<td>✅</td>
+<td>native</td>
 <td>as damper</td>
 </tr>
 <tr>
 <td>Periodic (sine, square, triangle, sawtooth)</td>
 <td>host-sampled into constant force</td>
 <td>host-sampled into constant force</td>
-<td>✅ firmware-rendered</td>
+<td>firmware-rendered</td>
 </tr>
 <tr>
 <td>Auto centering</td>
@@ -3626,9 +3626,10 @@
 <p>The <strong>T150</strong> uses a separate protocol and runs through the generic path.</p>
 <hr />
 <h3 id="moza-and-other-standard-pid-wheels">Moza and other standard-PID wheels<a class="headerlink" href="#moza-and-other-standard-pid-wheels" title="Permanent link">&para;</a></h3>
-<p>Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard USB PID force-feedback protocol rather than a proprietary one, so they ride the generic path by design. There is no Moza driver to add, and that is not a gap: the same is true of Cammus, VRS, Asetek, Simucube and PXN bases. What the generic path gives them is game force feedback plus the Auto Centering spring. What it cannot give them is vendor-specific rotation range or RPM LEDs, which have no standard command.</p>
+<p>Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard USB PID force-feedback protocol rather than a proprietary one, so they ride the generic path by design. There is no Moza driver to add, and that is not a gap: the same is true of Cammus, VRS, Asetek, and PXN bases. What the generic path gives them is game force feedback plus the Auto Centering spring. What it cannot give them is vendor-specific rotation range or RPM LEDs, which have no standard command.</p>
 <h3 id="centering-and-constant-force-pick-one-seat-on-the-generic-path">Centering and Constant Force pick one seat on the generic path<a class="headerlink" href="#centering-and-constant-force-pick-one-seat-on-the-generic-path" title="Permanent link">&para;</a></h3>
 <p>On a wheel driven through the generic path, both are idle behaviors: each applies its force only while the game is not sending force feedback of its own. A generic wheel has one force-feedback effect slot, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. Game force outranks both and hands the slot back the moment it goes quiet. Logitech, Fanatec, and Thrustmaster wheels keep centering as a separate firmware or software spring, so Constant Force and auto centering can run together there. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.</p>
+<hr />
 <h2 id="over-remote-link">Over Remote Link<a class="headerlink" href="#over-remote-link" title="Permanent link">&para;</a></h2>
 <p>A supported wheel plugged into another PC and shared over <a href="../../guides/remote-link/">Remote Link</a> keeps the whole native pipeline. The PC running the game decodes the game's force-feedback effects exactly as it does for a local wheel. Instead of writing to the wheel, it ships the steering parameters across the link: constant force, the condition effects, the periodic waveform, rotation range, auto centering, and the RPM LED state. The wheel's PC re-encodes them with its own vendor writer, so the wheel firmware receives the same commands a local wheel would.</p>
 <ul>
@@ -3666,7 +3667,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: help when a wheel has no force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

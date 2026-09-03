@@ -97,7 +97,7 @@ Stated plainly because it shapes what the feature is for: this gives games the *
 
 The return path is an event, not a poll. `HMVRController.HapticReceived` fires with `(hand, amplitude, durationSeconds)` and `OnHapticReceived` fans it into the slot's `Vibration` entry, the same lane ordinary game rumble rides, so whatever physical device drives the slot buzzes with no VR-specific plumbing downstream.
 
-Left hand drives `LeftMotorSpeed`, right drives `RightMotorSpeed`. Amplitude clamps to `0..1` and scales to `ushort`. Duration has a floor of `MinPulseMs`, because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.
+Left hand drives `LeftMotorSpeed`, right drives `RightMotorSpeed`. Amplitude clamps to `0..1` and scales to `ushort`. Duration has a floor of `MinPulseMs` (50 ms), because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.
 
 Overlapping pulses on one hand keep the **later** end tick rather than restarting the timer, so a rapid burst holds the motor for the union of its pulses instead of chopping.
 
@@ -212,4 +212,4 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

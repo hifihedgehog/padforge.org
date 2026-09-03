@@ -32,7 +32,7 @@ It exposes zero gamepad surface: no axes, buttons, hats, or device objects. The 
 
 ## MidiInputRuntime: the shared WM2 session
 
-`MidiInputRuntime` is a static class over `Microsoft.Windows.Devices.Midi2` (Windows MIDI Services). Its `Session` property lazily creates one `MidiSession`, but only after `MidiVirtualController.IsAvailable()` returns true. It never initializes the SDK itself. It rides the runtime the output side brings up, and returns null when Windows MIDI Services is absent.
+`MidiInputRuntime` is a static class over `Microsoft.Windows.Devices.Midi2` (Windows MIDI Services). Its `Session` property lazily creates one `MidiSession`, but only after `MidiVirtualController.IsAvailable()` returns true, and the create itself runs on a worker bounded by the same 3 s timeout the device open uses, so a wedged service returns null instead of stalling the caller. It never initializes the SDK itself. It rides the runtime the output side brings up, and returns null when Windows MIDI Services is absent.
 
 `EnumerateEndpoints` calls `MidiEndpointDeviceInformation.FindAll` and keeps only the normal message endpoints (`MidiEndpointDevicePurpose.NormalMessageEndpoint`), skipping the diagnostic endpoints, the in-box synth, and the virtual-device responder twins. PadForge's own MIDI virtual-controller endpoints still appear as inputs (the no-hardware loopback path) because the service publishes a client-visible twin of every virtual device as a normal endpoint. The device-side responder twin is for the hosting application only, and enumerating it is how the input lane used to poke stranded responder corpses every sweep (the MIDI VC lifecycle-wedge fix). `Shutdown` disposes the session and must run before `MidiVirtualController.Shutdown` on app exit.
 
@@ -57,7 +57,7 @@ The channel-mode CCs get extra handling in the CC path, after their value is wri
 - **Omni Off/On and Mono/Poly (CCs 124–127)** clear the note lanes too, since each carries All Notes Off semantics per MIDI 1.0. CC 122 (Local Control) clears nothing.
 - **Reset All Controllers (CC 121)** applies the RP-015 reset to the lanes this state models: pitch bend recenters, the mod wheel (CC 1) and pedals (CCs 64–67) drop to 0, expression (CC 11) returns to 127, and the RPN and NRPN selectors (CCs 98–101) return to null. Each reset lane's encoder pulse machine is cleared in both directions, so queued detent pulses stop with the reset. Bank, volume, pan, and sound lanes stay put, per RP-015. Without this, a keyboard panic (121 plus 123) released mapped notes but left a mapped Pitch Bend axis frozen off-center.
 
-A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (center 0x40, 0x41 is one step up, 0x3F is one step down). A small positive delta queues an up pulse on lane `2*cc` and a small negative delta queues a down pulse on `2*cc+1`. Values outside the band read as an absolute fader and never pulse. The two's-complement and signed-bit encoder styles read as absolute jumps. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. `MidiInputState` holds the note, CC, and encoder up and down arrays plus a single pitch-bend value, with a `Clone`, and is null on `CustomInputState` for non-MIDI devices.
+A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (`RelativeCenter` 0x40, 0x41 is one step up, 0x3F is one step down). A delta within `RelativeMax` (16) of center queues that many up pulses on lane `2*cc`, or down pulses on `2*cc+1`. Values outside that band read as an absolute fader and never pulse. The two's-complement and signed-bit encoder styles read as absolute jumps. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. `MidiInputState` holds the note, CC, and encoder up and down arrays plus a single pitch-bend value, with a `Clone`, and is null on `CustomInputState` for non-MIDI devices.
 
 ---
 
@@ -74,7 +74,7 @@ A vanished endpoint is marked offline, disposed, and has its mapped outputs neut
 
 `CloseMidiInputsForEndpoint` closes any open loopback input connections to one PadForge MIDI endpoint, and the ordering is the contract: the loopback client connections must close before that endpoint's device-side teardown, because tearing down a virtual endpoint while this process still holds a client connection to it is the deterministic midisrv wedge (bench 2026-07-23). Callers demote the endpoint's registry claim first (`MidiVirtualController.MarkClosing`) so the scanner cannot reopen it in that window. Closing neutralizes the device's mapped outputs too, so held notes and CCs release.
 
-`ShutdownMidiInputs` suppresses further enumeration, disposes every open device, and calls `MidiInputRuntime.Shutdown`. The ordering at the Windows MIDI Services uninstall path is load-bearing: `ShutdownMidiInputs` runs first, then the output controller shuts down, then the service is removed, because MIDI input enumeration loads the SDK runtime whenever the service is installed.
+`ShutdownMidiInputs` suppresses further enumeration, disposes every open device, and calls `MidiInputRuntime.Shutdown`. The ordering at the Windows MIDI Services uninstall path is load-bearing: `ShutdownMidiInputs` runs first, then `MidiVirtualController.SuppressForUninstall` latches the runtime off and disposes the SDK initializer while the service still exists, then the service is removed, because MIDI input enumeration loads the SDK runtime whenever the service is installed.
 
 ---
 
@@ -102,4 +102,4 @@ A vanished endpoint is marked offline, disposed, and has its mapped outputs neut
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

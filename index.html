@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PadForge: Make any input look like any controller</title>
     <meta name="description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
-    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller, Remote Link, share controller between PCs, controller speaker audio, wheel force feedback, MIDI input">
+    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller, Remote Link, share controller between PCs, controller speaker audio, wheel force feedback, MIDI input, Steam Deck virtual controller, Steam Controller, head tracking, OpenTrack, Razer Chroma, Logitech LIGHTSYNC, handheld PC buttons, Legion Go, ROG Ally">
     <meta property="og:title" content="PadForge: Make any input look like any controller">
     <meta property="og:description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
     <meta property="og:image" content="https://padforge.org/assets/logo.png">
@@ -93,11 +93,11 @@
                     speaks one language. No subscription, no device tier, no
                     feature held back for a paid build.
                 </p>
-                <a href="specs.html" class="btn btn-ghost reveal" data-d="3" style="margin-top:2rem">See all 61 capabilities</a>
+                <a href="specs.html" class="btn btn-ghost reveal" data-d="3" style="margin-top:2rem">See every capability</a>
             </div>
 
             <div class="manifest reveal" data-d="1">
-                <div class="mf" style="--mf: var(--ember)"><b>Sixteen virtual controllers</b><span>Xbox, PlayStation, Nintendo, VR, MIDI, keyboard and mouse</span></div>
+                <div class="mf" style="--mf: var(--ember)"><b>Sixteen virtual controllers</b><span>Xbox, PlayStation, Nintendo, Steam, VR, MIDI, keyboard and mouse</span></div>
                 <div class="mf" style="--mf: var(--brand-ps)"><b>1000 Hz input engine</b><span>Poll rate the games never see coming</span></div>
                 <div class="mf" style="--mf: var(--brand-xbox)"><b>Native wheel force feedback</b><span>Logitech, Fanatec and Thrustmaster, in the wheel's own protocol</span></div>
                 <div class="mf" style="--mf: var(--telemetry)"><b>Gyro at Steam Input parity</b><span>Flick stick, dual threshold smoothing, real-world calibration</span></div>
@@ -111,6 +111,10 @@
                 <div class="mf" style="--mf: var(--brand-steam)"><b>Per-app profiles</b><span>Switched automatically when the game takes focus</span></div>
                 <div class="mf" style="--mf: var(--ember)"><b>Your voice as a button</b><span>Registered phrases fire macros, recognized offline</span></div>
                 <div class="mf" style="--mf: var(--brand-ps)"><b>Anything with an axis is a source</b><span>PlayStation Move, SpaceMouse pucks, VR controllers, wheels, HOTAS</span></div>
+                <div class="mf" style="--mf: var(--brand-xbox)"><b>Steam Deck and Steam Controller</b><span>Valve's own USB identity, with both trackpads mapped</span></div>
+                <div class="mf" style="--mf: var(--telemetry)"><b>Your head as six axes</b><span>OpenTrack or FreeTrack, bound like a stick</span></div>
+                <div class="mf" style="--mf: var(--brand-nin)"><b>Buttons your handheld hides</b><span>Press a rear paddle once and PadForge learns it</span></div>
+                <div class="mf" style="--mf: var(--brand-steam)"><b>Room lights that follow the pad</b><span>Razer Chroma and Logitech LIGHTSYNC take the color the game writes</span></div>
             </div>
         </div>
     </div>
@@ -166,7 +170,7 @@
 </section>
 
 <!-- ═══════════════ THE ANNOTATED CONTROLLER ═══════════════
-     The centrepiece, and the answer to "show, don't tell". Every hotspot
+     The centerpiece, and the answer to "show, don't tell". Every hotspot
      is placed from the app's own generated overlay geometry, so the ring
      sits exactly on the control it names.                              -->
 <section class="section" id="controller">
@@ -253,7 +257,7 @@
     <div class="container">
         <div class="stat-grid">
             <div class="stat reveal"><div class="stat-n">16</div><div class="stat-l">Virtual controllers at once</div></div>
-            <div class="stat reveal" data-d="1"><div class="stat-n">714</div><div class="stat-l">Devices known by name</div></div>
+            <div class="stat reveal" data-d="1"><div class="stat-n">711</div><div class="stat-l">Devices known by name</div></div>
             <div class="stat reveal" data-d="2"><div class="stat-n">231</div><div class="stat-l">Device profiles</div></div>
             <div class="stat reveal" data-d="3"><div class="stat-n">1000<em>Hz</em></div><div class="stat-l">Polling, sub-ms jitter</div></div>
             <div class="stat reveal" data-d="4"><div class="stat-n">$0</div><div class="stat-l">Forever, no paywall</div></div>
@@ -267,7 +271,7 @@
         <div class="section-head section-head-c">
             <p class="kicker reveal">Compatibility</p>
             <h2 class="display-m reveal" data-d="1">Will it work with yours?</h2>
-            <p class="lede lede-center reveal" data-d="2">Type a controller, wheel, stick or adapter. Searches all 714 devices PadForge knows by name.</p>
+            <p class="lede lede-center reveal" data-d="2">Type a controller, wheel, stick or adapter. It searches every device PadForge knows by name.</p>
         </div>
         <div class="dc reveal" data-d="1">
             <label class="dc-field">
@@ -277,6 +281,16 @@
             </label>
             <div id="dcout" class="dc-out" role="status" aria-live="polite"></div>
             <p class="dc-foot">Not finding it? It very likely still works. Anything Windows reads as an input device can be mapped, so this list is where the names, the correct layout and the extra capabilities come from rather than the limit of what PadForge accepts. <a href="/docs/devices/supported/">See the full list</a>.</p>
+        </div>
+        <div class="details reveal" data-d="2" style="max-width:760px; margin:3.2rem auto 0">
+            <details class="detail">
+                <summary>Buttons your handheld hides</summary>
+                <div class="detail-body">Handheld gaming PCs and gaming laptops carry rear paddles, menu keys, and wheels that Windows never presents as part of a controller. Turn on Handheld PC Buttons in Settings, then press one when the Learn dialog asks for it. PadForge samples the idle state first, so a sensor byte that moves on its own can never be mistaken for a button. Then it watches the keyboard, every vendor HID report, and every system event for whatever your press changed. Name it and it binds like any other button. There is no table of models inside the app, so a handheld that ships tomorrow is learned the same way. One owner's learned set exports to a file that seeds every machine of that model. The same toggle adds the machine's own gyroscope as a motion device, for handhelds that keep the sensor in the tablet.</div>
+            </details>
+            <details class="detail">
+                <summary>Charging over USB without paying for the radio</summary>
+                <div class="detail-body">Plug a Bluetooth pad into a cable and it usually keeps talking over the radio while it charges, which is the slow way to fill it. Quick Charge watches the pad's own charging flag and drops the Bluetooth link the moment it goes high, so the cable does the work. Any USB power source counts, a wall charger included. Turn the radio back on with the cable still in and PadForge leaves it alone until the next unplug. It covers any pad that reports its radio address as its serial. That takes in the DualSense, DualShock 4, DualShock 3, Switch 2, and Joy-Con pairs.</div>
+            </details>
         </div>
     </div>
 </section>
@@ -309,7 +323,7 @@
                     </details>
                     <details class="detail">
                         <summary>Shift layers</summary>
-                        <div class="detail-body">Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages.</div>
+                        <div class="detail-body">Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages. An activator can be scoped to one layer, so a button that means nothing on the base layer becomes that layer's exit. A Switch Layer macro action jumps the slot straight to a layer by name.</div>
                     </details>
                     <details class="detail">
                         <summary>Thirteen starter profiles</summary>
@@ -320,8 +334,16 @@
                         <div class="detail-body">One slot presents a left and a right hand to SteamVR, so a gamepad, a flight stick, a keyboard, or a phone over Wi-Fi can drive them. Every stick, trigger, grip and button is a mapping target, triggers and grips stay genuinely analog, and when a game buzzes a hand the pulse comes back out through the device in your hands. PadForge installs the SteamVR runtime itself if you do not have it, with no Steam account and no Steam client.</div>
                     </details>
                     <details class="detail">
+                        <summary>Steam Deck and Steam Controller, as virtual pads</summary>
+                        <div class="detail-body">An Extended slot can present the Steam Deck, the 2015 Steam Controller, or the 2026 one, carrying Valve's own USB identity down to the vendor and product strings. Steam and any SDL game read the real device and load its layout. Both trackpads come with it: Left and Right Pad X, Y, Touch and Click each get their own mapping row, and the grid names the controls the way Valve does instead of counting buttons. The two Steam Controller bodies in the 3D preview are meshed from Valve's own published CAD.</div>
+                    </details>
+                    <details class="detail">
                         <summary>A virtual Switch Pro Controller</summary>
                         <div class="detail-body">The Nintendo slot type creates a virtual Switch Pro Controller through HIDMaestro. Games and emulators that speak Switch see the real thing: the full button set, and gyro passed through from your physical pad.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Radial menus, with your own icons</summary>
+                        <div class="detail-body">A radial or grid menu hangs off a button, and its cells fire a key, a controller button, or one of the slot's macros by name. A macro cell is an extra trigger rather than a copy, so a While Held macro runs for as long as the cell is held and the macro's own layer scope still applies. Every cell is also a mapping source in its own right, which means a cell with no binding of its own can still drive a row elsewhere. Icons come from a .pficons package, a zip of images PadForge reads without ever unpacking it. Add one someone made, or build one from loose files. An exported profile carries the packages its menus use.</div>
                     </details>
                     <details class="detail">
                         <summary>SOCD cleaning and mouse gestures</summary>
@@ -397,6 +419,18 @@
                 <div class="detail-body">Route a slot's rumble to any Windows audio device as a low-frequency channel, so a transducer under the seat moves with the game. Independent low and high motor routing, per-voice gain, and a carrier frequency from 20 to 120 Hz with a sweep to find where your shaker responds. The pad keeps its own rumble.</div>
             </details>
             <details class="detail">
+                <summary>The rest of the desk follows the pad</summary>
+                <div class="detail-body">When a game paints the lightbar on a virtual PlayStation controller, PadForge can send that same color out to your Razer Chroma devices and your Logitech LIGHTSYNC devices. Chroma goes through the local server Razer Synapse runs, and PadForge shows up in Synapse's Connect tab where you scope it to the devices you want. LIGHTSYNC calls the LED engine G HUB already registered on the machine, saves the lighting you had when it connects, and puts it back when it stops. PadForge ships no Razer or Logitech code for either one. Which controller is in your hands does not matter, because the color comes from the virtual pad the game is writing to.</div>
+            </details>
+            <details class="detail">
+                <summary>Rumble on a Razer Sensa HD device</summary>
+                <div class="detail-body">Sensa HD haptics sit in a headset, a mouse, or a chair rather than in the pad. PadForge streams the loudest of a slot's four rumble voices into the Interhaptics engine Razer ships, which renders it on gear like the Wolverine V3 line, the Kraken V4 Pro, and the Freyja. What crosses is amplitude, as one looping effect between 65 and 300 Hz, with no left and right split. It needs Razer Synapse 4 with Sensa HD Haptics, and the device's Haptic Source set to Sensa HD Games.</div>
+            </details>
+            <details class="detail">
+                <summary>The 2026 Steam Controller's own haptics</summary>
+                <div class="detail-body">A pad with haptic coils and no speaker normally gets a reduction. PadForge measures the loudest frequency in the sound each tick and plays that single tone, which lands beeps and cues and loses everything else. The 2026 Steam Controller does not need the reduction. Its four coils, two in the grips and two under the trackpads, take 8 kHz stereo audio over the pad's own reports, and PadForge streams the mix into them. A low-pass cutoff, 250 Hz by default, keeps the coils vibrating instead of audibly playing the sound, and you can raise it for sharper detail. Wired and over the dongle. A Bluetooth link falls back to the tone.</div>
+            </details>
+            <details class="detail">
                 <summary>Which wheels, by name</summary>
                 <div class="detail-body"><b>Driven in the wheel's own protocol.</b> Logitech G29, G923, G27, G25, Driving Force, Driving Force Pro, Driving Force GT, MOMO Force, MOMO Racing and WingMan Formula Force GP. Thrustmaster T300RS, T-GT II, T248, TX, TS-XW and TS-PC Racer. Fanatec CSL DD, GT DD Pro, CSL Elite, ClubSport V2 and V2.5, Podium DD1 and DD2, CSR Elite and the Porsche 911 GT3 RS. Rotation range, autocenter and the LED strip come with it on the wheels that have them, and Fanatec ClubSport V3, CSL Elite and CSL Loadcell pedals get their own rumble.<br><br><b>Recognized as wheels and mapped like one</b>, with force feedback through the standard path: Logitech G920 and PRO Racing Wheel, Thrustmaster T500RS, Fanatec ClubSport V1, Moza R3, R5, R9, R12, R16 and R21, Simucube 1 and Simucube 2 Sport, Pro and Ultimate, Simagic M10, Alpha Mini, Alpha and Alpha U, Asetek Invicta, Forte, La Prima and Tony Kannan, Cammus C5 and C12, VRS DirectForce Pro, PXN VD6 and V900, the Xbox 360 Wireless Racing Wheel and OpenFFBoard builds.</div>
             </details>
@@ -433,6 +467,18 @@
                     <details class="detail">
                         <summary>Turn your head to aim</summary>
                         <div class="detail-body">Sony headphones that carry a head tracker become a motion source, confirmed on the WH-1000XM5 family. The whole gyro pipeline takes it: gyro-to-stick, gyro-to-mouse, aim engage, calibration, and the motion server. Discovery is by capability rather than a model list, so any headset exposing the same sensor collection is a candidate. It reports rotation, never position, and it pairs best with an engage button because head tracking that is always live is disorienting.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>OpenTrack, as six axes</summary>
+                        <div class="detail-body">Turn on Head Tracking on the Dashboard and a Head Tracker device appears carrying six axes: yaw, pitch, roll, and the three translations. They bind anywhere an axis binds, with the same deadzone, curve, and inversion a stick gets, so head yaw can swing the camera while both thumbs stay on the buttons. PadForge reads OpenTrack's UDP output and the FreeTrack 2.0 shared memory at the same time, so a game already reading FreeTrack keeps its pose and PadForge sees the same one. Anything else that speaks either format can point straight at it. After a second with no pose the axes return to center, so a camera that loses your face never leaves a stick pinned.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>How you are holding the Wii Remote</summary>
+                        <div class="detail-body">A Wii Remote aimed at the screen, turned sideways for the NES-style hold, or dropped into a Wii Wheel is one piece of hardware reporting three different worlds. Grip rotates the gyro, the accelerometer, and gravity together to match the hold: Pointing, Sideways Face Up, Wii Wheel Face Toward You, or Upright. It applies to your mappings and to the motion the virtual controller reports, and the D-pad follows the same frame, so Up is up in the hold you are actually using.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>A shake as a source</summary>
+                        <div class="detail-body">Motion Shake reads how far the accelerometer's magnitude departs from one g, which means it answers to a shake and ignores a tilt. It arrives as an ordinary axis between zero and one, so it can cross a threshold as a button, pull a trigger, or scale anything else that takes an analog source. A Nunchuk and the left half of a Joy-Con pair each get their own.</div>
                     </details>
                     <details class="detail">
                         <summary>Motion into emulators</summary>
@@ -522,6 +568,14 @@
                 <div class="detail-body">Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. PadForge creates a real Windows MIDI endpoint that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge.</div>
             </details>
             <details class="detail">
+                <summary>Profiles your launcher can switch</summary>
+                <div class="detail-body">Turn on external control on the Profiles page and PadForge serves a named pipe on the local machine while the engine runs. Playnite, LaunchBox, a batch file, or anything that can write one line sends <b>activate</b> with a profile name, <b>deactivate</b> to fall back to Default, or <b>query</b> to ask what is loaded. A profile activated that way is held until the script releases it or you switch by hand, so a game-launch rule cannot pull it back out from under the script. PadForge's own executable takes the same instructions as arguments and forwards them down the pipe, so running it a second time is the command. The pipe is open to authenticated users on that machine and nowhere else, and the whole thing stays off until you turn it on.</div>
+            </details>
+            <details class="detail">
+                <summary>A polling rate per game</summary>
+                <div class="detail-body">The engine's poll interval is a global setting, and a profile can overrule it. Pick 1000, 500, 250, 125, or 62.5 Hz in the profile dialog and that rate applies while the profile is active, with every other profile falling back to the global value. The Settings page names the profile in charge under the knob. Nothing restarts on a switch, because the loop recomputes its target every cycle.</div>
+            </details>
+            <details class="detail">
                 <summary>Local co-op without limits</summary>
                 <div class="detail-body">Sixteen slots, and XInput's four-pad ceiling stops being your ceiling: slots beyond four present as DirectInput or as other virtual shapes, so a room full of players all land in the same game. Every slot carries its own profile, its own layers, and its own feedback routing.</div>
             </details>
@@ -555,12 +609,13 @@
                     <tbody>
                         <tr><td>Price</td><td class="us">Free, no paywall</td><td>Paid, per-feature</td><td>Free</td><td>Free</td></tr>
                         <tr><td>Virtual controllers at once</td><td class="us">16</td><td>4</td><td>4</td><td>4</td></tr>
-                        <tr><td>Virtual controller shapes</td><td class="us">Xbox, PlayStation, Nintendo, VR, MIDI, keyboard + mouse, custom HID</td><td>Xbox, DualShock 4</td><td>Xbox, DualShock 4</td><td>Xbox</td></tr>
+                        <tr><td>Virtual controller shapes</td><td class="us">Xbox, PlayStation, Nintendo, Steam, VR, MIDI, keyboard + mouse, custom HID</td><td>Xbox, DualShock 4</td><td>Xbox, DualShock 4</td><td>Xbox</td></tr>
                         <tr><td>Wheel force feedback, native protocol</td><td class="us">Yes</td><td>No</td><td>No</td><td>No</td></tr>
                         <tr><td>Controller speaker as an audio output</td><td class="us">Yes</td><td>No</td><td>No</td><td>No</td></tr>
                         <tr><td>Phone as a controller, no app</td><td class="us">Yes, 16 at once</td><td>No</td><td>No</td><td>No</td></tr>
                         <tr><td>Share a controller between PCs</td><td class="us">Yes, with feedback</td><td>No</td><td>No</td><td>Remote Play only</td></tr>
                         <tr><td>MIDI in and MIDI out</td><td class="us">Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                        <tr><td>Buttons a handheld PC hides from Windows</td><td class="us">Learned by pressing them</td><td>Unsupported on ROG Ally, AYANEO</td><td>No</td><td>Unverified</td></tr>
                         <tr><td>Gyro to mouse and stick</td><td class="us">Yes, Steam Input parity</td><td>Partial</td><td>Yes</td><td>Yes</td></tr>
                         <tr><td>Works outside Steam</td><td class="us">Yes</td><td>Yes</td><td>Yes</td><td>Steam games only</td></tr>
                         <tr><td>Open source</td><td class="us">Yes</td><td>No</td><td>Yes</td><td>No</td></tr>
@@ -594,6 +649,16 @@
             <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-profiles.jpg" alt="Profiles" loading="lazy"><figcaption><b>Profiles</b>Per game, switched automatically.</figcaption></figure>
             <figure class="reveal"><img class="zoom" src="assets/screenshot-audio.jpg" alt="Audio routing" loading="lazy"><figcaption><b>Audio</b>The controller speaker, bass shakers, and rumble from sound.</figcaption></figure>
             <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-remote-link.jpg" alt="Remote Link" loading="lazy"><figcaption><b>Remote Link</b>A pad on one PC, a game on another.</figcaption></figure>
+            <!-- CAPTURE 4.4.0: uncomment each figure as its shot lands in assets/.
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-pad-extended-steam-deck.jpg" alt="An Extended slot set to the Steam Deck persona, with the Steam Deck body in the 3D preview" loading="lazy"><figcaption><b>Steam Deck</b>Valve's identity, and both trackpads.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-pad-extended-steam-controller.jpg" alt="An Extended slot set to the Steam Controller (2026) persona, with the 2026 Steam Controller body in the 3D preview" loading="lazy"><figcaption><b>Steam Controller</b>Both generations, meshed from Valve's CAD.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-dashboard-head-tracking.jpg" alt="The Head Tracking section on the Dashboard" loading="lazy"><figcaption><b>Head tracking</b>OpenTrack and FreeTrack, as six axes.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-dashboard-lightbar-mirrors.jpg" alt="The Lightbar Mirrors and Razer Sensa HD Haptics sections on the Dashboard" loading="lazy"><figcaption><b>Lightbar mirrors</b>Chroma, LIGHTSYNC, and Sensa HD.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-settings-handheld-buttons.jpg" alt="The Handheld PC Buttons card on the Settings page" loading="lazy"><figcaption><b>Handheld buttons</b>Learned once, then mapped.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-pad-gyro-grip.jpg" alt="The Grip control in the Pad page's motion section" loading="lazy"><figcaption><b>Grip</b>Four ways to hold a Wii Remote.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-profiles-external-control.jpg" alt="The external control checkbox on the Profiles page" loading="lazy"><figcaption><b>External control</b>A launcher switches the profile.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-devices-quick-charge.jpg" alt="The Quick Charge control in the Power section of the Devices page" loading="lazy"><figcaption><b>Quick Charge</b>The cable takes over from the radio.</figcaption></figure>
+            -->
         </div>
     </div>
 </section>

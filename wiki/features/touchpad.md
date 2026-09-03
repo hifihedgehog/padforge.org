@@ -63,7 +63,7 @@ Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a K
 | Speed Threshold | 130 | Trackpad response only. Finger speed in mm/s where the cursor starts speeding up, 20–600. Lower accelerates sooner. libinput's own default and its single exposed tunable. |
 | Pad Width | 69 | Trackpad response only. Physical width of this touchpad in mm, 20–150. Decides whether slow movement can reach the fine-control range at all, so set it near the real size of the pad. |
 | Acceleration | 0.00 | Simple response only. Fast drags cover more screen than slow ones over the same distance, 0–5. 0 keeps the cursor speed flat. |
-| Momentum Glide | 0.90 | How far the cursor coasts, 0.80–1.00. At 1.00 the coast is frictionless: the cursor keeps its speed until you touch the pad again, like a spun trackball. Time-based, so the glide lasts the same at any polling rate. Editable only while Momentum is on. |
+| Momentum Glide | 0.90 | How far the cursor coasts, 0.80–1.00. At 1.00 nothing slows the coast: the cursor keeps its speed until you touch the pad again, like a spun trackball. Time-based, so the glide lasts the same at any polling rate. Editable only while Momentum is on. |
 | Fling Boost | 1.00 | Scales how fast a fling launches without changing drag speed, 0.1–5. The sensitivity sliders scale dragging and coasting together, so this is the knob that makes a flick travel further on its own. 1.00 launches at exactly the speed the finger was moving. Momentum only. |
 | Fling Threshold | 0.29 | How fast the finger must be moving at lift-off for the cursor to coast, in pad widths per second, 0–2. Below it the cursor stops dead. The default is the Steam Controller driver's own minimum lift velocity, which is what shipped before this knob existed. Momentum only. |
 | Max Fling Speed | 0 (off) | Caps how fast a fling can launch, in pad widths per second, 0–30. A quick flick measures around 25. 0 turns the cap off. Momentum only. |
@@ -206,4 +206,4 @@ Shape matching runs two open-source gesture recognizers on every single-finger s
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

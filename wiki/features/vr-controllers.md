@@ -18,7 +18,7 @@ You do not need a Steam account, the Steam client, or a headset plugged in to in
 
 Two details worth knowing before you start it:
 
-- **Choose where it goes.** The card has an install-location field. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
+- **Choose where it goes.** The card has an install-location field with a **Browse** button. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
 - **It is several gigabytes.** The download runs for a few minutes on a fast connection and considerably longer on a slow one.
 
 An existing SteamVR is found automatically when it came from Steam, or when it sits at `C:\SteamVR`, and the card then reports it as installed. A hand-placed install somewhere else is not discovered, so point the install location at it or let PadForge fetch its own copy.
@@ -68,7 +68,7 @@ When a VR game buzzes a hand, that pulse does not stop at the virtual controller
 
 ## Motion
 
-PadForge does not fabricate positional tracking. The driver parks both hands a fixed distance in front of the headset, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the **controls**: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.
+PadForge does not fabricate positional tracking. The driver anchors both hands about half a meter ahead of the headset, one to each side, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the **controls**: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.
 
 ---
 
@@ -76,7 +76,7 @@ PadForge does not fabricate positional tracking. The driver parks both hands a f
 
 Stated plainly, because they will shape whether this is useful to you:
 
-- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added.
+- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added, and the Add Controller tile reads *VR (max 1)* once one exists.
 - **No per-slot VR configuration.** The driver ships one honest identity. There is no VR equivalent of the PlayStation or Extended profile pickers.
 - **The runtime is a hard requirement.** No SteamVR, no VR slot, and the tile stays disabled.
 - **SteamVR's own Test Controller is not a reliable indicator.** Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the app's own Preview tab, or the game.
@@ -93,4 +93,4 @@ Stated plainly, because they will shape whether this is useful to you:
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

@@ -28,7 +28,7 @@ Open **Manage Voice Macros** from a Microphone row or a Bluetooth DualSense row 
 
 - **Enable Voice Macros** turns listening on.
 - **Listening** picks **Always** or **Push to Talk**. Always keeps the microphone open. Push to Talk listens only while a bound **Voice Listen (While Held)** macro is held, which also keeps a Bluetooth DualSense's mic session closed while idle, costing no bandwidth or battery.
-- **Minimum Confidence** sets how sure the recognizer must be before a phrase fires. Raise it if stray speech triggers macros, lower it if your phrases are missed.
+- **Minimum Confidence** sets how sure the recognizer must be before a phrase fires. It defaults to 0.80, and the slider runs 0.50 to 0.99. Raise it if stray speech triggers macros, lower it if your phrases are missed.
 - Type a phrase, give it a name, and press **Register**. The live readout shows every recognition with its confidence, whether or not it fired. A registered phrase's row lights only when the recognition actually fires, so a dark row beside a readout line means it fell below **Minimum Confidence** or the talk key was up.
 
 Short, distinct phrases recognize best. Two phrases that rhyme will fight each other.
@@ -64,4 +64,4 @@ Every DualSense and Microphone row's details pane carries a **Voice Macros** sec
 - On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.
 - The first enable unpacks the model from inside PadForge, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online.
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

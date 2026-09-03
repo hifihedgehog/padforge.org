@@ -140,13 +140,13 @@ The Extended virtual controller advertises DirectInput force feedback by default
 
 ## PlayStation pads
 
-When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble, lightbar, adaptive triggers, and the mic LED together in one update to the pad, whatever the slot's output type. Game rumble and your effect settings arrive in sync, so nothing fights over the device.
+When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble and lightbar together in one update to the pad, whatever the slot's output type. On the DualSense family that same update carries the adaptive triggers, the player row, and the mic LED. A DualShock 4 has none of those. Game rumble and your effect settings arrive in sync, so nothing fights over the device.
 
 ---
 
 ## Constant Force
 
-A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. Its angle sets direction (0 → +1 vertical is forward, 0 → +1 horizontal is right).
+A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. Its angle sets direction: Y at +1 points forward, X at +1 points right.
 
 **Override-with-resume rule.** While the toggle is on, PadForge keeps applying the configured force as long as no game or program is sending non-zero force to that device/slot pair. The moment a game sends any non-zero rumble or force feedback effect, the game's force takes over. The moment the game returns to silence, the constant force resumes. Macro rumble counts as game force here, so a macro pulse takes over the same way, and the constant force resumes once the pulse ends.
 
@@ -313,6 +313,7 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 ## Related pages
 
 - [Controller Slots](controller-slots.md): create and configure virtual controllers.
+- [Bass Shakers](bass-shakers.md): the slot-level tab in full, voice by voice.
 - [Wheel](wheel.md): native force feedback for Logitech, Fanatec, and Thrustmaster wheels, plus rotation range, auto-center, and RPM LEDs.
 - [Button and Axis Mappings](mappings.md): map physical inputs.
 - [Stick Deadzones](stick-deadzones.md): thumbstick deadzone and response curves.

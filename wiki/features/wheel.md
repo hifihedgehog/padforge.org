@@ -52,12 +52,12 @@ The game decides which effects to send. What reaches the wheel depends on what t
 
 | Effect | Logitech | Fanatec | Thrustmaster |
 |---|---|---|---|
-| Constant force | ✅ | ✅ | ✅ |
-| Spring | ✅ | ✅ | ✅ |
-| Damper | ✅ | ✅ | ✅ |
-| Friction | ✅ on G27 / G25 / DFGT / DFP, else damper | ✅ | as damper |
-| Inertia | as damper | ✅ | as damper |
-| Periodic (sine, square, triangle, sawtooth) | host-sampled into constant force | host-sampled into constant force | ✅ firmware-rendered |
+| Constant force | native | native | native |
+| Spring | native | native | native |
+| Damper | native | native | native |
+| Friction | native on G27 / G25 / DFGT / DFP, else damper | native | as damper |
+| Inertia | as damper | native | as damper |
+| Periodic (sine, square, triangle, sawtooth) | host-sampled into constant force | host-sampled into constant force | firmware-rendered |
 | Auto centering | firmware spring | software spring | firmware spring |
 
 Thrustmaster wheels have an onboard periodic generator. Logitech and Fanatec do not, so a periodic effect is sampled each frame and sent as a moving constant force, which feels the same at PadForge's polling rate.
@@ -92,11 +92,13 @@ The **T150** uses a separate protocol and runs through the generic path.
 
 ### Moza and other standard-PID wheels
 
-Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard USB PID force-feedback protocol rather than a proprietary one, so they ride the generic path by design. There is no Moza driver to add, and that is not a gap: the same is true of Cammus, VRS, Asetek, Simucube and PXN bases. What the generic path gives them is game force feedback plus the Auto Centering spring. What it cannot give them is vendor-specific rotation range or RPM LEDs, which have no standard command.
+Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard USB PID force-feedback protocol rather than a proprietary one, so they ride the generic path by design. There is no Moza driver to add, and that is not a gap: the same is true of Cammus, VRS, Asetek, and PXN bases. What the generic path gives them is game force feedback plus the Auto Centering spring. What it cannot give them is vendor-specific rotation range or RPM LEDs, which have no standard command.
 
 ### Centering and Constant Force pick one seat on the generic path
 
 On a wheel driven through the generic path, both are idle behaviors: each applies its force only while the game is not sending force feedback of its own. A generic wheel has one force-feedback effect slot, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. Game force outranks both and hands the slot back the moment it goes quiet. Logitech, Fanatec, and Thrustmaster wheels keep centering as a separate firmware or software spring, so Constant Force and auto centering can run together there. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.
+
+---
 
 ## Over Remote Link
 
@@ -140,4 +142,4 @@ A supported wheel plugged into another PC and shared over [Remote Link](../guide
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

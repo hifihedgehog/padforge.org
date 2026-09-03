@@ -3295,7 +3295,7 @@
 <ul>
 <li><strong>Enable Voice Macros</strong> turns listening on.</li>
 <li><strong>Listening</strong> picks <strong>Always</strong> or <strong>Push to Talk</strong>. Always keeps the microphone open. Push to Talk listens only while a bound <strong>Voice Listen (While Held)</strong> macro is held, which also keeps a Bluetooth DualSense's mic session closed while idle, costing no bandwidth or battery.</li>
-<li><strong>Minimum Confidence</strong> sets how sure the recognizer must be before a phrase fires. Raise it if stray speech triggers macros, lower it if your phrases are missed.</li>
+<li><strong>Minimum Confidence</strong> sets how sure the recognizer must be before a phrase fires. It defaults to 0.80, and the slider runs 0.50 to 0.99. Raise it if stray speech triggers macros, lower it if your phrases are missed.</li>
 <li>Type a phrase, give it a name, and press <strong>Register</strong>. The live readout shows every recognition with its confidence, whether or not it fired. A registered phrase's row lights only when the recognition actually fires, so a dark row beside a readout line means it fell below <strong>Minimum Confidence</strong> or the talk key was up.</li>
 </ul>
 <p>Short, distinct phrases recognize best. Two phrases that rhyme will fight each other.</p>
@@ -3322,7 +3322,7 @@
 <li>On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.</li>
 <li>The first enable unpacks the model from inside PadForge, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online.</li>
 </ul>
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

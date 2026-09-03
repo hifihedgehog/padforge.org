@@ -3642,7 +3642,7 @@
 <h3 id="4-assign-the-controller-to-a-slot">4. Assign the controller to a slot<a class="headerlink" href="#4-assign-the-controller-to-a-slot" title="Permanent link">&para;</a></h3>
 <ol>
 <li>The browser controller shows up on the <a href="../../features/devices/">Devices</a> page named for the layout you picked: <strong>Xbox 360 Web Controller 1</strong>, <strong>DualShock 4 Web Controller 1</strong>, or <strong>Web Touchpad 1</strong> (each layout numbers its own devices starting at 1).</li>
-<li>Click the slot badge on the device card to assign it. Same as any physical controller.</li>
+<li>Click its card, then click the slot's pill under <strong>Virtual Controller Assignment</strong>. Same as any physical controller.</li>
 <li>Done. Start playing.</li>
 </ol>
 <blockquote>
@@ -3665,7 +3665,7 @@
 </tr>
 <tr>
 <td><strong>Firewall</strong></td>
-<td>PadForge adds a "PadForge Web Controller" inbound rule when the server starts, if one is not already there. Third-party firewalls may need a manual TCP 8080 allow rule.</td>
+<td>Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. Third-party firewalls may need a manual TCP 8080 allow rule.</td>
 </tr>
 <tr>
 <td><strong>Max clients</strong></td>
@@ -3744,7 +3744,6 @@
 <p>Switch layouts at any time by going back to the landing page.</p>
 <h3 id="finishes">Finishes<a class="headerlink" href="#finishes" title="Permanent link">&para;</a></h3>
 <p>Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.</p>
-<p><img alt="The layout picker: ten controller layouts, the touchpad surface, and the builder" src="../../images/web-landing.png" /></p>
 <h3 id="lights-on-the-page">Lights, on the page<a class="headerlink" href="#lights-on-the-page" title="Permanent link">&para;</a></h3>
 <p>The layouts whose hardware has lighting draw it on the controller itself, where the real one is.</p>
 <table>
@@ -3850,7 +3849,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Latency:</strong> expect 5-15 ms more than a wired controller over home Wi-Fi. Fine for casual, puzzle, and platform games. Fast competitive play may feel a touch less responsive.</p>
+<p><strong>Latency:</strong> a Wi-Fi hop costs more than a wired controller does. Fine for casual, puzzle, and platform games. Fast competitive play may feel a touch less responsive.</p>
 <p><strong>Reconnection:</strong> each browser tab keeps a persistent pad ID. A brief disconnect (phone screen lock) does not change the device identity or slot assignment. No reassignment needed.</p>
 <hr />
 <h2 id="rumble-feedback">Rumble feedback<a class="headerlink" href="#rumble-feedback" title="Permanent link">&para;</a></h2>
@@ -3905,7 +3904,7 @@
 <li><a href="../../features/visualization/">3D and 2D Visualization</a>: the same controller art powers both the web controller and the desktop 2D view.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

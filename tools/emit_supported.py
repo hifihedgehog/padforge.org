@@ -132,7 +132,7 @@ fam = collections.defaultdict(set)
 for line in CL.splitlines():
     if line.strip().startswith("//"):
         continue
-    m = re.search(r'MAKE_CONTROLLER_ID\(\s*0x[0-9a-fA-F]+\s*,\s*0x[0-9a-fA-F]+\s*\)\s*,'
+    m = re.search(r'MAKE_CONTROLLER_ID\s*\(\s*0[xX][0-9a-fA-F]+\s*,\s*0[xX][0-9a-fA-F]+\s*\)\s*,'
                   r'\s*k_eControllerType_(\w+)\s*,\s*(NULL|"([^"]*)")\s*\}\s*,?\s*(?://\s*(.*))?$', line)
     if not m:
         continue
@@ -143,8 +143,26 @@ for line in CL.splitlines():
         fam[FAMILY.get(typ, "Other")].add(one)
 
 # ── SDL_gamepad_db.h: shipped mappings, by name ─────────────────────────────
+# The database is one file for every platform SDL builds on, cut into
+# preprocessor blocks. PadForge is a Windows app, so only the four
+# Windows blocks compile into the binary that ships. Counting the whole
+# file returns 407 and reports macOS, Linux, Android and iOS mappings as
+# things this build carries, which it does not.
+WIN_GUARDS = ("SDL_JOYSTICK_PRIVATE", "SDL_JOYSTICK_XINPUT",
+              "SDL_JOYSTICK_WGI", "SDL_JOYSTICK_DINPUT")
 mapped = set()
+_guards = []
 for line in DB.splitlines():
+    _s = line.strip()
+    if _s.startswith("#ifdef ") or _s.startswith("#if "):
+        _guards.append(_s.replace("#ifdef", "").replace("#if", "").strip())
+        continue
+    if _s.startswith("#endif"):
+        if _guards:
+            _guards.pop()
+        continue
+    if not _guards or not any(w in _guards[-1] for w in WIN_GUARDS):
+        continue
     m = re.match(r'\s*"([0-9a-fA-F]{32}),([^,]+),', line)
     if m:
         n = m.group(2).strip()
@@ -179,11 +197,26 @@ CAT = {k: sorted({clean(v) for v in table(t)}, key=str.lower) for k, t in [
 
 def ids(t):
     m = re.search(re.escape(t) + r"\[\]\s*=\s*\{(.*?)\n\};", JS, re.S)
-    return {(a.lower(), b.lower()) for a, b in re.findall(
-        r"MAKE_VIDPID\(\s*(0x[0-9a-fA-F]+)\s*,\s*(0x[0-9a-fA-F]+)\s*\)", m.group(1))}
+    return {(int(a, 16), int(b, 16)) for a, b in re.findall(
+        r"MAKE_VIDPID\s*\(\s*(0[xX][0-9a-fA-F]+)\s*,\s*(0[xX][0-9a-fA-F]+)\s*\)", m.group(1))}
 
-cl_ids = set(re.findall(r"MAKE_CONTROLLER_ID\(\s*(0x[0-9a-fA-F]+)\s*,\s*(0x[0-9a-fA-F]+)\s*\)", CL))
-cl_ids = {(a.lower(), b.lower()) for a, b in cl_ids}
+# Three things a plain findall over the file text gets wrong, each worth 2
+# to 8 devices in the headline count. Commented-out entries are still
+# entries in the text, so they must be skipped by line. Two live rows do
+# not match a strict pattern: line 155 writes the product id as 0X0401
+# and line 172 puts a space before the paren. And the same device is
+# written with different zero padding in three places (0x0f0d/0x00ed
+# against 0xf0d/0xed), so the pairs must be compared as numbers, not as
+# strings, or one device counts twice.
+CL_ID_RE = re.compile(
+    r"MAKE_CONTROLLER_ID\s*\(\s*(0[xX][0-9a-fA-F]+)\s*,\s*(0[xX][0-9a-fA-F]+)\s*\)")
+cl_ids = set()
+for _i, _l in enumerate(CL.splitlines(), 1):
+    if "MAKE_CONTROLLER_ID" not in _l or _l.lstrip().startswith("//"):
+        continue
+    _m = CL_ID_RE.search(_l)
+    if _m:
+        cl_ids.add((int(_m.group(1), 16), int(_m.group(2), 16)))
 union = cl_ids | ids("initial_wheel_devices") | ids("initial_flightstick_devices") \
         | ids("initial_throttle_devices") | ids("initial_arcadestick_devices") \
         | ids("initial_gamecube_devices")

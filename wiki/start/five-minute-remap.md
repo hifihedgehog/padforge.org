@@ -49,7 +49,7 @@ game gets. No save step, no apply step. Your mapping persists in
 ## When recording grabs the wrong input
 
 Use the source dropdown instead. It is one list of every input the slot
-can see, grouped under device-name headers, with the **(Any device)**
+can see, grouped under device-name headers, with the **(Any Device)**
 group first. Pick an entry ("B", "Axis 3", "POV 0 Up") and it assigns on
 the spot, same result as recording.
 
@@ -78,4 +78,4 @@ device (a generic joystick, an arcade encoder) from scratch.
   [Shift Layers](../guides/shift-layers.md).
 - Timed sequences on one press: [Macros](../guides/macros.md).
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

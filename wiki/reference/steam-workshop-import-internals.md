@@ -114,7 +114,7 @@ The version gate rejects anything below 3 with the exact reason: "Steam Input co
 
 ## ConfigTranslator
 
-`Translate(config, options)` produces a `TranslatedProfile`: two `MappingSet`s (`XboxMappingSet`, `KbmMappingSet`), a macro list, a menu list (`Menus`, `MenuDefinitionEntry` objects from `PadForge.Engine.Menus`), a name and description, slot-demand flags (`NeedsXboxSlot`, `NeedsKbmSlot`), and a `TranslationReport`. It never touches `ProfileData`. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros that need the slot: a trigger with no descriptor entries (it reads the Xbox slot's combined output), or an action that writes a virtual-controller button or axis (`RepeatVcButtonWhileHeld`, `ToggleVcButton`, `HoldVcButton`, `VcButtonTap`, `VcAxisTap`, `HoldVcAxis`, `ToggleVcAxis`, `RepeatVcAxisWhileHeld`, and a `CycleList` whose steps include a VC tap). A macro riding a device-free `InputDevice` trigger (paddle, touchpad, gyro) whose action writes no VC target demands no Xbox slot on its own. An `Identities.Count` clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for menus when no Xbox slot is demanded, so every import with a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps `MappingSet.Authoritative` on both sets it places and clones each menu onto every created slot's `MappingSet.Menus`.
+`Translate(config, options)` produces a `TranslatedProfile`: two `MappingSet`s (`XboxMappingSet`, `KbmMappingSet`), a macro list, a menu list (`Menus`, `MenuDefinitionEntry` objects from `PadForge.Engine.Menus`), a name and description, slot-demand flags (`NeedsXboxSlot`, `NeedsKbmSlot`), four device-tuning carriers the materializer parks on the slot (`LeftStickDeadZoneShape`, `RightStickDeadZoneShape`, the `GyroEngageDescriptor` triple, `GyroRatchetDescriptors`), and a `TranslationReport`. It never touches `ProfileData`. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros that need the slot: a trigger with no descriptor entries (it reads the Xbox slot's combined output), or an action that writes a virtual-controller button or axis (`RepeatVcButtonWhileHeld`, `ToggleVcButton`, `HoldVcButton`, `VcButtonTap`, `VcAxisTap`, `HoldVcAxis`, `ToggleVcAxis`, `RepeatVcAxisWhileHeld`, and a `CycleList` whose steps include a VC tap). A macro riding a device-free `InputDevice` trigger (paddle, touchpad, gyro) whose action writes no VC target demands no Xbox slot on its own. An `Identities.Count` clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for menus when no Xbox slot is demanded, so every import with a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps `MappingSet.Authoritative` on both sets it places and clones each menu onto every created slot's `MappingSet.Menus`.
 
 `TranslationOptions` has exactly four fields: `FileId` (feeds deterministic layer names), `PreferredLanguage` (default `"english"`, for localized title fallback), `ProfileNameOverride`, and `IncludedPresetIds`, the preset filter the dialog's chips re-run translation with (null means all).
 
@@ -195,7 +195,7 @@ The v1 translator read six setting keys. The waves widened that considerably:
 
 | Setting | Handling |
 |---|---|
-| `sensitivity` | Mouse-output groups: `ratio = clamp(sens / baseline, 0.05, 20.0)` with `StickMouseBaseline = 80`, `TrackpadMouseBaseline = 50`. Stick family → per-source `Sensitivity`; gyro family → `GyroSensitivity`; touchpad-finger family → per-row `Sensitivity` (since v4). On a `flickstick` group it is Steam's Dots Per 360° and lands on `ParamFlickCountsPer360`. On a menu it is In-Menu Sensitivity, dropped as Partial `MenuTuningDropped`. |
+| `sensitivity` | Mouse-output groups: `ratio = clamp(sens / baseline, 0.05, 20.0)` with `StickMouseBaseline = 80`, `TrackpadMouseBaseline = 50`. Stick family → per-source `Sensitivity`, gyro family → `GyroSensitivity`, touchpad-finger family → per-row `Sensitivity` (since v4). On a `flickstick` group it is Steam's Dots Per 360° and lands on `ParamFlickCountsPer360`. On a menu it is In-Menu Sensitivity, dropped as Partial `MenuTuningDropped`. |
 | `hold_repeats` + `repeat_rate` | `key_press` → a `RepeatKeyWhileHeld` macro. `xinput_button` → a `RepeatVcButtonWhileHeld` turbo macro (since v3), except identity and trigger-axis targets where the row keeps and the repeat drops (Partial `RepeatDropped`). `repeat_rate` clamps 10–1000 ms into the macro interval. |
 | `toggle` | On an activator: a `ToggleVcButton` / `ToggleKey` latch macro, or `Mode = "Toggle"` on a layer carry (since v3). No latch for the output → Partial `ToggleDropped`. |
 | `long_press_time` | Carries into the activator `DelayMs` on long-press layer switches. |
@@ -371,7 +371,42 @@ A `FluentWindow` (Mica, 1280×760) with a three-state flow (`WsState`): `Cold` (
 
 `Materialize(translated, source)` builds the `ProfileData`. It creates only the slots the translation demands (`NeedsXboxSlot` / `NeedsKbmSlot`), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with the default HIDMaestro profile id for its type and its translated mapping set attached. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on `PadIndex = 0` (the first created slot: Xbox when demanded, otherwise the KbM slot that a macro-only or key-only config creates). Combined-output triggers use `OutputController`, and device-free descriptor triggers use `InputDevice`. Name falls back to `"Workshop Profile"`. When provenance is supplied it stamps `ImportedAt` and `TranslationSummary`.
 
+`MappingSet.Authoritative` is set on each claimed slot, and only on those. The translator spells every binding out, automap-identical ones included, so the legacy merge must add nothing on top when a device is assigned. An unclaimed slot gets a fresh `MappingSet` that stays non-authoritative, because a slot the user creates later has to automap normally.
+
+Three carriers ride the claimed slots as `MappingSet.Workshop*` stamps, parked there because the import runs before any device exists and the settings they belong in are keyed by device guid:
+
+- `WorkshopLeftStickDeadZoneShape` / `WorkshopRightStickDeadZoneShape` ride the Xbox set alone, since the thumb pairs they shape live there.
+- `WorkshopGyroEngageDescriptor` plus its `Invert` and `Toggle` flags ride **every** claimed slot, because a split config hosts gyro mouse rows on the KbM slot and gyro stick rows on the Xbox slot while the engage gate is per slot.
+- `WorkshopGyroRatchetDescriptors` (pipe-joined) rides every claimed slot for the same reason.
+
+Menus clone onto every claimed slot's `MappingSet.Menus` on the same logic: the menu runtime and its fired-set provider are slot-keyed, each slot's rows read their own slot's fires, and the overlay publisher dedupes at display time.
+
+`BuildMacros` returns an empty array, never null. On `ProfileData`, a null `Macros` is the legacy sentinel meaning "saved before macros rode profiles, leave the live set alone", and a Workshop import owns its state outright, so it has to clear the outgoing profile's macros rather than inherit them.
+
+Two translated actions lower to a pair of macros rather than one:
+
+- `HoldKey` and `HoldMouseButton` become a press leg that SETs the `ToggleKey` / `ToggleMouseButton` latch and an `OnRelease` twin that CLEARs it, sharing a nonzero `PairId` unique within the profile. The latch is what makes the held key visible to the per-frame reconcile and to the engine-stop and profile-switch release paths, which a raw key-down cannot reach. Neither leg consumes its trigger buttons, since both read the same trigger and a consumed bit would release the twin early. Clearing an unset latch is a no-op, so a tap below a `Long_Press` threshold stays harmless.
+- `MouseLimitRegion` becomes an engage macro on `OnPress` and a release twin on `OnRelease`, because the translator's clamp is semantic while the engine clamp is a toggle primitive (#110). Region geometry folds into centered per-edge insets computed from `GetSystemMetrics`. An off-center region clamps at the same size around the screen center, which the translator already reported Partial. Activator delays ride the pair as Steam's shifted window: `delay_start` before the engage leg, `delay_end` before the release leg.
+
+`MacroData.LayerMask` is stamped on all three build legs, the single-macro path included. The omission on the region-clamp pair was invisible while every translated macro shipped an empty mask, and became the one imported macro whose cursor clamp engaged in every action set once the #254 funnel started stamping them.
+
 The import sink (`AddWorkshopProfile` in `MainWindow.xaml.cs`) mirrors the `.pfprofile` import path: dedup the display name, append to `Profiles`, build the list card, `MarkDirty()`, and optionally `LoadProfile` for Save and Apply.
+
+### WorkshopTuningApplier
+
+The `Workshop*` stamps were a second, invisible settings system: the runtime read the stick deadzone shape stamp unconditionally on an authoritative slot, so the user's own Dead Zone Shape control was overridden and editing it did nothing, with nothing on screen to say why.
+
+`ApplyToAssignedDevice(slotIndex, ps, deviceGuid)` folds the stamps into the device's own `PadSetting` at assignment and clears them. It runs from both assignment entry points, `DeviceService.OnAssignToSlot` (the device list's assign command) and `DeviceService.AssignDeviceToSlot` (drag-drop and programmatic). It is idempotent and cheap, so calling it too often is free and calling it too seldom is a silent regression. Each value applies only where the user has not already chosen something, and clears unconditionally: a stamp that has been offered once has done its job, and leaving it would let it re-apply after the user deliberately changed the value back.
+
+What folds:
+
+- Stick deadzone shape onto `LeftThumbDeadZoneShape` / `RightThumbDeadZoneShape`.
+- Gyro engage onto `GyroAimEngageButton` with an empty `GyroAimEngageDeviceGuid` (the import's descriptor is device-free by construction) and `GyroAimEngageMode` of `Toggle`, `ReleaseToEngage`, or `Hold`.
+- Per-source response shaping (`FoldSourceShaping`): a `ShapingCard` resolved from the row's TARGET (`LeftThumbAxisX` and its siblings) exposes that axis's `PadSetting` curve, range, anti-deadzone, deadzone, and shape fields. `ParamCurveExponent`, `ParamAntiDeadzone`, and `ParamRangeOuter` fold onto them and clear off the source. `ParamStickDeadZoneShape` takes the `FoldStickGeometry` branch instead of the plain range fold.
+- Touchpad acceleration (`FoldTouchpadAcceleration`): a source's `ParamAccel` onto that pad's `TouchpadSettings` entry `MouseAcceleration`. Keyed off the source descriptor, not the row target, because the target of a touchpad mouse row is Mouse X or Mouse Y and names no pad.
+- Gyro acceleration (`FoldGyroAcceleration`): `ParamAccel` on a `Gyro ` source onto the `GyroAcceleration` card, written in the card's own `F2` invariant format.
+
+Two stamps deliberately do not fold. `WorkshopGyroRatchetDescriptors` has no `PadSetting` field and no control in any view, so it stays a runtime overlay. `ParamFlickRotationOffsetDeg` has no card either and stays on the source, which the code names as a real remaining gap rather than a deliberate exclusion.
 
 ---
 
@@ -414,7 +449,7 @@ Three generic-read application sites in `SourceCoercion`, all clamped after scal
 2. `ReadAsUnipolar`: trigger value × sensitivity, clamped to 0..1.
 3. `ReadAsBool` (the axis-to-button threshold read): the raw value scales before the threshold comparison. Half-axis scales deviation from center, full-axis and slider scale magnitude from zero, and sensitivity 1.0 leaves every comparison bit-identical. Without this site the slider had no effect on axis-to-button rows.
 
-The family readers that own their own scaling call `PerSourceSensitivity` themselves: the three touchpad axis reads (`TryReadTouchpadAxis`, `TryReadTouchpadAxisAbsolute`, `TryReadTouchpadAxisRaw`), the trackball emitter `EmitBallCounts`, and `ReadGyroLean`.
+The family readers that own their own scaling call `PerSourceSensitivity` themselves: the three touchpad axis reads (`TryReadTouchpadAxis`, `TryReadTouchpadAxisAbsolute`, `TryReadTouchpadAxisRaw`), the trackball emitter `EmitBallCounts`, `ReadGyroLean`, and `ReadShakeEnvelope`.
 
 The field clamps 0.1–5.0 in `MappingItem`. The grid no longer shows a generic slider for plain analog sources (2026-07-27): the field is surfaced only on Gyro Lean rows (label `Mapping_GyroSensitivity`) and as the pointer-stick speed on a keyboard-and-mouse slot's Sticks tab (label `Macro_Sensitivity`). `Mapping_Sensitivity` remains in the resx unused.
 
@@ -457,4 +492,4 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

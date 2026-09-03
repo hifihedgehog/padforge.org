@@ -35,7 +35,7 @@ Tap one of the twelve cards. Ten are gamepad layouts, one is the bare **Touchpad
 ### 4. Assign the controller to a slot
 
 1. The browser controller shows up on the [Devices](../features/devices.md) page named for the layout you picked: **Xbox 360 Web Controller 1**, **DualShock 4 Web Controller 1**, or **Web Touchpad 1** (each layout numbers its own devices starting at 1).
-2. Click the slot badge on the device card to assign it. Same as any physical controller.
+2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller.
 3. Done. Start playing.
 
 > **Tip:** Use your browser's "Add to Home Screen" option for fullscreen mode without the address bar.
@@ -49,7 +49,7 @@ The web controller is built into PadForge. Nothing extra to install. The phone o
 | Requirement | Details |
 |-------------|---------|
 | **Port** | TCP 8080 (default), settable on the [Dashboard](../features/dashboard.md) |
-| **Firewall** | PadForge adds a "PadForge Web Controller" inbound rule when the server starts, if one is not already there. Third-party firewalls may need a manual TCP 8080 allow rule. |
+| **Firewall** | Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. Third-party firewalls may need a manual TCP 8080 allow rule. |
 | **Max clients** | 16 browser tabs at once |
 
 **Can't reach the URL?**
@@ -86,8 +86,6 @@ Switch layouts at any time by going back to the landing page.
 ### Finishes
 
 Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.
-
-![The layout picker: ten controller layouts, the touchpad surface, and the builder](../images/web-landing.png)
 
 ### Lights, on the page
 
@@ -178,7 +176,7 @@ The web controller stays connected for instant input. Updates send the moment yo
 | **Connected** | Active connection. Input reaches PadForge. |
 | **Disconnected** | Connection lost. Tap to reconnect. |
 
-**Latency:** expect 5-15 ms more than a wired controller over home Wi-Fi. Fine for casual, puzzle, and platform games. Fast competitive play may feel a touch less responsive.
+**Latency:** a Wi-Fi hop costs more than a wired controller does. Fine for casual, puzzle, and platform games. Fast competitive play may feel a touch less responsive.
 
 **Reconnection:** each browser tab keeps a persistent pad ID. A brief disconnect (phone screen lock) does not change the device identity or slot assignment. No reassignment needed.
 
@@ -221,4 +219,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 4.3.0.*
+*Last updated for PadForge 4.4.0.*

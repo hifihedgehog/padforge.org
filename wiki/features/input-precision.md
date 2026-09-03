@@ -136,4 +136,4 @@ There is no per-axis or per-button overhead. At 1000 Hz that is one report per c
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

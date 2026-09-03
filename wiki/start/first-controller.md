@@ -18,8 +18,9 @@ Pick **Xbox**. Almost every PC game with controller support reads
 Xbox-style input natively, so it is what to pick when you do not know what
 to pick. The other types are there when you need them: PlayStation for
 ports with Circle and Cross prompts, Nintendo for games with Switch
-prompts (a virtual Switch Pro Controller), Extended for sim titles that
-read DirectInput, Keyboard + Mouse, MIDI, and VR for a SteamVR hand pair.
+prompts (a virtual Switch Pro or Switch 2 Pro Controller), Extended for
+sim titles that read DirectInput, Keyboard + Mouse, MIDI, and VR for a
+SteamVR hand pair.
 
 ![The Add Controller popup](../images/add-controller-popup.png)
 
@@ -77,4 +78,4 @@ see double input, you do not need it.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

@@ -466,7 +466,7 @@ Pads with a motion sensor add whole-sensor, tilt, and shake sources to the picke
 | **Nunchuk Accelerometer** / **Left Joy-Con Accelerometer** | The accelerometer on an attached Nunchuk or left Joy-Con instead of the main body. Shows as **Aux Motion Accelerometer** on other devices. |
 | **Motion Lean** | Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the Gyro tab's Motion Steering card, per assigned device. |
 | **Nunchuk Lean** / **Left Joy-Con Lean** | The aux sensor's tilt: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Lean** on other devices. |
-| **Motion Shake** | How far the accelerometer's magnitude leaves 1 g, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis the read is unsigned and **Invert** does nothing. On a button the Axis-to-Button Deadzone is the threshold, and its default there is 25% (about 0.5 g) rather than the usual 50%. Offered on any device with an accelerometer. |
+| **Motion Shake** | How far the accelerometer's magnitude leaves its resting level, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis the read is unsigned and **Invert** does nothing. On a button the Axis-to-Button Deadzone is the threshold, and its default there is 25% (about 0.5 g) rather than the usual 50%. Offered on any device with an accelerometer. |
 | **Nunchuk Shake** / **Left Joy-Con Shake** | The aux sensor's shake: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Shake** on other devices. |
 
 Auto-mapping adds the motion passthrough rows for pads that report a sensor. Delete a motion row and you can re-add it from the source dropdown. See [Gyro](../guides/gyro.md) for calibration and tuning, and [DSU Motion Server](../reference/dsu-motion-server.md) for broadcasting the feed to emulators.
@@ -590,4 +590,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

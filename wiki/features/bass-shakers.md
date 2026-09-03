@@ -46,16 +46,24 @@ Default frequencies: 40 Hz low motor, 80 Hz high motor, 60 Hz on both
 triggers. Every voice starts enabled at 100% gain. Master Gain starts at
 50%.
 
+---
+
 ## Frequency Sweep
 
 **Frequency Sweep** sweeps a tone from 20 to 120 Hz over eight seconds on
 the low motor routing. Note where your shaker responds strongest and set
 the voice frequencies there. **Stop** ends a running test or sweep.
 
+---
+
+## Reset controls
+
 The enable, output device, channel mode, and master gain rows each carry a
 reset button, and each voice row carries one that restores that voice to
 enabled, 100% gain, and its default frequency. The Rumble to Audio card
-header carries a **Reset All** for the whole card.
+header carries a **Reset All** that returns the output device, channel mode,
+master gain, and all four voices to their defaults. It leaves the routing
+toggle as you set it, since the enable row has its own reset.
 
 ---
 
@@ -66,5 +74,7 @@ header carries a **Reset All** for the whole card.
   motors).
 - [Controller Audio](controller-audio.md) covers the controller's own
   speaker and haptic-tone audio.
+
+---
 
 *Last updated for PadForge 4.4.0.*

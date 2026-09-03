@@ -3314,7 +3314,7 @@
 <p>You do not need a Steam account, the Steam client, or a headset plugged in to install the runtime. PadForge can fetch it for you: open <strong>Settings</strong>, find the <strong>SteamVR</strong> card, and use <strong>Install</strong>. The card describes itself as <em>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</em></p>
 <p>Two details worth knowing before you start it:</p>
 <ul>
-<li><strong>Choose where it goes.</strong> The card has an install-location field. It defaults to <code>C:\SteamVR</code> and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.</li>
+<li><strong>Choose where it goes.</strong> The card has an install-location field with a <strong>Browse</strong> button. It defaults to <code>C:\SteamVR</code> and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.</li>
 <li><strong>It is several gigabytes.</strong> The download runs for a few minutes on a fast connection and considerably longer on a slow one.</li>
 </ul>
 <p>An existing SteamVR is found automatically when it came from Steam, or when it sits at <code>C:\SteamVR</code>, and the card then reports it as installed. A hand-placed install somewhere else is not discovered, so point the install location at it or let PadForge fetch its own copy.</p>
@@ -3394,12 +3394,12 @@
 <p>When a VR game buzzes a hand, that pulse does not stop at the virtual controller. PadForge fans it back out to whatever physical device is driving the slot, riding the same lane ordinary game rumble uses. A DualSense driving the right hand rumbles when the right hand is buzzed.</p>
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
-<p>PadForge does not fabricate positional tracking. The driver parks both hands a fixed distance in front of the headset, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the <strong>controls</strong>: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.</p>
+<p>PadForge does not fabricate positional tracking. The driver anchors both hands about half a meter ahead of the headset, one to each side, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the <strong>controls</strong>: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.</p>
 <hr />
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <p>Stated plainly, because they will shape whether this is useful to you:</p>
 <ul>
-<li><strong>One VR slot, ever.</strong> The pair is the unit. A second VR slot cannot be added.</li>
+<li><strong>One VR slot, ever.</strong> The pair is the unit. A second VR slot cannot be added, and the Add Controller tile reads <em>VR (max 1)</em> once one exists.</li>
 <li><strong>No per-slot VR configuration.</strong> The driver ships one honest identity. There is no VR equivalent of the PlayStation or Extended profile pickers.</li>
 <li><strong>The runtime is a hard requirement.</strong> No SteamVR, no VR slot, and the tile stays disabled.</li>
 <li><strong>SteamVR's own Test Controller is not a reliable indicator.</strong> Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the app's own Preview tab, or the game.</li>
@@ -3414,7 +3414,7 @@
 <li><a href="../../reference/vr-controllers-internals/">Virtual VR Controllers: Internals</a> for the state struct, the bit layout and the haptic return path</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

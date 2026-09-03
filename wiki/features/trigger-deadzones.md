@@ -254,4 +254,4 @@ Stick Trim shows only on trigger outputs.
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*

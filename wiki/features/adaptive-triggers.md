@@ -11,7 +11,7 @@
 
 The Adaptive Triggers tab follows the device picked in the assigned-devices dropdown, the same way the [Lighting](lighting.md) tab does. It appears when that device is a DualSense or DualSense Edge and hides for anything else. On a slot with a DualSense plus another pad, the tab hides while the other pad is selected. Switch the dropdown back to the DualSense and the tab reappears.
 
-These settings drive the trigger when no game is writing to it. Game-driven effects (Returnal, Astro, Gran Turismo 7) pass through a separate path and override these settings while the game runs.
+These settings drive the trigger when no game is writing to it. A game that programs the triggers itself writes through a separate path, and its effects override this tab while it runs.
 
 A DualSense holds its trigger program in firmware with no timeout, so an exiting game would otherwise leave its last effect loaded. After fifteen seconds with no packet from the game, PadForge sends a release frame that sets both triggers to Off and claims nothing else. Reconnecting the pad, or restarting PadForge, also reasserts this tab: a configured effect reloads and Off ships a release.
 

@@ -3683,7 +3683,7 @@
 <hr />
 <h2 id="haptics-return-on-the-vibration-lane">Haptics return on the Vibration lane<a class="headerlink" href="#haptics-return-on-the-vibration-lane" title="Permanent link">&para;</a></h2>
 <p>The return path is an event, not a poll. <code>HMVRController.HapticReceived</code> fires with <code>(hand, amplitude, durationSeconds)</code> and <code>OnHapticReceived</code> fans it into the slot's <code>Vibration</code> entry, the same lane ordinary game rumble rides, so whatever physical device drives the slot buzzes with no VR-specific plumbing downstream.</p>
-<p>Left hand drives <code>LeftMotorSpeed</code>, right drives <code>RightMotorSpeed</code>. Amplitude clamps to <code>0..1</code> and scales to <code>ushort</code>. Duration has a floor of <code>MinPulseMs</code>, because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.</p>
+<p>Left hand drives <code>LeftMotorSpeed</code>, right drives <code>RightMotorSpeed</code>. Amplitude clamps to <code>0..1</code> and scales to <code>ushort</code>. Duration has a floor of <code>MinPulseMs</code> (50 ms), because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.</p>
 <p>Overlapping pulses on one hand keep the <strong>later</strong> end tick rather than restarting the timer, so a rapid burst holds the motor for the union of its pulses instead of chopping.</p>
 <h3 id="the-lock-is-load-bearing">The lock is load-bearing<a class="headerlink" href="#the-lock-is-load-bearing" title="Permanent link">&para;</a></h3>
 <p><code>OnHapticReceived</code> re-checks <code>_connected</code> <strong>inside</strong> <code>_hapticLock</code>, and the comment there is worth preserving:</p>
@@ -3782,7 +3782,7 @@
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.3.2.</em></p>
+<p><em>Last updated for PadForge 4.4.0.</em></p>
 
 
 

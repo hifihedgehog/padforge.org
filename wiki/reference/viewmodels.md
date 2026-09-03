@@ -9,6 +9,8 @@
 > **v4.2:** The VR output type (#49) lands as `VirtualControllerType.Vr` (6), with a `VrControllerIcon` sidebar entry, a `VrOutputSnapshot`, and a SteamVR row in both driver-status surfaces (`DashboardViewModel.IsSteamVrInstalled`, plus the install / uninstall pair on `SettingsViewModel`). The pad page grows two slot-tier tabs: Bass Shakers at index 16 and Output at index 17 (SOCD plus Keep Controller Awake). `DeviceSlotConfig` gains headphone-jack volume, the DualSense audio-output path, and persona haptics, with `MacroActionType.HeadphoneVolumeUp` / `HeadphoneVolumeDown` (52 / 53) driving the volume. Sony headset head trackers get their own device class (`HeadsetMotion`, #188). `RawHidState` replaced the old `ExtendedRawState`, so the Extended snapshot is now `RawHidOutputSnapshot`.
 >
 > **v4.3:** The mapping picker gains one shared per-slot choice list plus a search box and device-visibility filter (#322 / discussion #302), both on `PadViewModel`. Voice macros (#317) add the `"Microphone"` device class, the Voice Macros preview on `DevicesViewModel`, `DeviceRowViewModel.ShowManageVoicePhrases`, and `MacroActionType.VoiceListenWhileHeld` (54). `MacroAction` grows the pressure-scaled turbo block (#290). `StickConfigItem` grows stick trackball momentum (#291), the touchpad partial grows the shared momentum knobs, and `PadViewModel` grows the Gyro Tilt envelope (#292). The Dashboard's web-controller card gains a URL and QR (#296), its SteamVR row goes tiered (#287), and Settings gains the low-battery notification trio (#293).
+>
+> **v4.4:** Head tracking moves from `SettingsViewModel` to `DashboardViewModel`, which also gains the Razer Chroma (#373), Logitech LIGHTSYNC (#382) and Razer Sensa (#374) enable-plus-status pairs. The Dashboard's driver-status strip is gone, leaving three bare installed flags and the full cards on Settings. `DeviceRowViewModel` gains `ShowQuickCharge` (#372), and `IsInternalVirtual` grows the `handheld://`, `sensor://` and `headtrack://` schemes. `PadViewModel` gains the `ExtendedConfig` reseed on a profile switch, the Grip option list and `IsLoadingPadSetting` (#392), the grouped `MacroTypeCatalog` picker, menu macro cells and `.pficons` icon packages (#390). The Profiles page gains external control (#366) and the per-profile polling override (#365).
 
 ---
 
@@ -201,7 +203,7 @@ HIDMaestro ships inside the executable as a managed SDK, so it never had an inst
 
 ### Head Tracking (#355)
 
-A UDP listener on OpenTrack's port plus a FreeTrack 2.0 shared-memory reader, surfaced as the Head Tracker device row. Each setter mirrors into the static `PadForge.Common.Input.HeadTrackingRuntime` that the poll thread's device sweep reads, so a write lands whatever its source (global load, profile apply, the user). The enable rides profiles as a nullable leg (`ProfileData.EnableHeadTracking`). Port, FreeTrack toggle, and the two ranges are global. These properties moved here from `SettingsViewModel` on 2026-09-02.
+A UDP listener on OpenTrack's port plus a FreeTrack 2.0 shared-memory reader, surfaced as the Head Tracker device row. Each setter mirrors into the static `PadForge.Common.Input.HeadTrackingRuntime` that the poll thread's device sweep reads, so a write lands whatever its source (global load, profile apply, the user). The enable rides profiles as a nullable leg (`ProfileData.EnableHeadTracking`). Port, FreeTrack toggle, and the two ranges are global. These properties moved here from `SettingsViewModel` on 2026-09-02. MainWindow's Dashboard dirty-gate allowlist moved with them, so a head-tracking edit still marks the settings file dirty.
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
@@ -456,7 +458,7 @@ The VR slot type needs SteamVR present. PadForge can install it Steam-free throu
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsSteamVrInstalled` | `bool` | A SteamVR install of either shape is present (Steam client, or the Steam-free steamcmd one). Notifies `SteamVrStatusText` and `ShowSteamVrUninstall`. |
-| `SteamVrStatusText` | `string` | Computed, tiered (#287), deepest true state wins: `"Not Installed"`, then controllers-live / driver-connected / running read off `HMaestroVRController.GlobalDriverStatus()` and `OpenVrConsumerService.ServerConnected`, falling back to `"Installed"`. The only SteamVR status row in the app since the Dashboard's driver strip was removed. |
+| `SteamVrStatusText` | `string` | Computed, tiered (#287), deepest true state wins: `"Not Installed"`, then controllers-live / driver-connected / running read off `HMaestroVRController.GlobalDriverStatus()` and `OpenVrConsumerService.ServerConnected`, falling back to `"Installed"`. This is where the SteamVR status reads now that the Dashboard's driver strip is gone. |
 | `SteamVrInstallDir` | `string` | Where the Steam-free install will land (seeded from `DriverInstaller.SteamVrInstallDir`). Not persisted by PadForge: after a successful install the HIDMaestro path hint is the durable record. |
 | `IsSteamVrOwned` | `bool` | The present install is the Steam-free one PadForge created. A Steam-client install is never PadForge's to remove. |
 | `ShowSteamVrUninstall` | `bool` | Computed: `IsSteamVrInstalled && IsSteamVrOwned`. |
@@ -1124,9 +1126,9 @@ The slot's HID descriptor. Picking a different profile rewires the slot, so the 
 
 The `ProfileId` setter, in order, on a live re-target only (it reads `SettingsManager.GetWireStamp` before translating, so restore, apply, and import paths, which stamp the incoming wire first, no-op through it):
 
-1. Translates existing raw bindings by role when both wires are lettered, `StampNintendoWire` otherwise. Raw targets are wire-relative and the lettered families share almost no indices, so without this every binding keeps its index and silently changes meaning.
+1. Translates existing raw bindings by role on a Nintendo slot, or on any slot where both the outgoing and incoming wires are lettered (`NintendoPreviewMap.IsLettered`). Every other live re-target only re-stamps the wire (`StampNintendoWire`). Raw targets are wire-relative and the lettered families share almost no indices, so without the translation every binding keeps its index and silently changes meaning.
 2. On an Extended or Nintendo slot, fills empty auto-mappings for what the new profile added (`DeviceService.FillEmptyAutoMappingsForSlot`, then `SettingsService.RefreshMappingSetsFromLegacy`), merged into the slot's `MappingSet` before the rebuild, since the grid rebuilds from the set and the save pipeline regenerates settings from the grid. Fill is additive, so a binding the user authored or deliberately cleared survives.
-3. Reseeds `ExtendedConfig` from the profile (`SyncExtendedConfigFromProfile`): `ThumbstickCount` and `TriggerCount` from `HMProfile.StickCount` / `TriggerCount`, `PovCount` from `HasHat`, `ButtonCount` from the profile's own lettered count. That count is authoritative rather than a `Min` against the SDK-reported one: taking a `Min` let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid.
+3. Reseeds `ExtendedConfig` from the profile (`SyncExtendedConfigFromProfile`): `ThumbstickCount` and `TriggerCount` from `HMProfile.StickCount` / `TriggerCount`, `PovCount` from `HasHat`, `ButtonCount` from the profile's own lettered count. That count is authoritative rather than a `Min` against the SDK-reported one: taking a `Min` let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from `NintendoPreviewMap` instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces `ExtendedConfig.Customize` on.
 4. Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (`SyncMacroButtonStyle`), and re-gates the Bass Shakers tab.
 
 Xbox and PlayStation slots have fixed layouts, so they skip the reseed and only rebuild mappings. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs), so a profile change within the category still has to rebuild the row list.
@@ -1195,13 +1197,15 @@ Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so tw
 
 ### XInput Output State (Controller Visualizer)
 
-Combined slot output values, updated at 30 Hz by `UpdateFromEngineState()`. Bound to the 2D/3D controller visualizer.
+Combined slot output values, updated at 30 Hz by `UpdateFromEngineState()`. Bound to the 2D/3D controller visualizer. On a slot whose preview rides the raw surface, `UpdateNintendoPreviewFromRaw` owns the button and stick properties instead, and `UpdateFromEngineState` writes only the vibration bars.
 
 **Buttons (all `bool`):**
 
 `ButtonA`, `ButtonB`, `ButtonX`, `ButtonY`, `LeftShoulder`, `RightShoulder`, `ButtonBack`, `ButtonStart`, `LeftThumbButton`, `RightThumbButton`, `ButtonGuide`, `DPadUp`, `DPadDown`, `DPadLeft`, `DPadRight`
 
-Family extras on the same lane, each driving the 2D overlay and 3D mesh accent for the pads that carry the button: `ButtonShare` (Xbox Series), `ButtonMute` (DualSense mic mute), `LeftFunction` / `RightFunction` (DualSense Edge Fn), `ButtonC`, `LeftPaddle` / `RightPaddle` (Switch 2 Pro C, GL, GR, written by the raw bridge from wire indices 20, 19, 18).
+Family extras on the same lane, each driving the 2D overlay and 3D mesh accent for the pads that carry the button: `ButtonShare` (Xbox Series), `ButtonMute` (DualSense mic mute), `LeftFunction` / `RightFunction` (DualSense Edge Fn), `ButtonC` / `LeftPaddle` / `RightPaddle` (Switch 2 Pro C, GL and GR, with `UpdateFromGamepad` writing the paddle pair on PlayStation slots too, so both surfaces share it), and the Valve set `ButtonQuickAccess`, `Paddle1`-`Paddle4` (translator handedness: R4, L4, R5, L5), `LeftGrip` / `RightGrip` (the 2015 pad's rear grips), and `LeftTouchpadClick` / `RightTouchpadClick`.
+
+On a Nintendo or Valve slot these come from `UpdateNintendoPreviewFromRaw`, which walks `Models2D.NintendoPreviewMap.ButtonTable(ProfileId)` and assigns by name. It is table-driven off the same wire table the mapping grid and the click-to-record path use, so the two directions cannot disagree. The hardcoded index list it replaced was the original Pro Controller's, and it lit the wrong art for eleven of the Switch 2 Pro's twenty-one buttons. Two details fall out of the table: on the 2015 Steam Controller the right pad click is also the right stick button, so `RightThumbButton` follows `RightTouchpadClick`, and a profile that spends real buttons on the D-pad (Switch 2 Pro) skips the hat read entirely.
 
 **Axes (combined slot values):**
 
@@ -1702,7 +1706,7 @@ The per-slot Bass Shakers tab surface, MappingSet-backed like Menus and persiste
 
 Both cards live on the Output tab (index 17). `OutputTabVisible` is a slot-type gate: every type except MIDI and VR, the two with no output-behavior surface at all.
 
-Controller-button SOCD is distinct from `KbmSlotConfig`'s key SOCD (#205). `SocdCardVisible` and `KbmSocdCardVisible` are mutually exclusive by slot type. The card binds `SocdMode` over `MappingSet.SocdMode` (`AvailableSlotSocdModes`: Off / Last Wins / First Wins / Neutral), and `SocdPairItems` (`SlotSocdPairItem`) edits the opposing button pairs from `SocdButtonOptions`. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.
+Controller-button SOCD is distinct from `KbmSlotConfig`'s key SOCD (#205). `SocdCardVisible` and `KbmSocdCardVisible` are mutually exclusive by slot type. The card binds `SocdMode` over `MappingSet.SocdMode` (`AvailableSlotSocdModes`, in dropdown order: Off / Last Wins / Neutral / First Wins), and `SocdPairItems` (`SlotSocdPairItem`) edits the opposing button pairs from `SocdButtonOptions`. `SocdUsesRawIndices` says which pair grammar the slot stores: Extended and Nintendo slots write flat raw indices (`"12:13"`), Xbox and PlayStation slots write the `WriteBoolTarget` names, mirroring the engine's own raw-surface gate. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.
 
 Keep Controller Awake holds a stick off-center so a console-style pad never idles out. Like the Bass Shakers config, it lives on the slot's `MappingSet` and every setter fires `ConfigItemDirtyCallback`.
 
@@ -1710,12 +1714,15 @@ Keep Controller Awake holds a stick off-center so a console-style pad never idle
 |----------|------|---------|-------------|
 | `KeepAwakeCardVisible` | `bool` | - | Computed: Xbox and PlayStation slots only. |
 | `KeepAwakeEnabled` | `bool` | `false` | Card master switch, over `MappingSet.KeepAwakeEnabled`. |
+| `KeepAwakeMotion` | `bool` | `false` | Sweep the hold instead of parking it, over `MappingSet.KeepAwakeMotion`. For titles that gate vibration on the stick moving rather than on where it sits. |
 | `KeepAwakeAxis` | `string` | `"LX"` | Held axis, locale-stable: `LX`, `LY`, `RX`, `RY`. The default is stored as an empty string, so the getter substitutes `"LX"`. |
 | `AvailableKeepAwakeAxes` | `IReadOnlyList<GyroLabeledOption>` | - | Axis picker options, reusing the stick-axis strings the mapping grid already localizes. |
 | `KeepAwakeDeflection` | `int` | `25` | Held deflection percent, clamped 1–90. A persisted `0` means unset and reads as the engine default 25, so the card always shows the effective number. |
 
 | Command | Description |
 |---------|-------------|
+| `ResetKeepAwakeEnabledCommand` | Card switch back off. |
+| `ResetKeepAwakeMotionCommand` | Sweep back off. |
 | `ResetKeepAwakeAxisCommand` | Back to `"LX"`. |
 | `ResetKeepAwakeDeflectionCommand` | Back to 25. |
 | `ResetKeepAwakeCardCommand` | Disabled, axis and deflection back to their unset defaults, then `ReloadKeepAwake()`. |
@@ -1774,6 +1781,7 @@ Radial / touch menus for this slot. Slot-level like Macros: the collection wraps
 | `PasteSettingsCommand` | `HasSelectedDevice` | Raises `PasteSettingsRequested`. |
 | `CopyFromCommand` | `HasSelectedDevice` | Raises `CopyFromRequested`. |
 | `MapAllCommand` | `HasSelectedDevice && !IsMapAllActive && SelectedMappedDevice.IsOnline` | Starts sequential "Map All" recording. |
+| `StopMapAllCommand` | `IsMapAllActive` | Raises `MapAllCancelRequested`, ending a sweep in progress. The Map All button swaps its own caption and tooltip through `MapAllButtonText` / `MapAllButtonTooltip` while a sweep runs. |
 
 ### Map All System
 
@@ -1804,7 +1812,7 @@ Radial / touch menus for this slot. Slot-level like Macros: the collection wraps
 | `UpdateFromEngineState(Gamepad, Vibration, Vibration selectedDeviceVibration = null)` | Updates combined slot output at 30 Hz. The optional third argument drives the selected device's own motor bars. |
 | `UpdateDeviceState(Gamepad)` | Updates per-device stick/trigger values for tab previews. |
 | `UpdateFromTouchpadState(in TouchpadState)` | Mirrors the combined touchpad state onto the `TouchpadFinger*` / `TouchpadClickPressed` preview properties. |
-| `UpdateFromRawHidState(RawHidState)` | Publishes the combined raw-HID output for the Extended schematic. Skips the notification when axes, hardware axes, buttons, and POVs all match the last snapshot, so an idle slot does not re-arm a repaint at 30 Hz. On a Nintendo slot it also projects the raw state onto the Gamepad-shaped preview properties. |
+| `UpdateFromRawHidState(RawHidState)` | Publishes the combined raw-HID output for the Extended schematic. Skips the notification when axes, hardware axes, buttons, and POVs all match the last snapshot, so an idle slot does not re-arm a repaint at 30 Hz. On a slot whose preview rides the raw surface (`PreviewRidesRawSurface`: any Nintendo slot, and an Extended slot on a Valve lettered profile) it also projects the raw state onto the Gamepad-shaped preview properties, and `UpdateFromEngineState` skips writing them so the two paths cannot fight. |
 | `UpdateFromMidiRawState(MidiRawState)` | Updates MIDI preview snapshot. |
 | `OnMapAllItemCompleted()` | Advances Map All to next item after 500 ms delay. |
 | `StopMapAll()` | Stops Map All, clears state, raises `MapAllCancelRequested`. |
@@ -2117,7 +2125,7 @@ A trigger combination of inputs that produces a sequence of output actions. Eval
 |----------|------|---------|-------------|
 | `TriggerDeviceGuid` | `Guid` | `Guid.Empty` | Trigger source device. `Empty` = legacy Xbox bitmask. |
 | `TriggerRawButtons` | `int[]` | `[]` | Raw button indices. All must be pressed. |
-| `UsesRawTrigger` | `bool` | - | Computed: any `TriggerInputs` entry has `RawButton >= 0`, or the legacy pair `TriggerDeviceGuid != Empty && TriggerRawButtons.Length > 0`. The legacy half alone reads false for every modern entry-list macro. |
+| `UsesRawTrigger` | `bool` | - | Computed: any `TriggerInputs` entry has `RawButton >= 0`, or the legacy pair `TriggerDeviceGuid != Empty && TriggerRawButtons.Length > 0`. The legacy half alone reads false for every entry-list macro. |
 
 ### Trigger Condition (POV Hat)
 
@@ -2830,7 +2838,7 @@ Per-slot Extended-controller configuration. Drives stick/trigger/POV/button coun
 | `ComputeAxisLayout(out int[], out int[], out int[])` | Computes interleaved axis indices per group. |
 | `ResetToDefaults()` | Resets every field to its fresh-install default in place. Never replaces the instance (MainWindow's autosave hook binds to this object's `PropertyChanged`). Triggers drop to `0` first so the stick default isn't clamped away by the shared-axis budget. |
 
-The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `d57a725`). v3 picks layouts from the 225+ HIDMaestro profile catalog instead, with `Customize` as the single boolean that gates user overrides on top of the catalog profile.
+The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `d57a725`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead (225 profiles across 32 vendors), with `Customize` as the single boolean that gates user overrides on top of the catalog profile.
 
 ### ExtendedSlotConfigData
 
@@ -2925,6 +2933,13 @@ Per-(slot, device) output configuration. Renamed from `PlayStationSlotConfig` in
 | `AudioPassthroughEnabled` | `bool` | `false` | Mirror the system audio to this pad's built-in speaker (per device). |
 | `AudioMirrorSourceId` | `string` | `""` | MMDevice ID of the render endpoint to capture. Empty = the system default. |
 
+### Synthetic touchpad pressure (#239)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `TouchpadSyntheticPressure` | `bool` | `false` | Synthesize a pressure reading on pads whose hardware reports none (DualShock 4, DualSense, Steam Controller 2015). No touch reads 0, a resting touch reads `TouchpadSyntheticTouchPercent`, a pad click reads 100%. Valve pads with true analog pressure keep their raw readings while this is off. |
+| `TouchpadSyntheticTouchPercent` | `int` | `50` | The touch stop of that curve, percent of full pressure a resting unclicked touch reads. Clamped 0-100. |
+
 ### Haptic mirror engage gate (#185)
 
 Applies to haptic-tone sinks only (Joy-Con, Switch Pro, Steam family). Sony/Wii speaker mirrors stay ungated.
@@ -2953,6 +2968,12 @@ Filters the single (pitch, amplitude) pair the haptic-tone sinks reduce everythi
 | `AudioPersonaHapticsGain` | `int` | `100` | Input gain percent (25–300) applied before the tone reducer, so a quiet authored track can still reach the actuators. |
 
 Reset commands: `ResetPersonaHapticsCommand`, `ResetPersonaHapticsGainCommand` (both on `PadViewModel`, alongside the Audio tab's other row resets).
+
+### Steam Controller 2026 PCM haptics (#381)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `AudioTritonLowPassHz` | `int` | `250` | Low-pass cutoff in Hz for the Steam Controller 2026 PCM haptic stream, clamped 60-1000. Past roughly 250 Hz the pad's actuators start behaving like small speakers. 250 is one requester's hardware-measured threshold on their own unit, not a device specification, which is why it stays tunable. |
 
 ### Audio DSP chain (#347)
 
@@ -3018,9 +3039,9 @@ Transient runtime state set by `MacroActionType.LightbarColor`. Not persisted (`
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `GuideLedMode` | `GuideLedMode` | `DeviceDefault` | DeviceDefault never writes, Fixed holds `GuideLedBrightness`, Battery tracks battery percent. Xbox One+ pads take the GIP LED command over `\\.\XboxGIP` (USB only). The 2015 Steam Controller takes SDL's home-LED hint. Notifies `IsGuideLedFixed`. |
+| `GuideLedMode` | `GuideLedMode` | `DeviceDefault` | DeviceDefault never writes, Fixed holds `GuideLedBrightness`, Battery re-maps battery percent to brightness on a slow cadence with a floor of 10 so a low battery stays visible. Xbox One and later pads take the GIP LED command over `\\.\XboxGIP` (USB only, `XboxGipGuideLedWriter`). The 2015 Steam Controller takes SDL's process-global home-LED hint (`SteamHomeLedSetter`). Switch Pro Controllers, right Joy-Cons, the combined pair, and the charging grip take per-device `SDL_SetJoystickLED` (`SwitchHomeLedSetter`, #226). Notifies `IsGuideLedFixed`. |
 | `IsGuideLedFixed` | `bool` | - | Computed: mode is `Fixed`. Gates the brightness slider. |
-| `GuideLedBrightness` | `int` | `100` | Fixed-mode brightness percent. Clamped 0–100. Writers scale it onto each device's range. |
+| `GuideLedBrightness` | `int` | `100` | Fixed-mode brightness percent. Clamped 0–100. Writers scale it onto each device's own range: 0-47 for GIP per MS-GIPUSB, 0..1 for the SDL hint, and a 4-bit subcommand 0x38 intensity for the Switch home LED. |
 
 ### Lightbar mode and animation
 
@@ -3081,7 +3102,7 @@ Each control has a matching `Reset…Command` (mirroring the Sticks / Triggers p
 
 ### DeviceSlotConfigData
 
-Serializable DTO. All scalar properties are `[XmlAttribute]`. The two palettes are `[XmlArray]`. Key defaults: `LeftEndPosition`/`RightEndPosition` = 255, `LeftStrength`/`RightStrength` = 200, `LeftFrequency`/`RightFrequency` = 10, `LightbarBlue` = 0xFF, `AudioMirrorEngageMode` = "Always", `AudioMirrorEngageReleaseMs` = 500, `AudioToneFilterMode` = "Off", `AudioToneLimitHz` = 800, `AudioPersonaHapticsEnabled` = false, `AudioPersonaHapticsGain` = 100, `HeadphoneVolume` = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), `Ds5AudioBufferLength` = 48, `AudioOutputPath` = Automatic, `AudioCrossfeedLevel` = 0, `AudioCrossfeedCutHz` = 700, `AudioCrossfeedFeedDb` = 4.5, `AudioEqEnabled` = false, `AudioEqBands` = "", `AudioEqPreampDb` = 0, `AudioLimiterEnabled` = true, `AudioLimiterCeiling` = 98, `GuideLedMode` = DeviceDefault, `GuideLedBrightness` = 100, `LightbarMode` = Off (the DTO default, migrated to PlayerNumber via `LightingRev`), `PlayerLedMode` = Off (likewise). It also carries a `DeviceGuid` (per-device key, empty = a legacy slot-level entry the loader fans out) and `LightingRev` (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). `LightbarPaletteEntryData` is the palette element (`R`, `G`, `B` byte attributes).
+Serializable DTO. All scalar properties are `[XmlAttribute]`. The two palettes are `[XmlArray]`. Key defaults: `LeftEndPosition`/`RightEndPosition` = 255, `LeftStrength`/`RightStrength` = 200, `LeftFrequency`/`RightFrequency` = 10, `LightbarBlue` = 0xFF, `AudioMirrorEngageMode` = "Always", `AudioMirrorEngageReleaseMs` = 500, `AudioToneFilterMode` = "Off", `AudioToneLimitHz` = 800, `TouchpadSyntheticPressure` = false, `TouchpadSyntheticTouchPercent` = 50, `AudioPersonaHapticsEnabled` = false, `AudioPersonaHapticsGain` = 100, `AudioTritonLowPassHz` = 250, `HeadphoneVolume` = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), `Ds5AudioBufferLength` = 48, `AudioOutputPath` = Automatic, `AudioCrossfeedLevel` = 0, `AudioCrossfeedCutHz` = 700, `AudioCrossfeedFeedDb` = 4.5, `AudioEqEnabled` = false, `AudioEqBands` = "", `AudioEqPreampDb` = 0, `AudioLimiterEnabled` = true, `AudioLimiterCeiling` = 98, `GuideLedMode` = DeviceDefault, `GuideLedBrightness` = 100, `LightbarMode` = Off (the DTO default, migrated to PlayerNumber via `LightingRev`), `PlayerLedMode` = Off (likewise). It also carries a `DeviceGuid` (per-device key, empty = a legacy slot-level entry the loader fans out) and `LightingRev` (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). `LightbarPaletteEntryData` is the palette element (`R`, `G`, `B` byte attributes).
 
 ---
 
@@ -3182,4 +3203,4 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 
 ---
 
-*Last updated for PadForge 4.3.2.*
+*Last updated for PadForge 4.4.0.*
