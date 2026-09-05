@@ -971,6 +971,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#browser-gamepad-a-controller-paired-to-the-phone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Browser Gamepad: a controller paired to the phone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Browser Gamepad: a controller paired to the phone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fullscreen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fullscreen
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#phone-motion" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3520,6 +3548,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#browser-gamepad-a-controller-paired-to-the-phone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Browser Gamepad: a controller paired to the phone
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Browser Gamepad: a controller paired to the phone">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fullscreen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fullscreen
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#phone-motion" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3795,6 +3851,20 @@
 <p>Saved pads live in PadForge's own settings file beside the executable, machine-wide rather than inside a profile, and each one gets its own card on the landing page next to the stock layouts. A saved pad shows up on the <a href="../../features/devices/">Devices</a> page under its own name, and its shape follows its widgets: a pad built from two buttons and a stick offers exactly that in the mapping picker.</p>
 <p><img alt="The custom controller builder" src="../../images/web-custom.png" /></p>
 <hr />
+<h2 id="browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad: a controller paired to the phone<a class="headerlink" href="#browser-gamepad-a-controller-paired-to-the-phone" title="Permanent link">&para;</a></h2>
+<p>Pick <strong>Browser Gamepad</strong> on the layouts page and the phone's browser reads a controller that is paired to the phone, or built into the handheld the page is open on, and forwards it to PadForge as its own device, named <strong>Browser Gamepad 1</strong>, then 2 for a second pad. Nothing is installed on the phone and nothing is paired to the PC.</p>
+<p>Press a button on the controller first. Browsers hide a connected controller from every page until you press something on it, so the page shows a prompt until then. After that press the pad appears with its name, its layout, and its button and axis counts, and PadForge sees it on the Devices page. Assign it to a slot like any other controller.</p>
+<p>What comes through depends on how the browser recognized the pad.</p>
+<ul>
+<li><strong>Standard layout</strong>: the browser mapped the pad to the standard gamepad layout. Both sticks, both analog triggers, the D-pad, the face buttons, the bumpers, the stick clicks, Back, Start and Guide land on their PadForge slots. Buttons beyond the standard seventeen land on the paddle and Misc slots in order, up to ten of them, and you map them like any other button.</li>
+<li><strong>Raw layout</strong>: the browser did not recognize the pad. Then button <em>i</em> is PadForge button <em>i</em> (slot 16 is skipped, so 21 buttons at most) and axis <em>i</em> is axis <em>i</em> for the first six, nothing is guessed, and there is no D-pad hat. Each axis is forwarded as the browser reports it. PadForge notes where each axis sat when the pad connected and returns it there when the page goes quiet, so a trigger the pad reports as an axis releases to its own rest and not to a made-up center. The rest is sampled whenever forwarding connects or reconnects, so release every control while the connection is being established, or a held control is recorded as its rest. Controls within those limits are reachable, and you map them by hand.</li>
+</ul>
+<p>Rumble goes to the pad itself when the browser can drive it (Android Chrome can), otherwise to the phone's vibrator where the browser offers one. iPhone Safari offers neither: it exposes no gamepad haptics and no vibration API, so a pad forwarded from an iPhone gets no rumble. Each pad's row on the page says where its rumble goes.</p>
+<p>Keep the phone awake. On the https address the page asks the browser to hold the screen awake while a pad is forwarded, and the browser may still refuse. On the plain http address that request is not available, so set the phone's screen timeout long enough. PadForge checks in with the page once a second. If the phone sleeps or loses Wi-Fi mid-press, PadForge releases everything on that pad a few seconds after the page stops answering, so a button cannot stay held on the PC. Until the page answers again its input is ignored, and when it does PadForge asks it to resend everything it holds.</p>
+<p>The same page works from a gaming handheld's own browser. An Android handheld or a Windows handheld running PadForge's page can hand its built-in controls to a PC on the same network. It is expected to forward the controls the handheld's browser exposes, within the limits above. Handheld hardware has not been tested here.</p>
+<p>The browser samples the pad on its animation clock, typically about 60 times a second, and PadForge's own polling target for a plugged-in pad is far shorter. For most games that difference does not matter. For anything where timing is the point, it will. The web controller allows sixteen sessions at once, and each forwarded pad is one session. When a forwarded pad's last slot assignment is removed while a game is rumbling it, PadForge stops that rumble. That automatic stop covers web controllers only, and a physical Xbox pad or wheel unassigned mid-rumble may keep its output until the game changes it.</p>
+<h3 id="fullscreen">Fullscreen<a class="headerlink" href="#fullscreen" title="Permanent link">&para;</a></h3>
+<p>Where the browser allows a page to go fullscreen, which Android Chrome does, each page has a fullscreen button in its header or its top-left corner. Tap it to hide the browser's own bars, tap again or swipe down to leave. iPhone Safari does not offer element fullscreen, so the button does not appear there.</p>
 <h2 id="phone-motion">Phone motion<a class="headerlink" href="#phone-motion" title="Permanent link">&para;</a></h2>
 <p>The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.</p>
 <p>Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over <strong>HTTPS</strong> whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works.</p>

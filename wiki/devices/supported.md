@@ -497,8 +497,10 @@ as a generic joystick.
 | **Trackballs** | Motion with momentum | [Input Precision](../features/input-precision.md) |
 | **Microphones** | Spoken phrases as macro triggers | [Voice Macros](../features/voice-macros.md) |
 | **Phones and tablets** | A browser gamepad over Wi-Fi, no app install | [Web Controller](../guides/web-controller.md) |
+| **A controller paired to a phone** | Forwarded through the phone's browser: a Bluetooth pad, a telescopic pad clamped around the phone, anything the phone's browser sees as a gamepad. Sticks, triggers, D-pad and up to ten extra buttons on a standard-layout pad, up to 21 buttons and six axes forwarded as reported otherwise, rumble back to the pad where the browser can drive it | [Browser Gamepad](../guides/web-controller.md#browser-gamepad-a-controller-paired-to-the-phone) |
+| **Android and Windows gaming handhelds, through their browser** | The handheld's built-in controls forwarded to the PC from the handheld's own browser, the same way. Expected to forward the controls the handheld's browser exposes, within the same limits. Handheld hardware has not been tested here | [Browser Gamepad](../guides/web-controller.md#browser-gamepad-a-controller-paired-to-the-phone) |
 | **Another PC's controllers** | Any device above, shared over the network or the internet | [Remote Link](../guides/remote-link.md) |
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*
