@@ -1075,6 +1075,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Trust and reconnecting">
+      <ul class="md-nav__list">
+
+          <li class="md-nav__item">
+  <a href="#assign-devices-from-the-other-pc-v4-dev" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Assign devices from the other PC (v4-dev)
+
+    </span>
+  </a>
+
+</li>
+
+          <li class="md-nav__item">
+  <a href="#automatic-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Automatic reconnect
+
+    </span>
+  </a>
+
+</li>
+
+      </ul>
+    </nav>
+
 </li>
       
         <li class="md-nav__item">
@@ -3401,6 +3429,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Trust and reconnecting">
+      <ul class="md-nav__list">
+
+          <li class="md-nav__item">
+  <a href="#assign-devices-from-the-other-pc-v4-dev" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Assign devices from the other PC (v4-dev)
+
+    </span>
+  </a>
+
+</li>
+
+          <li class="md-nav__item">
+  <a href="#automatic-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Automatic reconnect
+
+    </span>
+  </a>
+
+</li>
+
+      </ul>
+    </nav>
+
 </li>
       
         <li class="md-nav__item">
@@ -3549,6 +3605,18 @@
 <p>Once paired, each PC's shareable devices appear in the other's <a href="../../features/devices/">Devices</a> list. Assign a shared device to a <a href="../../features/controller-slots/">slot</a> and map it like any local controller.</p>
 <hr />
 <h2 id="trust-and-reconnecting">Trust and reconnecting<a class="headerlink" href="#trust-and-reconnecting" title="Permanent link">&para;</a></h2>
+<h3 id="assign-devices-from-the-other-pc-v4-dev">Assign devices from the other PC (v4-dev)<a class="headerlink" href="#assign-devices-from-the-other-pc-v4-dev" title="Permanent link">&para;</a></h3>
+<p>Available on <code>v4-dev</code> for the next release. Both PCs need a build with remote assignment support.</p>
+<p>Web controllers already travel over Remote Link like other input devices. Remote assignment lets you choose their destination slots from the PC sharing them. For a two-PC streaming setup:</p>
+<ol>
+<li>On the gaming PC, open <strong>Remote Link &gt; Paired PCs</strong>, find the streaming PC, and check <strong>Allow Remote Assignment Changes</strong>. The same option is available during pairing. It starts off, including for existing pairings.</li>
+<li>On the streaming PC, find the gaming PC under <strong>Paired PCs</strong> and click <strong>Assign Shared Devices</strong>.</li>
+<li>Select a shared device, then check the virtual controllers it should feed on the gaming PC. Clear a checkbox to remove that assignment. One device can feed several controllers.</li>
+</ol>
+<p>The dialog shows the destination PC and active profile. Changes use that PC's normal mapping and save process without opening its window or changing the foreground application. Other devices and assignments stay in place.</p>
+<p>The grant covers the peer's own shared devices and this PC's existing virtual controllers. Create destination controllers locally before assigning them. This control does not edit profiles or mappings. Gamepad-only restrictions still apply. Turning the permission off blocks further changes and preserves assignments already made.</p>
+<p>If the destination's settings change while the dialog is open, review the refreshed assignments before clicking again. If a request times out, click <strong>Refresh</strong> to check the actual state. A missing reply does not establish whether the change was applied. Reopen the dialog after reconnecting a PC.</p>
+<h3 id="automatic-reconnect">Automatic reconnect<a class="headerlink" href="#automatic-reconnect" title="Permanent link">&para;</a></h3>
 <p>Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they find each other, on the local network or across the internet, with no code to re-enter. Auto-reconnect is on by default and can be turned off in the Remote Link settings.</p>
 <p>Trust is tied to each PC's cryptographic identity, not its name. Renaming a PC does not break a pairing. The display name is only there so you can tell your paired PCs apart.</p>
 <p>To end a pairing, find the PC under <strong>Paired PCs</strong> and click <strong>Revoke</strong>. <strong>Revoke All</strong> drops every trusted PC at once. A revoked PC cannot reconnect until it pairs again.</p>

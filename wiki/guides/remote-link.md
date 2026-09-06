@@ -69,6 +69,24 @@ Once paired, each PC's shareable devices appear in the other's [Devices](../feat
 
 ## Trust and reconnecting
 
+### Assign devices from the other PC (v4-dev)
+
+Available on `v4-dev` for the next release. Both PCs need a build with remote assignment support.
+
+Web controllers already travel over Remote Link like other input devices. Remote assignment lets you choose their destination slots from the PC sharing them. For a two-PC streaming setup:
+
+1. On the gaming PC, open **Remote Link > Paired PCs**, find the streaming PC, and check **Allow Remote Assignment Changes**. The same option is available during pairing. It starts off, including for existing pairings.
+2. On the streaming PC, find the gaming PC under **Paired PCs** and click **Assign Shared Devices**.
+3. Select a shared device, then check the virtual controllers it should feed on the gaming PC. Clear a checkbox to remove that assignment. One device can feed several controllers.
+
+The dialog shows the destination PC and active profile. Changes use that PC's normal mapping and save process without opening its window or changing the foreground application. Other devices and assignments stay in place.
+
+The grant covers the peer's own shared devices and this PC's existing virtual controllers. Create destination controllers locally before assigning them. This control does not edit profiles or mappings. Gamepad-only restrictions still apply. Turning the permission off blocks further changes and preserves assignments already made.
+
+If the destination's settings change while the dialog is open, review the refreshed assignments before clicking again. If a request times out, click **Refresh** to check the actual state. A missing reply does not establish whether the change was applied. Reopen the dialog after reconnecting a PC.
+
+### Automatic reconnect
+
 Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they find each other, on the local network or across the internet, with no code to re-enter. Auto-reconnect is on by default and can be turned off in the Remote Link settings.
 
 Trust is tied to each PC's cryptographic identity, not its name. Renaming a PC does not break a pairing. The display name is only there so you can tell your paired PCs apart.

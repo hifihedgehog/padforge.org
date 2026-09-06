@@ -38,6 +38,8 @@ Tap one of the twelve cards. Ten are gamepad layouts, one is the bare **Touchpad
 2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller.
 3. Done. Start playing.
 
+With [Remote Link](remote-link.md#4-share-and-assign), the web controller also appears on paired PCs. Assign it to a slot on the PC running the game. The `v4-dev` branch adds [remote assignment controls](remote-link.md#assign-devices-from-the-other-pc-v4-dev), so a streaming PC can change those assignments after the gaming PC grants permission.
+
 > **Tip:** Use your browser's "Add to Home Screen" option for fullscreen mode without the address bar.
 
 ---
