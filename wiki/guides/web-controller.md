@@ -26,9 +26,9 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 
 ### 3. Pick a layout
 
-Tap one of the twelve cards. Ten are gamepad layouts, one is the bare **Touchpad** surface, and **Build Your Own** opens the builder.
+PadForge v4.4.0 has twelve built-in cards: ten gamepad layouts, **Touchpad**, and **Build Your Own**. The `v4-dev` branch adds **Browser Gamepad** as a thirteenth card. Each saved custom layout adds its own card.
 
-- Every gamepad layout uses the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
+- The touchscreen gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
 - Layouts with a touchpad add a drag surface on the controller art, with its own click pill beside it.
 - Touchpad is a multi-touch surface that drives the DS4 touchpad on whichever PlayStation slot it is assigned to.
 
@@ -66,7 +66,7 @@ Stopping PadForge stops the server.
 
 ## Controller layouts
 
-Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full. Keep the finger down and drag it downward to feather the pull, and slide back up for full again.
+The touchscreen gamepad layouts draw the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full. Keep the finger down and drag it downward to feather the pull, and slide back up for full again.
 
 | Layout | What it adds |
 |---|---|
@@ -80,6 +80,7 @@ Every layout draws the same 2D controller art the desktop app shows. Tap a trigg
 | **Switch 2 Pro** | C button and back paddles |
 | **Steam Deck** | Dual trackpads and four grips |
 | **Steam Controller** | Dual trackpads and paddles |
+| **Browser Gamepad** (`v4-dev`) | Forwards a controller detected by the browser |
 | **Touchpad** | Multi-touch surface only |
 | **Build Your Own** | Drag widgets onto a blank pad |
 
@@ -147,6 +148,8 @@ Saved pads live in PadForge's own settings file beside the executable, machine-w
 ---
 
 ## Browser Gamepad: a controller paired to the phone
+
+Available in current `v4-dev` builds.
 
 Pick **Browser Gamepad** on the layouts page and the phone's browser reads a controller that is paired to the phone, or built into the handheld the page is open on, and forwards it to PadForge as its own device, named **Browser Gamepad 1**, then 2 for a second pad. Nothing is installed on the phone and nothing is paired to the PC.
 
@@ -244,4 +247,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.4.0 and v4-dev.*

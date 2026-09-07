@@ -3689,9 +3689,9 @@
 <li>The landing page loads with the layout choices.</li>
 </ol>
 <h3 id="3-pick-a-layout">3. Pick a layout<a class="headerlink" href="#3-pick-a-layout" title="Permanent link">&para;</a></h3>
-<p>Tap one of the twelve cards. Ten are gamepad layouts, one is the bare <strong>Touchpad</strong> surface, and <strong>Build Your Own</strong> opens the builder.</p>
+<p>PadForge v4.4.0 has twelve built-in cards: ten gamepad layouts, <strong>Touchpad</strong>, and <strong>Build Your Own</strong>. The <code>v4-dev</code> branch adds <strong>Browser Gamepad</strong> as a thirteenth card. Each saved custom layout adds its own card.</p>
 <ul>
-<li>Every gamepad layout uses the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.</li>
+<li>The touchscreen gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.</li>
 <li>Layouts with a touchpad add a drag surface on the controller art, with its own click pill beside it.</li>
 <li>Touchpad is a multi-touch surface that drives the DS4 touchpad on whichever PlayStation slot it is assigned to.</li>
 </ul>
@@ -3739,7 +3739,7 @@
 <p>Stopping PadForge stops the server.</p>
 <hr />
 <h2 id="controller-layouts">Controller layouts<a class="headerlink" href="#controller-layouts" title="Permanent link">&para;</a></h2>
-<p>Every layout draws the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full. Keep the finger down and drag it downward to feather the pull, and slide back up for full again.</p>
+<p>The touchscreen gamepad layouts draw the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps straight to full. Keep the finger down and drag it downward to feather the pull, and slide back up for full again.</p>
 <table>
 <thead>
 <tr>
@@ -3787,6 +3787,10 @@
 <tr>
 <td><strong>Steam Controller</strong></td>
 <td>Dual trackpads and paddles</td>
+</tr>
+<tr>
+<td><strong>Browser Gamepad</strong> (<code>v4-dev</code>)</td>
+<td>Forwards a controller detected by the browser</td>
 </tr>
 <tr>
 <td><strong>Touchpad</strong></td>
@@ -3853,6 +3857,7 @@
 <p><img alt="The custom controller builder" src="../../images/web-custom.png" /></p>
 <hr />
 <h2 id="browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad: a controller paired to the phone<a class="headerlink" href="#browser-gamepad-a-controller-paired-to-the-phone" title="Permanent link">&para;</a></h2>
+<p>Available in current <code>v4-dev</code> builds.</p>
 <p>Pick <strong>Browser Gamepad</strong> on the layouts page and the phone's browser reads a controller that is paired to the phone, or built into the handheld the page is open on, and forwards it to PadForge as its own device, named <strong>Browser Gamepad 1</strong>, then 2 for a second pad. Nothing is installed on the phone and nothing is paired to the PC.</p>
 <p>Press a button on the controller first. Browsers hide a connected controller from every page until you press something on it, so the page shows a prompt until then. After that press the pad appears with its name, its layout, and its button and axis counts, and PadForge sees it on the Devices page. Assign it to a slot like any other controller.</p>
 <p>What comes through depends on how the browser recognized the pad.</p>
@@ -3975,7 +3980,7 @@
 <li><a href="../../features/visualization/">3D and 2D Visualization</a>: the same controller art powers both the web controller and the desktop 2D view.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.4.0 and v4-dev.</em></p>
 
 
 
