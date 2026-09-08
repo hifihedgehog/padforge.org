@@ -3468,7 +3468,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Services/SettingsService.cs</code></td>
-<td><code>AppSettingsData.HeadTracking*</code>, <code>ProfileData.EnableHeadTracking</code></td>
+<td><code>AppSettingsData.HeadTracking*</code>, <code>ProfileData.EnableHeadTracking</code>, <code>EnableHeadTrackingFreeTrack</code>, and format markers</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Services/WebControllerServer.cs</code></td>
@@ -3527,7 +3527,7 @@
 <p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page draws neither the Input Hiding nor the Input Mode section. <code>CreateDefaultPadSetting</code> auto-maps only gamepad capability types, so the row starts unmapped by design.</p>
 <hr />
 <h2 id="lifecycle-phase-1i">Lifecycle: Phase 1i<a class="headerlink" href="#lifecycle-phase-1i" title="Permanent link">&para;</a></h2>
-<p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the row when the toggle went off, the user removed it from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while enabled.</p>
+<p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when both inputs are off, the user removed it from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while either input is enabled. Stored assignments and mappings survive retirement.</p>
 <p><code>FromCurrentSettings</code> reads <code>Version</code> first and the settings after it. The setters bump <code>Version</code> last, so the other order could capture the new version with the old port and the reconfigured check would never fire again for that change.</p>
 <p><code>HeadTrackingRuntime</code> is the static mirror:</p>
 <table>
@@ -3544,17 +3544,17 @@
 <td><code>Enabled</code></td>
 <td>false</td>
 <td></td>
-<td>Retire or open</td>
+<td>UDP input changed</td>
 </tr>
 <tr>
 <td><code>UdpPort</code></td>
 <td>4242</td>
 <td>1 to 65535</td>
-<td>Yes</td>
+<td>Only while UDP is enabled</td>
 </tr>
 <tr>
 <td><code>FreeTrackEnabled</code></td>
-<td>true</td>
+<td>false</td>
 <td></td>
 <td>Yes</td>
 </tr>
@@ -3572,7 +3572,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>Open</code> never blocks. It binds the socket, starts the receive thread, queues the firewall rule on the thread pool, and opens the FreeTrack mapping. The row opens even when both sources fail, so the status line can say why nothing arrives. <code>Dispose</code> runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks <code>ReceiveFrom</code>), a 50 ms courtesy join, then the FreeTrack reader.</p>
+<p><code>Open</code> opens only enabled inputs. UDP binds its socket, starts its receive thread, and queues the firewall rule. FreeTrack opens its mapping independently. The row opens even when both sources fail, so the status line can say why nothing arrives. <code>Dispose</code> runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks <code>ReceiveFrom</code>), a 50 ms courtesy join, then the FreeTrack reader.</p>
 <hr />
 <h2 id="source-one-opentrack-udp">Source one: OpenTrack UDP<a class="headerlink" href="#source-one-opentrack-udp" title="Permanent link">&para;</a></h2>
 <p>OpenTrack's "UDP over network" output (<code>proto-udp/ftnoir_protocol_ftn.cpp</code>) sends <code>sizeof(double[6])</code> per pose.</p>
@@ -3774,11 +3774,12 @@
 <p>The same text lands in two places, each rebuilt only when <code>StatusVersion</code> moves. The Devices row's line comes from <code>UpdateDevicesRawState</code>, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Dashboard's <code>HeadTrackingStatus</code> comes from <code>UpdateHeadTrackingStatus</code> on the dashboard tick and reads <code>Stopped</code> (<code>Common_Stopped</code>) while the feature is off, the engine is down, or the row has not opened.</p>
 <hr />
 <h2 id="the-firewall-rule">The firewall rule<a class="headerlink" href="#the-firewall-rule" title="Permanent link">&para;</a></h2>
-<p><code>WebControllerServer.EnsureInboundFirewallRule("PadForge Head Tracking", "UDP", port)</code> runs <code>netsh advfirewall firewall delete rule name=...</code> then <code>add rule ... dir=in action=allow protocol=UDP localport=&lt;port&gt;</code>. Delete-then-add needs no parsing of netsh's localized output, is idempotent, and clears the pile-up a port change used to leave behind. It is queued on the thread pool from <code>Open</code>, since netsh can block for seconds, and it is best effort.</p>
+<p><code>WebControllerServer.EnsureInboundFirewallRule("PadForge Head Tracking", "UDP", port)</code> runs <code>netsh advfirewall firewall delete rule name=...</code> then <code>add rule ... dir=in action=allow protocol=UDP localport=&lt;port&gt;</code>. Delete-then-add needs no parsing of netsh's localized output, is idempotent, and clears the pile-up a port change used to leave behind. It is queued on the thread pool from <code>Open</code> only when UDP is enabled, since netsh can block for seconds, and it is best effort.</p>
 <hr />
 <h2 id="settings-and-the-profile-leg">Settings and the profile leg<a class="headerlink" href="#settings-and-the-profile-leg" title="Permanent link">&para;</a></h2>
-<p>Global, in <code>AppSettingsData</code>: <code>HeadTrackingEnabled</code> (false), <code>HeadTrackingUdpPort</code> (4242), <code>HeadTrackingFreeTrack</code> (true), <code>HeadTrackingRotationRange</code> (90), <code>HeadTrackingTranslationRange</code> (30). A stored zero for the port or a range reads as the default on load.</p>
-<p><code>ProfileData.EnableHeadTracking</code> is <code>bool?</code>, the same nullable authored contract as the Chroma, LIGHTSYNC, and Sensa mirrors. A profile with an opinion sets <code>Dashboard.HeadTrackingEnabled</code> on apply. A profile saved before the field exists reads as no opinion and leaves the global value standing. A user change of the toggle while a profile is active records into that profile, and the save path refreshes an existing opinion from the Dashboard. Only the enable rides profiles. The port, the FreeTrack toggle, and the two ranges stay global.</p>
+<p>Global settings retain <code>HeadTrackingEnabled</code> for UDP and <code>HeadTrackingFreeTrack</code> for FreeTrack, with a <code>HeadTrackingIndependentInputs</code> format marker. Old files are loaded as UDP = old master and FreeTrack = old master AND old FreeTrack preference. The original DTO preference is retained long enough to migrate all stored profile opinions. New saves write independent values. Fresh settings have both inputs off.</p>
+<p>Profiles retain nullable <code>EnableHeadTracking</code> for UDP and add nullable <code>EnableHeadTrackingFreeTrack</code>, plus their own format marker. Legacy explicit master opinions migrate once using the original FreeTrack preference. Null opinions remain null. An old standalone profile imported later uses the current FreeTrack preference. New user edits author only the changed input. Applying a null opinion leaves the current value alone. Save and export preserve both opinions and the marker. The port and ranges remain global.</p>
+<p>Real UDP and uniquely named shared-memory fixtures verify all four input combinations, each failure beside a working input, resource release, and the status text. Assignment tests verify that adding a tracker leaves authored Any Device mappings intact.</p>
 <hr />
 <h2 id="diagnostics-lines">Diagnostics lines<a class="headerlink" href="#diagnostics-lines" title="Permanent link">&para;</a></h2>
 <table>

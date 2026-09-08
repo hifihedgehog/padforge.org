@@ -26,7 +26,7 @@ Ten sections, stacked top to bottom: the engine and its slots, then a **Services
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the [Settings](settings.md) page under Driver Management.
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The four newer toggles (Head Tracking, the two Lightbar Mirrors, and Razer Sensa HD Haptics) are stored as an opinion: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.
 
 ---
 
@@ -147,14 +147,14 @@ Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 share
 
 | Control | Description |
 |---------|-------------|
-| **Enable Head Tracking Input** | Adds the Head Tracker row and opens the listener. |
-| **Also Read FreeTrack 2.0 Shared Memory** | Reads the FreeTrack mapping too, so a game that already reads FreeTrack keeps working. |
-| **UDP Port** | The port OpenTrack's *UDP over network* output sends to. Default `4242`. |
+| **Enable UDP Tracking Input** | Enables the UDP listener independently of FreeTrack. |
+| **Enable FreeTrack 2.0 Shared Memory Input** | Enables shared-memory input independently of UDP. |
+| **UDP Port** | The port OpenTrack's *UDP over network* output sends to. Default `4242`. Disabled while UDP input is off. |
 | **Rotation Range (Degrees)** | Head rotation that moves yaw, pitch, and roll to full deflection. Default 90. |
 | **Translation Range (cm)** | Head travel that moves X, Y, and Z to full deflection. Default 30. |
-| **Status** | *Stopped* while the toggle is off or the engine is stopped. Otherwise *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, or *UDP port `<port>` is in use by another program.* |
+| **Status** | *Stopped* while both inputs are off or the engine is stopped. Otherwise *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, or *UDP port `<port>` is in use by another program.* |
 
-Only **Enable Head Tracking Input** rides the profile. The port, the FreeTrack toggle, and the two ranges are global.
+Each input toggle has its own authored profile opinion. The port and the two ranges remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.
 
 See [Head Tracking](head-tracking.md) for the OpenTrack setup.
 

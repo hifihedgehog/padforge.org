@@ -8,20 +8,20 @@
 
 ## Turning it on
 
-Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and turn on **Enable Head Tracking Input**.
+Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and enable **UDP Tracking Input**, **FreeTrack 2.0 Shared Memory Input**, or both.
 
 <!-- SCREENSHOT: dashboard-head-tracking -->
 ![Dashboard, Head Tracking section with its toggles, port, ranges, and status line](../images/dashboard-head-tracking.png)
 
 | Control | Default | Range | Notes |
 | --- | --- | --- | --- |
-| **Enable Head Tracking Input** | Off | | Adds the Head Tracker row and opens the listener. Rides profiles: a profile saved with an opinion sets it on apply, and a profile with none leaves the global setting alone. |
-| **Also Read FreeTrack 2.0 Shared Memory** | On | | Reads the `FT_SharedMem` block as well. Global. |
-| **UDP Port** | 4242 | 1 to 65535 | The port OpenTrack's "UDP over network" output sends to. Global. |
+| **Enable UDP Tracking Input** | Off | | Opens the UDP listener. An authored profile opinion applies to this input only. |
+| **Enable FreeTrack 2.0 Shared Memory Input** | Off | | Reads `FT_SharedMem` independently of UDP. It has its own authored profile opinion. |
+| **UDP Port** | 4242 | 1 to 65535 | The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off. |
 | **Rotation Range (Degrees)** | 90 | 1 to 180 | Head rotation that moves yaw, pitch, and roll to full deflection. Global, applied live. |
 | **Translation Range (cm)** | 30 | 1 to 500 | Head travel that moves X, Y, and Z to full deflection. Global, applied live. |
 
-Each numeric field has a reset button. Changing the port or the FreeTrack toggle reopens the row. The status line under the controls reads **Stopped** while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.
+Each numeric field has a reset button. Changing an input toggle reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line under the controls reads **Stopped** while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.
 
 A **Head Tracker (OpenTrack)** row appears on the [Devices](devices.md) page, typed Head Tracker, with six axes:
 
@@ -41,7 +41,9 @@ Every axis rests at center. Yaw right and X right read high, like a stick pushed
 
 The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map covers gamepads only, so each axis is bound by hand.
 
-With the toggle off, nothing runs: no device row, no socket, no shared memory, no thread.
+With both inputs off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.
+
+Older settings keep their effective enabled state on upgrade. A profile with no input opinion leaves that input unchanged.
 
 ---
 
@@ -51,9 +53,9 @@ Two outputs work, and both can be on at once.
 
 **UDP over network.** In OpenTrack's Output list choose *UDP over network*, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under **UDP Port** in PadForge (default 4242). Click Start. The status line changes from *Waiting for a tracker on UDP port 4242.* to *Receiving over UDP from 127.0.0.1:port.*, where the port is the one OpenTrack sent from.
 
-**freetrack 2.0 Enhanced.** If a game already reads FreeTrack from OpenTrack, keep that output and leave **Also Read FreeTrack 2.0 Shared Memory** on in PadForge. PadForge reads the same `FT_SharedMem` block the game does, so both see the pose. The status line says *Receiving from FreeTrack shared memory.* PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.
+**freetrack 2.0 Enhanced.** If a game already reads FreeTrack from OpenTrack, keep that output and enable **FreeTrack 2.0 Shared Memory Input** in PadForge. You can leave UDP input off. PadForge reads the same `FT_SharedMem` block the game does, so both see the pose. The status line says *Receiving from FreeTrack shared memory.* PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.
 
-Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named **PadForge Head Tracking** for the port when the row opens.
+Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named **PadForge Head Tracking** for the port when UDP input opens.
 
 When OpenTrack stops, or the camera loses the face, the axes return to center after one second without a pose, so a stick is never left pinned. The row stays online, so mappings can be made before the tracker is started.
 
@@ -63,7 +65,7 @@ When OpenTrack stops, or the camera loses the face, the axes return to center af
 
 On the Pad page, pick **Head Yaw** as the source of the right stick's X axis and set a deadzone on that mapping for the angle you want ignored. Deadzone, curve, and inversion are the ordinary per-mapping controls, the same ones a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.
 
-The six axes bind anywhere an axis does.
+The six axes bind anywhere an axis does. Assigning the tracker preserves existing Any Device rows. It does not append named gamepad defaults to those rows. If an earlier version already added an unwanted extra source, remove that extra once while retaining the Any Device source.
 
 ---
 

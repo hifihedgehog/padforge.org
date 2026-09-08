@@ -3661,7 +3661,7 @@
 </tbody>
 </table>
 <p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the <a href="../settings/">Settings</a> page under Driver Management.</p>
-<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The four newer toggles (Head Tracking, the two Lightbar Mirrors, and Razer Sensa HD Haptics) are stored as an opinion: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.</p>
+<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -3905,16 +3905,16 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Enable Head Tracking Input</strong></td>
-<td>Adds the Head Tracker row and opens the listener.</td>
+<td><strong>Enable UDP Tracking Input</strong></td>
+<td>Enables the UDP listener independently of FreeTrack.</td>
 </tr>
 <tr>
-<td><strong>Also Read FreeTrack 2.0 Shared Memory</strong></td>
-<td>Reads the FreeTrack mapping too, so a game that already reads FreeTrack keeps working.</td>
+<td><strong>Enable FreeTrack 2.0 Shared Memory Input</strong></td>
+<td>Enables shared-memory input independently of UDP.</td>
 </tr>
 <tr>
 <td><strong>UDP Port</strong></td>
-<td>The port OpenTrack's <em>UDP over network</em> output sends to. Default <code>4242</code>.</td>
+<td>The port OpenTrack's <em>UDP over network</em> output sends to. Default <code>4242</code>. Disabled while UDP input is off.</td>
 </tr>
 <tr>
 <td><strong>Rotation Range (Degrees)</strong></td>
@@ -3926,11 +3926,11 @@
 </tr>
 <tr>
 <td><strong>Status</strong></td>
-<td><em>Stopped</em> while the toggle is off or the engine is stopped. Otherwise <em>Waiting for a tracker on UDP port <code>&lt;port&gt;</code>.</em>, <em>Receiving over UDP from <code>&lt;address&gt;</code>.</em>, <em>Receiving from FreeTrack shared memory.</em>, or <em>UDP port <code>&lt;port&gt;</code> is in use by another program.</em></td>
+<td><em>Stopped</em> while both inputs are off or the engine is stopped. Otherwise <em>Waiting for a tracker on UDP port <code>&lt;port&gt;</code>.</em>, <em>Receiving over UDP from <code>&lt;address&gt;</code>.</em>, <em>Receiving from FreeTrack shared memory.</em>, or <em>UDP port <code>&lt;port&gt;</code> is in use by another program.</em></td>
 </tr>
 </tbody>
 </table>
-<p>Only <strong>Enable Head Tracking Input</strong> rides the profile. The port, the FreeTrack toggle, and the two ranges are global.</p>
+<p>Each input toggle has its own authored profile opinion. The port and the two ranges remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.</p>
 <p>See <a href="../head-tracking/">Head Tracking</a> for the OpenTrack setup.</p>
 <hr />
 <h2 id="motion-server">Motion Server<a class="headerlink" href="#motion-server" title="Permanent link">&para;</a></h2>

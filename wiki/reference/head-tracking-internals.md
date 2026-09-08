@@ -11,7 +11,7 @@ The user-facing page is [Head Tracking (OpenTrack)](../features/head-tracking.md
 | `PadForge.App/Common/Input/HeadTrackingRuntime.cs` | Static mirror of the Dashboard controls the poll thread reads |
 | `PadForge.App/ViewModels/DashboardViewModel.cs` | The five properties, their reset commands, and `HeadTrackingStatus` |
 | `PadForge.App/Services/InputService.cs` | `BuildHeadTrackerStatus`, `UpdateHeadTrackingStatus`, the Devices row status |
-| `PadForge.App/Services/SettingsService.cs` | `AppSettingsData.HeadTracking*`, `ProfileData.EnableHeadTracking` |
+| `PadForge.App/Services/SettingsService.cs` | `AppSettingsData.HeadTracking*`, `ProfileData.EnableHeadTracking`, `EnableHeadTrackingFreeTrack`, and format markers |
 | `PadForge.App/Services/WebControllerServer.cs` | `EnsureInboundFirewallRule`, shared with the web controller |
 | `PadForge.App/Common/Input/InputManager.Step1.UpdateDevices.cs` | Phase 1i: `UpdateHeadTrackerDevice`, `RetireHeadTrackerRow`, `ShutdownHeadTrackerInputs` |
 
@@ -36,7 +36,7 @@ The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and 
 
 ## Lifecycle: Phase 1i
 
-`UpdateHeadTrackerDevice` runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the row when the toggle went off, the user removed it from the Devices page, or `ConfigVersion` no longer equals `HeadTrackingRuntime.Version`, and opens a fresh one from `FromCurrentSettings` while enabled.
+`UpdateHeadTrackerDevice` runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when both inputs are off, the user removed it from the Devices page, or `ConfigVersion` no longer equals `HeadTrackingRuntime.Version`, and opens a fresh one from `FromCurrentSettings` while either input is enabled. Stored assignments and mappings survive retirement.
 
 `FromCurrentSettings` reads `Version` first and the settings after it. The setters bump `Version` last, so the other order could capture the new version with the old port and the reconfigured check would never fire again for that change.
 
@@ -44,13 +44,13 @@ The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and 
 
 | Member | Default | Clamp | Reopens the row |
 |---|---|---|---|
-| `Enabled` | false | | Retire or open |
-| `UdpPort` | 4242 | 1 to 65535 | Yes |
-| `FreeTrackEnabled` | true | | Yes |
+| `Enabled` | false | | UDP input changed |
+| `UdpPort` | 4242 | 1 to 65535 | Only while UDP is enabled |
+| `FreeTrackEnabled` | false | | Yes |
 | `RotationRangeDeg` | 90 | 1 to 180 | No, read live every poll |
 | `TranslationRangeCm` | 30 | 1 to 500 | No, read live every poll |
 
-`Open` never blocks. It binds the socket, starts the receive thread, queues the firewall rule on the thread pool, and opens the FreeTrack mapping. The row opens even when both sources fail, so the status line can say why nothing arrives. `Dispose` runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks `ReceiveFrom`), a 50 ms courtesy join, then the FreeTrack reader.
+`Open` opens only enabled inputs. UDP binds its socket, starts its receive thread, and queues the firewall rule. FreeTrack opens its mapping independently. The row opens even when both sources fail, so the status line can say why nothing arrives. `Dispose` runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks `ReceiveFrom`), a 50 ms courtesy join, then the FreeTrack reader.
 
 ---
 
@@ -152,15 +152,17 @@ The same text lands in two places, each rebuilt only when `StatusVersion` moves.
 
 ## The firewall rule
 
-`WebControllerServer.EnsureInboundFirewallRule("PadForge Head Tracking", "UDP", port)` runs `netsh advfirewall firewall delete rule name=...` then `add rule ... dir=in action=allow protocol=UDP localport=<port>`. Delete-then-add needs no parsing of netsh's localized output, is idempotent, and clears the pile-up a port change used to leave behind. It is queued on the thread pool from `Open`, since netsh can block for seconds, and it is best effort.
+`WebControllerServer.EnsureInboundFirewallRule("PadForge Head Tracking", "UDP", port)` runs `netsh advfirewall firewall delete rule name=...` then `add rule ... dir=in action=allow protocol=UDP localport=<port>`. Delete-then-add needs no parsing of netsh's localized output, is idempotent, and clears the pile-up a port change used to leave behind. It is queued on the thread pool from `Open` only when UDP is enabled, since netsh can block for seconds, and it is best effort.
 
 ---
 
 ## Settings and the profile leg
 
-Global, in `AppSettingsData`: `HeadTrackingEnabled` (false), `HeadTrackingUdpPort` (4242), `HeadTrackingFreeTrack` (true), `HeadTrackingRotationRange` (90), `HeadTrackingTranslationRange` (30). A stored zero for the port or a range reads as the default on load.
+Global settings retain `HeadTrackingEnabled` for UDP and `HeadTrackingFreeTrack` for FreeTrack, with a `HeadTrackingIndependentInputs` format marker. Old files are loaded as UDP = old master and FreeTrack = old master AND old FreeTrack preference. The original DTO preference is retained long enough to migrate all stored profile opinions. New saves write independent values. Fresh settings have both inputs off.
 
-`ProfileData.EnableHeadTracking` is `bool?`, the same nullable authored contract as the Chroma, LIGHTSYNC, and Sensa mirrors. A profile with an opinion sets `Dashboard.HeadTrackingEnabled` on apply. A profile saved before the field exists reads as no opinion and leaves the global value standing. A user change of the toggle while a profile is active records into that profile, and the save path refreshes an existing opinion from the Dashboard. Only the enable rides profiles. The port, the FreeTrack toggle, and the two ranges stay global.
+Profiles retain nullable `EnableHeadTracking` for UDP and add nullable `EnableHeadTrackingFreeTrack`, plus their own format marker. Legacy explicit master opinions migrate once using the original FreeTrack preference. Null opinions remain null. An old standalone profile imported later uses the current FreeTrack preference. New user edits author only the changed input. Applying a null opinion leaves the current value alone. Save and export preserve both opinions and the marker. The port and ranges remain global.
+
+Real UDP and uniquely named shared-memory fixtures verify all four input combinations, each failure beside a working input, resource release, and the status text. Assignment tests verify that adding a tracker leaves authored Any Device mappings intact.
 
 ---
 

@@ -3264,7 +3264,7 @@
 <p><a href="https://github.com/opentrack/opentrack">OpenTrack</a> turns a webcam, an IR clip, a phone, or an eye tracker into a head pose: three rotations and three translations. On Windows its outputs are FreeTrack, TrackIR emulation, mouse movement, UDP, and a few sim-specific bridges. None of them is a gamepad. PadForge reads two of those outputs and turns the pose into a device row with six axes, so head yaw can drive a virtual controller's right stick while both thumbs stay on the face buttons.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open the <a href="../dashboard/">Dashboard</a>, find the <strong>Head Tracking</strong> section, and turn on <strong>Enable Head Tracking Input</strong>.</p>
+<p>Open the <a href="../dashboard/">Dashboard</a>, find the <strong>Head Tracking</strong> section, and enable <strong>UDP Tracking Input</strong>, <strong>FreeTrack 2.0 Shared Memory Input</strong>, or both.</p>
 <!-- SCREENSHOT: dashboard-head-tracking -->
 <p><img alt="Dashboard, Head Tracking section with its toggles, port, ranges, and status line" src="../../images/dashboard-head-tracking.png" /></p>
 <table>
@@ -3278,22 +3278,22 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Enable Head Tracking Input</strong></td>
+<td><strong>Enable UDP Tracking Input</strong></td>
 <td>Off</td>
 <td></td>
-<td>Adds the Head Tracker row and opens the listener. Rides profiles: a profile saved with an opinion sets it on apply, and a profile with none leaves the global setting alone.</td>
+<td>Opens the UDP listener. An authored profile opinion applies to this input only.</td>
 </tr>
 <tr>
-<td><strong>Also Read FreeTrack 2.0 Shared Memory</strong></td>
-<td>On</td>
+<td><strong>Enable FreeTrack 2.0 Shared Memory Input</strong></td>
+<td>Off</td>
 <td></td>
-<td>Reads the <code>FT_SharedMem</code> block as well. Global.</td>
+<td>Reads <code>FT_SharedMem</code> independently of UDP. It has its own authored profile opinion.</td>
 </tr>
 <tr>
 <td><strong>UDP Port</strong></td>
 <td>4242</td>
 <td>1 to 65535</td>
-<td>The port OpenTrack's "UDP over network" output sends to. Global.</td>
+<td>The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off.</td>
 </tr>
 <tr>
 <td><strong>Rotation Range (Degrees)</strong></td>
@@ -3309,7 +3309,7 @@
 </tr>
 </tbody>
 </table>
-<p>Each numeric field has a reset button. Changing the port or the FreeTrack toggle reopens the row. The status line under the controls reads <strong>Stopped</strong> while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.</p>
+<p>Each numeric field has a reset button. Changing an input toggle reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line under the controls reads <strong>Stopped</strong> while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.</p>
 <p>A <strong>Head Tracker (OpenTrack)</strong> row appears on the <a href="../devices/">Devices</a> page, typed Head Tracker, with six axes:</p>
 <table>
 <thead>
@@ -3363,18 +3363,19 @@
 <!-- SCREENSHOT: devices-head-tracking -->
 <p><img alt="Devices page, Head Tracker row selected, with the status line and six axes" src="../../images/devices-head-tracking.png" /></p>
 <p>The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map covers gamepads only, so each axis is bound by hand.</p>
-<p>With the toggle off, nothing runs: no device row, no socket, no shared memory, no thread.</p>
+<p>With both inputs off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.</p>
+<p>Older settings keep their effective enabled state on upgrade. A profile with no input opinion leaves that input unchanged.</p>
 <hr />
 <h2 id="setting-up-opentrack">Setting up OpenTrack<a class="headerlink" href="#setting-up-opentrack" title="Permanent link">&para;</a></h2>
 <p>Two outputs work, and both can be on at once.</p>
 <p><strong>UDP over network.</strong> In OpenTrack's Output list choose <em>UDP over network</em>, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under <strong>UDP Port</strong> in PadForge (default 4242). Click Start. The status line changes from <em>Waiting for a tracker on UDP port 4242.</em> to <em>Receiving over UDP from 127.0.0.1:port.</em>, where the port is the one OpenTrack sent from.</p>
-<p><strong>freetrack 2.0 Enhanced.</strong> If a game already reads FreeTrack from OpenTrack, keep that output and leave <strong>Also Read FreeTrack 2.0 Shared Memory</strong> on in PadForge. PadForge reads the same <code>FT_SharedMem</code> block the game does, so both see the pose. The status line says <em>Receiving from FreeTrack shared memory.</em> PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.</p>
-<p>Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named <strong>PadForge Head Tracking</strong> for the port when the row opens.</p>
+<p><strong>freetrack 2.0 Enhanced.</strong> If a game already reads FreeTrack from OpenTrack, keep that output and enable <strong>FreeTrack 2.0 Shared Memory Input</strong> in PadForge. You can leave UDP input off. PadForge reads the same <code>FT_SharedMem</code> block the game does, so both see the pose. The status line says <em>Receiving from FreeTrack shared memory.</em> PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.</p>
+<p>Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named <strong>PadForge Head Tracking</strong> for the port when UDP input opens.</p>
 <p>When OpenTrack stops, or the camera loses the face, the axes return to center after one second without a pose, so a stick is never left pinned. The row stays online, so mappings can be made before the tracker is started.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
 <p>On the Pad page, pick <strong>Head Yaw</strong> as the source of the right stick's X axis and set a deadzone on that mapping for the angle you want ignored. Deadzone, curve, and inversion are the ordinary per-mapping controls, the same ones a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.</p>
-<p>The six axes bind anywhere an axis does.</p>
+<p>The six axes bind anywhere an axis does. Assigning the tracker preserves existing Any Device rows. It does not append named gamepad defaults to those rows. If an earlier version already added an unwanted extra source, remove that extra once while retaining the Any Device source.</p>
 <hr />
 <h2 id="what-it-does-not-do">What it does not do<a class="headerlink" href="#what-it-does-not-do" title="Permanent link">&para;</a></h2>
 <p>TrackIR's NPClient interface is a DLL the game loads by game ID, not a stream anything can subscribe to. Games that only speak TrackIR keep using OpenTrack's own output for that.</p>
