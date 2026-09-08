@@ -49,6 +49,12 @@ A Wii Nunchuk or a left Joy-Con exposes its own lean source in the input dropdow
 
 Motion Lean needs a controller with a motion sensor. Without one it produces no output.
 
+## Continuous steering rumble
+
+For a cue throughout the turn, open **Force Feedback > Steering Angle Rumble**. It follows the selected virtual stick axis, so an ordinary wheel-axis mapping works too. Center adds no rumble, and each direction increases its own rumble channel up to the configured strength at full travel. The option is off by default and saves per assigned device.
+
+See [Steering Angle Rumble](../features/force-feedback.md#steering-angle-rumble) for the axis selector, strength, center deadzone, output support, and interaction with game rumble.
+
 ## At-lock feedback
 
 When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The **Steering Lock Feedback** card sits near the bottom of the **Sticks** tab, below the per-stick cards (on a keyboard and mouse slot the **Flick Stick** card follows it). Every channel is per-slot and off by default, and rows the selected device can't play are hidden.

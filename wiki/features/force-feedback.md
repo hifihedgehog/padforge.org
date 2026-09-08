@@ -58,6 +58,27 @@ When one physical controller is assigned to several virtual slots, PadForge take
 
 ---
 
+## Steering Angle Rumble
+
+The **Steering Angle Rumble** card adds continuous feedback as the selected virtual stick axis moves away from center. It works with a non-FFB wheel mapped to a virtual Xbox or PlayStation controller. Select the wheel in the assigned-devices dropdown, enable the option, and select the virtual axis used for steering.
+
+| Setting | Default | Range |
+| --- | --- | --- |
+| Enable Steering Angle Rumble | Off | On / Off |
+| Virtual Axis | Left Stick X | Left Stick X/Y or Right Stick X/Y |
+| Strength | 50% | 0-100% |
+| Center Deadzone | 2% | 0-25% |
+
+Negative axis movement drives the left, low-frequency rumble channel. Positive movement drives the right, high-frequency channel. Intensity rises linearly from the edge of the center deadzone to the chosen strength at full travel. Center adds no rumble. Games and other enabled effects can still vibrate there.
+
+The cue follows the final mapped output, including curves, inversion, layers, macros, and the combination of assigned sources. Each physical device keeps its own settings. Overall Gain, motor strength, Swap Left and Right Motors, and trigger routing apply afterward. Game rumble and the steering cue combine by taking the stronger value on each motor.
+
+This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers and devices reporting native constant-force support keep their existing feedback. Raw HID, keyboard/mouse, MIDI, and VR outputs do not supply these four virtual stick axes. Physical motor placement depends on the device.
+
+The [steering-lock pulse](../guides/steering.md#at-lock-feedback) remains a separate option for a brief cue at full lock. Ordinary wheel-axis mappings can use Steering Angle Rumble without enabling Winding, Angle to Axis, or Motion Lean.
+
+---
+
 ## Test Rumble
 
 Click **Test Rumble** to send a short vibration pulse. Confirms the device supports rumble, PadForge is forwarding correctly, and your current settings produce the effect you wanted.

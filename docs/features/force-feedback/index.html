@@ -1440,6 +1440,17 @@
   </a>
   
 </li>
+
+        <li class="md-nav__item">
+  <a href="#steering-angle-rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Steering Angle Rumble
+
+    </span>
+  </a>
+
+</li>
       
         <li class="md-nav__item">
   <a href="#test-rumble" class="md-nav__link">
@@ -3497,6 +3508,17 @@
   </a>
   
 </li>
+
+        <li class="md-nav__item">
+  <a href="#steering-angle-rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+
+        Steering Angle Rumble
+
+    </span>
+  </a>
+
+</li>
       
         <li class="md-nav__item">
   <a href="#test-rumble" class="md-nav__link">
@@ -3870,6 +3892,44 @@
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="steering-angle-rumble">Steering Angle Rumble<a class="headerlink" href="#steering-angle-rumble" title="Permanent link">&para;</a></h2>
+<p>The <strong>Steering Angle Rumble</strong> card adds continuous feedback as the selected virtual stick axis moves away from center. It works with a non-FFB wheel mapped to a virtual Xbox or PlayStation controller. Select the wheel in the assigned-devices dropdown, enable the option, and select the virtual axis used for steering.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enable Steering Angle Rumble</td>
+<td>Off</td>
+<td>On / Off</td>
+</tr>
+<tr>
+<td>Virtual Axis</td>
+<td>Left Stick X</td>
+<td>Left Stick X/Y or Right Stick X/Y</td>
+</tr>
+<tr>
+<td>Strength</td>
+<td>50%</td>
+<td>0-100%</td>
+</tr>
+<tr>
+<td>Center Deadzone</td>
+<td>2%</td>
+<td>0-25%</td>
+</tr>
+</tbody>
+</table>
+<p>Negative axis movement drives the left, low-frequency rumble channel. Positive movement drives the right, high-frequency channel. Intensity rises linearly from the edge of the center deadzone to the chosen strength at full travel. Center adds no rumble. Games and other enabled effects can still vibrate there.</p>
+<p>The cue follows the final mapped output, including curves, inversion, layers, macros, and the combination of assigned sources. Each physical device keeps its own settings. Overall Gain, motor strength, Swap Left and Right Motors, and trigger routing apply afterward. Game rumble and the steering cue combine by taking the stronger value on each motor.</p>
+<p>This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers and devices reporting native constant-force support keep their existing feedback. Raw HID, keyboard/mouse, MIDI, and VR outputs do not supply these four virtual stick axes. Physical motor placement depends on the device.</p>
+<p>The <a href="../../guides/steering/#at-lock-feedback">steering-lock pulse</a> remains a separate option for a brief cue at full lock. Ordinary wheel-axis mappings can use Steering Angle Rumble without enabling Winding, Angle to Axis, or Motion Lean.</p>
 <hr />
 <h2 id="test-rumble">Test Rumble<a class="headerlink" href="#test-rumble" title="Permanent link">&para;</a></h2>
 <p>Click <strong>Test Rumble</strong> to send a short vibration pulse. Confirms the device supports rumble, PadForge is forwarding correctly, and your current settings produce the effect you wanted.</p>
