@@ -4074,6 +4074,7 @@
 <hr />
 <h3 id="gyro-tilt">Gyro Tilt<a class="headerlink" href="#gyro-tilt" title="Permanent link">&para;</a></h3>
 <p>Gyro Tilt is an envelope for the <strong>Gyro Tilt X</strong> and <strong>Gyro Tilt Y</strong> inputs: hold a tilt and the stick holds its deflection, the way Steam's Joystick Deflection mode behaves. <strong>Full Tilt Range</strong> sets the angle that reaches full deflection (1° to 90°, default 25°), <strong>Tilt Deadzone</strong> ignores tilt around the resting grip and subtracts before scaling (default 0), and the <strong>Gyro Recenter</strong> macro action re-zeroes the resting grip. Yaw, turning the controller flat, is invisible to gravity and does not move these inputs.</p>
+<p>On controllers with a gyroscope and accelerometer, Gyro Tilt updates its orientation estimate on each input poll. Gyro rotation follows the movement, and accelerometer correction keeps the gravity reference stable. It uses the device's existing gyro calibration. Motion Lean and Gyro Lean keep their smoothed response. Devices with only an accelerometer keep the existing gravity estimate.</p>
 <p><img alt="The Gyro Tilt card" src="../../images/pad-gyro-tilt.png" /></p>
 <h2 id="calibration">Calibration<a class="headerlink" href="#calibration" title="Permanent link">&para;</a></h2>
 <p>Zero the at-rest reading so gyro mappings don't drift the mouse or stick while you hold still.</p>
@@ -4385,13 +4386,13 @@
 </table>
 <p>Steam's separate "Joystick Camera" is a stick-group mode in its schema, not a gyro mode. The configurator shows both families in the same place, which makes them easy to conflate.</p>
 <p><strong>Rate</strong> is the default and what the plain gyro axes give you: instantaneous rotation speed maps to stick deflection, so you stop tilting and the stick recenters while the in-game camera stays where you turned it. This is deliberate and will not change. An integrated tilt-to-stick path shipped once and was removed, because holding the controller tilted kept the camera turning forever, the opposite of how gyro aim is supposed to feel. JoyShockMapper, Steam Input, and Splatoon all treat gyro-to-stick as rate.</p>
-<p><strong>Tilt</strong> holds. Keep the controller tilted and the stick keeps its deflection for as long as you hold the tilt. Three inputs read it, all from the accelerometer's gravity direction:</p>
+<p><strong>Tilt</strong> holds. Keep the controller tilted and the stick keeps its deflection for as long as you hold the tilt. Three inputs map that angle:</p>
 <ul>
 <li><strong>Gyro Tilt X / Gyro Tilt Y</strong> reach full deflection at the range set on this tab's <strong>Gyro Tilt</strong> card (default 25°), with a tilt deadzone that subtracts before scaling. This is the closest match to Steam's Deflection mode.</li>
 <li><strong>Gyro Lean X / Gyro Lean Y</strong> are the fixed-envelope originals: 90° of tilt is full scale, and the per-source Sensitivity dial on the mapping row scales the read.</li>
 <li><strong>Motion Lean</strong> is the steering-oriented tilt input with its own inner/outer deadzones and grip orientation on the <a href="#motion-steering">Motion Steering</a> card.</li>
 </ul>
-<p>All three capture your resting grip as the neutral when the controller connects, and the <strong>Gyro Recenter</strong> <a href="../macros/">macro action</a> re-zeroes it mid-session. A change of <a href="#grip">Held As</a> re-zeroes it as well. Because gravity is the reference, these inputs cannot drift and need no recalibration.</p>
+<p>All three capture your resting grip as the neutral when the controller connects, and the <strong>Gyro Recenter</strong> <a href="../macros/">macro action</a> re-zeroes it mid-session. A change of <a href="#grip">Held As</a> re-zeroes it as well. Gyro Tilt also uses the saved gyro bias. See <a href="#calibration">Calibration</a> for the existing Calibrate Gyro command.</p>
 <p><strong>Held yaw is not possible.</strong> Gravity points down: it moves when you pitch or roll the controller, and it does not move at all when you turn the controller flat around the vertical axis. So the tilt inputs hold pitch and roll, never yaw. Holding a yaw rotation would need the gyro's rate integrated into an angle, which drifts without something to correct it, and no shipped mode does that today. To turn a camera with gyro, use rate mode.</p>
 <hr />
 <h2 id="left-joy-con-aux-gyro">Left Joy-Con aux gyro<a class="headerlink" href="#left-joy-con-aux-gyro" title="Permanent link">&para;</a></h2>
