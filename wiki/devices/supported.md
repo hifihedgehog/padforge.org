@@ -486,6 +486,7 @@ as a generic joystick.
 | **Wii Balance Board** | Total weight and lean on both axes | [Wii Controllers](wii-controllers.md) |
 | **Steam Controller (2015), Steam Controller 2026, Steam Deck** | Trackpads, gyro, haptics, and the 2026 pad's PCM haptic stream. The Steam Deck and the Steam Controller 2026 are also virtual-controller personas, each with its own 2D and 3D body | [Touchpad](../features/touchpad.md), [Virtual Controllers](../features/virtual-controllers.md) |
 | **Xbox One, Elite, Series** | Impulse triggers, Guide LED brightness, paddles | [Impulse Triggers](../features/impulse-triggers.md) |
+| **Buffalo BSGC101, BSGC201 (Padix PSX/USB converter)** | Rumble on the PS1 or PS2 pad behind the converter, without Buffalo's driver package | [Force Feedback](../features/force-feedback.md#playstation-pads-through-a-padix-converter) |
 | **3Dconnexion SpaceMouse** | All six axes of the puck, as ordinary mapping sources | [SpaceMouse](spacemouse.md) |
 | **Handheld gaming PCs and gaming laptops** | The rear paddles, menu keys and wheels the firmware hides from games, learned by pressing them, plus the machine's own gyroscope and accelerometer | [Handheld PC Buttons](../features/handheld-buttons.md) |
 | **VR controllers** | Any OpenVR controller through SteamVR, as a slot with hand roles | [VR Controllers](../features/vr-controllers.md) |

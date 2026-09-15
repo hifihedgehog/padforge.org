@@ -163,6 +163,10 @@ The Extended virtual controller advertises DirectInput force feedback by default
 
 When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble and lightbar together in one update to the pad, whatever the slot's output type. On the DualSense family that same update carries the adaptive triggers, the player row, and the mic LED. A DualShock 4 has none of those. Game rumble and your effect settings arrive in sync, so nothing fights over the device.
 
+### PlayStation pads through a Padix converter
+
+PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Feedback tab appears for the converter whether or not that package is installed.
+
 ---
 
 ## Constant Force
