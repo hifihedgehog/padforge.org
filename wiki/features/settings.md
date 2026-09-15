@@ -48,7 +48,7 @@ The 2D-versus-3D controller view is set on the [Pad](controller-slots.md) page, 
 
 ## Window
 
-Controls how PadForge acts as a Windows app. Four switches here. Combine them with **Auto-start engine** (in the Input Engine card above) for a fully background install.
+Controls how PadForge acts as a Windows app. Five switches here. Combine them with **Auto-start engine** (in the Input Engine card above) for a fully background install.
 
 ### Minimize to System Tray
 
@@ -56,7 +56,11 @@ Sends PadForge to the notification area instead of the taskbar when you minimize
 
 ### Close to System Tray
 
-Keeps PadForge running when you click the window's close button or press Alt+F4. The window hides in the notification area and the engine keeps going. While this is on, the tray icon stays visible even with the window open, so **Exit** in its menu is always available without closing the window first. Double-click the tray icon or pick **Show** to bring the window back.
+Keeps PadForge running when you click the window's close button or press Alt+F4. The window hides in the notification area and the engine keeps going. Double-click the tray icon or pick **Show** to bring the window back, and pick **Exit** in its menu to quit.
+
+### Always Show in System Tray
+
+Keeps the tray icon visible while the window is open, so **Show** and **Exit** in its menu are always one click away. Off by default. Pair it with **Close to System Tray** to quit from the tray without closing the window first.
 
 ### Start Minimized
 
