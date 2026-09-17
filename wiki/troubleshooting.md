@@ -73,9 +73,9 @@ The game is reading both the physical controller and PadForge's virtual controll
 2. Enable **"Hide Devices from Games"** on the [Settings](features/settings.md) page.
 3. On the [Devices](features/devices.md) page, enable **"Hide from Games (HidHide)"** per device.
 4. PadForge always whitelists itself, so it keeps seeing hidden devices. Add other apps (emulators, tools) that need a hidden device under **Whitelisted Applications** on [Settings](features/settings.md).
-5. Restart the game after changing HidHide settings.
+5. Restart the game after changing HidHide settings. HidHide blocks only programs that open the controller after the hide lands. A program that already had it open keeps it until the controller reconnects.
 6. Check the game's controller settings. Disable the physical controller and keep the virtual one.
-7. If using Steam, disable Steam Input for the game or close Steam entirely.
+7. If using Steam, start PadForge before Steam, or unplug and reconnect the controller once PadForge is running. Steam opens controllers when it starts and holds them, so a pad connected before PadForge hid it stays visible to Steam under its real name, and Steam Input reads it alongside the virtual one. If Steam usually starts first, turn on **Keep Devices Cloaked Between Launches** in [Settings](features/settings.md). Otherwise disable Steam Input for the game or close Steam entirely.
 8. BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device **"Hide from Games (HidHide)"** toggle is on and that **"Hide Devices from Games"** is enabled in the HidHide section of [Settings](features/settings.md).
 
 ---
