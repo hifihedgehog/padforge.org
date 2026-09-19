@@ -74,7 +74,7 @@ Six more tails follow the `0xE2` extension, each marked by its own magic byte an
 
 Each tail decodes only after everything before it parsed cleanly, under its own `try`/`catch`. A malformed tail costs only its own fields and marks the cursor unreliable, so later tails are skipped rather than misread. An old peer that stops earlier simply leaves the fields at their defaults (flags false, counts zero).
 
-The periodic push also refreshes an already-registered device in place. `ReconcileRemoteDevices` keys by the stable device id and copies the relayed metadata (serial, touchpad shape, `DeviceObjects`), the v1 capability flags plus `HasGyroAux` and `HasNfcReader`, and the axis, button, and hat counts and input-device type onto the existing record, so a capability that appears after connect (a Joy-Con pair joining, a reader arming rule flipping) reaches the consumer without a re-register. `HasExtraGenericAxes` and the `0xE3`, `0xE5`, `0xE7`, and `0xE8` tail fields (raw counts, supported index sets, SDL GUID) are set only at first registration and are not refreshed in place.
+The periodic push also refreshes an already-registered device in place. `ReconcileRemoteDevices` keys by the stable device id and copies the relayed metadata (serial, touchpad shape, `DeviceObjects`), every capability flag, the standardized and raw axis and button counts, the hat count, `HasExtraGenericAxes`, and the input-device type onto the existing record, so a capability that appears after connect (a Joy-Con pair joining, a reader arming rule flipping) reaches the consumer without a re-register. The raw counts travel with the standardized ones because the raw axis count is the larger of the two, and refreshing only the standardized one moved half of one answer. The supported index sets and the SDL GUID are the exception: they are set at first registration and never refreshed. Identity fields, the ids and the peer-labeled name, stay untouched.
 
 ---
 
@@ -233,4 +233,4 @@ The auto-reconnect dial runs when a peer is discovered. It requires a trusted en
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

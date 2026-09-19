@@ -215,4 +215,4 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

@@ -135,4 +135,4 @@ build the property is absent and the virtual report is unchanged.
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

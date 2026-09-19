@@ -216,4 +216,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

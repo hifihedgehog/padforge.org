@@ -350,4 +350,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

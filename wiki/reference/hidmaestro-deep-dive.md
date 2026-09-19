@@ -309,4 +309,4 @@ The legacy v2 driver cleanup dialog (offered on the first launch that detects Vi
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

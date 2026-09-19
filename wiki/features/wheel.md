@@ -142,4 +142,4 @@ A supported wheel plugged into another PC and shared over [Remote Link](../guide
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

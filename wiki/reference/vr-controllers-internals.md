@@ -212,4 +212,4 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

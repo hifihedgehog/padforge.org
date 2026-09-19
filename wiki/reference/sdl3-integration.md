@@ -1464,4 +1464,4 @@ Copy the output `SDL3.dll` into `PadForge.App/Resources/SDL3/x64/` before publis
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

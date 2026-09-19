@@ -239,4 +239,4 @@ The overlay tracks up to five finger contacts, the Windows Precision Touchpad ce
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

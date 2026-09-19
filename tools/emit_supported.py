@@ -6,9 +6,9 @@ Sources, all read at run time so a rebase regenerates rather than rots:
   SDL_joystick.c      the wheel, flight stick, throttle, arcade and
                       GameCube adapter tables
 
-Writes:
-  wiki/devices/supported.md   the docs compatibility page
-  _specs_block.html           the specs.html Devices section, for splicing
+Prints the counts and the per-family and per-category name lists as JSON.
+wiki/devices/supported.md and _specs_block.html are edited by hand against
+that output, so run this after any SDL rebase and reconcile both.
 """
 import io, re, collections
 

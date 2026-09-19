@@ -204,8 +204,8 @@ Two static fields make that safe. `s_generation` increments on every `Start`, an
 | Worker | `Task.Run(LoopAsync)` | `Task.Run(LoopAsync)` |
 | Publisher | The HM `OutputDecoded` callback, one volatile write | Same callback, one volatile write |
 | Native or network calls | All on the worker, through one `HttpClient` | All on the worker. Every reference serializes SDK calls, and the Rust binding wraps the whole API in a process mutex. |
-| `StateChanged` | Raised on the worker. The owner marshals. | Raised on the worker, gated by `Superseded`. The owner marshals. |
-| `Stop` | Cancel, wait 3000 ms, dispose the token source | Cancel, wait `stopWaitMs`, orphan on expiry |
+| `StateChanged` | Raised on the worker, gated by `Superseded`. The owner marshals. | Same. |
+| `Stop` | Cancel, wait 3000 ms, orphan on expiry | Cancel, wait `stopWaitMs`, orphan on expiry |
 | `Dispose` | `Stop`, then dispose the `HttpClient`. Idempotent through `_disposed`. | `Stop`. Idempotent through `_disposed`. |
 | Second `Start` on a live instance | No-op (`_cts != null`) | No-op (`_cts != null`) |
 | Session end on the server side | Heartbeat non-success breaks to `DELETE` and re-register | Three failed sends break to restore, shutdown, unload |
@@ -224,4 +224,4 @@ Neither service was run against Razer or Logitech software by the maintainer. Th
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

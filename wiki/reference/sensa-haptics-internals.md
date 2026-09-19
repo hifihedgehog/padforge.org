@@ -104,11 +104,20 @@ That outliving worker is the predecessor-join rule. Its `finally` disarms the pu
 
 ```csharp
 var prev = Interlocked.Exchange(ref s_lastWorker, Thread.CurrentThread);
-if (prev != null && prev != Thread.CurrentThread && prev.IsAlive) prev.Join();
+if (prev != null && prev != Thread.CurrentThread && prev.IsAlive
+    && !prev.Join(_predecessorJoinMs))
+{
+    Interlocked.CompareExchange(ref s_lastWorker, prev, Thread.CurrentThread);
+    return; // finally reports Stopped.
+}
 Volatile.Write(ref s_publisherArmed, 1);
 ```
 
-The predecessor's teardown lands before the successor arms and inits, never after. `s_lastWorker` is static because the publisher flag it protects is. `SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor` holds a worker in `BeforeProviderInit`, stops it, starts a second service, and asserts the second worker waits for the first to exit.
+The predecessor's teardown lands before the successor arms and inits, never after. `s_lastWorker` is static because the publisher flag it protects is.
+
+The join is bounded at 10 seconds (`DefaultPredecessorJoinMs`). That is long past any bring-up the provider completes and short enough that a wedged one costs a single wait. On the deadline the successor hands the slot back to the straggler and quits without arming, because arming over a live predecessor is the exact handoff fault the join exists to prevent: that predecessor's `finally` would then disarm the publisher underneath it. An unbounded join blocked every later worker and leaked one thread per enable.
+
+`SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor` holds a worker in `BeforeProviderInit`, stops it, starts a second service, and asserts the second worker waits for the first to exit.
 
 | Static | Purpose |
 |---|---|
@@ -192,4 +201,4 @@ Live rendering on Sensa hardware was not verified by the maintainer.
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

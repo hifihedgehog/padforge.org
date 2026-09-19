@@ -590,4 +590,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

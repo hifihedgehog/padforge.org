@@ -58,7 +58,7 @@ does.</p>
 
 - **One device, many outputs.** A single physical controller can feed up to
   16 virtual controllers: Xbox, PlayStation, Nintendo (Switch Pro and
-  Switch 2 Pro), Extended (190+ DirectInput profiles), keyboard and mouse,
+  Switch 2 Pro), Extended (231 DirectInput profiles), keyboard and mouse,
   MIDI, or a SteamVR hand pair.
 - **Any input, any output.** Map a stick to the mouse, a touchpad to a
   d-pad, gyro to aim, a MIDI key to a button, a Wii Remote to a wheel.
@@ -75,4 +75,4 @@ does.</p>
 PadForge is free and open source. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

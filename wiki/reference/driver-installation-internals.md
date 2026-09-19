@@ -837,4 +837,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

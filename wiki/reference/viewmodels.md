@@ -3203,4 +3203,4 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

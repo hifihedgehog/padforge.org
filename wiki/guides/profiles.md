@@ -410,4 +410,4 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

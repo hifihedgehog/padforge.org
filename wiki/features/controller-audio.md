@@ -242,4 +242,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

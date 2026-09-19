@@ -166,4 +166,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

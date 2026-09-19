@@ -218,4 +218,4 @@ On the owner side `InputService` hands each received frame to `HapticToneService
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

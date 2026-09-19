@@ -133,4 +133,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

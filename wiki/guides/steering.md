@@ -96,4 +96,4 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

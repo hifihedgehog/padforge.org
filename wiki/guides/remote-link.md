@@ -69,9 +69,9 @@ Once paired, each PC's shareable devices appear in the other's [Devices](../feat
 
 ## Trust and reconnecting
 
-### Assign devices from the other PC (v4-dev)
+### Assign devices from the other PC
 
-Available on `v4-dev` for the next release. Both PCs need a build with remote assignment support.
+Both PCs need a build with remote assignment support.
 
 Web controllers already travel over Remote Link like other input devices. Remote assignment lets you choose their destination slots from the PC sharing them. For a two-PC streaming setup:
 
@@ -173,4 +173,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

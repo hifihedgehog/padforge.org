@@ -2558,4 +2558,4 @@ On load, `RemoveAll(us => us.MapTo < 0)` purges stale entries with `MapTo == -1`
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

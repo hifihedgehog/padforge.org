@@ -443,4 +443,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

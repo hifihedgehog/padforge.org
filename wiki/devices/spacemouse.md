@@ -44,4 +44,4 @@ The CadMouse and Keyboard Pro families share 3Dconnexion's vendor ID but are poi
 
 3Dconnexion's own driver can stay installed. Windows delivers the puck's input to every application that opens it, so PadForge and 3DxWare read the same motion side by side. CAD keeps working while a game takes the mapped output.
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

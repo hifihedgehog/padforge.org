@@ -783,4 +783,4 @@ Both land in the folder PadForge runs from, and the card shows the path.
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

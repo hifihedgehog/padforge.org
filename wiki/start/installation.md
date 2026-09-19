@@ -10,8 +10,8 @@
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
-5. Back on the [Dashboard](../features/dashboard.md), click **Add Controller** and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR). The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. No button to click.
-6. Plug in a physical controller. It appears on the **[Devices](../features/devices.md)** page. Click the slot badge on its card to assign it.
+5. Back on the [Dashboard](../features/dashboard.md), click **Add Controller** and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR).
+6. Plug in a physical controller. It appears on the **[Devices](../features/devices.md)** page. Select it, then under **Virtual Controller Assignment** click the pill for the slot you want it to feed. Assigning the first device to an Xbox, PlayStation, Nintendo, or Extended slot installs HIDMaestro automatically. No button to click.
 7. Done. Games now see a virtual controller.
 
 > **Upgrading from PadForge v2?** On first launch, PadForge detects ViGEmBus and vJoy and offers to uninstall them. HIDMaestro replaces both.
@@ -34,9 +34,9 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 PadForge opens the [Dashboard](../features/dashboard.md) after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.
 
-1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.
+1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.
 2. **Check devices.** Open **[Devices](../features/devices.md)**. PadForge auto-detects every connected gamepad, joystick, keyboard, and mouse.
-3. **Assign a device.** Click the slot badge on a device card to route that physical controller through the virtual one.
+3. **Assign a device.** Select the device on the Devices page, then click a slot pill under **Virtual Controller Assignment** to route that physical controller through the virtual one. The slot badges on the list cards show what is already assigned; they are not buttons.
 
 Games now see the virtual controller as a standard gamepad.
 
@@ -50,7 +50,7 @@ The **About** page, at the bottom of the sidebar, lists the projects PadForge is
 
 HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.
 
-The driver ships embedded in `PadForge.exe`. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
+The driver ships embedded in `PadForge.exe`. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
 !!! note "The very first launch may need one relaunch"
     The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on **Hide from Games**, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.
@@ -139,4 +139,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

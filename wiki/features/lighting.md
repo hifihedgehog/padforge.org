@@ -228,4 +228,4 @@ The color a game writes to a virtual PlayStation controller can also light Razer
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

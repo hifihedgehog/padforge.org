@@ -139,4 +139,4 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

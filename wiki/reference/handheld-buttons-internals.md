@@ -238,4 +238,4 @@ The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

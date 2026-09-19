@@ -220,4 +220,4 @@ The requester (discussion #371) ran the shipped stream on hardware: native PCM w
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

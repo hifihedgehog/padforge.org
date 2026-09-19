@@ -116,7 +116,7 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 
 | File | Description |
 |------|-------------|
-| `PadForge.exe` | ~355 MB, single-file self-contained. The only file in the publish directory |
+| `PadForge.exe` | ~289 MB, single-file self-contained. The only file in the publish directory |
 
 `SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain `dotnet build` drops all eight beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
 
@@ -234,9 +234,9 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 </Compile>
 ```
 
-`SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. All three projects set `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
+`SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. Every project sets `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
 
-**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.4.0.0`.
+**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.5.0.0`.
 
 ## NuGet Dependencies
 
@@ -401,11 +401,10 @@ Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUS
 ```xml
 <!-- 3D controller model assets (adapted from Handheld Companion, CC BY-NC-SA 4.0;
      Switch2Pro set split from the purchased hado CGTrader model) -->
-<EmbeddedResource Include="3DModels\**\*.obj" />
-<EmbeddedResource Include="3DModels\**\*.png" />
+<EmbeddedResource Include="3DModels\**\*.jpg" />
 ```
 
-OBJ mesh files for 3D controller visualization, plus the PNG textures some sets carry. Loaded at runtime via `ControllerModelBase.LoadModel()`.
+Only the opaque texture atlases are embedded directly, as JPEG, because JPEG is already compressed. Everything else goes through the `EmbedPackedArt` target described below. Loaded at runtime via `ControllerModelBase.LoadModel()`.
 
 The Sony and Xbox families are split one folder per colorway, and each colorway holds a full part set. The counts below are per colorway.
 
@@ -424,6 +423,38 @@ The Sony and Xbox families are split one folder per colorway, and each colorway 
 The two Steam Controller sets are meshed from Valve's own STEP releases by `tools/steam_controller_2015_mesh.py` and `tools/steam_controller_2026_mesh.py`. Two follow-up scripts fix up what the conversion left wrong: `steam_controller_2026_pads.py` gives each 2026 trackpad only its own surface, and `steam_deck_stick_well.py` opens the Deck's capped stick wells.
 
 There is no Xbox One mesh set and no `ControllerModelXboxOne` class. The Series mesh serves Xbox One, Elite, and Adaptive, and the Switch 2 Pro mesh serves both Switch generations. `ControllerModelView` passes a `wantExtraControls` flag so a borrowing profile gets inert meshes for controls it does not have.
+
+### Packed Art (EmbedPackedArt target)
+
+Meshes, transparent atlases and the speech model are too big to ship raw and
+compress badly inside the single-file bundle, which deflates each resource on
+its own. The `EmbedPackedArt` target runs an inline `PackAssets` task before
+`PrepareForBuild` and rewrites all three into Brotli streams:
+
+| Source | Packed as | What the packer does |
+|---|---|---|
+| `3DModels/**/*.obj` | `.objbr` | Brotli over the mesh text |
+| `3DModels/**/*.png` | `.pngbr` | Re-emits each IDAT chunk as a stored deflate block, then Brotli over the whole file |
+| `VoiceModels/*.zip` | `.zipbr` | Re-emits the zip entries stored, then Brotli over the archive |
+
+The PNG and zip cases both follow the same rule: store first, compress once.
+Deflating data that is already deflated costs size, so the packer strips the
+inner compression and lets Brotli see the raw bytes. That is where most of the
+saving comes from. Opaque atlases skip the whole path because they ship as
+JPEG.
+
+Two traps the target handles explicitly. Packing is incremental on file
+timestamps, so art that has not changed is not repacked and only the first
+build pays. And each packed file is named for the resource it becomes, so its
+name carries dots; MSBuild reads the segment before the extension as a culture
+when it matches one. `Switch2Pro/GL.obj` became
+`PadForge._3DModels.Switch2Pro.GL.objbr`, whose `GL` is Galician, and that mesh
+was routed into a satellite assembly and disappeared from the pad. The
+`EmbeddedResource` items carry `WithCulture="false"` for that reason.
+
+A separate `SharedGeometry` table names twelve donor meshes that identical
+parts in other sets point at instead of carrying their own copy, which drops
+352 duplicate meshes from the bundle.
 
 ### Web Controller Assets (EmbeddedResource)
 
@@ -447,11 +478,7 @@ HTML/CSS/JS for the browser-based virtual controller. Served at runtime by `WebC
 
 ### Voice Model (EmbeddedResource)
 
-```xml
-<EmbeddedResource Include="VoiceModels\*.zip" />
-```
-
-`VoiceModels/vosk-model-small-en-us-0.15.zip`, the offline Vosk recognizer model behind voice macros (#317), about 39 MB compressed. It ships inside the exe rather than downloading on first use, so voice macros work on a machine with no internet and nothing is written into LocalAppData unasked.
+`VoiceModels/vosk-model-small-en-us-0.15.zip`, the offline Vosk recognizer model behind voice macros (#317). The `EmbedPackedArt` target below repacks it to about 35 MB. It ships inside the exe rather than downloading on first use, so voice macros work on a machine with no internet and nothing is written into LocalAppData unasked.
 
 ### Localization Strings (EmbeddedResource)
 
@@ -706,4 +733,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

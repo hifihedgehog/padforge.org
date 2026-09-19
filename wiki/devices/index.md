@@ -29,4 +29,4 @@ A handheld gaming PC's hidden paddles and menu keys have their own feature
 page, [Handheld PC Buttons](../features/handheld-buttons.md), because they
 are learned on the machine rather than recognized by USB identity.
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

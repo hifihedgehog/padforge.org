@@ -212,4 +212,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

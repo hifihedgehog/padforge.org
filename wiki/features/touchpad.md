@@ -10,7 +10,7 @@ The **Touchpad** tab appears on any slot whose assigned device exposes a touchpa
 
 ## Drawing tablets
 
-Available on `v4-dev` for the next release. Windows HID pen and digitizer devices appear as **Drawing Tablet** on the Devices page. Start the input engine, select the tablet, and assign it to a virtual controller. Its pen contact appears as Touchpad 1, Finger 1. The picker includes pressure and pen buttons only when the device reports them.
+Windows HID pen and digitizer devices appear as **Drawing Tablet** on the Devices page. Start the input engine, select the tablet, and assign it to a virtual controller. Its pen contact appears as Touchpad 1, Finger 1. The picker includes pressure and pen buttons only when the device reports them.
 
 Enable **Hide Device** on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.
 
@@ -233,4 +233,4 @@ Shape matching runs two open-source gesture recognizers on every single-finger s
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

@@ -750,4 +750,4 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

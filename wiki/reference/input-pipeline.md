@@ -2644,4 +2644,4 @@ The concrete device identity (Xbox 360 Wired, DualSense, Logitech G920, ...) is 
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*
