@@ -10,7 +10,7 @@ This page is about reading real VR controllers *into* PadForge. For the opposite
 
 ## Turning it on
 
-There is no separate switch. Enable **OpenXR Headset Input** on the [Dashboard](dashboard.md)'s Head Tracking section and the controller rows appear once the runtime reports them.
+There is no separate switch. Enable **OpenXR Headset Input** on the [Dashboard](dashboard.md)'s Head Tracking section and both controller rows appear. They are there whether or not a runtime ever answers, so mappings can be made before a headset is plugged in. A row that never goes live simply holds its axes at rest.
 
 Two rows show up on the [Devices](devices.md) page, typed **VR Controller**:
 
@@ -45,7 +45,7 @@ Ten axes and four buttons.
 | Secondary Button | Button 2 |
 | Menu Button | Button 3 |
 
-The six pose axes come first and carry the same names and order as the [Head Tracker](head-tracking.md) row, so an axis you already know how to map reads the same here. They rest at center and take the same shared and per-axis ranges the headset pose uses.
+The six pose axes come first, in the same order as the [Head Tracker](head-tracking.md) row's, so an axis you already know how to map sits where you expect. The names say Controller rather than Head, because the two rows are different devices. They rest at center and take the same shared and per-axis ranges the headset pose uses.
 
 Trigger and Grip rest at zero rather than center, the way a gamepad's triggers do. An Axis Past Threshold activator on either knows that, so it sits disengaged at rest instead of firing the moment you save it.
 
@@ -59,7 +59,7 @@ PadForge suggests bindings for three interaction profiles and the runtime picks 
 - Valve Index controllers
 - The Khronos simple controller, the fallback profile every conformant runtime supports
 
-A controller the runtime maps to the simple profile reports fewer controls, because that profile only defines a pose, a trigger and two buttons.
+A controller the runtime maps to the simple profile reports far fewer controls, because that profile defines only a pose and two buttons. There is no stick, no trigger and no grip in it, so those axes stay at rest and Primary and Menu are the only buttons that move.
 
 ---
 

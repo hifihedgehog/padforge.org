@@ -3448,7 +3448,7 @@
 <p>One more step matters: in Logitech Gaming Software, set the <strong>PadForge</strong> profile to <strong>Persistent</strong>. Without it, the SDK only feeds whichever program is in the foreground, so your G-keys work in PadForge's own window and nowhere else.</p>
 <hr />
 <h2 id="reading-the-status-line">Reading the status line<a class="headerlink" href="#reading-the-status-line" title="Permanent link">&para;</a></h2>
-<p>Under the checkbox is a line saying exactly which of six situations the machine is in, so a quiet G-key is never a mystery.</p>
+<p>Under the checkbox is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.</p>
 <table>
 <thead>
 <tr>
@@ -3482,8 +3482,8 @@
 <td>Do that, then press a G-key.</td>
 </tr>
 <tr>
-<td><em>Running, N key events</em></td>
-<td>Working. The count rises as you press keys.</td>
+<td><em>Running, {0} key events</em></td>
+<td>Working, with the count in place of <code>{0}</code>. It rises as you press keys.</td>
 </tr>
 </tbody>
 </table>
@@ -3496,10 +3496,11 @@
 <li><strong>Mouse buttons 6 through 20.</strong> 15 buttons, for the extra buttons on a Logitech mouse.</li>
 </ul>
 <p>Every one of the 102 is listed even on a keyboard with six G-keys, because the SDK has no way to report how many a given device has. Finding the right entry is what the <strong>Record</strong> button is for: press it, press the key, and it binds.</p>
+<p>While the SDK is not running, the row retires and rebuilds every five seconds to retry it, so it can blink out of the Devices list between attempts.</p>
 <p>The layout is fixed rather than derived from the attached hardware, so a saved mapping keeps pointing at the same key when you plug in a different Logitech keyboard.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
-<p>The row binds anywhere a button does, including <a href="../mappings/">macros</a> and <a href="../mappings/">menus</a>. An <strong>Any Device</strong> source never reads it, so pick the G-Keys row by name.</p>
+<p>The row binds anywhere a button does, including <a href="../../guides/macros/">macros</a> and <a href="../../guides/menus/">menus</a>. An <strong>(Any Device)</strong> source never reads it, so pick the G-Keys row by name.</p>
 <p>A tap can begin and end between two of PadForge's polls, so a press is held asserted briefly after it arrives. A macro sees the edge either way.</p>
 <hr />
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>

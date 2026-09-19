@@ -68,9 +68,9 @@ The runtime picks whichever matches the attached hardware and reports how many p
 
 Each hand is one `OpenXrHandDevice`, an `ISdlInputDevice` like any synthetic row.
 
-**Axis layout.** Ten axes. The six pose axes come first and in the Head Tracker row's order, so a user who has mapped a head axis reads the same names on a hand. Then `Thumbstick X`/`Y`, then `Trigger` and `Grip`.
+**Axis layout.** Ten axes. The six pose axes come first and in the Head Tracker row's order, so a user who has mapped a head axis finds the hand's equivalent at the same index. The names differ: the head row says `Head Yaw` and the hand row says `Controller Yaw`. Then `Thumbstick X`/`Y`, then `Trigger` and `Grip`.
 
-**Separate identities.** Left and right have different `InstanceGuid` *and* different `ProductGuid`, derived from `pfopenxrhand-product:left` and `:right`. Sharing a product GUID would let offline-product adoption hand the left row the right row's mappings after a row is deleted and re-created.
+**Separate identities.** Left and right have different `InstanceGuid` *and* different `ProductGuid`. The instance seeds are `pfopenxrhand:left` and `pfopenxrhand:right`, the product seeds `pfopenxrhand-product:left` and `-product:right`. Sharing a product GUID would let offline-product adoption hand the left row the right row's mappings after a row is deleted and re-created.
 
 **Vendor and product IDs.** VID `0x1209`, the pid.codes open-source vendor ID, with PIDs `0x2874` (left) and `0x2875` (right).
 
@@ -98,7 +98,9 @@ The ranges are applied in the shared state fill, so every source that feeds thes
 
 ## Residual
 
-Coexistence with VDXR while another OpenXR client is running has not been exercised on real hardware. Everything else is covered by tests against the negotiation, the manifest parsing, the action layer and the device rows.
+Coexistence with VDXR while another OpenXR client is running has not been exercised on real hardware.
+
+Test coverage is uneven and worth stating plainly. The device rows, the head-pose math, the row status text and the runtime picker have ordinary tests that run on every suite. The negotiation and manifest parsing are covered only by `OpenXrRuntimeProbeTests`, which is gated behind `PADFORGE_OPENXR_PROBE=1` and skips on a normal run, because it would otherwise start a runtime on the build machine. The action layer's thumbstick read is asserted by grepping `OpenXrActions.cs` for the assignment, not by exercising it.
 
 ---
 

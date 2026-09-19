@@ -3647,7 +3647,7 @@
 <p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page draws neither the Input Hiding nor the Input Mode section. <code>CreateDefaultPadSetting</code> auto-maps only gamepad capability types, so the row starts unmapped by design.</p>
 <hr />
 <h2 id="lifecycle-phase-1i">Lifecycle: Phase 1i<a class="headerlink" href="#lifecycle-phase-1i" title="Permanent link">&para;</a></h2>
-<p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when both inputs are off, the user removed it from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while either input is enabled. Stored assignments and mappings survive retirement.</p>
+<p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when every input is off, the user removed it from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in <a href="../openxr-input-internals/">OpenXR Input Internals</a>. Stored assignments and mappings survive retirement.</p>
 <p><code>FromCurrentSettings</code> reads <code>Version</code> first and the settings after it. The setters bump <code>Version</code> last, so the other order could capture the new version with the old port and the reconfigured check would never fire again for that change.</p>
 <p><code>HeadTrackingRuntime</code> is the static mirror:</p>
 <table>
@@ -3803,7 +3803,7 @@
 </tbody>
 </table>
 <p>Non-finite floats reject the read. The heap is polled from <code>GetCurrentState</code>, on the poll thread, and only a <code>DataID</code> change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. When the mutex cannot be created the reader reads unlocked, which the reference client does not do (its <code>FTGetData</code> copies nothing then). A torn pose was judged a better answer than none for a source whose only job is to report one. A mapping that fails to open sets <code>FreeTrackFailed</code>.</p>
-<p>The two sources carry the same pose from the same tracker, so interleaving them is harmless.</p>
+<p>UDP and FreeTrack carry the same pose from the same tracker, so interleaving those two is harmless.</p>
 <hr />
 <h2 id="scaling-into-axes">Scaling into axes<a class="headerlink" href="#scaling-into-axes" title="Permanent link">&para;</a></h2>
 <p><code>HeadPose.ToAxis(value, range)</code>:</p>
@@ -3897,7 +3897,7 @@
 <p><code>WebControllerServer.EnsureInboundFirewallRule("PadForge Head Tracking", "UDP", port)</code> runs <code>netsh advfirewall firewall delete rule name=...</code> then <code>add rule ... dir=in action=allow protocol=UDP localport=&lt;port&gt;</code>. Delete-then-add needs no parsing of netsh's localized output, is idempotent, and clears the pile-up a port change used to leave behind. It is queued on the thread pool from <code>Open</code> only when UDP is enabled, since netsh can block for seconds, and it is best effort.</p>
 <hr />
 <h2 id="settings-and-the-profile-leg">Settings and the profile leg<a class="headerlink" href="#settings-and-the-profile-leg" title="Permanent link">&para;</a></h2>
-<p>Global settings retain <code>HeadTrackingEnabled</code> for UDP and <code>HeadTrackingFreeTrack</code> for FreeTrack, with a <code>HeadTrackingIndependentInputs</code> format marker. Old files are loaded as UDP = old master and FreeTrack = old master AND old FreeTrack preference. The original DTO preference is retained long enough to migrate all stored profile opinions. New saves write independent values. Fresh settings have both inputs off.</p>
+<p>Global settings retain <code>HeadTrackingEnabled</code> for UDP and <code>HeadTrackingFreeTrack</code> for FreeTrack, with a <code>HeadTrackingIndependentInputs</code> format marker. Old files are loaded as UDP = old master and FreeTrack = old master AND old FreeTrack preference. The original DTO preference is retained long enough to migrate all stored profile opinions. New saves write independent values. Fresh settings have every input off.</p>
 <p>Profiles retain nullable <code>EnableHeadTracking</code> for UDP and add nullable <code>EnableHeadTrackingFreeTrack</code>, plus their own format marker. Legacy explicit master opinions migrate once using the original FreeTrack preference. Null opinions remain null. An old standalone profile imported later uses the current FreeTrack preference. New user edits author only the changed input. Applying a null opinion leaves the current value alone. Save and export preserve both opinions and the marker. The port and ranges remain global.</p>
 <p>Real UDP and uniquely named shared-memory fixtures verify all four input combinations, each failure beside a working input, resource release, and the status text. Assignment tests verify that adding a tracker leaves authored Any Device mappings intact.</p>
 <hr />
@@ -3946,7 +3946,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a> for where Phase 1i sits</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

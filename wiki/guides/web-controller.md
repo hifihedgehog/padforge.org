@@ -247,4 +247,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 4.4.0 and v4-dev.*
+*Last updated for PadForge 4.4.0.*

@@ -11,9 +11,9 @@ The code lives in `PadForge.Engine/Common/Logitech/`:
 | `LogitechGKeyCatalog.cs` | Finds `LogitechGkey.dll` and reports why it could not. |
 | `LogitechGKeyInterop.cs` | The exported functions, the callback signature, and the event word. |
 | `LogitechGKeyMap.cs` | The fixed 102-button layout and the two-way index mapping. |
-| `LogitechGKeySource.cs` | Load, init, callback, resync, teardown. |
+| `LogitechGKeySource.cs` | Load, init, callback, the two held-state queries, teardown. |
 
-The device row is `PadForge.App/Common/Input/LogitechGKeysDevice.cs`, with `LogitechGKeysRuntime.cs` as the Dashboard-to-engine mirror.
+The device row is `PadForge.App/Common/Input/LogitechGKeysDevice.cs`, which also owns the pulse and the resync. `LogitechGKeysRuntime.cs` is the Settings-to-engine mirror, written by `SettingsViewModel.GKeysEnabled`.
 
 ---
 
@@ -42,13 +42,13 @@ That totals 32, so PadForge reads the word whole and masks it rather than descri
 
 **Existing and loading are different questions.** An earlier cut returned the first path that existed, which strands an x86 registration on an x64 host: the file is there, and it will never load. The catalog hands back candidates and the source tries each until one loads, which is again what Mumble does.
 
-The failure states map one-to-one onto the six status lines a user can see, so a quiet G-key always has a stated reason rather than silence.
+The source has five failure states: no SDK, a registered path whose file is gone, a load failure, a library that is not this SDK, and an init the SDK refused. Each gets its own status line. Two more lines cover running-but-silent and running-with-keys, for seven in all, so a quiet G-key always has a stated reason rather than silence.
 
 ---
 
 ## Callback, not polling
 
-The SDK offers both. PadForge registers the callback, because the row would otherwise have to poll 102 entry points per cycle to find one press. The callback runs on the SDK's own thread, as its header states, so the handler does nothing but take a short lock and set a flag. Nothing blocking may run on Logitech's dispatch path.
+The SDK offers both. PadForge registers the callback, because the row would otherwise have to make 102 cross-DLL calls per cycle, across the SDK's two query exports, to find one press. The callback runs on the SDK's own thread, as its header states, so the handler does nothing but take a short lock and set a flag. Nothing blocking may run on Logitech's dispatch path.
 
 ### The pulse
 
@@ -81,7 +81,7 @@ Mouse buttons 1 through 5 are excluded because Windows already delivers them.
 
 The layout is fixed so a saved mapping keeps pointing at the same key when a different Logitech keyboard is plugged in. The SDK has no way to ask how many G-keys a device has, which is also why `SupportedButtonIndices` is null rather than a filtered array: gating would be a guess.
 
-Names come from the SDK where it supplies one, with the M-state appended, because the SDK's name carries no mode and M1, M2 and M3 would otherwise all read "G5".
+Names come from the SDK where it supplies one. A keyboard name gets the M-state appended, because the SDK's name carries no mode and M1, M2 and M3 would otherwise all read "G5". A mouse name has no mode and is used unchanged.
 
 ---
 
@@ -99,7 +99,9 @@ Buttons are written every poll, pressed or not, so a released key produces its f
 
 ## Residual
 
-No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header and Mumble's implementation, and the decode, the map, the pulse and the resync are covered by tests.
+No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header and Mumble's implementation.
+
+Test coverage is uneven. The decode, the button map and the pulse have real behavioral tests. The resync has only a wiring assertion that reads this file and checks the call is present, because the path needs a live source in the `Running` state and the test seam cannot supply one.
 
 ---
 

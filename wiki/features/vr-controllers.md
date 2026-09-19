@@ -8,6 +8,8 @@ PadForge can present a pair of VR motion controllers to SteamVR. Add a **VR** sl
 
 One slot serves **both** hands. There is no separate left slot and right slot to keep in sync.
 
+This page is the direction where PadForge *presents* hands to SteamVR. For the opposite direction, reading a real headset and its controllers *into* PadForge as mappable devices, see [VR Controller Input](vr-controller-input.md). That path uses OpenXR and does not need SteamVR.
+
 ---
 
 ## What you need
@@ -93,4 +95,4 @@ Stated plainly, because they will shape whether this is useful to you:
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

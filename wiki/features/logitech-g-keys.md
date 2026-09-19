@@ -24,7 +24,7 @@ One more step matters: in Logitech Gaming Software, set the **PadForge** profile
 
 ## Reading the status line
 
-Under the checkbox is a line saying exactly which of six situations the machine is in, so a quiet G-key is never a mystery.
+Under the checkbox is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.
 
 | Status | What to do |
 | --- | --- |
@@ -34,7 +34,7 @@ Under the checkbox is a line saying exactly which of six situations the machine 
 | *That library is not the G-key SDK this expects.* | Something else is registered under the SDK's key. |
 | *The G-key SDK refused to start. Logitech Gaming Software is usually not running.* | Start Logitech Gaming Software. |
 | *Connected, no key seen yet. Set the PadForge profile to Persistent in Logitech Gaming Software.* | Do that, then press a G-key. |
-| *Running, N key events* | Working. The count rises as you press keys. |
+| *Running, {0} key events* | Working, with the count in place of `{0}`. It rises as you press keys. |
 
 The line is empty while the feature is off.
 
@@ -49,13 +49,15 @@ The line is empty while the feature is off.
 
 Every one of the 102 is listed even on a keyboard with six G-keys, because the SDK has no way to report how many a given device has. Finding the right entry is what the **Record** button is for: press it, press the key, and it binds.
 
+While the SDK is not running, the row retires and rebuilds every five seconds to retry it, so it can blink out of the Devices list between attempts.
+
 The layout is fixed rather than derived from the attached hardware, so a saved mapping keeps pointing at the same key when you plug in a different Logitech keyboard.
 
 ---
 
 ## Mapping it
 
-The row binds anywhere a button does, including [macros](mappings.md) and [menus](mappings.md). An **Any Device** source never reads it, so pick the G-Keys row by name.
+The row binds anywhere a button does, including [macros](../guides/macros.md) and [menus](../guides/menus.md). An **(Any Device)** source never reads it, so pick the G-Keys row by name.
 
 A tap can begin and end between two of PadForge's polls, so a press is held asserted briefly after it arrives. A macro sees the edge either way.
 

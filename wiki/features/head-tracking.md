@@ -24,7 +24,7 @@ Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and enab
 | **UDP Port** | 4242 | 1 to 65535 | The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off. |
 | **Rotation Range (Degrees)** | 90 | 1 to 180 | Head rotation that moves yaw, pitch, and roll to full deflection. Global, applied live. |
 | **Translation Range (cm)** | 30 | 1 to 500 | Head travel that moves X, Y, and Z to full deflection. Global, applied live. |
-| **Set Neutral** | | | Makes your current position the neutral. Applies to the OpenXR headset input only. |
+| **Set Neutral** | | | Makes your current position the neutral. Applies to the OpenXR input only, and re-zeros the headset and both VR controllers together. |
 
 Each numeric field has a reset button. Changing an input toggle reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line under the controls reads **Stopped** while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.
 
@@ -36,7 +36,9 @@ The box always shows what you pinned, not what is in effect. A field reading zer
 
 This is for an axis whose comfortable travel does not match the rest. Neck rotation covers 90 degrees easily while leaning forward covers far less, so pinning **Lean Forward and Back** low gives that axis full deflection over the distance you actually move.
 
-A **Head Tracker (OpenTrack)** row appears on the [Devices](devices.md) page, typed Head Tracker, with six axes:
+### The device row
+
+A Head Tracker row appears on the [Devices](devices.md) page, typed Head Tracker, with six axes. Its name says which backends are feeding it, so with UDP or FreeTrack on it reads **Head Tracker (OpenTrack)**, and with only the headset input on it reads **Head Tracker (OpenXR)**:
 
 | Axis | Raw view | What it reads | Full deflection |
 | --- | --- | --- | --- |
@@ -54,7 +56,7 @@ Every axis rests at center. Yaw right and X right read high, like a stick pushed
 
 The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map covers gamepads only, so each axis is bound by hand.
 
-With both inputs off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.
+With every input off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.
 
 Older settings keep their effective enabled state on upgrade. A profile with no input opinion leaves that input unchanged.
 
@@ -76,9 +78,9 @@ When OpenTrack stops, or the camera loses the face, the axes return to center af
 
 ## Setting up an OpenXR headset
 
-Enable **OpenXR Headset Input** and leave **OpenXR Runtime** on *System Default*, which uses whichever runtime Windows has registered as the active one. The dropdown lists every runtime installed on the machine, so you can read from one while another stays the system default. Picking a runtime here never changes the system default.
+Enable **OpenXR Headset Input** and leave **OpenXR Runtime** on *System Default*, which uses whichever runtime Windows has registered as the active one. The dropdown lists each registered runtime whose library is still on disk, so you can read from one while another stays the system default. Picking a runtime here never changes the system default. A runtime whose manifest survives an uninstall is not offered, but one you had already chosen stays listed so the setting does not silently move.
 
-PadForge asks the runtime for a session that runs without drawing anything, so no game has to be open and no compositor window appears. A runtime that cannot supply one reports *This runtime cannot supply a background session*, and the headset input stays off while the other two inputs carry on.
+PadForge asks the runtime for a session that runs without drawing anything, so no game has to be open. It submits no frames, though a given runtime may still show its own status window. A runtime that cannot supply one reports *This runtime cannot supply a background session*, and the headset input stays off while the other two inputs carry on.
 
 The status line reports each stage:
 
@@ -92,7 +94,7 @@ The status line reports each stage:
 | *This runtime cannot supply a background session* | The runtime refused the headless session PadForge needs. |
 | *The OpenXR session failed. See the diagnostics log.* | Something else went wrong. Turn on diagnostics in Settings for the detail. |
 
-**Set Neutral** makes your current head position the zero point. It applies to this input only, because OpenTrack and FreeTrack already center their own pose before sending it.
+**Set Neutral** makes your current position the zero point. It applies to the OpenXR input only, because OpenTrack and FreeTrack already center their own pose before sending it. It re-zeros the headset and both [VR controllers](vr-controller-input.md) together, so hold them where you want their neutral to be.
 
 ---
 

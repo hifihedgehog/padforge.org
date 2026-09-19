@@ -3527,11 +3527,11 @@
 </tr>
 <tr>
 <td><code>LogitechGKeySource.cs</code></td>
-<td>Load, init, callback, resync, teardown.</td>
+<td>Load, init, callback, the two held-state queries, teardown.</td>
 </tr>
 </tbody>
 </table>
-<p>The device row is <code>PadForge.App/Common/Input/LogitechGKeysDevice.cs</code>, with <code>LogitechGKeysRuntime.cs</code> as the Dashboard-to-engine mirror.</p>
+<p>The device row is <code>PadForge.App/Common/Input/LogitechGKeysDevice.cs</code>, which also owns the pulse and the resync. <code>LogitechGKeysRuntime.cs</code> is the Settings-to-engine mirror, written by <code>SettingsViewModel.GKeysEnabled</code>.</p>
 <hr />
 <h2 id="the-event-word">The event word<a class="headerlink" href="#the-event-word" title="Permanent link">&para;</a></h2>
 <p>The SDK passes one 32-bit word by value. <code>LogitechGkeyLib.h</code> declares it as C bitfields under <code>#pragma pack(push, 1)</code>:</p>
@@ -3582,10 +3582,10 @@
 <h2 id="finding-the-library">Finding the library<a class="headerlink" href="#finding-the-library" title="Permanent link">&para;</a></h2>
 <p><code>LogitechGKeyCatalog</code> builds a candidate list and tries each in order: the SDK's registered CLSID, whose <code>ServerBinary</code> value is the DLL path, then the default install path. That is the order Mumble's <code>GKey.cpp</code> uses.</p>
 <p><strong>Existing and loading are different questions.</strong> An earlier cut returned the first path that existed, which strands an x86 registration on an x64 host: the file is there, and it will never load. The catalog hands back candidates and the source tries each until one loads, which is again what Mumble does.</p>
-<p>The failure states map one-to-one onto the six status lines a user can see, so a quiet G-key always has a stated reason rather than silence.</p>
+<p>The source has five failure states: no SDK, a registered path whose file is gone, a load failure, a library that is not this SDK, and an init the SDK refused. Each gets its own status line. Two more lines cover running-but-silent and running-with-keys, for seven in all, so a quiet G-key always has a stated reason rather than silence.</p>
 <hr />
 <h2 id="callback-not-polling">Callback, not polling<a class="headerlink" href="#callback-not-polling" title="Permanent link">&para;</a></h2>
-<p>The SDK offers both. PadForge registers the callback, because the row would otherwise have to poll 102 entry points per cycle to find one press. The callback runs on the SDK's own thread, as its header states, so the handler does nothing but take a short lock and set a flag. Nothing blocking may run on Logitech's dispatch path.</p>
+<p>The SDK offers both. PadForge registers the callback, because the row would otherwise have to make 102 cross-DLL calls per cycle, across the SDK's two query exports, to find one press. The callback runs on the SDK's own thread, as its header states, so the handler does nothing but take a short lock and set a flag. Nothing blocking may run on Logitech's dispatch path.</p>
 <h3 id="the-pulse">The pulse<a class="headerlink" href="#the-pulse" title="Permanent link">&para;</a></h3>
 <p>A G-key tap can begin and end between two of PadForge's polls. A press therefore asserts its button for at least <code>PulseMs</code> (175), so a macro sees the edge. This is the handheld button row's rule, adopted for the same reason.</p>
 <h3 id="the-resync">The resync<a class="headerlink" href="#the-resync" title="Permanent link">&para;</a></h3>
@@ -3604,7 +3604,7 @@
 </ul>
 <p>Mouse buttons 1 through 5 are excluded because Windows already delivers them.</p>
 <p>The layout is fixed so a saved mapping keeps pointing at the same key when a different Logitech keyboard is plugged in. The SDK has no way to ask how many G-keys a device has, which is also why <code>SupportedButtonIndices</code> is null rather than a filtered array: gating would be a guess.</p>
-<p>Names come from the SDK where it supplies one, with the M-state appended, because the SDK's name carries no mode and M1, M2 and M3 would otherwise all read "G5".</p>
+<p>Names come from the SDK where it supplies one. A keyboard name gets the M-state appended, because the SDK's name carries no mode and M1, M2 and M3 would otherwise all read "G5". A mouse name has no mode and is used unchanged.</p>
 <hr />
 <h2 id="the-row">The row<a class="headerlink" href="#the-row" title="Permanent link">&para;</a></h2>
 <p><code>LogitechGKeysDevice</code> is an <code>ISdlInputDevice</code> shaped like <code>HandheldButtonsDevice</code>: extra hardware buttons that are not a gamepad, surfaced as a synthetic row so they bind through the grid every other device uses.</p>
@@ -3613,7 +3613,8 @@
 <p>Buttons are written every poll, pressed or not, so a released key produces its falling edge.</p>
 <hr />
 <h2 id="residual">Residual<a class="headerlink" href="#residual" title="Permanent link">&para;</a></h2>
-<p>No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header and Mumble's implementation, and the decode, the map, the pulse and the resync are covered by tests.</p>
+<p>No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header and Mumble's implementation.</p>
+<p>Test coverage is uneven. The decode, the button map and the pulse have real behavioral tests. The resync has only a wiring assertion that reads this file and checks the call is present, because the path needs a live source in the <code>Running</code> state and the test seam cannot supply one.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>

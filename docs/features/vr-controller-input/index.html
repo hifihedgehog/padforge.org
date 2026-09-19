@@ -3407,7 +3407,7 @@
 <p>This page is about reading real VR controllers <em>into</em> PadForge. For the opposite direction, presenting a virtual left and right hand <em>to</em> SteamVR, see <a href="../vr-controllers/">Virtual VR Controllers</a>.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>There is no separate switch. Enable <strong>OpenXR Headset Input</strong> on the <a href="../dashboard/">Dashboard</a>'s Head Tracking section and the controller rows appear once the runtime reports them.</p>
+<p>There is no separate switch. Enable <strong>OpenXR Headset Input</strong> on the <a href="../dashboard/">Dashboard</a>'s Head Tracking section and both controller rows appear. They are there whether or not a runtime ever answers, so mappings can be made before a headset is plugged in. A row that never goes live simply holds its axes at rest.</p>
 <p>Two rows show up on the <a href="../devices/">Devices</a> page, typed <strong>VR Controller</strong>:</p>
 <ul>
 <li><strong>VR Controller (Left)</strong></li>
@@ -3504,7 +3504,7 @@
 </tr>
 </tbody>
 </table>
-<p>The six pose axes come first and carry the same names and order as the <a href="../head-tracking/">Head Tracker</a> row, so an axis you already know how to map reads the same here. They rest at center and take the same shared and per-axis ranges the headset pose uses.</p>
+<p>The six pose axes come first, in the same order as the <a href="../head-tracking/">Head Tracker</a> row's, so an axis you already know how to map sits where you expect. The names say Controller rather than Head, because the two rows are different devices. They rest at center and take the same shared and per-axis ranges the headset pose uses.</p>
 <p>Trigger and Grip rest at zero rather than center, the way a gamepad's triggers do. An Axis Past Threshold activator on either knows that, so it sits disengaged at rest instead of firing the moment you save it.</p>
 <hr />
 <h2 id="which-controllers-work">Which controllers work<a class="headerlink" href="#which-controllers-work" title="Permanent link">&para;</a></h2>
@@ -3514,7 +3514,7 @@
 <li>Valve Index controllers</li>
 <li>The Khronos simple controller, the fallback profile every conformant runtime supports</li>
 </ul>
-<p>A controller the runtime maps to the simple profile reports fewer controls, because that profile only defines a pose, a trigger and two buttons.</p>
+<p>A controller the runtime maps to the simple profile reports far fewer controls, because that profile defines only a pose and two buttons. There is no stick, no trigger and no grip in it, so those axes stay at rest and Primary and Menu are the only buttons that move.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
 <p>The rows bind anywhere a gamepad does. An <strong>Any Device</strong> source never reads them, so pick the controller by name. That is deliberate: these rows speak their own vocabulary, and an Any Device row asking for "Button 1" should not suddenly answer from a headset controller.</p>

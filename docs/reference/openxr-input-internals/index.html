@@ -3537,8 +3537,8 @@
 <hr />
 <h2 id="the-device-rows">The device rows<a class="headerlink" href="#the-device-rows" title="Permanent link">&para;</a></h2>
 <p>Each hand is one <code>OpenXrHandDevice</code>, an <code>ISdlInputDevice</code> like any synthetic row.</p>
-<p><strong>Axis layout.</strong> Ten axes. The six pose axes come first and in the Head Tracker row's order, so a user who has mapped a head axis reads the same names on a hand. Then <code>Thumbstick X</code>/<code>Y</code>, then <code>Trigger</code> and <code>Grip</code>.</p>
-<p><strong>Separate identities.</strong> Left and right have different <code>InstanceGuid</code> <em>and</em> different <code>ProductGuid</code>, derived from <code>pfopenxrhand-product:left</code> and <code>:right</code>. Sharing a product GUID would let offline-product adoption hand the left row the right row's mappings after a row is deleted and re-created.</p>
+<p><strong>Axis layout.</strong> Ten axes. The six pose axes come first and in the Head Tracker row's order, so a user who has mapped a head axis finds the hand's equivalent at the same index. The names differ: the head row says <code>Head Yaw</code> and the hand row says <code>Controller Yaw</code>. Then <code>Thumbstick X</code>/<code>Y</code>, then <code>Trigger</code> and <code>Grip</code>.</p>
+<p><strong>Separate identities.</strong> Left and right have different <code>InstanceGuid</code> <em>and</em> different <code>ProductGuid</code>. The instance seeds are <code>pfopenxrhand:left</code> and <code>pfopenxrhand:right</code>, the product seeds <code>pfopenxrhand-product:left</code> and <code>-product:right</code>. Sharing a product GUID would let offline-product adoption hand the left row the right row's mappings after a row is deleted and re-created.</p>
 <p><strong>Vendor and product IDs.</strong> VID <code>0x1209</code>, the pid.codes open-source vendor ID, with PIDs <code>0x2874</code> (left) and <code>0x2875</code> (right).</p>
 <p><strong>Silence returns to rest.</strong> A sample older than <code>SilenceMs</code> (1000) returns every axis to rest and releases every button. This is the Head Tracker row's failsafe, for the same reason: a controller set down mid-game must not leave a stick held.</p>
 <p><strong>Own-vocabulary rows answer no Any Device source.</strong> <code>AnswersAnyDeviceSources</code> is false, the rule <a href="../../features/devices/">discussion #431</a> established. A row whose axes are named "Controller Yaw" must not satisfy a mapping asking a generic "Axis 0".</p>
@@ -3552,7 +3552,8 @@
 <p><code>OpenXrHeadPoseSource</code> owns a thread that creates the session, pumps events, and publishes poses. <code>Stop</code> joins it. The publish side is a lock around the latest sample. The read side is the poll thread's device sweep.</p>
 <hr />
 <h2 id="residual">Residual<a class="headerlink" href="#residual" title="Permanent link">&para;</a></h2>
-<p>Coexistence with VDXR while another OpenXR client is running has not been exercised on real hardware. Everything else is covered by tests against the negotiation, the manifest parsing, the action layer and the device rows.</p>
+<p>Coexistence with VDXR while another OpenXR client is running has not been exercised on real hardware.</p>
+<p>Test coverage is uneven and worth stating plainly. The device rows, the head-pose math, the row status text and the runtime picker have ordinary tests that run on every suite. The negotiation and manifest parsing are covered only by <code>OpenXrRuntimeProbeTests</code>, which is gated behind <code>PADFORGE_OPENXR_PROBE=1</code> and skips on a normal run, because it would otherwise start a runtime on the build machine. The action layer's thumbstick read is asserted by grepping <code>OpenXrActions.cs</code> for the assignment, not by exercising it.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>

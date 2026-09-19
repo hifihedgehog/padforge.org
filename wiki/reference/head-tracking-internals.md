@@ -36,7 +36,7 @@ The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and 
 
 ## Lifecycle: Phase 1i
 
-`UpdateHeadTrackerDevice` runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when both inputs are off, the user removed it from the Devices page, or `ConfigVersion` no longer equals `HeadTrackingRuntime.Version`, and opens a fresh one from `FromCurrentSettings` while either input is enabled. Stored assignments and mappings survive retirement.
+`UpdateHeadTrackerDevice` runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when every input is off, the user removed it from the Devices page, or `ConfigVersion` no longer equals `HeadTrackingRuntime.Version`, and opens a fresh one from `FromCurrentSettings` while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in [OpenXR Input Internals](openxr-input-internals.md). Stored assignments and mappings survive retirement.
 
 `FromCurrentSettings` reads `Version` first and the settings after it. The setters bump `Version` last, so the other order could capture the new version with the old port and the reconfigured check would never fire again for that change.
 
@@ -97,7 +97,7 @@ The peer is recorded as `address:port` of the last sender, and a change of peer 
 
 Non-finite floats reject the read. The heap is polled from `GetCurrentState`, on the poll thread, and only a `DataID` change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. When the mutex cannot be created the reader reads unlocked, which the reference client does not do (its `FTGetData` copies nothing then). A torn pose was judged a better answer than none for a source whose only job is to report one. A mapping that fails to open sets `FreeTrackFailed`.
 
-The two sources carry the same pose from the same tracker, so interleaving them is harmless.
+UDP and FreeTrack carry the same pose from the same tracker, so interleaving those two is harmless.
 
 ---
 
@@ -158,7 +158,7 @@ The same text lands in two places, each rebuilt only when `StatusVersion` moves.
 
 ## Settings and the profile leg
 
-Global settings retain `HeadTrackingEnabled` for UDP and `HeadTrackingFreeTrack` for FreeTrack, with a `HeadTrackingIndependentInputs` format marker. Old files are loaded as UDP = old master and FreeTrack = old master AND old FreeTrack preference. The original DTO preference is retained long enough to migrate all stored profile opinions. New saves write independent values. Fresh settings have both inputs off.
+Global settings retain `HeadTrackingEnabled` for UDP and `HeadTrackingFreeTrack` for FreeTrack, with a `HeadTrackingIndependentInputs` format marker. Old files are loaded as UDP = old master and FreeTrack = old master AND old FreeTrack preference. The original DTO preference is retained long enough to migrate all stored profile opinions. New saves write independent values. Fresh settings have every input off.
 
 Profiles retain nullable `EnableHeadTracking` for UDP and add nullable `EnableHeadTrackingFreeTrack`, plus their own format marker. Legacy explicit master opinions migrate once using the original FreeTrack preference. Null opinions remain null. An old standalone profile imported later uses the current FreeTrack preference. New user edits author only the changed input. Applying a null opinion leaves the current value alone. Save and export preserve both opinions and the marker. The port and ranges remain global.
 
@@ -198,4 +198,4 @@ Confirmed by reading and by the replay tests: the datagram layout, the heap offs
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*
