@@ -175,9 +175,9 @@ A Nintendo slot's mappings live in the same raw button / axis / POV grid an Exte
 
 An Extended slot on a Valve profile gets both views, like the console families. The three pads differ enough that each has its own body and its own 2D set.
 
-<!-- pending capture: ![Extended slot on the Steam Controller profile, the 2015 pad's body in the preview](../images/pad-extended-steam-controller.png) -->
+![Extended slot on the Steam Controller profile, the 2015 pad's body in the preview](../images/pad-extended-steam-controller.png)
 
-<!-- pending capture: ![Extended slot on the Steam Deck profile, the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png) -->
+![Extended slot on the Steam Deck profile, the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png)
 
 | Pad | What the 3D model carries |
 |---|---|
@@ -272,4 +272,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

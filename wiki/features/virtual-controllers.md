@@ -209,7 +209,7 @@ Acceptance was hardware-verified: SDL3's `HIDAPI_DriverSwitch` opens the virtual
 
 New in 4.4.0. Five HIDMaestro profiles in the **Extended** category present as Valve hardware. Steam and any SDL game read the real device's USB identity, and the slot submits that device's own input frame instead of the field-encoded raw surface.
 
-<!-- pending capture: ![Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below](../images/pad-extended-steam-deck.png) -->
+![Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below](../images/pad-extended-steam-deck.png)
 
 | Profile id | Catalog name | USB identity | Presents as |
 |---|---|---|---|
@@ -270,7 +270,7 @@ Row strings live in `Strings.resx`: `Btn_View`, `Btn_Menu`, `Btn_Steam`, `Btn_Qu
 
 The 2015 pad has one physical stick and rides its right trackpad as the right stick, which is why `StickCount` is 2 on every family. Its right pad click is one wire bit doing two jobs: SDL reports it as `SDL_GAMEPAD_BUTTON_RIGHT_STICK` (`SDL_hidapi_steam.c:1627`) and as the right pad's click on the touchpad surface (`:1677`), both from `STEAM_BUTTON_RIGHTPAD_CLICKED_MASK`. The table names the slot once as `RightTouchpadClick`, and `NintendoPreviewMap.Aliases` lets `RightThumbButton` reach the same row.
 
-<!-- pending capture: ![Extended slot on the Pad page with the Steam Controller (2026) profile: the config bar with the Extended type chip and the Preset picker, and the 2026 Steam Controller body in the 3D preview below](../images/pad-extended-steam-controller.png) -->
+![Extended slot on the Pad page with the Steam Controller (2026) profile: the config bar with the Extended type chip and the Preset picker, and the 2026 Steam Controller body in the 3D preview below](../images/pad-extended-steam-controller.png)
 
 #### Both trackpads
 
@@ -1083,4 +1083,4 @@ Note that mouse movement and scroll do NOT go through `SendInput` here. Those ro
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

@@ -107,9 +107,9 @@ Five profiles in the Extended picker are Valve pads. Pick one and the slot takes
 
 A composite persona rides the real USB stack, so Steam and SDL see Valve hardware and run their own handshake against it. On the bench, live Steam claimed the Steam Controller (Composite) persona: it opened the device, reserved an XInput slot, took the input stream, and loaded its Steam Controller configuration. Stock SDL3 claims it as a Steam Controller with two touchpads, a gyro, and an accelerometer. What Steam does with the persona's motion data and haptics has not been checked on a live session.
 
-<!-- pending capture: ![Extended slot on the Steam Controller profile: the Valve row names in the grid and the 2015 pad's own body in the preview](../images/pad-extended-steam-controller.png) -->
+![Extended slot on the Steam Controller profile: the Valve row names in the grid and the 2015 pad's own body in the preview](../images/pad-extended-steam-controller.png)
 
-<!-- pending capture: ![Extended slot on the Steam Deck profile: the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png) -->
+![Extended slot on the Steam Deck profile: the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png)
 
 The mapping grid uses Valve's names. Buttons are A, B, X, Y, L1, R1, L3, R3, Steam, and the pad clicks (Left Pad Click, Right Pad Click) on every profile, then per pad:
 
@@ -352,4 +352,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 4.4.0.*
+*Last updated for PadForge 4.5.0.*

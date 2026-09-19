@@ -5390,8 +5390,7 @@
 <p>Acceptance was hardware-verified: SDL3's <code>HIDAPI_DriverSwitch</code> opens the virtual pad, completes init, reads calibrated sticks and buttons, reports gyro + accel through <code>SDL_GetGamepadSensorData</code>, and Steam Input shows a Pro Controller with Nintendo glyphs.</p>
 <h3 id="valve-personas-issues-337-338">Valve personas (issues #337 / #338)<a class="headerlink" href="#valve-personas-issues-337-338" title="Permanent link">&para;</a></h3>
 <p>New in 4.4.0. Five HIDMaestro profiles in the <strong>Extended</strong> category present as Valve hardware. Steam and any SDL game read the real device's USB identity, and the slot submits that device's own input frame instead of the field-encoded raw surface.</p>
-<!-- pending capture: ![Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below](../images/pad-extended-steam-deck.png) -->
-
+<p><img alt="Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below" src="../../images/pad-extended-steam-deck.png" /></p>
 <table>
 <thead>
 <tr>
@@ -5509,8 +5508,7 @@
 </table>
 <p>Row strings live in <code>Strings.resx</code>: <code>Btn_View</code>, <code>Btn_Menu</code>, <code>Btn_Steam</code>, <code>Btn_QuickAccess</code>, <code>Btn_LeftGrip</code>, <code>Btn_RightGrip</code>, <code>Btn_LeftPadClick</code>, <code>Btn_RightPadClick</code>, plus <code>Mapping_LeftPadX</code> / <code>Y</code> / <code>Touch</code> and their right-pad twins. R4, L4, R5 and L5 are printed on the hardware, so they are literals and are not localized.</p>
 <p>The 2015 pad has one physical stick and rides its right trackpad as the right stick, which is why <code>StickCount</code> is 2 on every family. Its right pad click is one wire bit doing two jobs: SDL reports it as <code>SDL_GAMEPAD_BUTTON_RIGHT_STICK</code> (<code>SDL_hidapi_steam.c:1627</code>) and as the right pad's click on the touchpad surface (<code>:1677</code>), both from <code>STEAM_BUTTON_RIGHTPAD_CLICKED_MASK</code>. The table names the slot once as <code>RightTouchpadClick</code>, and <code>NintendoPreviewMap.Aliases</code> lets <code>RightThumbButton</code> reach the same row.</p>
-<!-- pending capture: ![Extended slot on the Pad page with the Steam Controller (2026) profile: the config bar with the Extended type chip and the Preset picker, and the 2026 Steam Controller body in the 3D preview below](../images/pad-extended-steam-controller.png) -->
-
+<p><img alt="Extended slot on the Pad page with the Steam Controller (2026) profile: the config bar with the Extended type chip and the Preset picker, and the 2026 Steam Controller body in the 3D preview below" src="../../images/pad-extended-steam-controller.png" /></p>
 <h4 id="both-trackpads">Both trackpads<a class="headerlink" href="#both-trackpads" title="Permanent link">&para;</a></h4>
 <p><code>InputManager.SlotCarriesTouchpad(slot)</code> (<code>InputManager.cs:196</code>) is true for every PlayStation slot, and for an Extended slot on a raw surface whose profile is Valve. Step 3 computes the touch surface and Step 4 combines it only when it is true. Before that predicate existed both steps gated on PlayStation alone, so every Valve packer received a zeroed <code>TouchpadState</code> and no pad on a virtual Deck or Steam Controller could be touched.</p>
 <p>Every Valve frame carries one finger per pad, so the slot's two-finger <code>TouchpadState</code> splits as finger 0 = left pad, finger 1 = right pad (<code>ValveReportPackers.Pads</code>). The grid lists Left / Right Pad X, Y and Touch on those two fingers. Pad clicks stay raw buttons, so a Valve grid has no <code>TouchpadClick</code> row. A click arriving with no per-pad source lands on whichever pad is touched, and on the left pad when neither is.</p>
@@ -6690,7 +6688,7 @@
 <li><a href="../../reference/build-and-publish/">Build and Publish</a>: HIDMaestro and HidHide embedded resources</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 
