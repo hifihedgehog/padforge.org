@@ -7,8 +7,8 @@ Sources, all read at run time so a rebase regenerates rather than rots:
                       GameCube adapter tables
 
 Prints the counts and the per-family and per-category name lists as JSON.
-wiki/devices/supported.md and _specs_block.html are edited by hand against
-that output, so run this after any SDL rebase and reconcile both.
+emit_pages.py turns the same data into the two pages. Run this one to see
+what changed after an SDL rebase before deciding what to reconcile.
 """
 import io, re, collections
 
