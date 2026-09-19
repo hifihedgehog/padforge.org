@@ -2097,7 +2097,7 @@ VM wrapper around a single `Engine.Data.ShiftActivator`. Populates the nested ta
 
 **File:** `MacroItem.cs`
 
-A trigger combination of inputs that produces a sequence of output actions. Evaluated between Step 3 (mapping) and Step 4 (combining).
+A trigger combination of inputs that produces a sequence of output actions. Evaluated in Step 4b, after Step 4 combines the slot output and before Step 5 writes the virtual devices.
 
 ### Identity
 

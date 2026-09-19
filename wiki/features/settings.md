@@ -90,6 +90,20 @@ Keeps the engine running when PadForge is not the foreground window.
 
 **Leave this on.** Without it, the engine stops the moment you tab into a game and virtual controllers go dead. Turn it off only if you use PadForge as a passive diagnostic.
 
+### Flydigi Enhanced Protocol
+
+Turns on the extra buttons and motion sensors that supported Flydigi controllers expose beyond their standard gamepad report.
+
+If Flydigi's own software is running, PadForge says so on the device. Both can hold the same controller interface, and a Vader 5 Pro has been reported dropping and reconnecting repeatedly while both had access. Stop the Flydigi service while using PadForge, or keep the controller hidden and take the service out of the HidHide whitelist.
+
+### Read Logitech G-Keys
+
+Reads the G-keys and extra mouse buttons on Logitech gaming gear through the vendor's G-key SDK, and presents them as their own device row. See [Logitech G-Keys](logitech-g-keys.md).
+
+The SDK ships with **Logitech Gaming Software 8.55 or later**, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.
+
+Set the PadForge profile to **Persistent** in Logitech Gaming Software. Without that, the keys only reach PadForge while it is the active window.
+
 ### Polling Interval
 
 How often the engine reads input, in milliseconds. Default: **1 ms** (~1000 Hz).

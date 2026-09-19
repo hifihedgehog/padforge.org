@@ -3583,7 +3583,7 @@
 <p>The <strong>Touchpad</strong> tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a <a href="../../guides/web-controller/">Web Controller</a> client in DS4 or touchpad-only mode, the on-screen <a href="../dashboard/#touchpad-overlay">Touchpad Overlay</a>, or a Windows Precision Touchpad enumerated through the <a href="../devices/">Devices</a> page.</p>
 <hr />
 <h2 id="drawing-tablets">Drawing tablets<a class="headerlink" href="#drawing-tablets" title="Permanent link">&para;</a></h2>
-<p>Available on <code>v4-dev</code> for the next release. Windows HID pen and digitizer devices appear as <strong>Drawing Tablet</strong> on the Devices page. Start the input engine, select the tablet, and assign it to a virtual controller. Its pen contact appears as Touchpad 1, Finger 1. The picker includes pressure and pen buttons only when the device reports them.</p>
+<p>Windows HID pen and digitizer devices appear as <strong>Drawing Tablet</strong> on the Devices page. Start the input engine, select the tablet, and assign it to a virtual controller. Its pen contact appears as Touchpad 1, Finger 1. The picker includes pressure and pen buttons only when the device reports them.</p>
 <p>Enable <strong>Hide Device</strong> on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.</p>
 <p>The status below Hide Device changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with Hide Device.</p>
 <p>Turning Hide Device off returns the pen to Windows. Stopping PadForge follows <strong>Keep HidHide Cloaks Between Launches</strong>: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.</p>
@@ -3936,7 +3936,7 @@
 <li><a href="../devices/">Devices</a> for enumerating a laptop trackpad as a touchpad source.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

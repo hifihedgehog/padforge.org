@@ -1529,6 +1529,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#what-a-game-reads-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a game reads back
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3485,6 +3496,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#what-a-game-reads-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a game reads back
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3641,6 +3663,23 @@
 </ol>
 <p>The sliders stay editable after loading. It's a one-click loader, not a lock.</p>
 <hr />
+<h2 id="what-a-game-reads-back">What a game reads back<a class="headerlink" href="#what-a-game-reads-back" title="Permanent link">&para;</a></h2>
+<p>A DualSense reports the state of its own trigger effects in its input
+report: two feedback bytes carrying a stop-location and a status nibble
+each, and a byte of active effect-mode nibbles. Games that drive adaptive
+triggers read those back to decide whether a trigger is being held against
+its effect.</p>
+<p>A virtual DualSense used to send zeros there. A game that checks the
+bytes then saw no effect running, so holding L2 against a resistance it
+had itself commanded did nothing. Since 4.5.0 PadForge copies the eight
+bytes at payload offsets 40 through 47 from the physical pad into the
+virtual report, so the game reads the real state of the triggers under
+your finger.</p>
+<p>This needs a physical DualSense or DualSense Edge on the slot. The bytes
+come from the bundled SDL fork, which publishes them as a joystick
+property; SDL upstream parses nothing from that range. Without the fork
+build the property is absent and the virtual report is unchanged.</p>
+<hr />
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
 <li>For Multiple-Position Feedback, narrow the Range to a partial span (such as 50–150) to feel the bumps. The default 0–255 range spreads them across the whole pull and can feel like one rough surface.</li>
@@ -3658,7 +3697,7 @@
 <li><a href="../mappings/">Button and Axis Mappings</a>: the trigger axis source picker.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

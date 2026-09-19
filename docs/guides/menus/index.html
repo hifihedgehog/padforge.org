@@ -3698,7 +3698,7 @@
 <li>A loose image file: <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.bmp</code>, or <code>.gif</code>. A file kept under PadForge's own folder is stored by relative path, so the pair travels together.</li>
 <li>A <code>.pficons</code> package. Picking one adds it to the list below and offers its icons. A package with a single image binds it right away.</li>
 </ul>
-<p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
+<p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. <strong>Icon Size</strong> next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
 <h3 id="icon-packages">Icon packages<a class="headerlink" href="#icon-packages" title="Permanent link">&para;</a></h3>
 <!-- pending capture: ![The Icon Packages block on the Menus tab](../images/menu-icon-packs.png) -->
 
@@ -3735,7 +3735,11 @@
 <p>The overlay itself is optional. The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Menu Overlay</strong> toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.</p>
 <hr />
 <h2 id="menus-and-shift-layers">Menus and shift layers<a class="headerlink" href="#menus-and-shift-layers" title="Permanent link">&para;</a></h2>
-<p>A menu imported from a Steam config that lived on an action layer engages only while that <a href="../shift-layers/">shift layer</a> is held. Releasing the layer counts as letting go, so an On Touch Release menu commits its hovered cell right there, matching Steam's mode-shift behavior. Menus you add by hand are always available.</p>
+<p>Each menu carries a <strong>Layer</strong> picker naming the <a href="../shift-layers/">shift layer</a> that permits it. <strong>Any Layer</strong> is the default and the menu is always available. <strong>Base</strong> also allows the menu under other active layers. A named layer permits the menu only while that layer is the active one.</p>
+<p><strong>Layer Holds the Menu Open</strong> changes how the menu opens. Normally a menu opens when you touch its surface or deflect its stick past the engage deadzone. With this on, the named layer opens it: the menu appears the moment the layer goes active and stays up for as long as it is held, and a <strong>Steer With</strong> picker chooses the physical input that moves the highlight while it is open. That input is read from the controllers assigned to the slot, and what each cell fires still comes from the cell's own binding. <strong>Any Layer</strong> and <strong>Base</strong> keep normal surface opening, so the toggle only does something on a named layer.</p>
+<p>The fire modes read a little differently in this mode. <strong>On Click</strong> holds the highlighted cell's binding while the click input is held, and a highlighted radial center can fire with the stick at rest. <strong>On Click Release</strong> fires once when the click input releases, falling back to the previous selection if the surface releases in the same instant. <strong>On Touch Release</strong> fires when you lift off or return inside the engage deadzone while the menu stays open, and leaving the layer also commits a selection still being steered.</p>
+<p>A menu imported from a Steam config that lived on an action layer engages only while that layer is held. Releasing the layer counts as letting go, so an On Touch Release menu commits its hovered cell right there, matching Steam's mode-shift behavior.</p>
+<p>The row reset restores <strong>Any Layer</strong> and turns layer-held opening off.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
 <p>Every setting row on the Menus tab carries a per-field reset, and the overlay card has a reset of its own.</p>
@@ -3751,7 +3755,7 @@
 <li><a href="../../features/dashboard/">Dashboard</a>: the Menu Overlay toggle.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

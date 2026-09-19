@@ -3759,7 +3759,7 @@
 </tbody>
 </table>
 <p>Each tail decodes only after everything before it parsed cleanly, under its own <code>try</code>/<code>catch</code>. A malformed tail costs only its own fields and marks the cursor unreliable, so later tails are skipped rather than misread. An old peer that stops earlier simply leaves the fields at their defaults (flags false, counts zero).</p>
-<p>The periodic push also refreshes an already-registered device in place. <code>ReconcileRemoteDevices</code> keys by the stable device id and copies the relayed metadata (serial, touchpad shape, <code>DeviceObjects</code>), the v1 capability flags plus <code>HasGyroAux</code> and <code>HasNfcReader</code>, and the axis, button, and hat counts and input-device type onto the existing record, so a capability that appears after connect (a Joy-Con pair joining, a reader arming rule flipping) reaches the consumer without a re-register. <code>HasExtraGenericAxes</code> and the <code>0xE3</code>, <code>0xE5</code>, <code>0xE7</code>, and <code>0xE8</code> tail fields (raw counts, supported index sets, SDL GUID) are set only at first registration and are not refreshed in place.</p>
+<p>The periodic push also refreshes an already-registered device in place. <code>ReconcileRemoteDevices</code> keys by the stable device id and copies the relayed metadata (serial, touchpad shape, <code>DeviceObjects</code>), every capability flag, the standardized and raw axis and button counts, the hat count, <code>HasExtraGenericAxes</code>, and the input-device type onto the existing record, so a capability that appears after connect (a Joy-Con pair joining, a reader arming rule flipping) reaches the consumer without a re-register. The raw counts travel with the standardized ones because the raw axis count is the larger of the two, and refreshing only the standardized one moved half of one answer. The supported index sets and the SDL GUID are the exception: they are set at first registration and never refreshed. Identity fields, the ids and the peer-labeled name, stay untouched.</p>
 <hr />
 <h2 id="reaching-a-peer-over-the-internet-294">Reaching a peer over the internet (#294)<a class="headerlink" href="#reaching-a-peer-over-the-internet-294" title="Permanent link">&para;</a></h2>
 <p>Everything above is one subnet. #294 adds internet reach with no VPN, no port forward, and no PadForge-run server. Nothing in the handshake or the sealed data plane changes. Only how the two sockets find each other does, and every lane ends in the same <code>LinkConnection</code> handshake over an <code>ILinkControlChannel</code>.</p>
@@ -3938,7 +3938,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: the persisted Remote Link fields.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

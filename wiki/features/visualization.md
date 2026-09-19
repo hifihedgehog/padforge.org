@@ -56,7 +56,9 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 
 ### Colorways
 
-A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. In the 3D view that is the Xbox Series, DualSense, and DualShock 4 families. The 2D view carries its own colorway sets, which also cover Xbox 360 and DualSense Edge. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker. The Xbox 360, Switch 2 Pro, and the three Valve pads each ship one appearance.
+A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
+
+The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2); the Xbox 360, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two.
 
 ### Camera controls
 

@@ -5777,7 +5777,7 @@
 <a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">OverlayElement</span><span class="p">[]</span><span class="w"> </span><span class="n">Overlays</span><span class="p">;</span><span class="w">  </span><span class="c1">// 19 elements</span>
 <a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="p">}</span>
 </code></pre></div>
-<p>These two are generated into the same file but <code>ControllerModel2DView</code> never dispatches them. Their consumers are <code>WorkshopControllerPreview</code>, which draws the controller a Steam config was authored for (a different device from whatever the user has assigned), and the web controller server (#296), which serves them as the <code>?type=steamdeck</code> and <code>?type=steamcontroller</code> layouts.</p>
+<p><code>ControllerModel2DView</code> dispatches both, alongside the 2026 Steam Controller. They have two other consumers: <code>WorkshopControllerPreview</code>, which draws the controller a Steam config was authored for (a different device from whatever the user has assigned), and the web controller server (#296), which serves them as the <code>?type=steamdeck</code> and <code>?type=steamcontroller</code> layouts.</p>
 <p>Both carry dual touchpads (<code>LeftTouchpad</code> / <code>LeftTouchpadClick</code> and the right-hand pair). Steam Deck adds <code>ButtonQuickAccess</code> and four rear paddles. Steam Controller has one stick, so it carries <code>LeftThumbRing</code> with no right-hand counterpart, plus <code>LeftGrip</code> and <code>RightGrip</code>.</p>
 <h3 id="touchpad-click-highlight">Touchpad Click Highlight<a class="headerlink" href="#touchpad-click-highlight" title="Permanent link">&para;</a></h3>
 <p>The touchpad-click visual is a PNG from the asset pack, not a hand-drawn shape. <code>TouchpadClickSprite(folder)</code> names it: <code>DS4_Touchpad_Click.png</code> for <code>DS4</code>, <code>DualSense_Touchpad_Click.png</code> for both <code>DualSense</code> and <code>DUALSENSEEDGE</code>, null everywhere else. That null is the gate. <code>BuildCanvas</code> builds the touchpad preview for any folder the sprite lookup answers for, rather than naming folders inline, which is what silently excluded the Edge the day it got its own folder. The sprite's stem tracks the art family, not the folder, because the Edge folder carries the DualSense sprites.</p>
@@ -7566,7 +7566,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: 2D PNG assets (<code>2DModels/</code>) included as WPF <code>Resource</code> items</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

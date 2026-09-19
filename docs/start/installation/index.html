@@ -3598,8 +3598,8 @@
 <li>Extract the zip to any folder (e.g. <code>C:\PadForge\</code>).</li>
 <li>Run <code>PadForge.exe</code>.</li>
 <li>Approve the one UAC prompt at startup. PadForge needs administrator rights to run.</li>
-<li>Back on the <a href="../../features/dashboard/">Dashboard</a>, click <strong>Add Controller</strong> and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR). The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. No button to click.</li>
-<li>Plug in a physical controller. It appears on the <strong><a href="../../features/devices/">Devices</a></strong> page. Click the slot badge on its card to assign it.</li>
+<li>Back on the <a href="../../features/dashboard/">Dashboard</a>, click <strong>Add Controller</strong> and pick a type (Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR).</li>
+<li>Plug in a physical controller. It appears on the <strong><a href="../../features/devices/">Devices</a></strong> page. Select it, then under <strong>Virtual Controller Assignment</strong> click the pill for the slot you want it to feed. Assigning the first device to an Xbox, PlayStation, Nintendo, or Extended slot installs HIDMaestro automatically. No button to click.</li>
 <li>Done. Games now see a virtual controller.</li>
 </ol>
 <blockquote>
@@ -3634,9 +3634,9 @@
 <h2 id="first-launch">First launch<a class="headerlink" href="#first-launch" title="Permanent link">&para;</a></h2>
 <p>PadForge opens the <a href="../../features/dashboard/">Dashboard</a> after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.</p>
 <ol>
-<li><strong>Create a virtual controller.</strong> On the Dashboard, click <strong>Add Controller</strong> and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The first Xbox, PlayStation, Nintendo, or Extended controller you add installs HIDMaestro automatically. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.</li>
+<li><strong>Create a virtual controller.</strong> On the Dashboard, click <strong>Add Controller</strong> and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.</li>
 <li><strong>Check devices.</strong> Open <strong><a href="../../features/devices/">Devices</a></strong>. PadForge auto-detects every connected gamepad, joystick, keyboard, and mouse.</li>
-<li><strong>Assign a device.</strong> Click the slot badge on a device card to route that physical controller through the virtual one.</li>
+<li><strong>Assign a device.</strong> Select the device on the Devices page, then click a slot pill under <strong>Virtual Controller Assignment</strong> to route that physical controller through the virtual one. The slot badges on the list cards show what is already assigned; they are not buttons.</li>
 </ol>
 <p>Games now see the virtual controller as a standard gamepad.</p>
 <p>The <strong>About</strong> page, at the bottom of the sidebar, lists the projects PadForge is built on, along with its license and a short description of what it does. Your app version lives on <strong><a href="../../features/settings/">Settings</a></strong> under <strong>Diagnostics &gt; App Version</strong>. Note it when filing an issue.</p>
@@ -3644,7 +3644,7 @@
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.</p>
-<p>The driver ships embedded in <code>PadForge.exe</code>. It installs automatically the first time you add an Xbox, PlayStation, Nintendo, or Extended controller. There's no button to click, and the startup UAC prompt covers it. On the <a href="../../features/settings/">Settings</a> page, the HIDMaestro card always reads <strong>Installed</strong> and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended controller you add on the Dashboard becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.</p>
+<p>The driver ships embedded in <code>PadForge.exe</code>. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the <a href="../../features/settings/">Settings</a> page, the HIDMaestro card always reads <strong>Installed</strong> and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.</p>
 <div class="admonition note">
 <p class="admonition-title">The very first launch may need one relaunch</p>
 <p>The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on <strong>Hide from Games</strong>, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.</p>
@@ -3718,7 +3718,7 @@
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro under the hood.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

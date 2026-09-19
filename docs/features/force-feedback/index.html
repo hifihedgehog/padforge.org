@@ -4094,10 +4094,10 @@
 <p><img alt="Motor activity panel showing stacked RAW and OUT bars for the left and right motors" src="../../images/pad-motor-activity.png" /></p>
 <p>Each motor (Left, Right) shows two stacked bars in real time as games send rumble:</p>
 <ul>
-<li><strong>RAW</strong> (cold color): the slot's strongest value on that motor across every device mapped to the slot, with each device's own gain, strength, swap, constant force, and trigger routing already applied. Macro rumble and audio rumble count too.</li>
+<li><strong>RAW</strong> (cold color): the rumble the game sent to the virtual controller, before this device's gain, strength, swap, constant force, trigger routing, or audio rumble touch it.</li>
 <li><strong>OUT</strong> (ember orange): what the selected physical device receives.</li>
 </ul>
-<p>With one mapped device the two bars match. When several devices with different settings share the slot, the gap between RAW and OUT shows how the selected device's output differs from the loudest device on the slot. Each bar has its own percentage readout. Left is the low-frequency motor, right is the high-frequency motor.</p>
+<p>The gap between the two bars is what this device's own settings did to the game's command. At defaults, with no audio rumble, constant force, or trigger routing, they match. Each bar has its own percentage readout. Left is the low-frequency motor, right is the high-frequency motor.</p>
 <p>Use the bars to:</p>
 <ul>
 <li>Watch which motor a game favors and how hard it pushes.</li>
@@ -4343,7 +4343,7 @@
 <h2 id="reset-controls">Reset controls<a class="headerlink" href="#reset-controls" title="Permanent link">&para;</a></h2>
 <p>Every slider has its own reset button. Reset All restores everything in its section.</p>
 <ul>
-<li><strong>Rumble Reset All</strong>: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Constant Force and Audio Rumble sections below it.</li>
+<li><strong>Rumble Reset All</strong>: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Steering Angle Rumble, Constant Force, and Audio Rumble sections below it.</li>
 <li><strong>Constant Force Reset All</strong>: Toggle off, X = 0, Y = 0.</li>
 <li><strong>Audio Rumble Reset All</strong>: Disabled, sensitivity 4.0, cutoff 80 Hz, both motors 100%.</li>
 <li><strong>Trigger Routing Reset All</strong>: every trigger back to Source None (off), Mode Duplicate, Scale 100%, activator cleared, Activator Mode Hold.</li>
@@ -4358,7 +4358,7 @@
 <ol>
 <li>Open the <strong>Bass Shakers</strong> tab for the slot.</li>
 <li>Check <strong>Route Rumble to an Audio Output</strong>.</li>
-<li>Pick an <strong>Output Device</strong>. System default follows the Windows default playback device.</li>
+<li>Pick an <strong>Output Device</strong>. System Default follows the Windows default playback device.</li>
 <li>Play a game that rumbles, or click a voice's <strong>Test</strong> button.</li>
 </ol>
 <p>Turning the toggle off keeps every setting. If the selected output device disappears, audio stays off until it returns, and the status line under the picker says so. Bluetooth audio devices add noticeable latency.</p>
@@ -4505,7 +4505,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: wider help with rumble issues.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

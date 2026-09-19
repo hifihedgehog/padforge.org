@@ -17,7 +17,7 @@ Ten sections, stacked top to bottom: the engine and its slots, then a **Services
 | **Virtual Controllers** | One card per [slot](controller-slots.md), plus an Add card. |
 | **Web Controller** | [Browser-based controller](../guides/web-controller.md) for phones, tablets, and other PCs. |
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
-| **Head Tracking** | [OpenTrack head pose](head-tracking.md) as six mappable axes. |
+| **Head Tracking** | A head pose from [OpenTrack](head-tracking.md) or from a [VR headset](vr-controller-input.md) as six mappable axes. |
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Lightbar Mirrors** | Forward a virtual PlayStation pad's lightbar color to [Razer Chroma and Logitech LIGHTSYNC](lightbar-mirrors.md) devices. |
 | **Razer Sensa HD Haptics** | Translate controller rumble into [Razer Sensa HD haptics](lightbar-mirrors.md#razer-sensa-hd-haptics). |
@@ -143,20 +143,25 @@ See [Remote Link](../guides/remote-link.md) for full details.
 
 ## Head Tracking
 
-Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 shared memory, and exposes it as six axes on a **Head Tracker** row on the Devices page.
+Reads a head pose from OpenTrack over its UDP output, from the FreeTrack 2.0 shared memory, or from a VR headset through an OpenXR runtime, and exposes it as six axes on a **Head Tracker** row on the Devices page. The three inputs are independent and can run together.
 
 | Control | Description |
 |---------|-------------|
 | **Enable UDP Tracking Input** | Enables the UDP listener independently of FreeTrack. |
 | **Enable FreeTrack 2.0 Shared Memory Input** | Enables shared-memory input independently of UDP. |
+| **Enable OpenXR Headset Input** | Reads a VR headset's pose through an OpenXR runtime, with or without SteamVR. |
+| **OpenXR Runtime** | Which runtime to read from. **System Default** follows the machine's registered runtime. Changing this affects PadForge only and never the system default. Disabled while OpenXR input is off. |
 | **UDP Port** | The port OpenTrack's *UDP over network* output sends to. Default `4242`. Disabled while UDP input is off. |
 | **Rotation Range (Degrees)** | Head rotation that moves yaw, pitch, and roll to full deflection. Default 90. |
 | **Translation Range (cm)** | Head travel that moves X, Y, and Z to full deflection. Default 30. |
-| **Status** | *Stopped* while both inputs are off or the engine is stopped. Otherwise *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, or *UDP port `<port>` is in use by another program.* |
+| **Per-Axis Range** | Overrides one axis on its own. Zero follows the range above. Rotation is in degrees, travel in centimeters. Each box shows the value you pinned, never the range it resolves to. |
+| **Status** | *Stopped* while every input is off or the engine is stopped. The UDP and FreeTrack lines are *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, or *UDP port `<port>` is in use by another program.* The OpenXR lines are *Starting the OpenXR session*, *Waiting for `<runtime>` to report a tracked pose*, *Reading `<runtime>`*, *No OpenXR runtime is installed*, *The OpenXR runtime reports no headset*, *This runtime cannot supply a background session*, or *The OpenXR session failed. See the diagnostics log.* |
 
-Each input toggle has its own authored profile opinion. The port and the two ranges remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.
+Each input toggle has its own authored profile opinion. The port, the two ranges and the per-axis overrides remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.
 
-See [Head Tracking](head-tracking.md) for the OpenTrack setup.
+Turning on OpenXR headset input also brings up the two **VR Controller** rows on the Devices page when the runtime reports hand controllers.
+
+See [Head Tracking](head-tracking.md) for the OpenTrack setup and [VR Controller Input](vr-controller-input.md) for the OpenXR side.
 
 ---
 

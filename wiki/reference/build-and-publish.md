@@ -411,7 +411,7 @@ The Sony and Xbox families are split one folder per colorway, and each colorway 
 | Directory | Colorways | Contents |
 |-----------|-----------|----------|
 | `3DModels/XBOX360/` | none, flat | 31 OBJ files (Xbox 360 controller parts) |
-| `3DModels/XboxSeries/` | 13 (Carbon, Starfield, Robot, and so on) | 32 OBJ files each, 34 for Starfield |
+| `3DModels/XboxSeries/` | 21 (Carbon, Starfield, Robot, Sonic, and so on) | 32 OBJ files each, 34 for Starfield |
 | `3DModels/DS4/` | 2 (JetBlack, MagmaRed) | 37 OBJ files each |
 | `3DModels/DualSense/` | 10 (White, Midnight, SpiderMan2, and so on) | 32 OBJ files each, Touchpad split for click-mapping |
 | `3DModels/DualSenseEdge/` | 1 (Edge) | 40 OBJ files |

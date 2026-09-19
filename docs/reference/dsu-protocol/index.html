@@ -4343,12 +4343,12 @@
 <tr>
 <td><code>GyroPitch</code></td>
 <td><code>gx</code></td>
-<td>Negated (<code>-gx</code>)</td>
+<td>Kept (<code>gx</code>)</td>
 </tr>
 <tr>
 <td><code>GyroYaw</code></td>
 <td><code>gy</code></td>
-<td>Kept (<code>gy</code>)</td>
+<td>Negated (<code>-gy</code>)</td>
 </tr>
 <tr>
 <td><code>GyroRoll</code></td>
@@ -4357,7 +4357,7 @@
 </tr>
 </tbody>
 </table>
-<p>Accel and gyro must be in the same coordinate frame. <code>AccelX</code> and <code>GyroPitch</code> reference the same physical axis. Only <code>GyroYaw</code> keeps its sign.</p>
+<p>Accel and gyro must be in the same coordinate frame. <code>AccelX</code> and <code>GyroPitch</code> reference the same physical axis. Only <code>GyroPitch</code> keeps its sign.</p>
 <p>The sign transform lives in <code>BuildPadDataPacket</code>, not in <code>MotionSnapshot</code>. The snapshot carries no protocol frame of its own, so the Sony HID report packers read the same values and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.</p>
 <p>One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. <code>UpdateMotionSnapshots</code> calls <code>SourceCoercion.ApplyMotionGrip</code> on the body accelerometer, and <code>GetPassthroughGyro</code> applies the same rotation inside its calibrated read.</p>
 <hr />
@@ -5128,7 +5128,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

@@ -3997,6 +3997,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-the-assets-ship-450" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the assets ship (4.5.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How the assets ship (4.5.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sharedgeometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SharedGeometry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-shell-skins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom-shell skins
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#controllermodelview" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5300,6 +5339,45 @@
     <span class="md-ellipsis">
       
         Directory Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-assets-ship-450" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the assets ship (4.5.0)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How the assets ship (4.5.0)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sharedgeometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SharedGeometry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-shell-skins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom-shell skins
       
     </span>
   </a>
@@ -7460,71 +7538,137 @@
 <a id="__codelineno-22-179" name="__codelineno-22-179" href="#__codelineno-22-179"></a>      Transparent-Shoulder-Left-Trigger.obj  (clear trigger shells that
 <a id="__codelineno-22-180" name="__codelineno-22-180" href="#__codelineno-22-180"></a>      Transparent-Shoulder-Right-Trigger.obj  rotate with the pull)
 </code></pre></div>
-<p>Meshes and textures are both embedded as <code>EmbeddedResource</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;3DModels\**\*.obj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;3DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<h2 id="how-the-assets-ship-450">How the assets ship (4.5.0)<a class="headerlink" href="#how-the-assets-ship-450" title="Permanent link">&para;</a></h2>
+<p>Only one class of asset is embedded directly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;3DModels\**\*.jpg&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
+<p>Everything else goes through the <code>PackAssets</code> inline MSBuild task and the
+<code>EmbedPackedArt</code> target in <code>PadForge.App.csproj</code>, which Brotli-pack each file
+and embed the packed form under a new extension:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Ships as</th>
+<th>Packing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>3DModels/**/*.obj</code></td>
+<td><code>.objbr</code></td>
+<td>Brotli over the Wavefront text</td>
+</tr>
+<tr>
+<td><code>3DModels/**/*.png</code></td>
+<td><code>.pngbr</code></td>
+<td>IDAT re-emitted as deflate STORED, then Brotli</td>
+</tr>
+<tr>
+<td><code>3DModels/**/*.jpg</code></td>
+<td><code>.jpg</code></td>
+<td>embedded as-is, already compressed</td>
+</tr>
+<tr>
+<td><code>VoiceModels/*.zip</code></td>
+<td><code>.zipbr</code></td>
+<td>zip rebuilt uncompressed, then Brotli</td>
+</tr>
+</tbody>
+</table>
+<p>Storing before compressing is the whole trick: Brotli cannot improve on bytes
+that deflate already compressed, so the inner layer is made to store instead.</p>
+<p>An atlas that is fully opaque ships as JPEG, because JPEG beats deflate-stored
+PNG on photographic texture. An atlas with alpha stays PNG, because JPEG has no
+alpha channel and a transparent decal would lose it. <code>FindResource</code> tries
+<code>.jpg</code> first and falls back to <code>.pngbr</code>.</p>
+<p>One build trap worth knowing: MSBuild reads a two-letter stem as a culture, so
+<code>GL.objbr</code> was taken for Galician until the target set <code>WithCulture=false</code> on
+every packed item.</p>
+<h3 id="sharedgeometry">SharedGeometry<a class="headerlink" href="#sharedgeometry" title="Permanent link">&para;</a></h3>
+<p>Most colorways differ only in their texture, so shipping a mesh set per
+colorway shipped the same geometry many times over. <code>ControllerModelBase</code>
+carries a donor table:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">SharedGeometry</span>
+</code></pre></div>
+<p>Twelve entries. <code>DS4.MagmaRed</code> borrows <code>DS4.JetBlack</code>; <code>DualSense.GrayCamo</code> and
+<code>.NovaPink</code> borrow <code>DualSense.CosmicRed</code>; <code>.DeepEarthSterling</code> and
+<code>.DeepEarthVolcanic</code> borrow <code>DualSense.DeepEarthCobalt</code>; <code>XboxSeries.Robot</code> and
+<code>.PulseRed</code> borrow <code>XboxSeries.Carbon</code>; <code>.DeepPink</code>, <code>.ShockBlue</code>,
+<code>.VelocityGreen</code>, <code>.Porsche75th</code> and <code>.DaystrikeCamo</code> borrow
+<code>XboxSeries.ElectricVolt</code>.</p>
+<p><code>TryLoadModel</code> tries the colorway's own folder first and falls back to its donor
+once. It never chains, so a donor cannot itself borrow. That removed 352
+duplicate meshes, which is why the per-folder mesh counts above are not uniform:
+a borrowing colorway ships none of its own.</p>
+<h3 id="custom-shell-skins">Custom-shell skins<a class="headerlink" href="#custom-shell-skins" title="Permanent link">&para;</a></h3>
+<p>The eight skins added in 4.5.0 (Sonic the Hedgehog, Razer, Captain America,
+Boba Fett, The Mandalorian, Stormtrooper, Darth Vader, Star Wars: Squadrons)
+ship exactly one file each, <code>Shell.jpg</code>. They pass
+<code>resourceModelName: "XboxSeries.Carbon"</code> to the base constructor and borrow
+Carbon's whole asset set, then re-paint <code>MainBody</code> with their own shell after
+the generic body pass.</p>
 <hr />
 <h2 id="controllermodelview">ControllerModelView<a class="headerlink" href="#controllermodelview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/ControllerModelView.xaml</code>, <code>ControllerModelView.xaml.cs</code></p>
 <p>WPF <code>UserControl</code> hosting a <code>HelixViewport3D</code> for 3D controller visualization. The code-behind spans two partial files: <code>ControllerModelView.xaml.cs</code> (2169 lines: rendering, input, hit testing, flash) and <code>ControllerModelView.Annotations.cs</code> (1052 lines: the annotation overlay, see below).</p>
 <h3 id="xaml-structure">XAML Structure<a class="headerlink" href="#xaml-structure" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">&lt;Grid&gt;</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="nt">&lt;helix:HelixViewport3D</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;ModelViewPort&quot;</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">        </span><span class="na">IsRotationEnabled=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">IsPanEnabled=</span><span class="s">&quot;False&quot;</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">        </span><span class="na">IsMoveEnabled=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">IsZoomEnabled=</span><span class="s">&quot;False&quot;</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">        </span><span class="na">ShowViewCube=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">ZoomExtentsWhenLoaded=</span><span class="s">&quot;False&quot;</span>
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">        </span><span class="na">Background=</span><span class="s">&quot;Transparent&quot;</span><span class="w"> </span><span class="na">IsManipulationEnabled=</span><span class="s">&quot;False&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">        </span><span class="nt">&lt;helix:SunLight</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">        </span><span class="nt">&lt;helix:DirectionalHeadLight</span><span class="w"> </span><span class="na">Brightness=</span><span class="s">&quot;0.35&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>
-<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">        </span><span class="cm">&lt;!-- Ember rim light (#175) --&gt;</span>
-<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">        </span><span class="nt">&lt;ModelVisual3D&gt;</span>
-<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">            </span><span class="nt">&lt;ModelVisual3D.Content&gt;</span>
-<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">                </span><span class="nt">&lt;DirectionalLight</span><span class="w"> </span><span class="na">Color=</span><span class="s">&quot;#5A321C&quot;</span><span class="w"> </span><span class="na">Direction=</span><span class="s">&quot;0,-0.7,0.7&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">            </span><span class="nt">&lt;/ModelVisual3D.Content&gt;</span>
-<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">        </span><span class="nt">&lt;/ModelVisual3D&gt;</span>
-<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>
-<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a><span class="w">        </span><span class="nt">&lt;ModelVisual3D</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;ModelVisual3D&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>
-<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="w">        </span><span class="nt">&lt;helix:HelixViewport3D.Camera&gt;</span>
-<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a><span class="w">            </span><span class="nt">&lt;PerspectiveCamera</span><span class="w"> </span><span class="na">FieldOfView=</span><span class="s">&quot;55&quot;</span>
-<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a><span class="w">                </span><span class="na">LookDirection=</span><span class="s">&quot;0,0.793,-0.609&quot;</span>
-<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a><span class="w">                </span><span class="na">Position=</span><span class="s">&quot;0,-172,132&quot;</span><span class="w"> </span><span class="na">UpDirection=</span><span class="s">&quot;0,0,1&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a><span class="w">        </span><span class="nt">&lt;/helix:HelixViewport3D.Camera&gt;</span>
-<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a><span class="w">    </span><span class="nt">&lt;/helix:HelixViewport3D&gt;</span>
-<a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a>
-<a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a><span class="w">    </span><span class="cm">&lt;!-- Annotation overlay (#175): chips, leader lines, trigger bars.</span>
-<a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a><span class="cm">         No Background so empty space stays click-through to the viewport. --&gt;</span>
-<a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a><span class="w">    </span><span class="nt">&lt;Canvas</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationCanvas&quot;</span><span class="w"> </span><span class="na">Visibility=</span><span class="s">&quot;Collapsed&quot;</span><span class="w"> </span><span class="na">ClipToBounds=</span><span class="s">&quot;True&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>
-<a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a><span class="w">    </span><span class="cm">&lt;!-- Top-right controls: colorway picker, annotation toggle</span>
-<a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a><span class="cm">         (Tag glyph E8EC), Reset View --&gt;</span>
-<a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a><span class="w">    </span><span class="nt">&lt;StackPanel</span><span class="w"> </span><span class="na">Orientation=</span><span class="s">&quot;Horizontal&quot;</span><span class="w"> </span><span class="na">HorizontalAlignment=</span><span class="s">&quot;Right&quot;</span>
-<a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a><span class="w">                </span><span class="na">VerticalAlignment=</span><span class="s">&quot;Top&quot;</span><span class="w"> </span><span class="na">Margin=</span><span class="s">&quot;0,8,8,0&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a><span class="w">        </span><span class="nt">&lt;ComboBox</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AppearancePicker&quot;</span><span class="w"> </span><span class="na">MinWidth=</span><span class="s">&quot;130&quot;</span>
-<a id="__codelineno-24-36" name="__codelineno-24-36" href="#__codelineno-24-36"></a><span class="w">                  </span><span class="na">Visibility=</span><span class="s">&quot;Collapsed&quot;</span>
-<a id="__codelineno-24-37" name="__codelineno-24-37" href="#__codelineno-24-37"></a><span class="w">                  </span><span class="na">SelectionChanged=</span><span class="s">&quot;AppearancePicker_SelectionChanged&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-38" name="__codelineno-24-38" href="#__codelineno-24-38"></a><span class="w">        </span><span class="nt">&lt;ui:Button</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleButton&quot;</span>
-<a id="__codelineno-24-39" name="__codelineno-24-39" href="#__codelineno-24-39"></a><span class="w">                   </span><span class="na">Style=</span><span class="s">&quot;{StaticResource EmberIconButton}&quot;</span>
-<a id="__codelineno-24-40" name="__codelineno-24-40" href="#__codelineno-24-40"></a><span class="w">                   </span><span class="na">Click=</span><span class="s">&quot;AnnotationToggle_Click&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-24-41" name="__codelineno-24-41" href="#__codelineno-24-41"></a><span class="w">            </span><span class="nt">&lt;TextBlock</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleGlyph&quot;</span>
-<a id="__codelineno-24-42" name="__codelineno-24-42" href="#__codelineno-24-42"></a><span class="w">                       </span><span class="na">FontFamily=</span><span class="s">&quot;Segoe MDL2 Assets&quot;</span><span class="w"> </span><span class="na">Text=</span><span class="s">&quot;&amp;#xE8EC;&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-43" name="__codelineno-24-43" href="#__codelineno-24-43"></a><span class="w">        </span><span class="nt">&lt;/ui:Button&gt;</span>
-<a id="__codelineno-24-44" name="__codelineno-24-44" href="#__codelineno-24-44"></a><span class="w">        </span><span class="nt">&lt;Button</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;ResetViewButton&quot;</span><span class="w"> </span><span class="na">Click=</span><span class="s">&quot;ResetView_Click&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-24-45" name="__codelineno-24-45" href="#__codelineno-24-45"></a><span class="w">    </span><span class="nt">&lt;/StackPanel&gt;</span>
-<a id="__codelineno-24-46" name="__codelineno-24-46" href="#__codelineno-24-46"></a><span class="nt">&lt;/Grid&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">&lt;Grid&gt;</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="nt">&lt;helix:HelixViewport3D</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;ModelViewPort&quot;</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">        </span><span class="na">IsRotationEnabled=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">IsPanEnabled=</span><span class="s">&quot;False&quot;</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">        </span><span class="na">IsMoveEnabled=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">IsZoomEnabled=</span><span class="s">&quot;False&quot;</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">        </span><span class="na">ShowViewCube=</span><span class="s">&quot;False&quot;</span><span class="w"> </span><span class="na">ZoomExtentsWhenLoaded=</span><span class="s">&quot;False&quot;</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">        </span><span class="na">Background=</span><span class="s">&quot;Transparent&quot;</span><span class="w"> </span><span class="na">IsManipulationEnabled=</span><span class="s">&quot;False&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">        </span><span class="nt">&lt;helix:SunLight</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">        </span><span class="nt">&lt;helix:DirectionalHeadLight</span><span class="w"> </span><span class="na">Brightness=</span><span class="s">&quot;0.35&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="w">        </span><span class="cm">&lt;!-- Ember rim light (#175) --&gt;</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="w">        </span><span class="nt">&lt;ModelVisual3D&gt;</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="w">            </span><span class="nt">&lt;ModelVisual3D.Content&gt;</span>
+<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="w">                </span><span class="nt">&lt;DirectionalLight</span><span class="w"> </span><span class="na">Color=</span><span class="s">&quot;#5A321C&quot;</span><span class="w"> </span><span class="na">Direction=</span><span class="s">&quot;0,-0.7,0.7&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a><span class="w">            </span><span class="nt">&lt;/ModelVisual3D.Content&gt;</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="w">        </span><span class="nt">&lt;/ModelVisual3D&gt;</span>
+<a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a>
+<a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="w">        </span><span class="nt">&lt;ModelVisual3D</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;ModelVisual3D&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a>
+<a id="__codelineno-25-20" name="__codelineno-25-20" href="#__codelineno-25-20"></a><span class="w">        </span><span class="nt">&lt;helix:HelixViewport3D.Camera&gt;</span>
+<a id="__codelineno-25-21" name="__codelineno-25-21" href="#__codelineno-25-21"></a><span class="w">            </span><span class="nt">&lt;PerspectiveCamera</span><span class="w"> </span><span class="na">FieldOfView=</span><span class="s">&quot;55&quot;</span>
+<a id="__codelineno-25-22" name="__codelineno-25-22" href="#__codelineno-25-22"></a><span class="w">                </span><span class="na">LookDirection=</span><span class="s">&quot;0,0.793,-0.609&quot;</span>
+<a id="__codelineno-25-23" name="__codelineno-25-23" href="#__codelineno-25-23"></a><span class="w">                </span><span class="na">Position=</span><span class="s">&quot;0,-172,132&quot;</span><span class="w"> </span><span class="na">UpDirection=</span><span class="s">&quot;0,0,1&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-24" name="__codelineno-25-24" href="#__codelineno-25-24"></a><span class="w">        </span><span class="nt">&lt;/helix:HelixViewport3D.Camera&gt;</span>
+<a id="__codelineno-25-25" name="__codelineno-25-25" href="#__codelineno-25-25"></a><span class="w">    </span><span class="nt">&lt;/helix:HelixViewport3D&gt;</span>
+<a id="__codelineno-25-26" name="__codelineno-25-26" href="#__codelineno-25-26"></a>
+<a id="__codelineno-25-27" name="__codelineno-25-27" href="#__codelineno-25-27"></a><span class="w">    </span><span class="cm">&lt;!-- Annotation overlay (#175): chips, leader lines, trigger bars.</span>
+<a id="__codelineno-25-28" name="__codelineno-25-28" href="#__codelineno-25-28"></a><span class="cm">         No Background so empty space stays click-through to the viewport. --&gt;</span>
+<a id="__codelineno-25-29" name="__codelineno-25-29" href="#__codelineno-25-29"></a><span class="w">    </span><span class="nt">&lt;Canvas</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationCanvas&quot;</span><span class="w"> </span><span class="na">Visibility=</span><span class="s">&quot;Collapsed&quot;</span><span class="w"> </span><span class="na">ClipToBounds=</span><span class="s">&quot;True&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-30" name="__codelineno-25-30" href="#__codelineno-25-30"></a>
+<a id="__codelineno-25-31" name="__codelineno-25-31" href="#__codelineno-25-31"></a><span class="w">    </span><span class="cm">&lt;!-- Top-right controls: colorway picker, annotation toggle</span>
+<a id="__codelineno-25-32" name="__codelineno-25-32" href="#__codelineno-25-32"></a><span class="cm">         (Tag glyph E8EC), Reset View --&gt;</span>
+<a id="__codelineno-25-33" name="__codelineno-25-33" href="#__codelineno-25-33"></a><span class="w">    </span><span class="nt">&lt;StackPanel</span><span class="w"> </span><span class="na">Orientation=</span><span class="s">&quot;Horizontal&quot;</span><span class="w"> </span><span class="na">HorizontalAlignment=</span><span class="s">&quot;Right&quot;</span>
+<a id="__codelineno-25-34" name="__codelineno-25-34" href="#__codelineno-25-34"></a><span class="w">                </span><span class="na">VerticalAlignment=</span><span class="s">&quot;Top&quot;</span><span class="w"> </span><span class="na">Margin=</span><span class="s">&quot;0,8,8,0&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-25-35" name="__codelineno-25-35" href="#__codelineno-25-35"></a><span class="w">        </span><span class="nt">&lt;ComboBox</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AppearancePicker&quot;</span><span class="w"> </span><span class="na">MinWidth=</span><span class="s">&quot;130&quot;</span>
+<a id="__codelineno-25-36" name="__codelineno-25-36" href="#__codelineno-25-36"></a><span class="w">                  </span><span class="na">Visibility=</span><span class="s">&quot;Collapsed&quot;</span>
+<a id="__codelineno-25-37" name="__codelineno-25-37" href="#__codelineno-25-37"></a><span class="w">                  </span><span class="na">SelectionChanged=</span><span class="s">&quot;AppearancePicker_SelectionChanged&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-38" name="__codelineno-25-38" href="#__codelineno-25-38"></a><span class="w">        </span><span class="nt">&lt;ui:Button</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleButton&quot;</span>
+<a id="__codelineno-25-39" name="__codelineno-25-39" href="#__codelineno-25-39"></a><span class="w">                   </span><span class="na">Style=</span><span class="s">&quot;{StaticResource EmberIconButton}&quot;</span>
+<a id="__codelineno-25-40" name="__codelineno-25-40" href="#__codelineno-25-40"></a><span class="w">                   </span><span class="na">Click=</span><span class="s">&quot;AnnotationToggle_Click&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-25-41" name="__codelineno-25-41" href="#__codelineno-25-41"></a><span class="w">            </span><span class="nt">&lt;TextBlock</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleGlyph&quot;</span>
+<a id="__codelineno-25-42" name="__codelineno-25-42" href="#__codelineno-25-42"></a><span class="w">                       </span><span class="na">FontFamily=</span><span class="s">&quot;Segoe MDL2 Assets&quot;</span><span class="w"> </span><span class="na">Text=</span><span class="s">&quot;&amp;#xE8EC;&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-43" name="__codelineno-25-43" href="#__codelineno-25-43"></a><span class="w">        </span><span class="nt">&lt;/ui:Button&gt;</span>
+<a id="__codelineno-25-44" name="__codelineno-25-44" href="#__codelineno-25-44"></a><span class="w">        </span><span class="nt">&lt;Button</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;ResetViewButton&quot;</span><span class="w"> </span><span class="na">Click=</span><span class="s">&quot;ResetView_Click&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-25-45" name="__codelineno-25-45" href="#__codelineno-25-45"></a><span class="w">    </span><span class="nt">&lt;/StackPanel&gt;</span>
+<a id="__codelineno-25-46" name="__codelineno-25-46" href="#__codelineno-25-46"></a><span class="nt">&lt;/Grid&gt;</span>
 </code></pre></div>
 <p>The camera is wrapped in <code>&lt;helix:HelixViewport3D.Camera&gt;</code> rather than being a bare child. The viewport is named <code>ModelViewPort</code> (the code-behind reads it for hit testing and projection). The rim light is a third light source (see <a href="#lighting">Lighting</a>). All built-in HelixToolkit camera controls are disabled. Rotation, zoom, and pan are handled by custom event handlers to avoid conflicts with PadForge's click-to-map and touch gesture handling.</p>
 <h3 id="colorway-picker">Colorway Picker<a class="headerlink" href="#colorway-picker" title="Permanent link">&para;</a></h3>
 <p><code>AppearancePicker</code> shows only when the current model family ships more than one appearance, which <code>UpdateAppearancePicker()</code> decides from <code>AppearanceRegistry(family)</code>. The registry is a switch over <code>"XboxSeries"</code>, <code>"DualSense"</code>, <code>"DS4"</code>, and <code>"DualSenseEdge"</code>, reading each model class's static <code>AppearanceIds</code> / <code>AppearanceNames</code>. <code>DualSenseEdge</code> has one entry, so its picker stays collapsed. Xbox 360, Switch 2 Pro, and the three Valve models are not in the registry at all, so their pickers never appear.</p>
 <p>Selection writes <code>PadViewModel.SetModelAppearance(family, id)</code>, which raises <code>Model3DAppearances</code>, which re-enters <code>EnsureModel()</code> and rebuilds against the new atlas set. The choice is per virtual controller, persisted on the pad's <code>PadSetting</code>, so two VCs of the same family can wear different colorways.</p>
 <h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ControllerElementRecordRequested</span><span class="p">;</span><span class="w">   </span><span class="c1">// xaml.cs</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AnnotationsToggled</span><span class="p">;</span><span class="w">                   </span><span class="c1">// Annotations.cs</span>
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AnnotationChipNavigateRequested</span><span class="p">;</span><span class="w">    </span><span class="c1">// Annotations.cs</span>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">AnnotationsEnabled</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                          </span><span class="c1">// Annotations.cs</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ControllerElementRecordRequested</span><span class="p">;</span><span class="w">   </span><span class="c1">// xaml.cs</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AnnotationsToggled</span><span class="p">;</span><span class="w">                   </span><span class="c1">// Annotations.cs</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AnnotationChipNavigateRequested</span><span class="p">;</span><span class="w">    </span><span class="c1">// Annotations.cs</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">AnnotationsEnabled</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                          </span><span class="c1">// Annotations.cs</span>
 </code></pre></div>
 <table>
 <thead>
@@ -7762,12 +7906,12 @@
 </table>
 <p>Annotation-overlay fields live in the <code>ControllerModelView.Annotations.cs</code> partial and are covered in <a href="#annotation-overlay">Annotation Overlay</a>.</p>
 <h3 id="viewmodel-binding">ViewModel Binding<a class="headerlink" href="#viewmodel-binding" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Bind</span><span class="p">(</span><span class="n">PadViewModel</span><span class="w"> </span><span class="n">vm</span><span class="p">)</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Unbind</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Bind</span><span class="p">(</span><span class="n">PadViewModel</span><span class="w"> </span><span class="n">vm</span><span class="p">)</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Unbind</span><span class="p">()</span>
 </code></pre></div>
 <p><code>Bind</code> subscribes to <code>PropertyChanged</code>, hooks <code>CompositionTarget.Rendering</code>, calls <code>EnsureModel()</code>, and rebuilds annotations. <code>OutputType</code>, <code>ProfileId</code>, or <code>Model3DAppearances</code> changes trigger <code>EnsureModel()</code>. <code>CurrentRecordingTarget</code> changes trigger flash animation and arrow overlays. The six live gyro and accel readout properties return early, because the 3D render never consumes them and a motion pad at rest otherwise re-armed the full refresh every tick. All other changes set <code>_dirty</code>.</p>
 <h3 id="model-lifecycle">Model Lifecycle<a class="headerlink" href="#model-lifecycle" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">EnsureModel</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">EnsureModel</span><span class="p">()</span>
 </code></pre></div>
 <p>Resolves the asset folder via <code>HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)</code>, whose second tuple element is the 3D folder:</p>
 <table>
@@ -7871,47 +8015,47 @@
 <p><code>PadPage.ApplyViewMode()</code> routes MIDI to <code>MidiPreviewView</code>, KB+Mouse to <code>KBMPreviewView</code>, VR to <code>VRPreview</code>, and an Extended slot to <code>ControllerSchematicView</code> unless <code>HasDedicatedArt</code> says PadForge ships that controller's own body. This control serves the gamepad presets, which means Xbox, PlayStation, Nintendo, and the five Valve profiles under Extended. A profile change re-runs <code>ApplyViewMode</code>.</p>
 <h3 id="render-frame-update-pipeline">Render-Frame Update Pipeline<a class="headerlink" href="#render-frame-update-pipeline" title="Permanent link">&para;</a></h3>
 <p><code>CompositionTarget.Rendering</code> handler (~60 fps), gated by <code>_dirty</code> flag:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>OnRendering()
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>    |
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    +-&gt; visibility gate (skip if !IsVisible or the window is minimized)
-<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>    +-&gt; _dirty check (skip if clean)
-<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>    |
-<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>    +-&gt; HighlightButtons()          -- swap materials for 31 button roles
-<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>    +-&gt; UpdateJoystick() x2         -- tilt left/right stick meshes
-<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>    +-&gt; UpdateTrigger() x2          -- rotate left/right trigger meshes
-<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>    +-&gt; UpdateTouchpadPreview3D()   -- touchpad highlight + finger spheres
-<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>    +-&gt; UpdateAnnotationLevelBars() -- trigger bar heights (no-op if overlay off)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>OnRendering()
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>    |
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>    +-&gt; visibility gate (skip if !IsVisible or the window is minimized)
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>    +-&gt; _dirty check (skip if clean)
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>    |
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>    +-&gt; HighlightButtons()          -- swap materials for 31 button roles
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>    +-&gt; UpdateJoystick() x2         -- tilt left/right stick meshes
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>    +-&gt; UpdateTrigger() x2          -- rotate left/right trigger meshes
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>    +-&gt; UpdateTouchpadPreview3D()   -- touchpad highlight + finger spheres
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>    +-&gt; UpdateAnnotationLevelBars() -- trigger bar heights (no-op if overlay off)
 </code></pre></div>
 <p>The visibility gate is a retained-page guard. Pages are eagerly instantiated and visibility-toggled, so <code>Loaded</code> fires at startup even for hidden pages and <code>Unloaded</code> never fires. Without it a connected device's 30 Hz updates kept <code>_dirty</code> set and this handler rebuilt the whole WPF3D transform and material graph every frame while invisible. <code>_dirty</code> stays set, so the first visible frame catches up. <code>IsVisible</code> stays true while minimized, which is why the minimize probe is a separate test.</p>
 <p><code>UpdateTouchpadPreview3D()</code> runs every dirty frame but returns immediately when the current model has no <code>Touchpad</code>. <code>UpdateAnnotationLevelBars()</code> returns immediately when the overlay is off.</p>
 <h4 id="highlightbuttons">HighlightButtons()<a class="headerlink" href="#highlightbuttons" title="Permanent link">&para;</a></h4>
 <p>Iterates <code>ButtonReaders</code>, a 31-entry table pairing each button role with the reader that pulls its state off the view model, and swaps between <code>DefaultMaterials</code> and <code>HighlightMaterials</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="nf">readonly</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Func</span><span class="o">&lt;</span><span class="n">PadViewModel</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Read</span><span class="p">)[]</span><span class="w"> </span><span class="n">ButtonReaders</span><span class="w"> </span><span class="o">=</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="p">{</span>
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;ButtonA&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">ButtonA</span><span class="p">),</span>
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="c1">// ...the 20 other shared roles...</span>
-<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;ButtonQuickAccess&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">ButtonQuickAccess</span><span class="p">),</span>
-<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle1</span><span class="p">),</span>
-<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle2</span><span class="p">),</span>
-<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle3</span><span class="p">),</span>
-<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle4&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle4</span><span class="p">),</span>
-<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;LeftGrip&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">LeftGrip</span><span class="p">),</span>
-<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;RightGrip&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">RightGrip</span><span class="p">),</span>
-<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;LeftTouchpadClick&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">LeftTouchpadClick</span><span class="p">),</span>
-<a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;RightTouchpadClick&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">RightTouchpadClick</span><span class="p">),</span>
-<a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="p">};</span>
-<a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a>
-<a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">ButtonProperties</span><span class="w"> </span><span class="o">=</span>
-<a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a><span class="w">    </span><span class="n">ButtonReaders</span><span class="p">.</span><span class="n">Select</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">Name</span><span class="p">).</span><span class="n">ToArray</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="nf">readonly</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Func</span><span class="o">&lt;</span><span class="n">PadViewModel</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Read</span><span class="p">)[]</span><span class="w"> </span><span class="n">ButtonReaders</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="p">{</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;ButtonA&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">ButtonA</span><span class="p">),</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="c1">// ...the 20 other shared roles...</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;ButtonQuickAccess&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">ButtonQuickAccess</span><span class="p">),</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle1</span><span class="p">),</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle2</span><span class="p">),</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle3</span><span class="p">),</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;Paddle4&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">Paddle4</span><span class="p">),</span>
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;LeftGrip&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">LeftGrip</span><span class="p">),</span>
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;RightGrip&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">RightGrip</span><span class="p">),</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;LeftTouchpadClick&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">LeftTouchpadClick</span><span class="p">),</span>
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="w">    </span><span class="p">(</span><span class="s">&quot;RightTouchpadClick&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vm</span><span class="p">.</span><span class="n">RightTouchpadClick</span><span class="p">),</span>
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="p">};</span>
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a>
+<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">ButtonProperties</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="w">    </span><span class="n">ButtonReaders</span><span class="p">.</span><span class="n">Select</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">Name</span><span class="p">).</span><span class="n">ToArray</span><span class="p">();</span>
 </code></pre></div>
 <p>One table, because two hand-kept lists drifted and the drift shipped: the reader switch grew the Valve roles while the array the press loop iterates did not, so Quick Access, the four rear buttons, the grips, and the two pad clicks were read by nothing and never lit on any Valve model. <code>ButtonProperties</code> and the by-name lookup are both derived from <code>ButtonReaders</code>, so adding a role reaches every half at once.</p>
 <p>Many roles resolve to a mesh on only some models: <code>ButtonShare</code> on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), <code>ButtonMute</code> on DualSense and Edge, <code>LeftFunction</code> / <code>RightFunction</code> on the Edge alone, <code>ButtonC</code> / <code>LeftPaddle</code> / <code>RightPaddle</code> on Switch 2 Pro when the extra controls are wired with the paddles also on the Edge, <code>LeftGrip</code> / <code>RightGrip</code> on the 2015 Steam Controller, and the four <code>PaddleN</code> roles on the Steam Deck and the 2026 Steam Controller. Everywhere else <code>ButtonMap.TryGetValue</code> misses and the entry is skipped.</p>
 <p>For each button, iterates all <code>Model3DGroup</code> entries in <code>ButtonMap</code> (multi-mesh support). The pass drives a group only when its current material is one the view set (the registered default or the registered highlight), so a glossy or textured default such as the DualSense mute button still lights on press. The stick rings, the stick clicks, and the bumpers bypass that check, because mid-deflection they carry a graded <code>MaterialGroup</code> and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.</p>
 <h4 id="updatejoystick">UpdateJoystick()<a class="headerlink" href="#updatejoystick" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateJoystick</span><span class="p">(</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">rawX</span><span class="p">,</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">rawY</span><span class="p">,</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">    </span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">thumbRing</span><span class="p">,</span><span class="w"> </span><span class="n">Model3D</span><span class="w"> </span><span class="n">thumb</span><span class="p">,</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="n">Vector3D</span><span class="w"> </span><span class="n">rotationPoint</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">maxAngleDeg</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateJoystick</span><span class="p">(</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">rawX</span><span class="p">,</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">rawY</span><span class="p">,</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">thumbRing</span><span class="p">,</span><span class="w"> </span><span class="n">Model3D</span><span class="w"> </span><span class="n">thumb</span><span class="p">,</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="n">Vector3D</span><span class="w"> </span><span class="n">rotationPoint</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">maxAngleDeg</span><span class="p">)</span>
 </code></pre></div>
 <ol>
 <li>Normalizes raw values (<code>short.MaxValue</code>) to &minus;1–1 range.</li>
@@ -7920,12 +8064,12 @@
 <li><strong>Rotation</strong>: <code>AxisAngleRotation3D</code> for X (around Z) and Y (around X), centered at <code>rotationPoint</code>. Both ring and thumb meshes share one retained <code>Transform3DGroup</code>, cached in <code>_stickTransforms3D</code> and mutated in place. Allocating the five-object graph per dirty frame was pure churn.</li>
 </ol>
 <h4 id="updatetrigger">UpdateTrigger()<a class="headerlink" href="#updatetrigger" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateTrigger</span><span class="p">(</span>
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">triggerNorm</span><span class="p">,</span>
-<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">triggerModel</span><span class="p">,</span>
-<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="n">Vector3D</span><span class="w"> </span><span class="n">rotationPoint</span><span class="p">,</span>
-<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">maxAngleDeg</span><span class="p">,</span>
-<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="k">ref</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">prevAngle</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateTrigger</span><span class="p">(</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">triggerNorm</span><span class="p">,</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">triggerModel</span><span class="p">,</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="n">Vector3D</span><span class="w"> </span><span class="n">rotationPoint</span><span class="p">,</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">maxAngleDeg</span><span class="p">,</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">    </span><span class="k">ref</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">prevAngle</span><span class="p">)</span>
 </code></pre></div>
 <ol>
 <li><strong>Hover check</strong>: Returns immediately when the trigger is the hovered group.</li>
@@ -7934,9 +8078,9 @@
 <li><strong>Change detection</strong>: Skips the rotation if angle delta &lt; 0.01 degrees.</li>
 </ol>
 <h4 id="gradienthighlight">GradientHighlight()<a class="headerlink" href="#gradienthighlight" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="nf">GradientHighlight</span><span class="p">(</span><span class="n">GeometryModel3D</span><span class="w"> </span><span class="n">owner</span><span class="p">,</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">Material</span><span class="w"> </span><span class="n">defaultMaterial</span><span class="p">,</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="n">highlightMaterial</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">factor</span><span class="p">,</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">riderDecal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="nf">GradientHighlight</span><span class="p">(</span><span class="n">GeometryModel3D</span><span class="w"> </span><span class="n">owner</span><span class="p">,</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="n">Material</span><span class="w"> </span><span class="n">defaultMaterial</span><span class="p">,</span><span class="w"> </span><span class="n">Material</span><span class="w"> </span><span class="n">highlightMaterial</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">factor</span><span class="p">,</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">riderDecal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
 </code></pre></div>
 <p>Two paths, chosen by what the default material is.</p>
 <p>A flat <code>DiffuseMaterial</code> over a solid brush takes the ARGB interpolation path between default and highlight colors.</p>
@@ -8007,7 +8151,7 @@
 - <strong>Second finger</strong>: Pinch-to-zoom (inter-finger distance vs <code>_pinchStartDist</code>, camera moves along look direction) + pan (midpoint tracking, camera moves perpendicular).
 - <strong>Stylus suppression</strong>: WPF press-and-hold (synthesized right-click) and flick gestures blocked via <code>PreviewStylusSystemGesture</code>.</p>
 <h3 id="click-to-record-hit-testing">Click-to-Record Hit Testing<a class="headerlink" href="#click-to-record-hit-testing" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Viewport_PreviewMouseLeftButtonUp</span><span class="p">(</span><span class="kt">object</span><span class="w"> </span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">MouseButtonEventArgs</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Viewport_PreviewMouseLeftButtonUp</span><span class="p">(</span><span class="kt">object</span><span class="w"> </span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">MouseButtonEventArgs</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
 </code></pre></div>
 <ol>
 <li><code>Viewport3DHelper.FindHits()</code> at click position.</li>
@@ -8017,8 +8161,8 @@
 <li>Fires <code>ControllerElementRecordRequested</code> with the PadSetting target name.</li>
 </ol>
 <h3 id="quadrant-detection">Quadrant Detection<a class="headerlink" href="#quadrant-detection" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryResolveQuadrantHit</span><span class="p">(</span><span class="n">GeometryModel3D</span><span class="w"> </span><span class="n">hitGeo</span><span class="p">,</span><span class="w"> </span><span class="n">Point3D</span><span class="w"> </span><span class="n">hitPos</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
-<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsOuterCapHit</span><span class="p">(</span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">cap</span><span class="p">,</span><span class="w"> </span><span class="n">Point3D</span><span class="w"> </span><span class="n">localHitPos</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryResolveQuadrantHit</span><span class="p">(</span><span class="n">GeometryModel3D</span><span class="w"> </span><span class="n">hitGeo</span><span class="p">,</span><span class="w"> </span><span class="n">Point3D</span><span class="w"> </span><span class="n">hitPos</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsOuterCapHit</span><span class="p">(</span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">cap</span><span class="p">,</span><span class="w"> </span><span class="n">Point3D</span><span class="w"> </span><span class="n">localHitPos</span><span class="p">)</span>
 </code></pre></div>
 <p><code>TryResolveQuadrantHit</code> finds the <code>QuadrantMap</code> group holding the hit geometry, then picks a quadrant from the hit position relative to the group's bounding-box center, not its rotation pivot, which sits off-center on the DualSense. The frame is model space, X across the face and +Z toward its top edge, and <code>QuadrantSlot</code> returns 0 up, 1 down, 2 left, 3 right:</p>
 <ul>
@@ -8038,7 +8182,7 @@
 <li><code>Viewport_MouseLeave</code> also clears hover, ends the left gesture, and releases a dangling drag. <code>RestoreHoverGroup()</code> returns early when <code>_currentModel</code> is null, because a stale <code>_hoverGroup</code> can outlive a swap to a non-3D preview.</li>
 </ul>
 <h3 id="flash-animation-map-all">Flash Animation (Map All)<a class="headerlink" href="#flash-animation-map-all" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateFlashTarget</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateFlashTarget</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
 </code></pre></div>
 <p>Starts when <code>CurrentRecordingTarget</code> changes. A <code>DispatcherTimer</code> at 400 ms toggles highlight/default materials:</p>
 <ul>
@@ -8048,8 +8192,8 @@
 <li>Stops when <code>CurrentRecordingTarget</code> becomes null.</li>
 </ul>
 <h3 id="arrow-overlay">Arrow Overlay<a class="headerlink" href="#arrow-overlay" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ShowArrowForTarget</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
-<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveArrow</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ShowArrowForTarget</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveArrow</span><span class="p">()</span>
 </code></pre></div>
 <p>Creates a 3D arrow (<code>ModelVisual3D</code>) via <code>CreateFlatArrow()</code>:
 - Flat box (shaft) + triangular prism (head).
@@ -8057,9 +8201,9 @@
 - Direction from target: <code>LeftThumbAxisX</code> = right, <code>LeftThumbAxisXNeg</code> = left, etc.
 - Uses the app's accent color.</p>
 <h3 id="quadrant-ring-overlay">Quadrant Ring Overlay<a class="headerlink" href="#quadrant-ring-overlay" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ShowQuadrantRingOverlay</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
-<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="k">private</span><span class="w"> </span><span class="n">MeshGeometry3D</span><span class="w"> </span><span class="nf">BuildClippedQuadrantMesh</span><span class="p">(</span>
-<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span><span class="w"> </span><span class="n">Vector3D</span><span class="w"> </span><span class="n">center</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isX</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isNeg</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ShowQuadrantRingOverlay</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="k">private</span><span class="w"> </span><span class="n">MeshGeometry3D</span><span class="w"> </span><span class="nf">BuildClippedQuadrantMesh</span><span class="p">(</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="w">    </span><span class="n">Model3DGroup</span><span class="w"> </span><span class="n">ring</span><span class="p">,</span><span class="w"> </span><span class="n">Vector3D</span><span class="w"> </span><span class="n">center</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isX</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isNeg</span><span class="p">)</span>
 </code></pre></div>
 <p>Builds a highlight overlay from the ring's mesh triangles:
 1. Two half-planes at +/&minus;45 degrees isolate one quadrant.
@@ -8068,12 +8212,12 @@
 4. Triangulates clipped polygons as fans.</p>
 <h3 id="touchpad-preview">Touchpad Preview<a class="headerlink" href="#touchpad-preview" title="Permanent link">&para;</a></h3>
 <p>The view renders a live touchpad preview for any model that exposes a <code>Touchpad</code> mesh: DualSense and Edge via <code>Touchpad.obj</code>, DS4 via <code>Screen.obj</code>, and every Valve model via <code>LeftPadTouch.obj</code> plus a <code>TouchpadRight</code> from <code>RightPadTouch.obj</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BuildTouchpadFingerVisuals</span><span class="p">()</span>
-<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="k">private</span><span class="w"> </span><span class="nf">static</span><span class="w"> </span><span class="p">(</span><span class="n">ModelVisual3D</span><span class="p">,</span><span class="w"> </span><span class="n">TranslateTransform3D</span><span class="p">)</span><span class="w"> </span><span class="n">CreateFingerSphere</span><span class="p">(</span><span class="n">Color</span><span class="w"> </span><span class="n">color</span><span class="p">)</span>
-<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateTouchpadPreview3D</span><span class="p">()</span>
-<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PositionFingerSphere</span><span class="p">(</span>
-<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="w">    </span><span class="n">TranslateTransform3D</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">down</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">normX</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">normY</span><span class="p">,</span>
-<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="w">    </span><span class="n">ControllerModelBase</span><span class="p">.</span><span class="n">TouchSurface</span><span class="w"> </span><span class="n">surface</span><span class="p">,</span><span class="w"> </span><span class="n">ControllerModelBase</span><span class="w"> </span><span class="n">model</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BuildTouchpadFingerVisuals</span><span class="p">()</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="k">private</span><span class="w"> </span><span class="nf">static</span><span class="w"> </span><span class="p">(</span><span class="n">ModelVisual3D</span><span class="p">,</span><span class="w"> </span><span class="n">TranslateTransform3D</span><span class="p">)</span><span class="w"> </span><span class="n">CreateFingerSphere</span><span class="p">(</span><span class="n">Color</span><span class="w"> </span><span class="n">color</span><span class="p">)</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateTouchpadPreview3D</span><span class="p">()</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PositionFingerSphere</span><span class="p">(</span>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="w">    </span><span class="n">TranslateTransform3D</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">down</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">normX</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">normY</span><span class="p">,</span>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a><span class="w">    </span><span class="n">ControllerModelBase</span><span class="p">.</span><span class="n">TouchSurface</span><span class="w"> </span><span class="n">surface</span><span class="p">,</span><span class="w"> </span><span class="n">ControllerModelBase</span><span class="w"> </span><span class="n">model</span><span class="p">)</span>
 </code></pre></div>
 <ul>
 <li><strong>Build</strong> (<code>BuildTouchpadFingerVisuals</code>, called from <code>EnsureModel()</code>): tears down any prior finger visuals, then, if <code>_currentModel.Touchpad != null</code>, builds two finger spheres and the click-highlight material. Skipped for Xbox 360, Xbox Series, and Switch 2 Pro models, which have no <code>Touchpad</code>.</li>
@@ -8130,8 +8274,8 @@
 </tbody>
 </table>
 <h3 id="toggle-and-state">Toggle and state<a class="headerlink" href="#toggle-and-state" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">AnnotationsEnabled</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">AnnotationToggle_Click</span><span class="p">(</span><span class="kt">object</span><span class="w"> </span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">RoutedEventArgs</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">AnnotationsEnabled</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">AnnotationToggle_Click</span><span class="p">(</span><span class="kt">object</span><span class="w"> </span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">RoutedEventArgs</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
 </code></pre></div>
 <p>The top-right toggle button (<code>AnnotationToggleButton</code>, Segoe MDL2 glyph <code>E8EC</code>) flips <code>AnnotationsEnabled</code> and raises <code>AnnotationsToggled</code>. Setting <code>AnnotationsEnabled</code> true starts the 150 ms <code>DispatcherTimer</code> and builds the overlay. Setting it false stops the timer, clears the canvas, and collapses it. The setter itself raises no event, so the owner's write-back cannot loop. While enabled the glyph and button border take <code>ColdBrush</code>.</p>
 <h3 id="chips">Chips<a class="headerlink" href="#chips" title="Permanent link">&para;</a></h3>
@@ -8325,7 +8469,7 @@
 <li><a href="../build-and-publish/">Build and Publish</a>: 3D OBJ meshes (<code>3DModels/</code>) included as <code>EmbeddedResource</code> items</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

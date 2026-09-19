@@ -83,7 +83,7 @@ The browser accepts:
 - A loose image file: `.png`, `.jpg`, `.jpeg`, `.bmp`, or `.gif`. A file kept under PadForge's own folder is stored by relative path, so the pair travels together.
 - A `.pficons` package. Picking one adds it to the list below and offers its icons. A package with a single image binds it right away.
 
-On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. With **Show Labels** on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.
+On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. **Icon Size** next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With **Show Labels** on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.
 
 ### Icon packages
 
@@ -117,7 +117,15 @@ The overlay itself is optional. The [Dashboard](../features/dashboard.md)'s **Ov
 
 ## Menus and shift layers
 
-A menu imported from a Steam config that lived on an action layer engages only while that [shift layer](shift-layers.md) is held. Releasing the layer counts as letting go, so an On Touch Release menu commits its hovered cell right there, matching Steam's mode-shift behavior. Menus you add by hand are always available.
+Each menu carries a **Layer** picker naming the [shift layer](shift-layers.md) that permits it. **Any Layer** is the default and the menu is always available. **Base** also allows the menu under other active layers. A named layer permits the menu only while that layer is the active one.
+
+**Layer Holds the Menu Open** changes how the menu opens. Normally a menu opens when you touch its surface or deflect its stick past the engage deadzone. With this on, the named layer opens it: the menu appears the moment the layer goes active and stays up for as long as it is held, and a **Steer With** picker chooses the physical input that moves the highlight while it is open. That input is read from the controllers assigned to the slot, and what each cell fires still comes from the cell's own binding. **Any Layer** and **Base** keep normal surface opening, so the toggle only does something on a named layer.
+
+The fire modes read a little differently in this mode. **On Click** holds the highlighted cell's binding while the click input is held, and a highlighted radial center can fire with the stick at rest. **On Click Release** fires once when the click input releases, falling back to the previous selection if the surface releases in the same instant. **On Touch Release** fires when you lift off or return inside the engage deadzone while the menu stays open, and leaving the layer also commits a selection still being steered.
+
+A menu imported from a Steam config that lived on an action layer engages only while that layer is held. Releasing the layer counts as letting go, so an On Touch Release menu commits its hovered cell right there, matching Steam's mode-shift behavior.
+
+The row reset restores **Any Layer** and turns layer-held opening off.
 
 ---
 

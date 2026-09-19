@@ -2112,6 +2112,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#flydigi-enhanced-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flydigi Enhanced Protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-logitech-g-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read Logitech G-Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#polling-interval" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3891,6 +3913,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#flydigi-enhanced-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flydigi Enhanced Protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-logitech-g-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read Logitech G-Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#polling-interval" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4328,6 +4372,13 @@
 <h3 id="continue-polling-when-window-loses-focus">Continue Polling When Window Loses Focus<a class="headerlink" href="#continue-polling-when-window-loses-focus" title="Permanent link">&para;</a></h3>
 <p>Keeps the engine running when PadForge is not the foreground window.</p>
 <p><strong>Leave this on.</strong> Without it, the engine stops the moment you tab into a game and virtual controllers go dead. Turn it off only if you use PadForge as a passive diagnostic.</p>
+<h3 id="flydigi-enhanced-protocol">Flydigi Enhanced Protocol<a class="headerlink" href="#flydigi-enhanced-protocol" title="Permanent link">&para;</a></h3>
+<p>Turns on the extra buttons and motion sensors that supported Flydigi controllers expose beyond their standard gamepad report.</p>
+<p>If Flydigi's own software is running, PadForge says so on the device. Both can hold the same controller interface, and a Vader 5 Pro has been reported dropping and reconnecting repeatedly while both had access. Stop the Flydigi service while using PadForge, or keep the controller hidden and take the service out of the HidHide whitelist.</p>
+<h3 id="read-logitech-g-keys">Read Logitech G-Keys<a class="headerlink" href="#read-logitech-g-keys" title="Permanent link">&para;</a></h3>
+<p>Reads the G-keys and extra mouse buttons on Logitech gaming gear through the vendor's G-key SDK, and presents them as their own device row. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</p>
+<p>The SDK ships with <strong>Logitech Gaming Software 8.55 or later</strong>, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.</p>
+<p>Set the PadForge profile to <strong>Persistent</strong> in Logitech Gaming Software. Without that, the keys only reach PadForge while it is the active window.</p>
 <h3 id="polling-interval">Polling Interval<a class="headerlink" href="#polling-interval" title="Permanent link">&para;</a></h3>
 <p>How often the engine reads input, in milliseconds. Default: <strong>1 ms</strong> (~1000 Hz).</p>
 <table>
@@ -4671,7 +4722,7 @@ after a glitch.</p>
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

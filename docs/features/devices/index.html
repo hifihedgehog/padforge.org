@@ -4795,7 +4795,7 @@
 <tbody>
 <tr>
 <td><strong>Type</strong></td>
-<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, or plain Device for anything unclassified.</td>
+<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, or plain Device for anything unclassified.</td>
 </tr>
 <tr>
 <td><strong>VID:PID</strong></td>
@@ -4876,7 +4876,7 @@
 </table>
 <p>A row of capability icons sits at the bottom of the card: rumble, gyro, and touchpad marks light up for the devices that have them.</p>
 <h3 id="submit-device-mapping-button">Submit Device Mapping button<a class="headerlink" href="#submit-device-mapping-button" title="Permanent link">&para;</a></h3>
-<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, and the Hidden Buttons, System Motion, and Head Tracker rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
+<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
 <p>Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:</p>
 <ul>
 <li>Device name</li>
@@ -5087,7 +5087,7 @@
 <p>The deep how-to (registering, naming, and mapping tags) lives on <a href="../nfc-tags/">NFC Tags</a>.</p>
 <hr />
 <h2 id="machine-and-tracker-rows">Machine and tracker rows<a class="headerlink" href="#machine-and-tracker-rows" title="Permanent link">&para;</a></h2>
-<p>Three rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers <strong>Submit Device Mapping</strong>.</p>
+<p>Six rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers <strong>Submit Device Mapping</strong>.</p>
 <table>
 <thead>
 <tr>
@@ -5116,9 +5116,22 @@
 <td><strong>Enable Head Tracking Input</strong> on the <a href="../dashboard/">Dashboard</a></td>
 <td>Six absolute axes, Head Yaw through Head Z, with a status line that says which source is live</td>
 </tr>
+<tr>
+<td><strong>VR Controller (Left)</strong> and <strong>VR Controller (Right)</strong></td>
+<td>VR Controller</td>
+<td><strong>Enable Head Tracking Input</strong> on the <a href="../dashboard/">Dashboard</a>, with an OpenXR runtime installed</td>
+<td>Six pose axes in the head tracker's convention, plus a thumbstick, a trigger, a grip and four buttons. Each hand is its own row, so one going to sleep leaves the other alone. See <a href="../vr-controller-input/">VR Controller Input</a>.</td>
+</tr>
+<tr>
+<td><strong>Logitech G-Keys</strong></td>
+<td>Logitech G-Keys</td>
+<td><strong>Read Logitech G-Keys</strong> in <a href="../settings/">Settings</a></td>
+<td>The G-keys and extra mouse buttons on Logitech gaming gear, read through the vendor SDK. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</td>
+</tr>
 </tbody>
 </table>
 <p>The machine name in the first two rows is the product name the firmware reports, or the family name when the product name is a bare model code. See <a href="../handheld-buttons/">Handheld PC Buttons</a> and <a href="../head-tracking/">Head Tracking</a> for setup.</p>
+<p>A drawing tablet is not in this group. Windows HID pen and digitizer devices are real HID devices, so they enumerate normally and keep their Input Mode and Input Hiding sections.</p>
 <hr />
 <h2 id="pairing-a-controller">Pairing a controller<a class="headerlink" href="#pairing-a-controller" title="Permanent link">&para;</a></h2>
 <p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog. A <strong>Controller Family</strong> selector offers three families: <strong>Nintendo Wii</strong>, <strong>Sony DualShock 3</strong>, and <strong>PlayStation Move / Navigation</strong>.</p>
@@ -5290,7 +5303,7 @@
 <h3 id="how-to-turn-it-on">How to turn it on<a class="headerlink" href="#how-to-turn-it-on" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Select the device card</li>
-<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, and Head Tracker rows, and pads reaching this PC over Remote Link.)</li>
+<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows, and pads reaching this PC over Remote Link.)</li>
 <li>Check <strong>Force Raw Joystick Mode (Bypass Gamepad Remapping)</strong></li>
 <li>Saved right away. Persists across restarts.</li>
 </ol>
@@ -5402,7 +5415,7 @@
 <h3 id="hidhide-toggle-grayed-out-or-missing">HidHide toggle grayed out or missing<a class="headerlink" href="#hidhide-toggle-grayed-out-or-missing" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Grayed out</strong>: HidHide is not installed. Install via <a href="../driver-management/">Driver Management</a> and restart PadForge.</li>
-<li><strong>Missing</strong>: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, and Head Tracker rows, pads reaching this PC over Remote Link). HidHide cannot cloak what is not a HID device, so the section is left out instead of shown disabled.</li>
+<li><strong>Missing</strong>: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows, pads reaching this PC over Remote Link). HidHide cannot cloak what is not a HID device, so the section is left out instead of shown disabled.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
@@ -5426,7 +5439,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: general troubleshooting guide.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

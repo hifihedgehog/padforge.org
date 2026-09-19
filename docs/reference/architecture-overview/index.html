@@ -4531,7 +4531,7 @@
 </code></pre></div>
 <hr />
 <h2 id="solution-structure">Solution Structure<a class="headerlink" href="#solution-structure" title="Permanent link">&para;</a></h2>
-<p>Five-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, and their two test projects):</p>
+<p>Six-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.NativeChecks, and the two test projects):</p>
 <table>
 <thead>
 <tr>
@@ -4805,7 +4805,7 @@
 <a id="__codelineno-1-231" name="__codelineno-1-231" href="#__codelineno-1-231"></a>    OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge&#39;s own XInput view
 <a id="__codelineno-1-232" name="__codelineno-1-232" href="#__codelineno-1-232"></a>    Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
 <a id="__codelineno-1-233" name="__codelineno-1-233" href="#__codelineno-1-233"></a>    Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll&#39;s Razer Sensa backend
-<a id="__codelineno-1-234" name="__codelineno-1-234" href="#__codelineno-1-234"></a>    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.7.2 (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+<a id="__codelineno-1-234" name="__codelineno-1-234" href="#__codelineno-1-234"></a>    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.8.1 (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
 <a id="__codelineno-1-235" name="__codelineno-1-235" href="#__codelineno-1-235"></a>    HidHide_1.5.230_x64.exe           # Embedded HidHide installer
 <a id="__codelineno-1-236" name="__codelineno-1-236" href="#__codelineno-1-236"></a>
 <a id="__codelineno-1-237" name="__codelineno-1-237" href="#__codelineno-1-237"></a>  WebAssets/
@@ -5205,7 +5205,7 @@
 <p>The engine thread reads <code>SettingsManager</code> without referencing the WPF-dependent <code>SettingsService</code>.</p>
 <hr />
 <h2 id="inputmanager-partial-class-split">InputManager Partial Class Split<a class="headerlink" href="#inputmanager-partial-class-split" title="Permanent link">&para;</a></h2>
-<p><code>InputManager</code> is a <code>partial class</code> split across 12 files for <strong>pipeline stage isolation</strong>. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).</p>
+<p><code>InputManager</code> is a <code>partial class</code> split across 16 files for <strong>pipeline stage isolation</strong>. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).</p>
 <table>
 <thead>
 <tr>
@@ -5274,6 +5274,26 @@
 <td><code>InputManager.Step6.RetrieveOutputStates.cs</code></td>
 <td>Step 6</td>
 <td>Copy <code>CombinedOutputStates[]</code> → <code>RetrievedOutputStates[]</code> for UI</td>
+</tr>
+<tr>
+<td><code>InputManager.GyroTilt.cs</code></td>
+<td>Step 3 helper</td>
+<td>Gyro Tilt, the degree-ranged hold mode beside the usual rate mode</td>
+</tr>
+<tr>
+<td><code>InputManager.MenuPublication.cs</code></td>
+<td>Steps 2-5</td>
+<td>The publication scope Steps 2 through 5 run inside, so a menu cannot observe a half-written frame</td>
+</tr>
+<tr>
+<td><code>InputManager.SteeringAngleRumble.cs</code></td>
+<td>Step 6 helper</td>
+<td>Proportional steering-angle rumble on wheels, published per slot</td>
+</tr>
+<tr>
+<td><code>InputManager.Tablets.cs</code></td>
+<td>Phase 1 helper</td>
+<td>Windows pen and drawing tablet rows, and their capture state</td>
 </tr>
 </tbody>
 </table>
@@ -5643,7 +5663,7 @@
 </tbody>
 </table>
 <p>The App also references <code>System.Management</code> 10.0.11 for the WMI queries behind the handheld hidden-button learner.</p>
-<p><code>HIDMaestro.Core.dll</code> is referenced as a project-local <code>&lt;Reference&gt;</code> (<code>Resources/HIDMaestro/HIDMaestro.Core.dll</code>), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version <code>1.7.2.0</code>. See <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
+<p><code>HIDMaestro.Core.dll</code> is referenced as a project-local <code>&lt;Reference&gt;</code> (<code>Resources/HIDMaestro/HIDMaestro.Core.dll</code>), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version <code>1.8.1.0</code>. See <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
 <p>Native libraries folded into <code>PadForge.exe</code> and extracted beside it at first launch:</p>
 <table>
 <thead>
@@ -5948,7 +5968,7 @@
 <li><a href="../build-and-publish/">Build and Publish</a>: Build commands, publish configuration, CI/CD</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

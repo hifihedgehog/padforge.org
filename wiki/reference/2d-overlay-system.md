@@ -259,7 +259,7 @@ public static class SteamControllerLayout
 }
 ```
 
-These two are generated into the same file but `ControllerModel2DView` never dispatches them. Their consumers are `WorkshopControllerPreview`, which draws the controller a Steam config was authored for (a different device from whatever the user has assigned), and the web controller server (#296), which serves them as the `?type=steamdeck` and `?type=steamcontroller` layouts.
+`ControllerModel2DView` dispatches both, alongside the 2026 Steam Controller. They have two other consumers: `WorkshopControllerPreview`, which draws the controller a Steam config was authored for (a different device from whatever the user has assigned), and the web controller server (#296), which serves them as the `?type=steamdeck` and `?type=steamcontroller` layouts.
 
 Both carry dual touchpads (`LeftTouchpad` / `LeftTouchpadClick` and the right-hand pair). Steam Deck adds `ButtonQuickAccess` and four rear paddles. Steam Controller has one stick, so it carries `LeftThumbRing` with no right-hand counterpart, plus `LeftGrip` and `RightGrip`.
 

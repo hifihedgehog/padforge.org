@@ -3757,7 +3757,7 @@
 </tr>
 <tr>
 <td>Mutex</td>
-<td><code>FT_Mutext</code>, waited 16 ms per read</td>
+<td><code>FT_Mutext</code>, taken with a zero-millisecond wait per read</td>
 </tr>
 <tr>
 <td>Open</td>
@@ -3802,7 +3802,7 @@
 </tr>
 </tbody>
 </table>
-<p>Non-finite floats reject the read. The heap is polled from <code>GetCurrentState</code>, on the poll thread, and only a <code>DataID</code> change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. When the mutex cannot be created the reader reads unlocked, which the reference client does not do (its <code>FTGetData</code> copies nothing then). A torn pose was judged a better answer than none for a source whose only job is to report one. A mapping that fails to open sets <code>FreeTrackFailed</code>.</p>
+<p>Non-finite floats reject the read. The heap is polled from <code>GetCurrentState</code>, on the poll thread, and only a <code>DataID</code> change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. The heap is never copied without the mutex. A mutex the reader could not open means it copies nothing, which is what the reference client's <code>FTGetData</code> does: its copy sits inside the wait test. A torn pose is worse than a stale one, and the silence timeout already reports a writer that stops. The wait itself is zero rather than the reference's 16 ms, because the read happens inline on the input polling thread. Sixteen milliseconds is a game frame's budget, not a poll tick's, and waiting on another process's writer stalled the whole poll loop. A contested tick reports no new pose and the last one stands. A mapping that fails to open sets <code>FreeTrackFailed</code>.</p>
 <p>UDP and FreeTrack carry the same pose from the same tracker, so interleaving those two is harmless.</p>
 <hr />
 <h2 id="scaling-into-axes">Scaling into axes<a class="headerlink" href="#scaling-into-axes" title="Permanent link">&para;</a></h2>

@@ -4179,12 +4179,12 @@
 </tr>
 <tr>
 <td><code>StateChanged</code></td>
-<td>Raised on the worker. The owner marshals.</td>
 <td>Raised on the worker, gated by <code>Superseded</code>. The owner marshals.</td>
+<td>Same.</td>
 </tr>
 <tr>
 <td><code>Stop</code></td>
-<td>Cancel, wait 3000 ms, dispose the token source</td>
+<td>Cancel, wait 3000 ms, orphan on expiry</td>
 <td>Cancel, wait <code>stopWaitMs</code>, orphan on expiry</td>
 </tr>
 <tr>
@@ -4230,7 +4230,7 @@
 </tbody>
 </table>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 

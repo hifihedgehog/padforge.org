@@ -3756,7 +3756,7 @@
 </tr>
 <tr>
 <td><strong>Head Tracking</strong></td>
-<td><a href="../head-tracking/">OpenTrack head pose</a> as six mappable axes.</td>
+<td>A head pose from <a href="../head-tracking/">OpenTrack</a> or from a <a href="../vr-controller-input/">VR headset</a> as six mappable axes.</td>
 </tr>
 <tr>
 <td><strong>Motion Server</strong></td>
@@ -4015,7 +4015,7 @@
 <p>See <a href="../../guides/remote-link/">Remote Link</a> for full details.</p>
 <hr />
 <h2 id="head-tracking">Head Tracking<a class="headerlink" href="#head-tracking" title="Permanent link">&para;</a></h2>
-<p>Reads a head pose from OpenTrack, over its UDP output or the FreeTrack 2.0 shared memory, and exposes it as six axes on a <strong>Head Tracker</strong> row on the Devices page.</p>
+<p>Reads a head pose from OpenTrack over its UDP output, from the FreeTrack 2.0 shared memory, or from a VR headset through an OpenXR runtime, and exposes it as six axes on a <strong>Head Tracker</strong> row on the Devices page. The three inputs are independent and can run together.</p>
 <table>
 <thead>
 <tr>
@@ -4033,6 +4033,14 @@
 <td>Enables shared-memory input independently of UDP.</td>
 </tr>
 <tr>
+<td><strong>Enable OpenXR Headset Input</strong></td>
+<td>Reads a VR headset's pose through an OpenXR runtime, with or without SteamVR.</td>
+</tr>
+<tr>
+<td><strong>OpenXR Runtime</strong></td>
+<td>Which runtime to read from. <strong>System Default</strong> follows the machine's registered runtime. Changing this affects PadForge only and never the system default. Disabled while OpenXR input is off.</td>
+</tr>
+<tr>
 <td><strong>UDP Port</strong></td>
 <td>The port OpenTrack's <em>UDP over network</em> output sends to. Default <code>4242</code>. Disabled while UDP input is off.</td>
 </tr>
@@ -4045,13 +4053,18 @@
 <td>Head travel that moves X, Y, and Z to full deflection. Default 30.</td>
 </tr>
 <tr>
+<td><strong>Per-Axis Range</strong></td>
+<td>Overrides one axis on its own. Zero follows the range above. Rotation is in degrees, travel in centimeters. Each box shows the value you pinned, never the range it resolves to.</td>
+</tr>
+<tr>
 <td><strong>Status</strong></td>
-<td><em>Stopped</em> while both inputs are off or the engine is stopped. Otherwise <em>Waiting for a tracker on UDP port <code>&lt;port&gt;</code>.</em>, <em>Receiving over UDP from <code>&lt;address&gt;</code>.</em>, <em>Receiving from FreeTrack shared memory.</em>, or <em>UDP port <code>&lt;port&gt;</code> is in use by another program.</em></td>
+<td><em>Stopped</em> while every input is off or the engine is stopped. The UDP and FreeTrack lines are <em>Waiting for a tracker on UDP port <code>&lt;port&gt;</code>.</em>, <em>Receiving over UDP from <code>&lt;address&gt;</code>.</em>, <em>Receiving from FreeTrack shared memory.</em>, or <em>UDP port <code>&lt;port&gt;</code> is in use by another program.</em> The OpenXR lines are <em>Starting the OpenXR session</em>, <em>Waiting for <code>&lt;runtime&gt;</code> to report a tracked pose</em>, <em>Reading <code>&lt;runtime&gt;</code></em>, <em>No OpenXR runtime is installed</em>, <em>The OpenXR runtime reports no headset</em>, <em>This runtime cannot supply a background session</em>, or <em>The OpenXR session failed. See the diagnostics log.</em></td>
 </tr>
 </tbody>
 </table>
-<p>Each input toggle has its own authored profile opinion. The port and the two ranges remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.</p>
-<p>See <a href="../head-tracking/">Head Tracking</a> for the OpenTrack setup.</p>
+<p>Each input toggle has its own authored profile opinion. The port, the two ranges and the per-axis overrides remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.</p>
+<p>Turning on OpenXR headset input also brings up the two <strong>VR Controller</strong> rows on the Devices page when the runtime reports hand controllers.</p>
+<p>See <a href="../head-tracking/">Head Tracking</a> for the OpenTrack setup and <a href="../vr-controller-input/">VR Controller Input</a> for the OpenXR side.</p>
 <hr />
 <h2 id="motion-server">Motion Server<a class="headerlink" href="#motion-server" title="Permanent link">&para;</a></h2>
 <p>Broadcasts gyroscope and accelerometer data over UDP using the DSU/Cemuhook protocol. Cemu, Dolphin, Yuzu, and Ryujinx read it for motion controls like gyro aiming.</p>
@@ -4178,7 +4191,7 @@
 <li><a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>: the Razer Chroma, Logitech LIGHTSYNC, and Sensa HD sections.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.4.0.</em></p>
+<p><em>Last updated for PadForge 4.5.0.</em></p>
 
 
 
