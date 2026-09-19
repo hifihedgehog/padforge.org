@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PadForge: Make any input look like any controller</title>
     <meta name="description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
-    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller, Remote Link, share controller between PCs, controller speaker audio, wheel force feedback, MIDI input, Steam Deck virtual controller, Steam Controller, head tracking, OpenTrack, Razer Chroma, Logitech LIGHTSYNC, handheld PC buttons, Legion Go, ROG Ally">
+    <meta name="keywords" content="PadForge, controller mapper, gamepad mapper, virtual controller, Xbox emulator, DualSense PC, HIDMaestro, x360ce alternative, reWASD alternative, free controller remapper, racing wheel emulation, flight stick, MIDI controller, Remote Link, share controller between PCs, controller speaker audio, wheel force feedback, MIDI input, Steam Deck virtual controller, Steam Controller, head tracking, OpenTrack, OpenXR, VR controller input, Logitech G-keys, Razer Chroma, Logitech LIGHTSYNC, handheld PC buttons, Legion Go, ROG Ally">
     <meta property="og:title" content="PadForge: Make any input look like any controller">
     <meta property="og:description" content="Free Windows app. Plug a steering wheel into a game that only takes Xbox pads. Use a DualSense in a game that ignores it. Map a phone over Wi-Fi. PadForge maps any input to any virtual controller games can use.">
     <meta property="og:image" content="https://padforge.org/assets/logo.png">
@@ -112,7 +112,7 @@
                 <div class="mf" style="--mf: var(--ember)"><b>Your voice as a button</b><span>Registered phrases fire macros, recognized offline</span></div>
                 <div class="mf" style="--mf: var(--brand-ps)"><b>Anything with an axis is a source</b><span>PlayStation Move, SpaceMouse pucks, VR controllers, wheels, HOTAS</span></div>
                 <div class="mf" style="--mf: var(--brand-xbox)"><b>Steam Deck and Steam Controller</b><span>Valve's own USB identity, with both trackpads mapped</span></div>
-                <div class="mf" style="--mf: var(--telemetry)"><b>Your head as six axes</b><span>OpenTrack or FreeTrack, bound like a stick</span></div>
+                <div class="mf" style="--mf: var(--telemetry)"><b>Your head as six axes</b><span>OpenTrack, FreeTrack or a VR headset, bound like a stick</span></div>
                 <div class="mf" style="--mf: var(--brand-nin)"><b>Buttons your handheld hides</b><span>Press a rear paddle once and PadForge learns it</span></div>
                 <div class="mf" style="--mf: var(--brand-steam)"><b>Room lights that follow the pad</b><span>Razer Chroma and Logitech LIGHTSYNC take the color the game writes</span></div>
             </div>
@@ -294,6 +294,10 @@
             <details class="detail">
                 <summary>Buttons your handheld hides</summary>
                 <div class="detail-body">Handheld gaming PCs and gaming laptops carry rear paddles, menu keys, and wheels that Windows never presents as part of a controller. Turn on Handheld PC Buttons in Settings, then press one when the Learn dialog asks for it. PadForge samples the idle state first, so a sensor byte that moves on its own can never be mistaken for a button. Then it watches the keyboard, every vendor HID report, and every system event for whatever your press changed. Name it and it binds like any other button. There is no table of models inside the app, so a handheld that ships tomorrow is learned the same way. One owner's learned set exports to a file that seeds every machine of that model. The same toggle adds the machine's own gyroscope as a motion device, for handhelds that keep the sensor in the tablet.</div>
+            </details>
+            <details class="detail">
+                <summary>G-keys that stay out of every other program</summary>
+                <div class="detail-body">A G-key on a Logitech keyboard sends nothing until you program it, and the usual workaround has it type a real key, which burns a keycode and fires in every program on the machine. Tick <b>Read Logitech G-Keys</b> in Settings and PadForge reads them straight from the G-key SDK instead, as their own device row that binds and macros like any other. All 29 keys in each of M1, M2 and M3, plus a Logitech mouse's buttons 6 through 20. The layout is fixed rather than probed, so a mapping keeps pointing at the same key when you swap keyboards, and a status line names which of six situations the machine is in when a key stays quiet.</div>
             </details>
             <details class="detail">
                 <summary>Charging over USB drops the Bluetooth link</summary>
@@ -481,6 +485,14 @@
                         <div class="detail-body">Turn on Head Tracking on the Dashboard and a Head Tracker device appears carrying six axes: yaw, pitch, roll, and the three translations. They bind anywhere an axis binds, with the same deadzone, curve, and inversion a stick gets, so head yaw can swing the camera while both thumbs stay on the buttons. PadForge reads OpenTrack's UDP output and the FreeTrack 2.0 shared memory at the same time, so a game already reading FreeTrack keeps its pose and PadForge sees the same one. Anything else that speaks either format can point straight at it. After a second with no pose the axes return to center, so a camera that loses your face never leaves a stick pinned.</div>
                     </details>
                     <details class="detail">
+                        <summary>A VR headset, without a VR game</summary>
+                        <div class="detail-body">OpenXR Headset Input reads your headset's pose into the same six axes, so a Quest or an Index drives a flat game's camera. PadForge talks to the runtime directly rather than through the Khronos loader, which lets it pick a runtime for itself without touching the machine's default and keeps other programs' API layers out of its process. The session runs without drawing anything, so no VR game has to be open and no compositor window appears. Per-Axis Range pins one axis on its own when neck rotation and leaning cover very different distances, and Set Neutral makes your current position the zero.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Your VR controllers as gamepads</summary>
+                        <div class="detail-body">With the headset input on, each hand controller becomes its own device row: six pose axes in the same names the head uses, plus the thumbstick, the trigger, the grip, and four buttons. Wave a Touch controller to drive a stick, or squeeze the grip to pull a trigger, in a game that has never heard of VR. Oculus Touch, Valve Index, and the Khronos simple profile are all suggested, and the runtime picks whichever matches your hardware. Left and right are separate devices, so one going to sleep leaves the other's mappings alone, and a controller set down returns its axes to rest after a second.</div>
+                    </details>
+                    <details class="detail">
                         <summary>How you are holding the Wii Remote</summary>
                         <div class="detail-body">A Wii Remote aimed at the screen, turned sideways for the NES-style hold, or dropped into a Wii Wheel is one piece of hardware reporting three different worlds. Grip rotates the gyro, the accelerometer, and gravity together to match the hold: Pointing, Sideways Face Up, Wii Wheel Face Toward You, or Upright. It applies to your mappings and to the motion the virtual controller reports, and the D-pad follows the same frame, so Up is up in the hold you are actually using.</div>
                     </details>
@@ -659,15 +671,15 @@
             <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-profiles.jpg" alt="Profiles" loading="lazy"><figcaption><b>Profiles</b>Per game, switched automatically.</figcaption></figure>
             <figure class="reveal"><img class="zoom" src="assets/screenshot-audio.jpg" alt="Audio routing" loading="lazy"><figcaption><b>Audio</b>The controller speaker, bass shakers, and rumble from sound.</figcaption></figure>
             <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-remote-link.jpg" alt="Remote Link" loading="lazy"><figcaption><b>Remote Link</b>A pad on one PC, a game on another.</figcaption></figure>
-            <!-- CAPTURE 4.4.0: uncomment each figure as its shot lands in assets/.
-            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-pad-extended-steam-deck.jpg" alt="An Extended slot set to the Steam Deck persona, with the Steam Deck body in the 3D preview" loading="lazy"><figcaption><b>Steam Deck</b>Valve's identity, and both trackpads.</figcaption></figure>
-            <figure class="reveal"><img class="zoom" src="assets/screenshot-pad-extended-steam-controller.jpg" alt="An Extended slot set to the Steam Controller (2026) persona, with the 2026 Steam Controller body in the 3D preview" loading="lazy"><figcaption><b>Steam Controller</b>Both generations, meshed from Valve's CAD.</figcaption></figure>
-            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-dashboard-head-tracking.jpg" alt="The Head Tracking section on the Dashboard" loading="lazy"><figcaption><b>Head tracking</b>OpenTrack and FreeTrack, as six axes.</figcaption></figure>
-            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-dashboard-lightbar-mirrors.jpg" alt="The Lightbar Mirrors and Razer Sensa HD Haptics sections on the Dashboard" loading="lazy"><figcaption><b>Lightbar mirrors</b>Chroma, LIGHTSYNC, and Sensa HD.</figcaption></figure>
+                        <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-dashboard-lightbar-mirrors.jpg" alt="The Lightbar Mirrors and Razer Sensa HD Haptics sections on the Dashboard" loading="lazy"><figcaption><b>Lightbar mirrors</b>Chroma, LIGHTSYNC, and Sensa HD.</figcaption></figure>
             <figure class="reveal"><img class="zoom" src="assets/screenshot-settings-handheld-buttons.jpg" alt="The Handheld PC Buttons card on the Settings page" loading="lazy"><figcaption><b>Handheld buttons</b>Learned once, then mapped.</figcaption></figure>
-            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-pad-gyro-grip.jpg" alt="The Grip control in the Pad page's motion section" loading="lazy"><figcaption><b>Grip</b>Four ways to hold a Wii Remote.</figcaption></figure>
             <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-profiles-external-control.jpg" alt="The external control checkbox on the Profiles page" loading="lazy"><figcaption><b>External control</b>A launcher switches the profile.</figcaption></figure>
             <figure class="reveal"><img class="zoom" src="assets/screenshot-devices-quick-charge.jpg" alt="The Quick Charge control in the Power section of the Devices page" loading="lazy"><figcaption><b>Quick Charge</b>The cable takes over from the radio.</figcaption></figure>
+            <!-- CAPTURE 4.5.0: uncomment each figure as its shot lands in assets/.
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-pad-extended-steam-deck.jpg" alt="An Extended slot set to the Steam Deck persona, with the Steam Deck body in the 3D preview" loading="lazy"><figcaption><b>Steam Deck</b>Valve's identity, and both trackpads.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-pad-extended-steam-controller.jpg" alt="An Extended slot set to the Steam Controller (2026) persona, with the 2026 Steam Controller body in the 3D preview" loading="lazy"><figcaption><b>Steam Controller</b>Both generations, meshed from Valve's CAD.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-dashboard-head-tracking.jpg" alt="The Head Tracking section on the Dashboard" loading="lazy"><figcaption><b>Head tracking</b>OpenTrack, FreeTrack and OpenXR, as six axes.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-pad-gyro-grip.jpg" alt="The Grip control in the Pad page's motion section" loading="lazy"><figcaption><b>Grip</b>Four ways to hold a Wii Remote.</figcaption></figure>
             -->
         </div>
     </div>
@@ -816,7 +828,7 @@
     lb.addEventListener("click", function (e) { if (e.target === lb || e.target === lbImg) closeLb(); });
     addEventListener("keydown", function (e) { if (e.key === "Escape" && lb.classList.contains("on")) closeLb(); });
 
-    /* ── Colourway morph ─────────────────────────────────────────── */
+    /* ── Colorway morph ──────────────────────────────────────────── */
     var stage = document.getElementById("morph");
     if (stage) {
         var pads = [].slice.call(stage.querySelectorAll("img")),
