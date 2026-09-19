@@ -22,8 +22,11 @@ site assets. Trimming the site assets alone lasts exactly until the next
 mirror, which re-exports every asset from those PNG sources and silently
 restores the margin. Order is: capture, trim the sources, then mirror.
 
-    python tools/trim_shots.py                    # site assets (jpg)
-    python tools/trim_shots.py ../wiki/images     # capture sources (png)
+Both forms run from the repo root, and the argument is resolved against the
+current directory, not against this file.
+
+    python tools/trim_shots.py                 # site assets (jpg)
+    python tools/trim_shots.py wiki/images     # capture sources (png)
 """
 import glob, os, sys
 from PIL import Image
