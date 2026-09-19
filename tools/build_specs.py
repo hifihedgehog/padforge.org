@@ -35,8 +35,74 @@ def add(title, desc):
         return
     seen[k] = len(pool); pool.append((title, desc))
 
+# The two sources describe the same capability under different names: a
+# feature card says "Nintendo virtual controller" and a rail says "Nintendo
+# output". add() keys on the title, so neither collides and BOTH shipped, and
+# the specs page carried seven pairs of rows saying the same thing twice.
+#
+# MERGE maps a rail eyebrow onto the feature title it duplicates. The rail is
+# then added under that title, so add() collapses the pair.
+MERGE = {
+    "Nintendo output": "Nintendo virtual controller",
+    "Touchpad as more than a touchpad": "Touchpad outputs",
+    "Bass shakers": "Bass shaker output",
+    "Audio through the controller speaker": "Controller speaker audio",
+    "Share controllers across your PCs": "Remote Link",
+    "Wii controllers, paired in-app": "Wii controllers",
+    "A MIDI keyboard as a controller": "MIDI input",
+}
+
+# Keeping the longer description drops the shorter one's unique sentences,
+# which is a quiet content loss rather than a merge. Where the two sides each
+# carry facts the other lacks, the union is written out here once and wins
+# over both. A pair not listed here takes the longer of the two.
+UNION = {
+    # The rail's headline and its body both open with "a virtual Switch Pro
+    # Controller", so the concatenation says it twice in one breath.
+    "Nintendo virtual controller":
+        "The Nintendo slot type creates a virtual Switch Pro Controller "
+        "through HIDMaestro. Games and emulators that speak Switch see the "
+        "real thing: the full button set, and gyro passed through from your "
+        "physical pad.",
+    "Touchpad outputs":
+        "Map any touchpad, on a DualSense, a DS4, a laptop trackpad, a phone "
+        "over the web, or the on-screen overlay, to mouse X/Y with per-axis "
+        "sensitivity, invert, and a Trackpad pointer response that moves the "
+        "cursor the way a laptop touchpad does. Anchor a virtual analog stick "
+        "where your finger lands, or drop a wedge-thresholded D-pad on top. "
+        "Pressure-sensitive pads expose per-finger pressure as sources, and "
+        "swipe haptics tick the pad as a finger travels. Plus the gesture "
+        "stack: 4-way and 8-way swipes, taps, longpress, pinch, rotate, two- "
+        "to five-finger gestures, and custom shape templates. Every toggle "
+        "saves per pad per slot.",
+    "Remote Link":
+        "Share a controller, wheel, or HOTAS with the other PadForge PCs on "
+        "your network. One plugged into one PC drives a game on another, both "
+        "directions at once, and the feedback comes home: rumble, force "
+        "feedback, adaptive triggers, lightbar, player LEDs, and speaker "
+        "audio all play on the physical device wherever it lives. Pair once "
+        "with a six-digit code and trusted PCs reconnect on their own. A "
+        "gamepad-only switch keeps a paired PC away from your keyboard, "
+        "mouse, and macros. Works on your home network, and across the "
+        "internet by swapping connection codes with no VPN needed.",
+    "Wii controllers":
+        "Pair a Wii Remote without leaving PadForge. Its PIN is six raw bytes "
+        "set by the sync button, not text you can type into the Windows "
+        "prompt, so PadForge runs the pairing itself: click Pair, press the "
+        "red SYNC button, and the controller bonds and reconnects on any "
+        "button press. Hold 1 and 2 instead for a temporary pairing. A bare "
+        "Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro "
+        "Controller all map as normal pads, with the accelerometer and Motion "
+        "Plus gyro feeding the same motion pipeline as a DualSense. The IR "
+        "camera drives an on-screen pointer, and a Balance Board reports "
+        "weight and lean as mapping sources.",
+}
+
 for f in feats: add(f["t"], f["d"])
-for r in rails: add(r["eyebrow"], r["t"] + " " + r["d"])
+for r in rails: add(MERGE.get(r["eyebrow"], r["eyebrow"]), r["t"] + " " + r["d"])
+
+for i, (title, desc) in enumerate(pool):
+    if title in UNION: pool[i] = (title, UNION[title])
 
 CATS = [
  ("mapping", "Mapping and control", [
@@ -247,3 +313,30 @@ total = sum(len(i) for _, _, i in sections)
 print("specs.html written: %d entries across %d sections" % (total, len(sections)))
 for cid, title, items in sections:
     print("  %-26s %d" % (title, len(items)))
+
+# The page shipped seven pairs of rows saying the same thing twice, because
+# the two source files title one capability two ways and add() keys on the
+# title. MERGE fixes the pairs that exist; this refuses to ship new ones.
+# Word-overlap rather than exact text, because the duplicates were never
+# identical, only redundant.
+import itertools as _it
+def _words(s):
+    return set(re.findall(r"[a-z0-9]{4,}", re.sub(r"<[^>]+>", " ", s).lower()))
+_dupes = []
+for (_t1, _d1), (_t2, _d2) in _it.combinations(pool, 2):
+    _w1, _w2 = _words(_d1), _words(_d2)
+    if not _w1 or not _w2:
+        continue
+    _j = len(_w1 & _w2) / len(_w1 | _w2)
+    if _j > 0.32:
+        _dupes.append((_j, _t1, _t2))
+if _dupes:
+    print()
+    print("REFUSING TO SHIP: %d row pair(s) say the same thing twice." % len(_dupes))
+    for _j, _a, _b in sorted(_dupes, reverse=True):
+        print("   %.2f overlap: %r and %r" % (_j, _a, _b))
+    print()
+    print("Add the rail's eyebrow to MERGE so the pair collapses onto one")
+    print("title, and give it a UNION entry when each side carries a fact the")
+    print("other lacks. Raising the threshold is not the fix.")
+    raise SystemExit(1)
