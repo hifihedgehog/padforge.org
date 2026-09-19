@@ -87,7 +87,7 @@ On the overlay the icon draws at the center of the cell, 30 pixels tall at the m
 
 ### Icon packages
 
-<!-- pending capture: ![The Icon Packages block on the Menus tab](../images/menu-icon-packs.png) -->
+![The Icon Packages block on the Menus tab](../images/menu-icon-packs.png)
 
 An icon package is one zip file of images with the `.pficons` extension. PadForge reads straight from the file and never unpacks it. Keep packages next to `PadForge.exe` to stay portable.
 
