@@ -145,7 +145,7 @@ If the status line reads **Port 26760 in use**, another DSU server holds the por
 
 ## Axis convention
 
-PadForge orients the axes for the emulator. The packet negates accelerometer X, Y, and Z and gyro pitch and roll against the sensor frame it reads, and keeps yaw. Nothing to flip by hand.
+PadForge orients the axes for the emulator. The packet negates accelerometer X, Y, and Z and gyro yaw and roll against the sensor frame it reads, and keeps pitch. Nothing to flip by hand.
 
 If a direction reads backward on your controller, say which one on the [issue tracker](https://github.com/hifihedgehog/PadForge/issues) with the model. Do not compensate inside the emulator: that hides the report the fix needs.
 

@@ -94,10 +94,10 @@ If several physical devices share a slot, the test pulse only fires on the devic
 
 Each motor (Left, Right) shows two stacked bars in real time as games send rumble:
 
-- **RAW** (cold color): the slot's strongest value on that motor across every device mapped to the slot, with each device's own gain, strength, swap, constant force, and trigger routing already applied. Macro rumble and audio rumble count too.
+- **RAW** (cold color): the rumble the game sent to the virtual controller, before this device's gain, strength, swap, constant force, trigger routing, or audio rumble touch it.
 - **OUT** (ember orange): what the selected physical device receives.
 
-With one mapped device the two bars match. When several devices with different settings share the slot, the gap between RAW and OUT shows how the selected device's output differs from the loudest device on the slot. Each bar has its own percentage readout. Left is the low-frequency motor, right is the high-frequency motor.
+The gap between the two bars is what this device's own settings did to the game's command. At defaults, with no audio rumble, constant force, or trigger routing, they match. Each bar has its own percentage readout. Left is the low-frequency motor, right is the high-frequency motor.
 
 Use the bars to:
 
@@ -257,7 +257,7 @@ See [Impulse Triggers](impulse-triggers.md) for game-driven impulse passthrough,
 
 Every slider has its own reset button. Reset All restores everything in its section.
 
-- **Rumble Reset All**: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Constant Force and Audio Rumble sections below it.
+- **Rumble Reset All**: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Steering Angle Rumble, Constant Force, and Audio Rumble sections below it.
 - **Constant Force Reset All**: Toggle off, X = 0, Y = 0.
 - **Audio Rumble Reset All**: Disabled, sensitivity 4.0, cutoff 80 Hz, both motors 100%.
 - **Trigger Routing Reset All**: every trigger back to Source None (off), Mode Duplicate, Scale 100%, activator cleared, Activator Mode Hold.
@@ -277,7 +277,7 @@ Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per d
 
 1. Open the **Bass Shakers** tab for the slot.
 2. Check **Route Rumble to an Audio Output**.
-3. Pick an **Output Device**. System default follows the Windows default playback device.
+3. Pick an **Output Device**. System Default follows the Windows default playback device.
 4. Play a game that rumbles, or click a voice's **Test** button.
 
 Turning the toggle off keeps every setting. If the selected output device disappears, audio stays off until it returns, and the status line under the picker says so. Bluetooth audio devices add noticeable latency.

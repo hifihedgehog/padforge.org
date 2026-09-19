@@ -1039,12 +1039,67 @@ PadForge.App/3DModels/
       Transparent-Shoulder-Right-Trigger.obj  rotate with the pull)
 ```
 
-Meshes and textures are both embedded as `EmbeddedResource`:
+## How the assets ship (4.5.0)
+
+Only one class of asset is embedded directly:
 
 ```xml
-<EmbeddedResource Include="3DModels\**\*.obj" />
-<EmbeddedResource Include="3DModels\**\*.png" />
+<EmbeddedResource Include="3DModels\**\*.jpg" />
 ```
+
+Everything else goes through the `PackAssets` inline MSBuild task and the
+`EmbedPackedArt` target in `PadForge.App.csproj`, which Brotli-pack each file
+and embed the packed form under a new extension:
+
+| Source | Ships as | Packing |
+| --- | --- | --- |
+| `3DModels/**/*.obj` | `.objbr` | Brotli over the Wavefront text |
+| `3DModels/**/*.png` | `.pngbr` | IDAT re-emitted as deflate STORED, then Brotli |
+| `3DModels/**/*.jpg` | `.jpg` | embedded as-is, already compressed |
+| `VoiceModels/*.zip` | `.zipbr` | zip rebuilt uncompressed, then Brotli |
+
+Storing before compressing is the whole trick: Brotli cannot improve on bytes
+that deflate already compressed, so the inner layer is made to store instead.
+
+An atlas that is fully opaque ships as JPEG, because JPEG beats deflate-stored
+PNG on photographic texture. An atlas with alpha stays PNG, because JPEG has no
+alpha channel and a transparent decal would lose it. `FindResource` tries
+`.jpg` first and falls back to `.pngbr`.
+
+One build trap worth knowing: MSBuild reads a two-letter stem as a culture, so
+`GL.objbr` was taken for Galician until the target set `WithCulture=false` on
+every packed item.
+
+### SharedGeometry
+
+Most colorways differ only in their texture, so shipping a mesh set per
+colorway shipped the same geometry many times over. `ControllerModelBase`
+carries a donor table:
+
+```csharp
+private static readonly Dictionary<string, string> SharedGeometry
+```
+
+Twelve entries. `DS4.MagmaRed` borrows `DS4.JetBlack`; `DualSense.GrayCamo` and
+`.NovaPink` borrow `DualSense.CosmicRed`; `.DeepEarthSterling` and
+`.DeepEarthVolcanic` borrow `DualSense.DeepEarthCobalt`; `XboxSeries.Robot` and
+`.PulseRed` borrow `XboxSeries.Carbon`; `.DeepPink`, `.ShockBlue`,
+`.VelocityGreen`, `.Porsche75th` and `.DaystrikeCamo` borrow
+`XboxSeries.ElectricVolt`.
+
+`TryLoadModel` tries the colorway's own folder first and falls back to its donor
+once. It never chains, so a donor cannot itself borrow. That removed 352
+duplicate meshes, which is why the per-folder mesh counts above are not uniform:
+a borrowing colorway ships none of its own.
+
+### Custom-shell skins
+
+The eight skins added in 4.5.0 (Sonic the Hedgehog, Razer, Captain America,
+Boba Fett, The Mandalorian, Stormtrooper, Darth Vader, Star Wars: Squadrons)
+ship exactly one file each, `Shell.jpg`. They pass
+`resourceModelName: "XboxSeries.Carbon"` to the base constructor and borrow
+Carbon's whole asset set, then re-paint `MainBody` with their own shell after
+the generic body pass.
 
 ---
 

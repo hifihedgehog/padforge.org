@@ -883,14 +883,14 @@ AccelX = ax, AccelY = ay, AccelZ = az,
 GyroPitch = gx, GyroYaw = gy, GyroRoll = gz,
 ```
 
-The DSU/cemuhook convention negates accelerometer X/Y/Z and gyro pitch/roll relative to SDL's frame, leaving yaw unchanged. That transform is applied downstream, per DSU packet, in `DsuMotionServer.BuildPadDataPacket()`, so only DSU clients see it:
+The DSU/cemuhook convention negates accelerometer X/Y/Z and gyro yaw/roll relative to SDL's frame, leaving pitch unchanged. That transform is applied downstream, per DSU packet, in `DsuMotionServer.BuildPadDataPacket()`, so only DSU clients see it:
 
 ```csharp
 WriteFloat(packet, o + 56, -snapshot.AccelX);   // Accel X inverted
 WriteFloat(packet, o + 60, -snapshot.AccelY);   // Accel Y inverted
 WriteFloat(packet, o + 64, -snapshot.AccelZ);   // Accel Z inverted
-WriteFloat(packet, o + 68, -snapshot.GyroPitch); // Pitch inverted
-WriteFloat(packet, o + 72,  snapshot.GyroYaw);   // Yaw unchanged
+WriteFloat(packet, o + 68,  snapshot.GyroPitch); // Pitch unchanged
+WriteFloat(packet, o + 72, -snapshot.GyroYaw);   // Yaw inverted
 WriteFloat(packet, o + 76, -snapshot.GyroRoll);  // Roll inverted
 ```
 

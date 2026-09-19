@@ -38,11 +38,11 @@ SDL reports sensors in its own right-handed frame. The DSU packet negates five o
 | `AccelX` | `ax` | Negated (`-ax`) |
 | `AccelY` | `ay` | Negated (`-ay`) |
 | `AccelZ` | `az` | Negated (`-az`) |
-| `GyroPitch` | `gx` | Negated (`-gx`) |
-| `GyroYaw` | `gy` | Kept (`gy`) |
+| `GyroPitch` | `gx` | Kept (`gx`) |
+| `GyroYaw` | `gy` | Negated (`-gy`) |
 | `GyroRoll` | `gz` | Negated (`-gz`) |
 
-Accel and gyro must be in the same coordinate frame. `AccelX` and `GyroPitch` reference the same physical axis. Only `GyroYaw` keeps its sign.
+Accel and gyro must be in the same coordinate frame. `AccelX` and `GyroPitch` reference the same physical axis. Only `GyroPitch` keeps its sign.
 
 The sign transform lives in `BuildPadDataPacket`, not in `MotionSnapshot`. The snapshot carries no protocol frame of its own, so the Sony HID report packers read the same values and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.
 

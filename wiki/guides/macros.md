@@ -593,7 +593,7 @@ Pick **Assigned Devices** when the axis is unmapped (a throttle lever you want f
 1. Click **Add Action** and pick the type.
 2. Set it up (button, key, delay, etc.).
 3. Add more rows. They run top to bottom.
-4. Use the delete icon to remove a row.
+4. Use **Remove** to drop a row.
 
 Quick melee combo:
 

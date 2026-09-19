@@ -18,7 +18,7 @@ with force feedback, such as racing wheels. Game feedback and Test Rumble play t
 | Control | What it does |
 | --- | --- |
 | **Route Rumble to an Audio Output** | Plays the game rumble and force feedback this virtual controller receives as low-frequency tones on the selected audio output. Turning it off keeps every setting. |
-| **Output Device** | The playback device that receives the rumble tones. System default follows the Windows default playback device. If the selected device disappears, audio stays off until it returns. |
+| **Output Device** | The playback device that receives the rumble tones. System Default follows the Windows default playback device. If the selected device disappears, audio stays off until it returns. |
 | **Channel Mode** | **Mono (All Channels)** plays every voice on all speaker channels. **Controller Stereo** splits them like the controller: low motor and left trigger on the left channel, high motor and right trigger on the right. |
 | **Master Gain** | Overall loudness applied after each voice's own gain. Keep headroom so the four voices do not clip when they play together. |
 

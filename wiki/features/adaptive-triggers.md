@@ -94,6 +94,28 @@ The sliders stay editable after loading. It's a one-click loader, not a lock.
 
 ---
 
+## What a game reads back
+
+A DualSense reports the state of its own trigger effects in its input
+report: two feedback bytes carrying a stop-location and a status nibble
+each, and a byte of active effect-mode nibbles. Games that drive adaptive
+triggers read those back to decide whether a trigger is being held against
+its effect.
+
+A virtual DualSense used to send zeros there. A game that checks the
+bytes then saw no effect running, so holding L2 against a resistance it
+had itself commanded did nothing. Since 4.5.0 PadForge copies the eight
+bytes at payload offsets 40 through 47 from the physical pad into the
+virtual report, so the game reads the real state of the triggers under
+your finger.
+
+This needs a physical DualSense or DualSense Edge on the slot. The bytes
+come from the bundled SDL fork, which publishes them as a joystick
+property; SDL upstream parses nothing from that range. Without the fork
+build the property is absent and the virtual report is unchanged.
+
+---
+
 ## Tips
 
 - For Multiple-Position Feedback, narrow the Range to a partial span (such as 50–150) to feel the bumps. The default 0–255 range spreads them across the whole pull and can feel like one rough surface.

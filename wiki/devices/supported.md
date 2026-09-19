@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **711** devices by their USB identity: 605 gamepads in SDL's controller list, 3 Flydigi pads its dedicated driver claims, 75 racing wheels, 19 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **249** shipped gamepad mappings (248 from SDL's Windows database plus PadForge's own DualShock 3 entry) and 231 device profiles.
+PadForge recognizes **709** devices by their USB identity: 605 gamepads in SDL's controller list, 3 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **249** shipped gamepad mappings (248 from SDL's Windows database plus PadForge's own DualShock 3 entry) and 231 device profiles.
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -123,19 +123,19 @@ family gets that family's layout and works everywhere that family does.
 | **Thrustmaster** | Thrustmaster wireless 3-1 |
 | **Venom** | Venom Arcade Stick |
 
-### PlayStation 4 (63)
+### PlayStation 4 (65)
 
 | Vendor | Devices |
 | --- | --- |
 | **NACON** | NACON Asymmetric Controller, NACON Asymmetric Controller Wireless Dongle, NACON Daija Arcade Stick, NACON Daija Fight Stick, Nacon PS4 Compact Controller, NACON PS4 controller in Xbox mode, NACON Revolution 5 Pro, NACON Revolution 5 Pro (PS4 mode wired), NACON Revolution Infinite, Nacon Revolution Pro Controller, NACON Revolution Pro Controller 3, Nacon Revolution Pro Controller v2, NACON Revolution Unlimited, NACON Revolution Unlimited Wireless Dongle, NACON Wireless Controller for PS4 |
 | **HORI** | HORI Fighting Commander 4 PS4, HORI Fighting Commander OCTA, HORI Fighting Commander PS4, HORI Fighting Stick mini 4, Hori Fighting Stick mini 4 kai, Hori Fighting Stick α, Hori mini wired, HORI Real Arcade Pro 4, HORI TAC PRO mousething, HORI TAC4 mousething, HORI Wireless Controller Light, HORIPAD 4 FPS, HORIPAD 4 FPS Plus |
-| **Razer** | Razer Panthera Evo Fightstick, Razer Raiju 2 Tournament edition BT, Razer Raiju 2 Tournament edition USB, Razer Raiju 2 Ultimate BT, Razer Raiju 2 Ultimate USB, Razer Raiju PS4 Controller, Razer RAION Fightpad |
+| **Razer** | Razer Panthera Evo Fightstick, Razer Panthera PS4 Controller, Razer Raiju 2 Tournament edition BT, Razer Raiju 2 Tournament edition USB, Razer Raiju 2 Ultimate BT, Razer Raiju 2 Ultimate USB, Razer Raiju PS4 Controller, Razer RAION Fightpad |
 | **Qanba** | Qanba Dragon, Qanba Dragon Arcade Joystick, Qanba Drone, Qanba Obsidian, Qanba Obsidian Arcade Joystick |
 | **Mad Catz** | Mad Catz FightPad Pro PS4, Mad Catz FightStick TE 2 PS4, Mad Catz FightStick TE 2+ PS4, Mad Catz FightStick TE S+ PS4 |
 | **PDP** | Victrix Pro FS, Victrix Pro FS PS4/PS5 (PS4 mode), Victrix Pro FS V2 w/ Touchpad for PS4 |
 | **Armor** | Armor 3 or Level Up Cobra, Armor Armor 3 Pad PS4 |
 | **Sony** | Sony PS4 Controller, Sony PS4 Slim Controller |
-| **Astro** | Astro C40 |
+| **Astro** | Astro C40, Astro C40 in Xbox 360 mode |
 | **Brook** | Brook Mars Controller |
 | **EMIO** | EMIO PS4 Elite Controller |
 | **Game:Pad** | Game:Pad 4 |
@@ -391,7 +391,7 @@ feed a slot alongside the wheel.
 
 ## Flight controls
 
-### Sticks (18)
+### Sticks (19)
 
 | Vendor | Devices |
 | --- | --- |
@@ -401,7 +401,7 @@ feed a slot alongside the wheel.
 | **Logitech** | Logitech Extreme 3D |
 | **Saitek** | Saitek Pro Flight X-56 Rhino Stick |
 | **Turtle Beach** | Turtle Beach VelocityOne |
-| **VKB** | Gunfighter Mk.III 'Space Combat Edition' |
+| **VKB** | Gunfighter Mk.III 'Space Combat Edition', VKB Gladiator NXT Evo |
 | **Yawman** | Yawman Arrow |
 
 ### Throttles (4)

@@ -381,7 +381,7 @@ Flick stick turns a thumbstick into a compass for mouse-driven camera control. D
 
 Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:
 
-1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. It sits in the source picker's **(Any device)** group, next to **Left Half** and **Right Half** variants that read one half of a single pad as the whole surface.
+1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. It sits in the source picker's **(Any Device)** group, next to **Left Half** and **Right Half** variants that read one half of a single pad as the whole surface.
 2. Tune the **Flick Stick** card, which appears on the Sticks tab of a Keyboard + Mouse slot.
 
 | Setting | Default | What it does |

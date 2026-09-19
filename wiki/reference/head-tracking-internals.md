@@ -82,7 +82,7 @@ The peer is recorded as `address:port` of the last sender, and a change of peer 
 |---|---|
 | Mapping name | `FT_SharedMem` |
 | Size | 108 bytes: `FTData` (92) + `GameID` + an 8-byte table + `GameID2` (`freetrackclient/fttypes.h`) |
-| Mutex | `FT_Mutext`, waited 16 ms per read |
+| Mutex | `FT_Mutext`, taken with a zero-millisecond wait per read |
 | Open | `MemoryMappedFile.CreateOrOpen`, so launch order does not matter |
 
 `TryDecodeFreeTrackHeap` inverts OpenTrack's writer (`proto-ft/ftnoir_protocol_ft.cpp`):
@@ -95,7 +95,7 @@ The peer is recorded as `address:port` of the last sender, and a change of peer 
 | 20 | Roll, float radians | `roll × 180/π` |
 | 24, 28, 32 | X, Y, Z, float millimeters | `/ 10` |
 
-Non-finite floats reject the read. The heap is polled from `GetCurrentState`, on the poll thread, and only a `DataID` change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. When the mutex cannot be created the reader reads unlocked, which the reference client does not do (its `FTGetData` copies nothing then). A torn pose was judged a better answer than none for a source whose only job is to report one. A mapping that fails to open sets `FreeTrackFailed`.
+Non-finite floats reject the read. The heap is polled from `GetCurrentState`, on the poll thread, and only a `DataID` change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. The heap is never copied without the mutex. A mutex the reader could not open means it copies nothing, which is what the reference client's `FTGetData` does: its copy sits inside the wait test. A torn pose is worse than a stale one, and the silence timeout already reports a writer that stops. The wait itself is zero rather than the reference's 16 ms, because the read happens inline on the input polling thread. Sixteen milliseconds is a game frame's budget, not a poll tick's, and waiting on another process's writer stalled the whole poll loop. A contested tick reports no new pose and the last one stands. A mapping that fails to open sets `FreeTrackFailed`.
 
 UDP and FreeTrack carry the same pose from the same tracker, so interleaving those two is harmless.
 

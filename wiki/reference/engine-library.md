@@ -79,6 +79,9 @@ graph TB
 | `PadForge.Engine.Mouse` | (v4) Mouse-gesture pipeline (#200): `MouseGestureRecognizer` (per-button flick classifier), `MouseGestureContext`, `MouseGestureSettings`, `MouseGestureSettingsEntry` |
 | `PadForge.Engine.Menus` | (v4.1) Radial / touch menus (#9 B-17): `MenuDefinitionEntry` (+ nested `MenuItemDefinition`, enums `MenuKind` / `MenuFireType`), `MenuSelectionMath`, `MenuEvaluator`, `MenuRuntimeState` |
 | `PadForge.Engine.RemoteLink` | (v4) Device sharing between PCs (#138): `LinkDiscovery`, `LinkServer`, `LinkConnection` (+ `ILinkControlChannel`), `LinkSession`, `LinkHandshake`, `PeerCrypto`, `PeerIdentity`, `IdentityProtector`, `PeerTrust` / `PeerTrustStore`, `RemotePeerDevice`, `CustomInputStateCodec`, `OutputEffectCodec`, `AntiReplayWindow`, `TcpControlChannel`, and the (#294 internet) lane: `LinkCode`, `IrohRelayClient`, `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `RendezvousProtocol`, `UdpControlChannel`, plus the `Dht/` folder. See [Remote Link Internals](remote-link-internals.md) |
+| `PadForge.Engine.Common.OpenXr` | (v4.5) OpenXR headset and motion controller input (#403): `OpenXrSession`, `OpenXrInterop` (structs, constants and the negotiation entry point), `OpenXrActions` (action set and suggested bindings), `OpenXrHeadPoseSource`, `OpenXrRuntimeCatalog`, `OpenXrHandState` (+ `OpenXrHand`). PadForge talks to the runtime directly rather than through the Khronos loader. See [OpenXR Input Internals](openxr-input-internals.md) |
+| `PadForge.Engine.Common.Logitech` | (v4.5) Logitech G-key input (#454): `LogitechGKeyInterop` (the packed event word), `LogitechGKeyMap` (the fixed 102-button layout), `LogitechGKeyCatalog` (library search), `LogitechGKeySource` (load, callback, teardown). See [Logitech G-Keys Internals](logitech-g-keys-internals.md) |
+| `PadForge.Engine.Tablets` | Windows pen and drawing tablet input: `WindowsTabletDevice`, an Engine-side `ISdlInputDevice` implementer, and its reader |
 | `SDL3` | P/Invoke |
 
 ---
@@ -332,7 +335,7 @@ public struct KbmRawState
     public short MouseDeltaX;       // Mouse X delta (signed, pixels per frame)
     public short MouseDeltaY;       // Mouse Y delta (signed, pixels per frame)
     public short ScrollDelta;       // Mouse scroll delta (positive = up)
-    public byte MouseButtons;       // Bit 0=LMB, 1=RMB, 2=MMB, 3=X1, 4=X2
+    public byte MouseButtons;       // Bit 0=LMB, 1=MMB, 2=RMB, 3=X1, 4=X2
 
     // Pre-deadzone values (for UI stick/trigger preview)
     public short PreDzMouseDeltaX;  // Mouse X before center offset + deadzone
@@ -375,7 +378,7 @@ public struct KbmRawState
 |--------|-----------|-------------|
 | `GetKey` | `bool GetKey(byte vk)` | `true` if VK code bit is set (`word = vk/64`, `bit = vk%64`). |
 | `SetKey` | `void SetKey(byte vk, bool pressed)` | Sets or clears a VK code bit. |
-| `GetMouseButton` | `bool GetMouseButton(int index)` | `true` if mouse button bit is set (0=LMB, 1=RMB, 2=MMB, 3=X1, 4=X2). |
+| `GetMouseButton` | `bool GetMouseButton(int index)` | `true` if mouse button bit is set (0=LMB, 1=MMB, 2=RMB, 3=X1, 4=X2). Middle is 1 and right is 2, the order `SdlMouseWrapper` names them: Left Click, Middle Click, Right Click, X1, X2. |
 | `SetMouseButton` | `void SetMouseButton(int index, bool pressed)` | Sets or clears a mouse button bit. |
 | `Clear` | `void Clear()` | Zeros all keys, mouse deltas, both scroll axes, mouse buttons, pre-deadzone fields, the absolute-pointer fields, and the flick / gyro / touch / coast count lanes. |
 | `Combine` | `static KbmRawState Combine(KbmRawState a, KbmRawState b)` | Merges two KBM states. Keys and mouse buttons OR'd. Deltas and both scroll axes take largest absolute magnitude. Absolute-pointer coordinates take the tracking side per axis, and the `MouseAbs*Valid` flags OR. `MouseFlickX` takes the larger magnitude. `MouseGyro*`, `MouseTouch*`, and `MouseStickCoast*` sum, so two gyros aimed at one slot each contribute their real motion. |
@@ -1164,7 +1167,24 @@ Integer constants. 18–25 match the DirectInput device type values. 26 and up a
 | `Microphone` | 31 | Standalone Windows capture endpoint (#317). Its buttons are registered voice phrases. A mic-bearing controller carries its phrases on its own device instead |
 | `HandheldButtons` | 32 | Handheld PC hidden buttons (#343). One per-machine row whose buttons are learned on the machine, delivered by the firmware either as keyboard chords through the low-level hooks or as bits and codes in a vendor HID input report |
 | `SystemMotion` | 33 | The machine's own gyroscope and accelerometer through the Windows sensor stack (#343), for handhelds whose IMU sits in the tablet rather than in the controller halves |
-| `HeadTracker` | 34 | A head pose from OpenTrack's UDP output or the FreeTrack 2.0 shared memory (#355). Six absolute axes, yaw / pitch / roll plus the three translations, centered at rest. Decoded by [HeadPose](#headpose) |
+| `HeadTracker` | 34 | A head pose from OpenTrack's UDP output, the FreeTrack 2.0 shared memory, or a VR headset through an OpenXR runtime (#355, #403). Six absolute axes, yaw / pitch / roll plus the three translations, centered at rest. Decoded by [HeadPose](#headpose) |
+| `Tablet` | 35 | A Windows pen or drawing tablet. Barrel buttons, eraser, inversion and in-range as named buttons; the contact rides the touchpad lane, so the row carries no axes |
+| `VrController` | 36 | One VR motion controller read through an OpenXR runtime (#403). Ten axes, six pose in the head row's order plus thumbstick, trigger and grip, and four buttons. Left and right are separate rows |
+| `LogitechGKeys` | 37 | The G-keys on a Logitech keyboard and a Logitech mouse's buttons 6 through 20, read through the G-key SDK (#454). 102 buttons, no axes |
+
+### AnswersAnyDeviceSources
+
+`InputTypes.cs` carries one predicate beside the enum:
+
+```csharp
+public static bool AnswersAnyDeviceSources(int capType)
+```
+
+It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController` and `LogitechGKeys`.
+
+Those rows publish their own vocabulary through the numbered Axis and Button arrays, so a mapping whose `DeviceGuid` is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.
+
+---
 
 ### MapType
 
@@ -1376,7 +1396,7 @@ public class InputHookManager : IDisposable
 | `Start` | `void Start()` | Creates background thread with `GetMessage` loop, installs both hooks. Blocks until installed (5s timeout). |
 | `Stop` | `void Stop()` | Posts `WM_QUIT` to hook thread, joins (2s timeout), clears state. |
 | `SetSuppressedKeys` | `void SetSuppressedKeys(HashSet<int> vkCodes)` | Updates VK codes to suppress. Clears state for removed keys. Volatile reference swap. |
-| `SetSuppressedMouseButtons` | `void SetSuppressedMouseButtons(HashSet<int> buttons)` | Updates mouse button IDs to suppress (0=L, 1=R, 2=M, 3=X1, 4=X2). Volatile reference swap. |
+| `SetSuppressedMouseButtons` | `void SetSuppressedMouseButtons(HashSet<int> buttons)` | Updates mouse button IDs to suppress (0=L, 1=M, 2=R, 3=X1, 4=X2). Volatile reference swap. |
 | `HasAnySuppression` | `bool` (property) | `true` if any keys or mouse buttons suppressed. |
 | `MergeHookedKeyState` | `static void MergeHookedKeyState(bool[] dest, int count)` | Merges suppressed-key state into dest (hook state is authoritative). Called by `SdlKeyboardWrapper`. |
 | `MergeHookedMouseState` | `static void MergeHookedMouseState(bool[] dest, int count)` | Same for mouse buttons. Called by `SdlMouseWrapper`. |
@@ -1391,8 +1411,8 @@ public class InputHookManager : IDisposable
 | Mouse Message | Button ID |
 |---------------|-----------|
 | `WM_LBUTTONDOWN/UP` | 0 (Left) |
-| `WM_RBUTTONDOWN/UP` | 1 (Right) |
-| `WM_MBUTTONDOWN/UP` | 2 (Middle) |
+| `WM_MBUTTONDOWN/UP` | 1 (Middle) |
+| `WM_RBUTTONDOWN/UP` | 2 (Right) |
 | `WM_XBUTTONDOWN/UP` (XBUTTON1) | 3 |
 | `WM_XBUTTONDOWN/UP` (XBUTTON2) | 4 |
 | Other (move, wheel) | -1 (pass through) |

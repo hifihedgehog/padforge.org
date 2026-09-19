@@ -189,7 +189,7 @@ The game is reading both the physical controller and PadForge's virtual controll
    - **Turbo** repeats only while the trigger is held.
 5. Confirm the macro's enable checkbox is checked.
 6. Confirm the engine is running and the slot is enabled.
-7. If the trigger source is "Input Device" but no device is assigned, there is nothing to read. Switch to "Output Controller" or assign a device.
+7. If the **Source** dropdown is set to **Assigned Devices** but no device is assigned, there is nothing to read. Switch to **Virtual Controller** or assign a device.
 8. Check for conflicting macros with overlapping triggers on the same slot.
 
 ---
@@ -198,7 +198,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **A macro with Mouse Move, Mouse Button, or Mouse Scroll produces no visible effect.**
 
-1. Match the axis source. "Output Controller" reads mapped output, "Input Device" reads the physical device directly.
+1. Match the axis source. **Virtual Controller** reads the slot's combined output, **Assigned Devices** reads the physical device directly.
 2. Adjust the **sensitivity slider** if movement is too fast or too slow.
 3. Confirm the trigger is firing (see "My Macro Doesn't Fire" above).
 4. Anti-cheat software may block simulated mouse input.

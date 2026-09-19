@@ -103,7 +103,7 @@ graph TB
 
 ## Solution Structure
 
-Five-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, and their two test projects):
+Six-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.NativeChecks, and the two test projects):
 
 | Project | Target | Role |
 |---|---|---|
@@ -355,7 +355,7 @@ PadForge.App/
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.7.2 (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.8.1 (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer
 
   WebAssets/
@@ -741,7 +741,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## InputManager Partial Class Split
 
-`InputManager` is a `partial class` split across 12 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
+`InputManager` is a `partial class` split across 16 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
 
 | File | Stage | Responsibility |
 |---|---|---|
@@ -757,6 +757,10 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.Step4b.EvaluateMacros.cs` | Step 4b | Evaluate macro triggers, execute actions (button/axis overrides, volume OSD, toggle) |
 | `InputManager.Step5.VirtualDevices.cs` | Step 5 | Create/destroy `IVirtualController` (HM lifecycle on thread pool, see [HIDMaestro Deep Dive](hidmaestro-deep-dive.md)), submit `CombinedOutputStates[]` via `HMController.SubmitState` / `SubmitRawReport` (HM) or per-VC paths (VR / MIDI / KBM), XInput slot detection |
 | `InputManager.Step6.RetrieveOutputStates.cs` | Step 6 | Copy `CombinedOutputStates[]` → `RetrievedOutputStates[]` for UI |
+| `InputManager.GyroTilt.cs` | Step 3 helper | Gyro Tilt, the degree-ranged hold mode beside the usual rate mode |
+| `InputManager.MenuPublication.cs` | Steps 2-5 | The publication scope Steps 2 through 5 run inside, so a menu cannot observe a half-written frame |
+| `InputManager.SteeringAngleRumble.cs` | Step 6 helper | Proportional steering-angle rumble on wheels, published per slot |
+| `InputManager.Tablets.cs` | Phase 1 helper | Windows pen and drawing tablet rows, and their capture state |
 
 `SettingsManager` is also a partial class. Its collection types are declared alongside the Step 1 code that populates them.
 
@@ -1024,7 +1028,7 @@ Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio pa
 
 The App also references `System.Management` 10.0.11 for the WMI queries behind the handheld hidden-button learner.
 
-`HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `1.7.2.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
+`HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `1.8.1.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 
 Native libraries folded into `PadForge.exe` and extracted beside it at first launch:
 

@@ -284,8 +284,8 @@ profiles depending on how it was launched. The hold is never written to disk. It
 ends when:
 
 - the script sends `deactivate`,
-- you switch profiles yourself, by the status-bar switcher, the **Load** or
-  **Revert to Default** button on this page, or a controller shortcut,
+- you switch profiles yourself, by the status-bar switcher, the **Load** button on
+  this page (loading **Default** reverts), or a controller shortcut,
 - you uncheck **Allow External Control by Launchers and Scripts**,
 - the engine stops, or PadForge restarts.
 

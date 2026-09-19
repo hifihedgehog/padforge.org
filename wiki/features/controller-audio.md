@@ -39,10 +39,10 @@ Turn on **Mirror System Audio to the Controller Speaker** and pick a source. Pad
 | Control | What it does |
 |---|---|
 | Mirror System Audio to the Controller Speaker | Per-device toggle. Off by default. |
-| Mirror Source | "System default" or any active output device on the PC. |
+| Mirror Source | "System Default" or any active output device on the PC. |
 | Master Volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. |
 
-Picking "System default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. Pick a specific output instead when you want one particular device's sound on the pad.
+Picking "System Default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. Pick a specific output instead when you want one particular device's sound on the pad.
 
 The mirror captures a Windows **output endpoint**, not a single program. To send one game's sound to the pad, point that game (or all of Windows) at the output you are mirroring. This is also how a game's own DualSense audio reaches the speaker: the game plays it to a Windows output, and PadForge mirrors that output. PadForge does not intercept the game's controller-audio packets directly.
 
@@ -144,7 +144,7 @@ Headphones hand each ear one channel and nothing of the other, which never happe
 |---|---|
 | Off | |
 | Low, Medium, High | 360 Hz at 6.0 dB, 500 Hz at 4.5 dB, 700 Hz at 3.0 dB |
-| Low (easy), Medium (easy), High (easy) | 360 Hz at 8.4 dB, 500 Hz at 7.2 dB, 700 Hz at 6.0 dB. High (easy) is the C. Moy setting. |
+| Low (Easy), Medium (Easy), High (Easy) | 360 Hz at 8.4 dB, 500 Hz at 7.2 dB, 700 Hz at 6.0 dB. High (Easy) is the C. Moy setting. |
 | Jan Meier | 650 Hz at 9.5 dB, the preset most headphone listeners reach for |
 | bs2b default | 700 Hz at 4.5 dB |
 | Custom | Your own Cutoff (300 to 2000 Hz) and Feed (1.0 to 15.0 dB) on two sliders |
@@ -155,15 +155,15 @@ Crossfeed only runs on a genuine stereo route. That means Output Path set to Def
 
 ### Parametric EQ
 
-Turn on **Parametric EQ** and a graphic EQ appears: a log-frequency curve from 20 Hz to 20 kHz with the summed response drawn across it and one handle per band. Drag a handle to move its frequency and gain together. Roll the wheel over a handle to widen or narrow it (Q). Under the curve, each band has a row with an on switch, a type picker, and Freq (Hz), Gain (dB), and Q boxes you can type into. Band types are Peak, Low Shelf, High Shelf, High Pass, Low Pass, and Notch. **Add band** appends a 1 kHz peak, **Clear** removes them all, and the **Preamp** row sets the overall level before the bands.
+Turn on **Parametric EQ** and a graphic EQ appears: a log-frequency curve from 20 Hz to 20 kHz with the summed response drawn across it and one handle per band. Drag a handle to move its frequency and gain together. Roll the wheel over a handle to widen or narrow it (Q). Under the curve, each band has a row with an on switch, a type picker, and Freq (Hz), Gain (dB), and Q boxes you can type into. Band types are Peak, Low Shelf, High Shelf, High Pass, Low Pass, and Notch. **Add Band** appends a 1 kHz peak, **Clear** removes them all, and the **Preamp** row sets the overall level before the bands.
 
 For a correction matched to a specific pair of headphones, use AutoEq:
 
 1. Open [autoeq.app](https://autoeq.app) and choose your headphone model.
 2. Pick **Custom Parametric Eq** and download it. You get a `.txt`.
-3. Back in PadForge, click **Import from file** and pick that `.txt`.
+3. Back in PadForge, click **Import from File** and pick that `.txt`.
 
-The import replaces the bands, sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip), and turns the EQ on. A status line under the buttons says what it did, naming the band count, the preamp, and the file. **Import from clipboard** does the same for a profile that arrived as text, from the AutoEq repo or a forum post.
+The import replaces the bands, sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip), and turns the EQ on. A status line under the buttons says what it did, naming the band count, the preamp, and the file. **Import from Clipboard** does the same for a profile that arrived as text, from the AutoEq repo or a forum post.
 
 Do not use AutoEq's Graphic Eq download. It carries no filter lines and cannot be imported. If you pick it, the status line says so and your current EQ is left alone, which is also what happens for anything else unreadable.
 
