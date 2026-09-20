@@ -4770,7 +4770,7 @@
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    LC -.-&gt; ELEV
 </code></pre></div>
 <p><code>app.manifest</code> declares <code>&lt;requestedExecutionLevel level="requireAdministrator" uiAccess="false"/&gt;</code>, so Windows shows the UAC shield on the icon and prompts once when the process starts. Every install/uninstall path runs inside the already-elevated process. There are no further UAC prompts mid-session.</p>
-<p>The OpenXInput shim (<code>xinput1_4.dll</code> under <code>Resources/OpenXInput/x64/</code>) is <strong>not</strong> managed by <code>DriverInstaller</code>. It ships embedded inside <code>PadForge.exe</code> as a <code>&lt;Content&gt;</code> item bundled by <code>IncludeNativeLibrariesForSelfExtract</code>. <code>App.xaml.cs</code> calls <code>SetDllDirectory</code> on the single-file extract directory so the loader resolves PadForge's copy ahead of <code>C:\Windows\System32\xinput1_4.dll</code>. Nothing to install or uninstall, the shim is removed when you delete the PadForge folder.</p>
+<p>The OpenXInput shim (<code>xinput1_4.dll</code> under <code>Resources/OpenXInput/x64/</code>, or <code>arm64/</code> for the ARM64 build) is <strong>not</strong> managed by <code>DriverInstaller</code>. It ships embedded inside <code>PadForge.exe</code> as a <code>&lt;Content&gt;</code> item bundled by <code>IncludeNativeLibrariesForSelfExtract</code>. <code>App.xaml.cs</code> calls <code>SetDllDirectory</code> on the single-file extract directory so the loader resolves PadForge's copy ahead of <code>C:\Windows\System32\xinput1_4.dll</code>. Nothing to install or uninstall, the shim is removed when you delete the PadForge folder.</p>
 <p><code>devobj.dll</code> is deliberately <strong>not</strong> shipped with the EXE. OpenXInput's source tree contains a stub <code>devobj.dll</code> (every export returns <code>0xCDCDCDCD</code>) only to satisfy <code>xinput1_4.dll</code>'s static-link import at compile time. Shipping it would let <code>SetDllDirectory</code> pre-empt <code>C:\Windows\System32\devobj.dll</code> for the entire process, including <code>setupapi.dll</code>'s own <code>DevObj*</code> imports. <code>setupapi</code> then crashes during HID class enumeration. See <a href="https://github.com/hifihedgehog/PadForge/issues/69">PadForge #69</a>. The system <code>devobj.dll</code> resolves from System32 unaided.</p>
 <hr />
 <h2 id="embedded-resources">Embedded Resources<a class="headerlink" href="#embedded-resources" title="Permanent link">&para;</a></h2>
@@ -4805,8 +4805,8 @@
 <tr>
 <td><code>Resources\BthPS3\**\*.*</code></td>
 <td>INF + SYS + CAT</td>
-<td>~360 KB total</td>
-<td>Nefarius BthPS3 (<code>BthPS3_x64\</code>) and BthPS3PSM (<code>BthPS3PSM_x64\</code>) driver packages plus <code>WinUSB\ds3_winusb.inf</code>. Each resource carries a <code>LogicalName</code> of <code>BthPS3.{RecursiveDir}{Filename}{Extension}</code>, which <code>Ds3DriverInstaller.ExtractDrivers()</code> maps straight back to a directory tree.</td>
+<td>~750 KB total</td>
+<td>Nefarius BthPS3 (<code>BthPS3\</code>) and BthPS3PSM (<code>BthPS3PSM\</code>) driver packages, each with an <code>x64\</code> and an <code>ARM64\</code> binary under it since 4.5.1, plus <code>WinUSB\ds3_winusb.inf</code>. Each resource carries a <code>LogicalName</code> of <code>BthPS3.{RecursiveDir}{Filename}{Extension}</code>, which <code>Ds3DriverInstaller.ExtractDrivers()</code> maps straight back to a directory tree.</td>
 </tr>
 </tbody>
 </table>
@@ -5053,10 +5053,10 @@
 <p>The "already installed" probe is <code>IsServiceInstalled</code>, which requires <code>ImagePath</code> under <code>SYSTEM\CurrentControlSet\Services\{name}</code>, not merely that the key exists. Any write under <code>Services\BthPS3\Parameters</code> creates the parent on the way down, so a settings write against a driver that was not installed yet left a key that looked installed to a null check and permanently blocked the install. <code>HasOrphanedBthPs3Key()</code> detects that exact damaged shape (key present, <code>ImagePath</code> absent) and deletes it before installing.</p>
 <p>The install itself, when the service is absent:</p>
 <ol>
-<li><code>InstallInf</code> the filter (<code>BthPS3PSM_x64\BthPS3PSM.inf</code>), which uses <code>Devcon.Install</code> from <code>Nefarius.Utilities.DeviceManagement</code>.</li>
+<li><code>InstallInf</code> the filter (<code>BthPS3PSM\BthPS3PSM.inf</code>), which uses <code>Devcon.Install</code> from <code>Nefarius.Utilities.DeviceManagement</code>.</li>
 <li><code>DeviceClassFilters.AddLower(BluetoothClass, "BthPS3PSM")</code> registers it as the Bluetooth-class lower filter.</li>
 <li><code>CycleBluetoothRadio</code> re-enumerates the radio so the filter attaches.</li>
-<li><code>InstallInf</code> the profile driver (<code>BthPS3_x64\BthPS3.inf</code>) and the raw-PDO placeholder (<code>BthPS3_x64\BthPS3_PDO_NULL_Device.inf</code>).</li>
+<li><code>InstallInf</code> the profile driver (<code>BthPS3\BthPS3.inf</code>) and the raw-PDO placeholder (<code>BthPS3\BthPS3_PDO_NULL_Device.inf</code>). Each INF names an <code>amd64</code> and an <code>arm64</code> source folder, and Windows installs the binary that matches the machine.</li>
 <li><code>EnsureConsumerParams()</code> writes <code>RawPDO=1</code>, <code>ExclusivePDO=0</code>, and <code>AutoEnableFilter=0</code>.</li>
 <li><code>EnableBthPs3Service</code> advertises <code>BthPS3Service</code>, which spawns the profile PDO. One retry after a fresh radio cycle when the advertisement fails.</li>
 <li>Wait for the <code>BthPS3</code> service to appear (10 s, then a radio cycle and 15 s more), because PnP creates it asynchronously when the advertised PDO matches the INF.</li>
@@ -5651,7 +5651,7 @@
 <li><a href="../xaml-views/">XAML Views</a>: <code>SettingsPage</code> driver install/uninstall buttons and guards</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.1.</em></p>
 
 
 

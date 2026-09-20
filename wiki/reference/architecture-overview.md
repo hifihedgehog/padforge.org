@@ -351,11 +351,12 @@ PadForge.App/
       Strings.pt-BR.resx             # Brazilian Portuguese
       Strings.zh-Hans.resx           # Simplified Chinese
     SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
+    SDL3/arm64/, OpenXInput/arm64/, VisualCpp/arm64/   # ARM64 copies for the win-arm64 build (4.5.1, preliminary)
     SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.8.1 (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.9.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer
 
   WebAssets/
@@ -1054,14 +1055,15 @@ dotnet publish PadForge.App/PadForge.App.csproj -c Release
 Key publish properties (`PadForge.App.csproj`):
 
 ```xml
-<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+<RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
 <PublishSingleFile>true</PublishSingleFile>
 <SelfContained>true</SelfContained>
 <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 ```
 
-Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe`
+Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe`, or `win-arm64/publish/` with `-r win-arm64`. See [Building for ARM64](build-and-publish.md#building-for-arm64).
 
 `SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root). With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely. `libvosk.dll` and the three MinGW runtime DLLs ride in the same way, added by the Vosk package's targets file rather than by the csproj.
 
@@ -1211,4 +1213,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*

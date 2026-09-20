@@ -78,7 +78,7 @@ graph TD
 
 `app.manifest` declares `<requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>`, so Windows shows the UAC shield on the icon and prompts once when the process starts. Every install/uninstall path runs inside the already-elevated process. There are no further UAC prompts mid-session.
 
-The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`) is **not** managed by `DriverInstaller`. It ships embedded inside `PadForge.exe` as a `<Content>` item bundled by `IncludeNativeLibrariesForSelfExtract`. `App.xaml.cs` calls `SetDllDirectory` on the single-file extract directory so the loader resolves PadForge's copy ahead of `C:\Windows\System32\xinput1_4.dll`. Nothing to install or uninstall, the shim is removed when you delete the PadForge folder.
+The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`, or `arm64/` for the ARM64 build) is **not** managed by `DriverInstaller`. It ships embedded inside `PadForge.exe` as a `<Content>` item bundled by `IncludeNativeLibrariesForSelfExtract`. `App.xaml.cs` calls `SetDllDirectory` on the single-file extract directory so the loader resolves PadForge's copy ahead of `C:\Windows\System32\xinput1_4.dll`. Nothing to install or uninstall, the shim is removed when you delete the PadForge folder.
 
 `devobj.dll` is deliberately **not** shipped with the EXE. OpenXInput's source tree contains a stub `devobj.dll` (every export returns `0xCDCDCDCD`) only to satisfy `xinput1_4.dll`'s static-link import at compile time. Shipping it would let `SetDllDirectory` pre-empt `C:\Windows\System32\devobj.dll` for the entire process, including `setupapi.dll`'s own `DevObj*` imports. `setupapi` then crashes during HID class enumeration. See [PadForge #69](https://github.com/hifihedgehog/PadForge/issues/69). The system `devobj.dll` resolves from System32 unaided.
 
@@ -91,7 +91,7 @@ The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`) is **not
 | `HIDMaestro.Core.dll` (referenced via `HintPath`, not embedded) | Managed assembly | varies by version | HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR. `HMContext.InstallDriver()` registers the driver with Windows the first time an HM-backed slot is created. |
 | `Resources\HidHide_1.5.230_x64.exe` | EXE (WiX Burn bootstrapper) | ~7.7 MB | HidHide kernel driver. Bundled MSI extracted and run silently. |
 | `Resources\OpenXInput\x64\xinput1_4.dll` | DLL (Content) | ~172 KB | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
-| `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~360 KB total | Nefarius BthPS3 (`BthPS3_x64\`) and BthPS3PSM (`BthPS3PSM_x64\`) driver packages plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
+| `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~750 KB total | Nefarius BthPS3 (`BthPS3\`) and BthPS3PSM (`BthPS3PSM\`) driver packages, each with an `x64\` and an `ARM64\` binary under it since 4.5.1, plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
 
 Windows MIDI Services is **not** embedded. It is downloaded on demand from `api.github.com/repos/microsoft/MIDI/releases` (~210 MB). The download path is ephemeral. Nothing is bundled with PadForge. SteamVR is not embedded either: `steamcmd.zip` comes from `steamcdn-a.akamaihd.net` at install time and the payload is several GB.
 
@@ -389,10 +389,10 @@ The "already installed" probe is `IsServiceInstalled`, which requires `ImagePath
 
 The install itself, when the service is absent:
 
-1. `InstallInf` the filter (`BthPS3PSM_x64\BthPS3PSM.inf`), which uses `Devcon.Install` from `Nefarius.Utilities.DeviceManagement`.
+1. `InstallInf` the filter (`BthPS3PSM\BthPS3PSM.inf`), which uses `Devcon.Install` from `Nefarius.Utilities.DeviceManagement`.
 2. `DeviceClassFilters.AddLower(BluetoothClass, "BthPS3PSM")` registers it as the Bluetooth-class lower filter.
 3. `CycleBluetoothRadio` re-enumerates the radio so the filter attaches.
-4. `InstallInf` the profile driver (`BthPS3_x64\BthPS3.inf`) and the raw-PDO placeholder (`BthPS3_x64\BthPS3_PDO_NULL_Device.inf`).
+4. `InstallInf` the profile driver (`BthPS3\BthPS3.inf`) and the raw-PDO placeholder (`BthPS3\BthPS3_PDO_NULL_Device.inf`). Each INF names an `amd64` and an `arm64` source folder, and Windows installs the binary that matches the machine.
 5. `EnsureConsumerParams()` writes `RawPDO=1`, `ExclusivePDO=0`, and `AutoEnableFilter=0`.
 6. `EnableBthPs3Service` advertises `BthPS3Service`, which spawns the profile PDO. One retry after a fresh radio cycle when the advertisement fails.
 7. Wait for the `BthPS3` service to appear (10 s, then a radio cycle and 15 s more), because PnP creates it asynchronously when the advertised PDO matches the INF.
@@ -837,4 +837,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*
