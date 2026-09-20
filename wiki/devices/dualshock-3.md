@@ -102,6 +102,8 @@ One exception: with another DualShock 3 driver such as DsHidMini installed, the 
 ## Requirements
 
 - A Bluetooth radio, for wireless use. Over a USB cable, no radio is needed.
+  USB, PCIe and UART radios all work. A PCIe or UART adapter, which is what
+  most recent Intel laptops carry, needs PadForge 4.5.1 or later.
 - PadForge runs elevated. The pairing writes to the Bluetooth stack and installs a driver, both of which need the elevated app.
 
 ---

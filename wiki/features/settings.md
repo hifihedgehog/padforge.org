@@ -102,7 +102,7 @@ Reads the G-keys and extra mouse buttons on Logitech gaming gear through the ven
 
 The SDK ships with **Logitech Gaming Software 8.55 or later**, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.
 
-Set the PadForge profile to **Persistent** in Logitech Gaming Software. Without that, the keys only reach PadForge while it is the active window.
+In Logitech Gaming Software, mark PadForge's profile **Persistent**. That profile is Logitech's, not a PadForge setting. Without it the keys only reach PadForge while its window is in front.
 
 ### Polling Interval
 

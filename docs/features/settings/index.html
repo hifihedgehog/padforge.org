@@ -4378,7 +4378,7 @@
 <h3 id="read-logitech-g-keys">Read Logitech G-Keys<a class="headerlink" href="#read-logitech-g-keys" title="Permanent link">&para;</a></h3>
 <p>Reads the G-keys and extra mouse buttons on Logitech gaming gear through the vendor's G-key SDK, and presents them as their own device row. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</p>
 <p>The SDK ships with <strong>Logitech Gaming Software 8.55 or later</strong>, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.</p>
-<p>Set the PadForge profile to <strong>Persistent</strong> in Logitech Gaming Software. Without that, the keys only reach PadForge while it is the active window.</p>
+<p>In Logitech Gaming Software, mark PadForge's profile <strong>Persistent</strong>. That profile is Logitech's, not a PadForge setting. Without it the keys only reach PadForge while its window is in front.</p>
 <h3 id="polling-interval">Polling Interval<a class="headerlink" href="#polling-interval" title="Permanent link">&para;</a></h3>
 <p>How often the engine reads input, in milliseconds. Default: <strong>1 ms</strong> (~1000 Hz).</p>
 <table>
