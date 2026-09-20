@@ -18,7 +18,9 @@ A **Logitech G-Keys** row then appears on the [Devices](devices.md) page.
 
 Logitech Gaming Software 8.55 or later, running. The SDK ships with it.
 
-One more step matters. Logitech Gaming Software keeps a profile per application; find the one for **PadForge** and mark it **Persistent**. Without that, the SDK only feeds whichever program is in the foreground, so your G-keys work in PadForge's own window and nowhere else.
+One more step matters, and it happens in Logitech's software rather than in PadForge. Logitech Gaming Software lets you nominate one **persistent profile**, which keeps receiving G-keys no matter which program is in front. Make PadForge that profile. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.
+
+This is unrelated to PadForge's own [profiles](../guides/profiles.md), which are a different thing that lives on the Profiles page.
 
 ---
 
@@ -33,7 +35,7 @@ Under the checkbox is a line saying exactly which of seven situations the machin
 | *Found the G-key SDK and could not load it.* | Usually an architecture mismatch or a damaged install. |
 | *That library is not the G-key SDK this expects.* | Something else is registered under the SDK's key. |
 | *The G-key SDK refused to start. Logitech Gaming Software is usually not running.* | Start Logitech Gaming Software. |
-| *Connected, no key seen yet. In Logitech Gaming Software, mark PadForge's profile Persistent.* | Do that, then press a G-key. |
+| *Connected, no key seen yet. In Logitech Gaming Software, make PadForge the persistent profile.* | Do that, then press a G-key. |
 | *Running, {0} key events* | Working, with the count in place of `{0}`. It rises as you press keys. |
 
 The line is empty while the feature is off.
