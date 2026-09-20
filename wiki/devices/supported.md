@@ -441,7 +441,7 @@ controller together, so a button on the throttle chords with a button on the sti
 | **Austgame** | Austgame GameCube to USB convertor |
 | **Cyber** | Cyber Gadget GameCube Controller |
 | **DragonRise** | DragonRise GameCube Controller Adapter |
-| **GameCube** | GameCube {HuiJia USB box} |
+| **GameCube** | GameCube \{HuiJia USB box\} |
 | **Nintendo** | Nintendo Wii U GameCube Controller Adapter |
 | **Nintendo Switch** | Nintendo Switch 2 NSO GameCube Controller |
 | **PDP** | PDP Wired Fight Pad Pro for Nintendo Switch |

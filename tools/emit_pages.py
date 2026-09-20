@@ -44,6 +44,15 @@ def vendor_of(name):
     return ALIAS.get(first, first)
 
 
+def md_escape(n):
+    """Python-Markdown's attr_list extension reads a trailing {...} as HTML
+    attributes, so SDL's "GameCube {HuiJia USB box}" rendered as the word
+    GameCube followed by HuiJia="HuiJia" USB="USB" box="box" and the rest of
+    the name vanished from the built page. Backslash-escape the braces; the
+    HTML emitter below needs none of this, because braces are literal there."""
+    return n.replace("{", "\{").replace("}", "\}")
+
+
 def vendor_table(names):
     """Vendors with two or more entries get their own row. Singletons collect in
     one final row, so every name still appears and the table stays readable."""
@@ -57,7 +66,7 @@ def vendor_table(names):
                    key=lambda kv: (-len(kv[1]), kv[0].lower()))
     rows = ["| Vendor | Devices |", "| --- | --- |"]
     for v, ns in items:
-        rows.append("| **" + v + "** | " + ", ".join(ns) + " |")
+        rows.append("| **" + v + "** | " + ", ".join(md_escape(n) for n in ns) + " |")
     return rows
 
 
