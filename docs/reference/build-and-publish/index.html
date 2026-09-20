@@ -4854,37 +4854,39 @@
 <p>Preliminary since 4.5.1. Nothing on this path has run on ARM64 hardware: the bench is x64 and cannot execute ARM64 code, so the checks are static.</p>
 <p>Every bundled native binary sits in a folder named for its architecture: <code>Resources/SDL3/x64</code> and <code>Resources/SDL3/arm64</code>, and the same pair for <code>OpenXInput</code> and <code>VisualCpp</code>. <code>Interhaptics</code> has an <code>x64</code> folder only. <code>NativeBinaryArchitectureTests</code> reads the PE header of every <code>.dll</code> and <code>.sys</code> in those folders and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a <code>vcruntime140_1.dll</code> that is an x64 image.</p>
 <p>A publish for either architecture is refused by the <code>RequireBundledNatives</code> target if <code>SDL3.dll</code> or <code>libusb-1.0.dll</code> is missing from <code>Resources/SDL3/&lt;arch&gt;</code>, or <code>xinput1_4.dll</code> from <code>Resources/OpenXInput/&lt;arch&gt;</code>. The three <code>Content</code> items are conditioned on <code>Exists</code>, so without that target a missing DLL would publish anyway, and the auto build runs no tests that would notice. Without <code>SDL3.dll</code> the input engine cannot start. Without <code>libusb-1.0.dll</code> wired Switch 2 controllers and the GameCube adapter never open, which is the 4.5.0 regression. Without the fork's <code>xinput1_4.dll</code> SDL loads the system one and PadForge reads its own virtual controllers back as input. The same target refuses any runtime other than <code>win-x64</code> and <code>win-arm64</code>, which would otherwise be handed the x64 libraries. A plain <code>dotnet build</code> is let through with a message. <code>SDL3.dll</code> and <code>xinput1_4.dll</code> come from the forks, the ARM64 pair cross-compiled with <code>cmake -A ARM64</code>.</p>
-<p>Three features have no ARM64 native half, and <code>PadForge.Engine/Common/PlatformSupport.cs</code> decides each one:</p>
+<p>Three features have a native half, and <code>PadForge.Engine/Common/PlatformSupport.cs</code> decides each one by the architecture that half follows:</p>
 <table>
 <thead>
 <tr>
 <th>Feature</th>
 <th>Decided by</th>
-<th>Why</th>
+<th>On ARM64</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>HidHide</td>
 <td>Machine architecture (<code>OSArchitecture</code>)</td>
-<td>A kernel driver cannot run emulated, and upstream publishes an x64 package only. The installer is not embedded in an ARM64 build</td>
+<td>A kernel driver cannot run emulated, so either build installs HidHide's Microsoft-signed ARM64 driver (<code>Resources/HidHideArm64/HidHide_ARM64.zip</code>, driver 1.6.280.0) with HidHide's own tool (<code>nefconc.exe</code>, nefcon 1.20.0, ARM64). An x64 machine gets the x64 MSI, which only the x64 build embeds</td>
 </tr>
 <tr>
 <td>Vosk voice engine</td>
 <td>Process architecture (<code>ProcessArchitecture</code>)</td>
-<td>libvosk ships for Windows x64 only. <code>VoskModelStore</code> never starts, and voice macros run on the SAPI recognizer. The model, about 36 MB packed, is left out of the ARM64 art pack</td>
+<td>The ARM64 build bundles <code>Resources/Vosk/arm64/libvosk.dll</code>. The Vosk package carries the x64 one. Both builds embed the model</td>
 </tr>
 <tr>
 <td>Razer Sensa HD haptics</td>
 <td>Process architecture</td>
-<td>The Interhaptics SDK ships for Win32 and x64 only. <code>SensaHapticsService</code> reports <code>Unsupported</code></td>
+<td>Not available. The Interhaptics SDK ships for Win32 and x64 only, and Razer lists Synapse for x86-64 Windows only. <code>SensaHapticsService</code> reports <code>Unsupported</code></td>
 </tr>
 </tbody>
 </table>
-<p>The x64 build running emulated on ARM64 Windows loses HidHide alone. The ARM64 build loses all three. Each rule answers true for x64 and false for every other architecture, since x64 is the one the native half was built for. <code>PlatformSupportTests</code> pins both halves of that rule on an x64 bench, because each rule is a pure function of the architecture it is handed. An x64 bench cannot tell a live property wired to the machine from one wired to the process, since both are x64 there, so the same tests also pin that wiring in the source.</p>
+<p>Each rule names the architectures that have the native half and answers false for every other.</p>
+<p><code>HidHideArm64Installer</code> performs upstream's documented manual install in the order HidHide's own setup uses: <code>nefconc install HidHide.inf root\HidHide</code>, then an upper class filter on HIDClass, XnaComposite and XboxComposite, and on removal the filters first, then the device. A class filter entry that names a driver which is not running can stop every keyboard and mouse from starting. HidHide's x64 setup ships a watchdog service for that and an ARM64 install has none. So the filters are added only after the driver's control device opens, removal leaves the driver in while any filter still names it, and at startup on an ARM64 machine PadForge takes out a filter entry whose driver is gone. Nothing registers this install with Windows Installer, so "installed" is read from the service, the device node and the HIDClass filter. <code>HidHideArm64InstallerTests</code> pins that order and the hashes of both bundled files.</p>
+<p>Nobody publishes <code>libvosk.dll</code> for Windows ARM64. Vosk's maintainer wrote the recipe for one (vosk-api 1b308a30, <code>travis/Dockerfile.winaarch64</code>) and never shipped its output. <code>tools/build-libvosk-arm64.sh</code> is that recipe with the same flags and every source pinned to a commit, run from Git Bash with a portable llvm-mingw toolchain. Its header lists each difference from upstream with the reason. The DLL links its C++ runtime statically, so it imports <code>KERNEL32</code> and the Universal C Runtime alone, where the x64 one needs three MinGW DLLs beside it. The same recipe aimed at x64 produced recognition output identical to the official x64 library, word timings included. Two runs of the script differ in bytes, so the bundled file is pinned by hash, and <code>BundledVoskArm64Tests</code> checks that it exports every function the managed binding calls and names no DLL the ARM64 build lacks. <code>PlatformSupportTests</code> pins both halves of that rule on an x64 bench, because each rule is a pure function of the architecture it is handed. An x64 bench cannot tell a live property wired to the machine from one wired to the process, since both are x64 there, so the same tests also pin that wiring in the source.</p>
 <p>Four more features load a library the vendor's own software installs, and PadForge has no gate for them because the load itself answers. <code>LogitechGkey.dll</code> comes in x64 and x86 only (<code>LogitechGKeyCatalog</code>), and the SteamVR input service loads <code>bin\win64\openvr_api.dll</code> (<code>OpenVrConsumerService</code>), so an ARM64 process gets neither. The LIGHTSYNC engine and the OpenXR runtime are whatever the registry names, so they work in an ARM64 process only if the vendor registers an ARM64 one. None of these crashes the app. G-keys, LIGHTSYNC and OpenXR each show a status line, and the SteamVR input service logs the failed load and keeps retrying.</p>
 <p>A fourth gap is decided in the SDL fork. Its Xbox Elite paddle reader (<code>SDL_XINPUT_PADDLES</code>) requires <code>SDL_CPU_X64</code> and switches itself off for any other target, so the ARM64 <code>SDL3.dll</code> reads no Elite paddles. That is also why the ARM64 build bundles <code>vcruntime140.dll</code> alone: the x64 <code>SDL3.dll</code> imports <code>msvcp140.dll</code> and <code>vcruntime140_1.dll</code> for that C++ reader, and the ARM64 one imports neither.</p>
-<p>Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. <code>DropX64OnlyNativesOnArm64</code> takes them back out of an ARM64 build.</p>
+<p>Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. <code>DropX64OnlyNativesOnArm64</code> takes them back out of an ARM64 build, which gets its own <code>libvosk.dll</code> from a <code>Content</code> item. An ARM64 publish without that file is refused by <code>RequireBundledNatives</code>.</p>
 <p>Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, the x64 build embeds both BthPS3 payloads because an emulated x64 PadForge still installs the ARM64 driver, <code>Ds3DriverInstaller.SignWinUsbPackage()</code> builds its catalog for <code>10_ARM64</code> on an ARM64 machine, and the Windows MIDI Services download picks the <code>-arm64</code> installer there.</p>
 <h2 id="project-configuration-details">Project Configuration Details<a class="headerlink" href="#project-configuration-details" title="Permanent link">&para;</a></h2>
 <h3 id="padforgeappcsproj">PadForge.App.csproj<a class="headerlink" href="#padforgeappcsproj" title="Permanent link">&para;</a></h3>
@@ -5226,7 +5228,15 @@
 <tbody>
 <tr>
 <td><code>HidHide_1.5.230_x64.exe</code></td>
-<td>HidHide installer. Hides physical controllers from other applications. x64 build only: an ARM64 build cannot use it, and its 8 MB stays out of that exe</td>
+<td>HidHide setup for x64 machines. Hides physical controllers from other applications. Embedded in the x64 build only, since only that build can run on an x64 machine</td>
+</tr>
+<tr>
+<td><code>HidHideArm64/HidHide_ARM64.zip</code></td>
+<td>HidHide's Microsoft-signed ARM64 driver package (driver 1.6.280.0), byte for byte as upstream publishes it. Embedded in both builds, because the x64 build also runs on ARM64 Windows</td>
+</tr>
+<tr>
+<td><code>HidHideArm64/nefconc.exe</code></td>
+<td>nefcon 1.20.0, the ARM64 console build. HidHide's own install tool, which <code>HidHideArm64Installer</code> runs as a native child process. Embedded in both builds</td>
 </tr>
 </tbody>
 </table>
