@@ -223,18 +223,20 @@ The dialog appears once. After you pick either button, it does not come back on 
 
 | Driver / Service | Windows 10 (x64) | Windows 11 (x64) | Windows 11 24H2+ (x64) | ARM64 | x86 (32-bit) |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **HIDMaestro** | Yes | Yes | Yes | * | No |
+| **HIDMaestro** | Yes | Yes | Yes | Yes (1) | No |
 | **HidHide** | Yes | Yes | Yes | No | No |
-| **Windows MIDI Services** | No | No | Yes | No | No |
+| **Windows MIDI Services** | No | No | Yes | Yes (1) | No |
 | **SteamVR** | Yes | Yes | Yes | No | No |
-| **Keyboard+Mouse** (no driver) | Yes | Yes | Yes | * | No |
+| **Keyboard+Mouse** (no driver) | Yes | Yes | Yes | Yes (1) | No |
 
-- **HIDMaestro** runs in user mode, so it installs with no reboot. ARM64 support tracks the HIDMaestro project. Check the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases) for current status.
+(1) Preliminary. Nothing in the ARM64 column has run on ARM64 hardware yet.
+
+- **HIDMaestro** runs in user mode, so it installs with no reboot. HIDMaestro 1.9.0, bundled since PadForge 4.5.1, carries an ARM64 driver beside the x64 one and installs the one that matches the machine.
 - **HidHide** is an x64 kernel driver. It does not run on ARM64 (Snapdragon laptops) or 32-bit Windows.
-- **Windows MIDI Services** needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows.
+- **Windows MIDI Services** needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows. On an ARM64 machine PadForge downloads Microsoft's ARM64 installer.
 - **SteamVR** is x64. Valve ships no ARM64 build.
 - **Keyboard+Mouse** needs no driver, so it works wherever PadForge itself runs.
-- **PadForge itself** ships as a 64-bit x64 app. It runs on 64-bit Windows 10 and 11, and on ARM64 Windows only through x64 emulation. It does not run on 32-bit Windows.
+- **PadForge itself** ships as two 64-bit builds. The x64 build runs on 64-bit Windows 10 and 11, and on Windows 11 on ARM64 through x64 emulation. The ARM64 build, new and preliminary in 4.5.1, runs there natively. [Installation](../start/installation.md#windows-on-arm-preliminary) lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.
 
 ---
 
@@ -299,4 +301,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*

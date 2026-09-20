@@ -601,6 +601,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows-on-arm-preliminary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows on ARM (preliminary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3432,6 +3449,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows-on-arm-preliminary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows on ARM (preliminary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3594,7 +3628,7 @@
 <p><img alt="Add Controller popup: pick a virtual controller type" src="../../images/add-controller-popup.png" /></p>
 <h2 id="quick-start-2-minutes">Quick start (2 minutes)<a class="headerlink" href="#quick-start-2-minutes" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Download <code>PadForge-v4.4.0-win-x64.zip</code> from the <a href="https://github.com/hifihedgehog/PadForge/releases">Releases page</a>. Every release ships one zip with <code>PadForge.exe</code> inside.</li>
+<li>Download the <code>win-x64</code> zip from the <a href="https://github.com/hifihedgehog/PadForge/releases/latest">latest release</a>, for example <code>PadForge-v4.5.1-win-x64.zip</code>. It holds <code>PadForge.exe</code> and nothing else. On Windows on ARM, take the <code>win-arm64</code> zip (<a href="#windows-on-arm-preliminary">preliminary</a>).</li>
 <li>Extract the zip to any folder (e.g. <code>C:\PadForge\</code>).</li>
 <li>Run <code>PadForge.exe</code>.</li>
 <li>Approve the one UAC prompt at startup. PadForge needs administrator rights to run.</li>
@@ -3617,7 +3651,7 @@
 <tbody>
 <tr>
 <td><strong>OS</strong></td>
-<td>Windows 10 or 11 (x64)</td>
+<td>Windows 10 or 11 (x64), or Windows 11 on ARM64 (<a href="#windows-on-arm-preliminary">preliminary</a>)</td>
 </tr>
 <tr>
 <td><strong>Runtime</strong></td>
@@ -3630,6 +3664,42 @@
 </tbody>
 </table>
 <p>Settings live in <code>PadForge.xml</code> next to the executable. To move PadForge, move the whole folder.</p>
+<h3 id="windows-on-arm-preliminary">Windows on ARM (preliminary)<a class="headerlink" href="#windows-on-arm-preliminary" title="Permanent link">&para;</a></h3>
+<p>Since 4.5.1 every release carries a second zip, <code>win-arm64</code>, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.</p>
+<p>Four features are missing on ARM64. Three need a library that has no ARM64 release, and the Xbox Elite paddle reader in PadForge's input library is written for x64.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>ARM64 build</th>
+<th>x64 build under emulation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HidHide device hiding</td>
+<td>Not available</td>
+<td>Not available</td>
+</tr>
+<tr>
+<td>Vosk voice recognition</td>
+<td>Voice macros use the Windows speech recognizer</td>
+<td>Works</td>
+</tr>
+<tr>
+<td>Razer Sensa HD haptics</td>
+<td>Not available</td>
+<td>Works</td>
+</tr>
+<tr>
+<td>Xbox Elite paddles</td>
+<td>Not read</td>
+<td>Untested</td>
+</tr>
+</tbody>
+</table>
+<p>Settings shows <strong>Not Available on ARM64</strong> for HidHide and for Sensa.</p>
+<p>None of this has run on ARM64 hardware yet. The bench is x64.</p>
 <hr />
 <h2 id="first-launch">First launch<a class="headerlink" href="#first-launch" title="Permanent link">&para;</a></h2>
 <p>PadForge opens the <a href="../../features/dashboard/">Dashboard</a> after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.</p>
@@ -3718,7 +3788,7 @@
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro under the hood.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.1.</em></p>
 
 
 

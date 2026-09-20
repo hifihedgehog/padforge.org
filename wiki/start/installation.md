@@ -6,7 +6,7 @@
 
 ## Quick start (2 minutes)
 
-1. Download `PadForge-v4.4.0-win-x64.zip` from the [Releases page](https://github.com/hifihedgehog/PadForge/releases). Every release ships one zip with `PadForge.exe` inside.
+1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v4.5.1-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([preliminary](#windows-on-arm-preliminary)).
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
@@ -22,11 +22,28 @@
 
 | Requirement | Details |
 |-------------|---------|
-| **OS** | Windows 10 or 11 (x64) |
+| **OS** | Windows 10 or 11 (x64), or Windows 11 on ARM64 ([preliminary](#windows-on-arm-preliminary)) |
 | **Runtime** | .NET 10 Desktop Runtime, bundled. No separate install. |
 | **Format** | Portable single-file executable. No installer. Extract and run. |
 
 Settings live in `PadForge.xml` next to the executable. To move PadForge, move the whole folder.
+
+### Windows on ARM (preliminary)
+
+Since 4.5.1 every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.
+
+Four features are missing on ARM64. Three need a library that has no ARM64 release, and the Xbox Elite paddle reader in PadForge's input library is written for x64.
+
+| Feature | ARM64 build | x64 build under emulation |
+|---|---|---|
+| HidHide device hiding | Not available | Not available |
+| Vosk voice recognition | Voice macros use the Windows speech recognizer | Works |
+| Razer Sensa HD haptics | Not available | Works |
+| Xbox Elite paddles | Not read | Untested |
+
+Settings shows **Not Available on ARM64** for HidHide and for Sensa.
+
+None of this has run on ARM64 hardware yet. The bench is x64.
 
 ---
 
@@ -139,4 +156,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*

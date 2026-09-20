@@ -125,4 +125,4 @@ One exception: with another DualShock 3 driver such as DsHidMini installed, the 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*

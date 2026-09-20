@@ -4323,7 +4323,7 @@
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
-<td style="text-align: center;">*</td>
+<td style="text-align: center;">Yes (1)</td>
 <td style="text-align: center;">No</td>
 </tr>
 <tr>
@@ -4339,7 +4339,7 @@
 <td style="text-align: center;">No</td>
 <td style="text-align: center;">No</td>
 <td style="text-align: center;">Yes</td>
-<td style="text-align: center;">No</td>
+<td style="text-align: center;">Yes (1)</td>
 <td style="text-align: center;">No</td>
 </tr>
 <tr>
@@ -4355,18 +4355,19 @@
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
-<td style="text-align: center;">*</td>
+<td style="text-align: center;">Yes (1)</td>
 <td style="text-align: center;">No</td>
 </tr>
 </tbody>
 </table>
+<p>(1) Preliminary. Nothing in the ARM64 column has run on ARM64 hardware yet.</p>
 <ul>
-<li><strong>HIDMaestro</strong> runs in user mode, so it installs with no reboot. ARM64 support tracks the HIDMaestro project. Check the <a href="https://github.com/hifihedgehog/HIDMaestro/releases">HIDMaestro releases</a> for current status.</li>
+<li><strong>HIDMaestro</strong> runs in user mode, so it installs with no reboot. HIDMaestro 1.9.0, bundled since PadForge 4.5.1, carries an ARM64 driver beside the x64 one and installs the one that matches the machine.</li>
 <li><strong>HidHide</strong> is an x64 kernel driver. It does not run on ARM64 (Snapdragon laptops) or 32-bit Windows.</li>
-<li><strong>Windows MIDI Services</strong> needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows.</li>
+<li><strong>Windows MIDI Services</strong> needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows. On an ARM64 machine PadForge downloads Microsoft's ARM64 installer.</li>
 <li><strong>SteamVR</strong> is x64. Valve ships no ARM64 build.</li>
 <li><strong>Keyboard+Mouse</strong> needs no driver, so it works wherever PadForge itself runs.</li>
-<li><strong>PadForge itself</strong> ships as a 64-bit x64 app. It runs on 64-bit Windows 10 and 11, and on ARM64 Windows only through x64 emulation. It does not run on 32-bit Windows.</li>
+<li><strong>PadForge itself</strong> ships as two 64-bit builds. The x64 build runs on 64-bit Windows 10 and 11, and on Windows 11 on ARM64 through x64 emulation. The ARM64 build, new and preliminary in 4.5.1, runs there natively. <a href="../../start/installation/#windows-on-arm-preliminary">Installation</a> lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.</li>
 </ul>
 <hr />
 <h2 id="uninstall-guards">Uninstall guards<a class="headerlink" href="#uninstall-guards" title="Permanent link">&para;</a></h2>
@@ -4501,7 +4502,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.1.</em></p>
 
 
 

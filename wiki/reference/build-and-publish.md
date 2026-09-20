@@ -116,9 +116,17 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 
 | File | Description |
 |------|-------------|
-| `PadForge.exe` | ~289 MB, single-file self-contained. The only file in the publish directory |
+| `PadForge.exe` | ~331 MB, single-file self-contained. The only file in the publish directory |
 
-`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain `dotnet build` drops all eight beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
+For Windows on ARM (preliminary, since 4.5.1), add the runtime identifier:
+
+```bash
+dotnet publish PadForge.App/PadForge.App.csproj -c Release -r win-arm64
+```
+
+Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-arm64/publish/`, one ~269 MB `PadForge.exe`. It cross-compiles on an x64 machine. With no `-r` the build is x64, so every existing command produces what it always has. See [Building for ARM64](#building-for-arm64) for what differs.
+
+`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll` and the three Visual C++ runtime files are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain x64 `dotnet build` drops all twelve beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
 
 The custom gamepad mapping database ships embedded in the assembly, not as a loose file. See [gamecontrollerdb_padforge.txt](#gamecontrollerdb_padforgetxt) under Embedded Resources.
 
@@ -146,7 +154,10 @@ The App csproj defines these publish properties:
 ```xml
 <!-- Single-file portable publish: dotnet publish -c Release -->
 <PropertyGroup>
-  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+  <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+  <NativeArch Condition="'$(RuntimeIdentifier)' == 'win-arm64'">arm64</NativeArch>
+  <NativeArch Condition="'$(NativeArch)' == ''">x64</NativeArch>
   <PublishSingleFile>true</PublishSingleFile>
   <SelfContained>true</SelfContained>
   <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
@@ -157,7 +168,9 @@ The App csproj defines these publish properties:
 
 | Property | Value | Effect |
 |----------|-------|--------|
-| `RuntimeIdentifier` | `win-x64` | Targets 64-bit Windows only |
+| `RuntimeIdentifiers` | `win-x64;win-arm64` | The two architectures the project restores and builds for |
+| `RuntimeIdentifier` | `win-x64` unless `-r` says otherwise | x64 stays the default, so an unadorned command builds what it always has |
+| `NativeArch` | `x64` or `arm64` | The resource folder the native DLLs for this build come from. Every architecture-specific `<Content>` item is keyed on it |
 | `PublishSingleFile` | `true` | Bundles all managed assemblies into one exe |
 | `SelfContained` | `true` | Embeds .NET 10 runtime (no install needed on target) |
 | `IncludeNativeLibrariesForSelfExtract` | `true` | Packs native DLLs into the exe. Extracted to temp dir at runtime |
@@ -165,6 +178,30 @@ The App csproj defines these publish properties:
 | `DebugType` | `embedded` | Embeds debug symbols in assemblies (no `.pdb` files). Preserves stack traces for crash diagnostics |
 
 **Note:** `RuntimeIdentifier` sits in a plain `PropertyGroup` with no publish-only condition, so `dotnet build` also targets `win-x64` and produces a RID-specific output folder.
+
+### Building for ARM64
+
+Preliminary since 4.5.1. Nothing on this path has run on ARM64 hardware: the bench is x64 and cannot execute ARM64 code, so the checks are static.
+
+Every bundled native binary sits in a folder named for its architecture: `Resources/SDL3/x64` and `Resources/SDL3/arm64`, and the same pair for `OpenXInput` and `VisualCpp`. `Interhaptics` has an `x64` folder only. `NativeBinaryArchitectureTests` reads the PE header of every `.dll` and `.sys` in those folders and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a `vcruntime140_1.dll` that is an x64 image.
+
+An ARM64 publish is refused by the `RequireArm64Natives` target if `Resources/SDL3/arm64/SDL3.dll` or `Resources/OpenXInput/arm64/xinput1_4.dll` is missing. Both `Content` items are conditioned on `Exists`, so without that target a missing DLL would publish an exe whose input engine cannot start. A plain `dotnet build -r win-arm64` is let through with a message. Both DLLs come from the forks, cross-compiled with `cmake -A ARM64`.
+
+Three features have no ARM64 native half, and `PadForge.Engine/Common/PlatformSupport.cs` decides each one:
+
+| Feature | Decided by | Why |
+|---|---|---|
+| HidHide | Machine architecture (`OSArchitecture`) | A kernel driver cannot run emulated, and upstream publishes an x64 package only. The installer is not embedded in an ARM64 build |
+| Vosk voice engine | Process architecture (`ProcessArchitecture`) | libvosk ships for Windows x64 only. `VoskModelStore` never starts, and voice macros run on the SAPI recognizer. The model, about 36 MB packed, is left out of the ARM64 art pack |
+| Razer Sensa HD haptics | Process architecture | The Interhaptics SDK ships for Win32 and x64 only. `SensaHapticsService` reports `Unsupported` |
+
+The x64 build running emulated on ARM64 Windows loses HidHide alone. The ARM64 build loses all three. `PlatformSupportTests` pins both halves of that rule on an x64 bench, because each rule is a pure function of the architecture it is handed.
+
+A fourth gap is decided in the SDL fork. Its Xbox Elite paddle reader (`SDL_XINPUT_PADDLES`) requires `SDL_CPU_X64` and switches itself off for any other target, so the ARM64 `SDL3.dll` reads no Elite paddles. That is also why the ARM64 build bundles `vcruntime140.dll` alone: the x64 `SDL3.dll` imports `msvcp140.dll` and `vcruntime140_1.dll` for that C++ reader, and the ARM64 one imports neither.
+
+Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build.
+
+Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, the x64 build embeds both BthPS3 payloads because an emulated x64 PadForge still installs the ARM64 driver, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_ARM64` on an ARM64 machine, and the Windows MIDI Services download picks the `-arm64` installer there.
 
 ## Project Configuration Details
 
@@ -307,25 +344,29 @@ Declared as `<Content>` + `CopyToOutputDirectory`, which puts them in `bin/.../p
 
 The full native set in the bundle:
 
-| Library | Origin | Caller |
-|---|---|---|
-| `SDL3.dll` | `<Content>`, `Resources/SDL3/x64/` | `SDL3Minimal.cs` |
-| `libusb-1.0.dll` | `<Content>`, `Resources/SDL3/x64/` | SDL3's HIDAPI backend |
-| `xinput1_4.dll` | `<Content>`, `Resources/OpenXInput/x64/` | SDL3's XInput backend, and `BluetoothLinkHelper` for ordinals 108 / 103 |
-| `HAR.dll` | `<Content>`, `Resources/Interhaptics/x64/` | `SensaHapticsService` (#374), P/Invoked lazily |
-| `Interhaptics.RazerProvider.dll` | `<Content>`, `Resources/Interhaptics/x64/` | Loaded by `HAR.dll` as its Razer Sensa backend |
-| `libvosk.dll` | Vosk 0.3.38 package targets | `Vosk.dll`, behind `VoskVoiceEngine` (#317) |
-| `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | Vosk 0.3.38 package targets | MinGW runtime `libvosk.dll` links against |
+`<arch>` is `x64` or `arm64`, picked by `$(NativeArch)`.
+
+| Library | Origin | Caller | In the ARM64 build |
+|---|---|---|:-:|
+| `SDL3.dll` | `<Content>`, `Resources/SDL3/<arch>/` | `SDL3Minimal.cs` | Yes |
+| `libusb-1.0.dll` | `<Content>`, `Resources/SDL3/<arch>/` | SDL3's HIDAPI backend, loaded at run time by the file name compiled into `SDL3.dll` | Yes |
+| `xinput1_4.dll` | `<Content>`, `Resources/OpenXInput/<arch>/` | SDL3's XInput backend, and `BluetoothLinkHelper` for ordinals 108 / 103 | Yes |
+| `vcruntime140.dll` | `<Content>`, `Resources/VisualCpp/<arch>/` | `SDL3.dll` | Yes |
+| `msvcp140.dll`, `vcruntime140_1.dll` | `<Content>`, `Resources/VisualCpp/x64/` | The x64 `SDL3.dll`, for its C++ Elite paddle reader | No |
+| `HAR.dll` | `<Content>`, `Resources/Interhaptics/x64/` | `SensaHapticsService` (#374), P/Invoked lazily | No |
+| `Interhaptics.RazerProvider.dll` | `<Content>`, `Resources/Interhaptics/x64/` | Loaded by `HAR.dll` as its Razer Sensa backend | No |
+| `libvosk.dll` | Vosk 0.3.38 package targets | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | No |
+| `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | Vosk 0.3.38 package targets | MinGW runtime `libvosk.dll` links against | No |
 
 ### SDL3.dll and libusb-1.0.dll
 
 ```xml
-<Content Include="Resources\SDL3\x64\SDL3.dll" Link="SDL3.dll"
-         Condition="Exists('Resources\SDL3\x64\SDL3.dll')">
+<Content Include="Resources\SDL3\$(NativeArch)\SDL3.dll" Link="SDL3.dll"
+         Condition="Exists('Resources\SDL3\$(NativeArch)\SDL3.dll')">
   <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 </Content>
-<Content Include="Resources\SDL3\x64\libusb-1.0.dll" Link="libusb-1.0.dll"
-         Condition="Exists('Resources\SDL3\x64\libusb-1.0.dll')">
+<Content Include="Resources\SDL3\$(NativeArch)\libusb-1.0.dll" Link="libusb-1.0.dll"
+         Condition="Exists('Resources\SDL3\$(NativeArch)\libusb-1.0.dll')">
   <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 </Content>
 ```
@@ -333,15 +374,16 @@ The full native set in the bundle:
 - **`Link="SDL3.dll"`**. Flattens to output root (next to `PadForge.exe`) instead of preserving the subdirectory path.
 - **`Condition="Exists(...)"`**. Build succeeds even if the DLL is absent (e.g., fresh clone).
 - **SDL3.dll** is a **custom fork** with WinUSB support for Switch 2 Pro Controller. The fork tree is not inside the PadForge repository. It lives in a sibling `SDL3-build/SDL/` checkout, and only the built DLL is committed here. See [SDL3 Integration](sdl3-integration.md) for build instructions.
-- **libusb-1.0.dll** provides WinUSB access for Switch 2 Pro Controller communication.
+- **libusb-1.0.dll** provides WinUSB access for Switch 2 Pro Controller communication. The x64 copy is upstream's `VS2022/MS64` build and the ARM64 copy is upstream's `MinGW-llvm-aarch64` build, both 1.0.29 and both unmodified.
+- **SDL loads libusb by a file name compiled into `SDL3.dll`**, and that name has to be a file bundled beside it. The fork's build reads the name off libusb's import library with `dumpbin`. When a Visual Studio update removed the `dumpbin` its build cache pointed at, the fallback was the import library's own name, and the seven x64 DLLs delivered September 10 to 15, 2026 asked Windows for `libusb-1.0.lib`. libusb never loaded, so in PadForge 4.5.0 a wired Switch 2 Pro Controller, Joy-Con 2 or Switch 2 GameCube controller did not work, because `SDL_hidapi_switch2.c` starts each of them through libusb and returns false without it, and the GameCube adapter, which SDL reaches through libusb alone, was never seen. The fork's configure now stops on a name that is not a DLL, and `BundledSdlLibusbNameTests` checks the delivered bytes from PadForge's side for both architectures.
 
-Source location: `PadForge.App/Resources/SDL3/x64/`
+Source location: `PadForge.App/Resources/SDL3/<arch>/`
 
 ### xinput1_4.dll (OpenXInput shim)
 
 ```xml
-<Content Include="Resources\OpenXInput\x64\xinput1_4.dll" Link="xinput1_4.dll"
-         Condition="Exists('Resources\OpenXInput\x64\xinput1_4.dll')">
+<Content Include="Resources\OpenXInput\$(NativeArch)\xinput1_4.dll" Link="xinput1_4.dll"
+         Condition="Exists('Resources\OpenXInput\$(NativeArch)\xinput1_4.dll')">
   <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 </Content>
 ```
@@ -350,7 +392,7 @@ Source location: `PadForge.App/Resources/SDL3/x64/`
 - **Replaces the system `xinput1_4.dll` via DLL search order.** The application directory is searched before `System32` for non-KnownDLLs, so when SDL3 calls `LoadLibrary("xinput1_4.dll")` this local copy resolves first and SDL's XInput backend uses it instead of Microsoft's.
 - **`devobj.dll` is deliberately not shipped alongside it.** A stub `devobj.dll` would pre-empt `System32\devobj.dll` for the whole process and crash `setupapi.dll` during HID class enumeration. `xinput1_4.dll`'s `devobj.dll` import resolves from `System32` unaided. See [Driver Installation Internals](driver-installation-internals.md).
 
-Source location: `PadForge.App/Resources/OpenXInput/x64/`
+Source location: `PadForge.App/Resources/OpenXInput/<arch>/`. The ARM64 DLL links the C runtime statically and has the same export table as the x64 one, down to the unnamed ordinals 100 to 104, 108 and 109.
 
 ## Embedded Resources
 
@@ -369,12 +411,13 @@ Source location: `PadForge.App/gamecontrollerdb_padforge.txt`
 ### Driver Installers (EmbeddedResource)
 
 ```xml
-<EmbeddedResource Include="Resources\HidHide_1.5.230_x64.exe" />
+<EmbeddedResource Include="Resources\HidHide_1.5.230_x64.exe"
+                  Condition="'$(NativeArch)' == 'x64'" />
 ```
 
 | Resource | Purpose |
 |----------|---------|
-| `HidHide_1.5.230_x64.exe` | HidHide installer. Hides physical controllers from other applications |
+| `HidHide_1.5.230_x64.exe` | HidHide installer. Hides physical controllers from other applications. x64 build only: an ARM64 build cannot use it, and its 8 MB stays out of that exe |
 
 The HIDMaestro user-mode driver is **not** managed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll` (referenced as a `<Reference>`, so it's bundled into the single-file EXE). `InputManager` calls `HMContext.InstallDriver()` on first start (from `EnsureHMaestroContext()` in `PadForge.App/Common/Input/`), which registers the driver with Windows through `pnputil` from inside PadForge's already-elevated process. No separate installer EXE. The OpenXInput shim (`xinput1_4.dll` only) ships as `<Content>` and is bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract`. `devobj.dll` is deliberately not shipped. See [Driver Installation Internals](driver-installation-internals.md) for why a bundled stub would crash HID class enumeration. The Windows MIDI Services SDK is downloaded from the GitHub releases API on demand when the user clicks Install, then run with `/install /quiet /norestart`.
 
@@ -388,12 +431,12 @@ PadForge v2's vJoy and ViGEmBus installers are no longer bundled. v4 detects eit
 </EmbeddedResource>
 ```
 
-Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. `Ds3DriverInstaller.ExtractDrivers()` walks every manifest resource whose name starts with `BthPS3.`, strips that prefix, and drops the files under `%TEMP%\PadForge\BthPS3Drivers\` before running `pnputil`. The explicit `LogicalName` preserves the subdirectory layout inside the manifest name.
+Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. `Ds3DriverInstaller.ExtractDrivers()` walks every manifest resource whose name starts with `BthPS3.`, strips that prefix, and drops the files under `%TEMP%\PadForge\BthPS3Drivers\` before running `pnputil`. The explicit `LogicalName` preserves the subdirectory layout inside the manifest name. Each 3.0.0 INF names both architectures, `[SourceDisksFiles.amd64]` and `[SourceDisksFiles.arm64]`, and Windows installs the binary that matches the machine, so both builds of PadForge embed both.
 
 | Directory | Contents |
 |-----------|----------|
-| `Resources/BthPS3/BthPS3_x64/` | `BthPS3.inf`/`.sys`/`.cat` (profile driver) + `BthPS3_PDO_NULL_Device.inf`/`.cat` (raw PDO extension) |
-| `Resources/BthPS3/BthPS3PSM_x64/` | `BthPS3PSM.inf`/`.sys`/`.cat` (L2CAP PSM filter) |
+| `Resources/BthPS3/BthPS3/` | `BthPS3.inf`/`.cat` (profile driver) + `BthPS3_PDO_NULL_Device.inf`/`.cat` (raw PDO extension), with `x64/BthPS3.sys` and `ARM64/BthPS3.sys` |
+| `Resources/BthPS3/BthPS3PSM/` | `BthPS3PSM.inf`/`.cat` (L2CAP PSM filter), with `x64/BthPS3PSM.sys` and `ARM64/BthPS3PSM.sys` |
 | `Resources/BthPS3/WinUSB/` | `ds3_winusb.inf` only (DS3-over-USB WinUSB binding). The matching `ds3_winusb.cat` is not checked in. `Ds3DriverInstaller.SignWinUsbPackage()` regenerates and signs it against this machine's certificate every run, because a stale catalog left by an earlier run still chains and would hand `pnputil` hashes that no longer match the INF |
 
 ### 3D Model Assets (EmbeddedResource)
@@ -549,13 +592,22 @@ on:
 
 Runs on every push/PR to `v4-dev` and on manual trigger.
 
-### Build Steps
+### Build job (one per architecture)
+
+A matrix runs `win-x64` and `win-arm64` side by side on `windows-latest`. Nearly all of a build is the art pack and each architecture packs its own, so two publishes in one job would double the wall clock. `fail-fast` is off: a broken ARM64 build shows red on the run and does not cancel the x64 build the dev feed depends on. x64 keeps every name it has always had, and ARM64 adds `-arm64`.
 
 1. **Checkout**. `actions/checkout@v5`, `fetch-depth: 0` (full history for commit counting)
 2. **Setup .NET**. `actions/setup-dotnet@v5`, `dotnet-version: 10.x`
-3. **Publish**. `dotnet publish PadForge.App/PadForge.App.csproj -c Release`
-4. **Upload artifact**. `actions/upload-artifact@v7`, publish directory as `PadForge_r{COMMIT_COUNT}@{COMMIT_SHORT}`
-5. **Package release zip** (push only). Deletes any `*.pdb`, then `7z a -mx=9` over the publish directory into `PadForge.zip`, copied a second time as `PadForge_r{N}@{SHA}.zip`
+3. **Get build info**. Commit count and 7-character SHA, exported as job outputs. It runs before Publish so that a failed publish cannot leave its copy of those outputs blank
+4. **Publish**. `dotnet publish PadForge.App/PadForge.App.csproj -c Release`, plus `-r win-arm64` for the ARM64 leg
+5. **Upload artifact**. `actions/upload-artifact@v7`, publish directory as `PadForge_r{COMMIT_COUNT}@{COMMIT_SHORT}`, with `-arm64` appended for ARM64
+
+### Release job (push only)
+
+One job writes the dev feed, because the `latest-<branch>` step deletes and recreates a release and two jobs doing that at once would race. It runs under `!cancelled()`, so a failed ARM64 build does not stop it and a canceled run publishes nothing. It cannot publish without x64: the x64 artifact download is its first step and fails before any release is touched.
+
+1. **Download x64 build**, then **Download ARM64 build** with `continue-on-error`. `actions/download-artifact@v8`
+2. **Package release zips**. Deletes any `*.pdb`, then `7z a -mx=9` over each publish directory into `PadForge.zip` and `PadForge-arm64.zip`, each copied a second time as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. With no ARM64 build, x64 is released alone
 
 ### Automatic Releases (push to v4-dev only)
 
@@ -563,16 +615,16 @@ On push (not PR), the workflow creates two GitHub releases keyed off the branch 
 
 | Release | Behavior |
 |---------|----------|
-| **`archive-v4-dev`** | Accumulates every build as `PadForge_r{N}@{SHA}.zip`. Uses `--clobber` for the latest upload. Preserves the tag across builds. Rolls to a new part when full (see below). |
-| **`latest-v4-dev`** | Recreated on every push (old release deleted first). Contains `PadForge.zip` with the most recent build. The "always current" download link. The step aborts before the delete if `release/PadForge.zip` is missing or empty, because the delete takes the tag with it and the upload is the only thing that puts a download back. |
+| **`archive-v4-dev`** | Accumulates every build as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. Uses `--clobber` for the latest upload. Preserves the tag across builds. Rolls to a new part when full (see below). |
+| **`latest-v4-dev`** | Recreated on every push (old release deleted first). Contains `PadForge.zip` (x64) and `PadForge-arm64.zip` with the most recent build. The "always current" download link. The step aborts before the delete if `release/PadForge.zip` is missing or empty, because the delete takes the tag with it and the upload is the only thing that puts a download back. |
 
 Both are marked `--prerelease` and cross-link to each other in their notes.
 
-**Rolling archive parts.** GitHub caps a release at 1000 assets. The workflow watches the active archive and, once it reaches 999 assets, creates the next numbered part (`archive-v4-dev-2`, `archive-v4-dev-3`, and so on) targeting the current commit. Each new part's notes link back to the previous part, and `latest-v4-dev` points at whichever part is currently active.
+**Rolling archive parts.** GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 998 assets, creates the next numbered part (`archive-v4-dev-2`, `archive-v4-dev-3`, and so on) targeting the current commit. Each new part's notes link back to the previous part, and `latest-v4-dev` points at whichever part is currently active.
 
 ### Artifact Naming
 
-Format: `PadForge_r{COMMIT_COUNT}@{7-char COMMIT_SHA}` (e.g., `PadForge_r342@f35bb36`)
+Format: `PadForge_r{COMMIT_COUNT}@{7-char COMMIT_SHA}` (e.g., `PadForge_r342@f35bb36`), with `-arm64` appended for the ARM64 build
 
 ### Environment Variables
 
@@ -622,7 +674,8 @@ PadForge always requests administrator privileges on startup (declared in `app.m
 ### 2. Build
 
 ```bash
-dotnet publish -c Release
+dotnet publish PadForge.App/PadForge.App.csproj -c Release
+dotnet publish PadForge.App/PadForge.App.csproj -c Release -r win-arm64
 ```
 
 ### 3. Deploy and Test
@@ -641,20 +694,22 @@ git commit -m "Release vX.Y.Z"
 git push
 ```
 
-### 5. Create Binary Zip
+### 5. Create Binary Zips
 
 ```bash
 cd PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish
 zip -r PadForge-vX.Y.Z-win-x64.zip .
+cd ../../win-arm64/publish
+zip -r PadForge-vX.Y.Z-win-arm64.zip .
 ```
 
-The publish directory holds one file, so the 4.4.0 asset is `PadForge-v4.4.0-win-x64.zip` containing `PadForge.exe` and nothing else.
+Each publish directory holds one file, so the 4.5.1 assets are `PadForge-v4.5.1-win-x64.zip` and `PadForge-v4.5.1-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
 
 ### 6. Create GitHub Release
 
 ```bash
 gh release create vX.Y.Z --title "PadForge vX.Y.Z" --notes "Release notes here"
-gh release upload vX.Y.Z PadForge-vX.Y.Z-win-x64.zip
+gh release upload vX.Y.Z PadForge-vX.Y.Z-win-x64.zip PadForge-vX.Y.Z-win-arm64.zip
 ```
 
 Use `--prerelease` for beta/RC releases. Use `--latest` for the default download.
@@ -733,4 +788,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*

@@ -82,4 +82,4 @@ G HUB is not Logitech Gaming Software. The G-key SDK ships with Logitech Gaming 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.1.*
