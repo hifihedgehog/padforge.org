@@ -32,18 +32,21 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 Since 4.5.1 every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.
 
-Four features are missing on ARM64. Three need a library that has no ARM64 release, and the Xbox Elite paddle reader in PadForge's input library is written for x64.
+An ARM64 program can load ARM64 libraries only, and several libraries PadForge relies on exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation. Its libraries match its process there, and the one thing emulation cannot run is a kernel driver.
 
 | Feature | ARM64 build | x64 build under emulation |
 |---|---|---|
-| HidHide device hiding | Not available | Not available |
-| Vosk voice recognition | Voice macros use the Windows speech recognizer | Works |
-| Razer Sensa HD haptics | Not available | Works |
-| Xbox Elite paddles | Not read | Untested |
+| HidHide device hiding | Not available. HidHide has no ARM64 release | Not available |
+| Vosk voice recognition | Voice macros use the Windows speech recognizer | Untested |
+| Razer Sensa HD haptics | Not available. The Interhaptics engine has no ARM64 build | Untested |
+| Xbox Elite paddles | Not read. The paddle reader in PadForge's input library is written for x64 | Untested |
+| Logitech G-keys | Not available. Logitech Gaming Software installs x64 and x86 libraries only | Untested |
+| VR headset and controllers through SteamVR | Not available. PadForge loads SteamVR's win64 library | Untested |
+| Logitech LIGHTSYNC, OpenXR headset input | Only if the vendor's software installs an ARM64 engine or runtime | Untested |
 
 Settings shows **Not Available on ARM64** for HidHide and for Sensa.
 
-None of this has run on ARM64 hardware yet. The bench is x64.
+Neither build has run on ARM64 hardware yet. The bench is x64.
 
 ---
 

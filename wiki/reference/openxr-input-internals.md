@@ -74,7 +74,7 @@ Each hand is one `OpenXrHandDevice`, an `ISdlInputDevice` like any synthetic row
 
 **Vendor and product IDs.** VID `0x1209`, the pid.codes open-source vendor ID, with PIDs `0x2874` (left) and `0x2875` (right).
 
-**Silence returns to rest.** A sample older than `SilenceMs` (1000) returns every axis to rest and releases every button. This is the Head Tracker row's failsafe, for the same reason: a controller set down mid-game must not leave a stick held.
+**Silence returns to rest.** A sample older than `SilenceMs` (1000) returns every axis to rest and releases every button. This is the Head Tracker row's failsafe, for the same reason: a controller that goes to sleep or drops out of tracking mid-game must not leave a stick held. One that is set down and still tracked keeps reporting, and its axes follow it.
 
 **Own-vocabulary rows answer no Any Device source.** `AnswersAnyDeviceSources` is false, the rule [discussion #431](../features/devices.md) established. A row whose axes are named "Controller Yaw" must not satisfy a mapping asking a generic "Axis 0".
 

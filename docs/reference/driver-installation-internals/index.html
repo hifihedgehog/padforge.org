@@ -5085,7 +5085,7 @@
 </tr>
 <tr>
 <td><code>SignWinUsbPackage(dir, log)</code></td>
-<td>Deletes stale <code>*.cat</code>, runs <code>Inf2Cat.exe /driver:"{dir}" /os:10_X64</code>, then <code>signtool sign /sm /s My /sha1 {thumb} /fd SHA256 "ds3_winusb.cat"</code>. Tools come from <code>HIDMaestro.Internal.DriverBuilder.EnsureExtracted()</code>. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on <code>_signLock</code>.</td>
+<td>Deletes stale <code>*.cat</code>, runs <code>Inf2Cat.exe /driver:"{dir}"</code> with <code>/os:10_X64</code>, or <code>/os:10_ARM64</code> on an ARM64 machine, then <code>signtool sign /sm /s My /sha1 {thumb} /fd SHA256 "ds3_winusb.cat"</code>. Tools come from <code>HIDMaestro.Internal.DriverBuilder.EnsureExtracted()</code>. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on <code>_signLock</code>.</td>
 </tr>
 <tr>
 <td><code>IsWinUsbPackageTrusted(out signer)</code></td>

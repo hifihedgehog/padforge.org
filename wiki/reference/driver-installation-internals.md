@@ -419,7 +419,7 @@ PadForge signs the DS3 WinUSB package on the machine that installs it, the same 
 | Member | Behavior |
 |---|---|
 | `EnsureSigningCertificate()` | Finds or creates a `CN=PadForge DS3 WinUSB` code-signing certificate in `LocalMachine\My`, ten-year validity, Code Signing EKU. Re-imported with `PersistKeySet \| MachineKeySet` so `signtool` can read the private key, then added to `My`, `Root`, and `TrustedPublisher`. Returns the thumbprint. |
-| `SignWinUsbPackage(dir, log)` | Deletes stale `*.cat`, runs `Inf2Cat.exe /driver:"{dir}" /os:10_X64`, then `signtool sign /sm /s My /sha1 {thumb} /fd SHA256 "ds3_winusb.cat"`. Tools come from `HIDMaestro.Internal.DriverBuilder.EnsureExtracted()`. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on `_signLock`. |
+| `SignWinUsbPackage(dir, log)` | Deletes stale `*.cat`, runs `Inf2Cat.exe /driver:"{dir}"` with `/os:10_X64`, or `/os:10_ARM64` on an ARM64 machine, then `signtool sign /sm /s My /sha1 {thumb} /fd SHA256 "ds3_winusb.cat"`. Tools come from `HIDMaestro.Internal.DriverBuilder.EnsureExtracted()`. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on `_signLock`. |
 | `IsWinUsbPackageTrusted(out signer)` | Builds an `X509Chain` over the catalog's signer with `RevocationMode.NoCheck`. Checked after signing as the proof that signing worked. |
 
 `RunTool` drains stdout and stderr asynchronously with a 120 s timeout and kills a timed-out child, because a synchronous `ReadToEnd` on one stream deadlocks once the child fills the other stream's pipe buffer, and both tools write warnings to stderr as a matter of course.

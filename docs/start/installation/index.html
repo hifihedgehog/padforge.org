@@ -3666,7 +3666,7 @@
 <p>Settings live in <code>PadForge.xml</code> next to the executable. To move PadForge, move the whole folder.</p>
 <h3 id="windows-on-arm-preliminary">Windows on ARM (preliminary)<a class="headerlink" href="#windows-on-arm-preliminary" title="Permanent link">&para;</a></h3>
 <p>Since 4.5.1 every release carries a second zip, <code>win-arm64</code>, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.</p>
-<p>Four features are missing on ARM64. Three need a library that has no ARM64 release, and the Xbox Elite paddle reader in PadForge's input library is written for x64.</p>
+<p>An ARM64 program can load ARM64 libraries only, and several libraries PadForge relies on exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation. Its libraries match its process there, and the one thing emulation cannot run is a kernel driver.</p>
 <table>
 <thead>
 <tr>
@@ -3678,28 +3678,43 @@
 <tbody>
 <tr>
 <td>HidHide device hiding</td>
-<td>Not available</td>
+<td>Not available. HidHide has no ARM64 release</td>
 <td>Not available</td>
 </tr>
 <tr>
 <td>Vosk voice recognition</td>
 <td>Voice macros use the Windows speech recognizer</td>
-<td>Works</td>
+<td>Untested</td>
 </tr>
 <tr>
 <td>Razer Sensa HD haptics</td>
-<td>Not available</td>
-<td>Works</td>
+<td>Not available. The Interhaptics engine has no ARM64 build</td>
+<td>Untested</td>
 </tr>
 <tr>
 <td>Xbox Elite paddles</td>
-<td>Not read</td>
+<td>Not read. The paddle reader in PadForge's input library is written for x64</td>
+<td>Untested</td>
+</tr>
+<tr>
+<td>Logitech G-keys</td>
+<td>Not available. Logitech Gaming Software installs x64 and x86 libraries only</td>
+<td>Untested</td>
+</tr>
+<tr>
+<td>VR headset and controllers through SteamVR</td>
+<td>Not available. PadForge loads SteamVR's win64 library</td>
+<td>Untested</td>
+</tr>
+<tr>
+<td>Logitech LIGHTSYNC, OpenXR headset input</td>
+<td>Only if the vendor's software installs an ARM64 engine or runtime</td>
 <td>Untested</td>
 </tr>
 </tbody>
 </table>
 <p>Settings shows <strong>Not Available on ARM64</strong> for HidHide and for Sensa.</p>
-<p>None of this has run on ARM64 hardware yet. The bench is x64.</p>
+<p>Neither build has run on ARM64 hardware yet. The bench is x64.</p>
 <hr />
 <h2 id="first-launch">First launch<a class="headerlink" href="#first-launch" title="Permanent link">&para;</a></h2>
 <p>PadForge opens the <a href="../../features/dashboard/">Dashboard</a> after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.</p>
