@@ -2639,6 +2639,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#xbox-elite-paddles-do-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xbox Elite Paddles Do Nothing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#custom-expression-macro-wont-fire" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4293,6 +4304,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#xbox-elite-paddles-do-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xbox Elite Paddles Do Nothing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#custom-expression-macro-wont-fire" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4928,6 +4950,14 @@
 <li>A DualSense does not get this tab. Its trigger motors are driven from the Adaptive Triggers tab instead. Xbox impulse data a game sends routes there automatically as trigger vibration, gentler than Xbox impulse-trigger motors. If the buzz feels weak, raise the Vibration effect strength on the Adaptive Triggers tab.</li>
 </ol>
 <hr />
+<h2 id="xbox-elite-paddles-do-nothing">Xbox Elite Paddles Do Nothing<a class="headerlink" href="#xbox-elite-paddles-do-nothing" title="Permanent link">&para;</a></h2>
+<p><strong>The four paddles of an Xbox Elite controller never light a mapping row, while the rest of the pad works.</strong></p>
+<ol>
+<li>Check how the controller is connected. Over USB and the Xbox Wireless Adapter, PadForge reads the paddles from the Windows GameInput service, which takes Windows 11 24H2 or 25H2 at build 26100.8973 or 26200.8973 (July 28, 2026) or later. Run <code>winver</code> to see your build. The GameInput redistributable is not required.</li>
+<li>On Windows 10 and older Windows 11 that route stays off. An Elite Series 2 can pair over Bluetooth, where the paddles come from the controller's own Bluetooth LE service. The first Elite has no Bluetooth.</li>
+<li>The paddles are sources named <strong>Right Paddle 1</strong>, <strong>Left Paddle 1</strong>, <strong>Right Paddle 2</strong> and <strong>Left Paddle 2</strong>. Record a mapping by pressing one, or pick it from the source dropdown.</li>
+</ol>
+<hr />
 <h2 id="custom-expression-macro-wont-fire">Custom Expression Macro Won't Fire<a class="headerlink" href="#custom-expression-macro-wont-fire" title="Permanent link">&para;</a></h2>
 <p><strong>A Custom Expression macro is set up but the formula never crosses 0.5.</strong></p>
 <ol>
@@ -5111,6 +5141,10 @@
 <tr>
 <td>Wrong button mapping</td>
 <td>Force Raw Joystick Mode, re-record</td>
+</tr>
+<tr>
+<td>Elite paddles do nothing over USB</td>
+<td>Windows 11 24H2 or 25H2 at build 26100.8973 or later, or pair an Elite Series 2 over Bluetooth</td>
 </tr>
 <tr>
 <td>Opposite buttons vanish</td>
@@ -5331,7 +5365,7 @@
 <li><a href="../devices/wii-controllers/">Wii Controllers</a>: Holds, emulator setup, and the Motion Plus limitation</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.2.</em></p>
 
 
 

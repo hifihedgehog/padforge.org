@@ -519,6 +519,16 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 ---
 
+## Xbox Elite Paddles Do Nothing
+
+**The four paddles of an Xbox Elite controller never light a mapping row, while the rest of the pad works.**
+
+1. Check how the controller is connected. Over USB and the Xbox Wireless Adapter, PadForge reads the paddles from the Windows GameInput service, which takes Windows 11 24H2 or 25H2 at build 26100.8973 or 26200.8973 (July 28, 2026) or later. Run `winver` to see your build. The GameInput redistributable is not required.
+2. On Windows 10 and older Windows 11 that route stays off. An Elite Series 2 can pair over Bluetooth, where the paddles come from the controller's own Bluetooth LE service. The first Elite has no Bluetooth.
+3. The paddles are sources named **Right Paddle 1**, **Left Paddle 1**, **Right Paddle 2** and **Left Paddle 2**. Record a mapping by pressing one, or pick it from the source dropdown.
+
+---
+
 ## Custom Expression Macro Won't Fire
 
 **A Custom Expression macro is set up but the formula never crosses 0.5.**
@@ -710,6 +720,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Double input | Install HidHide, enable "Hide Devices from Games" |
 | BLE controller not hidden | Enable per-device "Hide from Games" and "Hide Devices from Games" in Settings |
 | Wrong button mapping | Force Raw Joystick Mode, re-record |
+| Elite paddles do nothing over USB | Windows 11 24H2 or 25H2 at build 26100.8973 or later, or pair an Elite Series 2 over Bluetooth |
 | Opposite buttons vanish | SOCD cleaning. Set Mode to Off or remove the pair |
 | No rumble | Overall Gain > 0%, motor strength > 0%, Test Rumble |
 | Audio bass rumble flat | Check audio playing, raise sensitivity |
@@ -783,4 +794,4 @@ Both land in the folder PadForge runs from, and the card shows the path.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.2.*

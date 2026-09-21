@@ -3668,6 +3668,7 @@
 <p>Since 4.5.1 every release carries a second zip, <code>win-arm64</code>, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.</p>
 <p>Since 4.5.2, HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.</p>
 <p>Since 4.5.2, Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.</p>
+<p>Since 4.5.2, Xbox Elite paddles are read in the ARM64 build over USB, the Xbox Wireless Adapter and Bluetooth, under the same check as on x64. <a href="../../troubleshooting/#xbox-elite-paddles-do-nothing">Troubleshooting</a> has the Windows build the USB and adapter route needs.</p>
 <p>An ARM64 program can load ARM64 libraries only, and the libraries behind the features below exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation, where its libraries match its process.</p>
 <table>
 <thead>
@@ -3681,11 +3682,6 @@
 <tr>
 <td>Razer Sensa HD haptics</td>
 <td>Not available. Razer ships no ARM64 engine, and lists Synapse for x86-64 Windows only</td>
-<td>Untested</td>
-</tr>
-<tr>
-<td>Xbox Elite paddles over USB or the Xbox Wireless Adapter</td>
-<td>Not read yet. That route reads an undocumented Windows format, so the input library switches it on only where the Windows files behind it match a set it has checked, and it has checked no ARM64 set. The ARM64 files are measured, and the library work is open as hifihedgehog/SDL#32. Paddles over Bluetooth are read</td>
 <td>Untested</td>
 </tr>
 <tr>
