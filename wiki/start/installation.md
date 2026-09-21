@@ -43,7 +43,7 @@ A few features wait on their vendors, because an ARM64 program can load ARM64 li
 
 The Sensa status on the Dashboard reads **Not Available on ARM64** in the ARM64 build.
 
-The x64 zip also runs on an ARM64 PC, under emulation, where those libraries match its process. That is untested, and so is the ARM64 build: neither has run on ARM64 hardware yet.
+The ARM64 build has not run on ARM64 hardware yet.
 
 ---
 

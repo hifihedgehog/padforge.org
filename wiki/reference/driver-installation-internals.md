@@ -91,7 +91,7 @@ The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`, or `arm6
 |---|---|---|---|
 | `HIDMaestro.Core.dll` (referenced via `HintPath`, not embedded) | Managed assembly | varies by version | HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR. `HMContext.InstallDriver()` registers the driver with Windows the first time an HM-backed slot is created. |
 | `Resources\HidHide_1.5.230_x64.exe` | EXE (WiX Burn bootstrapper) | ~7.7 MB | HidHide kernel driver for an x64 machine. Bundled MSI extracted and run silently. In the x64 build only, since only that build runs on an x64 machine. |
-| `Resources\HidHideArm64\HidHide_ARM64.zip` | ZIP (INF + SYS + CAT) | ~44 KB | HidHide's Microsoft-signed ARM64 driver package, driver 1.6.280.0, as upstream publishes it. In both builds, because the x64 build also runs on ARM64 Windows and a kernel driver follows the machine. |
+| `Resources\HidHideArm64\HidHide_ARM64.zip` | ZIP (INF + SYS + CAT) | ~44 KB | HidHide's Microsoft-signed ARM64 driver package, driver 1.6.280.0, as upstream publishes it. In both builds, because a kernel driver follows the machine and not the build. |
 | `Resources\HidHideArm64\nefconc.exe` | EXE (ARM64) | ~1 MB | nefcon 1.20.0, the tool HidHide's own setup drives. Runs the ARM64 install and removal as a child process. In both builds. |
 | `Resources\OpenXInput\<arch>\xinput1_4.dll` | DLL (Content) | ~172 KB | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
 | `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~750 KB total | Nefarius BthPS3 (`BthPS3\`) and BthPS3PSM (`BthPS3PSM\`) driver packages, each with an `x64\` and an `ARM64\` binary under it since 4.5.1, plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
@@ -253,7 +253,7 @@ On an ARM64 machine with no such registration, `HidHideArm64Installer.IsInstalle
 
 ### The ARM64 path
 
-`HidHideArm64Installer` stages the embedded `HidHide_ARM64.zip` and the ARM64 `nefconc.exe` in a folder per attempt and runs nefcon as a child process, so native code performs the install whether PadForge is the ARM64 build or the x64 build under emulation. The commands and their order are those of HidHide's own setup (`Installer/Program.cs`):
+`HidHideArm64Installer` stages the embedded `HidHide_ARM64.zip` and the ARM64 `nefconc.exe` in a folder per attempt and runs nefcon as a child process, so native code performs the install whichever build PadForge is. The commands and their order are those of HidHide's own setup (`Installer/Program.cs`):
 
 | Step | Commands |
 |---|---|

@@ -4823,7 +4823,7 @@
 <td><code>Resources\HidHideArm64\HidHide_ARM64.zip</code></td>
 <td>ZIP (INF + SYS + CAT)</td>
 <td>~44 KB</td>
-<td>HidHide's Microsoft-signed ARM64 driver package, driver 1.6.280.0, as upstream publishes it. In both builds, because the x64 build also runs on ARM64 Windows and a kernel driver follows the machine.</td>
+<td>HidHide's Microsoft-signed ARM64 driver package, driver 1.6.280.0, as upstream publishes it. In both builds, because a kernel driver follows the machine and not the build.</td>
 </tr>
 <tr>
 <td><code>Resources\HidHideArm64\nefconc.exe</code></td>
@@ -5010,7 +5010,7 @@
 <p>One look answers both "installed" and the version, because the status timer asks every five seconds on the UI thread. <code>TryGetHidHideMsiInfo(out displayVersion, out productCode)</code> scans the Uninstall keys (Registry64 + Registry32) for <code>"HidHide"</code> or <code>"HID Hide"</code> in <code>DisplayName</code> (case-insensitive). Any such entry counts as installed. The ProductCode comes only from an entry Windows Installer marks as its own (<code>WindowsInstaller</code> = 1 under a brace GUID key). The version falls back to <code>"Installed"</code> when <code>DisplayVersion</code> is null or empty.</p>
 <p>On an ARM64 machine with no such registration, <code>HidHideArm64Installer.IsInstalled()</code> decides, and the version is the driver file's own.</p>
 <h3 id="the-arm64-path">The ARM64 path<a class="headerlink" href="#the-arm64-path" title="Permanent link">&para;</a></h3>
-<p><code>HidHideArm64Installer</code> stages the embedded <code>HidHide_ARM64.zip</code> and the ARM64 <code>nefconc.exe</code> in a folder per attempt and runs nefcon as a child process, so native code performs the install whether PadForge is the ARM64 build or the x64 build under emulation. The commands and their order are those of HidHide's own setup (<code>Installer/Program.cs</code>):</p>
+<p><code>HidHideArm64Installer</code> stages the embedded <code>HidHide_ARM64.zip</code> and the ARM64 <code>nefconc.exe</code> in a folder per attempt and runs nefcon as a child process, so native code performs the install whichever build PadForge is. The commands and their order are those of HidHide's own setup (<code>Installer/Program.cs</code>):</p>
 <table>
 <thead>
 <tr>

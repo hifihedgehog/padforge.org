@@ -232,11 +232,11 @@ The dialog appears once. After you pick either button, it does not come back on 
 (1) Preliminary. Nothing in the ARM64 column has run on ARM64 hardware yet.
 
 - **HIDMaestro** runs in user mode, so it installs with no reboot. It carries an x64 and an ARM64 driver and installs the one that matches the machine.
-- **HidHide** is a kernel driver, so it has to match the machine: x64 on an x64 PC, ARM64 on an ARM64 PC, from either PadForge build. Neither install asks for a restart. It does not run on 32-bit Windows.
+- **HidHide** is a kernel driver, so it has to match the machine: x64 on an x64 PC, ARM64 on an ARM64 PC. Neither install asks for a restart. It does not run on 32-bit Windows.
 - **Windows MIDI Services** needs Windows 11 24H2 (build 26100)+. The Install button auto-disables on older Windows. On an ARM64 machine PadForge downloads Microsoft's ARM64 installer.
 - **SteamVR** is x64. Valve ships no ARM64 build.
 - **Keyboard+Mouse** needs no driver, so it works wherever PadForge itself runs.
-- **PadForge itself** ships as two 64-bit builds. The x64 build runs on Windows 10 and 11, and on Windows 11 on ARM64 under emulation. The ARM64 build runs there natively. [Installation](../start/installation.md#windows-on-arm-preliminary) lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.
+- **PadForge itself** ships as two 64-bit builds: x64 for Windows 10 and 11, and ARM64 for Windows 11 on ARM64. [Installation](../start/installation.md#windows-on-arm-preliminary) lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.
 
 ---
 

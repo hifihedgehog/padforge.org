@@ -4867,7 +4867,7 @@
 <tr>
 <td>HidHide</td>
 <td>Machine architecture (<code>OSArchitecture</code>)</td>
-<td>A kernel driver cannot run emulated, so either build installs HidHide's Microsoft-signed ARM64 driver (<code>Resources/HidHideArm64/HidHide_ARM64.zip</code>, driver 1.6.280.0) with HidHide's own tool (<code>nefconc.exe</code>, nefcon 1.20.0, ARM64). An x64 machine gets the x64 MSI, which only the x64 build embeds</td>
+<td>A kernel driver has to match the machine, so the choice follows the machine and not the build. An ARM64 machine gets HidHide's ARM64 driver (<code>Resources/HidHideArm64/HidHide_ARM64.zip</code>, driver 1.6.280.0), installed with HidHide's tool (<code>nefconc.exe</code>, nefcon 1.20.0, ARM64). An x64 machine gets the x64 MSI, which only the x64 build embeds</td>
 </tr>
 <tr>
 <td>Vosk voice engine</td>
@@ -4888,7 +4888,7 @@
 <p>One more ARM64 piece lives in the SDL fork. Its Xbox Elite paddle reader (<code>SDL_XINPUT_PADDLES</code>) builds for x64 and, since fork commit a1416320e2, for ARM64. It has two routes. The Bluetooth route uses public WinRT calls. The USB and Xbox Wireless Adapter route reads an undocumented format from the Windows GameInput service, so the fork switches it on only where the files behind that format belong to a version family it has read, by product version: <code>GameInputSvc.exe</code> and <code>GameInput.dll</code> 0.2309.26100 from revision 8875, <code>Windows.Gaming.Input.dll</code> 10.0.26100 from 8737 and <code>drivers\xboxgip.sys</code> 10.0.26100 from 8972. <code>GameInputRedist.dll</code> is optional, and must be major version 3 when it is there. That is Windows 11 24H2 or 25H2 at build 26100.8973 or 26200.8973 (July 28, 2026) or later. On Windows 10 and older Windows 11 the route stays off, and paddles are read over Bluetooth only. The version resource carries no architecture, so one table serves x64 and ARM64. Until fork commit 5df5eff539 the check was five exact file hashes. They matched the Windows updates dated 2026-08-27 to 2026-09-14 with GameInput redistributable 3.3.221.0, and no ARM64 installation (hifihedgehog/SDL#32). When the route stays off, the joystick's <code>SDL.joystick.xinput.paddle.error</code> property holds the reason. PadForge does not read it yet.</p>
 <p>The reader is C++, so <code>SDL3.dll</code> imports <code>msvcp140.dll</code> on both architectures, and <code>vcruntime140_1.dll</code> on x64, where that file's exception handler exists. Neither <code>msvcp140.dll</code> nor <code>vcruntime140.dll</code> carries an <code>Exists</code> condition, so a missing one stops the build and names it. <code>BundledSdlRuntimeImportsTests</code> reads each bundled <code>SDL3.dll</code> for the runtime DLLs it names and fails when one is not in that architecture's <code>Resources/VisualCpp</code> folder. It was written before the ARM64 reader was delivered and failed on that delivery, which is how the ARM64 <code>msvcp140.dll</code> came to be bundled with it.</p>
 <p>Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. <code>DropX64OnlyNativesOnArm64</code> takes them back out of an ARM64 build, which gets its own <code>libvosk.dll</code> from a <code>Content</code> item. An ARM64 publish without that file is refused by <code>RequireBundledNatives</code>.</p>
-<p>Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, the x64 build embeds both BthPS3 payloads because an emulated x64 PadForge still installs the ARM64 driver, <code>Ds3DriverInstaller.SignWinUsbPackage()</code> builds its catalog for <code>10_ARM64</code> on an ARM64 machine, and the Windows MIDI Services download picks the <code>-arm64</code> installer there.</p>
+<p>Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, <code>Ds3DriverInstaller.SignWinUsbPackage()</code> builds its catalog for <code>10_ARM64</code> on an ARM64 machine, and the Windows MIDI Services download picks the <code>-arm64</code> installer there.</p>
 <h2 id="project-configuration-details">Project Configuration Details<a class="headerlink" href="#project-configuration-details" title="Permanent link">&para;</a></h2>
 <h3 id="padforgeappcsproj">PadForge.App.csproj<a class="headerlink" href="#padforgeappcsproj" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">&lt;PropertyGroup&gt;</span>
@@ -5239,7 +5239,7 @@
 </tr>
 <tr>
 <td><code>HidHideArm64/HidHide_ARM64.zip</code></td>
-<td>HidHide's Microsoft-signed ARM64 driver package (driver 1.6.280.0), byte for byte as upstream publishes it. Embedded in both builds, because the x64 build also runs on ARM64 Windows</td>
+<td>HidHide's Microsoft-signed ARM64 driver package (driver 1.6.280.0), byte for byte as upstream publishes it. Embedded in both builds, because the driver is chosen by the machine and not by the build</td>
 </tr>
 <tr>
 <td><code>HidHideArm64/nefconc.exe</code></td>

@@ -191,7 +191,7 @@ Three features have a native half, and `PadForge.Engine/Common/PlatformSupport.c
 
 | Feature | Decided by | On ARM64 |
 |---|---|---|
-| HidHide | Machine architecture (`OSArchitecture`) | A kernel driver cannot run emulated, so either build installs HidHide's Microsoft-signed ARM64 driver (`Resources/HidHideArm64/HidHide_ARM64.zip`, driver 1.6.280.0) with HidHide's own tool (`nefconc.exe`, nefcon 1.20.0, ARM64). An x64 machine gets the x64 MSI, which only the x64 build embeds |
+| HidHide | Machine architecture (`OSArchitecture`) | A kernel driver has to match the machine, so the choice follows the machine and not the build. An ARM64 machine gets HidHide's ARM64 driver (`Resources/HidHideArm64/HidHide_ARM64.zip`, driver 1.6.280.0), installed with HidHide's tool (`nefconc.exe`, nefcon 1.20.0, ARM64). An x64 machine gets the x64 MSI, which only the x64 build embeds |
 | Vosk voice engine | Process architecture (`ProcessArchitecture`) | The ARM64 build bundles `Resources/Vosk/arm64/libvosk.dll`. The Vosk package carries the x64 one. Both builds embed the model |
 | Razer Sensa HD haptics | Process architecture | Not available. The Interhaptics SDK ships for Win32 and x64 only, and Razer lists Synapse for x86-64 Windows only. `SensaHapticsService` reports `Unsupported` |
 
@@ -209,7 +209,7 @@ The reader is C++, so `SDL3.dll` imports `msvcp140.dll` on both architectures, a
 
 Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build, which gets its own `libvosk.dll` from a `Content` item. An ARM64 publish without that file is refused by `RequireBundledNatives`.
 
-Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, the x64 build embeds both BthPS3 payloads because an emulated x64 PadForge still installs the ARM64 driver, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_ARM64` on an ARM64 machine, and the Windows MIDI Services download picks the `-arm64` installer there.
+Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_ARM64` on an ARM64 machine, and the Windows MIDI Services download picks the `-arm64` installer there.
 
 ## Project Configuration Details
 
@@ -427,7 +427,7 @@ Source location: `PadForge.App/gamecontrollerdb_padforge.txt`
 | Resource | Purpose |
 |----------|---------|
 | `HidHide_1.5.230_x64.exe` | HidHide setup for x64 machines. Hides physical controllers from other applications. Embedded in the x64 build only, since only that build can run on an x64 machine |
-| `HidHideArm64/HidHide_ARM64.zip` | HidHide's Microsoft-signed ARM64 driver package (driver 1.6.280.0), byte for byte as upstream publishes it. Embedded in both builds, because the x64 build also runs on ARM64 Windows |
+| `HidHideArm64/HidHide_ARM64.zip` | HidHide's Microsoft-signed ARM64 driver package (driver 1.6.280.0), byte for byte as upstream publishes it. Embedded in both builds, because the driver is chosen by the machine and not by the build |
 | `HidHideArm64/nefconc.exe` | nefcon 1.20.0, the ARM64 console build. HidHide's own install tool, which `HidHideArm64Installer` runs as a native child process. Embedded in both builds |
 
 The HIDMaestro user-mode driver is **not** managed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll` (referenced as a `<Reference>`, so it's bundled into the single-file EXE). `InputManager` calls `HMContext.InstallDriver()` on first start (from `EnsureHMaestroContext()` in `PadForge.App/Common/Input/`), which registers the driver with Windows through `pnputil` from inside PadForge's already-elevated process. No separate installer EXE. The OpenXInput shim (`xinput1_4.dll` only) ships as `<Content>` and is bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract`. `devobj.dll` is deliberately not shipped. See [Driver Installation Internals](driver-installation-internals.md) for why a bundled stub would crash HID class enumeration. The Windows MIDI Services SDK is downloaded from the GitHub releases API on demand when the user clicks Install, then run with `/install /quiet /norestart`.
