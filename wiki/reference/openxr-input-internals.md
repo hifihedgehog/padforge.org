@@ -113,4 +113,4 @@ Test coverage is uneven and worth stating plainly. The device rows, the head-pos
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.2.*

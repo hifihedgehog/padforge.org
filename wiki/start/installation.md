@@ -6,7 +6,7 @@
 
 ## Quick start (2 minutes)
 
-1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v4.5.1-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([preliminary](#windows-on-arm-preliminary)).
+1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v4.5.2-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([preliminary](#windows-on-arm-preliminary)).
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
@@ -32,9 +32,9 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 Since 4.5.1 every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.
 
-HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.
+Since 4.5.2, HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.
 
-Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.
+Since 4.5.2, Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.
 
 An ARM64 program can load ARM64 libraries only, and the libraries behind the features below exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation, where its libraries match its process.
 
@@ -161,4 +161,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.2.*

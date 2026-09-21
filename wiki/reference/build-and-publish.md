@@ -714,7 +714,7 @@ cd ../../win-arm64/publish
 zip -r PadForge-vX.Y.Z-win-arm64.zip .
 ```
 
-Each publish directory holds one file, so the 4.5.1 assets are `PadForge-v4.5.1-win-x64.zip` and `PadForge-v4.5.1-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
+Each publish directory holds one file, so the 4.5.2 assets are `PadForge-v4.5.2-win-x64.zip` and `PadForge-v4.5.2-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
 
 ### 6. Create GitHub Release
 
@@ -799,4 +799,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.2.*

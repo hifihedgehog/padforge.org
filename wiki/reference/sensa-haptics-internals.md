@@ -202,4 +202,4 @@ Live rendering on Sensa hardware was not verified by the maintainer.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.2.*

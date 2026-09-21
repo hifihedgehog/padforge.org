@@ -1213,4 +1213,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.2.*

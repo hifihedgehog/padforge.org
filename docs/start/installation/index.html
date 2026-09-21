@@ -3628,7 +3628,7 @@
 <p><img alt="Add Controller popup: pick a virtual controller type" src="../../images/add-controller-popup.png" /></p>
 <h2 id="quick-start-2-minutes">Quick start (2 minutes)<a class="headerlink" href="#quick-start-2-minutes" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Download the <code>win-x64</code> zip from the <a href="https://github.com/hifihedgehog/PadForge/releases/latest">latest release</a>, for example <code>PadForge-v4.5.1-win-x64.zip</code>. It holds <code>PadForge.exe</code> and nothing else. On Windows on ARM, take the <code>win-arm64</code> zip (<a href="#windows-on-arm-preliminary">preliminary</a>).</li>
+<li>Download the <code>win-x64</code> zip from the <a href="https://github.com/hifihedgehog/PadForge/releases/latest">latest release</a>, for example <code>PadForge-v4.5.2-win-x64.zip</code>. It holds <code>PadForge.exe</code> and nothing else. On Windows on ARM, take the <code>win-arm64</code> zip (<a href="#windows-on-arm-preliminary">preliminary</a>).</li>
 <li>Extract the zip to any folder (e.g. <code>C:\PadForge\</code>).</li>
 <li>Run <code>PadForge.exe</code>.</li>
 <li>Approve the one UAC prompt at startup. PadForge needs administrator rights to run.</li>
@@ -3666,8 +3666,8 @@
 <p>Settings live in <code>PadForge.xml</code> next to the executable. To move PadForge, move the whole folder.</p>
 <h3 id="windows-on-arm-preliminary">Windows on ARM (preliminary)<a class="headerlink" href="#windows-on-arm-preliminary" title="Permanent link">&para;</a></h3>
 <p>Since 4.5.1 every release carries a second zip, <code>win-arm64</code>, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.</p>
-<p>HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.</p>
-<p>Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.</p>
+<p>Since 4.5.2, HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.</p>
+<p>Since 4.5.2, Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.</p>
 <p>An ARM64 program can load ARM64 libraries only, and the libraries behind the features below exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation, where its libraries match its process.</p>
 <table>
 <thead>
@@ -3795,7 +3795,7 @@
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro under the hood.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.1.</em></p>
+<p><em>Last updated for PadForge 4.5.2.</em></p>
 
 
 

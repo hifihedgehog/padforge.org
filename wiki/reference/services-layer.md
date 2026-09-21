@@ -1828,4 +1828,4 @@ User clicks Record button
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.2.*

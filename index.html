@@ -690,7 +690,8 @@
     <div class="container dl-inner">
         <h2 class="display-l reveal">Free means free.</h2>
         <p class="lede lede-center reveal" data-d="1" style="margin-top:1.4rem">
-            No installer. Single EXE. Windows 10 or 11, 64-bit. PadForge will never
+            No installer. Single EXE. Windows 10 or 11, 64-bit, with a native build
+            for Windows 11 on ARM64. PadForge will never
             become paid, freemium, or early-access paywalled.
         </p>
         <div class="hero-cta reveal" data-d="2" style="margin-top:2.4rem">
@@ -698,12 +699,12 @@
             <a href="/docs/" class="btn btn-ghost">Read the docs</a>
         </div>
         <div class="dl-meta reveal" data-d="3">
-            <span>Single EXE</span><span>Windows 10 / 11 64-bit</span><span>CC BY-NC-SA 4.0</span>
+            <span>Single EXE</span><span>Windows 10 / 11 64-bit</span><span>Windows 11 ARM64</span><span>CC BY-NC-SA 4.0</span>
         </div>
         <div class="details reveal" data-d="3" style="max-width:720px; margin:2.6rem auto 0; text-align:left">
             <details class="detail">
                 <summary>What gets installed</summary>
-                <div class="detail-body">PadForge installs <strong>HIDMaestro</strong> on first run. HIDMaestro is the driver that creates virtual controllers: when you add a slot it spins up a real HID device matching the shape you picked, and the device disappears when you delete the slot. Two more drivers are optional, offered only when you need the feature. <strong>HidHide</strong> hides your physical controller so games only see the virtual one. Most games need it, because otherwise they read the physical pad and the virtual one at the same time. <strong>Windows MIDI Services</strong> is required for MIDI input and the MIDI virtual controller type, and needs Windows 11 24H2 or later.</div>
+                <div class="detail-body">PadForge installs <strong>HIDMaestro</strong> on first run. HIDMaestro is the driver that creates virtual controllers: when you add a slot it spins up a real HID device matching the shape you picked, and the device disappears when you delete the slot. Two more drivers are optional, offered only when you need the feature. <strong>HidHide</strong> hides your physical controller so games only see the virtual one. Most games need it, because otherwise they read the physical pad and the virtual one at the same time. On an ARM64 PC PadForge installs HidHide's own ARM64 driver. <strong>Windows MIDI Services</strong> is required for MIDI input and the MIDI virtual controller type, and needs Windows 11 24H2 or later.</div>
             </details>
         </div>
         <div class="give reveal" data-d="4">

@@ -121,7 +121,7 @@
   },
   {
     "t": "Voice macros",
-    "d": "Register a phrase and speak it to fire a macro. Recognition runs offline with no account and no cloud. The Vosk model downloads once on first use, and Windows' own recognizer carries the feature until it lands. Anything the recognizer hears that is not a registered phrase goes to an unknown bucket rather than firing at random."
+    "d": "Register a phrase and speak it to fire a macro. Recognition runs offline with no account and no cloud. The Vosk model ships inside PadForge and unpacks on first use, and Windows' own recognizer carries the feature until it is ready. Anything the recognizer hears that is not a registered phrase goes to an unknown bucket rather than firing at random."
   },
   {
     "t": "PlayStation Move and Navigation",

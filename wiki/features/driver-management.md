@@ -301,4 +301,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.2.*
