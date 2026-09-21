@@ -1452,7 +1452,7 @@ cmake --build build --config Release
 
 Copy the output `SDL3.dll` into `PadForge.App/Resources/SDL3/x64/` before publishing PadForge.
 
-The ARM64 build is the same configuration generated with `-A ARM64` into its own build directory, cross-compiled on an x64 machine, and its `SDL3.dll` goes into `PadForge.App/Resources/SDL3/arm64/`. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 `libusb-1.0.dll` with `lib /def /machine:arm64`. The ARM64 configuration differs from x64 in two ways: `SDL_JOYSTICK_XINPUT_PADDLES` is off, because the Elite paddle reader requires `SDL_CPU_X64`, and NEON replaces SSE and AVX.
+The ARM64 build is the same configuration generated with `-A ARM64` into its own build directory, cross-compiled on an x64 machine, and its `SDL3.dll` goes into `PadForge.App/Resources/SDL3/arm64/`. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 `libusb-1.0.dll` with `lib /def /machine:arm64`. The ARM64 configuration differs from x64 in one way: NEON replaces SSE and AVX. Until fork commit a1416320e2 the Elite paddle reader required `SDL_CPU_X64`, so `SDL_XINPUT_PADDLES` was off for ARM64. It builds for both now.
 
 Whichever architecture you build, check the libusb name inside the DLL before bundling it. The configure step reads it off the import library with `dumpbin` and stops if it does not end in `.dll`. `BundledSdlLibusbNameTests` in PadForge checks the delivered file again.
 
@@ -1468,4 +1468,4 @@ Whichever architecture you build, check the libusb name inside the DLL before bu
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.2.*

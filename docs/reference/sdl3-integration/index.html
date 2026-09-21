@@ -7423,7 +7423,7 @@
 <a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
 </code></pre></div>
 <p>Copy the output <code>SDL3.dll</code> into <code>PadForge.App/Resources/SDL3/x64/</code> before publishing PadForge.</p>
-<p>The ARM64 build is the same configuration generated with <code>-A ARM64</code> into its own build directory, cross-compiled on an x64 machine, and its <code>SDL3.dll</code> goes into <code>PadForge.App/Resources/SDL3/arm64/</code>. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 <code>libusb-1.0.dll</code> with <code>lib /def /machine:arm64</code>. The ARM64 configuration differs from x64 in two ways: <code>SDL_JOYSTICK_XINPUT_PADDLES</code> is off, because the Elite paddle reader requires <code>SDL_CPU_X64</code>, and NEON replaces SSE and AVX.</p>
+<p>The ARM64 build is the same configuration generated with <code>-A ARM64</code> into its own build directory, cross-compiled on an x64 machine, and its <code>SDL3.dll</code> goes into <code>PadForge.App/Resources/SDL3/arm64/</code>. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 <code>libusb-1.0.dll</code> with <code>lib /def /machine:arm64</code>. The ARM64 configuration differs from x64 in one way: NEON replaces SSE and AVX. Until fork commit a1416320e2 the Elite paddle reader required <code>SDL_CPU_X64</code>, so <code>SDL_XINPUT_PADDLES</code> was off for ARM64. It builds for both now.</p>
 <p>Whichever architecture you build, check the libusb name inside the DLL before bundling it. The configure step reads it off the import library with <code>dumpbin</code> and stops if it does not end in <code>.dll</code>. <code>BundledSdlLibusbNameTests</code> in PadForge checks the delivered file again.</p>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
@@ -7435,7 +7435,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.1.</em></p>
+<p><em>Last updated for PadForge 4.5.2.</em></p>
 
 
 

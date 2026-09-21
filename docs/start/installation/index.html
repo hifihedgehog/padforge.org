@@ -3685,7 +3685,7 @@
 </tr>
 <tr>
 <td>Xbox Elite paddles over USB or the Xbox Wireless Adapter</td>
-<td>Not read. That route reads an undocumented Windows format that has been checked against x64 Windows alone, and it stays off until it is checked on an ARM64 PC. Paddles over Bluetooth are read</td>
+<td>Not read yet. That route reads an undocumented Windows format, so the input library switches it on only where the Windows files behind it match a set it has checked, and it has checked no ARM64 set. The ARM64 files are measured, and the library work is open as hifihedgehog/SDL#32. Paddles over Bluetooth are read</td>
 <td>Untested</td>
 </tr>
 <tr>
