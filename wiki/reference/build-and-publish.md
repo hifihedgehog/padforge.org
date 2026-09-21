@@ -203,7 +203,9 @@ Nobody publishes `libvosk.dll` for Windows ARM64. Vosk's maintainer wrote the re
 
 Four more features load a library the vendor's own software installs, and PadForge has no gate for them because the load itself answers. `LogitechGkey.dll` comes in x64 and x86 only (`LogitechGKeyCatalog`), and the SteamVR input service loads `bin\win64\openvr_api.dll` (`OpenVrConsumerService`), so an ARM64 process gets neither. The LIGHTSYNC engine and the OpenXR runtime are whatever the registry names, so they work in an ARM64 process only if the vendor registers an ARM64 one. None of these crashes the app. G-keys, LIGHTSYNC and OpenXR each show a status line, and the SteamVR input service logs the failed load and keeps retrying.
 
-A fourth gap is decided in the SDL fork. Its Xbox Elite paddle reader (`SDL_XINPUT_PADDLES`) requires `SDL_CPU_X64` and switches itself off for any other target, so the ARM64 `SDL3.dll` reads no Elite paddles. That is also why the ARM64 build bundles `vcruntime140.dll` alone: the x64 `SDL3.dll` imports `msvcp140.dll` and `vcruntime140_1.dll` for that C++ reader, and the ARM64 one imports neither.
+One more gap is decided in the SDL fork. Its Xbox Elite paddle reader (`SDL_XINPUT_PADDLES`) builds for x64 and, since fork commit a1416320e2, for ARM64. It has two routes. The Bluetooth route uses public WinRT calls and runs on both. The USB and Xbox Wireless Adapter route reads an undocumented format from the Windows GameInput service, so the fork switches it on only where five Windows files match a profile it has checked, by size and SHA-256. That profile is of x64 Windows and no ARM64 installation matches it, so the ARM64 `SDL3.dll` reads Elite paddles over Bluetooth only, until an ARM64 profile is qualified on an ARM64 PC (hifihedgehog/SDL#31).
+
+The reader is C++, so `SDL3.dll` imports `msvcp140.dll` on both architectures, and `vcruntime140_1.dll` on x64, where that file's exception handler exists. `BundledSdlRuntimeImportsTests` reads each bundled `SDL3.dll` for the runtime DLLs it names and fails when one is not in that architecture's `Resources/VisualCpp` folder. It was written before the ARM64 reader was delivered and failed on that delivery, which is how the ARM64 `msvcp140.dll` came to be bundled with it.
 
 Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build, which gets its own `libvosk.dll` from a `Content` item. An ARM64 publish without that file is refused by `RequireBundledNatives`.
 
@@ -358,10 +360,11 @@ The full native set in the bundle:
 | `libusb-1.0.dll` | `<Content>`, `Resources/SDL3/<arch>/` | SDL3's HIDAPI backend, loaded at run time by the file name compiled into `SDL3.dll` | Yes |
 | `xinput1_4.dll` | `<Content>`, `Resources/OpenXInput/<arch>/` | SDL3's XInput backend, and `BluetoothLinkHelper` for ordinals 108 / 103 | Yes |
 | `vcruntime140.dll` | `<Content>`, `Resources/VisualCpp/<arch>/` | `SDL3.dll` | Yes |
-| `msvcp140.dll`, `vcruntime140_1.dll` | `<Content>`, `Resources/VisualCpp/x64/` | The x64 `SDL3.dll`, for its C++ Elite paddle reader | No |
+| `msvcp140.dll` | `<Content>`, `Resources/VisualCpp/<arch>/` | `SDL3.dll`, for its C++ Elite paddle reader | Yes |
+| `vcruntime140_1.dll` | `<Content>`, `Resources/VisualCpp/x64/` | The x64 `SDL3.dll`. It holds an exception handler that exists for the x64 ABI alone | No |
 | `HAR.dll` | `<Content>`, `Resources/Interhaptics/x64/` | `SensaHapticsService` (#374), P/Invoked lazily | No |
 | `Interhaptics.RazerProvider.dll` | `<Content>`, `Resources/Interhaptics/x64/` | Loaded by `HAR.dll` as its Razer Sensa backend | No |
-| `libvosk.dll` | Vosk 0.3.38 package targets | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | No |
+| `libvosk.dll` | x64: Vosk 0.3.38 package targets. ARM64: `<Content>`, `Resources/Vosk/arm64/` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | Yes |
 | `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | Vosk 0.3.38 package targets | MinGW runtime `libvosk.dll` links against | No |
 
 ### SDL3.dll and libusb-1.0.dll

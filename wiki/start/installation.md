@@ -41,7 +41,7 @@ An ARM64 program can load ARM64 libraries only, and the libraries behind the fea
 | Feature | ARM64 build | x64 build under emulation |
 |---|---|---|
 | Razer Sensa HD haptics | Not available. Razer ships no ARM64 engine, and lists Synapse for x86-64 Windows only | Untested |
-| Xbox Elite paddles | Not read. The paddle reader in PadForge's input library is written for x64 | Untested |
+| Xbox Elite paddles over USB or the Xbox Wireless Adapter | Not read. That route reads an undocumented Windows format that has been checked against x64 Windows alone, and it stays off until it is checked on an ARM64 PC. Paddles over Bluetooth are read | Untested |
 | Logitech G-keys | Not available. Logitech Gaming Software installs x64 and x86 libraries only | Untested |
 | VR headset and controllers through SteamVR | Not available. PadForge loads SteamVR's win64 library | Untested |
 | Logitech LIGHTSYNC, OpenXR headset input | Only if the vendor's software installs an ARM64 engine or runtime | Untested |
