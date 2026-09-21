@@ -1,0 +1,44 @@
+PadForge
+Product information | September 21, 2026
+
+PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards, and mice to virtual controllers. Players can tune stick response and gyro aiming, build macros, and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
+
+Website: https://padforge.org/
+Press resources: https://padforge.org/press/
+Current release: v4.5.2, September 21, 2026
+Release notes and downloads: https://github.com/hifihedgehog/PadForge/releases/tag/v4.5.2
+Platforms: Windows 10 and 11 on x64. Preliminary Windows 11 ARM64 build.
+Price: Free. No subscriptions or paid feature packs.
+Source license: CC BY-NC-SA 4.0.
+Source and attributions: https://github.com/hifihedgehog/PadForge/blob/v4.5.2/LICENSE
+
+Setup
+PadForge runs as administrator. Its runtime is included in the executable.
+HIDMaestro provides virtual controller output and is installed when needed.
+Composite USB profiles install the USB/IP driver on first use.
+Installation and removal: https://padforge.org/docs/start/installation/
+
+Product references
+Specifications: https://padforge.org/specs.html
+Supported devices: https://padforge.org/docs/devices/supported/
+Gyro controls: https://padforge.org/docs/guides/gyro/
+Steam community imports: https://padforge.org/docs/guides/steam-workshop-import/
+Phone and browser controllers: https://padforge.org/docs/guides/web-controller/
+DualSense audio: https://padforge.org/docs/reference/controller-audio-internals/#composite-usb-persona-lanes
+
+DualSense audio over Bluetooth uses a virtual USB DualSense for compatible
+games. The game supplies its native speaker audio and haptic effects.
+Steam imports include a translation report. Some bindings are approximated
+or skipped. Game-specific Steam Input API actions do not translate.
+
+Images
+button-mappings.jpg: Button mappings and combined inputs. 2560 x 1539 JPG.
+steam-community-layouts.jpg: Steam community layout translation. 2560 x 1539 JPG.
+controller-audio.jpg: Controller audio and EQ. 2560 x 1539 JPG.
+macros.jpg: Macro conditions and actions. 2560 x 1539 JPG.
+dualsense-cobalt.jpg: DualSense Cobalt controller preview. 2560 x 1539 JPG.
+padforge-logo.png: Logo with wordmark. 800 x 800 transparent PNG.
+padforge-icon.png: App icon. 571 x 533 transparent PNG.
+
+Images are supplied in their original proportions. Product names and artwork
+belong to their respective owners. See the source license and attributions.
