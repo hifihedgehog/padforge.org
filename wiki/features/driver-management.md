@@ -137,7 +137,7 @@ Other controller utilities (Steam Input, for example) need their own whitelist e
 
 1. Open **Settings**. Scroll to **HidHide Driver**.
 2. Click **Install**. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.
-3. A restart may be needed for full effect. Restart if hiding does not work right away.
+3. No restart is needed. A controller that was already connected picks HidHide up the next time it connects, so reconnect it if hiding does not work right away.
 
 Turn on **Keep a Diagnostics Log** under **Settings** to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, and which rule the transport sweep used. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.
 
@@ -277,7 +277,7 @@ The slot guards read your saved slots, not what the engine is running, so they h
 | PadForge disappears when I uninstall Windows MIDI Services | Fixed in 4.3.0. Older builds were closed by Windows Restart Manager, which asks running programs to quit so an installer can reach files they hold open. PadForge now declines that request and stays up through the uninstall. |
 | UAC prompt on every launch | Expected. PadForge needs administrator rights to drive its drivers, so Windows asks at startup. Everything after that runs without a second prompt. |
 | Double input (every press counts twice) | Install HidHide. Turn on **Hide from Games (HidHide)** for the physical controller on the [Devices](devices.md) page. |
-| Double input still there after HidHide | Restart the game. Some games only detect controllers at launch. Restart the PC if the install was new. |
+| Double input still there after HidHide | Restart the game. Some games only detect controllers at launch. Reconnect the controller if the install was new, since a controller that was already connected picks HidHide up the next time it connects. |
 | Virtual controller shows up but games do not see it | Restart the game once after PadForge is running. Some games and Steam only detect controllers at launch. |
 | HIDMaestro slot stuck on "Initializing" | Give it a few seconds. If it never finishes, check the inactivity timeout under **Settings**. A slot whose devices go offline drops its virtual controller after that timeout. The slot itself stays and comes back when the devices return. |
 

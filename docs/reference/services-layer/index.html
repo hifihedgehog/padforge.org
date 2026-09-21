@@ -7670,7 +7670,7 @@
 </tr>
 <tr>
 <td><code>VoskVoiceEngine</code></td>
-<td>The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes</td>
+<td>The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes, and for the rest of the run when libvosk will not load, which leaves the cache alone. libvosk reports a model it cannot read by returning null. The store reads the native handle, so such a model is deleted and unpacked again and is never published as ready</td>
 </tr>
 <tr>
 <td><code>NfcReaderService</code></td>

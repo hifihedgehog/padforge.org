@@ -85,13 +85,14 @@ Streams the rumble PadForge is sending to its virtual controllers into the Inter
 |---|---|
 | Software | Razer Synapse 4 with Sensa HD Haptics. In Synapse, set the device's Haptic Source to Sensa HD Games. |
 | Hardware | A Sensa HD device. |
-| Shipped inside PadForge | The Interhaptics engine (`HAR.dll`) and its Razer provider (`Interhaptics.RazerProvider.dll`), unmodified, under the Wyvrn EULA. |
+| Shipped inside PadForge | The Interhaptics engine (`HAR.dll`) and its Razer provider (`Interhaptics.RazerProvider.dll`), unmodified, under the Wyvrn EULA. Both are x64, so the x64 build carries them and the ARM64 build does not. |
 
 | Status text | Meaning |
 |---|---|
 | *Razer Sensa runtime not found. Retrying.* | The engine is up but the Razer provider could not reach Synapse's Sensa runtime. PadForge retries every 30 seconds. |
 | *Streaming rumble to Sensa HD Haptics* | The provider is up. Rumble is being rendered. |
 | *Stopped* | The toggle is off, the engine is stopped, or the Interhaptics engine failed to start. |
+| *Not Available on ARM64* | This is the ARM64 build. Razer ships no ARM64 engine, so nothing starts and nothing retries. The x64 build, which also runs on ARM64 Windows, carries the engine. |
 
 The translation is amplitude only. The loudest rumble voice across every slot sets the intensity of one looping haptic effect in the 65 to 300 Hz band. There is no left-right split and no pitch.
 

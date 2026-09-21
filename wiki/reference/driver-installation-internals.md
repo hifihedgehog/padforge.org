@@ -5,15 +5,16 @@
 PadForge v4 deals with five drivers/services and a legacy v2 cleanup path:
 
 1. **HIDMaestro** is the user-mode UMDF2 driver behind the Xbox, PlayStation, Nintendo, and Extended slot types. It is **not** installed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll`. `HMContext.InstallDriver()` (called lazily the first time one of those four slot types activates) registers them with Windows. VR slots ride HIDMaestro too, but through its OpenVR driver, registered with SteamVR by `HMVR.EnsureDriverRegistered()` rather than by `InstallDriver()`. MIDI and Keyboard+Mouse slots use no driver of HIDMaestro's at all.
-2. **HidHide** is the kernel-mode driver that hides physical controllers from games. Embedded as a WiX Burn bootstrapper EXE, install/uninstall via `msiexec`.
+2. **HidHide** is the kernel-mode driver that hides physical controllers from games. On an x64 machine it is an embedded WiX Burn bootstrapper EXE, installed and removed through `msiexec`. On an ARM64 machine it is upstream's Microsoft-signed ARM64 driver package, installed and removed by `HidHideArm64Installer` with upstream's own tool, nefcon.
 3. **Windows MIDI Services** is downloaded on demand from GitHub releases (the installer is ~210 MB, too large to embed) and run with `/install /quiet /norestart`.
 4. **SteamVR** is installed without the Steam client, by downloading Valve's `steamcmd` and running the anonymous `app_update` for app 250820 (issue #49). Uninstall is offered only for the install PadForge itself created.
 5. **The DualShock 3 Bluetooth stack** (BthPS3 + BthPS3PSM) ships as embedded driver packages and is installed from `Ds3DriverInstaller`, which also binds a docked DS3 to inbox WinUSB so the sixpair reports can be sent.
 6. **Legacy v2 driver cleanup** offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.
 
-Driver-side code lives in four files:
+Driver-side code lives in five files:
 
 - **`PadForge.App/Common/DriverInstaller.cs`** (`PadForge.Common`) handles HidHide, Windows MIDI Services, and Steam-free SteamVR install/uninstall, plus the legacy v2 ViGEmBus and vJoy uninstall paths.
+- **`PadForge.App/Common/HidHideArm64Installer.cs`** (`PadForge.Common`) installs and removes HidHide on an ARM64 machine, and carries the startup check that stands in for HidHide's watchdog service there.
 - **`PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs`** owns `EnsureHMaestroContext()`, which calls into the HM SDK to register the HIDMaestro driver with Windows.
 - **`PadForge.App/App.xaml.cs`** owns the launch-time HIDMaestro orphan sweep and the OEM-name orphan recovery, both before any virtual is created.
 - **`PadForge.App/Services/Ds3DriverInstaller.cs`** (`PadForge.Services`) installs BthPS3 and BthPS3PSM from embedded driver packages, signs and installs the DS3 WinUSB package on the machine that runs it, and arms PSM patching.
@@ -47,7 +48,7 @@ graph TD
 
     subgraph DriverInstaller["DriverInstaller (static class)"]
         direction TB
-        HH["HidHide<br/>Embedded EXE bootstrapper"]
+        HH["HidHide<br/>x64: embedded EXE bootstrapper<br/>ARM64: driver package and nefcon"]
         MS["Windows MIDI Services<br/>GitHub releases API download"]
         SV["SteamVR<br/>steamcmd, anonymous app 250820"]
         LC["Legacy v2 cleanup<br/>(detect + uninstall ViGEmBus, vJoy if present)"]
@@ -60,7 +61,7 @@ graph TD
     end
 
     HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(231 profiles bundled in the SDK)"]
-    HH -->|"embedded HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi"| HH_DRV["HidHide kernel driver"]
+    HH -->|"x64: HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi<br/>ARM64: nefconc install, then class filters"| HH_DRV["HidHide kernel driver"]
     MS -->|"GitHub /releases -> SDK Runtime x64 EXE -> /install"| MS_SVC["Windows MIDI Services<br/>(Win11 24H2+)"]
     SV -->|"steamcmd.zip -> +app_update 250820<br/>-> HMVR.SetSteamVRPathHint"| SV_DIR["SteamVR payload<br/>(default C:\SteamVR)"]
     BT -->|"Devcon.Install of the two INFs<br/>+ Bluetooth-class lower filter"| BT_DRV["BthPS3 profile driver<br/>+ BthPS3PSM filter"]
@@ -89,8 +90,10 @@ The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`, or `arm6
 | Resource | Type | Approximate size | Purpose |
 |---|---|---|---|
 | `HIDMaestro.Core.dll` (referenced via `HintPath`, not embedded) | Managed assembly | varies by version | HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR. `HMContext.InstallDriver()` registers the driver with Windows the first time an HM-backed slot is created. |
-| `Resources\HidHide_1.5.230_x64.exe` | EXE (WiX Burn bootstrapper) | ~7.7 MB | HidHide kernel driver. Bundled MSI extracted and run silently. |
-| `Resources\OpenXInput\x64\xinput1_4.dll` | DLL (Content) | ~172 KB | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
+| `Resources\HidHide_1.5.230_x64.exe` | EXE (WiX Burn bootstrapper) | ~7.7 MB | HidHide kernel driver for an x64 machine. Bundled MSI extracted and run silently. In the x64 build only, since only that build runs on an x64 machine. |
+| `Resources\HidHideArm64\HidHide_ARM64.zip` | ZIP (INF + SYS + CAT) | ~44 KB | HidHide's Microsoft-signed ARM64 driver package, driver 1.6.280.0, as upstream publishes it. In both builds, because the x64 build also runs on ARM64 Windows and a kernel driver follows the machine. |
+| `Resources\HidHideArm64\nefconc.exe` | EXE (ARM64) | ~1 MB | nefcon 1.20.0, the tool HidHide's own setup drives. Runs the ARM64 install and removal as a child process. In both builds. |
+| `Resources\OpenXInput\<arch>\xinput1_4.dll` | DLL (Content) | ~172 KB | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
 | `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~750 KB total | Nefarius BthPS3 (`BthPS3\`) and BthPS3PSM (`BthPS3PSM\`) driver packages, each with an `x64\` and an `ARM64\` binary under it since 4.5.1, plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
 
 Windows MIDI Services is **not** embedded. It is downloaded on demand from `api.github.com/repos/microsoft/MIDI/releases` (~210 MB). The download path is ephemeral. Nothing is bundled with PadForge. SteamVR is not embedded either: `steamcmd.zip` comes from `steamcdn-a.akamaihd.net` at install time and the payload is several GB.
@@ -103,8 +106,10 @@ Declared in `PadForge.App.csproj`:
 <Reference Include="HIDMaestro.Core">
   <HintPath>Resources\HIDMaestro\HIDMaestro.Core.dll</HintPath>
 </Reference>
-<EmbeddedResource Include="Resources\HidHide_1.5.230_x64.exe" />
-<Content Include="Resources\OpenXInput\x64\xinput1_4.dll" Link="xinput1_4.dll" />
+<EmbeddedResource Include="Resources\HidHide_1.5.230_x64.exe" Condition="'$(NativeArch)' == 'x64'" />
+<EmbeddedResource Include="Resources\HidHideArm64\HidHide_ARM64.zip" />
+<EmbeddedResource Include="Resources\HidHideArm64\nefconc.exe" />
+<Content Include="Resources\OpenXInput\$(NativeArch)\xinput1_4.dll" Link="xinput1_4.dll" />
 <EmbeddedResource Include="Resources\BthPS3\**\*.*">
   <LogicalName>BthPS3.%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
 </EmbeddedResource>
@@ -123,8 +128,8 @@ Private methods reused across HidHide and the MIDI Services flows.
 | `ExtractEmbeddedResource` | `(string resourceFileName, string tempDir)` | Finds resource via case-insensitive `IndexOf` on `GetManifestResourceNames()`, streams to `{tempDir}\{resourceFileName}`. Throws `FileNotFoundException` (listing all resource names) if not found. |
 | `ExtractInstallerBundle` | `(string exePath, string tempDir)` | Runs the WiX bootstrapper with `/extract` to unpack its MSI into `{tempDir}\Extracted\`. Recreates the directory if it exists. 60s timeout. |
 | `FindMsi` | `(string extractDir, string primaryName, string fallbackPattern)` | Searches recursively for an MSI: exact name first, then glob fallback. Throws `FileNotFoundException` if neither matches. |
-| `RunElevated` | `(string fileName, string arguments)` | Launches a child process with `Verb = "runas"`, hidden window, 180s timeout. PadForge is already elevated via `app.manifest`, so Windows does not show a UAC prompt when launching the child. Used by HidHide install/uninstall and the legacy vJoy uninstall script. |
-| `RunMsiElevated` | `(string arguments)` | Wrapper: `RunElevated("msiexec.exe", arguments)`. |
+| `RunElevated` | `(string fileName, string arguments)` | Launches a child process with `Verb = "runas"`, hidden window, 180s timeout, and returns its exit code, or null when it is still running after the wait. PadForge is already elevated via `app.manifest`, so Windows does not show a UAC prompt when launching the child. Used by HidHide install/uninstall on x64 and the legacy vJoy uninstall script. |
+| `RunMsiElevated` | `(string arguments, bool absentIsSuccess)` | `RunElevated("msiexec.exe", arguments)`, held to its exit code. 0, 3010 and 1641 are success, and 1605 (not installed) only when `absentIsSuccess`. Anything else, or a timeout, throws `InstallerFailedException`. |
 | `CleanupTempDir` | `(string tempDir)` | Recursive delete, swallows all exceptions. Called in `finally` blocks. |
 | `FindUninstallProductCode` | `(string displayNameSubstring)` | Scans `HKLM\...\Uninstall` (Registry64 + Registry32) for a `DisplayName` containing the substring, then returns the subkey name only when it is brace-wrapped, so Inno and NSIS entries fall through and the scan continues. Returns the MSI ProductCode GUID `{XXXXXXXX-...}` or `null`. Used for ViGEmBus uninstall, where PadForge does not embed the MSI. |
 
@@ -214,13 +219,17 @@ PadForge does not expose a "remove HIDMaestro driver" path, and HIDMaestro is no
 
 ## HidHide
 
+A kernel driver follows the machine, so `PlatformSupport.IsArm64Machine` picks the path, whichever build is running.
+
 ### InstallHidHide()
 
 ```csharp
 public static void InstallHidHide()
 ```
 
-Extract embedded `HidHide_1.5.230_x64.exe` to `%TEMP%\PadForge_HidHide\`, run `/extract` to unpack the MSI, locate `HidHide.msi` (with `HidHide*.msi` glob fallback), then run `msiexec /i "{msiPath}" /qb /norestart` via `RunMsiElevated`. Temp cleanup in `finally`.
+On an x64 machine: extract embedded `HidHide_1.5.230_x64.exe` to a staging folder of this attempt's own under `%TEMP%\PadForge_HidHide\`, run `/extract` to unpack the MSI, locate `HidHide.msi` (with `HidHide*.msi` glob fallback), then run `msiexec /i "{msiPath}" /qb /norestart` via `RunMsiElevated`. The staging folder is deleted in `finally`, except after a timeout, when the installer may still be reading it.
+
+On an ARM64 machine: `HidHideArm64Installer.Install()`. See [The ARM64 path](#the-arm64-path).
 
 ### UninstallHidHide()
 
@@ -228,16 +237,38 @@ Extract embedded `HidHide_1.5.230_x64.exe` to `%TEMP%\PadForge_HidHide\`, run `/
 public static void UninstallHidHide()
 ```
 
-Same extraction flow as install, then `msiexec /x "{msiPath}" /qb /norestart` via `RunMsiElevated`. Temp cleanup in `finally`.
+The HidHide that is installed is removed by its registered ProductCode, `msiexec /x {ProductCode} /qb /norestart`, which is the command Windows itself records for the product. A package path names the product inside that package, so the bundled 1.5.230 package removes an installed HidHide only when the two share a ProductCode. 1605 counts as done on this route.
 
-### Detection: IsHidHideInstalled() / GetHidHideVersion()
+With no usable ProductCode, an ARM64 machine takes `HidHideArm64Installer.Uninstall()`. An x64 machine falls back to the bundled package, `msiexec /x "{msiPath}"`, where 1605 stays a failure, because it only says the bundled product is absent while something named HidHide is still registered.
+
+### Detection: TryGetHidHideStatus()
 
 ```csharp
-public static bool IsHidHideInstalled()
-public static string GetHidHideVersion()
+public static bool TryGetHidHideStatus(out string version)
 ```
 
-Both delegate to `TryGetHidHideMsiInfo(out displayVersion, out productCode)`, which scans Uninstall keys (Registry64 + Registry32) for `"HidHide"` or `"HID Hide"` in `DisplayName` (case-insensitive). Returns `DisplayVersion` and the subkey name (the MSI ProductCode GUID) when matched. `GetHidHideVersion()` falls back to `"Installed"` when `DisplayVersion` is null/empty.
+One look answers both "installed" and the version, because the status timer asks every five seconds on the UI thread. `TryGetHidHideMsiInfo(out displayVersion, out productCode)` scans the Uninstall keys (Registry64 + Registry32) for `"HidHide"` or `"HID Hide"` in `DisplayName` (case-insensitive). Any such entry counts as installed. The ProductCode comes only from an entry Windows Installer marks as its own (`WindowsInstaller` = 1 under a brace GUID key). The version falls back to `"Installed"` when `DisplayVersion` is null or empty.
+
+On an ARM64 machine with no such registration, `HidHideArm64Installer.IsInstalled()` decides, and the version is the driver file's own.
+
+### The ARM64 path
+
+`HidHideArm64Installer` stages the embedded `HidHide_ARM64.zip` and the ARM64 `nefconc.exe` in a folder per attempt and runs nefcon as a child process, so native code performs the install whether PadForge is the ARM64 build or the x64 build under emulation. The commands and their order are those of HidHide's own setup (`Installer/Program.cs`):
+
+| Step | Commands |
+|---|---|
+| Install | `install "<inf>" "root\HidHide" --no-duplicates --remove-duplicates`, then `--add-class-filter --position upper --service-name HidHide --class-guid <class>` for HIDClass, XnaComposite and XboxComposite |
+| Remove | `--remove-class-filter` for the three classes in reverse, then `remove "root\HidHide"` |
+
+Exit codes 0 and 3010 are success, and so is 259 on install, which is how Windows reports a driver that is already current. HIDClass has to take. The other two classes are best effort, as they are in HidHide's setup. Each command gets three minutes, the wait the timeout message states.
+
+A class filter entry that names a driver which cannot load can stop every keyboard and mouse from starting. HidHide's x64 setup ships a watchdog service for that, and an ARM64 install has none. Three rules stand in for it.
+
+1. Filters are added only after `\\.\HidHide` answers. The control device is exclusive, so "access denied" (error 5) counts as answering: another client holds it. If it does not answer, no filter is added and the device node's removal is attempted. After exit code 3010 the device stays in and the code is reported.
+2. Removal takes the filters off, reads them back, and only then removes the device node. nefcon's `remove` takes the node alone. The service and the driver package stay, as they do after HidHide's own uninstall. If the removal stops part way, by an exit code or a throw, with the node still in, the filters that were listed at the start are added back, provided the driver still answers. When every add succeeds the state is a complete install again and Uninstall stays on offer, and an add that fails is logged. Nothing is put back after a command that outlived its wait, or when the node is gone or cannot be read back. nefcon answers 1 for "no device matched" too, so a node that is already gone counts as removed.
+3. At startup on an ARM64 machine, `RemoveDanglingFilters()` asks the Service Control Manager about the HidHide service. If it does not exist, or is registered and stopped, every class filter entry that names it is removed, and the diagnostics log names the state and the classes. A running service, a service between two states, and a query that fails all leave the filters alone.
+
+Install, removal and the startup check hold one lock, so the check cannot take out a filter an install has just added. "Installed" means the service, the HIDClass filter and the device node together, read in that order, so a machine without HidHide never enumerates its devices.
 
 ---
 
@@ -770,7 +801,7 @@ Windows shows the UAC shield on the icon and prompts once when the process start
 |---|---|---|
 | PadForge launch | `app.manifest` `requireAdministrator` | 1 (per launch, if UAC is enabled) |
 | `HMContext.InstallDriver()` (HM driver register) | App already elevated | 0 |
-| HidHide install/uninstall | `msiexec` via `RunElevated` (child inherits PadForge's elevation) | 0 |
+| HidHide install/uninstall | x64: `msiexec` via `RunElevated`. ARM64: `nefconc.exe` via `Process.Start`. The child inherits PadForge's elevation either way | 0 |
 | MIDI Services install | Direct `Process.Start` (no `runas` to avoid `Win32Exception` on already-elevated processes) | 0 |
 | SteamVR install | Direct `Process.Start` of `steamcmd.exe`, plus an HKLM write for the path hint | 0 |
 | SteamVR uninstall | `Directory.Delete` plus an HKLM value delete, both in-process | 0 |
@@ -786,7 +817,7 @@ Windows shows the UAC shield on the icon and prompts once when the process start
 
 | Driver | Temp Directory |
 |---|---|
-| HidHide | `%TEMP%\PadForge_HidHide\` |
+| HidHide | `%TEMP%\PadForge_HidHide\<guid>\`, a folder per attempt |
 | MIDI Services | `%TEMP%\PadForge_MidiServices\` |
 | SteamVR (steamcmd staging) | `%TEMP%\PadForge_SteamCmd\` |
 | DS3 driver packages | `%TEMP%\PadForge\BthPS3Drivers\` |
@@ -804,14 +835,14 @@ HIDMaestro has no temp directory because PadForge does not unpack any installer 
 
 ### General Strategy
 
-The temp-dir install flows (HidHide, MIDI Services, SteamVR) use `try/finally` so their temp directory is always deleted. The vJoy uninstall deletes its `.cmd` script with a best-effort `try/catch` after the script runs.
+The temp-dir install flows (HidHide, MIDI Services, SteamVR) use `try/finally` so their temp directory is deleted. HidHide makes one exception: an installer that outlived its wait may still be reading its staging folder, so that folder is left for Windows to clear. The vJoy uninstall deletes its `.cmd` script with a best-effort `try/catch` after the script runs.
 
 ### Per-driver
 
 | Path | Error Strategy |
 |---|---|
 | HIDMaestro `InstallDriver()` | Caught in `EnsureHMaestroContext`. On failure, sets `_hmaestroContextFailed = true` (sticky for the session) and calls `RaiseError("Failed to initialize HIDMaestro.", ex)`. The engine continues running for KB+M, VR, and (if installed) MIDI categories. HM-backed slot creation is gated on the context being non-null. |
-| HidHide install/uninstall | MSI installer handles its own rollback. PadForge surfaces no specific error UI, so failures bubble up as exceptions. |
+| HidHide install/uninstall | On x64 the MSI handles its own rollback. On ARM64 a removal that stops part way tries to put its class filters back. Either way an exit code or a timeout arrives as `InstallerFailedException`, which `MainWindow.DescribeDriverFailure` words in the UI language inside the "Driver operation failed" status line. |
 | MIDI Services | WiX Burn bootstrapper handles rollback. PadForge surfaces no specific error UI. HTTP and process timeouts both throw. |
 | SteamVR install | No rollback. The install is verdicted on `vrpathreg.exe` rather than on exit codes, retried up to three times, and throws `InvalidOperationException` carrying the tail of `steamcmd`'s output when the payload never lands. A partial payload is left in place, since the next attempt resumes it. Temp staging is still cleaned in `finally`. |
 | SteamVR uninstall | Three refusals before anything is deleted: no owned install, `vrserver` running, recorded path is a drive root. Past those, `Directory.Delete` is not undoable, so the method proves the result instead: it unloads the cached `openvr_api.dll`, retries the delete ten times at 300 ms against the asynchronous lock release, and throws `IOException` when the directory survives. |
@@ -831,7 +862,7 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 - [Virtual Controllers](../features/virtual-controllers.md): `HMaestroVirtualController` (Xbox / PlayStation / Nintendo / Extended), `MidiVirtualController`, `KeyboardMouseVirtualController` consuming installed drivers
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface (`HMContext`, `HMProfile`, `HMController`), thread-pool lifecycle, OpenXInput shim, bubble-up cascade, inactivity timeout
 - [Architecture Overview](architecture-overview.md): Elevation strategy (`requireAdministrator` in `app.manifest`)
-- [Build and Publish](build-and-publish.md): Embedded driver resources (the HidHide installer, while HIDMaestro is referenced as a managed assembly)
+- [Build and Publish](build-and-publish.md): Embedded driver resources (the HidHide installer and the ARM64 driver package, while HIDMaestro is referenced as a managed assembly)
 - [Settings and Serialization](settings-and-serialization.md): Driver status display in `SettingsViewModel`
 - [XAML Views](xaml-views.md): `SettingsPage` driver install/uninstall buttons and guards
 

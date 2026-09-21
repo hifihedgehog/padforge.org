@@ -3440,7 +3440,7 @@
 <li>A recognition is a single 175 ms press. Holding a note does not hold the button.</li>
 <li>The DualShock 4 is not supported. Its microphone is a headset-jack passthrough, not a controller mic.</li>
 <li>On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.</li>
-<li>The first enable unpacks the model from inside PadForge, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online.</li>
+<li>The first enable unpacks the model from inside PadForge, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.</li>
 </ul>
 <p><em>Last updated for PadForge 4.5.0.</em></p>
 

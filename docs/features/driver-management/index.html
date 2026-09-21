@@ -4228,7 +4228,7 @@
 <ol>
 <li>Open <strong>Settings</strong>. Scroll to <strong>HidHide Driver</strong>.</li>
 <li>Click <strong>Install</strong>. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.</li>
-<li>A restart may be needed for full effect. Restart if hiding does not work right away.</li>
+<li>No restart is needed. A controller that was already connected picks HidHide up the next time it connects, so reconnect it if hiding does not work right away.</li>
 </ol>
 <p>Turn on <strong>Keep a Diagnostics Log</strong> under <strong>Settings</strong> to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, and which rule the transport sweep used. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.</p>
 <h3 id="uninstall-steps">Uninstall steps<a class="headerlink" href="#uninstall-steps" title="Permanent link">&para;</a></h3>
@@ -4460,7 +4460,7 @@
 </tr>
 <tr>
 <td>Double input still there after HidHide</td>
-<td>Restart the game. Some games only detect controllers at launch. Restart the PC if the install was new.</td>
+<td>Restart the game. Some games only detect controllers at launch. Reconnect the controller if the install was new, since a controller that was already connected picks HidHide up the next time it connects.</td>
 </tr>
 <tr>
 <td>Virtual controller shows up but games do not see it</td>

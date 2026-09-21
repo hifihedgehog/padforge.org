@@ -3624,7 +3624,7 @@
 </tr>
 <tr>
 <td>Shipped inside PadForge</td>
-<td>The Interhaptics engine (<code>HAR.dll</code>) and its Razer provider (<code>Interhaptics.RazerProvider.dll</code>), unmodified, under the Wyvrn EULA.</td>
+<td>The Interhaptics engine (<code>HAR.dll</code>) and its Razer provider (<code>Interhaptics.RazerProvider.dll</code>), unmodified, under the Wyvrn EULA. Both are x64, so the x64 build carries them and the ARM64 build does not.</td>
 </tr>
 </tbody>
 </table>
@@ -3647,6 +3647,10 @@
 <tr>
 <td><em>Stopped</em></td>
 <td>The toggle is off, the engine is stopped, or the Interhaptics engine failed to start.</td>
+</tr>
+<tr>
+<td><em>Not Available on ARM64</em></td>
+<td>This is the ARM64 build. Razer ships no ARM64 engine, so nothing starts and nothing retries. The x64 build, which also runs on ARM64 Windows, carries the engine.</td>
 </tr>
 </tbody>
 </table>

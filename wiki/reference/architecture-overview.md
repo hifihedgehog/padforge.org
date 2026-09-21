@@ -1040,7 +1040,7 @@ Native libraries folded into `PadForge.exe` and extracted beside it at first lau
 | `xinput1_4.dll` | XInput-consuming code paths | OpenXInput fork. Single-file-embedded. `SetDllDirectory` at launch resolves the extracted copy ahead of System32. Filters HM virtuals from PadForge's own XInput view |
 | `HAR.dll` | `SensaHapticsService` (#374) | Interhaptics engine, P/Invoked lazily, so a missing DLL degrades to a diagnostics line. `Resources/Interhaptics/x64/` |
 | `Interhaptics.RazerProvider.dll` | `HAR.dll` | The Razer Sensa backend `HAR.dll` loads. `Resources/Interhaptics/x64/` |
-| `libvosk.dll` + `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | Added by the Vosk 0.3.38 package's own targets file, not by the csproj. The three MinGW DLLs are what `libvosk.dll` links against |
+| `libvosk.dll` + `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | x64: added by the Vosk 0.3.38 package's own targets file, not by the csproj, and the three MinGW DLLs are what that `libvosk.dll` links against. ARM64: a `<Content>` item, `Resources/Vosk/arm64/libvosk.dll`, built by `tools/build-libvosk-arm64.sh` with its runtime linked in, so it has no companions |
 
 ---
 
@@ -1065,7 +1065,7 @@ Key publish properties (`PadForge.App.csproj`):
 
 Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe`, or `win-arm64/publish/` with `-r win-arm64`. See [Building for ARM64](build-and-publish.md#building-for-arm64).
 
-`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root). With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely. `libvosk.dll` and the three MinGW runtime DLLs ride in the same way, added by the Vosk package's targets file rather than by the csproj.
+`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root). With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely. On x64, `libvosk.dll` and the three MinGW runtime DLLs ride in the same way, added by the Vosk package's targets file rather than by the csproj. The ARM64 build drops those four and takes its own `libvosk.dll` from a `<Content>` item.
 
 `UseWindowsForms=true` is set in the csproj. Required for `System.Windows.Forms.NotifyIcon` (system tray). WinForms implicit usings are removed to avoid WPF type ambiguities.
 

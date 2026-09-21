@@ -3741,6 +3741,10 @@
 <td><code>SensaServiceState.Stopped</code></td>
 <td><code>Common_Stopped</code></td>
 </tr>
+<tr>
+<td><code>SensaServiceState.Unsupported</code></td>
+<td><code>Common_NotAvailableOnArm64</code></td>
+</tr>
 </tbody>
 </table>
 <p>Persistence follows the lightbar mirrors leg for leg: <code>AppSettings.EnableSensaHaptics</code> (global <code>bool</code>, default false), <code>ProfileData.EnableSensaHaptics</code> (<code>bool?</code>, null = no opinion, applied by <code>SettingsService.ApplyProfileServiceToggles</code>, authored by <code>OnDashboardServiceToggleChanged</code>), and the <code>MainWindow</code> Dashboard autosave allowlist. See <a href="../lightbar-mirrors-internals/#ownership-and-persistence">Lightbar Mirrors Internals</a> for the rule and its test.</p>

@@ -161,6 +161,7 @@ The worker reads the bits every `tickMs` (default 16) and calls `SetEventIntensi
 | `SensaServiceState.Active` | `Dashboard_SensaActive` |
 | `SensaServiceState.WaitingForRuntime` | `Dashboard_SensaWaiting` |
 | `SensaServiceState.Stopped` | `Common_Stopped` |
+| `SensaServiceState.Unsupported` | `Common_NotAvailableOnArm64` |
 
 Persistence follows the lightbar mirrors leg for leg: `AppSettings.EnableSensaHaptics` (global `bool`, default false), `ProfileData.EnableSensaHaptics` (`bool?`, null = no opinion, applied by `SettingsService.ApplyProfileServiceToggles`, authored by `OnDashboardServiceToggleChanged`), and the `MainWindow` Dashboard autosave allowlist. See [Lightbar Mirrors Internals](lightbar-mirrors-internals.md#ownership-and-persistence) for the rule and its test.
 

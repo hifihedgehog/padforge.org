@@ -326,7 +326,7 @@ When a physical device feeds a [slot](controller-slots.md), games can see both d
 
 ### Hide from Games (HidHide)
 
-Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). The device disappears from every non-whitelisted app the moment you toggle the option. PadForge is whitelisted automatically. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from [Driver Management](driver-management.md).
+Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). Reconnect the controller after turning this on: anything that already had it open, Windows included, keeps it until it comes back. From then on it is hidden from every app that is not on the whitelist. PadForge is whitelisted automatically. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from [Driver Management](driver-management.md).
 
 PadForge hides every interface of the device that HidHide can filter, including the XInput node of a controller built into a USB composite device, such as a handheld PC's controller or a pad on the Xbox 360 wireless receiver. An interface that appears on this page as its own connected device, such as a handheld's touchpad, follows its own checkbox. Leave that checkbox off and the interface stays visible while the pad is hidden. An offline card does not count: only a connected row with hiding off keeps its interface out of the pad's hide list.
 

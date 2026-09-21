@@ -196,7 +196,7 @@ See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md) for what feeds the
 
 ## Razer Sensa HD Haptics
 
-Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja shake with your games. One checkbox, **Send Rumble to Sensa HD Haptics**, off by default. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads *Razer Sensa runtime not found. Retrying.* until the runtime answers, then *Streaming rumble to Sensa HD Haptics*.
+Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja shake with your games. One checkbox, **Send Rumble to Sensa HD Haptics**, off by default. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. The status reads *Razer Sensa runtime not found. Retrying.* until the runtime answers, then *Streaming rumble to Sensa HD Haptics*. The ARM64 build reads *Not Available on ARM64*: Razer ships no ARM64 engine, so nothing starts there.
 
 See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md#razer-sensa-hd-haptics) for the translation and its limits.
 
