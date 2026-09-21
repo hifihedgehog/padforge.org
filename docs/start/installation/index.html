@@ -3665,44 +3665,36 @@
 </table>
 <p>Settings live in <code>PadForge.xml</code> next to the executable. To move PadForge, move the whole folder.</p>
 <h3 id="windows-on-arm-preliminary">Windows on ARM (preliminary)<a class="headerlink" href="#windows-on-arm-preliminary" title="Permanent link">&para;</a></h3>
-<p>Since 4.5.1 every release carries a second zip, <code>win-arm64</code>, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.</p>
-<p>Since 4.5.2, HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.</p>
-<p>Since 4.5.2, Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.</p>
-<p>Since 4.5.2, Xbox Elite paddles are read in the ARM64 build over USB, the Xbox Wireless Adapter and Bluetooth, under the same check as on x64. <a href="../../troubleshooting/#xbox-elite-paddles-do-nothing">Troubleshooting</a> has the Windows build the USB and adapter route needs.</p>
-<p>An ARM64 program can load ARM64 libraries only, and the libraries behind the features below exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation, where its libraries match its process.</p>
+<p>Every release carries a second zip, <code>win-arm64</code>, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers, HidHide, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles all run there, each driver installs its ARM64 version, and the Windows MIDI Services setup downloads the ARM64 installer. HidHide, Vosk and Elite paddles joined in 4.5.2.</p>
+<p>A few features wait on their vendors, because an ARM64 program can load ARM64 libraries only:</p>
 <table>
 <thead>
 <tr>
 <th>Feature</th>
-<th>ARM64 build</th>
-<th>x64 build under emulation</th>
+<th>In the ARM64 build</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Razer Sensa HD haptics</td>
 <td>Not available. Razer ships no ARM64 engine, and lists Synapse for x86-64 Windows only</td>
-<td>Untested</td>
 </tr>
 <tr>
 <td>Logitech G-keys</td>
 <td>Not available. Logitech Gaming Software installs x64 and x86 libraries only</td>
-<td>Untested</td>
 </tr>
 <tr>
 <td>VR headset and controllers through SteamVR</td>
 <td>Not available. PadForge loads SteamVR's win64 library</td>
-<td>Untested</td>
 </tr>
 <tr>
 <td>Logitech LIGHTSYNC, OpenXR headset input</td>
 <td>Only if the vendor's software installs an ARM64 engine or runtime</td>
-<td>Untested</td>
 </tr>
 </tbody>
 </table>
 <p>The Sensa status on the Dashboard reads <strong>Not Available on ARM64</strong> in the ARM64 build.</p>
-<p>Neither build has run on ARM64 hardware yet. The bench is x64.</p>
+<p>The x64 zip also runs on an ARM64 PC, under emulation, where those libraries match its process. That is untested, and so is the ARM64 build: neither has run on ARM64 hardware yet.</p>
 <hr />
 <h2 id="first-launch">First launch<a class="headerlink" href="#first-launch" title="Permanent link">&para;</a></h2>
 <p>PadForge opens the <a href="../../features/dashboard/">Dashboard</a> after first launch. It shows one UAC prompt at startup because it needs administrator rights. A short welcome tour appears the first time and highlights the main areas. Follow it or skip it, then set things up in this order.</p>

@@ -30,26 +30,20 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 ### Windows on ARM (preliminary)
 
-Since 4.5.1 every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. HIDMaestro 1.9.0 installs its ARM64 driver there, so virtual controllers work as they do on x64. The DualShock 3 Bluetooth driver installs its ARM64 binary, and the Windows MIDI Services setup downloads the ARM64 installer.
+Every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers, HidHide, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles all run there, each driver installs its ARM64 version, and the Windows MIDI Services setup downloads the ARM64 installer. HidHide, Vosk and Elite paddles joined in 4.5.2.
 
-Since 4.5.2, HidHide works on an ARM64 PC from either zip. A kernel driver cannot run emulated, so PadForge installs HidHide's own Microsoft-signed ARM64 driver there, with HidHide's own install tool. Install and Uninstall sit in Settings as they do on x64, and neither asks for a restart.
+A few features wait on their vendors, because an ARM64 program can load ARM64 libraries only:
 
-Since 4.5.2, Vosk voice recognition works in the ARM64 build, which carries its own ARM64 copy of the Vosk library.
-
-Since 4.5.2, Xbox Elite paddles are read in the ARM64 build over USB, the Xbox Wireless Adapter and Bluetooth, under the same check as on x64. [Troubleshooting](../troubleshooting.md#xbox-elite-paddles-do-nothing) has the Windows build the USB and adapter route needs.
-
-An ARM64 program can load ARM64 libraries only, and the libraries behind the features below exist for x64 alone. The x64 zip also runs on ARM64 Windows, under emulation, where its libraries match its process.
-
-| Feature | ARM64 build | x64 build under emulation |
-|---|---|---|
-| Razer Sensa HD haptics | Not available. Razer ships no ARM64 engine, and lists Synapse for x86-64 Windows only | Untested |
-| Logitech G-keys | Not available. Logitech Gaming Software installs x64 and x86 libraries only | Untested |
-| VR headset and controllers through SteamVR | Not available. PadForge loads SteamVR's win64 library | Untested |
-| Logitech LIGHTSYNC, OpenXR headset input | Only if the vendor's software installs an ARM64 engine or runtime | Untested |
+| Feature | In the ARM64 build |
+|---|---|
+| Razer Sensa HD haptics | Not available. Razer ships no ARM64 engine, and lists Synapse for x86-64 Windows only |
+| Logitech G-keys | Not available. Logitech Gaming Software installs x64 and x86 libraries only |
+| VR headset and controllers through SteamVR | Not available. PadForge loads SteamVR's win64 library |
+| Logitech LIGHTSYNC, OpenXR headset input | Only if the vendor's software installs an ARM64 engine or runtime |
 
 The Sensa status on the Dashboard reads **Not Available on ARM64** in the ARM64 build.
 
-Neither build has run on ARM64 hardware yet. The bench is x64.
+The x64 zip also runs on an ARM64 PC, under emulation, where those libraries match its process. That is untested, and so is the ARM64 build: neither has run on ARM64 hardware yet.
 
 ---
 
