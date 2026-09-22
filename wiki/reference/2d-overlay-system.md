@@ -720,7 +720,7 @@ Built for DS4 and DualSense slots by `BuildTouchpadPreview()`, updated each fram
 - `_touchpadFinger0Dot` / `_touchpadFinger1Dot`: orange and blue dots. `UpdateFingerDot()` shows a dot when `TouchpadFingerNDown` is true and centers it on `_touchpadOverlay.X + normX * Width`, `_touchpadOverlay.Y + normY * Height`.
 
 <!-- SCREENSHOT: 2d-touchpad-finger-dots -->
-![DS4 2D preview with two touchpad finger dots](../images/2d-touchpad-finger-dots.png)
+![DualSense 2D preview with the touchpad in frame](../images/2d-touchpad-finger-dots.png)
 
 ### Annotation Overlay (#175)
 
@@ -1572,4 +1572,4 @@ Key differences:
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.2.*
