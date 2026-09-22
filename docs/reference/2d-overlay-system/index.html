@@ -6464,8 +6464,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p>Anchors come from the active layout table: <code>SetAnnotationAnchors()</code> stores each overlay's rect center by TargetName, skipping <code>TriggerBase</code> rows. <code>ResolveAnnotationAnchor()</code> falls back from a direct name to the stick ring for <code>LeftThumbAxisX/Y</code> and <code>RightThumbAxisX/Y</code>. <code>LayoutAnnotations()</code> translates every anchor through the live <code>Viewbox</code> transform, splits chips into left and right columns, then runs a two-pass slot assignment (downward greedy, upward overflow fix) so chips never overlap. Re-layout is event-driven (size change, rebuild, source-text refresh), not per-frame. The 150 ms timer only expires flashes and evaluates ember dots.</p>
 <p><code>AnnotationToggleButton</code> (glyph E8EC, top-right) flips <code>AnnotationsEnabled</code> and raises <code>AnnotationsToggled</code>. Chip clicks raise <code>AnnotationChipNavigateRequested</code> with the row's <code>TargetSettingName</code>.</p>
 <!-- SCREENSHOT: 2d-annotation-overlay -->
-<!-- image pending recapture: ![2D controller preview with annotation chips and leader lines enabled](../images/2d-annotation-overlay.png) -->
-
+<p><img alt="2D controller preview with annotation chips and leader lines enabled" src="../../images/2d-annotation-overlay.png" /></p>
 <hr />
 <h2 id="controllerschematicview">ControllerSchematicView<a class="headerlink" href="#controllerschematicview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/ControllerSchematicView.xaml</code>, <code>ControllerSchematicView.xaml.cs</code></p>

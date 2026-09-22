@@ -741,7 +741,7 @@ Anchors come from the active layout table: `SetAnnotationAnchors()` stores each 
 `AnnotationToggleButton` (glyph E8EC, top-right) flips `AnnotationsEnabled` and raises `AnnotationsToggled`. Chip clicks raise `AnnotationChipNavigateRequested` with the row's `TargetSettingName`.
 
 <!-- SCREENSHOT: 2d-annotation-overlay -->
-<!-- image pending recapture: ![2D controller preview with annotation chips and leader lines enabled](../images/2d-annotation-overlay.png) -->
+![2D controller preview with annotation chips and leader lines enabled](../images/2d-annotation-overlay.png)
 
 ---
 
