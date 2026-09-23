@@ -72,7 +72,7 @@ does.</p>
   WASD shooters, emulation, racing, space sims, and gyro aim. Load one
   and edit from there.
 
-PadForge is free and open source. The code, issues, and releases live at
+PadForge is free, and its source is available under CC BY-NC-SA 4.0. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.2.*
