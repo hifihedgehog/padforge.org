@@ -147,7 +147,7 @@ leftovers = [(t, d) for t, d in pool if t.lower() not in used]
 if leftovers:
     sections.append(("more", "Also included", leftovers))
 
-def esc(x): return html.escape(unescape(x), quote=False)
+def esc(x): return html.escape(unescape(x), quote=False).replace(" ", "&nbsp;")
 
 rows = []
 for cid, title, items in sections:

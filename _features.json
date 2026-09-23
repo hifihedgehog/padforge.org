@@ -69,7 +69,7 @@
   },
   {
     "t": "3D and 2D visualization",
-    "d": "Native 2D art per profile, plus 3D models for Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense, DualSense Edge, and the Switch Pro pads. Click any button in 3D to record its mapping."
+    "d": "Native 2D art per profile, plus 3D models for Xbox 360, Xbox One / Elite / Adaptive, Xbox Series, DualShock 4, DualSense, DualSense Edge, the Switch Pro pads, the Steam Deck, and both Steam Controllers. Click any button in 3D to record its mapping."
   },
   {
     "t": "Six deadzone shapes",
@@ -109,7 +109,7 @@
   },
   {
     "t": "Hide physical controllers",
-    "d": "HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Cloak persists across launches."
+    "d": "HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Keep Devices Cloaked Between Launches carries the cloak across launches."
   },
   {
     "t": "Wii controllers",
@@ -150,5 +150,9 @@
   {
     "t": "Low-battery alerts",
     "d": "Get notified before a controller dies mid-game, at a percentage you set, with an optional buzz on the pad itself. The same rumble drives identify, which is how you tell several identical pads apart."
+  },
+  {
+    "t": "In-app updates",
+    "d": "Settings checks GitHub for new versions 20 seconds after launch and every 12 hours, downloads the build for your processor, checks it against the SHA-256 GitHub publishes, and replaces PadForge.exe in place. Install with one click or at the next launch, and opt in to the latest dev build if you want fixes first."
   }
 ]

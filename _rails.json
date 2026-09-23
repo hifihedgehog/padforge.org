@@ -147,6 +147,6 @@
  {
   "eyebrow": "Unknown hardware welcome",
   "t": "If Windows sees it, you can map it.",
-  "d": "For unrecognized gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
+  "d": "For unrecognized gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Device Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
  }
 ]
