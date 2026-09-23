@@ -1524,6 +1524,8 @@
       
         
       
+        
+      
     
     
     
@@ -2390,6 +2392,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2659,6 +2689,8 @@
       
         
           
+        
+      
         
       
         
@@ -3044,6 +3076,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -4128,7 +4188,7 @@
 <p>The Gyro tab appears when the slot's assigned physical device exposes a gyroscope or an accelerometer. Tuning saves per pad per slot, so the same pad on two different slots can carry two different feels.</p>
 <hr />
 <h2 id="when-the-tab-shows">When the tab shows<a class="headerlink" href="#when-the-tab-shows" title="Permanent link">&para;</a></h2>
-<p>The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, and any Extended profile that wires gyro axes all qualify. Pads with no motion sensor never see the tab.</p>
+<p>The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, a handheld PC's own motion sensor, and a Sony headset's head motion all qualify. Pads with no motion sensor never see the tab.</p>
 <p>On a device with an accelerometer and no gyroscope, such as a Wii Remote without Motion Plus, the tab shows only the cards that read the accelerometer: Grip, Motion Steering, and Gyro Tilt. The five rate cards (Motion Passthrough, Calibration, Sensitivity, Response Shaping, Engage) stay hidden. Before 4.4.0 the whole tab was gated on a gyroscope, so those three cards were unreachable on such a remote.</p>
 <hr />
 <h2 id="grip">Grip<a class="headerlink" href="#grip" title="Permanent link">&para;</a></h2>
@@ -4181,10 +4241,10 @@
 <p>The row's reset button (<strong>Reset Grip</strong>) returns Held As to Pointing.</p>
 <hr />
 <h2 id="motion-passthrough">Motion Passthrough<a class="headerlink" href="#motion-passthrough" title="Permanent link">&para;</a></h2>
-<p>The first card carries one checkbox: <strong>Apply Gyro Tuning to Motion Passthrough</strong>.</p>
+<p>The Motion Passthrough card carries one checkbox: <strong>Apply Gyro Tuning to Motion Passthrough</strong>.</p>
 <p>Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.</p>
 <p>Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The <a href="#engage-gates">engage gates</a> come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.</p>
-<p>The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense) and the Nintendo (virtual Switch Pro) type since 4.1.0. Xbox, Extended, MIDI, and Keyboard + Mouse slots have no motion channel.</p>
+<p>The virtual controllers that carry motion to the game are PlayStation slots (DualShock 4, DualSense), Nintendo slots (Switch Pro since 4.1.0, and Switch 2 Pro), and Extended slots on the Valve profiles (Steam Deck and both Steam Controllers). Xbox, MIDI, Keyboard + Mouse, and every other Extended profile have no motion channel.</p>
 <p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice.</p>
 <p><strong>Leave it off for emulators.</strong> An emulator integrates the gyro rate into an orientation. With the box checked, the tab's default tuning runs the tightening and smoothing thresholds and then a 3°/s deadzone on that rate before it leaves. A rate that reads zero below 3°/s and three degrees short above it accumulates orientation error the emulator cannot see, so steering drifts after a tilt and breaks on a sharp turn. The live readouts on this tab show the calibrated rate, not the tuned passthrough, so the distortion is invisible there as well. If motion in an emulator drifts or turns the wrong way, this box is the first thing to check.</p>
 <hr />
@@ -4211,7 +4271,7 @@
 <h2 id="sensitivity">Sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">&para;</a></h2>
 <p>Top-level scaling, axis inversion, and the reference frame the gyro is interpreted in. Every gyro mapping on this device inherits these values.</p>
 <h3 id="units">Units<a class="headerlink" href="#units" title="Permanent link">&para;</a></h3>
-<p>The <strong>Units</strong> dropdown offers <strong>Multiplier</strong> (the default) and <strong>Degrees per screen turn</strong>. It is a saved preference only: neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.</p>
+<p>The <strong>Units</strong> dropdown offers <strong>Multiplier</strong> (the default) and <strong>Degrees per Screen Turn</strong>. It is a saved preference only: neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.</p>
 <h3 id="horizontal-and-vertical">Horizontal and Vertical<a class="headerlink" href="#horizontal-and-vertical" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4332,7 +4392,7 @@
 <td>x^1.5. Sits between Linear and Aggressive. Milder than Aggressive.</td>
 </tr>
 <tr>
-<td>Extra wide</td>
+<td>Extra Wide</td>
 <td>x^2.5. Stronger than Aggressive.</td>
 </tr>
 </tbody>
@@ -4560,7 +4620,7 @@
 <p>Since 4.1.0, rows with a continuous source also carry an <strong>Acceleration</strong> control (0–5). Fast motion on that row's input is amplified, slow motion passes through unchanged, and 0 keeps the response flat. On a gyro row it applies after this tab's Acceleration, so the two compose. Steam Workshop imports carry Steam's mouse acceleration here on stick-hosted rows.</p>
 <hr />
 <h2 id="per-pad-per-slot-persistence">Per pad, per slot persistence<a class="headerlink" href="#per-pad-per-slot-persistence" title="Permanent link">&para;</a></h2>
-<p>Calibration, sensitivity, smoothing, curve, and engage values save per pad per slot. Assigning the same pad to two slots gives you two independent tunings. Removing the pad from a slot keeps the values cached for next time.</p>
+<p>Calibration, sensitivity, smoothing, curve, and engage values save per pad per slot. Assigning the same pad to two slots gives you two independent tunings. Removing the pad from a slot drops its values there, and assigning it again starts from the defaults.</p>
 <p>The values save automatically to your profile whenever you change anything on this tab.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
@@ -4580,6 +4640,10 @@
 <tr>
 <td>Reset Motion Passthrough</td>
 <td>Apply Gyro Tuning to Motion Passthrough</td>
+</tr>
+<tr>
+<td>Reset Motion Steering</td>
+<td>Both tilt deadzones and the orientation</td>
 </tr>
 <tr>
 <td>Reset Gyro Tilt</td>
@@ -4783,7 +4847,7 @@
 <li><a href="../../devices/wii-controllers/">Wii Controllers</a>: the Wii Remote's holds and the emulator setup that goes with them.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

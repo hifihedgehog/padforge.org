@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3948,7 +4008,7 @@
 <p>Only one chain is ever read at runtime, so the pull model's single-reader rule holds.</p>
 <h3 id="mix-not-arbitrate">Mix, not arbitrate<a class="headerlink" href="#mix-not-arbitrate" title="Permanent link">&para;</a></h3>
 <p>The <code>MacroMixer</code> is the sum every source already feeds. On a PCM sink that means the persona's haptic channels (<code>PersonaBuf</code>, fed by <code>SubmitPersonaHaptics</code> from HIDMaestro's pacing thread, scaled by Haptics Gain 25 to 300%), macro sounds, and the system-audio mirror behind its engage gate. The stream consumes the mix and nothing is silenced by it. The requester's original limitation, exclusive ownership of the actuators by one source, dissolves into mixing.</p>
-<p>Two things are synthesized into the stream instead of being sent as their own reports. The Audio-tab test tone and a Remote Link relayed tone render as a sine at the requested frequency and amplitude. A touchpad swipe tick becomes a 160 Hz sine (<code>PcmPulseHz</code>) with a decaying envelope, <code>PulseAmp * 0.6</code> max-wins with whatever envelope is still ringing, because racing a 0x82 click against an active stream is an interaction no reference documents. <code>PulseAmp</code> is read then zeroed on consumption, so a lowered slider takes effect on the next swipe (the 09-02 audit's F13).</p>
+<p>Two things are synthesized into the stream instead of being sent as their own reports. The Audio-tab test tone and a Remote Link relayed tone render as a sine at the requested frequency and amplitude. While the stream is armed, a touchpad swipe tick becomes a 160 Hz sine (<code>PcmPulseHz</code>) on its own side's channel with a decaying envelope, that side's pulse amplitude times 0.6, max-wins with whatever envelope is still ringing, because racing a 0x82 click against an active stream is an interaction no reference documents. With the stream disarmed the tick goes out as the ordinary 0x82 tick command. The pulse amplitudes (<code>PulseAmp</code>, <code>PulseAmpLeft</code>, <code>PulseAmpRight</code>) are read then zeroed on consumption, so a lowered slider takes effect on the next swipe (the 09-02 audit's F13).</p>
 <h3 id="arm-and-disarm">Arm and disarm<a class="headerlink" href="#arm-and-disarm" title="Permanent link">&para;</a></h3>
 <p><code>StreamTritonPcmTick</code> marks <code>PcmLastContentMs</code> whenever a tick's peak is audible. The stream is wanted while a test tone is active or within <code>PcmHangoverMs</code> (2000 ms) of the last content. Wanted and not armed arms. Not wanted and armed disarms, so an idle pad costs nothing on the wire.</p>
 <p><code>ArmTritonPcm</code> (<code>HapticToneService.cs</code>) sends, in order:</p>
@@ -4008,7 +4068,7 @@
 <tr>
 <td><code>TRITONPCM stream</code></td>
 <td>5 s while armed</td>
-<td><code>pendingFrames</code>, <code>dropped</code>, <code>hardFail</code>, <code>lp</code>, <code>personaMs</code>, <code>idleDrained</code></td>
+<td><code>mulaw</code>, <code>pendingFrames</code>, <code>dropped</code>, <code>hardFail</code>, <code>lp</code>, <code>personaMs</code>, <code>idleDrained</code></td>
 </tr>
 <tr>
 <td><code>HAPTICBUF</code></td>
@@ -4090,7 +4150,7 @@
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: how a relayed tone reaches this sink.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

@@ -32,7 +32,7 @@ The [Dashboard](dashboard.md) shows the live rate next to the engine power butto
 
 A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the **Inactivity Timeout** (60 seconds by default, in the same **Input Engine** settings). Set the timeout to 0 and the engine idles immediately.
 
-While a [Remote Link](../guides/remote-link.md) peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.
+While a [Remote Link](../guides/remote-link.md) peer is connected, the loop stays at full rate even with no local slot active. A connected peer can read this PC's shared controllers, and idling would sample that input choppily.
 
 Cursor and scroll speed on a [Keyboard + Mouse](controller-slots.md) slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.
 
@@ -136,4 +136,4 @@ There is no per-axis or per-button overhead. At 1000 Hz that is one report per c
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

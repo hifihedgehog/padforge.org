@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2525,6 +2555,8 @@
       
         
       
+        
+      
     
     
     
@@ -2846,6 +2878,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3779,7 +3839,7 @@
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See <a href="../../guides/gyro/">Gyro</a> for calibration, sensitivity, and the engage controls.</p>
-<p>A Nunchuk carries its own accelerometer. When one is attached, two more sources appear in the picker: <strong>Nunchuk Accelerometer</strong> and <strong>Nunchuk Lean</strong>. They read the Nunchuk's own tilt, separate from the remote's motion, so you can map each hand independently.</p>
+<p>A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong>. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently.</p>
 <p>The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.</p>
 <h3 id="holds">Holds<a class="headerlink" href="#holds" title="Permanent link">&para;</a></h3>
 <p>The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The <strong>Grip</strong> card on the <a href="../../guides/gyro/#grip">Gyro</a> tab, row <strong>Held As</strong>, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
@@ -3884,10 +3944,14 @@
 <td><strong>Left Joy-Con Lean</strong></td>
 <td>The left half's tilt, for motion steering or any axis row.</td>
 </tr>
+<tr>
+<td><strong>Left Joy-Con Shake</strong></td>
+<td>How hard the left half is shaken, whatever its tilt, for shake-to-press bindings.</td>
+</tr>
 </tbody>
 </table>
 <p>The two hands read independently, so the left half can drive the cursor while the right half's gyro aims a stick.</p>
-<p><strong>Left Joy-Con Accelerometer</strong> and <strong>Left Joy-Con Lean</strong> are the same two sources that show as <strong>Nunchuk Accelerometer</strong> and <strong>Nunchuk Lean</strong> on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.</p>
+<p><strong>Left Joy-Con Accelerometer</strong>, <strong>Left Joy-Con Lean</strong> and <strong>Left Joy-Con Shake</strong> are the same three sources that show as <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong> on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.</p>
 <ul>
 <li>Joy-Con 2 pairs expose the same left-side sources.</li>
 <li>The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the <a href="../../guides/gyro/">Gyro</a> tab all apply, and those device-level sliders tune both halves at once. The per-row <strong>Sensitivity</strong> dial is the independent knob.</li>
@@ -3934,7 +3998,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

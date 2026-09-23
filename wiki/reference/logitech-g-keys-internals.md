@@ -32,7 +32,7 @@ The SDK passes one 32-bit word by value. `LogitechGkeyLib.h` declares it as C bi
 
 That totals 32, so PadForge reads the word whole and masks it rather than describing it to the marshaler, which has no bitfield of its own.
 
-**Logitech's own C# sample gets this wrong and must not be copied.** Its `Doc\C#Instructions.pdf` declares the word as a `ushort`, half the width the header defines, so its `reserved2` shift of 16 can only ever yield zero. It also reads `mouse` as `(complete >> 11) & 15` where the field is one bit wide, folding three reserved bits into the answer, which can read a keyboard event as a mouse event. The header is what the DLL was compiled against, so the header wins. This was cross-checked against [Mumble](https://github.com/mumble-voip/mumble)'s `GKey.cpp`, which has decoded it correctly in production for years.
+**Logitech's own C# sample gets this wrong and must not be copied.** Its `Doc\C#Instructions.pdf` declares the word as a `ushort`, half the width the header defines, so its `reserved2` shift of 16 can only ever yield zero. It also reads `mouse` as `(complete >> 11) & 15` where the field is one bit wide, folding three reserved bits into the answer, which can read a keyboard event as a mouse event. The header is what the DLL was compiled against, so the header wins. [Mumble](https://github.com/mumble-voip/mumble)'s `GKey.cpp` never reads the word: it initializes without a callback and polls, so the header is the only source for this layout.
 
 ---
 
@@ -58,15 +58,15 @@ A G-key tap can begin and end between two of PadForge's polls. A press therefore
 
 Events alone cannot be trusted to close a press. The SDK only feeds an application whose Logitech profile is active, so a key held while PadForge loses that profile never delivers its release, and the button would stay asserted for the life of the session. Unplugging the keyboard mid-press reaches the same state.
 
-`ResyncHeld` asks the SDK what is actually held and clears anything the events got wrong. It runs every `ResyncIntervalMs` (250) rather than every poll, because it is 102 cross-DLL calls and has no business running at the poll rate. It only clears. A press still arrives by callback, because the poll can fall between a press and its release and the pulse is what carries that edge.
+`ResyncHeld` asks the SDK what is actually held and clears anything the events got wrong. It runs every `ResyncIntervalMs` (250) rather than every poll, because it makes one cross-DLL call per button the events left held, up to 102, and has no business running at the poll rate. It only clears. A press still arrives by callback, because the poll can fall between a press and its release and the pulse is what carries that edge.
 
 ---
 
 ## Teardown
 
-`Teardown` never frees the module and always calls `LogiGkeyShutdown`, both matching Mumble.
+`Teardown` never frees the module, and it calls `LogiGkeyShutdown` whenever that export resolved, whether or not init succeeded. Both match Mumble.
 
-Freeing the library risks a callback in flight during dispose landing in unmapped memory. Mumble does not unload on success either, and one mapped library for the life of the process is the cheaper trade. Calling shutdown unconditionally covers the case where init fails *after* the SDK has already stored the callback pointer: skipping shutdown there leaves it holding a pointer into a delegate that is about to be collected.
+Freeing the library risks a callback in flight during dispose landing in unmapped memory. Mumble does not unload on success either, and one mapped library for the life of the process is the cheaper trade. Calling shutdown whatever init returned covers the case where init fails *after* the SDK has already stored the callback pointer: skipping shutdown there leaves it holding a pointer into a delegate that is about to be collected.
 
 ---
 
@@ -99,7 +99,7 @@ Buttons are written every poll, pressed or not, so a released key produces its f
 
 ## Residual
 
-No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header and Mumble's implementation.
+No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header, and the library search and teardown in Mumble's implementation.
 
 Test coverage is uneven. The decode, the button map and the pulse have real behavioral tests. The resync has only a wiring assertion that reads this file and checks the call is present, because the path needs a live source in the `Running` state and the test seam cannot supply one.
 
@@ -114,4 +114,4 @@ Test coverage is uneven. The decode, the button map and the pulse have real beha
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

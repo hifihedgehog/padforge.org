@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -4295,7 +4355,7 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasMotion</span><span class="p">;</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
 </code></pre></div>
-<p>Single slot's motion data, ready for DSU transmission. Units already in DSU conventions:</p>
+<p>One slot's motion data in SDL's sensor frame, after the Grip rotation. Units already in DSU conventions:</p>
 <table>
 <thead>
 <tr>
@@ -4358,8 +4418,8 @@
 </tbody>
 </table>
 <p>Accel and gyro must be in the same coordinate frame. <code>AccelX</code> and <code>GyroPitch</code> reference the same physical axis. Only <code>GyroPitch</code> keeps its sign.</p>
-<p>The sign transform lives in <code>BuildPadDataPacket</code>, not in <code>MotionSnapshot</code>. The snapshot carries no protocol frame of its own, so the Sony HID report packers read the same values and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.</p>
-<p>One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. <code>UpdateMotionSnapshots</code> calls <code>SourceCoercion.ApplyMotionGrip</code> on the body accelerometer, and <code>GetPassthroughGyro</code> applies the same rotation inside its calibrated read.</p>
+<p>The sign transform lives in <code>BuildPadDataPacket</code>, not in <code>MotionSnapshot</code>. The snapshot carries no protocol frame of its own, so the HID report packers read <code>InputManager.MotionSnapshots</code> in the same frame and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.</p>
+<p>One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. <code>CaptureMotionSnapshot</code>, which <code>UpdateMotionSnapshots</code> reaches for every source it reads, calls <code>SourceCoercion.ApplyMotionGrip</code> on the body accelerometer, and <code>GetPassthroughGyro</code> applies the same rotation inside its calibrated read.</p>
 <hr />
 <h2 id="dsumotionserver">DsuMotionServer<a class="headerlink" href="#dsumotionserver" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DsuMotionServer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
@@ -4642,10 +4702,10 @@
 <h3 id="broadcastmotion">BroadcastMotion()<a class="headerlink" href="#broadcastmotion" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BroadcastMotion</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">MotionSnapshot</span><span class="w"> </span><span class="n">snapshot</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">connected</span><span class="p">)</span>
 </code></pre></div>
-<p>Called from the InputManager polling thread at ~1000 Hz. Primary data path.</p>
+<p>Called from the InputManager polling thread at ~1000 Hz. Primary data path. While the engine idles (a 20 Hz loop) or stays suspended because PadForge lost focus with background polling off (a 10 Hz loop), the same thread keeps calling it with a zeroed snapshot and a fresh timestamp, so subscribers receive neutral packets.</p>
 <ol>
 <li>Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).</li>
-<li>Updates <code>_slotConnected[slot]</code> and <code>_slotHasMotion[slot]</code>. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.</li>
+<li>When <code>connected</code> is false, replaces the snapshot with an empty one that keeps only <code>TimestampUs</code>. Then updates <code>_slotConnected[slot]</code> and <code>_slotHasMotion[slot]</code>. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.</li>
 <li>Returns if <code>_subCount == 0</code>. A volatile int read, no lock taken.</li>
 <li>Returns if <code>_anyAllSlotSubs</code> is false and this slot's bit is clear in <code>_slotSubMask</code> (<code>Volatile.Read</code>). With one client subscribed to one slot, the other slots' calls stop here instead of taking the lock.</li>
 <li>Calls <code>GetSubscribers(slot)</code>. Returns if the result is empty.</li>
@@ -4654,9 +4714,10 @@
 </ol>
 <p><strong>Performance</strong>: at 1000 Hz with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the <code>GetSubscribers</code> collections are reused scratch, so the steady state allocates nothing either.</p>
 <h3 id="snapshot-source">Snapshot Source<a class="headerlink" href="#snapshot-source" title="Permanent link">&para;</a></h3>
-<p><code>InputManager.UpdateMotionSnapshots()</code> fills <code>MotionSnapshots[padIndex]</code> each poll cycle, immediately before <code>BroadcastDsuMotion()</code> fans the values out to <code>BroadcastMotion()</code>. Two gates decide whether a broadcast ever carries <code>HasMotion = true</code>:</p>
+<p><code>InputManager.UpdateMotionSnapshots()</code> fills two arrays each poll cycle: <code>MotionSnapshots[padIndex]</code> for the virtual controller's own motion report, and <code>DsuMotionSnapshots[padIndex]</code> for slots 0–3. <code>BroadcastDsuMotion()</code> runs immediately after it and fans <code>DsuMotionSnapshots</code> out to <code>BroadcastMotion()</code>, with <code>connected</code> taken from <code>IsSlotActive(padIndex)</code>: the slot is created, enabled, and holds an online assigned device. The slot's motion rows decide what DSU carries:</p>
 <ul>
-<li><strong>Slot type</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its <code>motionCapableProfile</code> argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. <code>SettingsService.EnsureMotionRowsForAllSlots</code> sets that argument from <code>NintendoPreviewMap.IsValve(ProfileId)</code> on an Extended slot. Every other slot type has no motion rows, resolves no motion source, and broadcasts <code>HasMotion = false</code>.</li>
+<li><strong>Motion rows</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its <code>motionCapableProfile</code> argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. <code>SettingsService.EnsureMotionRowsForAllSlots</code> sets that argument from <code>NintendoPreviewMap.IsValve(ProfileId)</code> on an Extended slot. When either row exists, DSU gets the same reconciled result as <code>MotionSnapshots</code>, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (<code>MaxAbs</code> by default, or <code>Sum</code>, <code>Average</code>, or <code>Custom</code>), after each source's own calibration, grip, and optional tuning.</li>
+<li><strong>No motion rows</strong>: every other slot type (Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots), and a motion-capable slot whose rows were removed, still broadcasts. <code>ReconcileAssignedMotion</code> reads every enabled, online device assigned to the slot and combines their readings axis by axis with the default <code>MaxAbs</code> combine. A device without the primary sensor contributes its aux sensor instead. <code>MotionSnapshots</code> stays empty for such a slot, so the virtual controller's own report carries no motion.</li>
 <li><strong>Row source</strong>: the row's source descriptor picks the sensor stream. <code>Motion Gyro</code> and <code>Motion Accel</code> read the body IMU. The aux variants <code>Motion Gyro L</code> (#252) and <code>Motion Accel L</code> (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".</li>
 </ul>
 <hr />
@@ -4696,7 +4757,7 @@
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>[20..23]     4     Number of ports requested (int32 LE)
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>[24..N]      N     Slot indices (one byte each)
 </code></pre></div>
-<p>Validated: <code>numPorts</code> must be in [0, MaxSlots] and the packet must contain enough bytes for all slot indices. Each valid slot triggers a <code>SendControllerInfo()</code> response.</p>
+<p>Validated: the declared frame must hold at least 24 bytes, <code>numPorts</code> must be in [0, MaxSlots], and the frame must contain enough bytes for all slot indices. Each valid slot (0–3) triggers a <code>SendControllerInfo()</code> response.</p>
 <h4 id="controller-info-response-server-to-client-type-0x100001">Controller Info Response (Server to Client, type 0x100001)<a class="headerlink" href="#controller-info-response-server-to-client-type-0x100001" title="Permanent link">&para;</a></h4>
 <p>One response per requested slot.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Byte offset  Size  Field              Value
@@ -4721,7 +4782,7 @@
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>[21]         1     Slot number
 <a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>[22..27]     6     MAC address
 </code></pre></div>
-<p>Validated: packet must be at least <code>HeaderSize + 12</code> (28) bytes.</p>
+<p>Validated: the declared frame must be at least <code>HeaderSize + 12</code> (28) bytes.</p>
 <p><strong>Subscription flags:</strong></p>
 <table>
 <thead>
@@ -4737,15 +4798,15 @@
 </tr>
 <tr>
 <td><code>0x01</code></td>
-<td>Subscribe to specific slot by ID (stored in <code>_subscriptions[(endpoint, slot)]</code>)</td>
+<td>Subscribe to specific slot by ID (stored in <code>_subscriptions[(endpoint, slot)]</code>). A slot byte of 4 or more registers nothing</td>
 </tr>
 <tr>
 <td><code>0x02</code></td>
-<td>Subscribe by MAC (treated as all-slot subscription)</td>
+<td>Subscribe by MAC. The server advertises five zero bytes followed by the slot number, so a MAC in that form with a slot below 4 subscribes to that one slot in <code>_subscriptions</code>. Any other MAC registers nothing</td>
 </tr>
 <tr>
 <td><code>0x03</code></td>
-<td>Both <code>0x01</code> and <code>0x02</code> (subscribe to specific slot AND all-slot)</td>
+<td>Both <code>0x01</code> and <code>0x02</code>: the slot byte and the MAC each add their own per-slot subscription</td>
 </tr>
 </tbody>
 </table>
@@ -4881,21 +4942,21 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <td><code>_subscriptions</code></td>
 <td><code>(EndPoint, slotIndex)</code></td>
 <td><code>Stopwatch.GetTimestamp()</code></td>
-<td>Pad data request with <code>flags &amp; 0x01</code></td>
+<td>Pad data request with <code>flags &amp; 0x01</code>, or <code>flags &amp; 0x02</code> with a MAC that names a slot</td>
 </tr>
 <tr>
 <td><code>_allSlotSubscriptions</code></td>
 <td><code>EndPoint</code></td>
 <td><code>Stopwatch.GetTimestamp()</code></td>
-<td>Pad data request with <code>flags == 0</code> or <code>flags &amp; 0x02</code></td>
+<td>Pad data request with <code>flags == 0</code></td>
 </tr>
 </tbody>
 </table>
 <h3 id="subscriber-resolution-algorithm">Subscriber Resolution Algorithm<a class="headerlink" href="#subscriber-resolution-algorithm" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Clear and reuse the poll-thread scratch collections: <code>_subScratch</code> (result list) and <code>_subSeenScratch</code> (dedup set). No per-call allocation.</li>
-<li>Acquire <code>lock(_subscriptions)</code>.</li>
 <li>Compute <code>timeoutTicks</code> from <code>Stopwatch.Frequency * ClientTimeoutMs / 1000</code> (5 s in high-resolution ticks).</li>
+<li>Acquire <code>lock(_subscriptions)</code>.</li>
 <li><strong>Per-slot subscribers</strong>: iterate <code>_subscriptions</code> for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and the seen set.</li>
 <li><strong>All-slot subscribers</strong>: iterate <code>_allSlotSubscriptions</code>. Expired entries go to a removal list. Active ones go to the result if not already in the seen set (prevents duplicates).</li>
 <li><strong>Prune expired</strong>: remove all expired entries from both dictionaries. If anything was pruned, call <code>RecountSubscribers()</code> so <code>_subCount</code> and the slot mask stay exact.</li>
@@ -4945,7 +5006,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 </code></pre></div>
 <p>Background thread (<code>IsBackground = true</code>). Loops <code>ReceiveFrom()</code> with a 1024-byte buffer until <code>_running</code> is false.</p>
 <h3 id="packet-validation-pipeline">Packet Validation Pipeline<a class="headerlink" href="#packet-validation-pipeline" title="Permanent link">&para;</a></h3>
-<p>Each received packet passes five validation checks before dispatch. Stage 1 runs in <code>ReceiveLoop</code>, before <code>ProcessPacket</code> is called. Stages 2 through 5 run in <code>ProcessPacket</code>, which never re-checks length. Its first action reads <code>data[0..3]</code> for the magic bytes.</p>
+<p>Each received packet passes five validation checks before dispatch. Stage 1 runs in <code>ReceiveLoop</code>, before <code>ProcessPacket</code> is called. Stages 2 through 5 run in <code>ProcessPacket</code>, which does not repeat the minimum-size check. Its first action reads <code>data[0..3]</code> for the magic bytes.</p>
 <table>
 <thead>
 <tr>
@@ -4978,7 +5039,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <td>4</td>
 <td><code>ProcessPacket</code></td>
 <td>Payload length</td>
-<td><code>HeaderSize + payloadLength &gt; received</code></td>
+<td><code>payloadLength &lt; 4</code> (shorter than the message type), or <code>HeaderSize + payloadLength &gt; received</code></td>
 </tr>
 <tr>
 <td>5</td>
@@ -4988,7 +5049,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 </tr>
 </tbody>
 </table>
-<p>After validation, dispatches based on message type:</p>
+<p>After validation, dispatches based on message type. The handlers get <code>frameLength = HeaderSize + payloadLength</code>, not the datagram length, so bytes past the declared frame sit outside the CRC and never reach a handler:</p>
 <table>
 <thead>
 <tr>
@@ -5003,11 +5064,11 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 </tr>
 <tr>
 <td><code>0x100001</code></td>
-<td><code>HandleControllerInfoRequest(data, length, sender)</code></td>
+<td><code>HandleControllerInfoRequest(data, frameLength, sender)</code></td>
 </tr>
 <tr>
 <td><code>0x100002</code></td>
-<td><code>HandlePadDataRequest(data, length, sender)</code></td>
+<td><code>HandlePadDataRequest(data, frameLength, sender)</code></td>
 </tr>
 </tbody>
 </table>
@@ -5090,13 +5151,13 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 </tr>
 <tr>
 <td><code>_packetCounters</code></td>
-<td>Accessed only from BroadcastMotion (single caller per slot). No lock needed.</td>
+<td>Incremented only in BroadcastMotion's packet build (single caller per slot) and zeroed by <code>Stop()</code>. No lock.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="slot-limits">Slot Limits<a class="headerlink" href="#slot-limits" title="Permanent link">&para;</a></h2>
-<p>The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (<code>InputManager.MaxPads = 16</code>), but only slots 0–3 participate in DSU broadcasts. <code>InputManager.BroadcastDsuMotion()</code> loops over all 16 pads each frame and calls <code>BroadcastMotion(padIndex, ...)</code>. The server drops slots 4–15 through its <code>slot &gt;= MaxSlots</code> guard, so those 12 calls return after a single range check with no lock and no allocation.</p>
+<p>The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (<code>InputManager.MaxPads = 16</code>), but only slots 0–3 participate in DSU broadcasts. <code>InputManager.BroadcastDsuMotion()</code> loops over <code>DsuMotionSnapshots</code>, which holds <code>DsuMotionServer.MaxSlots</code> (4) entries, and calls <code>BroadcastMotion(padIndex, ...)</code> once per entry. Slots 4–15 never reach the server. Its <code>slot &gt;= MaxSlots</code> guard stays as a backstop.</p>
 <hr />
 <h2 id="polling-optimization">Polling Optimization<a class="headerlink" href="#polling-optimization" title="Permanent link">&para;</a></h2>
 <p><code>BroadcastMotion()</code> runs at ~1000 Hz per slot. Overhead shrinks in tiers, cheapest check first:</p>
@@ -5115,7 +5176,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <ol>
 <li>Enable the DSU motion server on the PadForge Dashboard (default port 26760).</li>
 <li>Run <code>DsuDiag.exe</code>. Connects to <code>localhost:26760</code>.</li>
-<li>Sends a version request, then subscribes with <code>flags = 0</code> (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. Targets <code>net8.0</code>.</li>
+<li>Sends a version request, then subscribes with <code>flags = 0</code> (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. <code>DsuDiag verdict [slot] [seconds]</code> instead reads the hold from the accelerometer while the controller sits still, then records one rotation (5 s by default) and reports the peak rate and integrated angle per gyro axis. Targets <code>net8.0</code>.</li>
 </ol>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
@@ -5128,7 +5189,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

@@ -60,9 +60,9 @@ graph TD
         WU["DS3 WinUSB package<br/>signed on this machine"]
     end
 
-    HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(231 profiles bundled in the SDK)"]
+    HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(231 profiles bundled in the SDK,<br/>133 of them offered in PadForge)"]
     HH -->|"x64: HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi<br/>ARM64: nefconc install, then class filters"| HH_DRV["HidHide kernel driver"]
-    MS -->|"GitHub /releases -> SDK Runtime x64 EXE -> /install"| MS_SVC["Windows MIDI Services<br/>(Win11 24H2+)"]
+    MS -->|"GitHub /releases -> SDK Runtime EXE for the machine (x64 or arm64) -> /install"| MS_SVC["Windows MIDI Services<br/>(Win11 24H2+)"]
     SV -->|"steamcmd.zip -> +app_update 250820<br/>-> HMVR.SetSteamVRPathHint"| SV_DIR["SteamVR payload<br/>(default C:\SteamVR)"]
     BT -->|"Devcon.Install of the two INFs<br/>+ Bluetooth-class lower filter"| BT_DRV["BthPS3 profile driver<br/>+ BthPS3PSM filter"]
     WU -->|"Inf2Cat + signtool, then<br/>UpdateDriverForPlugAndPlayDevices"| WU_DEV["Docked DS3 on winusb.sys"]
@@ -93,7 +93,7 @@ The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`, or `arm6
 | `Resources\HidHide_1.5.230_x64.exe` | EXE (WiX Burn bootstrapper) | ~7.7 MB | HidHide kernel driver for an x64 machine. Bundled MSI extracted and run silently. In the x64 build only, since only that build runs on an x64 machine. |
 | `Resources\HidHideArm64\HidHide_ARM64.zip` | ZIP (INF + SYS + CAT) | ~44 KB | HidHide's Microsoft-signed ARM64 driver package, driver 1.6.280.0, as upstream publishes it. In both builds, because a kernel driver follows the machine and not the build. |
 | `Resources\HidHideArm64\nefconc.exe` | EXE (ARM64) | ~1 MB | nefcon 1.20.0, the tool HidHide's own setup drives. Runs the ARM64 install and removal as a child process. In both builds. |
-| `Resources\OpenXInput\<arch>\xinput1_4.dll` | DLL (Content) | ~172 KB | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
+| `Resources\OpenXInput\<arch>\xinput1_4.dll` | DLL (Content) | ~172 KB (arm64), ~180 KB (x64) | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
 | `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~750 KB total | Nefarius BthPS3 (`BthPS3\`) and BthPS3PSM (`BthPS3PSM\`) driver packages, each with an `x64\` and an `ARM64\` binary under it since 4.5.1, plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
 
 Windows MIDI Services is **not** embedded. It is downloaded on demand from `api.github.com/repos/microsoft/MIDI/releases` (~210 MB). The download path is ephemeral. Nothing is bundled with PadForge. SteamVR is not embedded either: `steamcmd.zip` comes from `steamcdn-a.akamaihd.net` at install time and the payload is several GB.
@@ -115,29 +115,31 @@ Declared in `PadForge.App.csproj`:
 </EmbeddedResource>
 ```
 
-`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.4.0 ships HIDMaestro 1.7.2. The 1.6 line introduced the native OpenVR driver behind the VR slot type.
+`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 4.5.3 ships HIDMaestro 1.9.0. The 1.6 line introduced the native OpenVR driver behind the VR slot type.
 
 ---
 
 ## Shared Helpers
 
-Private methods reused across HidHide and the MIDI Services flows.
+Helpers reused across the install flows. `ExtractEmbeddedResource` and `CleanupTempDir` are internal, because `HidHideArm64Installer` uses them too. The rest are private.
 
 | Method | Signature | Behavior |
 |---|---|---|
 | `ExtractEmbeddedResource` | `(string resourceFileName, string tempDir)` | Finds resource via case-insensitive `IndexOf` on `GetManifestResourceNames()`, streams to `{tempDir}\{resourceFileName}`. Throws `FileNotFoundException` (listing all resource names) if not found. |
 | `ExtractInstallerBundle` | `(string exePath, string tempDir)` | Runs the WiX bootstrapper with `/extract` to unpack its MSI into `{tempDir}\Extracted\`. Recreates the directory if it exists. 60s timeout. |
 | `FindMsi` | `(string extractDir, string primaryName, string fallbackPattern)` | Searches recursively for an MSI: exact name first, then glob fallback. Throws `FileNotFoundException` if neither matches. |
-| `RunElevated` | `(string fileName, string arguments)` | Launches a child process with `Verb = "runas"`, hidden window, 180s timeout, and returns its exit code, or null when it is still running after the wait. PadForge is already elevated via `app.manifest`, so Windows does not show a UAC prompt when launching the child. Used by HidHide install/uninstall on x64 and the legacy vJoy uninstall script. |
+| `RunElevated` | `(string fileName, string arguments)` | Launches a child process with `Verb = "runas"`, hidden window, 180s timeout, and returns its exit code, or null when it is still running after the wait. PadForge is already elevated via `app.manifest`, so Windows does not show a UAC prompt when launching the child. Used by HidHide install/uninstall on x64 and the legacy ViGEmBus uninstall (both through `RunMsiElevated`), and by the legacy vJoy uninstall script. |
 | `RunMsiElevated` | `(string arguments, bool absentIsSuccess)` | `RunElevated("msiexec.exe", arguments)`, held to its exit code. 0, 3010 and 1641 are success, and 1605 (not installed) only when `absentIsSuccess`. Anything else, or a timeout, throws `InstallerFailedException`. |
 | `CleanupTempDir` | `(string tempDir)` | Recursive delete, swallows all exceptions. Called in `finally` blocks. |
-| `FindUninstallProductCode` | `(string displayNameSubstring)` | Scans `HKLM\...\Uninstall` (Registry64 + Registry32) for a `DisplayName` containing the substring, then returns the subkey name only when it is brace-wrapped, so Inno and NSIS entries fall through and the scan continues. Returns the MSI ProductCode GUID `{XXXXXXXX-...}` or `null`. Used for ViGEmBus uninstall, where PadForge does not embed the MSI. |
+| `FindUninstallProductCode` | `(string displayNameSubstring)` | Scans `HKLM\...\Uninstall` (Registry64 + Registry32) for a `DisplayName` containing the substring, then returns the subkey name only when Windows Installer marks the entry as its own (`WindowsInstaller` = 1 under a brace GUID key, `MsiProductCodeOrNull`), so a bootstrapper's own entry, and Inno and NSIS entries, fall through and the scan continues. Returns the MSI ProductCode GUID `{XXXXXXXX-...}` or `null`. Used for ViGEmBus uninstall, where PadForge does not embed the MSI. |
 
 ---
 
 ## HIDMaestro
 
-PadForge does not ship a separate HIDMaestro installer EXE or MSI, and `DriverInstaller` has no `InstallHIDMaestro` / `UninstallHIDMaestro` methods. The HM SDK assembly (`HIDMaestro.Core.dll`) bundles the UMDF2 driver binaries, INF, signing tools, and 231 device profiles. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created (typically during the first engine `Start()` that has such a slot configured).
+PadForge does not ship a separate HIDMaestro installer EXE or MSI, and `DriverInstaller` has no `InstallHIDMaestro` / `UninstallHIDMaestro` methods. The HM SDK assembly (`HIDMaestro.Core.dll`) bundles the UMDF2 driver binaries, INF, signing tools, and 231 device profiles. PadForge's pickers offer the 133 that carry a captured HID descriptor: `HMaestroProfileCatalog` keeps only profiles whose `HMProfile.IsDeployable` is true, which is `HasDescriptor`, and adds its own synthetic Custom profile. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created (typically during the first engine `Start()` that has such a slot configured).
+
+Composite personas need one more driver. The six profiles whose `backend` is `usbip` (`dualsense-composite`, `dualsense-edge-composite`, `dualshock-4-v2-composite`, `steam-controller-2`, `steam-controller-composite` and `steam-deck-composite`) attach through usbip-win2's virtual USB host controller. HIDMaestro 1.9.0 carries the usbip-win2 0.9.7.5 installer for x64 and for ARM64 inside `HIDMaestro.Core.dll`, checks its SHA-256 after extraction, and runs it with `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART` the first time a composite controller is created (`HMContext.CreateController` reaches `UsbipDriverInstaller.EnsureInstalled`). PadForge makes no call of its own. The install re-enumerates the USB root hubs once. A machine that already has usbip-win2 with its host controller stopped gets a device restart instead of a reinstall, and one still carrying the 0.9.7.7 host controller that HIDMaestro installed through 1.8.1 is moved to the 0.9.7.5 driver in place.
 
 ### EnsureHMaestroContext()
 
@@ -287,7 +289,7 @@ flowchart TD
     A[Create %TEMP%\PadForge_MidiServices\] --> B
     B["HttpClient with UserAgent='PadForge'<br/>Timeout = 10 minutes"] --> C
     C["GET https://api.github.com/repos/<br/>microsoft/MIDI/releases<br/>(full releases list, not /latest)"] --> D
-    D["FindMidiServicesDownloadUrl<br/>Parse JSON for SDK.Runtime x64 .exe"] --> E
+    D["FindMidiServicesDownloadUrl<br/>Parse JSON for the SDK.Runtime .exe<br/>built for this machine (x64 or arm64)"] --> E
     E["Download installer (~210 MB)<br/>Stream to MidiServicesSdkRuntime.exe"] --> F
     F["Run installer directly (no runas)<br/>/install /quiet /norestart<br/>Wait up to 5 minutes"] --> G
     G["MidiVirtualController.ResetAvailability()<br/>Clear cached SDK check"] --> H
@@ -306,9 +308,9 @@ flowchart TD
 private static async Task<string> FindMidiServicesDownloadUrl(HttpClient http)
 ```
 
-Parses the GitHub releases JSON to find the SDK Runtime x64 installer URL. Uses simple string search (no JSON library): finds `"browser_download_url"` occurrences, extracts URLs, matches on `"SDK.Runtime"` + `"x64"` + `.exe` (case-insensitive). Returns the first match. Throws `InvalidOperationException` if none found.
+Parses the GitHub releases JSON to find the SDK Runtime installer URL for this machine. The service installs for the machine, not the process, so `PlatformSupport.IsArm64Machine` picks the architecture token, `arm64` or `x64`, whichever build is running. Uses simple string search (no JSON library): finds `"browser_download_url"` occurrences, extracts URLs, matches on `"SDK.Runtime"` + `"-<arch>."` + `.exe` (case-insensitive). Returns the first match. Throws `InvalidOperationException` if none found.
 
-**Asset pattern**: `Windows.MIDI.Services.SDK.Runtime.and.Tools.*-x64.exe`
+**Asset pattern**: `Windows.MIDI.Services.SDK.Runtime.and.Tools.*-<arch>.exe`, where `<arch>` is `x64` or `arm64`
 
 ### UninstallMidiServices()
 
@@ -414,7 +416,7 @@ An `internal static` class that installs the Nefarius BthPS3 profile driver and 
 public static bool EnsureInstalled(Action<string> log)
 ```
 
-Called from `Ds3PairingService`. Idempotent: when `BthPS3` is already a real service it only reconciles the consumer registry values, repairs the PSM filter if its control device is missing, and re-arms patching.
+Called from `Ds3PairingService`. Idempotent: when `BthPS3` is already a real service it reconciles the consumer registry values, repairs the PSM filter if its control device is missing, and re-arms patching. It also upgrades an older install in place: when the bundled `BthPS3.inf` carries a newer `DriverVer` than the installed `BthPS3.sys` (the bundle is 3.0.0.2082), `UpgradeInstalledDriversIfOlder` re-runs the three INFs, cycles the radio, and rewrites the consumer values.
 
 The "already installed" probe is `IsServiceInstalled`, which requires `ImagePath` under `SYSTEM\CurrentControlSet\Services\{name}`, not merely that the key exists. Any write under `Services\BthPS3\Parameters` creates the parent on the way down, so a settings write against a driver that was not installed yet left a key that looked installed to a null check and permanently blocked the install. `HasOrphanedBthPs3Key()` detects that exact damaged shape (key present, `ImagePath` absent) and deletes it before installing.
 
@@ -441,7 +443,7 @@ public static void CycleBluetoothRadio(Action<string> log)
 
 The `finally` block does two things that callers depend on. It waits up to 20 s for a radio handle to be obtainable again, because a cycle returns before the radio is back and the very next step needs one. It then sleeps 3 s past that, because on a fast radio (Intel AX211) `CyclePort` returns while the old radio and filter instances still answer, so a probe in that window passes against a dying instance and anything armed on it evaporates.
 
-`_cycleLock` serializes the cycle primitive itself. Two overlapping cycles are a path into a BthPS3 freed-context bugcheck. There is deliberately no helper that removes the BthPS3 PDO with PnP, for the same reason: the PDO is transient and self-destroys when the pad disconnects.
+`_cycleLock` serializes the cycle primitive itself, including the calls driver installation makes outside the pairing service's radio gate. It is part of the mitigation for the July 9 bugcheck (#204) and does not control BthPS3's callback lifetimes. A transient PDO's removal is left to BthPS3's disconnect path, because forced removal adds teardown churn to the operation investigated after that crash. The one exception is `RemoveStaleBthPs3Children`: with DsHidMini absent, it removes a BthPS3 child that cannot start (CM problem 19 or 28, a devnode that kept an uninstalled driver's configuration), and BthPS3 re-creates it raw on the pad's next page. A healthy or driver-bound child is never removed.
 
 ### WinUSB package signing
 
@@ -481,9 +483,9 @@ Otherwise it signs the package, verifies trust, `InstallInf`s `ds3_winusb.inf`, 
 
 Both take a 4-byte `{ ULONG DeviceIndex }` input, indexing the filter's per-radio collection. A bad index completes with `STATUS_NO_SUCH_DEVICE`, surfaced as `ERROR_NO_SUCH_DEVICE` (433), which ends the multi-radio sweep.
 
-`EnsureConsumerParams()` writes `AutoEnableFilter=0`, which hands PadForge sole ownership of arming. BthPS3's default of 1 auto-arms at radio power-up and re-arms about 10 s after it denies a foreign device, which keeps its use-after-free-on-disconnect path reachable. With it off, BthPS3 receives no incoming connections whenever no DS3 is in play (issue #199).
+`EnsureConsumerParams()` writes `AutoEnableFilter=0`, which turns off BthPS3's own arming from its next load (the driver's default is on), so PadForge's policy decides when patching is armed. The running driver keeps its cached setting, and another consumer can still request patching. Patching rewrites new L2CAP connection requests, not existing channels or callbacks, so keeping it off while no PS3-family pad is in play reduces exposure to new connections without draining existing ones (issue #199, #204).
 
-Both the raw-PDO pair and `AutoEnableFilter` are skipped entirely when `IsDsHidMiniInstalled()` is true. `RawPDO=1` makes BthPS3 enumerate its DS3 children with no function driver, which is what PadForge needs and what DsHidMini cannot live with, since its INF binds a UMDF stack to that same child. `App.xaml.cs` also calls `Ds3PairingService.ReconcilePsmPatchForCrashSafety("startup")` on a background task at every launch, so patching ends up armed only when a DS3 is actually paired.
+Both the raw-PDO pair and `AutoEnableFilter` are skipped entirely when `IsDsHidMiniInstalled()` is true. `RawPDO=1` makes BthPS3 enumerate its DS3 children with no function driver, which is what PadForge needs and what DsHidMini cannot live with, since its INF binds a UMDF stack to that same child. `App.xaml.cs` also calls `Ds3PairingService.ReconcilePsmPatchForCrashSafety("startup")` on a background task at every launch. Without DsHidMini, PadForge takes ownership and arms patching only when a PS3-family pad is paired or the machine carries a DualShock 3, PS Move or Navigation controller device node, present or not. With DsHidMini installed, PadForge removes its `AutoEnableFilter` override and keeps patching armed, because DsHidMini's pads connect only while it is.
 
 ### Extraction
 
@@ -506,7 +508,7 @@ The dialog only fires when both:
 1. `_viewModel.Settings.LegacyDriverCleanupOffered` is `false` (per-user once-only flag persisted in `PadForge.xml`), and
 2. At least one of `DriverInstaller.IsExtendedInstalled()` (vJoy) or `DriverInstaller.GetViGEmVersion() != null` (ViGEmBus) returns truthy.
 
-If neither legacy driver is detected, the flag is flipped to `true` and the offer is silently skipped. Otherwise PadForge raises a `Wpf.Ui.Controls.MessageBox` titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, `UninstallViGEmBus()` and `UninstallVJoy()` run on a worker thread through `RunDriverOperationAsync` (the "Removing legacy drivers..." overlay), each gated on its own detection result (`if (hasViGEm)` / `if (hasExtended)`), inside a single `try/catch`. They used to run inline on the dispatcher, which froze the window for the whole removal. Because both calls share one try block, a throw from `UninstallViGEmBus()` skips `UninstallVJoy()`, and the captured exception feeds a follow-up "Cleanup encountered an error" dialog. The flag is flipped to `true` afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.
+If neither legacy driver is detected, the flag is flipped to `true` and the offer is silently skipped. Otherwise PadForge raises a `Wpf.Ui.Controls.MessageBox` titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, `UninstallViGEmBus()` and `UninstallVJoy()` run on a worker thread through `RunDriverOperationAsync` (the "Removing legacy drivers…" overlay), each gated on its own detection result (`if (hasViGEm)` / `if (hasExtended)`) and each inside its own `try/catch`. They used to run inline on the dispatcher, which froze the window for the whole removal. Because each call has its own try block, a throw from `UninstallViGEmBus()` no longer skips `UninstallVJoy()`. Every caught failure is worded by `DescribeDriverFailure` and collected, and the collection feeds one follow-up "Cleanup encountered an error" dialog. The flag is flipped to `true` afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.
 
 The whole entry point is wrapped in a top-level `try/catch` that swallows everything because it runs as `async void` from the dispatcher. An unhandled exception there would surface as a generic "unexpected error" dialog at startup. On detection failure, the flag is **not** flipped, so the next launch retries.
 
@@ -659,9 +661,12 @@ static List<string> GetBlacklist()                          // Device instance I
 static bool SetBlacklist(List<string> ids)                  // Replace entire blacklist, false when the driver refused
 static List<string> GetWhitelist()                          // DOS device paths, or NULL on a failed read
 static bool SetWhitelist(List<string> paths)                // Replace entire whitelist, false when the driver refused
+static string DescribeReach(params string[] exeNames)       // Diagnostics snapshot: driver reachable, active flag, whitelist size, per-name listing
 static bool GetActive()                                     // Cloaking enabled?
+static bool TryGetActive(out bool active)                   // The same read, false when the IOCTL failed
 static void SetActive(bool active)                          // Enable/disable cloaking
 static void RemoveManagedDevices()                          // Remove only PadForge's entries
+static int AdoptExistingAsManaged()                         // Seed the managed set from the driver's list, -1 on a failed read
 static bool SyncManagedDevices(HashSet<string> desiredIds)  // Diff-based blacklist sync against the driver's own list
 static bool SyncManagedDevices(HashSet<string> desiredIds,
                                out List<string> added,
@@ -692,7 +697,7 @@ An empty list is a two-byte reply, one `L'\0'`. Zero bytes or an odd count is ma
 
 `_managedDeviceIds` (`HashSet<string>`) tracks device IDs PadForge added to the blacklist. `RemoveManagedDevices()` removes only these entries, leaving entries from other tools untouched.
 
-**Startup clear and cloak persistence**: `_managedDeviceIds` is in-memory, so a crashed or force-killed session leaves stale blacklist entries that `RemoveManagedDevices()` can no longer identify. `InputService.Start` resets the driver state with `ClearAll()` at engine start. The clear is conditional: when the Settings toggle **Keep Devices Cloaked Between Launches** (`KeepHidHideCloaksBetweenLaunches`, off by default) is on, startup skips `ClearAll()` so persisted cloaks survive into the new session with no visible decloak window, and `ApplyDeviceHiding`'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as `RemoveDeviceHiding(keepCloaks: ...)`.
+**Startup clear and cloak persistence**: `_managedDeviceIds` is in-memory, so a crashed or force-killed session leaves stale blacklist entries that `RemoveManagedDevices()` can no longer identify. `InputService.Start` resets the driver state with `ClearAll()` at engine start. The clear is conditional: when the Settings toggle **Keep Devices Cloaked Between Launches** (`KeepHidHideCloaksBetweenLaunches`, off by default) is on, startup skips `ClearAll()` so persisted cloaks survive into the new session with no visible decloak window, and `ApplyDeviceHiding`'s per-device walk re-asserts them idempotently. With the setting on, the first apply also adopts the entries the driver already holds as PadForge's own (`AdoptExistingAsManaged`, through `EnsureHidHideCloaksAdopted`), so the sync can still retire a kept cloak the new session no longer wants. A failed read leaves adoption for the next apply. The same flag reaches the shutdown path as `RemoveDeviceHiding(keepCloaks: ...)`.
 
 **The diff is taken against the driver, not the managed set**. All blacklist management goes through `SyncManagedDevices`, which reads the driver's list, adds every desired id the driver lacks, removes every managed id that left the desired set and the driver still carries, and writes the whole list once. The managed set moves to the desired set only after a write the driver accepted, or when there was nothing to write.
 
@@ -700,7 +705,7 @@ Diffing against the in-process managed set alone had two holes. An entry another
 
 A failed read returns `false` without writing. This method's contract is that it never clears the entire blacklist, and a failed read falling through to `SetBlacklist` did precisely that.
 
-**Merge-based cache**: `ApplyDeviceHiding` uses a merge-based approach for its resolved instance ID cache. New IDs are added but previously cached IDs are never discarded. This ensures offline devices that were resolved in a prior cycle remain in the blacklist even if they are not currently enumerable.
+**Merge-based cache**: `ApplyDeviceHiding` uses a merge-based approach for each device's resolved instance ID cache (`UserDevice.HidHideInstanceIds`). New IDs are added and previously cached IDs are kept, except any that turn out to belong to a HIDMaestro virtual, which are scrubbed. This ensures offline devices that were resolved in a prior cycle remain in the blacklist even if they are not currently enumerable.
 
 ### VID/PID Format Matching
 
@@ -719,7 +724,7 @@ The match requires the `PID&XXXX` fragment plus any one of the four Bluetooth VI
 `ExpandToBaseContainerAndChildren` widens a single HID instance ID into the full set of instance paths HidHide needs to hide a device at its container boundary. It follows HidHide's own `BlacklistDlg.cpp:294-345` and adds one step the client cannot express:
 
 1. Start with the passed HID instance ID.
-2. Read its Container ID, then walk parents while the Container ID stays the same, recording each node passed. The last matching parent is the base container.
+2. Read its Container ID, then walk parents while the Container ID stays the same, recording each node passed. The last matching parent is the base container. A built-in device reports the system container ID, which every built-in device shares, so its walk is bounded by the node's `VID_xxxx&PID_yyyy` token instead and stops at the USB composite parent.
 3. Blacklist every recorded node between the HID node and the base container whose class HidHide filters.
 4. Enumerate the base container's immediate children, counting how many are HID-class. If the base container is HIDClass, XUSB, or XboxComposite **and** every child is a HID, add the base-container instance path too. This blocks the device at the parent boundary so XInput and WGI cannot reach it through a sibling child path.
 5. Always add every HID-child instance path.
@@ -749,6 +754,7 @@ Every id the keep-out predicate removed is reported back through `keptOut` and l
 | Line | Content |
 |---|---|
 | `HIDHIDE UNAVAILABLE` | `TryProbe` failed while at least one device wanted hiding. Carries the Win32 error. |
+| `HIDHIDE adopted` | How many kept entries the first apply adopted from the previous session, when **Keep Devices Cloaked Between Launches** is on. |
 | `HIDHIDE apply` | Device count and how many want hiding. |
 | `HIDHIDE keepout` | The keep-out set, when non-empty. |
 | `HIDHIDE dev` | Per device: VID:PID, the resolved instance id, the expansion, the sibling sweep, the sweep decision, and anything the keep-out held back. |
@@ -841,7 +847,7 @@ The temp-dir install flows (HidHide, MIDI Services, SteamVR) use `try/finally` s
 
 | Path | Error Strategy |
 |---|---|
-| HIDMaestro `InstallDriver()` | Caught in `EnsureHMaestroContext`. On failure, sets `_hmaestroContextFailed = true` (sticky for the session) and calls `RaiseError("Failed to initialize HIDMaestro.", ex)`. The engine continues running for KB+M, VR, and (if installed) MIDI categories. HM-backed slot creation is gated on the context being non-null. |
+| HIDMaestro `InstallDriver()` | Caught in `EnsureHMaestroContext`. On failure, sets `_hmaestroContextFailed = true` (sticky until the engine stops, when `DisposeHMaestroContextOnShutdown()` clears it, so the next `Start()` tries again) and calls `RaiseError("Failed to initialize HIDMaestro.", ex)`. The engine continues running for KB+M, VR, and (if installed) MIDI categories. HM-backed slot creation is gated on the context being non-null. |
 | HidHide install/uninstall | On x64 the MSI handles its own rollback. On ARM64 a removal that stops part way tries to put its class filters back. Either way an exit code or a timeout arrives as `InstallerFailedException`, which `MainWindow.DescribeDriverFailure` words in the UI language inside the "Driver operation failed" status line. |
 | MIDI Services | WiX Burn bootstrapper handles rollback. PadForge surfaces no specific error UI. HTTP and process timeouts both throw. |
 | SteamVR install | No rollback. The install is verdicted on `vrpathreg.exe` rather than on exit codes, retried up to three times, and throws `InvalidOperationException` carrying the tail of `steamcmd`'s output when the payload never lands. A partial payload is left in place, since the next attempt resumes it. Temp staging is still cleaned in `finally`. |
@@ -868,4 +874,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

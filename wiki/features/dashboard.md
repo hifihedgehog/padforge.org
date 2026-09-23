@@ -3,7 +3,7 @@
 *PadForge's home screen. Engine status, virtual controllers, and every service PadForge runs beside them, on one page.*
 
 <!-- SCREENSHOT: dashboard -->
-![Dashboard overview showing engine status, virtual controllers, and driver health](../images/dashboard.png)
+![Dashboard overview showing engine status, virtual controllers, and services](../images/dashboard.png)
 
 ---
 
@@ -24,9 +24,9 @@ Ten sections, stacked top to bottom: the engine and its slots, then a **Services
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
 
-Disconnected controllers and a stopped engine surface here. Driver install status lives on the [Settings](settings.md) page under Driver Management.
+Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the [Settings](settings.md) page. See [Driver Management](driver-management.md).
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too.
 
 ---
 
@@ -38,7 +38,7 @@ The engine card sits at the top with four elements in a row.
 |---------|-------------|
 | **Power flame** | Starts and stops the engine. The flame's look shows state (see below). |
 | **Status text** | "Forging", "Idle", "Stopping…", or "Stopped". |
-| **Polling frequency** | Live polling rate in Hz, e.g. `987.3 Hz`. Dash when stopped. |
+| **Polling frequency** | Live polling rate in Hz, e.g. `987.3 Hz`. Dash when the engine is stopped or idle. |
 | **Device count** | Online vs. total, e.g. `2/3 devices online`. Online means plugged in right now. Total includes remembered devices. |
 
 ### Power flame states
@@ -48,11 +48,11 @@ The power control is a flame. Its fill and glow show what the engine is doing.
 | State | Look |
 |-------|------|
 | **Forging** | Ember (orange) flame with a glow. Running and processing input. |
-| **Idle** | Gold flame. The engine started, but no enabled slot has a connected device (a mapped device that is offline does not count once its grace period ends) and no linked PC is sharing input, so there's nothing to process. |
+| **Idle** | Gold flame. The engine started, but no enabled slot has a connected device (a mapped device that is offline does not count once its grace period ends) and no paired PC is connected over Remote Link, so there's nothing to process. |
 | **Stopping** | Gold flame, flashing while it winds down. |
 | **Stopped** | Hollow flame outline in steel. No fill. |
 
-> **Tip:** Turn on **Auto-Start Engine on Launch** in [Settings](settings.md) to skip the manual power click each time.
+> **Tip:** **Auto-Start Engine on Launch** in [Settings](settings.md), on by default, starts the engine when PadForge opens, so no power click is needed.
 
 ---
 
@@ -69,11 +69,11 @@ Each [virtual controller slot](controller-slots.md) gets a card under the engine
 |---------|----------|-------------|
 | **Power flame** | Top-left | Slot status, shown as a flame (see below). Click to enable or disable. |
 | **Slot number** | Next to the flame | Global controller number (1, 2, 3, ...). |
-| **Type track** | Second row | A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember. The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: with Windows MIDI Services missing the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate. |
+| **Type track** | Second row | A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: with Windows MIDI Services missing the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate. |
 | **Per-type instance number** | After the type track | Position within the type, e.g. `#2` for the second Xbox slot. |
-| **Device roster** | Third row | Every mapped device, each with a device-class icon, a Bluetooth icon on wireless links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty. |
+| **Device roster** | Third row | Every mapped device, each with a device-class icon, a Bluetooth icon on Bluetooth links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty. |
 | **Status text + counts** | Fourth row | The slot state in words (see below), then `2 mapped, 1 connected`. |
-| **Stage ledger** | Fifth row | One small icon per pipeline stage the slot's devices have: sticks, triggers, gyro, lighting, touchpad, audio. An icon glows ember when that stage carries a non-default setup and stays steel when it is untouched. Hover an icon for a per-device readout. |
+| **Stage ledger** | Fifth row | One small icon per pipeline stage the slot's devices have: sticks, triggers, gyro, lighting, touchpad, audio. An icon glows ember when that stage carries a non-default setup and stays steel when it is untouched. Hover a lit icon for a per-device readout. |
 | **Delete button (X)** | Upper-right | Removes the slot. Appears on hover. |
 
 ### Slot status
@@ -82,8 +82,8 @@ The power flame and the status text both track the slot's state. Hovering the fl
 
 | Status text | Flame | Meaning |
 |-------------|-------|---------|
-| **Forging** | Ember, with a glow | Enabled, a device is connected, output is live. Holds through the HIDMaestro inactivity grace period (default 60 s). |
-| **Idle** | Ember, with a glow | A mapped device dropped offline. The controller holds through its grace period, so the flame stays the same as Forging until the timeout tears it down. |
+| **Forging** | Ember, with a glow | Enabled, a device is connected, output is live. |
+| **Idle** | Ember, with a glow | A mapped device dropped offline. The controller holds through the HIDMaestro inactivity grace period (default 60 s), so the flame stays the same as Forging until the timeout tears it down. |
 | **Awaiting devices** | Gold | Enabled and mapped, but nothing is connected and the controller is down, or the engine is stopped. |
 | **Virtual controller failed** | Gold. Steel outline if nothing is mapped | The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return. |
 | **Cold** | Steel outline | Enabled with no devices mapped. |
@@ -113,6 +113,7 @@ A browser-based controller you can open from any device on the same network.
 | **Enable Web Controller Server** | Starts and stops the web server. |
 | **Port** | HTTP/WebSocket port. Default `8080`. Range `1024-65535`. |
 | **Status indicator** | A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on `<url>`" until clients connect, then "Running (`<n>` clients)". |
+| **QR code and address** | Shown while the server runs: a QR code to scan with a phone camera, and the address with a copy button. |
 
 See [Web Controller](../guides/web-controller.md) for full details.
 
@@ -120,7 +121,7 @@ See [Web Controller](../guides/web-controller.md) for full details.
 
 ## Remote Link
 
-Shares controllers with a paired PadForge on another PC over your network. A device on one PC shows up as an ordinary input device on the other.
+Shares controllers with a paired PadForge on another PC, on your network or across the internet. A device on one PC shows up as an ordinary input device on the other.
 
 | Control | Description |
 |---------|-------------|
@@ -135,7 +136,7 @@ Sets how this PC stores its pairing identity. **Secure: This PC Only** keys it t
 
 ### Paired PCs and Nearby PCs
 
-**Paired PCs** lists your established pairings, each with rename, connect, and revoke, plus **Revoke All**. **Nearby PCs (Not Paired)** lists peers discovered on the network. **Or Connect by Address (Advanced)** reaches a peer by IP when discovery can't find it.
+**Paired PCs** lists your established pairings, each with rename, connect, revoke, an **Allow Remote Assignment Changes** box, and **Assign Shared Devices** while that PC is online, plus **Revoke All**. **Nearby PCs (Not Paired)** lists peers discovered on the network. **Or Connect by Address (Advanced)** reaches a peer by IP when discovery can't find it, or across the internet by the other PC's code. **This PC's Code** shows yours once Remote Link has found this PC's public address.
 
 See [Remote Link](../guides/remote-link.md) for full details.
 
@@ -155,11 +156,12 @@ Reads a head pose from OpenTrack over its UDP output, from the FreeTrack 2.0 sha
 | **Rotation Range (Degrees)** | Head rotation that moves yaw, pitch, and roll to full deflection. Default 90. |
 | **Translation Range (cm)** | Head travel that moves X, Y, and Z to full deflection. Default 30. |
 | **Per-Axis Range** | Overrides one axis on its own. Zero follows the range above. Rotation is in degrees, travel in centimeters. Each box shows the value you pinned, never the range it resolves to. |
-| **Status** | *Stopped* while every input is off or the engine is stopped. The UDP and FreeTrack lines are *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, or *UDP port `<port>` is in use by another program.* The OpenXR lines are *Starting the OpenXR session*, *Waiting for `<runtime>` to report a tracked pose*, *Reading `<runtime>`*, *No OpenXR runtime is installed*, *The OpenXR runtime reports no headset*, *This runtime cannot supply a background session*, or *The OpenXR session failed. See the diagnostics log.* |
+| **Set Neutral** | Makes your current head position the neutral. Applies to the OpenXR headset input only. |
+| **Status** | *Stopped* while every input is off or the engine is stopped. The UDP and FreeTrack lines include *Waiting for a tracker on UDP port `<port>`.*, *Receiving over UDP from `<address>`.*, *Receiving from FreeTrack shared memory.*, *Waiting for FreeTrack shared memory data.*, *FreeTrack shared memory is unavailable.*, and *UDP port `<port>` is in use by another program.* The OpenXR lines are *Starting the OpenXR session*, *Waiting for `<runtime>` to report a tracked pose*, *Reading `<runtime>`*, *No OpenXR runtime is installed*, *The OpenXR runtime reports no headset*, *This runtime cannot supply a background session*, or *The OpenXR session failed. See the diagnostics log.* |
 
-Each input toggle has its own authored profile opinion. The port, the two ranges and the per-axis overrides remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.
+The UDP and FreeTrack toggles each carry their own authored profile opinion. The OpenXR toggle, the runtime choice, the port, the two ranges and the per-axis overrides remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.
 
-Turning on OpenXR headset input also brings up the two **VR Controller** rows on the Devices page when the runtime reports hand controllers.
+Turning on OpenXR headset input also brings up the two **VR Controller** rows on the Devices page. They stay idle until the runtime reports hand controllers.
 
 See [Head Tracking](head-tracking.md) for the OpenTrack setup and [VR Controller Input](vr-controller-input.md) for the OpenXR side.
 
@@ -225,7 +227,7 @@ An on-screen, transparent touch surface you can pin to any monitor. Drives the t
 | **Reset Position** | Recenters the overlay on its monitor. |
 | **Status indicator** | A flame: ember while the overlay is showing, steel outline when hidden. |
 
-The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.
+The overlay tracks up to two finger contacts and feeds them to every slot its **Touchpad Overlay** device is assigned to on the [Devices](devices.md) page. It needs the OS to report touch events: a mouse does not draw a finger on it. Three or more fingers on the overlay drag the window itself to a new spot, and so does a right-button mouse drag. A double tap with one finger, or a press on the bar along the bottom edge, clicks the touchpad.
 
 ---
 
@@ -244,4 +246,4 @@ The overlay tracks up to five finger contacts, the Windows Precision Touchpad ce
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

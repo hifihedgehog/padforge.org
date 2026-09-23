@@ -51,7 +51,7 @@ The hat turns with the remote's hold. Set **Held As** on the Gyro tab to one of 
 
 The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See [Gyro](../guides/gyro.md) for calibration, sensitivity, and the engage controls.
 
-A Nunchuk carries its own accelerometer. When one is attached, two more sources appear in the picker: **Nunchuk Accelerometer** and **Nunchuk Lean**. They read the Nunchuk's own tilt, separate from the remote's motion, so you can map each hand independently.
+A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake**. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently.
 
 The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.
 
@@ -147,10 +147,11 @@ A combined Joy-Con pair carries a full motion sensor in each half. On a pair the
 | **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. |
 | **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. |
 | **Left Joy-Con Lean** | The left half's tilt, for motion steering or any axis row. |
+| **Left Joy-Con Shake** | How hard the left half is shaken, whatever its tilt, for shake-to-press bindings. |
 
 The two hands read independently, so the left half can drive the cursor while the right half's gyro aims a stick.
 
-**Left Joy-Con Accelerometer** and **Left Joy-Con Lean** are the same two sources that show as **Nunchuk Accelerometer** and **Nunchuk Lean** on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.
+**Left Joy-Con Accelerometer**, **Left Joy-Con Lean** and **Left Joy-Con Shake** are the same three sources that show as **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake** on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.
 
 - Joy-Con 2 pairs expose the same left-side sources.
 - The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the [Gyro](../guides/gyro.md) tab all apply, and those device-level sliders tune both halves at once. The per-row **Sensitivity** dial is the independent knob.
@@ -212,4 +213,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

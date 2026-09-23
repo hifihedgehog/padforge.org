@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2179,10 +2209,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#flydigi-3-usb-identities" class="md-nav__link">
+  <a href="#flydigi-4-usb-identities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flydigi (3 USB identities)
+        Flydigi (4 USB identities)
       
     </span>
   </a>
@@ -2201,10 +2231,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#with-a-shipped-mapping-249" class="md-nav__link">
+  <a href="#with-a-shipped-mapping-250" class="md-nav__link">
     <span class="md-ellipsis">
       
-        With a shipped mapping (249)
+        With a shipped mapping (250)
       
     </span>
   </a>
@@ -2476,6 +2506,8 @@
       
         
           
+        
+      
         
       
         
@@ -2861,6 +2893,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3607,10 +3667,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#flydigi-3-usb-identities" class="md-nav__link">
+  <a href="#flydigi-4-usb-identities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flydigi (3 USB identities)
+        Flydigi (4 USB identities)
       
     </span>
   </a>
@@ -3629,10 +3689,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#with-a-shipped-mapping-249" class="md-nav__link">
+  <a href="#with-a-shipped-mapping-250" class="md-nav__link">
     <span class="md-ellipsis">
       
-        With a shipped mapping (249)
+        With a shipped mapping (250)
       
     </span>
   </a>
@@ -3757,7 +3817,7 @@
 
 <h1 id="supported-devices">Supported Devices<a class="headerlink" href="#supported-devices" title="Permanent link">&para;</a></h1>
 <p><em>Every controller, wheel, stick and adapter PadForge knows by name, in one place.</em></p>
-<p>PadForge recognizes <strong>709</strong> devices by their USB identity: 605 gamepads in SDL's controller list, 3 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit <strong>249</strong> shipped gamepad mappings (248 from SDL's Windows database plus PadForge's own DualShock 3 entry) and 231 device profiles.</p>
+<p>PadForge recognizes <strong>713</strong> devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit <strong>250</strong> shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 231 device profiles, and PadForge offers the 133 that carry a captured HID descriptor.</p>
 <div class="admonition tip">
 <p class="admonition-title">Not on this list?</p>
 <p>It very likely still works. Anything Windows enumerates as an input device can be read
@@ -4381,7 +4441,7 @@ family gets that family's layout and works everywhere that family does.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="flydigi-3-usb-identities">Flydigi (3 USB identities)<a class="headerlink" href="#flydigi-3-usb-identities" title="Permanent link">&para;</a></h3>
+<h3 id="flydigi-4-usb-identities">Flydigi (4 USB identities)<a class="headerlink" href="#flydigi-4-usb-identities" title="Permanent link">&para;</a></h3>
 <p>SDL's Flydigi driver claims these pads by USB identity, then names the model from the controller's own device ID, so one identity covers a family.</p>
 <table>
 <thead>
@@ -4400,13 +4460,17 @@ family gets that family's layout and works everywhere that family does.</p>
 <td>Second-generation Flydigi Apex</td>
 </tr>
 <tr>
+<td><strong>37D7:2502</strong></td>
+<td>Second-generation Flydigi Apex 6</td>
+</tr>
+<tr>
 <td><strong>37D7:2401</strong></td>
 <td>Second-generation Flydigi Vader</td>
 </tr>
 </tbody>
 </table>
-<p>Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Vader 2, Vader 2 Pro, Vader 3, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro.</p>
-<p>The four rear paddles map as Paddle 1 to 4. The Vader series C and Z buttons and the Apex 5 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.</p>
+<p>Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Apex 6, Vader 2, Vader 2 Pro, Vader 3, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro.</p>
+<p>The four rear paddles map as Right Paddle 1 and 2 and Left Paddle 1 and 2. The Vader series C and Z buttons and the Apex 5 and Apex 6 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Apex 6, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.</p>
 <h3 id="other-3">Other (3)<a class="headerlink" href="#other-3" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4430,9 +4494,9 @@ family gets that family's layout and works everywhere that family does.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="with-a-shipped-mapping-249">With a shipped mapping (249)<a class="headerlink" href="#with-a-shipped-mapping-249" title="Permanent link">&para;</a></h3>
+<h3 id="with-a-shipped-mapping-250">With a shipped mapping (250)<a class="headerlink" href="#with-a-shipped-mapping-250" title="Permanent link">&para;</a></h3>
 <p>Pads carrying a mapping in the database, so their buttons and axes land in the right places
-the moment they are plugged in. SDL's database holds 248 names in its Windows section, and
+the moment they are plugged in. SDL's database holds 249 names in its Windows section, and
 PadForge adds one of its own for the DualShock 3 under DsHidMini.</p>
 <table>
 <thead>
@@ -4657,6 +4721,10 @@ PadForge adds one of its own for the DualShock 3 under DsHidMini.</p>
 <tr>
 <td><strong>GAMEPAD</strong></td>
 <td>GAMEPAD 3 TURBO</td>
+</tr>
+<tr>
+<td><strong>Gamesir-G5</strong></td>
+<td>Gamesir-G5</td>
 </tr>
 <tr>
 <td><strong>GameSir-T3</strong></td>
@@ -5285,8 +5353,8 @@ as a generic joystick.</p>
 </tr>
 <tr>
 <td><strong>Switch Pro, Switch 2 Pro</strong></td>
-<td>Gyro, accelerometer, HOME LED, rumble, NFC on the pads that have it</td>
-<td><a href="../wii-controllers/">Wii Controllers</a></td>
+<td>Gyro, accelerometer and rumble. On the original Switch Pro, also the HOME LED and the NFC tag reader</td>
+<td><a href="../../features/lighting/">Lighting</a>, <a href="../../features/nfc-tags/">NFC Tags</a></td>
 </tr>
 <tr>
 <td><strong>Joy-Con, Joy-Con 2</strong></td>
@@ -5329,9 +5397,9 @@ as a generic joystick.</p>
 <td><a href="../../features/handheld-buttons/">Handheld PC Buttons</a></td>
 </tr>
 <tr>
-<td><strong>VR controllers</strong></td>
-<td>Any OpenVR controller through SteamVR, as a slot with hand roles</td>
-<td><a href="../../features/vr-controllers/">VR Controllers</a></td>
+<td><strong>VR headsets and controllers</strong></td>
+<td>The headset pose as six axes, and each hand controller's pose, stick, trigger, grip and buttons, through any OpenXR runtime with or without SteamVR. While SteamVR runs, also the headset and every controller it tracks, each as its own device</td>
+<td><a href="../../features/vr-controller-input/">VR Controller Input</a>, <a href="../../reference/vr-controllers-internals/#the-other-direction-consuming-real-vr-devices-287">Virtual VR Controllers Internals</a></td>
 </tr>
 <tr>
 <td><strong>Sony wireless headsets</strong></td>
@@ -5391,7 +5459,7 @@ as a generic joystick.</p>
 </tbody>
 </table>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

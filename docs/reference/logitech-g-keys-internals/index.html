@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3577,7 +3637,7 @@
 </tbody>
 </table>
 <p>That totals 32, so PadForge reads the word whole and masks it rather than describing it to the marshaler, which has no bitfield of its own.</p>
-<p><strong>Logitech's own C# sample gets this wrong and must not be copied.</strong> Its <code>Doc\C#Instructions.pdf</code> declares the word as a <code>ushort</code>, half the width the header defines, so its <code>reserved2</code> shift of 16 can only ever yield zero. It also reads <code>mouse</code> as <code>(complete &gt;&gt; 11) &amp; 15</code> where the field is one bit wide, folding three reserved bits into the answer, which can read a keyboard event as a mouse event. The header is what the DLL was compiled against, so the header wins. This was cross-checked against <a href="https://github.com/mumble-voip/mumble">Mumble</a>'s <code>GKey.cpp</code>, which has decoded it correctly in production for years.</p>
+<p><strong>Logitech's own C# sample gets this wrong and must not be copied.</strong> Its <code>Doc\C#Instructions.pdf</code> declares the word as a <code>ushort</code>, half the width the header defines, so its <code>reserved2</code> shift of 16 can only ever yield zero. It also reads <code>mouse</code> as <code>(complete &gt;&gt; 11) &amp; 15</code> where the field is one bit wide, folding three reserved bits into the answer, which can read a keyboard event as a mouse event. The header is what the DLL was compiled against, so the header wins. <a href="https://github.com/mumble-voip/mumble">Mumble</a>'s <code>GKey.cpp</code> never reads the word: it initializes without a callback and polls, so the header is the only source for this layout.</p>
 <hr />
 <h2 id="finding-the-library">Finding the library<a class="headerlink" href="#finding-the-library" title="Permanent link">&para;</a></h2>
 <p><code>LogitechGKeyCatalog</code> builds a candidate list and tries each in order: the SDK's registered CLSID, whose <code>ServerBinary</code> value is the DLL path, then the default install path. That is the order Mumble's <code>GKey.cpp</code> uses.</p>
@@ -3590,11 +3650,11 @@
 <p>A G-key tap can begin and end between two of PadForge's polls. A press therefore asserts its button for at least <code>PulseMs</code> (175), so a macro sees the edge. This is the handheld button row's rule, adopted for the same reason.</p>
 <h3 id="the-resync">The resync<a class="headerlink" href="#the-resync" title="Permanent link">&para;</a></h3>
 <p>Events alone cannot be trusted to close a press. The SDK only feeds an application whose Logitech profile is active, so a key held while PadForge loses that profile never delivers its release, and the button would stay asserted for the life of the session. Unplugging the keyboard mid-press reaches the same state.</p>
-<p><code>ResyncHeld</code> asks the SDK what is actually held and clears anything the events got wrong. It runs every <code>ResyncIntervalMs</code> (250) rather than every poll, because it is 102 cross-DLL calls and has no business running at the poll rate. It only clears. A press still arrives by callback, because the poll can fall between a press and its release and the pulse is what carries that edge.</p>
+<p><code>ResyncHeld</code> asks the SDK what is actually held and clears anything the events got wrong. It runs every <code>ResyncIntervalMs</code> (250) rather than every poll, because it makes one cross-DLL call per button the events left held, up to 102, and has no business running at the poll rate. It only clears. A press still arrives by callback, because the poll can fall between a press and its release and the pulse is what carries that edge.</p>
 <hr />
 <h2 id="teardown">Teardown<a class="headerlink" href="#teardown" title="Permanent link">&para;</a></h2>
-<p><code>Teardown</code> never frees the module and always calls <code>LogiGkeyShutdown</code>, both matching Mumble.</p>
-<p>Freeing the library risks a callback in flight during dispose landing in unmapped memory. Mumble does not unload on success either, and one mapped library for the life of the process is the cheaper trade. Calling shutdown unconditionally covers the case where init fails <em>after</em> the SDK has already stored the callback pointer: skipping shutdown there leaves it holding a pointer into a delegate that is about to be collected.</p>
+<p><code>Teardown</code> never frees the module, and it calls <code>LogiGkeyShutdown</code> whenever that export resolved, whether or not init succeeded. Both match Mumble.</p>
+<p>Freeing the library risks a callback in flight during dispose landing in unmapped memory. Mumble does not unload on success either, and one mapped library for the life of the process is the cheaper trade. Calling shutdown whatever init returned covers the case where init fails <em>after</em> the SDK has already stored the callback pointer: skipping shutdown there leaves it holding a pointer into a delegate that is about to be collected.</p>
 <hr />
 <h2 id="the-button-layout">The button layout<a class="headerlink" href="#the-button-layout" title="Permanent link">&para;</a></h2>
 <p>102 buttons, fixed rather than derived from attached hardware:</p>
@@ -3613,7 +3673,7 @@
 <p>Buttons are written every poll, pressed or not, so a released key produces its falling edge.</p>
 <hr />
 <h2 id="residual">Residual<a class="headerlink" href="#residual" title="Permanent link">&para;</a></h2>
-<p>No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header and Mumble's implementation.</p>
+<p>No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header, and the library search and teardown in Mumble's implementation.</p>
 <p>Test coverage is uneven. The decode, the button map and the pulse have real behavioral tests. The resync has only a wiring assertion that reads this file and checks the call is present, because the path needs a live source in the <code>Running</code> state and the test seam cannot supply one.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
@@ -3624,7 +3684,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

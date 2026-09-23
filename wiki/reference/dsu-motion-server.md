@@ -41,6 +41,7 @@ A controller has to ship a gyro and accelerometer for any of this to work.
 | Joy-Con (left and right) | |
 | Wii Remote (gyro needs MotionPlus) | |
 | Steam Deck built-in controller | |
+| 2015 Steam Controller | |
 | 2026 Steam Controller | |
 
 The [Devices](../features/devices.md) page shows live gyro and accelerometer values for any controller that has them.
@@ -50,7 +51,7 @@ The [Devices](../features/devices.md) page shows live gyro and accelerometer val
 ## Turn it on
 
 1. Plug in a controller that reports motion.
-2. Assign it to one of slots 1–4. The slot's virtual controller type has to be **PlayStation** or **Nintendo**, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), whose native frame carries an IMU of its own. Xbox, Keyboard + Mouse, MIDI, VR, and any other Extended slot broadcast no motion.
+2. Assign it to one of slots 1–4. Any virtual controller type works. An **Xbox** slot broadcasts its controller's motion the same as a **PlayStation** slot, with no motion mapping needed.
 3. On the [Dashboard](../features/dashboard.md), tick **Enable DSU Motion Server (CemuHook Motion Provider Protocol)**.
 4. Leave the **Port** box at **26760**, or type a different number. The reset button next to it returns the port to 26760.
 5. Start the input engine with the play button.
@@ -70,9 +71,11 @@ Two things still reach it. **Grip** rotates the body gyro, the body acceleromete
 
 ### The Mappings grid picks the source device
 
-Motion is not implicit in the device assignment. Each motion-capable slot carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.
+A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike. While either row exists, DSU follows the rows alone: a missing row, a row with no source, or a row whose devices are all offline sends nothing on that channel.
 
-- Several motion devices on one slot stack as sources on the same row. The first source whose device is online wins, and the walk falls through to the next source when that device goes offline.
+A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, still broadcasts. DSU combines the sensors of every enabled device assigned to the slot, axis by axis, and keeps the reading with the largest magnitude, the rule the **Strongest** combine mode uses. The virtual controller itself carries no motion on such a slot.
+
+- Several motion devices on one slot stack as sources on the same row. The row's **Combine** setting merges their readings axis by axis: **Strongest** by default, or **Combined**, **Average**, or **Custom**.
 - The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.
 - On a Joy-Con pair, the source picker also offers **Left Joy-Con Motion Gyro** and **Left Joy-Con Accelerometer** to stream the left half's sensors instead of the pair's primary stream. A Wii Remote with a Nunchuk attached offers **Nunchuk Accelerometer** the same way.
 
@@ -122,7 +125,6 @@ The DSU format only carries 4 slots. PadForge supports 16. Slots 5–16 do not a
 - Single player: put the motion controller in slot 1.
 - Local multiplayer with motion: up to 4 controllers.
 - Motion controller in slot 5 or later does not show up in the emulator. Move it to slots 1–4.
-- The cap sits on top of the slot-type rule: the slot still has to carry a motion channel.
 
 ---
 
@@ -161,7 +163,7 @@ If a direction reads backward on your controller, say which one on the [issue tr
 | Only one controller has motion | DSU caps at 4 slots. Move the motion device to slots 1–4. |
 | Device has no motion sensors | Some controllers (Xbox) ship without a gyro. Check the [Devices](../features/devices.md) page. |
 | Emulator says "connected" but no values | The physical controller has to be assigned to a slot, not only detected on the Devices page. |
-| Emulator connected, controller assigned, still no motion | The slot's virtual controller type has to be **PlayStation**, **Nintendo**, or **Extended** on a Valve profile. Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots send no motion. |
+| Emulator connected, controller assigned, still no motion | Check the slot's **Motion Gyro** and **Motion Accelerometer** rows on the Mappings grid. While either row exists, DSU reads only those rows, so a row with no source, or one whose device is offline, sends no motion. Add the controller as a source on each row. |
 
 ---
 
@@ -175,4 +177,4 @@ If a direction reads backward on your controller, say which one on the [issue tr
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

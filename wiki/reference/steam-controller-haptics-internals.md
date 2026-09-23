@@ -105,7 +105,7 @@ Only one chain is ever read at runtime, so the pull model's single-reader rule h
 
 The `MacroMixer` is the sum every source already feeds. On a PCM sink that means the persona's haptic channels (`PersonaBuf`, fed by `SubmitPersonaHaptics` from HIDMaestro's pacing thread, scaled by Haptics Gain 25 to 300%), macro sounds, and the system-audio mirror behind its engage gate. The stream consumes the mix and nothing is silenced by it. The requester's original limitation, exclusive ownership of the actuators by one source, dissolves into mixing.
 
-Two things are synthesized into the stream instead of being sent as their own reports. The Audio-tab test tone and a Remote Link relayed tone render as a sine at the requested frequency and amplitude. A touchpad swipe tick becomes a 160 Hz sine (`PcmPulseHz`) with a decaying envelope, `PulseAmp * 0.6` max-wins with whatever envelope is still ringing, because racing a 0x82 click against an active stream is an interaction no reference documents. `PulseAmp` is read then zeroed on consumption, so a lowered slider takes effect on the next swipe (the 09-02 audit's F13).
+Two things are synthesized into the stream instead of being sent as their own reports. The Audio-tab test tone and a Remote Link relayed tone render as a sine at the requested frequency and amplitude. While the stream is armed, a touchpad swipe tick becomes a 160 Hz sine (`PcmPulseHz`) on its own side's channel with a decaying envelope, that side's pulse amplitude times 0.6, max-wins with whatever envelope is still ringing, because racing a 0x82 click against an active stream is an interaction no reference documents. With the stream disarmed the tick goes out as the ordinary 0x82 tick command. The pulse amplitudes (`PulseAmp`, `PulseAmpLeft`, `PulseAmpRight`) are read then zeroed on consumption, so a lowered slider takes effect on the next swipe (the 09-02 audit's F13).
 
 ### Arm and disarm
 
@@ -168,7 +168,7 @@ With `PADFORGE_DIAG` armed or the diagnostics log on:
 | `HAPTICDIAG triton-build` | sink build | `usb`, `puck`, output and feature caps, path tail |
 | `TRITONPCM arm` / `disarm` | each edge | mode, targets, mu-law, `outLen` |
 | `TRITONPCM arm FAILED` / `arm ok, failure streak ended` | streak edges | |
-| `TRITONPCM stream` | 5 s while armed | `pendingFrames`, `dropped`, `hardFail`, `lp`, `personaMs`, `idleDrained` |
+| `TRITONPCM stream` | 5 s while armed | `mulaw`, `pendingFrames`, `dropped`, `hardFail`, `lp`, `personaMs`, `idleDrained` |
 | `HAPTICBUF` | 5 s | `personaMs`, `mirrorMs`, `idleDrained` |
 | `TRITONPCM ring FAILED` | once | the exception, then the 0x83 fallback |
 
@@ -220,4 +220,4 @@ The requester (discussion #371) ran the shipped stream on hardware: native PCM w
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -1917,10 +1919,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#live-highlighting" class="md-nav__link">
+  <a href="#live-highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Live highlighting
+        Live highlights
       
     </span>
   </a>
@@ -2144,6 +2146,34 @@
     
   
     Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
   
 
     
@@ -2426,6 +2456,8 @@
       
         
           
+        
+      
         
       
         
@@ -2811,6 +2843,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3491,10 +3551,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#live-highlighting" class="md-nav__link">
+  <a href="#live-highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Live highlighting
+        Live highlights
       
     </span>
   </a>
@@ -3765,8 +3825,8 @@
 <p>The 2D sets do not share the same way. Xbox One and Series keep separate artwork, and so do the two Switch Pro generations, because Switch 2 Pro art carries a C button and the GL / GR grip tiles.</p>
 <p>Each model registers hit regions for every button, stick, trigger, and the touchpad. Click anywhere on the model to target that control.</p>
 <h3 id="colorways">Colorways<a class="headerlink" href="#colorways" title="Permanent link">&para;</a></h3>
-<p>A model family that ships more than one appearance shows a <strong>Colorway</strong> picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.</p>
-<p>The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2); the Xbox 360, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two.</p>
+<p>A model family that ships more than one appearance shows a <strong>Colorway</strong> picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and is saved with the slot, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.</p>
+<p>The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2). The Xbox 360, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two. Both views read the same stored choice, and a view with no art for it draws its default colorway.</p>
 <h3 id="camera-controls">Camera controls<a class="headerlink" href="#camera-controls" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3809,7 +3869,7 @@
 <blockquote>
 <p><strong>Tip:</strong> Zoom in before using click-to-record so you can target small buttons accurately. Right-click drag to re-center after zooming. Click <strong>Reset View</strong> to snap back to the default angle.</p>
 </blockquote>
-<h3 id="live-highlighting">Live highlighting<a class="headerlink" href="#live-highlighting" title="Permanent link">&para;</a></h3>
+<h3 id="live-highlights">Live highlights<a class="headerlink" href="#live-highlights" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -3866,7 +3926,7 @@
 <p>During Map All (from <a href="../mappings/">Button and Axis Mappings</a>), outputs flash orange one at a time in sequence. Stick axes show a directional arrow and quadrant wedge on the ring. The flash holds until the mapping is recorded, then advances to the next output.</p>
 <hr />
 <h2 id="2d-overlay">2D overlay<a class="headerlink" href="#2d-overlay" title="Permanent link">&para;</a></h2>
-<p>Switch between 3D and 2D with the view-mode button in the top-left corner of the Preview tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlighting, click-to-record, hover previews, and Map All flash.</p>
+<p>Switch between 3D and 2D with the view-mode button in the top-left corner of the Preview tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlights, click-to-record, hover previews, and Map All flash.</p>
 <p>Each controller type has its own 2D layout that places buttons, sticks, triggers, and the touchpad over the base diagram. Click anywhere on a control to record a mapping, the same as in 3D.</p>
 <p>Your choice of view persists across sessions.</p>
 <table>
@@ -3879,7 +3939,7 @@
 <tbody>
 <tr>
 <td>Sticks</td>
-<td>Slide to follow input, no tilt. Hovering shows a quadrant wedge indicating which axis a click would map.</td>
+<td>Slide to follow input, no tilt. Hovering lights the half of the stick a click would map, or its center for the stick button.</td>
 </tr>
 <tr>
 <td>Triggers</td>
@@ -3887,7 +3947,7 @@
 </tr>
 <tr>
 <td>Buttons / D-Pad</td>
-<td>Same accent-color highlighting as the 3D view.</td>
+<td>A pressed-state overlay appears on the control, in the asset pack's cyan rather than the 3D view's accent color.</td>
 </tr>
 </tbody>
 </table>
@@ -3950,10 +4010,10 @@
 <p>A Valve pad has two trackpads and the preview draws both. The first finger rides the left pad and the second the right, following the <strong>Left Pad X</strong>, <strong>Left Pad Y</strong>, <strong>Left Pad Touch</strong>, <strong>Right Pad X</strong>, <strong>Right Pad Y</strong>, and <strong>Right Pad Touch</strong> rows. Each pad's click is its own button row, <strong>Left Pad Click</strong> and <strong>Right Pad Click</strong>, and lights its own pad. On the 2015 Steam Controller the pads are round, so a finger dot never leaves the circle.</p>
 <hr />
 <h2 id="nintendo-preview">Nintendo preview<a class="headerlink" href="#nintendo-preview" title="Permanent link">&para;</a></h2>
-<p>Nintendo slots get both views, like Xbox and PlayStation. The 3D model is the Switch 2 Pro mesh, shared with the <code>switch2-pro</code> profiles. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay uses the Switch Pro artwork, which is its own set rather than the Switch 2 Pro one.</p>
+<p>Nintendo slots get both views, like Xbox and PlayStation. A Nintendo slot runs the original Switch Pro Controller profile or the Switch 2 Pro Controller profile, and both draw the Switch 2 Pro mesh in 3D. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay has a set per generation: the Switch Pro art for the original, and Switch 2 Pro art that adds the C button and the GL / GR grip tiles.</p>
 <p><img alt="Nintendo slot preview" src="../../images/pad-nintendo-configbar.png" /></p>
-<p>The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.</p>
-<p>A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.</p>
+<p>The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture, plus C and GL / GR on the Switch 2 Pro. Live highlights, hover previews, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.</p>
+<p>A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture, plus C, GL, and GR on the Switch 2 Pro. Clicking a control on the diagram records into the matching raw row.</p>
 <hr />
 <h2 id="valve-preview">Valve preview<a class="headerlink" href="#valve-preview" title="Permanent link">&para;</a></h2>
 <p>An Extended slot on a Valve profile gets both views, like the console families. The three pads differ enough that each has its own body and its own 2D set.</p>
@@ -3982,7 +4042,7 @@
 </tbody>
 </table>
 <p>The 2D overlays follow one rule: a control the front art cannot show still gets a place to hover, click, and flash. The Steam Deck's R4 L4 R5 L5 and the 2026 pad's bumpers, triggers, and four rear buttons sit as labeled tiles in a column on each side of the body. The 2015 pad's D-Pad wedges are cut out of the left trackpad and its right stick is drawn over the right trackpad, with printed zone lines marking the wedges and each grip's outline. Those printed marks are decals: always visible, never a click target.</p>
-<p>Live highlighting, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See <a href="../controller-slots/#valve-personas">Controller Slots</a> for the row list per pad.</p>
+<p>Live highlights, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See <a href="../controller-slots/#valve-personas">Controller Slots</a> for the row list per pad.</p>
 <hr />
 <h2 id="vr-preview">VR preview<a class="headerlink" href="#vr-preview" title="Permanent link">&para;</a></h2>
 <p>VR slots draw both SteamVR hands side by side. One slot drives the pair, so there is no single controller body and the 2D/3D toggle is hidden. The art is a flat drawn pack like the branded 2D overlays: one base bitmap with a per-element tint layer composited on top when an element is lit, hovered, or under record.</p>
@@ -4050,7 +4110,7 @@
 <p>The schematic represents the live HID layout for the Extended slot. Xbox or PlayStation visuals render for actual Xbox or PlayStation slots, not for Extended slots that happen to be running an Xbox- or PlayStation-style HIDMaestro profile. The Valve profiles are the one exception, because PadForge ships their own bodies (see <a href="#valve-preview">Valve preview</a>).</p>
 <hr />
 <h2 id="keyboard-mouse-preview">Keyboard + Mouse preview<a class="headerlink" href="#keyboard-mouse-preview" title="Permanent link">&para;</a></h2>
-<p>Keyboard+Mouse slots show a full ANSI QWERTY keyboard and mouse diagram. The 2D/3D toggle is hidden.</p>
+<p>Keyboard+Mouse slots show a full ANSI QWERTY keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to <strong>Mouse Only</strong> draws only the mouse, and one set to <strong>Keyboard Only</strong> draws only the keyboard.</p>
 <table>
 <thead>
 <tr>
@@ -4061,7 +4121,7 @@
 <tbody>
 <tr>
 <td>Keyboard</td>
-<td>Full layout including the numpad. Keys show labels, mapping tooltips, and accent highlighting when active.</td>
+<td>Full layout including the numpad. Keys show labels, mapping tooltips, and an accent highlight when active.</td>
 </tr>
 <tr>
 <td>LMB / RMB</td>
@@ -4120,7 +4180,7 @@
 <li><a href="../../guides/macros/">Macros</a>: trigger and action authoring that uses the same recording flow.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

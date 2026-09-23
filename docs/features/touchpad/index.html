@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2118,6 +2120,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2387,6 +2417,8 @@
       
         
           
+        
+      
         
       
         
@@ -2772,6 +2804,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3580,13 +3640,13 @@
 <h1 id="touchpad">Touchpad<a class="headerlink" href="#touchpad" title="Permanent link">&para;</a></h1>
 <p><em>Per-slot touchpad tuning: continuous output modes (relative mouse, absolute pointer, virtual analog stick, D-pad), synthetic pressure, swipe haptics, and the gesture stack (swipes, taps, longpress, pinch, rotate, shape templates). One physical touchpad in two slots carries two independent configurations.</em></p>
 <p><img alt="Touchpad tab" src="../../images/pad-touchpad.png" /></p>
-<p>The <strong>Touchpad</strong> tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a <a href="../../guides/web-controller/">Web Controller</a> client in DS4 or touchpad-only mode, the on-screen <a href="../dashboard/#touchpad-overlay">Touchpad Overlay</a>, or a Windows Precision Touchpad enumerated through the <a href="../devices/">Devices</a> page.</p>
+<p>The <strong>Touchpad</strong> tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a <a href="../../guides/web-controller/">Web Controller</a> client whose layout has a touchpad or that runs in touchpad-only mode, the on-screen <a href="../dashboard/#touchpad-overlay">Touchpad Overlay</a>, a Windows Precision Touchpad enumerated through the <a href="../devices/">Devices</a> page, or a drawing tablet (below).</p>
 <hr />
 <h2 id="drawing-tablets">Drawing tablets<a class="headerlink" href="#drawing-tablets" title="Permanent link">&para;</a></h2>
 <p>Windows HID pen and digitizer devices appear as <strong>Drawing Tablet</strong> on the Devices page. Start the input engine, select the tablet, and assign it to a virtual controller. Its pen contact appears as Touchpad 1, Finger 1. The picker includes pressure and pen buttons only when the device reports them.</p>
-<p>Enable <strong>Hide Device</strong> on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.</p>
-<p>The status below Hide Device changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with Hide Device.</p>
-<p>Turning Hide Device off returns the pen to Windows. Stopping PadForge follows <strong>Keep HidHide Cloaks Between Launches</strong>: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.</p>
+<p>Enable <strong>Hide from Games (HidHide)</strong> on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.</p>
+<p>The status below that checkbox changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with that checkbox.</p>
+<p>Turning the checkbox off returns the pen to Windows. Stopping PadForge follows <strong>Keep Devices Cloaked Between Launches</strong>: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.</p>
 <table>
 <thead>
 <tr>
@@ -3605,7 +3665,7 @@
 </tr>
 <tr>
 <td>Fixed contact zones</td>
-<td>Map the Finger 1 Down North, South, East, and West sources to D-pad directions or other buttons.</td>
+<td>Map the Touchpad 1 Finger 1 Touch (North Quadrant), (South Quadrant), (East Quadrant), and (West Quadrant) sources to D-pad directions or other buttons.</td>
 </tr>
 <tr>
 <td>Pressure as a trigger</td>
@@ -3924,7 +3984,7 @@
 <p>Every setting row carries a per-field <strong>Reset</strong> button (the small reset arrow on the right). Each setting card carries a <strong>Reset All</strong> button in its header that restores the card's defaults in one click.</p>
 <hr />
 <h2 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">&para;</a></h2>
-<p>Shape matching runs two open-source gesture recognizers on every single-finger shape and keeps whichever one recognizes the stroke (both BSD 3-Clause). The Mouse Output card's Trackpad response is an original C# re-derivation of libinput's touchpad acceleration profile (MIT). Full credits, copyright, and license text are on the in-app <strong>About</strong> page and in the project README.</p>
+<p>Shape matching runs two gesture recognizers on every single-finger shape and keeps whichever one recognizes the stroke. The point-cloud matcher is a C# re-derivation of the $Q Super-Quick Recognizer (BSD 3-Clause). The angular-margin matcher is original C# that follows the algorithm GestureSign's PointPatternAnalyzer describes. GestureSign is GPL-2.0, was read for the algorithm only, and none of its code ships. The Mouse Output card's Trackpad response is an original C# re-derivation of libinput's touchpad acceleration profile (MIT). Full credits, copyright, and license text are on the in-app <strong>About</strong> page and in the project README.</p>
 <hr />
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3936,7 +3996,7 @@
 <li><a href="../devices/">Devices</a> for enumerating a laptop trackpad as a touchpad source.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

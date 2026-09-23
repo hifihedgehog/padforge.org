@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3949,7 +4009,11 @@
 </tr>
 <tr>
 <td><code>CHROMA state=...</code></td>
-<td>Every state transition</td>
+<td>Every state transition from a live worker</td>
+</tr>
+<tr>
+<td><code>CHROMA superseded worker dropped state=...</code></td>
+<td>A report an orphan would have made</td>
 </tr>
 <tr>
 <td><code>CHROMA effect rejected: {category ...}, retrying on the next poll</code></td>
@@ -4111,7 +4175,7 @@
 <p>There is no keep-alive in the SDK. A set color persists.</p>
 <h3 id="generation-token-and-orphans">Generation token and orphans<a class="headerlink" href="#generation-token-and-orphans" title="Permanent link">&para;</a></h3>
 <p>Native calls are unbounded. <code>Init</code> during a G HUB cold start can sit for the 14 seconds Artemis waits out. <code>Stop</code> cancels, waits <code>stopWaitMs</code>, and when the wait expires it publishes the task into <code>s_orphan</code>, logs <code>LIGHTSYNC stop timed out after ... ms, worker orphaned inside the SDK</code>, and returns. The owner disposes and recreates the service on re-enable, so the orphan belongs to a dead instance.</p>
-<p>Two static fields make that safe. <code>s_generation</code> increments on every <code>Start</code>, and each worker captures the value it started under. <code>Superseded(generation)</code> is true once a newer Start exists. A superseded worker drops its <code>StateChanged</code> reports (its closure targets the Dashboard the live instance now owns) and skips <code>RestoreAndShutdown</code> at both teardown sites, since <code>LogiLedShutdown</code> is process-global and would kill the newer session. It still unloads its own module handle. The next worker's first act is to wait for <code>s_orphan</code> to complete before loading the engine, reporting <code>WaitingForGHub</code> and logging <code>LIGHTSYNC waiting for the orphaned worker of the previous session to leave the SDK</code> while it does, then clears the slot with a <code>CompareExchange</code>. <code>LightsyncLightbarTests.OrphanedWorker_NeverShutsDownOrReportsOverTheNewSession</code> and <code>OrphanedStreamingWorker_SkipsRestoreShutdownAtThePostSessionTeardown</code> pin both teardown sites.</p>
+<p>Two static fields make that safe. <code>s_generation</code> increments on every <code>Start</code>, and each worker captures the value it started under. <code>Superseded(generation)</code> is true once a newer Start exists. A superseded worker drops its <code>StateChanged</code> reports (its closure targets the Dashboard the live instance now owns) and skips <code>RestoreAndShutdown</code> at both teardown sites, since <code>LogiLedShutdown</code> is process-global and would kill the newer session. It still unloads its own module handle. The next worker's first act is to wait for <code>s_orphan</code> to complete before loading the engine, reporting <code>WaitingForGHub</code> and logging <code>LIGHTSYNC waiting for the orphaned worker of the previous session to leave the SDK</code> while it does. The wait is bounded by <code>DefaultOrphanWaitMs</code> (15000), past the 14 seconds Artemis waits out. On the deadline the worker logs <code>LIGHTSYNC orphan wait timed out after ... ms, loading the engine anyway</code> and goes on to the engine, because an overlapped session beats a dead feature. A finished orphan is cleared from the slot with a <code>CompareExchange</code>. A straggler stays in the slot, so the next worker gives it its own bounded wait. <code>LightsyncLightbarTests.OrphanedWorker_NeverShutsDownOrReportsOverTheNewSession</code> and <code>OrphanedStreamingWorker_SkipsRestoreShutdownAtThePostSessionTeardown</code> pin both teardown sites, and <code>OrphanThatNeverReturns_ReleasesTheNewWorkerAtTheDeadline</code> pins the deadline.</p>
 <h3 id="diag-lines_1">Diag lines<a class="headerlink" href="#diag-lines_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4148,6 +4212,10 @@
 <tr>
 <td><code>LIGHTSYNC waiting for the orphaned worker of the previous session to leave the SDK</code></td>
 <td>A new worker found a live orphan</td>
+</tr>
+<tr>
+<td><code>LIGHTSYNC orphan wait timed out after {n} ms, loading the engine anyway</code></td>
+<td>The orphan wait reached its deadline</td>
 </tr>
 </tbody>
 </table>
@@ -4217,11 +4285,11 @@
 <tbody>
 <tr>
 <td><code>ChromaLightbarTests.cs</code></td>
-<td>An in-process <code>HttpListener</code> fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, and the teardown DELETE. <code>FeedAndSiblingContracts</code> counts the persistence legs against the web-controller sibling.</td>
+<td>An in-process <code>HttpListener</code> fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, the teardown DELETE, and an orphaned worker's dropped reports. <code>FeedAndSiblingContracts</code> counts the persistence legs against the web-controller sibling.</td>
 </tr>
 <tr>
 <td><code>LightsyncLightbarTests.cs</code></td>
-<td>A scripted <code>ILogiLedNative</code> fake. Pins init order, percent conversion, change-only plus liveness sends, no-software retry without an engine load, refused-init unload, fail-streak re-init and recovery, and both orphan teardown sites.</td>
+<td>A scripted <code>ILogiLedNative</code> fake. Pins init order, percent conversion, change-only plus liveness sends, no-software retry without an engine load, refused-init unload, fail-streak re-init and recovery, both orphan teardown sites, and the orphan-wait deadline.</td>
 </tr>
 <tr>
 <td><code>ProfileServiceToggleTests.cs</code></td>
@@ -4230,7 +4298,7 @@
 </tbody>
 </table>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

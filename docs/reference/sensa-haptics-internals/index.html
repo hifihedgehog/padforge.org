@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3647,20 +3707,22 @@
 <p>On success the worker reports <code>Active</code>. The provider stays up for the life of the worker. There is no liveness probe against Synapse after that.</p>
 <hr />
 <h2 id="worker-lifecycle">Worker lifecycle<a class="headerlink" href="#worker-lifecycle" title="Permanent link">&para;</a></h2>
-<p>The worker is a dedicated background <code>Thread</code> named <code>SensaHaptics</code>, not a task. <code>Start</code> is a no-op while <code>_thread</code> is set. <code>Stop</code> sets <code>_stop</code>, joins for 3000 ms, and nulls <code>_thread</code> regardless, so a worker still inside <code>ProviderInit</code> can outlive its service.</p>
+<p>The worker is a dedicated background <code>Thread</code> named <code>SensaHaptics</code>, not a task. <code>Start</code> is a no-op while <code>_thread</code> is set. In a process that cannot load the engine (<code>PlatformSupport.SensaAvailable</code> is true only for x64), <code>Start</code> reports <code>Unsupported</code> on the caller's thread and starts no worker. <code>Stop</code> sets <code>_stop</code>, joins for 3000 ms, and nulls <code>_thread</code> regardless, so a worker still inside <code>ProviderInit</code> can outlive its service.</p>
 <p>That outliving worker is the predecessor-join rule. Its <code>finally</code> disarms the publisher, zeroes the amplitude, and calls <code>Har.Quit</code>, and if it ran under the next instance's engine it would tear that engine down. So every worker's first act is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Interlocked</span><span class="p">.</span><span class="n">Exchange</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_lastWorker</span><span class="p">,</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">);</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prev</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prev</span><span class="p">.</span><span class="n">IsAlive</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">prev</span><span class="p">.</span><span class="n">Join</span><span class="p">(</span><span class="n">_predecessorJoinMs</span><span class="p">))</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">{</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_lastWorker</span><span class="p">,</span><span class="w"> </span><span class="n">prev</span><span class="p">,</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">);</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="c1">// finally reports Stopped.</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_publisherArmed</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">PadForge</span><span class="p">.</span><span class="n">Engine</span><span class="p">.</span><span class="n">SdlDiagLog</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="s">$&quot;SENSA predecessor join timed out after {_predecessorJoinMs} ms, worker quitting without arming&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="c1">// finally reports Stopped.</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_publisherArmed</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 </code></pre></div>
 <p>The predecessor's teardown lands before the successor arms and inits, never after. <code>s_lastWorker</code> is static because the publisher flag it protects is.</p>
 <p>The join is bounded at 10 seconds (<code>DefaultPredecessorJoinMs</code>). That is long past any bring-up the provider completes and short enough that a wedged one costs a single wait. On the deadline the successor hands the slot back to the straggler and quits without arming, because arming over a live predecessor is the exact handoff fault the join exists to prevent: that predecessor's <code>finally</code> would then disarm the publisher underneath it. An unbounded join blocked every later worker and leaked one thread per enable.</p>
-<p><code>SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor</code> holds a worker in <code>BeforeProviderInit</code>, stops it, starts a second service, and asserts the second worker waits for the first to exit.</p>
+<p><code>SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor</code> holds a worker in <code>BeforeProviderInit</code>, stops it, starts a second service, and asserts the second worker waits for the first to exit. <code>Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever</code> keeps the first worker parked past a shortened deadline and asserts the second quits without a provider attempt and reports <code>Stopped</code>.</p>
 <table>
 <thead>
 <tr>
@@ -3763,8 +3825,12 @@
 <td>Every start attempt</td>
 </tr>
 <tr>
+<td><code>SENSA predecessor join timed out after {n} ms, worker quitting without arming</code></td>
+<td>The predecessor join hit its deadline</td>
+</tr>
+<tr>
 <td><code>SENSA worker: calling HAR.Init</code></td>
-<td>Worker entry</td>
+<td>Worker entry, after the predecessor join</td>
 </tr>
 <tr>
 <td><code>SENSA HAR.dll not found</code></td>
@@ -3829,11 +3895,19 @@
 </tr>
 <tr>
 <td><code>Service_ArmsPublisherAndDegradesWithoutRuntime</code></td>
-<td>Publisher armed while running, <code>WaitingForRuntime</code> reported, at least one provider attempt</td>
+<td>Publisher armed while running, a state reported before <code>Stopped</code> (<code>WaitingForRuntime</code> on a bench without Synapse), at least one provider attempt</td>
+</tr>
+<tr>
+<td><code>Service_ReportsUnsupportedAndStartsNoWorkerWhereTheEngineCannotLoad</code></td>
+<td>The ARM64 branch: <code>Unsupported</code> raised once on the caller's thread, no worker</td>
 </tr>
 <tr>
 <td><code>Service_NextWorkerWaitsForAStragglingPredecessor</code></td>
 <td>The predecessor-join rule</td>
+</tr>
+<tr>
+<td><code>Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever</code></td>
+<td>The bounded join: the successor quits without arming</td>
 </tr>
 <tr>
 <td><code>FeedAndSiblingContracts</code></td>
@@ -3843,7 +3917,7 @@
 </table>
 <p>Live rendering on Sensa hardware was not verified by the maintainer.</p>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

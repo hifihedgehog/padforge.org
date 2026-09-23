@@ -4,7 +4,7 @@
 
 ![Touchpad tab](../images/pad-touchpad.png)
 
-The **Touchpad** tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a [Web Controller](../guides/web-controller.md) client in DS4 or touchpad-only mode, the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay), or a Windows Precision Touchpad enumerated through the [Devices](devices.md) page.
+The **Touchpad** tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a [Web Controller](../guides/web-controller.md) client whose layout has a touchpad or that runs in touchpad-only mode, the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay), a Windows Precision Touchpad enumerated through the [Devices](devices.md) page, or a drawing tablet (below).
 
 ---
 
@@ -12,17 +12,17 @@ The **Touchpad** tab appears on any slot whose assigned device exposes a touchpa
 
 Windows HID pen and digitizer devices appear as **Drawing Tablet** on the Devices page. Start the input engine, select the tablet, and assign it to a virtual controller. Its pen contact appears as Touchpad 1, Finger 1. The picker includes pressure and pen buttons only when the device reports them.
 
-Enable **Hide Device** on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.
+Enable **Hide from Games (HidHide)** on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.
 
-The status below Hide Device changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with Hide Device.
+The status below that checkbox changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with that checkbox.
 
-Turning Hide Device off returns the pen to Windows. Stopping PadForge follows **Keep HidHide Cloaks Between Launches**: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.
+Turning the checkbox off returns the pen to Windows. Stopping PadForge follows **Keep Devices Cloaked Between Launches**: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.
 
 | Use | Mapping |
 |---|---|
 | Relative mouse movement | Assign the tablet to a Keyboard / Mouse virtual controller. Map Touchpad 1 Finger 1 X and Y to Mouse X and Y. A new contact starts with zero movement. |
 | Stick movement from a swipe | Enable Stick / D-Pad Output on the Touchpad tab. Map Touchpad Stick X and Y to the desired stick axes. Each contact sets a new center. |
-| Fixed contact zones | Map the Finger 1 Down North, South, East, and West sources to D-pad directions or other buttons. |
+| Fixed contact zones | Map the Touchpad 1 Finger 1 Touch (North Quadrant), (South Quadrant), (East Quadrant), and (West Quadrant) sources to D-pad directions or other buttons. |
 | Pressure as a trigger | Map Touchpad 1 Finger 1 Pressure to the trigger. Pressure returns to zero on lift. This source appears only if the tablet reports pressure. |
 | Virtual controller touchpad | On a PlayStation virtual controller, the default mapping carries the tablet's position and contact. Other layouts with touchpad targets can use explicit X, Y, and contact mappings. Pen contact does not automatically press the virtual touchpad click button. |
 | Absolute cursor positioning | Map Touchpad 1 Pointer X and Y to Mouse X and Y. This places the cursor at the corresponding screen position. |
@@ -218,7 +218,7 @@ Every setting row carries a per-field **Reset** button (the small reset arrow on
 
 ## Credits
 
-Shape matching runs two open-source gesture recognizers on every single-finger shape and keeps whichever one recognizes the stroke (both BSD 3-Clause). The Mouse Output card's Trackpad response is an original C# re-derivation of libinput's touchpad acceleration profile (MIT). Full credits, copyright, and license text are on the in-app **About** page and in the project README.
+Shape matching runs two gesture recognizers on every single-finger shape and keeps whichever one recognizes the stroke. The point-cloud matcher is a C# re-derivation of the $Q Super-Quick Recognizer (BSD 3-Clause). The angular-margin matcher is original C# that follows the algorithm GestureSign's PointPatternAnalyzer describes. GestureSign is GPL-2.0, was read for the algorithm only, and none of its code ships. The Mouse Output card's Trackpad response is an original C# re-derivation of libinput's touchpad acceleration profile (MIT). Full credits, copyright, and license text are on the in-app **About** page and in the project README.
 
 ---
 
@@ -233,4 +233,4 @@ Shape matching runs two open-source gesture recognizers on every single-finger s
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

@@ -11,7 +11,7 @@ The Gyro tab appears when the slot's assigned physical device exposes a gyroscop
 
 ## When the tab shows
 
-The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, and any Extended profile that wires gyro axes all qualify. Pads with no motion sensor never see the tab.
+The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, a handheld PC's own motion sensor, and a Sony headset's head motion all qualify. Pads with no motion sensor never see the tab.
 
 On a device with an accelerometer and no gyroscope, such as a Wii Remote without Motion Plus, the tab shows only the cards that read the accelerometer: Grip, Motion Steering, and Gyro Tilt. The five rate cards (Motion Passthrough, Calibration, Sensitivity, Response Shaping, Engage) stay hidden. Before 4.4.0 the whole tab was gated on a gyroscope, so those three cards were unreachable on such a remote.
 
@@ -49,13 +49,13 @@ The row's reset button (**Reset Grip**) returns Held As to Pointing.
 
 ## Motion Passthrough
 
-The first card carries one checkbox: **Apply Gyro Tuning to Motion Passthrough**.
+The Motion Passthrough card carries one checkbox: **Apply Gyro Tuning to Motion Passthrough**.
 
 Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.
 
 Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The [engage gates](#engage-gates) come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.
 
-The virtual controller types that carry motion to the game are PlayStation slots (DualShock 4, DualSense) and the Nintendo (virtual Switch Pro) type since 4.1.0. Xbox, Extended, MIDI, and Keyboard + Mouse slots have no motion channel.
+The virtual controllers that carry motion to the game are PlayStation slots (DualShock 4, DualSense), Nintendo slots (Switch Pro since 4.1.0, and Switch 2 Pro), and Extended slots on the Valve profiles (Steam Deck and both Steam Controllers). Xbox, MIDI, Keyboard + Mouse, and every other Extended profile have no motion channel.
 
 Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice.
 
@@ -102,7 +102,7 @@ Top-level scaling, axis inversion, and the reference frame the gyro is interpret
 
 ### Units
 
-The **Units** dropdown offers **Multiplier** (the default) and **Degrees per screen turn**. It is a saved preference only: neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.
+The **Units** dropdown offers **Multiplier** (the default) and **Degrees per Screen Turn**. It is a saved preference only: neither choice changes how the sliders read. Both sensitivity sliders always take a multiplier, and the "≈ N°/turn" readout beside each slider gives the Steam-style equivalent at all times. 1.0× reads ≈ 360°/turn, 2.5× reads ≈ 144°/turn.
 
 ### Horizontal and Vertical
 
@@ -188,7 +188,7 @@ Reshape applied after smoothing, before either Acceleration stage.
 | Aggressive | x² (slow stays slow, fast amplifies hard) |
 | Relaxed | √x (slow amplifies, fast saturates) |
 | Wide | x^1.5. Sits between Linear and Aggressive. Milder than Aggressive. |
-| Extra wide | x^2.5. Stronger than Aggressive. |
+| Extra Wide | x^2.5. Stronger than Aggressive. |
 
 The stages run in a fixed order: curve first, then this tab's Acceleration, then the per-row Acceleration from the mapping table.
 
@@ -355,7 +355,7 @@ Since 4.1.0, rows with a continuous source also carry an **Acceleration** contro
 
 ## Per pad, per slot persistence
 
-Calibration, sensitivity, smoothing, curve, and engage values save per pad per slot. Assigning the same pad to two slots gives you two independent tunings. Removing the pad from a slot keeps the values cached for next time.
+Calibration, sensitivity, smoothing, curve, and engage values save per pad per slot. Assigning the same pad to two slots gives you two independent tunings. Removing the pad from a slot drops its values there, and assigning it again starts from the defaults.
 
 The values save automatically to your profile whenever you change anything on this tab.
 
@@ -369,6 +369,7 @@ Every row has a reset button (circular arrow icon). Each card except Grip and Co
 |---|---|
 | Reset Grip | Held As back to Pointing |
 | Reset Motion Passthrough | Apply Gyro Tuning to Motion Passthrough |
+| Reset Motion Steering | Both tilt deadzones and the orientation |
 | Reset Gyro Tilt | Full Tilt Range, Tilt Deadzone |
 | Reset Calibration | Auto-cal bias + timestamp |
 | Reset Sensitivity | Units, Space, Horizontal, Vertical, all three Invert flags, Real-World Calibration |
@@ -443,4 +444,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

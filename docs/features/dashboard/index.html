@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2191,6 +2193,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2460,6 +2490,8 @@
       
         
           
+        
+      
         
       
         
@@ -2845,6 +2877,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3726,7 +3786,7 @@
 <h1 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">&para;</a></h1>
 <p><em>PadForge's home screen. Engine status, virtual controllers, and every service PadForge runs beside them, on one page.</em></p>
 <!-- SCREENSHOT: dashboard -->
-<p><img alt="Dashboard overview showing engine status, virtual controllers, and driver health" src="../../images/dashboard.png" /></p>
+<p><img alt="Dashboard overview showing engine status, virtual controllers, and services" src="../../images/dashboard.png" /></p>
 <hr />
 <h2 id="sections">Sections<a class="headerlink" href="#sections" title="Permanent link">&para;</a></h2>
 <p>Ten sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then input services, output services, and overlays.</p>
@@ -3780,8 +3840,8 @@
 </tr>
 </tbody>
 </table>
-<p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the <a href="../settings/">Settings</a> page under Driver Management.</p>
-<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link is the one toggle that stays global: a link between two PCs is not a per-game setting.</p>
+<p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the <a href="../settings/">Settings</a> page. See <a href="../driver-management/">Driver Management</a>.</p>
+<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -3803,7 +3863,7 @@
 </tr>
 <tr>
 <td><strong>Polling frequency</strong></td>
-<td>Live polling rate in Hz, e.g. <code>987.3 Hz</code>. Dash when stopped.</td>
+<td>Live polling rate in Hz, e.g. <code>987.3 Hz</code>. Dash when the engine is stopped or idle.</td>
 </tr>
 <tr>
 <td><strong>Device count</strong></td>
@@ -3827,7 +3887,7 @@
 </tr>
 <tr>
 <td><strong>Idle</strong></td>
-<td>Gold flame. The engine started, but no enabled slot has a connected device (a mapped device that is offline does not count once its grace period ends) and no linked PC is sharing input, so there's nothing to process.</td>
+<td>Gold flame. The engine started, but no enabled slot has a connected device (a mapped device that is offline does not count once its grace period ends) and no paired PC is connected over Remote Link, so there's nothing to process.</td>
 </tr>
 <tr>
 <td><strong>Stopping</strong></td>
@@ -3840,7 +3900,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Tip:</strong> Turn on <strong>Auto-Start Engine on Launch</strong> in <a href="../settings/">Settings</a> to skip the manual power click each time.</p>
+<p><strong>Tip:</strong> <strong>Auto-Start Engine on Launch</strong> in <a href="../settings/">Settings</a>, on by default, starts the engine when PadForge opens, so no power click is needed.</p>
 </blockquote>
 <hr />
 <h2 id="virtual-controllers">Virtual Controllers<a class="headerlink" href="#virtual-controllers" title="Permanent link">&para;</a></h2>
@@ -3870,7 +3930,7 @@
 <tr>
 <td><strong>Type track</strong></td>
 <td>Second row</td>
-<td>A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember. The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: with Windows MIDI Services missing the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate.</td>
+<td>A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: with Windows MIDI Services missing the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate.</td>
 </tr>
 <tr>
 <td><strong>Per-type instance number</strong></td>
@@ -3880,7 +3940,7 @@
 <tr>
 <td><strong>Device roster</strong></td>
 <td>Third row</td>
-<td>Every mapped device, each with a device-class icon, a Bluetooth icon on wireless links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty.</td>
+<td>Every mapped device, each with a device-class icon, a Bluetooth icon on Bluetooth links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty.</td>
 </tr>
 <tr>
 <td><strong>Status text + counts</strong></td>
@@ -3890,7 +3950,7 @@
 <tr>
 <td><strong>Stage ledger</strong></td>
 <td>Fifth row</td>
-<td>One small icon per pipeline stage the slot's devices have: sticks, triggers, gyro, lighting, touchpad, audio. An icon glows ember when that stage carries a non-default setup and stays steel when it is untouched. Hover an icon for a per-device readout.</td>
+<td>One small icon per pipeline stage the slot's devices have: sticks, triggers, gyro, lighting, touchpad, audio. An icon glows ember when that stage carries a non-default setup and stays steel when it is untouched. Hover a lit icon for a per-device readout.</td>
 </tr>
 <tr>
 <td><strong>Delete button (X)</strong></td>
@@ -3913,12 +3973,12 @@
 <tr>
 <td><strong>Forging</strong></td>
 <td>Ember, with a glow</td>
-<td>Enabled, a device is connected, output is live. Holds through the HIDMaestro inactivity grace period (default 60 s).</td>
+<td>Enabled, a device is connected, output is live.</td>
 </tr>
 <tr>
 <td><strong>Idle</strong></td>
 <td>Ember, with a glow</td>
-<td>A mapped device dropped offline. The controller holds through its grace period, so the flame stays the same as Forging until the timeout tears it down.</td>
+<td>A mapped device dropped offline. The controller holds through the HIDMaestro inactivity grace period (default 60 s), so the flame stays the same as Forging until the timeout tears it down.</td>
 </tr>
 <tr>
 <td><strong>Awaiting devices</strong></td>
@@ -3976,12 +4036,16 @@
 <td><strong>Status indicator</strong></td>
 <td>A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on <code>&lt;url&gt;</code>" until clients connect, then "Running (<code>&lt;n&gt;</code> clients)".</td>
 </tr>
+<tr>
+<td><strong>QR code and address</strong></td>
+<td>Shown while the server runs: a QR code to scan with a phone camera, and the address with a copy button.</td>
+</tr>
 </tbody>
 </table>
 <p>See <a href="../../guides/web-controller/">Web Controller</a> for full details.</p>
 <hr />
 <h2 id="remote-link">Remote Link<a class="headerlink" href="#remote-link" title="Permanent link">&para;</a></h2>
-<p>Shares controllers with a paired PadForge on another PC over your network. A device on one PC shows up as an ordinary input device on the other.</p>
+<p>Shares controllers with a paired PadForge on another PC, on your network or across the internet. A device on one PC shows up as an ordinary input device on the other.</p>
 <table>
 <thead>
 <tr>
@@ -4011,7 +4075,7 @@
 <h3 id="identity-protection">Identity Protection<a class="headerlink" href="#identity-protection" title="Permanent link">&para;</a></h3>
 <p>Sets how this PC stores its pairing identity. <strong>Secure: This PC Only</strong> keys it to the machine. The portable modes carry your pairings on a thumb drive between machines.</p>
 <h3 id="paired-pcs-and-nearby-pcs">Paired PCs and Nearby PCs<a class="headerlink" href="#paired-pcs-and-nearby-pcs" title="Permanent link">&para;</a></h3>
-<p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, and revoke, plus <strong>Revoke All</strong>. <strong>Nearby PCs (Not Paired)</strong> lists peers discovered on the network. <strong>Or Connect by Address (Advanced)</strong> reaches a peer by IP when discovery can't find it.</p>
+<p><strong>Paired PCs</strong> lists your established pairings, each with rename, connect, revoke, an <strong>Allow Remote Assignment Changes</strong> box, and <strong>Assign Shared Devices</strong> while that PC is online, plus <strong>Revoke All</strong>. <strong>Nearby PCs (Not Paired)</strong> lists peers discovered on the network. <strong>Or Connect by Address (Advanced)</strong> reaches a peer by IP when discovery can't find it, or across the internet by the other PC's code. <strong>This PC's Code</strong> shows yours once Remote Link has found this PC's public address.</p>
 <p>See <a href="../../guides/remote-link/">Remote Link</a> for full details.</p>
 <hr />
 <h2 id="head-tracking">Head Tracking<a class="headerlink" href="#head-tracking" title="Permanent link">&para;</a></h2>
@@ -4057,13 +4121,17 @@
 <td>Overrides one axis on its own. Zero follows the range above. Rotation is in degrees, travel in centimeters. Each box shows the value you pinned, never the range it resolves to.</td>
 </tr>
 <tr>
+<td><strong>Set Neutral</strong></td>
+<td>Makes your current head position the neutral. Applies to the OpenXR headset input only.</td>
+</tr>
+<tr>
 <td><strong>Status</strong></td>
-<td><em>Stopped</em> while every input is off or the engine is stopped. The UDP and FreeTrack lines are <em>Waiting for a tracker on UDP port <code>&lt;port&gt;</code>.</em>, <em>Receiving over UDP from <code>&lt;address&gt;</code>.</em>, <em>Receiving from FreeTrack shared memory.</em>, or <em>UDP port <code>&lt;port&gt;</code> is in use by another program.</em> The OpenXR lines are <em>Starting the OpenXR session</em>, <em>Waiting for <code>&lt;runtime&gt;</code> to report a tracked pose</em>, <em>Reading <code>&lt;runtime&gt;</code></em>, <em>No OpenXR runtime is installed</em>, <em>The OpenXR runtime reports no headset</em>, <em>This runtime cannot supply a background session</em>, or <em>The OpenXR session failed. See the diagnostics log.</em></td>
+<td><em>Stopped</em> while every input is off or the engine is stopped. The UDP and FreeTrack lines include <em>Waiting for a tracker on UDP port <code>&lt;port&gt;</code>.</em>, <em>Receiving over UDP from <code>&lt;address&gt;</code>.</em>, <em>Receiving from FreeTrack shared memory.</em>, <em>Waiting for FreeTrack shared memory data.</em>, <em>FreeTrack shared memory is unavailable.</em>, and <em>UDP port <code>&lt;port&gt;</code> is in use by another program.</em> The OpenXR lines are <em>Starting the OpenXR session</em>, <em>Waiting for <code>&lt;runtime&gt;</code> to report a tracked pose</em>, <em>Reading <code>&lt;runtime&gt;</code></em>, <em>No OpenXR runtime is installed</em>, <em>The OpenXR runtime reports no headset</em>, <em>This runtime cannot supply a background session</em>, or <em>The OpenXR session failed. See the diagnostics log.</em></td>
 </tr>
 </tbody>
 </table>
-<p>Each input toggle has its own authored profile opinion. The port, the two ranges and the per-axis overrides remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.</p>
-<p>Turning on OpenXR headset input also brings up the two <strong>VR Controller</strong> rows on the Devices page when the runtime reports hand controllers.</p>
+<p>The UDP and FreeTrack toggles each carry their own authored profile opinion. The OpenXR toggle, the runtime choice, the port, the two ranges and the per-axis overrides remain global. FreeTrack-only input opens no UDP socket and shows shared-memory status without a UDP waiting message.</p>
+<p>Turning on OpenXR headset input also brings up the two <strong>VR Controller</strong> rows on the Devices page. They stay idle until the runtime reports hand controllers.</p>
 <p>See <a href="../head-tracking/">Head Tracking</a> for the OpenTrack setup and <a href="../vr-controller-input/">VR Controller Input</a> for the OpenXR side.</p>
 <hr />
 <h2 id="motion-server">Motion Server<a class="headerlink" href="#motion-server" title="Permanent link">&para;</a></h2>
@@ -4175,7 +4243,7 @@
 </tr>
 </tbody>
 </table>
-<p>The overlay tracks up to five finger contacts, the Windows Precision Touchpad ceiling, and forwards them to whichever PlayStation-output slot has a touchpad bound. Multi-touch needs the OS to report touch events. Mouse drag falls back to one finger on slot 0. Three or more fingers on the overlay drag the window itself to a new spot.</p>
+<p>The overlay tracks up to two finger contacts and feeds them to every slot its <strong>Touchpad Overlay</strong> device is assigned to on the <a href="../devices/">Devices</a> page. It needs the OS to report touch events: a mouse does not draw a finger on it. Three or more fingers on the overlay drag the window itself to a new spot, and so does a right-button mouse drag. A double tap with one finger, or a press on the bar along the bottom edge, clicks the touchpad.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4191,7 +4259,7 @@
 <li><a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>: the Razer Chroma, Logitech LIGHTSYNC, and Sensa HD sections.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

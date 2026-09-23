@@ -2085,6 +2085,8 @@
       
         
       
+        
+      
     
     
     
@@ -2951,6 +2953,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3220,6 +3250,8 @@
       
         
           
+        
+      
         
       
         
@@ -3605,6 +3637,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -5311,14 +5371,14 @@
 </tbody>
 </table>
 <p>An <strong>Assigned Devices</strong> source also reaches devices that are not gamepads. An NFC reader shows an <strong>Any NFC Tag</strong> button plus one button per tag you have registered. A media device shows its named media keys (Play/Pause, Mute, and the rest). Tap a registered tag or press a media key to fire the macro, the same way a button press does.</p>
-<p>An Assigned Devices trigger does not have to name a specific device. Entries picked from the <strong>(Any device)</strong> group fire from whichever assigned device provides that input, and they render with an "(Any device)" chip. Profiles imported from the <a href="../steam-workshop-import/">Steam Workshop</a> use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.</p>
+<p>An Assigned Devices trigger does not have to name a specific device. Entries picked from the <strong>(Any Device)</strong> group fire from whichever assigned device provides that input, and they render with an "(Any Device)" chip. Profiles imported from the <a href="../steam-workshop-import/">Steam Workshop</a> use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.</p>
 <h3 id="record-a-trigger">Record a trigger<a class="headerlink" href="#record-a-trigger" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Click <strong>Record Trigger</strong>.</li>
+<li>Click the record icon (tooltip <strong>Record Trigger</strong>).</li>
 <li>Hold the buttons you want.</li>
 <li>Push a stick or pull a trigger past the threshold to add an axis input.</li>
 <li>Tap a D-pad direction to add a hat input.</li>
-<li>Click <strong>Stop</strong> when the inputs you want are listed.</li>
+<li>Click the icon again (tooltip <strong>Stop</strong>) when the inputs you want are listed. Recording also stops on its own 5 seconds after it starts.</li>
 </ol>
 <h3 id="trigger-input-types">Trigger input types<a class="headerlink" href="#trigger-input-types" title="Permanent link">&para;</a></h3>
 <table>
@@ -5339,29 +5399,29 @@
 </tr>
 <tr>
 <td>D-pad / POV hat</td>
-<td>Fires when the hat matches the recorded direction. The match is a 45-degree sector, so "Up" also catches small diagonals.</td>
+<td>Fires when the hat matches the recorded direction. The match is a 45-degree sector centered on that direction, so an 8-way D-pad's diagonal does not count as Up.</td>
 </tr>
 </tbody>
 </table>
 <p>A mixed example: LB + Right Stick X (Positive) + D-pad Up. All three must hold for the macro to fire.</p>
 <h3 id="axis-threshold">Axis threshold<a class="headerlink" href="#axis-threshold" title="Permanent link">&para;</a></h3>
-<p>When the trigger has a <strong>Virtual Controller</strong> axis, a <strong>Threshold</strong> slider appears (1 to 100 percent, default 50). The axis must cross that percent to count.</p>
+<p>When the trigger has a <strong>Virtual Controller</strong> axis, a <strong>Threshold</strong> slider appears (1 to 100 percent, default 50) with a <strong>Direction</strong> dropdown (Any, Positive, Negative). Recording sets the direction to the way you moved the axis.</p>
 <ul>
-<li>10 percent. A tiny push fires the macro.</li>
-<li>90 percent. You need to push almost all the way.</li>
-<li>The <strong>Direction</strong> dropdown (Any, Positive, Negative) picks which side of the axis counts, and the threshold applies to that side.</li>
+<li><strong>Positive</strong> and <strong>Negative</strong> measure from the middle of the axis toward that end, and the threshold is a percent of that half. On a stick, 10 percent fires on a tiny push and 90 percent needs a push almost all the way.</li>
+<li><strong>Any</strong> measures a stick's push from the middle in either direction, as a percent of that half.</li>
+<li>A trigger is measured from rest whatever the direction, so 50 percent fires at a half pull.</li>
 </ul>
 <p><strong>Assigned Devices</strong> axis entries do not use this slider. Each one carries its own per-entry <strong>Invert</strong>, <strong>Half</strong>, <strong>Bidirectional</strong>, and <strong>Deadzone</strong> controls instead.</p>
 <h3 id="gesture-triggers">Gesture triggers<a class="headerlink" href="#gesture-triggers" title="Permanent link">&para;</a></h3>
 <p>A trigger can be a touchpad gesture or a mouse gesture instead of a button combo. You pick these from a list, not by recording. Recording deliberately skips gestures so a stray swipe cannot overwrite the combo.</p>
 <ol>
-<li>Click <strong>Add from List</strong> next to <strong>Record Trigger</strong>.</li>
-<li>The dropdown lists buttons, POV directions, stick and trigger axes, the touchpad click, and every gesture enabled on the slot.</li>
+<li>Open the <strong>Add from List</strong> dropdown under <strong>Source</strong>.</li>
+<li>The dropdown lists the slot's buttons, POV directions, stick and trigger axes, the touchpad click and finger contacts, gyro axes, and gestures, along with on/off sources such as NFC tags, voice phrases, and menu cells.</li>
 <li>Pick the gesture you want. It joins the trigger the same as a recorded input.</li>
 </ol>
 <!-- SCREENSHOT: macro-add-from-list -->
 <p><img alt="The Add from List dropdown showing gestures alongside buttons and axes" src="../../images/macro-add-from-list.png" /></p>
-<p>Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the <a href="../../features/touchpad/">Touchpad</a> tab. Mouse gestures (flick left, right, up, down, or a plain click) appear once you enable them for that mouse, including the gestures armed by a <strong>Custom</strong> activation input. Gesture triggers work with every fire mode, including On Release.</p>
+<p>Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the <a href="../../features/touchpad/">Touchpad</a> tab. Mouse gestures (flick left, right, up, down, or a plain click) appear for each button picked under <strong>Gesture Buttons</strong> on the <strong>Mouse</strong> tab, <strong>Custom</strong> included, and fire only while <strong>Enable Mouse Gestures</strong> is on. Gesture triggers work with every fire mode, including On Release.</p>
 <h3 id="menu-cells-as-triggers">Menu cells as triggers<a class="headerlink" href="#menu-cells-as-triggers" title="Permanent link">&para;</a></h3>
 <p>A cell on an on-screen <a href="../menus/">menu</a> can name a macro. While the cell is fired, the macro counts as triggered, on top of whatever trigger it already has. The macro's own fire mode still applies: a <strong>While Held</strong> macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. A macro with no trigger of its own can be driven this way alone. The <strong>Layer</strong> scope and the rest of the macro's settings apply as usual, since the cell feeds the same evaluator.</p>
 <p>Set it up on the <strong>Menus</strong> tab: pick <strong>Macro</strong> as the cell's binding and choose the macro by name. The <strong>Macro</strong> choice appears once the slot has at least one macro.</p>
@@ -5370,24 +5430,24 @@
 <ul>
 <li><strong>Motion Shake</strong> is listed for every assigned device with an accelerometer. It reads the strength of a shake and ignores slow tilting.</li>
 <li><strong>Nunchuk Shake</strong> is the Nunchuk's own accelerometer on a Wii Remote. On a combined Joy-Con pair the same entry is <strong>Left Joy-Con Shake</strong>. On any other two-sensor device it is <strong>Aux Motion Shake</strong>.</li>
-<li>On a button target the row fires past 25 percent of a shake by default. A deadzone value on the row replaces that threshold. On an axis target the row reads the shake strength from 0 to 1.</li>
+<li>On a button target the row fires once the shake passes the row's <strong>Axis-to-Button Deadzone</strong>, 50 percent (about 1 g) unless you change it. On an axis or trigger target the row reads the shake strength from 0 to 1.</li>
 </ul>
 <hr />
 <h2 id="custom-expression-trigger-mode">Custom Expression trigger mode<a class="headerlink" href="#custom-expression-trigger-mode" title="Permanent link">&para;</a></h2>
 <p>Pick <strong>Custom Expression</strong> in the <strong>Fire</strong> dropdown when the shape you want is bigger than a fixed combo. Chords across two pads. "Press this only if that other thing isn't pressed." Axes crossing a threshold that depends on another axis. Anything you can write as a small expression.</p>
 <h3 id="variables">Variables<a class="headerlink" href="#variables" title="Permanent link">&para;</a></h3>
-<p>Add as many variables as the formula needs. Each one becomes a letter: <code>a</code> for the first, <code>b</code> for the second, then <code>c</code>, <code>d</code>, <code>e</code>, and as many more as you add. The formula refers to those letters.</p>
+<p>Add up to 32 variables. Each one becomes a letter: <code>a</code> for the first, <code>b</code> for the second, and so on through <code>z</code>. Variables 27 through 32 go by index, <code>s[26]</code> through <code>s[31]</code>. The formula refers to those names.</p>
 <p>Each variable binds to one of two things:</p>
 <ul>
-<li>An <strong>Assigned Devices</strong> input: any button, POV direction, or axis on any physical device assigned to the slot.</li>
-<li>A <strong>Virtual Controller</strong> channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.</li>
+<li>An <strong>Assigned Devices</strong> input: any button or POV direction, or one of the first six axes (the stick and trigger axes), on any physical device assigned to the slot.</li>
+<li>A <strong>Virtual Controller</strong> channel: a standard button, D-pad direction, trigger, or stick axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.</li>
 </ul>
 <p>Click the record icon (tooltip <strong>Record Trigger</strong>) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip <strong>Clear</strong>) to wipe a binding.</p>
 <h3 id="trigger-formula">Trigger Formula<a class="headerlink" href="#trigger-formula" title="Permanent link">&para;</a></h3>
 <p>The <strong>Trigger Formula</strong> text box accepts:</p>
 <ul>
 <li>Variables: <code>a</code>, <code>b</code>, <code>c</code>, … (or the indexed form <code>s[0]</code>, <code>s[1]</code>, …).</li>
-<li>Math operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>.</li>
+<li>Math operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> (remainder).</li>
 <li>Comparisons: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code>, <code>!=</code>.</li>
 <li>Logic: <code>&amp;&amp;</code> (and), <code>||</code> (or), <code>!</code> (not), <code>?:</code> (if/else).</li>
 <li>Functions: <code>abs</code>, <code>min</code>, <code>max</code>, <code>clamp</code>, <code>sign</code>, <code>lerp</code>, <code>round</code>, <code>sqrt</code>, <code>pow</code>, <code>hypot</code>, <code>deadzone</code>, <code>floor</code>, <code>ceil</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>atan2</code>. Every one has a chip on the palette below the box.</li>
@@ -5423,12 +5483,12 @@
 </tr>
 </tbody>
 </table>
-<p>Click a recipe to drop it into the formula box.</p>
+<p>Click a recipe to drop it into the formula box. The row continues with the shared recipes from the mapping editor's formula box (Half Scale, Weighted Blend, Threshold Gate, and the rest).</p>
 <h3 id="how-it-fires">How it fires<a class="headerlink" href="#how-it-fires" title="Permanent link">&para;</a></h3>
 <p>Rising-edge detection. The macro fires once when the formula's value crosses 0.5 going up. It does not fire again until the value drops below 0.5 and rises past it.</p>
 <p>Boolean variables (button held, POV match) read as 0 or 1. A trigger axis reads 0 at rest and 1 fully pulled. A stick axis reads 0.5 at rest, falling toward 0 as you push one way and rising toward 1 as you push the other. A chord of two buttons crosses 0.5 when both go high.</p>
 <p>A stick sits at 0.5 at rest, which already meets the fire threshold, so a bare stick variable is active before you touch it. To fire on stick deflection, measure distance from center. <code>abs(a - 0.5)</code> reaches 0.25 once the stick passes halfway in either direction, so <code>abs(a - 0.5) &gt; 0.25</code> fires past that point. The <strong>Axis past 50%</strong> recipe writes that formula for you.</p>
-<p>See <a href="../../features/mappings/">Button and Axis Mappings</a> for the cross-device input picker the variable rows share with the rest of the app, and for the operator palette the Trigger Formula box uses.</p>
+<p>See <a href="../../features/mappings/">Button and Axis Mappings</a> for the mapping editor's formula box, whose operator palette and shared recipes the Trigger Formula box reuses.</p>
 <hr />
 <h2 id="fire-modes">Fire modes<a class="headerlink" href="#fire-modes" title="Permanent link">&para;</a></h2>
 <p>The <strong>Fire</strong> dropdown sets when the macro runs.</p>
@@ -5454,7 +5514,7 @@
 </tr>
 <tr>
 <td><strong>While Held</strong></td>
-<td>Every frame while the trigger is active. Good for turbo fire and live mouse control.</td>
+<td>Over and over while the trigger is active. The sequence starts again each time it finishes. Good for turbo fire and live mouse control.</td>
 </tr>
 <tr>
 <td><strong>On Long Press</strong></td>
@@ -5470,7 +5530,7 @@
 </tr>
 <tr>
 <td><strong>On Triple Press</strong></td>
-<td>When the trigger is pressed three times within the Press Window. If held on the third press, it stays active until release.</td>
+<td>When the trigger is pressed three times, each press within the Press Window of the one before. If held on the third press, it stays active until release.</td>
 </tr>
 <tr>
 <td><strong>Toggle</strong></td>
@@ -5482,7 +5542,7 @@
 </tr>
 <tr>
 <td><strong>Always</strong></td>
-<td>Every frame, with no trigger. Good for stick-to-mouse and a permanent volume knob.</td>
+<td>Over and over with no trigger. The sequence starts again each time it finishes. Good for stick-to-mouse and a permanent volume knob.</td>
 </tr>
 <tr>
 <td><strong>Custom Expression</strong></td>
@@ -5511,7 +5571,7 @@
 <td>How close together the presses must land.</td>
 </tr>
 <tr>
-<td><strong>Interval</strong> (ms)</td>
+<td><strong>Interval</strong> (ms, default 100)</td>
 <td>Toggle, Turbo</td>
 <td>The repeat pacing. These two modes repeat until release on their own, so the Repeat section is replaced by this one field.</td>
 </tr>
@@ -5530,12 +5590,12 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Any layer</strong> (default)</td>
+<td><strong>Any Layer</strong> (default)</td>
 <td>Regardless of the engaged layer.</td>
 </tr>
 <tr>
 <td><strong>Base</strong></td>
-<td>Only while the slot is on the unshifted Base.</td>
+<td>While the slot is on Base, and while an engaged layer inherits unmapped targets from Base, the way a Base mapping row falls through.</td>
 </tr>
 <tr>
 <td>A named layer</td>
@@ -5543,13 +5603,13 @@
 </tr>
 </tbody>
 </table>
-<p>The dropdown appears once the slot has at least one shift layer. A macro that arrives with a scope already set (pasted or imported) shows the row even on a slot with no layers, so the scope stays visible and clearable.</p>
+<p>The dropdown appears once the slot has at least one shift layer. A macro that arrives with a scope already set shows the row even on a slot with no layers, so the scope stays visible and clearable. Paste and Copy From keep a named-layer scope only when the destination slot has that layer or came from the same Steam Workshop import as a slot that has it. Otherwise the copy lands on <strong>Any Layer</strong>.</p>
 <hr />
 <h2 id="actions">Actions<a class="headerlink" href="#actions" title="Permanent link">&para;</a></h2>
 <p><img alt="The Move Mouse to Position action editor" src="../../images/macro-move-mouse.png" /></p>
 <p>Actions run in list order, top to bottom, each time the macro fires.</p>
 <h3 id="the-action-type-picker">The action-type picker<a class="headerlink" href="#the-action-type-picker" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Add Action</strong> and the type dropdown opens grouped by what the action acts on. Each group is a header in the list, and every type carries its tooltip.</p>
+<p>Click <strong>Add Action</strong> to add a Button Press step, then pick its kind from the <strong>Type</strong> dropdown. The dropdown groups the types by what they act on, each group under a header, and most types carry a tooltip.</p>
 <table>
 <thead>
 <tr>
@@ -5607,13 +5667,13 @@
 <h3 id="button-press-button-release">Button Press / Button Release<a class="headerlink" href="#button-press-button-release" title="Permanent link">&para;</a></h3>
 <p>Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.</p>
 <ul>
-<li>Names follow the slot's output type (Xbox labels, PlayStation labels, or numbered buttons for Extended Custom).</li>
+<li>Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names.</li>
 <li>Select more than one button to fire them together.</li>
 </ul>
 <h3 id="key-press-key-release">Key Press / Key Release<a class="headerlink" href="#key-press-key-release" title="Permanent link">&para;</a></h3>
 <p>Send a keyboard keystroke. The game sees it as a real key.</p>
 <ul>
-<li>Combos work (Ctrl+C, Ctrl+Alt+Delete, etc.). Keys press in order and release in reverse.</li>
+<li>Combos work (Ctrl+C, Ctrl+Shift+S, and so on). Keys press in order and release in reverse.</li>
 <li>Type the combo string or pick from the dropdown.</li>
 </ul>
 <h3 id="text-block">Text Block<a class="headerlink" href="#text-block" title="Permanent link">&para;</a></h3>
@@ -5699,7 +5759,7 @@
 <h3 id="combo-break">Combo Break<a class="headerlink" href="#combo-break" title="Permanent link">&para;</a></h3>
 <p>The sequence pauses here. Press the trigger again to continue. A held trigger must be released first. Chain several to split one macro into a press-by-press combo.</p>
 <h3 id="set-axis">Set Axis<a class="headerlink" href="#set-axis" title="Permanent link">&para;</a></h3>
-<p>Force a virtual controller axis to a fixed value. The <strong>Value</strong> box is a percent of full deflection.</p>
+<p>Force a virtual controller axis to a fixed value for one frame. <strong>Hold Axis</strong> keeps a value for a duration, and <strong>Set Axis (Latched)</strong> keeps it until released. The <strong>Value</strong> box is a percent of full deflection.</p>
 <table>
 <thead>
 <tr>
@@ -5714,12 +5774,12 @@
 </tr>
 <tr>
 <td>Trigger (LT, RT)</td>
-<td>Percent of pull. 0 is released, 100 is a full pull.</td>
+<td>Percent of pull. 0 is released and 100 is a full pull.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="hold-axis">Hold Axis<a class="headerlink" href="#hold-axis" title="Permanent link">&para;</a></h3>
-<p>Writes the axis value every frame for the duration. With the Until Release repeat mode, the axis stays asserted until the trigger releases.</p>
+<p>Writes the axis value every frame for the duration. With the Until Release repeat mode and a repeat <strong>Delay</strong> of 0, the axis stays asserted until the trigger releases.</p>
 <h3 id="axis-add-relative">Axis Add (Relative)<a class="headerlink" href="#axis-add-relative" title="Permanent link">&para;</a></h3>
 <p>Adds a signed percent on top of what the mapping already wrote to the axis, every frame for the duration. Negative values subtract. Trigger targets add on the pull scale (100 percent is a full pull).</p>
 <h3 id="set-axis-latched">Set Axis (Latched)<a class="headerlink" href="#set-axis-latched" title="Permanent link">&para;</a></h3>
@@ -5733,7 +5793,7 @@
 <h3 id="repeat-axis-while-held">Repeat Axis While Held<a class="headerlink" href="#repeat-axis-while-held" title="Permanent link">&para;</a></h3>
 <p>Axis turbo. While the trigger is held, asserts the axis value on an on/off square wave at the set interval.</p>
 <h3 id="yield-to-physical-input">Yield to Physical Input<a class="headerlink" href="#yield-to-physical-input" title="Permanent link">&para;</a></h3>
-<p>Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a <strong>Yield to Physical Input</strong> checkbox. When physical movement pushes the target axis past the threshold, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.</p>
+<p>Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a <strong>Yield to Physical Input</strong> checkbox. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.</p>
 <h3 id="system-volume">System Volume<a class="headerlink" href="#system-volume" title="Permanent link">&para;</a></h3>
 <p>Map an axis to Windows master volume. Updates every frame.</p>
 <ul>
@@ -5745,7 +5805,7 @@
 <h3 id="app-volume">App Volume<a class="headerlink" href="#app-volume" title="Permanent link">&para;</a></h3>
 <p>Same as System Volume, but it drives one app in the Windows audio mixer.</p>
 <ul>
-<li><strong>Process.</strong> The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.</li>
+<li><strong>Process.</strong> The app to control (Spotify, Firefox, Discord), by its process name without .exe. The dropdown lists apps that have an audio session on the default playback device.</li>
 <li>The other options match System Volume.</li>
 </ul>
 <h3 id="raise-headphone-volume-lower-headphone-volume">Raise Headphone Volume / Lower Headphone Volume<a class="headerlink" href="#raise-headphone-volume-lower-headphone-volume" title="Permanent link">&para;</a></h3>
@@ -5756,7 +5816,7 @@
 <ul>
 <li><strong>Sound File.</strong> The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).</li>
 <li><strong>Volume.</strong> Scales the file against the slot's master volume.</li>
-<li><strong>Loop Until Stopped.</strong> Repeat until a <strong>Stop Sounds</strong> action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.</li>
+<li><strong>Loop Until Stopped.</strong> Repeat until a <strong>Stop Sounds</strong> action runs, or until the trigger's release ends a run that repeats until release (the <strong>Until Release</strong> repeat mode, or the Turbo and Toggle fire modes). One-shots play to the end.</li>
 </ul>
 <p><strong>Stop Sounds</strong> ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See <a href="../../features/controller-audio/">Controller Audio</a> for how sounds route to the selected controller, the <strong>Output Path</strong> setting, and sound packages.</p>
 <h3 id="mouse-move">Mouse Move<a class="headerlink" href="#mouse-move" title="Permanent link">&para;</a></h3>
@@ -5777,7 +5837,7 @@
 <li>Stick Y scrolls in both directions. Triggers scroll one way.</li>
 </ul>
 <h3 id="mouse-wheel-tick">Mouse Wheel Tick<a class="headerlink" href="#mouse-wheel-tick" title="Permanent link">&para;</a></h3>
-<p>Sends one discrete wheel detent per fire. The <strong>Value</strong> is the signed tick count. Positive scrolls up, or right with <strong>Scroll Horizontal</strong> checked.</p>
+<p>Sends a fixed number of wheel detents per fire. The <strong>Value</strong> is the signed tick count, and 0 sends one tick. Positive scrolls up, or right with <strong>Scroll Horizontal</strong> checked.</p>
 <h3 id="toggle-wheel-scroll">Toggle Wheel Scroll<a class="headerlink" href="#toggle-wheel-scroll" title="Permanent link">&para;</a></h3>
 <p>Each fire latches or unlatches a continuous scroll. While latched, it sends the tick count once per interval until the next fire or until the macro is disabled.</p>
 <h3 id="nudge-cursor">Nudge Cursor<a class="headerlink" href="#nudge-cursor" title="Permanent link">&para;</a></h3>
@@ -5804,7 +5864,7 @@
 <p>Warp the cursor to a fixed screen spot in one press. One jump, no pinning: the cursor is free again the instant it lands.</p>
 <ul>
 <li><strong>Mouse X / Mouse Y.</strong> The target coordinate in pixels on the primary monitor.</li>
-<li><strong>Pick on screen.</strong> Click it, then place the cursor where you want it. The button counts down three seconds ("Capturing in 3...") and captures the spot into the two fields.</li>
+<li><strong>Pick on Screen.</strong> Click it, then place the cursor where you want it. The button counts down three seconds ("Capturing in 3...") and captures the spot into the two fields.</li>
 </ul>
 <p>Good for map pings, minimap clicks, and menu buttons that always live at the same spot. Community configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> use this action for their cursor-warp bindings.</p>
 <h3 id="set-lightbar-color">Set Lightbar Color<a class="headerlink" href="#set-lightbar-color" title="Permanent link">&para;</a></h3>
@@ -5814,7 +5874,7 @@
 <li><strong>Reactive (Fade).</strong> Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.</li>
 <li><strong>Sticky (Hold).</strong> Hold the color at full brightness until a <strong>Clear Lightbar Override</strong> action or a fresh override replaces it. Good for armed / disarmed markers.</li>
 </ul>
-<p>Available on slots that have at least one Sony pad (DualShock 4, DualSense, DualSense Edge).</p>
+<p>It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.</p>
 <h3 id="clear-lightbar-override">Clear Lightbar Override<a class="headerlink" href="#clear-lightbar-override" title="Permanent link">&para;</a></h3>
 <p>Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.</p>
 <h3 id="set-lightbar-mode">Set Lightbar Mode<a class="headerlink" href="#set-lightbar-mode" title="Permanent link">&para;</a></h3>
@@ -5982,12 +6042,12 @@
 </tr>
 <tr>
 <td><strong>Until Release</strong></td>
-<td>Loops while the trigger is held. Requires <strong>While Held</strong>.</td>
+<td>Loops while the trigger is held and stops on release. Unavailable with <strong>On Short Press</strong>.</td>
 </tr>
 </tbody>
 </table>
 <p>Fixed Count and Until Release both have a <strong>Delay</strong> in milliseconds between runs.</p>
-<p>In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline <strong>Interval</strong> field beside the fire mode. On Short Press hides it too, because the trigger is already released when the macro fires and an until-release loop can never run.</p>
+<p>In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline <strong>Interval</strong> field beside the fire mode. On Short Press keeps the section but disables <strong>Until Release</strong>, because the trigger is already released when the macro fires and an until-release loop can never run. <strong>Fixed Count</strong> still works there.</p>
 <p>Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 50 ms. A presses every 100 ms (about 10 times a second) while held.</p>
 <hr />
 <h2 id="consume-trigger-buttons">Consume trigger buttons<a class="headerlink" href="#consume-trigger-buttons" title="Permanent link">&para;</a></h2>
@@ -6010,7 +6070,7 @@
 </tr>
 </tbody>
 </table>
-<p>Consume works for virtual controller buttons, raw device buttons, and touchpad or gyro style inputs. Assigned Devices button entries are stripped at the source, before mapping. Axis-threshold, POV, and gesture triggers are not consumed. Always and Custom Expression macros never consume anything, since they ignore the trigger entry list.</p>
+<p>Consume works for virtual controller buttons, raw device buttons, and touchpad or gyro style inputs. Assigned Devices button entries are stripped at the source, before mapping. Axis-threshold, POV, and gesture entries are not consumed, and an Assigned Devices combo that includes an axis entry consumes nothing. Always and Custom Expression macros ignore the trigger entry list, so they never consume an Assigned Devices entry left over from another mode.</p>
 <hr />
 <h2 id="how-actions-run-together">How actions run together<a class="headerlink" href="#how-actions-run-together" title="Permanent link">&para;</a></h2>
 <table>
@@ -6024,12 +6084,12 @@
 <tbody>
 <tr>
 <td>Sequential</td>
-<td>Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis, Switch Layer</td>
+<td>Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis, Switch Layer, and every other action not in the next two rows</td>
 <td>One at a time, top to bottom.</td>
 </tr>
 <tr>
 <td>Continuous</td>
-<td>System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held</td>
+<td>System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held, Voice Listen (While Held)</td>
 <td>Every frame, all in parallel.</td>
 </tr>
 <tr>
@@ -6084,7 +6144,7 @@
 <h3 id="turbo-fire">Turbo fire<a class="headerlink" href="#turbo-fire" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fire mode: While Held</li>
-<li>Trigger: Right Trigger axis, threshold 50 percent</li>
+<li>Trigger: Right Trigger axis from the <strong>Assigned Devices</strong> source, <strong>Deadzone</strong> 50 percent</li>
 <li>Repeat: Until Release, delay 50 ms</li>
 <li>Action: Button Press: A (30 ms)</li>
 </ul>
@@ -6108,12 +6168,12 @@
 <li>Delay: 50 ms</li>
 <li>Key Press: G (50 ms)</li>
 <li>Delay: 50 ms</li>
-<li>Key Press: Return (50 ms). Sends the message.</li>
+<li>Key Press: Enter (50 ms). Sends the message.</li>
 </ul>
 <p>Increase the delays if the game needs more time between keystrokes.</p>
 <hr />
 <h2 id="extended-custom-button-support">Extended Custom button support<a class="headerlink" href="#extended-custom-button-support" title="Permanent link">&para;</a></h2>
-<p>Extended slots set to <strong>Custom</strong> support up to 128 buttons. The trigger recorder and the Button Press dropdown grow to match the slot's button count. Xbox, PlayStation, and gamepad-shaped HIDMaestro profiles use the standard button names.</p>
+<p>An Extended slot carries up to 128 buttons, set in its <strong>Buttons</strong> field with <strong>Customize</strong> on. The trigger recorder and the Button Press button list grow to match the slot's button count. Those buttons show as numbers (Btn 1, Btn 2, and so on), except on Switch Pro family, Steam Deck, and Steam Controller profiles, which use the pad's own names. Xbox and PlayStation slots use their standard button names.</p>
 <hr />
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
@@ -6145,7 +6205,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: fixes for macros that do not fire.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

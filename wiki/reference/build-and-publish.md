@@ -35,7 +35,7 @@ PadForge.sln
 │   │                         Xbox sets split by colorway subfolder
 │   ├── Converter/            WPF value converters
 │   ├── Controls/             Custom controls (RangeSlider, CurveEditor, EqCurveControl,
-│   │                         TriggerTravelArc)
+│   │                         SettingResetButton, TriggerTravelArc)
 │   ├── Resources/            Icons, SDL3 DLL, embedded driver installers, localization
 │   └── Properties/           AssemblyInfo.cs
 │
@@ -49,6 +49,8 @@ PadForge.sln
 │
 ├── PadForge.Tests/           xunit suite for App + Engine (net10.0-windows10.0.26100.0)
 ├── PadForge.SteamWorkshop.Tests/  xunit suite for the Workshop client (offline fixtures + golden translation snapshots)
+├── PadForge.NativeChecks/    Console helper (net10.0-windows) that PadForge.Tests runs in a child
+│                             process against the bundled x64 SDL3.dll
 │
 ├── nuget-local/              Local NuGet source (MIDI Services SDK)
 ├── nuget.config               Registers nuget.org + nuget-local/ as package sources
@@ -62,12 +64,13 @@ PadForge.sln
     ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
     ├── WdgProbe/             Runs the app's own ACPI _WDG / WMI learner path outside the app
     ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
+    ├── rowmeasure/           WPF width-measurement harness for fixed-size rows, every locale
     ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
     └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, runtime traces, asset
                               generation (see Development Scripts)
 ```
 
-Line endings are repo-enforced. `.gitattributes` carries a single `* text=auto` rule, so a text file committed from a CRLF working tree is still stored with LF. A CRLF copy of one file once turned a 167-line change into a 12,000-line diff.
+Line endings are repo-enforced. `.gitattributes` opens with a `* text=auto` rule, so a text file committed from a CRLF working tree is still stored with LF. A CRLF copy of one file once turned a 167-line change into a 12,000-line diff. Two narrower rules set the checkout: the driver INFs under `PadForge.App/Resources` check out with CRLF, because a signed catalog hashes the exact bytes of each INF it covers, and `*.sh` scripts check out with LF, because bash reads a carriage return as part of each command.
 
 ## Prerequisites
 
@@ -75,12 +78,12 @@ Line endings are repo-enforced. `.gitattributes` carries a single `* text=auto` 
 |-------------|---------|-------|
 | .NET SDK | 10.0+ | `net10.0-windows10.0.26100.0` target framework |
 | Windows SDK | 10.0.26100.57 | Set via `WindowsSdkPackageVersion` in App csproj |
-| Windows | 10/11 x64 | WPF + Windows-specific P/Invoke |
-| Visual Studio (optional) | 2022+ | Not required. `dotnet` CLI suffices |
+| Windows | 10 or 11 | WPF builds on Windows only. An x64 machine builds both the x64 and the ARM64 exe |
+| Visual Studio (optional) | 2022+ | Not required. Its own MSBuild runs on .NET Framework, which lacks the Brotli the art packer needs, so build with the `dotnet` CLI |
 
 Minimum supported OS: Windows 10 1809 (build 17763), set via `SupportedOSPlatformVersion` in the App csproj.
 
-All native DLLs, the HidHide installer, and model assets are checked into the repository. The build needs no external downloads. The Windows MIDI Services SDK installer is fetched from GitHub releases on demand at runtime when the user clicks Install, not at build time.
+All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. The Windows MIDI Services SDK installer is fetched from GitHub releases on demand at runtime when the user clicks Install, not at build time.
 
 ## Build Commands
 
@@ -92,7 +95,7 @@ dotnet build -c Debug
 
 Output: `PadForge.App/bin/Debug/net10.0-windows10.0.26100.0/win-x64/`
 
-Suitable for development and debugging. **Not deployable**. Produces loose DLLs and requires the .NET runtime.
+Suitable for development and debugging. **Not deployable**. Produces about 300 loose files, the self-contained .NET runtime among them, instead of one exe.
 
 ### Release Build
 
@@ -124,7 +127,7 @@ For Windows on ARM (preliminary, since 4.5.1), add the runtime identifier:
 dotnet publish PadForge.App/PadForge.App.csproj -c Release -r win-arm64
 ```
 
-Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-arm64/publish/`, one ~269 MB `PadForge.exe`. It cross-compiles on an x64 machine. With no `-r` the build is x64, so every existing command produces what it always has. See [Building for ARM64](#building-for-arm64) for what differs.
+Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-arm64/publish/`, one ~310 MB `PadForge.exe`. It cross-compiles on an x64 machine. With no `-r` the build is x64, so every existing command produces what it always has. See [Building for ARM64](#building-for-arm64) for what differs.
 
 `SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll` and the three Visual C++ runtime files are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain x64 `dotnet build` drops all twelve beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
 
@@ -183,7 +186,7 @@ The App csproj defines these publish properties:
 
 Preliminary since 4.5.1. Nothing on this path has run on ARM64 hardware: the bench is x64 and cannot execute ARM64 code, so the checks are static.
 
-Every bundled native binary sits in a folder named for its architecture: `Resources/SDL3/x64` and `Resources/SDL3/arm64`, and the same pair for `OpenXInput` and `VisualCpp`. `Interhaptics` has an `x64` folder only. `NativeBinaryArchitectureTests` reads the PE header of every `.dll` and `.sys` in those folders and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a `vcruntime140_1.dll` that is an x64 image.
+Every bundled native binary sits in a folder named for its architecture: `Resources/SDL3/x64` and `Resources/SDL3/arm64`, and the same pair for `OpenXInput` and `VisualCpp`. `Interhaptics` has an `x64` folder only. `NativeBinaryArchitectureTests` reads the PE header of every `.dll` and `.sys` in an `x64` or `arm64` folder under `Resources` and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a `vcruntime140_1.dll` that is an x64 image.
 
 A publish for either architecture is refused by the `RequireBundledNatives` target if `SDL3.dll` or `libusb-1.0.dll` is missing from `Resources/SDL3/<arch>`, or `xinput1_4.dll` from `Resources/OpenXInput/<arch>`, and an ARM64 publish if `libvosk.dll` is missing from `Resources/Vosk/arm64`. Those `Content` items are conditioned on `Exists`, so without that target a missing DLL would publish anyway, and the auto build runs no tests that would notice. Without `SDL3.dll` the input engine cannot start. Without `libusb-1.0.dll` wired Switch 2 controllers and the GameCube adapter never open, which is the 4.5.0 regression. Without the fork's `xinput1_4.dll` SDL loads the system one and PadForge reads its own virtual controllers back as input. The same target refuses any runtime other than `win-x64` and `win-arm64`, which would otherwise be handed the x64 libraries. A plain `dotnet build` is let through with a message. `SDL3.dll` and `xinput1_4.dll` come from the forks, the ARM64 pair cross-compiled with `cmake -A ARM64`.
 
@@ -274,14 +277,18 @@ The Engine targets `net10.0-windows` (no specific SDK version needed). SDL3 and 
 App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the repo root. All three csproj files link it in:
 
 ```xml
-<Compile Include="..\SharedVersion.cs">
-  <Link>Properties\SharedVersion.cs</Link>
-</Compile>
+<Compile Include="..\SharedVersion.cs" Link="Properties\SharedVersion.cs" />
 ```
 
-`SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in each project carries the other assembly metadata (title, copyright, COM GUID, theme info) and explicitly does **not** carry version attributes. Every project sets `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
+`SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in the App and the Engine carries the other assembly metadata (title, copyright, COM GUID, and theme info in the App). The SteamWorkshop one carries only `InternalsVisibleTo`. None of them carries version attributes. Every project sets `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
 
-**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.5.0.0`.
+**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.5.3.0`.
+
+### Build Identity
+
+Every build between two releases carries the same version, so the App also stamps the commit it was built from. The `StampBuildIdentity` target in the App csproj runs before `CoreCompile`, reads `git`, and writes `PadForgeBuildIdentity.g.cs` into the intermediate folder with three `AssemblyMetadata` attributes: the commit count (`PadForgeBuildNumber`), the seven-character hash (`PadForgeCommit`) and the full hash (`PadForgeCommitSha`). It stamps them only in a full, non-shallow clone of this repository whose `HEAD` holds `PadForge.App/PadForge.App.csproj`. A shallow clone, a tree with no git, or a checkout nested inside another repository stamps nothing. The target clears the three properties before it reads git, so a `/p:` override on the command line does not reach the exe.
+
+`BuildIdentity.Display` turns the stamp into the text the Diagnostics card's App Version shows, for example `4.5.3 (r3682@176208e)`, or the version alone when nothing was stamped. The in-app updater orders dev builds by the commit count. See [Updates Internals](updates-internals.md#build-identity).
 
 ## NuGet Dependencies
 
@@ -289,18 +296,18 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 
 | Package | Version | Source | Purpose |
 |---------|---------|--------|---------|
-| **WPF-UI** | 4.3.0 | nuget.org | Fluent Design theme for WPF (dark mode, NavigationView, controls) |
+| **CommunityToolkit.Mvvm** | 8.2.2 | nuget.org | MVVM: `ObservableObject`, `RelayCommand` |
+| **Concentus** | 2.2.2 | nuget.org | Pure-C# Opus encoder and decoder for the DualSense Bluetooth speaker and microphone streams |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | nuget.org | 3D viewport rendering (OBJ model loading, camera, lighting) |
-| **CommunityToolkit.Mvvm** | 8.2.2 | nuget.org | MVVM: `ObservableObject`, `RelayCommand`, `[ObservableProperty]` |
-| **Concentus** | 2.2.2 | nuget.org | Pure-C# Opus encoder for the DualSense Bluetooth speaker stream |
-| **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI loopback audio capture for bass-driven rumble detection |
+| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Windows MIDI Services SDK for virtual MIDI device creation |
+| **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI capture, playback and endpoint enumeration, Media Foundation decode, and mixing through its NAudio.Core dependency: the controller speaker mirror, macro sounds, voice-macro microphones, bass shakers, and bass-driven rumble detection |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) |
+| **System.Management** | 10.0.11 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
 | **System.Speech** | 10.0.0 | nuget.org | SAPI recognizer behind the voice-macro trigger (#317) |
 | **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown. Its targets file also copies `libvosk.dll` and the MinGW runtime into the output |
-| **System.Management** | 10.0.11 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
-| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Windows MIDI Services SDK for virtual MIDI device creation |
+| **WPF-UI** | 4.3.0 | nuget.org | Fluent Design theme for WPF (dark mode, NavigationView, controls) |
 
-`HIDMaestro.Core` (the virtual Xbox / PlayStation controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.7.2.0`. The DLL's own file version is the authority, because the csproj comment naming the shipped build is hand-maintained and drifts: at this commit that comment still says v1.7.1.
+`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.9.0.0`, and the csproj comment naming the shipped build says v1.9.0. That comment is hand-maintained, so when the two disagree the DLL's own file version is the authority.
 
 The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
 
@@ -317,13 +324,13 @@ The Workshop client is the #9 community config import feature. Every client cons
 | Package | Version | Purpose |
 |---|---|---|
 | **BouncyCastle.Cryptography** | 2.6.2 | X25519 / Ed25519 / ChaCha20-Poly1305 for Remote Link pairing and transport, on the Win10 1809 floor where the in-box AEAD is gated to Win11 22000+ |
-| **System.Security.Cryptography.ProtectedData** | 10.0.9 | DPAPI at-rest protection for Remote Link peer identity keys |
+| **System.Security.Cryptography.ProtectedData** | 10.0.9 | DPAPI at-rest protection for this PC's Remote Link identity key |
 
 All SDL3 and system interop still uses raw `[DllImport]` P/Invoke.
 
 ### Test Projects
 
-`PadForge.Tests` and `PadForge.SteamWorkshop.Tests` both reference xunit 2.9.3, xunit.runner.visualstudio 3.1.4, Microsoft.NET.Test.Sdk 17.14.1, and coverlet.collector 6.0.4.
+`PadForge.Tests` and `PadForge.SteamWorkshop.Tests` both reference coverlet.collector 6.0.4, Microsoft.NET.Test.Sdk 17.14.1, xunit 2.9.3, and xunit.runner.visualstudio 3.1.4. `PadForge.Tests` also references Jint 4.16.2, a JavaScript interpreter its touchpad web-page tests run the page script in.
 
 ### Local NuGet Source (`nuget-local/`)
 
@@ -398,7 +405,7 @@ Source location: `PadForge.App/Resources/SDL3/<arch>/`
 ```
 
 - **OpenXInput-derived.** Forked from `Nemirtingas/OpenXInput` with a HIDMaestro classifier added to the enumeration step so HM virtuals are skipped during slot assignment.
-- **Replaces the system `xinput1_4.dll` via DLL search order.** The application directory is searched before `System32` for non-KnownDLLs, so when SDL3 calls `LoadLibrary("xinput1_4.dll")` this local copy resolves first and SDL's XInput backend uses it instead of Microsoft's.
+- **Replaces the system `xinput1_4.dll` via DLL search order.** In a loose build the DLL sits in the application directory, which Windows searches before `System32` for non-KnownDLLs. In the single-file exe it is extracted to `%TEMP%\.net\PadForge\<hash>\`, and `App.OnStartup` passes that folder to `SetDllDirectory`, which also puts it ahead of `System32`. Either way, when SDL3 calls `LoadLibrary("xinput1_4.dll")` this copy resolves first and SDL's XInput backend uses it instead of Microsoft's.
 - **`devobj.dll` is deliberately not shipped alongside it.** A stub `devobj.dll` would pre-empt `System32\devobj.dll` for the whole process and crash `setupapi.dll` during HID class enumeration. `xinput1_4.dll`'s `devobj.dll` import resolves from `System32` unaided. See [Driver Installation Internals](driver-installation-internals.md).
 
 Source location: `PadForge.App/Resources/OpenXInput/<arch>/`. The ARM64 DLL links the C runtime statically and has the same export table as the x64 one, down to the unnamed ordinals 100 to 104, 108 and 109.
@@ -442,7 +449,7 @@ PadForge v2's vJoy and ViGEmBus installers are no longer bundled. v4 detects eit
 </EmbeddedResource>
 ```
 
-Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. `Ds3DriverInstaller.ExtractDrivers()` walks every manifest resource whose name starts with `BthPS3.`, strips that prefix, and drops the files under `%TEMP%\PadForge\BthPS3Drivers\` before running `pnputil`. The explicit `LogicalName` preserves the subdirectory layout inside the manifest name. Each 3.0.0 INF names both architectures, `[SourceDisksFiles.amd64]` and `[SourceDisksFiles.arm64]`, and Windows installs the binary that matches the machine, so both builds of PadForge embed both.
+Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. `Ds3DriverInstaller.ExtractDrivers()` walks every manifest resource whose name starts with `BthPS3.`, strips that prefix, and drops the files under `%TEMP%\PadForge\BthPS3Drivers\` before running `pnputil`. The explicit `LogicalName` preserves the subdirectory layout inside the manifest name. The two 3.0.0 INFs that carry a binary, `BthPS3.inf` and `BthPS3PSM.inf`, each name both architectures, `[SourceDisksFiles.amd64]` and `[SourceDisksFiles.arm64]`, and Windows installs the binary that matches the machine, so both builds of PadForge embed both.
 
 | Directory | Contents |
 |-----------|----------|
@@ -460,7 +467,7 @@ Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUS
 
 Only the opaque texture atlases are embedded directly, as JPEG, because JPEG is already compressed. Everything else goes through the `EmbedPackedArt` target described below. Loaded at runtime via `ControllerModelBase.LoadModel()`.
 
-The Sony and Xbox families are split one folder per colorway, and each colorway holds a full part set. The counts below are per colorway.
+The Sony and Xbox families are split one folder per colorway. The counts below are one colorway's full part set. Not every colorway folder carries its own (see `SharedGeometry` under Packed Art).
 
 | Directory | Colorways | Contents |
 |-----------|-----------|----------|
@@ -488,7 +495,7 @@ its own. The `EmbedPackedArt` target runs an inline `PackAssets` task before
 | Source | Packed as | What the packer does |
 |---|---|---|
 | `3DModels/**/*.obj` | `.objbr` | Brotli over the mesh text |
-| `3DModels/**/*.png` | `.pngbr` | Re-emits each IDAT chunk as a stored deflate block, then Brotli over the whole file |
+| `3DModels/**/*.png` | `.pngbr` | Inflates the IDAT data and re-emits it as one IDAT of stored deflate blocks, then Brotli over the whole file |
 | `VoiceModels/*.zip` | `.zipbr` | Re-emits the zip entries stored, then Brotli over the archive |
 
 The PNG and zip cases both follow the same rule: store first, compress once.
@@ -500,15 +507,18 @@ JPEG.
 Two traps the target handles explicitly. Packing is incremental on file
 timestamps, so art that has not changed is not repacked and only the first
 build pays. And each packed file is named for the resource it becomes, so its
-name carries dots; MSBuild reads the segment before the extension as a culture
+name carries dots. MSBuild reads the segment before the extension as a culture
 when it matches one. `Switch2Pro/GL.obj` became
 `PadForge._3DModels.Switch2Pro.GL.objbr`, whose `GL` is Galician, and that mesh
 was routed into a satellite assembly and disappeared from the pad. The
 `EmbeddedResource` items carry `WithCulture="false"` for that reason.
 
-A separate `SharedGeometry` table names twelve donor meshes that identical
-parts in other sets point at instead of carrying their own copy, which drops
-352 duplicate meshes from the bundle.
+A separate `SharedGeometry` table in `ControllerModelBase` names twelve
+colorways whose meshes match a sibling colorway's. Each one keeps only the
+meshes that differ, none for most of them, and loads the rest from the
+sibling, which drops 352 duplicate meshes from the bundle. Eight Xbox Series
+skins (Sonic and the seven Razer editions) carry no meshes at all: they load the
+Carbon set whole and bring only their own shell texture.
 
 ### Web Controller Assets (EmbeddedResource)
 
@@ -525,14 +535,25 @@ HTML/CSS/JS for the browser-based virtual controller. Served at runtime by `WebC
 | `WebAssets/controller.html` | Virtual gamepad UI |
 | `WebAssets/touchpad.html` | Touchpad surface UI |
 | `WebAssets/custom.html` | Custom controller builder UI |
+| `WebAssets/gamepad.html` | Browser Gamepad page: forwards a controller paired to the phone or built into the handheld |
 | `WebAssets/css/controller.css` | Gamepad styling |
 | `WebAssets/js/controller_client.js` | WebSocket client logic |
 | `WebAssets/js/custom_client.js` | Custom layout client logic |
+| `WebAssets/js/gamepad_client.js` | Gamepad API reader and WebSocket forwarding for the Browser Gamepad page |
+| `WebAssets/js/fullscreen.js` | Fullscreen toggle for the web controller pages, added where the browser supports element fullscreen |
 | `WebAssets/js/nipplejs.min.js` | Virtual joystick library |
 
 ### Voice Model (EmbeddedResource)
 
-`VoiceModels/vosk-model-small-en-us-0.15.zip`, the offline Vosk recognizer model behind voice macros (#317). The `EmbedPackedArt` target below repacks it to about 35 MB. It ships inside the exe rather than downloading on first use, so voice macros work on a machine with no internet and nothing is written into LocalAppData unasked.
+`VoiceModels/vosk-model-small-en-us-0.15.zip`, the offline Vosk recognizer model behind voice macros (#317). The `EmbedPackedArt` target above repacks it to about 35 MB. It ships inside the exe rather than downloading on first use, so voice macros work on a machine with no internet. Vosk loads a model from a folder, so once voice macros are on and have phrases, `VoskModelStore` unpacks it to `%TEMP%\PadForge\voice-models` and loads it from there.
+
+### License Notices (EmbeddedResource)
+
+```xml
+<EmbeddedResource Include="..\LICENSE" LogicalName="PadForge.ThirdPartyNotices.txt" />
+```
+
+The repository's `LICENSE`, which carries PadForge's license, the third-party licenses and attributions, and their full license texts, is embedded as `PadForge.ThirdPartyNotices.txt`, so the notices travel inside the single-file exe. No code reads it.
 
 ### Localization Strings (EmbeddedResource)
 
@@ -607,31 +628,42 @@ Runs on every push/PR to `v4-dev` and on manual trigger.
 
 A matrix runs `win-x64` and `win-arm64` side by side on `windows-latest`. Nearly all of a build is the art pack and each architecture packs its own, so two publishes in one job would double the wall clock. `fail-fast` is off: a broken ARM64 build shows red on the run and does not cancel the x64 build the dev feed depends on. x64 keeps every name it has always had, and ARM64 adds `-arm64`.
 
-1. **Checkout**. `actions/checkout@v5`, `fetch-depth: 0` (full history for commit counting)
+1. **Checkout**. `actions/checkout@v5`, `fetch-depth: 0` (full history for commit counting, which the [build identity](#build-identity) stamp also needs)
 2. **Setup .NET**. `actions/setup-dotnet@v5`, `dotnet-version: 10.x`
 3. **Get build info**. Commit count and 7-character SHA, exported as job outputs. It runs before Publish so that a failed publish cannot leave its copy of those outputs blank
 4. **Publish**. `dotnet publish PadForge.App/PadForge.App.csproj -c Release`, plus `-r win-arm64` for the ARM64 leg
 5. **Upload artifact**. `actions/upload-artifact@v7`, publish directory as `PadForge_r{COMMIT_COUNT}@{COMMIT_SHORT}`, with `-arm64` appended for ARM64
 
-### Release job (push only)
+### Archive job (push only)
 
-One job writes the dev feed, because the `latest-<branch>` step deletes and recreates a release and two jobs doing that at once would race. It runs under `!cancelled()`, so a failed ARM64 build does not stop it and a canceled run publishes nothing. It cannot publish without x64: the x64 artifact download is its first step and fails before any release is touched.
+`archive` puts every build into the rolling archive. It runs under `!cancelled()`, so a failed ARM64 build does not stop it and a canceled run publishes nothing. It cannot publish without x64: the x64 artifact download is its first step and fails before any release is touched. It sits in no concurrency group and takes no lock, because the archive must never lose a build, and runs for different commits upload files with different names.
 
 1. **Download x64 build**, then **Download ARM64 build** with `continue-on-error`. `actions/download-artifact@v8`
-2. **Package release zips**. Deletes any `*.pdb`, then `7z a -mx=9` over each publish directory into `PadForge.zip` and `PadForge-arm64.zip`, each copied a second time as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. With no ARM64 build, x64 is released alone
+2. **Package release zips**. Deletes any `*.pdb`, then `7z a -mx=9` over each publish directory into `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. With no ARM64 build, x64 is released alone
+3. **Release rolling dev archive**. Uploads the zips to the active archive part with `--clobber`, rolling to a new part first when the active one is full
+
+### Latest job (push only)
+
+`latest` rewrites `latest-v4-dev`. It runs only after a successful `archive` job, on `ubuntu-latest`, in a concurrency group per branch: one run publishes, one waits, and a third that arrives replaces the waiting one.
+
+1. **Decide whether this commit should be published**. Builds do not finish in push order, so the job asks the branch as it is now. A commit that a force-push left out of the branch's history is skipped, and so is a commit older than the one already published. An API error fails the job and leaves the published release untouched
+2. **Fetch this build from the archive**. Downloads the zips the archive job uploaded and renames them `PadForge.zip` and `PadForge-arm64.zip`, so nothing is compressed twice
+3. **Stage, then swap**. Deletes staging drafts that dead runs left, creates the new release as a draft titled `PadForge r{N}@{SHA}` with its zips attached, and checks that every file uploaded. Only then does it delete the old release, move the `latest-v4-dev` tag to this commit, and publish the draft under that tag. It reads the release back and fails if the files or the commit differ
 
 ### Automatic Releases (push to v4-dev only)
 
-On push (not PR), the workflow creates two GitHub releases keyed off the branch ref name:
+On push (not PR), the workflow maintains two GitHub releases keyed off the branch ref name:
 
 | Release | Behavior |
 |---------|----------|
-| **`archive-v4-dev`** | Accumulates every build as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. Uses `--clobber` for the latest upload. Preserves the tag across builds. Rolls to a new part when full (see below). |
-| **`latest-v4-dev`** | Recreated on every push (old release deleted first). Contains `PadForge.zip` (x64) and `PadForge-arm64.zip` with the most recent build. The "always current" download link. The step aborts before the delete if `release/PadForge.zip` is missing or empty, because the delete takes the tag with it and the upload is the only thing that puts a download back. |
+| **`archive-v4-dev`** | Accumulates every build as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. Uploads with `--clobber`. Preserves the tag across builds. Rolls to a new part when full (see below). |
+| **`latest-v4-dev`** | Replaced when a push's build is newer than the published one. Titled `PadForge r{N}@{SHA}`, with `PadForge.zip` (x64) and `PadForge-arm64.zip` from that build. The "always current" download link. The replacement is built as a draft and swapped in only once it holds every file, so a failed upload never leaves the link without a download. |
 
-Both are marked `--prerelease` and cross-link to each other in their notes.
+Both are pre-releases. The notes of `latest-v4-dev` link to the archive part that holds its build and to the run's log, and the first archive part's notes link to `latest-v4-dev`.
 
-**Rolling archive parts.** GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 998 assets, creates the next numbered part (`archive-v4-dev-2`, `archive-v4-dev-3`, and so on) targeting the current commit. Each new part's notes link back to the previous part, and `latest-v4-dev` points at whichever part is currently active.
+The in-app updater's pre-release channel reads `latest-v{major}-dev`: it takes the build number from the title `PadForge r{N}@{SHA}` and picks `PadForge.zip` or `PadForge-arm64.zip` by name. A comment in `build.yml` says so. Renaming the tag, the title format, or either zip breaks that channel for every installed copy. See [Updates Internals](updates-internals.md#couplings).
+
+**Rolling archive parts.** GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 990 assets, creates the next numbered part (`archive-v4-dev-2`, `archive-v4-dev-3`, and so on) targeting the current commit. The count is read without a lock, so runs that overlap all see the same number, and 990 leaves room for five of them at once. Each new part's notes link back to the previous part.
 
 ### Artifact Naming
 
@@ -647,7 +679,7 @@ env:
 
 ### Formal Releases
 
-Created manually via `gh release create` with a version tag (e.g., `v4.4.0`, `v4.4.0-beta1`). See [Release Workflow](#release-workflow) below.
+Created manually via `gh release create` with a version tag (e.g., `v4.4.0`, `v4.4.0-beta1`). The in-app updater's release channel reads GitHub's latest release and accepts only a `vX.Y.Z` tag with no suffix, so a suffixed tag is never offered as an update. See [Release Workflow](#release-workflow) below.
 
 ## Deployment
 
@@ -660,7 +692,7 @@ Copy the publish output to any folder:
 cp PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe C:\PadForge\PadForge.exe
 ```
 
-There are no companion files. Every native library (`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `libvosk.dll`, and the MinGW runtime) is folded into the single-file bundle on publish and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe either. A deploy is one `PadForge.exe`.
+There are no companion files. Every native library (`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, the Visual C++ runtime, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `libvosk.dll`, and the MinGW runtime) is folded into the single-file bundle on publish and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe either. A deploy is one `PadForge.exe`.
 
 ### Development Deploy Script
 
@@ -714,7 +746,9 @@ cd ../../win-arm64/publish
 zip -r PadForge-vX.Y.Z-win-arm64.zip .
 ```
 
-Each publish directory holds one file, so the 4.5.2 assets are `PadForge-v4.5.2-win-x64.zip` and `PadForge-v4.5.2-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
+Each publish directory holds one file, so the 4.5.3 assets are `PadForge-v4.5.3-win-x64.zip` and `PadForge-v4.5.3-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
+
+The in-app updater finds a release by these names: a `vX.Y.Z` tag with no suffix, zips ending in `-win-x64.zip` and `-win-arm64.zip`, and `PadForge.exe` at the root of each zip. It offers an asset only when GitHub reports a SHA-256 `digest` for it. See [Updates Internals](updates-internals.md#couplings).
 
 ### 6. Create GitHub Release
 
@@ -736,10 +770,11 @@ Standalone diagnostic utilities and development scripts. None of the tool projec
 | **SteamWorkshopSmoke** | `cd tools/SteamWorkshopSmoke && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Manually-run smoke harness for the live Steam network paths. The test suite has no live-network tests, so this is the end-to-end check against real Steam endpoints |
 | **SteamWorkshopSweep** | `cd tools/SteamWorkshopSweep && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Mass wild-corpus regression sweep for the Workshop config translator: harvests top-by-vote configs for every game in `games.csv`, caches the VDFs, translates everything, and reports reason keys outside the lockdown-approved set |
 | **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option per locale for the Indicator LEDs card combos |
+| **rowmeasure** | `cd tools/rowmeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | The same measurement for the fixed-size rows the 2026-09-15 audit flagged: the Profiles shortcut row, the raw hat strip, the equalizer row and the gesture recorder's hint, in every locale |
 | **PersonaVerify** | `dotnet run --project tools/PersonaVerify -- [diagLogPath]` | net10.0-windows10.0.26100.0 | NAudio 2.2.1 | Consumer-side integration check for HIDMaestro composite USB personas. Measures at the persona's own WASAPI endpoints instead of trusting PadForge's internal counters, which read healthy while Windows received full-scale noise. Also renders four channels (speaker on 1/2, authored haptics on 3/4) so the haptics lane is exercised with no game running. Pass a `PADFORGE_DIAG` log path for the log-backed checks. The audio checks run without it |
 | **WdgProbe** | `dotnet run --project tools/WdgProbe -- [seconds]` | net10.0-windows | PadForge.Engine, System.Management 10.0.11 | Runs the handheld hidden-button learner's own path outside the app (#343): dumps the firmware ACPI `_WDG` table, lists the WMI event classes that pass the gate, then subscribes and prints every event for the given seconds. Compiles the app's `AcpiWmi.cs` and `WmiEventRuntime.cs` directly, so it cannot drift from what PadForge does |
 
-The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 35 with the capture, tracing, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
+The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 37 with the capture, tracing, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
 
 ### Development Scripts
 
@@ -752,7 +787,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `prep_xml_for_capture.ps1` | Preps `PadForge.xml` with 5 slot types and sample macros for screenshot runs. `prep_xml_for_capture_wrapper.ps1` adds logging |
 | `convert_screenshots.ps1` | Converts and renames captured wiki images into `screenshots/` |
 | `add_slots_via_ui.ps1` | Restores a `PadForge.xml` backup, then adds slot types via UI Automation |
-| `capture_colorways.ps1` | Captures the themed-colorway shots by writing `PadForge.xml` state (`Model3DAppearances`, `Use2DControllerView`, slot types) rather than driving the appearance picker, which is one of the two least reliable UI paths for automation |
+| `capture_colorways.ps1` | Captures the themed-colorway shots by writing `PadForge.xml` state (`SlotModel3DAppearances`, `Use2DControllerView`, slot types) rather than driving the appearance picker, which is one of the two least reliable UI paths for automation |
 | `capture_vr.ps1` | Same state-injection approach, for the VR controller shots |
 | `capture_web.ps1` | Recaptures the two Web Controller shots against a proven-live server. Refuses to capture until an HTTP 200 comes back, after both shots shipped as Edge's "localhost refused to connect" page |
 | `capture_mouse_gestures.ps1` | Recaptures the Mouse tab shot alone, with the same seven-slot topology the rest of the gallery shows. Two minutes instead of the full run's twenty five |
@@ -765,7 +800,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `steam_controller_2026_pads.py` | Splits the 2026 trackpad meshes into connected components and keeps only each pad's own surface, so hovering a trackpad stops lighting a rear paddle |
 | `steam_deck_stick_well.py` | Cuts the disc capping each Steam Deck stick well and drops a dark socket behind it, so the stick has an opening under it |
 | `probe_macro_list.ps1` | Dumps control type, class, and name of everything on the Macros tab, so the capture harness's macro-presence gate can match on what UI Automation really exposes |
-| `verify_site_carousel.ps1` | Opens padforge.org in a visible browser and screenshots the finish carousel twice seconds apart to prove it advances. Headless cannot answer this, because the carousel pauses on `document.hidden` |
+| `verify_site_carousel.ps1` | Opens the padforge.org page (the local repository copy by default) in a visible browser and screenshots the finish carousel twice, 11 seconds apart by default, to prove it advances. Headless cannot answer this, because the carousel pauses on `document.hidden` |
 | `overlay_positions.py` | Generates 2D overlay positions from labeled Gamepad-Asset-Pack SVGs. Positions are generated, never placed by eye |
 | `gen_2d_colorways.py` | Emits the 2D colorway art for the five stock families plus the derived DualSense Edge set. Only sprites that differ from the default are written |
 | `gen_dualsense_edge_art.py` | Extends the DualSense 2D set into `2DModels/DUALSENSEEDGE`, adding the four extra controls as floating tiles |
@@ -776,13 +811,13 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 | Issue | Cause | Fix |
 |-------|-------|-----|
-| `SDL3.dll` not found at runtime | DLL not in `Resources\SDL3\x64\` | Download from SDL3 releases or build from fork |
+| `SDL3.dll` missing (a publish is refused, a plain build prints a message) | DLL not in `Resources\SDL3\<arch>\` | Build it from the PadForge SDL fork. An upstream SDL3 release lacks the fork's HIDMaestro filter, Switch 2 Pro driver and PS5 status bytes |
 | MIDI package not found | `nuget.config` missing or `nuget-local/` folder missing | Ensure both are present at solution root |
 | Missing WPF types | Using `dotnet build` instead of `dotnet publish` for deployment | Always use `dotnet publish -c Release` for deployment |
 | `System.Drawing` ambiguity | WinForms implicit usings conflict with WPF | Ensure `<Using Remove="System.Drawing" />` is in csproj |
 | HelixToolkit errors | Package restore failed | Run `dotnet restore` first |
-| Large exe size (~350 MB) | Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset | `EnableCompressionInSingleFile` already enabled |
-| CI build fails | .NET 10 SDK not available in runner | Check `actions/setup-dotnet` version supports .NET 10 preview |
+| Large exe size (~331 MB x64, ~310 MB ARM64) | Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset | `EnableCompressionInSingleFile` already enabled |
+| CI build fails | .NET 10 SDK not available in runner | Check that the `actions/setup-dotnet` step still resolves `dotnet-version: 10.x` |
 | `HIDMaestro.Core` reference fails to resolve | `Resources/HIDMaestro/HIDMaestro.Core.dll` missing or wrong build | Drop a Release-build `HIDMaestro.Core.dll` from a tagged HIDMaestro release into `Resources/HIDMaestro/` |
 
 ---
@@ -796,7 +831,8 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 - [Driver Installation Internals](driver-installation-internals.md): Driver lifecycle (HIDMaestro, HidHide, MIDI Services) and legacy v2 cleanup
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface, OpenXInput shim, four-surface filtering architecture
 - [DSU Protocol Implementation](dsu-protocol.md): `DsuDiag` diagnostic tool in `tools/`
+- [Updates Internals](updates-internals.md): the build identity stamp and the release names the in-app updater reads
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

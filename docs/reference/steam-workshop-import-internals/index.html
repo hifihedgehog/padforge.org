@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -4206,7 +4266,7 @@
 </tr>
 <tr>
 <td><code>PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs</code>, <code>SteamInputVkTable.cs</code>, <code>XInputTargetTable.cs</code>, <code>SteamVocabulary.cs</code></td>
-<td>Steam slot → PadForge source resolution, key and pad-target tables, the serializer-vocabulary token set.</td>
+<td>Steam slot → PadForge source resolution, key and pad-target tables, and the wire-token display names (<code>SpellToken</code>, <code>CommandLabel</code>, <code>MemberLabel</code>).</td>
 </tr>
 <tr>
 <td><code>PadForge.SteamWorkshop/Cache/SteamWorkshopCache.cs</code>, <code>CacheCategory.cs</code></td>
@@ -4254,11 +4314,11 @@
 </tr>
 <tr>
 <td><code>PadForge.SteamWorkshop.Tests/</code></td>
-<td>Parser, client, cache, and translation tests: <code>TranslationEdgeTests</code>, the v1-v7 per-wave suites (<code>WaveOneA</code>, <code>WaveTwoA</code>, <code>WaveThree</code>, <code>WaveFour</code>, <code>WaveFourB</code>, <code>WaveFourC</code>), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures.</td>
+<td>Parser, client, cache, and translation tests: <code>TranslationEdgeTests</code>, the v2-v7 per-wave suites (<code>WaveOneA</code>, <code>WaveTwoA</code>, <code>WaveThree</code>, <code>WaveFour</code>, <code>WaveFourB</code>, <code>WaveFourC</code>), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures.</td>
 </tr>
 </tbody>
 </table>
-<p>The assembly targets <code>net10.0-windows</code>, references <code>PadForge.Engine</code>, and carries a single direct NuGet dependency: <code>SteamKit2</code> 3.4.0 (LGPL 2.1). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.</p>
+<p>The assembly targets <code>net10.0-windows</code>, references <code>PadForge.Engine</code>, and carries a single direct NuGet dependency: <code>SteamKit2</code> 3.4.0 (LGPL-2.1-only). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.</p>
 <hr />
 <h2 id="the-opt-in-gate">The opt-in gate<a class="headerlink" href="#the-opt-in-gate" title="Permanent link">&para;</a></h2>
 <p><code>ISteamWorkshopGate</code> exposes one member, <code>IsCommunityConfigLookupEnabled</code>. <code>DelegateSteamWorkshopGate</code> adapts a <code>Func&lt;bool&gt;</code> (the app passes <code>() =&gt; settings.EnableCommunityConfigLookup</code>). <code>SteamWorkshopGuard.EnsureEnabled</code> throws <code>InvalidOperationException</code> ("Community config lookup is disabled in PadForge settings...") when the gate is off.</p>
@@ -4313,9 +4373,9 @@
 </tr>
 </tbody>
 </table>
-<p>All REST clients share <code>SteamHttp.Client</code>: one lazy <code>HttpClient</code>, 15-second timeout, <code>PadForge/{version}</code> User-Agent, case-insensitive JSON. No API key, no cookies, no tokens anywhere. Creator avatar images are the one fetch outside these clients: the browse dialog downloads the <code>avatars.fastly.steamstatic.com</code> URLs from the profile XML on its own <code>HttpClient</code> (same timeout, same User-Agent) and caches them under the art budget.</p>
+<p>All REST clients share <code>SteamHttp.Client</code>: one lazy <code>HttpClient</code>, 15-second timeout, <code>PadForge/{version}</code> User-Agent, case-insensitive JSON. No API key, no token, and no cookie of PadForge's own. The default handler does keep any cookie a Steam server sets, in memory, for the life of the process. Creator avatar images are the one fetch outside these clients: the browse dialog downloads the <code>avatars.fastly.steamstatic.com</code> URLs from the profile XML on its own <code>HttpClient</code> (same timeout, same User-Agent) and caches them under the art budget.</p>
 <h3 id="steamworkshopclient-the-anonymous-cm-session">SteamWorkshopClient: the anonymous CM session<a class="headerlink" href="#steamworkshopclient-the-anonymous-cm-session" title="Permanent link">&para;</a></h3>
-<p>Configuration: <code>SteamConfiguration.Create(b =&gt; b.WithProtocolTypes(ProtocolTypes.WebSocket).WithDirectoryFetch(true))</code>. WebSocket rides port 443, which passes firewalls that block Steam's classic CM ports. <code>EnsureLoggedOnAsync</code> connects, then <code>SteamUser.LogOnAnonymous()</code>, with 15-second timeouts on both stages (<code>ConnectTimeout</code>, <code>LogonTimeout</code>) and a <code>SemaphoreSlim</code> making the logon idempotent. A background task pumps <code>CallbackManager.RunWaitCallbacks</code> every 100 ms and never lets an exception escape.</p>
+<p>Configuration: <code>SteamConfiguration.Create(b =&gt; b.WithProtocolTypes(ProtocolTypes.WebSocket).WithDirectoryFetch(true))</code>. WebSocket rides port 443, which passes firewalls that block Steam's classic CM ports. <code>EnsureLoggedOnAsync</code> connects, then <code>SteamUser.LogOnAnonymous()</code>, with 15-second timeouts on both stages (<code>ConnectTimeout</code>, <code>LogonTimeout</code>) and a <code>SemaphoreSlim</code> making the logon idempotent. SteamKit2's anonymous logon sends the OS type, a language, the cell id, and a machine id built from SHA-1 hashes of the Windows <code>MachineGuid</code>, the physical network adapters' MAC addresses, and the boot disk serial. PadForge does not replace SteamKit2's machine-info provider. A background task pumps <code>CallbackManager.RunWaitCallbacks</code> every 100 ms and never lets an exception escape.</p>
 <p>Search goes through <code>SteamUnifiedMessages</code> → <code>PublishedFile.QueryFiles</code> with:</p>
 <ul>
 <li><code>appid = 241100</code> (<code>ControllerConfigsAppId</code>): the query filters on the <em>consumer</em> app, Steam's controller-configs bucket. This is <code>appid</code>, not <code>creator_appid</code>.</li>
@@ -4343,11 +4403,11 @@
 <p><code>VdfNode</code> is null-safe: the indexer returns a <code>Missing</code> sentinel instead of null, key lookup is case-insensitive, and typed accessors (<code>AsInt</code>, <code>AsDouble</code>, <code>AsBool</code>) parse with <code>InvariantCulture</code>. <code>VdfSyntaxException</code> carries offset, line, and column.</p>
 <hr />
 <h2 id="typed-model">Typed model<a class="headerlink" href="#typed-model" title="Permanent link">&para;</a></h2>
-<p><code>SteamInputConfig.FromVdf</code> accepts the document root or the <code>controller_mappings</code> node directly and validates structure into <code>SteamInputConfig</code> → <code>SteamInputGroup</code> / <code>SteamInputPreset</code> → <code>SteamInputInput</code> → <code>SteamInputActivator</code> → <code>SteamInputBinding</code>. Malformed structure throws <code>SteamInputConfigException</code>.</p>
+<p><code>SteamInputConfig.FromVdf</code> accepts the document root or the <code>controller_mappings</code> node directly and validates structure into <code>SteamInputConfig</code> → <code>SteamInputGroup</code> / <code>SteamInputPreset</code> → <code>SteamInputInput</code> → <code>SteamInputActivator</code> → <code>SteamInputBinding</code>. A missing <code>controller_mappings</code> object throws <code>SteamInputConfigException</code>. Groups, presets, inputs, and activators below it parse tolerantly (a missing <code>id</code> reads as -1).</p>
 <p>The version gate rejects anything below 3 with the exact reason: "Steam Input config version {N} (pre-2017 schema). Translator targets version 3 only." A missing or non-numeric <code>version</code> is also rejected. Current Workshop configs are version 3, and the grammar has not moved.</p>
 <hr />
 <h2 id="configtranslator">ConfigTranslator<a class="headerlink" href="#configtranslator" title="Permanent link">&para;</a></h2>
-<p><code>Translate(config, options)</code> produces a <code>TranslatedProfile</code>: two <code>MappingSet</code>s (<code>XboxMappingSet</code>, <code>KbmMappingSet</code>), a macro list, a menu list (<code>Menus</code>, <code>MenuDefinitionEntry</code> objects from <code>PadForge.Engine.Menus</code>), a name and description, slot-demand flags (<code>NeedsXboxSlot</code>, <code>NeedsKbmSlot</code>), four device-tuning carriers the materializer parks on the slot (<code>LeftStickDeadZoneShape</code>, <code>RightStickDeadZoneShape</code>, the <code>GyroEngageDescriptor</code> triple, <code>GyroRatchetDescriptors</code>), and a <code>TranslationReport</code>. It never touches <code>ProfileData</code>. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros that need the slot: a trigger with no descriptor entries (it reads the Xbox slot's combined output), or an action that writes a virtual-controller button or axis (<code>RepeatVcButtonWhileHeld</code>, <code>ToggleVcButton</code>, <code>HoldVcButton</code>, <code>VcButtonTap</code>, <code>VcAxisTap</code>, <code>HoldVcAxis</code>, <code>ToggleVcAxis</code>, <code>RepeatVcAxisWhileHeld</code>, and a <code>CycleList</code> whose steps include a VC tap). A macro riding a device-free <code>InputDevice</code> trigger (paddle, touchpad, gyro) whose action writes no VC target demands no Xbox slot on its own. An <code>Identities.Count</code> clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for menus when no Xbox slot is demanded, so every import with a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps <code>MappingSet.Authoritative</code> on both sets it places and clones each menu onto every created slot's <code>MappingSet.Menus</code>.</p>
+<p><code>Translate(config, options)</code> produces a <code>TranslatedProfile</code>: two <code>MappingSet</code>s (<code>XboxMappingSet</code>, <code>KbmMappingSet</code>), a macro list, a menu list (<code>Menus</code>, <code>MenuDefinitionEntry</code> objects from <code>PadForge.Engine.Menus</code>), a name and description, slot-demand flags (<code>NeedsXboxSlot</code>, <code>NeedsKbmSlot</code>), four device-tuning carriers the materializer parks on the slot (<code>LeftStickDeadZoneShape</code>, <code>RightStickDeadZoneShape</code>, the <code>GyroEngageDescriptor</code> triple, <code>GyroRatchetDescriptors</code>), and a <code>TranslationReport</code>. It never touches <code>ProfileData</code>. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros that need the slot: a trigger with no descriptor entries (it reads the Xbox slot's combined output), or an action that writes a virtual-controller button or axis (<code>RepeatVcButtonWhileHeld</code>, <code>ToggleVcButton</code>, <code>HoldVcButton</code>, <code>VcButtonTap</code>, <code>VcAxisTap</code>, <code>HoldVcAxis</code>, <code>ToggleVcAxis</code>, <code>RepeatVcAxisWhileHeld</code>, and a <code>CycleList</code> whose steps include a VC tap). A macro riding a device-free <code>InputDevice</code> trigger (paddle, touchpad, gyro) whose action writes no VC target demands no Xbox slot on its own. An <code>Identities.Count</code> clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for macros or menus when no Xbox slot is demanded, so every import with a macro or a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps <code>MappingSet.Authoritative</code> on both sets it places and clones each menu onto every created slot's <code>MappingSet.Menus</code>.</p>
 <p><code>TranslationOptions</code> has exactly four fields: <code>FileId</code> (feeds deterministic layer names), <code>PreferredLanguage</code> (default <code>"english"</code>, for localized title fallback), <code>ProfileNameOverride</code>, and <code>IncludedPresetIds</code>, the preset filter the dialog's chips re-run translation with (null means all).</p>
 <h3 id="translator-version-history">Translator version history<a class="headerlink" href="#translator-version-history" title="Permanent link">&para;</a></h3>
 <p><code>TranslationReport.CurrentTranslatorVersion</code> is <strong>26</strong>. Each report stamps the version it was produced under, and the summary digest leads with it. Every bump is summarized in the doc comment above the constant in <code>TranslationReport.cs</code>, which is the authoritative changelog. The bumps:</p>
@@ -4443,7 +4503,7 @@
 <tr>
 <td>17</td>
 <td></td>
-<td><code>Double_Press</code> activators on any host lower to macros on the engine's new DoublePress trigger. Stick <code>mouse_region</code> engages on a deflection ring.</td>
+<td><code>Double_Press</code> activators on any host lower to macros on the engine's new DoublePress trigger. Stick-hosted <code>edge</code> members build on the new deflection-ring read (<code>Gamepad LeftStickRing</code> / <code>RightStickRing</code>).</td>
 </tr>
 <tr>
 <td>18</td>
@@ -4478,7 +4538,7 @@
 <tr>
 <td>24</td>
 <td></td>
-<td>The mass-sweep top four: <code>button_macro0..4</code> resolve as the device's extra buttons (bits 32-39, capability-gated).</td>
+<td>The mass-sweep top four: <code>button_macro0..4</code> resolve as the device's extra buttons (bits 32-36, capability-gated).</td>
 </tr>
 <tr>
 <td>25</td>
@@ -4488,7 +4548,7 @@
 <tr>
 <td>26</td>
 <td></td>
-<td>Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise <code>MobileTouchSurfaceOnly</code> / <code>ChordWithoutPartner</code> classes.</td>
+<td>Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, stick <code>mouse_region</code> engaging on the v17 deflection ring, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise <code>MobileTouchSurfaceOnly</code> / <code>ChordWithoutPartner</code> classes.</td>
 </tr>
 </tbody>
 </table>
@@ -4526,11 +4586,11 @@
 </tr>
 <tr>
 <td><code>controller_action REMOVE_LAYER</code></td>
-<td>A remove hosted inside the layer it removes lowers to <code>Mode = "Cycle"</code> over that one layer with <code>CycleIncludeBase</code>, <code>InheritUnmapped = true</code>. A remove targeting a different layer, or hosted in Base, emits no activator. Partial <code>RemoveLayerApproximated</code> either way.</td>
+<td>A remove hosted inside the layer it removes lowers to <code>Mode = "Cycle"</code> over that one layer with <code>CycleIncludeBase</code>, <code>InheritUnmapped = true</code>. A remove targeting a different layer, or hosted in Base, emits no activator. Partial <code>RemoveLayerApproximated</code> either way, unless the same input already engages that layer through a Toggle or Hold activator: then the Cycle is dropped and the entry reports Clean <code>ShiftLayerEmitted</code>.</td>
 </tr>
 <tr>
 <td><code>controller_action CHANGE_PRESET</code></td>
-<td><code>Mode = "Custom"</code> with <code>JumpToLayer</code></td>
+<td><code>Mode = "Custom"</code> latching the target layer (<code>LayerMask</code> = target, <code>JumpToLayer</code> cleared, <code>InheritUnmapped = false</code>). A lone jump to Base lowers to a single-stop <code>Cycle</code> through the hosting layer, and a Base-hosted jump to Base drops as Partial <code>ShiftLayerEmpty</code>.</td>
 </tr>
 <tr>
 <td>Same-input CHANGE_PRESET pairs</td>
@@ -4542,10 +4602,10 @@
 </tr>
 </tbody>
 </table>
-<p>Activators duplicate onto whichever mapping set(s) actually contain the layer's rows. <code>FillActivatorInput</code> picks <code>Kind</code>: <code>"Axis"</code> for a directional analog host (stick wedge, gyro rate half) with the half stamp and the source's own threshold, <code>"Chord"</code> when the source carries a <code>GateDescriptor</code>, <code>"Button"</code> otherwise. Trigger pulls deliberately keep <code>"Button"</code>, gating at the default <code>AxisThreshold = 0.5</code>, because the bipolar axis read rests at -1 and would engage permanently. Since wave 4c, activators evaluate with their true slot index, so an activator descriptor can read slot-scoped families such as menu-item fires.</p>
+<p>Activators duplicate onto whichever mapping set(s) actually contain the layer's rows. <code>FillActivatorInput</code> picks <code>Kind</code>: <code>"Axis"</code> for a directional analog host (stick wedge, gyro rate half) with the half stamp and a threshold (the wedge's own deadzone, or the engine's 30 deg/s gyro-button rate on a gyro rate half), <code>"Chord"</code> when the source carries a <code>GateDescriptor</code>, <code>"Button"</code> otherwise. Trigger pulls deliberately keep <code>"Button"</code>, gating at the default <code>AxisThreshold = 0.5</code>, because the bipolar axis read rests at -1 and would engage permanently. Since wave 4c, activators evaluate with their true slot index, so an activator descriptor can read slot-scoped families such as menu-item fires.</p>
 <h3 id="group-and-activator-settings-honored">Group and activator settings honored<a class="headerlink" href="#group-and-activator-settings-honored" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p><strong>Currency note (4.1.0).</strong> This table records the v7-era state. Waves v18 through v26 consumed most of the drops listed below: click gates now ride <code>MappingSource.GateDescriptor</code> on every source, the latch/turbo family completed, response curves land on every analog lane, and the haptic / double-press / ratchet clusters all build. Every reason key this table names in its Handling column carries its deletion version in the taxonomy below when the key no longer exists. The authoritative per-setting status is the version changelog above plus <code>ConfigTranslator.cs</code> at HEAD.</p>
+<p><strong>Currency note (4.1.0).</strong> This table records the v7-era state. Waves v17 through v26 consumed most of the drops listed below: click gates now land as real gate sources on the row with a Custom combine expression, the latch/turbo family completed, response curves land on every analog lane, and the haptic / double-press / ratchet clusters all build. Every reason key this table names in its Handling column carries its deletion version in the taxonomy below when the key no longer exists. The authoritative per-setting status is the version changelog above plus <code>ConfigTranslator.cs</code> at HEAD.</p>
 </blockquote>
 <p>The v1 translator read six setting keys. The waves widened that considerably:</p>
 <table>
@@ -4590,7 +4650,7 @@
 </tr>
 <tr>
 <td><code>mouse_region</code> geometry</td>
-<td><code>position_x/y</code>, <code>scale</code>, <code>sensitivity_horiz_scale</code>, <code>sensitivity_vert_scale</code> land on the pointer-source region params (trackpad host) or the clamp-macro geometry (stick and gyro hosts). <code>teleport_start</code> / <code>teleport_stop</code> → Partial <code>MouseRegionTuningDropped</code>. <code>edge_binding_*</code> left that list: the edge member consumes it through the v17 stick ring and the v26 finger ring.</td>
+<td><code>position_x/y</code>, <code>scale</code>, <code>sensitivity_horiz_scale</code>, <code>sensitivity_vert_scale</code> land on the pointer-source region params (trackpad host). The clamp macro (stick and trigger hosts) carries only <code>position_x/y</code> and <code>scale</code>. <code>teleport_start</code> / <code>teleport_stop</code> → Partial <code>MouseRegionTuningDropped</code>. <code>edge_binding_*</code> left that list: the edge member consumes it through the v17 stick ring and the v26 finger ring.</td>
 </tr>
 <tr>
 <td>Menu keys</td>
@@ -4602,15 +4662,15 @@
 </tr>
 </tbody>
 </table>
-<p>Of the v1-era silent fall-throughs, only <code>mouse_dampening_trigger</code> remains unconsumed, and it is named now rather than silent (Partial <code>MouseModeTuningDropped</code>). <code>trackball</code> and its friction became the momentum decay in v18, and <code>double_tap_time</code> became the <code>Double_Press</code> window in v17 (default 442 ms).</p>
+<p>Of the v1-era silent fall-throughs, <code>mouse_dampening_trigger</code> is the one still named (Partial <code>MouseModeTuningDropped</code>). On the mouse modes, <code>trackball</code>, <code>friction</code>, <code>mouse_smoothing</code>, and <code>mouse_move_threshold</code> built in v18 and are silent drops again: <code>MouseFeelChannel.StampFeel</code> stamps only <code>acceleration</code>, because none of the others has a card. <code>double_tap_time</code> became the <code>Double_Press</code> window in v17 (default 442 ms).</p>
 <h3 id="mouse_position-coordinates">MOUSE_POSITION coordinates<a class="headerlink" href="#mouse_position-coordinates" title="Permanent link">&para;</a></h3>
 <p>The translator keeps Steam's normalized 16-bit space: <code>NormalizedX/Y = clamp(x, 0, 65535)</code>. The materializer converts to primary-monitor physical pixels: <code>round(n / 65535 * (screen - 1))</code> clamped to the screen, using <code>GetSystemMetrics(SM_CXSCREEN/SM_CYSCREEN)</code>. The result feeds a <code>MoveMouseToScreenPosition</code> macro action (one cursor warp on fire).</p>
 <h3 id="determinism-and-caps">Determinism and caps<a class="headerlink" href="#determinism-and-caps" title="Permanent link">&para;</a></h3>
 <p>Same config + same options = identical output, asserted by test. Ordering: presets ascending by id; group entries by <code>(slotToken, groupId)</code>; inputs by name; final rows by <code>(Kbm, Base-first, Layer, Target)</code> ordinal; activators by <code>(LayerMask, Descriptor, Mode)</code> with a dedup key. Constants: <code>MaxRowsPerSlot = 5000</code> per slot class (exceeding it emits Error <code>RowCapExceeded</code> and stops adding rows for that slot), <code>MaxReferenceDepth = 4</code> for <code>reference</code>-mode group chains (cycles and overruns emit Error <code>ReferenceCycle</code>). All emitted sources carry an empty <code>DeviceGuid</code>.</p>
 <hr />
 <h2 id="translationreport">TranslationReport<a class="headerlink" href="#translationreport" title="Permanent link">&para;</a></h2>
-<p><code>TranslationStatus</code>: <code>Clean = 0</code>, <code>Partial = 1</code>, <code>Skipped = 2</code>, <code>Error = 3</code>. Entries carry <code>Status</code>, <code>ReasonKey</code>, <code>ReasonArgs</code>, <code>SourcePath</code>, <code>Binding</code> (raw binding text), and <code>Emitted</code> (an unlocalized diagnostic trace like <code>KbmKey57 &lt;- Touchpad 0 DPadUp</code>). The report also counts rows, macros, menus (<code>MenuCount</code>), and activators per set, and <code>ToSummaryString()</code> renders the provenance digest (<code>v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0</code>).</p>
-<p>Reason keys are resx keys in the <code>Workshop_Tr_*</code> namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v14 onward a wave that retires a key DELETES the key and its locale strings (each deletion is named in the version changelog above), so the live vocabulary is exactly the <code>Workshop_Tr_*</code> set in <code>Strings.resx</code> at HEAD. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list. Nineteen of the keys it lists have since been deleted, each marked in place with the version that deleted it. Nine keys that arrived after the snapshot are listed separately below the taxonomy.</p>
+<p><code>TranslationStatus</code>: <code>Clean = 0</code>, <code>Partial = 1</code>, <code>Skipped = 2</code>, <code>Error = 3</code>. Entries carry <code>Status</code>, <code>ReasonKey</code>, <code>ReasonArgs</code>, <code>SourcePath</code>, <code>Binding</code> (raw binding text), and <code>Emitted</code> (the unlocalized <code>{target} &lt;- {descriptor}</code> line, like <code>KbmKey57 &lt;- Touchpad 0 DPadUp</code>, which the browse dialog splits to fill the manifest's source and target columns). The report also counts rows per set, plus macros, menus (<code>MenuCount</code>), and shift activators across both sets, and <code>ToSummaryString()</code> renders the provenance digest (<code>v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0</code>).</p>
+<p>Reason keys are resx keys in the <code>Workshop_Tr_*</code> namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v14 onward a wave that retires a key deletes the key and its locale strings (each deletion is named in the changelog comment in <code>TranslationReport.cs</code>), so the live vocabulary is exactly the <code>Workshop_Tr_*</code> set in <code>Strings.resx</code> at HEAD. <code>ReleaseActivatorNotSupported</code> is the exception: it lost its last emission site in v15 and stays defined. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list. Nineteen of the keys it lists have since been deleted, each marked in place with the version that deleted it. Nine keys that arrived after the snapshot are listed separately below the taxonomy.</p>
 <h3 id="emission-clean">Emission (Clean)<a class="headerlink" href="#emission-clean" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4669,7 +4729,7 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_RemoveLayerApproximated</code></td>
-<td><code>REMOVE_LAYER</code>. Since v10 a remove hosted inside its own layer builds a single-stop Cycle and the note names the extra step. Other removes still have no construct.</td>
+<td><code>REMOVE_LAYER</code>. Since v10 a remove hosted inside its own layer builds a single-stop Cycle, still reported Partial. Other removes still have no construct.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_ClickGateDropped</code></td>
@@ -4685,7 +4745,7 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_MouseRegionApproximated</code></td>
-<td>A stick- or gyro-hosted <code>mouse_region</code> approximated as a centered cursor clamp while the surface is held (<code>{scale}%</code>, region center <code>{x}%, {y}%</code>). v3. Trackpad hosts go Clean via the pointer family instead (v6).</td>
+<td>A stick- or trigger-hosted <code>mouse_region</code> approximated as a centered cursor clamp while the surface is held (<code>{scale}%</code>, region center <code>{x}%, {y}%</code>). v3. Trackpad hosts go Clean via the pointer family instead (v6).</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_MouseRegionTuningDropped</code></td>
@@ -4721,11 +4781,11 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_ResponseCurveNotSupported</code></td>
-<td>v2. Since v18 the curve/range cluster lands on every analog lane, so the args name only <code>deadzone_shape</code> on a mouse-output host (whose X / Y rows have no pair read) plus the defensively-listed <code>output_curve</code>.</td>
+<td>v2. Since v18 the curve/range cluster lands on every analog lane, so the args name <code>deadzone_shape</code> only where no pair channel consumes it (every productive group except <code>joystick_move</code>, <code>mouse_joystick</code>, and the stick-hosted <code>joystick_mouse</code>, <code>joystick_camera</code>, and <code>gyro_to_joystick</code> groups) plus the defensively-listed <code>output_curve</code>.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_GyroButtonMaskDropped</code></td>
-<td>v2. Since v22 and v23 the ratchet mask and the engage index both ground against Steam's <code>k_eGamepadButtonBitMask</code>, so the note names only out-of-enum <code>gyro_button</code> indices, non-boolean <code>gyro_button_invert</code> values, and the residual mask of ungrounded ratchet bits.</td>
+<td>v2. Since v22 and v23 the ratchet mask and the engage index both ground against Steam's <code>k_eGamepadButtonBitMask</code>, so the note names only <code>gyro_button</code> indices with no grounded read, <code>gyro_button_invert</code> values other than 0, 1, and 2 (2 = Toggle since v25), and the residual mask of ungrounded ratchet bits.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_ActivatorDelayDropped</code></td>
@@ -4737,7 +4797,7 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_MissingModeShiftGroup</code>, <code>Workshop_Tr_MissingPreset</code>, <code>Workshop_Tr_ActivatorInputNotSupported</code>, <code>Workshop_Tr_ShiftLayerEmpty</code>, <code>Workshop_Tr_PresetHasNoActivator</code></td>
-<td>Layer and preset-switch diagnostics: dangling references, activator sources that cannot drive a layer (gesture-gated wedges, gyro), layers that produced no rows, presets nothing switches to.</td>
+<td>Layer and preset-switch diagnostics: dangling references, activator sources that cannot drive a layer (tap or swipe gestures and gyro rate reads outside the latching one-shot arms), layers that produced no rows, presets nothing switches to.</td>
 </tr>
 </tbody>
 </table>
@@ -4756,7 +4816,7 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_SteamSystemAction</code></td>
-<td>Steam-client system verbs (<code>system_key_0</code> and the <code>SteamClientActions</code> families). <code>SCREENSHOT</code>, <code>SYSTEM_KEY_1</code>, and <code>SHOW_KEYBOARD</code> left this key in v17 and v20: they build macros and report nothing.</td>
+<td>Steam-client system verbs (<code>system_key_0</code> and the <code>SteamClientActions</code> families). <code>SCREENSHOT</code> and <code>SHOW_KEYBOARD</code> build macros since v10 (silent since v17), and <code>SYSTEM_KEY_1</code> left this key in v20.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_PlayerNumberActionNotSupported</code>, <code>Workshop_Tr_LizardModeActionNotSupported</code></td>
@@ -4788,7 +4848,7 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_ReleaseActivatorNotSupported</code></td>
-<td>A <code>release</code> on a mouse or pad button skips. On a <code>key_press</code> it becomes an on-release macro instead. (<code>Workshop_Tr_DoublePressNotSupported</code> sat here too, <strong>deleted in v17</strong>: <code>Double_Press</code> now lowers to macros on the engine's DoublePress trigger.)</td>
+<td>A <code>release</code> on a mouse or pad button skipped. <strong>No emission site since v15</strong>: release activators build tap macros on mouse and pad buttons (v10) and on trigger pulls, stick directions, and wheel detents (v15), and on a <code>key_press</code> an on-release macro. (<code>Workshop_Tr_DoublePressNotSupported</code> sat here too, <strong>deleted in v17</strong>: <code>Double_Press</code> now lowers to macros on the engine's DoublePress trigger.)</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_EdgeInputNotSupported</code></td>
@@ -4796,7 +4856,7 @@
 </tr>
 <tr>
 <td><code>Workshop_Tr_NoDeviceFreeTrigger</code></td>
-<td>Residual only: a <code>mouse_region</code> hosted on a stick or gyro with nothing to engage it. Paddle-, touchpad-, and gyro-hosted macros translate via device-free triggers since v4.</td>
+<td>Residual only: a <code>mouse_region</code> on a host with no engage read (the gyro, button surfaces). A memberless full-screen region there drops silently (v26). Paddle-, touchpad-, and gyro-hosted macros translate via device-free triggers since v4.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_UnknownBindingType</code>, <code>Workshop_Tr_UnknownKey</code>, <code>Workshop_Tr_UnknownMouseButton</code>, <code>Workshop_Tr_UnknownXInputButton</code>, <code>Workshop_Tr_UnknownPhysicalInput</code>, <code>Workshop_Tr_UnknownGroupMode</code>, <code>Workshop_Tr_UnknownActivatorType</code>, <code>Workshop_Tr_UnsupportedControllerAction</code></td>
@@ -4851,7 +4911,7 @@
 <tr>
 <td><code>Workshop_Tr_MouseModeTuningDropped</code></td>
 <td>Partial</td>
-<td><code>mouse_dampening_trigger</code> alone at HEAD: cross-input analog modulation has no per-source channel. v18.</td>
+<td><code>mouse_dampening_trigger</code> alone at HEAD: cross-input analog modulation has no per-source channel. v8, narrowed to this key in v18.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_DeadZoneRadialResidual</code></td>
@@ -4866,7 +4926,7 @@
 <tr>
 <td><code>Workshop_Tr_LayerReleaseEdgeApproximated</code></td>
 <td>Partial</td>
-<td>A release-hosted <code>HOLD_LAYER</code>: the Hold carrier is level-driven, so it lowers one edge early. Every other carrier takes the exact release edge via <code>ShiftActivator.FireOnRelease</code>. v19.</td>
+<td>A release-hosted carrier with no edge to move: the Hold carrier of a <code>HOLD_LAYER</code> or held mode shift, which is level-driven and lowers one edge early, and the press-edge Cycle of a sentinel set cycle or of merged same-input <code>CHANGE_PRESET</code> jumps. Every other carrier takes the exact release edge via <code>ShiftActivator.FireOnRelease</code>. v19.</td>
 </tr>
 <tr>
 <td><code>Workshop_Tr_MenuIconUnresolved</code></td>
@@ -4936,6 +4996,11 @@
 <td>v3/v6</td>
 <td>Mouse regions route to pointer rows, clamp macros, or the <code>NoDeviceFreeTrigger</code> residual.</td>
 </tr>
+<tr>
+<td><code>Workshop_Tr_ReleaseActivatorNotSupported</code></td>
+<td>v15</td>
+<td>Release activators build tap macros on mouse and pad buttons (v10) and on trigger pulls, stick directions, and wheel detents (v15).</td>
+</tr>
 </tbody>
 </table>
 <p>One constant (<code>TriggerThresholdApproximated</code>) is defined and localized but has never been emitted. <code>mouse_wheel</code> scroll bindings are not skipped. They emit <code>KbmScroll</code>/<code>KbmScrollH</code> rows. Empty bindings and <code>EMPTY_SUB_COMMAND</code> drop silently.</p>
@@ -4984,7 +5049,7 @@
 </tr>
 </tbody>
 </table>
-<p>Writes are atomic (temp file + <code>File.Move</code> overwrite under a lock), then the budget is enforced by deleting least-recently-accessed files first. TTL freshness rides last-write time, LRU recency rides last-access time, both stamped from an injectable clock for tests. <code>TryGetBytes</code> deletes an expired entry. <code>TryGetBytesStaleOk</code> (the art path) reports staleness but keeps the entry so the artwork client can serve it on network failure. Keys sanitize to <code>[0-9A-Za-z._-]</code> or fall back to a SHA-256 hex name. <code>Clear()</code> backs the Settings button.</p>
+<p>Writes are atomic (temp file + <code>File.Move</code> overwrite under a lock), then the budget is enforced by deleting least-recently-accessed files first. TTL freshness rides last-write time, LRU recency rides last-access time, both stamped from an injectable clock for tests. <code>TryGetBytes</code> deletes an expired entry. <code>TryGetBytesStaleOk</code> (the art path) reports staleness but keeps the entry so the artwork client can serve it on network failure. A key of up to 96 characters from <code>[0-9A-Za-z._-]</code> passes through as the file name. Any other key falls back to a lowercase SHA-256 hex name. <code>Clear()</code> backs the Settings button.</p>
 <hr />
 <h2 id="local-legacy-fallback">Local legacy fallback<a class="headerlink" href="#local-legacy-fallback" title="Permanent link">&para;</a></h2>
 <p><code>LocalWorkshopConfigStore</code> is the no-network path for configs whose <code>file_url</code> is absent (pre-2017) or dead. Read-only, never writes. Resolution order:</p>
@@ -4997,14 +5062,14 @@
 <hr />
 <h2 id="provenance-and-the-update-check">Provenance and the update check<a class="headerlink" href="#provenance-and-the-update-check" title="Permanent link">&para;</a></h2>
 <p><code>SteamWorkshopSource</code> (in <code>SettingsService.cs</code>, serialized as the <code>&lt;SteamWorkshopSource&gt;</code> element on <code>ProfileData.WorkshopSource</code>) carries <code>PublishedFileId</code>, <code>AppId</code>, <code>GameName</code>, <code>Title</code>, <code>TimeUpdated</code> (unix seconds at import), <code>ImportedAt</code> (UTC), and <code>TranslationSummary</code> (the report digest). Null on every non-imported profile.</p>
-<p>Provenance is identity-scoped, like <code>Name</code> and <code>Id</code>. The runtime snapshot copiers exclude it by design: guard comments pin that at <code>SettingsService.UpdateActiveProfileSnapshot</code> and the <code>InputService</code> snapshot copy-back (both <code>SaveActiveProfileState</code> and its 250 ms autosave twin). <code>SnapshotCurrentProfile</code> never captures it, which is what makes a <strong>Save As</strong> fork user-authored with no Workshop link. Compaction preserves it (<code>Compaction_PreservesProvenance</code>).</p>
+<p>Provenance is identity-scoped, like <code>Name</code> and <code>Id</code>. The runtime snapshot copiers exclude it by design: guard comments pin that at <code>SettingsService.UpdateActiveProfileSnapshot</code> (the mirror the 250 ms autosave path runs) and at <code>InputService.SaveActiveProfileState</code>. <code>SnapshotCurrentProfile</code> never captures it, which is what makes a <strong>Save As</strong> fork user-authored with no Workshop link. Compaction preserves it (<code>Compaction_PreservesProvenance</code>).</p>
 <p>The update check (<code>OnCheckWorkshopUpdates</code> in <code>MainWindow.xaml.cs</code>) short-circuits with a status line when the opt-in is off, collects profiles with a nonzero <code>PublishedFileId</code>, and issues one batched <code>GetPublishedFileDetails</code> POST over the distinct ids. Only per-item <code>Result == 1</code> responses count (removed or banned items stay unreported). Stale means <code>fresh.time_updated &gt; stored TimeUpdated</code>, strictly. Clean runs end in a status line. Stale runs raise a message box whose primary button reopens the browse dialog. It is not surfaced anywhere else in the UI: provenance is persisted-but-invisible metadata whose only consumer is this check.</p>
 <hr />
 <h2 id="app-side-wiring">App-side wiring<a class="headerlink" href="#app-side-wiring" title="Permanent link">&para;</a></h2>
 <h3 id="workshopbrowsedialog">WorkshopBrowseDialog<a class="headerlink" href="#workshopbrowsedialog" title="Permanent link">&para;</a></h3>
 <p>A <code>FluentWindow</code> (Mica, 1280×760) with a three-state flow (<code>WsState</code>): <code>Cold</code> (opt-in off, showing the endpoint list and an enable button), <code>Search</code> (game shelf), <code>Browse</code> (game room). Search debounces 500 ms, requires 2+ characters, and takes the top 12 store matches. The manifest pane has exactly five mutually exclusive fills: idle, loading, legacy, error, result. Only result shows the import footer. Preset chips re-run the translation with a new <code>IncludedPresetIds</code> set. Art crossfades 240 ms through steel (120 out, swap, 120 in), honors the Windows animation setting, and decodes off the UI thread. Legacy selection tries <code>LocalWorkshopConfigStore</code> before showing the subscribe prompt, and the same fallback fires for dead CDN URLs.</p>
 <h3 id="workshopprofilematerializer">WorkshopProfileMaterializer<a class="headerlink" href="#workshopprofilematerializer" title="Permanent link">&para;</a></h3>
-<p><code>Materialize(translated, source)</code> builds the <code>ProfileData</code>. It creates only the slots the translation demands (<code>NeedsXboxSlot</code> / <code>NeedsKbmSlot</code>), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with the default HIDMaestro profile id for its type and its translated mapping set attached. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on <code>PadIndex = 0</code> (the first created slot: Xbox when demanded, otherwise the KbM slot that a macro-only or key-only config creates). Combined-output triggers use <code>OutputController</code>, and device-free descriptor triggers use <code>InputDevice</code>. Name falls back to <code>"Workshop Profile"</code>. When provenance is supplied it stamps <code>ImportedAt</code> and <code>TranslationSummary</code>.</p>
+<p><code>Materialize(translated, source)</code> builds the <code>ProfileData</code>. It creates only the slots the translation demands (<code>NeedsXboxSlot</code> / <code>NeedsKbmSlot</code>), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with its translated mapping set attached. The Xbox slot takes the default HIDMaestro profile id, and a keyboard-and-mouse slot's id stays null. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on <code>PadIndex = 0</code> (the first created slot: Xbox when demanded, otherwise the KbM slot that a macro-only or key-only config creates). Combined-output triggers use <code>OutputController</code>, and device-free descriptor triggers use <code>InputDevice</code>. Name falls back to <code>"Workshop Profile"</code>. When provenance is supplied it stamps <code>ImportedAt</code> and <code>TranslationSummary</code>.</p>
 <p><code>MappingSet.Authoritative</code> is set on each claimed slot, and only on those. The translator spells every binding out, automap-identical ones included, so the legacy merge must add nothing on top when a device is assigned. An unclaimed slot gets a fresh <code>MappingSet</code> that stays non-authoritative, because a slot the user creates later has to automap normally.</p>
 <p>Three carriers ride the claimed slots as <code>MappingSet.Workshop*</code> stamps, parked there because the import runs before any device exists and the settings they belong in are keyed by device guid:</p>
 <ul>
@@ -5032,7 +5097,7 @@
 <li>Touchpad acceleration (<code>FoldTouchpadAcceleration</code>): a source's <code>ParamAccel</code> onto that pad's <code>TouchpadSettings</code> entry <code>MouseAcceleration</code>. Keyed off the source descriptor, not the row target, because the target of a touchpad mouse row is Mouse X or Mouse Y and names no pad.</li>
 <li>Gyro acceleration (<code>FoldGyroAcceleration</code>): <code>ParamAccel</code> on a <code>Gyro</code> source onto the <code>GyroAcceleration</code> card, written in the card's own <code>F2</code> invariant format.</li>
 </ul>
-<p>Two stamps deliberately do not fold. <code>WorkshopGyroRatchetDescriptors</code> has no <code>PadSetting</code> field and no control in any view, so it stays a runtime overlay. <code>ParamFlickRotationOffsetDeg</code> has no card either and stays on the source, which the code names as a real remaining gap rather than a deliberate exclusion.</p>
+<p>Two imported values do not fold. <code>WorkshopGyroRatchetDescriptors</code> has no <code>PadSetting</code> field and no control in any view, so it stays a runtime overlay. <code>ParamFlickRotationOffsetDeg</code> has no card either and stays on the source, which the code names as a real remaining gap rather than a deliberate exclusion.</p>
 <hr />
 <h2 id="engine-substrate-shipped-with-the-import-usable-everywhere">Engine substrate (shipped with the import, usable everywhere)<a class="headerlink" href="#engine-substrate-shipped-with-the-import-usable-everywhere" title="Permanent link">&para;</a></h2>
 <h3 id="the-abstract-gamepad-descriptor-family">The abstract Gamepad descriptor family<a class="headerlink" href="#the-abstract-gamepad-descriptor-family" title="Permanent link">&para;</a></h3>
@@ -5127,10 +5192,10 @@
 </tr>
 </tbody>
 </table>
-<p>Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing <code>Gyro ...</code> / <code>Touchpad ...</code> descriptors, which already resolve per device. The family does not rename them. The picker offers the family in the leading <strong>(Any device)</strong> group (empty guid) on every slot, and per concrete device only for <code>CapType == Gamepad</code> devices not in raw-numbered naming, rendered through <code>Mapping_Gamepad_Format</code> ("Gamepad {0}") with the shared <code>DevObj_*</code> member labels.</p>
+<p>Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing <code>Gyro ...</code> / <code>Touchpad ...</code> descriptors, which already resolve per device. The family does not rename them. The picker offers the family in the leading <strong>(Any Device)</strong> group (empty guid) on every slot, and per concrete device only for <code>CapType == Gamepad</code> devices not in raw-numbered naming, rendered through <code>Mapping_Gamepad_Format</code> ("Gamepad {0}") with the shared <code>DevObj_*</code> member labels.</p>
 <p><strong>Empty-DeviceGuid contract.</strong> <code>MappingSource.DeviceGuid</code> defaults to <code>""</code>, documented as "first available device on the VC," resolved per frame in Step 3. The Workshop translator emits every source with an empty guid. Two seams enforce the contract off the happy path:</p>
 <ul>
-<li>The multi-source contribution builders in <code>PadForge.App/Common/Input/InputManager.Step3.MappingSetEval.cs</code> (<code>BuildCustomContribsForBipolarAxis</code> / <code>Trigger</code> / <code>Button</code>) resolve an empty guid across every device on the slot (<code>GetSlotDeviceStates</code>, per-device read, max-abs across devices) instead of reading only the device being evaluated or a null lookup that contributed 0. <code>EvaluateStickTrim</code> still resolves an empty guid to the device currently being evaluated.</li>
+<li>The multi-source contribution builders in <code>PadForge.App/Common/Input/InputManager.Step3.MappingSetEval.cs</code> (<code>BuildCustomContribsForBipolarAxis</code> / <code>Trigger</code> / <code>Button</code>) resolve an empty guid across every device on the slot (<code>GetSlotDeviceStates</code>, per-device read, max-abs across devices) instead of reading only the device being evaluated or a null lookup that contributed 0. <code>EvaluateStickTrim</code> resolves an empty guid across the slot the same way: gates take the strongest pull, and the trim source the largest deflection.</li>
 <li>The gesture-provider invocations in <code>SourceCoercion</code> (<code>ReadAsBool</code> / <code>ReadAsBipolar</code> / <code>ReadAsUnipolar</code>) pass the caller-resolved guid, because the gesture providers key on a concrete <code>(slot, device, pad)</code> triple and a bare empty guid always missed.</li>
 </ul>
 <h3 id="generic-per-source-sensitivity">Generic per-source Sensitivity<a class="headerlink" href="#generic-per-source-sensitivity" title="Permanent link">&para;</a></h3>
@@ -5141,24 +5206,24 @@
 <li><code>ReadAsUnipolar</code>: trigger value × sensitivity, clamped to 0..1.</li>
 <li><code>ReadAsBool</code> (the axis-to-button threshold read): the raw value scales before the threshold comparison. Half-axis scales deviation from center, full-axis and slider scale magnitude from zero, and sensitivity 1.0 leaves every comparison bit-identical. Without this site the slider had no effect on axis-to-button rows.</li>
 </ol>
-<p>The family readers that own their own scaling call <code>PerSourceSensitivity</code> themselves: the three touchpad axis reads (<code>TryReadTouchpadAxis</code>, <code>TryReadTouchpadAxisAbsolute</code>, <code>TryReadTouchpadAxisRaw</code>), the trackball emitter <code>EmitBallCounts</code>, <code>ReadGyroLean</code>, and <code>ReadShakeEnvelope</code>.</p>
-<p>The field clamps 0.1–5.0 in <code>MappingItem</code>. The grid no longer shows a generic slider for plain analog sources (2026-07-27): the field is surfaced only on Gyro Lean rows (label <code>Mapping_GyroSensitivity</code>) and as the pointer-stick speed on a keyboard-and-mouse slot's Sticks tab (label <code>Macro_Sensitivity</code>). <code>Mapping_Sensitivity</code> remains in the resx unused.</p>
+<p>The family readers that own their own scaling call <code>PerSourceSensitivity</code> themselves: the three touchpad axis reads (<code>TryReadTouchpadAxis</code>, <code>TryReadTouchpadAxisAbsolute</code>, <code>TryReadTouchpadAxisRaw</code>), the touchpad mouse-counts read <code>ReadTouchpadMouseCounts</code>, <code>ReadGyroLean</code>, and <code>ReadShakeEnvelope</code>.</p>
+<p>The field clamps 0.1–5.0 in <code>MappingItem</code>. The grid no longer shows a generic slider for plain analog sources (2026-07-27): the field is surfaced only on Gyro Lean rows (label <code>Mapping_GyroSensitivity</code>). The pointer-stick speed on a keyboard-and-mouse slot's Sticks tab (label <code>Macro_Sensitivity</code>) is a separate stick-level field, <code>StickConfigItem.Sensitivity</code>. <code>Mapping_Sensitivity</code> remains in the resx unused.</p>
 <h3 id="touchpad-finger-pressure">Touchpad finger pressure<a class="headerlink" href="#touchpad-finger-pressure" title="Permanent link">&para;</a></h3>
 <p>The <code>Touchpad {p} Finger {f} Pressure</code> descriptor existed in the engine. Phase A put it in the picker (<code>Mapping_TouchpadFingerPressure_Format</code>, one entry per pad × finger, gated on <code>HasTouchpad || IsTouchpad</code> and withheld for PTP system touchpads, whose reader synthesizes pressure as a 0/1 contact flag, finger counts from the live SDL snapshot or the persisted capability). It reads <code>FingerPressure[f]</code> as a unipolar 0..1 level and bypasses the touchpad delta path. Values arrive from SDL's per-finger pressure on gamepad touchpads (pads without a force sensor report full on contact). The PTP reader and the touchpad overlay report binary 0/1 while a finger is down. The Workshop translator never emits this descriptor (its trackpad <code>soft_press</code> rides the click and touch descriptors, reporting Clean since v17). It exists for hand-built mappings.</p>
 <h3 id="the-macro-action-family">The macro-action family<a class="headerlink" href="#the-macro-action-family" title="Permanent link">&para;</a></h3>
 <p>Appended to <code>MacroActionType</code> (the enum is append-only because the clipboard serializes ints) in waves v1 through v3: <code>MoveMouseToScreenPosition = 33</code>, <code>RepeatKeyWhileHeld = 34</code>, <code>RepeatVcButtonWhileHeld = 35</code>, <code>ToggleVcButton = 36</code>, <code>ToggleKey = 37</code>, <code>GyroRecenter = 38</code>. Later waves appended <code>AxisHold = 39</code> and <code>MouseWheelTap = 40</code> (v15), <code>MouseNudge = 41</code> and <code>CycleTapList = 42</code> (v16), and <code>ToggleMouseButton = 43</code>, <code>ToggleVcAxis = 44</code>, <code>RepeatVcAxisWhileHeld = 45</code>, <code>ToggleWheel = 46</code> (v18).</p>
 <ul>
-<li><code>MoveMouseToScreenPosition</code>: <code>MouseX</code> / <code>MouseY</code> (primary-monitor pixels, clamped to the screen), executed as one <code>CursorControlService.MoveCursorTo</code> warp. Editor: two numeric fields plus <strong>Pick on screen</strong> (3-second countdown, then captures the live cursor).</li>
+<li><code>MoveMouseToScreenPosition</code>: <code>MouseX</code> / <code>MouseY</code> (primary-monitor pixels, clamped to the screen), executed as one <code>CursorControlService.MoveCursorTo</code> warp. Editor: two numeric fields plus <strong>Pick on Screen</strong> (3-second countdown, then captures the live cursor).</li>
 <li><code>RepeatKeyWhileHeld</code>: the shared key picker plus <code>IntervalMs</code> (clamped 10–1000, default 100). A continuous action: while the trigger holds, it sends a full key-down/key-up pulse per parsed key each time the interval elapses, first pulse immediately.</li>
 <li><code>RepeatVcButtonWhileHeld</code> (v3): the virtual-controller twin, pulsing an Xbox button on the interval (Steam's xinput <code>hold_repeats</code> turbo).</li>
 <li><code>ToggleVcButton</code> / <code>ToggleKey</code> (v3): press-to-latch, press-again-to-release, for Steam's activator <code>toggle</code> setting.</li>
 <li><code>GyroRecenter</code> (v3): Steam's <code>camera_reset</code>, approximated as a gyro recenter.</li>
 </ul>
-<p>The translator also reuses existing actions: <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>GuideLedBrightness</code> for <code>set_led</code> (v2, with HSV saturation and brightness folded by the materializer) and <code>MouseLimitRegion</code> for stick- and gyro-hosted mouse regions (v3). The translator's neutral shape is <code>TranslatedMacroAction</code>, a 26-member 0-based enum in <code>TranslatedProfile.cs</code> (<code>MoveMouseToScreenPosition = 0</code> through <code>RepeatWheelWhileHeld = 25</code>) that the materializer lowers onto <code>MacroActionType</code>. Not every member has its own <code>MacroActionType</code>: <code>RepeatWheelWhileHeld</code> lowers onto <code>MouseWheelTap</code> with <code>MacroRepeatMode.UntilRelease</code>.</p>
+<p>The translator also reuses existing actions: <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>GuideLedBrightness</code> for <code>set_led</code> (v2, with HSV saturation and brightness folded by the materializer) and <code>MouseLimitRegion</code> for stick- and trigger-hosted mouse regions (v3). The translator's neutral shape is <code>TranslatedMacroAction</code>, a 26-member 0-based enum in <code>TranslatedProfile.cs</code> (<code>MoveMouseToScreenPosition = 0</code> through <code>RepeatWheelWhileHeld = 25</code>) that the materializer lowers onto <code>MacroActionType</code>. Not every member has its own <code>MacroActionType</code>: <code>RepeatWheelWhileHeld</code> lowers onto <code>MouseWheelTap</code> with <code>MacroRepeatMode.UntilRelease</code>.</p>
 <p>All dispatch in the gamepad-state and Extended raw-state switches of <code>InputManager.Step4b.EvaluateMacros.cs</code>, carry the DTO triple in <code>SettingsService</code>, and follow the <code>Is*Type</code> editor-visibility pattern in <code>MacroItem.cs</code>.</p>
 <hr />
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
-<p><code>PadForge.SteamWorkshop.Tests</code> covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through <code>TranslationEdgeTests</code>, the v1-v7 per-wave suites (<code>WaveOneATranslationTests</code> through <code>WaveFourCTranslationTests</code>), the v8-v26 topic suites (<code>GroupAxisInversionTests</code>, <code>CurveChannelTranslationTests</code>, <code>DeadZoneGeometryTranslationTests</code>, <code>GapClosureTranslationTests</code>, <code>StickDirectionTranslationTests</code>, <code>StickSwipeScrollTests</code>, <code>AuditTwoTranslationTests</code>, <code>SentinelPresetCycleTests</code>, <code>MenuCellLabelTests</code>, <code>MenuNameDisambiguationTests</code>, <code>RatchetDelayHapticTranslationTests</code>, <code>ReleaseActivatorWheelTests</code>, <code>VocabularyCensusTests</code>, <code>MassSweepTopFourTests</code>, <code>MassSweepRoundTwoTests</code>, <code>MassSweepRoundThreeTests</code>, <code>TranslatorAuditFixTests</code>, <code>MacroTriggerReachabilityTests</code>, <code>WorkshopSourceDeviceGuidTests</code>), the reason-key lockdowns (<code>ReportReasonLockdownTests</code>, <code>ApprovedReasonLockdown</code>, <code>UserFacingVocabularyTests</code>), and 30 golden fixtures (<code>Golden/{fileId}.golden.txt</code>, re-blessed via <code>PADFORGE_BLESS_GOLDEN=1</code> so translator changes surface as reviewable diffs). <code>PadForge.Tests/WorkshopProvenanceTests.cs</code> pins the provenance XML round-trip, the materializer stamp, and compaction preservation.</p>
+<p><code>PadForge.SteamWorkshop.Tests</code> covers the parser (syntax, caps, VBKV), the clients (gate throws, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through <code>TranslationEdgeTests</code>, the v2-v7 per-wave suites (<code>WaveOneATranslationTests</code> through <code>WaveFourCTranslationTests</code>), the v8-v26 topic suites (<code>GroupAxisInversionTests</code>, <code>CurveChannelTranslationTests</code>, <code>DeadZoneGeometryTranslationTests</code>, <code>GapClosureTranslationTests</code>, <code>StickDirectionTranslationTests</code>, <code>StickSwipeScrollTests</code>, <code>AuditTwoTranslationTests</code>, <code>SentinelPresetCycleTests</code>, <code>MenuCellLabelTests</code>, <code>MenuNameDisambiguationTests</code>, <code>RatchetDelayHapticTranslationTests</code>, <code>ReleaseActivatorWheelTests</code>, <code>VocabularyCensusTests</code>, <code>MassSweepTopFourTests</code>, <code>MassSweepRoundTwoTests</code>, <code>MassSweepRoundThreeTests</code>, <code>TranslatorAuditFixTests</code>, <code>MacroTriggerReachabilityTests</code>, <code>WorkshopSourceDeviceGuidTests</code>), the reason-key lockdowns (<code>ReportReasonLockdownTests</code>, <code>ApprovedReasonLockdown</code>, <code>UserFacingVocabularyTests</code>), and 30 golden fixtures (<code>Golden/{fileId}.golden.txt</code>, re-blessed via <code>PADFORGE_BLESS_GOLDEN=1</code> so translator changes surface as reviewable diffs). <code>PadForge.Tests/WorkshopProvenanceTests.cs</code> pins the provenance XML round-trip, the materializer stamp, and compaction preservation.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -5172,7 +5237,7 @@
 <li><a href="../engine-library/">Engine Library</a>: <code>MappingSource</code>, <code>MappingSet</code>, and the coercion layer.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

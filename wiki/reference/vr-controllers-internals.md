@@ -4,7 +4,7 @@
 
 The user-facing page is [Virtual VR Controllers](../features/vr-controllers.md). This one is for whoever has to change the code.
 
-Two VR lanes ship, and they run in opposite directions. Most of this page covers the **output** lane (#49): a PadForge slot emits a pair of virtual SteamVR hands through HIDMaestro's OpenVR driver. 4.3.0 added the **input** lane (#287): real VR hardware already tracked by SteamVR becomes a PadForge device you can map from. They share no code beyond a self-emission filter that keeps one from eating the other. The input lane has its own section at the end.
+Two SteamVR lanes ship, and they run in opposite directions. Most of this page covers the **output** lane (#49): a PadForge slot emits a pair of virtual SteamVR hands through HIDMaestro's OpenVR driver. 4.3.0 added the **input** lane (#287): real VR hardware already tracked by SteamVR becomes a PadForge device you can map from. They share no code beyond a self-emission filter that keeps one from eating the other. The input lane has its own section at the end. A third lane reads a headset and its hand controllers through any OpenXR runtime, with or without SteamVR, and has its own page, [OpenXR Input Internals](openxr-input-internals.md).
 
 ---
 
@@ -113,7 +113,7 @@ Without the inner re-check, a haptic event arriving during teardown re-latches a
 
 ## Availability and install
 
-`HMaestroVRController.IsAvailable()` caches `HMVR.IsSteamVRInstalled` for 5 seconds (`AvailabilityTtlMs`), because the probe walks Steam's library metadata on disk and the sidebar rail rebuild queries once per slot. `ResetAvailability()` drops the cache so the gates lift right after an install instead of waiting out the TTL.
+`HMaestroVRController.IsAvailable()` caches `HMVR.IsSteamVRInstalled` for 5 seconds (`AvailabilityTtlMs`), because the probe reads up to three registry keys and checks up to four install paths on disk, and the sidebar rail rebuild queries once per slot. `ResetAvailability()` drops the cache so the gates lift right after an install instead of waiting out the TTL.
 
 The cache's "has a value" flag is an explicit `bool`, not a sentinel timestamp. Seeding the tick with `long.MinValue` made `now - s_availCheckedTick` overflow negative, which always reads as inside the TTL, so the first call returned the default `false` and SteamVR read as absent forever.
 
@@ -212,4 +212,4 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

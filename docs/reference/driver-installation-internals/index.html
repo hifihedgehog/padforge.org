@@ -16,7 +16,7 @@
         <link rel="prev" href="../hidmaestro-deep-dive/">
       
       
-        <link rel="next" href="../dsu-motion-server/">
+        <link rel="next" href="../updates-internals/">
       
       
         
@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -3351,6 +3383,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -4776,9 +4836,9 @@
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        WU[&quot;DS3 WinUSB package&lt;br/&gt;signed on this machine&quot;]
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    end
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(231 profiles bundled in the SDK)&quot;]
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(231 profiles bundled in the SDK,&lt;br/&gt;133 of them offered in PadForge)&quot;]
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    HH --&gt;|&quot;x64: HidHide_1.5.230_x64.exe&lt;br/&gt;/extract -&gt; msiexec /i HidHide.msi&lt;br/&gt;ARM64: nefconc install, then class filters&quot;| HH_DRV[&quot;HidHide kernel driver&quot;]
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    MS --&gt;|&quot;GitHub /releases -&gt; SDK Runtime x64 EXE -&gt; /install&quot;| MS_SVC[&quot;Windows MIDI Services&lt;br/&gt;(Win11 24H2+)&quot;]
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    MS --&gt;|&quot;GitHub /releases -&gt; SDK Runtime EXE for the machine (x64 or arm64) -&gt; /install&quot;| MS_SVC[&quot;Windows MIDI Services&lt;br/&gt;(Win11 24H2+)&quot;]
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    SV --&gt;|&quot;steamcmd.zip -&gt; +app_update 250820&lt;br/&gt;-&gt; HMVR.SetSteamVRPathHint&quot;| SV_DIR[&quot;SteamVR payload&lt;br/&gt;(default C:\SteamVR)&quot;]
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    BT --&gt;|&quot;Devcon.Install of the two INFs&lt;br/&gt;+ Bluetooth-class lower filter&quot;| BT_DRV[&quot;BthPS3 profile driver&lt;br/&gt;+ BthPS3PSM filter&quot;]
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    WU --&gt;|&quot;Inf2Cat + signtool, then&lt;br/&gt;UpdateDriverForPlugAndPlayDevices&quot;| WU_DEV[&quot;Docked DS3 on winusb.sys&quot;]
@@ -4834,7 +4894,7 @@
 <tr>
 <td><code>Resources\OpenXInput\&lt;arch&gt;\xinput1_4.dll</code></td>
 <td>DLL (Content)</td>
-<td>~172 KB</td>
+<td>~172 KB (arm64), ~180 KB (x64)</td>
 <td>OpenXInput shim. <strong>Not</strong> an installer. Bundled into the single-file EXE via <code>IncludeNativeLibrariesForSelfExtract</code> and loaded via <code>SetDllDirectory</code> on the extract directory at runtime.</td>
 </tr>
 <tr>
@@ -4859,10 +4919,10 @@
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&lt;LogicalName&gt;</span>BthPS3.%(RecursiveDir)%(Filename)%(Extension)<span class="nt">&lt;/LogicalName&gt;</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
 </code></pre></div>
-<p><code>HIDMaestro.Core.dll</code> is a <code>&lt;Reference&gt;</code>, not a <code>&lt;ProjectReference&gt;</code>. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of <code>HIDMaestro.Core.dll</code> from the HIDMaestro repo into <code>Resources\HIDMaestro\</code> after a tag is cut there. PadForge 4.4.0 ships HIDMaestro 1.7.2. The 1.6 line introduced the native OpenVR driver behind the VR slot type.</p>
+<p><code>HIDMaestro.Core.dll</code> is a <code>&lt;Reference&gt;</code>, not a <code>&lt;ProjectReference&gt;</code>. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of <code>HIDMaestro.Core.dll</code> from the HIDMaestro repo into <code>Resources\HIDMaestro\</code> after a tag is cut there. PadForge 4.5.3 ships HIDMaestro 1.9.0. The 1.6 line introduced the native OpenVR driver behind the VR slot type.</p>
 <hr />
 <h2 id="shared-helpers">Shared Helpers<a class="headerlink" href="#shared-helpers" title="Permanent link">&para;</a></h2>
-<p>Private methods reused across HidHide and the MIDI Services flows.</p>
+<p>Helpers reused across the install flows. <code>ExtractEmbeddedResource</code> and <code>CleanupTempDir</code> are internal, because <code>HidHideArm64Installer</code> uses them too. The rest are private.</p>
 <table>
 <thead>
 <tr>
@@ -4890,7 +4950,7 @@
 <tr>
 <td><code>RunElevated</code></td>
 <td><code>(string fileName, string arguments)</code></td>
-<td>Launches a child process with <code>Verb = "runas"</code>, hidden window, 180s timeout, and returns its exit code, or null when it is still running after the wait. PadForge is already elevated via <code>app.manifest</code>, so Windows does not show a UAC prompt when launching the child. Used by HidHide install/uninstall on x64 and the legacy vJoy uninstall script.</td>
+<td>Launches a child process with <code>Verb = "runas"</code>, hidden window, 180s timeout, and returns its exit code, or null when it is still running after the wait. PadForge is already elevated via <code>app.manifest</code>, so Windows does not show a UAC prompt when launching the child. Used by HidHide install/uninstall on x64 and the legacy ViGEmBus uninstall (both through <code>RunMsiElevated</code>), and by the legacy vJoy uninstall script.</td>
 </tr>
 <tr>
 <td><code>RunMsiElevated</code></td>
@@ -4905,13 +4965,14 @@
 <tr>
 <td><code>FindUninstallProductCode</code></td>
 <td><code>(string displayNameSubstring)</code></td>
-<td>Scans <code>HKLM\...\Uninstall</code> (Registry64 + Registry32) for a <code>DisplayName</code> containing the substring, then returns the subkey name only when it is brace-wrapped, so Inno and NSIS entries fall through and the scan continues. Returns the MSI ProductCode GUID <code>{XXXXXXXX-...}</code> or <code>null</code>. Used for ViGEmBus uninstall, where PadForge does not embed the MSI.</td>
+<td>Scans <code>HKLM\...\Uninstall</code> (Registry64 + Registry32) for a <code>DisplayName</code> containing the substring, then returns the subkey name only when Windows Installer marks the entry as its own (<code>WindowsInstaller</code> = 1 under a brace GUID key, <code>MsiProductCodeOrNull</code>), so a bootstrapper's own entry, and Inno and NSIS entries, fall through and the scan continues. Returns the MSI ProductCode GUID <code>{XXXXXXXX-...}</code> or <code>null</code>. Used for ViGEmBus uninstall, where PadForge does not embed the MSI.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
-<p>PadForge does not ship a separate HIDMaestro installer EXE or MSI, and <code>DriverInstaller</code> has no <code>InstallHIDMaestro</code> / <code>UninstallHIDMaestro</code> methods. The HM SDK assembly (<code>HIDMaestro.Core.dll</code>) bundles the UMDF2 driver binaries, INF, signing tools, and 231 device profiles. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created (typically during the first engine <code>Start()</code> that has such a slot configured).</p>
+<p>PadForge does not ship a separate HIDMaestro installer EXE or MSI, and <code>DriverInstaller</code> has no <code>InstallHIDMaestro</code> / <code>UninstallHIDMaestro</code> methods. The HM SDK assembly (<code>HIDMaestro.Core.dll</code>) bundles the UMDF2 driver binaries, INF, signing tools, and 231 device profiles. PadForge's pickers offer the 133 that carry a captured HID descriptor: <code>HMaestroProfileCatalog</code> keeps only profiles whose <code>HMProfile.IsDeployable</code> is true, which is <code>HasDescriptor</code>, and adds its own synthetic Custom profile. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created (typically during the first engine <code>Start()</code> that has such a slot configured).</p>
+<p>Composite personas need one more driver. The six profiles whose <code>backend</code> is <code>usbip</code> (<code>dualsense-composite</code>, <code>dualsense-edge-composite</code>, <code>dualshock-4-v2-composite</code>, <code>steam-controller-2</code>, <code>steam-controller-composite</code> and <code>steam-deck-composite</code>) attach through usbip-win2's virtual USB host controller. HIDMaestro 1.9.0 carries the usbip-win2 0.9.7.5 installer for x64 and for ARM64 inside <code>HIDMaestro.Core.dll</code>, checks its SHA-256 after extraction, and runs it with <code>/VERYSILENT /SUPPRESSMSGBOXES /NORESTART</code> the first time a composite controller is created (<code>HMContext.CreateController</code> reaches <code>UsbipDriverInstaller.EnsureInstalled</code>). PadForge makes no call of its own. The install re-enumerates the USB root hubs once. A machine that already has usbip-win2 with its host controller stopped gets a device restart instead of a reinstall, and one still carrying the 0.9.7.7 host controller that HIDMaestro installed through 1.8.1 is moved to the 0.9.7.5 driver in place.</p>
 <h3 id="ensurehmaestrocontext">EnsureHMaestroContext()<a class="headerlink" href="#ensurehmaestrocontext" title="Permanent link">&para;</a></h3>
 <p><code>InputManager.Step5.VirtualDevices.cs</code> owns the HM lifecycle:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">EnsureHMaestroContext</span><span class="p">()</span>
@@ -5047,7 +5108,7 @@
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    A[Create %TEMP%\PadForge_MidiServices\] --&gt; B
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    B[&quot;HttpClient with UserAgent=&#39;PadForge&#39;&lt;br/&gt;Timeout = 10 minutes&quot;] --&gt; C
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    C[&quot;GET https://api.github.com/repos/&lt;br/&gt;microsoft/MIDI/releases&lt;br/&gt;(full releases list, not /latest)&quot;] --&gt; D
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    D[&quot;FindMidiServicesDownloadUrl&lt;br/&gt;Parse JSON for SDK.Runtime x64 .exe&quot;] --&gt; E
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    D[&quot;FindMidiServicesDownloadUrl&lt;br/&gt;Parse JSON for the SDK.Runtime .exe&lt;br/&gt;built for this machine (x64 or arm64)&quot;] --&gt; E
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    E[&quot;Download installer (~210 MB)&lt;br/&gt;Stream to MidiServicesSdkRuntime.exe&quot;] --&gt; F
 <a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    F[&quot;Run installer directly (no runas)&lt;br/&gt;/install /quiet /norestart&lt;br/&gt;Wait up to 5 minutes&quot;] --&gt; G
 <a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    G[&quot;MidiVirtualController.ResetAvailability()&lt;br/&gt;Clear cached SDK check&quot;] --&gt; H
@@ -5059,8 +5120,8 @@
 <h3 id="findmidiservicesdownloadurl">FindMidiServicesDownloadUrl()<a class="headerlink" href="#findmidiservicesdownloadurl" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">FindMidiServicesDownloadUrl</span><span class="p">(</span><span class="n">HttpClient</span><span class="w"> </span><span class="n">http</span><span class="p">)</span>
 </code></pre></div>
-<p>Parses the GitHub releases JSON to find the SDK Runtime x64 installer URL. Uses simple string search (no JSON library): finds <code>"browser_download_url"</code> occurrences, extracts URLs, matches on <code>"SDK.Runtime"</code> + <code>"x64"</code> + <code>.exe</code> (case-insensitive). Returns the first match. Throws <code>InvalidOperationException</code> if none found.</p>
-<p><strong>Asset pattern</strong>: <code>Windows.MIDI.Services.SDK.Runtime.and.Tools.*-x64.exe</code></p>
+<p>Parses the GitHub releases JSON to find the SDK Runtime installer URL for this machine. The service installs for the machine, not the process, so <code>PlatformSupport.IsArm64Machine</code> picks the architecture token, <code>arm64</code> or <code>x64</code>, whichever build is running. Uses simple string search (no JSON library): finds <code>"browser_download_url"</code> occurrences, extracts URLs, matches on <code>"SDK.Runtime"</code> + <code>"-&lt;arch&gt;."</code> + <code>.exe</code> (case-insensitive). Returns the first match. Throws <code>InvalidOperationException</code> if none found.</p>
+<p><strong>Asset pattern</strong>: <code>Windows.MIDI.Services.SDK.Runtime.and.Tools.*-&lt;arch&gt;.exe</code>, where <code>&lt;arch&gt;</code> is <code>x64</code> or <code>arm64</code></p>
 <h3 id="uninstallmidiservices">UninstallMidiServices()<a class="headerlink" href="#uninstallmidiservices" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UninstallMidiServices</span><span class="p">()</span>
 </code></pre></div>
@@ -5117,7 +5178,7 @@
 <h3 id="ensureinstalled">EnsureInstalled()<a class="headerlink" href="#ensureinstalled" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">EnsureInstalled</span><span class="p">(</span><span class="n">Action</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">)</span>
 </code></pre></div>
-<p>Called from <code>Ds3PairingService</code>. Idempotent: when <code>BthPS3</code> is already a real service it only reconciles the consumer registry values, repairs the PSM filter if its control device is missing, and re-arms patching.</p>
+<p>Called from <code>Ds3PairingService</code>. Idempotent: when <code>BthPS3</code> is already a real service it reconciles the consumer registry values, repairs the PSM filter if its control device is missing, and re-arms patching. It also upgrades an older install in place: when the bundled <code>BthPS3.inf</code> carries a newer <code>DriverVer</code> than the installed <code>BthPS3.sys</code> (the bundle is 3.0.0.2082), <code>UpgradeInstalledDriversIfOlder</code> re-runs the three INFs, cycles the radio, and rewrites the consumer values.</p>
 <p>The "already installed" probe is <code>IsServiceInstalled</code>, which requires <code>ImagePath</code> under <code>SYSTEM\CurrentControlSet\Services\{name}</code>, not merely that the key exists. Any write under <code>Services\BthPS3\Parameters</code> creates the parent on the way down, so a settings write against a driver that was not installed yet left a key that looked installed to a null check and permanently blocked the install. <code>HasOrphanedBthPs3Key()</code> detects that exact damaged shape (key present, <code>ImagePath</code> absent) and deletes it before installing.</p>
 <p>The install itself, when the service is absent:</p>
 <ol>
@@ -5136,7 +5197,7 @@
 </code></pre></div>
 <p><code>UsbPnPDevice.CyclePort()</code> (IOCTL_USB_HUB_CYCLE_PORT) first. When the hub refuses it, the radio devnode is disabled and re-enabled instead. The fallback is not theoretical: on a MediaTek MT7925 the port cycle failed, the filter never attached, and the install stayed broken until the adapter was toggled by hand.</p>
 <p>The <code>finally</code> block does two things that callers depend on. It waits up to 20 s for a radio handle to be obtainable again, because a cycle returns before the radio is back and the very next step needs one. It then sleeps 3 s past that, because on a fast radio (Intel AX211) <code>CyclePort</code> returns while the old radio and filter instances still answer, so a probe in that window passes against a dying instance and anything armed on it evaporates.</p>
-<p><code>_cycleLock</code> serializes the cycle primitive itself. Two overlapping cycles are a path into a BthPS3 freed-context bugcheck. There is deliberately no helper that removes the BthPS3 PDO with PnP, for the same reason: the PDO is transient and self-destroys when the pad disconnects.</p>
+<p><code>_cycleLock</code> serializes the cycle primitive itself, including the calls driver installation makes outside the pairing service's radio gate. It is part of the mitigation for the July 9 bugcheck (#204) and does not control BthPS3's callback lifetimes. A transient PDO's removal is left to BthPS3's disconnect path, because forced removal adds teardown churn to the operation investigated after that crash. The one exception is <code>RemoveStaleBthPs3Children</code>: with DsHidMini absent, it removes a BthPS3 child that cannot start (CM problem 19 or 28, a devnode that kept an uninstalled driver's configuration), and BthPS3 re-creates it raw on the pad's next page. A healthy or driver-bound child is never removed.</p>
 <h3 id="winusb-package-signing">WinUSB package signing<a class="headerlink" href="#winusb-package-signing" title="Permanent link">&para;</a></h3>
 <p>PadForge signs the DS3 WinUSB package on the machine that installs it, the same approach HIDMaestro takes for its own drivers. Shipping a pre-signed catalog is what broke: the one previously in the repo was signed by a prototype certificate that existed on one developer machine.</p>
 <table>
@@ -5195,8 +5256,8 @@
 </tbody>
 </table>
 <p>Both take a 4-byte <code>{ ULONG DeviceIndex }</code> input, indexing the filter's per-radio collection. A bad index completes with <code>STATUS_NO_SUCH_DEVICE</code>, surfaced as <code>ERROR_NO_SUCH_DEVICE</code> (433), which ends the multi-radio sweep.</p>
-<p><code>EnsureConsumerParams()</code> writes <code>AutoEnableFilter=0</code>, which hands PadForge sole ownership of arming. BthPS3's default of 1 auto-arms at radio power-up and re-arms about 10 s after it denies a foreign device, which keeps its use-after-free-on-disconnect path reachable. With it off, BthPS3 receives no incoming connections whenever no DS3 is in play (issue #199).</p>
-<p>Both the raw-PDO pair and <code>AutoEnableFilter</code> are skipped entirely when <code>IsDsHidMiniInstalled()</code> is true. <code>RawPDO=1</code> makes BthPS3 enumerate its DS3 children with no function driver, which is what PadForge needs and what DsHidMini cannot live with, since its INF binds a UMDF stack to that same child. <code>App.xaml.cs</code> also calls <code>Ds3PairingService.ReconcilePsmPatchForCrashSafety("startup")</code> on a background task at every launch, so patching ends up armed only when a DS3 is actually paired.</p>
+<p><code>EnsureConsumerParams()</code> writes <code>AutoEnableFilter=0</code>, which turns off BthPS3's own arming from its next load (the driver's default is on), so PadForge's policy decides when patching is armed. The running driver keeps its cached setting, and another consumer can still request patching. Patching rewrites new L2CAP connection requests, not existing channels or callbacks, so keeping it off while no PS3-family pad is in play reduces exposure to new connections without draining existing ones (issue #199, #204).</p>
+<p>Both the raw-PDO pair and <code>AutoEnableFilter</code> are skipped entirely when <code>IsDsHidMiniInstalled()</code> is true. <code>RawPDO=1</code> makes BthPS3 enumerate its DS3 children with no function driver, which is what PadForge needs and what DsHidMini cannot live with, since its INF binds a UMDF stack to that same child. <code>App.xaml.cs</code> also calls <code>Ds3PairingService.ReconcilePsmPatchForCrashSafety("startup")</code> on a background task at every launch. Without DsHidMini, PadForge takes ownership and arms patching only when a PS3-family pad is paired or the machine carries a DualShock 3, PS Move or Navigation controller device node, present or not. With DsHidMini installed, PadForge removes its <code>AutoEnableFilter</code> override and keeps patching armed, because DsHidMini's pads connect only while it is.</p>
 <h3 id="extraction">Extraction<a class="headerlink" href="#extraction" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">ExtractDrivers</span><span class="p">()</span>
 </code></pre></div>
@@ -5210,7 +5271,7 @@
 <li><code>_viewModel.Settings.LegacyDriverCleanupOffered</code> is <code>false</code> (per-user once-only flag persisted in <code>PadForge.xml</code>), and</li>
 <li>At least one of <code>DriverInstaller.IsExtendedInstalled()</code> (vJoy) or <code>DriverInstaller.GetViGEmVersion() != null</code> (ViGEmBus) returns truthy.</li>
 </ol>
-<p>If neither legacy driver is detected, the flag is flipped to <code>true</code> and the offer is silently skipped. Otherwise PadForge raises a <code>Wpf.Ui.Controls.MessageBox</code> titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, <code>UninstallViGEmBus()</code> and <code>UninstallVJoy()</code> run on a worker thread through <code>RunDriverOperationAsync</code> (the "Removing legacy drivers..." overlay), each gated on its own detection result (<code>if (hasViGEm)</code> / <code>if (hasExtended)</code>), inside a single <code>try/catch</code>. They used to run inline on the dispatcher, which froze the window for the whole removal. Because both calls share one try block, a throw from <code>UninstallViGEmBus()</code> skips <code>UninstallVJoy()</code>, and the captured exception feeds a follow-up "Cleanup encountered an error" dialog. The flag is flipped to <code>true</code> afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.</p>
+<p>If neither legacy driver is detected, the flag is flipped to <code>true</code> and the offer is silently skipped. Otherwise PadForge raises a <code>Wpf.Ui.Controls.MessageBox</code> titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, <code>UninstallViGEmBus()</code> and <code>UninstallVJoy()</code> run on a worker thread through <code>RunDriverOperationAsync</code> (the "Removing legacy drivers…" overlay), each gated on its own detection result (<code>if (hasViGEm)</code> / <code>if (hasExtended)</code>) and each inside its own <code>try/catch</code>. They used to run inline on the dispatcher, which froze the window for the whole removal. Because each call has its own try block, a throw from <code>UninstallViGEmBus()</code> no longer skips <code>UninstallVJoy()</code>. Every caught failure is worded by <code>DescribeDriverFailure</code> and collected, and the collection feeds one follow-up "Cleanup encountered an error" dialog. The flag is flipped to <code>true</code> afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.</p>
 <p>The whole entry point is wrapped in a top-level <code>try/catch</code> that swallows everything because it runs as <code>async void</code> from the dispatcher. An unhandled exception there would surface as a generic "unexpected error" dialog at startup. On detection failure, the flag is <strong>not</strong> flipped, so the next launch retries.</p>
 <h3 id="detection">Detection<a class="headerlink" href="#detection" title="Permanent link">&para;</a></h3>
 <h4 id="isextendedinstalled-vjoy">IsExtendedInstalled() (vJoy)<a class="headerlink" href="#isextendedinstalled-vjoy" title="Permanent link">&para;</a></h4>
@@ -5417,23 +5478,26 @@
 <a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetBlacklist</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ids</span><span class="p">)</span><span class="w">                  </span><span class="c1">// Replace entire blacklist, false when the driver refused</span>
 <a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetWhitelist</span><span class="p">()</span><span class="w">                          </span><span class="c1">// DOS device paths, or NULL on a failed read</span>
 <a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetWhitelist</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paths</span><span class="p">)</span><span class="w">                </span><span class="c1">// Replace entire whitelist, false when the driver refused</span>
-<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetActive</span><span class="p">()</span><span class="w">                                     </span><span class="c1">// Cloaking enabled?</span>
-<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                          </span><span class="c1">// Enable/disable cloaking</span>
-<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveManagedDevices</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Remove only PadForge&#39;s entries</span>
-<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w">  </span><span class="c1">// Diff-based blacklist sync against the driver&#39;s own list</span>
-<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">,</span>
-<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">added</span><span class="p">,</span>
-<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">removed</span><span class="p">)</span><span class="w">    </span><span class="c1">// The same sync, reporting what changed</span>
-<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MissingFromBlacklist</span><span class="p">(</span><span class="n">IEnumerable</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w"> </span><span class="c1">// Read-back: what the driver does not carry</span>
-<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ClearAll</span><span class="p">()</span><span class="w">                                      </span><span class="c1">// Clear blacklist + disable cloaking</span>
-<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">FindInstanceIdsByVidPid</span><span class="p">(</span><span class="kt">ushort</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="p">)</span><span class="w"> </span><span class="c1">// Enumerate HID-class devices by VID/PID (USB + BLE + BT Classic)</span>
-<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">)</span>
-<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span>
-<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">,</span><span class="w"> </span><span class="n">Func</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keepOut</span><span class="p">,</span>
-<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="w">    </span><span class="n">ICollection</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keptOut</span><span class="p">)</span><span class="w">                            </span><span class="c1">// The expansion with the keep-out set applied</span>
-<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsHidMaestroDeviceInstance</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w">           </span><span class="c1">// True if instance (or an ancestor) is a HIDMaestro virtual</span>
-<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DevicePathToInstanceId</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w">              </span><span class="c1">// \\?\HID#... -&gt; HID\VID_...\...</span>
-<a id="__codelineno-30-23" name="__codelineno-30-23" href="#__codelineno-30-23"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">ToDosDevicePathPublic</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">)</span><span class="w">        </span><span class="c1">// C:\... -&gt; \Device\HarddiskVolumeN\...</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DescribeReach</span><span class="p">(</span><span class="k">params</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">exeNames</span><span class="p">)</span><span class="w">       </span><span class="c1">// Diagnostics snapshot: driver reachable, active flag, whitelist size, per-name listing</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetActive</span><span class="p">()</span><span class="w">                                     </span><span class="c1">// Cloaking enabled?</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryGetActive</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                   </span><span class="c1">// The same read, false when the IOCTL failed</span>
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                          </span><span class="c1">// Enable/disable cloaking</span>
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveManagedDevices</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Remove only PadForge&#39;s entries</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">AdoptExistingAsManaged</span><span class="p">()</span><span class="w">                         </span><span class="c1">// Seed the managed set from the driver&#39;s list, -1 on a failed read</span>
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w">  </span><span class="c1">// Diff-based blacklist sync against the driver&#39;s own list</span>
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">,</span>
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">added</span><span class="p">,</span>
+<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">removed</span><span class="p">)</span><span class="w">    </span><span class="c1">// The same sync, reporting what changed</span>
+<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MissingFromBlacklist</span><span class="p">(</span><span class="n">IEnumerable</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w"> </span><span class="c1">// Read-back: what the driver does not carry</span>
+<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ClearAll</span><span class="p">()</span><span class="w">                                      </span><span class="c1">// Clear blacklist + disable cloaking</span>
+<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">FindInstanceIdsByVidPid</span><span class="p">(</span><span class="kt">ushort</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="p">)</span><span class="w"> </span><span class="c1">// Enumerate HID-class devices by VID/PID (USB + BLE + BT Classic)</span>
+<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">)</span>
+<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span>
+<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">,</span><span class="w"> </span><span class="n">Func</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keepOut</span><span class="p">,</span>
+<a id="__codelineno-30-23" name="__codelineno-30-23" href="#__codelineno-30-23"></a><span class="w">    </span><span class="n">ICollection</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keptOut</span><span class="p">)</span><span class="w">                            </span><span class="c1">// The expansion with the keep-out set applied</span>
+<a id="__codelineno-30-24" name="__codelineno-30-24" href="#__codelineno-30-24"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsHidMaestroDeviceInstance</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w">           </span><span class="c1">// True if instance (or an ancestor) is a HIDMaestro virtual</span>
+<a id="__codelineno-30-25" name="__codelineno-30-25" href="#__codelineno-30-25"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DevicePathToInstanceId</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w">              </span><span class="c1">// \\?\HID#... -&gt; HID\VID_...\...</span>
+<a id="__codelineno-30-26" name="__codelineno-30-26" href="#__codelineno-30-26"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">ToDosDevicePathPublic</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">)</span><span class="w">        </span><span class="c1">// C:\... -&gt; \Device\HarddiskVolumeN\...</span>
 </code></pre></div>
 <p><code>GetBlacklist</code> and <code>GetWhitelist</code> return <code>null</code> for a failed read and an empty list for a successful read of an empty list. Callers must not conflate the two: every consumer does read-modify-write, so treating a failed read as "the list is empty" writes an empty list back and destroys entries the user set outside PadForge.</p>
 <h3 id="reading-the-drivers-list">Reading the Driver's List<a class="headerlink" href="#reading-the-drivers-list" title="Permanent link">&para;</a></h3>
@@ -5442,11 +5506,11 @@
 <p>An empty list is a two-byte reply, one <code>L'\0'</code>. Zero bytes or an odd count is malformed and reads as a failure.</p>
 <h3 id="managed-device-tracking">Managed Device Tracking<a class="headerlink" href="#managed-device-tracking" title="Permanent link">&para;</a></h3>
 <p><code>_managedDeviceIds</code> (<code>HashSet&lt;string&gt;</code>) tracks device IDs PadForge added to the blacklist. <code>RemoveManagedDevices()</code> removes only these entries, leaving entries from other tools untouched.</p>
-<p><strong>Startup clear and cloak persistence</strong>: <code>_managedDeviceIds</code> is in-memory, so a crashed or force-killed session leaves stale blacklist entries that <code>RemoveManagedDevices()</code> can no longer identify. <code>InputService.Start</code> resets the driver state with <code>ClearAll()</code> at engine start. The clear is conditional: when the Settings toggle <strong>Keep Devices Cloaked Between Launches</strong> (<code>KeepHidHideCloaksBetweenLaunches</code>, off by default) is on, startup skips <code>ClearAll()</code> so persisted cloaks survive into the new session with no visible decloak window, and <code>ApplyDeviceHiding</code>'s per-device walk re-asserts them idempotently. The same flag reaches the shutdown path as <code>RemoveDeviceHiding(keepCloaks: ...)</code>.</p>
+<p><strong>Startup clear and cloak persistence</strong>: <code>_managedDeviceIds</code> is in-memory, so a crashed or force-killed session leaves stale blacklist entries that <code>RemoveManagedDevices()</code> can no longer identify. <code>InputService.Start</code> resets the driver state with <code>ClearAll()</code> at engine start. The clear is conditional: when the Settings toggle <strong>Keep Devices Cloaked Between Launches</strong> (<code>KeepHidHideCloaksBetweenLaunches</code>, off by default) is on, startup skips <code>ClearAll()</code> so persisted cloaks survive into the new session with no visible decloak window, and <code>ApplyDeviceHiding</code>'s per-device walk re-asserts them idempotently. With the setting on, the first apply also adopts the entries the driver already holds as PadForge's own (<code>AdoptExistingAsManaged</code>, through <code>EnsureHidHideCloaksAdopted</code>), so the sync can still retire a kept cloak the new session no longer wants. A failed read leaves adoption for the next apply. The same flag reaches the shutdown path as <code>RemoveDeviceHiding(keepCloaks: ...)</code>.</p>
 <p><strong>The diff is taken against the driver, not the managed set</strong>. All blacklist management goes through <code>SyncManagedDevices</code>, which reads the driver's list, adds every desired id the driver lacks, removes every managed id that left the desired set and the driver still carries, and writes the whole list once. The managed set moves to the desired set only after a write the driver accepted, or when there was nothing to write.</p>
 <p>Diffing against the in-process managed set alone had two holes. An entry another tool dropped was never re-added, because the managed set still listed it (the HidHide client saves its whole list, and the driver's <code>SET</code> is a full replace). And a <code>SET</code> the driver refused was recorded as landed all the same. Either way the read-back printed <code>MISSING</code> on every apply and nothing fixed it.</p>
 <p>A failed read returns <code>false</code> without writing. This method's contract is that it never clears the entire blacklist, and a failed read falling through to <code>SetBlacklist</code> did precisely that.</p>
-<p><strong>Merge-based cache</strong>: <code>ApplyDeviceHiding</code> uses a merge-based approach for its resolved instance ID cache. New IDs are added but previously cached IDs are never discarded. This ensures offline devices that were resolved in a prior cycle remain in the blacklist even if they are not currently enumerable.</p>
+<p><strong>Merge-based cache</strong>: <code>ApplyDeviceHiding</code> uses a merge-based approach for each device's resolved instance ID cache (<code>UserDevice.HidHideInstanceIds</code>). New IDs are added and previously cached IDs are kept, except any that turn out to belong to a HIDMaestro virtual, which are scrubbed. This ensures offline devices that were resolved in a prior cycle remain in the blacklist even if they are not currently enumerable.</p>
 <h3 id="vidpid-format-matching">VID/PID Format Matching<a class="headerlink" href="#vidpid-format-matching" title="Permanent link">&para;</a></h3>
 <p><code>FindInstanceIdsByVidPid()</code> enumerates <code>GUID_DEVCLASS_HIDCLASS</code> present devices and matches instance IDs in three formats:</p>
 <ul>
@@ -5460,7 +5524,7 @@
 <p><code>ExpandToBaseContainerAndChildren</code> widens a single HID instance ID into the full set of instance paths HidHide needs to hide a device at its container boundary. It follows HidHide's own <code>BlacklistDlg.cpp:294-345</code> and adds one step the client cannot express:</p>
 <ol>
 <li>Start with the passed HID instance ID.</li>
-<li>Read its Container ID, then walk parents while the Container ID stays the same, recording each node passed. The last matching parent is the base container.</li>
+<li>Read its Container ID, then walk parents while the Container ID stays the same, recording each node passed. The last matching parent is the base container. A built-in device reports the system container ID, which every built-in device shares, so its walk is bounded by the node's <code>VID_xxxx&amp;PID_yyyy</code> token instead and stops at the USB composite parent.</li>
 <li>Blacklist every recorded node between the HID node and the base container whose class HidHide filters.</li>
 <li>Enumerate the base container's immediate children, counting how many are HID-class. If the base container is HIDClass, XUSB, or XboxComposite <strong>and</strong> every child is a HID, add the base-container instance path too. This blocks the device at the parent boundary so XInput and WGI cannot reach it through a sibling child path.</li>
 <li>Always add every HID-child instance path.</li>
@@ -5487,6 +5551,10 @@
 <tr>
 <td><code>HIDHIDE UNAVAILABLE</code></td>
 <td><code>TryProbe</code> failed while at least one device wanted hiding. Carries the Win32 error.</td>
+</tr>
+<tr>
+<td><code>HIDHIDE adopted</code></td>
+<td>How many kept entries the first apply adopted from the previous session, when <strong>Keep Devices Cloaked Between Launches</strong> is on.</td>
 </tr>
 <tr>
 <td><code>HIDHIDE apply</code></td>
@@ -5670,7 +5738,7 @@
 <tbody>
 <tr>
 <td>HIDMaestro <code>InstallDriver()</code></td>
-<td>Caught in <code>EnsureHMaestroContext</code>. On failure, sets <code>_hmaestroContextFailed = true</code> (sticky for the session) and calls <code>RaiseError("Failed to initialize HIDMaestro.", ex)</code>. The engine continues running for KB+M, VR, and (if installed) MIDI categories. HM-backed slot creation is gated on the context being non-null.</td>
+<td>Caught in <code>EnsureHMaestroContext</code>. On failure, sets <code>_hmaestroContextFailed = true</code> (sticky until the engine stops, when <code>DisposeHMaestroContextOnShutdown()</code> clears it, so the next <code>Start()</code> tries again) and calls <code>RaiseError("Failed to initialize HIDMaestro.", ex)</code>. The engine continues running for KB+M, VR, and (if installed) MIDI categories. HM-backed slot creation is gated on the context being non-null.</td>
 </tr>
 <tr>
 <td>HidHide install/uninstall</td>
@@ -5719,7 +5787,7 @@
 <li><a href="../xaml-views/">XAML Views</a>: <code>SettingsPage</code> driver install/uninstall buttons and guards</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 
@@ -5774,13 +5842,13 @@
         
         
           
-          <a href="../dsu-motion-server/" class="md-footer__link md-footer__link--next" aria-label="Next: DSU Motion Server">
+          <a href="../updates-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Updates Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                DSU Motion Server
+                Updates Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

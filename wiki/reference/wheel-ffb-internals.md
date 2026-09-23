@@ -13,7 +13,7 @@ Two force pipelines converge on the same vendor writers:
 - **Game PID force feedback** (DirectInput games): the game writes HID PID output reports to an Extended virtual controller. `HMaestroFfbDecoder` parses them into a `Vibration` carrying direction and condition data.
 - **XInput rumble** (Xbox-target games): the two motor bytes become scalar `Vibration` fields, which wheels translate into an oscillating constant force.
 
-Both write the single aggregation buffer `_combinedVibration` in `InputManager.Step2.UpdateInputStates.cs`. Everything downstream reads from it.
+Both land in the slot's `VibrationStates` entry, which `ApplyForceFeedback` in `InputManager.Step2.UpdateInputStates.cs` merges into the single aggregation buffer `_combinedVibration`. Everything downstream reads from it.
 
 A third destination joined in 4.1.0: the Bass Shakers lane (#236) turns the same game force into low-frequency audio. It bypasses `_combinedVibration` and the writers:
 
@@ -32,9 +32,9 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 | `PadForge.App/Common/Input/HMaestroVirtualController.cs` | Forwards HM HID-output and XInput packets into the decoder. |
 | `PadForge.App/Common/Input/HMaestroFfbDecoder.cs` | Parses HID PID reports into a `Vibration`. |
 | `PadForge.App/Common/Input/InputManager.Step2.UpdateInputStates.cs` | `ApplyForceFeedback` aggregates per slot and dispatches to a vendor writer. |
-| `PadForge.App/Common/Input/LogitechRawHidWriter.cs` | Logitech native HID (from `new-lg4ff`, clean-room). |
-| `PadForge.App/Common/Input/FanatecRawHidWriter.cs` | Fanatec native HID (from `hid-fanatecff`, clean-room). |
-| `PadForge.App/Common/Input/ThrustmasterRawHidWriter.cs` | Thrustmaster native HID (from `hid-tmff2`, clean-room). |
+| `PadForge.App/Common/Input/LogitechRawHidWriter.cs` | Logitech native HID. Original C#, wire protocol checked against `new-lg4ff`, read as documentation. |
+| `PadForge.App/Common/Input/FanatecRawHidWriter.cs` | Fanatec native HID. Original C#, wire protocol checked against `hid-fanatecff`, read as documentation. |
+| `PadForge.App/Common/Input/ThrustmasterRawHidWriter.cs` | Thrustmaster native HID. Original C#, wire protocol checked against `hid-tmff2`, read as documentation. |
 | `PadForge.Engine/Common/ForceFeedbackState.cs` | The `Vibration` carrier, the host-sampled and software paths, the SDL writer for generic devices. |
 | `PadForge.App/Common/Input/InputManager.Step3.SteeringLockFeedback.cs` | The at-lock feedback channels for a steering source. |
 | `PadForge.App/Common/Telemetry/` | The RPM-LED telemetry sources, hub, and LED map. |
@@ -43,7 +43,7 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 
 ## Decode chain
 
-`HMaestroVirtualController` holds an `HMaestroFfbDecoder`, constructed when the controller's HID descriptor carries the PID force-feedback block (the gate is descriptor presence, not VID, so catalog profiles keep their identity). The HM output callback routes by packet source: a HID-output report goes to `_ffbDecoder.OnHidOutput` then immediately `Apply`, a HID feature report (the Create-New-Effect path) goes to `OnHidFeature`, and an XInput packet writes the scalar motor and impulse-trigger bytes directly. A per-tick `TickFfb` calls `ApplyIfDue` so duration-bounded effects expire even without new packets.
+`HMaestroVirtualController` holds an `HMaestroFfbDecoder`, constructed when the controller's HID descriptor carries the PID force-feedback block (the gate is descriptor presence, not VID, so catalog profiles keep their identity). The HM output callback routes by packet source: a HID-output report goes to `_ffbDecoder.OnHidOutput` then immediately `Apply`, a HID feature report (the Create-New-Effect path) goes to `OnHidFeature`, and an XInput packet writes the scalar motor bytes directly and zeroes the trigger motors, since the XUSB wire carries none. A per-tick `TickFfb` calls `ApplyIfDue` so duration-bounded effects expire even without new packets.
 
 `HMaestroFfbDecoder.OnHidOutput` dispatches per report ID: Set Effect (0x11), Set Condition (0x13, the bit-packed per-axis condition coefficients for spring, damper, inertia, and friction), Set Periodic (0x14), Set Constant (0x15), Set Ramp (0x16), Effect Operation (0x1A, start and stop), Block Free (0x1B), Device Control (0x1C), and Device Gain (0x1D). It also handles the pre-allocation flow where the OS writes parameters before the SetFeature allocates the real effect block. `ParseFfbScales` walks the report descriptor once at construction to normalize hand-authored descriptors (the SideWinder ranges) into canonical units.
 
@@ -59,6 +59,7 @@ The `Vibration` carrier lives in `PadForge.Engine/Common/ForceFeedbackState.cs` 
 
 - Sony pads (DualSense, DualShock 4) return early. They are written by `UserEffectsDispatcher` and `PlayStationEffectWriter`.
 - Xbox One and later take the `XboxImpulseHidWriter` path.
+- Padix PSX/USB converters take the `PadixConverterRawHidWriter` path.
 - Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by `IsLogitechWheel` / `IsFanatecWheel` / `IsThrustmasterWheel` / `IsFanatecPedal`) take the vendor-writer block.
 - Everything else falls to `ForceFeedbackState.SetDeviceForces` (the SDL path).
 
@@ -68,7 +69,7 @@ Per-frame force is throttled by a change-detection struct cached in `_appliedWhe
 
 ## The three vendor writers
 
-All three are `internal static class`, frame a vendor-shaped command padded to the device's output-report length, and are clean-room C# from the open Linux drivers.
+All three are `internal static class`, frame a vendor-shaped command padded to the device's output-report length, and are original C# written against the wire protocols the open Linux drivers document. Those drivers are GPL and were read as documentation only, so none of their code ships.
 
 ### Logitech (`LogitechRawHidWriter`, VID 0x046D)
 
@@ -76,7 +77,7 @@ All three are `internal static class`, frame a vendor-shaped command padded to t
 
 ### Fanatec (`FanatecRawHidWriter`, VID 0x0EB7)
 
-`IsFanatecWheel` gates the CSL Elite, CSL DD, DD Pro, ClubSport DD, ClubSport V2 and V2.5, Podium DD1 and DD2, CSR Elite, and Porsche 911 bases. `IsFanatecPedal` gates the ClubSport V3 and CSL pedals (rumble only). High-resolution bases write 16-bit force. `WriteAutocenter` is a software centering spring routed through a slot-1 condition and re-asserted every frame, because Fanatec bases expose no firmware auto-center and the range command disables the stock spring. `WriteRange` sends three reports. `WriteRpmLeds` writes the base strip and the rim strip separately, nine LEDs. No firmware periodic.
+`IsFanatecWheel` gates the CSL Elite, CSL DD, DD Pro, ClubSport DD, ClubSport V2 and V2.5, Podium DD1 and DD2, CSR Elite, and Porsche 911 bases. `IsFanatecPedal` gates the ClubSport V3 and CSL pedals (rumble only). High-resolution bases write 16-bit force. `WriteAutocenter` is a software centering spring routed through a slot-1 condition and re-asserted with every constant-force write, because Fanatec bases expose no firmware auto-center and the range command disables the stock spring. `WriteRange` sends three reports. `WriteRpmLeds` writes the base strip and the rim strip separately, nine LEDs. No firmware periodic.
 
 ### Thrustmaster (`ThrustmasterRawHidWriter`, VID 0x044F)
 
@@ -166,4 +167,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

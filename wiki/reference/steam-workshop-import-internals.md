@@ -22,7 +22,7 @@ This is the developer-side companion to [Steam Workshop Config Import](../guides
 | `PadForge.SteamWorkshop/Model/SteamInputConfig.cs` (+ Group, Preset, Input, Activator, Binding) | Typed Steam Input config model. |
 | `PadForge.SteamWorkshop/Translation/ConfigTranslator.cs` | The translator. |
 | `PadForge.SteamWorkshop/Translation/TranslationReport.cs`, `TranslationStatus.cs`, `TranslationOptions.cs`, `TranslatedProfile.cs` | Report, status enum, options, neutral output shape. |
-| `PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs`, `SteamInputVkTable.cs`, `XInputTargetTable.cs`, `SteamVocabulary.cs` | Steam slot → PadForge source resolution, key and pad-target tables, the serializer-vocabulary token set. |
+| `PadForge.SteamWorkshop/Translation/PhysicalSlotResolver.cs`, `SteamInputVkTable.cs`, `XInputTargetTable.cs`, `SteamVocabulary.cs` | Steam slot → PadForge source resolution, key and pad-target tables, and the wire-token display names (`SpellToken`, `CommandLabel`, `MemberLabel`). |
 | `PadForge.SteamWorkshop/Cache/SteamWorkshopCache.cs`, `CacheCategory.cs` | File-system cache, TTLs, dual budgets, LRU. |
 | `PadForge.SteamWorkshop/Local/LocalWorkshopConfigStore.cs` | Read-only legacy fallback from the local Steam install. |
 | `PadForge.App/Views/WorkshopBrowseDialog.xaml(.cs)` | The browse dialog. |
@@ -34,9 +34,9 @@ This is the developer-side companion to [Steam Workshop Config Import](../guides
 | `PadForge.App/Services/SettingsService.cs` | `EnableCommunityConfigLookup`, `ShowLegacyWorkshopConfigs`, `SteamWorkshopSource`. |
 | `PadForge.Engine/Common/Mapping/SourceCoercion.cs` | Gamepad alias table, generic Sensitivity, pressure read, the flick stick and touchpad pointer families. |
 | `PadForge.Engine/Menus/MenuDefinitionEntry.cs` (+ `MenuEvaluator.cs`, `MenuSelectionMath.cs`) | The menu model translated menus land on. See [Menus](../guides/menus.md) and the engine pages. |
-| `PadForge.SteamWorkshop.Tests/` | Parser, client, cache, and translation tests: `TranslationEdgeTests`, the v1-v7 per-wave suites (`WaveOneA`, `WaveTwoA`, `WaveThree`, `WaveFour`, `WaveFourB`, `WaveFourC`), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures. |
+| `PadForge.SteamWorkshop.Tests/` | Parser, client, cache, and translation tests: `TranslationEdgeTests`, the v2-v7 per-wave suites (`WaveOneA`, `WaveTwoA`, `WaveThree`, `WaveFour`, `WaveFourB`, `WaveFourC`), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures. |
 
-The assembly targets `net10.0-windows`, references `PadForge.Engine`, and carries a single direct NuGet dependency: `SteamKit2` 3.4.0 (LGPL 2.1). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.
+The assembly targets `net10.0-windows`, references `PadForge.Engine`, and carries a single direct NuGet dependency: `SteamKit2` 3.4.0 (LGPL-2.1-only). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.
 
 ---
 
@@ -59,11 +59,11 @@ Every client constructor calls the guard first: `SteamWorkshopClient`, `SteamSto
 | `SteamUgcDownloader` | HTTPS GET | caller-supplied `file_url` (config CDN) | 10 MB cap, size and HTML-page validation. |
 | `SteamArtworkClient` | HTTPS GET | `cdn.cloudflare.steamstatic.com/steam/apps/{appId}/{file}` | Fallback chains, magic-byte image check, 16 MB cap. |
 
-All REST clients share `SteamHttp.Client`: one lazy `HttpClient`, 15-second timeout, `PadForge/{version}` User-Agent, case-insensitive JSON. No API key, no cookies, no tokens anywhere. Creator avatar images are the one fetch outside these clients: the browse dialog downloads the `avatars.fastly.steamstatic.com` URLs from the profile XML on its own `HttpClient` (same timeout, same User-Agent) and caches them under the art budget.
+All REST clients share `SteamHttp.Client`: one lazy `HttpClient`, 15-second timeout, `PadForge/{version}` User-Agent, case-insensitive JSON. No API key, no token, and no cookie of PadForge's own. The default handler does keep any cookie a Steam server sets, in memory, for the life of the process. Creator avatar images are the one fetch outside these clients: the browse dialog downloads the `avatars.fastly.steamstatic.com` URLs from the profile XML on its own `HttpClient` (same timeout, same User-Agent) and caches them under the art budget.
 
 ### SteamWorkshopClient: the anonymous CM session
 
-Configuration: `SteamConfiguration.Create(b => b.WithProtocolTypes(ProtocolTypes.WebSocket).WithDirectoryFetch(true))`. WebSocket rides port 443, which passes firewalls that block Steam's classic CM ports. `EnsureLoggedOnAsync` connects, then `SteamUser.LogOnAnonymous()`, with 15-second timeouts on both stages (`ConnectTimeout`, `LogonTimeout`) and a `SemaphoreSlim` making the logon idempotent. A background task pumps `CallbackManager.RunWaitCallbacks` every 100 ms and never lets an exception escape.
+Configuration: `SteamConfiguration.Create(b => b.WithProtocolTypes(ProtocolTypes.WebSocket).WithDirectoryFetch(true))`. WebSocket rides port 443, which passes firewalls that block Steam's classic CM ports. `EnsureLoggedOnAsync` connects, then `SteamUser.LogOnAnonymous()`, with 15-second timeouts on both stages (`ConnectTimeout`, `LogonTimeout`) and a `SemaphoreSlim` making the logon idempotent. SteamKit2's anonymous logon sends the OS type, a language, the cell id, and a machine id built from SHA-1 hashes of the Windows `MachineGuid`, the physical network adapters' MAC addresses, and the boot disk serial. PadForge does not replace SteamKit2's machine-info provider. A background task pumps `CallbackManager.RunWaitCallbacks` every 100 ms and never lets an exception escape.
 
 Search goes through `SteamUnifiedMessages` → `PublishedFile.QueryFiles` with:
 
@@ -106,7 +106,7 @@ Handled: quoted and unquoted tokens, duplicate keys (preserved in order, exposed
 
 ## Typed model
 
-`SteamInputConfig.FromVdf` accepts the document root or the `controller_mappings` node directly and validates structure into `SteamInputConfig` → `SteamInputGroup` / `SteamInputPreset` → `SteamInputInput` → `SteamInputActivator` → `SteamInputBinding`. Malformed structure throws `SteamInputConfigException`.
+`SteamInputConfig.FromVdf` accepts the document root or the `controller_mappings` node directly and validates structure into `SteamInputConfig` → `SteamInputGroup` / `SteamInputPreset` → `SteamInputInput` → `SteamInputActivator` → `SteamInputBinding`. A missing `controller_mappings` object throws `SteamInputConfigException`. Groups, presets, inputs, and activators below it parse tolerantly (a missing `id` reads as -1).
 
 The version gate rejects anything below 3 with the exact reason: "Steam Input config version {N} (pre-2017 schema). Translator targets version 3 only." A missing or non-numeric `version` is also rejected. Current Workshop configs are version 3, and the grammar has not moved.
 
@@ -114,7 +114,7 @@ The version gate rejects anything below 3 with the exact reason: "Steam Input co
 
 ## ConfigTranslator
 
-`Translate(config, options)` produces a `TranslatedProfile`: two `MappingSet`s (`XboxMappingSet`, `KbmMappingSet`), a macro list, a menu list (`Menus`, `MenuDefinitionEntry` objects from `PadForge.Engine.Menus`), a name and description, slot-demand flags (`NeedsXboxSlot`, `NeedsKbmSlot`), four device-tuning carriers the materializer parks on the slot (`LeftStickDeadZoneShape`, `RightStickDeadZoneShape`, the `GyroEngageDescriptor` triple, `GyroRatchetDescriptors`), and a `TranslationReport`. It never touches `ProfileData`. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros that need the slot: a trigger with no descriptor entries (it reads the Xbox slot's combined output), or an action that writes a virtual-controller button or axis (`RepeatVcButtonWhileHeld`, `ToggleVcButton`, `HoldVcButton`, `VcButtonTap`, `VcAxisTap`, `HoldVcAxis`, `ToggleVcAxis`, `RepeatVcAxisWhileHeld`, and a `CycleList` whose steps include a VC tap). A macro riding a device-free `InputDevice` trigger (paddle, touchpad, gyro) whose action writes no VC target demands no Xbox slot on its own. An `Identities.Count` clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for menus when no Xbox slot is demanded, so every import with a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps `MappingSet.Authoritative` on both sets it places and clones each menu onto every created slot's `MappingSet.Menus`.
+`Translate(config, options)` produces a `TranslatedProfile`: two `MappingSet`s (`XboxMappingSet`, `KbmMappingSet`), a macro list, a menu list (`Menus`, `MenuDefinitionEntry` objects from `PadForge.Engine.Menus`), a name and description, slot-demand flags (`NeedsXboxSlot`, `NeedsKbmSlot`), four device-tuning carriers the materializer parks on the slot (`LeftStickDeadZoneShape`, `RightStickDeadZoneShape`, the `GyroEngageDescriptor` triple, `GyroRatchetDescriptors`), and a `TranslationReport`. It never touches `ProfileData`. That is the materializer's job. The Xbox demand flag is true for rows (identity bindings and matched-side analog passthroughs included, since they emit rows now), activators, or macros that need the slot: a trigger with no descriptor entries (it reads the Xbox slot's combined output), or an action that writes a virtual-controller button or axis (`RepeatVcButtonWhileHeld`, `ToggleVcButton`, `HoldVcButton`, `VcButtonTap`, `VcAxisTap`, `HoldVcAxis`, `ToggleVcAxis`, `RepeatVcAxisWhileHeld`, and a `CycleList` whose steps include a VC tap). A macro riding a device-free `InputDevice` trigger (paddle, touchpad, gyro) whose action writes no VC target demands no Xbox slot on its own. An `Identities.Count` clause remains as belt-and-braces for the row-cap edge. The KbM flag is true for its own rows or activators, and for macros or menus when no Xbox slot is demanded, so every import with a macro or a menu has a slot to carry it. The materializer creates only the demanded slots, Xbox first when present so macro trigger pad indices hold, so a pure keyboard layout imports as a single KbM pad. It stamps `MappingSet.Authoritative` on both sets it places and clones each menu onto every created slot's `MappingSet.Menus`.
 
 `TranslationOptions` has exactly four fields: `FileId` (feeds deterministic layer names), `PreferredLanguage` (default `"english"`, for localized title fallback), `ProfileNameOverride`, and `IncludedPresetIds`, the preset filter the dialog's chips re-run translation with (null means all).
 
@@ -140,16 +140,16 @@ The version gate rejects anything below 3 with the exact reason: "Steam Input co
 | 14 | | Self-arming gesture reads: `TrackpadFeatureRequired` retires whole, authoritative slots' mapped gesture descriptors self-enable the gesture gate. |
 | 15 | | The swipe / flick skip family closes: gyro-hosted `2dscroll` lowers onto one-shot tap macros on signed gyro-rate halves. `MouseWheelTap` action lands. |
 | 16 | | `mouse_delta` builds on the new one-shot `MouseNudge` macro through the engine's accumulate-and-flush mouse lane. `CycleTapList` lands. |
-| 17 | | `Double_Press` activators on any host lower to macros on the engine's new DoublePress trigger. Stick `mouse_region` engages on a deflection ring. |
+| 17 | | `Double_Press` activators on any host lower to macros on the engine's new DoublePress trigger. Stick-hosted `edge` members build on the new deflection-ring read (`Gamepad LeftStickRing` / `RightStickRing`). |
 | 18 | | The response-cluster and gate/latch waves: the curve/range shaping seam widens to every analog lane, click gates ride `GateDescriptor`, and the latch/turbo family completes (`ToggleMouseButton` / `ToggleVcAxis` / `RepeatVcAxisWhileHeld` / `ToggleWheel`). |
 | 19 | | Audit-2 semantics: the gyro-hosted `mouse_joystick` rotation matrix stays orthogonal against the yaw-frame flip, `mouse_wheel` `hold_repeats` lowers to repeats. |
 | 20 | | `CHANGE_PRESET` sentinel ids (32766 next / 32765 previous) lower as one Cycle activator through every action set in authored order. |
 | 21 | | Menu cell icons carry: authored icon names ride `MenuItemDefinition.Icon`, resolved against the local Steam client's binding-icon art. |
 | 22 | | The Skyrim notes: `gyro_ratchet_button_mask` lowers onto a slot-level clutch lane grounded per bit against Steam's `k_eGamepadButtonBitMask`. |
 | 23 | | `gyro_button` engage arm gains the full bitmask enum, indexing the same table as the ratchet grounding. |
-| 24 | | The mass-sweep top four: `button_macro0..4` resolve as the device's extra buttons (bits 32-39, capability-gated). |
+| 24 | | The mass-sweep top four: `button_macro0..4` resolve as the device's extra buttons (bits 32-36, capability-gated). |
 | 25 | | Wild-corpus round 2: serializer-vocabulary switch members resolve, `always_on_action` lowers onto the constant-true source with `LayerMask` scoping, radial menus host on the physical dpad / face diamond, `deadzone_shape` lands per source. |
-| 26 | | Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise `MobileTouchSurfaceOnly` / `ChordWithoutPartner` classes. |
+| 26 | | Wild-corpus round 3: the gravity-lean channel ("Gyro Lean X/Y"), capsense reads, trackpad edge members on the finger-ring read, stick `mouse_region` engaging on the v17 deflection ring, trackpad-hosted flickstick, hotbar grids, In-Menu Sensitivity, and the precise `MobileTouchSurfaceOnly` / `ChordWithoutPartner` classes. |
 
 Versions 8 through 26 land across the 4.1.0 cycle. The doc comment in `TranslationReport.cs` carries one block per bump. It records no commit hashes, so the commit for each lives in git history (`git log -S"CurrentTranslatorVersion = N"`).
 
@@ -180,16 +180,16 @@ The first preset by id becomes the literal layer `"Base"`. Every other preset be
 | `mode_shift` | `Mode = "Hold"` (`"Toggle"` when the activator carries `toggle = 1`), `InheritUnmapped = true` |
 | `controller_action HOLD_LAYER` | `Mode = "Hold"` (`"Toggle"` with `toggle = 1`), `InheritUnmapped = true` |
 | `controller_action ADD_LAYER` | `Mode = "Toggle"`, `InheritUnmapped = true` |
-| `controller_action REMOVE_LAYER` | A remove hosted inside the layer it removes lowers to `Mode = "Cycle"` over that one layer with `CycleIncludeBase`, `InheritUnmapped = true`. A remove targeting a different layer, or hosted in Base, emits no activator. Partial `RemoveLayerApproximated` either way. |
-| `controller_action CHANGE_PRESET` | `Mode = "Custom"` with `JumpToLayer` |
+| `controller_action REMOVE_LAYER` | A remove hosted inside the layer it removes lowers to `Mode = "Cycle"` over that one layer with `CycleIncludeBase`, `InheritUnmapped = true`. A remove targeting a different layer, or hosted in Base, emits no activator. Partial `RemoveLayerApproximated` either way, unless the same input already engages that layer through a Toggle or Hold activator: then the Cycle is dropped and the entry reports Clean `ShiftLayerEmitted`. |
+| `controller_action CHANGE_PRESET` | `Mode = "Custom"` latching the target layer (`LayerMask` = target, `JumpToLayer` cleared, `InheritUnmapped = false`). A lone jump to Base lowers to a single-stop `Cycle` through the hosting layer, and a Base-hosted jump to Base drops as Partial `ShiftLayerEmpty`. |
 | Same-input CHANGE_PRESET pairs | Merged to `Mode = "Cycle"` (`CycleLayers` ordinal-sorted, `CycleIncludeBase` when a jump targeted Base) |
 | `Long_Press` layer switch | The carrying activator gains `DelayMs` from `long_press_time` (v2). |
 
-Activators duplicate onto whichever mapping set(s) actually contain the layer's rows. `FillActivatorInput` picks `Kind`: `"Axis"` for a directional analog host (stick wedge, gyro rate half) with the half stamp and the source's own threshold, `"Chord"` when the source carries a `GateDescriptor`, `"Button"` otherwise. Trigger pulls deliberately keep `"Button"`, gating at the default `AxisThreshold = 0.5`, because the bipolar axis read rests at -1 and would engage permanently. Since wave 4c, activators evaluate with their true slot index, so an activator descriptor can read slot-scoped families such as menu-item fires.
+Activators duplicate onto whichever mapping set(s) actually contain the layer's rows. `FillActivatorInput` picks `Kind`: `"Axis"` for a directional analog host (stick wedge, gyro rate half) with the half stamp and a threshold (the wedge's own deadzone, or the engine's 30 deg/s gyro-button rate on a gyro rate half), `"Chord"` when the source carries a `GateDescriptor`, `"Button"` otherwise. Trigger pulls deliberately keep `"Button"`, gating at the default `AxisThreshold = 0.5`, because the bipolar axis read rests at -1 and would engage permanently. Since wave 4c, activators evaluate with their true slot index, so an activator descriptor can read slot-scoped families such as menu-item fires.
 
 ### Group and activator settings honored
 
-> **Currency note (4.1.0).** This table records the v7-era state. Waves v18 through v26 consumed most of the drops listed below: click gates now ride `MappingSource.GateDescriptor` on every source, the latch/turbo family completed, response curves land on every analog lane, and the haptic / double-press / ratchet clusters all build. Every reason key this table names in its Handling column carries its deletion version in the taxonomy below when the key no longer exists. The authoritative per-setting status is the version changelog above plus `ConfigTranslator.cs` at HEAD.
+> **Currency note (4.1.0).** This table records the v7-era state. Waves v17 through v26 consumed most of the drops listed below: click gates now land as real gate sources on the row with a Custom combine expression, the latch/turbo family completed, response curves land on every analog lane, and the haptic / double-press / ratchet clusters all build. Every reason key this table names in its Handling column carries its deletion version in the taxonomy below when the key no longer exists. The authoritative per-setting status is the version changelog above plus `ConfigTranslator.cs` at HEAD.
 
 The v1 translator read six setting keys. The waves widened that considerably:
 
@@ -203,11 +203,11 @@ The v1 translator read six setting keys. The waves widened that considerably:
 | `requires_click` | Trackpad d-pad wedges gain an AND-combined `"Touchpad {p} Click"` gate source. Dropped (Partial `ClickGateDropped`) when a second source joins the target. |
 | `output_trigger` | Crossed side emits an axis row to the opposite trigger. Matched side emits its own full-axis passthrough row via the `Finalize` matched-analog pass, with any click identity absorbed behind the analog source. |
 | `output_joystick` | Crossed stick emits `{dst}ThumbAxisX/Y` rows. Matched stick emits its own axis pair via the matched-analog pass. Trackpad-as-stick emits them as Partial `TrackpadFeatureRequired`. |
-| `mouse_region` geometry | `position_x/y`, `scale`, `sensitivity_horiz_scale`, `sensitivity_vert_scale` land on the pointer-source region params (trackpad host) or the clamp-macro geometry (stick and gyro hosts). `teleport_start` / `teleport_stop` → Partial `MouseRegionTuningDropped`. `edge_binding_*` left that list: the edge member consumes it through the v17 stick ring and the v26 finger ring. |
+| `mouse_region` geometry | `position_x/y`, `scale`, `sensitivity_horiz_scale`, `sensitivity_vert_scale` land on the pointer-source region params (trackpad host). The clamp macro (stick and trigger hosts) carries only `position_x/y` and `scale`. `teleport_start` / `teleport_stop` → Partial `MouseRegionTuningDropped`. `edge_binding_*` left that list: the edge member consumes it through the v17 stick ring and the v26 finger ring. |
 | Menu keys | `touchmenu_button_fire_type` (clamped 0–3), `touch_menu_position_x/_y`, `touch_menu_scale`, `touch_menu_opacity`, `touch_menu_show_labels`, `touch_menu_button_count`. |
 | Named drops | `haptic_intensity` aggregates into Partial `HapticIntensityDropped`. Response-curve and range keys → `ResponseCurveNotSupported`. `gyro_button` masks → `GyroButtonMaskDropped`. `delay_start` / `delay_end` → `ActivatorDelayDropped`. `interruptable` → `InterruptibleDropped`. Flick stick's `edge_binding_radius`, `mouse_smoothing`, `rotation`, `transition_time` → `FlickStickTuningDropped`. |
 
-Of the v1-era silent fall-throughs, only `mouse_dampening_trigger` remains unconsumed, and it is named now rather than silent (Partial `MouseModeTuningDropped`). `trackball` and its friction became the momentum decay in v18, and `double_tap_time` became the `Double_Press` window in v17 (default 442 ms).
+Of the v1-era silent fall-throughs, `mouse_dampening_trigger` is the one still named (Partial `MouseModeTuningDropped`). On the mouse modes, `trackball`, `friction`, `mouse_smoothing`, and `mouse_move_threshold` built in v18 and are silent drops again: `MouseFeelChannel.StampFeel` stamps only `acceleration`, because none of the others has a card. `double_tap_time` became the `Double_Press` window in v17 (default 442 ms).
 
 ### MOUSE_POSITION coordinates
 
@@ -221,9 +221,9 @@ Same config + same options = identical output, asserted by test. Ordering: prese
 
 ## TranslationReport
 
-`TranslationStatus`: `Clean = 0`, `Partial = 1`, `Skipped = 2`, `Error = 3`. Entries carry `Status`, `ReasonKey`, `ReasonArgs`, `SourcePath`, `Binding` (raw binding text), and `Emitted` (an unlocalized diagnostic trace like `KbmKey57 <- Touchpad 0 DPadUp`). The report also counts rows, macros, menus (`MenuCount`), and activators per set, and `ToSummaryString()` renders the provenance digest (`v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0`).
+`TranslationStatus`: `Clean = 0`, `Partial = 1`, `Skipped = 2`, `Error = 3`. Entries carry `Status`, `ReasonKey`, `ReasonArgs`, `SourcePath`, `Binding` (raw binding text), and `Emitted` (the unlocalized `{target} <- {descriptor}` line, like `KbmKey57 <- Touchpad 0 DPadUp`, which the browse dialog splits to fill the manifest's source and target columns). The report also counts rows per set, plus macros, menus (`MenuCount`), and shift activators across both sets, and `ToSummaryString()` renders the provenance digest (`v7 rows:x0+k46 macros:2 menus:1 layers:3 clean:48 partial:6 skipped:23 errors:0`).
 
-Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v14 onward a wave that retires a key DELETES the key and its locale strings (each deletion is named in the version changelog above), so the live vocabulary is exactly the `Workshop_Tr_*` set in `Strings.resx` at HEAD. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list. Nineteen of the keys it lists have since been deleted, each marked in place with the version that deleted it. Nine keys that arrived after the snapshot are listed separately below the taxonomy.
+Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display time so the manifest localizes. Early waves kept retired keys defined for old reports, but from v14 onward a wave that retires a key deletes the key and its locale strings (each deletion is named in the changelog comment in `TranslationReport.cs`), so the live vocabulary is exactly the `Workshop_Tr_*` set in `Strings.resx` at HEAD. `ReleaseActivatorNotSupported` is the exception: it lost its last emission site in v15 and stays defined. A report serialized under an older version can reference a deleted key, which renders as the raw key name. The family taxonomy below is the v7-era snapshot and reads as historical structure, not the current key list. Nineteen of the keys it lists have since been deleted, each marked in place with the version that deleted it. Nine keys that arrived after the snapshot are listed separately below the taxonomy.
 
 ### Emission (Clean)
 
@@ -243,11 +243,11 @@ Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display 
 | `Workshop_Tr_SoftPressApproximated` | `soft_press` becomes a plain press threshold (a 15% deadzone on an analog trigger pull). Sources that need a touchpad feature report `TrackpadFeatureRequired` instead. **Deleted in v17.** |
 | `Workshop_Tr_MacroTriggerViaXboxOutput` | A macro whose trigger reads the Xbox slot's combined output (autofire, key-on-release, or cursor warp on a standard pad button). **Deleted in v15.** |
 | `Workshop_Tr_RepeatDropped` | `xinput_button` with `hold_repeats` on an identity or trigger-axis target: row kept, turbo dropped. Other targets get a turbo macro instead (v3). **Deleted in v18.** |
-| `Workshop_Tr_RemoveLayerApproximated` | `REMOVE_LAYER`. Since v10 a remove hosted inside its own layer builds a single-stop Cycle and the note names the extra step. Other removes still have no construct. |
+| `Workshop_Tr_RemoveLayerApproximated` | `REMOVE_LAYER`. Since v10 a remove hosted inside its own layer builds a single-stop Cycle, still reported Partial. Other removes still have no construct. |
 | `Workshop_Tr_ClickGateDropped` | A `requires_click` gate abandoned when a second source joined the target. **Deleted in v18.** |
 | `Workshop_Tr_ToggleDropped` | An activator `toggle` with no latch for that output. v3. **Deleted in v18.** |
 | `Workshop_Tr_CameraResetApproximated` | `camera_reset` approximated as a gyro recenter. v3. |
-| `Workshop_Tr_MouseRegionApproximated` | A stick- or gyro-hosted `mouse_region` approximated as a centered cursor clamp while the surface is held (`{scale}%`, region center `{x}%, {y}%`). v3. Trackpad hosts go Clean via the pointer family instead (v6). |
+| `Workshop_Tr_MouseRegionApproximated` | A stick- or trigger-hosted `mouse_region` approximated as a centered cursor clamp while the surface is held (`{scale}%`, region center `{x}%, {y}%`). v3. Trackpad hosts go Clean via the pointer family instead (v6). |
 | `Workshop_Tr_MouseRegionTuningDropped` | `teleport_start` / `teleport_stop` dropped, on both the pointer-row and clamp-macro branches. v3. |
 | `Workshop_Tr_TouchQuadrantApproximated` | `four_buttons` cells share the hosting touch surface (no per-cell zones). v4. **Deleted in v18.** |
 | `Workshop_Tr_TrackpadHalfApproximated` | A binding hosted on one half of the touchpad where PadForge reads the whole pad. v4. **Deleted in v18.** |
@@ -256,18 +256,18 @@ Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display 
 | `Workshop_Tr_FlickStickTuningDropped` | Flick stick keys with no PadForge equivalent (`edge_binding_radius`, `mouse_smoothing`, `rotation`, `transition_time`). v5. **Deleted in v26.** |
 | `Workshop_Tr_SetLedDefaultApproximated` | A restore-default `set_led` approximated as clearing the override. v2. **Deleted in v17.** |
 | `Workshop_Tr_HapticIntensityDropped` | Per-config aggregate of dropped haptic-feedback settings (`{count}` bindings). v2. **Deleted in v22.** |
-| `Workshop_Tr_ResponseCurveNotSupported` | v2. Since v18 the curve/range cluster lands on every analog lane, so the args name only `deadzone_shape` on a mouse-output host (whose X / Y rows have no pair read) plus the defensively-listed `output_curve`. |
-| `Workshop_Tr_GyroButtonMaskDropped` | v2. Since v22 and v23 the ratchet mask and the engage index both ground against Steam's `k_eGamepadButtonBitMask`, so the note names only out-of-enum `gyro_button` indices, non-boolean `gyro_button_invert` values, and the residual mask of ungrounded ratchet bits. |
+| `Workshop_Tr_ResponseCurveNotSupported` | v2. Since v18 the curve/range cluster lands on every analog lane, so the args name `deadzone_shape` only where no pair channel consumes it (every productive group except `joystick_move`, `mouse_joystick`, and the stick-hosted `joystick_mouse`, `joystick_camera`, and `gyro_to_joystick` groups) plus the defensively-listed `output_curve`. |
+| `Workshop_Tr_GyroButtonMaskDropped` | v2. Since v22 and v23 the ratchet mask and the engage index both ground against Steam's `k_eGamepadButtonBitMask`, so the note names only `gyro_button` indices with no grounded read, `gyro_button_invert` values other than 0, 1, and 2 (2 = Toggle since v25), and the residual mask of ungrounded ratchet bits. |
 | `Workshop_Tr_ActivatorDelayDropped` | `delay_start` / `delay_end` press delays dropped. v2. **Deleted in v22.** |
 | `Workshop_Tr_InterruptibleDropped` | A non-interruptible press behaves as a normal press. v2. **Deleted in v18.** |
-| `Workshop_Tr_MissingModeShiftGroup`, `Workshop_Tr_MissingPreset`, `Workshop_Tr_ActivatorInputNotSupported`, `Workshop_Tr_ShiftLayerEmpty`, `Workshop_Tr_PresetHasNoActivator` | Layer and preset-switch diagnostics: dangling references, activator sources that cannot drive a layer (gesture-gated wedges, gyro), layers that produced no rows, presets nothing switches to. |
+| `Workshop_Tr_MissingModeShiftGroup`, `Workshop_Tr_MissingPreset`, `Workshop_Tr_ActivatorInputNotSupported`, `Workshop_Tr_ShiftLayerEmpty`, `Workshop_Tr_PresetHasNoActivator` | Layer and preset-switch diagnostics: dangling references, activator sources that cannot drive a layer (tap or swipe gestures and gyro rate reads outside the latching one-shot arms), layers that produced no rows, presets nothing switches to. |
 
 ### Skipped
 
 | Key | Trigger |
 |---|---|
 | `Workshop_Tr_GameActionsNotSupported` | Per-preset aggregate of `game_action` bindings (`{count}` in-game actions, Steam-only). |
-| `Workshop_Tr_SteamSystemAction` | Steam-client system verbs (`system_key_0` and the `SteamClientActions` families). `SCREENSHOT`, `SYSTEM_KEY_1`, and `SHOW_KEYBOARD` left this key in v17 and v20: they build macros and report nothing. |
+| `Workshop_Tr_SteamSystemAction` | Steam-client system verbs (`system_key_0` and the `SteamClientActions` families). `SCREENSHOT` and `SHOW_KEYBOARD` build macros since v10 (silent since v17), and `SYSTEM_KEY_1` left this key in v20. |
 | `Workshop_Tr_PlayerNumberActionNotSupported`, `Workshop_Tr_LizardModeActionNotSupported` | Steam-client actions with no equivalent. v2. |
 | `Workshop_Tr_ScrollWheelModeNotSupported` | The `scrollwheel` group mode (circular scrolling). Its `click` member still translates. **Deleted in v16.** |
 | `Workshop_Tr_ScrollGestureModeNotSupported` | The `2dscroll` directional-swipe mode. v2. **Deleted in v14.** |
@@ -275,9 +275,9 @@ Reason keys are resx keys in the `Workshop_Tr_*` namespace, resolved at display 
 | `Workshop_Tr_MenuSurfaceNotSupported` | A menu hosted on a surface with no direction or position read (`{host}`). v7. Sticks and trackpads carry menus from v7, the physical dpad and face diamond from v25, and the gyro lean pair from v26. |
 | `Workshop_Tr_FlickStickSurfaceNotSupported` | A `flickstick` hosted on neither a stick nor a trackpad (`{slot}`). v5. Trackpad hosts build on the touch-surface flick family since v26. |
 | `Workshop_Tr_LongPressNotSupported` | Residual only. Since v24 every impossible `Long_Press` binding reroutes into its own binding's class, so this names genuinely unknown vocabulary. |
-| `Workshop_Tr_ReleaseActivatorNotSupported` | A `release` on a mouse or pad button skips. On a `key_press` it becomes an on-release macro instead. (`Workshop_Tr_DoublePressNotSupported` sat here too, **deleted in v17**: `Double_Press` now lowers to macros on the engine's DoublePress trigger.) |
+| `Workshop_Tr_ReleaseActivatorNotSupported` | A `release` on a mouse or pad button skipped. **No emission site since v15**: release activators build tap macros on mouse and pad buttons (v10) and on trigger pulls, stick directions, and wheel detents (v15), and on a `key_press` an on-release macro. (`Workshop_Tr_DoublePressNotSupported` sat here too, **deleted in v17**: `Double_Press` now lowers to macros on the engine's DoublePress trigger.) |
 | `Workshop_Tr_EdgeInputNotSupported` | An `edge` input on a non-trigger slot. **Deleted in v17.** |
-| `Workshop_Tr_NoDeviceFreeTrigger` | Residual only: a `mouse_region` hosted on a stick or gyro with nothing to engage it. Paddle-, touchpad-, and gyro-hosted macros translate via device-free triggers since v4. |
+| `Workshop_Tr_NoDeviceFreeTrigger` | Residual only: a `mouse_region` on a host with no engage read (the gyro, button surfaces). A memberless full-screen region there drops silently (v26). Paddle-, touchpad-, and gyro-hosted macros translate via device-free triggers since v4. |
 | `Workshop_Tr_UnknownBindingType`, `Workshop_Tr_UnknownKey`, `Workshop_Tr_UnknownMouseButton`, `Workshop_Tr_UnknownXInputButton`, `Workshop_Tr_UnknownPhysicalInput`, `Workshop_Tr_UnknownGroupMode`, `Workshop_Tr_UnknownActivatorType`, `Workshop_Tr_UnsupportedControllerAction` | Unknown-token family: forward-compat catch-alls so translator drift degrades to labeled skips, never a crash. |
 
 ### Errors
@@ -296,10 +296,10 @@ Nine live keys post-date the taxonomy above. Definitions and arguments ride `Tra
 |---|---|---|
 | `Workshop_Tr_ScrollWheelApproximated` | Partial | A trackpad `scrollwheel` group lowered onto the vertical finger drag: circular scratch geometry as a linear drag. v10. |
 | `Workshop_Tr_AxisInversionNotApplied` | Partial | A Steam inversion with no source flag to carry it: `invert_z` (no third mouse-delta axis) or flick-stick inversion (the angle read ignores Invert). The row emits un-inverted. |
-| `Workshop_Tr_MouseModeTuningDropped` | Partial | `mouse_dampening_trigger` alone at HEAD: cross-input analog modulation has no per-source channel. v18. |
+| `Workshop_Tr_MouseModeTuningDropped` | Partial | `mouse_dampening_trigger` alone at HEAD: cross-input analog modulation has no per-source channel. v8, narrowed to this key in v18. |
 | `Workshop_Tr_DeadZoneRadialResidual` | Partial | Pair-host deadzone geometry: the inner radius reaches only the digital per-source `DeadZone` and the outer applies per axis, so diagonals overshoot. v19. |
 | `Workshop_Tr_RotationNonlinearWithheld` | Partial | Curve exponent, anti-deadzone, and accel withheld on a rotated group, because per-leg nonlinear shaping does not commute with the rotation's two-source Sum. v19. |
-| `Workshop_Tr_LayerReleaseEdgeApproximated` | Partial | A release-hosted `HOLD_LAYER`: the Hold carrier is level-driven, so it lowers one edge early. Every other carrier takes the exact release edge via `ShiftActivator.FireOnRelease`. v19. |
+| `Workshop_Tr_LayerReleaseEdgeApproximated` | Partial | A release-hosted carrier with no edge to move: the Hold carrier of a `HOLD_LAYER` or held mode shift, which is level-driven and lowers one edge early, and the press-edge Cycle of a sentinel set cycle or of merged same-input `CHANGE_PRESET` jumps. Every other carrier takes the exact release edge via `ShiftActivator.FireOnRelease`. v19. |
 | `Workshop_Tr_MenuIconUnresolved` | Partial | A cell icon reference outside the Steam client's bare-filename art shape. `@`-prefixed names are the configurator's app-provided namespace and degrade silently instead (v24). v21. |
 | `Workshop_Tr_MobileTouchSurfaceOnly` | Skipped | Steam Link on-screen touch controls: `button_macro5..7` (bits 37-39) sit past SDL's whole gamepad surface, and the One / Two Finger Taps (bits 48/49) are mobile-overlay gestures. v26. |
 | `Workshop_Tr_ChordWithoutPartner` | Skipped | A chord activator whose settings carry no `chord_button`. The partner picker was never set, so not even Steam can fire it. v26. |
@@ -318,6 +318,7 @@ These keys are no longer emitted. They stay defined so reports serialized under 
 | `Workshop_Tr_LongPressKeyTap` | v10 | A `Long_Press` key rides the `HoldKey` pair (down at threshold, up on release), so nothing taps. |
 | `Workshop_Tr_UnsupportedKey` | v10 | VKs outside the KbM row engine's closed list ride SendInput `HoldKey` macros, so nothing is unsupported. |
 | `Workshop_Tr_MouseRegionNotSupported` | v3/v6 | Mouse regions route to pointer rows, clamp macros, or the `NoDeviceFreeTrigger` residual. |
+| `Workshop_Tr_ReleaseActivatorNotSupported` | v15 | Release activators build tap macros on mouse and pad buttons (v10) and on trigger pulls, stick directions, and wheel detents (v15). |
 
 One constant (`TriggerThresholdApproximated`) is defined and localized but has never been emitted. `mouse_wheel` scroll bindings are not skipped. They emit `KbmScroll`/`KbmScrollH` rows. Empty bindings and `EMPTY_SUB_COMMAND` drop silently.
 
@@ -335,7 +336,7 @@ One constant (`TriggerThresholdApproximated`) is defined and localized but has n
 | `Personas` | `personas/` | 7 d | General |
 | `Art` | `art/` | 7 d, stale-ok | Art |
 
-Writes are atomic (temp file + `File.Move` overwrite under a lock), then the budget is enforced by deleting least-recently-accessed files first. TTL freshness rides last-write time, LRU recency rides last-access time, both stamped from an injectable clock for tests. `TryGetBytes` deletes an expired entry. `TryGetBytesStaleOk` (the art path) reports staleness but keeps the entry so the artwork client can serve it on network failure. Keys sanitize to `[0-9A-Za-z._-]` or fall back to a SHA-256 hex name. `Clear()` backs the Settings button.
+Writes are atomic (temp file + `File.Move` overwrite under a lock), then the budget is enforced by deleting least-recently-accessed files first. TTL freshness rides last-write time, LRU recency rides last-access time, both stamped from an injectable clock for tests. `TryGetBytes` deletes an expired entry. `TryGetBytesStaleOk` (the art path) reports staleness but keeps the entry so the artwork client can serve it on network failure. A key of up to 96 characters from `[0-9A-Za-z._-]` passes through as the file name. Any other key falls back to a lowercase SHA-256 hex name. `Clear()` backs the Settings button.
 
 ---
 
@@ -355,7 +356,7 @@ Files past the parser's 10 MB cap are refused. The layout was grounded against V
 
 `SteamWorkshopSource` (in `SettingsService.cs`, serialized as the `<SteamWorkshopSource>` element on `ProfileData.WorkshopSource`) carries `PublishedFileId`, `AppId`, `GameName`, `Title`, `TimeUpdated` (unix seconds at import), `ImportedAt` (UTC), and `TranslationSummary` (the report digest). Null on every non-imported profile.
 
-Provenance is identity-scoped, like `Name` and `Id`. The runtime snapshot copiers exclude it by design: guard comments pin that at `SettingsService.UpdateActiveProfileSnapshot` and the `InputService` snapshot copy-back (both `SaveActiveProfileState` and its 250 ms autosave twin). `SnapshotCurrentProfile` never captures it, which is what makes a **Save As** fork user-authored with no Workshop link. Compaction preserves it (`Compaction_PreservesProvenance`).
+Provenance is identity-scoped, like `Name` and `Id`. The runtime snapshot copiers exclude it by design: guard comments pin that at `SettingsService.UpdateActiveProfileSnapshot` (the mirror the 250 ms autosave path runs) and at `InputService.SaveActiveProfileState`. `SnapshotCurrentProfile` never captures it, which is what makes a **Save As** fork user-authored with no Workshop link. Compaction preserves it (`Compaction_PreservesProvenance`).
 
 The update check (`OnCheckWorkshopUpdates` in `MainWindow.xaml.cs`) short-circuits with a status line when the opt-in is off, collects profiles with a nonzero `PublishedFileId`, and issues one batched `GetPublishedFileDetails` POST over the distinct ids. Only per-item `Result == 1` responses count (removed or banned items stay unreported). Stale means `fresh.time_updated > stored TimeUpdated`, strictly. Clean runs end in a status line. Stale runs raise a message box whose primary button reopens the browse dialog. It is not surfaced anywhere else in the UI: provenance is persisted-but-invisible metadata whose only consumer is this check.
 
@@ -369,7 +370,7 @@ A `FluentWindow` (Mica, 1280×760) with a three-state flow (`WsState`): `Cold` (
 
 ### WorkshopProfileMaterializer
 
-`Materialize(translated, source)` builds the `ProfileData`. It creates only the slots the translation demands (`NeedsXboxSlot` / `NeedsKbmSlot`), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with the default HIDMaestro profile id for its type and its translated mapping set attached. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on `PadIndex = 0` (the first created slot: Xbox when demanded, otherwise the KbM slot that a macro-only or key-only config creates). Combined-output triggers use `OutputController`, and device-free descriptor triggers use `InputDevice`. Name falls back to `"Workshop Profile"`. When provenance is supplied it stamps `ImportedAt` and `TranslationSummary`.
+`Materialize(translated, source)` builds the `ProfileData`. It creates only the slots the translation demands (`NeedsXboxSlot` / `NeedsKbmSlot`), packed from slot 0 with the Xbox VC first when present: a split config lands Xbox at slot 0 and keyboard/mouse at slot 1, while a pure keyboard/mouse config imports as a single KbM VC at slot 0. Each created slot is enabled with its translated mapping set attached. The Xbox slot takes the default HIDMaestro profile id, and a keyboard-and-mouse slot's id stays null. Every other slot stays empty. Device assignments stay empty on purpose, so the abstract Gamepad descriptors resolve on whatever the user assigns. Macros land on `PadIndex = 0` (the first created slot: Xbox when demanded, otherwise the KbM slot that a macro-only or key-only config creates). Combined-output triggers use `OutputController`, and device-free descriptor triggers use `InputDevice`. Name falls back to `"Workshop Profile"`. When provenance is supplied it stamps `ImportedAt` and `TranslationSummary`.
 
 `MappingSet.Authoritative` is set on each claimed slot, and only on those. The translator spells every binding out, automap-identical ones included, so the legacy merge must add nothing on top when a device is assigned. An unclaimed slot gets a fresh `MappingSet` that stays non-authoritative, because a slot the user creates later has to automap normally.
 
@@ -406,7 +407,7 @@ What folds:
 - Touchpad acceleration (`FoldTouchpadAcceleration`): a source's `ParamAccel` onto that pad's `TouchpadSettings` entry `MouseAcceleration`. Keyed off the source descriptor, not the row target, because the target of a touchpad mouse row is Mouse X or Mouse Y and names no pad.
 - Gyro acceleration (`FoldGyroAcceleration`): `ParamAccel` on a `Gyro ` source onto the `GyroAcceleration` card, written in the card's own `F2` invariant format.
 
-Two stamps deliberately do not fold. `WorkshopGyroRatchetDescriptors` has no `PadSetting` field and no control in any view, so it stays a runtime overlay. `ParamFlickRotationOffsetDeg` has no card either and stays on the source, which the code names as a real remaining gap rather than a deliberate exclusion.
+Two imported values do not fold. `WorkshopGyroRatchetDescriptors` has no `PadSetting` field and no control in any view, so it stays a runtime overlay. `ParamFlickRotationOffsetDeg` has no card either and stays on the source, which the code names as a real remaining gap rather than a deliberate exclusion.
 
 ---
 
@@ -432,11 +433,11 @@ Two stamps deliberately do not fold. `WorkshopGyroRatchetDescriptors` has no `Pa
 | `Gamepad Paddle2` | `Button 13` | `Gamepad Paddle3` | `Button 14` |
 | `Gamepad Paddle4` | `Button 15` | | |
 
-Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing `Gyro ...` / `Touchpad ...` descriptors, which already resolve per device. The family does not rename them. The picker offers the family in the leading **(Any device)** group (empty guid) on every slot, and per concrete device only for `CapType == Gamepad` devices not in raw-numbered naming, rendered through `Mapping_Gamepad_Format` ("Gamepad {0}") with the shared `DevObj_*` member labels.
+Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing `Gyro ...` / `Touchpad ...` descriptors, which already resolve per device. The family does not rename them. The picker offers the family in the leading **(Any Device)** group (empty guid) on every slot, and per concrete device only for `CapType == Gamepad` devices not in raw-numbered naming, rendered through `Mapping_Gamepad_Format` ("Gamepad {0}") with the shared `DevObj_*` member labels.
 
 **Empty-DeviceGuid contract.** `MappingSource.DeviceGuid` defaults to `""`, documented as "first available device on the VC," resolved per frame in Step 3. The Workshop translator emits every source with an empty guid. Two seams enforce the contract off the happy path:
 
-- The multi-source contribution builders in `PadForge.App/Common/Input/InputManager.Step3.MappingSetEval.cs` (`BuildCustomContribsForBipolarAxis` / `Trigger` / `Button`) resolve an empty guid across every device on the slot (`GetSlotDeviceStates`, per-device read, max-abs across devices) instead of reading only the device being evaluated or a null lookup that contributed 0. `EvaluateStickTrim` still resolves an empty guid to the device currently being evaluated.
+- The multi-source contribution builders in `PadForge.App/Common/Input/InputManager.Step3.MappingSetEval.cs` (`BuildCustomContribsForBipolarAxis` / `Trigger` / `Button`) resolve an empty guid across every device on the slot (`GetSlotDeviceStates`, per-device read, max-abs across devices) instead of reading only the device being evaluated or a null lookup that contributed 0. `EvaluateStickTrim` resolves an empty guid across the slot the same way: gates take the strongest pull, and the trim source the largest deflection.
 - The gesture-provider invocations in `SourceCoercion` (`ReadAsBool` / `ReadAsBipolar` / `ReadAsUnipolar`) pass the caller-resolved guid, because the gesture providers key on a concrete `(slot, device, pad)` triple and a bare empty guid always missed.
 
 ### Generic per-source Sensitivity
@@ -449,9 +450,9 @@ Three generic-read application sites in `SourceCoercion`, all clamped after scal
 2. `ReadAsUnipolar`: trigger value × sensitivity, clamped to 0..1.
 3. `ReadAsBool` (the axis-to-button threshold read): the raw value scales before the threshold comparison. Half-axis scales deviation from center, full-axis and slider scale magnitude from zero, and sensitivity 1.0 leaves every comparison bit-identical. Without this site the slider had no effect on axis-to-button rows.
 
-The family readers that own their own scaling call `PerSourceSensitivity` themselves: the three touchpad axis reads (`TryReadTouchpadAxis`, `TryReadTouchpadAxisAbsolute`, `TryReadTouchpadAxisRaw`), the trackball emitter `EmitBallCounts`, `ReadGyroLean`, and `ReadShakeEnvelope`.
+The family readers that own their own scaling call `PerSourceSensitivity` themselves: the three touchpad axis reads (`TryReadTouchpadAxis`, `TryReadTouchpadAxisAbsolute`, `TryReadTouchpadAxisRaw`), the touchpad mouse-counts read `ReadTouchpadMouseCounts`, `ReadGyroLean`, and `ReadShakeEnvelope`.
 
-The field clamps 0.1–5.0 in `MappingItem`. The grid no longer shows a generic slider for plain analog sources (2026-07-27): the field is surfaced only on Gyro Lean rows (label `Mapping_GyroSensitivity`) and as the pointer-stick speed on a keyboard-and-mouse slot's Sticks tab (label `Macro_Sensitivity`). `Mapping_Sensitivity` remains in the resx unused.
+The field clamps 0.1–5.0 in `MappingItem`. The grid no longer shows a generic slider for plain analog sources (2026-07-27): the field is surfaced only on Gyro Lean rows (label `Mapping_GyroSensitivity`). The pointer-stick speed on a keyboard-and-mouse slot's Sticks tab (label `Macro_Sensitivity`) is a separate stick-level field, `StickConfigItem.Sensitivity`. `Mapping_Sensitivity` remains in the resx unused.
 
 ### Touchpad finger pressure
 
@@ -461,13 +462,13 @@ The `Touchpad {p} Finger {f} Pressure` descriptor existed in the engine. Phase A
 
 Appended to `MacroActionType` (the enum is append-only because the clipboard serializes ints) in waves v1 through v3: `MoveMouseToScreenPosition = 33`, `RepeatKeyWhileHeld = 34`, `RepeatVcButtonWhileHeld = 35`, `ToggleVcButton = 36`, `ToggleKey = 37`, `GyroRecenter = 38`. Later waves appended `AxisHold = 39` and `MouseWheelTap = 40` (v15), `MouseNudge = 41` and `CycleTapList = 42` (v16), and `ToggleMouseButton = 43`, `ToggleVcAxis = 44`, `RepeatVcAxisWhileHeld = 45`, `ToggleWheel = 46` (v18).
 
-- `MoveMouseToScreenPosition`: `MouseX` / `MouseY` (primary-monitor pixels, clamped to the screen), executed as one `CursorControlService.MoveCursorTo` warp. Editor: two numeric fields plus **Pick on screen** (3-second countdown, then captures the live cursor).
+- `MoveMouseToScreenPosition`: `MouseX` / `MouseY` (primary-monitor pixels, clamped to the screen), executed as one `CursorControlService.MoveCursorTo` warp. Editor: two numeric fields plus **Pick on Screen** (3-second countdown, then captures the live cursor).
 - `RepeatKeyWhileHeld`: the shared key picker plus `IntervalMs` (clamped 10–1000, default 100). A continuous action: while the trigger holds, it sends a full key-down/key-up pulse per parsed key each time the interval elapses, first pulse immediately.
 - `RepeatVcButtonWhileHeld` (v3): the virtual-controller twin, pulsing an Xbox button on the interval (Steam's xinput `hold_repeats` turbo).
 - `ToggleVcButton` / `ToggleKey` (v3): press-to-latch, press-again-to-release, for Steam's activator `toggle` setting.
 - `GyroRecenter` (v3): Steam's `camera_reset`, approximated as a gyro recenter.
 
-The translator also reuses existing actions: `LightbarColor` / `LightbarColorClear` / `GuideLedBrightness` for `set_led` (v2, with HSV saturation and brightness folded by the materializer) and `MouseLimitRegion` for stick- and gyro-hosted mouse regions (v3). The translator's neutral shape is `TranslatedMacroAction`, a 26-member 0-based enum in `TranslatedProfile.cs` (`MoveMouseToScreenPosition = 0` through `RepeatWheelWhileHeld = 25`) that the materializer lowers onto `MacroActionType`. Not every member has its own `MacroActionType`: `RepeatWheelWhileHeld` lowers onto `MouseWheelTap` with `MacroRepeatMode.UntilRelease`.
+The translator also reuses existing actions: `LightbarColor` / `LightbarColorClear` / `GuideLedBrightness` for `set_led` (v2, with HSV saturation and brightness folded by the materializer) and `MouseLimitRegion` for stick- and trigger-hosted mouse regions (v3). The translator's neutral shape is `TranslatedMacroAction`, a 26-member 0-based enum in `TranslatedProfile.cs` (`MoveMouseToScreenPosition = 0` through `RepeatWheelWhileHeld = 25`) that the materializer lowers onto `MacroActionType`. Not every member has its own `MacroActionType`: `RepeatWheelWhileHeld` lowers onto `MouseWheelTap` with `MacroRepeatMode.UntilRelease`.
 
 All dispatch in the gamepad-state and Extended raw-state switches of `InputManager.Step4b.EvaluateMacros.cs`, carry the DTO triple in `SettingsService`, and follow the `Is*Type` editor-visibility pattern in `MacroItem.cs`.
 
@@ -475,7 +476,7 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ## Tests
 
-`PadForge.SteamWorkshop.Tests` covers the parser (syntax, caps, VBKV), the clients (gate throws, downloader validation, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through `TranslationEdgeTests`, the v1-v7 per-wave suites (`WaveOneATranslationTests` through `WaveFourCTranslationTests`), the v8-v26 topic suites (`GroupAxisInversionTests`, `CurveChannelTranslationTests`, `DeadZoneGeometryTranslationTests`, `GapClosureTranslationTests`, `StickDirectionTranslationTests`, `StickSwipeScrollTests`, `AuditTwoTranslationTests`, `SentinelPresetCycleTests`, `MenuCellLabelTests`, `MenuNameDisambiguationTests`, `RatchetDelayHapticTranslationTests`, `ReleaseActivatorWheelTests`, `VocabularyCensusTests`, `MassSweepTopFourTests`, `MassSweepRoundTwoTests`, `MassSweepRoundThreeTests`, `TranslatorAuditFixTests`, `MacroTriggerReachabilityTests`, `WorkshopSourceDeviceGuidTests`), the reason-key lockdowns (`ReportReasonLockdownTests`, `ApprovedReasonLockdown`, `UserFacingVocabularyTests`), and 30 golden fixtures (`Golden/{fileId}.golden.txt`, re-blessed via `PADFORGE_BLESS_GOLDEN=1` so translator changes surface as reviewable diffs). `PadForge.Tests/WorkshopProvenanceTests.cs` pins the provenance XML round-trip, the materializer stamp, and compaction preservation.
+`PadForge.SteamWorkshop.Tests` covers the parser (syntax, caps, VBKV), the clients (gate throws, artwork stale-serve), the cache (TTL, budgets, atomicity), the local store (library parsing, both file shapes), and the translator through `TranslationEdgeTests`, the v2-v7 per-wave suites (`WaveOneATranslationTests` through `WaveFourCTranslationTests`), the v8-v26 topic suites (`GroupAxisInversionTests`, `CurveChannelTranslationTests`, `DeadZoneGeometryTranslationTests`, `GapClosureTranslationTests`, `StickDirectionTranslationTests`, `StickSwipeScrollTests`, `AuditTwoTranslationTests`, `SentinelPresetCycleTests`, `MenuCellLabelTests`, `MenuNameDisambiguationTests`, `RatchetDelayHapticTranslationTests`, `ReleaseActivatorWheelTests`, `VocabularyCensusTests`, `MassSweepTopFourTests`, `MassSweepRoundTwoTests`, `MassSweepRoundThreeTests`, `TranslatorAuditFixTests`, `MacroTriggerReachabilityTests`, `WorkshopSourceDeviceGuidTests`), the reason-key lockdowns (`ReportReasonLockdownTests`, `ApprovedReasonLockdown`, `UserFacingVocabularyTests`), and 30 golden fixtures (`Golden/{fileId}.golden.txt`, re-blessed via `PADFORGE_BLESS_GOLDEN=1` so translator changes surface as reviewable diffs). `PadForge.Tests/WorkshopProvenanceTests.cs` pins the provenance XML round-trip, the materializer stamp, and compaction preservation.
 
 ---
 
@@ -492,4 +493,4 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

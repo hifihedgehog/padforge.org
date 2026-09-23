@@ -33,7 +33,7 @@ The whole MIDI namespace is always available: all 128 notes, all 128 CC numbers,
 
 Select a MIDI device on the [Devices](devices.md) page and PadForge shows a live preview: a piano that lights the notes you play and vertical sliders that follow the CC knobs and faders. Use it to find which CC number a knob sends before you map it.
 
-Turn an endless encoder and its CC bar flashes: green for a clockwise detent, orange for counter-clockwise. No flash means the encoder is in a relative mode PadForge does not decode (see below).
+Turn an endless encoder and its CC bar flashes: green for a clockwise detent, orange for counter-clockwise. No flash means the encoder is in a relative mode PadForge does not decode (see [What you can map](#what-you-can-map)).
 
 ---
 
@@ -64,4 +64,4 @@ PadForge's own MIDI virtual controllers show up in the MIDI input list on purpos
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

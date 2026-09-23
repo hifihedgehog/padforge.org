@@ -35,7 +35,7 @@ The controller's card shows an **NFC** chip in its capabilities line. The contro
 
 The reader powers on only while an NFC source is bound or the **NFC Tags** dialog is open. Unused, it costs nothing.
 
-A tag left resting on a controller's reader holds its button down. The button releases 175 ms after you lift the tag.
+A tag left resting on a controller's reader holds its button down. After you lift the tag, the controller takes about two seconds to report it gone, and the button releases 175 ms after that.
 
 Limitations, stated plainly:
 
@@ -87,4 +87,4 @@ Bindings follow the tag itself, not its name. Rename a tag and its bindings stay
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

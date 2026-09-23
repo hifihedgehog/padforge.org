@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3510,7 +3570,7 @@
 <h2 id="no-khronos-loader">No Khronos loader<a class="headerlink" href="#no-khronos-loader" title="Permanent link">&para;</a></h2>
 <p>A runtime DLL exports exactly one entry point, <code>xrNegotiateLoaderRuntimeInterface</code>, which hands back <code>xrGetInstanceProcAddr</code>. Everything else is a function pointer obtained from that. PadForge performs that handshake itself, about a hundred lines, instead of linking the loader. Two reasons, both structural:</p>
 <p><strong>Runtime selection.</strong> PadForge runs elevated. The Khronos loader deliberately ignores <code>XR_RUNTIME_JSON</code> in a high-integrity process (<code>OpenXR-SDK</code>, <code>src/common/platform_utils.hpp</code>, <code>PlatformUtilsGetSecureEnv</code>). Choosing the manifest ourselves makes the runtime choice per-process by construction, with nothing configured globally and nothing to put back afterward. That is what the <strong>OpenXR Runtime</strong> dropdown sets, and it is why picking one never disturbs the machine's active runtime.</p>
-<p><strong>Isolation.</strong> The loader inserts every API layer installed on the machine into the calling process. A background client that only reads poses has no use for them, and a user's layers belong to their game.</p>
+<p><strong>Isolation.</strong> The loader inserts every implicit API layer installed on the machine into the calling process. A background client that only reads poses has no use for them, and a user's layers belong to their game.</p>
 <hr />
 <h2 id="finding-the-runtimes">Finding the runtimes<a class="headerlink" href="#finding-the-runtimes" title="Permanent link">&para;</a></h2>
 <p><code>OpenXrRuntimeCatalog</code> reads <code>HKLM\SOFTWARE\Khronos\OpenXR\1</code>:</p>
@@ -3563,7 +3623,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

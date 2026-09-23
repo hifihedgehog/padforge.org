@@ -26,7 +26,7 @@ The **Opens With** picker sets the input that opens and steers the menu. It read
 | Host | How it engages |
 |---|---|
 | **Left Stick** / **Right Stick** | When the stick leaves the **Engage Deadzone** (default 25). |
-| **Touchpad 1** and up | On touch. A **Pad Half** picker (**Whole Pad**, **Left Half**, **Right Half**) narrows the menu to half the pad, so one pad can carry two menus, the way Steam treats the PS touchpad as two. |
+| **Touchpad 1** and **Touchpad 2** | On touch. A **Pad Half** picker (**Whole Pad**, **Left Half**, **Right Half**) narrows the menu to half the pad, so one pad can carry two menus, the way Steam treats the PS touchpad as two. |
 | **Custom Axes** | Record any two axes as **Steer X** and **Steer Y**, then push past the deadzone like a stick. This is how joysticks, wheels, and other non-gamepad devices host menus. |
 
 ### Click Input
@@ -147,4 +147,4 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

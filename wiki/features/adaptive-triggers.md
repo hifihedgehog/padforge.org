@@ -111,7 +111,7 @@ your finger.
 
 This needs a physical DualSense or DualSense Edge on the slot. The bytes
 come from the bundled SDL fork, which publishes them as a joystick
-property; SDL upstream parses nothing from that range. Without the fork
+property. SDL upstream parses nothing from that range. Without the fork
 build the property is absent and the virtual report is unchanged.
 
 ---
@@ -135,4 +135,4 @@ build the property is absent and the virtual report is unchanged.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

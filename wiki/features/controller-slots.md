@@ -23,7 +23,7 @@ Each slot has its own:
 - [Menus](../guides/menus.md)
 - [Shift Layers](../guides/shift-layers.md)
 
-The Pad page Copy / Paste / Copy From operations carry every per-device tuning on this list along with the mapping table. See [Button and Axis Mappings](mappings.md) for the matching rules.
+The Pad page Copy / Paste / Copy From operations carry every per-device tuning on this list along with the mapping table. A Motion Gyro or Motion Accelerometer row that loses every input when its devices are matched to the target slot is dropped, as device cleanup does, so the target's motion auto-map fills it again. A motion row you switched off by emptying it, or one marked not to inherit, copies as it is. See [Button and Axis Mappings](mappings.md) for the matching rules.
 
 ---
 
@@ -57,7 +57,7 @@ A type button shows faded when:
 - **Type at capacity.** The cursor turns into a "no" icon. The tooltip shows the cap.
 - **Missing dependency.** Two types dim when what they need is absent: MIDI without Windows MIDI Services ("MIDI (requires Windows MIDI Services)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
 
-The Add Controller card disappears when all 16 slots are in use or every type is at capacity.
+The Add Controller card disappears when all 16 slots are in use.
 
 ---
 
@@ -67,11 +67,11 @@ Pick the type when you create the slot. You can also switch an existing slot's t
 
 ### Xbox
 
-The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons. HIDMaestro-backed. Almost every PC game with controller support reads Xbox-style input natively, so this is what to pick when you do not know what to pick.
+The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons, plus Share on the Xbox Series presets. HIDMaestro-backed. Almost every PC game with controller support reads Xbox-style input natively, so this is what to pick when you do not know what to pick.
 
 ### PlayStation
 
-HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 15 buttons. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
+HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
 
 ![PlayStation slot: the preset picker selects DualShock 4, DualShock 3, DualSense, or DualSense Edge, with the controller view below](../images/pad-playstation-configbar.png)
 
@@ -81,13 +81,13 @@ HIDMaestro-backed. Two presets: **Nintendo Switch Pro Controller** (the default)
 
 The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. The Switch 2 Pro preset carries 21, adding C, GL, and GR among others, on its own wire order. Neither has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on either. The slot deploys the preset as-is.
 
-Map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to the virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
+On the Switch Pro preset, map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. The Switch 2 Pro preset carries neither: its input report has no motion data, and HIDMaestro decodes no rumble for it. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
 
 ![Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below](../images/pad-nintendo-configbar.png)
 
 ### Extended (HIDMaestro)
 
-A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks one of HIDMaestro's 231 device profiles (HOTAS, wheels, third-party gamepads, and Valve's controllers). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout, except on the Valve profiles, which draw the pad itself.
+A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks the Custom entry or one of the 96 HIDMaestro profiles the Extended picker lists (HOTAS, wheels, third-party gamepads, and Valve's controllers). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout, except on the Valve profiles, which draw the pad itself.
 
 Sim titles (DCS World, MSFS, X-Plane, iRacing) read DirectInput best. Extended slots also deliver [force feedback](force-feedback.md) to sim titles that support it.
 
@@ -111,7 +111,7 @@ A composite persona rides the real USB stack, so Steam and SDL see Valve hardwar
 
 ![Extended slot on the Steam Deck profile: the Deck's body with both trackpads and the four rear buttons](../images/pad-extended-steam-deck.png)
 
-The mapping grid uses Valve's names. Buttons are A, B, X, Y, L1, R1, L3, R3, Steam, and the pad clicks (Left Pad Click, Right Pad Click) on every profile, then per pad:
+The mapping grid uses Valve's names. Buttons are A, B, X, Y, L1, R1, L3, Steam, and the pad clicks (Left Pad Click, Right Pad Click) on every profile, plus R3 on the Steam Deck and the 2026 pad, then per pad:
 
 | Control | Steam Deck | Steam Controller (2015) | Steam Controller (2026) |
 |---|---|---|---|
@@ -286,7 +286,7 @@ Four tabs are always there:
 
 Two more slot-tier tabs appear conditionally.
 
-**Bass Shakers** shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Force Feedback checkbox decides when Customize is on, the profile's own descriptor when it is off). It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Extended slots without force feedback, Keyboard+Mouse, MIDI, and VR slots have no feedback surface and hide it.
+**Bass Shakers** shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Force Feedback checkbox decides when Customize is on, the profile's own descriptor when it is off). With Customize off it also shows on the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes without a force feedback descriptor. It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Extended slots without force feedback, Keyboard+Mouse, MIDI, and VR slots have no feedback surface and hide it.
 
 **Output** carries the slot's output-behavior cards. It shows on every slot type except MIDI and VR. The SOCD cleaner is on it for every type that shows the tab. **Keep Controller Awake** sits beside it on Xbox and PlayStation slots only. That card holds a small stick deflection so games that switch their prompts the moment they see mouse or keyboard input keep treating the pad as the active device.
 
@@ -297,7 +297,7 @@ The rest appear based on the physical device selected in the slot's device dropd
 | [Stick Deadzones](stick-deadzones.md) | every slot except MIDI and VR (gated by slot type, not the device) |
 | [Trigger Deadzones](trigger-deadzones.md) | every slot except Keyboard+Mouse, MIDI, and VR (gated by slot type, not the device). Nintendo and Extended slots whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital |
 | [Force Feedback](force-feedback.md) | a stick-class input (hidden for keyboard, mouse, touchpad, and MIDI) |
-| [Gyro](../guides/gyro.md) | a gyro sensor |
+| [Gyro](../guides/gyro.md) | a gyro or an accelerometer. The gyro-rate cards need a gyro |
 | [Impulse Triggers](impulse-triggers.md) | Xbox One / Elite / Series trigger motors |
 | [Adaptive Triggers](adaptive-triggers.md) | a DualSense or DualSense Edge |
 | [Lighting](lighting.md) | a lightbar or lit sphere (DualSense family, DualShock 4, PS Move), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip) |
@@ -352,4 +352,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

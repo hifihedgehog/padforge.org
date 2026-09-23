@@ -737,6 +737,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#uninstalling" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1215,6 +1226,8 @@
       
         
           
+        
+      
         
       
         
@@ -2141,6 +2154,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2410,6 +2451,8 @@
       
         
           
+        
+      
         
       
         
@@ -2795,6 +2838,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3585,6 +3656,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#uninstalling" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3628,7 +3710,7 @@
 <p><img alt="Add Controller popup: pick a virtual controller type" src="../../images/add-controller-popup.png" /></p>
 <h2 id="quick-start-2-minutes">Quick start (2 minutes)<a class="headerlink" href="#quick-start-2-minutes" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Download the <code>win-x64</code> zip from the <a href="https://github.com/hifihedgehog/PadForge/releases/latest">latest release</a>, for example <code>PadForge-v4.5.2-win-x64.zip</code>. It holds <code>PadForge.exe</code> and nothing else. On Windows on ARM, take the <code>win-arm64</code> zip (<a href="#windows-on-arm-preliminary">preliminary</a>).</li>
+<li>Download the <code>win-x64</code> zip from the <a href="https://github.com/hifihedgehog/PadForge/releases/latest">latest release</a>, for example <code>PadForge-v4.5.3-win-x64.zip</code>. It holds <code>PadForge.exe</code> and nothing else. On Windows on ARM, take the <code>win-arm64</code> zip (<a href="#windows-on-arm-preliminary">preliminary</a>).</li>
 <li>Extract the zip to any folder (e.g. <code>C:\PadForge\</code>).</li>
 <li>Run <code>PadForge.exe</code>.</li>
 <li>Approve the one UAC prompt at startup. PadForge needs administrator rights to run.</li>
@@ -3701,7 +3783,7 @@
 <ol>
 <li><strong>Create a virtual controller.</strong> On the Dashboard, click <strong>Add Controller</strong> and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.</li>
 <li><strong>Check devices.</strong> Open <strong><a href="../../features/devices/">Devices</a></strong>. PadForge auto-detects every connected gamepad, joystick, keyboard, and mouse.</li>
-<li><strong>Assign a device.</strong> Select the device on the Devices page, then click a slot pill under <strong>Virtual Controller Assignment</strong> to route that physical controller through the virtual one. The slot badges on the list cards show what is already assigned; they are not buttons.</li>
+<li><strong>Assign a device.</strong> Select the device on the Devices page, then click a slot pill under <strong>Virtual Controller Assignment</strong> to route that physical controller through the virtual one. The slot badges on the list cards show what is already assigned. They are not buttons.</li>
 </ol>
 <p>Games now see the virtual controller as a standard gamepad.</p>
 <p>The <strong>About</strong> page, at the bottom of the sidebar, lists the projects PadForge is built on, along with its license and a short description of what it does. Your app version lives on <strong><a href="../../features/settings/">Settings</a></strong> under <strong>Diagnostics &gt; App Version</strong>. Note it when filing an issue.</p>
@@ -3712,13 +3794,13 @@
 <p>The driver ships embedded in <code>PadForge.exe</code>. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the <a href="../../features/settings/">Settings</a> page, the HIDMaestro card always reads <strong>Installed</strong> and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.</p>
 <div class="admonition note">
 <p class="admonition-title">The very first launch may need one relaunch</p>
-<p>The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on <strong>Hide from Games</strong>, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.</p>
+<p>The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on <strong>Hide from Games (HidHide)</strong>, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.</p>
 </div>
 <p>If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.</p>
 <p>See <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a> for how PadForge talks to the driver under the hood.</p>
 <hr />
 <h2 id="optional-add-ons">Optional add-ons<a class="headerlink" href="#optional-add-ons" title="Permanent link">&para;</a></h2>
-<p>Three optional installs live on <strong><a href="../../features/settings/">Settings</a></strong>. HidHide (1.5.230) is bundled inside <code>PadForge.exe</code>. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its <strong>Install</strong> button for <strong>Uninstall</strong>.</p>
+<p>Three optional installs live on <strong><a href="../../features/settings/">Settings</a></strong>. HidHide is bundled inside <code>PadForge.exe</code>: the 1.5.230 setup on an x64 PC, the ARM64 driver 1.6.280.0 on an ARM64 PC. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its <strong>Install</strong> button for <strong>Uninstall</strong>.</p>
 <p>One more driver installs outside Settings. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a> over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it.</p>
 <!-- SCREENSHOT: settings-driver-cards -->
 <p><img alt="The Settings drivers section: HIDMaestro, HidHide, and Windows MIDI Services cards" src="../../images/settings-driver-cards.png" /></p>
@@ -3754,7 +3836,7 @@
 </tr>
 <tr>
 <td><strong>Start Minimized</strong></td>
-<td>Skips showing the main window.</td>
+<td>Starts with the main window minimized.</td>
 </tr>
 <tr>
 <td><strong>Minimize to System Tray</strong></td>
@@ -3764,10 +3846,14 @@
 </table>
 <p>With all three on, PadForge runs in the background with only a tray icon.</p>
 <hr />
+<h2 id="updating">Updating<a class="headerlink" href="#updating" title="Permanent link">&para;</a></h2>
+<p>From 4.5.3 on, PadForge updates itself. <strong>Settings &gt; Updates</strong> checks GitHub 20 seconds after launch and every 12 hours, and <strong>Install and Restart</strong> replaces <code>PadForge.exe</code> in place. <code>PadForge.xml</code> is not touched. See <a href="../../features/updates/">Updates</a>.</p>
+<p>Version 4.5.2 and older have no updater. Download the new zip, close PadForge, and replace <code>PadForge.exe</code> with the one from the zip. <code>PadForge.xml</code> stays where it is and carries over.</p>
+<hr />
 <h2 id="uninstalling">Uninstalling<a class="headerlink" href="#uninstalling" title="Permanent link">&para;</a></h2>
 <p>There is no installer, so removal is short.</p>
 <ol>
-<li>Open <strong><a href="../../features/settings/">Settings</a></strong> and click <strong>Uninstall</strong> next to HidHide, Windows MIDI Services, and SteamVR if you installed them. HIDMaestro has no Uninstall button and stays registered.</li>
+<li>Open <strong><a href="../../features/settings/">Settings</a></strong> and click <strong>Uninstall</strong> next to HidHide, Windows MIDI Services, and SteamVR if you installed them. HIDMaestro has no Uninstall button and stays registered. Turn off <strong>Start at Login</strong> too if it is on, so Windows drops its logon task.</li>
 <li>Close PadForge.</li>
 <li>Delete the PadForge folder.</li>
 </ol>
@@ -3776,6 +3862,7 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../features/settings/">Settings</a>: install and manage optional drivers.</li>
+<li><a href="../../features/updates/">Updates</a>: keep PadForge current from inside the app.</li>
 <li><a href="../../features/dashboard/">Dashboard</a>: main control panel after first launch.</li>
 <li><a href="../../features/devices/">Devices</a>: view detected physical controllers.</li>
 <li><a href="../../features/controller-slots/">Controller Slots</a>: create and configure virtual controllers.</li>
@@ -3783,7 +3870,7 @@
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro under the hood.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

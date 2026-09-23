@@ -4,7 +4,7 @@
 
 ![Audio tab with mirror source picker and master volume](../images/pad-audio.png)
 
-Some controllers can make sound. A DualSense or DualShock 4 has a small speaker in the pad. A Wii Remote has a built-in speaker too. Other controllers have no speaker but can turn a sound into a single vibrating tone. PadForge drives whichever kind the assigned device provides, using a mirror of a Windows audio output and the sound effects your [Macros](../guides/macros.md) play. The Audio tab is **per pad per slot**, and it appears when the slot has a sound-capable device assigned.
+Some controllers can make sound. A DualSense or DualShock 4 has a small speaker in the pad. A Wii Remote has a built-in speaker too. Other controllers have no speaker but can turn a sound into a single vibrating tone. PadForge drives whichever kind the assigned device provides, using a mirror of a Windows audio output and the sound effects your [Macros](../guides/macros.md) play. The Audio tab is **per pad per slot**, and it appears when the device selected on the slot can make sound.
 
 ---
 
@@ -23,7 +23,7 @@ Switch 2 controllers are not included: no known method plays an audible tone on 
 Inside the tab, the mirror controls appear for any device with a reachable speaker or actuator:
 
 - **DualSense and DualSense Edge:** USB or Bluetooth.
-- **DualShock 4:** Bluetooth, or the Sony USB wireless adaptor. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
+- **DualShock 4:** Bluetooth, or the Sony USB wireless adapter. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
 - **Wii Remote:** mirrors into its built-in speaker at the same low rate as its macro sounds.
 - **Haptic-tone pads:** mirror the captured audio as a tracking haptic tone, the same reduction a macro sound gets. Expect a pitch-following buzz, not the source audio.
 - **Steam Controller 2026 over USB or the dongle:** mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Everything above the cutoff you set is filtered out.
@@ -40,11 +40,11 @@ Turn on **Mirror System Audio to the Controller Speaker** and pick a source. Pad
 |---|---|
 | Mirror System Audio to the Controller Speaker | Per-device toggle. Off by default. |
 | Mirror Source | "System Default" or any active output device on the PC. |
-| Master Volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. |
+| Master Volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. It also sets the level of macro sounds that fall back to the PC's default output. |
 
-Picking "System Default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. Pick a specific output instead when you want one particular device's sound on the pad.
+On a DualSense or DualShock 4, picking "System Default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. A Wii Remote or haptic-tone pad keeps capturing the output that was the default when its mirror started. Pick a specific output instead when you want one particular device's sound on the pad.
 
-The mirror captures a Windows **output endpoint**, not a single program. To send one game's sound to the pad, point that game (or all of Windows) at the output you are mirroring. This is also how a game's own DualSense audio reaches the speaker: the game plays it to a Windows output, and PadForge mirrors that output. PadForge does not intercept the game's controller-audio packets directly.
+The mirror captures a Windows **output endpoint**, not a single program. To send one game's sound to the pad, point that game (or all of Windows) at the output you are mirroring. A game's own controller audio needs no mirror when the slot's virtual controller carries audio, as the default DualSense for new PlayStation slots does: the game plays it to that virtual pad, and PadForge passes it to the physical Sony pads on the slot. On other slots, point the game at the output you are mirroring.
 
 ---
 
@@ -87,7 +87,7 @@ On a Steam Controller 2026 over USB or the dongle the same toggle feeds the hapt
 
 ### Actuator Low-Pass Cutoff
 
-Shown only for a Steam Controller 2026 on a USB cable or its dongle. Keeps the haptic stream below this frequency so the pads vibrate instead of audibly playing sound. Around 250 Hz the actuators start to become audible. Raise it for sharper detail, lower it for quieter play. Range 60 to 1000 Hz, default 250, with a **Reset to 250 Hz** button. The High Tones setting does nothing on this pad over those two transports. The cutoff takes its place.
+Shown only for a Steam Controller 2026 on a USB cable or its dongle. Keeps the haptic stream below this frequency so the pads vibrate instead of audibly playing sound. Around 250 Hz the actuators start to become audible. Raise it for sharper detail, lower it for quieter play. Range 60 to 1000 Hz, default 250, with a reset button whose tooltip reads "Reset to 250 Hz". The High Tones setting does nothing on this pad over those two transports. The cutoff takes its place.
 
 ---
 
@@ -95,13 +95,13 @@ Shown only for a Steam Controller 2026 on a USB cable or its dongle. Keeps the h
 
 The Steam Controller 2026's firmware accepts a continuous audio stream for its actuators, two trackpads and two grips, over the USB cable and over the wireless dongle. PadForge uses it. On those two transports the pad is no longer a haptic-tone pad. Everything the slot plays, the system mirror, macro sounds, the Test button, the touchpad swipe ticks, and a virtual DualSense's authored haptics when the toggle above is on, is mixed into one stream and sent to the actuators as audio at 8 kHz. Nothing has to be turned on. Assign the pad, and the Audio tab's mirror and macro sounds start using the stream.
 
-Several sources play at once without one silencing another. A game's haptics keep playing while a macro sound fires or the mirror runs.
+Several sources play at once without one silencing another. A game's haptics keep playing while a macro sound fires or the mirror runs. The Test button is the exception: for its 350 ms it replaces the mix with an 880 Hz tone that skips the cutoff.
 
 What to expect:
 
 - Low frequencies are what the actuators render well. The cutoff above defaults to 250 Hz, so bass, engine rumble, and impacts come through as vibration and higher content is filtered off before it reaches the pad.
-- Over Bluetooth the pad falls back to the single-tone path described on this page, since no known implementation streams audio to it over a direct Bluetooth link.
-- The stream starts when there is something to play and stops about two seconds after the last sound, so an idle pad sends nothing.
+- Over Bluetooth the pad falls back to the single-tone path described on this page, since no known implementation sustains the full-rate stream over a direct Bluetooth link.
+- The stream starts when there is something to play and stops two seconds after the last sound, so an idle pad sends nothing.
 - Over the dongle the audio is 8-bit companded (G.711 mu-law), a dongle bandwidth limit. Over the cable it is 16-bit.
 
 The stream was confirmed working by the requester on their own pad. Detail on the protocol is on [Steam Controller Haptics Internals](../reference/steam-controller-haptics-internals.md).
@@ -110,7 +110,7 @@ The stream was confirmed working by the requester on their own pad. Detail on th
 
 ## DualSense headset jack
 
-A DualSense or DualSense Edge adds three more rows under Master Volume.
+A DualSense or DualSense Edge adds these rows under Master Volume. Audio Buffer Length appears only over Bluetooth.
 
 | Control | What it does |
 |---|---|
@@ -134,7 +134,7 @@ The drop runs once for each time you plug the cable in. If you re-link Bluetooth
 
 ![Audio tab scrolled to the crossfeed picker, the graphic EQ, and the limiter](../images/pad-audio-dsp.png)
 
-Under Output Path, the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.
+Under Output Path (under Master Volume on a DualShock 4), the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.
 
 ### Crossfeed
 
@@ -145,17 +145,17 @@ Headphones hand each ear one channel and nothing of the other, which never happe
 | Off | |
 | Low, Medium, High | 360 Hz at 6.0 dB, 500 Hz at 4.5 dB, 700 Hz at 3.0 dB |
 | Low (Easy), Medium (Easy), High (Easy) | 360 Hz at 8.4 dB, 500 Hz at 7.2 dB, 700 Hz at 6.0 dB. High (Easy) is the C. Moy setting. |
-| Jan Meier | 650 Hz at 9.5 dB, the preset most headphone listeners reach for |
+| Jan Meier | 650 Hz at 9.5 dB |
 | bs2b default | 700 Hz at 4.5 dB |
 | Custom | Your own Cutoff (300 to 2000 Hz) and Feed (1.0 to 15.0 dB) on two sliders |
 
 Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how much of the opposite channel arrives below the cutoff. The ranges are libbs2b's own.
 
-Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack with something plugged in. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing.
+Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack unless it has switched to the speaker. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing.
 
 ### Parametric EQ
 
-Turn on **Parametric EQ** and a graphic EQ appears: a log-frequency curve from 20 Hz to 20 kHz with the summed response drawn across it and one handle per band. Drag a handle to move its frequency and gain together. Roll the wheel over a handle to widen or narrow it (Q). Under the curve, each band has a row with an on switch, a type picker, and Freq (Hz), Gain (dB), and Q boxes you can type into. Band types are Peak, Low Shelf, High Shelf, High Pass, Low Pass, and Notch. **Add Band** appends a 1 kHz peak, **Clear** removes them all, and the **Preamp** row sets the overall level before the bands.
+Turn on **Parametric EQ** and a graphic EQ appears: a log-frequency curve from 20 Hz to 20 kHz with the summed response drawn across it and one handle per band. Drag a handle to move its frequency, and its gain on Peak and shelf bands. Roll the wheel over a handle to widen or narrow it (Q). Under the curve, each band has a row with an on switch, a type picker, and Freq (Hz), Gain (dB), and Q boxes you can type into. Band types are Peak, Low Shelf, High Shelf, High Pass, Low Pass, and Notch. **Add Band** appends a 1 kHz peak, **Clear** removes them all, and the **Preamp** row sets the overall level before the bands.
 
 For a correction matched to a specific pair of headphones, use AutoEq:
 
@@ -208,8 +208,8 @@ A `.pfsounds` package travels with a shared profile. A macro that plays a packag
 
 | Button | What it does |
 |---|---|
-| Test | Plays a short test tone on the selected device only, so you can check one pad without firing the others on the slot. On a haptic-tone pad it plays as a brief vibrating tone. |
-| Stop All Sounds | Stops every sound playing on the slot. |
+| Test | Plays a short test tone on the selected device only, so you can check one pad without firing the others on the slot. On a haptic-tone pad it plays as a brief vibrating tone. On a Sony pad it plays only while the pad already has audio running: the mirror on, a sound macro on the slot, or a virtual controller with audio. |
+| Stop All Sounds | Stops every macro sound playing on the slot. The mirror keeps running. |
 
 Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a **Reset All** button that clears the whole card for the selected device at once.
 
@@ -217,12 +217,12 @@ Every setting row has its own reset button that returns just that setting to its
 
 ## Limits
 
-- **DualShock 4 audio is Bluetooth only.** A wired DS4 exposes no audio interface. The exception is the Sony USB wireless adaptor, which presents a real USB audio endpoint.
-- **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads. Each macro's Play Sound action still carries its own volume.
+- **DualShock 4 audio is Bluetooth only.** A wired DS4 exposes no audio interface. The exception is the Sony USB wireless adapter, which presents a real USB audio endpoint.
+- **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads, plus the PC fallback output. Each macro's Play Sound action still carries its own volume.
 - **The mirror is endpoint-level, not per-app.** It mirrors a Windows output device, not one program's sound.
 - **The pad speaker is small.** It suits voice, prompts, and effects more than music.
 - **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and the Steam Controller 2026 over Bluetooth reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.
-- **The Steam Controller 2026 stream is low-passed.** Over USB or the dongle the pad gets real audio, but only what sits under the Actuator Low-Pass Cutoff. It is a vibration channel, not a speaker.
+- **The Steam Controller 2026 stream is low-passed.** Over USB or the dongle the pad gets real audio, but only what sits under the Actuator Low-Pass Cutoff, apart from the Test button's tone. It is a vibration channel, not a speaker.
 - **A dual-connected DualSense needs the radio dropped.** The pad's own firmware mutes USB audio while a Bluetooth link stands. PadForge drops that link when it builds the wired audio path. A DualSense whose radio was dropped while the cable is in does not re-link on the PS button until you unplug it.
 - **The Wii Remote speaker is low-rate.** Expect beeps and short cues, not clean playback.
 - **Switch 2 controllers have no audio output here.** They do not appear in the Audio tab.
@@ -242,4 +242,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

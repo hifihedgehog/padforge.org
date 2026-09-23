@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://padforge.org/docs/reference/dsu-motion-server/">
       
       
-        <link rel="prev" href="../driver-installation-internals/">
+        <link rel="prev" href="../updates-internals/">
       
       
         <link rel="next" href="../dsu-protocol/">
@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3747,6 +3807,10 @@
 <td></td>
 </tr>
 <tr>
+<td>2015 Steam Controller</td>
+<td></td>
+</tr>
+<tr>
 <td>2026 Steam Controller</td>
 <td></td>
 </tr>
@@ -3757,7 +3821,7 @@
 <h2 id="turn-it-on">Turn it on<a class="headerlink" href="#turn-it-on" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Plug in a controller that reports motion.</li>
-<li>Assign it to one of slots 1–4. The slot's virtual controller type has to be <strong>PlayStation</strong> or <strong>Nintendo</strong>, or an <strong>Extended</strong> slot running a Valve profile (Steam Deck, or either Steam Controller), whose native frame carries an IMU of its own. Xbox, Keyboard + Mouse, MIDI, VR, and any other Extended slot broadcast no motion.</li>
+<li>Assign it to one of slots 1–4. Any virtual controller type works. An <strong>Xbox</strong> slot broadcasts its controller's motion the same as a <strong>PlayStation</strong> slot, with no motion mapping needed.</li>
 <li>On the <a href="../../features/dashboard/">Dashboard</a>, tick <strong>Enable DSU Motion Server (CemuHook Motion Provider Protocol)</strong>.</li>
 <li>Leave the <strong>Port</strong> box at <strong>26760</strong>, or type a different number. The reset button next to it returns the port to 26760.</li>
 <li>Start the input engine with the play button.</li>
@@ -3770,9 +3834,10 @@
 <p>The accelerometer stream skips the tuning chain. Sensitivity, deadzone, smoothing, curve, and both gates are gyro-only, so the broadcast carries the scaled accelerometer reading.</p>
 <p>Two things still reach it. <strong>Grip</strong> rotates the body gyro, the body accelerometer, and gravity together in both states of the passthrough toggle, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. And the Motion Accelerometer row's own <strong>Invert</strong> checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.</p>
 <h3 id="the-mappings-grid-picks-the-source-device">The Mappings grid picks the source device<a class="headerlink" href="#the-mappings-grid-picks-the-source-device" title="Permanent link">&para;</a></h3>
-<p>Motion is not implicit in the device assignment. Each motion-capable slot carries a <strong>Motion Gyro</strong> row and a <strong>Motion Accelerometer</strong> row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike.</p>
+<p>A <strong>PlayStation</strong> or <strong>Nintendo</strong> slot, or an <strong>Extended</strong> slot running a Valve profile (Steam Deck, or either Steam Controller), carries a <strong>Motion Gyro</strong> row and a <strong>Motion Accelerometer</strong> row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike. While either row exists, DSU follows the rows alone: a missing row, a row with no source, or a row whose devices are all offline sends nothing on that channel.</p>
+<p>A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, still broadcasts. DSU combines the sensors of every enabled device assigned to the slot, axis by axis, and keeps the reading with the largest magnitude, the rule the <strong>Strongest</strong> combine mode uses. The virtual controller itself carries no motion on such a slot.</p>
 <ul>
-<li>Several motion devices on one slot stack as sources on the same row. The first source whose device is online wins, and the walk falls through to the next source when that device goes offline.</li>
+<li>Several motion devices on one slot stack as sources on the same row. The row's <strong>Combine</strong> setting merges their readings axis by axis: <strong>Strongest</strong> by default, or <strong>Combined</strong>, <strong>Average</strong>, or <strong>Custom</strong>.</li>
 <li>The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.</li>
 <li>On a Joy-Con pair, the source picker also offers <strong>Left Joy-Con Motion Gyro</strong> and <strong>Left Joy-Con Accelerometer</strong> to stream the left half's sensors instead of the pair's primary stream. A Wii Remote with a Nunchuk attached offers <strong>Nunchuk Accelerometer</strong> the same way.</li>
 </ul>
@@ -3817,7 +3882,6 @@
 <li>Single player: put the motion controller in slot 1.</li>
 <li>Local multiplayer with motion: up to 4 controllers.</li>
 <li>Motion controller in slot 5 or later does not show up in the emulator. Move it to slots 1–4.</li>
-<li>The cap sits on top of the slot-type rule: the slot still has to carry a motion channel.</li>
 </ul>
 <hr />
 <h2 id="port">Port<a class="headerlink" href="#port" title="Permanent link">&para;</a></h2>
@@ -3871,7 +3935,7 @@
 </tr>
 <tr>
 <td>Emulator connected, controller assigned, still no motion</td>
-<td>The slot's virtual controller type has to be <strong>PlayStation</strong>, <strong>Nintendo</strong>, or <strong>Extended</strong> on a Valve profile. Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots send no motion.</td>
+<td>Check the slot's <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> rows on the Mappings grid. While either row exists, DSU reads only those rows, so a row with no source, or one whose device is offline, sends no motion. Add the controller as a source on each row.</td>
 </tr>
 </tbody>
 </table>
@@ -3885,7 +3949,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 
@@ -3923,7 +3987,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../driver-installation-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Driver Installation Internals">
+          <a href="../updates-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Updates Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3933,7 +3997,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Driver Installation Internals
+                Updates Internals
               </div>
             </div>
           </a>

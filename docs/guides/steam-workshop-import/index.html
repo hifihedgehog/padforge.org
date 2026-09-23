@@ -1281,6 +1281,8 @@
       
         
       
+        
+      
     
     
     
@@ -2147,6 +2149,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2416,6 +2446,8 @@
       
         
           
+        
+      
         
       
         
@@ -2801,6 +2833,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3639,7 +3699,7 @@
 <p><em>Browse community-made Steam Input controller configs for any game, read a per-binding translation manifest, and save the result as a ready-to-use PadForge profile.</em></p>
 <!-- SCREENSHOT: workshop-browse (capture post-deploy: Browse Community Configs dialog, game open, config cards and translation manifest visible) -->
 
-<p>Steam Workshop holds years of community controller layouts built in Steam Input. PadForge reads those configs straight from Steam and translates them into its own mappings, shift layers, macros, and on-screen menus. Nothing applies blind. A manifest shows every binding and what became of it before you save anything.</p>
+<p>Steam Workshop holds years of community controller layouts built in Steam Input. PadForge reads those configs straight from Steam and translates them into its own mappings, shift layers, macros, and on-screen menus. Nothing applies blind. A manifest shows what became of the config's bindings before you save anything.</p>
 <hr />
 <h2 id="turn-it-on">Turn it on<a class="headerlink" href="#turn-it-on" title="Permanent link">&para;</a></h2>
 <p><img alt="The Workshop browser before the community-config opt-in is enabled" src="../../images/workshop-cold.png" /></p>
@@ -3651,8 +3711,8 @@
 <p>What the toggle allows, exactly:</p>
 <ul>
 <li>PadForge connects directly to Steam, and only when you act: searching for a game, opening a game's config list, opening one config, or clicking the update check. Never at startup, never in the background.</li>
-<li>The servers contacted are all Steam's own: <code>store.steampowered.com</code> (game search and details), <code>api.steampowered.com</code> (config metadata), <code>steamcommunity.com</code> (creator names), <code>cdn.steamusercontent.com</code> (the config files), <code>cdn.cloudflare.steamstatic.com</code> (game artwork), and <code>avatars.fastly.steamstatic.com</code> (creator avatars).</li>
-<li>Your search text and the config you open are the only data sent. Access is anonymous. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.</li>
+<li>The servers contacted are all Steam's own: <code>store.steampowered.com</code> (game search), <code>api.steampowered.com</code> (Steam's server directory and the update check), the Steam connection servers that directory names (config lists and their details, over an anonymous session), <code>steamcommunity.com</code> (creator names), <code>cdn.steamusercontent.com</code> (the config files), <code>cdn.cloudflare.steamstatic.com</code> (game artwork), and Steam's avatar servers, such as <code>avatars.fastly.steamstatic.com</code> (creator avatars). Steam's own data names the config-file and avatar hosts.</li>
+<li>PadForge sends your search text, the game and the configs you open, and, for the update check, the ids of the configs you imported. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the MAC addresses of the physical network adapters, and the boot disk serial. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.</li>
 </ul>
 <p>The card carries three more controls:</p>
 <table>
@@ -3684,10 +3744,10 @@
 <p><img alt="Searching the Steam Workshop for a game" src="../../images/workshop-search.png" /></p>
 <p>Open the <strong>Profiles</strong> page and click <strong>Browse Community Configs</strong>. The button is always there. If Community Configs is still off, the dialog opens on an unlit "The Forge Is Cold" panel that names the Steam servers involved and offers the <strong>Enable Community Configs</strong> step right in place.</p>
 <h3 id="find-the-game">Find the game<a class="headerlink" href="#find-the-game" title="Permanent link">&para;</a></h3>
-<p>Type at least two characters into <strong>Search Games</strong>. The search runs about half a second after you stop typing and shows the top matches with their cover art and a config count per game. Click a game (or press Enter for the first match) to open its config list.</p>
+<p>Type at least two characters into <strong>Search Games</strong>. The search runs half a second after you stop typing and shows the top matches with their cover art and a config count per game. Click a game (or press Enter for the first match) to open its config list.</p>
 <h3 id="read-the-config-cards">Read the config cards<a class="headerlink" href="#read-the-config-cards" title="Permanent link">&para;</a></h3>
-<p>The game's configs list ranked by rating. A filter row above the list carries an <strong>All</strong> chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, PlayStation, and so on). Click a chip to narrow the list to configs built for that controller.</p>
-<p><strong>Sorted By</strong> re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. <strong>Search These Configs</strong> asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs shortly after you stop typing, or on Enter. Escape clears it.</p>
+<p>The game's configs list ranked by rating. A filter row above the list carries an <strong>All</strong> chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.</p>
+<p><strong>Sorted By</strong> re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. <strong>Search These Configs</strong> asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.4 seconds after you stop typing, or on Enter. Escape clears it.</p>
 <p>Each card shows:</p>
 <table>
 <thead>
@@ -3745,15 +3805,15 @@
 </tr>
 </tbody>
 </table>
-<p>Below the stats, one row per binding, grouped by the physical control it came from (left touchpad, button diamond, gyro, and so on). Each row shows a status dot, the source, the target, and a reason for anything that is not a plain translation.</p>
+<p>Below the stats, a drawing of the controller lights the inputs the config binds. Under it comes one row per binding, grouped by the physical control it came from (Left Trackpad, Face Buttons, Gyro, and so on). Each row shows a status dot, the source, the target, and a reason for anything that is not a plain translation.</p>
 <p>Real examples of each status:</p>
 <ul>
-<li><strong>Clean</strong>: "Touchpad 1 Click → Left Mouse Button". A clean row shows source and target only, with no reason text. The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own. A radial or touch menu becomes an on-screen menu row, and a macro riding a paddle, touchpad, or gyro trigger becomes a macro row, both counted as Clean.</li>
+<li><strong>Clean</strong>: "Touchpad 1 Click → Left Click". A clean row shows source and target only, with no reason text. The pad-passthrough part of the config (A stays A, bumpers stay bumpers, sticks stay sticks) appears the same way, one row per output: every binding becomes an explicit mapping row, including the ones that match the automap defaults, and the implicit analog passthroughs (a matched stick, a matched trigger pull) get explicit rows of their own whenever another binding lands on the Xbox pad. A radial or touch menu becomes an on-screen menu row, and a macro riding a paddle, touchpad, or gyro trigger becomes a macro row, both counted as Clean.</li>
 <li><strong>Partial</strong>: "circular scroll wheel approximated as a vertical drag" (a touchpad scratch wheel becomes a linear finger drag), or "camera reset approximated as a gyro recenter" (PadForge re-references its own gyro aim state, the equivalent state it owns).</li>
 <li><strong>Skipped</strong>: "12 in-game actions, Steam-only, no game-side hook" (bindings that call the game's own action API, which only Steam can deliver), or "player-number change is a Steam-client action, no equivalent".</li>
 </ul>
 <h3 id="preset-chips">Preset chips<a class="headerlink" href="#preset-chips" title="Permanent link">&para;</a></h3>
-<p>Steam Input configs can carry several action sets (Default, Driving, Menu, and so on). Each appears as a chip in the manifest footer, all included by default. Uncheck a chip and the manifest re-translates live without it. Included sets beyond the first become <a href="../shift-layers/">Shift Layers</a> in the imported profile.</p>
+<p>Steam Input configs can carry several action sets (Default, Driving, Menu, and so on). Each appears as a chip in the manifest footer, all included by default. Click a chip to leave that set out, and the manifest re-translates live without it. Included sets beyond the first become <a href="../shift-layers/">Shift Layers</a> in the imported profile.</p>
 <hr />
 <h2 id="import">Import<a class="headerlink" href="#import" title="Permanent link">&para;</a></h2>
 <p><img alt="An imported config applied as an ordinary PadForge profile" src="../../images/workshop-applied.png" /></p>
@@ -3792,25 +3852,25 @@
 <tr>
 <td>First</td>
 <td><strong>Xbox</strong></td>
-<td>Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). All become explicit mapping rows.</td>
-<td>The config binds any controller output or layer switch, or carries a macro that reads this pad's output or writes a virtual-controller button or axis (turbo, toggle, hold).</td>
+<td>Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). Plain bindings become explicit mapping rows. Turbo, long-press, double-press, and release bindings become macros instead.</td>
+<td>The config binds any controller output, switches to a layer that holds controller rows or macros, or carries a macro that reads this pad's output or writes a virtual-controller button or axis (turbo, toggle, hold).</td>
 </tr>
 <tr>
 <td>Next</td>
 <td><strong>Keyboard + Mouse</strong></td>
-<td>Every key, mouse button, mouse move, and scroll binding, including flick stick and absolute-pointer rows.</td>
-<td>The config binds any key or mouse output, or it has no controller-shaped output at all and still carries a macro or an on-screen menu (something has to host them).</td>
+<td>Every plain key, mouse button, mouse move, and scroll binding, including flick stick and absolute-pointer rows.</td>
+<td>The config binds a plain key or mouse output, or it has no controller-shaped output at all and still carries a macro or an on-screen menu (something has to host them).</td>
 </tr>
 </tbody>
 </table>
 <p>All created pads read the same physical controller. Radial and touch menus land on every created pad, so they follow whichever pad the game reads.</p>
-<p>Imported mapping tables are <strong>authoritative</strong>: they spell out the whole layout, so assigning a controller to an imported pad adds no automap rows on top. Your pad drives exactly what the config authored, nothing doubled. That holds for every pad the import creates, an empty table included.</p>
+<p>Imported mapping tables are <strong>authoritative</strong>: they spell out the whole layout, so assigning a controller to an imported pad adds no automap rows on top. Your pad drives exactly what the config authored, nothing doubled. That holds for every pad whose imported table has rows. A pad whose table came out empty (a layout of macros only) runs the controller's default mapping instead, and its macros read that output.</p>
 <p>Where everything lands:</p>
 <ul>
 <li><strong>Mappings</strong> go into each pad's <a href="../../features/mappings/">Button and Axis Mappings</a> table. They use device-portable <strong>Gamepad</strong> sources ("Gamepad A", "Gamepad Left Stick X"), so they work on any recognized controller without rework. Imported rows name no device, so their device column reads <strong>(Any Device)</strong> and each row follows whichever controller the slot holds.</li>
 <li><strong>Action sets and layers</strong> become <a href="../shift-layers/">Shift Layers</a>: hold-style mode shifts become Hold layers, add-layer commands become Toggle layers, and set-switch buttons become layer jumps or cycles.</li>
 <li><strong>Radial and touch menus</strong> become on-screen <a href="../menus/">Menus</a> with the config's cell labels, fire mode, and screen placement.</li>
-<li><strong>Cursor warps, key autofire, turbo, toggles, long presses, double presses, haptic pulses, and lighting commands</strong> become <a href="../macros/">Macros</a>. A double-press activator rides the macro's <strong>On Double Press</strong> fire mode with the config's press window. A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.</li>
+<li><strong>Cursor warps, key autofire, turbo, toggles, long presses, double presses, haptic pulses, and lighting commands</strong> become <a href="../macros/">Macros</a>. A double-press activator rides the macro's <strong>On Double Press</strong> fire mode with the config's press window, except on a touchpad, where it reads the pad's double-tap gesture. A macro bound to a standard pad button triggers from the Xbox pad's combined output. A macro bound to a paddle, touchpad, or gyro triggers straight from the physical device, no pad button needed.</li>
 <li><strong>Flick stick</strong> groups, hosted on a stick or a touchpad, become the <a href="../../features/stick-deadzones/#flick-stick">flick stick</a> source on the Keyboard + Mouse pad, with the config's Dots per 360° carried over.</li>
 <li><strong>Mouse regions on a touchpad</strong> become the absolute <a href="../../features/touchpad/#absolute-pointer">Touchpad Pointer</a> sources, so the cursor warps to your finger inside the config's region.</li>
 <li><strong>PlayStation touchpad halves</strong> map onto the left and right halves of the single DS4 or DualSense pad.</li>
@@ -3818,8 +3878,8 @@
 </ul>
 <h3 id="after-the-import">After the import<a class="headerlink" href="#after-the-import" title="Permanent link">&para;</a></h3>
 <ol>
-<li><strong>Assign your controller.</strong> The imported profile ships with no device assignments, so its Gamepad sources wait for whichever pad you give each slot. Assign your physical controller to both pads.</li>
-<li><strong>Attach the game.</strong> Select the profile, click <strong>Edit</strong>, and add the game's executable with <strong>Browse...</strong>. Auto-switch then loads the profile whenever the game gains focus, like any other profile.</li>
+<li><strong>Assign your controller.</strong> The imported profile ships with no device assignments, so its Gamepad sources wait for whichever pad you give each slot. Assign your physical controller to every pad the import created.</li>
+<li><strong>Attach the game.</strong> Select the profile, click <strong>Edit</strong>, and add the game's executable with <strong>Browse...</strong>. With <strong>Auto-Switch Profiles Based on Foreground Application</strong> checked on the Profiles page (it starts off), PadForge then loads the profile whenever the game gains focus, like any other profile.</li>
 <li><strong>Hide the physical pad if needed.</strong> If the game sees both your real pad and the virtual one, cloak the real pad on the <a href="../../features/devices/">Devices</a> page.</li>
 </ol>
 <hr />
@@ -3827,7 +3887,7 @@
 <p>Configs uploaded before 2017 predate Steam's config download servers, so PadForge cannot fetch them directly. With <strong>Show Legacy Workshop Configs</strong> on, they appear in the list with a <strong>LEGACY</strong> badge. Click one and PadForge tries two things in order:</p>
 <ol>
 <li><strong>Your Steam install.</strong> If you are subscribed to the config in Steam, Steam has already downloaded it, and PadForge reads it from your Steam folder on the spot. The manifest fills like any other config.</li>
-<li><strong>A subscribe prompt.</strong> If there is no local copy, the manifest pane explains and offers <strong>Open in Steam Workshop</strong>. Subscribe on the page that opens, let Steam download it, then click the config again.</li>
+<li><strong>A subscribe prompt.</strong> If there is no local copy, the manifest pane explains and offers <strong>Open in Steam Workshop</strong>. Subscribe on the page that opens, let Steam download it, then click another config and back to this one.</li>
 </ol>
 <p>The same local-folder fallback also rescues a newer config whose download link has gone dead on Steam's side.</p>
 <hr />
@@ -3844,7 +3904,7 @@
 </ul>
 <hr />
 <h2 id="the-cache">The cache<a class="headerlink" href="#the-cache" title="Permanent link">&para;</a></h2>
-<p>Everything fetched from Steam lands in a local cache at <code>%LOCALAPPDATA%\PadForge\SteamWorkshopCache</code>, so repeat visits are instant and polite to Steam:</p>
+<p>Everything the browser fetches from Steam lands in a local cache at <code>%LOCALAPPDATA%\PadForge\SteamWorkshopCache</code>, so repeat visits are instant and polite to Steam:</p>
 <ul>
 <li>Search results, config metadata, and game details stay fresh for a day. Creator names for a week.</li>
 <li>Config files are kept per revision and never expire on their own.</li>
@@ -3854,7 +3914,7 @@
 <p><strong>Clear Cached Configs</strong> on the Settings card empties the whole thing. Imported profiles are not part of the cache. They live in your normal PadForge settings and survive a clear.</p>
 <hr />
 <h2 id="what-does-not-translate">What does not translate<a class="headerlink" href="#what-does-not-translate" title="Permanent link">&para;</a></h2>
-<p>Steam Input has a few features PadForge does not reproduce, and a few it reproduces with a documented difference. The manifest marks every one with a reason instead of guessing:</p>
+<p>Steam Input has a few features PadForge does not reproduce, and a few it reproduces with a documented difference. The manifest marks each one below with a reason instead of guessing. Mouse smoothing, the mouse movement threshold, and trackball friction drop without a note.</p>
 <table>
 <thead>
 <tr>
@@ -3868,16 +3928,16 @@
 <td>Skipped. These bindings call the game's own action API, which only Steam can deliver.</td>
 </tr>
 <tr>
-<td>Steam client actions (system key, player number, lizard mode, and the Steam-overlay verbs)</td>
-<td>Skipped, with the action named. Two translate instead: screenshot taps PrintScreen, and the keyboard popup opens the on-screen keyboard.</td>
+<td>Steam client actions (system key 0, player number, lizard mode, and the Steam-overlay verbs)</td>
+<td>Skipped, with the action named. Three translate instead, without a manifest row: screenshot and system key 1 (the Capture button) tap PrintScreen, and the keyboard popup opens the on-screen keyboard.</td>
 </tr>
 <tr>
-<td>Circular scrolling (the scroll-wheel touchpad mode)</td>
-<td>Partial: the circular scratch becomes a vertical finger drag. Directional swipes and scroll-wheel lists translate whole.</td>
+<td>Circular scrolling (the scroll-wheel mode on a touchpad or stick)</td>
+<td>Partial: the circular scratch becomes a vertical drag (the finger on a touchpad, the Y deflection on a stick), and a scroll-wheel list steps forward only. Directional swipes translate whole.</td>
 </tr>
 <tr>
-<td>Mouse regions on a stick or gyro</td>
-<td>Partial: a cursor-clamp macro holds the region while the input is engaged. On a touchpad the region translates Clean as the absolute pointer instead.</td>
+<td>Mouse regions on a stick or trigger</td>
+<td>Partial: a cursor-clamp macro holds the region while the input is engaged. On a touchpad the region translates Clean as the absolute pointer instead. On the gyro it is Skipped.</td>
 </tr>
 <tr>
 <td>Menu cell icons</td>
@@ -3892,8 +3952,8 @@
 <td>Skipped, with the host named. Sticks and touchpads both carry flick stick.</td>
 </tr>
 <tr>
-<td>Response curve settings on mouse outputs</td>
-<td>Partial: deadzone_shape (mouse rows evaluate per axis, no pair read) and output_curve drop, named. Every other curve, range, and sensitivity setting carries onto its rows.</td>
+<td>Response curve settings</td>
+<td>Partial where one drops, named: output_curve always, and deadzone_shape unless the output is a thumb pair or a stick-hosted mouse (trackpad and gyro mouse rows evaluate per axis, with no pair read). A rotated group also withholds its curve exponent and anti-deadzone. Every other curve, range, and sensitivity setting carries onto its rows.</td>
 </tr>
 <tr>
 <td>Unknown key names</td>
@@ -3906,9 +3966,9 @@
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Double input, or the game reacts twice per press.</strong> The imported profile replaces what the Steam config did. It does not need Steam Input running. If Steam Input is still active for the game, both layers fire. Disable Steam Input for that game (Steam &gt; game properties &gt; Controller), or close Steam, and cloak the physical pad on the <a href="../../features/devices/">Devices</a> page.</li>
-<li><strong>"Steam Is Unreachable."</strong> The dialog could not reach Steam. Check your connection and click <strong>Retry</strong>. Profiles you already imported keep working: they live on this PC.</li>
-<li><strong>A config's bindings do nothing in game.</strong> Check the two imported pads have your physical controller assigned, and the profile is the active one.</li>
-<li><strong>"No Configs for This Game Yet."</strong> Steam Workshop has no community controller configs for that game. You can be the first: build one in Steam, and it appears here.</li>
+<li><strong>"Steam Is Unreachable."</strong> The dialog could not reach Steam. Check your connection and click <strong>Retry</strong>. Profiles you already imported keep working: they live on this PC. In the manifest pane the same title also heads a config that would not read, and the line under it says why.</li>
+<li><strong>A config's bindings do nothing in game.</strong> Check that every imported pad has your physical controller assigned, and that the profile is the active one.</li>
+<li><strong>"No Configs for This Game Yet."</strong> Steam Workshop has no community controller configs for that game. You can be the first: build one in Steam, and it appears here. The same panel appears when <strong>Search These Configs</strong> or a filter chip matches nothing, and when every config the game has is legacy while <strong>Show Legacy Workshop Configs</strong> is off.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
@@ -3922,7 +3982,7 @@
 <li><a href="../../features/devices/">Devices</a>: assign your controller to the imported pads, and cloak it from games.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

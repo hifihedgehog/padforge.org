@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2097,6 +2099,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2366,6 +2396,8 @@
       
         
           
+        
+      
         
       
         
@@ -2751,6 +2783,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3575,7 +3635,7 @@
 </tbody>
 </table>
 <p>A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the <strong>Inactivity Timeout</strong> (60 seconds by default, in the same <strong>Input Engine</strong> settings). Set the timeout to 0 and the engine idles immediately.</p>
-<p>While a <a href="../../guides/remote-link/">Remote Link</a> peer is connected and sharing this PC's controllers, the loop stays at full rate even with no local slot active. The peer is reading that shared input, so idling would sample it choppily.</p>
+<p>While a <a href="../../guides/remote-link/">Remote Link</a> peer is connected, the loop stays at full rate even with no local slot active. A connected peer can read this PC's shared controllers, and idling would sample that input choppily.</p>
 <p>Cursor and scroll speed on a <a href="../controller-slots/">Keyboard + Mouse</a> slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.</p>
 <h3 id="per-profile-override">Per-profile override<a class="headerlink" href="#per-profile-override" title="Permanent link">&para;</a></h3>
 <p>A profile can carry its own rate. The New Profile and Edit Profile dialogs have a <strong>Polling Rate</strong> dropdown with six entries: <strong>Default (Global Setting)</strong>, 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms), and 62.5 Hz (16 ms). Pick anything but Default and that rate applies whenever the profile is active. See <a href="../../guides/profiles/">Profiles</a>.</p>
@@ -3704,7 +3764,7 @@
 <p>Each virtual controller sends one full state update per read. Every button, axis, and hat travels in a single report, so the cost per frame is fixed. It does not grow with how many axes or buttons the slot has.</p>
 <p>There is no per-axis or per-button overhead. At 1000 Hz that is one report per controller per millisecond. Adding more slots scales the work in a straight line.</p>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

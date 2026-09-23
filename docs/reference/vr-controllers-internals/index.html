@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3704,7 +3764,7 @@
 <h1 id="virtual-vr-controllers-internals">Virtual VR Controllers: Internals<a class="headerlink" href="#virtual-vr-controllers-internals" title="Permanent link">&para;</a></h1>
 <p><em>How one slot becomes a SteamVR hand pair: the state struct, the mapping targets, the pack, and the haptic return path.</em></p>
 <p>The user-facing page is <a href="../../features/vr-controllers/">Virtual VR Controllers</a>. This one is for whoever has to change the code.</p>
-<p>Two VR lanes ship, and they run in opposite directions. Most of this page covers the <strong>output</strong> lane (#49): a PadForge slot emits a pair of virtual SteamVR hands through HIDMaestro's OpenVR driver. 4.3.0 added the <strong>input</strong> lane (#287): real VR hardware already tracked by SteamVR becomes a PadForge device you can map from. They share no code beyond a self-emission filter that keeps one from eating the other. The input lane has its own section at the end.</p>
+<p>Two SteamVR lanes ship, and they run in opposite directions. Most of this page covers the <strong>output</strong> lane (#49): a PadForge slot emits a pair of virtual SteamVR hands through HIDMaestro's OpenVR driver. 4.3.0 added the <strong>input</strong> lane (#287): real VR hardware already tracked by SteamVR becomes a PadForge device you can map from. They share no code beyond a self-emission filter that keeps one from eating the other. The input lane has its own section at the end. A third lane reads a headset and its hand controllers through any OpenXR runtime, with or without SteamVR, and has its own page, <a href="../openxr-input-internals/">OpenXR Input Internals</a>.</p>
 <hr />
 <h2 id="shape-of-the-thing">Shape of the thing<a class="headerlink" href="#shape-of-the-thing" title="Permanent link">&para;</a></h2>
 <p>One VR slot drives <strong>both</strong> hands. There is no left slot and right slot, and there is no second VR slot: <code>SettingsManager.MaxVrSlots</code> is <code>1</code>, and the add-slot gate reads <code>count &lt; MaxVrSlots</code>.</p>
@@ -3813,7 +3873,7 @@
 <p>Without the inner re-check, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and <code>ScheduleExpiryLocked</code> builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.</p>
 <hr />
 <h2 id="availability-and-install">Availability and install<a class="headerlink" href="#availability-and-install" title="Permanent link">&para;</a></h2>
-<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code> for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe walks Steam's library metadata on disk and the sidebar rail rebuild queries once per slot. <code>ResetAvailability()</code> drops the cache so the gates lift right after an install instead of waiting out the TTL.</p>
+<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code> for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe reads up to three registry keys and checks up to four install paths on disk, and the sidebar rail rebuild queries once per slot. <code>ResetAvailability()</code> drops the cache so the gates lift right after an install instead of waiting out the TTL.</p>
 <p>The cache's "has a value" flag is an explicit <code>bool</code>, not a sentinel timestamp. Seeding the tick with <code>long.MinValue</code> made <code>now - s_availCheckedTick</code> overflow negative, which always reads as inside the TTL, so the first call returned the default <code>false</code> and SteamVR read as absent forever.</p>
 <p><code>Connect()</code> refuses twice, once on <code>IsSteamVRInstalled</code> and once on <code>EnsureDriverRegistered()</code>, before constructing the pipe.</p>
 <p>Install lives in <code>DriverInstaller</code>:</p>
@@ -3902,7 +3962,7 @@
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

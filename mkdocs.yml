@@ -116,6 +116,7 @@ nav:
       - Input Precision: features/input-precision.md
       - Driver Management: features/driver-management.md
       - Settings: features/settings.md
+      - Updates: features/updates.md
   - Devices:
       - devices/index.md
       - Supported Devices: devices/supported.md
@@ -136,6 +137,7 @@ nav:
       - SDL3 Integration: reference/sdl3-integration.md
       - HIDMaestro Deep Dive: reference/hidmaestro-deep-dive.md
       - Driver Installation Internals: reference/driver-installation-internals.md
+      - Updates Internals: reference/updates-internals.md
       - DSU Motion Server: reference/dsu-motion-server.md
       - DSU Protocol: reference/dsu-protocol.md
       - Remote Link Internals: reference/remote-link-internals.md

@@ -15,6 +15,7 @@ touch.
 | [Controller Slots](controller-slots.md) | The 16 slots, assignment, per-slot output type |
 | [Virtual Controllers](virtual-controllers.md) | What games see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR |
 | [Settings](settings.md) | Application-wide options |
+| [Updates](updates.md) | The Updates card on the **Settings** page: automatic checks, one-click installs, and pre-releases |
 | [Driver Management](driver-management.md) | The driver cards on the **Settings** page: HIDMaestro status and version, plus **Install** and **Uninstall** for HidHide, Windows MIDI Services, and SteamVR |
 
 ## The Pad page, tab by tab
@@ -68,4 +69,4 @@ when that device has the matching hardware.
 | [Head Tracking (OpenTrack)](head-tracking.md) | A head pose from OpenTrack or FreeTrack as six mappable axes |
 | [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md) | A slot's lightbar color sent on to Razer Chroma and Logitech LIGHTSYNC gear, and its rumble to Razer Sensa HD haptics |
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

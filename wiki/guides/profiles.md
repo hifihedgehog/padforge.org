@@ -181,7 +181,7 @@ Export writes a profile to a `.pfprofile` file. That file is one archive holding
 2. Click **Export…**.
 3. Pick a location and save. The file is named after the profile.
 
-You can export the **Default** profile too. It writes a snapshot of your current settings.
+You can export the **Default** profile too. It writes the Default profile's own settings, even while another profile is active.
 
 Import reads a `.pfprofile` back in.
 
@@ -410,4 +410,4 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

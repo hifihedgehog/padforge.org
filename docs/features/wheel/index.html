@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2141,6 +2143,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2410,6 +2440,8 @@
       
         
           
+        
+      
         
       
         
@@ -2795,6 +2827,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3669,7 +3729,7 @@
 </table>
 <p>The rotation-range and RPM-LED rows are hidden for wheels PadForge drives through the generic path, since those rows need vendor commands.</p>
 <h3 id="auto-centering">Auto Centering<a class="headerlink" href="#auto-centering" title="Permanent link">&para;</a></h3>
-<p>Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge applies each tick, because Fanatec bases expose no firmware auto centering.</p>
+<p>Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge re-sends with each force update, because Fanatec bases expose no firmware auto centering.</p>
 <h3 id="rpm-shift-leds">RPM shift LEDs<a class="headerlink" href="#rpm-shift-leds" title="Permanent link">&para;</a></h3>
 <p>When RPM shift LEDs are on and a supported racing game is running, PadForge reads the game's telemetry and lights the wheel's rev LEDs in step with engine RPM. The LED count follows the wheel: 5 on Logitech, 9 on Fanatec, 15 on Thrustmaster.</p>
 <p>Telemetry comes from the game, so the LEDs only light for titles PadForge can read: Assetto Corsa and Competizione, the Codemasters F1, DiRT, and GRID games, Forza, iRacing, Automobilista 1 and 2, Project CARS 2 and 3, rFactor 1 and 2, Le Mans Ultimate, RaceRoom, the SCS trucks (Euro Truck Simulator 2, American Truck Simulator), BeamNG.drive, and Live for Speed. Other games leave the LEDs dark.</p>
@@ -3787,7 +3847,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: help when a wheel has no force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

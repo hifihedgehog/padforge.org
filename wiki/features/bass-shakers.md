@@ -22,7 +22,7 @@ with force feedback, such as racing wheels. Game feedback and Test Rumble play t
 | **Channel Mode** | **Mono (All Channels)** plays every voice on all speaker channels. **Controller Stereo** splits them like the controller: low motor and left trigger on the left channel, high motor and right trigger on the right. |
 | **Master Gain** | Overall loudness applied after each voice's own gain. Keep headroom so the four voices do not clip when they play together. |
 
-A status line under the card reads "Audio output is not running." while
+A status line under the Output Device picker reads "Audio output is not running." while
 the routing is off, "Playing to {device}." while it runs, and warns when
 the selected output device is unavailable. Bluetooth audio devices add
 noticeable latency, and the card says so.
@@ -77,4 +77,4 @@ toggle as you set it, since the enable row has its own reset.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

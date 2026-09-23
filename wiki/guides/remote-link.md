@@ -2,7 +2,7 @@
 
 *Share a controller, wheel, or HOTAS between PCs, on your own network or across the internet. A device plugged into one drives a game on another, and the feedback comes back to the real hardware.*
 
-![Remote Link section on the Dashboard with paired and nearby PCs](../images/remote-link.png)
+![Remote Link section on the Dashboard](../images/remote-link.png)
 
 Remote Link connects two PadForge PCs, on the same network or on opposite sides of the internet. A device plugged into one PC (the owner) shows up in another PC's PadForge (the consumer) as an ordinary input device, ready to assign to a [slot](../features/controller-slots.md) and map like anything else. The game on the consumer sees a virtual controller and never knows the hardware is in another room.
 
@@ -20,11 +20,11 @@ Feedback travels the other way too. When the game on the consumer drives the sha
 - DualSense adaptive triggers
 - Lightbar color
 - Player-number LEDs
-- Guide button LED brightness (Xbox pads, the Home button LED on the 2015 Steam Controller, and the Switch HOME button LED on a Pro Controller or right Joy-Con)
+- Guide button LED brightness (Xbox One and later pads on USB, the Home button LED on the 2015 Steam Controller, and the Switch HOME button LED on a Pro Controller or right Joy-Con)
 - Controller speaker audio
 - HD haptic tones (pads with no speaker that play macro sounds through their actuators: Joy-Con, Switch Pro, Steam Controller, Steam Deck)
 
-So a wheel shared from the den shakes in the den while the race runs on the PC in the office, and a DualSense lights its bar and buzzes its triggers on the couch while the game plays upstairs.
+A wheel shared from the den shakes in the den while the race runs on the PC in the office, and a DualSense lights its bar and buzzes its triggers on the couch while the game plays upstairs.
 
 ---
 
@@ -37,7 +37,7 @@ Tag reads travel with the input. Tap a tag on a shared Switch controller that ha
 - A named-tag trigger matches by the tag's button number, and each PC numbers its own registered tags. Register the same tags in the same order on both PCs so the numbers line up.
 - A standalone NFC reader shares across the link like any other device and brings its tag names with it, so its tags only need registering on the PC it is plugged into.
 - The Switch controller must be on Bluetooth. A USB-linked Switch controller cannot read tags, shared or not.
-- Tag taps trigger macros, so a gamepad-only pairing blocks them.
+- A gamepad-only pairing does not block tag taps. They still fire, and the macros they start skip their keyboard, mouse, and scroll actions.
 
 ---
 
@@ -51,7 +51,7 @@ On the [Dashboard](../features/dashboard.md), open the **Remote Link** section a
 
 On the same network, a PC running Remote Link shows up under **Nearby PCs (Not Paired)**. Click it and pair.
 
-On different networks, or when discovery is blocked, use codes. Each PC shows a **This PC's Code** box, a dash-grouped string like `A7K2M-...`. Copy yours and send it to the other person over any chat. Paste theirs into **Or Connect by Address (Advanced)**. You both click **Pair / Connect**, and the two PCs find each other with no VPN and no port forward. A code lasts an hour and re-mints itself when this PC's public address moves, so copy it fresh at connect time.
+On different networks, or when discovery is blocked, use codes. Each PC shows a **This PC's Code** box, a dash-grouped string like `A7K2M-...`. Copy yours and send it to the other person over any chat. Paste theirs into **Or Connect by Address (Advanced)**. You both click **Pair / Connect**, and the two PCs find each other with no VPN and no port forward. A code lasts 24 hours and re-mints itself when this PC's public address moves, so copy it fresh at connect time.
 
 The same box still takes a plain address. Type `192.168.1.20:27500` to name a host directly.
 
@@ -81,7 +81,7 @@ Web controllers already travel over Remote Link like other input devices. Remote
 
 The dialog shows the destination PC and active profile. Changes use that PC's normal mapping and save process without opening its window or changing the foreground application. Other devices and assignments stay in place.
 
-The grant covers the peer's own shared devices and this PC's existing virtual controllers. Create destination controllers locally before assigning them. This control does not edit profiles or mappings. Gamepad-only restrictions still apply. Turning the permission off blocks further changes and preserves assignments already made.
+The grant covers the peer's own shared devices and this PC's existing virtual controllers. Create destination controllers locally before assigning them. This control only assigns and unassigns. It cannot switch profiles or edit mapping rows. Gamepad-only restrictions still apply. Turning the permission off blocks further changes and preserves assignments already made.
 
 If the destination's settings change while the dialog is open, review the refreshed assignments before clicking again. If a request times out, click **Refresh** to check the actual state. A missing reply does not establish whether the change was applied. Reopen the dialog after reconnecting a PC.
 
@@ -97,9 +97,9 @@ To end a pairing, find the PC under **Paired PCs** and click **Revoke**. **Revok
 
 ## Staying safe: gamepad-only
 
-A paired PC can drive this one's gamepad output. Whether it can also reach your keyboard, mouse, and macros is your choice. The pairing dialog has a gamepad-only checkbox. It starts off, so tick it when you pair a PC you do not fully control. To change the setting for a PC you already paired, revoke it and pair again.
+A paired PC can drive this one's gamepad output. Whether it can also send keyboard, mouse, and scroll input here, directly or through macros, is your choice. The pairing dialog has a gamepad-only checkbox, **Limit This PC to Gamepad Input Only**. It starts off, so check it when you pair a PC you do not fully control. To change the setting for a PC you already paired, revoke it and pair again.
 
-With gamepad-only on, a shared device can act as a virtual gamepad and nothing else. Its keyboard and mouse output is suppressed, and it cannot run macros on this PC.
+With gamepad-only on, a shared device cannot type, click, or scroll on this PC. A Keyboard + Mouse or VR controller it feeds sends nothing, and macros it triggers, or macros on a slot it feeds, skip their keyboard, mouse, scroll, and cursor actions. Their other actions still run, Run Program included, and a MIDI controller it feeds still plays.
 
 ---
 
@@ -113,7 +113,7 @@ Each PadForge install has a Remote Link identity, the key that pairings trust. Y
 | Portable: Password Protected | Encrypted with a password you set | You want to carry one identity across installs. Pair once, then clone. |
 | Portable: No Password | Plain, no password | A throwaway or test identity. |
 
-A portable identity lets a group of PCs that share one install image pair once and then recognize each other everywhere. Most people never need to change this from Secure.
+A portable identity lets a copied install keep its pairings, since your paired PCs recognize the copy as the same PC. Two PCs running one identity at once do not see each other. Most people never need to change this from Secure.
 
 ---
 
@@ -124,7 +124,7 @@ Remote Link finds other PCs on your **local network** automatically. Discovery i
 | Requirement | Details |
 |---|---|
 | Discovery | UDP broadcast on port 27501 (same subnet only) |
-| Connection | Direct PC-to-PC on port 27500 by default, encrypted end to end. The port carries both a TCP listener (address dialing) and a UDP socket (hole punching). |
+| Connection | Direct PC-to-PC on port 27500 by default, encrypted end to end. The port carries both a TCP listener (the handshake when you dial an address) and a UDP socket (the input and feedback stream, and hole punching). |
 | Listening port | 27500 by default. Change it per PC in the Remote Link settings (any port from 1024 to 65535). The reset button next to the field restores 27500. |
 | Internet reach | Outbound only. The public-address probe and the relay fallback both dial out, so no inbound rule and no port forward. |
 | Firewall | Allow PadForge through the firewall on each PC |
@@ -133,9 +133,9 @@ If you write per-port firewall rules instead of allowing the whole app, open UDP
 
 ### How the internet path works
 
-PadForge probes its own public address, folds it into the code, and punches a direct UDP path to the PC whose code you pasted. Both sides punch, which is why both people paste and both click Connect.
+PadForge probes its own public address, folds it into the code, and punches a direct UDP path to the PC whose code you pasted. Both sides punch, which is why both people paste and both click **Pair / Connect**.
 
-Where a direct path cannot exist, the link falls back to the free public relays run by n0.computer, reached over an outbound WebSocket. The relay forwards opaque bytes. The handshake and session encryption are unchanged, so the relay operator sees ciphertext and nothing else.
+Where a direct path cannot exist, the link falls back to the free public relays run by n0.computer, reached over an outbound WebSocket. The relay forwards bytes without reading them. The handshake and session encryption are unchanged: the relay operator sees the handshake's public keys, nonces, and signatures, and ciphertext after that.
 
 After the first pairing, codes are done. Each PC publishes its current endpoints under its long-term identity key, so a paired PC that moves to a new network is found and reconnects on its own.
 
@@ -145,7 +145,7 @@ Some networks cannot be punched at all. On a mobile hotspot or carrier-grade NAT
 
 ## How the security works
 
-Pairing runs a fresh key exchange and signs the whole exchange with each PC's long-term identity key, so each side proves it is the same PC it paired with before. The six-digit code is derived from the exchange after both sides commit to it, which is why a matching code rules out a machine in the middle. A failed handshake creates no device and shares nothing. Traffic after pairing is encrypted.
+Pairing runs a fresh key exchange and signs the whole exchange with each PC's long-term identity key, so each side proves it is the same PC it paired with before. The six-digit code is derived from the exchange after both sides have fixed their contributions to it, which is why a matching code rules out a machine in the middle. A failed handshake creates no device and shares nothing. Traffic after pairing is encrypted.
 
 ---
 
@@ -153,7 +153,7 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 - **Discovery is local only.** It is a subnet broadcast, so it never crosses the internet. Reaching a PC on another network means swapping codes, or naming its address directly.
 - **A code is not a password.** It authenticates nobody. The six-digit pairing check and the mutual key exchange are what gate trust, so a code someone else gets hold of still cannot pair with you.
-- **Input devices only.** Remote Link shares what shows on the [Devices](../features/devices.md) page (controllers, wheels, HOTAS, keyboards, mice, MIDI, NFC readers), not arbitrary USB hardware.
+- **Input devices only.** Remote Link shares the input devices PadForge reads (controllers, wheels, HOTAS, keyboards, mice, MIDI, NFC readers), including ones hidden from the [Devices](../features/devices.md) page, not arbitrary USB hardware. A device another PC shares with this one is not passed on.
 - **Every PC runs PadForge.** Remote Link is PadForge-to-PadForge.
 
 ---
@@ -173,4 +173,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

@@ -6,7 +6,7 @@
 
 ## Quick start (2 minutes)
 
-1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v4.5.2-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([preliminary](#windows-on-arm-preliminary)).
+1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v4.5.3-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([preliminary](#windows-on-arm-preliminary)).
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
@@ -53,7 +53,7 @@ PadForge opens the [Dashboard](../features/dashboard.md) after first launch. It 
 
 1. **Create a virtual controller.** On the Dashboard, click **Add Controller** and pick a type. Xbox, PlayStation, Nintendo, Extended (flight sticks, wheels, third-party gamepads, custom HID), Keyboard + Mouse, MIDI, or VR. The VR type stays disabled until SteamVR is installed, and one VR slot is the maximum because it drives both hands.
 2. **Check devices.** Open **[Devices](../features/devices.md)**. PadForge auto-detects every connected gamepad, joystick, keyboard, and mouse.
-3. **Assign a device.** Select the device on the Devices page, then click a slot pill under **Virtual Controller Assignment** to route that physical controller through the virtual one. The slot badges on the list cards show what is already assigned; they are not buttons.
+3. **Assign a device.** Select the device on the Devices page, then click a slot pill under **Virtual Controller Assignment** to route that physical controller through the virtual one. The slot badges on the list cards show what is already assigned. They are not buttons.
 
 Games now see the virtual controller as a standard gamepad.
 
@@ -70,7 +70,7 @@ HIDMaestro is the user-mode driver that creates the virtual controllers. PadForg
 The driver ships embedded in `PadForge.exe`. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
 !!! note "The very first launch may need one relaunch"
-    The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on **Hide from Games**, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.
+    The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on **Hide from Games (HidHide)**, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.
 
 If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.
 
@@ -80,7 +80,7 @@ See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForg
 
 ## Optional add-ons
 
-Three optional installs live on **[Settings](../features/settings.md)**. HidHide (1.5.230) is bundled inside `PadForge.exe`. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**.
+Three optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled inside `PadForge.exe`: the 1.5.230 setup on an x64 PC, the ARM64 driver 1.6.280.0 on an ARM64 PC. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**.
 
 One more driver installs outside Settings. Pairing a [DualShock 3](../devices/dualshock-3.md) over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it.
 
@@ -126,10 +126,18 @@ To run PadForge silently in the background, turn on all three options.
 | Option | Effect |
 |--------|--------|
 | **Start at Login** | Launches PadForge on sign-in. |
-| **Start Minimized** | Skips showing the main window. |
+| **Start Minimized** | Starts with the main window minimized. |
 | **Minimize to System Tray** | Keeps PadForge in the notification area instead of the taskbar. |
 
 With all three on, PadForge runs in the background with only a tray icon.
+
+---
+
+## Updating
+
+From 4.5.3 on, PadForge updates itself. **Settings > Updates** checks GitHub 20 seconds after launch and every 12 hours, and **Install and Restart** replaces `PadForge.exe` in place. `PadForge.xml` is not touched. See [Updates](../features/updates.md).
+
+Version 4.5.2 and older have no updater. Download the new zip, close PadForge, and replace `PadForge.exe` with the one from the zip. `PadForge.xml` stays where it is and carries over.
 
 ---
 
@@ -137,7 +145,7 @@ With all three on, PadForge runs in the background with only a tray icon.
 
 There is no installer, so removal is short.
 
-1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide, Windows MIDI Services, and SteamVR if you installed them. HIDMaestro has no Uninstall button and stays registered.
+1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide, Windows MIDI Services, and SteamVR if you installed them. HIDMaestro has no Uninstall button and stays registered. Turn off **Start at Login** too if it is on, so Windows drops its logon task.
 2. Close PadForge.
 3. Delete the PadForge folder.
 
@@ -148,6 +156,7 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 ## Related pages
 
 - [Settings](../features/settings.md): install and manage optional drivers.
+- [Updates](../features/updates.md): keep PadForge current from inside the app.
 - [Dashboard](../features/dashboard.md): main control panel after first launch.
 - [Devices](../features/devices.md): view detected physical controllers.
 - [Controller Slots](../features/controller-slots.md): create and configure virtual controllers.
@@ -156,4 +165,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

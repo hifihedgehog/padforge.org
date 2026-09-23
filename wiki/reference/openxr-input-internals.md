@@ -25,7 +25,7 @@ A runtime DLL exports exactly one entry point, `xrNegotiateLoaderRuntimeInterfac
 
 **Runtime selection.** PadForge runs elevated. The Khronos loader deliberately ignores `XR_RUNTIME_JSON` in a high-integrity process (`OpenXR-SDK`, `src/common/platform_utils.hpp`, `PlatformUtilsGetSecureEnv`). Choosing the manifest ourselves makes the runtime choice per-process by construction, with nothing configured globally and nothing to put back afterward. That is what the **OpenXR Runtime** dropdown sets, and it is why picking one never disturbs the machine's active runtime.
 
-**Isolation.** The loader inserts every API layer installed on the machine into the calling process. A background client that only reads poses has no use for them, and a user's layers belong to their game.
+**Isolation.** The loader inserts every implicit API layer installed on the machine into the calling process. A background client that only reads poses has no use for them, and a user's layers belong to their game.
 
 ---
 
@@ -113,4 +113,4 @@ Test coverage is uneven and worth stating plainly. The device rows, the head-pos
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3695,7 +3755,7 @@
 </table>
 <hr />
 <h2 id="lifecycle-phase-1h">Lifecycle: Phase 1h<a class="headerlink" href="#lifecycle-phase-1h" title="Permanent link">&para;</a></h2>
-<p><code>UpdateHandheldDevices</code> runs on the poll thread inside Step 1. With <code>HandheldButtonRegistry.FeatureEnabled</code> false and nothing to retire, it returns after two volatile reads. Turning the feature off retires both rows, neutralizes their mapped outputs, and stops the chord worker (<code>HandheldChordRuntime.Stop</code>) outside the handheld lock, since <code>Stop</code> joins its worker and the poll thread must not block on a join under a nested lock.</p>
+<p><code>UpdateHandheldDevices</code> runs on the poll thread inside Step 1. With <code>HandheldButtonRegistry.FeatureEnabled</code> false and nothing to retire, it returns after five volatile field reads and takes no lock. Turning the feature off retires both rows, neutralizes their mapped outputs, and stops the chord worker (<code>HandheldChordRuntime.Stop</code>) outside the handheld lock, since <code>Stop</code> joins its worker and the poll thread must not block on a join under a nested lock.</p>
 <p>The button row opens on the poll thread with no I/O (<code>HandheldButtonsDevice.Open</code> only wires events and pushes the registry). Everything that blocks lives in <code>HandheldSweep</code>, a worker task every <code>_handheldSweepIntervalMs</code> = 4000 ms:</p>
 <ol>
 <li><code>HandheldDaemonWatch.Refresh</code> scans the process list (3 ms measured across 335 processes).</li>
@@ -4043,7 +4103,7 @@
 </table>
 <hr />
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
-<p><code>HandheldChordEngineTests</code> (36) replays the engine rules with a fake clock. <code>HandheldButtonsTests</code> (33) covers the registry, the device state (minimum press, value hold, other report ids, two bits in one byte, span growth), the WMI pulse and the pinned Step 3 path, the learners over Legion-style, active-low, Ally-style, and GPD Win 5 fixtures, the WMI candidate rules, the motion conversions, and the <code>_WDG</code> parser over a synthetic table.</p>
+<p><code>HandheldChordEngineTests.cs</code> (36) replays the engine rules with a fake clock (23), runs the report learner over Legion Go, GPD Win 5, and ROG Ally byte captures (11), and checks the machine display name (2). <code>HandheldButtonsTests.cs</code> (33) covers the registry, the device state (minimum press, value hold, other report ids, two bits in one byte, span growth), the WMI pulse and the pinned Step 3 path, the learn session over Legion-style, active-low, and Ally-style fixtures, the WMI candidate rules, the motion conversions, the device type ordinals, and the <code>_WDG</code> parser over a synthetic table.</p>
 <hr />
 <h2 id="evidence-status">Evidence status<a class="headerlink" href="#evidence-status" title="Permanent link">&para;</a></h2>
 <p>The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage (<code>LENOVO_UTILITY_EVENT</code>, <code>PressTypeDataVal</code> = 72, fires on press) and Smart Connect (value 1, fires only on a short tap) keys and triggered their mapped outputs. The chord and report paths have no handheld bench yet. Their contracts are the replay tests, built from byte-for-byte agreements between Handheld Companion and InputPlumber on the same hardware (Legion Go byte 20 paddle bits, the Ally <code>0x5A</code> key-code byte, the OneXPlayer frame). Where those two references disagreed on a layout, which happened fifteen times, a table would have shipped one of them wrong, and that is why there is no table.</p>
@@ -4055,7 +4115,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a> for <code>AppSettingsData</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

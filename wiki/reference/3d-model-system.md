@@ -14,13 +14,13 @@ Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not ass
 ControllerModelBase (abstract)
     |
     +-- ControllerModelXbox360        (HC mesh, flat plastic colors)
-    +-- ControllerModelXboxSeries     (Series mesh, 13 colorways; also serves
+    +-- ControllerModelXboxSeries     (Series mesh, 21 colorways, also serves
     |                                  Xbox One / Elite / Adaptive profiles)
     +-- ControllerModelDS4            (DualShock 4 mesh, 2 colorways)
     +-- ControllerModelDualSense      (DualSense mesh, 10 colorways)
     |     |
     |     +-- ControllerModelDualSenseEdge  (Edge asset folder, own family)
-    +-- ControllerModelSwitch2Pro     (Switch 2 Pro mesh; also serves the
+    +-- ControllerModelSwitch2Pro     (Switch 2 Pro mesh, also serves the
     |                                  original Switch Pro profile)
     +-- ControllerModelSteamDeck         (Handheld Companion per-part OBJs)
     +-- ControllerModelSteamController   (2015 Steam Controller, Valve STEP)
@@ -53,19 +53,19 @@ public abstract class ControllerModelBase : IDisposable
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `ButtonMap` | `Dictionary<string, List<Model3DGroup>>` | PadSetting name to Model3DGroups for highlighting (supports multi-mesh buttons like button + overlay). |
+| `ButtonMap` | `Dictionary<string, List<Model3DGroup>>` | PadSetting name to the Model3DGroups that light for it (supports multi-mesh buttons like button + overlay). |
 | `ClickMap` | `Dictionary<Model3DGroup, string>` | Model3DGroup to PadSetting name for hit-test click-to-record. Reverse of ButtonMap. |
 | `DefaultMaterials` | `Dictionary<Model3DGroup, Material>` | Original material per group. Restored after highlight/flash. |
 | `HighlightMaterials` | `Dictionary<Model3DGroup, Material>` | Accent-colored material per group. Applied on press or flash. |
 | `QuadrantMap` | `Dictionary<Model3DGroup, string[]>` | Surfaces whose hover resolves by quadrant instead of as one target. Four names in up, down, left, right order, in model space (X across the face, +Z toward its top edge). See [Quadrant surfaces](#quadrant-surfaces). |
-| `StickRiders` | `Dictionary<Model3DGroup, List<Model3DGroup>>` | Parts that lean with a stick without lighting with it, keyed on that stick's ring. Tilting and glowing are different sets: the Steam Deck's stem has to lean with the cap and must not light, because the glow belongs on the base. |
+| `StickRiders` | `Dictionary<Model3DGroup, List<Model3DGroup>>` | Parts that lean with a stick without lighting with it, keyed on that stick's ring, and filled through `AddStickRider`. No model registers one at present: the Steam Deck's stem, the part it was written for, is registered under the stick button and lights with the base. |
 
 ### Scene Graph
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `model3DGroup` | `Model3DGroup` | Root scene group containing all child meshes. Assigned to `ModelVisual3D.Content`. |
-| `ModelName` | `string` | Embedded-resource folder. `"XBOX360"` or `"Switch2Pro"` for the single-appearance families, `"{family}.{appearance}"` for the rest (`"DS4.JetBlack"`, `"DualSense.White"`, `"DualSenseEdge.Edge"`, `"XboxSeries.Carbon"`). |
+| `ModelName` | `string` | Embedded-resource folder. `"XBOX360"`, `"Switch2Pro"`, `"SteamDeck"`, `"SteamController"`, or `"SteamController2"` for the single-appearance families, `"{family}.{appearance}"` for the rest (`"DS4.JetBlack"`, `"DualSense.White"`, `"DualSenseEdge.Edge"`, `"XboxSeries.Carbon"`). The eight custom-shell Xbox colorways load everything except their `Shell.jpg` from `XboxSeries.Carbon` (see [Custom-shell skins](#custom-shell-skins)). |
 | `ModelFamily` | `string` | Everything before the first `.` in `ModelName`, or `ModelName` when there is no dot. The identity `EnsureModel()` compares against, so a colorway swap does not read as a family swap. |
 | `Touchpad` | `Model3DGroup` | First touch surface, or null on models without one. DS4 points it at `Screen.obj`, DualSense at `Touchpad.obj`, every Valve model at `LeftPadTouch.obj`. |
 | `TouchpadRight` | `Model3DGroup` | The second touch surface, on a pad that has two. Null on a one-pad model, where both fingers ride `Touchpad`. Every Valve model sets it, and the split matches the frame packers: finger 0 is the left pad, finger 1 the right. |
@@ -150,18 +150,18 @@ protected static readonly Dictionary<string, string> ButtonFileMap = new()
 ### Constructor Flow (Model Loading)
 
 ```csharp
-protected ControllerModelBase(string modelName)
+protected ControllerModelBase(string modelName, string resourceModelName = null)
 ```
 
 Steps are order-dependent:
 
-1. **Set ModelName and derive ModelFamily**. `ModelName` is the embedded-resource folder, chosen by `HMaestroProfileCatalog.ResolveAssetFolders` against the slot's `ProfileId` and `OutputType`, plus the pad's colorway for the families that have one. `ModelFamily` is the part before the first dot.
-2. **Load common geometry** via `LoadModel()`: MainBody, stick rings, motors, triggers.
+1. **Set ModelName and derive ModelFamily**. `ModelName` is the embedded-resource folder, chosen by `HMaestroProfileCatalog.ResolveAssetFolders` against the slot's `ProfileId` and `OutputType`, plus the pad's colorway for the families that have one. `ModelFamily` is the part before the first dot. `resourceModelName`, when given, names a different folder to load the meshes and atlases from. Only the custom-shell Xbox colorways pass it.
+2. **Load common geometry**: `MainBody` through `LoadModel()`, the stick rings, motors, and triggers through `TryLoadModel()`.
 3. **Register trigger ClickMap entries**: `LeftShoulderTrigger` -> `"LeftTrigger"`, `RightShoulderTrigger` -> `"RightTrigger"`. Triggers use ClickMap (not ButtonMap) because they are continuous axes, not toggle buttons.
 4. **Iterate ButtonFileMap**: Calls `TryLoadModel()` per entry, then `RegisterButton()` to populate both `ButtonMap` and `ClickMap`. Special cases: `LeftStickClick.obj` and `RightStickClick.obj` also set `LeftThumb`/`RightThumb` references for tilt animation.
 5. **Register each stick's cap as a quadrant surface**. `RegisterQuadrants(LeftThumbRing ?? LeftThumb, ...)` puts the cap in `QuadrantMap` under the four axis directions, and the same for the right side. A pad with no separate cap solid falls back to its click mesh, so every stick has a direction target whatever its mesh split looks like.
 6. **Add all parts to `model3DGroup.Children`**. Assigned to `ModelVisual3D.Content`.
-7. **Subclass constructor continues**. Loads extra meshes, applies texture atlases or flat colors, calls `DrawAccentHighlights()`, then attaches rider decals and adds the static decal and transparent overlays last.
+7. **Subclass constructor continues**. Loads extra meshes, applies texture atlases or flat colors, calls `DrawAccentHighlights()` (the three Valve models do not), then attaches rider decals and adds the static decal and transparent overlays last.
 
 **The stick button does not own the cap.** Step 5 used to append the ring into `ButtonMap["LeftThumbButton"]` instead, so pressing or hovering the click lit the whole stick and the two controls a stick carries read as one. The Steam Deck showed it plainly, its cap and its collar being separate solids. The button now glows its own click mesh. Physical deflection still grades cap and body together in `UpdateJoystick`, which is a different signal.
 
@@ -173,7 +173,7 @@ A cap that is in `QuadrantMap` alone reads as directions edge to edge. A cap tha
 protected void RegisterButton(string padSettingName, Model3DGroup group)
 ```
 
-Adds `group` to `ButtonMap[padSettingName]` (creates list if needed) and sets `ClickMap[group] = padSettingName`. This bidirectional mapping enables highlighting (name -> groups) and click detection (group -> name).
+Adds `group` to `ButtonMap[padSettingName]` (creates list if needed) and sets `ClickMap[group] = padSettingName`. This bidirectional mapping drives the highlight (name -> groups) and click detection (group -> name).
 
 ### Quadrant surfaces
 
@@ -191,7 +191,7 @@ Two rules that a new mesh set has to satisfy:
 - Every quadrant target must survive `NintendoPreviewMap.ToRaw(target, profileId)`, or clicking it records nothing. A hat-encoded D-pad resolves to `RawPov0Up` and its siblings.
 - A group that leaves `ButtonMap` also leaves `PaintTarget`'s reach. `EveryQuadrantSurfaceIsPaintedAndCanGlow` in `PadForge.Tests/ControllerModel3DHoverTests.cs` catches the unpainted result, which renders in the OBJ loader's default yellow.
 
-**The wedge builder is for tori only.** `BuildClippedQuadrantMesh` offsets each clipped point away from a skeleton circle at the part's own center, which suits a torus exactly. Every stick cap in this tree is one: hollow to 0.49 of its radius on the Xbox 360, 0.66 on the 2026 Steam Controller, 0.74 on the Steam Deck. A direction surface that is not a torus gets its own mesh instead. The 2015 Steam Controller's pads are 42 mm bowls 7.6 mm deep, where the torus offset drove half of each face sideways across the bowl rather than off it, so `tools/steam_controller_2015_mesh.py` quarters each pad face on its two diagonals and emits every quarter as its own mesh.
+**The wedge builder is for stick caps only.** `BuildClippedQuadrantMesh` offsets each clipped point away from a skeleton circle at the part's own center, which suits a torus exactly. The Xbox 360, 2026 Steam Controller, and Steam Deck caps are tori, hollow to 0.49, 0.66, and 0.74 of their radius. The DualSense, Xbox Series, and Switch 2 Pro heads are dishes whose floor reaches the axis (see [Stick anatomy](#stick-anatomy)). A direction surface that is not a stick cap gets its own mesh instead. The 2015 Steam Controller's pads are 42 mm bowls 7.6 mm deep, where the torus offset drove half of each face sideways across the bowl rather than off it, so `tools/steam_controller_2015_mesh.py` quarters each pad face on its two diagonals and emits every quarter as its own mesh.
 
 When one model's wedge looks wrong and the rest look right, the defect is in that model's asset. The shared builder was changed four times chasing the 2015 pad's solid dome cap, each change degraded pads that were already correct, and it was restored verbatim. The mesh tool splits the dome at 0.55 of its radius into a ring and a middle instead.
 
@@ -205,9 +205,9 @@ protected static TouchSurface MeasureTouchSurface(Model3DGroup[] parts)
 
 A pad's touchable face: where it sits, which way it faces, and how far it runs across and up its own plane. An axis-aligned bounding box cannot describe one. Every Valve pad is canted, the 2026's by 15 degrees off the controller's front and the 2015's by 19, so a point placed on the box lands beside the pad and the box's corners reach past the pad's outline entirely.
 
-`MeasureTouchSurface` takes the outward-facing triangles for a rough normal, keeps the ones lying within 5 mm of the frontmost point along it, and re-fits. That 5 mm separates a face from its mounting: the 2026's pad mesh runs 38 mm deep and its front face is a 3 mm slab carrying 1775 of the 1800 outward-facing triangles, with the boss more than 20 mm behind. All three Valve faces come out flat to half a millimeter. The axes are built from the normal rather than fitted, so they cannot come out arbitrary: U is the normal crossed with the model's up, which points to the controller's right, and V is U crossed back.
+`MeasureTouchSurface` takes the outward-facing triangles for a rough normal, keeps the ones lying within 5 mm of the frontmost point along it, and re-fits. That 5 mm separates a face from its mounting: the 2026's pad mesh runs 38 mm deep and its front face is a 3 mm slab carrying 1775 of the 1800 outward-facing triangles, with the boss more than 20 mm behind. All three Valve faces come out flat to half a millimeter. The in-plane axes come from the smallest rectangle enclosing the face, found by rotating calipers over its convex hull (`MinAreaRect`). The 2026's pads are rotated 10.2 degrees within their plane, and an axis-aligned box around one is 18% larger than the pad. U is then turned to point to the controller's right and V to its top, so a touch report's x = 0 is always the pad's left edge.
 
-`Radius` is set for a round pad and clamps `At()` to the disc, so a finger dot cannot travel into a corner the pad does not have.
+`Radius` is set for a round pad and clamps `At()` to the disc, so a finger dot cannot travel into a corner the pad does not have. A face whose hull fills less than 0.85 of its rectangle counts as round, and its radius is the hull's mean distance from the center. A circle fills 0.785 of its bounding square, and the 2015 pads measure 0.786.
 
 ### Painting
 
@@ -216,7 +216,7 @@ protected void Paint(Model3DGroup group, Material material)
 protected void PaintTarget(string padSettingName, Material material)
 ```
 
-`Paint` applies a material AND registers it in `DefaultMaterials`. `PaintTarget` does the same for every group under a `ButtonMap` name. Applying without registering leaves the part HelixToolkit-default yellow again the moment a press or hover restores it. `ExtendedPreviewRoutingTests.EveryValveModelConstructs` fails the build if any drawn part lacks a resting material.
+`Paint` applies a material AND registers it in `DefaultMaterials`. `PaintTarget` does the same for every group under a `ButtonMap` name. Applying without registering leaves the part HelixToolkit-default yellow again the moment a press or hover restores it. `ExtendedPreviewRoutingTests.EveryValveModelConstructs` fails when any drawn part lacks a resting material.
 
 ### DrawAccentHighlights
 
@@ -224,7 +224,9 @@ protected void PaintTarget(string padSettingName, Material material)
 protected virtual void DrawAccentHighlights()
 ```
 
-Creates accent-colored `DiffuseMaterial` for all children. Reads the `SystemAccentColorPrimary` resource (a WPF-UI theme `Color`) and wraps it in a `SolidColorBrush`. Falls back to `#FF6B2C` ember orange. The brush stays solid because `GradientHighlight()` lerps its `Color`. `AccentButtonBackground` became an ember gradient in #175, so the highlight now derives from the accent `Color` instead. Called at the end of each subclass constructor.
+Creates accent-colored `DiffuseMaterial` for all children. Reads the `SystemAccentColorPrimary` resource (a WPF-UI theme `Color`) and wraps it in a `SolidColorBrush`. Falls back to `#FF6B2C` ember orange. The brush stays solid because `GradientHighlight()` lerps its `Color`. `AccentButtonBackground` became an ember gradient in #175, so the highlight now derives from the accent `Color` instead. The Xbox 360, DS4, Xbox Series, DualSense, and Switch 2 Pro constructors call it.
+
+`EnsureHighlightMaterials()` is the backstop `Create` runs on every model. It gives each `ClickMap` group, each `ButtonMap` group, both stick rings, and every scene child the accent material when it has none, and keeps any highlight a model set by hand. The three Valve models call neither method themselves, so their glow comes from here.
 
 ### Embedded Resource Loading
 
@@ -233,28 +235,28 @@ protected Model3DGroup LoadModel(string filename)     // Throws FileNotFoundExce
 protected Model3DGroup TryLoadModel(string filename)  // Returns null on failure
 ```
 
-Loads `.obj` meshes from embedded resources via HelixToolkit's `ObjReader`. Searches manifest resource names by **suffix** (`.{ModelName}.{filename}`) to handle MSBuild digit-prefix mangling.
+Loads `.obj` meshes from embedded resources via HelixToolkit's `ObjReader`. Meshes ship Brotli-packed under an `.objbr` extension (see [How the assets ship](#how-the-assets-ship-450)), so the loader searches manifest resource names by **suffix** (`.{resource folder}.{stem}.objbr`), expands the match into a `MemoryStream`, and parses that, because `ObjReader` seeks and a decompressing stream cannot. The manifest name list is read once and cached.
 
 **MSBuild mangling:** `3DModels` becomes `_3DModels` in resource names because MSBuild prefixes digit-leading folder names. Suffix matching avoids hard-coding the prefix.
 
 ```csharp
-string suffix = $".{ModelName}.{filename}";
-foreach (var name in assembly.GetManifestResourceNames())
-    if (name.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
-        // Found it
+string suffix = $".{modelName}.{Path.GetFileNameWithoutExtension(filename)}.objbr";
+resourceName = FindResource(new[] { suffix });
 ```
+
+`TryLoadModel` tries the model's own folder first, then its `SharedGeometry` donor once (see [SharedGeometry](#sharedgeometry)).
 
 ### Texture and Decal Helpers
 
 ```csharp
-protected Material LoadTexturedMaterial(string filename, double opacity = 1.0)     // flat gray fallback
-protected Material TryLoadTexturedMaterial(string filename, double opacity = 1.0)  // null when absent
+protected Material LoadTexturedMaterial(string filename, double opacity = 1.0, string resourceModelName = null)     // flat gray fallback
+protected Material TryLoadTexturedMaterial(string filename, double opacity = 1.0, string resourceModelName = null)  // null when absent
 protected static Material AddGloss(Material baseMaterial, double intensity, double power)
 protected void AttachRiderDecal(Model3DGroup host, string filename, Material material, bool covering = false)
 protected static void ApplyMaterial(Model3DGroup group, Material material)
 ```
 
-`TryLoadTexturedMaterial` loads a PNG atlas by the same suffix search, decodes it from a `MemoryStream` that outlives `BeginInit`/`EndInit`, and wraps it in a frozen `DiffuseMaterial` over an `ImageBrush`. `ViewportUnits` must be `Absolute`: the default `RelativeToBoundingBox` remaps the image onto each mesh's texcoord bounding box, which would render the whole atlas squeezed onto every part's own UV island.
+`TryLoadTexturedMaterial` takes the atlas name a caller passes (`"Body.png"`), keeps its stem, and tries `.{folder}.{stem}.jpg` first and the packed `.{folder}.{stem}.pngbr` second, Brotli-expanding the second before decoding. It decodes with `BitmapCacheOption.OnLoad` from a `MemoryStream`, disposes the stream right after `EndInit` (keeping it alive pinned the expanded image, about 21 MB per Xbox Series model), and wraps the bitmap in a frozen `DiffuseMaterial` over an `ImageBrush`. `ViewportUnits` must be `Absolute`: the default `RelativeToBoundingBox` remaps the image onto each mesh's texcoord bounding box, which would render the whole atlas squeezed onto every part's own UV island.
 
 `AddGloss` wraps a material in a `MaterialGroup` with a `SpecularMaterial` on top. `DiffuseMaterial` has no specular term, so a semi-transparent diffuse layer renders as a flat tint and clear ABXY shells read as no shell at all.
 
@@ -270,7 +272,7 @@ protected virtual void Dispose(bool disposing)
 ~ControllerModelBase()
 ```
 
-Clears all dictionaries and `model3DGroup.Children`. Standard dispose pattern with finalizer. Called by `EnsureModel()` when switching model types.
+Clears `ButtonMap`, `QuadrantMap`, `ClickMap`, `DefaultMaterials`, `HighlightMaterials`, and `model3DGroup.Children`. Standard dispose pattern with finalizer. Called by `EnsureModel()` before every rebuild and by the view's `Unbind()`.
 
 ---
 
@@ -325,7 +327,7 @@ Face button overlays (`B1Button`–`B4Button`) use transparent variants (`Alpha 
 
 ### Material Assignment Order
 
-1. Face button overlays (`B1Button`–`B4Button`) get transparent color materials and register into `ButtonMap` alongside base meshes for joint highlighting.
+1. Face button overlays (`B1Button`–`B4Button`) get transparent color materials and register into `ButtonMap` alongside base meshes, so each lights together with its button.
 2. `SpecialLED` gets green transparent material.
 3. Base face buttons (`B1.obj`–`B4.obj`) get opaque color materials.
 4. Guide button gets silver material.
@@ -369,7 +371,7 @@ An unrecognized id falls back to `AppearanceIds[0]` (`JetBlack`).
 
 ### Materials
 
-Two atlases per colorway: `Body.png` for every solid part, `Decal.png` for the art. There is no flat color palette. `MaterialBody` paints every `ButtonMap` group first, then every remaining child of `model3DGroup`, then `DrawAccentHighlights()` runs.
+Two atlases per colorway: `Body.jpg` for every solid part, `Decal.png` for the art. There is no flat color palette. `MaterialBody` paints every `ButtonMap` group first, then every remaining child of `model3DGroup`, then `DrawAccentHighlights()` runs.
 
 ### Rider Decals
 
@@ -391,7 +393,7 @@ The DS4 exposes `Screen.obj` as `Touchpad` and registers `ClickMap[Screen] = "To
 | `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-38.061, -0.34, 18.59)` |
 | `ShoulderTriggerRotationPointCenterRightMillimeter` | `(38.061, -0.34, 18.59)` |
 | `TriggerMaxAngleDeg` | `16.0` |
-| `ModelScale` | `1.0` (161 mm body width, real-world scale) |
+| `ModelScale` | `1.0` (`MainBody.obj` measures 169.75 mm across) |
 
 The trigger hinge sits a third of the way up the part, by the Xbox One model's fraction of the trigger bounds, not at its top edge. Pinned at the top the paddle swept backwards into the bumper instead of swinging.
 
@@ -406,13 +408,13 @@ public class ControllerModelXboxSeries : ControllerModelBase
 public ControllerModelXboxSeries(string appearance = "Carbon", bool enableShare = true)
 ```
 
-Calls `base($"XboxSeries.{Validate(appearance)}")`. Purchased hado CGTrader mesh, split per-part: 33 shells classified, the hybrid d-pad disc bisected into four wedges, sticks neck-split into cap-head ring groups and stem/base click groups.
+Calls `base($"XboxSeries.{Validate(appearance)}", ...)`, passing `"XboxSeries.Carbon"` as the resource folder for the eight custom-shell colorways and nothing for the rest. Purchased hado CGTrader mesh, split per-part: 33 shells classified, the hybrid d-pad disc bisected into four wedges, sticks neck-split into cap-head ring groups and stem/base click groups.
 
 This class replaced `ControllerModelXboxOne`, which no longer exists. Xbox One, Elite, and Adaptive profiles now render this mesh too, because it is the better model and the shapes are close enough. Their 2D layouts still diverge, which is why `ResolveAssetFolders` returns `("XBOXONE", "XboxSeries")` for them.
 
 ### Appearances
 
-Thirteen colorways share the mesh: Carbon Black, Robot White, Electric Volt, Daystrike Camo, Halo Infinite, Starfield, Stellar Shift, Deep Pink, Porsche 75th Anniversary, Velocity Green, Pulse Red, Shock Blue, Remix Special Edition. Ids are `AppearanceIds`, display strings are `AppearanceNames`. An unrecognized id falls back to `Carbon`.
+Twenty-one colorways share the mesh: Carbon Black, Robot White, Electric Volt, Daystrike Camo, Halo Infinite, Starfield, Stellar Shift, Deep Pink, Porsche 75th Anniversary, Velocity Green, Pulse Red, Shock Blue, Remix Special Edition, and the eight custom shells added in 4.5.0: Sonic the Hedgehog Limited Edition, Razer Limited Edition, Captain America Limited Edition, Boba Fett Limited Edition, The Mandalorian Beskar Edition, Stormtrooper Limited Edition, Darth Vader Limited Edition, and Star Wars: Squadrons. Ids are `AppearanceIds`, display strings are `AppearanceNames`. An unrecognized id falls back to `Carbon`.
 
 ### Series-Specific Mesh Groups
 
@@ -428,7 +430,7 @@ The constructor takes a `bool enableShare`. The view passes `true` only when `Pr
 
 ### Materials
 
-`Body.png` for the solid parts, `Decal.png` for the art, `Transparent.png` for the clear plastic. The transparent material runs through `AddGloss(…, 0.60, 40.0)` because flat diffuse left the ABXY shells barely there. Two fallbacks guard colorways that merged their trim into the body: a missing `Transparent.png` samples `Body.png` at 30 % opacity, and `Transparent.obj` loads through `TryLoadModel` so a missing mesh is skipped instead of throwing. All thirteen shipped colorways carry both files today, so neither fallback currently fires.
+`Body.jpg` for the solid parts, `Decal.png` for the art, `Transparent.png` for the clear plastic. A custom-shell colorway adds its own `Shell.jpg`, painted onto `MainBody` after the body pass. The transparent material runs through `AddGloss(…, 0.60, 40.0)` because flat diffuse left the ABXY shells barely there. Two fallbacks guard colorways that merged their trim into the body: a missing `Transparent.png` samples the body atlas at 30 % opacity, and `Transparent.obj` loads through `TryLoadModel` so a missing mesh is skipped instead of throwing. All 21 colorways reach both files today, from their own folder, their `SharedGeometry` donor, or Carbon, so neither fallback currently fires.
 
 Rider decals: knurl rings onto the stick cap-head groups, dotted grip panels onto the triggers and bumpers, and `Decal-Special.obj` onto the guide button as a **covering** rider, so a guide press tints the emblem's own texels accent while the button keeps its default material. Starfield alone ships `Transparent-Shoulder-Left/Right-Trigger.obj`, clear trigger shells that ride the trigger groups so they rotate with the pull. On every other colorway those two calls are no-ops.
 
@@ -449,12 +451,13 @@ Rider decals: knurl rings onto the stick cap-head groups, dotted grip panels ont
 1. Load `Share.obj`. Register `ButtonShare` if `enableShare`.
 2. Paint every `ButtonMap` group with the body atlas.
 3. Paint every remaining scene child with the body atlas.
-4. `DrawAccentHighlights()`.
-5. Attach rider decals into the ring, trigger, bumper, and guide groups.
-6. Add `Decal.obj` with the decal atlas.
-7. Add `Transparent.obj` with the glossed transparent atlas, when the colorway has one.
+4. On a custom-shell colorway, repaint `MainBody` with its `Shell.jpg`.
+5. `DrawAccentHighlights()`.
+6. Attach rider decals into the ring, trigger, bumper, and guide groups.
+7. Add `Decal.obj` with the decal atlas.
+8. Add `Transparent.obj` with the glossed transparent atlas, when the colorway has one.
 
-Steps 6 and 7 come last because WPF renders transparency in scene order.
+Steps 7 and 8 come last because WPF renders transparency in scene order.
 
 ---
 
@@ -487,7 +490,7 @@ Ten colorways: White, Midnight Black, Cosmic Red, Gray Camouflage, Nova Pink, De
 
 ### Materials
 
-`Body.png`, `Decal.png`, and `Transparent.png` per colorway. The transparent atlas carries alpha from the source opacity map. Midnight Black merged its trim into the body mesh and ships no `Transparent.png`, so it samples `Body.png` at 30 % opacity instead. Either way it goes through `AddGloss(…, 0.60, 40.0)`. The ungloss'd flat material is kept as the highlight fallback, because that path reads a `DiffuseMaterial` brush.
+`Body.jpg`, `Decal.png`, and `Transparent.png` per colorway. The transparent atlas carries alpha from the source opacity map. Midnight Black merged its trim into the body mesh and ships no `Transparent.png`, so it samples the body atlas at 30 % opacity instead. Either way it goes through `AddGloss(…, 0.60, 40.0)`. The ungloss'd flat material is kept as the highlight fallback, because that path reads a `DiffuseMaterial` brush.
 
 Rider decals: L2/R2 label faces into the trigger groups, stick-cap knurl art into the ring groups, `Decal-L1.obj` / `Decal-R1.obj` onto the bumpers.
 
@@ -534,7 +537,7 @@ The Edge extras live in the DualSense body, gated by `TryLoadModel` so they are 
 | `LeftFnButton.obj` | `LeftFunction` | Re-filed out of the stick housing |
 | `RightFnButton.obj` | `RightFunction` | Re-filed out of the stick housing |
 | `StickHousingL.obj`, `StickHousingR.obj` | (static) | Fixed housings that must not swing with deflection |
-| `StickModule.png` | (atlas) | The removable stick modules have their own atlas. Every other colorway UVs the sticks into the body atlas, so a missing file falls back to it. |
+| `StickModule.jpg` | (atlas) | The removable stick modules have their own atlas. Every other colorway UVs the sticks into the body atlas, so a missing file falls back to it. |
 
 The Fn buttons come out of the stick housings, so their UVs live in the module atlas. The generic button pass gives them the body atlas first, then a second pass re-points them. `Decal-Fn-Left.obj` and `Decal-Fn-Right.obj` ride their buttons so the labels light with a press.
 
@@ -581,7 +584,7 @@ The `enableSwitch2Controls` flag gates C, GL, and GR into the click-to-record an
 
 ### Materials
 
-One baked diffuse atlas, `Switch2Pro_Diffuse.png` (base color times ambient occlusion, since WPF 3D has no PBR), serves every source part. Glyphs, d-pad arrows, and panel lines all come from the texture. Generated meshes with synthetic UVs keep flat colors.
+One baked diffuse atlas, `Switch2Pro_Diffuse.jpg` (base color times ambient occlusion, since WPF 3D has no PBR), serves every source part. Glyphs, d-pad arrows, and panel lines all come from the texture. Generated meshes with synthetic UVs keep flat colors.
 
 | Name | Hex | Usage |
 |------|-----|-------|
@@ -612,11 +615,11 @@ The two Steam Controller bodies come from Valve's own published CAD, meshed at t
 
 | Body | Source | Converter | Triangles |
 |------|--------|-----------|-----------|
-| Steam Controller (2015) | Valve's March 2016 SteamControllerWorkshop03 archive, its STEP file. A 50-solid assembly in millimeters with every part named. | `tools/steam_controller_2015_mesh.py` | 193k |
+| Steam Controller (2015) | Valve's March 2016 SteamControllerWorkshop03 archive, its STEP file. A 50-solid assembly in millimeters with every part named. | `tools/steam_controller_2015_mesh.py` | 196k |
 | Steam Controller (2026) | Valve's `SC_solid_stp_20260429.stp` from the SteamHardware/SteamController repository. One merged solid, 848 unnamed faces. | `tools/steam_controller_2026_mesh.py` | 169k |
 | Steam Deck | Handheld Companion's per-part OBJ set, used as shipped. It needed no splitting, because HC authored it against this same per-part contract. Cross-checked for proportion against Valve's official Steam Deck CAD. | none | n/a |
 
-Both converters need `OCP` (`pip install cadquery`).
+Both converters need `OCP` and `numpy`. The 2015 tool installs them with `pip install cadquery numpy`, and the 2026 tool with `pip install cadquery-ocp numpy scipy opencv-python pymupdf`.
 
 **Mesh the B-rep once, at preview density, with a size floor, with surface normals, and decimate nothing.** Each clause was learned separately:
 
@@ -791,7 +794,7 @@ Serves the `steam-controller` and `steam-controller-composite` profiles. Two dep
 
 ### The right stick ghost
 
-The right pad is the right thumbstick, and nothing on the controller looks like one. `BuildRightStickGhost` revolves the measured stick profile from [Stick anatomy](#stick-anatomy) into a translucent stick and stands it on the pad's own face, taking center, normal, and radius from `TouchpadSurface1` so it stands square to a pad canted 19 degrees and scales with it. The pivot sits 19 mm behind the cap.
+The right pad is the right thumbstick, and nothing on the controller looks like one. `BuildRightStickGhost` revolves the measured stick profile from [Stick anatomy](#stick-anatomy) into a translucent stick and stands it on the pad's own face. The normal and radius come from `TouchpadSurface1`, so it stands square to a pad canted 19 degrees and scales with it. The center comes from the right pad's center disc, because the fitted plane includes the bowl walls of the four quarters and its midpoint sits off the pad's axis. The pivot sits 19 mm behind the cap.
 
 It is two pieces, split at the stem, because a stick is two controls. The head becomes `RightThumbRing` and takes the four axis directions through `RegisterQuadrants`, the stem and base become `RightThumb` and take the button. The base is registered twice, as `RightTouchpadClick` and then as `RightThumbButton`: the press loop reads roles and needs the base under `RightThumbButton`, while the Map All flash translates the grid's `RawBtn13` back through the wire table, which names it `RightTouchpadClick`. `RightThumbButton` goes last so `ClickMap` keeps it.
 
@@ -854,7 +857,7 @@ Flat colors, the same Valve palette the 2015 model uses: `#202224` body, `#26272
 
 ### Directory Structure
 
-Two shapes live side by side. The single-appearance families keep their OBJs directly under the family folder. The colorway families put one folder per appearance underneath, each holding a full mesh set plus its own PNG atlases. `ModelName` is the path segment after `3DModels/`, which is why it carries the appearance for the second shape.
+Two shapes live side by side. The single-appearance families keep their OBJs directly under the family folder. The colorway families put one folder per appearance underneath, each holding its own atlases and either a full mesh set or only the meshes that differ from its donor (see [SharedGeometry](#sharedgeometry)). `ModelName` is the path segment after `3DModels/`, which is why it carries the appearance for the second shape.
 
 ```
 PadForge.App/3DModels/
@@ -896,7 +899,7 @@ PadForge.App/3DModels/
     CButton.obj                              (C button, Switch 2 only)
     GL.obj, GR.obj                           (grip buttons, Switch 2 only)
     LED1.obj .. LED4.obj                     (player-indicator LEDs)
-    Switch2Pro_Diffuse.png                   (baked base color x AO atlas)
+    Switch2Pro_Diffuse.jpg                   (baked base color x AO atlas)
   SteamController/ (33 meshes, no textures)
     MainBody.obj                             (body shell)
     LeftPadTouch.obj, RightPadTouch.obj      (trackpad center discs)
@@ -954,7 +957,8 @@ PadForge.App/3DModels/
     OEM1.obj, ThreeDots.obj                  (Quick Access key + its dots)
     L4.obj, L5.obj, R4.obj, R5.obj           (back grips)
   DS4/
-    JetBlack/, MagmaRed/                     (37 meshes + Body.png, Decal.png each)
+    MagmaRed/                                (Body.jpg, Decal.png, meshes from JetBlack)
+    JetBlack/                                (37 meshes + Body.jpg, Decal.png)
       MainBody.obj, MainBodyBack.obj         (body, back panel)
       Screen.obj                             (touchpad surface)
       Shoulder-Left-Middle.obj               (left shoulder middle)
@@ -976,10 +980,11 @@ PadForge.App/3DModels/
       Decal-Shoulder-Left-Trigger.obj        (L2 label rider)
       Decal-Shoulder-Right-Trigger.obj       (R2 label rider)
   DualSense/
-    White/, Midnight/, CosmicRed/,           (32 meshes each + Body.png,
-    GrayCamo/, NovaPink/,                     Decal.png, Transparent.png.
-    DeepEarthCobalt/, DeepEarthSterling/,     Midnight has no Transparent.png)
-    DeepEarthVolcanic/, FFXVI/, SpiderMan2/
+    GrayCamo/, NovaPink/,                    (Body.jpg, Decal.png, Transparent.png,
+    DeepEarthSterling/, DeepEarthVolcanic/    meshes from a donor)
+    White/, Midnight/, CosmicRed/,           (32 meshes each + Body.jpg,
+    DeepEarthCobalt/, FFXVI/, SpiderMan2/     Decal.png, Transparent.png.
+                                              Midnight has no Transparent.png)
       MainBody.obj                           (body shell)
       Touchpad.obj                           (touch surface)
       MuteButton.obj                         (mic-mute capsule)
@@ -1001,19 +1006,24 @@ PadForge.App/3DModels/
       Decal-Shoulder-Left-Trigger.obj
       Decal-Shoulder-Right-Trigger.obj
   DualSenseEdge/
-    Edge/                                    (40 meshes + Body.png, Decal.png,
-                                              Transparent.png, StickModule.png)
+    Edge/                                    (40 meshes + Body.jpg, Decal.png,
+                                              Transparent.png, StickModule.jpg)
       (the full DualSense set, plus:)
       LeftBackButton.obj, RightBackButton.obj  (back paddles)
       LeftFnButton.obj, RightFnButton.obj      (Fn buttons)
       StickHousingL.obj, StickHousingR.obj     (fixed module housings)
       Decal-Fn-Left.obj, Decal-Fn-Right.obj    (Fn label riders)
   XboxSeries/
-    Carbon/, Robot/, ElectricVolt/,          (32 meshes each + Body.png,
-    DaystrikeCamo/, HaloInfinite/,            Decal.png, Transparent.png.
-    Starfield/, StellarShift/, DeepPink/,     Starfield has 34, see below)
-    Porsche75th/, VelocityGreen/,
-    PulseRed/, ShockBlue/, Remix/
+    Robot/, DeepPink/, ShockBlue/,           (Body.jpg, Decal.png, Transparent.png,
+    VelocityGreen/                            meshes from a donor)
+    Porsche75th/, PulseRed/                  (8 decal meshes each + the same atlases)
+    DaystrikeCamo/                           (21 meshes + the same atlases)
+    Sonic/, Razer/, CaptainAmerica/,         (Shell.jpg only, everything else
+    BobaFett/, Mandalorian/,                  from Carbon)
+    Stormtrooper/, DarthVader/, Squadrons/
+    Carbon/, ElectricVolt/, HaloInfinite/,   (32 meshes each + Body.jpg,
+    StellarShift/, Remix/, Starfield/         Decal.png, Transparent.png.
+                                              Starfield has 34, see below)
       MainBody.obj                           (body shell)
       Share.obj                              (Share button)
       Transparent.obj                        (clear ABXY domes)
@@ -1080,17 +1090,18 @@ carries a donor table:
 private static readonly Dictionary<string, string> SharedGeometry
 ```
 
-Twelve entries. `DS4.MagmaRed` borrows `DS4.JetBlack`; `DualSense.GrayCamo` and
-`.NovaPink` borrow `DualSense.CosmicRed`; `.DeepEarthSterling` and
-`.DeepEarthVolcanic` borrow `DualSense.DeepEarthCobalt`; `XboxSeries.Robot` and
-`.PulseRed` borrow `XboxSeries.Carbon`; `.DeepPink`, `.ShockBlue`,
+Twelve entries. `DS4.MagmaRed` borrows `DS4.JetBlack`. `DualSense.GrayCamo` and
+`.NovaPink` borrow `DualSense.CosmicRed`. `.DeepEarthSterling` and
+`.DeepEarthVolcanic` borrow `DualSense.DeepEarthCobalt`. `XboxSeries.Robot` and
+`.PulseRed` borrow `XboxSeries.Carbon`. `.DeepPink`, `.ShockBlue`,
 `.VelocityGreen`, `.Porsche75th` and `.DaystrikeCamo` borrow
 `XboxSeries.ElectricVolt`.
 
 `TryLoadModel` tries the colorway's own folder first and falls back to its donor
 once. It never chains, so a donor cannot itself borrow. That removed 352
 duplicate meshes, which is why the per-folder mesh counts above are not uniform:
-a borrowing colorway ships none of its own.
+a borrowing colorway ships only the meshes that differ from its donor, and most
+ship none.
 
 ### Custom-shell skins
 
@@ -1107,7 +1118,7 @@ the generic body pass.
 
 **File:** `PadForge.App/Views/ControllerModelView.xaml`, `ControllerModelView.xaml.cs`
 
-WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2169 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1052 lines: the annotation overlay, see below).
+WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2208 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1052 lines: the annotation overlay, see below).
 
 ### XAML Structure
 
@@ -1142,13 +1153,15 @@ WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. T
          No Background so empty space stays click-through to the viewport. -->
     <Canvas x:Name="AnnotationCanvas" Visibility="Collapsed" ClipToBounds="True" />
 
-    <!-- Top-right controls: colorway picker, annotation toggle
-         (Tag glyph E8EC), Reset View -->
+    <!-- Top-right controls: colorway picker and its reset button,
+         annotation toggle (Tag glyph E8EC), Reset View -->
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                 VerticalAlignment="Top" Margin="0,8,8,0">
         <ComboBox x:Name="AppearancePicker" MinWidth="130"
                   Visibility="Collapsed"
                   SelectionChanged="AppearancePicker_SelectionChanged" />
+        <reset:SettingResetButton Click="ResetAppearance_Click"
+                  Visibility="{Binding Visibility, ElementName=AppearancePicker}" />
         <ui:Button x:Name="AnnotationToggleButton"
                    Style="{StaticResource EmberIconButton}"
                    Click="AnnotationToggle_Click">
@@ -1166,7 +1179,7 @@ The camera is wrapped in `<helix:HelixViewport3D.Camera>` rather than being a ba
 
 `AppearancePicker` shows only when the current model family ships more than one appearance, which `UpdateAppearancePicker()` decides from `AppearanceRegistry(family)`. The registry is a switch over `"XboxSeries"`, `"DualSense"`, `"DS4"`, and `"DualSenseEdge"`, reading each model class's static `AppearanceIds` / `AppearanceNames`. `DualSenseEdge` has one entry, so its picker stays collapsed. Xbox 360, Switch 2 Pro, and the three Valve models are not in the registry at all, so their pickers never appear.
 
-Selection writes `PadViewModel.SetModelAppearance(family, id)`, which raises `Model3DAppearances`, which re-enters `EnsureModel()` and rebuilds against the new atlas set. The choice is per virtual controller, persisted on the pad's `PadSetting`, so two VCs of the same family can wear different colorways.
+Selection writes `PadViewModel.SetModelAppearance(family, id)`, which raises `Model3DAppearances`, which re-enters `EnsureModel()` and rebuilds against the new atlas set. The choice is per virtual controller and saved with the slot (`SlotModel3DAppearances` in the settings file and in each profile), so two VCs of the same family can wear different colorways. The reset button beside the picker shows and hides with it and returns it to the first entry, the family default.
 
 ### Events
 
@@ -1221,9 +1234,10 @@ The last three drive the annotation overlay (see [Annotation Overlay](#annotatio
 | `_modelRotation` | `Transform3DGroup` | Persistent scale + rotation on `ModelVisual3D.Transform` |
 | `_yawRotation` | `AxisAngleRotation3D` | Yaw: axis (0,0,1) |
 | `_pitchRotation` | `AxisAngleRotation3D` | Pitch: axis (1,0,0) |
-| `_modelScaleTransform` | `ScaleTransform3D` | Per-model uniform scale, composed into `_modelRotation` so rotation and scale share one `Transform` assignment. Used for the DualSense and Switch 2 Pro scale corrections. |
+| `_modelScaleTransform` | `ScaleTransform3D` | Per-model uniform scale, composed into `_modelRotation` so rotation and scale share one `Transform` assignment. Used for the DualSense, Switch 2 Pro, and Valve scale corrections. |
 | `_modelRecenter` | `TranslateTransform3D` | Vertical recenter, computed once per model load from the mesh's static bounds. First child of `_modelRotation`, so scale and rotation both see a model whose visual center is the origin. Never live bounds: trigger pulls change the group's bounds a little, and the whole model would bob with them. |
 | `_stickTransforms3D` | `Dictionary<Model3DGroup, …>` | Retained per-stick rotation graph keyed on the ring group. Cleared on every model rebuild, since the keys are the outgoing model's groups. |
+| `_stickParts` | `Dictionary<Model3DGroup, Model3DGroup[]>` | Every group one stick is made of, keyed on its ring: the ring, the click mesh, any other group registered to the stick button, and the model's `StickRiders`. Built once per model and cleared with `_stickTransforms3D`. |
 | `_touchpadHighlightMaterial` | `DiffuseMaterial` | Fully opaque accent material shown on the touchpad surface while click is held |
 | `_touchpadCurrentlyHighlighted` | `bool` | Tracks the current touchpad material swap so it does not churn every frame |
 | `_touchpadFinger0Visual` / `_touchpadFinger1Visual` | `ModelVisual3D` | Finger-sphere visuals (orange, blue) parented under `ModelVisual3D` |
@@ -1278,7 +1292,7 @@ The Switch test asks the canonical wire table rather than matching on the profil
 
 The rebuild is skipped when `_currentModel.ModelFamily`, `_currentModelExtraControlsEnabled`, and `_currentModelAppearance` all match what is wanted, so re-entrancy from PropertyChanged storms is cheap. Comparing `ModelFamily` and not `ModelName` is what keeps a colorway from reading as a family change.
 
-On a real rebuild: `_stickTransforms3D` is cleared and both retained trigger angles reset to zero, because both key on the outgoing model. Without the reset a switch carried the old model's pull angles into the new one and the triggers rendered part-pressed at rest. The arrow overlay is removed, the old model disposed, the new one constructed and assigned to `ModelVisual3D.Content`, then `ModelScale` is pushed into `_modelScaleTransform`, `_modelRecenter.OffsetZ` is computed from the fresh static bounds, and the finger visuals and annotations are rebuilt.
+On a real rebuild: `_stickTransforms3D` and `_stickParts` are cleared and both retained trigger angles reset to zero, because both key on the outgoing model. Without the reset a switch carried the old model's pull angles into the new one and the triggers rendered part-pressed at rest. The arrow overlay is removed, the old model disposed, the new one constructed and assigned to `ModelVisual3D.Content`, then `ModelScale` is pushed into `_modelScaleTransform`, `_modelRecenter.OffsetZ` is computed from the fresh static bounds, and the finger visuals and annotations are rebuilt.
 
 `PadPage.ApplyViewMode()` routes MIDI to `MidiPreviewView`, KB+Mouse to `KBMPreviewView`, VR to `VRPreview`, and an Extended slot to `ControllerSchematicView` unless `HasDedicatedArt` says PadForge ships that controller's own body. This control serves the gamepad presets, which means Xbox, PlayStation, Nintendo, and the five Valve profiles under Extended. A profile change re-runs `ApplyViewMode`.
 
@@ -1311,7 +1325,7 @@ Iterates `ButtonReaders`, a 31-entry table pairing each button role with the rea
 private static readonly (string Name, Func<PadViewModel, bool> Read)[] ButtonReaders =
 {
     ("ButtonA", vm => vm.ButtonA),
-    // ...the 20 other shared roles...
+    // ...the 21 other shared roles...
     ("ButtonQuickAccess", vm => vm.ButtonQuickAccess),
     ("Paddle1", vm => vm.Paddle1),
     ("Paddle2", vm => vm.Paddle2),
@@ -1344,8 +1358,8 @@ private void UpdateJoystick(
 
 1. Normalizes raw values (`short.MaxValue`) to &minus;1–1 range.
 2. **Ownership check**: If the stick button is pressed, hovered, or flashing, the button highlight owns the whole stick at full intensity and this pass skips the grading so it does not stomp the glow back to rest.
-3. **Gradient highlight**: Grades every geometry in the ring group and the click group, cap and knurl riders alike, by deflection magnitude. A visual deadzone of 0.05 gates it, because a drifting stick otherwise keeps its ring permanently accent-tinted. Mapping is unaffected: this gates only the preview glow.
-4. **Rotation**: `AxisAngleRotation3D` for X (around Z) and Y (around X), centered at `rotationPoint`. Both ring and thumb meshes share one retained `Transform3DGroup`, cached in `_stickTransforms3D` and mutated in place. Allocating the five-object graph per dirty frame was pure churn.
+3. **Gradient highlight**: Grades every geometry in the ring group and in each group the stick button lights, cap and knurl riders alike, by deflection magnitude. A visual deadzone of 0.05 gates it, because a drifting stick otherwise keeps its ring permanently accent-tinted. Mapping is unaffected: this gates only the preview glow.
+4. **Rotation**: `AxisAngleRotation3D` for X (around Z) and Y (around X), centered at `rotationPoint`. Every part in `_stickParts` shares one retained `Transform3DGroup`, cached in `_stickTransforms3D` and mutated in place. Allocating the five-object graph per dirty frame was pure churn.
 
 #### UpdateTrigger()
 
@@ -1389,7 +1403,7 @@ Turntable rotation (left-drag) and camera panning (right-drag) via Preview (tunn
 | `PreviewMouseLeftButtonUp` | Drag < 5 px -> hit-test for click-to-record. Otherwise end drag. |
 | `PreviewMouseRightButtonDown` | Capture mouse, store start position for panning |
 | `PreviewMouseRightButtonUp` | Release capture |
-| `PreviewMouseMove` | Left-drag: rotate; right-drag: pan; no button: hover highlight |
+| `PreviewMouseMove` | Left-drag rotates, right-drag pans, no button hover-highlights |
 | `PreviewMouseWheel` | Zoom camera along look direction |
 | `PreviewTouchDown` | First finger: rotation. Second finger: pinch-to-zoom + pan. |
 | `PreviewTouchMove` | One finger: rotation. Two fingers: pinch-to-zoom + midpoint pan. |
@@ -1437,13 +1451,13 @@ A group that is in `ClickMap` as well splits by radius. `IsOuterCapHit` sends th
 
 `TryFindQuadrantSurface` is the reverse lookup, from a target name back to its surface plus a wedge direction (slots 2 and 3 are the X pair, slots 0 and 2 are the negative ones). The hover wedge, the recording ring, the arrow, and the flash resolver all ask it, so a surface carrying directions is served by the same code the sticks are. All four used to parse target names for "AxisX" and a "Left" prefix instead.
 
-A direction that is not on a torus does not go through this path at all. It gets its own mesh and `RegisterDirection`, which is how the 2015 Steam Controller's pad quarters work.
+A direction that is not on a stick cap does not go through this path at all. It gets its own mesh and `RegisterDirection`, which is how the 2015 Steam Controller's pad quarters work.
 
-### Hover Highlighting
+### Hover Highlight
 
 `Viewport_PreviewMouseMove` hit-tests at the cursor on every move:
 
-- **Buttons/triggers**: `ApplyHoverHighlight()` sets the highlight material. `RestoreHoverGroup()` restores default (skipped during flash animation). Both go through `ResolveTargetGroups()`, which walks the hit group to its `ClickMap` target and back out through `ButtonMap`, so hovering a stick click lights the ring with it and hovering one mesh of a multi-mesh button lights the rest.
+- **Buttons/triggers**: `ApplyHoverHighlight()` sets the highlight material. `RestoreHoverGroup()` restores default (skipped during flash animation). Both go through `ResolveTargetGroups()`, which walks the hit group to its `ClickMap` target and back out through `ButtonMap`, so hovering one mesh of a multi-mesh button lights the rest, the way the Steam Deck's stick stem lights with its base. The stick cap is not in the stick button's list, so hovering the click leaves the cap dark.
 - **Stick rings**: `ShowHoverQuadrant()` creates a semi-transparent wedge overlay from the ring's mesh triangles, clipped to the target quadrant.
 - `ClearHover()` removes all hover state and resets the cursor.
 - `Viewport_MouseLeave` also clears hover, ends the left gesture, and releases a dangling drag. `RestoreHoverGroup()` returns early when `_currentModel` is null, because a stale `_hoverGroup` can outlive a swap to a non-3D preview.
@@ -1545,7 +1559,7 @@ Each chip is a steel `Border` holding the output name, a 1px cold `Line` leader 
 
 ### Trigger level bars
 
-For each shoulder trigger present, `CreateTriggerBars()` builds a steel track holding two stacked `Rectangle`s: a cold bar (raw selected-device level, `_vm.DeviceLeftTrigger` / `DeviceRightTrigger`) and an ember bar (combined slot output, `_vm.LeftTrigger` / `RightTrigger`). `UpdateAnnotationLevelBars()` sets bar heights every dirty frame from `OnRendering`. The track shows only when both its anchor projects on-canvas and a level is above `0.02`, so an idle empty track never reads as a stray box on the trigger.
+For each shoulder trigger present, `CreateTriggerBars()` builds a steel track holding two `Rectangle`s side by side, each filling from the bottom: a cold bar (raw selected-device level, `_vm.DeviceLeftTrigger` / `DeviceRightTrigger`) and an ember bar (combined slot output, `_vm.LeftTrigger` / `RightTrigger`). `UpdateAnnotationLevelBars()` sets bar heights every dirty frame from `OnRendering`. The track shows only when both its anchor projects on-canvas and a level is above `0.02`, so an idle empty track never reads as a stray box on the trigger.
 
 ### Detail strip and tooltips
 
@@ -1568,8 +1582,8 @@ Xbox 360, all three Valve models, and Switch 2 Pro's generated parts use `Diffus
 
 | Category | Source | Storage | Usage |
 |----------|--------|---------|-------|
-| **Default** | Per-colorway PNG atlases (`Body.png`, `Decal.png`, `Transparent.png`, `StickModule.png`), or flat hex colors on Xbox 360, Switch 2 Pro, and the Valve models. Xbox 360 face overlays use `Alpha = 150`. Registered by `Paint` / `PaintTarget`, never by assigning a geometry's material alone. | `DefaultMaterials[group]` | Restored after highlight/flash |
-| **Highlight** | `DrawAccentHighlights()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. One shared material for every group in the scene at the time it runs. | `HighlightMaterials[group]` | Applied on press or flash |
+| **Default** | Per-colorway atlases (`Body.jpg`, `Decal.png`, `Transparent.png`, `StickModule.jpg`, `Shell.jpg`) and the Switch 2 Pro's one atlas, or flat hex colors on Xbox 360, the Valve models, and the Switch 2 Pro's generated parts. Xbox 360 face overlays use `Alpha = 150`. Registered by `Paint` / `PaintTarget`, never by assigning a geometry's material alone. | `DefaultMaterials[group]` | Restored after highlight/flash |
+| **Highlight** | `DrawAccentHighlights()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. One shared material for every group in the scene at the time it runs. `EnsureHighlightMaterials()` then fills any interactive group still without one. | `HighlightMaterials[group]` | Applied on press or flash |
 | **Gradient** | `GradientHighlight()` interpolates ARGB for solid defaults, or layers an alpha-scaled accent overlay for textured ones. | `ConditionalWeakTable` keyed on the `GeometryModel3D` | Sticks and triggers (proportional) |
 
 Gradient materials are retained per geometry and mutated in place rather than reallocated. The DualSense `TransparentTrim` and `MuteButton` set their highlight material by hand, since `DrawAccentHighlights()` ran before either joined the scene.
@@ -1605,11 +1619,11 @@ Child order matters:
 | 3 | Yaw | Z (0,0,1) | Left-drag horizontal | none |
 | 4 | Pitch | X (1,0,0) | Left-drag vertical | &minus;60–+60 degrees |
 
-Recenter runs first, in model units, so the scale and both rotations see a model whose visual center is the origin. The camera frames the origin and yaw/pitch pivot there, so a family authored off-center would hang off-center and rotate about the wrong point. The DS4 meshes are authored with their vertical center 21.9 mm below origin, every other family within 6 mm, which is why the DS4 sat low and clipped its handles when pitched front-facing. Scale comes before rotation so the rotated controller does not scale around its rotated bounding-box center.
+Recenter runs first, in model units, so the scale and both rotations see a model whose visual center is the origin. The camera frames the origin and yaw/pitch pivot there, so a family authored off-center would hang off-center and rotate about the wrong point. The DS4 meshes are authored with their vertical center 21.9 mm below origin, which is why the DS4 sat low and clipped its handles when pitched front-facing. Valve's CAD sits lower still: 15.2 mm below on the 2015 Steam Controller and 49.6 mm on the 2026. Scale comes before rotation so the rotated controller does not scale around its rotated bounding-box center.
 
 ### Joystick Tilt Transform
 
-`Transform3DGroup` on both ring and thumb meshes:
+One `Transform3DGroup` shared by every part of the stick (`_stickParts`):
 1. **X tilt**: Around Z axis, proportional to stick X, centered at `JoystickRotationPointCenter{Left/Right}Millimeter`.
 2. **Y tilt**: Around X axis, proportional to stick Y, same center.
 
@@ -1641,7 +1655,7 @@ Three light sources in XAML:
 | **Visual deadzones** | Stick grading below 0.05 deflection and trigger grading below 0.03 restore the rest material instead of grading, so sensor noise does not hold the glow lit. |
 | **Retained transforms** | Per-stick rotation graphs live in `_stickTransforms3D` and get their two angles mutated, instead of a five-object graph allocated per dirty frame. |
 | **Retained gradient materials** | Per-geometry `ConditionalWeakTable` entries whose brush color is mutated in place. Weak keys let a rebuilt model's entries collect. |
-| **One-time mesh loading** | OBJ meshes and PNG atlases load in the constructor. `EnsureModel()` recreates only when the family, the extra-controls flag, or the colorway changes. |
+| **One-time mesh loading** | OBJ meshes and texture atlases load in the constructor. `EnsureModel()` recreates only when the family, the extra-controls flag, or the colorway changes. |
 | **Preview events** | Tunneling events prevent double-processing by HelixToolkit and PadForge. |
 
 ---
@@ -1657,4 +1671,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

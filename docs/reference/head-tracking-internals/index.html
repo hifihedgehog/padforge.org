@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3557,7 +3617,7 @@
 
 <h1 id="head-tracking-internals">Head Tracking: Internals<a class="headerlink" href="#head-tracking-internals" title="Permanent link">&para;</a></h1>
 <p><em>The OpenTrack UDP datagram, the FreeTrack 2.0 heap, the scaling into six axes, and the row that carries them.</em></p>
-<p>The user-facing page is <a href="../../features/head-tracking/">Head Tracking (OpenTrack)</a>. This one is for whoever has to change the code.</p>
+<p>The user-facing page is <a href="../../features/head-tracking/">Head Tracking</a>. This one is for whoever has to change the code.</p>
 <table>
 <thead>
 <tr>
@@ -3580,7 +3640,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/ViewModels/DashboardViewModel.cs</code></td>
-<td>The five properties, their reset commands, and <code>HeadTrackingStatus</code></td>
+<td>The head-tracking properties (three input toggles, the OpenXR runtime picker, the UDP port, two shared ranges, six per-axis ranges), their reset commands, the Set Neutral command, and <code>HeadTrackingStatus</code></td>
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.cs</code></td>
@@ -3612,7 +3672,7 @@
 <tbody>
 <tr>
 <td><code>Name</code></td>
-<td><code>Head Tracker (OpenTrack)</code></td>
+<td><code>Head Tracker (OpenTrack)</code>, or <code>Head Tracker (OpenXR)</code> when OpenXR is the only input on</td>
 </tr>
 <tr>
 <td><code>DevicePath</code></td>
@@ -3647,7 +3707,7 @@
 <p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page draws neither the Input Hiding nor the Input Mode section. <code>CreateDefaultPadSetting</code> auto-maps only gamepad capability types, so the row starts unmapped by design.</p>
 <hr />
 <h2 id="lifecycle-phase-1i">Lifecycle: Phase 1i<a class="headerlink" href="#lifecycle-phase-1i" title="Permanent link">&para;</a></h2>
-<p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when every input is off, the user removed it from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in <a href="../openxr-input-internals/">OpenXR Input Internals</a>. Stored assignments and mappings survive retirement.</p>
+<p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after five volatile field reads and takes no lock. Otherwise it retires the runtime row when every input is off, the user removed it or either VR controller row from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in <a href="../openxr-input-internals/">OpenXR Input Internals</a>. Stored assignments and mappings survive retirement.</p>
 <p><code>FromCurrentSettings</code> reads <code>Version</code> first and the settings after it. The setters bump <code>Version</code> last, so the other order could capture the new version with the old port and the reconfigured check would never fire again for that change.</p>
 <p><code>HeadTrackingRuntime</code> is the static mirror:</p>
 <table>
@@ -3679,6 +3739,18 @@
 <td>Yes</td>
 </tr>
 <tr>
+<td><code>OpenXrEnabled</code></td>
+<td>false</td>
+<td></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>OpenXrRuntimeManifest</code></td>
+<td>empty, the system default</td>
+<td></td>
+<td>Only while OpenXR is enabled</td>
+</tr>
+<tr>
 <td><code>RotationRangeDeg</code></td>
 <td>90</td>
 <td>1 to 180</td>
@@ -3690,9 +3762,15 @@
 <td>1 to 500</td>
 <td>No, read live every poll</td>
 </tr>
+<tr>
+<td><code>SetAxisRange(axis, value)</code></td>
+<td>0, follow the shared range</td>
+<td>1 to 180 for a rotation axis, 1 to 500 for a translation axis</td>
+<td>No, read live every poll</td>
+</tr>
 </tbody>
 </table>
-<p><code>Open</code> opens only enabled inputs. UDP binds its socket, starts its receive thread, and queues the firewall rule. FreeTrack opens its mapping independently. The row opens even when both sources fail, so the status line can say why nothing arrives. <code>Dispose</code> runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks <code>ReceiveFrom</code>), a 50 ms courtesy join, then the FreeTrack reader.</p>
+<p><code>Open</code> opens only enabled inputs. UDP binds its socket, starts its receive thread, and queues the firewall rule. FreeTrack opens its mapping independently. OpenXR creates the two VR controller rows and starts its session thread. The row opens even when every source fails, so the status line can say why nothing arrives. <code>Dispose</code> runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks <code>ReceiveFrom</code>), a 50 ms courtesy join, then the FreeTrack reader, then the OpenXR source, whose stop joins its thread for up to 2 s, and the two controller rows.</p>
 <hr />
 <h2 id="source-one-opentrack-udp">Source one: OpenTrack UDP<a class="headerlink" href="#source-one-opentrack-udp" title="Permanent link">&para;</a></h2>
 <p>OpenTrack's "UDP over network" output (<code>proto-udp/ftnoir_protocol_ftn.cpp</code>) sends <code>sizeof(double[6])</code> per pose.</p>
@@ -3812,7 +3890,7 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>f &lt;  0: round(32768 + f × 32768)
 </code></pre></div>
 <p>So −range reads 0, rest reads 32768 (<code>AxisCenter</code>, the <code>CustomInputState</code> center, not the arithmetic midpoint), +range reads 65535, beyond either end clamps, and a non-positive range or a NaN reads rest.</p>
-<p><code>FillAxes</code> applies the signs:</p>
+<p><code>FillAxesPerAxis</code> applies the signs:</p>
 <table>
 <thead>
 <tr>
@@ -3854,7 +3932,7 @@
 </tr>
 </tbody>
 </table>
-<p>The two ranges are read from <code>HeadTrackingRuntime</code> on every poll, so a range edit applies without reopening the row.</p>
+<p>Each axis's range comes from <code>HeadTrackingRuntime.GetAxisRange</code> on every poll: the axis's own pinned range when one is set, the shared rotation or translation range otherwise. A range edit applies without reopening the row.</p>
 <hr />
 <h2 id="silence">Silence<a class="headerlink" href="#silence" title="Permanent link">&para;</a></h2>
 <p><code>SilenceMs</code> = 1000. <code>GetCurrentState</code> compares the last pose's tick against now. Older than that, or no pose ever, and the axes read center and <code>Source</code> drops to <code>None</code> with a <code>StatusVersion</code> bump. The row stays attached, so mappings can be made before the tracker starts. A tracker that stops (OpenTrack closed, the camera lost the face) therefore recenters the stick within a second.</p>
@@ -3871,26 +3949,39 @@
 <tbody>
 <tr>
 <td><code>Source</code> is <code>Udp</code></td>
-<td><code>Receiving over UDP from {peer}.</code></td>
+<td><code>Receiving over UDP from {peer}.</code> plus <code>FreeTrack shared memory is unavailable.</code> when <code>FreeTrackFailed</code></td>
 </tr>
 <tr>
 <td><code>Source</code> is <code>FreeTrack</code></td>
-<td><code>Receiving from FreeTrack shared memory.</code></td>
+<td><code>Receiving from FreeTrack shared memory.</code> plus <code>UDP port {port} is in use by another program.</code> when UDP is on and <code>UdpBindFailed</code></td>
 </tr>
 <tr>
-<td>Neither, <code>UdpBindFailed</code></td>
+<td><code>Source</code> is <code>OpenXr</code></td>
+<td><code>Reading {runtime}</code></td>
+</tr>
+<tr>
+<td>No pose, OpenXR the only input on</td>
+<td>The OpenXR state line below</td>
+</tr>
+<tr>
+<td>No pose, UDP off</td>
+<td><code>FreeTrack shared memory is unavailable.</code> when <code>FreeTrackFailed</code>, else <code>Waiting for FreeTrack shared memory data.</code>, plus the OpenXR state line when OpenXR is on</td>
+</tr>
+<tr>
+<td>No pose, <code>UdpBindFailed</code></td>
 <td><code>UDP port {port} is in use by another program.</code> plus <code>The FreeTrack shared memory could not be opened either.</code> when <code>FreeTrackFailed</code></td>
 </tr>
 <tr>
-<td>Neither, <code>FreeTrackFailed</code></td>
+<td>No pose, <code>FreeTrackFailed</code></td>
 <td><code>Waiting for a tracker on UDP port {port}. The FreeTrack shared memory could not be opened.</code></td>
 </tr>
 <tr>
-<td>Neither</td>
-<td><code>Waiting for a tracker on UDP port {port}.</code></td>
+<td>No pose</td>
+<td><code>Waiting for a tracker on UDP port {port}.</code> plus the OpenXR state line when OpenXR is on</td>
 </tr>
 </tbody>
 </table>
+<p>The OpenXR state line follows <code>OpenXrSourceState</code>: <code>No OpenXR runtime is installed</code> (<code>NoRuntime</code>), <code>The OpenXR runtime reports no headset</code> (<code>NoHeadset</code>), <code>This runtime cannot supply a background session</code> (<code>NotSupported</code>), <code>The OpenXR session failed. See the diagnostics log.</code> (<code>Failed</code>), <code>Waiting for {runtime} to report a tracked pose</code> (<code>Running</code> before the first pose), and <code>Starting the OpenXR session</code> otherwise.</p>
 <p>The same text lands in two places, each rebuilt only when <code>StatusVersion</code> moves. The Devices row's line comes from <code>UpdateDevicesRawState</code>, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Dashboard's <code>HeadTrackingStatus</code> comes from <code>UpdateHeadTrackingStatus</code> on the dashboard tick and reads <code>Stopped</code> (<code>Common_Stopped</code>) while the feature is off, the engine is down, or the row has not opened.</p>
 <hr />
 <h2 id="the-firewall-rule">The firewall rule<a class="headerlink" href="#the-firewall-rule" title="Permanent link">&para;</a></h2>
@@ -3927,7 +4018,11 @@
 <td>Mapping failed</td>
 </tr>
 <tr>
-<td><code>Head tracker: pose #&lt;n&gt; via &lt;Udp|FreeTrack&gt; yaw= pitch= roll= x= y= z=</code></td>
+<td><code>Head tracker: FreeTrack mutex failed &lt;message&gt;</code></td>
+<td>The mutex failed to open, so the mapping is closed</td>
+</tr>
+<tr>
+<td><code>Head tracker: pose #&lt;n&gt; via &lt;Udp|FreeTrack|OpenXr&gt; yaw= pitch= roll= x= y= z=</code></td>
 <td>Poses 1, 2, 4, ... 64, then every 4096th</td>
 </tr>
 </tbody>
@@ -3941,12 +4036,12 @@
 <hr />
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../features/head-tracking/">Head Tracking (OpenTrack)</a> for the user-facing page</li>
+<li><a href="../../features/head-tracking/">Head Tracking</a> for the user-facing page</li>
 <li><a href="../headset-motion-internals/">Headset Head Tracking Internals</a> for the other head source, which is rotation only</li>
 <li><a href="../input-pipeline/">Input Pipeline</a> for where Phase 1i sits</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

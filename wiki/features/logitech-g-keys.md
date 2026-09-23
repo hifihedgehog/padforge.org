@@ -67,7 +67,7 @@ A tap can begin and end between two of PadForge's polls, so a press is held asse
 
 ## Limitations
 
-This runs against Logitech's own library, and nothing here has been exercised against real Logitech hardware or software. The wire format comes from `LogitechGkeyLib.h` in the SDK and was cross-checked against [Mumble](https://github.com/mumble-voip/mumble)'s long-running implementation, so the decoding is grounded, but the library loading and calling back on a live machine is unverified.
+This runs against Logitech's own library, and nothing here has been exercised against real Logitech hardware or software. The wire format comes from `LogitechGkeyLib.h` in the SDK, so the decoding is grounded, and the library search and shutdown follow [Mumble](https://github.com/mumble-voip/mumble)'s long-running implementation, but the library loading and calling back on a live machine is unverified.
 
 G HUB is not Logitech Gaming Software. The G-key SDK ships with Logitech Gaming Software, and a machine running only G HUB may not register it.
 
@@ -82,4 +82,4 @@ G HUB is not Logitech Gaming Software. The G-key SDK ships with Logitech Gaming 
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.3.*

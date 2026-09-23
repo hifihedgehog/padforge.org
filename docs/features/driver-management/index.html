@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -1995,10 +1997,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-231-profiles-cover" class="md-nav__link">
+  <a href="#the-profiles-padforge-offers-cover" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The 231 profiles cover
+        The profiles PadForge offers cover
       
     </span>
   </a>
@@ -2346,6 +2348,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2615,6 +2645,8 @@
       
         
           
+        
+      
         
       
         
@@ -3000,6 +3032,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3702,10 +3762,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-231-profiles-cover" class="md-nav__link">
+  <a href="#the-profiles-padforge-offers-cover" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The 231 profiles cover
+        The profiles PadForge offers cover
       
     </span>
   </a>
@@ -4050,7 +4110,7 @@
 <tr>
 <td><strong>HIDMaestro</strong></td>
 <td>Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use.</td>
-<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). 231 device profiles.</td>
+<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 231 device profiles, and PadForge offers the 133 with a captured HID descriptor.</td>
 </tr>
 <tr>
 <td><strong>Keyboard+Mouse</strong></td>
@@ -4079,8 +4139,9 @@
 </blockquote>
 <hr />
 <h2 id="first-run-auto-install">First-run auto-install<a class="headerlink" href="#first-run-auto-install" title="Permanent link">&para;</a></h2>
-<p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The HIDMaestro card on the <strong>Settings</strong> page lights up and the Xbox, PlayStation, Nintendo, and Extended slot types turn on.</p>
+<p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch and the HIDMaestro card on the <strong>Settings</strong> page always reads <strong>Installed</strong>.</p>
 <p>HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>.</p>
+<p>Two more drivers install outside <strong>Settings</strong>, and only when something needs them. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a>, <a href="../../devices/ps-move/">PS Move</a> or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named <strong>Full</strong>, the two Valve <strong>Composite</strong> profiles, and <strong>Steam Controller (2026)</strong>) installs usbip-win2, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, <strong>DualSense (PS5): Full</strong>, is one of them. That install needs no prompt, and USB devices disconnect and reconnect once while Windows re-enumerates its USB root hubs.</p>
 <hr />
 <h2 id="status-indicators">Status indicators<a class="headerlink" href="#status-indicators" title="Permanent link">&para;</a></h2>
 <p>Each driver card on the Settings page shows an ember flame next to its status text.</p>
@@ -4140,15 +4201,16 @@
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>One driver that publishes the virtual controllers. Each Xbox, PlayStation, Nintendo, and Extended slot uses one HIDMaestro <strong>device profile</strong>. VR slots ride HIDMaestro's OpenVR driver instead and have no profile. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.</p>
 <p>The <strong>Nintendo</strong> slot type carries two profiles: Switch Pro (the default) and Switch 2 Pro. Pick between them from the slot's preset dropdown. Neither can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the <strong>Extended</strong> category.</p>
-<h3 id="the-231-profiles-cover">The 231 profiles cover<a class="headerlink" href="#the-231-profiles-cover" title="Permanent link">&para;</a></h3>
+<h3 id="the-profiles-padforge-offers-cover">The profiles PadForge offers cover<a class="headerlink" href="#the-profiles-padforge-offers-cover" title="Permanent link">&para;</a></h3>
+<p>HIDMaestro ships 231 device profiles. PadForge's pickers offer the 133 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own <strong>Custom</strong> profile. They cover:</p>
 <ul>
 <li>Xbox 360, Xbox One, Xbox Series, Elite, Adaptive</li>
 <li>DualShock 3, DualShock 4, DualSense, DualSense Edge</li>
-<li>Switch Pro, Switch 2 Pro, Joy-Cons (both generations), GameCube adapter, NSO retro pads (N64, SNES, Genesis)</li>
+<li>Switch Pro, Switch 2 Pro, the original Joy-Cons and their charging grip, the GameCube adapter in HID mode, NSO retro pads (N64, SNES, Genesis)</li>
 <li>Logitech G-series wheels (G29, G920, G923, G27)</li>
-<li>Thrustmaster and Fanatec wheels and pedals</li>
-<li>HOTAS and flight sticks (Thrustmaster T-Flight HOTAS, Logitech X52, VKB, VIRPIL, Winwing)</li>
-<li>Hori, 8BitDo, Nacon, Razer, other third-party gamepads</li>
+<li>Thrustmaster wheels, the Thrustmaster T-Rudder Pedals, and the Fanatec ClubSport Handbrake</li>
+<li>HOTAS and flight sticks (Thrustmaster T.Flight HOTAS 4 and One, Thrustmaster T.16000M, Saitek X52, SideWinder Force Feedback 2)</li>
+<li>Hori, Nacon, Razer, Flydigi, other third-party gamepads</li>
 <li>A <strong>Custom</strong> profile for the Extended category, with up to 8 axes, 128 buttons, and 4 POV hats.</li>
 </ul>
 <h3 id="install-when-you-want">Install when you want<a class="headerlink" href="#install-when-you-want" title="Permanent link">&para;</a></h3>
@@ -4158,7 +4220,7 @@
 <li>A custom controller shape for niche games</li>
 </ul>
 <h3 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the <strong>Settings</strong> page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The flame lights up once install finishes, and Xbox, PlayStation, Nintendo, and Extended slots become available.</p>
+<p>HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the <strong>Settings</strong> page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The card's flame is always lit and the Xbox, PlayStation, Nintendo, and Extended slot types are always available, because the driver ships inside PadForge.</p>
 <h3 id="uninstall">Uninstall<a class="headerlink" href="#uninstall" title="Permanent link">&para;</a></h3>
 <p>There is no in-app Uninstall button for HIDMaestro. Removing it through Device Manager is not supported. If you stop using PadForge, deleting the program leaves HIDMaestro installed but idle. It only acts when PadForge asks it to create a virtual controller.</p>
 <p>For the contract between PadForge and HIDMaestro, see <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
@@ -4278,7 +4340,7 @@
 <ol>
 <li>Close SteamVR. The uninstall refuses while it is running.</li>
 <li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
-<li>Click <strong>Uninstall</strong>. It removes the Steam-free install and frees the space, including the <code>logs</code> and <code>config</code> subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.</li>
+<li>Click <strong>Uninstall</strong>, then confirm. The dialog names the folder it removes. It removes the Steam-free install and frees the space, including the <code>logs</code> and <code>config</code> subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.</li>
 </ol>
 <p>Reading real VR hardware as an input source pauses for the rest of the session after an uninstall, and comes back the next time PadForge starts. PadForge holds SteamVR's client library open while it is running and lets go of it during the uninstall, so it does not go back to it until a fresh launch. Virtual VR controllers are unaffected by this: they run inside SteamVR's own process, not PadForge's.</p>
 <p>For the slot type itself, see <a href="../vr-controllers/">Virtual VR Controllers</a>.</p>
@@ -4295,7 +4357,7 @@
 <tbody>
 <tr>
 <td><strong>Uninstall</strong></td>
-<td>PadForge removes the drivers it found. Reboot when prompted.</td>
+<td>PadForge removes the drivers it found. It asks for no restart. If a removal fails, a second dialog names the error.</td>
 </tr>
 <tr>
 <td><strong>Keep</strong></td>
@@ -4502,7 +4564,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

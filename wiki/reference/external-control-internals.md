@@ -14,7 +14,7 @@ This is the developer-side companion to the external control section of [Profile
 | `PadForge.App/Services/InputService.cs` | `StartExternalControlIfEnabled` / `StopExternalControl`, `ExecuteExternalControlCommand` (the grammar), `ExternalActivate`, `ExternalDeactivate`, `NoteManualProfileSwitch`. |
 | `PadForge.App/Services/ForegroundMonitorService.cs` | `CheckForegroundWindow` returns early while the pin is held. |
 | `PadForge.App/Common/SettingsManager.cs` | `EnableExternalControl` (persisted opt-in) and `ExternalProfilePinActive` (runtime only). |
-| `PadForge.App/App.xaml.cs` | `ParseProfileCommand`, the first-instance deferred apply, and the second-instance pipe forward. |
+| `PadForge.App/App.xaml.cs` | `ParseProfileCommand`, the first-instance `PendingProfileCommand` (applied by `InputService.Start`), and the second-instance pipe forward. |
 | `PadForge.App/Views/ProfilesPage.xaml` | The **Allow External Control by Launchers and Scripts** checkbox, under the auto-switch checkbox in the profile management card. |
 
 Tests: `PadForge.Tests/ExternalControlTests.cs`.
@@ -44,9 +44,9 @@ The pattern mirrors Lenovo Legion Toolkit's `LenovoLegionToolkit.WPF/CLI/IpcServ
 
 No Everyone, no anonymous. `ExternalControlTests.ThePipeGrantsAuthenticatedUsers` pins the SID and the right.
 
-`Start` runs `AcceptLoop` on a task. Each iteration creates a fresh server stream, waits for one connection, reads one line, runs the executor, writes one line, and disposes the stream. One command per connection. A bad connection never kills the loop. `Stop` cancels the token, connects a throwaway client for 200 ms to nudge a server parked in `WaitForConnectionAsync` (it does not observe the token until a connection arrives), and waits up to 2 s for the loop.
+`Start` runs `AcceptLoop` on a task. Each iteration creates a fresh server stream, waits for one connection, reads one line, runs the executor, writes one line, and disposes the stream. One command per connection. A bad connection never kills the loop. `Stop` cancels the token, connects a throwaway client (200 ms connect timeout) to nudge a server parked in `WaitForConnectionAsync` (it does not observe the token until a connection arrives), and waits up to 2 s for the loop.
 
-Framing is plain UTF-8. `ReadLineAsync` reads a byte at a time up to 1024 characters, ends on `\n`, drops `\r`, and trims. `WriteLineAsync` appends `\n` and flushes. `ExternalControlTests.TheRequestReadIsCapped` pins the cap.
+Requests and replies are UTF-8. `ReadLineAsync` collects bytes until `\n`, drops `\r`, stops at 1024 bytes, decodes the line as UTF-8, and trims it, so a profile name with non-ASCII characters matches by name. Splitting on those two bytes is safe because UTF-8 never uses them inside a multi-byte character. `WriteLineAsync` appends `\n`, encodes UTF-8, and flushes. `ExternalControlTests.TheRequestReadIsCapped` pins the cap.
 
 The server always answers, including on an empty line. An earlier guard skipped the write when the request was empty, and a client that sent a bare newline then blocked in its own read until the pipe closed, which reads as a hung launcher. The executor returning null or throwing yields `error internal`.
 
@@ -62,7 +62,7 @@ The pipe serves while the engine is running, the same gate as the DSU server:
 |---|---|
 | Engine start, opt-in on | `StartExternalControlIfEnabled` creates and starts the server. |
 | Checkbox turned on, engine running | Same. With the engine stopped nothing starts, and the next engine start brings the pipe up. |
-| Checkbox turned off | `StopExternalControl` disposes the server, clears the pin, invalidates the foreground cache. |
+| Checkbox turned off | `StopExternalControl` disposes the server, clears the pin, invalidates the foreground cache. With no server running it does nothing, so a pin stays. |
 | Engine stop | `StopExternalControl`, same effects. |
 | Reset to Defaults | Opt-in and pin both cleared. |
 
@@ -72,14 +72,14 @@ The pipe serves while the engine is running, the same gate as the DSU server:
 
 ## The grammar
 
-`InputService.ExecuteExternalControlCommand` runs off the UI thread and marshals every state touch through the dispatcher. Verbs and replies are fixed ASCII, never localized, since this is a machine interface (`ExternalControlTests.TheGrammarIsNeverLocalized`). The first space splits verb from argument, so a profile name may contain spaces. The verb is lowercased.
+`InputService.ExecuteExternalControlCommand` runs off the UI thread when the pipe calls it (the command-line form calls it from `InputService.Start`) and marshals every state touch through the dispatcher. Verbs and replies are fixed ASCII, never localized, since this is a machine interface (`ExternalControlTests.TheGrammarIsNeverLocalized`). The first space splits verb from argument, so a profile name may contain spaces. The verb is lowercased.
 
 | Request | Reply |
 |---|---|
 | `activate <profile name or id>` | `ok <name>` with the profile's stored name, or `error unknown-profile` |
 | `activate` with no argument | `error empty` |
 | `deactivate` | `ok default` |
-| `query` | `ok <name> pinned`, `ok <name> unpinned`, or `ok default unpinned` |
+| `query` | `ok <name> pinned` or `ok <name> unpinned`, where `<name>` is `default` when no named profile is active |
 | empty or whitespace line | `error empty` |
 | anything else | `error unknown-command` |
 | executor threw or returned null | `error internal` |
@@ -98,10 +98,10 @@ Without the pin the requester's case fails: focusing the game fires the foregrou
 |---|---|
 | Set | `ExternalActivate`, before the switch |
 | Cleared by the script | `ExternalDeactivate` |
-| Cleared by the user | `NoteManualProfileSwitch`, called ahead of a manual load from the Profiles page. The user outranks a script. |
-| Cleared by lifecycle | `StopExternalControl` (checkbox off, engine stop), Reset to Defaults, app restart |
+| Cleared by the user | `NoteManualProfileSwitch`, called ahead of every manual switch: the Profiles page Load button (Default included), the status-bar switcher, a controller profile shortcut, and a Workshop profile applied from the browse dialog. The user outranks a script. |
+| Cleared by lifecycle | `StopExternalControl` (checkbox off, engine stop) while the pipe is serving, Reset to Defaults, app restart. A pin set by a first-instance `--profile` while the pipe is off survives an engine stop. |
 
-Whenever the pin drops, the monitor's dedup cache is invalidated (`InvalidateCache`), because it holds pre-pin state and a still-focused matched game must re-fire its rule on the next check. `ExternalControlTests.PinReleaseInvalidatesTheForegroundCache` and `AManualSwitchReleasesThePin` pin both halves.
+When `ExternalDeactivate` or `StopExternalControl` drops the pin, the monitor's dedup cache is invalidated (`InvalidateCache`), because it holds pre-pin state and a still-focused matched game must re-fire its rule on the next check. A manual switch drops it through `NoteManualProfileSwitch`, which sets the monitor's manual override instead. `ExternalControlTests.PinReleaseInvalidatesTheForegroundCache` and `AManualSwitchReleasesThePin` pin both halves.
 
 The pin proof on the live bench needed a same-window positive control: with no pin, focusing the matched executable auto-switched and closing it reverted, so the monitor was demonstrably firing. With the pin held, the same open-and-close left the profile untouched.
 
@@ -118,7 +118,7 @@ The pin proof on the live bench needed a same-window positive control: with no p
 
 First instance: the command is stored as `PendingProfileCommand` and applied once at the tail of `InputService.Start`, directly in-process through `ExecuteExternalControlCommand`. That works with the pipe off, since the pipe is for driving an already-running instance. `ClearPendingProfileCommand` runs first so an engine restart does not re-apply it.
 
-Second instance: `OnStartup` sees the single-instance mutex taken. With a profile argument present it forwards the command over the pipe (`TryForwardExternalCommand`, 2 s connect timeout), prints the reply to the console, and exits with no "already running" box. If the pipe is not being served (external control off) it prints `error not-connected`. `ExternalControlTests.ASecondInstanceForwardsInsteadOfNagging` and `TheCommandLineMapsOntoTheSameGrammar` pin it.
+Second instance: `OnStartup` sees the single-instance mutex taken. With a profile argument present it forwards the command over the pipe (`TryForwardExternalCommand`, 2 s connect timeout), writes the reply to standard output, and exits with no "already running" box. If the pipe is not being served (external control off) it writes `error not-connected`. While an in-app update holds its lease on the exe, every launch, `--profile` included, exits quietly before the single-instance check (see [Updates Internals](updates-internals.md)). `ExternalControlTests.ASecondInstanceForwardsInsteadOfNagging` and `TheCommandLineMapsOntoTheSameGrammar` pin it.
 
 Because the exe is elevated, this form prompts UAC when called from a normal process. The docs steer launchers to the pipe and keep the exe form for elevated scripts and Task Scheduler jobs.
 
@@ -138,4 +138,4 @@ Because the exe is elevated, this form prompts UAC when called from a normal pro
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

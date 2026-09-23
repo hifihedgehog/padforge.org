@@ -56,9 +56,9 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 
 ### Colorways
 
-A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and persists on the pad's settings, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
+A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and is saved with the slot, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
 
-The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2); the Xbox 360, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two.
+The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2). The Xbox 360, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two. Both views read the same stored choice, and a view with no art for it draws its default colorway.
 
 ### Camera controls
 
@@ -76,7 +76,7 @@ Rotation is turntable-style. Horizontal drag controls yaw. Vertical drag control
 
 > **Tip:** Zoom in before using click-to-record so you can target small buttons accurately. Right-click drag to re-center after zooming. Click **Reset View** to snap back to the default angle.
 
-### Live highlighting
+### Live highlights
 
 | Element | What changes |
 |---|---|
@@ -107,7 +107,7 @@ During Map All (from [Button and Axis Mappings](mappings.md)), outputs flash ora
 
 ## 2D overlay
 
-Switch between 3D and 2D with the view-mode button in the top-left corner of the Preview tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlighting, click-to-record, hover previews, and Map All flash.
+Switch between 3D and 2D with the view-mode button in the top-left corner of the Preview tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlights, click-to-record, hover previews, and Map All flash.
 
 Each controller type has its own 2D layout that places buttons, sticks, triggers, and the touchpad over the base diagram. Click anywhere on a control to record a mapping, the same as in 3D.
 
@@ -115,9 +115,9 @@ Your choice of view persists across sessions.
 
 | Element | What changes |
 |---|---|
-| Sticks | Slide to follow input, no tilt. Hovering shows a quadrant wedge indicating which axis a click would map. |
+| Sticks | Slide to follow input, no tilt. Hovering lights the half of the stick a click would map, or its center for the stick button. |
 | Triggers | Fill rises from the bottom as you pull. Zero is empty, full pull is solid highlight. |
-| Buttons / D-Pad | Same accent-color highlighting as the 3D view. |
+| Buttons / D-Pad | A pressed-state overlay appears on the control, in the asset pack's cyan rather than the 3D view's accent color. |
 
 > **Tip:** The 2D view uses less GPU. Pick it on low-end hardware or if you prefer a flat diagram.
 
@@ -163,13 +163,13 @@ A Valve pad has two trackpads and the preview draws both. The first finger rides
 
 ## Nintendo preview
 
-Nintendo slots get both views, like Xbox and PlayStation. The 3D model is the Switch 2 Pro mesh, shared with the `switch2-pro` profiles. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay uses the Switch Pro artwork, which is its own set rather than the Switch 2 Pro one.
+Nintendo slots get both views, like Xbox and PlayStation. A Nintendo slot runs the original Switch Pro Controller profile or the Switch 2 Pro Controller profile, and both draw the Switch 2 Pro mesh in 3D. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay has a set per generation: the Switch Pro art for the original, and Switch 2 Pro art that adds the C button and the GL / GR grip tiles.
 
 ![Nintendo slot preview](../images/pad-nintendo-configbar.png)
 
-The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture. Live highlighting, hover quadrant wedges, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.
+The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture, plus C and GL / GR on the Switch 2 Pro. Live highlights, hover previews, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.
 
-A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Clicking a control on the diagram records into the matching raw row.
+A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture, plus C, GL, and GR on the Switch 2 Pro. Clicking a control on the diagram records into the matching raw row.
 
 ---
 
@@ -189,7 +189,7 @@ An Extended slot on a Valve profile gets both views, like the console families. 
 
 The 2D overlays follow one rule: a control the front art cannot show still gets a place to hover, click, and flash. The Steam Deck's R4 L4 R5 L5 and the 2026 pad's bumpers, triggers, and four rear buttons sit as labeled tiles in a column on each side of the body. The 2015 pad's D-Pad wedges are cut out of the left trackpad and its right stick is drawn over the right trackpad, with printed zone lines marking the wedges and each grip's outline. Those printed marks are decals: always visible, never a click target.
 
-Live highlighting, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See [Controller Slots](controller-slots.md#valve-personas) for the row list per pad.
+Live highlights, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See [Controller Slots](controller-slots.md#valve-personas) for the row list per pad.
 
 ---
 
@@ -232,11 +232,11 @@ The schematic represents the live HID layout for the Extended slot. Xbox or Play
 
 ## Keyboard + Mouse preview
 
-Keyboard+Mouse slots show a full ANSI QWERTY keyboard and mouse diagram. The 2D/3D toggle is hidden.
+Keyboard+Mouse slots show a full ANSI QWERTY keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to **Mouse Only** draws only the mouse, and one set to **Keyboard Only** draws only the keyboard.
 
 | Element | Description |
 |---|---|
-| Keyboard | Full layout including the numpad. Keys show labels, mapping tooltips, and accent highlighting when active. |
+| Keyboard | Full layout including the numpad. Keys show labels, mapping tooltips, and an accent highlight when active. |
 | LMB / RMB | Shaped around the scroll wheel gap. Accent highlight on press. |
 | Scroll wheel | Center pill for middle-click. Up / down arrows highlight during scroll output. |
 | Movement circle | Dot deflects to show mouse movement. Click a quadrant to map Mouse X or Mouse Y. |
@@ -274,4 +274,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

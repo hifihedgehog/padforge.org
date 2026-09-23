@@ -2,14 +2,14 @@
 
 *The OpenTrack UDP datagram, the FreeTrack 2.0 heap, the scaling into six axes, and the row that carries them.*
 
-The user-facing page is [Head Tracking (OpenTrack)](../features/head-tracking.md). This one is for whoever has to change the code.
+The user-facing page is [Head Tracking](../features/head-tracking.md). This one is for whoever has to change the code.
 
 | File | Role |
 |---|---|
 | `PadForge.Engine/Common/HeadPose.cs` | Pure decoders and scaling, no Windows calls |
 | `PadForge.App/Common/Input/HeadTrackerDevice.cs` | The row: UDP receive thread, FreeTrack polling, silence, status. `FreeTrackReader` lives in the same file. |
 | `PadForge.App/Common/Input/HeadTrackingRuntime.cs` | Static mirror of the Dashboard controls the poll thread reads |
-| `PadForge.App/ViewModels/DashboardViewModel.cs` | The five properties, their reset commands, and `HeadTrackingStatus` |
+| `PadForge.App/ViewModels/DashboardViewModel.cs` | The head-tracking properties (three input toggles, the OpenXR runtime picker, the UDP port, two shared ranges, six per-axis ranges), their reset commands, the Set Neutral command, and `HeadTrackingStatus` |
 | `PadForge.App/Services/InputService.cs` | `BuildHeadTrackerStatus`, `UpdateHeadTrackingStatus`, the Devices row status |
 | `PadForge.App/Services/SettingsService.cs` | `AppSettingsData.HeadTracking*`, `ProfileData.EnableHeadTracking`, `EnableHeadTrackingFreeTrack`, and format markers |
 | `PadForge.App/Services/WebControllerServer.cs` | `EnsureInboundFirewallRule`, shared with the web controller |
@@ -21,7 +21,7 @@ The user-facing page is [Head Tracking (OpenTrack)](../features/head-tracking.md
 
 | Member | Value |
 |---|---|
-| `Name` | `Head Tracker (OpenTrack)` |
+| `Name` | `Head Tracker (OpenTrack)`, or `Head Tracker (OpenXR)` when OpenXR is the only input on |
 | `DevicePath` | `headtrack://opentrack` |
 | `InstanceGuid` | MD5 of `pfheadtrack:opentrack` |
 | `ProductGuid` | MD5 of `pfheadtrack-product` |
@@ -36,7 +36,7 @@ The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and 
 
 ## Lifecycle: Phase 1i
 
-`UpdateHeadTrackerDevice` runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after two volatile reads. Otherwise it retires the runtime row when every input is off, the user removed it from the Devices page, or `ConfigVersion` no longer equals `HeadTrackingRuntime.Version`, and opens a fresh one from `FromCurrentSettings` while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in [OpenXR Input Internals](openxr-input-internals.md). Stored assignments and mappings survive retirement.
+`UpdateHeadTrackerDevice` runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after five volatile field reads and takes no lock. Otherwise it retires the runtime row when every input is off, the user removed it or either VR controller row from the Devices page, or `ConfigVersion` no longer equals `HeadTrackingRuntime.Version`, and opens a fresh one from `FromCurrentSettings` while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in [OpenXR Input Internals](openxr-input-internals.md). Stored assignments and mappings survive retirement.
 
 `FromCurrentSettings` reads `Version` first and the settings after it. The setters bump `Version` last, so the other order could capture the new version with the old port and the reconfigured check would never fire again for that change.
 
@@ -47,10 +47,13 @@ The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and 
 | `Enabled` | false | | UDP input changed |
 | `UdpPort` | 4242 | 1 to 65535 | Only while UDP is enabled |
 | `FreeTrackEnabled` | false | | Yes |
+| `OpenXrEnabled` | false | | Yes |
+| `OpenXrRuntimeManifest` | empty, the system default | | Only while OpenXR is enabled |
 | `RotationRangeDeg` | 90 | 1 to 180 | No, read live every poll |
 | `TranslationRangeCm` | 30 | 1 to 500 | No, read live every poll |
+| `SetAxisRange(axis, value)` | 0, follow the shared range | 1 to 180 for a rotation axis, 1 to 500 for a translation axis | No, read live every poll |
 
-`Open` opens only enabled inputs. UDP binds its socket, starts its receive thread, and queues the firewall rule. FreeTrack opens its mapping independently. The row opens even when both sources fail, so the status line can say why nothing arrives. `Dispose` runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks `ReceiveFrom`), a 50 ms courtesy join, then the FreeTrack reader.
+`Open` opens only enabled inputs. UDP binds its socket, starts its receive thread, and queues the firewall rule. FreeTrack opens its mapping independently. OpenXR creates the two VR controller rows and starts its session thread. The row opens even when every source fails, so the status line can say why nothing arrives. `Dispose` runs on the poll thread when the sweep retires the row: close the socket first (that is what unblocks `ReceiveFrom`), a 50 ms courtesy join, then the FreeTrack reader, then the OpenXR source, whose stop joins its thread for up to 2 s, and the two controller rows.
 
 ---
 
@@ -113,7 +116,7 @@ f <  0: round(32768 + f × 32768)
 
 So −range reads 0, rest reads 32768 (`AxisCenter`, the `CustomInputState` center, not the arithmetic midpoint), +range reads 65535, beyond either end clamps, and a non-positive range or a NaN reads rest.
 
-`FillAxes` applies the signs:
+`FillAxesPerAxis` applies the signs:
 
 | Axis | Source | Sign |
 |---|---|---|
@@ -124,7 +127,7 @@ So −range reads 0, rest reads 32768 (`AxisCenter`, the `CustomInputState` cent
 | 4 Y | `-pose[TY]` | stick orientation, up at the low end |
 | 5 Z | `pose[TZ]` | as sent |
 
-The two ranges are read from `HeadTrackingRuntime` on every poll, so a range edit applies without reopening the row.
+Each axis's range comes from `HeadTrackingRuntime.GetAxisRange` on every poll: the axis's own pinned range when one is set, the shared rotation or translation range otherwise. A range edit applies without reopening the row.
 
 ---
 
@@ -140,11 +143,16 @@ The two ranges are read from `HeadTrackingRuntime` on every poll, so a range edi
 
 | Condition | Text |
 |---|---|
-| `Source` is `Udp` | `Receiving over UDP from {peer}.` |
-| `Source` is `FreeTrack` | `Receiving from FreeTrack shared memory.` |
-| Neither, `UdpBindFailed` | `UDP port {port} is in use by another program.` plus ` The FreeTrack shared memory could not be opened either.` when `FreeTrackFailed` |
-| Neither, `FreeTrackFailed` | `Waiting for a tracker on UDP port {port}. The FreeTrack shared memory could not be opened.` |
-| Neither | `Waiting for a tracker on UDP port {port}.` |
+| `Source` is `Udp` | `Receiving over UDP from {peer}.` plus ` FreeTrack shared memory is unavailable.` when `FreeTrackFailed` |
+| `Source` is `FreeTrack` | `Receiving from FreeTrack shared memory.` plus ` UDP port {port} is in use by another program.` when UDP is on and `UdpBindFailed` |
+| `Source` is `OpenXr` | `Reading {runtime}` |
+| No pose, OpenXR the only input on | The OpenXR state line below |
+| No pose, UDP off | `FreeTrack shared memory is unavailable.` when `FreeTrackFailed`, else `Waiting for FreeTrack shared memory data.`, plus the OpenXR state line when OpenXR is on |
+| No pose, `UdpBindFailed` | `UDP port {port} is in use by another program.` plus ` The FreeTrack shared memory could not be opened either.` when `FreeTrackFailed` |
+| No pose, `FreeTrackFailed` | `Waiting for a tracker on UDP port {port}. The FreeTrack shared memory could not be opened.` |
+| No pose | `Waiting for a tracker on UDP port {port}.` plus the OpenXR state line when OpenXR is on |
+
+The OpenXR state line follows `OpenXrSourceState`: `No OpenXR runtime is installed` (`NoRuntime`), `The OpenXR runtime reports no headset` (`NoHeadset`), `This runtime cannot supply a background session` (`NotSupported`), `The OpenXR session failed. See the diagnostics log.` (`Failed`), `Waiting for {runtime} to report a tracked pose` (`Running` before the first pose), and `Starting the OpenXR session` otherwise.
 
 The same text lands in two places, each rebuilt only when `StatusVersion` moves. The Devices row's line comes from `UpdateDevicesRawState`, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Dashboard's `HeadTrackingStatus` comes from `UpdateHeadTrackingStatus` on the dashboard tick and reads `Stopped` (`Common_Stopped`) while the feature is off, the engine is down, or the row has not opened.
 
@@ -174,7 +182,8 @@ Real UDP and uniquely named shared-memory fixtures verify all four input combina
 | `Head tracker: UDP port <port> bind failed: <message>` | Bind failed |
 | `Head tracker: FreeTrack shared memory open` | Mapping opened |
 | `Head tracker: FreeTrack mapping failed <message>` | Mapping failed |
-| `Head tracker: pose #<n> via <Udp|FreeTrack> yaw= pitch= roll= x= y= z=` | Poses 1, 2, 4, ... 64, then every 4096th |
+| `Head tracker: FreeTrack mutex failed <message>` | The mutex failed to open, so the mapping is closed |
+| `Head tracker: pose #<n> via <Udp|FreeTrack|OpenXr> yaw= pitch= roll= x= y= z=` | Poses 1, 2, 4, ... 64, then every 4096th |
 
 ---
 
@@ -192,10 +201,10 @@ Confirmed by reading and by the replay tests: the datagram layout, the heap offs
 
 ## Related
 
-- [Head Tracking (OpenTrack)](../features/head-tracking.md) for the user-facing page
+- [Head Tracking](../features/head-tracking.md) for the user-facing page
 - [Headset Head Tracking Internals](headset-motion-internals.md) for the other head source, which is rotation only
 - [Input Pipeline](input-pipeline.md) for where Phase 1i sits
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

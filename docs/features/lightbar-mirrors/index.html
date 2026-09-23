@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2052,6 +2054,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2321,6 +2351,8 @@
       
         
           
+        
+      
         
       
         
@@ -2706,6 +2738,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3512,7 +3572,7 @@
 </tr>
 </tbody>
 </table>
-<p>A lightbar write counts only when the game marks it valid. The DualSense and DualSense Edge presets set a validity flag for the lightbar in each output report, the DualShock 4 preset sets a different one, and a report without the flag leaves the mirrored color alone. Until a game writes a color, the mirrors send nothing. When two PlayStation slots are live, the most recent write wins.</p>
+<p>A lightbar write counts only when the game marks it valid. The DualSense and DualSense Edge presets carry a lightbar validity flag in each output report, the DualShock 4 preset carries a different one, and a report without the flag leaves the mirrored color alone. Until a game writes a color, the mirrors send nothing. When two PlayStation slots are live, the most recent write wins.</p>
 <p>The Sensa feed reads the same rumble authority as <a href="../bass-shakers/">Bass Shakers</a>: the game's inbound rumble merged with the live vibration state, so test rumble counts too. Nothing about the physical controller's own rumble settings changes it.</p>
 <hr />
 <h2 id="razer-chroma">Razer Chroma<a class="headerlink" href="#razer-chroma" title="Permanent link">&para;</a></h2>
@@ -3605,7 +3665,7 @@
 <p>The footer under the row reads: <em>Requires Logitech G HUB (or Logitech Gaming Software). Works with any physical controller: the color comes from the virtual pad the game paints.</em></p>
 <hr />
 <h2 id="razer-sensa-hd-haptics">Razer Sensa HD Haptics<a class="headerlink" href="#razer-sensa-hd-haptics" title="Permanent link">&para;</a></h2>
-<p>Streams the rumble PadForge is sending to its virtual controllers into the Interhaptics engine, whose Razer provider renders it on Sensa HD devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja.</p>
+<p>Streams the rumble games send to PadForge's virtual controllers into the Interhaptics engine, whose Razer provider renders it on Sensa HD devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja.</p>
 <table>
 <thead>
 <tr>
@@ -3707,7 +3767,7 @@
 <li><a href="../../reference/sensa-haptics-internals/">Sensa Haptics Internals</a>: the Interhaptics bindings and the worker.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

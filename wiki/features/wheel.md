@@ -36,7 +36,7 @@ The rotation-range and RPM-LED rows are hidden for wheels PadForge drives throug
 
 ### Auto Centering
 
-Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge applies each tick, because Fanatec bases expose no firmware auto centering.
+Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge re-sends with each force update, because Fanatec bases expose no firmware auto centering.
 
 ### RPM shift LEDs
 
@@ -142,4 +142,4 @@ A supported wheel plugged into another PC and shared over [Remote Link](../guide
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

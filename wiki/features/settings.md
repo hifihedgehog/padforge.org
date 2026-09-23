@@ -48,7 +48,7 @@ The 2D-versus-3D controller view is set on the [Pad](controller-slots.md) page, 
 
 ## Window
 
-Controls how PadForge acts as a Windows app. Five switches here. Combine them with **Auto-start engine** (in the Input Engine card above) for a fully background install.
+Controls how PadForge acts as a Windows app. Five switches here. Combine them with **Auto-Start Engine on Launch** (in the Input Engine card below) for a fully background install.
 
 ### Minimize to System Tray
 
@@ -56,21 +56,36 @@ Sends PadForge to the notification area instead of the taskbar when you minimize
 
 ### Close to System Tray
 
-Keeps PadForge running when you click the window's close button or press Alt+F4. The window hides in the notification area and the engine keeps going. Double-click the tray icon or pick **Show** to bring the window back, and pick **Exit** in its menu to quit.
+Keeps PadForge running when you click the window's close button or press Alt+F4. The window hides in the notification area and the engine keeps going. Double-click the tray icon or pick **Show PadForge** to bring the window back, and pick **Exit** in its menu to quit.
 
 ### Always Show in System Tray
 
-Keeps the tray icon visible while the window is open, so **Show** and **Exit** in its menu are always one click away. Off by default. Pair it with **Close to System Tray** to quit from the tray without closing the window first.
+Keeps the tray icon visible while the window is open, so **Show PadForge** and **Exit** in its menu are always one click away. Off by default. Pair it with **Close to System Tray** to quit from the tray without closing the window first.
 
 ### Start Minimized
 
-Opens PadForge with the window hidden. Combine with **Minimize to system tray** for a launch with only a tray icon.
+Opens PadForge minimized to the taskbar. Combine with **Minimize to System Tray** for a launch with only a tray icon.
 
 ### Start at Login
 
 Registers a logon scheduled task so PadForge runs when you log into Windows. PadForge is elevated, and Windows will not launch an elevated app from a Startup-folder shortcut, so the task runs it at highest privileges with no UAC prompt.
 
-> **Hands-off setup:** turn on **Auto-start engine**, **Start minimized**, **Minimize to system tray**, and **Start at login**. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.
+> **Hands-off setup:** turn on **Auto-Start Engine on Launch**, **Start Minimized**, **Minimize to System Tray**, and **Start at Login**. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.
+
+---
+
+## Updates
+
+![The Updates card in Settings, after a check](../images/settings-updates.png)
+
+Checks GitHub for new versions of PadForge and installs them from here.
+
+- **Check for Updates Automatically** is on by default. It checks 20 seconds after launch and every 12 hours after that.
+- **Install Updates Automatically** downloads a new version in the background and installs it the next time PadForge starts. It shows only while the automatic check is on.
+- **Include Pre-Releases** also offers the dev build of the latest commit.
+- **Check Now** checks right away. **Install and Restart** and **Release Notes** appear once a newer version is found.
+
+PadForge contacts only GitHub, and the only data it sends is its own version number. [Updates](updates.md) covers what an install does, pre-releases, and every message the card can show.
 
 ---
 
@@ -100,7 +115,7 @@ If Flydigi's own software is running, PadForge says so on the device. Both can h
 
 Reads the G-keys and extra mouse buttons on Logitech gaming gear through the vendor's G-key SDK, and presents them as their own device row. See [Logitech G-Keys](logitech-g-keys.md).
 
-The SDK ships with **Logitech Gaming Software 8.55 or later**, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.
+The SDK ships with **Logitech Gaming Software 8.55 or later**, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, an SDK that was found and would not load, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.
 
 In Logitech Gaming Software, make PadForge the **persistent profile**. This is done in Logitech's software, not in PadForge, and it has nothing to do with PadForge's own [profiles](../guides/profiles.md). Without it the keys only reach PadForge while its window is in front.
 
@@ -119,6 +134,8 @@ How often the engine reads input, in milliseconds. Default: **1 ms** (~1000 Hz).
 Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most users should leave the default. Raise it when CPU is tight or the machine runs on battery.
 
 A number field with up / down arrows. Range: 1-16 ms.
+
+While the active profile sets its own polling rate, that rate applies instead, and a note under the field names the profile and its rate. See [Profiles](../guides/profiles.md).
 
 ### Inactivity Timeout
 
@@ -145,6 +162,11 @@ Assign runs the same path as dragging the device onto the slot: the auto-map, in
 PadForge never assigns a device on its own. Sim rigs and arcade setups carry many devices with no obvious home for each, so the app only ever offers, and both offers can be switched off here.
 
 
+## Handheld PC Buttons
+
+**Enable Handheld PC Buttons** is off by default, and off means nothing runs. On, the [Devices](devices.md) page gains a row for the paddles, menu keys and hotkeys a handheld gaming PC or laptop hides from games, learned by pressing each one once, and a row for the machine's own gyroscope when Windows reports one. See [Handheld PC Buttons](handheld-buttons.md).
+
+
 ## Battery Alerts
 
 Get notified when a controller's battery runs low, before it dies mid-game.
@@ -152,6 +174,7 @@ Get notified when a controller's battery runs low, before it dies mid-game.
 - **Notify When Battery Runs Low** turns the alerts on.
 - **Notify at or Below** sets the percentage that triggers one.
 - **Also Vibrate the Controller** adds a buzz on the pad itself, so the warning reaches you without looking at the screen.
+- **Test Notification** sends a sample alert at the threshold level through the same path, so you can check it without draining a battery.
 
 The same rumble drives **identify**: buzzing a device is how you tell which of several identical pads is which.
 
@@ -173,7 +196,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | Driver | What it does | When to install |
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
-| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 231 device profiles. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
+| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers. 231 device profiles, of which PadForge offers the 133 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
 | **Windows MIDI Services** | Sends MIDI virtual-controller output. Needs Windows 11 24H2 (build 26100)+. | You drive a DAW, synth, or other MIDI app from a controller. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
@@ -331,7 +354,7 @@ The **Save** button is there for two cases.
 
 | Field | Description |
 |---|---|
-| **App Version** | PadForge version |
+| **App Version** | PadForge's version and build, for example `4.5.3 (r3682@176208e)`: the version, the commit count and the short commit hash. A build made without git shows the version alone. |
 | **.NET Runtime** | .NET runtime in use |
 | **SDL Version** | SDL3 library version |
 
@@ -381,4 +404,4 @@ Opens the folder holding `diagnostics.log` and any snapshots.
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.3.*

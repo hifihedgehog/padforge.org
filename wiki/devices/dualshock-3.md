@@ -87,7 +87,7 @@ The **Record** button won't find these for you. Pressing a face button during a 
 
 ## Removing the controller
 
-Remove the controller from the [Devices](../features/devices.md) list and its Bluetooth pairing clears too, so it won't reconnect on its own later. To use it again, run the pairing above once more.
+Remove the controller from the [Devices](../features/devices.md) list and the Bluetooth pairing of every DualShock 3 on this PC clears too, so none of them reconnects on its own later. To use one again, run the pairing above once more.
 
 ---
 
@@ -125,4 +125,4 @@ One exception: with another DualShock 3 driver such as DsHidMini installed, the 
 
 ---
 
-*Last updated for PadForge 4.5.1.*
+*Last updated for PadForge 4.5.3.*

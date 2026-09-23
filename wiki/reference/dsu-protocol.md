@@ -22,7 +22,7 @@ public struct MotionSnapshot
 }
 ```
 
-Single slot's motion data, ready for DSU transmission. Units already in DSU conventions:
+One slot's motion data in SDL's sensor frame, after the Grip rotation. Units already in DSU conventions:
 
 | Measurement | Unit |
 |---|---|
@@ -44,9 +44,9 @@ SDL reports sensors in its own right-handed frame. The DSU packet negates five o
 
 Accel and gyro must be in the same coordinate frame. `AccelX` and `GyroPitch` reference the same physical axis. Only `GyroPitch` keeps its sign.
 
-The sign transform lives in `BuildPadDataPacket`, not in `MotionSnapshot`. The snapshot carries no protocol frame of its own, so the Sony HID report packers read the same values and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.
+The sign transform lives in `BuildPadDataPacket`, not in `MotionSnapshot`. The snapshot carries no protocol frame of its own, so the HID report packers read `InputManager.MotionSnapshots` in the same frame and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.
 
-One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. `UpdateMotionSnapshots` calls `SourceCoercion.ApplyMotionGrip` on the body accelerometer, and `GetPassthroughGyro` applies the same rotation inside its calibrated read.
+One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. `CaptureMotionSnapshot`, which `UpdateMotionSnapshots` reaches for every source it reads, calls `SourceCoercion.ApplyMotionGrip` on the body accelerometer, and `GetPassthroughGyro` applies the same rotation inside its calibrated read.
 
 ---
 
@@ -218,10 +218,10 @@ The `DsuMotionServerPort` and `EnableDsuMotionServer` values persist per-app pro
 public void BroadcastMotion(int slot, MotionSnapshot snapshot, bool connected)
 ```
 
-Called from the InputManager polling thread at ~1000 Hz. Primary data path.
+Called from the InputManager polling thread at ~1000 Hz. Primary data path. While the engine idles (a 20 Hz loop) or stays suspended because PadForge lost focus with background polling off (a 10 Hz loop), the same thread keeps calling it with a zeroed snapshot and a fresh timestamp, so subscribers receive neutral packets.
 
 1. Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).
-2. Updates `_slotConnected[slot]` and `_slotHasMotion[slot]`. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.
+2. When `connected` is false, replaces the snapshot with an empty one that keeps only `TimestampUs`. Then updates `_slotConnected[slot]` and `_slotHasMotion[slot]`. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.
 3. Returns if `_subCount == 0`. A volatile int read, no lock taken.
 4. Returns if `_anyAllSlotSubs` is false and this slot's bit is clear in `_slotSubMask` (`Volatile.Read`). With one client subscribed to one slot, the other slots' calls stop here instead of taking the lock.
 5. Calls `GetSubscribers(slot)`. Returns if the result is empty.
@@ -232,9 +232,10 @@ Called from the InputManager polling thread at ~1000 Hz. Primary data path.
 
 ### Snapshot Source
 
-`InputManager.UpdateMotionSnapshots()` fills `MotionSnapshots[padIndex]` each poll cycle, immediately before `BroadcastDsuMotion()` fans the values out to `BroadcastMotion()`. Two gates decide whether a broadcast ever carries `HasMotion = true`:
+`InputManager.UpdateMotionSnapshots()` fills two arrays each poll cycle: `MotionSnapshots[padIndex]` for the virtual controller's own motion report, and `DsuMotionSnapshots[padIndex]` for slots 0–3. `BroadcastDsuMotion()` runs immediately after it and fans `DsuMotionSnapshots` out to `BroadcastMotion()`, with `connected` taken from `IsSlotActive(padIndex)`: the slot is created, enabled, and holds an online assigned device. The slot's motion rows decide what DSU carries:
 
-- **Slot type**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its `motionCapableProfile` argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. `SettingsService.EnsureMotionRowsForAllSlots` sets that argument from `NintendoPreviewMap.IsValve(ProfileId)` on an Extended slot. Every other slot type has no motion rows, resolves no motion source, and broadcasts `HasMotion = false`.
+- **Motion rows**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its `motionCapableProfile` argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. `SettingsService.EnsureMotionRowsForAllSlots` sets that argument from `NintendoPreviewMap.IsValve(ProfileId)` on an Extended slot. When either row exists, DSU gets the same reconciled result as `MotionSnapshots`, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (`MaxAbs` by default, or `Sum`, `Average`, or `Custom`), after each source's own calibration, grip, and optional tuning.
+- **No motion rows**: every other slot type (Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots), and a motion-capable slot whose rows were removed, still broadcasts. `ReconcileAssignedMotion` reads every enabled, online device assigned to the slot and combines their readings axis by axis with the default `MaxAbs` combine. A device without the primary sensor contributes its aux sensor instead. `MotionSnapshots` stays empty for such a slot, so the virtual controller's own report carries no motion.
 - **Row source**: the row's source descriptor picks the sensor stream. `Motion Gyro` and `Motion Accel` read the body IMU. The aux variants `Motion Gyro L` (#252) and `Motion Accel L` (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".
 
 ---
@@ -296,7 +297,7 @@ Byte offset  Size  Field
 [24..N]      N     Slot indices (one byte each)
 ```
 
-Validated: `numPorts` must be in [0, MaxSlots] and the packet must contain enough bytes for all slot indices. Each valid slot triggers a `SendControllerInfo()` response.
+Validated: the declared frame must hold at least 24 bytes, `numPorts` must be in [0, MaxSlots], and the frame must contain enough bytes for all slot indices. Each valid slot (0–3) triggers a `SendControllerInfo()` response.
 
 #### Controller Info Response (Server to Client, type 0x100001)
 
@@ -332,16 +333,16 @@ Byte offset  Size  Field
 [22..27]     6     MAC address
 ```
 
-Validated: packet must be at least `HeaderSize + 12` (28) bytes.
+Validated: the declared frame must be at least `HeaderSize + 12` (28) bytes.
 
 **Subscription flags:**
 
 | Flag Value | Behavior |
 |---|---|
 | `0x00` | Subscribe to ALL pads (stored in `_allSlotSubscriptions`) |
-| `0x01` | Subscribe to specific slot by ID (stored in `_subscriptions[(endpoint, slot)]`) |
-| `0x02` | Subscribe by MAC (treated as all-slot subscription) |
-| `0x03` | Both `0x01` and `0x02` (subscribe to specific slot AND all-slot) |
+| `0x01` | Subscribe to specific slot by ID (stored in `_subscriptions[(endpoint, slot)]`). A slot byte of 4 or more registers nothing |
+| `0x02` | Subscribe by MAC. The server advertises five zero bytes followed by the slot number, so a MAC in that form with a slot below 4 subscribes to that one slot in `_subscriptions`. Any other MAC registers nothing |
+| `0x03` | Both `0x01` and `0x02`: the slot byte and the MAC each add their own per-slot subscription |
 
 #### Pad Data Response (Server to Client, type 0x100002)
 
@@ -419,14 +420,14 @@ Two subscription dictionaries, both protected by `lock(_subscriptions)`:
 
 | Dictionary | Key | Value | Populated By |
 |---|---|---|---|
-| `_subscriptions` | `(EndPoint, slotIndex)` | `Stopwatch.GetTimestamp()` | Pad data request with `flags & 0x01` |
-| `_allSlotSubscriptions` | `EndPoint` | `Stopwatch.GetTimestamp()` | Pad data request with `flags == 0` or `flags & 0x02` |
+| `_subscriptions` | `(EndPoint, slotIndex)` | `Stopwatch.GetTimestamp()` | Pad data request with `flags & 0x01`, or `flags & 0x02` with a MAC that names a slot |
+| `_allSlotSubscriptions` | `EndPoint` | `Stopwatch.GetTimestamp()` | Pad data request with `flags == 0` |
 
 ### Subscriber Resolution Algorithm
 
 1. Clear and reuse the poll-thread scratch collections: `_subScratch` (result list) and `_subSeenScratch` (dedup set). No per-call allocation.
-2. Acquire `lock(_subscriptions)`.
-3. Compute `timeoutTicks` from `Stopwatch.Frequency * ClientTimeoutMs / 1000` (5 s in high-resolution ticks).
+2. Compute `timeoutTicks` from `Stopwatch.Frequency * ClientTimeoutMs / 1000` (5 s in high-resolution ticks).
+3. Acquire `lock(_subscriptions)`.
 4. **Per-slot subscribers**: iterate `_subscriptions` for entries matching the requested slot. Expired entries go to a removal list. Active ones go to the result list and the seen set.
 5. **All-slot subscribers**: iterate `_allSlotSubscriptions`. Expired entries go to a removal list. Active ones go to the result if not already in the seen set (prevents duplicates).
 6. **Prune expired**: remove all expired entries from both dictionaries. If anything was pruned, call `RecountSubscribers()` so `_subCount` and the slot mask stay exact.
@@ -501,23 +502,23 @@ Background thread (`IsBackground = true`). Loops `ReceiveFrom()` with a 1024-byt
 
 ### Packet Validation Pipeline
 
-Each received packet passes five validation checks before dispatch. Stage 1 runs in `ReceiveLoop`, before `ProcessPacket` is called. Stages 2 through 5 run in `ProcessPacket`, which never re-checks length. Its first action reads `data[0..3]` for the magic bytes.
+Each received packet passes five validation checks before dispatch. Stage 1 runs in `ReceiveLoop`, before `ProcessPacket` is called. Stages 2 through 5 run in `ProcessPacket`, which does not repeat the minimum-size check. Its first action reads `data[0..3]` for the magic bytes.
 
 | Stage | Location | Check | Reject Condition |
 |---|---|---|---|
 | 1 | `ReceiveLoop` | Minimum size | `received < HeaderSize + 4` (20 bytes). Packet dropped via `continue`, `ProcessPacket` not called |
 | 2 | `ProcessPacket` | Magic bytes | Not `"DSUC"` (bytes `D`, `S`, `U`, `C`) |
 | 3 | `ProcessPacket` | Protocol version | `version > ProtocolVersion` (1001) |
-| 4 | `ProcessPacket` | Payload length | `HeaderSize + payloadLength > received` |
+| 4 | `ProcessPacket` | Payload length | `payloadLength < 4` (shorter than the message type), or `HeaderSize + payloadLength > received` |
 | 5 | `ProcessPacket` | CRC32 | Computed CRC does not match received CRC |
 
-After validation, dispatches based on message type:
+After validation, dispatches based on message type. The handlers get `frameLength = HeaderSize + payloadLength`, not the datagram length, so bytes past the declared frame sit outside the CRC and never reach a handler:
 
 | Message Type | Handler |
 |---|---|
 | `0x100000` | `HandleVersionRequest(sender)` |
-| `0x100001` | `HandleControllerInfoRequest(data, length, sender)` |
-| `0x100002` | `HandlePadDataRequest(data, length, sender)` |
+| `0x100001` | `HandleControllerInfoRequest(data, frameLength, sender)` |
+| `0x100002` | `HandlePadDataRequest(data, frameLength, sender)` |
 
 ### Exception Handling
 
@@ -560,13 +561,13 @@ graph LR
 | `_padPacketScratch`, `_subScratch`, `_subSeenScratch` | Polling thread only (BroadcastMotion call chain). No lock needed |
 | `_running` flag | `volatile bool`. No lock needed, provides happens-before ordering |
 | `_slotConnected`, `_slotHasMotion` | Written by polling thread (BroadcastMotion), read by receive thread (SendControllerInfo). No lock. Benign race (stale value at worst) |
-| `_packetCounters` | Accessed only from BroadcastMotion (single caller per slot). No lock needed. |
+| `_packetCounters` | Incremented only in BroadcastMotion's packet build (single caller per slot) and zeroed by `Stop()`. No lock. |
 
 ---
 
 ## Slot Limits
 
-The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (`InputManager.MaxPads = 16`), but only slots 0–3 participate in DSU broadcasts. `InputManager.BroadcastDsuMotion()` loops over all 16 pads each frame and calls `BroadcastMotion(padIndex, ...)`. The server drops slots 4–15 through its `slot >= MaxSlots` guard, so those 12 calls return after a single range check with no lock and no allocation.
+The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (`InputManager.MaxPads = 16`), but only slots 0–3 participate in DSU broadcasts. `InputManager.BroadcastDsuMotion()` loops over `DsuMotionSnapshots`, which holds `DsuMotionServer.MaxSlots` (4) entries, and calls `BroadcastMotion(padIndex, ...)` once per entry. Slots 4–15 never reach the server. Its `slot >= MaxSlots` guard stays as a backstop.
 
 ---
 
@@ -592,7 +593,7 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 1. Enable the DSU motion server on the PadForge Dashboard (default port 26760).
 2. Run `DsuDiag.exe`. Connects to `localhost:26760`.
-3. Sends a version request, then subscribes with `flags = 0` (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. Targets `net8.0`.
+3. Sends a version request, then subscribes with `flags = 0` (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. `DsuDiag verdict [slot] [seconds]` instead reads the hold from the accelerometer while the controller sits still, then records one rotation (5 s by default) and reports the peak rate and integrated angle per gyro axis. Targets `net8.0`.
 
 ---
 
@@ -607,4 +608,4 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

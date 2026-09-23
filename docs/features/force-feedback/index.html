@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2308,6 +2310,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2577,6 +2607,8 @@
       
         
           
+        
+      
         
       
         
@@ -2962,6 +2994,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -4192,7 +4252,7 @@
 <h2 id="playstation-pads">PlayStation pads<a class="headerlink" href="#playstation-pads" title="Permanent link">&para;</a></h2>
 <p>When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble and lightbar together in one update to the pad, whatever the slot's output type. On the DualSense family that same update carries the adaptive triggers, the player row, and the mic LED. A DualShock 4 has none of those. Game rumble and your effect settings arrive in sync, so nothing fights over the device.</p>
 <h3 id="playstation-pads-through-a-padix-converter">PlayStation pads through a Padix converter<a class="headerlink" href="#playstation-pads-through-a-padix-converter" title="Permanent link">&para;</a></h3>
-<p>PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Feedback tab appears for the converter whether or not that package is installed.</p>
+<p>PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Force Feedback tab appears for the converter whether or not that package is installed.</p>
 <hr />
 <h2 id="constant-force">Constant Force<a class="headerlink" href="#constant-force" title="Permanent link">&para;</a></h2>
 <p>A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. Its angle sets direction: Y at +1 points forward, X at +1 points right.</p>
@@ -4330,7 +4390,7 @@
 <tr>
 <td><strong>Activator</strong></td>
 <td>A button picker plus an Activator Mode (Hold / Toggle / Release to Aim / Always On)</td>
-<td>Gates when the routing is live. An empty activator stays engaged all the time.</td>
+<td>Gates when the routing is live. An empty activator keeps the routing engaged in every mode except Toggle, which needs a button to switch it on.</td>
 </tr>
 </tbody>
 </table>
@@ -4353,7 +4413,7 @@
 <!-- SCREENSHOT: pad-bass-shakers -->
 <p><img alt="Rumble to Audio routing game feedback to a bass shaker" src="../../images/pad-bass-shakers.png" /></p>
 <p>The <strong>Bass Shakers</strong> tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.</p>
-<p>Unlike the Force Feedback tab, Bass Shakers settings are <strong>per slot</strong>, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the <strong>Force Feedback</strong> toggle with <strong>Customize</strong> on, or a catalog profile that ships with it). Extended slots without force feedback, Keyboard+Mouse, and MIDI hide it.</p>
+<p>Unlike the Force Feedback tab, Bass Shakers settings are <strong>per slot</strong>, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the <strong>Force Feedback</strong> toggle with <strong>Customize</strong> on, or a catalog profile that ships with it) and the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes directly. Other Extended slots, Keyboard+Mouse, and MIDI hide it.</p>
 <h3 id="turning-it-on_1">Turning it on<a class="headerlink" href="#turning-it-on_1" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Open the <strong>Bass Shakers</strong> tab for the slot.</li>
@@ -4505,7 +4565,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: wider help with rumble issues.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

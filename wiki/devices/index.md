@@ -7,7 +7,7 @@ a slot, play. The pages in this section exist for the families that have
 extra capabilities or extra setup steps worth their own walkthrough.
 
 Looking for one specific controller, wheel or stick? [**Supported Devices**](supported.md)
-lists every one PadForge knows by name, all 711 of them, grouped by family.
+lists every one PadForge knows by name, all 713 of them, grouped by family.
 
 | Family | Why it has a page |
 | --- | --- |
@@ -29,4 +29,4 @@ A handheld gaming PC's hidden paddles and menu keys have their own feature
 page, [Handheld PC Buttons](../features/handheld-buttons.md), because they
 are learned on the machine rather than recognized by USB identity.
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

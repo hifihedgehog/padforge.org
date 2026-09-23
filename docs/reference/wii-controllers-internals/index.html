@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3713,7 +3773,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Views/PairDeviceDialog.xaml.cs</code></td>
-<td>The Fluent dialog, family-selectable via a Controller Family combo (index 0 Nintendo Wii, 1 Sony DualShock 3, 2 PlayStation Move / Navigation). The Wii branch loops <code>RunPairingPass</code> on a background thread until a controller pairs or the user cancels. Either Sony family hides the temporary-pairing checkbox and the live found-list, and routes <code>Pair_Click</code> to <code>PairDs3</code> / <code>Ds3PairingService</code> instead (out of scope here).</td>
+<td>The Fluent dialog, family-selectable via a Controller Family combo (index 0 Nintendo Wii, 1 Sony DualShock 3, 2 PlayStation Move / Navigation). The Wii branch runs <code>RunPairingScan</code> on a background thread, which loops <code>RunPairingPass</code> until a controller pairs, a pass reports an error, or the user cancels. Either Sony family hides the temporary-pairing checkbox and the live found-list, and routes <code>Pair_Click</code> to <code>PairDs3</code> / <code>Ds3PairingService</code> instead (out of scope here).</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/InputManager.cs</code></td>
@@ -3721,7 +3781,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/MainWindow.xaml.cs</code></td>
-<td>The <code>PairRequested</code> handler that opens the dialog then runs the rescan, and the 100 ms <code>_sdlPumpTimer</code>.</td>
+<td>The <code>PairRequested</code> handler that opens the dialog, then runs the rescan when a Wii controller paired, and the 100 ms <code>_sdlPumpTimer</code>.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.cs</code></td>
@@ -3753,7 +3813,7 @@
 <hr />
 <h2 id="wiipairingservice-one-inquiry-and-pair-pass">WiiPairingService: one inquiry-and-pair pass<a class="headerlink" href="#wiipairingservice-one-inquiry-and-pair-pass" title="Permanent link">&para;</a></h2>
 <p><em>The <code>RunPairingPass</code> flow, the inquiry parameters, and why a pass returns every device state.</em></p>
-<p><code>RunPairingPass(bool temporary, CancellationToken ct)</code> runs a single Bluetooth inquiry and tries to bond every Wii controller it finds in pairing mode. The sequence is <code>BluetoothFindFirstRadio</code> to get the host radio handle, <code>BluetoothGetRadioInfo</code> to read the host address and name, then <code>BluetoothFindFirstDevice</code> and <code>BluetoothFindNextDevice</code> to walk the inquiry results. The inquiry uses <code>cTimeoutMultiplier = 2</code>, about 2.5 seconds per pass. The call blocks for that duration, so the dialog runs it on a background thread through <code>Task.Run</code>.</p>
+<p><code>RunPairingPass(bool temporary, CancellationToken ct)</code> runs a single Bluetooth inquiry and tries to bond every Wii controller it finds in pairing mode. The sequence is <code>BluetoothFindFirstRadio</code> to get the host radio handle, <code>BluetoothGetRadioInfo</code> to read the host address and name, then <code>BluetoothFindFirstDevice</code> and <code>BluetoothFindNextDevice</code> to walk the inquiry results. The inquiry uses <code>cTimeoutMultiplier = 2</code>, about 2.5 seconds per pass. The call blocks for that duration, so the dialog runs <code>RunPairingScan</code>, which loops the passes, on a background thread through <code>Task.Run</code>.</p>
 <p>The search parameters set every return flag, unknown devices included:</p>
 <table>
 <thead>
@@ -3797,8 +3857,8 @@
 </tbody>
 </table>
 <p>Filtering out the remembered state would hide a controller left half-paired by an earlier attempt, so it could never be reset and re-paired. Returning all four states is what makes that record visible to the cleanup step.</p>
-<p><code>RunPairingPass</code> returns a <code>PairPassResult</code> carrying the Wii controllers seen this pass (<code>Found</code>), the ones it bonded (<code>Paired</code>), the total device count from the inquiry (<code>DiscoveredCount</code>), and an <code>Error</code> string (<code>no-radio</code>, <code>radio-info</code>, <code>no-bluetooth-stack</code>, or <code>exception</code>, null on success). <code>PairDeviceDialog</code> loops passes, accumulating found controllers in a <code>HashSet</code>, and stops on the first pass that bonds one or when the user cancels. Dolphin runs a fixed three iterations per click. PadForge instead loops until success or cancel.</p>
-<p>One cross-cutting side effect matters when a DualShock 3 is in play. If BthPS3 is installed (<code>Ds3DriverInstaller.IsBthPs3Installed()</code>), the pass forces its PSM patching off for the whole inquiry-and-pair pass (issue #199) and restores it to policy in the outer <code>finally</code> on every exit path (<code>Ds3PairingService.ReconcilePsmPatchForCrashSafety("wii-pass-end")</code>). A Wii Remote's incoming HID connection must not enter BthPS3's identify/deny/destroy path, where the upstream use-after-free lives, so with patching off the Wii's standard HID PSMs pass through to the inbox Bluetooth stack, which is where a Wii Remote belongs anyway. See <a href="../../features/driver-management/">Driver Management</a> for the BthPS3 crash-safety detail.</p>
+<p><code>RunPairingPass</code> returns a <code>PairPassResult</code> carrying the Wii controllers seen this pass (<code>Found</code>), the ones it bonded (<code>Paired</code>), the total device count from the inquiry (<code>DiscoveredCount</code>), and an <code>Error</code> string (<code>no-radio</code>, <code>radio-info</code>, <code>no-bluetooth-stack</code>, <code>psm-verification-failed</code>, or <code>exception</code>, null on success). <code>RunPairingScan</code> loops passes and stops on the first pass that bonds a controller or reports an error, or when the user cancels. A pass that ends at once is paced to one per 100 ms. <code>PairDeviceDialog</code> accumulates the found controllers from each pass's progress report in a <code>HashSet</code>. Dolphin runs a fixed three iterations per click. PadForge instead loops until success, an error, or cancel.</p>
+<p>One cross-cutting side effect matters when a DualShock 3 is in play. The whole scan holds a <code>PsmPatchCoordinator.Suspension</code> from <code>Ds3DriverInstaller.SuspendPsmEnablingForWii()</code> (issue #199), and PadForge's own requests to enable PSM patching are deferred while it is held. Before each step of a pass, <code>CanContinuePairing</code> has the suspension verify the BthPS3 PSM filter: the first check disables patching on every radio and reads the state back, and later checks fail if the filter instances changed or patching came back on. A machine with neither BthPS3 driver installed passes. A failed check stops the scan with <code>psm-verification-failed</code>, which the dialog shows as <em>Wii pairing could not keep PS3 Bluetooth support paused. Close other controller tools and try again.</em> When the scan ends, releasing the suspension restores policy through <code>Ds3PairingService.ReconcilePsmPatchForCrashSafety("wii-scan-end")</code>. A Wii Remote's incoming HID connection must not enter BthPS3's identify/deny/destroy path, where the upstream use-after-free lives, so with patching off the Wii's standard HID PSMs pass through to the inbox Bluetooth stack, which is where a Wii Remote belongs anyway. See <a href="../../features/driver-management/">Driver Management</a> for the BthPS3 crash-safety detail.</p>
 <hr />
 <h2 id="discovery-match">Discovery match<a class="headerlink" href="#discovery-match" title="Permanent link">&para;</a></h2>
 <p><em>How a pass decides a discovered device is a Wii controller and not a stray keyboard.</em></p>
@@ -3873,7 +3933,7 @@
 <hr />
 <h2 id="cleanup-of-unusable-records">Cleanup of unusable records<a class="headerlink" href="#cleanup-of-unusable-records" title="Permanent link">&para;</a></h2>
 <p><em>How a stale half-paired record is forgotten so the next pass can rediscover it.</em></p>
-<p>This is Dolphin's <code>RemoveUnusableWiimoteBluetoothDevices</code>, inlined into the pass loop. For each discovered Wii controller:</p>
+<p>This follows the algorithm of Dolphin's <code>RemoveUnusableWiimoteBluetoothDevices</code>, run inside the pass loop. For each discovered Wii controller:</p>
 <ul>
 <li><strong>Already connected</strong> (<code>fConnected != 0</code>): leave it alone. It is working. The pass counts it as found and paired and moves on.</li>
 <li><strong>Remembered but not authenticated and not connected</strong> (<code>fRemembered != 0 &amp;&amp; fAuthenticated == 0</code>): this record cannot reconnect and it blocks re-pairing. <code>BluetoothRemoveDevice(ref deviceInfo.Address)</code> forgets it, and the next pass rediscovers it fresh.</li>
@@ -3956,7 +4016,7 @@
 <hr />
 <h2 id="iswiiconnected-and-pairing-narration">IsWiiConnected and pairing narration<a class="headerlink" href="#iswiiconnected-and-pairing-narration" title="Permanent link">&para;</a></h2>
 <p><em>An uncalled public helper, and where the pairing narration actually goes.</em></p>
-<p><code>IsWiiConnected()</code> is a fast state read with <code>fIssueInquiry = 0</code>, so it returns the radio's current connection state without paying the 2.5-second inquiry. Its intent, stated in the doc comment, is to time the SDL re-enumeration to the moment the controller actually connects (which happens on a button press, possibly seconds after the pair completes) rather than a fixed delay. It has no caller today. The shipped post-pair recovery uses the fixed-cadence <code>RescanWiiControllers</code> instead, which the <code>MainWindow</code> <code>PairRequested</code> handler runs unconditionally after the dialog closes.</p>
+<p><code>IsWiiConnected()</code> is a fast state read with <code>fIssueInquiry = 0</code>, so it returns the radio's current connection state without paying the 2.5-second inquiry. Its intent, stated in the doc comment, is to time the SDL re-enumeration to the moment the controller actually connects (which happens on a button press, possibly seconds after the pair completes) rather than a fixed delay. It has no caller today. The shipped post-pair recovery uses the fixed-cadence <code>RescanWiiControllers</code> instead, which the <code>MainWindow</code> <code>PairRequested</code> handler runs after the dialog closes when the scan paired a Wii controller (<code>PairDeviceDialog.PairedWii</code>). A canceled dialog and the DualShock 3 and Move ceremonies skip it, because the toggle drops every connected Wii Remote for about 11 seconds.</p>
 <p>PadForge writes no pairing log file. The private <code>Log</code> helper is a one-line delegate to the in-memory diagnostics ring: <code>SdlDiagLog.WriteLine("WIIPAIR " + message)</code>, the same crash-context buffer the rest of the app narrates into. That ring is the only narration sink. The dialog shows only the pass result (found and paired names from <code>PairPassResult</code>), not the per-step handshake trace. There is no <code>LogPath</code>, no <code>LogLine</code>, and no lock or <code>try/catch</code> around logging, because a ring write does not throw the way a file write can. <code>RescanWiiControllers</code> does not narrate.</p>
 <hr />
 <h2 id="the-reading-side-the-sdl-wii-hint">The reading side: the SDL Wii hint<a class="headerlink" href="#the-reading-side-the-sdl-wii-hint" title="Permanent link">&para;</a></h2>
@@ -4109,7 +4169,7 @@
 <p>Two consequences follow:</p>
 <ul>
 <li><strong>The zero is PadForge's.</strong> <code>GyroCalibratorService</code> auto-runs a 1500 ms at-rest sample the first time a slot sees the remote, and <code>GetPassthroughGyro</code> subtracts the measured bias in both passthrough toggle states. The calibrator rejects a bias above <code>MaxPlausibleBias</code> (0.15 rad/s) and writes nothing, so a remote whose true zero sits further from 8192 than that stays uncorrected. Whether a real Motion Plus zero can exceed that gate has not been measured.</li>
-<li><strong>The scale is fixed.</strong> Against the calibration block of Dolphin's reference unit (0x4400 &gt;&gt; 2 = 4352 counts per 270 degrees per second), the fixed slow scale reads about 13% low, and the yaw axis is a different sensor chip with its own scale. Derived from source, not measured on a remote.</li>
+<li><strong>The scale is fixed.</strong> Against the calibration block of Dolphin's reference unit (0x4400 &gt;&gt; 2 = 4352 counts per 270 degrees per second), the fixed slow scale reads about 13% low, and the yaw axis is a different sensor chip with its own scale. Computed from the source, not measured on a remote.</li>
 </ul>
 <p>A fork patch would read the block once after activation, use the per-axis zero and scale, and fall back to today's constants when the checksum fails. It is not filed.</p>
 <hr />
@@ -4124,7 +4184,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

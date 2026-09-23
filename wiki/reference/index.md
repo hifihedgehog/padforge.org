@@ -22,8 +22,9 @@ Nothing here is required reading for using the app.
 | Page | Covers |
 | --- | --- |
 | [SDL3 Integration](sdl3-integration.md) | The input backend and the PadForge SDL3 fork |
-| [HIDMaestro Deep Dive](hidmaestro-deep-dive.md) | The virtual-controller bus driver |
+| [HIDMaestro Deep Dive](hidmaestro-deep-dive.md) | The user-mode (UMDF2) driver behind the virtual controllers |
 | [Driver Installation Internals](driver-installation-internals.md) | How install, repair, and removal work |
+| [Updates Internals](updates-internals.md) | The update check, the checksum, the helper that replaces the running exe, and the cleanup |
 
 ## Protocols and subsystems
 
@@ -52,4 +53,4 @@ Nothing here is required reading for using the app.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

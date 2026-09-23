@@ -16,7 +16,7 @@
         <link rel="prev" href="../driver-management/">
       
       
-        <link rel="next" href="../../devices/">
+        <link rel="next" href="../updates/">
       
       
         
@@ -988,6 +988,8 @@
       
         
           
+        
+      
         
       
         
@@ -2078,6 +2080,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#input-engine" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2165,6 +2178,17 @@
     <span class="md-ellipsis">
       
         Assignment Prompts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handheld-pc-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handheld PC Buttons
       
     </span>
   </a>
@@ -2468,6 +2492,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2737,6 +2789,8 @@
       
         
           
+        
+      
         
       
         
@@ -3122,6 +3176,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3879,6 +3961,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#input-engine" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3966,6 +4059,17 @@
     <span class="md-ellipsis">
       
         Assignment Prompts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handheld-pc-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handheld PC Buttons
       
     </span>
   </a>
@@ -4349,20 +4453,31 @@
 <p>The 2D-versus-3D controller view is set on the <a href="../controller-slots/">Pad</a> page, not here. See <a href="../visualization/">3D and 2D Visualization</a>.</p>
 <hr />
 <h2 id="window">Window<a class="headerlink" href="#window" title="Permanent link">&para;</a></h2>
-<p>Controls how PadForge acts as a Windows app. Five switches here. Combine them with <strong>Auto-start engine</strong> (in the Input Engine card above) for a fully background install.</p>
+<p>Controls how PadForge acts as a Windows app. Five switches here. Combine them with <strong>Auto-Start Engine on Launch</strong> (in the Input Engine card below) for a fully background install.</p>
 <h3 id="minimize-to-system-tray">Minimize to System Tray<a class="headerlink" href="#minimize-to-system-tray" title="Permanent link">&para;</a></h3>
 <p>Sends PadForge to the notification area instead of the taskbar when you minimize. Double-click the tray icon to bring the window back.</p>
 <h3 id="close-to-system-tray">Close to System Tray<a class="headerlink" href="#close-to-system-tray" title="Permanent link">&para;</a></h3>
-<p>Keeps PadForge running when you click the window's close button or press Alt+F4. The window hides in the notification area and the engine keeps going. Double-click the tray icon or pick <strong>Show</strong> to bring the window back, and pick <strong>Exit</strong> in its menu to quit.</p>
+<p>Keeps PadForge running when you click the window's close button or press Alt+F4. The window hides in the notification area and the engine keeps going. Double-click the tray icon or pick <strong>Show PadForge</strong> to bring the window back, and pick <strong>Exit</strong> in its menu to quit.</p>
 <h3 id="always-show-in-system-tray">Always Show in System Tray<a class="headerlink" href="#always-show-in-system-tray" title="Permanent link">&para;</a></h3>
-<p>Keeps the tray icon visible while the window is open, so <strong>Show</strong> and <strong>Exit</strong> in its menu are always one click away. Off by default. Pair it with <strong>Close to System Tray</strong> to quit from the tray without closing the window first.</p>
+<p>Keeps the tray icon visible while the window is open, so <strong>Show PadForge</strong> and <strong>Exit</strong> in its menu are always one click away. Off by default. Pair it with <strong>Close to System Tray</strong> to quit from the tray without closing the window first.</p>
 <h3 id="start-minimized">Start Minimized<a class="headerlink" href="#start-minimized" title="Permanent link">&para;</a></h3>
-<p>Opens PadForge with the window hidden. Combine with <strong>Minimize to system tray</strong> for a launch with only a tray icon.</p>
+<p>Opens PadForge minimized to the taskbar. Combine with <strong>Minimize to System Tray</strong> for a launch with only a tray icon.</p>
 <h3 id="start-at-login">Start at Login<a class="headerlink" href="#start-at-login" title="Permanent link">&para;</a></h3>
 <p>Registers a logon scheduled task so PadForge runs when you log into Windows. PadForge is elevated, and Windows will not launch an elevated app from a Startup-folder shortcut, so the task runs it at highest privileges with no UAC prompt.</p>
 <blockquote>
-<p><strong>Hands-off setup:</strong> turn on <strong>Auto-start engine</strong>, <strong>Start minimized</strong>, <strong>Minimize to system tray</strong>, and <strong>Start at login</strong>. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.</p>
+<p><strong>Hands-off setup:</strong> turn on <strong>Auto-Start Engine on Launch</strong>, <strong>Start Minimized</strong>, <strong>Minimize to System Tray</strong>, and <strong>Start at Login</strong>. PadForge launches at login, starts the engine, and sits in the tray. Virtual controllers are live by the time you open a game.</p>
 </blockquote>
+<hr />
+<h2 id="updates">Updates<a class="headerlink" href="#updates" title="Permanent link">&para;</a></h2>
+<p><img alt="The Updates card in Settings, after a check" src="../../images/settings-updates.png" /></p>
+<p>Checks GitHub for new versions of PadForge and installs them from here.</p>
+<ul>
+<li><strong>Check for Updates Automatically</strong> is on by default. It checks 20 seconds after launch and every 12 hours after that.</li>
+<li><strong>Install Updates Automatically</strong> downloads a new version in the background and installs it the next time PadForge starts. It shows only while the automatic check is on.</li>
+<li><strong>Include Pre-Releases</strong> also offers the dev build of the latest commit.</li>
+<li><strong>Check Now</strong> checks right away. <strong>Install and Restart</strong> and <strong>Release Notes</strong> appear once a newer version is found.</li>
+</ul>
+<p>PadForge contacts only GitHub, and the only data it sends is its own version number. <a href="../updates/">Updates</a> covers what an install does, pre-releases, and every message the card can show.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>Controls the polling loop that reads physical controllers, runs mappings and deadzones, and writes the virtual controllers.</p>
@@ -4377,7 +4492,7 @@
 <p>If Flydigi's own software is running, PadForge says so on the device. Both can hold the same controller interface, and a Vader 5 Pro has been reported dropping and reconnecting repeatedly while both had access. Stop the Flydigi service while using PadForge, or keep the controller hidden and take the service out of the HidHide whitelist.</p>
 <h3 id="read-logitech-g-keys">Read Logitech G-Keys<a class="headerlink" href="#read-logitech-g-keys" title="Permanent link">&para;</a></h3>
 <p>Reads the G-keys and extra mouse buttons on Logitech gaming gear through the vendor's G-key SDK, and presents them as their own device row. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</p>
-<p>The SDK ships with <strong>Logitech Gaming Software 8.55 or later</strong>, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.</p>
+<p>The SDK ships with <strong>Logitech Gaming Software 8.55 or later</strong>, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, an SDK that was found and would not load, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.</p>
 <p>In Logitech Gaming Software, make PadForge the <strong>persistent profile</strong>. This is done in Logitech's software, not in PadForge, and it has nothing to do with PadForge's own <a href="../../guides/profiles/">profiles</a>. Without it the keys only reach PadForge while its window is in front.</p>
 <h3 id="polling-interval">Polling Interval<a class="headerlink" href="#polling-interval" title="Permanent link">&para;</a></h3>
 <p>How often the engine reads input, in milliseconds. Default: <strong>1 ms</strong> (~1000 Hz).</p>
@@ -4419,6 +4534,7 @@
 </table>
 <p>Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most users should leave the default. Raise it when CPU is tight or the machine runs on battery.</p>
 <p>A number field with up / down arrows. Range: 1-16 ms.</p>
+<p>While the active profile sets its own polling rate, that rate applies instead, and a note under the field names the profile and its rate. See <a href="../../guides/profiles/">Profiles</a>.</p>
 <h3 id="inactivity-timeout">Inactivity Timeout<a class="headerlink" href="#inactivity-timeout" title="Permanent link">&para;</a></h3>
 <p>Seconds a virtual controller stays alive after all of its mapped physical devices go offline. Default: <strong>60 s</strong>. Set to <strong>0</strong> to disable (the controller stays around indefinitely). One timeout governs every virtual controller type: Xbox, PlayStation, Nintendo, Extended, VR, Keyboard + Mouse, and MIDI.</p>
 <p>When a slot's mapped pads disconnect (laptop sleeps, USB hub unplugged, battery dies), PadForge holds the virtual controller open for this many seconds. If the devices come back, the controller stays in place. If not, PadForge tears it down to free its kernel slot (the XInput slot, for Xbox types). Surviving controllers of the same type then re-bind to lower kernel slots so the order stays contiguous, and shift back as slots reactivate. Slot configuration is kept either way. Plug the devices back in and the virtual controller comes back on its own.</p>
@@ -4434,12 +4550,15 @@
 </ul>
 <p>Assign runs the same path as dragging the device onto the slot: the auto-map, input hiding defaults, and the Mappings tab refresh all happen exactly as they do for a dropped device. Not Now dismisses that device for that slot until PadForge restarts. Neither prompt fires on startup or when the engine restarts, since both re-enumerate every device at once.</p>
 <p>PadForge never assigns a device on its own. Sim rigs and arcade setups carry many devices with no obvious home for each, so the app only ever offers, and both offers can be switched off here.</p>
+<h2 id="handheld-pc-buttons">Handheld PC Buttons<a class="headerlink" href="#handheld-pc-buttons" title="Permanent link">&para;</a></h2>
+<p><strong>Enable Handheld PC Buttons</strong> is off by default, and off means nothing runs. On, the <a href="../devices/">Devices</a> page gains a row for the paddles, menu keys and hotkeys a handheld gaming PC or laptop hides from games, learned by pressing each one once, and a row for the machine's own gyroscope when Windows reports one. See <a href="../handheld-buttons/">Handheld PC Buttons</a>.</p>
 <h2 id="battery-alerts">Battery Alerts<a class="headerlink" href="#battery-alerts" title="Permanent link">&para;</a></h2>
 <p>Get notified when a controller's battery runs low, before it dies mid-game.</p>
 <ul>
 <li><strong>Notify When Battery Runs Low</strong> turns the alerts on.</li>
 <li><strong>Notify at or Below</strong> sets the percentage that triggers one.</li>
 <li><strong>Also Vibrate the Controller</strong> adds a buzz on the pad itself, so the warning reaches you without looking at the screen.</li>
+<li><strong>Test Notification</strong> sends a sample alert at the threshold level through the same path, so you can check it without draining a battery.</li>
 </ul>
 <p>The same rumble drives <strong>identify</strong>: buzzing a device is how you tell which of several identical pads is which.</p>
 <p><img alt="The Battery Alerts card" src="../../images/settings-battery-alerts.png" /></p>
@@ -4469,7 +4588,7 @@
 </tr>
 <tr>
 <td><strong>HIDMaestro</strong></td>
-<td>Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro), and Extended (DirectInput) virtual controllers. 231 device profiles. Replaces ViGEmBus and vJoy in v3.</td>
+<td>Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers. 231 device profiles, of which PadForge offers the 133 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3.</td>
 <td>Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types.</td>
 </tr>
 <tr>
@@ -4676,7 +4795,7 @@
 <tbody>
 <tr>
 <td><strong>App Version</strong></td>
-<td>PadForge version</td>
+<td>PadForge's version and build, for example <code>4.5.3 (r3682@176208e)</code>: the version, the commit count and the short commit hash. A build made without git shows the version alone.</td>
 </tr>
 <tr>
 <td><strong>.NET Runtime</strong></td>
@@ -4722,7 +4841,7 @@ after a glitch.</p>
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.1.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 
@@ -4777,13 +4896,13 @@ after a glitch.</p>
         
         
           
-          <a href="../../devices/" class="md-footer__link md-footer__link--next" aria-label="Next: Devices">
+          <a href="../updates/" class="md-footer__link md-footer__link--next" aria-label="Next: Updates">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Devices
+                Updates
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -165,7 +165,7 @@ When the physical device you mapped is a DualShock 4, DualSense, or DualSense Ed
 
 ### PlayStation pads through a Padix converter
 
-PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Feedback tab appears for the converter whether or not that package is installed.
+PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Force Feedback tab appears for the converter whether or not that package is installed.
 
 ---
 
@@ -239,7 +239,7 @@ The **Trigger Routing** card pushes the main rumble-motor strength into the trig
 | **Source** | None (Off), Left Motor, Right Motor, Max of Both Motors, Sum of Both Motors | Which body-motor value feeds this trigger. **None** is a no-op, so existing rumble is unchanged. |
 | **Mode** | Off, Duplicate (Keep Main Motor), Redirect (Silence Main Motor) | **Duplicate** sends the value to the trigger and keeps the body motor running. **Redirect** sends it to the trigger and silences the body motor. |
 | **Scale** | 0–200%, default 100% | Scales the routed strength for this trigger. |
-| **Activator** | A button picker plus an Activator Mode (Hold / Toggle / Release to Aim / Always On) | Gates when the routing is live. An empty activator stays engaged all the time. |
+| **Activator** | A button picker plus an Activator Mode (Hold / Toggle / Release to Aim / Always On) | Gates when the routing is live. An empty activator keeps the routing engaged in every mode except Toggle, which needs a button to switch it on. |
 
 The Activator Modes: **Hold** engages the routing while the activator button is held. **Toggle** flips it on or off with each press. **Release to Aim** engages while the activator button is not held. **Always On** ignores the button.
 
@@ -271,7 +271,7 @@ Every slider has its own reset button. Reset All restores everything in its sect
 
 The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
-Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the **Force Feedback** toggle with **Customize** on, or a catalog profile that ships with it). Extended slots without force feedback, Keyboard+Mouse, and MIDI hide it.
+Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the **Force Feedback** toggle with **Customize** on, or a catalog profile that ships with it) and the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes directly. Other Extended slots, Keyboard+Mouse, and MIDI hide it.
 
 ### Turning it on
 
@@ -350,4 +350,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

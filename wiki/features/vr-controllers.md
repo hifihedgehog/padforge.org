@@ -78,7 +78,7 @@ PadForge does not fabricate positional tracking. The driver anchors both hands a
 
 Stated plainly, because they will shape whether this is useful to you:
 
-- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added, and the Add Controller tile reads *VR (max 1)* once one exists.
+- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added, and the Add Controller tile's tooltip reads *VR (max 1)* once one exists.
 - **No per-slot VR configuration.** The driver ships one honest identity. There is no VR equivalent of the PlayStation or Extended profile pickers.
 - **The runtime is a hard requirement.** No SteamVR, no VR slot, and the tile stays disabled.
 - **SteamVR's own Test Controller is not a reliable indicator.** Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the app's own Preview tab, or the game.
@@ -95,4 +95,4 @@ Stated plainly, because they will shape whether this is useful to you:
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

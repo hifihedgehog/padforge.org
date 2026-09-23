@@ -18,7 +18,7 @@ graph TB
 
     subgraph "Output State Types. PadForge.Engine"
         GP[Gamepad<br/>XInput-layout struct]
-        VRS[RawHidState<br/>arbitrary axes · 128 buttons · 4 POVs]
+        VRS[RawHidState<br/>up to 8 axes · 128 buttons · 4 POVs]
         KRS[KbmRawState<br/>256 VK codes · mouse deltas]
         MRS[MidiRawState<br/>128 notes · 128 CCs]
         VRR[VrRawState<br/>left + right hand pair]
@@ -39,7 +39,7 @@ graph TB
     end
 
     subgraph "Interfaces"
-        IVC[IVirtualController<br/>Create · Submit · Destroy]
+        IVC[IVirtualController<br/>Connect · Submit · Disconnect]
     end
 
     US -->|references| PS
@@ -72,12 +72,12 @@ graph TB
 |-----------|----------|
 | `PadForge.Engine` | Output state types, device wrappers, force-feedback types, common interfaces, `PrecisionTouchpadReader` |
 | `PadForge.Engine.Data` | XML-persisted data models (PadSetting, UserSetting, UserDevice, MappingSet, etc.) |
-| `PadForge.Engine.Common` | `InputHookManager` (LL hook host), (v3.6) `ConsumerUsageTable`, `IdleInputDetector`, `GlobalHotkeyParser`, `LfeOutputState` (#234), `RelativeVelocityWindow`, `ShiftCycleStepper`, (v4.4) `HeadPose` (#355 head-tracking wire decode), `MachineIdentity` (#343 SMBIOS identity), `VendorReportLearner` (+ `VendorButtonDefinition` / `VendorButtonCandidate` / `VendorButtonKind`, #343), `HandheldChords` (`HandheldChordDefinition`, `ChordDecision`, #343) |
+| `PadForge.Engine.Common` | `InputHookManager` (LL hook host), (v3.6) `ConsumerUsageTable`, `IdleInputDetector`, `GlobalHotkeyParser`, `LfeOutputState` (#234), `RelativeVelocityWindow`, `ShiftCycleStepper`, (v4.4) `HeadPose` (#355 head-tracking wire decode), `MachineIdentity` (#343 SMBIOS identity), `VendorReportLearner` (+ `VendorButtonDefinition` / `VendorButtonCandidate` / `VendorButtonKind`, #343), `HandheldChords` (`HandheldChordDefinition`, `ChordDecision`, `HandheldChordEngine`, #343), (v4.5) `OpenXrHeadPose` (#403 headset pose into the Head Tracker convention) |
 | `PadForge.Engine.Common.Mapping` | (v3.2) Multi-source mapping helpers: `CombineHelper`, `SourceEvaluator`, `SourceCoercion`, `SourceKindRuntime`, `TargetKind`, `MappingExpression` |
 | `PadForge.Engine.Haptics` | (v3.6) HD haptic tone path (#147): `HapticToneEncoder` (per-family wire bytes), `HapticToneReducer` (PCM to tone), `WiiSpeakerAdpcm` (Yamaha 4-bit ADPCM, off the live path). (v4.4) `TritonPcmEncoder` (Steam Controller 2026 PCM stream reports, #381) |
 | `PadForge.Engine.Touchpad` | (v3.3) Touchpad gesture pipeline: `GestureRecognizer` (Tier 1/2/3 detector), `ShapeRecognizer` (canonical $Q point-cloud matcher), `ShapeTemplate`, `AngularMarginRecognizer`, `InBoxShapeTemplates`, `TouchpadCustomGesture`, `TouchpadGestureContext`, `TouchpadGestureSettings`, `TouchpadSettingsEntry`, `TouchpadGestureAutoArm`, (v4.1) `SwipeHapticsEvaluator` (swipe-haptic distance detents, #219) |
 | `PadForge.Engine.Mouse` | (v4) Mouse-gesture pipeline (#200): `MouseGestureRecognizer` (per-button flick classifier), `MouseGestureContext`, `MouseGestureSettings`, `MouseGestureSettingsEntry` |
-| `PadForge.Engine.Menus` | (v4.1) Radial / touch menus (#9 B-17): `MenuDefinitionEntry` (+ nested `MenuItemDefinition`, enums `MenuKind` / `MenuFireType`), `MenuSelectionMath`, `MenuEvaluator`, `MenuRuntimeState` |
+| `PadForge.Engine.Menus` | (v4.1) Radial / touch menus (#9 B-17): `MenuDefinitionEntry` (+ `MenuItemDefinition` and enums `MenuKind` / `MenuFireType` in the same file), `MenuSelectionMath`, `MenuEvaluator`, `MenuRuntimeState` |
 | `PadForge.Engine.RemoteLink` | (v4) Device sharing between PCs (#138): `LinkDiscovery`, `LinkServer`, `LinkConnection` (+ `ILinkControlChannel`), `LinkSession`, `LinkHandshake`, `PeerCrypto`, `PeerIdentity`, `IdentityProtector`, `PeerTrust` / `PeerTrustStore`, `RemotePeerDevice`, `CustomInputStateCodec`, `OutputEffectCodec`, `AntiReplayWindow`, `TcpControlChannel`, and the (#294 internet) lane: `LinkCode`, `IrohRelayClient`, `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `RendezvousProtocol`, `UdpControlChannel`, plus the `Dht/` folder. See [Remote Link Internals](remote-link-internals.md) |
 | `PadForge.Engine.Common.OpenXr` | (v4.5) OpenXR headset and motion controller input (#403): `OpenXrSession`, `OpenXrInterop` (structs, constants and the negotiation entry point), `OpenXrActions` (action set and suggested bindings), `OpenXrHeadPoseSource`, `OpenXrRuntimeCatalog`, `OpenXrHandState` (+ `OpenXrHand`). PadForge talks to the runtime directly rather than through the Khronos loader. See [OpenXR Input Internals](openxr-input-internals.md) |
 | `PadForge.Engine.Common.Logitech` | (v4.5) Logitech G-key input (#454): `LogitechGKeyInterop` (the packed event word), `LogitechGKeyMap` (the fixed 102-button layout), `LogitechGKeyCatalog` (library search), `LogitechGKeySource` (load, callback, teardown). See [Logitech G-Keys Internals](logitech-g-keys-internals.md) |
@@ -248,7 +248,7 @@ X / Y coordinates are normalized [0, 1] across the active touch surface. `Packet
 **File:** `PadForge.Engine/Common/GamepadTypes.cs`
 **Namespace:** `PadForge.Engine`
 
-Raw output state for Extended-category and Nintendo virtual controllers and custom HID descriptors. Bypasses the fixed `Gamepad` struct to support arbitrary axis, button, and POV counts. Step 5 forwards this directly to HIDMaestro via `HMaestroVirtualController.SubmitRawHidState`, which since 4.1.0 also carries a `MotionSnapshot` argument for the gyro-passthrough IMU channel (HM v1.3.18). The struct was named `ExtendedRawState` before the 4.1.0 raw-surface grammar rename.
+Raw output state for Extended-category and Nintendo virtual controllers and custom HID descriptors. Bypasses the fixed `Gamepad` struct to support configurable axis, button, and POV counts. Step 5 forwards this directly to HIDMaestro via `HMaestroVirtualController.SubmitRawHidState`, which since 4.1.0 also carries a `MotionSnapshot` argument for the gyro-passthrough IMU channel (HM v1.3.18). The struct was named `ExtendedRawState` before the 4.1.0 raw-surface grammar rename.
 
 ```csharp
 public struct RawHidState
@@ -335,7 +335,7 @@ public struct KbmRawState
     public short MouseDeltaX;       // Mouse X delta (signed, pixels per frame)
     public short MouseDeltaY;       // Mouse Y delta (signed, pixels per frame)
     public short ScrollDelta;       // Mouse scroll delta (positive = up)
-    public byte MouseButtons;       // Bit 0=LMB, 1=MMB, 2=RMB, 3=X1, 4=X2
+    public byte MouseButtons;       // Bit 0=LMB, 1=RMB, 2=MMB, 3=X1, 4=X2
 
     // Pre-deadzone values (for UI stick/trigger preview)
     public short PreDzMouseDeltaX;  // Mouse X before center offset + deadzone
@@ -367,7 +367,10 @@ public struct KbmRawState
     public void SetKey(byte vk, bool pressed);
     public bool GetMouseButton(int index);
     public void SetMouseButton(int index, bool pressed);
+    public void ClearKeyboard();
+    public void ClearMouse();
     public void Clear();
+    public KbmRawState WithSurfaces(bool keyboardEnabled, bool mouseEnabled);
     public static KbmRawState Combine(KbmRawState a, KbmRawState b);
 }
 ```
@@ -378,9 +381,12 @@ public struct KbmRawState
 |--------|-----------|-------------|
 | `GetKey` | `bool GetKey(byte vk)` | `true` if VK code bit is set (`word = vk/64`, `bit = vk%64`). |
 | `SetKey` | `void SetKey(byte vk, bool pressed)` | Sets or clears a VK code bit. |
-| `GetMouseButton` | `bool GetMouseButton(int index)` | `true` if mouse button bit is set (0=LMB, 1=MMB, 2=RMB, 3=X1, 4=X2). Middle is 1 and right is 2, the order `SdlMouseWrapper` names them: Left Click, Middle Click, Right Click, X1, X2. |
+| `GetMouseButton` | `bool GetMouseButton(int index)` | `true` if mouse button bit is set (0=LMB, 1=RMB, 2=MMB, 3=X1, 4=X2). Right is 1 and middle is 2, the order Step 3 writes and `KeyboardMouseVirtualController` sends. The input side differs: `SdlMouseWrapper` names its buttons Left Click, Middle Click, Right Click, X1, X2. |
 | `SetMouseButton` | `void SetMouseButton(int index, bool pressed)` | Sets or clears a mouse button bit. |
-| `Clear` | `void Clear()` | Zeros all keys, mouse deltas, both scroll axes, mouse buttons, pre-deadzone fields, the absolute-pointer fields, and the flick / gyro / touch / coast count lanes. |
+| `ClearKeyboard` | `void ClearKeyboard()` | Zeros the four key words. |
+| `ClearMouse` | `void ClearMouse()` | Zeros every mouse lane: deltas, both scroll axes, mouse buttons, pre-deadzone fields, the absolute-pointer fields, and the flick / gyro / touch / coast count lanes. |
+| `Clear` | `void Clear()` | `ClearKeyboard()` plus `ClearMouse()`. |
+| `WithSurfaces` | `KbmRawState WithSurfaces(bool keyboardEnabled, bool mouseEnabled)` | A copy with the half the slot does not drive cleared (#408), so a Mouse-only slot emits no keystrokes and a Keyboard-only slot no mouse motion. The mappings stay untouched. |
 | `Combine` | `static KbmRawState Combine(KbmRawState a, KbmRawState b)` | Merges two KBM states. Keys and mouse buttons OR'd. Deltas and both scroll axes take largest absolute magnitude. Absolute-pointer coordinates take the tracking side per axis, and the `MouseAbs*Valid` flags OR. `MouseFlickX` takes the larger magnitude. `MouseGyro*`, `MouseTouch*`, and `MouseStickCoast*` sum, so two gyros aimed at one slot each contribute their real motion. |
 
 ---
@@ -471,7 +477,7 @@ public enum VirtualControllerType
 
 `VirtualControllerGroups.InOrder` publishes the same seven values in fixed sidebar / dashboard order. Groups are independent: an operation on one must never touch another.
 
-Numeric values are persisted, so never reorder them and append new members at the tail. They are also preserved across the rename so legacy PadForge.xml files keep loading. The `[XmlEnum]` attributes on `Xbox` and `PlayStation` are a back-compat accept-list for older settings files written with the prior identifiers. This is the exception path, not the canonical naming.
+Numeric values are persisted, so never reorder them and append new members at the tail. They are also preserved across the rename so legacy PadForge.xml files keep loading. Slot types persist as integers (`SlotControllerTypes` is an `int[]`). The `[XmlEnum]` attributes on `Xbox` and `PlayStation` keep the prior on-disk names: `XmlSerializer` reads and writes `Xbox` as `Microsoft` and `PlayStation` as `Sony`, so settings files written with those identifiers still deserialize.
 
 ---
 
@@ -568,6 +574,8 @@ public class CustomInputState
 
     // Methods
     public CustomInputState Clone();
+    public void CopyInto(CustomInputState dst);
+    public void ResetForReuse();
     public static void GetAxisMask(DeviceObjectItem[] items, int numAxes,
         out int axisMask, out int actuatorMask, out int actuatorCount);
 }
@@ -577,13 +585,15 @@ public class CustomInputState
 
 | Constructor | Description |
 |-------------|-------------|
-| `CustomInputState()` | Zeroed arrays at default sizes. POVs init to &minus;1 (centered). Gyro/Accel/AccelAux are `float[3]`. `Touchpads` and `Midi` start null and are allocated lazily on first read. `BatteryPercent` defaults to &minus;1 (unknown), `BatteryCharging` to false. |
+| `CustomInputState()` | Zeroed arrays at default sizes. POVs init to &minus;1 (centered). Gyro/Accel/AccelAux/GyroAux are `float[3]`. `Touchpads`, `Midi`, `CapSense`, and `NfcTag` start null and are allocated lazily by the read that first needs them. `BatteryPercent` defaults to &minus;1 (unknown), `BatteryCharging` to false. |
 
 ### Methods
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `Clone` | `CustomInputState Clone()` | Deep copy of all arrays (Axis, Sliders, Povs, Buttons, Gyro, Accel, AccelAux, Touchpads) plus the Midi state, the pointer / mouse fields (Ir, JoyConIrIntensity, JoyCon2MouseDX/DY, MouseRawDX/DY), and the scalar Battery fields. |
+| `Clone` | `CustomInputState Clone()` | Deep copy through `CopyInto`: all arrays (Axis, Sliders, Povs, Buttons, Gyro, Accel, AccelAux, GyroAux, Touchpads, CapSense, NfcTag) plus the Midi state, the pointer / mouse fields (Ir, JoyConIrIntensity, JoyCon2MouseDX/DY, MouseRawDX/DY), and the scalar Battery fields. |
+| `CopyInto` | `void CopyInto(CustomInputState dst)` | The one full-field copy. Reallocates `dst`'s nested Touchpads, CapSense, NfcTag, or Midi only when the shape changes. A reflection round-trip test (`CustomInputStateMirrorTests`) fails when a new field skips it. |
+| `ResetForReuse` | `void ResetForReuse()` | Returns the instance to fresh-constructed values without dropping nested allocations, which are cleared in place. `PooledInputStatePair` (same file) hands out two alternating instances through it for per-tick device reads. |
 | `GetAxisMask` | `static void GetAxisMask(DeviceObjectItem[], int, out int, out int, out int)` | Scans device objects to build axis and FFB actuator bitmasks. Bit N = axis/actuator N exists. |
 
 ### Value Conventions
@@ -599,7 +609,7 @@ public class CustomInputState
 | `AccelAux` | float[3] | 0.0 | (v4) m/s&sup2; auxiliary/left accelerometer (#199). SDL_SENSOR_ACCEL_L: the Nunchuk's own sensor, or the left half of a combined Joy-Con pair. Zeroed without the sensor |
 | `Touchpads` | TouchpadInputState[] | null | Per-pad contacts. One entry per physical pad (Steam Controller reports more than one). Each carries per-finger X/Y (0.0–1.0) and contact state. Replaced `TouchpadFingers[6]` / `TouchpadDown[2]` in v3.3 |
 | `Midi` | MidiInputState | null | MIDI note / CC state for MIDI-input devices (#128). Allocated on the first MIDI read |
-| `BatteryPercent` | int | -1 | SDL3-reported charge level. 0-100 = percentage; -1 = unknown. Not refreshed every frame. |
+| `BatteryPercent` | int | -1 | SDL3-reported charge level. 0-100 = percentage, -1 = unknown. Not refreshed every frame. |
 | `BatteryCharging` | bool | false | `true` when the source pad reports charging or fully charged. Drives the lightbar Battery mode |
 | `Ir` | `WiiIrState` | `Detected=false` | (v3.6) Wii Remote IR-camera pointer (#146). `X` / `Y` normalized to the [&minus;1..+1] stick range from the two sensor-bar dots, valid only when `Detected`. Value type, rebuilt each tick. |
 | `JoyConIrIntensity` | float | 0.0 | (v3.6) Right Joy-Con NIR camera average intensity 0..1 (#151). Covered reads bright (high), uncovered dark (low). 0 when the camera is off. Excluded from the idle test. |
@@ -608,7 +618,7 @@ public class CustomInputState
 | `MouseRawDX` | int | 0 | (v4) Unclamped Raw Input mouse X counts since the previous poll (#200). Feeds the mouse-gesture recognizer, which needs the counts before `Axis[0]` clamps them to the stick range. 0 when idle or non-mouse. |
 | `MouseRawDY` | int | 0 | (v4) Unclamped Raw Input mouse Y counts since the previous poll (#200). 0 when idle or non-mouse. |
 | `GyroAux` | float[3] | 0.0 | Auxiliary gyro, rad/s, SDL native frame (#252). SDL delivers it as `SDL_SENSOR_GYRO_L`, which only the Switch drivers register: the LEFT Joy-Con of a combined pair, gen 1 and gen 2, whose primary `Gyro` is the right half. Unlike `AccelAux` this never carries a Nunchuk, because the Nunchuk has no gyro |
-| `CapSense` | bool[] | null | Capacitive touch channels from `SDL_GetGamepadCapSense` (SDL 3.6.0). Index 0 left stick top, 1 right stick top, 2 left grip, 3 right grip. Allocated at device open only when `SDL_GamepadHasCapSense` reports at least one channel |
+| `CapSense` | bool[] | null | Capacitive touch channels from `SDL_GetGamepadCapSense` (SDL 3.6.0). Index 0 left stick top, 1 right stick top, 2 left grip, 3 right grip. Allocated on the first read, and only when `SDL_GamepadHasCapSense` reported at least one channel at device open |
 | `NfcTag` | bool[] | null | Switch right Joy-Con / Pro reader tag buttons (#241, fork SDL#15). Index 0 = "Any NFC Tag", index N = the tag whose stable `NfcTagRegistry` button is N. Null until NFC first arms on a reader-capable device, then retained and cleared all-false across disarm rather than re-nulled |
 
 ---
@@ -654,6 +664,8 @@ public interface ISdlInputDevice : IDisposable
     bool HasTouchpad { get; }
     int NumTouchpads => HasTouchpad ? 1 : 0;            // per-device pad count (SDL wrapper overrides)
     int[] TouchpadFingerCounts => Array.Empty<int>();   // per-pad finger counts
+    bool? TouchpadPressureSupported => null;            // null = unknown
+    bool? TouchpadClickSupported => null;               // null = unknown
     bool IsAttached { get; }
 
     // Haptic
@@ -677,7 +689,7 @@ public interface ISdlInputDevice : IDisposable
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `SdlInstanceId` | `uint` | SDL instance ID (unique per connection session; 0 = invalid) |
+| `SdlInstanceId` | `uint` | SDL instance ID (unique per connection session, 0 = invalid) |
 | `Name` | `string` | Human-readable device name |
 | `InstanceGuid` | `Guid` | Deterministic GUID for settings matching (from path/serial/VID+PID) |
 | `ProductGuid` | `Guid` | Product GUID from VID/PID for device family identification |
@@ -705,6 +717,7 @@ public interface ISdlInputDevice : IDisposable
 | `HasTouchpad` | `bool` | Has at least one touchpad surface |
 | `NumTouchpads` | `int` | Distinct touchpad surfaces (Steam Controller 2026 / Deck = 2, DualSense / DS4 = 1). Default-interface member returning `HasTouchpad ? 1 : 0`. The SDL wrapper overrides with the real count |
 | `TouchpadFingerCounts` | `int[]` | Per-touchpad finger count from `SDL_GetNumGamepadTouchpadFingers`. Default-interface member returning empty. The SDL wrapper overrides |
+| `TouchpadPressureSupported` / `TouchpadClickSupported` | `bool?` | Whether the touch surface reports pressure and a click. Default-interface members returning `null` (unknown). `WindowsTabletDevice` overrides both, and `UserDevice` stores them as `CapTouchpadPressure` / `CapTouchpadClick` |
 | `IsAttached` | `bool` | Handle still valid and connected |
 | `HapticStrategy` | `HapticEffectStrategy` | Best haptic strategy chosen at open time |
 | `HapticHandle` | `IntPtr` | SDL haptic handle (`IntPtr.Zero` if none) |
@@ -740,14 +753,17 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `JoystickType` | `SDL_JoystickType` | `UNKNOWN` | SDL joystick type classification |
 | `IsGameController` | `bool` | (computed) | `true` if opened as an SDL Gamepad |
 | `HasIrCamera` | `bool` | (set at open) | Wii Remote IR camera present. Drives the IR Pointer joystick-direct read (#146). |
-| `IsBalanceBoard` | `bool` | (set at open) | Wii Balance Board. Drives the corner-load read (#146). |
-| `HasJoyConIr` | `bool` | (set at open) | Standalone right Joy-Con NIR camera. Drives the IR Brightness read (#151). |
+| `IsBalanceBoard` | `bool` | (set at open) | Wii Balance Board, told apart from a Wii Remote by its SDL name. Keeps the board out of `HasIrCamera`. Its four corner load cells arrive on the stick axes through the standard decode (#146). |
+| `HasJoyConIr` | `bool` | (set at open) | Right Joy-Con NIR camera, on a standalone right Joy-Con (PID 0x2007) or a combined gen-1 pair (PID 0x2008, #275). Drives the IR Brightness read (#151). |
 | `HasJoyCon2Mouse` | `bool` | (set at open) | Switch 2 Joy-Con optical mouse. Drives the Mouse Motion read (#154). |
 | `HasSwitch2Magnetometer` | `bool` | (set at open) | Switch 2 BLE magnetometer (#271 item 5). Its samples land on wrapper-local `Switch2MagX/Y/Z`, deliberately not on `CustomInputState`, because the Remote Link block mask is full. The compass fusion consumes them through an App-layer provider. |
 | `HasNfcReader` | `bool` | (set at open) | The hardware can read NFC tags. It says nothing about power: the reader is energized only while NFC is armed and the Switch NFC hint is set. Read via `SDL_GetGamepadNfcTagUid`. |
 | `HasAccelAux` / `HasGyroAux` | `bool` | (set at open) | Aux (left-side) sensors, #199 and #252. |
+| `SdlDevicePath` | `string` | `""` | The SDL path as SDL reported it. `BuildInstanceGuid` hashes this one, so a path enriched afterward never changes the identity. |
+| `GameInputInfo` | `GameInputDeviceMetadata` | `null` | GameInput details (device id, root id, PnP path, container id, firmware, runtime) read from the joystick's `SDL.joystick.gameinput.*` properties when the GameInput backend produced the device. Its PnP path, when present, replaces `DevicePath`. |
+| `Backend` | `string` | (computed) | `gameinput` when `GameInputInfo` is set, otherwise read from the SDL GUID's driver-signature byte: `xinput`, `hidapi`, `rawinput`, `wgi`, or `dinput` (#395). |
 
-`GetCurrentState` reads these sensors straight off the joystick (`ReadIrPointer` / `ReadJoyConIr` / `ReadJoyCon2Mouse` / `ReadSwitch2Magnetometer` / `ReadNfcTag` / the Balance corners) into the matching `CustomInputState` fields, alongside the standard gamepad decode. Capsense channels come from the fork's `SDL_GamepadHasCapSense` / `SDL_GetGamepadCapSense` and are probed once at open into a private `_capSenseChannels` array, so a capsense-less device pays nothing per frame and never allocates `CustomInputState.CapSense`.
+`GetCurrentState` reads the IR pointer, the NIR scalar, and the Joy-Con 2 mouse counters straight off the raw joystick axes (`ReadIrPointer` / `ReadJoyConIr` / `ReadJoyCon2Mouse`) into the matching `CustomInputState` fields, alongside the standard gamepad decode. `ReadSwitch2Magnetometer` fills the wrapper-local magnetometer fields, and `ReadNfcTag` polls `SDL_GetGamepadNfcTagUid` only while NFC is armed. The Balance Board's corners need no extra read. Capsense channels come from SDL 3.6.0's `SDL_GamepadHasCapSense` / `SDL_GetGamepadCapSense` and are probed once at open into a private `_capSenseChannels` array, so a capsense-less device pays nothing per frame and never allocates `CustomInputState.CapSense`.
 
 ### Public Methods
 
@@ -755,9 +771,12 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 |--------|-----------|-------------|
 | `Open` | `bool Open(uint instanceId)` | Opens SDL device. Tries Gamepad first, falls back to Joystick. Populates all properties. |
 | `GetCurrentState` | `CustomInputState GetCurrentState(bool forceRaw = false)` | Routes to `GetGamepadState()` (remapped) or `GetJoystickState()` (raw) based on device type and `forceRaw`. |
-| `GetDeviceObjects` | `DeviceObjectItem[] GetDeviceObjects()` | Builds `DeviceObjectItem[]` for each axis, hat, button. Uses `Math.Max(NumButtons, RawButtonCount)` for button count so extra raw buttons (beyond the 22 standardized gamepad slots) are included with generic "Button N" names. First 6 axes use standard GUIDs. Extras use Slider. |
+| `GetDeviceObjects` | `DeviceObjectItem[] GetDeviceObjects()` | Builds `DeviceObjectItem[]` for each axis, hat, button. Uses `Math.Max(NumButtons, RawButtonCount)` for button count so extra raw buttons (beyond the 22 standardized gamepad slots) are included with generic "Button N" names. First 6 axes use standard GUIDs. Axes 6–23 surface as "Axis N" with a non-Slider axis GUID, and only raw axes 24 and up use Slider. On a gamepad, standard axis and button positions the device lacks (`SDL_GamepadHasAxis` / `SDL_GamepadHasButton`) are left out. |
 | `GetInputDeviceType` | `int GetInputDeviceType()` | Maps `SDL_JoystickType` to `InputDeviceType`. |
-| `SetRumble` | `bool SetRumble(ushort lowFreq, ushort highFreq, uint durationMs)` | Sends rumble via `SDL_RumbleJoystick`. `false` if unsupported. |
+| `SetRumble` | `bool SetRumble(ushort lowFreq, ushort highFreq, uint durationMs)` | Sends rumble via `SDL_RumbleJoystick`. `false` if unsupported. A Steam Deck's motors are scaled by 54394/65535 first (the #179 firmware headroom), and a Padix PSX converter returns `false` because PadForge drives its motors itself (#440). |
+| `SetPlayerIndex` | `bool SetPlayerIndex(int playerIndex)` | (#191) Pushes the player index into SDL so drivers with player LEDs light them. Nintendo devices and the USB DualShock 3 only. Every other device returns `false`, because SDL's PS4/PS5 drivers would fight the Sony sole writer. |
+| `BounceMotionSensors` | `void BounceMotionSensors()` | Turns every open motion sensor off and back on. The fork decides the right Joy-Con NIR camera's power only at that enable edge, so a runtime flip of the IR hint needs one bounce. |
+| `OverrideInstanceGuid` | `void OverrideInstanceGuid(Guid sessionGuid)` | Replaces `InstanceGuid` with a session-scoped one. The device resolver calls it only when two live devices report the same serial and so hash to the same identity. |
 | `SetHomeLedBrightness` | `bool SetHomeLedBrightness(int percent)` | (4.1.0, #226) Switch HOME-button LED brightness via `SDL_SetJoystickLED` with an equal-RGB byte. SDL's Switch driver recovers max(r,g,b) as a 0–100 brightness and issues subcommand 0x38. Devices without the LED refuse inside SDL's own type check. The subcommand ACK wait blocks ~30–100 ms while SDL's global joystick lock is held, so call from a dedicated worker (`SwitchHomeLedSetter`), never the poll or UI thread. |
 | `StopRumble` | `bool StopRumble()` | `SetRumble(0, 0, 0)`. |
 
@@ -795,7 +814,7 @@ Same-model duplicates without a serial go down branch 2. `StableXInputInstance.F
 
 | Output | Indices |
 |--------|---------|
-| Axes | [0]=LX, [1]=LY, [2]=LT, [3]=RX, [4]=RY, [5]=RT |
+| Axes | [0]=LX, [1]=LY, [2]=LT, [3]=RX, [4]=RY, [5]=RT. [6]–[23] carry extra raw joystick axes when `HasExtraGenericAxes` (#193) |
 | Buttons | [0]=A, [1]=B, [2]=X, [3]=Y, [4]=LB, [5]=RB, [6]=Back, [7]=Start, [8]=LS, [9]=RS, [10]=Guide, [11]=Misc1, [12]=RPaddle1, [13]=LPaddle1, [14]=RPaddle2, [15]=LPaddle2, [16]=Touchpad click, [17]–[21]=Misc2–6 |
 | POV[0] | Synthesized from gamepad D-pad buttons |
 | Sensors | Gyro and Accel populated if available |
@@ -892,8 +911,8 @@ Wraps a mouse device for unified input via `ISdlInputDevice`. State read from Ra
 | `MouseButtons` | 5 | Left, Middle, Right, X1, X2 |
 | `MouseAxes` | 3 | X Motion, Y Motion, Scroll |
 | `AxisCenter` | 32767 | Center value for mouse axis output |
-| `MotionScale` | 2048f | Multiplier for mouse delta to axis value |
-| `ScrollScale` | 128f | Multiplier for scroll delta to axis value |
+| `MotionScale` | 2048f | Scale for mouse motion. Applied as `MotionScale / 1000` to the windowed counts per second |
+| `ScrollScale` | 128f | Multiplier for the windowed scroll sum |
 
 ### Properties
 
@@ -911,7 +930,8 @@ Wraps a mouse device for unified input via `ISdlInputDevice`. State read from Ra
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `Open` | `bool Open(RawInputListener.DeviceInfo deviceInfo)` | Opens from Raw Input enumeration. |
-| `GetCurrentState` | `CustomInputState GetCurrentState(bool forceRaw)` | Reads deltas via `ConsumeMouseDelta`, scroll via `ConsumeMouseScroll`, buttons via `GetMouseButtons` + `MergeHookedMouseState`. Axes = `AxisCenter + (delta * Scale)` clamped to 0–65535. |
+| `UpdateHandle` | `void UpdateHandle(IntPtr newHandle)` | Swaps in a new Raw Input handle when the same physical mouse re-enumerates (after PTP registration, say). |
+| `GetCurrentState` | `CustomInputState GetCurrentState(bool forceRaw)` | Reads deltas via `ConsumeMouseDelta`, scroll via `ConsumeMouseScroll`, buttons via `GetMouseButtons` + `MergeHookedMouseState`. The deltas feed a `RelativeVelocityWindow` (25 ms, #331): X and Y = `AxisCenter + countsPerSecond * MotionScale / 1000`, scroll = `AxisCenter + windowSum * ScrollScale`, each clamped to 0–65535. The unwindowed per-poll deltas go to `MouseRawDX` / `MouseRawDY`. |
 | `GetDeviceObjects` | `DeviceObjectItem[]` | 3 `RelativeAxis` (X, Y, Scroll) + 5 `PushButton` (L, M, R, X1, X2). |
 | `GetInputDeviceType` | `int` | `InputDeviceType.Mouse` (18). |
 
@@ -933,7 +953,7 @@ Wraps a mouse device for unified input via `ISdlInputDevice`. State read from Ra
 | `NumButtons` | `int` | `ConsumerUsageTable.TotalSlots` (fixed block + dynamic slack) |
 | `RawButtonCount` | `int` | 0 |
 | `NumHats` | `int` | 0 |
-| `SupportedButtonIndices` | `int[]` | `Array.Empty<int>()` |
+| `SupportedButtonIndices` | `int[]` | Every slot, densely (`0` to `TotalSlots - 1`). An empty array would claim the device has no buttons |
 | `HasRumble` / `HasHaptic` / `HasGyro` / `HasAccel` / `HasTouchpad` | `bool` | all `false` |
 | `RawInputHandle` | `IntPtr` | The Raw Input device handle for per-device state reading |
 
@@ -990,15 +1010,15 @@ Virtual input device for a browser-connected gamepad. Implements `ISdlInputDevic
 |----------|-------|-------------|
 | `WebVendorId` | `0xBEEF` | Distinctive VID to avoid HIDMaestro filter false positives |
 | `WebProductId` | `0xCA7E` | Distinctive PID |
-| `WebProductGuidBase` | `{BEBC0000-0000-0000-0000-CAFEFACE0001}` | Base ProductGuid. The instance `ProductGuid` is this MD5-mixed with the layout key (`"xbox360"` / `"ds4"` / `"touchpad"`), so different layouts read as different products. |
+| `WebProductGuidBase` | `{BEBC0000-0000-0000-0000-CAFEFACE0001}` | Base ProductGuid. The instance `ProductGuid` is this MD5-mixed with the layout key (`"xbox360"`, `"ds4"`, `"switchpro"`, `"touchpad"`, and the other web layouts), so different layouts read as different products. |
 
 ### Capabilities
 
 | Property | Value |
 |----------|-------|
-| Axes | 6 (LX, LY, LT, RX, RY, RT. 0–65535 range) |
+| Axes | 6 (LX, LY, LT, RX, RY, RT. 0–65535 range). 0 for touchpad-only clients. A pad built in the web editor reports only its own axes through `SupportedAxisIndices` (`SetCustomSurface`) |
 | Buttons | 11 gamepad slots (standard Xbox layout: A, B, X, Y, LB, RB, Back, Start, LS, RS, Guide). 17 when the layout has a touchpad, with `Buttons[16]` = touchpad click. Extended surfaces raise it to `max(extendedMax + 1, 17 if touchpad)`. |
-| POV Hats | 1 (0 for touchpad-only clients) |
+| POV Hats | 1. 0 for touchpad-only clients, and for a built pad without a D-pad widget |
 | HasRumble | Client-reported (browser Vibration API). Defaults `true`, fires `CapabilitiesChanged` when the client says otherwise. |
 | HasHaptic | `false` |
 | HasGyro | `false` until `EnableMotionCaps()` flips it on the first motion message (#296), then `true` |
@@ -1017,14 +1037,20 @@ Creates a web controller. `clientId` is a unique browser localStorage identifier
 | Event | Signature | Description |
 |-------|-----------|-------------|
 | `RumbleRequested` | `Action<ushort, ushort>` | Fired on `SetRumble`. Parameters: (lowFreq, highFreq), 0–65535. |
+| `CapabilitiesChanged` | `Action` | Fired when a capability flips after connect: motion on the first motion message, a touch surface on the first touch message, or the client reporting no rumble. The connect-time `UserDevice` snapshot needs the re-sync. |
+| `LedChanged` | `Action<byte, byte, byte>` | Lightbar color for the browser to draw (#296), change-detected in `SetLed`. |
+| `PlayerIndexChanged` | `Action<int>` | 1-based player number for the browser's player pips (#296), change-detected in `SetPlayerNumber`. `ResendIdentity` re-emits both after a reconnect. |
 
 ### State Update Methods
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `UpdateAxis` | `void UpdateAxis(int code, int value)` | Sets axis (0=LX, 1=LY, 2=LT, 3=RX, 4=RY, 5=RT). Thread-safe. |
-| `UpdateButton` | `void UpdateButton(int code, bool pressed)` | Sets button (0=A through 10=Guide). Thread-safe. |
-| `UpdatePov` | `void UpdatePov(int value)` | Sets POV hat (centidegrees or &minus;1). Thread-safe. |
+| `UpdateButton` | `void UpdateButton(int code, bool pressed)` | Sets a button by slot (0=A through 10=Guide, 11–21 the extended slots, 16 the touchpad click). Any index below 256 is accepted. Thread-safe. |
+| `UpdatePov` | `void UpdatePov(int value)` | Sets POV hat (centidegrees or &minus;1). An angle outside 0–35999 reads as centered. Thread-safe. |
+| `SetExtendedButtons` | `void SetExtendedButtons(int[] codes)` | Declares the extended slots (11–21, except 16) the active layout offers, such as a Switch Pro's Capture or a Steam Deck's grips. |
+| `SetCustomSurface` | `void SetCustomSurface(int[] axes, int[] buttons, bool hasPov)` | Declares the exact axes, buttons, and hat a pad built in the web editor carries, so the picker and the Devices preview show nothing else. |
+| `NeutralizeAll` | `void NeutralizeAll()` | Releases every button, returns the axes to rest, and centers the hat (#402). The server calls it when a forwarded pad's session expires. |
 | `UpdateTouchpadFinger` | `void UpdateTouchpadFinger(int finger, float x, float y, bool down)` | Single-pad two-finger virtual touchpad from phone clients. Contact IDs are synthesized on rising / falling edges. Copy-on-write under the state lock. |
 | `UpdateMotion` | `void UpdateMotion(float gx, float gy, float gz, float ax, float ay, float az)` | Gyro rates + accelerometer from the phone's DeviceMotionEvent (#296). Copy-on-write. Rates go stale (zero) after 500 ms without a sample, the accelerometer keeps its last value. `EnableMotionCaps()` flips `HasGyro` / `HasAccel` on the first message and notifies once. |
 | `SetConnected` | `void SetConnected(bool connected)` | Sets connection state (volatile write). |
@@ -1036,7 +1062,7 @@ Creates a web controller. `clientId` is a unique browser localStorage identifier
 **File:** `PadForge.Engine/Common/TouchpadOverlayDevice.cs`
 **Namespace:** `PadForge.Engine`
 
-(v3.2) Virtual input device that backs the on-screen touchpad overlay. Implements `ISdlInputDevice` so the overlay shows up on the Devices page like any other gamepad and can be assigned to PlayStation slots. The window reads its position / size / monitor / opacity from `AppSettingsData.TouchpadOverlay*` fields.
+(v3.2) Virtual input device that backs the on-screen touchpad overlay. Implements `ISdlInputDevice` so the overlay shows up on the Devices page like any other device (as `InputDeviceType.Touchpad`) and can be assigned to PlayStation slots. The window reads its position / size / monitor / opacity from `AppSettingsData.TouchpadOverlay*` fields.
 
 | Property | Value |
 |----------|-------|
@@ -1051,7 +1077,7 @@ Creates a web controller. `clientId` is a unique browser localStorage identifier
 | `HasRumble` / `HasGyro` / `HasAccel` | all `false` |
 | `DevicePath` | `"overlay://touchpad"` |
 
-Touch state is fed in by the overlay window through a callback. The device exposes the resulting `CustomInputState` (`Touchpads[]` / `Buttons[16]`) through the standard `GetCurrentState` interface so Step 2 reads it the same way it reads SDL devices. There is only ever one overlay device per session (`SdlInstanceId = 0xFFFFFFFE`).
+The overlay window feeds touch state in through `UpdateState(TouchpadState)` (the mouse-drag fallback, slot 0 only) or `UpdateStateMulti(TouchpadInputState, bool click)` (up to `OverlayMaxFingers` = 5 contacts from a touch display). The device exposes the resulting `CustomInputState` (`Touchpads[]` / `Buttons[16]`) through the standard `GetCurrentState` interface so Step 2 reads it the same way it reads SDL devices. There is only ever one overlay device per session (`SdlInstanceId = 0xFFFFFFFE`).
 
 ---
 
@@ -1147,7 +1173,7 @@ Well-known GUIDs for device object types, matching DirectInput GUID constants.
 
 ### InputDeviceType
 
-Integer constants. 18–25 match the DirectInput device type values. 26 and up are PadForge extensions. Used in `UserDevice.CapType`, which serializes as an int in PadForge.xml, so the list is append-only.
+Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE_MOUSE` through `DI8DEVTYPE_1STPERSON`). `Supplemental` is 25 here, where DirectInput's `DI8DEVTYPE_SUPPLEMENTAL` is 28. 26 and up are PadForge extensions. Used in `UserDevice.CapType`, which serializes as an int in PadForge.xml, so the list is append-only.
 
 | Constant | Value | Description |
 |----------|-------|-------------|
@@ -1168,13 +1194,13 @@ Integer constants. 18–25 match the DirectInput device type values. 26 and up a
 | `HandheldButtons` | 32 | Handheld PC hidden buttons (#343). One per-machine row whose buttons are learned on the machine, delivered by the firmware either as keyboard chords through the low-level hooks or as bits and codes in a vendor HID input report |
 | `SystemMotion` | 33 | The machine's own gyroscope and accelerometer through the Windows sensor stack (#343), for handhelds whose IMU sits in the tablet rather than in the controller halves |
 | `HeadTracker` | 34 | A head pose from OpenTrack's UDP output, the FreeTrack 2.0 shared memory, or a VR headset through an OpenXR runtime (#355, #403). Six absolute axes, yaw / pitch / roll plus the three translations, centered at rest. Decoded by [HeadPose](#headpose) |
-| `Tablet` | 35 | A Windows pen or drawing tablet. Barrel buttons, eraser, inversion and in-range as named buttons; the contact rides the touchpad lane, so the row carries no axes |
+| `Tablet` | 35 | A Windows pen or drawing tablet. Barrel buttons, eraser, inversion and in-range as named buttons. The contact rides the touchpad lane, so the row carries no axes |
 | `VrController` | 36 | One VR motion controller read through an OpenXR runtime (#403). Ten axes, six pose in the head row's order plus thumbstick, trigger and grip, and four buttons. Left and right are separate rows |
 | `LogitechGKeys` | 37 | The G-keys on a Logitech keyboard and a Logitech mouse's buttons 6 through 20, read through the G-key SDK (#454). 102 buttons, no axes |
 
 ### AnswersAnyDeviceSources
 
-`InputTypes.cs` carries one predicate beside the enum:
+`InputDeviceType` carries one predicate beside its constants:
 
 ```csharp
 public static bool AnswersAnyDeviceSources(int capType)
@@ -1226,14 +1252,12 @@ Per-device force feedback (rumble) state with change detection. Only sends to ha
 | `_cachedRightMotorSpeed` | `ushort` | Last sent right motor speed |
 | `_cachedLeftTriggerMotorSpeed` | `ushort` | Last sent left impulse-trigger speed |
 | `_cachedRightTriggerMotorSpeed` | `ushort` | Last sent right impulse-trigger speed |
+| `_scalarNeedsWrite` | `bool` | Forces the next scalar write even at unchanged values, set when a directional effect or the auto-center spring took the haptic slot |
+| `_directWriteNeedsRetry` | `bool` | Set by `MarkDirectWriteFailed` so the next direct-writer snapshot reports a change and retries |
 | `_hapticEffectId` | `int` | SDL haptic effect ID (-1 = none) |
 | `_hapticEffectCreated` | `bool` | Whether a haptic effect has been created |
-| `_cachedEffectType` | `uint` | Last sent FFB effect type |
-| `_cachedSignedMag` | `short` | Last sent signed magnitude |
-| `_cachedDirection` | `ushort` | Last sent polar direction |
-| `_cachedPeriod` | `uint` | Last sent period |
-| `_cachedHasCondition` | `bool` | Last sent condition data flag |
-| `_cachedHasDirectional` | `bool` | Last sent directional data flag |
+| `_cachedDirectional` | `DirectionalSnapshot?` | Last directional or condition effect delivered: effect type, signed magnitude, direction, period, device and overall gain, both motor speeds, and a copy of up to two condition axes. Cached only after a successful write |
+| `_lastEmitFailed` / `_lastDirFailed` | `bool` | Throttle the `HAPTICDIAG` failure lines to one per failure run |
 | `_autoCenterActive` | `bool` | Software auto-center spring engaged (generic SDL wheels) |
 | `_autoCenterCoeff` | `short` | Last sent auto-center spring coefficient |
 
@@ -1243,7 +1267,11 @@ Per-device force feedback (rumble) state with change detection. Only sends to ha
 |--------|-----------|-------------|
 | `SetDeviceForces` | `void SetDeviceForces(UserDevice ud, ISdlInputDevice device, PadSetting ps, Vibration v)` | Main entry. Reads gain from PadSetting. Routes to directional haptic when `HasDirectionalData` or `HasConditionData` and device supports haptic, or scalar rumble otherwise. Only sends when values change. |
 | `StopDeviceForces` | `void StopDeviceForces(ISdlInputDevice device)` | Stops all rumble/haptic and resets cached state. |
-| `TryRecordXboxImpulseSnapshot` | `bool TryRecordXboxImpulseSnapshot(ushort leftMotor, ushort rightMotor, ushort leftTrigger, ushort rightTrigger)` | Change-detection bookkeeping for the Xbox One+ skip-SDL path (`XboxImpulseHidWriter`). Returns `true` when any of the four speeds differs from the last write (caller issues a fresh HID write). Always updates the public motor-speed properties and `IsActive`. |
+| `TryRecordXboxImpulseSnapshot` | `bool TryRecordXboxImpulseSnapshot(ushort leftMotor, ushort rightMotor, ushort leftTrigger, ushort rightTrigger)` | Change-detection bookkeeping for the Xbox One+ skip-SDL path (`XboxImpulseHidWriter`). Returns `true` when any of the four speeds differs from the last write, or a failed write was marked (caller issues a fresh HID write). Always updates the public motor-speed properties and `IsActive`. |
+| `TryRecordMotorSnapshot` | `bool TryRecordMotorSnapshot(ushort leftMotor, ushort rightMotor)` | Two-motor form for direct writers without trigger motors (the Padix PSX converter). Triggers record as zero. |
+| `MarkDirectWriteFailed` | `void MarkDirectWriteFailed()` | Marks the snapshot just recorded as undelivered, so the next call returns `true` at the same values. |
+
+Static helpers for the native wheel writers: `ComputeWheelSteeringLevel` (gain-scaled magnitude projected onto the steering axis, sampled through the periodic waveform), `ComputeWheelSteeringPeak` (the same projection without the waveform, for firmware periodic effects), `ComputeWheelRumbleLevel` (rumble turned into a steering-axis buzz, 120 ms period for the heavy channel and 40 ms for the light one), `IsPeriodicEffect`, and `IsGenericWheelSpringCapable` (haptic handle, spring support, and `InputDeviceType.Driving`, shared with the Wheel tab's gate).
 
 ### Private Methods
 
@@ -1251,8 +1279,9 @@ Per-device force feedback (rumble) state with change detection. Only sends to ha
 |--------|-------------|
 | `SetDirectionalHapticForces(device, v, overallGain)` | Directional constant/periodic force. Single-axis (wheels): projects via `sin(angle)`. Multi-axis: full 2D polar. Falls back to scalar if unsupported. |
 | `SetConditionHapticForces(device, v, overallGain)` | Condition effects (spring/damper/friction/inertia) with per-axis coefficients. Scales HID (&minus;10000..+10000) to SDL (&minus;32767..+32767). |
+| `TryApplyAutoCenterSpring(device, ps)` | Software centering spring for a generic SDL wheel, from the Wheel tab's Auto Centering Strength (`AutoCenterStrength`, 0–100 to a 0–32767 coefficient). Runs only when the game sends no directional effect. |
 | `SetHapticForces(device, left, right)` | Scalar haptic fallback. Translates dual-motor to SDL effect per `HapticEffectStrategy`. |
-| `ApplyHapticEffect(device, ref effect)` | Creates on first call, updates in-place after. Avoids create/destroy churn. |
+| `ApplyHapticEffect(device, ref effect)` | Creates on first call, updates in-place after. Avoids create/destroy churn. A rejected update destroys the effect and creates a new one. |
 | `StopAndDestroyHapticEffect(device)` | Stops and destroys active haptic effect. Resets effect state. |
 
 ### Scalar Haptic Strategy Mapping
@@ -1373,7 +1402,7 @@ public struct ConditionAxisData
 **File:** `PadForge.Engine/Common/InputHookManager.cs`
 **Namespace:** `PadForge.Engine.Common`
 
-Manages `WH_KEYBOARD_LL` and `WH_MOUSE_LL` low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets.
+Manages `WH_KEYBOARD_LL` and `WH_MOUSE_LL` low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343).
 
 ```csharp
 public class InputHookManager : IDisposable
@@ -1384,8 +1413,20 @@ public class InputHookManager : IDisposable
     void SetSuppressedMouseButtons(HashSet<int> buttons);
     bool HasAnySuppression { get; }
 
+    int RegisterGlobalHotkey(int[] vkCodes, Action callback);
+    void UnregisterGlobalHotkey(int id);
+    void ClearGlobalHotkeys();
+
     static void MergeHookedKeyState(bool[] dest, int count);
     static void MergeHookedMouseState(bool[] dest, int count);
+
+    // Handheld chords (#343)
+    static HandheldChordEngine ChordEngine { get; set; }
+    static readonly IntPtr ReplayTag;              // 0x50464843, "PFHC"
+    static event Action ChordWorkPending;
+    static void InjectReplay(int code, bool down);
+    static void InjectWinMask();
+    static bool IsExtendedKey(int vk);
 }
 ```
 
@@ -1396,15 +1437,19 @@ public class InputHookManager : IDisposable
 | `Start` | `void Start()` | Creates background thread with `GetMessage` loop, installs both hooks. Blocks until installed (5s timeout). |
 | `Stop` | `void Stop()` | Posts `WM_QUIT` to hook thread, joins (2s timeout), clears state. |
 | `SetSuppressedKeys` | `void SetSuppressedKeys(HashSet<int> vkCodes)` | Updates VK codes to suppress. Clears state for removed keys. Volatile reference swap. |
-| `SetSuppressedMouseButtons` | `void SetSuppressedMouseButtons(HashSet<int> buttons)` | Updates mouse button IDs to suppress (0=L, 1=M, 2=R, 3=X1, 4=X2). Volatile reference swap. |
+| `SetSuppressedMouseButtons` | `void SetSuppressedMouseButtons(HashSet<int> buttons)` | Updates mouse button IDs to suppress (0=L, 1=M, 2=R, 3=X1, 4=X2). Clears state for removed buttons. Volatile reference swap. |
 | `HasAnySuppression` | `bool` (property) | `true` if any keys or mouse buttons suppressed. |
+| `RegisterGlobalHotkey` | `int RegisterGlobalHotkey(int[] vkCodes, Action callback)` | Registers a combo from `GlobalHotkeyParser.Parse`. The callback fires once on the rising edge when every key is held, with modifiers matching either side. Never suppresses the keystroke. Returns the id `UnregisterGlobalHotkey` takes. |
+| `UnregisterGlobalHotkey` / `ClearGlobalHotkeys` | `void UnregisterGlobalHotkey(int id)` / `void ClearGlobalHotkeys()` | Removes one registration, or all of them on engine teardown. |
 | `MergeHookedKeyState` | `static void MergeHookedKeyState(bool[] dest, int count)` | Merges suppressed-key state into dest (hook state is authoritative). Called by `SdlKeyboardWrapper`. |
 | `MergeHookedMouseState` | `static void MergeHookedMouseState(bool[] dest, int count)` | Same for mouse buttons. Called by `SdlMouseWrapper`. |
+| `InjectReplay` / `InjectWinMask` | `static void InjectReplay(int code, bool down)` / `static void InjectWinMask()` | `SendInput` a key or mouse button stamped with `ReplayTag` in `dwExtraInfo`, so the hook passes it through without feeding it back to the chord engine. `InjectWinMask` taps VK 0xFF so releasing a swallowed chord's Win key does not open Start. Call from a worker, never inside a hook callback. |
 
 ### Hook Callbacks
 
-- **Keyboard:** Intercepts `WM_KEYDOWN/UP`, `WM_SYSKEYDOWN/UP`. Returns `(IntPtr)1` to suppress, `CallNextHookEx` to pass through. Captures state into `_hookedKeyState[]` before suppressing (LL hook runs before `WM_INPUT`).
-- **Mouse:** Intercepts button messages (`WM_[LR/M/X]BUTTONDOWN/UP`). Converts via `MouseMessageToButtonId()`. Captures into `_hookedMouseState[]`.
+- **Keyboard:** Intercepts `WM_KEYDOWN/UP`, `WM_SYSKEYDOWN/UP`. Tracks physical key state and checks the global hotkeys first, then offers the key to the chord engine, which can swallow it. Returns `(IntPtr)1` to suppress, `CallNextHookEx` to pass through. Captures state into `_hookedKeyState[]` before suppressing (LL hook runs before `WM_INPUT`).
+- **Mouse:** Intercepts button messages (`WM_[LR/M/X]BUTTONDOWN/UP`). Converts via `MouseMessageToButtonId()`. Offers the button to the chord engine when one is set, then captures suppressed buttons into `_hookedMouseState[]`.
+- Events injected by other software (`LLKHF_INJECTED` / `LLMHF_INJECTED`) and PadForge's own `ReplayTag` events skip the chord engine.
 
 ### Button ID Mapping
 
@@ -1428,6 +1473,8 @@ public class InputHookManager : IDisposable
 | `GetMessageW` | user32.dll | Message pump loop |
 | `PostThreadMessageW` | user32.dll | Post WM_QUIT to hook thread |
 | `GetCurrentThreadId` | kernel32.dll | Get hook thread ID |
+| `SendInput` | user32.dll | Inject chord replays and the Win mask |
+| `MapVirtualKeyW` | user32.dll | Scan code for an injected key |
 
 ---
 
@@ -1446,7 +1493,7 @@ public struct DeviceInfo
     public IntPtr Handle;       // Raw Input device handle
     public string Name;         // Device display name
     public string DevicePath;   // Device interface path
-    public uint   Type;         // 0 = mouse, 1 = keyboard
+    public uint   Type;         // 0 = mouse, 1 = keyboard, 2 = HID (Consumer Control)
     public ushort VendorId;     // USB VID
     public ushort ProductId;    // USB PID
 }
@@ -1464,10 +1511,13 @@ public struct DeviceInfo
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `Start` | `static void Start()` | Creates message-pump thread, registers Raw Input. Blocks until window created. |
-| `Stop` | `static void Stop()` | Posts `WM_QUIT`, joins thread. |
-| `EnumerateKeyboards` | `static DeviceInfo[] EnumerateKeyboards()` | All connected keyboards via `GetRawInputDeviceList`. |
-| `EnumerateMice` | `static DeviceInfo[] EnumerateMice()` | All connected mice. |
+| `Start` | `static void Start()` | Starts the `PadForge.RawInputListener` message-pump thread, which creates the window and registers Raw Input. Returns without waiting for it. |
+| `Stop` | `static void Stop()` | Posts `WM_QUIT`, joins thread (2 s), and clears the per-device state. |
+| `EnumerateKeyboards` | `static DeviceInfo[] EnumerateKeyboards()` | All connected keyboards via `GetRawInputDeviceList`, with the "All Keyboards (Merged)" aggregate entry first. |
+| `EnumerateMice` | `static DeviceInfo[] EnumerateMice()` | All connected mice, with the "All Mice (Merged)" aggregate entry first. Releases buttons still held by a mouse that is gone. |
+| `GetDeviceVidPid` | `static void GetDeviceVidPid(IntPtr hDevice, string devicePath, out ushort vendorId, out ushort productId)` | `HidD_GetAttributes` first, then `RIDI_DEVICEINFO`, then the `VID_xxxx&PID_xxxx` in the path. |
+| `ExtractFriendlyName` | `static string ExtractFriendlyName(string devicePath, uint type)` | HID product string, then the registry names, then a VID:PID label, then "Keyboard" / "Mouse" / "Consumer Control". |
+| `HasMouseState` / `ResolveMouseHandle` | `static bool HasMouseState(IntPtr hDevice)` / `static IntPtr ResolveMouseHandle(string devicePath)` | Whether a mouse handle has reported, and the live handle for a device path (handles change after a PTP registration). |
 | `GetKeyboardState` | `static void GetKeyboardState(IntPtr hDevice, bool[] dest, int count)` | Copies per-device key states. Aggregate handle for combined output. |
 | `ConsumeMouseDelta` | `static void ConsumeMouseDelta(IntPtr hDevice, out int dx, out int dy)` | Returns and resets accumulated mouse delta. |
 | `ConsumeMouseScroll` | `static int ConsumeMouseScroll(IntPtr hDevice)` | Returns and resets scroll delta. |
@@ -1481,7 +1531,8 @@ public struct DeviceInfo
 - **Keyboard** (`RIM_TYPEKEYBOARD`): Reads `RAWKEYBOARD.VKey`, handles `RI_KEY_E0` extended keys (right Ctrl/Alt/Shift, NumLock, Insert, Home, etc.). Per-device state in `ConcurrentDictionary<IntPtr, bool[]>`.
 - **Mouse** (`RIM_TYPEMOUSE`): Accumulates `lLastX`/`lLastY` deltas. Tracks buttons via `usButtonFlags`. Scroll via `RI_MOUSE_WHEEL`.
 - **Scroll:** `usButtonData` is a signed `short`. Accumulated per-device, consumed by `ConsumeMouseScroll`.
-- **Absolute-mode skip:** when `RAWMOUSE.usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set, `lLastX`/`lLastY` are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader returns early at the top of the mouse-event branch for absolute events. Matches the policy SDL3 and XInput use for the same situation.
+- **Absolute-mode skip:** when `RAWMOUSE.usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set, `lLastX`/`lLastY` are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader drops the delta for absolute events and still records the same report's buttons and wheel. Matches the policy SDL3 and XInput use for the same situation.
+- **Consumer Control** (`RIM_TYPEHID`, #168): each report carries the full set of held usages, read with `HidP_GetUsages`, so the device's slot array is rebuilt from every report rather than edited.
 
 ---
 
@@ -1490,12 +1541,12 @@ public struct DeviceInfo
 **File:** `PadForge.Engine/Common/IdleInputDetector.cs`
 **Namespace:** `PadForge.Engine.Common`
 
-(v3.6, #162) Pure idle test for the idle-disconnect countdown, the DS4Windows `isDS4Idle()` shape generalized to PadForge's normalized state. No state, no side effects. Two entry points:
+(v3.6, #162) Pure idle test for the idle-disconnect countdown. It follows the idle rule of DS4Windows' `isDS4Idle()`, read as documentation, generalized to PadForge's normalized state. No state, no side effects. Two entry points:
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `IsGamepadIdle` | `static bool IsGamepadIdle(CustomInputState s, CustomInputState previous = null)` | Absolute test for gamepad-typed devices (auto-map axis convention: sticks on axes 0/1/3/4 centered at 32767, triggers on axes 2/5 at rest 0). Idle when no button is pressed, no POV is deflected, both sticks sit inside the stick slop band, both triggers sit under the trigger slop, no touchpad finger is down, and the IR pointer / Joy-Con 2 mouse / Raw Input mouse are inactive. When `previous` is supplied, extra axes past 5 (#193) and sliders also take the change-detection test. |
-| `IsUnchanged` | `static bool IsUnchanged(CustomInputState current, CustomInputState previous)` | Generic change-detection test for devices whose axis layout and rest positions are unknown (raw joysticks, wheels, remotes). Idle means "nothing moved since the previous poll" within a small slop. Known limit: an axis held rock-steady off-rest reads idle. |
+| `IsGamepadIdle` | `static bool IsGamepadIdle(CustomInputState s, CustomInputState previous = null)` | Absolute test for gamepad-typed devices (auto-map axis convention: sticks on axes 0/1/3/4 centered at 32767, triggers on axes 2/5 at rest 0). Idle when no button is pressed, no POV is deflected, both sticks sit inside the stick slop band, both triggers sit under the trigger slop, no touchpad finger is down or clicked, the IR pointer / Joy-Con 2 mouse / Raw Input mouse are inactive, and no NFC tag is held. When `previous` is supplied, extra axes past 5 (#193) and sliders also take the change-detection test. |
+| `IsUnchanged` | `static bool IsUnchanged(CustomInputState current, CustomInputState previous)` | Generic change-detection test for devices whose axis layout and rest positions are unknown (raw joysticks, wheels, remotes). Idle means "nothing moved since the previous poll" within a small slop. MIDI notes, CCs, and pitch bend count as movement (#128), and so do touch and the pointer / mouse sources. Known limit: an axis held rock-steady off-rest reads idle. |
 
 ### Constants
 
@@ -1514,7 +1565,7 @@ Motion sensors (gyro / accel) are deliberately ignored, as DS4Windows ignores th
 **File:** `PadForge.Engine/Common/PrecisionTouchpadReader.cs`
 **Namespace:** `PadForge.Engine`
 
-Reads Windows Precision Touchpad (PTP) devices via Raw Input. Each enumerated PTP device shows up as a `UserDevice` with `CapType = Touchpad` and `Device == null` (data flows through this reader rather than an `ISdlInputDevice` wrapper). The reader runs its own hidden message-only window on a background thread, registers for digitizer top-level collection `0x0D / 0x05` with `RIDEV_INPUTSINK`, and uses the HidP_* API family to parse contacts from each report.
+Reads Windows Precision Touchpad (PTP) devices via Raw Input. Each enumerated PTP device shows up as a `UserDevice` with `CapType = Touchpad` and `Device == null` (data flows through this reader rather than an `ISdlInputDevice` wrapper). The reader runs its own hidden message-only window on a background thread, registers for digitizer top-level collection `0x0D / 0x05` with `RIDEV_INPUTSINK | RIDEV_DEVNOTIFY`, and uses the HidP_* API family to parse contacts from each report. On `WM_INPUT_DEVICE_CHANGE` with `GIDC_REMOVAL` it frees the removed touchpad's cached HID buffers and drops its state, so an unplugged touchpad stops enumerating.
 
 ### Constants
 
@@ -1532,7 +1583,7 @@ Per-device state, keyed by Raw Input `hDevice`:
 | `X`, `Y`, `Down` | `float[5]` / `bool[5]` | Per-slot contact position and touching flag. The gesture engine reads these via `TouchpadInputState`. |
 | `LastFrameDown`, `CurrentContactId` | `bool[5]` / `int[5]` | Persistent per-slot rising-edge tracking so the engine sees one continuous contact ID across the lifetime of a finger touching the slot. |
 | `SlotToHidId` | `int[5]` | HID contact ID currently occupying each engine slot, or -1 for free. Carries across frames. See "Stable slot assignment" below. |
-| `FrameExpected`, `FrameSeen` | `int` | Multi-report frame-assembly bookkeeping. |
+| `FrameExpected`, `FrameSeen`, `FrameLifted` | `int` | Multi-report frame-assembly bookkeeping. `FrameLifted` counts the frame's contacts that reported tip-switch 0. |
 | `FrameBufX`, `FrameBufY`, `FrameBufId` | parallel arrays | Per-fragment scratch buffer for the contacts seen so far in the in-progress frame. |
 | `Name`, `DevicePath`, `VendorId`, `ProductId`, `LastReportTicks` | various | Device identity + staleness timestamp. |
 
@@ -1550,7 +1601,7 @@ The PTP spec sends one final report for each contact with `tip-switch = 0` at li
 
 Most certified PTP hardware caps each HID report at 2 contacts. A 5-finger frame arrives as three reports (2 + 2 + 1). The PTP spec carries the total contact count on the first report's contact-count usage. Continuation reports carry zero.
 
-The reader accumulates contacts into `FrameBuf*` across reports and only commits `ds.Down` when the buffer reaches `FrameExpected`. Out-of-spec devices that never set contact-count (FrameExpected stays 0) fall back to per-report commit. Each fragment's contact append is bounded by `FrameExpected - FrameSeen` so that a descriptor with more contact link-collections than the frame actually carries (empty slots parse as zero-X/Y "contacts" with stale IDs) doesn't inflate the buffer past the spec-declared total.
+The reader accumulates contacts into `FrameBuf*` across reports and only commits `ds.Down` when `FrameSeen + FrameLifted` reaches `FrameExpected`. A lifted contact is counted but not buffered, because the frame's contact count includes it. Out-of-spec devices that never set contact-count (FrameExpected stays 0) fall back to per-report commit. Each fragment's contact append is bounded by `FrameExpected - FrameSeen` so that a descriptor with more contact link-collections than the frame actually carries (empty slots parse as zero-X/Y "contacts" with stale IDs) doesn't inflate the buffer past the spec-declared total.
 
 #### Stable slot assignment by HID contact ID
 
@@ -1573,7 +1624,7 @@ If no WM_INPUT report arrives for the device within `StaleThresholdTicks`, the n
 |---|---|---|
 | `Start` | `void Start()` | Spawns the message-pump thread and registers for digitizer Raw Input. |
 | `Stop` | `void Stop()` | Posts `WM_QUIT`, joins thread. |
-| `IsAvailable` | `bool { get; }` | True once at least one PTP device has produced a report. |
+| `IsAvailable` | `bool { get; }` | True once the reader's thread has registered for digitizer Raw Input. |
 | `GetDevices` | `(IntPtr, string, string, ushort, ushort)[] GetDevices()` | Snapshots known devices. Called from Step 1 enumeration. |
 | `ReadInto` | `void ReadInto(IntPtr hDevice, CustomInputState state)` | Per-device read. Allocates `state.Touchpads[0]` if absent. |
 | `ReadInto` | `void ReadInto(CustomInputState state)` | Aggregate read for the "All Touchpads (Merged)" pseudo-device: the first device's state. |
@@ -1585,7 +1636,7 @@ Step 2 (`UpdateInputStates`) reads PTP devices via the path:
 ```csharp
 if (ud.IsTouchpad && ud.Device == null && _ptpReader != null && _ptpReader.IsAvailable)
 {
-    newState = new CustomInputState();
+    newState = ud.PtpStatePool.Next();
     if (ud.InstanceGuid == PtpMergedGuid)
         _ptpReader.ReadInto(newState);
     else
@@ -1597,7 +1648,7 @@ if (ud.IsTouchpad && ud.Device == null && _ptpReader != null && _ptpReader.IsAva
 }
 ```
 
-The picker fallback in `MappingDisplayResolver.AddTouchpadGestureChoices` defaults `MaxFingers` to `PtpMaxFingers` when `ud.IsTouchpad && ud.Device == null` so 3/4/5-finger gestures surface in the dropdown even when no live state is available at picker-build time.
+The picker fallback in `MappingDisplayResolver.AddTouchpadGestureChoices` uses `PtpMaxFingers` for an `ud.IsTouchpad` row that has no persisted per-pad finger count (a system touchpad has no wrapper to fill one), so 3/4/5-finger gestures surface in the dropdown even when no live state is available at picker-build time.
 
 ---
 
@@ -1626,6 +1677,7 @@ The pose stays in OpenTrack's own convention: six doubles ordered TX, TY, TZ, Ya
 | `TryDecodeFreeTrackHeap` | `static bool TryDecodeFreeTrackHeap(ReadOnlySpan<byte> heap, out uint dataId, Span<double> pose)` | Inverts OpenTrack's FreeTrack writer: yaw and pitch are negated radians, roll is radians, translation is millimeters. FTData offsets are DataID 0, CamWidth 4, CamHeight 8, Yaw 12, Pitch 16, Roll 20, X 24, Y 28, Z 32. `dataId` increments once per written pose, so an unchanged value means no new pose. |
 | `ToAxis` | `static int ToAxis(double value, double range)` | A pose value against its full-deflection range, into the unsigned axis space: &minus;range reads 0, rest reads 32768, +range reads 65535, past either end clamps. A non-positive range or a NaN reads rest. |
 | `FillAxes` | `static void FillAxes(ReadOnlySpan<double> pose, double rotationRange, double translationRange, Span<int> axes)` | Fills the six device axes. Pitch and Y are stored in stick orientation, up at the low end, so mapping one onto a stick's Y axis needs no inversion. Yaw and X read high to the right. |
+| `FillAxesPerAxis` | `static void FillAxesPerAxis(ReadOnlySpan<double> pose, Func<int, double> rangeFor, Span<int> axes)` | (4.5.0, #403) The same fill with one range per axis, asked in this type's axis order: degrees for yaw, pitch and roll, centimeters for X, Y and Z. Head elevation wants a span of a few centimeters where leaning wants twenty. |
 | `CenterAxes` | `static void CenterAxes(Span<int> axes)` | Every device axis at rest. |
 
 ---
@@ -1688,11 +1740,11 @@ public readonly struct VendorButtonCandidate
 | `ValueHoldMs` | `const int` = `150` | How long a Value-kind button holds after its last matching report, since event-style firmware may send no release. |
 | `NoiseMask` | `static byte[] NoiseMask(IReadOnlyList<byte[]> idleSamples)` | Bit-level volatility mask: a bit is set where any idle sample disagreed with the first. Unequal-length reports compare over the shorter prefix, and the tail is treated as volatile. |
 | `MinPressRun` | `static int MinPressRun(int pressSamples)` | Consecutive flipped samples a press must show: `Math.Max(Math.Min(2, pressSamples), pressSamples / 40)`, about 2.5% of the window. A single captured sample is its own run. |
-| `FindBits` | `static List<VendorButtonCandidate> FindBits(byte[] idle, byte[] noise, IReadOnlyList<byte[]> press, IReadOnlyList<byte[]> release)` | Bit candidates outside the noise mask that read the opposite of idle in at least one press sample and are back at baseline by the last sample seen. One candidate per byte, carrying the combined mask of qualifying bits. |
+| `FindBits` | `static List<VendorButtonCandidate> FindBits(byte[] idle, byte[] noise, IReadOnlyList<byte[]> press, IReadOnlyList<byte[]> release)` | Bit candidates outside the noise mask that read the opposite of idle for at least `MinPressRun` consecutive press samples and are back at baseline by the last sample seen. One candidate per byte, carrying the combined mask of qualifying bits. |
 | `FindValues` | `static List<VendorButtonCandidate> FindValues(byte[] idle, byte[] noise, IReadOnlyList<byte[]> press, IReadOnlyList<byte[]> release)` | Value candidates: the first press sample differing from idle carries a value no release sample carries. A value still present after release is a mode byte, not a button. Single-bit differences are left to `FindBits`. |
-| `Learn` | `static List<VendorButtonCandidate> Learn(byte[] idle, byte[] noise, IReadOnlyList<byte[]> press, IReadOnlyList<byte[]> release)` | Runs both finders and prefers a single Bit candidate, then a single Value candidate. A byte whose press flipped more than one bit is promoted to exact-equality matching, because the ROG Ally writes 166 for one button and 167 for its neighbor and a mask match on 0xA6 would fire on both. More than one candidate of a kind means the press changed several things at once, and the caller shows them for the user to pick or to press again. |
+| `Learn` | `static List<VendorButtonCandidate> Learn(byte[] idle, byte[] noise, IReadOnlyList<byte[]> press, IReadOnlyList<byte[]> release)` | Returns the Bit candidates when `FindBits` finds any, otherwise the `FindValues` candidates. A byte whose press flipped more than one bit is promoted to exact-equality matching, because the ROG Ally writes 166 for one button and 167 for its neighbor and a mask match on 0xA6 would fire on both. More than one candidate of a kind means the press changed several things at once, and the caller shows them for the user to pick or to press again. |
 
-Chord-delivered hidden buttons take the other path, `HandheldChords` (`HandheldChordDefinition`, `ChordDecision`) in the same namespace, where the firmware types a key combination instead of writing a vendor report.
+Chord-delivered hidden buttons take the other path, `HandheldChords` (`HandheldChordDefinition`, `ChordDecision`, `HandheldChordEngine`) in the same namespace, where the firmware types a key combination instead of writing a vendor report.
 
 ---
 
@@ -1737,7 +1789,7 @@ Supporting members: `MidiNoteToFrequency` (melodic cue helper), `JoyConNeutral` 
 |--------|-----------|-------------|
 | `PacketPeriodMicroseconds` | `static int PacketPeriodMicroseconds(bool muLaw)` | Packet period at 8 kHz for the mode's frame count: 1875 for 16-bit, 3875 for mu-law. |
 | `FramesPerPacket` | `static int FramesPerPacket(bool muLaw)` | Frames carried per packet for the mode. |
-| `EncodeStreamCommand` | `static byte[] EncodeStreamCommand(bool enable, byte target, byte mode)` | The 4-byte 0x86 command `[0x86, operation, target, mode]`, operation 1 = disable and 2 = enable. The arm sequence is disable both targets, wait 10 ms, then enable both with the mode, because reconfiguring a running stream is rejected (0x44 bit 6). The transport pads to the interface's `OutputReportByteLength`. |
+| `EncodeStreamCommand` | `static byte[] EncodeStreamCommand(bool enable, byte target, byte mode)` | The 4-byte 0x86 command `[0x86, operation, target, mode]`, operation 1 = disable and 2 = enable. A disable sends mode 0. The arm sequence is disable both targets, wait 10 ms, then enable both with the mode, because reconfiguring a running stream is rejected (0x44 bit 6). The transport pads to the interface's `OutputReportByteLength`. |
 | `EncodeStereoPacket` | `static byte[] EncodeStereoPacket(ReadOnlySpan<short> interleaved, int frameCount, bool muLaw)` | One full 0x88 packet from interleaved s16 frames (L, R, L, R, ...). `frameCount` may be short on a burst's final packet. The tail of each channel area fills with the mode's true silence value, `0x00` for 16-bit and `0xFF` for mu-law. The length byte stays the mode's full per-channel count so every packet represents a whole period, silence included, and the stream never starves. |
 | `EncodeStereoPacketInto` | `static void EncodeStereoPacketInto(Span<byte> b, ReadOnlySpan<short> interleaved, int frameCount, bool muLaw)` | Allocation-free variant for the streaming hot path. The buffer must be at least `PacketLength` bytes. |
 | `MuLawEncode` | `static byte MuLawEncode(short sample)` | G.711 mu-law compression of one s16 sample: bias 0x84, clip 32635, complemented output. Silence encodes to `0xFF`, positive full scale to `0x80`, negative full scale to `0x00`. Input &minus;32768 clamps to &minus;32767 first, since the C references negate an int16 in place and overflow on that one value. |
@@ -1773,7 +1825,7 @@ Detects ~40 Hz to ~1300 Hz over an ~83 ms ring. Near-silent or unvoiced windows 
 **File:** `PadForge.Engine/Haptics/WiiSpeakerAdpcm.cs`
 **Namespace:** `PadForge.Engine.Haptics`
 
-(v3.6, #146) Yamaha 4-bit ADPCM codec for the Wii Remote speaker. The expand-nibble math (DiffLookup / IndexScale / clip) is the public WiiBrew / Dolphin algorithm. Two samples pack per byte, **low nibble first** (the order real Wii speaker hardware consumes, hardware-verified via the ffmpeg `adpcm_yamaha` + WiimoteLib playback path).
+(v3.6, #146) Yamaha 4-bit ADPCM codec for the Wii Remote speaker. The expand-nibble math (DiffLookup / IndexScale / clip) follows the public WiiBrew / Dolphin algorithm, with Dolphin's `Speaker.cpp` read as documentation for the table and formula. Two samples pack per byte, **low nibble first** (the order real Wii speaker hardware consumes, hardware-verified via the ffmpeg `adpcm_yamaha` + WiimoteLib playback path).
 
 > **Off the live path.** The live `WiiSpeakerService` ships 8-bit PCM (memoryless, tolerant of the SDL-shared BT link), not this differential ADPCM. This codec is kept compiled and unit-tested (`HapticEncoderTests`) as the verified reference implementation only.
 
@@ -1822,8 +1874,16 @@ Stored separately from UserSettings, linked via `PadSettingChecksum`. Multiple U
 | `ButtonBack` | `string` | `[XmlElement]` | `""` |
 | `ButtonStart` | `string` | `[XmlElement]` | `""` |
 | `ButtonGuide` | `string` | `[XmlElement]` | `""` |
+| `ButtonShare` | `string` | `[XmlElement]` | `""` |
+| `ButtonMute` | `string` | `[XmlElement]` | `""` |
+| `LeftPaddle` | `string` | `[XmlElement]` | `""` |
+| `RightPaddle` | `string` | `[XmlElement]` | `""` |
+| `LeftFunction` | `string` | `[XmlElement]` | `""` |
+| `RightFunction` | `string` | `[XmlElement]` | `""` |
 | `LeftThumbButton` | `string` | `[XmlElement]` | `""` |
 | `RightThumbButton` | `string` | `[XmlElement]` | `""` |
+
+`ButtonShare` surfaces only on Xbox Series profiles, `ButtonMute` on DualSense and DualSense Edge profiles, and the paddle and Fn pairs on DualSense Edge profiles.
 
 ### D-Pad Mappings
 
@@ -1926,6 +1986,9 @@ Stored separately from UserSettings, linked via `PadSettingChecksum`. Multiple U
 |----------|------|---------------|---------|-------------|
 | `PointerMode` | `string` | `[XmlElement]` | `"Mouse"` | Wii IR pointer cursor drive. `"Mouse"` = absolute aim, `"FpsMouse"` = center-offset velocity, `"Mouse43"` / `"Mouse169"` = cursor confined to an aspect region with border pin. Per (device, slot). Shapes the cursor drive only. The "IR Pointer X/Y" mapping sources read raw regardless. |
 | `PointerFpsSpeed` | `string` | `[XmlElement]` | `"35"` | FPS Mouse speed, pixels per 10 ms at full deflection. |
+| `IrSensorBarPos` | `string` | `[XmlElement]` | `"0"` | Where the sensor bar sits: 0 = centered, 1 = above, 2 = below. |
+| `IrSensorBarComp` | `string` | `[XmlElement]` | `"0"` | Vertical compensation for the bar position, 0–0.5 of the pointer range. |
+| `IrSmoothing` | `string` | `[XmlElement]` | `"0"` | Pointer smoothing 0–1. 0 = raw. |
 
 ### Motion Grip (#392)
 
@@ -1943,6 +2006,47 @@ The rotation itself lives in `SourceCoercion` (`PadForge.Engine/Common/Mapping/S
 | `ApplyMotionGrip` | `static void ApplyMotionGrip(string deviceGuid, int slotIndex, ref float x, ref float y, ref float z)` | Rotates a body-sensor triple in place by the (device, slot) grip. The App's snapshot builder and the Gyro tab's live readout call this for the accelerometer copy. The gyro copy already flows through the calibrated read. |
 | `ReadGravity` | `internal static (float gx, float gy, float gz) ReadGravity(string deviceGuid, int slotIndex, bool aux)` | The gravity estimate every Player Space, World Space, lean, and tilt read consumes, rotated by the grip for the body sensor. The aux sensor (Nunchuk, left Joy-Con) is a separate body in the other hand and keeps its own frame. The no-data sentinel `(0, 0, -1)` returns unrotated, so a sideways grip does not invent a different resting default before the first real sample. |
 
+### Gyro Tuning (v3.3)
+
+Per device, per slot, so each binding config carries its own gyro feel and its own bias calibration.
+
+| Property | Type | Serialization | Default | Description |
+|----------|------|---------------|---------|-------------|
+| `GyroSensitivityH` / `GyroSensitivityV` | `string` | `[XmlElement]` | `"1.0"` | Horizontal (yaw and roll) and vertical (pitch) multipliers |
+| `GyroSensitivityUnits` | `string` | `[XmlElement]` | `"Multiplier"` | `Multiplier` or `DegPerScreenTurn`. Changes only how the slider shows the stored multiplier |
+| `GyroDeadZoneDegPerSec` | `string` | `[XmlElement]` | `"3.0"` | Subtract-style deadzone in degrees per second |
+| `GyroSmoothingAlpha` | `string` | `[XmlElement]` | `"0"` | EMA smoothing, 0 (off) to 0.95 |
+| `GyroTighteningThresholdDegPerSec` / `GyroSmoothingThresholdDegPerSec` / `GyroSmoothingWindowMs` | `string` | `[XmlElement]` | `"3.0"` / `"8.0"` / `"50"` | Dual-threshold smoothing: below the tightening threshold the input is replaced by the window average, above the smoothing threshold it passes raw, and a linear blend runs between |
+| `GyroAcceleration` | `string` | `[XmlElement]` | `"0"` | Rate-dependent gain 0–2: output = input × (1 + accel × &#124;input&#124;) |
+| `GyroOutputCurve` | `string` | `[XmlElement]` | `"Linear"` | `Linear`, `Aggressive`, `Relaxed`, `Wide`, or `ExtraWide` |
+| `GyroSpace` | `string` | `[XmlElement]` | `"Local"` | `Local`, `Player`, or `World` |
+| `GyroPlayerSpaceYawRelaxFactor` | `string` | `[XmlElement]` | `"1.41"` | Player Space yaw relaxation |
+| `GyroWorldSpaceSideReductionThreshold` | `string` | `[XmlElement]` | `"0.125"` | World Space side reduction, 0–1 |
+| `GyroRealWorldCalibration` | `string` | `[XmlElement]` | `"0"` | In-game degrees per physical degree. 0 = off |
+| `GyroEasyAimStickThreshold` | `string` | `[XmlElement]` | `"0"` | 0–100%. 0 = always on. Above 0, gyro output zeroes while the engage stick deflects less than the threshold |
+| `GyroEngageStickSide` | `string` | `[XmlElement]` | `"Right"` | `Right`, `Left`, or `Either` (#120) |
+| `GyroEngageStickDirection` | `string` | `[XmlElement]` | `"Full"` | `Full`, `X`, `Y`, `XNeg`, `XPos`, `YNeg`, or `YPos` (#120) |
+| `GyroAimEngageButton` / `GyroAimEngageDeviceGuid` | `string` | `[XmlElement]` | `""` | Engage button descriptor and the device it reads. Empty = always on |
+| `GyroAimEngageMode` | `string` | `[XmlElement]` | `"Hold"` | `Hold` or `Toggle` |
+| `GyroInvertPitch` / `GyroInvertYaw` | `string` | `[XmlElement]` | `"0"` | Invert the projected pitch or yaw lane |
+| `GyroInvertRoll` | `string` | `[XmlElement]` | `""` | Roll invert (#321). Empty marks a profile saved before the yaw / roll split and resolves to the yaw value through the `[XmlIgnore]` `GyroInvertRollEffective` |
+| `GyroApplyTuningToPassthrough` | `string` | `[XmlElement]` | `"0"` | "1" sends the tuned gyro to the virtual controller's motion report and the DSU broadcast. "0" sends the calibrated reading |
+| `GyroBiasPitch` / `GyroBiasYaw` / `GyroBiasRoll` | `string` | `[XmlElement]` | `"0"` | At-rest bias in rad/s |
+| `GyroAuxBiasPitch` / `GyroAuxBiasYaw` / `GyroAuxBiasRoll` | `string` | `[XmlElement]` | `"0"` | Aux gyro bias (#252) |
+| `GyroCalibratedAtUtc` | `string` | `[XmlElement]` | `""` | ISO-8601 time of the last calibration. Empty = uncalibrated, and `InputService` calibrates on first sight |
+| `GyroCompassYaw` | `string` | `[XmlElement]` | `"0"` | "1" anchors yaw to the Switch 2 magnetometer (#271) |
+| `MagBiasX` / `MagBiasY` / `MagBiasZ` / `MagFieldNorm` | `string` | `[XmlElement]` | `"0"` | Magnetometer hard-iron bias and field magnitude from the figure-8 calibration. A zero norm keeps the compass off |
+
+### Touchpad, Motion, and Gesture Settings
+
+| Property | Type | Serialization | Default | Description |
+|----------|------|---------------|---------|-------------|
+| `TouchpadX1` / `TouchpadY1` / `TouchpadX2` / `TouchpadY2` / `TouchpadContact1` / `TouchpadContact2` / `TouchpadClick` | `string` | `[XmlElement]` | `""` | PlayStation touchpad output mappings |
+| `MotionGyro` / `MotionAccel` | `string` | `[XmlElement]` | `""` | `"Motion Gyro"` / `"Motion Accel"` while this device feeds the slot's motion rows, empty otherwise. `SettingsService.EnsureMotionRowsForAllSlots` mirrors the MappingSet rows into them |
+| `TouchpadSettings` | `TouchpadSettingsEntry[]` | `[XmlArray("TouchpadSettings")] [XmlArrayItem("Settings")]` | `null` | Gesture settings per assigned device and touchpad index. Null means every pad uses `TouchpadGestureSettings.Default()` |
+| `MouseGestureSettings` | `MouseGestureSettingsEntry[]` | `[XmlArray("MouseGestureSettings")] [XmlArrayItem("Settings")]` | `null` | Mouse-gesture settings per device (#200). Null means `MouseGestureSettings.Default()` |
+| `Model3DAppearances` | `string` | `[XmlElement]` | `""` | Legacy appearance map, kept for old settings and clipboard copies. Appearance now belongs to the slot |
+
 ### Force Feedback Settings
 
 | Property | Type | Serialization | Default | Description |
@@ -1952,6 +2056,46 @@ The rotation itself lives in `SourceCoercion` (`PadForge.Engine/Common/Mapping/S
 | `ForceSwapMotor` | `string` | `[XmlElement]` | `"0"` | "0"=no swap, "1"=swap left/right motors |
 | `LeftMotorStrength` | `string` | `[XmlElement]` | `"100"` | Left (low-freq) motor strength 0–100% |
 | `RightMotorStrength` | `string` | `[XmlElement]` | `"100"` | Right (high-freq) motor strength 0–100% |
+| `TriggerRumbleFold` | `string` | `[XmlElement]` | `"0"` | "1" folds the game's trigger-motor channels into the body motors on a device without trigger motors, each side by max (#271) |
+| `ImpulseOverallGain` | `string` | `[XmlElement]` | `"100"` | Overall impulse-trigger gain 0–100% (Xbox One+) |
+| `ImpulseLeftStrength` / `ImpulseRightStrength` | `string` | `[XmlElement]` | `"100"` | Per-trigger impulse motor strength 0–100% |
+| `ImpulseSwapTriggers` | `string` | `[XmlElement]` | `"0"` | "1" swaps the two impulse motors |
+| `AtVibrationToImpulseEnabled` | `string` | `[XmlElement]` | `"0"` | "1" plays a game's vibration-class DualSense trigger programs on this device's impulse triggers (#271). Resistance-class programs translate to nothing |
+| `ConstantForceEnabled` | `string` | `[XmlElement]` | `"0"` | "1" holds a constant force at `ConstantForceX` / `ConstantForceY` (each &minus;1.0 to +1.0). A non-zero game force overrides it, then it resumes |
+| `ConstantForceX` / `ConstantForceY` | `string` | `[XmlElement]` | `"0"` | |
+| `ConstantTriggerForceEnabled` | `string` | `[XmlElement]` | `"0"` | The impulse-trigger twin: while game trigger rumble is silent, `ConstantTriggerForceLeft` / `ConstantTriggerForceRight` (0..1) drive the trigger motors |
+| `ConstantTriggerForceLeft` / `ConstantTriggerForceRight` | `string` | `[XmlElement]` | `"0"` | |
+| `RotationRange` | `string` | `[XmlElement]` | `"900"` | Wheel rotation range in degrees (40–1080), applied by the native Logitech / Fanatec / Thrustmaster writers |
+| `AutoCenterStrength` | `string` | `[XmlElement]` | `"0"` | Wheel auto-center spring 0–100% (0 = off). Also drives the software spring for generic SDL wheels |
+| `WheelRpmLeds` | `string` | `[XmlElement]` | `"0"` | "1" drives a Logitech or Fanatec wheel's RPM LEDs from racing-game telemetry |
+
+### Steering At-Lock Feedback (#94)
+
+| Property | Type | Serialization | Default | Description |
+|----------|------|---------------|---------|-------------|
+| `SteeringAngleRumbleEnabled` | `string` | `[XmlElement]` | `"0"` | "1" turns a mapped virtual stick axis into continuous rumble: left motor for negative deflection, right for positive |
+| `SteeringAngleRumbleAxis` | `string` | `[XmlElement]` | `"0"` | 0 = LX, 1 = LY, 2 = RX, 3 = RY |
+| `SteeringAngleRumbleStrength` | `string` | `[XmlElement]` | `"50"` | 0–100% |
+| `SteeringAngleRumbleDeadzone` | `string` | `[XmlElement]` | `"2"` | 0–25% |
+| `SteeringLockRumbleEnabled` / `SteeringLockTriggerVibEnabled` / `SteeringLockLightbarEnabled` / `SteeringLockATResistanceEnabled` | `string` | `[XmlElement]` | `"0"` | Pulses on reaching full lock: rumble, impulse triggers, lightbar (DualSense / DS4), and an adaptive-trigger resistance ramp (DualSense) |
+| `SteeringLockPulseMs` | `string` | `[XmlElement]` | `"80"` | Rumble and trigger pulse length |
+| `SteeringLockLightbarColor` | `string` | `[XmlElement]` | `"#FF0000"` | Lightbar pulse color when the source is `Fixed` |
+| `SteeringLockLightbarColorSource` | `string` | `[XmlElement]` | `"Fixed"` | `Fixed`, `RandomHue`, or `PaletteStep` |
+| `SteeringLockLightbarPaletteCsv` | `string` | `[XmlElement]` | `""` | `RRGGBB` palette for `PaletteStep` |
+| `SteeringLockLightbarHoldMs` / `SteeringLockLightbarFadeMs` | `string` | `[XmlElement]` | `"80"` / `"250"` | Lightbar hold, then fade back |
+
+### Trigger Rumble Routing (#102)
+
+Routes the main-motor rumble into the trigger channel (Xbox impulse triggers, DualSense AT vibration), gated by a per-trigger activator.
+
+| Property | Type | Serialization | Default | Description |
+|----------|------|---------------|---------|-------------|
+| `LeftTriggerRouteSource` / `RightTriggerRouteSource` | `string` | `[XmlElement]` | `"None"` | `None`, `MainLeft`, `MainRight`, `MaxOfBoth`, or `SumOfBoth` |
+| `LeftTriggerRouteMode` / `RightTriggerRouteMode` | `string` | `[XmlElement]` | `"Duplicate"` | `Duplicate` keeps the main motor running, `Redirect` silences it |
+| `LeftTriggerRouteScale` / `RightTriggerRouteScale` | `string` | `[XmlElement]` | `"100"` | 0–200% of the source amplitude |
+| `LeftTriggerRouteActivator` / `RightTriggerRouteActivator` | `string` | `[XmlElement]` | `""` | Activator descriptor. Empty = always engaged |
+| `LeftTriggerRouteActivatorDeviceGuid` / `RightTriggerRouteActivatorDeviceGuid` | `string` | `[XmlElement]` | `""` | Device the activator reads |
+| `LeftTriggerRouteActivatorMode` / `RightTriggerRouteActivatorMode` | `string` | `[XmlElement]` | `"Hold"` | `Hold`, `Toggle`, `ReleaseToEngage`, or `AlwaysOn` |
 
 ### Audio Rumble Settings
 
@@ -1962,6 +2106,10 @@ The rotation itself lives in `SourceCoercion` (`PadForge.Engine/Common/Mapping/S
 | `AudioRumbleCutoffHz` | `string` | `[XmlElement]` | `"80"` | Low-pass cutoff Hz (40–200) |
 | `AudioRumbleLeftMotor` | `string` | `[XmlElement]` | `"100"` | Left motor strength for audio rumble (0–100%) |
 | `AudioRumbleRightMotor` | `string` | `[XmlElement]` | `"100"` | Right motor strength for audio rumble (0–100%) |
+| `AudioRumbleTriggersEnabled` | `string` | `[XmlElement]` | `"0"` | Audio-driven impulse-trigger rumble (Xbox One+), a separate filter chain with its own settings |
+| `AudioRumbleTriggersSensitivity` | `string` | `[XmlElement]` | `"4"` | 1–20 |
+| `AudioRumbleTriggersCutoffHz` | `string` | `[XmlElement]` | `"80"` | 40–200 Hz |
+| `AudioRumbleLeftTrigger` / `AudioRumbleRightTrigger` | `string` | `[XmlElement]` | `"100"` | Per-trigger scale 0–100% |
 
 ### Axis Configuration
 
@@ -2067,7 +2215,7 @@ Opaque payloads the App-side Copy path fills and the Paste path consumes. `ToJso
 | Property | Type | ToJson key | Description |
 |----------|------|------------|-------------|
 | `SlotDeviceConfigsJson` | `string` | `__SlotDeviceConfigs` | Per-(slot, device) bag: lighting, adaptive triggers, Mic LED, Player LED, audio-reactive, palette, tone filter. Was `__SlotPlayStationConfigs` before the DeviceSlotConfig rename. |
-| `SlotExtendedConfigJson` | `string` | `__SlotExtendedConfig` | Extended custom layout snapshot (axis / trigger / POV / button counts, OEM / Product strings, FFB toggle). |
+| `SlotExtendedConfigJson` | `string` | `__SlotExtendedConfig` | Extended custom layout snapshot (thumbstick / trigger / POV / button counts, OEM / Product strings, FFB toggle). |
 | `SlotMidiConfigJson` | `string` | `__SlotMidiConfig` | MIDI slot layout snapshot (channel, velocity, CC + note ranges). |
 | `SlotKbmConfigJson` | `string` | `__SlotKbmConfig` | KBM slot config: SOCD mode + key pairs (#205). |
 | `SlotShiftActivatorsJson` | `string` | `__SlotShiftActivators` | Slot shift authoring: ShiftActivators + Base flyout appearance (#119). |
@@ -2082,16 +2230,16 @@ Opaque payloads the App-side Copy path fills and the Paste path consumes. `ToJso
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `MigrateAntiDeadZones` | `void MigrateAntiDeadZones()` | Migrates legacy unified anti-deadzone to per-axis X/Y. Call after deserialization. |
+| `MigrateAntiDeadZones` | `void MigrateAntiDeadZones()` | Migrates legacy unified anti-deadzone to per-axis X/Y when both per-axis values are empty or zero, then zeros the legacy value. Call after deserialization. |
 | `MigrateMaxRangeDirections` | `void MigrateMaxRangeDirections()` | Copies symmetric max range to null/empty negative-direction properties. |
 | `ComputeChecksum` | `string ComputeChecksum()` | 8-char hex checksum (first 4 bytes of MD5) from all properties. Keys sorted for determinism. |
 | `UpdateChecksum` | `void UpdateChecksum()` | Computes and stores checksum in `PadSettingChecksum`. |
-| `ClearMappingDescriptors` | `void ClearMappingDescriptors(IReadOnlyDictionary<string, string> seed = null)` | Clears all mapping descriptors. Preserves deadzone and FFB settings. With a `seed`, each standard descriptor property is assigned its seeded value (or `""` when absent) in a single pass instead of being blanked for the caller to refill. That matters because the ~1 kHz poll thread reads these properties directly, so a blank-then-refill leaves a window in which a tick sees empty descriptors and drives the pad to neutral. Callers on a frequent path must pass a seed. Pass null only to clear everything. |
+| `ClearMappingDescriptors` | `void ClearMappingDescriptors(IReadOnlyDictionary<string, string> seed = null, IReadOnlyDictionary<string, string> deadZoneSeed = null, IReadOnlyDictionary<string, string> bidirectionalSeed = null)` | Replaces every mapping descriptor (standard, raw, MIDI, KBM, VR) and the per-mapping deadzone and bidirectional entries. Preserves per-device tuning such as stick deadzones and FFB. With a `seed`, each descriptor is assigned its seeded value (or `""` when absent) in a single pass instead of being blanked for the caller to refill, and `deadZoneSeed` / `bidirectionalSeed` do the same for their entries. That matters because the ~1 kHz poll thread reads these properties directly, so a blank-then-refill leaves a window in which a tick sees empty descriptors and drives the pad to neutral. Callers on a frequent path must pass a seed. Pass null only to clear everything. |
 | `GetAllMappingDescriptors` | `List<string> GetAllMappingDescriptors()` | All non-empty mapping descriptor strings. |
 | `ToJson` | `string ToJson(VirtualControllerType outputType = VirtualControllerType.Xbox, bool isExtended = false)` | JSON for clipboard. Embeds `__OutputType` / `__IsExtended` layout metadata, the mapping dicts (`__ExtendedMappings`, `__MidiMappings`, `__KbmMappings`, `__VrMappings`, `__MappingDeadZones`, `__MappingBidirectional`), the typed touchpad and mouse-gesture sub-trees (`__TouchpadSettings`, `__MouseGestureSettings`), and the clipboard-only per-slot payloads written only when set on the source: `__SlotDeviceConfigs` (was `__SlotPlayStationConfigs` before the DeviceSlotConfig rename), `__SlotExtendedConfig`, `__SlotMidiConfig`, `__SlotKbmConfig` (#205 SOCD), `__SlotShiftActivators` (#119 shift authoring), `__SlotMenus` (#9 B-17 menus), `__SlotSetExtras` (#236 / #240 / #270), `__SlotMacros` (#112), `__SlotPerDeviceSettings`, `__MultiSourceRows` (device-scoped rows), and `__SlotRows` (whole-slot rows). |
 | `FromJson` | `static PadSetting FromJson(string json)` | Deserializes JSON. Returns null on invalid input. |
 | `FromJson` | `static PadSetting FromJson(string json, out VirtualControllerType, out bool)` | Same, also returns the source layout metadata so cross-layout paste can translate. Reattaches the typed `TouchpadSettings` / `MouseGestureSettings` and the clipboard-only payloads listed above. Still accepts the legacy `__SlotPlayStationConfigs` key (mapped to `SlotDeviceConfigsJson`) for payloads copied by pre-v4 builds. `ToJson` no longer writes it. |
-| `CopyFrom` | `void CopyFrom(PadSetting source)` | Reflection copy of every `CopyablePropertyNames` entry. Deep-copies mapping arrays and the `TouchpadSettings` typed sub-tree. Invalidates cached dicts. |
+| `CopyFrom` | `void CopyFrom(PadSetting source)` | Reflection copy of every `CopyablePropertyNames` entry. Deep-copies mapping arrays and the `TouchpadSettings` and `MouseGestureSettings` typed sub-trees. Invalidates cached dicts. |
 | `CopyFromTranslated` | `void CopyFromTranslated(PadSetting source, VirtualControllerType srcType, bool srcIsExtended, VirtualControllerType tgtType, bool tgtIsExtended)` | Cross-layout copy via `MappingTranslation`. Translates mapping properties by canonical position. |
 | `CloneDeep` | `PadSetting CloneDeep()` | Deep copy including checksum. |
 
@@ -2139,6 +2287,7 @@ Links a physical device to a virtual controller slot and mapping. One per device
 
 | Property | Type | Serialization | Description |
 |----------|------|---------------|-------------|
+| `InstanceGuidString` | `string` | `[XmlIgnore]` | Cached `InstanceGuid.ToString()` for the ~1 kHz Step 3 descriptor reads. Reset when `InstanceGuid` is assigned. |
 | `OutputState` | `Gamepad` | `[XmlIgnore]` | Mapped output from Step 3. Written by background thread. |
 | `RawMappedState` | `Gamepad` | `[XmlIgnore]` | Pre-processing state (axis-selected, Y-negated, before DZ/ADZ/linear/range). For UI preview. |
 | `RawHidOutputState` | `RawHidState` | `[XmlIgnore]` | Mapped raw output for Extended slots. Forwarded to HIDMaestro via `HMaestroVirtualController.SubmitRawHidState`. |
@@ -2169,9 +2318,9 @@ Data model for a physical input device. Serializable properties (settings-persis
 
 | Property | Type | Serialization | Default | Description |
 |----------|------|---------------|---------|-------------|
-| `InstanceGuid` | `Guid` | `[XmlElement]` | | Deterministic GUID from device path |
+| `InstanceGuid` | `Guid` | `[XmlElement]` | | Deterministic GUID from `SdlDeviceWrapper.BuildInstanceGuid` (serial, device path, or SDL GUID) |
 | `InstanceName` | `string` | `[XmlElement]` | `""` | Instance name (e.g., "Xbox Controller") |
-| `ProductGuid` | `Guid` | `[XmlElement]` | | Product GUID (PIDVID format) |
+| `ProductGuid` | `Guid` | `[XmlElement]` | | Product GUID built from VID and PID (`SdlDeviceWrapper.BuildProductGuid`, no DirectInput PIDVID signature) |
 | `ProductName` | `string` | `[XmlElement]` | `""` | Product name |
 | `VendorId` | `ushort` | `[XmlElement]` | 0 | USB Vendor ID |
 | `ProdId` | `ushort` | `[XmlElement]` | 0 | USB Product ID |
@@ -2199,6 +2348,7 @@ Data model for a physical input device. Serializable properties (settings-persis
 | `HasTouchpad` | `bool` | `[XmlElement]` | `false` | At least one touchpad surface (DS4 / DualSense / Steam Deck) |
 | `CapTouchpadCount` | `int` | `[XmlElement]` | 0 | Touchpad surface count (Steam Controller 2026 / Deck = 2, DualSense / DS4 = 1). 0 on pre-field saves, callers fall back to `HasTouchpad`. |
 | `CapTouchpadFingerCounts` | `int[]` | (default) | `null` | Per-touchpad finger count. Index aligns with touchpad index. Null/empty on pre-field saves. |
+| `CapTouchpadPressure` / `CapTouchpadClick` | `bool?` | (default, written only when set) | `null` | The device's `TouchpadPressureSupported` / `TouchpadClickSupported`. Null = unknown |
 | `HasRumbleTriggers` | `bool` | `[XmlElement]` | `false` | Per-trigger ("impulse") rumble motors (Xbox One / Elite / Series) |
 
 ### Serialized Metadata
@@ -2207,13 +2357,14 @@ Data model for a physical input device. Serializable properties (settings-persis
 |----------|------|---------------|---------|-------------|
 | `DateCreated` | `DateTime` | `[XmlElement]` | `DateTime.Now` | First creation timestamp. Vestigial. Serialized but never read by any consumer. |
 | `DateUpdated` | `DateTime` | `[XmlElement]` | `DateTime.Now` | Last update timestamp. Vestigial. Serialized but never read by any consumer. |
-| `IsEnabled` | `bool` | `[XmlElement]` | `true` | Whether device is enabled for mapping |
+| `IsEnabled` | `bool` | `[XmlElement]` | `true` | Record-level flag, shown as "Disabled" in the Devices list. It gates no input, and no control writes it. The per-slot `UserSetting.IsEnabled` is the flag that gates an assignment |
 | `IsHidden` | `bool` | `[XmlElement]` | `false` | Whether device is hidden from UI |
 | `DisplayName` | `string` | `[XmlElement]` | `""` | User-assigned name (overrides InstanceName) |
 | `HidHideEnabled` | `bool` | `[XmlElement]` | `false` | Hide device from games via HidHide when assigned |
 | `ConsumeInputEnabled` | `bool` | `[XmlElement]` | `false` | Suppress mapped KB/mouse inputs via hooks |
 | `ForceRawJoystickMode` | `bool` | `[XmlElement]` | `false` | Bypass SDL gamepad remapping |
 | `IdleDisconnectSeconds` | `int` | `[XmlElement]` | 0 | Idle-disconnect countdown (#162). When Bluetooth-connected and idle this long, the host radio drops the link so the pad sleeps. 0 disables. No effect over USB. No charging gate. |
+| `QuickChargeEnabled` | `bool` | `[XmlElement]` | `false` | Quick Charge (#372): when a Bluetooth-connected pad starts reporting that it charges, PadForge drops the Bluetooth link so the pad only charges |
 | `HidHideInstanceIds` | `List<string>` | `[XmlArray] [XmlArrayItem("Id")]` | `new()` | Cached HID instance IDs for HidHide (persisted for offline devices) |
 | `DeviceObjects` | `DeviceObjectItem[]` | (default) | `null` | Axis, hat, and button metadata. Populated in Step 1. No serialization attribute, so it round-trips as a `<DeviceObjects>` wrapper of `<DeviceObjectItem>` children. Serialized for offline dropdown persistence so mapping UI can show source descriptors when the device is disconnected. |
 
@@ -2223,11 +2374,16 @@ Data model for a physical input device. Serializable properties (settings-persis
 |----------|------|---------------|-------------|
 | `Device` | `ISdlInputDevice` | `[XmlIgnore]` | Live device handle. Set in Step 1. |
 | `IsOnline` | `bool` | `[XmlIgnore]` | Connected and opened. |
+| `InstanceGuidString` | `string` | `[XmlIgnore]` | Cached `InstanceGuid.ToString()` for the poll loop. |
+| `OutputSync` | `object` | `[XmlIgnore]` | Lock that serializes a remote peer's relayed output frame and the feedback pass stopping the device (#416). |
 | `InputState` | `CustomInputState` | `[XmlIgnore]` | Current state snapshot (Step 2, atomic ref). |
+| `InputStateSeq` | `long` (field) | `[XmlIgnore]` | Publish counter Step 2 increments on every `InputState` republish. With pooled buffers a reference can recur with new content, so consumers compare this instead. |
+| `PtpStatePool` | `PooledInputStatePair` (field) | `[XmlIgnore]` | State buffers for the Precision Touchpad read path, which has no wrapper. |
 | `OldInputState` | `CustomInputState` | `[XmlIgnore]` | Previous state for change detection. |
 | `LastActiveTick` | `long` | `[XmlIgnore]` | Last `TickCount64` this device was non-idle, for the #162 idle countdown. Polling thread only. 0 = not tracked yet this connection. |
 | `IdleTrackedConnection` | `object` | `[XmlIgnore]` | Wrapper the idle countdown last stamped against. A mismatch marks a fresh connection and restarts the countdown. Polling thread only. |
 | `LastIdleCheckTick` | `long` | `[XmlIgnore]` | Last tick the #162 countdown ran, so it checks about once a second instead of at poll rate. Polling thread only. |
+| `QuickChargePrevCharging` / `LastQuickChargeCheckTick` | `bool` / `long` | `[XmlIgnore]` | Quick Charge edge memory and its ~1 Hz check tick (#372). The first observation of a record seeds the edge memory and never counts as an edge. Polling thread only. |
 | `ActuatorCount` | `int` | `[XmlIgnore]` | FFB actuator axis count. |
 | `ForceFeedbackState` | `ForceFeedbackState` | `[XmlIgnore]` | Per-device FFB state. |
 
@@ -2238,7 +2394,9 @@ Data model for a physical input device. Serializable properties (settings-persis
 | `IsMouse` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.Mouse` |
 | `IsKeyboard` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.Keyboard` |
 | `IsTouchpad` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.Touchpad` |
+| `IsTablet` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.Tablet` |
 | `IsConsumerControl` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.ConsumerControl` (#168) |
+| `SupportsTouchpadPressure` / `SupportsTouchpadClick` | `bool` | `[XmlIgnore]` | The stored `CapTouchpadPressure` / `CapTouchpadClick`, or when unknown, true for everything but a tablet and a wrapper-less system touchpad |
 | `HasIrCamera` | `bool` | `[XmlIgnore]` | Wii Remote IR camera. Identity-derived from VID `0x057E` + name prefix "Nintendo Wii Remote", correct online or offline (#146). Gates the "IR Pointer X/Y" sources. |
 | `IsBalanceBoard` | `bool` | `[XmlIgnore]` | Wii Balance Board. VID `0x057E` + name contains "Balance Board" (#146). Gates the corner-load sources. |
 | `HasJoyConIr` | `bool` | `[XmlIgnore]` | Right Joy-Con NIR camera. VID `0x057E` + exact name "Nintendo Switch Joy-Con (R)" (#151), or PID `0x2008` (combined gen-1 pair, whose right half posts the camera, #275). The PID leg exists because SDL names the gen-1 and gen-2 pairs identically. Gates the "IR Brightness" source. |
@@ -2246,7 +2404,7 @@ Data model for a physical input device. Serializable properties (settings-persis
 | `HasVoicePhrases` | `bool` | `[XmlIgnore]` | Voice phrases ride this pad's own surface (#317). VID `0x054C` and PID `0x0CE6` / `0x0DF2` (DualSense / DualSense Edge), the pads with an embedded microphone. Standalone microphone devices are not gated by this: they expose phrases as named raw buttons directly, the PC/SC-reader pattern. |
 | `HasNfcReader` | `bool` | `[XmlIgnore]` | Switch NFC reader (#241). Computed, not stored: VID `0x057E` and PID `0x2007` (right Joy-Con), `0x2008` (combined pair, whose right half carries the MCU), or `0x2009` (Pro Controller). Switch 2 controllers are deliberately excluded, because no reference reads their NFC on PC over any transport. Gates the picker offering the "Any NFC Tag" and per-tag sources. |
 | `HasForceFeedback` | `bool` | `[XmlIgnore]` | True when `ActuatorCount` is above 0, or when a live `Device` reports `HasRumble` or `HasHaptic`. Null-safe on `Device`. |
-| `ResolvedName` | `string` | `[XmlIgnore]` | DisplayName if set, then InstanceName, then ProductName, then "(Unknown Device)" |
+| `ResolvedName` | `string` | `[XmlIgnore]` | DisplayName if set, then InstanceName, then ProductName. "(Unknown Device)" only when ProductName is null |
 | `StatusText` | `string` | `[XmlIgnore]` | "Disabled", "Online", or "Offline" |
 
 ### Methods
@@ -2318,10 +2476,10 @@ public record MappingSlot(ControlCategory Category, int Position);
 
 | Layout | Property Name Examples | Notes |
 |--------|----------------------|-------|
-| **Gamepad** (Xbox / PlayStation / Extended gamepad preset) | `ButtonA`, `LeftThumbAxisX`, `DPadUp` | Xbox and PlayStation share property names. Buttons: A=0..Guide=10. Axes: LX=0..RT=5. |
+| **Gamepad** (Xbox / PlayStation / Extended gamepad preset) | `ButtonA`, `LeftThumbAxisX`, `DPadUp` | Xbox and PlayStation share property names. Buttons: A=0..Guide=10, then Share 11, Mute 12, the paddles 13–14, and the Fn pair 15–16. Axes: LX=0..RT=5. |
 | **Raw surface** (Extended Custom and Nintendo, `isExtended=true`) | `RawBtn0`, `RawAxis2`, `RawAxis2Neg`, `RawPov0Up` | Indexed by position. POV 0 only maps to D-Pad. |
 | **MIDI** | `MidiNote0`, `MidiCC3`, `MidiCC3Neg` | No D-Pad support (returns `null`). |
-| **KB+M** | `KbmMBtn0`, `KbmMouseX`, `KbmMouseXNeg`, `KbmKey20`, `KbmScroll` | Mouse buttons 0–4, VK codes, 4 mouse axes (`KbmMouseX`, `KbmMouseY`, `KbmScroll`, `KbmScrollH`). D-Pad mapped to arrow keys. |
+| **KB+M** | `KbmMBtn0`, `KbmMouseX`, `KbmMouseXNeg`, `KbmKey20`, `KbmScroll` | Button positions 0–4 are the mouse buttons (LMB, RMB, MMB, X1, X2), then Space, E, R, G, Q, and C at 5–10. Other keys have no position. 4 mouse axes (`KbmMouseX`, `KbmMouseY`, `KbmScroll`, `KbmScrollH`). D-Pad mapped to arrow keys. |
 | **VR** (#49) | `VrRA`, `VrLStickX`, `VrLStickXNeg`, `VrLGrip` | One slot is the left plus right hand pair. Buttons 0-15, axes mirror the gamepad order (LX0 LY1 LT2 RX3 RY4 RT5) with the two grips as axes 6 and 7. No D-Pad. |
 
 ### Internal Layout Kinds
@@ -2372,7 +2530,8 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 |----------|-------|-------------|
 | `SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS` | `"SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"` | Allow events when app not focused |
 | `SDL_HINT_JOYSTICK_RAWINPUT` | `"SDL_JOYSTICK_RAWINPUT"` | Do NOT set (conflicts with XInput enumeration) |
-| `SDL_HINT_JOYSTICK_XINPUT` | `"SDL_JOYSTICK_XINPUT"` | Enables Xbox controller enumeration |
+| `SDL_HINT_JOYSTICK_GAMEINPUT` | `"SDL_JOYSTICK_GAMEINPUT"` | Declared. PadForge never sets it |
+| `SDL_HINT_JOYSTICK_XINPUT` | `"SDL_JOYSTICK_XINPUT"` | Set to `"1"` at init, but SDL 3 reads no hint by this name. XInput stays on through `SDL_HINT_XINPUT_ENABLED` (`"SDL_XINPUT_ENABLED"`), which defaults to on |
 | `SDL_HINT_HIDAPI_IGNORE_DEVICES` | `"SDL_HIDAPI_IGNORE_DEVICES"` | Comma-separated `0xVVVV/0xPPPP` list hidapi must never enumerate or probe (#235) |
 | `SDL_HINT_JOYSTICK_BLACKLIST_DEVICES` | `"SDL_JOYSTICK_BLACKLIST_DEVICES"` | Joystick-layer blacklist. Set to `InputManager.JoystickBlacklistDevices` to suppress the PS Move family junk rows (#277) |
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH2` | `"SDL_JOYSTICK_HIDAPI_SWITCH2"` | Switch 2 controller support |
@@ -2384,7 +2543,17 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 | `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR` | `"SDL_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR"` | Right Joy-Con NIR camera (#151). Set on demand only, because the camera and the NFC reader share one MCU |
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH_NFC` | `"SDL_JOYSTICK_HIDAPI_SWITCH_NFC"` | Switch NFC reader (#241). Also demand-gated |
 | `SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER` | `"SDL_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER"` | Claims a DS3 in DsHidMini SixaxisCompatible mode (#194). Never set alongside `SDL_JOYSTICK_HIDAPI_PS3` |
+| `SDL_HINT_JOYSTICK_HIDAPI_FLYDIGI` | `"SDL_JOYSTICK_HIDAPI_FLYDIGI"` | Flydigi enhanced-protocol driver switch (#395). Written under the joystick lock and replayed before every `SDL_Init` |
 | `SDL_HINT_VIDEO_ALLOW_SCREENSAVER` | `"SDL_VIDEO_ALLOW_SCREENSAVER"` | Allow screensaver |
+
+### Property and Buffer Constants
+
+| Constant | Value | Description |
+|----------|-------|-------------|
+| `SDL_PROP_JOYSTICK_CAP_RUMBLE_BOOLEAN` | `"SDL.joystick.cap.rumble"` | Rumble capability, read through `SDL_GetBooleanProperty` |
+| `SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN` | `"SDL.joystick.cap.trigger_rumble"` | Impulse-trigger capability |
+| `SDL_LOG_PRIORITY_DEBUG` | `3` | Priority passed to `SDL_SetLogPriorities` for the diagnostics ring |
+| `NfcTagUidBufferLength` | `21` | UID buffer: 10 bytes as 20 hex characters plus the terminator |
 
 ### Enums
 
@@ -2432,6 +2601,8 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 **SDL_HapticRamp** (44 bytes): `type`, `direction`, `length`, `delay`, `button`, `interval`, `start`, `end`, `attack_length`, `attack_level`, `fade_length`, `fade_level`.
 
 **SDL_HapticEffect** (72 bytes, explicit layout): Union overlaying `type`, `leftright`, `constant`, `periodic`, `condition`, `ramp` all at `FieldOffset(0)`.
+
+**SDL_VirtualJoystickDesc** (136 bytes on x64) with **SDL_VirtualJoystickSensorDesc** and **SDL_VirtualJoystickTouchpadDesc** (8 bytes each): the virtual-joystick description for the Bluetooth DS3 bridge. Its callbacks are function pointers (`VJUpdate`, `VJRumble`, `VJSetLED`, and the rest), and the managed delegates must stay alive while the joystick is attached.
 
 ### Haptic Constants
 
@@ -2513,11 +2684,15 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 | `SDL_SENSOR_ACCEL_R` | 5 | Right accelerometer |
 | `SDL_SENSOR_GYRO_R` | 6 | Right gyroscope |
 
-### Capsense Constants (fork API)
+### Capsense Constants (SDL 3.6.0)
 
 | Constant | Value | Description |
 |----------|-------|-------------|
-| `SDL_GAMEPAD_CAPSENSE_COUNT` | 4 | Channel count. Index order is left stick top, right stick top, left grip, right grip |
+| `SDL_GAMEPAD_CAPSENSE_LEFT_STICK` | 0 | Left stick top |
+| `SDL_GAMEPAD_CAPSENSE_RIGHT_STICK` | 1 | Right stick top |
+| `SDL_GAMEPAD_CAPSENSE_LEFT_GRIP` | 2 | Left grip |
+| `SDL_GAMEPAD_CAPSENSE_RIGHT_GRIP` | 3 | Right grip |
+| `SDL_GAMEPAD_CAPSENSE_COUNT` | 4 | Channel count |
 
 ### Mouse Button Masks
 
@@ -2535,7 +2710,7 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 
 ### Core Function Categories
 
-**Lifecycle**: `SDL_Init`, `SDL_Quit`, `SDL_EnableScreenSaver`, `SDL_GetError`, `SDL_SetHint`, `SDL_free`
+**Lifecycle**: `SDL_Init`, `SDL_Quit`, `SDL_EnableScreenSaver`, `SDL_GetError`, `SDL_SetHint`, `SDL_GetHint`, `SDL_free`, `SDL_GetTicksNS`
 
 **Joystick Enumeration**: `SDL_GetJoysticks`, `SDL_GetJoystickVendorForID`, `SDL_GetJoystickProductForID`, `SDL_GetJoystickProductVersionForID`, `SDL_GetJoystickTypeForID`, `SDL_GetJoystickNameForID`, `SDL_GetJoystickPathForID`, `SDL_IsGamepad`
 
@@ -2549,15 +2724,17 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 
 **Touchpad**: `SDL_GetNumGamepadTouchpads`, `SDL_GetNumGamepadTouchpadFingers`, `SDL_GetGamepadTouchpadFinger`
 
-**Fork-only surface**: `SDL_GamepadHasCapSense` / `SDL_GetGamepadCapSense` (stick-top and grip capacitive touch), `SDL_GetGamepadNfcTagUid` and its non-throwing `SDL_TryGetGamepadNfcTagUid` twin (#241), `SDL_SendGamepadEffect` (Sony effect passthrough), `SDL_SetJoystickLED` (Switch HOME LED), `SDL_SetJoystickPlayerIndex`, `SDL_RumbleGamepadTriggers`
+**Fork-only surface**: `SDL_GetGamepadNfcTagUid` and its non-throwing `SDL_TryGetGamepadNfcTagUid` wrapper (#241), which returns false for good after the first call on a DLL without the export
 
-**Virtual joystick** (the bridged Bluetooth DS3 lane): `SDL_AttachVirtualJoystick`, `SDL_DetachVirtualJoystick`, `SDL_SetJoystickVirtualAxis` / `Button` / `Hat`, `SDL_SendJoystickVirtualSensorData`
+**Device extras**: `SDL_GamepadHasCapSense` / `SDL_GetGamepadCapSense` (stick-top and grip capacitive touch, SDL 3.6.0), `SDL_SendGamepadEffect` (Sony effect passthrough), `SDL_SetJoystickLED` (Switch HOME LED), `SDL_SetJoystickPlayerIndex`, `SDL_RumbleGamepadTriggers`
+
+**Virtual joystick** (the bridged Bluetooth DS3 lane): `SDL_AttachVirtualJoystick`, `SDL_DetachVirtualJoystick`, `SDL_IsJoystickVirtual`, `SDL_SetJoystickVirtualAxis` / `Button` / `Hat`, `SDL_SendJoystickVirtualSensorData`
 
 **Diagnostics and locking**: `SDL_SetLogOutputFunction`, `SDL_SetLogPriorities`, `SDL_LockJoysticks`, `SDL_UnlockJoysticks`
 
 **Joystick State**: `SDL_UpdateJoysticks`, `SDL_PumpEvents`, `SDL_GetJoystickAxis`, `SDL_GetJoystickButton`, `SDL_GetJoystickHat`, `SDL_GetNumJoystickAxes`, `SDL_GetNumJoystickButtons`, `SDL_GetNumJoystickHats`
 
-**Joystick Properties**: `SDL_GetJoystickName`, `SDL_GetJoystickVendor`, `SDL_GetJoystickProduct`, `SDL_GetJoystickProductVersion`, `SDL_GetJoystickType`, `SDL_GetJoystickPath`, `SDL_GetJoystickSerial`, `SDL_GetJoystickGUID`, `SDL_GetJoystickProperties`, `SDL_GetBooleanProperty`, `SDL_GetGamepadPowerInfo`
+**Joystick Properties**: `SDL_GetJoystickName`, `SDL_GetJoystickVendor`, `SDL_GetJoystickProduct`, `SDL_GetJoystickProductVersion`, `SDL_GetJoystickType`, `SDL_GetJoystickPath`, `SDL_GetJoystickSerial`, `SDL_GetJoystickGUID`, `SDL_GUIDToString`, `SDL_GetJoystickProperties`, `SDL_GetBooleanProperty`, `SDL_GetNumberProperty`, `SDL_GetStringProperty`, `SDL_GetGamepadPowerInfo`
 
 **Sensors**: `SDL_GamepadHasSensor`, `SDL_SetGamepadSensorEnabled`, `SDL_GetGamepadSensorData`
 
@@ -2592,7 +2769,7 @@ public static void Update(
     IReadOnlyList<ShapeTemplate> shapeTemplates = null)
 ```
 
-Walks the state machine `Idle → Accumulating → Recognizing → Cooldown → Idle`. Path tracking runs whenever either gesture recognition or joystick output is enabled. Both off skips the tick.
+Walks the state machine `Idle → Accumulating → Cooldown → Idle`, running end-of-gesture recognition on the lift that ends `Accumulating`. `GestureState.Recognizing` is declared but never entered. Path tracking runs whenever either gesture recognition or joystick output is enabled. Both off skips the tick.
 
 ### Three tiers
 
@@ -2625,7 +2802,7 @@ The same physical pad in multiple slots ticks through `Update` once per slot wit
 **File:** `PadForge.Engine/Touchpad/ShapeRecognizer.cs`
 **Namespace:** `PadForge.Engine.Touchpad`
 
-C# re-derivation of the canonical $Q point-cloud recognizer (Magrofuoco / Vatavu / Anthony / Wobbrock, MobileHCI 2018), BSD 3-Clause. Faithful port of [the reference JavaScript implementation](https://depts.washington.edu/acelab/proj/dollar/qdollar.js). Used by `GestureRecognizer` Tier 3 at the `Accumulating → Recognizing` transition.
+C# re-derivation of the canonical $Q point-cloud recognizer (Magrofuoco / Vatavu / Anthony / Wobbrock, MobileHCI 2018), BSD 3-Clause. Faithful port of [the reference JavaScript implementation](https://depts.washington.edu/acelab/proj/dollar/qdollar.js). Used by `GestureRecognizer` Tier 3 when the last finger lifts.
 
 ### Constants
 
@@ -2646,7 +2823,7 @@ public static string Match(
     out float bestScore)
 ```
 
-Returns the matched template name, or null when no template scores below the threshold. Templates whose `FingerCount` doesn't match `fingerCount` are skipped. The `bestScore` out-param is the actual best distance (regardless of threshold).
+Returns the matched template name, or null when no template's distance lands at or under its threshold (the template's `ThresholdOverride` when set, `threshold` otherwise). Disabled templates and templates whose `FingerCount` doesn't match `fingerCount` are skipped. The `bestScore` out-param is the actual best distance (regardless of threshold). `MatchByFingerCount` builds the candidate cloud from live finger paths and calls `Match`.
 
 ```csharp
 public static Vector2[] BuildCloud(
@@ -2662,11 +2839,11 @@ public static ushort[] BuildLookupTable(
 
 ### Algorithm
 
-`Match` builds the candidate's preprocessed cloud + LUT once per call, then iterates templates. For each template:
+`Match` builds the candidate's LUT once per call, then iterates templates. For each template:
 
-1. **`ComputeLowerBound(template, candidate)`**: closed-form SAT-based lower bound on `CloudDistance`. If the lower bound exceeds the current best score, skip this template entirely.
-2. **`CloudMatch(template, candidate)`**: runs `CloudDistance` in both directions (template→candidate and candidate→template), `floor(sqrt(n))` starting indices each way, takes the minimum. Matches the canonical implementation.
-3. **`CloudDistance(c1, c2, startIdx)`**: greedy nearest-unmatched matching with a `matched[]` exclusion array. Weight starts at `n` and decrements per step, biasing the score toward the earliest correspondences. Early-abandons when the running sum exceeds the current best.
+1. **`ComputeLowerBound`**: closed-form SAT-based lower bounds on `CloudDistance`, one per starting index, in each direction. A starting index whose bound is not below the current best is skipped.
+2. **`CloudMatch(candidate, candidateLut, template, minSoFar, effThreshold)`**: runs `CloudDistance` in both directions (template→candidate and candidate→template) from starting indices stepped by `floor(sqrt(n))`, takes the minimum. Pruning never runs tighter than the template's own threshold, and a template that never beats the pruning floor reports no score. Matches the canonical implementation.
+3. **`CloudDistance(pts1, pts2, start, minSoFar)`**: greedy nearest-unmatched matching, with an unmatched-index list standing in for `matched[]`. Weight starts at `n` and decrements per step, biasing the score toward the earliest correspondences. Early-abandons when the running sum exceeds the current best.
 
 The `matched[]` tracking is mandatory. An earlier PadForge revision dropped it on the assumption that the LUT replaced it, and an M-shape custom gesture matched a horizontal swipe.
 
@@ -2681,7 +2858,7 @@ Lower threshold = stricter match (fewer false positives). Default `GestureMatchT
 **File:** `PadForge.Engine/Touchpad/AngularMarginRecognizer.cs`
 **Namespace:** `PadForge.Engine.Touchpad`
 
-Per-segment angle-direction matcher adapted from [GestureSign](https://github.com/TransposonY/GestureSign)'s `PointPatternAnalyzer`, BSD 3-Clause. Runs alongside `ShapeRecognizer` on single-finger templates. The higher-confidence match wins.
+Per-segment angle-direction matcher. It follows the algorithm [GestureSign](https://github.com/TransposonY/GestureSign)'s `PointPatternAnalyzer` describes. GestureSign is GPL-2.0 and was read for the algorithm only: the C# is original to PadForge and carries no GestureSign code. Runs alongside `ShapeRecognizer` on single-finger templates. The higher-confidence match wins.
 
 ### Circular-variance gate
 
@@ -2691,11 +2868,11 @@ One threshold partitions both sides. A path whose circular variance `(1 - R)` fa
 
 ### Closed-path detection
 
-Templates flagged `AngularIsClosed` get a special endpoint-match scoring path so a re-traced closed shape doesn't get penalized for ending near where it started.
+Templates flagged `AngularIsClosed` (carried to `AngularTemplate.IsClosed`) score the candidate at every cyclic starting point (`BestRotationalScore`), so a closed shape matches whichever corner or edge the trace starts from. Open shapes (Z, Checkmark) stay start-anchored, because their first segment's orientation is part of their identity.
 
 ### Direction agnosticism
 
-Templates flagged `AngularIsDirectionAgnostic` score the candidate against both forward and reversed traversals and keep the better. Used for shapes where the user's drawing direction shouldn't matter (e.g. a horizontal Z that traces left-to-right or right-to-left).
+Templates flagged `AngularIsDirectionAgnostic` score the candidate against both forward and reversed traversals and keep the better. Used for shapes that read the same drawn clockwise or counterclockwise: the in-box Square and Triangle. Circle and CircleCCW stay directional on purpose, as separate gestures.
 
 ---
 
@@ -2704,20 +2881,20 @@ Templates flagged `AngularIsDirectionAgnostic` score the candidate against both 
 **File:** `PadForge.Engine/Touchpad/ShapeTemplate.cs`
 **Namespace:** `PadForge.Engine.Touchpad`
 
-Preprocessed template ready for matching by `ShapeRecognizer` and `AngularMarginRecognizer`. Constructed once from a path of `Vector2` points. The heavy work (resample / scale / translate / LUT-build / angular-signature precompute) runs at construction time so the per-tick `Match` path stays cheap.
+Preprocessed template ready for matching by `ShapeRecognizer` and `AngularMarginRecognizer`. A plain field class: its builders (`InBoxShapeTemplates` at startup, custom gestures at profile load) do the heavy work (resample / scale / translate / LUT-build / angular-signature precompute) once, so the per-tick `Match` path stays cheap.
 
 | Field | Type | Purpose |
 |---|---|---|
 | `Name` | `string` | Descriptor suffix (e.g. `Circle`, `CircleCCW`, custom name) |
 | `FingerCount` | `int` | Number of simultaneous fingers expected (1 for in-box, 1..5 for custom) |
-| `PointCloud` | `Vector2[]` | Resampled to `DefaultResampleCount`, normalized to unit box, centered |
+| `PointCloud` | `Vector2[]` | `FingerCount × DefaultResampleCount` points, the larger bounding-box dimension scaled to 1, centroid at the origin |
 | `LookupTable` | `ushort[]` | Closest-point integer-grid LUT for $Q lower-bound short-circuit |
 | `LookupTableSize` | `int` | LUT grid resolution (typically `DefaultLookupTableSize`) |
-| `ThresholdOverride` | `float?` | Per-template threshold override, null = use slot's `GestureMatchThreshold` |
+| `ThresholdOverride` | `float` | Per-template threshold override. 0 = use the slot's `GestureMatchThreshold` |
 | `Enabled` | `bool` | Per-gesture enable toggle (only meaningful for custom templates) |
 | `IsCustom` | `bool` | True for user-recorded gestures, false for in-box shapes |
-| `AngularSignature` | `float[]` | Per-segment direction angles for `AngularMarginRecognizer` |
-| `AngularIsClosed` | `bool` | Path starts ≈ ends, so angular scoring uses closed-path rules |
+| `AngularSignature` | `double[]` | Per-segment direction angles for `AngularMarginRecognizer`. Null for multi-finger templates |
+| `AngularIsClosed` | `bool` | Angular scoring tries every cyclic starting point |
 | `AngularIsDirectionAgnostic` | `bool` | Match both forward and reversed candidate traversals |
 
 ---
@@ -2729,7 +2906,7 @@ Preprocessed template ready for matching by `ShapeRecognizer` and `AngularMargin
 
 Procedural builders for the in-box shapes shipped with every profile. Six templates total: `Circle` (clockwise), `CircleCCW`, `Square`, `Triangle`, `Z`, `Checkmark`. The picker exposes Circle as two separate descriptors so the two directions can drive different mappings.
 
-`Add(...)` builds each template inline: generates the canonical Vector2 path, normalizes it to a cloud via `ShapeRecognizer.BuildCloud`, attaches the LUT from `ShapeRecognizer.BuildLookupTable`, sets the angular flags appropriate to the shape, and appends to the catalog. Static once-per-app initialization. No XML.
+`Add(...)` builds each template inline: generates the canonical Vector2 path, normalizes it to a cloud via `ShapeRecognizer.BuildCloud`, attaches the LUT from `ShapeRecognizer.BuildLookupTable`, sets the angular flags appropriate to the shape, and appends to the catalog. `Build()` returns a fresh list on every call: `InputManager` seeds its catalog with it, and `InputService` rebuilds the catalog, in-box shapes plus the profile's custom gestures, when a profile applies or a custom gesture changes. No XML.
 
 `Names` is a static `IReadOnlyList<string>` the picker walks to surface in-box shape descriptors.
 
@@ -2745,14 +2922,13 @@ XML-serializable representation of a user-recorded custom gesture. Stored in the
 | Field | Type | Serialization | Purpose |
 |---|---|---|---|
 | `Name` | `string` | `[XmlAttribute]` | Suffix on the `Touchpad N Custom_<name>` descriptor |
-| `FingerCount` | `int` | `[XmlAttribute]` | 1..5 |
-| `DeviceClass` | `string` | `[XmlAttribute]` | Optional filter ("DualSense", "PTP", "Overlay", "WebController", or empty = any) |
-| `TouchpadIndex` | `int` | `[XmlAttribute]` | Filter to a specific pad index on multi-pad devices |
+| `DeviceClass` | `string` | `[XmlAttribute]` | Device-class filter. `"any"` (default) matches every touchpad device, otherwise a class label such as `dualsense`, `ds4`, `steamdeck`, `steamcontroller`, `triton`, `precisiontouchpad`, or `overlay` |
+| `TouchpadIndex` | `int` | `[XmlAttribute]` | Pad index filter on multi-pad devices. `-1` (default) = any pad |
+| `Threshold` | `float` | `[XmlAttribute]` | Per-gesture recognition threshold. `0` = use the pad's `GestureMatchThreshold` |
 | `Enabled` | `bool` | `[XmlAttribute]` | Per-gesture disable toggle |
-| `Paths` | `List<List<Vector2>>` | `[XmlElement]` | Per-finger recorded paths |
-| `ThresholdOverride` | `float?` | `[XmlElement]` | Per-gesture override of the slot-wide threshold |
+| `FingerPaths` | `List<FingerPath>` | `[XmlElement("FingerPath")]` | One recorded path per finger. Each `FingerPath` holds `Points`, serialized as `<P X="" Y="" T="">` elements: normalized 0..1 position plus a millisecond timestamp. The finger count is the number of paths (1..5) |
 
-`ToTemplate()` constructs the `ShapeTemplate` by concatenating per-finger paths in a deterministic order, normalizing them with `ShapeRecognizer.BuildCloud`, building the LUT with `ShapeRecognizer.BuildLookupTable`, precomputing the angular signature for single-finger gestures, and copying threshold-override + finger-count + name.
+`ToTemplate()` builds the `ShapeTemplate`: it normalizes the finger paths with `ShapeRecognizer.BuildCloud`, builds the LUT with `ShapeRecognizer.BuildLookupTable`, precomputes the angular signature for single-finger gestures, names the template `Custom_<Name>`, and copies `Threshold` into `ThresholdOverride` along with `Enabled`. It returns null for a gesture with no finger paths.
 
 ---
 
@@ -2769,18 +2945,18 @@ Per-`(slot, deviceGuid, padIdx)` runtime context for the gesture recognizer. Hel
 |---|---|
 | `Idle` | No fingers in contact. Waiting for a finger-down. |
 | `Accumulating` | ≥1 finger in contact. Path is growing. Tier 1 / Tier 2 mid-gesture detectors may fire. |
-| `Recognizing` | All fingers just lifted. Ran end-of-gesture recognition. Transitions immediately to Cooldown. |
+| `Recognizing` | Declared, never entered. The lift that ends `Accumulating` runs end-of-gesture recognition and moves straight to `Cooldown`. |
 | `Cooldown` | Post-gesture quiet period (`CooldownMs`). Prevents bounce-fire. |
 
 ### Per-finger path storage
 
-`FingerPaths` is `List<List<Vector2>>`, indexed by the order fingers touched down (not by hardware slot index). A finger lifting and a new one landing in the same slot opens a fresh path so the gesture engine doesn't stitch unrelated contacts together. Cleared at the end of every gesture when the cooldown expires.
+`FingerPaths` is `List<List<Vector2>>`, indexed by the order fingers touched down (not by hardware slot index). A finger lifting and a new one landing in the same slot opens a fresh path so the gesture engine doesn't stitch unrelated contacts together. Cleared on the lift that ends each gesture, as it enters `Cooldown`.
 
-`FingerStartTimestampsMs` / `FingerContactIds` / `FingerSlotIndices` parallel `FingerPaths` so each entry's touchdown time, originating HID contact ID, and hardware slot index are recoverable.
+`FingerStartTimestampsMs` / `FingerContactIds` / `FingerSlotIndices` / `FingerPathLive` / `FingerPathLastLiveMs` parallel `FingerPaths` so each entry's touchdown time, originating HID contact ID, hardware slot index, and live state are recoverable.
 
 ### Per-frame fire set
 
-`FiredGesturesThisFrame` is a `HashSet<string>` of gesture-descriptor names fired this tick. The name is historical. Fires actually latch across the cooldown window so downstream readers (mapping evaluator → button output → macro trigger) see a stable fire long enough to pick up the rising edge at any reasonable polling rate. Cleared on cooldown expiry, not on every tick.
+`FiredGesturesThisFrame` is a `HashSet<string>` of gesture-descriptor names fired this tick. The name is historical. Fires actually latch across the cooldown window so downstream readers (mapping evaluator → button output → macro trigger) see a stable fire long enough to pick up the rising edge at any reasonable polling rate. Cleared on cooldown expiry and when a fresh gesture starts, not on every tick. Held sources (radial zones, touch spots) add and remove their own keys.
 
 ### Continuous-axis state
 
@@ -2846,12 +3022,12 @@ The same class carries the rest of the touchpad-to-pointer lane: the trackball m
 **File:** `PadForge.Engine/Touchpad/TouchpadSettingsEntry.cs`
 **Namespace:** `PadForge.Engine.Touchpad`
 
-XML-serializable wrapper that pairs a `TouchpadGestureSettings` instance with its `(DeviceGuid, TouchpadIndex)` key. Lives under `PadSetting.TouchpadSettings` as a `List<TouchpadSettingsEntry>` so a single slot can carry independent toggles + thresholds for each touchpad surface it sees (DualSense's one pad, a Steam Controller's two pads, a Steam Deck's two pads, plus a PTP system touchpad sharing the slot all at once).
+XML-serializable wrapper that pairs a `TouchpadGestureSettings` instance with its `(DeviceGuid, TouchpadIndex)` key. Lives under `PadSetting.TouchpadSettings` as a `TouchpadSettingsEntry[]` so a single slot can carry independent toggles + thresholds for each touchpad surface it sees (DualSense's one pad, a Steam Controller's two pads, a Steam Deck's two pads, plus a PTP system touchpad sharing the slot all at once).
 
 | Property | Type | Serialization | Purpose |
 |---|---|---|---|
 | `DeviceGuid` | `string` | `[XmlAttribute]` | Instance GUID of the device this entry's settings apply to. |
-| `TouchpadIndex` | `int` | `[XmlAttribute]` | Touchpad index within the device. 0 for single-pad devices; 0..N-1 for multi-pad devices like the original Steam Controller (2 pads) or Steam Deck (2 pads). |
+| `TouchpadIndex` | `int` | `[XmlAttribute]` | Touchpad index within the device. 0 for single-pad devices, 0..N-1 for multi-pad devices like the original Steam Controller (2 pads) or Steam Deck (2 pads). |
 | `Settings` | `TouchpadGestureSettings` | child element | The actual settings bundle. Round-trips its own `[XmlAttribute]`-tagged fields as nested attributes. Forward-compatible: missing properties take their defaults from `TouchpadGestureSettings.Default()`. |
 
 The runtime engine reads entries via `InputManager.TouchpadGestureSettingsProvider`, an instance `Func<int, Guid, int, TouchpadGestureSettings>` property keyed by `(slotIndex, deviceGuid, touchpadIndex)`. The App layer binds the provider against the active profile's `PadSetting.TouchpadSettings` collection at engine start.
@@ -2991,13 +3167,14 @@ All fields are `[XmlAttribute]` except `Items`:
 | `EngageDeadzonePercent` | `25` | Stick engage / radial center deadzone as percent of full deflection. The default sits between sc-controller's engage (1/3 deflection) and cancel (1/8) thresholds. Imported groups carrying `deadzone_inner_radius` override it. |
 | `SensitivityPercent` | `100` | In-Menu Sensitivity percent (Steam `sensitivity`, translator v26): scales the hover vector before selection, so a higher value reaches the ring or crosses the engage deadzone with less deflection. 100 = identity. Absent in older files = 100. |
 | `Enabled` | `true` | Per-menu switch. |
+| `LayerHoldsOpen` | `false` | (4.5.0, #413) Stay-open mode. When `LayerMask` names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover. Empty or `"Base"` cannot hold a menu open, so those fall back to ordinary surface engagement. |
 | `Items` | empty list | `[XmlElement("Item")]` list of `MenuItemDefinition`. |
 
 `Clone()` deep-copies, item list included. Every clone site (profile apply, slot copy, editor round-trips) must use it so item lists never alias.
 
 ### MenuItemDefinition
 
-One cell of a menu, nested in the same file. All seven properties are `[XmlAttribute]`:
+One cell of a menu, declared in the same file. All eight properties are `[XmlAttribute]`:
 
 | Property | Purpose |
 |---|---|
@@ -3008,6 +3185,7 @@ One cell of a menu, nested in the same file. All seven properties are `[XmlAttri
 | `ExtendedButton` | Direct binding for Extended slots: 1-based raw button number in the slot's custom layout, 0 = none. Extended output is raw HID up to 128 buttons, where an Xbox mask has no meaning. |
 | `MacroName` | (4.4.0, #390) Macro cell: the name of a saved macro on the same slot, triggered while the cell fires. The cell is an additional trigger source, so the macro's own trigger mode keeps its semantics. A While Held macro runs while a Click cell is held, and the one-shot fire types present their commit pulse as one clean edge. A name the slot no longer declares is an inert no-op, the #377 stale-mask convention. Renames retag through the macro name-change hook. Schema append-only, absent in older files = empty. |
 | `Icon` | (4.4.0, #390) Cell icon reference in one of three forms, resolved by the App-side `MenuIconResolver` in this order: a `pficon://Package/entry` icon-pack reference, a loose image file path (exe-relative preferred), or a bare Steam binding-icon file name (the binding string's third comma field, `"ghost_050_menu_0030.png"`) resolved against the local Steam client's `tenfoot\resource\images\library\controller\binding_icons`. The overlay falls back to the text label when nothing resolves. `IsValidIconName` gates only the Workshop translator's carry, which stores bare `*.png` names of at most 128 characters with no separators or drive colons and only letters, digits, `_`, `-`, and `.`. |
+| `IconScalePercent` | (4.5.0, #413) Icon size as percent of the menu's normal icon box, default 100. The editor and the overlay clamp it to 25..200, and clearing the icon resets it to 100. Absent in older files = 100. |
 
 Bindings come in two shapes. Imported Workshop menus leave the direct-binding fields at 0 and deliver through mapping rows / macros keyed on the item's fired descriptor (`Menu {id} Item {k}`). Hand-authored items may instead carry ONE direct binding that the menu runtime fires itself, so authoring a simple item never requires a hidden row.
 
@@ -3033,9 +3211,9 @@ Pure selection math for radial / grid menus. Inputs are in the SDL frame both st
 **File:** `PadForge.Engine/Menus/MenuEvaluator.cs`
 **Namespace:** `PadForge.Engine.Menus`
 
-The per-menu commit state machine. `MenuRuntimeState` (same file) is one menu's runtime state, one instance per `(slot, device, menu id)`, owned by the poll thread: `Engaged` / `Clicked` (last-frame edges), `HoveredIndex` (`-1` = none), `AssertedIndex` (item held by the hold-shaped fire types), `PulsedIndex` + `PulseUntilMs` (item fired by the one-shot fire types), `StepIndex` (button-pair grid stepped selection, &minus;1 = nothing selected yet, persisting across presses), `PrevStepMask` (previous frame's direction bools for the stepping edge detector, bit 0 up, 1 down, 2 left, 3 right), and `Reset()`.
+The per-menu commit state machine. `MenuRuntimeState` (same file) is one menu's runtime state, one instance per `(slot, device, menu id)`, owned by the poll thread: `Engaged` / `Clicked` (last-frame edges), `PhysicalEngaged` (stay-open menus only: the surface was physically engaged last frame while the menu was open), `HoveredIndex` (`-1` = none), `AssertedIndex` (item held by the hold-shaped fire types), `PulsedIndex` + `PulseUntilMs` (item fired by the one-shot fire types), `StepIndex` (button-pair grid stepped selection, &minus;1 = nothing selected yet, persisting across presses), `PrevStepMask` (previous frame's direction bools for the stepping edge detector, bit 0 up, 1 down, 2 left, 3 right), and `Reset()`.
 
-`Update(state, def, surfaceActive, clicked, dx, dy, nx, ny, nowMs)` advances one menu per poll frame. `surfaceActive` = physically engaged AND the hosting layer active, so a layer ending lands as a release edge, which is exactly Steam's mode-shift-end commit. Hover comes from `MenuSelectionMath`: radial menus use the center-relative deflection `(dx, dy)`, grids the absolute normalized position `(nx, ny)`. Fire-type semantics are grounded on Valve's shipped configurator strings ("Touch Menu Activation Style" / "Radial Menu Button Type"):
+`Update(state, def, surfaceActive, clicked, dx, dy, nx, ny, nowMs)` advances one surface-mode menu per poll frame. `surfaceActive` = physically engaged AND the hosting layer active, so a layer ending lands as a release edge, which is exactly Steam's mode-shift-end commit. `ComputeSurfaceActive(def, physical, layerOk)` decides whether a menu is open: the layer gate alone for a stay-open menu (`LayerHoldsOpen` on a real layer, #413), the layer gate AND physical engagement otherwise. Stay-open menus advance through `UpdateLayerEngaged(state, def, menuActive, physical, clicked, centerAtRest, dx, dy, nx, ny, nowMs)` instead, where Touch Release commits on the physical lift or re-center while the menu stays open, and the layer ending commits only an interaction still in progress. Hover comes from `MenuSelectionMath`: radial menus use the center-relative deflection `(dx, dy)`, grids the absolute normalized position `(nx, ny)`. Fire-type semantics are grounded on Valve's shipped configurator strings ("Touch Menu Activation Style" / "Radial Menu Button Type"):
 
 | Fire type | Shape | Behavior |
 |---|---|---|
@@ -3064,4 +3242,4 @@ The App-side runtime (`InputManager.MenuRuntime.cs`) ticks these contexts from S
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

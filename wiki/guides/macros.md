@@ -51,15 +51,15 @@ The **Source** dropdown picks where the trigger reads its inputs:
 
 An **Assigned Devices** source also reaches devices that are not gamepads. An NFC reader shows an **Any NFC Tag** button plus one button per tag you have registered. A media device shows its named media keys (Play/Pause, Mute, and the rest). Tap a registered tag or press a media key to fire the macro, the same way a button press does.
 
-An Assigned Devices trigger does not have to name a specific device. Entries picked from the **(Any device)** group fire from whichever assigned device provides that input, and they render with an "(Any device)" chip. Profiles imported from the [Steam Workshop](steam-workshop-import.md) use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.
+An Assigned Devices trigger does not have to name a specific device. Entries picked from the **(Any Device)** group fire from whichever assigned device provides that input, and they render with an "(Any Device)" chip. Profiles imported from the [Steam Workshop](steam-workshop-import.md) use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.
 
 ### Record a trigger
 
-1. Click **Record Trigger**.
+1. Click the record icon (tooltip **Record Trigger**).
 2. Hold the buttons you want.
 3. Push a stick or pull a trigger past the threshold to add an axis input.
 4. Tap a D-pad direction to add a hat input.
-5. Click **Stop** when the inputs you want are listed.
+5. Click the icon again (tooltip **Stop**) when the inputs you want are listed. Recording also stops on its own 5 seconds after it starts.
 
 ### Trigger input types
 
@@ -67,17 +67,17 @@ An Assigned Devices trigger does not have to name a specific device. Entries pic
 |---|---|
 | Button | Pressed buttons go into the combo. LB + A means both held. |
 | Axis | Fires when the stick or trigger crosses the threshold. Each **Assigned Devices** axis entry has its own **Invert**, **Half**, **Bidirectional**, and **Deadzone** options, the same set the merge-mapping editor uses on axis-to-button sources. **Half** by itself picks one side of center (Invert flips which side). **Half** plus **Bidirectional** fires past the deadzone on either side. This lets you bind separate macros to left-stick-left and left-stick-right, or one macro to "deflected past N percent in any direction". |
-| D-pad / POV hat | Fires when the hat matches the recorded direction. The match is a 45-degree sector, so "Up" also catches small diagonals. |
+| D-pad / POV hat | Fires when the hat matches the recorded direction. The match is a 45-degree sector centered on that direction, so an 8-way D-pad's diagonal does not count as Up. |
 
 A mixed example: LB + Right Stick X (Positive) + D-pad Up. All three must hold for the macro to fire.
 
 ### Axis threshold
 
-When the trigger has a **Virtual Controller** axis, a **Threshold** slider appears (1 to 100 percent, default 50). The axis must cross that percent to count.
+When the trigger has a **Virtual Controller** axis, a **Threshold** slider appears (1 to 100 percent, default 50) with a **Direction** dropdown (Any, Positive, Negative). Recording sets the direction to the way you moved the axis.
 
-- 10 percent. A tiny push fires the macro.
-- 90 percent. You need to push almost all the way.
-- The **Direction** dropdown (Any, Positive, Negative) picks which side of the axis counts, and the threshold applies to that side.
+- **Positive** and **Negative** measure from the middle of the axis toward that end, and the threshold is a percent of that half. On a stick, 10 percent fires on a tiny push and 90 percent needs a push almost all the way.
+- **Any** measures a stick's push from the middle in either direction, as a percent of that half.
+- A trigger is measured from rest whatever the direction, so 50 percent fires at a half pull.
 
 **Assigned Devices** axis entries do not use this slider. Each one carries its own per-entry **Invert**, **Half**, **Bidirectional**, and **Deadzone** controls instead.
 
@@ -85,14 +85,14 @@ When the trigger has a **Virtual Controller** axis, a **Threshold** slider appea
 
 A trigger can be a touchpad gesture or a mouse gesture instead of a button combo. You pick these from a list, not by recording. Recording deliberately skips gestures so a stray swipe cannot overwrite the combo.
 
-1. Click **Add from List** next to **Record Trigger**.
-2. The dropdown lists buttons, POV directions, stick and trigger axes, the touchpad click, and every gesture enabled on the slot.
+1. Open the **Add from List** dropdown under **Source**.
+2. The dropdown lists the slot's buttons, POV directions, stick and trigger axes, the touchpad click and finger contacts, gyro axes, and gestures, along with on/off sources such as NFC tags, voice phrases, and menu cells.
 3. Pick the gesture you want. It joins the trigger the same as a recorded input.
 
 <!-- SCREENSHOT: macro-add-from-list -->
 ![The Add from List dropdown showing gestures alongside buttons and axes](../images/macro-add-from-list.png)
 
-Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the [Touchpad](../features/touchpad.md) tab. Mouse gestures (flick left, right, up, down, or a plain click) appear once you enable them for that mouse, including the gestures armed by a **Custom** activation input. Gesture triggers work with every fire mode, including On Release.
+Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the [Touchpad](../features/touchpad.md) tab. Mouse gestures (flick left, right, up, down, or a plain click) appear for each button picked under **Gesture Buttons** on the **Mouse** tab, **Custom** included, and fire only while **Enable Mouse Gestures** is on. Gesture triggers work with every fire mode, including On Release.
 
 ### Menu cells as triggers
 
@@ -106,7 +106,7 @@ Set it up on the **Menus** tab: pick **Macro** as the cell's binding and choose 
 
 - **Motion Shake** is listed for every assigned device with an accelerometer. It reads the strength of a shake and ignores slow tilting.
 - **Nunchuk Shake** is the Nunchuk's own accelerometer on a Wii Remote. On a combined Joy-Con pair the same entry is **Left Joy-Con Shake**. On any other two-sensor device it is **Aux Motion Shake**.
-- On a button target the row fires past 25 percent of a shake by default. A deadzone value on the row replaces that threshold. On an axis target the row reads the shake strength from 0 to 1.
+- On a button target the row fires once the shake passes the row's **Axis-to-Button Deadzone**, 50 percent (about 1 g) unless you change it. On an axis or trigger target the row reads the shake strength from 0 to 1.
 
 ---
 
@@ -116,12 +116,12 @@ Pick **Custom Expression** in the **Fire** dropdown when the shape you want is b
 
 ### Variables
 
-Add as many variables as the formula needs. Each one becomes a letter: `a` for the first, `b` for the second, then `c`, `d`, `e`, and as many more as you add. The formula refers to those letters.
+Add up to 32 variables. Each one becomes a letter: `a` for the first, `b` for the second, and so on through `z`. Variables 27 through 32 go by index, `s[26]` through `s[31]`. The formula refers to those names.
 
 Each variable binds to one of two things:
 
-- An **Assigned Devices** input: any button, POV direction, or axis on any physical device assigned to the slot.
-- A **Virtual Controller** channel: any button or axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.
+- An **Assigned Devices** input: any button or POV direction, or one of the first six axes (the stick and trigger axes), on any physical device assigned to the slot.
+- A **Virtual Controller** channel: a standard button, D-pad direction, trigger, or stick axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.
 
 Click the record icon (tooltip **Record Trigger**) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip **Clear**) to wipe a binding.
 
@@ -130,7 +130,7 @@ Click the record icon (tooltip **Record Trigger**) on a variable row, push the i
 The **Trigger Formula** text box accepts:
 
 - Variables: `a`, `b`, `c`, … (or the indexed form `s[0]`, `s[1]`, …).
-- Math operators: `+`, `-`, `*`, `/`.
+- Math operators: `+`, `-`, `*`, `/`, `%` (remainder).
 - Comparisons: `<`, `>`, `<=`, `>=`, `==`, `!=`.
 - Logic: `&&` (and), `||` (or), `!` (not), `?:` (if/else).
 - Functions: `abs`, `min`, `max`, `clamp`, `sign`, `lerp`, `round`, `sqrt`, `pow`, `hypot`, `deadzone`, `floor`, `ceil`, `sin`, `cos`, `tan`, `atan2`. Every one has a chip on the palette below the box.
@@ -145,7 +145,7 @@ The **Trigger Formula** text box accepts:
 | a but not b | Fire when a is active and b is NOT active. |
 | Axis past 50% | Fire when stick axis a is deflected more than 50% from rest. |
 
-Click a recipe to drop it into the formula box.
+Click a recipe to drop it into the formula box. The row continues with the shared recipes from the mapping editor's formula box (Half Scale, Weighted Blend, Threshold Gate, and the rest).
 
 ### How it fires
 
@@ -155,7 +155,7 @@ Boolean variables (button held, POV match) read as 0 or 1. A trigger axis reads 
 
 A stick sits at 0.5 at rest, which already meets the fire threshold, so a bare stick variable is active before you touch it. To fire on stick deflection, measure distance from center. `abs(a - 0.5)` reaches 0.25 once the stick passes halfway in either direction, so `abs(a - 0.5) > 0.25` fires past that point. The **Axis past 50%** recipe writes that formula for you.
 
-See [Button and Axis Mappings](../features/mappings.md) for the cross-device input picker the variable rows share with the rest of the app, and for the operator palette the Trigger Formula box uses.
+See [Button and Axis Mappings](../features/mappings.md) for the mapping editor's formula box, whose operator palette and shared recipes the Trigger Formula box reuses.
 
 ---
 
@@ -168,14 +168,14 @@ The **Fire** dropdown sets when the macro runs.
 | **On Press** | Once, the moment the trigger becomes active. Good for one-shot commands. |
 | **On Single Press** | Once, when a press is not followed by a second press within the Press Window. Lets one button carry separate single-, double-, and triple-press macros. |
 | **On Release** | Once, the moment the trigger releases. Good for charged shots. |
-| **While Held** | Every frame while the trigger is active. Good for turbo fire and live mouse control. |
+| **While Held** | Over and over while the trigger is active. The sequence starts again each time it finishes. Good for turbo fire and live mouse control. |
 | **On Long Press** | Once, after the trigger has been held continuously for the Hold Time. A shorter tap does nothing. |
 | **On Short Press** | Once, when the trigger is released before the Hold Time elapses. Holding past the threshold fires nothing. |
 | **On Double Press** | When the trigger is pressed twice within the Press Window. If held on the second press, it stays active until release. |
-| **On Triple Press** | When the trigger is pressed three times within the Press Window. If held on the third press, it stays active until release. |
+| **On Triple Press** | When the trigger is pressed three times, each press within the Press Window of the one before. If held on the third press, it stays active until release. |
 | **Toggle** | First press latches the actions on. Press again to release. Holds and repeats stay active until the second press. |
 | **Turbo** | Repeats the actions at the Interval for as long as the trigger is held. |
-| **Always** | Every frame, with no trigger. Good for stick-to-mouse and a permanent volume knob. |
+| **Always** | Over and over with no trigger. The sequence starts again each time it finishes. Good for stick-to-mouse and a permanent volume knob. |
 | **Custom Expression** | On the rising edge of a formula you write. See [Custom Expression trigger mode](#custom-expression-trigger-mode). |
 
 Three fields appear beside the modes that use them:
@@ -184,7 +184,7 @@ Three fields appear beside the modes that use them:
 |---|---|---|
 | **Hold Time** (ms, default 500) | On Long Press, On Short Press | The tap-vs-hold boundary. |
 | **Press Window** (ms, default 442) | On Single Press, On Double Press, On Triple Press | How close together the presses must land. |
-| **Interval** (ms) | Toggle, Turbo | The repeat pacing. These two modes repeat until release on their own, so the Repeat section is replaced by this one field. |
+| **Interval** (ms, default 100) | Toggle, Turbo | The repeat pacing. These two modes repeat until release on their own, so the Repeat section is replaced by this one field. |
 
 Tap-vs-hold on one button: two macros, **On Short Press** on the first and **On Long Press** on the second, same trigger. The tap fires one, the hold fires the other, and neither double-fires.
 
@@ -196,11 +196,11 @@ On a slot with [shift layers](shift-layers.md), every macro carries a **Layer** 
 
 | Choice | When the macro fires |
 |---|---|
-| **Any layer** (default) | Regardless of the engaged layer. |
-| **Base** | Only while the slot is on the unshifted Base. |
+| **Any Layer** (default) | Regardless of the engaged layer. |
+| **Base** | While the slot is on Base, and while an engaged layer inherits unmapped targets from Base, the way a Base mapping row falls through. |
 | A named layer | Only while that layer is engaged, exactly like a mapping row. |
 
-The dropdown appears once the slot has at least one shift layer. A macro that arrives with a scope already set (pasted or imported) shows the row even on a slot with no layers, so the scope stays visible and clearable.
+The dropdown appears once the slot has at least one shift layer. A macro that arrives with a scope already set shows the row even on a slot with no layers, so the scope stays visible and clearable. Paste and Copy From keep a named-layer scope only when the destination slot has that layer or came from the same Steam Workshop import as a slot that has it. Otherwise the copy lands on **Any Layer**.
 
 ---
 
@@ -212,7 +212,7 @@ Actions run in list order, top to bottom, each time the macro fires.
 
 ### The action-type picker
 
-Click **Add Action** and the type dropdown opens grouped by what the action acts on. Each group is a header in the list, and every type carries its tooltip.
+Click **Add Action** to add a Button Press step, then pick its kind from the **Type** dropdown. The dropdown groups the types by what they act on, each group under a header, and most types carry a tooltip.
 
 | Group | Types |
 |---|---|
@@ -232,14 +232,14 @@ Click **Add Action** and the type dropdown opens grouped by what the action acts
 
 Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.
 
-- Names follow the slot's output type (Xbox labels, PlayStation labels, or numbered buttons for Extended Custom).
+- Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names.
 - Select more than one button to fire them together.
 
 ### Key Press / Key Release
 
 Send a keyboard keystroke. The game sees it as a real key.
 
-- Combos work (Ctrl+C, Ctrl+Alt+Delete, etc.). Keys press in order and release in reverse.
+- Combos work (Ctrl+C, Ctrl+Shift+S, and so on). Keys press in order and release in reverse.
 - Type the combo string or pick from the dropdown.
 
 ### Text Block
@@ -326,16 +326,16 @@ The sequence pauses here. Press the trigger again to continue. A held trigger mu
 
 ### Set Axis
 
-Force a virtual controller axis to a fixed value. The **Value** box is a percent of full deflection.
+Force a virtual controller axis to a fixed value for one frame. **Hold Axis** keeps a value for a duration, and **Set Axis (Latched)** keeps it until released. The **Value** box is a percent of full deflection.
 
 | Axis | Value |
 |---|---|
 | Stick (LX, LY, RX, RY) | -100 to 100 percent. 0 is center. |
-| Trigger (LT, RT) | Percent of pull. 0 is released, 100 is a full pull. |
+| Trigger (LT, RT) | Percent of pull. 0 is released and 100 is a full pull. |
 
 ### Hold Axis
 
-Writes the axis value every frame for the duration. With the Until Release repeat mode, the axis stays asserted until the trigger releases.
+Writes the axis value every frame for the duration. With the Until Release repeat mode and a repeat **Delay** of 0, the axis stays asserted until the trigger releases.
 
 ### Axis Add (Relative)
 
@@ -363,7 +363,7 @@ Axis turbo. While the trigger is held, asserts the axis value on an on/off squar
 
 ### Yield to Physical Input
 
-Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a **Yield to Physical Input** checkbox. When physical movement pushes the target axis past the threshold, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.
+Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a **Yield to Physical Input** checkbox. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.
 
 ### System Volume
 
@@ -378,7 +378,7 @@ Map an axis to Windows master volume. Updates every frame.
 
 Same as System Volume, but it drives one app in the Windows audio mixer.
 
-- **Process.** The app to control (Spotify, Firefox, Discord). The dropdown lists apps that are playing audio right now.
+- **Process.** The app to control (Spotify, Firefox, Discord), by its process name without .exe. The dropdown lists apps that have an audio session on the default playback device.
 - The other options match System Volume.
 
 ### Raise Headphone Volume / Lower Headphone Volume
@@ -393,7 +393,7 @@ Play a sound file through the slot's audio output. A Sony pad or Wii Remote play
 
 - **Sound File.** The file to play (.wav, .mp3, .m4a, .aac, .wma, or .flac).
 - **Volume.** Scales the file against the slot's master volume.
-- **Loop Until Stopped.** Repeat until a **Stop Sounds** action, or (for While Held / Until Release macros) the trigger's release. One-shots play to the end.
+- **Loop Until Stopped.** Repeat until a **Stop Sounds** action runs, or until the trigger's release ends a run that repeats until release (the **Until Release** repeat mode, or the Turbo and Toggle fire modes). One-shots play to the end.
 
 **Stop Sounds** ends every macro sound on the slot. Pair it with a looping Play Sound to stop it from another macro. See [Controller Audio](../features/controller-audio.md) for how sounds route to the selected controller, the **Output Path** setting, and sound packages.
 
@@ -422,7 +422,7 @@ Map an axis to scroll wheel movement. Updates every frame.
 
 ### Mouse Wheel Tick
 
-Sends one discrete wheel detent per fire. The **Value** is the signed tick count. Positive scrolls up, or right with **Scroll Horizontal** checked.
+Sends a fixed number of wheel detents per fire. The **Value** is the signed tick count, and 0 sends one tick. Positive scrolls up, or right with **Scroll Horizontal** checked.
 
 ### Toggle Wheel Scroll
 
@@ -459,7 +459,7 @@ These three pair with the **Mouse Position X / Y** mapping sources (see [Button 
 Warp the cursor to a fixed screen spot in one press. One jump, no pinning: the cursor is free again the instant it lands.
 
 - **Mouse X / Mouse Y.** The target coordinate in pixels on the primary monitor.
-- **Pick on screen.** Click it, then place the cursor where you want it. The button counts down three seconds ("Capturing in 3...") and captures the spot into the two fields.
+- **Pick on Screen.** Click it, then place the cursor where you want it. The button counts down three seconds ("Capturing in 3...") and captures the spot into the two fields.
 
 Good for map pings, minimap clicks, and menu buttons that always live at the same spot. Community configs imported from the [Steam Workshop](steam-workshop-import.md) use this action for their cursor-warp bindings.
 
@@ -472,7 +472,7 @@ Two hold modes:
 - **Reactive (Fade).** Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.
 - **Sticky (Hold).** Hold the color at full brightness until a **Clear Lightbar Override** action or a fresh override replaces it. Good for armed / disarmed markers.
 
-Available on slots that have at least one Sony pad (DualShock 4, DualSense, DualSense Edge).
+It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.
 
 ### Clear Lightbar Override
 
@@ -616,11 +616,11 @@ Stick-to-mouse aiming (Always mode):
 |---|---|
 | **Once** | Runs one time. |
 | **Fixed Count** | Runs N times in a row. |
-| **Until Release** | Loops while the trigger is held. Requires **While Held**. |
+| **Until Release** | Loops while the trigger is held and stops on release. Unavailable with **On Short Press**. |
 
 Fixed Count and Until Release both have a **Delay** in milliseconds between runs.
 
-In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline **Interval** field beside the fire mode. On Short Press hides it too, because the trigger is already released when the macro fires and an until-release loop can never run.
+In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline **Interval** field beside the fire mode. On Short Press keeps the section but disables **Until Release**, because the trigger is already released when the macro fires and an until-release loop can never run. **Fixed Count** still works there.
 
 Turbo fire: While Held plus Until Release, Button Press A (50 ms), repeat delay 50 ms. A presses every 100 ms (about 10 times a second) while held.
 
@@ -635,7 +635,7 @@ On by default. The trigger's inputs are stripped before the game sees them, so t
 | On (default) | Macro output only. LB + RB are hidden. |
 | Off | The trigger buttons and the macro output, both. |
 
-Consume works for virtual controller buttons, raw device buttons, and touchpad or gyro style inputs. Assigned Devices button entries are stripped at the source, before mapping. Axis-threshold, POV, and gesture triggers are not consumed. Always and Custom Expression macros never consume anything, since they ignore the trigger entry list.
+Consume works for virtual controller buttons, raw device buttons, and touchpad or gyro style inputs. Assigned Devices button entries are stripped at the source, before mapping. Axis-threshold, POV, and gesture entries are not consumed, and an Assigned Devices combo that includes an axis entry consumes nothing. Always and Custom Expression macros ignore the trigger entry list, so they never consume an Assigned Devices entry left over from another mode.
 
 ---
 
@@ -643,8 +643,8 @@ Consume works for virtual controller buttons, raw device buttons, and touchpad o
 
 | Type | Actions | Behavior |
 |---|---|---|
-| Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis, Switch Layer | One at a time, top to bottom. |
-| Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held | Every frame, all in parallel. |
+| Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis, Switch Layer, and every other action not in the next two rows | One at a time, top to bottom. |
+| Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held, Voice Listen (While Held) | Every frame, all in parallel. |
 | Latched | Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis, Toggle Wheel Scroll, Set Axis (Latched) | Fire in sequence, then the latched output persists until the next fire or a release. |
 
 All three mix in one macro. Two Mouse Move actions (X and Y) run in parallel while a Button Press in the same list runs in sequence next to them. A **Combo Break** splits the sequence: everything above it runs on the first press, everything below waits for the next.
@@ -679,7 +679,7 @@ Lower sensitivity gives you precision. Higher gives you speed. Pair this with th
 ### Turbo fire
 
 - Fire mode: While Held
-- Trigger: Right Trigger axis, threshold 50 percent
+- Trigger: Right Trigger axis from the **Assigned Devices** source, **Deadzone** 50 percent
 - Repeat: Until Release, delay 50 ms
 - Action: Button Press: A (30 ms)
 
@@ -705,7 +705,7 @@ Hold LB and move the left stick up or down to set Spotify volume. The game never
   4. Delay: 50 ms
   5. Key Press: G (50 ms)
   6. Delay: 50 ms
-  7. Key Press: Return (50 ms). Sends the message.
+  7. Key Press: Enter (50 ms). Sends the message.
 
 Increase the delays if the game needs more time between keystrokes.
 
@@ -713,7 +713,7 @@ Increase the delays if the game needs more time between keystrokes.
 
 ## Extended Custom button support
 
-Extended slots set to **Custom** support up to 128 buttons. The trigger recorder and the Button Press dropdown grow to match the slot's button count. Xbox, PlayStation, and gamepad-shaped HIDMaestro profiles use the standard button names.
+An Extended slot carries up to 128 buttons, set in its **Buttons** field with **Customize** on. The trigger recorder and the Button Press button list grow to match the slot's button count. Those buttons show as numbers (Btn 1, Btn 2, and so on), except on Switch Pro family, Steam Deck, and Steam Controller profiles, which use the pad's own names. Xbox and PlayStation slots use their standard button names.
 
 ---
 
@@ -750,4 +750,4 @@ Extended slots set to **Custom** support up to 128 buttons. The trigger recorder
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

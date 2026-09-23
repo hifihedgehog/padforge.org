@@ -31,7 +31,7 @@ The two lightbar mirrors and the Sensa translation read the virtual controller, 
 | Logitech LIGHTSYNC | The same lightbar color, from the same write | PlayStation slots, as above |
 | Razer Sensa HD Haptics | The loudest of a slot's four rumble voices (left motor, right motor, left trigger motor, right trigger motor), across every slot | Every slot that receives rumble from a game |
 
-A lightbar write counts only when the game marks it valid. The DualSense and DualSense Edge presets set a validity flag for the lightbar in each output report, the DualShock 4 preset sets a different one, and a report without the flag leaves the mirrored color alone. Until a game writes a color, the mirrors send nothing. When two PlayStation slots are live, the most recent write wins.
+A lightbar write counts only when the game marks it valid. The DualSense and DualSense Edge presets carry a lightbar validity flag in each output report, the DualShock 4 preset carries a different one, and a report without the flag leaves the mirrored color alone. Until a game writes a color, the mirrors send nothing. When two PlayStation slots are live, the most recent write wins.
 
 The Sensa feed reads the same rumble authority as [Bass Shakers](bass-shakers.md): the game's inbound rumble merged with the live vibration state, so test rumble counts too. Nothing about the physical controller's own rumble settings changes it.
 
@@ -79,7 +79,7 @@ The footer under the row reads: *Requires Logitech G HUB (or Logitech Gaming Sof
 
 ## Razer Sensa HD Haptics
 
-Streams the rumble PadForge is sending to its virtual controllers into the Interhaptics engine, whose Razer provider renders it on Sensa HD devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja.
+Streams the rumble games send to PadForge's virtual controllers into the Interhaptics engine, whose Razer provider renders it on Sensa HD devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja.
 
 | Needs | Detail |
 |---|---|
@@ -137,4 +137,4 @@ A profile has no opinion until you give it one. Profiles saved before PadForge 4
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

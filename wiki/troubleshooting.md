@@ -40,10 +40,10 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 
 **A slot is created and a device assigned, but games do not detect the virtual controller.**
 
-1. Install **HIDMaestro** from [Settings](features/settings.md) for Xbox, PlayStation, Nintendo, or Extended output.
+1. Xbox, PlayStation, Nintendo, and Extended output need **HIDMaestro**, which installs itself the first time a slot creates a virtual controller. There is nothing to install from [Settings](features/settings.md). If no virtual controller appears, restart PadForge so the engine tries the setup again.
 2. Install **Windows MIDI Services** from [Settings](features/settings.md) for MIDI output.
-3. Confirm the slot is enabled. The power icon on the Dashboard card should be green.
-4. Confirm the engine is running. The Dashboard should show "Running" with a green icon.
+3. Confirm the slot is enabled. The flame on its Dashboard card should be lit, ember while its virtual controller runs. An outline flame means the slot is disabled.
+4. Confirm the engine is running. The Dashboard shows **Forging** beside a lit ember flame. **Idle** means the engine runs with no slot active, and **Stopped** means it is off.
 5. Restart the game. Some games only scan for controllers at startup.
 6. Check the game's input settings. Some games require manual controller selection.
 7. For Extended controllers, verify in `joy.cpl` (Win+R > `joy.cpl`). If controllers are not listed, see "Extended Controllers Not Working" below.
@@ -54,7 +54,7 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 
 **A Nintendo virtual controller is active but the game does not react to it.**
 
-1. Install **HIDMaestro** from [Settings](features/settings.md). The Nintendo output rides the same driver as Xbox, PlayStation, and Extended.
+1. The Nintendo output rides **HIDMaestro**, the same driver as Xbox, PlayStation, and Extended. It installs itself the first time a slot creates a virtual controller. If no virtual controller appears, restart PadForge so the engine tries the setup again.
 2. Games see the slot as the picked Nintendo profile, a **Nintendo Switch Pro Controller** or a **Nintendo Switch 2 Pro Controller**. XInput-only games never read either one. Use an Xbox slot for those.
 3. Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.
 4. Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.
@@ -87,7 +87,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. Set **Overall Gain** above 0% on the [Force Feedback](features/force-feedback.md) tab.
 2. Set both **left motor** and **right motor** strength above 0%.
 3. Click **Test Rumble** to verify hardware support. No vibration means the device lacks rumble motors or driver support.
-4. Confirm a device is assigned to the slot and connected (green status dot).
+4. Confirm a device is assigned to the slot and connected (its flame is lit on the [Devices](features/devices.md) page).
 5. Check rumble support on the Devices page capabilities list. Devices without native rumble attempt haptic fallback, but results vary.
 6. Try a different game. Not all games use force feedback.
 7. Close other controller software (Steam Input, DS4Windows, reWASD) that may intercept rumble.
@@ -117,7 +117,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 **"Route Rumble to an Audio Output" is on but nothing plays on the shaker or subwoofer.**
 
 1. Check the status line on the **Bass Shakers** tab. "Audio output is not running." means the routing is off or the engine is stopped. "The selected output device is unavailable. Audio stays off until it returns." means the chosen **Output Device** disappeared. Pick another or reconnect it.
-2. The feature works with Xbox, DualShock 4 / DualSense, and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers with force feedback, such as racing wheels. Other slot types have no game feedback to route.
+2. The feature works with Xbox, PlayStation, and Nintendo virtual controllers, plus Extended virtual controllers with force feedback, such as racing wheels, and the Steam Deck Controller (Composite) profile. Other slot types have no game feedback to route.
 3. Game feedback and **Test Rumble** play through the audio output. Macro rumble stays on the controller by design. Test Rumble on the Force Feedback tab is therefore a valid audio-path check, as are the per-voice **Test** buttons and **Frequency Sweep** on the Bass Shakers tab.
 4. Set **Master Gain** above zero and enable at least one voice with its own gain above zero.
 5. Run **Frequency Sweep** (20 to 120 Hz over eight seconds) and note where the shaker responds strongest, then set the voice frequencies there.
@@ -130,9 +130,9 @@ The game is reading both the physical controller and PadForge's virtual controll
 **Extended (HIDMaestro) controllers do not appear in games or `joy.cpl`.**
 
 1. Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Canceling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.
-2. Verify the HIDMaestro driver shows "Installed" on the [Settings](features/settings.md) page.
+2. The HIDMaestro card on the [Settings](features/settings.md) page always reads "Installed", because the driver ships inside PadForge. It does not confirm that the driver registered.
 3. Check `joy.cpl` (Win+R > `joy.cpl`). If empty, create an Extended slot on the Dashboard first.
-4. Restart PadForge after installing HIDMaestro.
+4. Restart PadForge. A failed HIDMaestro setup is tried again the next time the engine starts.
 5. If a slot stays stuck on "Initializing," check the **Inactivity Timeout** in [Settings](features/settings.md). After the timeout, a slot whose mapped devices stay offline has its live virtual controller torn down to free its kernel slot. The slot configuration (mappings, profile, position) is preserved. The virtual controller recreates automatically when the devices return online.
 
 ---
@@ -157,7 +157,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. Install **Windows MIDI Services** from [Settings](features/settings.md).
 2. Windows MIDI Services requires **Windows 11 24H2 (build 26100) or later**. Earlier Windows 11 builds and any Windows 10 build are unsupported by Microsoft's SDK.
 3. Restart PadForge after installing.
-4. Verify the "Windows MIDI Services" service is running (Win+R > `services.msc`).
+4. Verify the Windows MIDI service (`midisrv`) is running (Win+R > `services.msc`).
 5. "Failed to create MIDI session" means the SDK initialized but cannot reach the service. Restart the service or reboot.
 
 ---
@@ -168,7 +168,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 1. In the DAW, look for **"PadForge MIDI N"** in the MIDI input list.
 2. Set the receiving app to read from the PadForge MIDI endpoint.
-3. Confirm the engine is running and the slot is enabled (green power icon).
+3. Confirm the engine is running and the slot is enabled (lit flame on its Dashboard card).
 4. Match the MIDI channel (1-16) between PadForge and the receiving app.
 5. Verify CC numbers (axes) and note numbers (buttons) match what the receiving app expects.
 6. Use a MIDI monitor (MIDI-OX or Windows MIDI Services console) to confirm PadForge is sending. If messages appear there but not in the DAW, the issue is DAW configuration.
@@ -259,7 +259,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **PadForge uses significant CPU, causing fan noise or slowdowns.**
 
-1. Increase the **polling interval** in [Settings](features/settings.md) > Input Engine. Default is 1 ms (~1000 Hz). Try 4 ms (~250 Hz) or 8 ms (~125 Hz) for casual use.
+1. Increase the **polling interval** in [Settings](features/settings.md) > Input Engine. Default is 1 ms (~1000 Hz). Try 4 ms (~250 Hz) or 8 ms (~125 Hz) for casual use. A profile with its own polling rate overrides this value while it is active.
 2. Disable **"Continue Polling When Window Loses Focus"** if PadForge is only needed during gameplay.
 3. Remove unused virtual controller slots.
 4. Disable **Audio Rumble** on unused slots (runs WASAPI capture and real-time DSP).
@@ -395,7 +395,7 @@ See [Steam Workshop Config Import](guides/steam-workshop-import.md) for the full
 4. A large deadzone leaves little range for the curve to affect. Reduce the deadzone to test.
 5. Custom control points placed nearly linearly produce no visible change. Spread them further apart.
 6. Per-direction max range settings may cause asymmetric behavior. Review them on the Sticks tab.
-7. Non-default deadzone shapes (Axial, Hybrid, Sloped) interact differently with curves. Try Scaled Radial to isolate the issue.
+7. Non-default deadzone shapes (Radial, Axial, Hybrid, Sloped Axial, Sloped Scaled Axial) interact differently with curves. Try Scaled Radial, the default, to isolate the issue.
 
 ---
 
@@ -533,11 +533,11 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 **A Custom Expression macro is set up but the formula never crosses 0.5.**
 
-1. Open the formula editor and watch the **live preview value** while you press the variable inputs. A button or trigger variable that never moves off 0, or a stick variable that never moves off 0.5, is not bound.
-2. Each variable needs a recorded input. Click **Record** on a variable row and press the input.
+1. Read the status line under the formula box. A ⚠ line names each letter the formula uses with no variable row behind it. Those letters read as 0.
+2. Each variable needs a recorded input. Click **Record** on a variable row and press the input. A variable with nothing recorded reads as 0.
 3. The macro fires on the **rising edge** (0 → over 0.5). It does not refire until the value drops below 0.5 and rises past it again.
 4. Buttons and POV directions read as 0 or 1. Triggers read 0 at rest up to 1 fully pressed. A stick axis reads 0.5 at rest and moves toward 0 or 1 as you push it, so a resting stick showing 0.5 is normal, not a binding failure.
-5. Verify the formula syntax. Parse status under the formula box shows **✓ valid** or **parse error**.
+5. Verify the formula syntax. The status line shows **✓ valid** for a formula that parses, and **✗** followed by the parse error for one that does not.
 
 ---
 
@@ -613,7 +613,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 1. Battery shows only when the device reports a level. Many wired controllers and some Bluetooth pads report nothing, so no indicator appears.
 2. The reading refreshes about every 5 seconds, not every frame. Give it a moment after connecting.
-3. An offline device shows no battery. Confirm the green status dot first.
+3. An offline device shows no battery. Confirm its flame is lit first.
 4. If SDL cannot read the battery for the device, PadForge cannot either. There is no manual override.
 
 ---
@@ -624,7 +624,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 1. Idle Disconnect is **off by default** (0). Set a timeout in minutes on the device's Power section to enable it.
 2. It only affects **Bluetooth** controllers. A wired (USB) controller has no radio link to drop, so it stays connected even with a timeout set.
-3. Xbox, Valve (Steam Controller), and Switch 2 pads receive a direct power-off. Sony pads, the Wii Remote, and other Bluetooth controllers drop their Bluetooth link instead, which needs the controller to report a valid MAC address (Bluetooth pads do). A pad that reports none stays connected.
+3. Xbox, Valve (Steam Controller), and Switch 2 pads receive a direct power-off. Sony pads, the Wii Remote, and other Bluetooth controllers drop their Bluetooth link instead, which needs the controller to report a valid MAC address (Bluetooth pads do). A classic Bluetooth pad that reports none stays connected.
 4. Aiming with the Wii IR pointer or Joy-Con 2 mouse counts as activity, so you are not disconnected mid-use.
 5. Charging does not pause the countdown. An idle pad disconnects even while charging, and dropping Bluetooth does not interrupt the charge.
 
@@ -689,6 +689,21 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 ---
 
+## Update Won't Check or Install
+
+**The Updates card in Settings reports an error, or an update did not install.**
+
+1. *GitHub is limiting requests from this network* means everyone behind the network's shared address used up GitHub's allowance of 60 requests an hour. Wait an hour, or check from another network.
+2. *Could not check for updates* followed by a reason means GitHub could not be reached or answered with an error. Check the connection, then click **Check Now**.
+3. *The download did not match the checksum GitHub published for it* means the file was damaged on the way, and PadForge did not install it. Click **Install and Restart** to download it again. With **Install Updates Automatically** on, **Check Now** downloads it again too.
+4. An update set to install at the next start that does not finish is reported once, and its staged copy is dropped. Install it from the card with **Install and Restart**.
+5. When the new version does not start, the message names the folder under `%TEMP%\PadForge_Update` that holds a copy of the old `PadForge.exe`. Copy that file over the installed one to go back.
+6. Versions 4.5.2 and older have no updater. Download 4.5.3 or later once from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest).
+
+[Updates](features/updates.md) lists every message the card can show.
+
+---
+
 ## Logs and diagnostics
 
 PadForge writes no log files on its own. A healthy session leaves nothing on disk unless you ask for it. Next to `PadForge.exe`:
@@ -715,8 +730,8 @@ Both land in the folder PadForge runs from, and the card shows the path.
 |---|---|
 | No devices | Check USB, cable, Device Manager |
 | Detected but no mapping | Assign to slot, check source dropdown |
-| No virtual controller in game | Install HIDMaestro / MIDI Services |
-| Nintendo slot not in game | Install HIDMaestro. XInput-only games need an Xbox slot |
+| No virtual controller in game | HIDMaestro installs itself. Restart PadForge. MIDI needs MIDI Services |
+| Nintendo slot not in game | XInput-only games need an Xbox slot |
 | Double input | Install HidHide, enable "Hide Devices from Games" |
 | BLE controller not hidden | Enable per-device "Hide from Games" and "Hide Devices from Games" in Settings |
 | Wrong button mapping | Force Raw Joystick Mode, re-record |
@@ -725,7 +740,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | No rumble | Overall Gain > 0%, motor strength > 0%, Test Rumble |
 | Audio bass rumble flat | Check audio playing, raise sensitivity |
 | Bass shakers silent | Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not |
-| Extended controller not in joy.cpl | Install HIDMaestro, verify driver status, restart PadForge |
+| Extended controller not in joy.cpl | Accept UAC, create an Extended slot, restart PadForge |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
 | MIDI button dimmed | Install Windows MIDI Services (Win 11 24H2 or later) |
 | No MIDI output | Select "PadForge MIDI N" in DAW input |
@@ -763,13 +778,14 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | DualShock 3 not connecting | Pair through PadForge, unplug, press PS over Bluetooth |
 | Shift layer stuck or won't engage | Check mode, Delay, Fire on Release, axis threshold, activator online. A Toggle layer releases on a second tap or via Auto-Cancel |
 | Impulse Triggers tab missing | Slot needs an Xbox One/Elite/Series pad. DualSense uses the Adaptive Triggers tab |
-| Custom Expression macro silent | Watch live preview value. Rising-edge means it must cross 0.5 |
+| Custom Expression macro silent | Record every variable, read the status line. Rising-edge means it must cross 0.5 |
 | Touchpad Overlay no input in game | Slot must be PlayStation type. A real DualSense or DS4 in the slot overrides the overlay |
 | Touchpad pressure in steps | Synthetic Pressure is on. Turn it off for raw readings |
 | Wii Remote drifts or turns wrong in an emulator | Uncheck Apply Gyro Tuning to Motion Passthrough, set Held As to the hold |
 | Handheld XInput pad still visible after hiding | 4.4.0 hides composite interfaces. Keep Devices Cloaked Between Launches, reboot once |
 | Dual-connected DualSense silent over USB | Firmware mute. 4.4.0 drops the stale Bluetooth link, or connect by one transport |
 | GameMaker game at 5 fps | Two devices share one id. Pick another Xbox profile, one transport per pad |
+| Update won't check or install | Read the card's message. See [Update Won't Check or Install](#update-wont-check-or-install) |
 
 ---
 
@@ -778,7 +794,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 - [Installation](start/installation.md): First-time setup guide
 - [Settings](features/settings.md): Engine and driver configuration
 - [Driver Management](features/driver-management.md): Driver installation
-- [Dashboard](features/dashboard.md): Engine and driver status
+- [Dashboard](features/dashboard.md): Engine status
 - [Controller Slots](features/controller-slots.md): Virtual controller creation and management
 - [Devices](features/devices.md): Device detection and input state
 - [Button and Axis Mappings](features/mappings.md): Input mapping configuration
@@ -794,4 +810,4 @@ Both land in the folder PadForge runs from, and the card shows the path.
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

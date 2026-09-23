@@ -30,7 +30,7 @@ There is no per-model table anywhere in this feature. A learned button is data, 
 
 ## Lifecycle: Phase 1h
 
-`UpdateHandheldDevices` runs on the poll thread inside Step 1. With `HandheldButtonRegistry.FeatureEnabled` false and nothing to retire, it returns after two volatile reads. Turning the feature off retires both rows, neutralizes their mapped outputs, and stops the chord worker (`HandheldChordRuntime.Stop`) outside the handheld lock, since `Stop` joins its worker and the poll thread must not block on a join under a nested lock.
+`UpdateHandheldDevices` runs on the poll thread inside Step 1. With `HandheldButtonRegistry.FeatureEnabled` false and nothing to retire, it returns after five volatile field reads and takes no lock. Turning the feature off retires both rows, neutralizes their mapped outputs, and stops the chord worker (`HandheldChordRuntime.Stop`) outside the handheld lock, since `Stop` joins its worker and the poll thread must not block on a join under a nested lock.
 
 The button row opens on the poll thread with no I/O (`HandheldButtonsDevice.Open` only wires events and pushes the registry). Everything that blocks lives in `HandheldSweep`, a worker task every `_handheldSweepIntervalMs` = 4000 ms:
 
@@ -220,7 +220,7 @@ All through `SdlDiagLog`, so they ride the diagnostics mirror.
 
 ## Tests
 
-`HandheldChordEngineTests` (36) replays the engine rules with a fake clock. `HandheldButtonsTests` (33) covers the registry, the device state (minimum press, value hold, other report ids, two bits in one byte, span growth), the WMI pulse and the pinned Step 3 path, the learners over Legion-style, active-low, Ally-style, and GPD Win 5 fixtures, the WMI candidate rules, the motion conversions, and the `_WDG` parser over a synthetic table.
+`HandheldChordEngineTests.cs` (36) replays the engine rules with a fake clock (23), runs the report learner over Legion Go, GPD Win 5, and ROG Ally byte captures (11), and checks the machine display name (2). `HandheldButtonsTests.cs` (33) covers the registry, the device state (minimum press, value hold, other report ids, two bits in one byte, span growth), the WMI pulse and the pinned Step 3 path, the learn session over Legion-style, active-low, and Ally-style fixtures, the WMI candidate rules, the motion conversions, the device type ordinals, and the `_WDG` parser over a synthetic table.
 
 ---
 
@@ -238,4 +238,4 @@ The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

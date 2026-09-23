@@ -10,7 +10,7 @@
 
 | Component | Status | What it does |
 |---|---|---|
-| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). 231 device profiles. |
+| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 231 device profiles, and PadForge offers the 133 with a captured HID descriptor. |
 | **Keyboard+Mouse** | Built in. No driver. | Maps controller inputs to keyboard and mouse presses. |
 | **HidHide** | Optional. Install when games show double input. | Hides physical controllers from games so they only see the virtual ones. |
 | **Windows MIDI Services** | Optional. Install for MIDI input or the MIDI controller type. | Virtual MIDI endpoints for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Needs Windows 11 24H2 (build 26100) or later. |
@@ -22,9 +22,11 @@
 
 ## First-run auto-install
 
-HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The HIDMaestro card on the **Settings** page lights up and the Xbox, PlayStation, Nintendo, and Extended slot types turn on.
+HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch and the HIDMaestro card on the **Settings** page always reads **Installed**.
 
 HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the **Settings** page until you click **Install**.
+
+Two more drivers install outside **Settings**, and only when something needs them. Pairing a [DualShock 3](../devices/dualshock-3.md), [PS Move](../devices/ps-move.md) or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named **Full**, the two Valve **Composite** profiles, and **Steam Controller (2026)**) installs usbip-win2, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, **DualSense (PS5): Full**, is one of them. That install needs no prompt, and USB devices disconnect and reconnect once while Windows re-enumerates its USB root hubs.
 
 ---
 
@@ -68,15 +70,17 @@ One driver that publishes the virtual controllers. Each Xbox, PlayStation, Ninte
 
 The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Switch 2 Pro. Pick between them from the slot's preset dropdown. Neither can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
 
-### The 231 profiles cover
+### The profiles PadForge offers cover
+
+HIDMaestro ships 231 device profiles. PadForge's pickers offer the 133 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. They cover:
 
 - Xbox 360, Xbox One, Xbox Series, Elite, Adaptive
 - DualShock 3, DualShock 4, DualSense, DualSense Edge
-- Switch Pro, Switch 2 Pro, Joy-Cons (both generations), GameCube adapter, NSO retro pads (N64, SNES, Genesis)
+- Switch Pro, Switch 2 Pro, the original Joy-Cons and their charging grip, the GameCube adapter in HID mode, NSO retro pads (N64, SNES, Genesis)
 - Logitech G-series wheels (G29, G920, G923, G27)
-- Thrustmaster and Fanatec wheels and pedals
-- HOTAS and flight sticks (Thrustmaster T-Flight HOTAS, Logitech X52, VKB, VIRPIL, Winwing)
-- Hori, 8BitDo, Nacon, Razer, other third-party gamepads
+- Thrustmaster wheels, the Thrustmaster T-Rudder Pedals, and the Fanatec ClubSport Handbrake
+- HOTAS and flight sticks (Thrustmaster T.Flight HOTAS 4 and One, Thrustmaster T.16000M, Saitek X52, SideWinder Force Feedback 2)
+- Hori, Nacon, Razer, Flydigi, other third-party gamepads
 - A **Custom** profile for the Extended category, with up to 8 axes, 128 buttons, and 4 POV hats.
 
 ### Install when you want
@@ -87,7 +91,7 @@ The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Sw
 
 ### Install
 
-HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the **Settings** page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The flame lights up once install finishes, and Xbox, PlayStation, Nintendo, and Extended slots become available.
+HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the **Settings** page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The card's flame is always lit and the Xbox, PlayStation, Nintendo, and Extended slot types are always available, because the driver ships inside PadForge.
 
 ### Uninstall
 
@@ -198,7 +202,7 @@ The runtime behind the VR slot type. PadForge installs it Steam-free from Valve'
 
 1. Close SteamVR. The uninstall refuses while it is running.
 2. Open **Settings**. Scroll to **SteamVR**.
-3. Click **Uninstall**. It removes the Steam-free install and frees the space, including the `logs` and `config` subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.
+3. Click **Uninstall**, then confirm. The dialog names the folder it removes. It removes the Steam-free install and frees the space, including the `logs` and `config` subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.
 
 Reading real VR hardware as an input source pauses for the rest of the session after an uninstall, and comes back the next time PadForge starts. PadForge holds SteamVR's client library open while it is running and lets go of it during the uninstall, so it does not go back to it until a fresh launch. Virtual VR controllers are unaffected by this: they run inside SteamVR's own process, not PadForge's.
 
@@ -212,7 +216,7 @@ Older PadForge versions needed ViGEmBus and vJoy. HIDMaestro replaces both. If e
 
 | Button | What happens |
 |---|---|
-| **Uninstall** | PadForge removes the drivers it found. Reboot when prompted. |
+| **Uninstall** | PadForge removes the drivers it found. It asks for no restart. If a removal fails, a second dialog names the error. |
 | **Keep** | The dialog closes. The old drivers stay installed. They will not interfere with HIDMaestro, but they take up space. |
 
 The dialog appears once. After you pick either button, it does not come back on later launches.
@@ -301,4 +305,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

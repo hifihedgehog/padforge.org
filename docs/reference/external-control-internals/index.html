@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -2571,6 +2603,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3498,7 +3558,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/App.xaml.cs</code></td>
-<td><code>ParseProfileCommand</code>, the first-instance deferred apply, and the second-instance pipe forward.</td>
+<td><code>ParseProfileCommand</code>, the first-instance <code>PendingProfileCommand</code> (applied by <code>InputService.Start</code>), and the second-instance pipe forward.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Views/ProfilesPage.xaml</code></td>
@@ -3549,8 +3609,8 @@
 </tbody>
 </table>
 <p>No Everyone, no anonymous. <code>ExternalControlTests.ThePipeGrantsAuthenticatedUsers</code> pins the SID and the right.</p>
-<p><code>Start</code> runs <code>AcceptLoop</code> on a task. Each iteration creates a fresh server stream, waits for one connection, reads one line, runs the executor, writes one line, and disposes the stream. One command per connection. A bad connection never kills the loop. <code>Stop</code> cancels the token, connects a throwaway client for 200 ms to nudge a server parked in <code>WaitForConnectionAsync</code> (it does not observe the token until a connection arrives), and waits up to 2 s for the loop.</p>
-<p>Framing is plain UTF-8. <code>ReadLineAsync</code> reads a byte at a time up to 1024 characters, ends on <code>\n</code>, drops <code>\r</code>, and trims. <code>WriteLineAsync</code> appends <code>\n</code> and flushes. <code>ExternalControlTests.TheRequestReadIsCapped</code> pins the cap.</p>
+<p><code>Start</code> runs <code>AcceptLoop</code> on a task. Each iteration creates a fresh server stream, waits for one connection, reads one line, runs the executor, writes one line, and disposes the stream. One command per connection. A bad connection never kills the loop. <code>Stop</code> cancels the token, connects a throwaway client (200 ms connect timeout) to nudge a server parked in <code>WaitForConnectionAsync</code> (it does not observe the token until a connection arrives), and waits up to 2 s for the loop.</p>
+<p>Requests and replies are UTF-8. <code>ReadLineAsync</code> collects bytes until <code>\n</code>, drops <code>\r</code>, stops at 1024 bytes, decodes the line as UTF-8, and trims it, so a profile name with non-ASCII characters matches by name. Splitting on those two bytes is safe because UTF-8 never uses them inside a multi-byte character. <code>WriteLineAsync</code> appends <code>\n</code>, encodes UTF-8, and flushes. <code>ExternalControlTests.TheRequestReadIsCapped</code> pins the cap.</p>
 <p>The server always answers, including on an empty line. An earlier guard skipped the write when the request was empty, and a client that sent a bare newline then blocked in its own read until the pipe closed, which reads as a hung launcher. The executor returning null or throwing yields <code>error internal</code>.</p>
 <p>The pipe name is a constructor parameter because a pipe name is machine-global. A test that served the production name was answered by the running PadForge and failed carrying the real app's replies. Tests serve a name unique to the test and process.</p>
 <hr />
@@ -3574,7 +3634,7 @@
 </tr>
 <tr>
 <td>Checkbox turned off</td>
-<td><code>StopExternalControl</code> disposes the server, clears the pin, invalidates the foreground cache.</td>
+<td><code>StopExternalControl</code> disposes the server, clears the pin, invalidates the foreground cache. With no server running it does nothing, so a pin stays.</td>
 </tr>
 <tr>
 <td>Engine stop</td>
@@ -3589,7 +3649,7 @@
 <p><code>ExternalControlTests.ThePipeStarterIsEngineGated</code> pins the gate.</p>
 <hr />
 <h2 id="the-grammar">The grammar<a class="headerlink" href="#the-grammar" title="Permanent link">&para;</a></h2>
-<p><code>InputService.ExecuteExternalControlCommand</code> runs off the UI thread and marshals every state touch through the dispatcher. Verbs and replies are fixed ASCII, never localized, since this is a machine interface (<code>ExternalControlTests.TheGrammarIsNeverLocalized</code>). The first space splits verb from argument, so a profile name may contain spaces. The verb is lowercased.</p>
+<p><code>InputService.ExecuteExternalControlCommand</code> runs off the UI thread when the pipe calls it (the command-line form calls it from <code>InputService.Start</code>) and marshals every state touch through the dispatcher. Verbs and replies are fixed ASCII, never localized, since this is a machine interface (<code>ExternalControlTests.TheGrammarIsNeverLocalized</code>). The first space splits verb from argument, so a profile name may contain spaces. The verb is lowercased.</p>
 <table>
 <thead>
 <tr>
@@ -3612,7 +3672,7 @@
 </tr>
 <tr>
 <td><code>query</code></td>
-<td><code>ok &lt;name&gt; pinned</code>, <code>ok &lt;name&gt; unpinned</code>, or <code>ok default unpinned</code></td>
+<td><code>ok &lt;name&gt; pinned</code> or <code>ok &lt;name&gt; unpinned</code>, where <code>&lt;name&gt;</code> is <code>default</code> when no named profile is active</td>
 </tr>
 <tr>
 <td>empty or whitespace line</td>
@@ -3651,15 +3711,15 @@
 </tr>
 <tr>
 <td>Cleared by the user</td>
-<td><code>NoteManualProfileSwitch</code>, called ahead of a manual load from the Profiles page. The user outranks a script.</td>
+<td><code>NoteManualProfileSwitch</code>, called ahead of every manual switch: the Profiles page Load button (Default included), the status-bar switcher, a controller profile shortcut, and a Workshop profile applied from the browse dialog. The user outranks a script.</td>
 </tr>
 <tr>
 <td>Cleared by lifecycle</td>
-<td><code>StopExternalControl</code> (checkbox off, engine stop), Reset to Defaults, app restart</td>
+<td><code>StopExternalControl</code> (checkbox off, engine stop) while the pipe is serving, Reset to Defaults, app restart. A pin set by a first-instance <code>--profile</code> while the pipe is off survives an engine stop.</td>
 </tr>
 </tbody>
 </table>
-<p>Whenever the pin drops, the monitor's dedup cache is invalidated (<code>InvalidateCache</code>), because it holds pre-pin state and a still-focused matched game must re-fire its rule on the next check. <code>ExternalControlTests.PinReleaseInvalidatesTheForegroundCache</code> and <code>AManualSwitchReleasesThePin</code> pin both halves.</p>
+<p>When <code>ExternalDeactivate</code> or <code>StopExternalControl</code> drops the pin, the monitor's dedup cache is invalidated (<code>InvalidateCache</code>), because it holds pre-pin state and a still-focused matched game must re-fire its rule on the next check. A manual switch drops it through <code>NoteManualProfileSwitch</code>, which sets the monitor's manual override instead. <code>ExternalControlTests.PinReleaseInvalidatesTheForegroundCache</code> and <code>AManualSwitchReleasesThePin</code> pin both halves.</p>
 <p>The pin proof on the live bench needed a same-window positive control: with no pin, focusing the matched executable auto-switched and closing it reverted, so the monitor was demonstrably firing. With the pin held, the same open-and-close left the profile untouched.</p>
 <hr />
 <h2 id="the-command-line-form">The command-line form<a class="headerlink" href="#the-command-line-form" title="Permanent link">&para;</a></h2>
@@ -3683,7 +3743,7 @@
 </tbody>
 </table>
 <p>First instance: the command is stored as <code>PendingProfileCommand</code> and applied once at the tail of <code>InputService.Start</code>, directly in-process through <code>ExecuteExternalControlCommand</code>. That works with the pipe off, since the pipe is for driving an already-running instance. <code>ClearPendingProfileCommand</code> runs first so an engine restart does not re-apply it.</p>
-<p>Second instance: <code>OnStartup</code> sees the single-instance mutex taken. With a profile argument present it forwards the command over the pipe (<code>TryForwardExternalCommand</code>, 2 s connect timeout), prints the reply to the console, and exits with no "already running" box. If the pipe is not being served (external control off) it prints <code>error not-connected</code>. <code>ExternalControlTests.ASecondInstanceForwardsInsteadOfNagging</code> and <code>TheCommandLineMapsOntoTheSameGrammar</code> pin it.</p>
+<p>Second instance: <code>OnStartup</code> sees the single-instance mutex taken. With a profile argument present it forwards the command over the pipe (<code>TryForwardExternalCommand</code>, 2 s connect timeout), writes the reply to standard output, and exits with no "already running" box. If the pipe is not being served (external control off) it writes <code>error not-connected</code>. While an in-app update holds its lease on the exe, every launch, <code>--profile</code> included, exits quietly before the single-instance check (see <a href="../updates-internals/">Updates Internals</a>). <code>ExternalControlTests.ASecondInstanceForwardsInsteadOfNagging</code> and <code>TheCommandLineMapsOntoTheSameGrammar</code> pin it.</p>
 <p>Because the exe is elevated, this form prompts UAC when called from a normal process. The docs steer launchers to the pipe and keep the exe form for elevated scripts and Task Scheduler jobs.</p>
 <hr />
 <h2 id="persistence">Persistence<a class="headerlink" href="#persistence" title="Permanent link">&para;</a></h2>
@@ -3696,7 +3756,7 @@
 <li><a href="../services-layer/">Services Layer</a>: where <code>InputService</code> and <code>ForegroundMonitorService</code> sit.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

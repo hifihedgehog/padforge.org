@@ -73,9 +73,9 @@ Auto-map covers gamepads only, so each control is bound by hand.
 
 ## When a controller goes quiet
 
-Set a controller down, or let it sleep, and after one second without a sample every axis returns to rest and every button releases. A stick is never left held by a controller lying on a desk.
+A controller that loses tracking returns its six pose axes to rest. Its stick, trigger, grip and buttons rest whenever the runtime stops reporting them, which includes a controller that has gone to sleep. If samples stop arriving altogether, every axis rests and every button releases after one second, so a stick is never left held. A controller set down where the runtime still tracks it keeps reporting, and its pose axes follow it.
 
-The row stays online while the session is up, so mappings can be made before you pick the controller back up.
+The row stays online while **OpenXR Headset Input** is on, so mappings can be made before you pick the controller back up.
 
 ---
 
@@ -88,4 +88,4 @@ The row stays online while the session is up, so mappings can be made before you
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

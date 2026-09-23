@@ -28,7 +28,7 @@ With the toggle off, nothing runs: no device rows, no keyboard hook, no vendor H
 
 ## Learning a button
 
-Select the **Hidden Buttons** row and click **Learn / Manage Hidden Buttons**. The **Learn a Button** dialog names your machine, warns if a vendor tool is running, and walks one press:
+Select the **Hidden Buttons** row and click **Learn / Manage Hidden Buttons**. The **Hidden Buttons** dialog names your machine, warns if a vendor tool is running, and walks one press under **Learn a Button**:
 
 1. **Start Learning**. For one second the dialog reads *Hands off. Reading the idle state…* while PadForge samples every vendor report on the machine, so bytes that move on their own (motion sensor words, counters) can never become a button.
 2. *Press the hidden button now, then let go…* You have three seconds. A tap or a hold both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.
@@ -50,7 +50,7 @@ Repeat for every paddle and key. The **Learned Buttons** list below shows each o
 
 **System events** cover the third kind of key: one the firmware reports to the vendor's WMI provider rather than to any keyboard or HID device. Lenovo's Vantage and Smart Connect keys on a Legion laptop arrive only this way, as a `LENOVO_UTILITY_EVENT` with a press code. During a learn pass PadForge subscribes to the event classes the firmware itself declares (the ACPI-WMI `_WDG` table lists every event GUID the machine's firmware can raise, on any brand). An event that fires while the key is held or when it is released becomes a button, unless it fires twice or more while your hands are off (a periodic status event). One early press does not spoil the pass. Event classes owned by other drivers are never touched. An event is a press with no release, so the button pulses for 175 ms. Outside a learn pass, only the classes your learned buttons name stay subscribed. The same rule covers laptops as well as handhelds: a special key is a special key.
 
-A learned button asserts for at least 175 ms, so a firmware tap that lasts two milliseconds still registers on a macro poll.
+A learned button asserts for at least 175 ms (a report code for at least 150 ms), so a firmware tap that lasts two milliseconds still registers on a macro poll.
 
 ---
 
@@ -93,4 +93,4 @@ The **Motion** row feeds the same gyro pipeline every controller uses: gyro aim,
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

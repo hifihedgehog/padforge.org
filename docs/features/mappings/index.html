@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2491,6 +2493,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2760,6 +2790,8 @@
       
         
           
+        
+      
         
       
         
@@ -3145,6 +3177,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -4342,7 +4402,7 @@
 </tr>
 <tr>
 <td><strong>Source</strong></td>
-<td>One or more physical inputs that drive this output. Pick by hand, use Record, or click <strong>+ Add Source</strong> to add another. Sources get letter tags <strong>a</strong>, <strong>b</strong>, <strong>c</strong>, … in the order you add them.</td>
+<td>One or more physical inputs that drive this output. Pick by hand, use Record, or click <strong>+ Add Source</strong> in the row's detail strip to add another. A Custom formula reads the sources as <strong>a</strong>, <strong>b</strong>, <strong>c</strong>, … in row order.</td>
 </tr>
 <tr>
 <td><strong>Value</strong></td>
@@ -4358,7 +4418,7 @@
 </tr>
 <tr>
 <td><strong>Options</strong></td>
-<td>Per-source controls: <strong>Invert</strong>, <strong>Half</strong>, <strong>Bidirectional</strong>, plus <strong>Flip Output</strong>, <strong>Do Not Inherit</strong>, <strong>Acceleration</strong>, and <strong>Sensitivity</strong> where they apply. Toggles that cannot act on the current source gray out. See <a href="#per-source-options">Per-source options</a>.</td>
+<td>Per-source controls: <strong>Invert</strong>, <strong>Half</strong>, <strong>Bidirectional</strong>, plus <strong>Flip Output</strong>, <strong>Acceleration</strong>, and <strong>Sensitivity</strong> where they apply, and the row's <strong>Do Not Inherit</strong> on an inheriting shift layer. Toggles that cannot act on the current source gray out. See <a href="#per-source-options">Per-source options</a>.</td>
 </tr>
 <tr>
 <td><strong>Axis-to-Button Deadzone</strong></td>
@@ -4366,31 +4426,32 @@
 </tr>
 </tbody>
 </table>
-<p>Two more controls live in the strip beneath each row rather than in a column:</p>
+<p>Two more controls live in the strip beneath the selected row rather than in a column:</p>
 <ul>
 <li><strong>Primary Mode</strong> picks how the primary source is read (Direct, Incremental, Invert On Hold, Ramp). See <a href="#source-kinds">Source kinds</a>.</li>
 <li><strong>Combine</strong> appears once a row has two or more sources, or when <strong>Primary Mode</strong> is anything other than Direct. See <a href="#combine-modes">Combine modes</a>.</li>
 </ul>
 <blockquote>
-<p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets.</p>
+<p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.</p>
 </blockquote>
-<p>Rows group by category: <strong>Buttons</strong> (face, shoulder, stick clicks, system), <strong>Left Stick / Right Stick</strong> (X and Y axes), <strong>Triggers</strong> (left and right), <strong>D-Pad</strong> (four directions). Nintendo and Extended slots arrange their own row sets. See <a href="#nintendo-virtual-controllers">Nintendo virtual controllers</a> and <a href="#custom-directinput-mappings">Custom DirectInput mappings</a>.</p>
+<p>Rows group by category, in this order: <strong>Buttons</strong> (face, shoulder, system, stick clicks), <strong>D-Pad</strong> (four directions), <strong>Triggers</strong> (left and right), <strong>Left Stick / Right Stick</strong> (X and Y axes). PlayStation slots add the touchpad rows, a <strong>Touchpad Click</strong> row, and the <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> rows. Nintendo and Extended slots arrange their own row sets. See <a href="#nintendo-virtual-controllers">Nintendo virtual controllers</a> and <a href="#custom-directinput-mappings">Custom DirectInput mappings</a>.</p>
 <hr />
 <h2 id="three-ways-to-bind">Three ways to bind<a class="headerlink" href="#three-ways-to-bind" title="Permanent link">&para;</a></h2>
 <h3 id="1-record">1. Record<a class="headerlink" href="#1-record" title="Permanent link">&para;</a></h3>
 <p>The fastest way to assign one source.</p>
 <ol>
 <li>Click <strong>Record</strong> on the target row.</li>
-<li>The button changes to "Recording..." and the row pulses orange.</li>
+<li>The button switches to a stop icon, its tooltip reads "Recording...", and the row pulses orange.</li>
 <li>Press the button or move the axis on any physical controller assigned to this slot.</li>
 <li>PadForge detects the input, fills in the source, and stops recording.</li>
 </ol>
 <p>PadForge detects buttons (first press), axes (movement past a threshold), D-pad / POV directions, and mouse axes.</p>
+<p>On a stick axis row, a button or D-pad press records one direction, and PadForge then asks for the opposite one. Moving an analog axis covers both directions at once.</p>
 <blockquote>
 <p><strong>Tip:</strong> Move only the input you want. Wiggling a stick while pressing a button can catch the stick instead. Push sticks firmly and pull triggers far enough to cross the detection threshold.</p>
 </blockquote>
 <h3 id="2-source-dropdown">2. Source dropdown<a class="headerlink" href="#2-source-dropdown" title="Permanent link">&para;</a></h3>
-<p>Each source has a cascading dropdown: first pick the device, then the input. The manual alternative to recording.</p>
+<p>Each source has one dropdown that lists the inputs of every device assigned to the slot, grouped under device headings, with an <strong>(Any Device)</strong> group first. The manual alternative to recording. The toolbar's <strong>Filter inputs</strong> box (Ctrl+F) and the funnel button beside it narrow what every dropdown on the tab offers.</p>
 <ul>
 <li><strong>Recognized gamepads</strong> (Xbox, DualSense, DualShock 4, DualShock 3, Switch Pro, etc.) show friendly names. "A", "B", "Left Stick X", "Right Trigger".</li>
 <li><strong>Raw or unrecognized devices</strong> (generic joysticks, racing wheels, flight sticks, Force Raw Joystick Mode) show numbered names. "Button 0", "Axis 0", "POV 0 Up".</li>
@@ -4429,12 +4490,12 @@
 <ol>
 <li>Click <strong>Map All</strong> (on the Controller tab or the Mappings tab toolbar).</li>
 <li>PadForge highlights the first row and starts recording.</li>
-<li>An orange prompt shows which output it expects and where you are in the sequence ("Map: A (1/21)").</li>
+<li>On the Controller tab, an orange prompt shows which output it expects and where you are in the sequence ("Map: A (1/21)").</li>
 <li>Press the matching button or move the matching axis.</li>
 <li>PadForge captures the input and moves to the next row.</li>
 <li>Repeat until done. Click <strong>Stop</strong> to stop early.</li>
 </ol>
-<p>Rows that already have a source are still in the sequence. Pressing an input overwrites the existing source. Skipping keeps it.</p>
+<p>Rows that already have a source are still in the sequence. Pressing an input overwrites the existing source. Letting a row's 10-second recording window run out skips it and keeps its source.</p>
 <p>On PlayStation virtual controllers, <strong>Touchpad Click</strong> is appended to the recording sequence after the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.</p>
 <blockquote>
 <p><strong>Tip:</strong> Start with Map All to assign everything in one pass, then fine-tune individual rows.</p>
@@ -4448,13 +4509,13 @@
 <li><strong>Buttons and D-pad directions:</strong> Either (any source fires the output).</li>
 <li><strong>Sticks and triggers:</strong> Strongest (the source pushing hardest wins).</li>
 </ul>
-<p>Existing custom rows are left alone. Auto-mapping never clobbers a row you edited by hand.</p>
+<p>Auto-mapping never overwrites a row you edited by hand. It only adds the new device's default source, and it skips a row that already reads that device or holds an <strong>(Any Device)</strong> source.</p>
 <p>Unrecognized devices (generic joysticks, flight sticks, raw-mode devices) do not get auto-mapping. Use Map All, recording, or the source dropdown to set them up.</p>
 <hr />
 <h2 id="multiple-sources-per-row">Multiple sources per row<a class="headerlink" href="#multiple-sources-per-row" title="Permanent link">&para;</a></h2>
 <p>A row can drive its output from any number of physical inputs, across any combination of assigned devices.</p>
 <h3 id="adding-sources">Adding sources<a class="headerlink" href="#adding-sources" title="Permanent link">&para;</a></h3>
-<p>Click <strong>+ Add Source</strong> on any existing source to add another. The new source gets the next letter tag (<strong>a</strong> is the first, <strong>b</strong> the second, <strong>c</strong> the third, …). Letter tags appear next to the source on the row and inside the formula editor as variable names.</p>
+<p>Select the row and click <strong>+ Add Source</strong> at the bottom of its detail strip. In a Custom formula the new source reads as the next letter (<strong>a</strong> is the first, <strong>b</strong> the second, <strong>c</strong> the third, …). In the formula editor, the tooltips on the <strong>a</strong> to <strong>d</strong> chips name the source each letter reads.</p>
 <p>Each extra source renders as its own chip with the same controls the primary carries: a mode dropdown, the input picker, Record and Clear buttons, the option checkboxes, the sliders that apply to it, and a remove button that deletes the source outright.</p>
 <h3 id="per-source-options">Per-source options<a class="headerlink" href="#per-source-options" title="Permanent link">&para;</a></h3>
 <p>Each source carries its own settings:</p>
@@ -4500,12 +4561,12 @@
 </tr>
 <tr>
 <td><strong>Do Not Inherit</strong></td>
-<td>Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See <a href="#shift-layers">Shift layers</a>.</td>
+<td>A row setting rather than a per-source one. Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See <a href="#shift-layers">Shift layers</a>.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="direction-badges">Direction badges<a class="headerlink" href="#direction-badges" title="Permanent link">&para;</a></h3>
-<p>When a button, a D-pad direction, or a touchpad click feeds a stick axis, the row shows a direction badge next to the source. It marks which way that press drives the stick:</p>
+<p>When an extra source that is a button, a D-pad direction, or a touchpad click feeds a stick axis, its chip shows a direction badge. It marks which way that press drives the stick:</p>
 <ul>
 <li><strong>→ +</strong> the press pushes the stick toward the positive side.</li>
 <li><strong>← −</strong> the press pushes the stick toward the negative side.</li>
@@ -4557,7 +4618,7 @@
 </tr>
 </tbody>
 </table>
-<p>For axis rows, <strong>Strongest</strong> is the auto-mapping default. For button and D-pad rows, <strong>Either</strong> is the default.</p>
+<p>For axis rows, <strong>Strongest</strong> is the auto-mapping default. For button and D-pad rows, <strong>Either</strong> is the default. The Motion Gyro and Motion Accelerometer rows offer only Strongest, Combined, Average, and Custom.</p>
 <p>A collapsed row with two or more sources shows the current mode as a small chip next to the source list. Select the row and the <strong>Combine</strong> picker is in the detail strip below.</p>
 <h3 id="gyro-plus-stick-on-one-axis">Gyro plus stick on one axis<a class="headerlink" href="#gyro-plus-stick-on-one-axis" title="Permanent link">&para;</a></h3>
 <p>The most common multi-source row: the physical stick for coarse movement, gyro for fine aim, both driving the same axis.</p>
@@ -4569,7 +4630,7 @@
 </ol>
 <p><strong>Combined</strong> adds the two instead, clipping at full deflection when both push the same way, and <strong>Average</strong> halves both. See the <a href="../../guides/gyro/#rate-versus-tilt">gyro guide's rate-versus-tilt section</a> for which gyro source fits which feel.</p>
 <h3 id="stick-trim">Stick Trim<a class="headerlink" href="#stick-trim" title="Permanent link">&para;</a></h3>
-<p><strong>Stick Trim</strong> shows up only on rows that target a trigger and carry two or more sources. The last source acts as a trim stick. While the other sources hold the trigger down, pushing that stick up raises the held level and pulling it down lowers it. Built for fine throttle and brake control on pads without analog triggers.</p>
+<p><strong>Stick Trim</strong> is offered only on rows that target a trigger, and it works once the row carries two or more sources. The last source acts as a trim stick. While the other sources hold the trigger down, pushing that stick up raises the held level and pulling it down lowers it. Built for fine throttle and brake control on pads without analog triggers.</p>
 <p>Picking it opens a settings strip under the row:</p>
 <table>
 <thead>
@@ -4608,7 +4669,7 @@
 <tbody>
 <tr>
 <td><strong>a</strong>, <strong>b</strong>, <strong>c</strong>, …</td>
-<td>The row's sources in order. <strong>a</strong> is the first source, <strong>b</strong> the second, and so on.</td>
+<td>The row's sources in order. <strong>a</strong> is the first source, <strong>b</strong> the second, and so on. An Invert On Hold source takes no letter. On a stick axis row, a second source on the first one's device with the opposite <strong>Invert</strong> (the pair that <strong>+ Opposite Direction</strong> or a two-direction recording makes) shares the first source's letter.</td>
 </tr>
 <tr>
 <td><strong>s[0]</strong>, <strong>s[1]</strong>, …</td>
@@ -4653,11 +4714,12 @@
 </tbody>
 </table>
 <h3 id="live-preview">Live preview<a class="headerlink" href="#live-preview" title="Permanent link">&para;</a></h3>
-<p>Under the formula box, PadForge shows:</p>
+<p>Under the formula box, a status line checks the formula as you type. The row's <strong>Value</strong> column shows the result live.</p>
 <ul>
-<li>The formula's current numeric value, recomputed every frame.</li>
-<li>Parse status: <strong>✓ valid</strong>, <strong>parse error</strong>, or <strong>✓ empty (evaluates to 0)</strong>.</li>
-<li>A "refs" line listing any variables the formula uses that have no source yet ("a and c have no source, treated as 0").</li>
+<li><strong>✓ valid</strong>, followed by a "refs" list naming the source each variable reads ("refs: a (DualSense · A)").</li>
+<li><strong>✓ empty (evaluates to 0)</strong> while the box is empty.</li>
+<li>✗ and the parse error, which names the problem and its position.</li>
+<li>⚠ when the formula uses a variable with no source yet ("c has no source (treated as 0)").</li>
 </ul>
 <h3 id="starter-recipes">Starter recipes<a class="headerlink" href="#starter-recipes" title="Permanent link">&para;</a></h3>
 <p>The <strong>Starter Recipes</strong> section lists ready-made formulas you can drop into the box and tweak.</p>
@@ -4711,7 +4773,7 @@
 </tr>
 <tr>
 <td><strong>a alone</strong></td>
-<td>Fire when <code>a</code> goes from rest to active.</td>
+<td><code>a</code> on its own, unchanged.</td>
 </tr>
 <tr>
 <td><strong>a and b</strong></td>
@@ -4727,7 +4789,7 @@
 </tr>
 <tr>
 <td><strong>Axis past 50%</strong></td>
-<td>Fire when axis <code>a</code> is deflected more than 50% from rest.</td>
+<td>Inserts <code>abs(a) &gt; 0.5</code>: true once <code>a</code> is past half its travel from rest, in either direction. A stick source reads -1 to 1 here and a trigger 0 to 1, both resting at 0. The macro editor's copy of this recipe is <code>abs(a - 0.5) &gt; 0.25</code>, because a macro reads a stick from 0 to 1 with rest at 0.5.</td>
 </tr>
 </tbody>
 </table>
@@ -4752,7 +4814,7 @@
 </tr>
 <tr>
 <td><strong>Invert On Hold</strong></td>
-<td>The inner source's value, flipped while a modifier button you pick is held.</td>
+<td>A row modifier. While the modifier button you pick is held, the row's combined output flips: a stick axis changes sign and a trigger reads as its opposite. Button rows ignore it. It adds no value of its own, so <strong>Primary Mode</strong> offers it only once the row has another source to flip.</td>
 </tr>
 <tr>
 <td><strong>Ramp</strong></td>
@@ -4760,10 +4822,10 @@
 </tr>
 </tbody>
 </table>
-<p>Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources read the descriptor, then flip while the modifier is held. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button captures a kind's own inputs in sequence (Up, then Down).</p>
+<p>Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button captures a kind's own inputs in sequence (Up, then Down, or the modifier alone).</p>
 <hr />
 <h2 id="activation-modes">Activation modes<a class="headerlink" href="#activation-modes" title="Permanent link">&para;</a></h2>
-<p>A mapping row is stateless: the output follows the source every frame, and nothing latches. Press-pattern behaviors like toggle and turbo belong to <a href="../../guides/macros/">Macros</a>, through each macro's <strong>Fire</strong> picker: <strong>On Press</strong>, <strong>On Single Press</strong>, <strong>On Release</strong>, <strong>While Held</strong>, <strong>On Long Press</strong>, <strong>On Short Press</strong>, <strong>On Double Press</strong>, <strong>On Triple Press</strong>, <strong>Toggle</strong> (the first press latches the actions on, the next press releases), <strong>Turbo</strong> (the actions repeat at an interval while the trigger is held), <strong>Always</strong>, and <strong>Custom Expression</strong>.</p>
+<p>A mapping row has no press patterns. Outside the Incremental, Ramp, and Stick Trim state described above, the output follows its sources every frame, and nothing toggles or repeats. Press-pattern behaviors like toggle and turbo belong to <a href="../../guides/macros/">Macros</a>, through each macro's <strong>Fire</strong> picker: <strong>On Press</strong>, <strong>On Single Press</strong>, <strong>On Release</strong>, <strong>While Held</strong>, <strong>On Long Press</strong>, <strong>On Short Press</strong>, <strong>On Double Press</strong>, <strong>On Triple Press</strong>, <strong>Toggle</strong> (the first press latches the actions on, the next press releases), <strong>Turbo</strong> (the actions repeat at an interval while the trigger is held), <strong>Always</strong>, and <strong>Custom Expression</strong>.</p>
 <p>To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid.</p>
 <hr />
 <h2 id="modifiers">Modifiers<a class="headerlink" href="#modifiers" title="Permanent link">&para;</a></h2>
@@ -4774,15 +4836,15 @@
 <h3 id="half-half-axis">Half (Half-axis)<a class="headerlink" href="#half-half-axis" title="Permanent link">&para;</a></h3>
 <p>Treats a bipolar axis source as half-range (0 to max) instead of full-range (-max to +max). Use this when:</p>
 <ul>
-<li>Mapping a trigger (0–100%) to a full stick axis (-100% to +100%).</li>
+<li>Splitting a centered axis between two outputs, with <strong>Invert</strong> picking the lower half (see <a href="#mapping-a-centered-axis-to-two-buttons">Mapping a centered axis to two buttons</a>).</li>
 <li>Mapping a stick axis to a trigger where only positive deflection should register.</li>
 </ul>
 <h3 id="bidirectional">Bidirectional<a class="headerlink" href="#bidirectional" title="Permanent link">&para;</a></h3>
 <p>Half-axis only. The axis-to-button gate fires on absolute deflection past the deadzone, so either side of center counts. Renamed from "Either" in 3.2. Invert has no effect in this mode (mirroring around center already covers both directions).</p>
 <h3 id="flip-output">Flip Output<a class="headerlink" href="#flip-output" title="Permanent link">&para;</a></h3>
-<p>When <strong>Half</strong> is on for a centered axis, the <strong>Invert</strong> box is consumed as the side selector (upper half vs. lower half), which leaves nothing to reverse the result with. The <strong>Flip Output</strong> checkbox appears in exactly that case and flips the output direction, so one source can select a half and still invert. It rides extra-source chips the same way.</p>
+<p>When <strong>Half</strong> is on for a centered axis, the <strong>Invert</strong> box is consumed as the side selector (upper half vs. lower half), which leaves nothing to reverse the result with. The <strong>Flip Output</strong> checkbox appears in that case and flips the output direction, so one source can select a half and still invert. Mouse Motion, Gyro Lean, and Gyro Tilt sources with <strong>Half</strong> on get it too, since <strong>Invert</strong> picks their direction. It rides extra-source chips the same way.</p>
 <h3 id="descriptor-prefixes">Descriptor prefixes<a class="headerlink" href="#descriptor-prefixes" title="Permanent link">&para;</a></h3>
-<p>On raw or unrecognized devices, the Invert and Half toggles also surface as prefixes on the descriptor itself.</p>
+<p>The Invert and Half toggles also ride the primary source's descriptor as prefixes.</p>
 <table>
 <thead>
 <tr>
@@ -4809,10 +4871,10 @@
 </tr>
 </tbody>
 </table>
-<p>Recognized gamepads show friendly names instead. You only see these prefixes on numbered raw descriptors.</p>
+<p>Where PadForge names the source in text, the prefix reads as a word before the input name on any device: "Inv. Axis 1", "Half Axis 0", "Inv. Half Axis 2", or "Inv. Left Stick X" on a recognized gamepad.</p>
 <hr />
 <h2 id="shift-layers">Shift layers<a class="headerlink" href="#shift-layers" title="Permanent link">&para;</a></h2>
-<p>A shift layer is a second mapping table on the same slot, active only while a button is held, a chord is engaged, or an axis is past a threshold. Same outputs, different bindings. Useful for double-duty controllers (driving / on-foot, weapon swap, menu nav) without juggling profiles.</p>
+<p>A shift layer is a second mapping table on the same slot, switched on by an activator: a button, a chord, or an axis past a threshold, held or toggled depending on the activator's mode. Same outputs, different bindings. Useful for double-duty controllers (driving / on-foot, weapon swap, menu nav) without juggling profiles.</p>
 <p>Each slot can carry any number of shift layers, each with its own activator and its own row set.</p>
 <p>By default a layer <strong>replaces</strong> Base: targets without a row on the layer output nothing while the layer is active. Check <strong>Inherit Unmapped Targets from Base</strong> in the activator dialog to overlay instead, so unmapped targets fall through to Base. While you are editing an inheriting layer, a <strong>Do Not Inherit</strong> checkbox appears in each row's Options column to keep that one target off rather than falling through.</p>
 <p>Activators can also wait for the release edge: the <strong>Fire on Release</strong> option flips the layer when the button is let go instead of when it is pressed (Toggle, Latch, Cycle, and Sticky modes).</p>
@@ -4824,7 +4886,7 @@
 <ul>
 <li>Each source has its own slider (1–100%) with an editable text field and a reset button.</li>
 <li>The default is <strong>50%</strong>. The source must pass the halfway point to fire.</li>
-<li>The column is only enabled when the source is an axis or slider and the target is a discrete output. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the <a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a> tabs for those.</li>
+<li>The slider applies only when the source is a continuous input, such as an axis, slider, gyro, pointer, or pressure read, a stick or touchpad ring, Motion Shake or Motion Lean, MIDI pitch bend, or inbound rumble, and the target is a discrete output. Otherwise the row hides it and an extra source's chip grays it out. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the <a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a> tabs for those.</li>
 <li>A higher value (80%) means a firmer push before the button fires. A lower value (20%) makes it more sensitive.</li>
 <li>Values persist per source and ride along with Copy, Paste, and Copy From operations.</li>
 </ul>
@@ -4900,7 +4962,7 @@
 <ul>
 <li>Build the pair list with <strong>Add Pair</strong>. Each pair is tracked on its own, and each has a remove button.</li>
 <li>Xbox and PlayStation slots pick each pair from the 15 named buttons: the four face buttons, shoulders, Back / Start / Guide (Share / Options / PS on PlayStation), stick clicks, and the four D-pad directions.</li>
-<li>Nintendo slots pick from the same lettered buttons the mapping grid shows. Extended slots type raw button indices, 0–127. Index 0 is Button 1 in the mapping grid.</li>
+<li>Nintendo slots, and Extended slots on a Valve profile, pick from the same lettered buttons the mapping grid shows. Other Extended slots type raw button indices, 0–127. Index 0 is Button 1 in the mapping grid.</li>
 <li>The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.</li>
 <li>The card's Reset All turns the mode off and removes every pair.</li>
 </ul>
@@ -5017,7 +5079,7 @@
 <hr />
 <h2 id="gamepad-sources">Gamepad sources<a class="headerlink" href="#gamepad-sources" title="Permanent link">&para;</a></h2>
 <p><img alt="The source picker listing a gamepad's inputs" src="../../images/gamepad-source-picker.png" /></p>
-<p>Every recognized gamepad's source dropdown carries a <strong>Gamepad</strong> group next to its device-specific entries. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") instead of pinning it to one physical pad. The row then reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework: build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.</p>
+<p>Each recognized gamepad's part of the source dropdown carries <strong>Gamepad</strong> entries beside its device-specific ones. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") rather than a device's raw button or axis number. Picked from the <strong>(Any Device)</strong> group, it pins to no physical pad: the row reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework. Build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.</p>
 <table>
 <thead>
 <tr>
@@ -5076,11 +5138,11 @@
 </tr>
 <tr>
 <td><strong>Gamepad Left Stick Ring</strong>, <strong>Gamepad Right Stick Ring</strong></td>
-<td>The stick pair's deflection magnitude, clamped to 0–1. On a button target the Axis-to-Button Deadzone becomes the ring radius, and <strong>Invert</strong> selects the inner ring instead of the outer one.</td>
+<td>The stick pair's deflection magnitude, clamped to 0–1. On a button target the source's deadzone is the ring radius (the usual 50% for a ring picked in the grid, which offers no Axis-to-Button Deadzone control for it), and <strong>Invert</strong> selects the inner ring instead of the outer one.</td>
 </tr>
 </tbody>
 </table>
-<p>The source dropdown leads with an <strong>(Any device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Left Stick Touch</strong>, <strong>Right Stick Touch</strong>, <strong>Left Grip Touch</strong>, and <strong>Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, the tilt pairs <strong>Gyro Lean X / Y</strong> and <strong>Gyro Tilt X / Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Rows that carry their own inputs through the numbered axes and buttons never answer it: a head tracker, an NFC reader, a microphone, handheld hidden buttons, a media remote and a pen tablet are always picked by name. Imported rows use this group, and their secondary sources display an <strong>(Any device)</strong> chip until a device is assigned.</p>
+<p>The source dropdown leads with an <strong>(Any Device)</strong> group. It carries everything above plus four capacitive-touch reads that appear nowhere else: <strong>Gamepad Left Stick Touch</strong>, <strong>Gamepad Right Stick Touch</strong>, <strong>Gamepad Left Grip Touch</strong>, and <strong>Gamepad Right Grip Touch</strong>, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong>, the tilt pairs <strong>Gyro Lean X / Y</strong> and <strong>Gyro Tilt X / Y</strong>, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. Rows that carry their own inputs through the numbered axes and buttons never answer it: a head tracker, an NFC reader, a microphone, handheld hidden buttons, a media remote, a pen tablet, a VR controller, and the Logitech G-keys are always picked by name. Imported rows use this group, and their sources read <strong>(Any Device)</strong> under the picker until you pick an input from a specific device.</p>
 <p>Profiles imported from the <a href="../../guides/steam-workshop-import/">Steam Workshop</a> are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source <strong>Acceleration</strong> slider.</p>
 <hr />
 <h2 id="named-input-device-sources">Named input-device sources<a class="headerlink" href="#named-input-device-sources" title="Permanent link">&para;</a></h2>
@@ -5119,7 +5181,7 @@
 </tr>
 <tr>
 <td><strong>Motion Lean</strong></td>
-<td>Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the Gyro tab's Motion Steering card, per assigned device.</td>
+<td>Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. On a trigger, a lean either way pulls it. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the Gyro tab's Motion Steering card, per assigned device.</td>
 </tr>
 <tr>
 <td><strong>Nunchuk Lean</strong> / <strong>Left Joy-Con Lean</strong></td>
@@ -5127,7 +5189,7 @@
 </tr>
 <tr>
 <td><strong>Motion Shake</strong></td>
-<td>How far the accelerometer's magnitude leaves its resting level, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis the read is unsigned and <strong>Invert</strong> does nothing. On a button the Axis-to-Button Deadzone is the threshold, and its default there is 25% (about 0.5 g) rather than the usual 50%. Offered on any device with an accelerometer.</td>
+<td>How far the accelerometer's magnitude leaves its resting level, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis or a trigger the read is unsigned and <strong>Invert</strong> does nothing. On a button it fires once the envelope passes the row's <strong>Axis-to-Button Deadzone</strong>, 50% of full scale (about 1 g) unless you change it. Offered on any device with an accelerometer.</td>
 </tr>
 <tr>
 <td><strong>Nunchuk Shake</strong> / <strong>Left Joy-Con Shake</strong></td>
@@ -5135,7 +5197,7 @@
 </tr>
 </tbody>
 </table>
-<p>Auto-mapping adds the motion passthrough rows for pads that report a sensor. Delete a motion row and you can re-add it from the source dropdown. See <a href="../../guides/gyro/">Gyro</a> for calibration and tuning, and <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for broadcasting the feed to emulators.</p>
+<p>Auto-mapping fills the <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> rows for pads that report a sensor, on PlayStation and Nintendo slots and on Extended slots running a Valve profile. A motion row you empty switches that channel off, and auto-mapping leaves it empty even when another device arrives. Pick <strong>Motion Gyro</strong> or <strong>Motion Accelerometer</strong> in the row's source dropdown to turn it back on. A slot saved before its first device arrived still gets its motion rows when the device comes. Copy, Paste, and Copy From carry a switched-off motion row, or one marked <strong>Do Not Inherit</strong>, as it is, but drop one whose inputs all belonged to devices the target slot lacks, so auto-mapping fills it there. See <a href="../../guides/gyro/">Gyro</a> for calibration and tuning, and <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for broadcasting the feed to emulators.</p>
 <hr />
 <h2 id="copy-paste-copy-from">Copy, Paste, Copy From<a class="headerlink" href="#copy-paste-copy-from" title="Permanent link">&para;</a></h2>
 <p>The toolbar above the mapping grid has bulk operations. <strong>Clear All</strong> sits apart at the far end in warning colors.</p>
@@ -5157,7 +5219,7 @@
 </tr>
 <tr>
 <td><strong>Copy From...</strong></td>
-<td>Same as Paste, sourced from another slot instead of the clipboard.</td>
+<td>Same as Paste, sourced from another slot instead of the clipboard, except that it leaves this slot's macros alone. The Macros tab has its own <strong>Copy From...</strong>, which adds another slot's macros.</td>
 </tr>
 <tr>
 <td><strong>Map All</strong></td>
@@ -5169,9 +5231,9 @@
 </tr>
 </tbody>
 </table>
-<p>Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together.</p>
+<p>Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together. Each source moves to the same controller on the target slot, or to another unit of the same model there. A source whose model the target slot lacks is dropped, except in a Custom row, which keeps its letter as a neutral input.</p>
 <p>The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.</p>
-<p>Two things travel with conditions. SOCD pairs are named in the slot type's own terms, so they cross only between slots of the same type, and a Bass Shakers setup names an audio output by its Windows endpoint ID, so pasted on another PC it stays selected but plays nothing until you pick an output that exists there (it never falls back to the default output on its own). A macro whose shift-layer scope the target slot does not declare arrives unscoped rather than gated on a layer the target cannot show.</p>
+<p>Some things travel with conditions. The full row table (every source on every layer), shift layers, menus, and SOCD pairs cross only between slots that share a layout: Xbox and PlayStation share one, Nintendo and Extended share another. Across layouts, bindings translate by position instead (see below), and Copy From also leaves Bass Shakers and Keep Awake alone. A Bass Shakers setup names an audio output by its Windows endpoint ID, so pasted on another PC it stays selected but plays nothing until you pick an output that exists there (it never falls back to the default output on its own). A macro whose shift-layer scope the target slot does not declare arrives unscoped rather than gated on a layer the target cannot show.</p>
 <p>There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click <strong>Copy Layer Rows</strong> and <strong>Paste Rows into Layer</strong> (see <a href="#shift-layers">Shift layers</a>).</p>
 <h3 id="cross-type-translation">Cross-type translation<a class="headerlink" href="#cross-type-translation" title="Permanent link">&para;</a></h3>
 <p>Copy From and Paste translate mappings between controller types automatically.</p>
@@ -5193,7 +5255,7 @@
 </tr>
 <tr>
 <td><strong>To or from Nintendo or Extended</strong></td>
-<td>Translated via the standardized gamepad mapping. Nintendo and Extended layouts are raw surfaces, so their rows carry over by role.</td>
+<td>Translated by position through the standardized gamepad order: gamepad button N lands on raw button N, axis N on raw axis N, and the D-pad on hat 0. Nintendo and Extended share a raw layout, so rows between them copy index for index.</td>
 </tr>
 </tbody>
 </table>
@@ -5206,7 +5268,7 @@
 <p>A Nintendo slot's grid mirrors the Xbox and PlayStation arrangement: analogous controls in analogous positions.</p>
 <ul>
 <li>Face buttons in positional order: <strong>B</strong>, <strong>A</strong>, <strong>Y</strong>, <strong>X</strong> (south, east, west, north, which is also raw index order).</li>
-<li><strong>L</strong> and <strong>R</strong>, then <strong>Minus</strong> and <strong>Plus</strong> where Back and Start sit, <strong>Home</strong> where Guide sits, and <strong>Capture</strong>.</li>
+<li><strong>L</strong> and <strong>R</strong>, then <strong>Minus</strong> and <strong>Plus</strong> where Back and Start sit, <strong>Home</strong> where Guide sits, and <strong>Capture</strong>. The Switch 2 Pro profile adds <strong>C</strong> after Capture, and <strong>GL</strong> / <strong>GR</strong> after the stick clicks.</li>
 <li>Stick clicks, the four D-pad directions, and <strong>ZL</strong> / <strong>ZR</strong> in the trigger rows' position. ZL and ZR are digital buttons on this controller, not analog triggers.</li>
 <li>Left and right stick axes with the same labels the other gamepad grids use.</li>
 <li><strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> passthrough rows at the tail, same as the PlayStation grid.</li>
@@ -5248,7 +5310,7 @@
 </table>
 <p>Sticks and triggers share a pool of 8 axes. Example: 2 sticks (4 axes) + 2 triggers (2 axes) = 6 of 8 used. Changing the DirectInput config rebuilds the mapping grid automatically.</p>
 <h3 id="valve-profiles-carry-lettered-rows">Valve profiles carry lettered rows<a class="headerlink" href="#valve-profiles-carry-lettered-rows" title="Permanent link">&para;</a></h3>
-<p>Five Extended profiles name their buttons instead of numbering them: <strong>Steam Deck Controller</strong>, <strong>Steam Controller (Wired)</strong>, <strong>Steam Controller (2026)</strong>, and the Composite variants of the first two. Their rows read <strong>A</strong>, <strong>B</strong>, <strong>View</strong>, <strong>Menu</strong>, <strong>Steam</strong>, <strong>Quick Access</strong>, <strong>L3</strong> / <strong>R3</strong>, <strong>Left Pad Click</strong> / <strong>Right Pad Click</strong>, and the rear buttons by their printed names: <strong>R4</strong> / <strong>L4</strong> / <strong>R5</strong> / <strong>L5</strong> on the Deck and the 2026 pad, <strong>Left Grip</strong> / <strong>Right Grip</strong> on the 2015 Steam Controller, which has no rear paddles. The wired and composite Steam Controller profiles say <strong>Back</strong> and <strong>Start</strong> where the Deck and the 2026 pad say View and Menu, matching each controller's own labels. Every other Extended profile keeps "Button 1", "Button 2", and so on.</p>
+<p>Five Extended profiles name their buttons instead of numbering them: <strong>Steam Deck Controller</strong>, <strong>Steam Controller (Wired)</strong>, <strong>Steam Controller (2026)</strong>, and the Composite variants of the first two. Their rows read <strong>A</strong>, <strong>B</strong>, <strong>X</strong>, <strong>Y</strong>, <strong>L1</strong> / <strong>R1</strong>, <strong>View</strong>, <strong>Menu</strong>, <strong>Steam</strong>, <strong>Quick Access</strong>, <strong>L3</strong> / <strong>R3</strong>, <strong>Left Pad Click</strong> / <strong>Right Pad Click</strong>, and the rear buttons by their printed names: <strong>R4</strong> / <strong>L4</strong> / <strong>R5</strong> / <strong>L5</strong> on the Deck and the 2026 pad, <strong>Left Grip</strong> / <strong>Right Grip</strong> on the 2015 Steam Controller, which has no rear paddles. The 2015 pad also has no Quick Access, and its <strong>Right Pad Click</strong> row doubles as R3. The wired and composite Steam Controller profiles say <strong>Back</strong> and <strong>Start</strong> where the Deck and the 2026 pad say View and Menu, matching each controller's own labels. Every other Extended profile keeps "Button 1", "Button 2", and so on.</p>
 <p>They fall into three wire families, one per controller generation, and each family has its own raw index space. None is shared. Switching a slot from one to another does two things:</p>
 <ul>
 <li><strong>Translates.</strong> Rows already bound move to the index that means the same control on the new wire. Without it, Steam sat on raw button 10, which is the left grip on the 2015 Steam Controller, and a left pad click sat on raw button 16, past the end of that 14-button wire.</li>
@@ -5269,14 +5331,14 @@
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>An axis moves the wrong direction.</strong> Turn on <strong>Invert</strong> on that source. If <strong>Half</strong> is on and Invert is picking the side, use <strong>Flip Output</strong>.</li>
-<li><strong>A trigger mapped to a stick only reaches 50%.</strong> Turn on <strong>Half</strong> to expand half-range input to full-range output.</li>
+<li><strong>A stick mapped to a trigger rests half pressed.</strong> Turn on <strong>Half</strong> so one side of the stick drives the pull and center reads as released.</li>
 <li><strong>Recording keeps catching the wrong input.</strong> Use the <a href="#2-source-dropdown">source dropdown</a> to pick the exact input by hand.</li>
 <li><strong>Buttons or axes are missing or numbered wrong.</strong> Try Force Raw Joystick Mode on the <a href="../devices/">Devices</a> page to bypass gamepad remapping.</li>
 <li><strong>A joystick axis fires a button on the slightest touch.</strong> Raise the <a href="#axis-to-button-deadzone">Axis-to-Button Deadzone</a> on that source.</li>
 <li><strong>A centered axis mapped to two buttons fires both at rest.</strong> Turn on <strong>Half</strong> on both sources, <strong>Invert</strong> on one direction, set deadzone to 50%. See <a href="#mapping-a-centered-axis-to-two-buttons">Mapping a centered axis to two buttons</a>.</li>
 <li><strong>Two sources on the same row fight each other.</strong> Switch the row to <strong>Either</strong> (buttons) or <strong>Strongest</strong> (axes), or pick <strong>Custom</strong> and write a rule that resolves the conflict.</li>
 <li><strong>Opposite directions register together and the game rejects the input.</strong> Add the pair to the <a href="#socd-cleaning">SOCD card</a> and pick a rule.</li>
-<li><strong>A custom formula shows "parse error".</strong> The status line points at the bad token. Common causes: a stray operator, a missing close paren, <code>=</code> used for equality instead of <code>==</code>.</li>
+<li><strong>A custom formula's status line starts with ✗.</strong> The message names the problem and the position of the bad token. Common causes: a stray operator, a missing close paren, <code>=</code> used for equality instead of <code>==</code>.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
@@ -5292,7 +5354,7 @@
 <li><a href="../../guides/steam-workshop-import/">Steam Workshop Config Import</a>: imported community configs are built from Gamepad sources.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

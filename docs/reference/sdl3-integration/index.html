@@ -1046,6 +1046,8 @@
       
         
       
+        
+      
     
     
     
@@ -1912,6 +1914,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2183,6 +2213,8 @@
       
         
           
+        
+      
         
       
         
@@ -3705,6 +3737,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -5444,8 +5504,8 @@
 
 
 <h1 id="sdl3-integration">SDL3 Integration<a class="headerlink" href="#sdl3-integration" title="Permanent link">&para;</a></h1>
-<p><em>How PadForge talks to every physical controller: the SDL3 P/Invoke layer, the custom fork, and the code that turns SDL devices into mappable inputs.</em></p>
-<p>PadForge uses SDL3 as its sole input backend for all controller types, including Xbox/XInput. This page covers the P/Invoke layer, device enumeration, state reading, sensors, haptic force feedback, virtual joysticks, and the custom SDL3 fork (HIDMaestro filter, Switch 2 controllers over USB and BLE, Wii and Joy-Con support, the Switch NFC reader, DualShock 3 motion, 16-XInput, and XInput Share).</p>
+<p><em>How PadForge talks to physical game controllers: the SDL3 P/Invoke layer, the custom fork, and the code that turns SDL devices into mappable inputs.</em></p>
+<p>PadForge reads game controllers through SDL3, Xbox/XInput pads included. OpenXR hand controllers, browser controllers, Remote Link peers and a handheld PC's extra buttons come in through their own device classes instead (see <a href="#isdlinputdevice-interface">ISdlInputDevice Interface</a>). This page covers the P/Invoke layer, device enumeration, state reading, sensors, haptic force feedback, virtual joysticks, and the custom SDL3 fork (HIDMaestro filter, Switch 2 controllers over USB and BLE, Wii and Joy-Con support, the Switch NFC reader, DualShock 3 motion, 16-XInput, and XInput Share).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>flowchart TD
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    START[SDL_GetJoysticks&lt;br/&gt;returns uint instanceId array&lt;br/&gt;HM virtuals are already filtered out by the SDL3 fork] --&gt; LOOP{For each instanceId}
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    LOOP --&gt; OPEN_CHECK{In _openedSdlInstanceIds?}
@@ -5499,7 +5559,7 @@
 <h2 id="sdl3-pinvoke-layer">SDL3 P/Invoke Layer<a class="headerlink" href="#sdl3-pinvoke-layer" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/SDL3Minimal.cs</code>
 <strong>Namespace:</strong> <code>SDL3</code></p>
-<p>All SDL3 functions are <code>[DllImport("SDL3")]</code> P/Invoke bindings in the static class <code>SDL3.SDL</code>. Only functions PadForge uses are declared. Not a complete binding. The shipped <code>SDL3.dll</code> at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> is a custom fork build (see <a href="#sdl3-fork">SDL3 Fork</a>).</p>
+<p>All SDL3 functions are <code>[DllImport("SDL3")]</code> P/Invoke bindings in the static class <code>SDL3.SDL</code>. Only functions PadForge uses are declared. Not a complete binding. The shipped <code>SDL3.dll</code> at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> (<code>arm64/SDL3.dll</code> for the ARM64 build) is a custom fork build (see <a href="#sdl3-fork">SDL3 Fork</a>).</p>
 <h3 id="key-sdl3-vs-sdl2-api-changes">Key SDL3 vs SDL2 API Changes<a class="headerlink" href="#key-sdl3-vs-sdl2-api-changes" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5587,20 +5647,21 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="nf">SDL_GetJoysticks</span><span class="p">()</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_SDL_GetJoysticks</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">)</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Array</span><span class="p">.</span><span class="n">Empty</span><span class="o">&lt;</span><span class="kt">uint</span><span class="o">&gt;</span><span class="p">();</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="k">try</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">uint</span><span class="p">[</span><span class="n">count</span><span class="p">];</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">            </span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unchecked</span><span class="p">((</span><span class="kt">uint</span><span class="p">)</span><span class="n">Marshal</span><span class="p">.</span><span class="n">ReadInt32</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">));</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ids</span><span class="p">;</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="k">finally</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="n">SDL_free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Array</span><span class="p">.</span><span class="n">Empty</span><span class="o">&lt;</span><span class="kt">uint</span><span class="o">&gt;</span><span class="p">();</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">uint</span><span class="p">[</span><span class="n">count</span><span class="p">];</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">            </span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unchecked</span><span class="p">((</span><span class="kt">uint</span><span class="p">)</span><span class="n">Marshal</span><span class="p">.</span><span class="n">ReadInt32</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="p">));</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ids</span><span class="p">;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="k">finally</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">        </span><span class="n">SDL_free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="key-functions-declared">Key Functions Declared<a class="headerlink" href="#key-functions-declared" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Init / Quit</span>
@@ -5695,7 +5756,7 @@
 <a id="__codelineno-5-90" name="__codelineno-5-90" href="#__codelineno-5-90"></a><span class="c1">// String property (e.g. Wii Balance Board calibration blob)</span>
 <a id="__codelineno-5-91" name="__codelineno-5-91" href="#__codelineno-5-91"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">SDL_GetStringProperty</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">props</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">defaultValue</span><span class="p">);</span>
 <a id="__codelineno-5-92" name="__codelineno-5-92" href="#__codelineno-5-92"></a>
-<a id="__codelineno-5-93" name="__codelineno-5-93" href="#__codelineno-5-93"></a><span class="c1">// Virtual joystick (DS3 Bluetooth bridge surfaced through the normal pipeline)</span>
+<a id="__codelineno-5-93" name="__codelineno-5-93" href="#__codelineno-5-93"></a><span class="c1">// Virtual joystick (pads PadForge reads natively, such as the DS3 bridge, surfaced through the normal pipeline)</span>
 <a id="__codelineno-5-94" name="__codelineno-5-94" href="#__codelineno-5-94"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nf">SDL_AttachVirtualJoystick</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">SDL_VirtualJoystickDesc</span><span class="w"> </span><span class="n">desc</span><span class="p">);</span>
 <a id="__codelineno-5-95" name="__codelineno-5-95" href="#__codelineno-5-95"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SDL_DetachVirtualJoystick</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="n">instance_id</span><span class="p">);</span>
 <a id="__codelineno-5-96" name="__codelineno-5-96" href="#__codelineno-5-96"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SDL_SetJoystickVirtualAxis</span><span class="p">(</span><span class="n">IntPtr</span><span class="w"> </span><span class="n">joystick</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">axis</span><span class="p">,</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="k">value</span><span class="p">);</span>
@@ -5724,7 +5785,7 @@
 <a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">center0</span><span class="p">,</span><span class="w"> </span><span class="n">center1</span><span class="p">,</span><span class="w"> </span><span class="n">center2</span><span class="p">;</span><span class="w">             </span><span class="c1">// Center point</span>
 <a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="p">}</span><span class="w"> </span><span class="c1">// 68 bytes</span>
 </code></pre></div>
-<p>Used for Spring, Damper, Friction, and Inertia effects. Each axis has independent coefficients, saturation, center, and deadband. SDL supports up to 3 axes. PadForge uses 2 (X and Y). Data flows from <code>HMaestroFfbDecoder</code> (parsing PID FFB packets emitted by the HM driver) through <code>Vibration.ConditionAxes[]</code> into <code>ForceFeedbackState.SetConditionHapticForces()</code>, which populates this struct.</p>
+<p>Used for Spring, Damper, Friction, and Inertia effects. Each axis has independent coefficients, saturation, center, and deadband. SDL supports up to 3 axes. PadForge fills at most 2 (X and Y), as many as the game's Set Condition reports address (<code>ConditionAxisCount</code>). Data flows from <code>HMaestroFfbDecoder</code> (parsing PID FFB packets emitted by the HM driver) through <code>Vibration.ConditionAxes[]</code> into <code>ForceFeedbackState.SetConditionHapticForces()</code>, which populates this struct.</p>
 <h3 id="sdl_hapticramp">SDL_HapticRamp<a class="headerlink" href="#sdl_hapticramp" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="na">[StructLayout(LayoutKind.Sequential)]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">SDL_HapticRamp</span>
@@ -5792,7 +5853,7 @@
 <tr>
 <td><code>SDL_INIT_VIDEO</code></td>
 <td><code>0x0020</code></td>
-<td>Required for <code>SDL_GetKeyboards()</code> / <code>SDL_GetMice()</code>. <strong>Side effect:</strong> disables screensaver and system sleep</td>
+<td>Required for <code>SDL_GetKeyboards()</code> / <code>SDL_GetMice()</code>. Only the keyboard and mouse wrappers' <code>IsAttached</code> fallback calls them, and no wrapper reaches it, because both open through Raw Input. <strong>Side effect:</strong> disables screensaver and system sleep</td>
 </tr>
 <tr>
 <td><code>SDL_INIT_HAPTIC</code></td>
@@ -5840,12 +5901,17 @@
 <tr>
 <td><code>SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS</code></td>
 <td><code>"1"</code></td>
-<td><strong>Required.</strong> Without this, SDL stops reading input when PadForge loses focus. A remapper must read input while games have focus.</td>
+<td>Keeps joystick input flowing while PadForge is in the background, which a remapper needs while games have focus. SDL drops that input only when the app has an SDL window and none holds keyboard focus (<code>SDL_PrivateJoystickShouldIgnoreEvent</code>, <code>SDL_joystick.c</code>). PadForge opens no SDL window, so that condition never holds and the hint changes nothing today.</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_XINPUT</code></td>
 <td><code>"1"</code></td>
-<td>Enables SDL's XInput backend for Xbox controller enumeration. Without this, Xbox controllers (USB or wireless adapter) do not appear in <code>SDL_GetJoysticks()</code>. Was <code>SDL_HINT_XINPUT_ENABLED</code> in SDL2.</td>
+<td>Has no effect. The constant's string, <code>SDL_JOYSTICK_XINPUT</code>, is not a hint SDL 3 reads. SDL 3 kept SDL2's name for the XInput switch, <code>SDL_HINT_XINPUT_ENABLED</code> (<code>SDL_XINPUT_ENABLED</code>), and that switch defaults to on (<code>SDL_xinputjoystick.c</code>), which is why Xbox controllers enumerate.</td>
+</tr>
+<tr>
+<td><code>SDL_HINT_JOYSTICK_HIDAPI_FLYDIGI</code></td>
+<td><code>"1"</code> by default</td>
+<td>The Settings page's Flydigi Enhanced Protocol checkbox (#395). On, SDL's Flydigi driver takes the pad's vendor interface for M1 to M4, C, Z, LM, RM and motion. Off leaves the pad on its XInput view, for a user whose Flydigi Space Station must keep sight of the pad. <code>SDL_Quit</code> clears hints, so <code>ApplyFlydigiEnhancedProtocol</code> replays the recorded state before every <code>SDL_Init()</code>, and a toggle applies live through the driver's hint callback.</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_HIDAPI_IGNORE_DEVICES</code></td>
@@ -5860,7 +5926,7 @@
 <tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH2</code></td>
 <td><code>"1"</code></td>
-<td>Activates the HIDAPI driver for the wired Switch 2 Pro Controller (PadForge's custom fork). Gates <code>SDL_hidapi_switch2.c</code>. Without it, the controller is ignored even though the driver code is compiled in.</td>
+<td>Enables the HIDAPI driver for wired Switch 2 controllers (<code>SDL_hidapi_switch2.c</code>: Pro Controller, Joy-Con 2 L/R, NSO GameCube). The fork carries the driver's Windows USB path. An unset hint falls back to <code>SDL_HINT_JOYSTICK_HIDAPI</code>, which is on by default on Windows (<code>SDL_HIDAPI_DEFAULT</code>), so setting it pins the default.</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_WII</code></td>
@@ -5885,7 +5951,7 @@
 <tr>
 <td><code>SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER</code></td>
 <td><code>"1"</code></td>
-<td>Enables the fork's Switch 2 BLE magnetometer channel (#271 item 5, same fork commit). Three raw int16 axes after the mouse counters, availability riding the raw axis count (9 = magnetometer, 11 = mouse plus magnetometer). PadForge does not consume them yet. The hint keeps the axes observable on a bench.</td>
+<td>Enables the fork's Switch 2 BLE magnetometer channel (#271 item 5, same fork commit). Three raw int16 axes after the mouse counters, availability riding the raw axis count (9 = magnetometer, 11 = mouse plus magnetometer). <code>SdlDeviceWrapper.ReadSwitch2Magnetometer</code> reads them every poll for the Gyro tab's compass-anchored yaw (<code>GyroCompassYaw</code>), which stays inert until a figure-8 calibration stores <code>MagBiasX/Y/Z</code> and <code>MagFieldNorm</code>.</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER</code></td>
@@ -5895,7 +5961,7 @@
 <tr>
 <td><code>SDL_HINT_VIDEO_ALLOW_SCREENSAVER</code></td>
 <td><code>"1"</code></td>
-<td>Counteracts <code>SDL_INIT_VIDEO</code>'s default screensaver suppression. PadForge only needs VIDEO for keyboard/mouse enumeration.</td>
+<td>Counteracts <code>SDL_INIT_VIDEO</code>'s default screensaver suppression. PadForge opens no SDL window, so it has no reason to hold the screensaver off.</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_RAWINPUT</code></td>
@@ -5905,7 +5971,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Hint timing:</strong> subsystem-init hints (<code>SDL_HINT_JOYSTICK_XINPUT</code>, <code>SDL_HINT_JOYSTICK_RAWINPUT</code>, background events) must precede <code>SDL_Init()</code> because SDL reads them during subsystem startup. HIDAPI driver hints stay live after init. SDL re-evaluates them when a hint change enables or disables a driver (<code>SDL_HIDAPIDriverHintChanged</code>), and the fork applies the two MCU hints below on the sensors-enable edge. The <a href="#sdl-hint-sdl_hint_joystick_hidapi_wii">Wii rescan</a> and the runtime-managed hints both depend on that.</p>
+<p><strong>Hint timing:</strong> subsystem-init hints (<code>SDL_HINT_XINPUT_ENABLED</code>, <code>SDL_HINT_JOYSTICK_RAWINPUT</code>) must precede <code>SDL_Init()</code> because SDL reads them during subsystem startup. The background-events hint can be set at any time. HIDAPI driver hints stay live after init. SDL re-evaluates them when a hint change enables or disables a driver (<code>SDL_HIDAPIDriverHintChanged</code>), and the fork applies the two MCU hints below on the sensors-enable edge. The <a href="#sdl-hint-sdl_hint_joystick_hidapi_wii">Wii rescan</a> and the runtime-managed hints both depend on that.</p>
 </blockquote>
 <h3 id="runtime-managed-hints-mcu-demand-latch">Runtime-Managed Hints (MCU Demand Latch)<a class="headerlink" href="#runtime-managed-hints-mcu-demand-latch" title="Permanent link">&para;</a></h3>
 <p>Two fork HIDAPI hints are toggled at runtime by <code>InputService.RefreshSwitchNfcArming()</code> (on the auto-idle cadence), never set at init:</p>
@@ -5943,58 +6009,69 @@
 <h2 id="device-enumeration-flow-step-1">Device Enumeration Flow (Step 1)<a class="headerlink" href="#device-enumeration-flow-step-1" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Common/Input/InputManager.Step1.UpdateDevices.cs</code>
 <strong>Method:</strong> <code>private void UpdateDevices()</code></p>
-<p>Runs every ~2s (<code>EnumerationIntervalMs = 2000</code>) on the background polling thread. The first cycle runs immediately (<code>firstCycle = true</code>) for instant controller detection. Two phases for joysticks, plus keyboard/mouse enumeration.</p>
+<p>Runs every ~2s (<code>EnumerationIntervalMs = 2000</code>) on the background polling thread, and every 5 s while the engine idles. The first cycle runs immediately (<code>firstCycle = true</code>) for instant controller detection, and so does the first cycle after idle or focus suspension ends. Two phases for joysticks, plus keyboard/mouse enumeration. The same pass also enumerates the device families SDL never sees (tablets, Precision Touchpads, MIDI inputs, NFC readers, microphones, head trackers, handheld PC buttons, Logitech G-keys), which <a href="../input-pipeline/">Input Pipeline</a> covers.</p>
 <h3 id="phase-1-open-newly-connected-joystick-devices">Phase 1: Open Newly Connected Joystick Devices<a class="headerlink" href="#phase-1-open-newly-connected-joystick-devices" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>SDL_GetJoysticks() -&gt; uint[] joystickIds
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    |
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    Build HashSet&lt;uint&gt; currentInstanceIds (used by Phase 2 to detect disconnects)
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    |
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    For each instanceId in joystickIds:
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    |       (HIDMaestro virtuals never reach here. The SDL3 fork&#39;s
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    |        substring-list filter drops them before SDL_GetJoysticks returns.
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    |        Every instance ID at this point is a real device.)
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    |       (The SDL3 fork&#39;s filter drops HIDMaestro virtuals before
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    |        SDL_GetJoysticks returns. The self-readback guard in step 2b
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    |        catches one that slips past.)
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    |
 <a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    |   1. Is it in _openedSdlInstanceIds?
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    |       YES -&gt; Skip (already open and tracked)
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    |
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    |   2. new SdlDeviceWrapper().Open(instanceId)
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    |       |
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    |       Open() internally:
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>    |       |   SDL_IsGamepad(instanceId)?
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    |       |   |-- YES: SDL_OpenGamepad(instanceId)
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    |       |   |        Joystick = SDL_GetGamepadJoystick(GameController)
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    |       |   |-- NO:  SDL_OpenJoystick(instanceId)
-<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    |       |
-<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>    |       |   Populate: Name, VID, PID, Path, Serial, Type
-<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>    |       |   RawButtonCount = SDL_GetNumJoystickButtons(Joystick)
-<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    |       |   RawAxisCount   = SDL_GetNumJoystickAxes(Joystick)
-<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    |       |   If gamepad: NumAxes=6, NumButtons=22 (0-10 standard + 11-21 SDL extended), NumHats=1
-<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    |       |               ParseMappedButtonIndices(GameController)
-<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    |       |               Detect v4 capabilities (rumble triggers, aux accel,
-<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    |       |               touchpads, Wii IR / Joy-Con cameras, extra generic axes)
-<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    |       |   Else:       NumAxes/Buttons/Hats from raw joystick
-<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>    |       |   HID name fallback if Name is raw VID/PID
-<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>    |       |   Check rumble via SDL properties system
-<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>    |       |   Enable gyro/accel sensors (gamepad only)
-<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    |       |   OpenHaptic() for force feedback
-<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    |       |   Build ProductGuid + InstanceGuid
-<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    |       |
-<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    |       Open() failed? -&gt; Dispose wrapper, continue to next
-<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    |
-<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    |   3. FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid)
-<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>    |       |   Exact match by InstanceGuid? -&gt; return existing
-<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    |       |   Fallback match by ProductGuid (offline device)? -&gt; migrate GUID
-<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    |       |   No match? -&gt; create new UserDevice
-<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>    |
-<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>    |   4. ud.LoadFromSdlDevice(wrapper)  -- populates UserDevice runtime state
-<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>    |      ud.IsOnline = true
-<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    |      _openedSdlInstanceIds[wrapper.SdlInstanceId] = wrapper
-<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>    |      changed = true
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    |      Is it in _suppressedSelfVirtualIds?
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    |       YES -&gt; Skip (rejected as PadForge&#39;s own virtual on an earlier pass)
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    |
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    |   2. new SdlDeviceWrapper().Open(instanceId)
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>    |       |
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    |       Open() internally:
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    |       |   SDL_IsGamepad(instanceId)?
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    |       |   |-- YES: SDL_OpenGamepad(instanceId)
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    |       |   |        Joystick = SDL_GetGamepadJoystick(GameController)
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>    |       |   |-- NO:  SDL_OpenJoystick(instanceId)
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>    |       |
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    |       |   Populate: Name, VID, PID, Path, Serial, Type
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    |       |   RawButtonCount = SDL_GetNumJoystickButtons(Joystick)
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    |       |   RawAxisCount   = SDL_GetNumJoystickAxes(Joystick)
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    |       |   If gamepad: NumAxes=6, NumButtons=22 (0-10 standard + 11-21 SDL extended), NumHats=1
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    |       |               ParseMappedButtonIndices(GameController)
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    |       |               Detect v4 capabilities (rumble triggers, aux accel,
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>    |       |               touchpads, Wii IR / Joy-Con cameras, extra generic axes)
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>    |       |   Else:       NumAxes/Buttons/Hats from raw joystick
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>    |       |   HID name fallback if Name is raw VID/PID
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    |       |   Check rumble via SDL properties system
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    |       |   Enable gyro/accel sensors (gamepad only)
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    |       |   OpenHaptic() for force feedback
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    |       |   Build ProductGuid + InstanceGuid
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    |       |
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    |       Open() failed? -&gt; Dispose wrapper, continue to next
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>    |
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    |   2b. Self-readback guard: serial starts &quot;HM-CTL-&quot;, path contains
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    |       &quot;HIDMAESTRO&quot;, or a Sony device whose parent chain reaches the
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>    |       usbip-win2 host controller (a composite persona)?
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>    |       YES -&gt; Dispose wrapper, add to _suppressedSelfVirtualIds, continue
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>    |
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    |   3. FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid,
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>    |                             currentInstanceIds, wrapper.SerialNumber)
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>    |       |   Same unit re-identifying inside the disconnect debounce? -&gt; its own row
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>    |       |   Exact match by InstanceGuid? -&gt; return existing
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>    |       |   Fallback match by ProductGuid (offline device)? -&gt; migrate GUID
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>    |       |   No match? -&gt; create new UserDevice
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>    |       If the row&#39;s InstanceGuid differs (a same-serial twin),
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>    |       wrapper.OverrideInstanceGuid(ud.InstanceGuid)
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>    |
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>    |   4. ud.LoadFromSdlDevice(wrapper)  -- populates UserDevice runtime state
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>    |      ud.IsOnline = true
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>    |      _openedSdlInstanceIds[wrapper.SdlInstanceId] = wrapper
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>    |      changed = true
 </code></pre></div>
 <p><strong>Why instance IDs, not GUIDs:</strong> <code>_openedSdlInstanceIds</code> uses SDL instance IDs (<code>uint</code>) because serial-based GUIDs (Bluetooth devices) are unavailable until the device is opened. Instance IDs are assigned at connection time and unique per session.</p>
 <h3 id="phase-1b1c-keyboard-and-mouse-enumeration">Phase 1b/1c: Keyboard and Mouse Enumeration<a class="headerlink" href="#phase-1b1c-keyboard-and-mouse-enumeration" title="Permanent link">&para;</a></h3>
-<p>Keyboards and mice use <code>RawInputListener.EnumerateKeyboards()</code> / <code>EnumerateMice()</code> via Windows Raw Input (not SDL). Each new device gets a <code>SdlKeyboardWrapper</code> or <code>SdlMouseWrapper</code>, with <code>UserDevice</code> populated via <code>LoadFromKeyboardDevice()</code> / <code>LoadFromMouseDevice()</code>.</p>
-<p>Tracking uses <code>_openedKeyboardHandles</code> and <code>_openedMouseHandles</code> (<code>HashSet&lt;IntPtr&gt;</code>) keyed on Raw Input handles.</p>
+<p>Keyboards, mice and Consumer Control collections use <code>RawInputListener.EnumerateKeyboards()</code> / <code>EnumerateMice()</code> / <code>EnumerateConsumerControls()</code> via Windows Raw Input (not SDL). The enumeration runs on a background task, and each pass consumes the previous task's results (the first pass enumerates synchronously). Each new device gets a <code>SdlKeyboardWrapper</code>, <code>SdlMouseWrapper</code> or <code>ConsumerControlWrapper</code>, with <code>UserDevice</code> populated via <code>LoadFromKeyboardDevice()</code> / <code>LoadFromMouseDevice()</code> / <code>LoadFromConsumerDevice()</code>.</p>
+<p>Tracking uses <code>_openedKeyboardHandles</code>, <code>_openedMouseHandles</code> and <code>_openedConsumerHandles</code> (<code>HashSet&lt;IntPtr&gt;</code>) keyed on Raw Input handles.</p>
 <p><strong>Why not SDL for keyboards/mice:</strong> SDL's APIs report system-wide state without distinguishing physical devices. PadForge's per-device mapping requires per-device tracking, which only Windows Raw Input provides.</p>
 <h3 id="phase-2-detect-disconnected-devices">Phase 2: Detect Disconnected Devices<a class="headerlink" href="#phase-2-detect-disconnected-devices" title="Permanent link">&para;</a></h3>
 <p>Two paths, depending on whether Step 2 already flipped the device offline.</p>
@@ -6016,12 +6093,12 @@
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="n">SdlDeviceWrapper</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_openedSdlInstanceIds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span>
 </code></pre></div>
 <p><code>_openedSdlInstanceIds</code> records every device PadForge has opened, keyed on SDL instance ID, so the engine does not re-open the same device twice per cycle. Each value is the device's <code>SdlDeviceWrapper</code>, which lets the Phase 2 disconnect sweep dispose an orphaned handle. There is no bulk prune. Phase 2 collects the IDs that disconnected this cycle and a follow-up loop calls <code>_openedSdlInstanceIds.Remove(sdlId)</code> for each.</p>
-<p>HIDMaestro virtual controllers are filtered upstream by PadForge's SDL3 fork: the patched enumerator does a fast substring match for <code>HIDMAESTRO</code> against each device's interface symlink, then walks the PnP parent chain looking for <code>HIDMAESTRO</code> in the hardware-ID list. Any match is dropped before <code>SDL_GetJoysticks</code> returns. This avoids the rumble-killing close path that earlier in-engine filtering used to guard against (<code>SDL_CloseJoystick</code> calls <code>XInputSetState(slot, 0, 0)</code> as cleanup, which would trigger an <code>OutputReceived(0, 0)</code> packet on the HIDMaestro bus). The fork's filter means HM devices never enter the engine's open/close cycle at all.</p>
+<p>HIDMaestro virtual controllers are filtered upstream by PadForge's SDL3 fork: the patched enumerator does a fast substring match for <code>HIDMAESTRO</code> against each device's interface symlink, then walks the PnP parent chain looking for <code>HIDMAESTRO</code> in the hardware-ID list. Any match is dropped before <code>SDL_GetJoysticks</code> returns. This avoids the rumble-killing close path that earlier in-engine filtering used to guard against (<code>SDL_CloseJoystick</code> calls <code>XInputSetState(slot, 0, 0)</code> as cleanup, which would reach the HIDMaestro virtual as an <code>OutputReceived(0, 0)</code> packet). The fork's filter keeps HM devices out of the engine's open/close cycle, and Step 1's self-readback guard disposes any that slip past right after <code>Open</code>.</p>
 <h3 id="userdevice-lookup-and-guid-migration">UserDevice Lookup and GUID Migration<a class="headerlink" href="#userdevice-lookup-and-guid-migration" title="Permanent link">&para;</a></h3>
-<p><strong><code>FindOrCreateUserDevice(Guid instanceGuid, Guid productGuid)</code></strong>. Three-tier matching:</p>
+<p><strong><code>FindOrCreateUserDevice(Guid instanceGuid, Guid productGuid = default, HashSet&lt;uint&gt; livePresentSdlIds = null, string serialNumber = null)</code></strong>. The SDL sweep passes the instance IDs SDL reports present and the wrapper's serial. Every other caller passes neither. Before the tiers, a same-product row with the same serial that is still online, but whose SDL instance has left the present set, is returned as the same unit re-identifying inside the disconnect debounce (for a device with no serial, only when a live device holds the exact-match row). Three-tier matching:</p>
 <ol>
-<li><strong>Exact match</strong> by <code>InstanceGuid</code>. Returns existing device with preserved settings</li>
-<li><strong>Fallback match</strong> by <code>ProductGuid</code> against offline devices. Handles Bluetooth reconnections with changed device paths/<code>InstanceGuid</code>. Migrates the old GUID and updates <code>UserSetting</code> via <code>MigrateUserSettingGuid()</code></li>
+<li><strong>Exact match</strong> by <code>InstanceGuid</code>. Returns existing device with preserved settings. When a live, present device already holds that row (two units reporting one serial), the newcomer takes an offline row of the same product and keeps that row's GUID, or gets a session GUID when no such row exists</li>
+<li><strong>Fallback match</strong> by <code>ProductGuid</code> against offline devices. Handles Bluetooth reconnections with changed device paths/<code>InstanceGuid</code>. Migrates the old GUID, updates <code>UserSetting</code> via <code>MigrateUserSettingGuid()</code>, and queues the device-pinned references (mapping rows, activators, menus, per-pad slot configs) in <code>PendingDeviceGuidMigrations</code> for the UI thread to re-key</li>
 <li><strong>Create new</strong>. Adds a fresh <code>UserDevice</code></li>
 </ol>
 <p>All lookups use manual <code>for</code> loops (not LINQ) to avoid closure allocations in the hot path.</p>
@@ -6030,8 +6107,9 @@
 <hr />
 <h2 id="device-filtering-hidmaestro">Device Filtering (HIDMaestro)<a class="headerlink" href="#device-filtering-hidmaestro" title="Permanent link">&para;</a></h2>
 <p>HIDMaestro virtual controllers (Xbox / PlayStation / Nintendo / Extended) appear as real input devices to SDL3 by default. The Nintendo family is the virtual Switch Pro added in 4.1.0 (#215, #246) and rides the same filter as the other three. Without filtering, SDL would enumerate PadForge's own outputs as inputs, the engine would map them back to themselves, and a feedback loop would create controllers exponentially.</p>
-<p>PadForge filters them at the SDL3 fork level. The fork's patched enumeration walks each device's PnP parent chain looking for <code>HIDMAESTRO</code> in the Hardware ID list, with a substring fast path against the interface symlink before falling back to the parent walk. Any device that matches is dropped before <code>SDL_GetJoysticks</code> returns. HM virtuals never appear in the enumeration the engine consumes.</p>
+<p>PadForge filters them at the SDL3 fork level. The fork's patched enumeration walks each device's PnP parent chain looking for <code>HIDMAESTRO</code> in the Hardware ID list, with a substring fast path against the interface symlink before falling back to the parent walk. The walk goes five devnodes deep (<code>HM_FILTER_MAX_DEPTH</code>), far enough to reach the emulated host controller HIDMaestro stamps for its composite USB personas. Any device that matches is dropped before <code>SDL_GetJoysticks</code> returns. The hidapi, DirectInput and Raw Input backends all run this check.</p>
 <p>The previous in-engine filter (<code>IsHIDMaestroVirtualDevice</code> in <code>InputManager.Step1</code>) is gone. The engine no longer needs the per-cycle classification by device path, VID/PID, or active/expected count. The fork-side filter is upstream of every consumer (engine, <code>SDL_OpenJoystick</code>, <code>SDL_CloseJoystick</code>), so the rumble-killing close path that the in-engine filter used to guard against can't fire on HM devices.</p>
+<p>One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after <code>Open</code>: a serial starting <code>HM-CTL-</code>, a path containing <code>HIDMAESTRO</code>, or a Sony device whose parent chain reaches the usbip-win2 host controller (<code>IsOnUsbipVhci</code>, the route composite personas take) marks PadForge's own virtual. The wrapper is disposed and its instance ID goes into <code>_suppressedSelfVirtualIds</code>, so later passes skip it without reopening it.</p>
 <p>For the SDL3 fork patches, see PadForge's SDL3 fork branch <code>feat/hidmaestro-filter</code>. The OpenXInput fork carries its own complementary filter for the XInput API surface, documented in <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
 <hr />
 <h2 id="sdldevicewrapper-class">SdlDeviceWrapper Class<a class="headerlink" href="#sdldevicewrapper-class" title="Permanent link">&para;</a></h2>
@@ -6338,8 +6416,8 @@
 <a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>    |-- NO: Keep haptic open. Store Haptic, HapticFeatures, then
 <a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>            |
 <a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>            NumHapticAxes = SDL_GetNumHapticAxes(haptic)
-<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>            |   1 axis -&gt; wheels (single-axis FFB: Spring/Damper on steering axis)
-<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>            |   2+ axes -&gt; joysticks, gamepads (X+Y axis condition effects)
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>            |   1 axis -&gt; wheels (constant/periodic forces on the steering axis)
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>            |   2+ axes -&gt; joysticks, gamepads (polar direction)
 <a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>            |
 <a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>            Pick best strategy:
 <a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>            |
@@ -6388,7 +6466,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>NumHapticAxes</code> is critical for <code>ForceFeedbackState</code>: it determines whether condition effects (Spring, Damper, Friction, Inertia) use 1 axis (wheels: steering only) or 2 axes (joysticks: X and Y).</p>
+<p><code>ForceFeedbackState</code> reads <code>NumHapticAxes</code> for directional effects. On a single-axis device (a wheel), constant and periodic forces use the steering axis (<code>SDL_HAPTIC_STEERING_AXIS</code>), with a constant force scaled by the X component of the game's direction. A device with two or more axes gets a polar direction. Condition effects (Spring, Damper, Friction, Inertia) take their axis count from the game's Set Condition reports instead (<code>ConditionAxisCount</code>, at most 2).</p>
 <hr />
 <h2 id="gamepad-vs-joystick-api">Gamepad vs Joystick API<a class="headerlink" href="#gamepad-vs-joystick-api" title="Permanent link">&para;</a></h2>
 <p>PadForge uses two SDL APIs depending on whether the device is in SDL's gamecontrollerdb. The choice is made at open time and cannot change without re-opening.</p>
@@ -6985,9 +7063,10 @@
 <h3 id="rumble-capability-detection">Rumble Capability Detection<a class="headerlink" href="#rumble-capability-detection" title="Permanent link">&para;</a></h3>
 <p>Detected during <code>Open()</code> via SDL3's properties system (replaces SDL2's <code>SDL_JoystickHasRumble()</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">uint</span><span class="w"> </span><span class="n">props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SDL_GetJoystickProperties</span><span class="p">(</span><span class="n">Joystick</span><span class="p">);</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">HasRumble</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">props</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">SDL_GetBooleanProperty</span><span class="p">(</span><span class="n">props</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SDL.joystick.cap.rumble&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">HasRumble</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">props</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">SDL_GetBooleanProperty</span><span class="p">(</span><span class="n">props</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SDL.joystick.cap.rumble&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">false</span><span class="p">))</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="o">||</span><span class="w"> </span><span class="n">PadixConverterIdentity</span><span class="p">.</span><span class="n">IsPlayStationConverter</span><span class="p">(</span><span class="n">VendorId</span><span class="p">,</span><span class="w"> </span><span class="n">ProductId</span><span class="p">);</span>
 </code></pre></div>
-<p><code>SetRumble()</code> returns <code>false</code> immediately if <code>HasRumble</code> is false or the joystick handle is invalid.</p>
+<p>A Padix PSX/USB converter counts as rumble-capable without SDL's help, because PadForge writes its two motors itself (<code>PadixConverterRawHidWriter</code>, #440). <code>SetRumble()</code> returns <code>false</code> immediately if <code>HasRumble</code> is false, the joystick handle is invalid, or the device is that converter. On a Steam Deck it scales both magnitudes by <code>DeckRumbleHeadroom</code> (54,394 / 65,535) before the SDL call, staying under the firmware's 16-bit wrap (#179).</p>
 <h3 id="stop-on-disconnect">Stop on Disconnect<a class="headerlink" href="#stop-on-disconnect" title="Permanent link">&para;</a></h3>
 <p>On disconnect, <code>MarkDeviceOffline()</code> calls <code>ForceFeedbackState.StopDeviceForces()</code> before disposing the SDL handle, ensuring rumble stops cleanly.</p>
 <hr />
@@ -7065,27 +7144,29 @@
 <a id="__codelineno-34-21" name="__codelineno-34-21" href="#__codelineno-34-21"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">HasTouchpad</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-34-22" name="__codelineno-34-22" href="#__codelineno-34-22"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumTouchpads</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">              </span><span class="c1">// touchpad surface count</span>
 <a id="__codelineno-34-23" name="__codelineno-34-23" href="#__codelineno-34-23"></a><span class="w">    </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">TouchpadFingerCounts</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">    </span><span class="c1">// per-pad simultaneous-finger count</span>
-<a id="__codelineno-34-24" name="__codelineno-34-24" href="#__codelineno-34-24"></a><span class="w">    </span><span class="n">HapticEffectStrategy</span><span class="w"> </span><span class="n">HapticStrategy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-25" name="__codelineno-34-25" href="#__codelineno-34-25"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">HapticHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-26" name="__codelineno-34-26" href="#__codelineno-34-26"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">HapticFeatures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-27" name="__codelineno-34-27" href="#__codelineno-34-27"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHapticAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-28" name="__codelineno-34-28" href="#__codelineno-34-28"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsAttached</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-29" name="__codelineno-34-29" href="#__codelineno-34-29"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">VendorId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-30" name="__codelineno-34-30" href="#__codelineno-34-30"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">ProductId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-31" name="__codelineno-34-31" href="#__codelineno-34-31"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">InstanceGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-32" name="__codelineno-34-32" href="#__codelineno-34-32"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">ProductGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-33" name="__codelineno-34-33" href="#__codelineno-34-33"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">DevicePath</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-34" name="__codelineno-34-34" href="#__codelineno-34-34"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SerialNumber</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-34-35" name="__codelineno-34-35" href="#__codelineno-34-35"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SdlGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                </span><span class="c1">// SDL joystick GUID (gamecontrollerdb / virtual identity)</span>
-<a id="__codelineno-34-36" name="__codelineno-34-36" href="#__codelineno-34-36"></a>
-<a id="__codelineno-34-37" name="__codelineno-34-37" href="#__codelineno-34-37"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">GetCurrentState</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">forceRaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<a id="__codelineno-34-38" name="__codelineno-34-38" href="#__codelineno-34-38"></a><span class="w">    </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">();</span>
-<a id="__codelineno-34-39" name="__codelineno-34-39" href="#__codelineno-34-39"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetInputDeviceType</span><span class="p">();</span>
-<a id="__codelineno-34-40" name="__codelineno-34-40" href="#__codelineno-34-40"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetRumble</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">low</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">high</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">durationMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uint</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-<a id="__codelineno-34-41" name="__codelineno-34-41" href="#__codelineno-34-41"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">();</span>
-<a id="__codelineno-34-42" name="__codelineno-34-42" href="#__codelineno-34-42"></a><span class="p">}</span>
+<a id="__codelineno-34-24" name="__codelineno-34-24" href="#__codelineno-34-24"></a><span class="w">    </span><span class="kt">bool?</span><span class="w"> </span><span class="n">TouchpadPressureSupported</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w"> </span><span class="c1">// null = unknown</span>
+<a id="__codelineno-34-25" name="__codelineno-34-25" href="#__codelineno-34-25"></a><span class="w">    </span><span class="kt">bool?</span><span class="w"> </span><span class="n">TouchpadClickSupported</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w">    </span><span class="c1">// null = unknown</span>
+<a id="__codelineno-34-26" name="__codelineno-34-26" href="#__codelineno-34-26"></a><span class="w">    </span><span class="n">HapticEffectStrategy</span><span class="w"> </span><span class="n">HapticStrategy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-27" name="__codelineno-34-27" href="#__codelineno-34-27"></a><span class="w">    </span><span class="n">IntPtr</span><span class="w"> </span><span class="n">HapticHandle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-28" name="__codelineno-34-28" href="#__codelineno-34-28"></a><span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="n">HapticFeatures</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-29" name="__codelineno-34-29" href="#__codelineno-34-29"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">NumHapticAxes</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-30" name="__codelineno-34-30" href="#__codelineno-34-30"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">IsAttached</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-31" name="__codelineno-34-31" href="#__codelineno-34-31"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">VendorId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-32" name="__codelineno-34-32" href="#__codelineno-34-32"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">ProductId</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-33" name="__codelineno-34-33" href="#__codelineno-34-33"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">InstanceGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-34" name="__codelineno-34-34" href="#__codelineno-34-34"></a><span class="w">    </span><span class="n">Guid</span><span class="w"> </span><span class="n">ProductGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-35" name="__codelineno-34-35" href="#__codelineno-34-35"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">DevicePath</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-36" name="__codelineno-34-36" href="#__codelineno-34-36"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SerialNumber</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-34-37" name="__codelineno-34-37" href="#__codelineno-34-37"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">SdlGuid</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">                </span><span class="c1">// SDL joystick GUID (gamecontrollerdb / virtual identity)</span>
+<a id="__codelineno-34-38" name="__codelineno-34-38" href="#__codelineno-34-38"></a>
+<a id="__codelineno-34-39" name="__codelineno-34-39" href="#__codelineno-34-39"></a><span class="w">    </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">GetCurrentState</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">forceRaw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<a id="__codelineno-34-40" name="__codelineno-34-40" href="#__codelineno-34-40"></a><span class="w">    </span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="nf">GetDeviceObjects</span><span class="p">();</span>
+<a id="__codelineno-34-41" name="__codelineno-34-41" href="#__codelineno-34-41"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetInputDeviceType</span><span class="p">();</span>
+<a id="__codelineno-34-42" name="__codelineno-34-42" href="#__codelineno-34-42"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetRumble</span><span class="p">(</span><span class="kt">ushort</span><span class="w"> </span><span class="n">low</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">high</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="n">durationMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">uint</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
+<a id="__codelineno-34-43" name="__codelineno-34-43" href="#__codelineno-34-43"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">();</span>
+<a id="__codelineno-34-44" name="__codelineno-34-44" href="#__codelineno-34-44"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>RawAxisCount</code>, <code>HasExtraGenericAxes</code>, <code>SupportedAxisIndices</code>, <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, and <code>TouchpadFingerCounts</code> have default interface implementations. Keyboard and mouse wrappers inherit those defaults. <code>SdlDeviceWrapper</code> overrides all seven with live per-device values, and the Remote Link peer (<code>RemotePeerDevice</code>) mirrors the owner's <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, and <code>TouchpadFingerCounts</code> off the device list so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252).</p>
+<p><code>RawAxisCount</code>, <code>HasExtraGenericAxes</code>, <code>SupportedAxisIndices</code>, <code>HasAccelAux</code>, <code>HasGyroAux</code>, <code>NumTouchpads</code>, <code>TouchpadFingerCounts</code>, <code>TouchpadPressureSupported</code>, and <code>TouchpadClickSupported</code> have default interface implementations. Keyboard and mouse wrappers inherit those defaults. <code>SdlDeviceWrapper</code> overrides the first seven with live per-device values and leaves both touchpad capability flags unknown. The Remote Link peer (<code>RemotePeerDevice</code>) mirrors all nine from the owner's device list, so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252). <code>WindowsTabletDevice</code> reads pressure support from its tablet descriptor and reports no click.</p>
 <h3 id="implementations">Implementations<a class="headerlink" href="#implementations" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7117,6 +7198,7 @@
 </tr>
 </tbody>
 </table>
+<p>Fourteen more classes implement the interface without touching SDL. In the engine: <code>ConsumerControlWrapper</code>, <code>WebControllerDevice</code>, <code>TouchpadOverlayDevice</code>, <code>WindowsTabletDevice</code>, and <code>RemotePeerDevice</code> (see <a href="../engine-library/">Engine Library</a>). In the app: <code>MidiInputDevice</code>, <code>NfcReaderDevice</code>, <code>MicrophoneInputDevice</code>, <code>SonyHeadsetMotionDevice</code>, <code>SystemMotionDevice</code>, <code>HandheldButtonsDevice</code>, <code>HeadTrackerDevice</code>, <code>OpenXrHandDevice</code>, and <code>LogitechGKeysDevice</code>.</p>
 <hr />
 <h2 id="keyboard-and-mouse-via-raw-input">Keyboard and Mouse via Raw Input<a class="headerlink" href="#keyboard-and-mouse-via-raw-input" title="Permanent link">&para;</a></h2>
 <p>Keyboards and mice use Windows Raw Input (not SDL) for per-device tracking. SDL's keyboard/mouse APIs cannot distinguish multiple physical devices, which PadForge's per-device mapping requires.</p>
@@ -7187,7 +7269,7 @@
 <a id="__codelineno-37-8" name="__codelineno-37-8" href="#__codelineno-37-8"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>SDL_JoystickConnected()</code> returns <code>false</code> when disconnected. Phase 2 of <code>UpdateDevices()</code> checks it every 2s. A device that first looks disconnected (handle detached, or ID absent from <code>SDL_GetJoysticks()</code>) enters a debounce window (<code>SdlDisconnectDebounceMs = 2000</code>) and transitions offline only once the condition holds for the full window. The exception is a handle Step 2 already saw detached: <code>UpdateInputStates()</code> drops the device's <code>IsOnline</code> flag on a null <code>GetCurrentState()</code>, and Phase 2 finishes that permanent detachment immediately, with no debounce.</p>
+<p><code>SDL_JoystickConnected()</code> returns <code>false</code> when disconnected. Phase 2 of <code>UpdateDevices()</code> checks it on every enumeration pass. A device that first looks disconnected (handle detached, or ID absent from <code>SDL_GetJoysticks()</code>) enters a debounce window (<code>SdlDisconnectDebounceMs = 2000</code>) and transitions offline only once the condition holds for the full window. The exception is a handle Step 2 already saw detached: <code>UpdateInputStates()</code> drops the device's <code>IsOnline</code> flag on a null <code>GetCurrentState()</code>, and Phase 2 finishes that permanent detachment immediately, with no debounce.</p>
 <h3 id="offline-transition-markdeviceoffline">Offline Transition: <code>MarkDeviceOffline()</code><a class="headerlink" href="#offline-transition-markdeviceoffline" title="Permanent link">&para;</a></h3>
 <p><strong>Method:</strong> <code>InputManager.MarkDeviceOffline(UserDevice ud)</code></p>
 <p>Full cleanup on disconnect:</p>
@@ -7201,7 +7283,7 @@
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
 <h2 id="sdl3-fork">SDL3 Fork<a class="headerlink" href="#sdl3-fork" title="Permanent link">&para;</a></h2>
-<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binary lands at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code>. PadForge 4.4.0 ships the fork's Release build at commit <code>d98c5804a9</code> (2026-08-10), the same build 4.3.2 shipped. No fork commit landed between the two releases.</p>
+<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 4.5.3 ships the fork's Release build at commit <code>5df5eff539</code> (2026-09-21) for both architectures, the same build 4.5.2 shipped. The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
 <h3 id="why-a-fork">Why a Fork<a class="headerlink" href="#why-a-fork" title="Permanent link">&para;</a></h3>
 <p>The branch began with six commits spanning four logical features. v4 consumes substantially more fork work on top. The original four are listed first, the v4 additions in the next subsection.</p>
 <table>
@@ -7217,25 +7299,25 @@
 <tr>
 <td>1</td>
 <td><strong>Switch 2 Pro Controller</strong>: WinUSB bulk I/O on Windows. The controller is a USB composite device with two interfaces. SDL needs to drive HID Interface 0 for input and WinUSB Interface 1 for the bulk init sequence.</td>
-<td><code>7c4118c49</code></td>
+<td><code>e962d7bb8d</code></td>
 <td>None</td>
 </tr>
 <tr>
 <td>2</td>
 <td><strong>HIDMaestro virtual-controller filter</strong> (PadForge-specific): <code>SDL_GetJoysticks</code> walks each device's PnP parent chain and drops any device whose hardware-ID list contains the <code>HIDMAESTRO</code> substring, with a fast-path substring match on the interface symlink. Stops SDL from re-enumerating the virtual controllers PadForge just created.</td>
-<td><code>60d06e2f4</code> (main filter) + <code>14f883872</code> (HMXINPUT dead-branch cleanup)</td>
+<td><code>bc9a80d77e</code> (main filter) + <code>c910b06a30</code> (HMXINPUT dead-branch cleanup)</td>
 <td>None</td>
 </tr>
 <tr>
 <td>3</td>
 <td><strong>16 XInput controllers</strong>: bumps <code>XUSER_MAX_COUNT</code> from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, rather than the first four alone.</td>
-<td><code>ba25d3671</code></td>
+<td><code>469f70815d</code></td>
 <td><a href="https://github.com/hifihedgehog/OpenXinput"><code>hifihedgehog/OpenXinput</code></a> branch <code>OpenXinput1_4</code> commit <code>45c91b1</code> (CMake default bump)</td>
 </tr>
 <tr>
 <td>4</td>
 <td><strong>XInput Share button</strong>: reads OpenXInput's <code>XInputGetSystemButtons</code> ordinal 109 and exposes Share at raw button 11 + the gamepad-db <code>misc1</code> mapping.</td>
-<td><code>1b266767c</code> (loader + dispatch) + <code>3fbf1429f</code> (gamepad-db <code>misc1:b11</code> mapping)</td>
+<td><code>d8c4d9006c</code> (loader + dispatch) + <code>259d947299</code> (gamepad-db <code>misc1:b11</code> mapping)</td>
 <td>Uses an existing OpenXInput export. No OpenXInput change needed.</td>
 </tr>
 </tbody>
@@ -7274,8 +7356,8 @@
 </tr>
 <tr>
 <td><code>SDL#9</code></td>
-<td><code>SDL_SendGamepadEffect</code> output path for DualSense adaptive triggers / lightbar / audio</td>
-<td>DualSense passthrough dispatcher</td>
+<td>The BLE Switch 2 driver takes <code>SDL_SendGamepadEffect</code> as a raw command passthrough, tears a controller down on link loss, and reports the Bluetooth address as the serial</td>
+<td>The Disconnect Controller macro action's Switch 2 power-off (<code>BluetoothLinkHelper.TrySwitch2EffectPassthrough</code>)</td>
 </tr>
 <tr>
 <td>DS3 SixAxis</td>
@@ -7288,15 +7370,35 @@
 <td><code>hidapi_wii</code> driver (#198, #208, #210)</td>
 </tr>
 <tr>
-<td><code>SDL#27</code> (fork commit <code>d98c5804a9</code>)</td>
-<td>Five second-generation MOZA wheelbase IDs in <code>initial_wheel_devices</code> (<code>SDL_joystick.c:613-617</code>: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed <code>SDL_JOYSTICK_TYPE_WHEEL</code> like the first-generation IDs at <code>:608-612</code></td>
+<td><code>SDL#15</code></td>
+<td>Drives the Switch NFC MCU on a Bluetooth right Joy-Con, combined pair or Pro Controller and exports <code>SDL_GetGamepadNfcTagUid</code></td>
+<td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH_NFC</code> (runtime-managed), <code>SDL_TryGetGamepadNfcTagUid</code>, <code>HasNfcReader</code> (#241)</td>
+</tr>
+<tr>
+<td><code>SDL#25</code></td>
+<td>Frequency-shaped Switch rumble, and the Switch 2 BLE magnetometer axes</td>
+<td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH_SHAPED_RUMBLE</code>, <code>SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER</code>, <code>HasSwitch2Magnetometer</code> (#271)</td>
+</tr>
+<tr>
+<td><code>SDL#27</code> (fork commit <code>c2794e11cb</code>)</td>
+<td>Five second-generation MOZA wheelbase IDs in <code>initial_wheel_devices</code> (<code>SDL_joystick.c:614-618</code>: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed <code>SDL_JOYSTICK_TYPE_WHEEL</code> like the first-generation IDs at <code>:609-613</code></td>
 <td><code>SdlDeviceWrapper</code> wheel typing, the Wheel tab (#282)</td>
+</tr>
+<tr>
+<td>Fork commit <code>067c3b9661</code></td>
+<td>The DualSense's trigger feedback bytes (payload 40..47 of the full report) published as the joystick property <code>SDL.joystick.hidapi.ps5.status_bytes</code></td>
+<td><code>DualSenseStatusBytes.Read</code>, which fills the same bytes in the virtual DualSense's report (#433)</td>
+</tr>
+<tr>
+<td><code>SDL_XINPUT_PADDLES</code> (fork commits <code>49cbac4a41</code>, <code>167f8ca9bc</code>, <code>11bf187ca5</code>, <code>4763baf830</code>, <code>a1416320e2</code>, <code>5df5eff539</code>, the last for <code>SDL#32</code>)</td>
+<td>Adds an Elite controller's four paddles to its XInput joystick as raw buttons 12-15 (<code>paddle1</code>-<code>paddle4</code>), over Bluetooth and, where the Windows GameInput files belong to a version family the fork has read, over USB and the Xbox Wireless Adapter. Builds for x64 and ARM64</td>
+<td>Gamepad positions 12-15 (Right/Left Paddle 1 and 2)</td>
 </tr>
 </tbody>
 </table>
 <p>The three Wii Bluetooth fixes (<code>SDL#2</code> / <code>SDL#3</code> / <code>SDL#4</code>) are covered in the <a href="#wii-controllers-hidapi_wii">Wii Controllers</a> subsection below.</p>
 <h3 id="upstream-drivers-the-fork-carries">Upstream drivers the fork carries<a class="headerlink" href="#upstream-drivers-the-fork-carries" title="Permanent link">&para;</a></h3>
-<p>The fork rebases on <code>libsdl-org/SDL</code> mainline, so every upstream HIDAPI driver is compiled in and registered in <code>SDL_hidapijoystick.c</code>. Three matter for devices this page is asked about. None needs a PadForge hint: each driver reads its own <code>SDL_HINT_JOYSTICK_HIDAPI_*</code> hint with <code>SDL_HINT_JOYSTICK_HIDAPI</code> as the default, and PadForge sets neither, so they are on.</p>
+<p>The fork rebases on <code>libsdl-org/SDL</code> mainline, so every upstream HIDAPI driver is compiled in and registered in <code>SDL_hidapijoystick.c</code>. Three matter for devices this page is asked about. None needs a PadForge hint: each driver reads its own <code>SDL_HINT_JOYSTICK_HIDAPI_*</code> hint with <code>SDL_HINT_JOYSTICK_HIDAPI</code> as the default, which is on. PadForge sets the Flydigi driver's hint anyway, from the Flydigi Enhanced Protocol setting (#395, see the hints table above), and sets no hint for the other two.</p>
 <table>
 <thead>
 <tr>
@@ -7309,9 +7411,9 @@
 <tbody>
 <tr>
 <td><code>SDL_HIDAPI_DriverFlydigi</code> (<code>SDL_hidapi_flydigi.c</code>)</td>
-<td><code>SDL_hidapijoystick.c:104</code>, enabled by <code>SDL_JOYSTICK_HIDAPI_FLYDIGI</code> at <code>SDL_hidapijoystick_c.h:49</code></td>
-<td><code>SDL_IsJoystickFlydigiController</code> (<code>SDL_joystick.c:3413</code>) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2401 (second generation, any interface), from <code>usb_ids.h:38-39</code> and <code>:94-96</code>. The model comes from the controller's device ID (<code>HIDAPI_DriverFlydigi_UpdateDeviceIdentity</code>): Apex 2, 3, 4, 5 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro</td>
-<td>The gamepad mapping (<code>SDL_gamepad.c:1298-1307</code>) puts the four paddles at <code>b11-b14</code>, the Vader C/Z and Apex 5 shoulder macros at <code>misc2:b15,misc3:b16</code>, and the Vader 5 Pro's three extra buttons at <code>misc4:b17,misc5:b18,misc6:b19</code>. <code>SdlDeviceWrapper</code> carries MISC2-MISC6 at <code>CustomInputState</code> button indices 17-21 (<code>SdlDeviceWrapper.cs:2393-2397</code>), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (<code>PhysicalSlotResolver.cs</code>). Apex 5, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream change carried: <code>eb340388fc</code> (2026-05-14, Vader 5 Pro fix)</td>
+<td><code>SDL_hidapijoystick.c:105</code>, enabled by <code>SDL_JOYSTICK_HIDAPI_FLYDIGI</code> at <code>SDL_hidapijoystick_c.h:49</code></td>
+<td><code>SDL_IsJoystickFlydigiController</code> (<code>SDL_joystick.c:3585</code>) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2502 / 37D7:2401 (second generation, any interface), from <code>usb_ids.h:38-39</code> and <code>:94-97</code>. The model comes from the controller's device ID (<code>HIDAPI_DriverFlydigi_UpdateDeviceIdentity</code>): Apex 2, 3, 4, 5, 6 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro</td>
+<td>The gamepad mapping (<code>SDL_gamepad.c:1301-1313</code>) puts the four paddles at <code>b11-b14</code>, the Vader C/Z and the Apex 5 and Apex 6 shoulder macros at <code>misc2:b15,misc3:b16</code>, and the Vader 5 Pro's three extra buttons at <code>misc4:b17,misc5:b18,misc6:b19</code>. <code>SdlDeviceWrapper</code> carries MISC2-MISC6 at <code>CustomInputState</code> button indices 17-21 (<code>SdlDeviceWrapper.cs:2464-2468</code>), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (<code>PhysicalSlotResolver.cs</code>). Apex 5, Apex 6, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream change carried: <code>d2050211eb</code> (2026-09-21, Apex 6 support)</td>
 </tr>
 <tr>
 <td><code>SDL_HIDAPI_DriverSteamDeck</code> (<code>SDL_hidapi_steamdeck.c</code>)</td>
@@ -7367,7 +7469,7 @@
 </tr>
 <tr>
 <td><code>SDL_hidapi_switch2.c</code></td>
-<td>New HIDAPI driver: libusb bulk init, HID input parsing, rumble output, stick/sensor calibration</td>
+<td>Upstream driver (libusb bulk init, HID input parsing, rumble output, stick/sensor calibration). The fork adds the Windows path: open Interface 1 through its own libusb context, pick the libusb device whose USB serial matches the HID device so two wired controllers never share one handle, and close the handle and context on teardown and on the init error path</td>
 </tr>
 </tbody>
 </table>
@@ -7377,7 +7479,7 @@
 <li>Calibration comes from flash blocks read over the same bulk pipes (serial at <code>0x13000</code>, gyro and accel bias at <code>0x13040</code>, stick calibration at <code>0x13080</code> / <code>0x130C0</code>, user calibration at <code>0x1FC040</code> / <code>0x1FC080</code>). A failed read logs a warning and leaves the defaults in place rather than failing the open</li>
 </ul>
 <h3 id="sdl-hint-sdl_hint_joystick_hidapi_switch2">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH2</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_switch2" title="Permanent link">&para;</a></h3>
-<p>Gates the Switch 2 driver. Set to <code>"1"</code> before <code>SDL_Init()</code>. Without it, the compiled-in driver is never activated.</p>
+<p>Gates the Switch 2 driver. PadForge sets it to <code>"1"</code> before <code>SDL_Init()</code>. The driver is on without it too: an unset hint falls back to <code>SDL_HINT_JOYSTICK_HIDAPI</code>, whose Windows default is on (<code>HIDAPI_DriverSwitch2_IsEnabled</code>, <code>SDL_HIDAPI_DEFAULT</code> in <code>SDL_hidapijoystick_c.h</code>).</p>
 <h3 id="steam-conflict">Steam Conflict<a class="headerlink" href="#steam-conflict" title="Permanent link">&para;</a></h3>
 <p>Steam exclusively locks WinUSB Interface 1 on detection. Since the init sequence requires exclusive access, Steam must be closed before PadForge can initialize the controller. HID input (Interface 0) works with Steam running, but the controller operates in limited mode without initialization.</p>
 <h3 id="wii-controllers-hidapi_wii">Wii Controllers (<code>hidapi_wii</code>)<a class="headerlink" href="#wii-controllers-hidapi_wii" title="Permanent link">&para;</a></h3>
@@ -7409,19 +7511,20 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus through the extension register (<code>0xA600FE</code> before activation, <code>0xA400FE</code> once a mode is set, <code>SDL_hidapi_wii.c:574</code>, <code>:638</code>, <code>:1991</code>) and converts its gyro words with fixed constants: 8192 counts per degree per second, times 440 in slow mode or 2000 in fast mode, per axis (<code>:1622-1650</code>). It reads no Motion Plus calibration block from the remote. The stick calibration and the Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) are the only calibration reads. The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them, and no Wii commit landed in the fork after the July Motion Plus fixes (<code>d3916fceed</code>, <code>dc24c1531e</code>, <code>db4acef28b</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above).</p>
+<p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus through the extension register (<code>0xA600FE</code> before activation, <code>0xA400FE</code> once a mode is set, <code>SDL_hidapi_wii.c:574</code>, <code>:638</code>, <code>:1991</code>) and converts its gyro words with fixed constants: 8192 counts per degree per second, times 440 in slow mode or 2000 in fast mode, per axis (<code>:1622-1650</code>). It reads no Motion Plus calibration block from the remote. The stick calibration and the Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) are the only calibration reads. The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them, and no Wii commit landed in the fork after the July Motion Plus fixes (<code>eee6964ab5</code>, <code>a7c6f5c79f</code>, <code>cb8b58d4a6</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above).</p>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:732</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:51</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1175</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes (<code>MainWindow.xaml.cs:880</code>).</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:795</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:52</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1238</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes, and only when a Wii pairing landed (<code>dialog.PairedWii</code>, <code>MainWindow.xaml.cs:875-876</code>), because the rescan drops every connected Wii Remote.</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git
 <a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="nb">cd</span><span class="w"> </span>SDL
 <a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>git<span class="w"> </span>checkout<span class="w"> </span>feat/hidmaestro-filter
-<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
-<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-A<span class="w"> </span>x64<span class="w"> </span>-DSDL_HIDAPI_LIBUSB<span class="o">=</span>ON<span class="w"> </span>-DSDL_HIDAPI_LIBUSB_SHARED<span class="o">=</span>ON<span class="w"> </span>-DLibUSB_INCLUDE_PATH<span class="o">=</span>&lt;folder<span class="w"> </span>with<span class="w"> </span>libusb.h&gt;<span class="w"> </span>-DLibUSB_LIBRARY<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>libusb-1.0.lib&gt;
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release<span class="w"> </span>--target<span class="w"> </span>SDL3-shared
 </code></pre></div>
+<p>Pass both libusb paths. <code>FindLibUSB.cmake</code> looks only on CMake's search path and in pkg-config's answer, and when it finds nothing <code>HAVE_LIBUSB</code> stays off: the wired Switch 2 driver compiles out (<code>SDL_hidapijoystick_c.h:38-39</code>) and the GameCube adapter becomes unreachable.</p>
 <p>Copy the output <code>SDL3.dll</code> into <code>PadForge.App/Resources/SDL3/x64/</code> before publishing PadForge.</p>
 <p>The ARM64 build is the same configuration generated with <code>-A ARM64</code> into its own build directory, cross-compiled on an x64 machine, and its <code>SDL3.dll</code> goes into <code>PadForge.App/Resources/SDL3/arm64/</code>. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 <code>libusb-1.0.dll</code> with <code>lib /def /machine:arm64</code>. The ARM64 configuration differs from x64 in one way: NEON replaces SSE and AVX. Until fork commit a1416320e2 the Elite paddle reader required <code>SDL_CPU_X64</code>, so <code>SDL_XINPUT_PADDLES</code> was off for ARM64. It builds for both now.</p>
 <p>Whichever architecture you build, check the libusb name inside the DLL before bundling it. The configure step reads it off the import library with <code>dumpbin</code> and stops if it does not end in <code>.dll</code>. <code>BundledSdlLibusbNameTests</code> in PadForge checks the delivered file again.</p>
@@ -7435,7 +7538,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.2.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

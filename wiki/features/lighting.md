@@ -45,7 +45,7 @@ A single dropdown selects the active base mode. Fourteen entries. Player Number 
 | Mode | What it does |
 |---|---|
 | Player Number (Default) | The lightbar idles showing the virtual controller's player identity. The Sony player color is 1 blue, 2 red, 3 green, 4 pink, with matching pips on a DualSense. A game that writes lighting takes over, and its last color stays for the session. |
-| Off | Paints the lightbar fully dark on every dispatch. A deliberate hard-off with no idle color and no game color showing. The Input Reactive overlay can still flash on the black base. |
+| Off | Paints the lightbar fully dark whenever no game is driving it. A deliberate hard-off with no idle color, and a game's color goes dark again once the game stops writing it. The Input Reactive overlay can still flash on the black base. |
 | Static Color | Solid color from the configured RGB. |
 | Breathing (Single Color Fades) | One color fades in and out at the configured period. |
 | Strobe: Square-Wave Flash | Hard on/off square-wave flash at the configured period. |
@@ -93,7 +93,7 @@ Two sliders below the overlay dropdown apply to all three non-Off variants.
 
 ## Single color picker
 
-Visible for Static Color, Breathing, Strobe, and the static-color Audio Pulse mode. A color picker, hex input, R/G/B sliders, and a swatch preview live in a bordered card. Each channel has its own reset button. Strobe square-waves between this color and black.
+Visible for Static Color, Breathing, Strobe, and the static-color Audio Pulse mode. A color picker, a row of eight one-click preset swatches, hex input, R/G/B sliders, and a swatch preview live in a bordered card. Each channel has its own reset button. Strobe square-waves between this color and black.
 
 The hex input takes six-digit RGB (`RRGGBB` or `#RRGGBB`). Press Enter or click away to apply.
 
@@ -121,7 +121,7 @@ The lightbar blends linearly from the Low Battery color at 0 % charge to the Ful
 
 ## Color cycle palette
 
-The Color Cycle base mode and the Cycle Through Palette overlay each keep their own palette. The Color Cycle palette shows below the mode dropdown when Color Cycle is the base mode. The overlay palette shows below the Input Reactive dropdown when the overlay is set to Cycle Through Palette and Color Cycle is not the base mode. With Color Cycle as the base only the base palette editor renders, while the overlay keeps stepping its own separate palette, which becomes editable again as soon as the base changes. Editing one leaves the other untouched.
+The Color Cycle base mode and the Cycle Through Palette overlay each keep their own palette. The Color Cycle palette shows below the mode dropdown when Color Cycle is the base mode. The overlay palette shows below the Input Reactive dropdown when the overlay is set to Cycle Through Palette. With Color Cycle as the base and Cycle Through Palette as the overlay, both editors show, one per palette. Editing one leaves the other untouched.
 
 Each palette is a wrapping list of swatches. Each entry has an in-place color picker with hex and RGB sliders, plus a remove button.
 
@@ -215,7 +215,7 @@ The color a game writes to a virtual PlayStation controller can also light Razer
 - Keep Sensitivity in the 4–8 range for the best audio response. Above 12 the bar sits at peak most of the time.
 - For Color Cycle, Blend Smoothly lerps between neighboring palette entries. With the blend off, the bar holds each entry for Period divided by the palette size, then hops to the next. Either way the dispatcher runs at the same cadence.
 - Only the Input Reactive Cycle variant reads the overlay palette. The Random and Base Color variants ignore it.
-- If you drag Mid-to-High below Low-to-Mid, PadForge raises Mid-to-High to match. The Medium color then never shows and the bar switches straight from Quiet to Loud.
+- If you drag Mid-to-High below Low-to-Mid, PadForge treats Mid-to-High as equal to Low-to-Mid, so the bar turns Loud at that single boundary. In the Hard Transitions mode the Medium color then never shows.
 
 ---
 
@@ -228,4 +228,4 @@ The color a game writes to a virtual PlayStation controller can also light Razer
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

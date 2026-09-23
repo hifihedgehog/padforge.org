@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **709** devices by their USB identity: 605 gamepads in SDL's controller list, 3 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **249** shipped gamepad mappings (248 from SDL's Windows database plus PadForge's own DualShock 3 entry) and 231 device profiles.
+PadForge recognizes **713** devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **250** shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 231 device profiles, and PadForge offers the 133 that carry a captured HID descriptor.
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -191,7 +191,7 @@ family gets that family's layout and works everywhere that family does.
 | --- | --- |
 | **8BitDo** | 8Bitdo Pro 2 Controller, 8Bitdo Pro 3 Controller, 8Bitdo SF30 Controller, 8Bitdo SN30 Controller, 8Bitdo Ultimate 2 Wireless Controller |
 
-### Flydigi (3 USB identities)
+### Flydigi (4 USB identities)
 
 SDL's Flydigi driver claims these pads by USB identity, then names the model from the controller's own device ID, so one identity covers a family.
 
@@ -199,11 +199,12 @@ SDL's Flydigi driver claims these pads by USB identity, then names the model fro
 | --- | --- |
 | **04B4:2412** | First-generation Flydigi gamepad (vendor protocol on interface 2) |
 | **37D7:2501** | Second-generation Flydigi Apex |
+| **37D7:2502** | Second-generation Flydigi Apex 6 |
 | **37D7:2401** | Second-generation Flydigi Vader |
 
-Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Vader 2, Vader 2 Pro, Vader 3, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro.
+Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Apex 6, Vader 2, Vader 2 Pro, Vader 3, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro.
 
-The four rear paddles map as Paddle 1 to 4. The Vader series C and Z buttons and the Apex 5 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.
+The four rear paddles map as Right Paddle 1 and 2 and Left Paddle 1 and 2. The Vader series C and Z buttons and the Apex 5 and Apex 6 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Apex 6, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.
 
 ### Other (3)
 
@@ -213,10 +214,10 @@ The four rear paddles map as Paddle 1 to 4. The Vader series C and Z buttons and
 | **Steam** | Steam Virtual Gamepad |
 | **Streaming** | Streaming mobile touch virtual controls |
 
-### With a shipped mapping (249)
+### With a shipped mapping (250)
 
 Pads carrying a mapping in the database, so their buttons and axes land in the right places
-the moment they are plugged in. SDL's database holds 248 names in its Windows section, and
+the moment they are plugged in. SDL's database holds 249 names in its Windows section, and
 PadForge adds one of its own for the DualShock 3 under DsHidMini.
 
 | Vendor | Devices |
@@ -275,6 +276,7 @@ PadForge adds one of its own for the DualShock 3 under DsHidMini.
 | **Gamecube** | Gamecube Controller |
 | **Gamepad** | Gamepad Pro USB |
 | **GAMEPAD** | GAMEPAD 3 TURBO |
+| **Gamesir-G5** | Gamesir-G5 |
 | **GameSir-T3** | GameSir-T3 2.02 |
 | **GGE909** | GGE909 Recoil Pad |
 | **Google** | Google Stadia Controller |
@@ -480,7 +482,7 @@ as a generic joystick.
 | **DualShock 4** | Gyro, accelerometer, touchpad, lightbar, speaker | [Lighting](../features/lighting.md) |
 | **DualShock 3** | Motion, pressure-sensitive buttons, pairing over USB | [DualShock 3](dualshock-3.md) |
 | **PlayStation Move, Navigation** | Gyro, accelerometer, the lit sphere, analog trigger and d-pad pressure | [PlayStation Move](ps-move.md) |
-| **Switch Pro, Switch 2 Pro** | Gyro, accelerometer, HOME LED, rumble, NFC on the pads that have it | [Wii Controllers](wii-controllers.md) |
+| **Switch Pro, Switch 2 Pro** | Gyro, accelerometer and rumble. On the original Switch Pro, also the HOME LED and the NFC tag reader | [Lighting](../features/lighting.md), [NFC Tags](../features/nfc-tags.md) |
 | **Joy-Con, Joy-Con 2** | Per-half motion, HD Rumble, the right Joy-Con IR camera brightness, the Joy-Con 2 optical mouse, combined-pair motion | [Wii Controllers](wii-controllers.md) |
 | **Wii Remote, Nunchuk, Classic, Wii U Pro** | Motion, Motion Plus, the IR pointer, the extension port, the speaker | [Wii Controllers](wii-controllers.md) |
 | **Wii Balance Board** | Total weight and lean on both axes | [Wii Controllers](wii-controllers.md) |
@@ -489,7 +491,7 @@ as a generic joystick.
 | **Buffalo BSGC101, BSGC201 (Padix PSX/USB converter)** | Rumble on the PS1 or PS2 pad behind the converter, without Buffalo's driver package | [Force Feedback](../features/force-feedback.md#playstation-pads-through-a-padix-converter) |
 | **3Dconnexion SpaceMouse** | All six axes of the puck, as ordinary mapping sources | [SpaceMouse](spacemouse.md) |
 | **Handheld gaming PCs and gaming laptops** | The rear paddles, menu keys and wheels the firmware hides from games, learned by pressing them, plus the machine's own gyroscope and accelerometer | [Handheld PC Buttons](../features/handheld-buttons.md) |
-| **VR controllers** | Any OpenVR controller through SteamVR, as a slot with hand roles | [VR Controllers](../features/vr-controllers.md) |
+| **VR headsets and controllers** | The headset pose as six axes, and each hand controller's pose, stick, trigger, grip and buttons, through any OpenXR runtime with or without SteamVR. While SteamVR runs, also the headset and every controller it tracks, each as its own device | [VR Controller Input](../features/vr-controller-input.md), [Virtual VR Controllers Internals](../reference/vr-controllers-internals.md#the-other-direction-consuming-real-vr-devices-287) |
 | **Sony wireless headsets** | Head rotation as a motion source | [Headset Motion](../features/headset-motion.md) |
 | **MIDI keyboards and pad controllers** | Notes, Control Change, pitch bend and encoders | [MIDI Input](../features/midi-input.md) |
 | **NFC readers** | Registered tags as button sources | [NFC Tags](../features/nfc-tags.md) |
@@ -504,4 +506,4 @@ as a generic joystick.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

@@ -12,7 +12,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 
 ## Concepts
 
-**Base layer.** Always active. Every slot starts with one Base layer holding the rows you bind on the **Mappings** tab. A **Configure Base** dialog sets the Base tab's name, color, and icon.
+**Base layer.** Always present, and active whenever no shift layer is engaged. Every slot starts with one Base layer holding the rows you bind on the **Mappings** tab. A **Configure Base** dialog sets the Base tab's name, color, and icon.
 
 **Shift layer.** A second (third, fourth) mapping table on the same slot. Active only while its activator is engaged.
 
@@ -72,7 +72,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Latch** | Press to latch this layer's own mappings on. Press again to return to Base. Pressing a different Latch button switches straight to that layer. Renamed from **Custom**. |
 | **Cycle** | One control steps through a queue of layers. See [Cycle queue](#cycle-queue) for the Next and Previous buttons and the queue options. |
 | **Sticky (One-Shot)** | One press engages. The next input you touch on any device assigned to the slot (button, stick, trigger, D-pad, or touchpad) fires on the layer while held, and the layer releases when you let that input go. Tap-then-tap muscle memory without holding. |
-| **No Button** | A passive layer with no activator of its own. It owns a tab and its mappings but never self-engages. You reach it only by adding it to a Cycle queue. |
+| **No Button** | A passive layer with no activator of its own. It owns a tab and its mappings but never self-engages. You reach it through a Cycle queue or a [Switch Layer](macros.md#switch-layer) macro. |
 
 Toggle, Latch, Cycle, and Sticky normally fire on the press. Check **Fire on Release** in the activator dialog to move that to the release edge instead, so the layer flips when you let go of the button.
 
@@ -120,16 +120,16 @@ Without the condition, both Latch activators would fire on every press.
 
 A horizontal strip sits above the mapping grid on the **Mappings** tab. It appears once the slot has its first shift layer. A slot with only Base shows the plain grid with no strip. **Base** is always the leftmost tab. Shift layers fill the rest in creation order. The strip wraps to a second row when there are more layers than fit.
 
-Each tab carries the layer's color. The active tab is the layer you're editing, not the layer currently engaged on the controller.
+Each shift-layer tab carries the layer's color as a dot. The active tab is the layer you're editing, not the layer currently engaged on the controller.
 
 Right-click a tab for per-layer operations:
 
 - **Configure Activator…** Reopens the dialog above.
 - **Rename Layer…** Edits the display name without breaking the link between each row and its layer.
-- **Copy Layer Rows.** Copies every row on this layer to the clipboard.
-- **Paste Rows into Layer.** Replaces the current layer's rows with the copied ones, re-tagging them to it. Rows already on the destination layer are removed first.
+- **Copy Layer Rows.** Copies every row on this layer to an in-app clipboard that lasts until PadForge closes.
+- **Paste Rows into Layer.** Replaces this layer's rows with the copied ones, re-tagging them to it. Rows already on the destination layer are removed first.
 - **Clear Layer Rows.** Removes every row on this layer. The layer itself stays.
-- **Delete Layer.** Removes the layer and every row tagged to it. Confirms first.
+- **Delete Layer.** Removes the layer and every row tagged to it, and drops it from the slot's Cycle queues. Macros scoped to it are switched off and set to **Any Layer**. Confirms first.
 
 ---
 
@@ -137,7 +137,7 @@ Right-click a tab for per-layer operations:
 
 When a shift layer engages, a Windows-11-style flyout appears at the bottom of the screen showing the layer's emoji icon and name. It stays on screen for as long as the layer is engaged. When the slot returns to Base, the flyout shows the Base tab's name and icon once and slides away 2 seconds later.
 
-The flyout scans every slot, not only the currently-viewed pad. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.
+The flyout scans every slot, starting with the pad you are viewing. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.
 
 The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Shift Layer Flyout** toggle, on by default. Turn it off and layers still engage, just without the announcement.
 
@@ -149,7 +149,7 @@ A slot can have many activators. When more than one Hold, Toggle, or Sticky acti
 
 Releasing the winning activator falls back to the next-most-recent still-engaged one. Release them all and the slot returns to Base.
 
-Latch and Cycle override that stack. A latched layer, or a Cycle stopped on a layer, holds the slot there no matter what the Hold, Toggle, and Sticky activators do. Releasing every held activator does not drop it. A Latch clears on a second press of its own button, when another Latch takes over, or when a Cycle on the same slot steps. A Cycle's cursor moves only on Next or Previous, but a Latch press on the same slot displaces the layer the Cycle selected until the Cycle steps again. Latch and Cycle share one override, so use one or the other per slot if you want them to hold unconditionally.
+Latch and Cycle override that stack. A latched layer, or a Cycle stopped on a layer, holds the slot there no matter what the Hold, Toggle, and Sticky activators do. Releasing every held activator does not drop it. A Latch clears on a second press of its own button, when another Latch takes over, when a Cycle on the same slot steps, or when a [Switch Layer](macros.md#switch-layer) macro fires. A Cycle's cursor moves only on Next or Previous, but a Latch press on the same slot displaces the layer the Cycle selected until the Cycle steps again. Latch and Cycle share one override, so use one or the other per slot if you want them to hold unconditionally.
 
 ---
 
@@ -159,8 +159,8 @@ Layers carry more than button rows:
 
 - **Any output type.** Layer rows drive every virtual output the slot has: Xbox and PlayStation outputs, Extended buttons, MIDI notes, keyboard keys, mouse moves, and touchpad outputs all follow the active layer.
 - **Flick stick.** A [flick stick](../features/stick-deadzones.md#flick-stick) row hosted on a layer arms when the layer engages and goes quiet when it drops, with no half-finished turn left running.
-- **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any layer** fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row. A macro can also change the layer: the [Switch Layer](macros.md#switch-layer) action jumps the slot to any layer or back to Base and holds it there the way a Latch does.
-- **Menus.** An on-screen [menu](menus.md) imported from a Steam action layer engages only while that layer is held, and releasing the layer commits an On Touch Release menu's hovered cell.
+- **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any Layer** fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row. A macro can also change the layer: the [Switch Layer](macros.md#switch-layer) action jumps the slot to any layer or back to Base and holds it there the way a Latch does.
+- **Menus.** An on-screen [menu](menus.md) set to a named **Layer** (menus imported from a Steam action layer arrive that way) engages only while that layer is engaged, and the layer ending commits an On Touch Release menu's hovered cell.
 
 ---
 
@@ -174,7 +174,7 @@ Goal. Hold or toggle a side button on the wheel and the face buttons of the slot
 4. **Layer Name:** `Pit Stop`.
 5. **Activator Input:** click **Record**, press the side button on the wheel rim.
 6. **Mode:** Toggle. One tap to open the menu, one tap to close.
-7. **Layer Color:** orange. **Emoji Icon:** 🔧.
+7. **Layer Color:** orange. Emoji: 🔧.
 8. **Inherit Unmapped Targets from Base:** on. Steering, brakes, and clutch keep working while the menu is up.
 9. Click **Save**. The Pit Stop tab appears.
 10. Click the Pit Stop tab. Bind A, B, X, Y to your sim's pit menu commands (tires, fuel, repair, leave).
@@ -205,17 +205,17 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 - A row's **Combine** setting is fixed per row. If you need a target to combine its sources differently per layer, build separate rows on each layer.
 - The engaged-layer flyout checks engagement about 30 times a second, on its own timer, not at the input polling rate. A very fast tap that engages and releases in under about 33 ms can fall between two checks and skip the flyout. Raising your controller's polling rate does not change this.
-- Latch stays on its layer until you press the same button again (back to Base), press a different Latch button (switch to that layer), or step a Cycle on the same slot. It does not release on its own.
+- Latch stays on its layer until you press the same button again (back to Base), press a different Latch button (switch to that layer), step a Cycle on the same slot, or fire a Switch Layer macro. It does not release on its own.
 
 ---
 
 ## Related pages
 
 - [Button and Axis Mappings](../features/mappings.md): the layer tab strip sits above the mapping grid. Base rows are bound there too.
-- [Macros](macros.md): every macro carries a **Layer** scope. Leave it on **Any layer**, or pin the macro to one layer so it fires only while that layer is engaged. The Switch Layer action moves the slot between layers from a macro.
+- [Macros](macros.md): every macro carries a **Layer** scope. Leave it on **Any Layer**, or pin the macro to one layer so it fires only while that layer is engaged. The Switch Layer action moves the slot between layers from a macro.
 - [Profiles](profiles.md): shift layers save per profile, so each game can run its own layer set.
 - [Controller Slots](../features/controller-slots.md): every slot keeps its own layers.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*

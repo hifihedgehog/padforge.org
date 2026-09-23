@@ -1048,6 +1048,8 @@
       
         
       
+        
+      
     
     
     
@@ -2030,6 +2032,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2299,6 +2329,8 @@
       
         
           
+        
+      
         
       
         
@@ -2684,6 +2716,34 @@
     
   
     Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
   
 
     
@@ -3521,8 +3581,8 @@
 <p>Auto-map covers gamepads only, so each control is bound by hand.</p>
 <hr />
 <h2 id="when-a-controller-goes-quiet">When a controller goes quiet<a class="headerlink" href="#when-a-controller-goes-quiet" title="Permanent link">&para;</a></h2>
-<p>Set a controller down, or let it sleep, and after one second without a sample every axis returns to rest and every button releases. A stick is never left held by a controller lying on a desk.</p>
-<p>The row stays online while the session is up, so mappings can be made before you pick the controller back up.</p>
+<p>A controller that loses tracking returns its six pose axes to rest. Its stick, trigger, grip and buttons rest whenever the runtime stops reporting them, which includes a controller that has gone to sleep. If samples stop arriving altogether, every axis rests and every button releases after one second, so a stick is never left held. A controller set down where the runtime still tracks it keeps reporting, and its pose axes follow it.</p>
+<p>The row stays online while <strong>OpenXR Headset Input</strong> is on, so mappings can be made before you pick the controller back up.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3532,7 +3592,7 @@
 <li><a href="../../reference/openxr-input-internals/">OpenXR Input Internals</a>: the runtime negotiation, session and action set, for whoever has to change the code.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 4.5.3.</em></p>
 
 
 

@@ -98,7 +98,7 @@ On success the worker reports `Active`. The provider stays up for the life of th
 
 ## Worker lifecycle
 
-The worker is a dedicated background `Thread` named `SensaHaptics`, not a task. `Start` is a no-op while `_thread` is set. `Stop` sets `_stop`, joins for 3000 ms, and nulls `_thread` regardless, so a worker still inside `ProviderInit` can outlive its service.
+The worker is a dedicated background `Thread` named `SensaHaptics`, not a task. `Start` is a no-op while `_thread` is set. In a process that cannot load the engine (`PlatformSupport.SensaAvailable` is true only for x64), `Start` reports `Unsupported` on the caller's thread and starts no worker. `Stop` sets `_stop`, joins for 3000 ms, and nulls `_thread` regardless, so a worker still inside `ProviderInit` can outlive its service.
 
 That outliving worker is the predecessor-join rule. Its `finally` disarms the publisher, zeroes the amplitude, and calls `Har.Quit`, and if it ran under the next instance's engine it would tear that engine down. So every worker's first act is:
 
@@ -108,6 +108,8 @@ if (prev != null && prev != Thread.CurrentThread && prev.IsAlive
     && !prev.Join(_predecessorJoinMs))
 {
     Interlocked.CompareExchange(ref s_lastWorker, prev, Thread.CurrentThread);
+    PadForge.Engine.SdlDiagLog.WriteLine(
+        $"SENSA predecessor join timed out after {_predecessorJoinMs} ms, worker quitting without arming");
     return; // finally reports Stopped.
 }
 Volatile.Write(ref s_publisherArmed, 1);
@@ -117,7 +119,7 @@ The predecessor's teardown lands before the successor arms and inits, never afte
 
 The join is bounded at 10 seconds (`DefaultPredecessorJoinMs`). That is long past any bring-up the provider completes and short enough that a wedged one costs a single wait. On the deadline the successor hands the slot back to the straggler and quits without arming, because arming over a live predecessor is the exact handoff fault the join exists to prevent: that predecessor's `finally` would then disarm the publisher underneath it. An unbounded join blocked every later worker and leaked one thread per enable.
 
-`SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor` holds a worker in `BeforeProviderInit`, stops it, starts a second service, and asserts the second worker waits for the first to exit.
+`SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor` holds a worker in `BeforeProviderInit`, stops it, starts a second service, and asserts the second worker waits for the first to exit. `Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever` keeps the first worker parked past a shortened deadline and asserts the second quits without a provider attempt and reports `Stopped`.
 
 | Static | Purpose |
 |---|---|
@@ -172,7 +174,8 @@ Persistence follows the lightbar mirrors leg for leg: `AppSettings.EnableSensaHa
 | Line | When |
 |---|---|
 | `SENSA start? enabled=... engine=... live=...` | Every start attempt |
-| `SENSA worker: calling HAR.Init` | Worker entry |
+| `SENSA predecessor join timed out after {n} ms, worker quitting without arming` | The predecessor join hit its deadline |
+| `SENSA worker: calling HAR.Init` | Worker entry, after the predecessor join |
 | `SENSA HAR.dll not found` | `DllNotFoundException` on `Init` |
 | `SENSA HAR entry point missing` | `EntryPointNotFoundException` on `Init` |
 | `SENSA HAR.Init => {bool}` | After `Init` |
@@ -194,12 +197,14 @@ Persistence follows the lightbar mirrors leg for leg: `AppSettings.EnableSensaHa
 | `Provider_DegradesCleanlyWithoutSynapse` | `ProviderInit` returns false with no runtime, no exception |
 | `PackToAmplitude_TakesTheLoudestVoice` | The four-voice max |
 | `PublishAmplitude_Clamps` | The 0..1 clamp |
-| `Service_ArmsPublisherAndDegradesWithoutRuntime` | Publisher armed while running, `WaitingForRuntime` reported, at least one provider attempt |
+| `Service_ArmsPublisherAndDegradesWithoutRuntime` | Publisher armed while running, a state reported before `Stopped` (`WaitingForRuntime` on a bench without Synapse), at least one provider attempt |
+| `Service_ReportsUnsupportedAndStartsNoWorkerWhereTheEngineCannotLoad` | The ARM64 branch: `Unsupported` raised once on the caller's thread, no worker |
 | `Service_NextWorkerWaitsForAStragglingPredecessor` | The predecessor-join rule |
+| `Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever` | The bounded join: the successor quits without arming |
 | `FeedAndSiblingContracts` | The Step 5 call site and the persistence legs |
 
 Live rendering on Sensa hardware was not verified by the maintainer.
 
 ---
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 4.5.3.*

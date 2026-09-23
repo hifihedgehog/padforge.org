@@ -221,6 +221,19 @@ union = cl_ids | ids("initial_wheel_devices") | ids("initial_flightstick_devices
         | ids("initial_throttle_devices") | ids("initial_arcadestick_devices") \
         | ids("initial_gamecube_devices")
 
+# SDL's Flydigi driver claims its pads through SDL_IsJoystickFlydigiController,
+# not controller_list.h, so read the ids that function accepts and resolve
+# them through usb_ids.h.
+UI = read(SDL + r"\usb_ids.h")
+USB_DEFS = {k: int(v, 16) for k, v in re.findall(
+    r"#define\s+(USB_\w+)\s+(0[xX][0-9a-fA-F]+)", UI)}
+_fly = re.search(r"bool SDL_IsJoystickFlydigiController\([^)]*\)\s*\{(.*?)\n\}", JS, re.S).group(1)
+flydigi = set()
+for _vendor, _body in re.findall(r"vendor_id == (USB_VENDOR_\w+)\)\s*\{(.*?)\n    \}", _fly, re.S):
+    for _product in re.findall(r"USB_PRODUCT_\w+", _body):
+        flydigi.add((USB_DEFS[_vendor], USB_DEFS[_product]))
+union = union | flydigi
+
 # The profile count comes from the HIDMaestro.Core.dll PadForge ships: every
 # embedded HIDMaestro.Profiles.<vendor>\<name>.json is one profile, and
 # HMContext.LoadDefaultProfiles loads all of them. Counting the manifest
@@ -234,6 +247,7 @@ N = {
     "union": len(union),
     "profiles": profiles,
     "pads": len(cl_ids),
+    "flydigi": len(flydigi),
     "wheels": len(ids("initial_wheel_devices")),
     "sticks": len(ids("initial_flightstick_devices")),
     "throttles": len(ids("initial_throttle_devices")),

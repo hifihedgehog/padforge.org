@@ -112,7 +112,8 @@ A rejection in one category does not stop the remaining categories. `SendStaticA
 | Line | When |
 |---|---|
 | `CHROMA start? enabled=... engine=... live=...` | Every start attempt |
-| `CHROMA state=...` | Every state transition |
+| `CHROMA state=...` | Every state transition from a live worker |
+| `CHROMA superseded worker dropped state=...` | A report an orphan would have made |
 | `CHROMA effect rejected: {category ...}, retrying on the next poll` | First rejection per distinct category and code |
 
 ---
@@ -181,7 +182,7 @@ There is no keep-alive in the SDK. A set color persists.
 
 Native calls are unbounded. `Init` during a G HUB cold start can sit for the 14 seconds Artemis waits out. `Stop` cancels, waits `stopWaitMs`, and when the wait expires it publishes the task into `s_orphan`, logs `LIGHTSYNC stop timed out after ... ms, worker orphaned inside the SDK`, and returns. The owner disposes and recreates the service on re-enable, so the orphan belongs to a dead instance.
 
-Two static fields make that safe. `s_generation` increments on every `Start`, and each worker captures the value it started under. `Superseded(generation)` is true once a newer Start exists. A superseded worker drops its `StateChanged` reports (its closure targets the Dashboard the live instance now owns) and skips `RestoreAndShutdown` at both teardown sites, since `LogiLedShutdown` is process-global and would kill the newer session. It still unloads its own module handle. The next worker's first act is to wait for `s_orphan` to complete before loading the engine, reporting `WaitingForGHub` and logging `LIGHTSYNC waiting for the orphaned worker of the previous session to leave the SDK` while it does, then clears the slot with a `CompareExchange`. `LightsyncLightbarTests.OrphanedWorker_NeverShutsDownOrReportsOverTheNewSession` and `OrphanedStreamingWorker_SkipsRestoreShutdownAtThePostSessionTeardown` pin both teardown sites.
+Two static fields make that safe. `s_generation` increments on every `Start`, and each worker captures the value it started under. `Superseded(generation)` is true once a newer Start exists. A superseded worker drops its `StateChanged` reports (its closure targets the Dashboard the live instance now owns) and skips `RestoreAndShutdown` at both teardown sites, since `LogiLedShutdown` is process-global and would kill the newer session. It still unloads its own module handle. The next worker's first act is to wait for `s_orphan` to complete before loading the engine, reporting `WaitingForGHub` and logging `LIGHTSYNC waiting for the orphaned worker of the previous session to leave the SDK` while it does. The wait is bounded by `DefaultOrphanWaitMs` (15000), past the 14 seconds Artemis waits out. On the deadline the worker logs `LIGHTSYNC orphan wait timed out after ... ms, loading the engine anyway` and goes on to the engine, because an overlapped session beats a dead feature. A finished orphan is cleared from the slot with a `CompareExchange`. A straggler stays in the slot, so the next worker gives it its own bounded wait. `LightsyncLightbarTests.OrphanedWorker_NeverShutsDownOrReportsOverTheNewSession` and `OrphanedStreamingWorker_SkipsRestoreShutdownAtThePostSessionTeardown` pin both teardown sites, and `OrphanThatNeverReturns_ReleasesTheNewWorkerAtTheDeadline` pins the deadline.
 
 ### Diag lines
 
@@ -194,6 +195,7 @@ Two static fields make that safe. `s_generation` increments on every `Start`, an
 | `LIGHTSYNC send failing, reinitializing` | Third consecutive failed send |
 | `LIGHTSYNC stop timed out after {n} ms, worker orphaned inside the SDK` | Stop's wait expired |
 | `LIGHTSYNC waiting for the orphaned worker of the previous session to leave the SDK` | A new worker found a live orphan |
+| `LIGHTSYNC orphan wait timed out after {n} ms, loading the engine anyway` | The orphan wait reached its deadline |
 
 ---
 
@@ -218,10 +220,10 @@ Neither service was run against Razer or Logitech software by the maintainer. Th
 
 | Test file | What it drives |
 |---|---|
-| `ChromaLightbarTests.cs` | An in-process `HttpListener` fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, and the teardown DELETE. `FeedAndSiblingContracts` counts the persistence legs against the web-controller sibling. |
-| `LightsyncLightbarTests.cs` | A scripted `ILogiLedNative` fake. Pins init order, percent conversion, change-only plus liveness sends, no-software retry without an engine load, refused-init unload, fail-streak re-init and recovery, and both orphan teardown sites. |
+| `ChromaLightbarTests.cs` | An in-process `HttpListener` fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, the teardown DELETE, and an orphaned worker's dropped reports. `FeedAndSiblingContracts` counts the persistence legs against the web-controller sibling. |
+| `LightsyncLightbarTests.cs` | A scripted `ILogiLedNative` fake. Pins init order, percent conversion, change-only plus liveness sends, no-software retry without an engine load, refused-init unload, fail-streak re-init and recovery, both orphan teardown sites, and the orphan-wait deadline. |
 | `ProfileServiceToggleTests.cs` | The nullable profile legs for all four service toggles, and `LightbarMirrors_OneSection_OneGlyph_TwoRows` for the Dashboard shape. |
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 4.5.3.*
