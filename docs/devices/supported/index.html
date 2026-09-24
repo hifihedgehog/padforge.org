@@ -2220,6 +2220,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#other-sdl-drivers-22-usb-identities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other SDL drivers (22 USB identities)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#other-3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2312,6 +2323,17 @@
     <span class="md-ellipsis">
       
         GameCube adapters (8)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#devices-padforges-own-code-claims-23-usb-identities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Devices PadForge's own code claims (23 USB identities)
       
     </span>
   </a>
@@ -3678,6 +3700,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#other-sdl-drivers-22-usb-identities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other SDL drivers (22 USB identities)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#other-3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3777,6 +3810,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#devices-padforges-own-code-claims-23-usb-identities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Devices PadForge's own code claims (23 USB identities)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#handheld-pcs" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3817,7 +3861,7 @@
 
 <h1 id="supported-devices">Supported Devices<a class="headerlink" href="#supported-devices" title="Permanent link">&para;</a></h1>
 <p><em>Every controller, wheel, stick and adapter PadForge knows by name, in one place.</em></p>
-<p>PadForge recognizes <strong>713</strong> devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit <strong>250</strong> shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 231 device profiles, and PadForge offers the 133 that carry a captured HID descriptor.</p>
+<p>PadForge recognizes <strong>758</strong> devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads and 22 other pads that SDL's dedicated drivers claim, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 23 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit <strong>250</strong> shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 231 device profiles, and PadForge offers the 133 that carry a captured HID descriptor.</p>
 <div class="admonition tip">
 <p class="admonition-title">Not on this list?</p>
 <p>It very likely still works. Anything Windows enumerates as an input device can be read
@@ -4471,6 +4515,129 @@ family gets that family's layout and works everywhere that family does.</p>
 </table>
 <p>Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Apex 6, Vader 2, Vader 2 Pro, Vader 3, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro.</p>
 <p>The four rear paddles map as Right Paddle 1 and 2 and Left Paddle 1 and 2. The Vader series C and Z buttons and the Apex 5 and Apex 6 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Apex 6, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.</p>
+<h3 id="other-sdl-drivers-22-usb-identities">Other SDL drivers (22 USB identities)<a class="headerlink" href="#other-sdl-drivers-22-usb-identities" title="Permanent link">&para;</a></h3>
+<p>These pads are claimed by SDL's dedicated drivers by USB identity, not through its controller list, the way the Flydigi driver works. The names are the ones SDL gives them.</p>
+<table>
+<thead>
+<tr>
+<th>Identity</th>
+<th>Device</th>
+<th>SDL driver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2DC8:202F</strong></td>
+<td>8BitDo Ultimate 3, mode switch on BT</td>
+<td>8BitDo</td>
+</tr>
+<tr>
+<td><strong>3537:10B8</strong></td>
+<td>GameSir G7 Pro 8K, wired, 2.4 GHz or Bluetooth in 8K mode</td>
+<td>GameSir</td>
+</tr>
+<tr>
+<td><strong>3537:103C</strong></td>
+<td>GameSir Tarantula 8K, wired, 2.4 GHz or Bluetooth</td>
+<td>GameSir</td>
+</tr>
+<tr>
+<td><strong>1949:0419</strong></td>
+<td>Amazon Luna Controller over Bluetooth</td>
+<td>Luna</td>
+</tr>
+<tr>
+<td><strong>18D1:9400</strong></td>
+<td>Google Stadia Controller</td>
+<td>Stadia</td>
+</tr>
+<tr>
+<td><strong>0955:7214</strong></td>
+<td>NVIDIA SHIELD Controller, v1.04</td>
+<td>SHIELD</td>
+</tr>
+<tr>
+<td><strong>057E:2017</strong></td>
+<td>Nintendo SNES Controller (Switch Online)</td>
+<td>Switch</td>
+</tr>
+<tr>
+<td><strong>057E:2019</strong></td>
+<td>Nintendo N64 Controller (Switch Online)</td>
+<td>Switch</td>
+</tr>
+<tr>
+<td><strong>057E:201E</strong></td>
+<td>Nintendo SEGA Genesis Controller (Switch Online)</td>
+<td>Switch</td>
+</tr>
+<tr>
+<td><strong>057E:0306</strong></td>
+<td>Wii Remote</td>
+<td>Wii</td>
+</tr>
+<tr>
+<td><strong>057E:0330</strong></td>
+<td>Wii Remote Plus and Wii U Pro Controller</td>
+<td>Wii</td>
+</tr>
+<tr>
+<td><strong>33DD:0006</strong></td>
+<td>ZUIKI MASCON PRO</td>
+<td>ZUIKI</td>
+</tr>
+<tr>
+<td><strong>33DD:0017</strong></td>
+<td>ZUIKI EVOTOP, PC mode over Bluetooth</td>
+<td>ZUIKI</td>
+</tr>
+<tr>
+<td><strong>33DD:001C</strong></td>
+<td>ZUIKI EVOTOP, UWB receiver in DirectInput mode</td>
+<td>ZUIKI</td>
+</tr>
+<tr>
+<td><strong>33DD:001D</strong></td>
+<td>ZUIKI EVOTOP, PC mode in DirectInput</td>
+<td>ZUIKI</td>
+</tr>
+<tr>
+<td><strong>33DD:0020</strong></td>
+<td>ZUIKI EVOTOP AXIS, DirectInput mode</td>
+<td>ZUIKI</td>
+</tr>
+<tr>
+<td><strong>2E8A:10C6</strong></td>
+<td>Any SInput device, generic identity</td>
+<td>SInput</td>
+</tr>
+<tr>
+<td><strong>2E8A:10DD</strong></td>
+<td>HHL GC Ultimate</td>
+<td>SInput</td>
+</tr>
+<tr>
+<td><strong>2E8A:10DF</strong></td>
+<td>HHL ProGCC</td>
+<td>SInput</td>
+</tr>
+<tr>
+<td><strong>2E8A:10E0</strong></td>
+<td>Bonziri FireBird</td>
+<td>SInput</td>
+</tr>
+<tr>
+<td><strong>2E8A:10E5</strong></td>
+<td>Void Gaming PS4 FireBird</td>
+<td>SInput</td>
+</tr>
+<tr>
+<td><strong>38D2:1014</strong></td>
+<td>Void Gaming Void GENESIS</td>
+<td>SInput</td>
+</tr>
+</tbody>
+</table>
 <h3 id="other-3">Other (3)<a class="headerlink" href="#other-3" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5281,6 +5448,134 @@ controller together, so a button on the throttle chords with a button on the sti
 </tbody>
 </table>
 <hr />
+<h2 id="devices-padforges-own-code-claims-23-usb-identities">Devices PadForge's own code claims (23 USB identities)<a class="headerlink" href="#devices-padforges-own-code-claims-23-usb-identities" title="Permanent link">&para;</a></h2>
+<p>SDL lists none of these. PadForge recognizes each one itself and drives the part SDL cannot. The 3Dconnexion models above were sold under Logitech's vendor ID. PadForge also reads every device on 3Dconnexion's own vendor ID, 256F, that reports the multi-axis controller usage, so current SpaceMouse models need no entry here.</p>
+<table>
+<thead>
+<tr>
+<th>Identity</th>
+<th>Device</th>
+<th>What PadForge adds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>046D:C293</strong></td>
+<td>Logitech WingMan Formula Force GP</td>
+<td>Force feedback in the wheel's own protocol, fixed 180-degree range</td>
+</tr>
+<tr>
+<td><strong>044F:B689</strong></td>
+<td>Thrustmaster TS-PC Racer</td>
+<td>Force feedback in the wheel's own protocol</td>
+</tr>
+<tr>
+<td><strong>0EB7:183B</strong></td>
+<td>Fanatec ClubSport Pedals V3</td>
+<td>Pedal rumble on both motors</td>
+</tr>
+<tr>
+<td><strong>0EB7:6204</strong></td>
+<td>Fanatec CSL Elite Pedals</td>
+<td>Pedal rumble on both motors</td>
+</tr>
+<tr>
+<td><strong>0EB7:6205</strong></td>
+<td>Fanatec CSL Pedals Loadcell</td>
+<td>Pedal rumble on both motors</td>
+</tr>
+<tr>
+<td><strong>0EB7:6206</strong></td>
+<td>Fanatec CSL Pedals LC V2</td>
+<td>Pedal rumble on both motors</td>
+</tr>
+<tr>
+<td><strong>054C:03D5</strong></td>
+<td>PlayStation Move over Bluetooth</td>
+<td>Pairing and input, see <a href="../ps-move/">PlayStation Move</a></td>
+</tr>
+<tr>
+<td><strong>054C:0C5E</strong></td>
+<td>PlayStation Move ZCM2 over USB</td>
+<td>Input, see <a href="../ps-move/">PlayStation Move</a></td>
+</tr>
+<tr>
+<td><strong>054C:042F</strong></td>
+<td>PlayStation Navigation controller</td>
+<td>Pairing and input</td>
+</tr>
+<tr>
+<td><strong>0583:B047</strong></td>
+<td>Buffalo BSGC101 (one PlayStation port)</td>
+<td>Rumble on the PS1 or PS2 pad behind the converter</td>
+</tr>
+<tr>
+<td><strong>0583:B048</strong></td>
+<td>Buffalo BSGC201 (two PlayStation ports)</td>
+<td>Rumble on the PS1 or PS2 pads behind the converter</td>
+</tr>
+<tr>
+<td><strong>046D:C603</strong></td>
+<td>SpaceMouse Plus XT</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C605</strong></td>
+<td>CadMan</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C606</strong></td>
+<td>SpaceMouse Classic</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C621</strong></td>
+<td>Spaceball 5000</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C623</strong></td>
+<td>Space Traveler</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C625</strong></td>
+<td>Space Pilot</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C626</strong></td>
+<td>Space Navigator</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C627</strong></td>
+<td>Space Explorer</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C628</strong></td>
+<td>Space Navigator for Notebooks</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C629</strong></td>
+<td>Space Pilot Pro</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C62B</strong></td>
+<td>SpaceMouse Pro</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+<tr>
+<td><strong>046D:C640</strong></td>
+<td>NuLOOQ</td>
+<td>All six axes, see <a href="../spacemouse/">SpaceMouse</a></td>
+</tr>
+</tbody>
+</table>
 <h2 id="handheld-pcs">Handheld PCs<a class="headerlink" href="#handheld-pcs" title="Permanent link">&para;</a></h2>
 <p>There is no model table. PadForge learns a handheld's hidden buttons on the machine, from the
 keystrokes, vendor HID report bits and firmware WMI events the press produces, so a handheld that
@@ -5407,6 +5702,11 @@ as a generic joystick.</p>
 <td><a href="../../features/headset-motion/">Headset Motion</a></td>
 </tr>
 <tr>
+<td><strong>Head trackers</strong></td>
+<td>A head pose from OpenTrack or anything that speaks its output formats, as six axes</td>
+<td><a href="../../features/head-tracking/">Head Tracking</a></td>
+</tr>
+<tr>
 <td><strong>MIDI keyboards and pad controllers</strong></td>
 <td>Notes, Control Change, pitch bend and encoders</td>
 <td><a href="../../features/midi-input/">MIDI Input</a></td>
@@ -5422,9 +5722,19 @@ as a generic joystick.</p>
 <td><a href="../../features/mappings/">Mappings</a></td>
 </tr>
 <tr>
+<td><strong>Logitech G-key keyboards and mice</strong></td>
+<td>The G-keys and the extra mouse buttons as their own device row, read through Logitech's G-key SDK</td>
+<td><a href="../../features/logitech-g-keys/">Logitech G-Keys</a></td>
+</tr>
+<tr>
 <td><strong>Precision touchpads</strong></td>
 <td>Multi-touch contacts, gestures, per-pad settings</td>
 <td><a href="../../features/touchpad/">Touchpad</a></td>
+</tr>
+<tr>
+<td><strong>Pens and drawing tablets</strong></td>
+<td>Pen contact as a touchpad finger, plus pressure and pen buttons when the tablet reports them</td>
+<td><a href="../../features/touchpad/#drawing-tablets">Drawing tablets</a></td>
 </tr>
 <tr>
 <td><strong>Trackballs</strong></td>

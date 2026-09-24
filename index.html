@@ -268,7 +268,7 @@
     <div class="container">
         <div class="stat-grid">
             <div class="stat reveal"><div class="stat-n">16</div><div class="stat-l">Virtual controllers at once</div></div>
-            <div class="stat reveal" data-d="1"><div class="stat-n">713</div><div class="stat-l">Devices known by USB identity</div></div>
+            <div class="stat reveal" data-d="1"><div class="stat-n">758</div><div class="stat-l">Devices known by USB identity</div></div>
             <div class="stat reveal" data-d="2"><div class="stat-n">231</div><div class="stat-l">Device profiles</div></div>
             <div class="stat reveal" data-d="3"><div class="stat-n">1000<em>Hz</em></div><div class="stat-l">Polling, sub-ms jitter</div></div>
             <div class="stat reveal" data-d="4"><div class="stat-n">$0</div><div class="stat-l">Forever, no paywall</div></div>
@@ -731,7 +731,7 @@
             <details class="detail"><summary>Will this get me banned?</summary><div class="detail-body">PadForge presents a normal HID device through a signed driver, the same way a physical controller does. It does not inject into games or read their memory. Kernel anti-cheat vendors still make their own rules about virtual input devices, and competitive titles change those rules without notice. Use your judgment in games with aggressive anti-cheat.</div></details>
             <details class="detail"><summary>Do I need HidHide?</summary><div class="detail-body">Most games do. Without it a game sees your physical controller and the virtual one at the same time and takes both, which usually shows up as doubled or fighting input. HidHide cloaks the physical device so only the virtual one reaches the game. PadForge offers to install it for you, and you can cloak per device rather than all at once.</div></details>
             <details class="detail"><summary>Does it work outside Steam?</summary><div class="detail-body">Yes. PadForge creates a real device at the driver level, so any game sees it, launcher or not. That is the difference from Steam Input, which only applies inside Steam.</div></details>
-            <details class="detail"><summary>What controllers are supported?</summary><div class="detail-body">231 device profiles covering Xbox, PlayStation, Nintendo, Steam, 8BitDo, wheels, HOTAS, arcade sticks, and generic HID gamepads. Anything Windows enumerates as an input device can usually be read, including keyboards, mice, MIDI devices, touchpads, and 3D mice.</div></details>
+            <details class="detail"><summary>What controllers are supported?</summary><div class="detail-body">PadForge recognizes 758 devices by their USB identity: Xbox, PlayStation, Nintendo, Steam, 8BitDo, Flydigi, GameSir and other pads, plus racing wheels and pedals, flight sticks, throttles, arcade sticks and GameCube adapters. Anything else Windows enumerates as an input device can usually be read, including keyboards, mice, MIDI devices, touchpads, drawing tablets and 3D mice. The <a href="/docs/devices/supported/">supported devices list</a> names every one.</div></details>
             <details class="detail"><summary>Can I use my phone?</summary><div class="detail-body">Yes. PadForge serves a web controller on your local network. Open the address in any phone browser, pick a layout, and it becomes a virtual pad with real rumble through the Vibration API. Up to sixteen at once, no app install.</div></details>
         </div>
     </div>

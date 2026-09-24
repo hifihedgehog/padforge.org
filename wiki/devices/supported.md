@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **713** devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads its dedicated driver claims, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks and 10 GameCube adapters. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **250** shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 231 device profiles, and PadForge offers the 133 that carry a captured HID descriptor.
+PadForge recognizes **758** devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads and 22 other pads that SDL's dedicated drivers claim, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 23 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **250** shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 231 device profiles, and PadForge offers the 133 that carry a captured HID descriptor.
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -205,6 +205,35 @@ SDL's Flydigi driver claims these pads by USB identity, then names the model fro
 Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Apex 6, Vader 2, Vader 2 Pro, Vader 3, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro.
 
 The four rear paddles map as Right Paddle 1 and 2 and Left Paddle 1 and 2. The Vader series C and Z buttons and the Apex 5 and Apex 6 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Apex 6, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.
+
+### Other SDL drivers (22 USB identities)
+
+These pads are claimed by SDL's dedicated drivers by USB identity, not through its controller list, the way the Flydigi driver works. The names are the ones SDL gives them.
+
+| Identity | Device | SDL driver |
+| --- | --- | --- |
+| **2DC8:202F** | 8BitDo Ultimate 3, mode switch on BT | 8BitDo |
+| **3537:10B8** | GameSir G7 Pro 8K, wired, 2.4 GHz or Bluetooth in 8K mode | GameSir |
+| **3537:103C** | GameSir Tarantula 8K, wired, 2.4 GHz or Bluetooth | GameSir |
+| **1949:0419** | Amazon Luna Controller over Bluetooth | Luna |
+| **18D1:9400** | Google Stadia Controller | Stadia |
+| **0955:7214** | NVIDIA SHIELD Controller, v1.04 | SHIELD |
+| **057E:2017** | Nintendo SNES Controller (Switch Online) | Switch |
+| **057E:2019** | Nintendo N64 Controller (Switch Online) | Switch |
+| **057E:201E** | Nintendo SEGA Genesis Controller (Switch Online) | Switch |
+| **057E:0306** | Wii Remote | Wii |
+| **057E:0330** | Wii Remote Plus and Wii U Pro Controller | Wii |
+| **33DD:0006** | ZUIKI MASCON PRO | ZUIKI |
+| **33DD:0017** | ZUIKI EVOTOP, PC mode over Bluetooth | ZUIKI |
+| **33DD:001C** | ZUIKI EVOTOP, UWB receiver in DirectInput mode | ZUIKI |
+| **33DD:001D** | ZUIKI EVOTOP, PC mode in DirectInput | ZUIKI |
+| **33DD:0020** | ZUIKI EVOTOP AXIS, DirectInput mode | ZUIKI |
+| **2E8A:10C6** | Any SInput device, generic identity | SInput |
+| **2E8A:10DD** | HHL GC Ultimate | SInput |
+| **2E8A:10DF** | HHL ProGCC | SInput |
+| **2E8A:10E0** | Bonziri FireBird | SInput |
+| **2E8A:10E5** | Void Gaming PS4 FireBird | SInput |
+| **38D2:1014** | Void Gaming Void GENESIS | SInput |
 
 ### Other (3)
 
@@ -451,6 +480,36 @@ controller together, so a button on the throttle chords with a button on the sti
 
 ---
 
+## Devices PadForge's own code claims (23 USB identities)
+
+SDL lists none of these. PadForge recognizes each one itself and drives the part SDL cannot. The 3Dconnexion models above were sold under Logitech's vendor ID. PadForge also reads every device on 3Dconnexion's own vendor ID, 256F, that reports the multi-axis controller usage, so current SpaceMouse models need no entry here.
+
+| Identity | Device | What PadForge adds |
+| --- | --- | --- |
+| **046D:C293** | Logitech WingMan Formula Force GP | Force feedback in the wheel's own protocol, fixed 180-degree range |
+| **044F:B689** | Thrustmaster TS-PC Racer | Force feedback in the wheel's own protocol |
+| **0EB7:183B** | Fanatec ClubSport Pedals V3 | Pedal rumble on both motors |
+| **0EB7:6204** | Fanatec CSL Elite Pedals | Pedal rumble on both motors |
+| **0EB7:6205** | Fanatec CSL Pedals Loadcell | Pedal rumble on both motors |
+| **0EB7:6206** | Fanatec CSL Pedals LC V2 | Pedal rumble on both motors |
+| **054C:03D5** | PlayStation Move over Bluetooth | Pairing and input, see [PlayStation Move](ps-move.md) |
+| **054C:0C5E** | PlayStation Move ZCM2 over USB | Input, see [PlayStation Move](ps-move.md) |
+| **054C:042F** | PlayStation Navigation controller | Pairing and input |
+| **0583:B047** | Buffalo BSGC101 (one PlayStation port) | Rumble on the PS1 or PS2 pad behind the converter |
+| **0583:B048** | Buffalo BSGC201 (two PlayStation ports) | Rumble on the PS1 or PS2 pads behind the converter |
+| **046D:C603** | SpaceMouse Plus XT | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C605** | CadMan | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C606** | SpaceMouse Classic | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C621** | Spaceball 5000 | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C623** | Space Traveler | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C625** | Space Pilot | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C626** | Space Navigator | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C627** | Space Explorer | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C628** | Space Navigator for Notebooks | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C629** | Space Pilot Pro | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C62B** | SpaceMouse Pro | All six axes, see [SpaceMouse](spacemouse.md) |
+| **046D:C640** | NuLOOQ | All six axes, see [SpaceMouse](spacemouse.md) |
+
 ## Handheld PCs
 
 There is no model table. PadForge learns a handheld's hidden buttons on the machine, from the
@@ -493,10 +552,13 @@ as a generic joystick.
 | **Handheld gaming PCs and gaming laptops** | The rear paddles, menu keys and wheels the firmware hides from games, learned by pressing them, plus the machine's own gyroscope and accelerometer | [Handheld PC Buttons](../features/handheld-buttons.md) |
 | **VR headsets and controllers** | The headset pose as six axes, and each hand controller's pose, stick, trigger, grip and buttons, through any OpenXR runtime with or without SteamVR. While SteamVR runs, also the headset and every controller it tracks, each as its own device | [VR Controller Input](../features/vr-controller-input.md), [Virtual VR Controllers Internals](../reference/vr-controllers-internals.md#the-other-direction-consuming-real-vr-devices-287) |
 | **Sony wireless headsets** | Head rotation as a motion source | [Headset Motion](../features/headset-motion.md) |
+| **Head trackers** | A head pose from OpenTrack or anything that speaks its output formats, as six axes | [Head Tracking](../features/head-tracking.md) |
 | **MIDI keyboards and pad controllers** | Notes, Control Change, pitch bend and encoders | [MIDI Input](../features/midi-input.md) |
 | **NFC readers** | Registered tags as button sources | [NFC Tags](../features/nfc-tags.md) |
 | **Keyboards and mice** | Every key, button, wheel and motion axis, per device | [Mappings](../features/mappings.md) |
+| **Logitech G-key keyboards and mice** | The G-keys and the extra mouse buttons as their own device row, read through Logitech's G-key SDK | [Logitech G-Keys](../features/logitech-g-keys.md) |
 | **Precision touchpads** | Multi-touch contacts, gestures, per-pad settings | [Touchpad](../features/touchpad.md) |
+| **Pens and drawing tablets** | Pen contact as a touchpad finger, plus pressure and pen buttons when the tablet reports them | [Drawing tablets](../features/touchpad.md#drawing-tablets) |
 | **Trackballs** | Motion with momentum | [Input Precision](../features/input-precision.md) |
 | **Microphones** | Spoken phrases as macro triggers | [Voice Macros](../features/voice-macros.md) |
 | **Phones and tablets** | A browser gamepad over Wi-Fi, no app install | [Web Controller](../guides/web-controller.md) |

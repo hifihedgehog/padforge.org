@@ -10,7 +10,7 @@ Prints the counts and the per-family and per-category name lists as JSON.
 emit_pages.py turns the same data into the two pages. Run this one to see
 what changed after an SDL rebase before deciding what to reconcile.
 """
-import io, re, collections
+import collections, glob, io, os, re
 
 SDL = r"C:\Users\sonic\OneDrive\Documents\GitHub\SDL3-build\SDL\src\joystick"
 SITE = r"C:\Users\sonic\OneDrive\Documents\GitHub\padforge.org"
@@ -234,6 +234,76 @@ for _vendor, _body in re.findall(r"vendor_id == (USB_VENDOR_\w+)\)\s*\{(.*?)\n  
         flydigi.add((USB_DEFS[_vendor], USB_DEFS[_product]))
 union = union | flydigi
 
+# The other HIDAPI drivers claim some pads in their own IsSupportedDevice
+# functions and never list them in controller_list.h: GameSir's 8K pads, the
+# 8BitDo Ultimate 3, Stadia, Luna over Bluetooth, the SHIELD v1.04, the Switch
+# Online SNES, N64 and Genesis pads, the Wii Remote pair, ZUIKI and the SInput
+# family. Read the ids each function accepts, following the SDL_IsJoystick*
+# helpers and the driver file's own static helpers it calls.
+def _body(text, fname):
+    m = re.search(r"\b" + re.escape(fname) + r"\s*\([^;{]*\)\s*\{", text)
+    if not m:
+        return ""
+    i, depth = m.end(), 1
+    while depth and i < len(text):
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return text[m.end():i]
+
+DRIVER_IDS = {}
+for _f in sorted(glob.glob(SDL + r"\hidapi\SDL_hidapi_*.c")):
+    _src = read(_f)
+    _m = re.search(r"static bool (HIDAPI_Driver\w+_IsSupportedDevice)", _src)
+    if not _m:
+        continue
+    _text = _body(_src, _m.group(1))
+    for _call in set(re.findall(r"\b([A-Za-z_]\w*)\s*\(", _text)):
+        if _call.startswith("SDL_IsJoystick"):
+            _text += _body(JS, "bool " + _call) or _body(JS, _call)
+        elif re.search(r"static\s+\w+\s+" + re.escape(_call) + r"\s*\(", _src):
+            _text += _body(_src, _call)
+    _vendor = None
+    for _tok in re.findall(r"USB_(?:VENDOR|PRODUCT)_\w+", _text):
+        if _tok.startswith("USB_VENDOR_"):
+            _vendor = _tok
+        elif _vendor in USB_DEFS and _tok in USB_DEFS:
+            DRIVER_IDS.setdefault((USB_DEFS[_vendor], USB_DEFS[_tok]),
+                                  (os.path.basename(_f), _tok))
+drivers = set(DRIVER_IDS) - union
+union = union | drivers
+
+# Devices only PadForge's own code recognizes, each checked against the
+# source file that names it so a removal fails here instead of leaving the
+# page counting a device PadForge no longer drives.
+PADFORGE = r"C:\Users\sonic\OneDrive\Documents\GitHub\PadForge"
+NATIVE_SOURCES = {
+    r"PadForge.App\Common\Input\LogitechRawHidWriter.cs": {(0x046D, 0xC293): "Logitech WingMan Formula Force GP"},
+    r"PadForge.App\Common\Input\ThrustmasterRawHidWriter.cs": {(0x044F, 0xB689): "Thrustmaster TS-PC Racer"},
+    r"PadForge.App\Common\Input\FanatecRawHidWriter.cs": {
+        (0x0EB7, 0x183B): "Fanatec ClubSport Pedals V3", (0x0EB7, 0x6204): "Fanatec CSL Elite Pedals",
+        (0x0EB7, 0x6205): "Fanatec CSL Pedals Loadcell", (0x0EB7, 0x6206): "Fanatec CSL Pedals LC V2"},
+    r"PadForge.App\Common\Input\SpaceMouseService.cs": {
+        (0x046D, 0xC603): "SpaceMouse Plus XT", (0x046D, 0xC605): "CadMan", (0x046D, 0xC606): "SpaceMouse Classic",
+        (0x046D, 0xC621): "Spaceball 5000", (0x046D, 0xC623): "Space Traveler", (0x046D, 0xC625): "Space Pilot",
+        (0x046D, 0xC626): "Space Navigator", (0x046D, 0xC627): "Space Explorer",
+        (0x046D, 0xC628): "Space Navigator for Notebooks", (0x046D, 0xC629): "Space Pilot Pro",
+        (0x046D, 0xC62B): "SpaceMouse Pro", (0x046D, 0xC640): "NuLOOQ"},
+    r"PadForge.Engine\Common\PadixConverterIdentity.cs": {
+        (0x0583, 0xB047): "Buffalo BSGC101", (0x0583, 0xB048): "Buffalo BSGC201"},
+    r"PadForge.App\Services\Ds3PairingService.cs": {
+        (0x054C, 0x03D5): "PlayStation Move, Bluetooth", (0x054C, 0x0C5E): "PlayStation Move ZCM2, USB",
+        (0x054C, 0x042F): "PlayStation Navigation controller"},
+}
+NATIVE = {}
+for _rel, _ids in NATIVE_SOURCES.items():
+    _src = read(os.path.join(PADFORGE, _rel)).lower()
+    for (_v, _p), _name in _ids.items():
+        if ("0x%04x" % _p) not in _src:
+            raise SystemExit("%s no longer names %04X:%04X (%s)" % (_rel, _v, _p, _name))
+        NATIVE[(_v, _p)] = _name
+native = set(NATIVE) - union
+union = union | native
+
 # The profile count comes from the HIDMaestro.Core.dll PadForge ships: every
 # embedded HIDMaestro.Profiles.<vendor>\<name>.json is one profile, and
 # HMContext.LoadDefaultProfiles loads all of them. Counting the manifest
@@ -248,6 +318,8 @@ N = {
     "profiles": profiles,
     "pads": len(cl_ids),
     "flydigi": len(flydigi),
+    "drivers": len(drivers),
+    "native": len(native),
     "wheels": len(ids("initial_wheel_devices")),
     "sticks": len(ids("initial_flightstick_devices")),
     "throttles": len(ids("initial_throttle_devices")),

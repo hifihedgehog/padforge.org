@@ -5,9 +5,10 @@ Reads the SDL fork's tables through emit_supported, so a rebase regenerates
 rather than leaving the lists to rot.
 
 WARNING: supported.md is a hybrid. It carries hand-authored sections this
-script does not reproduce, among them the Flydigi USB identities, the MOZA
-two-generation note, the Handheld PCs section and the intro's Flydigi
-clause. A blind run drops about 35 lines of them. Diff the result against
+script does not reproduce, among them the Flydigi USB identities, the
+Other SDL drivers table, the Devices PadForge's own code claims table, the
+MOZA two-generation note, the Handheld PCs section, the Beyond gamepads
+rows and the intro's Flydigi, driver and PadForge clauses. A blind run drops about 35 lines of them. Diff the result against
 the committed page and put the hand-authored parts back before committing.
 _specs_block.html has no hand-authored content and can be taken as written.
 """
