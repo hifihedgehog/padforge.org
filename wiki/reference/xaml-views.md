@@ -241,8 +241,14 @@ ScrollViewer
             ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
             ├─ "Web Controller" section (E774 glyph)
             │   └─ CardBorder: Enable toggle (EnableWebControllerCheckBox), port
-            │      NumberBox + reset, status flame + WebControllerStatus, QR image +
-            │      URL box + copy button (shown on HasWebControllerQr, #296), footer
+            │      NumberBox + reset, status flame + WebControllerStatus, HTTPS note
+            │      (caution border, shown on WebControllerHttpsWarning), QR image +
+            │      URL box + copy button (shown on HasWebControllerQr, #296), footer,
+            │      then a divider and the Plain HTTP Address section: Also Serve
+            │      Plain HTTP and This PC Only toggles with resets, a port and
+            │      access-code grid (NumberBox + reset, read-only code box + New
+            │      Code), plain status flame, and the plain URL with a copy button
+            │      and a QR shown on HasWebControllerPlainQr
             ├─ "Remote Link" section (E969 glyph, #138)
             │   └─ CardBorder: Enable toggle (EnableRemoteLinkCheckBox), auto-reconnect toggle,
             │      port NumberBox + reset, status flame + RemoteLinkStatus text,
@@ -292,6 +298,9 @@ ScrollViewer
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
 | `WebControllerPort` / `WebControllerStatus` | `DashboardViewModel` | Web controller port and status text |
 | `HasWebControllerQr` / `WebControllerQr` / `WebControllerUrl` | `DashboardViewModel` | QR panel visibility, the QR bitmap, and the URL shown beside it (#296) |
+| `WebControllerHttpsWarning` | `DashboardViewModel` | The HTTPS note under the status line |
+| `EnableWebControllerPlainHttp` / `WebControllerPlainHttpPort` / `WebControllerPlainHttpLocalOnly` / `WebControllerAccessCode` | `DashboardViewModel` | The plain HTTP address's toggles, port and access code |
+| `WebControllerPlainStatus` / `IsWebControllerPlainRunning` / `WebControllerPlainUrl` / `HasWebControllerPlainQr` / `WebControllerPlainQr` | `DashboardViewModel` | The plain address's status line and flame, its URL, and its QR |
 | `EnableRemoteLink` / `RemoteLinkPort` / `RemoteLinkConnectHost` | `DashboardViewModel` | Remote Link enable, port, and connect-by-address host (#138) |
 | `AutoReconnect` | `DashboardViewModel` | Remote Link auto-reconnect toggle |
 | `IsRemoteLinkRunning` / `RemoteLinkStatus` | `DashboardViewModel` | Remote Link status flame and text |
@@ -353,6 +362,10 @@ Rows are in trigger order. A later row wins when several hold.
 | AutomationId | Element | Purpose |
 |--------------|---------|---------|
 | `EnableWebControllerCheckBox` | CheckBox | Web controller enable toggle |
+| `EnableWebControllerPlainHttpCheckBox` | CheckBox | Also Serve Plain HTTP toggle |
+| `WebControllerPlainHttpLocalOnlyCheckBox` | CheckBox | This PC Only toggle |
+| `WebControllerAccessCodeBox` | TextBox | The read-only access code |
+| `NewWebAccessCodeButton` | Button | New Code |
 | `EnableRemoteLinkCheckBox` | CheckBox | Remote Link enable toggle (#138) |
 | `Reset_{Class}_{Property}_{n}` | `SettingResetButton` | Per-setting reset buttons on the service cards and paired-PC rows |
 

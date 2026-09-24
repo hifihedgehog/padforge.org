@@ -291,6 +291,8 @@ The game is reading both the physical controller and PadForge's virtual controll
 5. "Access denied for port 8080 (run as admin)" means Windows reserved it or another service holds it. Change the web controller port on the [Dashboard](features/dashboard.md) to a free one.
 6. Rotate the browser device to **landscape** orientation.
 7. Try Chrome, Firefox, or Edge if WebSocket issues occur.
+8. On the [plain HTTP address](guides/web-controller.md#plain-http-address), a page saying the controller opens only with its access code means the address was opened without the code, or with one that **New Code** replaced. Open the address the Dashboard shows, or scan its QR code.
+9. "Same port as the main address" under the plain address means both addresses asked for one port. Give the plain address its own.
 
 ---
 

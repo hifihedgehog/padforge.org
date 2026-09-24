@@ -339,6 +339,10 @@ public class SettingsFileData
     <DsuMotionServerPort>26760</DsuMotionServerPort>
     <EnableWebController>false</EnableWebController>
     <WebControllerPort>8080</WebControllerPort>
+    <EnableWebControllerPlainHttp>false</EnableWebControllerPlainHttp>
+    <WebControllerPlainHttpPort>8081</WebControllerPlainHttpPort>
+    <WebControllerPlainHttpLocalOnly>false</WebControllerPlainHttpLocalOnly>
+    <WebControllerAccessCodeProtected>AQAAANCMnd8BFdERjHoAwE...</WebControllerAccessCodeProtected>
     <Use2DControllerView>false</Use2DControllerView>
     <EnableInputHiding>true</EnableInputHiding>
     <HidHideWhitelistPaths>
@@ -1374,6 +1378,10 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `DsuMotionServerPort` | `int` | `[XmlElement]` | `26760` | DSU server port |
 | `EnableWebController` | `bool` | `[XmlElement]` | `false` | Embedded web controller server |
 | `WebControllerPort` | `int` | `[XmlElement]` | `8080` | Web controller port |
+| `EnableWebControllerPlainHttp` | `bool` | `[XmlElement]` | `false` | Also serve the web controller over plain HTTP on its own port, behind the access code. Machine-scoped, never in `ProfileData`, so a profile switch never opens or closes a port |
+| `WebControllerPlainHttpPort` | `int` | `[XmlElement]` | `8081` | The plain address's port. A stored value outside 1024-65535 loads as 8081 |
+| `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
+| `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
 | `EnableChromaLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #373) Razer Chroma lightbar mirror, the global leg. Stands when the active profile's nullable `ProfileData.EnableChromaLightbar` is null. |
 | `EnableSensaHaptics` | `bool` | `[XmlElement]` | `false` | (v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: `ProfileData.EnableSensaHaptics`. |
 | `EnableLightsyncLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, the global leg. Per-profile leg: `ProfileData.EnableLightsyncLightbar`. |

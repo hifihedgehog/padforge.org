@@ -213,6 +213,7 @@ PadForge.App/
     VoiceMacroService.cs              # Voice macro recognition (#317): one session per microphone, pulsing that device's phrase buttons
     VoskVoiceEngine.cs                # Vosk offline recognizer behind the same session surface SAPI uses (#317)
     WebControllerTls.cs               # HTTPS lane for the web controller (#296): motion sensors need a secure context
+    WebControllerAccess.cs            # The plain HTTP address's access code: generation, cookie, admission, DPAPI storage
     WebCustomLayoutStore.cs           # Browser-built custom pad layouts (#296), machine-scoped on AppSettingsData
     QrCode.cs                         # Byte-mode QR generator (Nayuki port) for the web-controller card's URL
     UpdateService.cs                  # In-app updates (#457): checks GitHub, downloads and verifies the build for this machine, replaces the running exe. Also holds BuildIdentity
@@ -599,6 +600,7 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 
 - `VoiceMacroService.cs` / `VoskVoiceEngine.cs`. Voice macro recognition (#317), one session per microphone. Vosk is the shipped engine, behind the same session surface SAPI uses
 - `WebControllerTls.cs` / `WebCustomLayoutStore.cs` / `QrCode.cs`. The web controller's HTTPS lane, its browser-built custom pad layouts, and the QR generator for the pairing card (#296)
+- `WebControllerAccess.cs`. The access code that guards the web controller's optional plain HTTP address, its cookie, and its encrypted storage
 
 **Engine**
 
@@ -884,7 +886,7 @@ var acceptThread = new Thread(() => AcceptLoop(ownedListener, token, generation)
 };
 ```
 
-Created when the web controller server is enabled. Runs an `HttpListener` accept loop. WebSocket connections spawn async tasks per client. Each browser client creates a `WebControllerDevice` (implements `ISdlInputDevice`) visible in Step 1 enumeration. Also serves static assets and `/api/layout` JSON.
+Created when the web controller server is enabled. Runs an `HttpListener` accept loop, one loop for the main address and the optional plain HTTP address, and rules on each plain-address request's access code before dispatching it. WebSocket connections spawn async tasks per client. Each browser client creates a `WebControllerDevice` (implements `ISdlInputDevice`) visible in Step 1 enumeration. Also serves static assets and the `/api/layout` and `/api/info` JSON.
 
 ### 9. Mouse Injector Thread (InputManager, ~500 Hz)
 

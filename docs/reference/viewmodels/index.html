@@ -9152,6 +9152,60 @@
 <td><code>false</code></td>
 <td>Whether a QR is available. Drives its visibility.</td>
 </tr>
+<tr>
+<td><code>WebControllerHttpsWarning</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>Why the main address fell back to plain HTTP and phone motion is off. Null while it serves HTTPS.</td>
+</tr>
+<tr>
+<td><code>EnableWebControllerPlainHttp</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Also serve the plain HTTP address. Machine setting, never in a profile.</td>
+</tr>
+<tr>
+<td><code>WebControllerPlainHttpPort</code></td>
+<td><code>int</code></td>
+<td><code>8081</code></td>
+<td>The plain address's port. Clamped to 1024–65535.</td>
+</tr>
+<tr>
+<td><code>WebControllerPlainHttpLocalOnly</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Admit only this PC on the plain address.</td>
+</tr>
+<tr>
+<td><code>WebControllerAccessCode</code></td>
+<td><code>string</code></td>
+<td>fresh code</td>
+<td>The plain address's access code. Starts as a freshly generated code, and the setter ignores anything that is not a valid code, so it is never empty.</td>
+</tr>
+<tr>
+<td><code>IsWebControllerPlainRunning</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Serving truth for the plain address's flame.</td>
+</tr>
+<tr>
+<td><code>WebControllerPlainStatus</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>Where the plain address runs, or why it does not. Null while stopped or off.</td>
+</tr>
+<tr>
+<td><code>WebControllerPlainUrl</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The plain address with its <code>?code=</code>. Null when not served.</td>
+</tr>
+<tr>
+<td><code>WebControllerPlainQr</code> / <code>HasWebControllerPlainQr</code></td>
+<td><code>ImageSource</code> / <code>bool</code></td>
+<td><code>null</code> / <code>false</code></td>
+<td>QR of the plain address. None in This PC Only mode.</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -9170,8 +9224,21 @@
 <td><code>CopyWebControllerUrlCommand</code></td>
 <td>Copies <code>WebControllerUrl</code> to the clipboard. No-op when empty.</td>
 </tr>
+<tr>
+<td><code>ResetWebPlainPortCommand</code></td>
+<td>Resets <code>WebControllerPlainHttpPort</code> to 8081.</td>
+</tr>
+<tr>
+<td><code>NewWebAccessCodeCommand</code></td>
+<td>Replaces <code>WebControllerAccessCode</code> with a fresh code.</td>
+</tr>
+<tr>
+<td><code>CopyWebControllerPlainUrlCommand</code></td>
+<td>Copies <code>WebControllerPlainUrl</code> to the clipboard. No-op when empty.</td>
+</tr>
 </tbody>
 </table>
+<p><code>ResetSettingCommand</code> also resets <code>EnableWebControllerPlainHttp</code> and <code>WebControllerPlainHttpLocalOnly</code> to off.</p>
 <h3 id="remote-link-138">Remote Link (#138)<a class="headerlink" href="#remote-link-138" title="Permanent link">&para;</a></h3>
 <p>Peer-to-peer controller relay over the LAN. The Dashboard hosts the server toggles and the outbound-connect box. The paired-peer manager and identity-protection state live on <code>SettingsViewModel</code> and are surfaced here through the <code>RemoteLink</code> reference below.</p>
 <table>

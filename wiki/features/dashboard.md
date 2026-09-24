@@ -26,7 +26,7 @@ Ten sections, stacked top to bottom: the engine and its slots, then a **Services
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the [Settings](settings.md) page. See [Driver Management](driver-management.md).
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so a profile switch never opens or closes a network port.
 
 ---
 
@@ -114,6 +114,12 @@ A browser-based controller you can open from any device on the same network.
 | **Port** | HTTP/WebSocket port. Default `8080`. Range `1024-65535`. |
 | **Status indicator** | A flame beside the status text. Ember when running, steel outline when stopped. The text reads "Running on `<url>`" until clients connect, then "Running (`<n>` clients)". |
 | **QR code and address** | Shown while the server runs: a QR code to scan with a phone camera, and the address with a copy button. |
+| **HTTPS note** | Shown when the main address fell back to plain HTTP. It says why, and that phone motion is off. |
+| **Also Serve Plain HTTP** | A second address without HTTPS, behind an access code. Off by default. See [Plain HTTP address](../guides/web-controller.md#plain-http-address). |
+| **Port** (plain HTTP) | The plain address's port. Default `8081`. Range `1024-65535`. It cannot be the main port. |
+| **This PC Only** | Admits only this PC on the plain address, for a tunnel or reverse proxy running here, and removes the plain port's firewall rule. |
+| **Access Code** | The code the plain address requires, read-only. **New Code** replaces it and disconnects everyone on the plain address. |
+| **Plain address status and link** | Where the plain address runs, or why it does not, with its own flame. Then the address with its code and a copy button, plus a QR code unless This PC Only is on. |
 
 See [Web Controller](../guides/web-controller.md) for full details.
 

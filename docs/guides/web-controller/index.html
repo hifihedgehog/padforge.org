@@ -1010,6 +1010,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#plain-http-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plain HTTP address
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Plain HTTP address">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-access-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The access code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#this-pc-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This PC Only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-plain-http-gives-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What plain HTTP gives up
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#touch-controls" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3767,6 +3817,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#plain-http-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plain HTTP address
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Plain HTTP address">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-access-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The access code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#this-pc-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This PC Only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-plain-http-gives-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What plain HTTP gives up
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#touch-controls" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3859,7 +3959,7 @@
 <h3 id="1-turn-on-the-server">1. Turn on the server<a class="headerlink" href="#1-turn-on-the-server" title="Permanent link">&para;</a></h3>
 <ol>
 <li>On the <a href="../../features/dashboard/">Dashboard</a>, check <strong>Enable Web Controller Server</strong> in the <strong>Web Controller</strong> section.</li>
-<li>PadForge shows a URL (e.g., <code>https://192.168.1.100:8080</code>, or <code>http://</code> when the certificate binding fails).</li>
+<li>PadForge shows a URL, for example <code>https://192.168.1.100:8080</code>. When the certificate cannot be bound it shows <code>http://</code> instead, with a note on the card saying why.</li>
 <li>The Dashboard shows the server status and how many browser tabs are connected.</li>
 </ol>
 <h3 id="2-open-the-url-on-your-phone">2. Open the URL on your phone<a class="headerlink" href="#2-open-the-url-on-your-phone" title="Permanent link">&para;</a></h3>
@@ -3902,7 +4002,7 @@
 </tr>
 <tr>
 <td><strong>Firewall</strong></td>
-<td>Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. Third-party firewalls may need a manual TCP 8080 allow rule.</td>
+<td>Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. The <a href="#plain-http-address">plain HTTP address</a> gets a rule of its own, "PadForge Web Controller (HTTP)", which PadForge removes when that address stops or is set to This PC Only. Third-party firewalls may need a manual TCP allow rule for each port.</td>
 </tr>
 <tr>
 <td><strong>Max clients</strong></td>
@@ -4052,10 +4152,25 @@
 <p>Where the browser allows a page to go fullscreen, which Android Chrome does, each page has a fullscreen button in its header or its top-left corner. Tap it to hide the browser's own bars, tap again or swipe down to leave. iPhone Safari does not offer element fullscreen, so the button does not appear there.</p>
 <h2 id="phone-motion">Phone motion<a class="headerlink" href="#phone-motion" title="Permanent link">&para;</a></h2>
 <p>The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.</p>
-<p>Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over <strong>HTTPS</strong> whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works.</p>
+<p>Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over <strong>HTTPS</strong> whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works. The Dashboard card then says why under the status line. When another program's certificate holds the port, choosing another port brings HTTPS back.</p>
 <p>Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.</p>
 <p>Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a <strong>Motion</strong> button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. On iOS the same tap is what triggers Safari's sensor permission prompt, so the button is required there, not optional. The Touchpad page has no motion button.</p>
+<p>Opened over plain HTTP on a touch device, a gamepad layout shows <strong>Motion needs HTTPS</strong> in that corner instead. When PadForge also serves HTTPS, the note reads <strong>Motion: open over HTTPS</strong>, and tapping it opens the same layout on the secure address.</p>
 <p>A <strong>QR code</strong> on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.</p>
+<h2 id="plain-http-address">Plain HTTP address<a class="headerlink" href="#plain-http-address" title="Permanent link">&para;</a></h2>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>Some browsers refuse PadForge's self-signed certificate outright, and a tunnel or reverse proxy that reaches the PC from outside brings a certificate of its own. For both, the Web Controller card can serve a second address over plain HTTP, on its own port, beside the main one. The main address does not change.</p>
+<p>Check <strong>Also Serve Plain HTTP</strong> on the <a href="../../features/dashboard/">Dashboard</a>. The plain address uses port <code>8081</code> unless you pick another, and it cannot share the main address's port.</p>
+<h3 id="the-access-code">The access code<a class="headerlink" href="#the-access-code" title="Permanent link">&para;</a></h3>
+<p>Every request to the plain address needs the card's <strong>Access Code</strong>, ten letters and digits. The address the card shows carries it, as in <code>http://192.168.1.100:8081/?code=7KQ2M9XH4P</code>, and so does the QR code beside it. The first page trades the code for a browser cookie that lasts until the browser closes, so the pages and the connection after it need nothing more. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.</p>
+<p><strong>New Code</strong> replaces the code and disconnects everyone on the plain address. Their pages stop working until they open the address with the new code. The main address and its clients are not affected, and the main address asks for no code.</p>
+<p>The code is stored in <code>PadForge.xml</code> encrypted for this PC, so a copy of the file posted elsewhere carries no working code. Copied to another PC, the stored code cannot be read there, and PadForge makes a new one.</p>
+<h3 id="this-pc-only">This PC Only<a class="headerlink" href="#this-pc-only" title="Permanent link">&para;</a></h3>
+<p><strong>This PC Only</strong> admits only this PC on the plain address and removes the plain port's firewall rule. It is for a tunnel or reverse proxy running on this PC, cloudflared, ngrok or Caddy for example, pointed at <code>http://localhost:8081</code>. Share the tunnel's public address with <code>/?code=</code> and the access code on the end. The card shows the local address with the code, and no QR code, since a phone cannot open <code>localhost</code>.</p>
+<h3 id="what-plain-http-gives-up">What plain HTTP gives up<a class="headerlink" href="#what-plain-http-gives-up" title="Permanent link">&para;</a></h3>
+<p>Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows <strong>Motion needs HTTPS</strong>. Through a tunnel or proxy that serves HTTPS the page is secure again, and motion works.</p>
+<p>Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.</p>
+<p>The <a href="#browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad</a> page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies gets past the first page and no further.</p>
 <h2 id="touch-controls">Touch controls<a class="headerlink" href="#touch-controls" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -4129,7 +4244,7 @@
 </tr>
 <tr>
 <td><strong>Port</strong></td>
-<td>TCP 8080 (default), not blocked by the firewall</td>
+<td>TCP 8080 (default), not blocked by the firewall. The optional plain HTTP address adds TCP 8081 (default).</td>
 </tr>
 <tr>
 <td><strong>Orientation</strong></td>

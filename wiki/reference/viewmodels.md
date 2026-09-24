@@ -266,11 +266,25 @@ Three optional vendor bridges, each an enable plus a status string that null-coa
 | `WebControllerUrl` | `string` | `null` | The live server URL, `https://` when the secure lane bound (#296). Empty when stopped. |
 | `WebControllerQr` | `ImageSource` | `null` | QR of `WebControllerUrl` so a phone opens the controller by scanning (#296). Null when stopped, which hides the image. |
 | `HasWebControllerQr` | `bool` | `false` | Whether a QR is available. Drives its visibility. |
+| `WebControllerHttpsWarning` | `string` | `null` | Why the main address fell back to plain HTTP and phone motion is off. Null while it serves HTTPS. |
+| `EnableWebControllerPlainHttp` | `bool` | `false` | Also serve the plain HTTP address. Machine setting, never in a profile. |
+| `WebControllerPlainHttpPort` | `int` | `8081` | The plain address's port. Clamped to 1024–65535. |
+| `WebControllerPlainHttpLocalOnly` | `bool` | `false` | Admit only this PC on the plain address. |
+| `WebControllerAccessCode` | `string` | fresh code | The plain address's access code. Starts as a freshly generated code, and the setter ignores anything that is not a valid code, so it is never empty. |
+| `IsWebControllerPlainRunning` | `bool` | `false` | Serving truth for the plain address's flame. |
+| `WebControllerPlainStatus` | `string` | `null` | Where the plain address runs, or why it does not. Null while stopped or off. |
+| `WebControllerPlainUrl` | `string` | `null` | The plain address with its `?code=`. Null when not served. |
+| `WebControllerPlainQr` / `HasWebControllerPlainQr` | `ImageSource` / `bool` | `null` / `false` | QR of the plain address. None in This PC Only mode. |
 
 | Command | Description |
 |---------|-------------|
 | `ResetWebPortCommand` | Resets `WebControllerPort` to 8080. |
 | `CopyWebControllerUrlCommand` | Copies `WebControllerUrl` to the clipboard. No-op when empty. |
+| `ResetWebPlainPortCommand` | Resets `WebControllerPlainHttpPort` to 8081. |
+| `NewWebAccessCodeCommand` | Replaces `WebControllerAccessCode` with a fresh code. |
+| `CopyWebControllerPlainUrlCommand` | Copies `WebControllerPlainUrl` to the clipboard. No-op when empty. |
+
+`ResetSettingCommand` also resets `EnableWebControllerPlainHttp` and `WebControllerPlainHttpLocalOnly` to off.
 
 ### Remote Link (#138)
 

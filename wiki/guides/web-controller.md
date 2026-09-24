@@ -15,7 +15,7 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 ### 1. Turn on the server
 
 1. On the [Dashboard](../features/dashboard.md), check **Enable Web Controller Server** in the **Web Controller** section.
-2. PadForge shows a URL (e.g., `https://192.168.1.100:8080`, or `http://` when the certificate binding fails).
+2. PadForge shows a URL, for example `https://192.168.1.100:8080`. When the certificate cannot be bound it shows `http://` instead, with a note on the card saying why.
 3. The Dashboard shows the server status and how many browser tabs are connected.
 
 ### 2. Open the URL on your phone
@@ -51,7 +51,7 @@ The web controller is built into PadForge. Nothing extra to install. The phone o
 | Requirement | Details |
 |-------------|---------|
 | **Port** | TCP 8080 (default), settable on the [Dashboard](../features/dashboard.md) |
-| **Firewall** | Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. Third-party firewalls may need a manual TCP 8080 allow rule. |
+| **Firewall** | Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. The [plain HTTP address](#plain-http-address) gets a rule of its own, "PadForge Web Controller (HTTP)", which PadForge removes when that address stops or is set to This PC Only. Third-party firewalls may need a manual TCP allow rule for each port. |
 | **Max clients** | 16 browser tabs at once |
 
 **Can't reach the URL?**
@@ -174,13 +174,43 @@ Where the browser allows a page to go fullscreen, which Android Chrome does, eac
 
 The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.
 
-Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works.
+Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works. The Dashboard card then says why under the status line. When another program's certificate holds the port, choosing another port brings HTTPS back.
 
 Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.
 
 Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a **Motion** button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. On iOS the same tap is what triggers Safari's sensor permission prompt, so the button is required there, not optional. The Touchpad page has no motion button.
 
+Opened over plain HTTP on a touch device, a gamepad layout shows **Motion needs HTTPS** in that corner instead. When PadForge also serves HTTPS, the note reads **Motion: open over HTTPS**, and tapping it opens the same layout on the secure address.
+
 A **QR code** on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.
+
+## Plain HTTP address
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+Some browsers refuse PadForge's self-signed certificate outright, and a tunnel or reverse proxy that reaches the PC from outside brings a certificate of its own. For both, the Web Controller card can serve a second address over plain HTTP, on its own port, beside the main one. The main address does not change.
+
+Check **Also Serve Plain HTTP** on the [Dashboard](../features/dashboard.md). The plain address uses port `8081` unless you pick another, and it cannot share the main address's port.
+
+### The access code
+
+Every request to the plain address needs the card's **Access Code**, ten letters and digits. The address the card shows carries it, as in `http://192.168.1.100:8081/?code=7KQ2M9XH4P`, and so does the QR code beside it. The first page trades the code for a browser cookie that lasts until the browser closes, so the pages and the connection after it need nothing more. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.
+
+**New Code** replaces the code and disconnects everyone on the plain address. Their pages stop working until they open the address with the new code. The main address and its clients are not affected, and the main address asks for no code.
+
+The code is stored in `PadForge.xml` encrypted for this PC, so a copy of the file posted elsewhere carries no working code. Copied to another PC, the stored code cannot be read there, and PadForge makes a new one.
+
+### This PC Only
+
+**This PC Only** admits only this PC on the plain address and removes the plain port's firewall rule. It is for a tunnel or reverse proxy running on this PC, cloudflared, ngrok or Caddy for example, pointed at `http://localhost:8081`. Share the tunnel's public address with `/?code=` and the access code on the end. The card shows the local address with the code, and no QR code, since a phone cannot open `localhost`.
+
+### What plain HTTP gives up
+
+Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows **Motion needs HTTPS**. Through a tunnel or proxy that serves HTTPS the page is secure again, and motion works.
+
+Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.
+
+The [Browser Gamepad](#browser-gamepad-a-controller-paired-to-the-phone) page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies gets past the first page and no further.
 
 ## Touch controls
 
@@ -227,7 +257,7 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 | Requirement | Details |
 |-------------|---------|
 | **Network** | PC and device on the same local network (Wi-Fi) |
-| **Port** | TCP 8080 (default), not blocked by the firewall |
+| **Port** | TCP 8080 (default), not blocked by the firewall. The optional plain HTTP address adds TCP 8081 (default). |
 | **Orientation** | Every gamepad layout needs landscape and shows a "Rotate to landscape mode" warning in portrait. The Touchpad layout works in portrait or landscape. |
 | **Browser** | Any current browser (Chrome, Safari, Firefox, Edge) |
 | **Touch** | Touchscreen recommended for analog stick and multi-touch input |
