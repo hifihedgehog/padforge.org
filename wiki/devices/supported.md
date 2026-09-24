@@ -222,7 +222,7 @@ These pads are claimed by SDL's dedicated drivers by USB identity, not through i
 | **057E:2019** | Nintendo N64 Controller (Switch Online) | Switch |
 | **057E:201E** | Nintendo SEGA Genesis Controller (Switch Online) | Switch |
 | **057E:0306** | Wii Remote | Wii |
-| **057E:0330** | Wii Remote Plus and Wii U Pro Controller | Wii |
+| **057E:0330** | Wii Remote Plus | Wii |
 | **33DD:0006** | ZUIKI MASCON PRO | ZUIKI |
 | **33DD:0017** | ZUIKI EVOTOP, PC mode over Bluetooth | ZUIKI |
 | **33DD:001C** | ZUIKI EVOTOP, UWB receiver in DirectInput mode | ZUIKI |
@@ -234,6 +234,8 @@ These pads are claimed by SDL's dedicated drivers by USB identity, not through i
 | **2E8A:10E0** | Bonziri FireBird | SInput |
 | **2E8A:10E5** | Void Gaming PS4 FireBird | SInput |
 | **38D2:1014** | Void Gaming Void GENESIS | SInput |
+
+SDL's Wii driver recognizes a Wii U Pro Controller by the extension it reports, under either Wii identity.
 
 ### Other (3)
 
