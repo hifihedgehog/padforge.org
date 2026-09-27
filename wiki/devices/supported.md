@@ -544,7 +544,7 @@ PadForge binds the driver each of these needs a few seconds after it appears. Se
 
 | Device | Identity | Notes |
 | --- | --- | --- |
-| **Namco GunCon 2** | 0B9A:016A | Needs a CRT with composite sync. The picker names its aim **Gun Aim X** and **Gun Aim Y**. The EMS LCD TopGun shares the ID. |
+| **Namco GunCon 2** | 0B9A:016A | Needs a CRT with composite sync. The picker names its aim **Gun Aim X** and **Gun Aim Y**. Calibrate it from its card on the Devices page. The EMS LCD TopGun shares the ID. |
 | **Taito Densha de GO! Type 2, Shinkansen and Ryojohen controllers** | 0AE4:0004, 0AE4:0005, 0AE4:0007 | Brake on the left trigger, power on the right |
 | **Multi Train Controller, Train Mascon** | 0AE4:0101, 1C06:77A7 | The lever on the left stick, the reverser on the right stick |
 | **I-Force wheels and joysticks** | 14 IDs | Thrustmaster Motor Sport GT, Logitech WingMan Force and WingMan Formula Force, AVB Top Shot Pegasus, Mag Turbo Force and Top Shot Force Feedback Racing Wheel, ACT LABS Force RS, Saitek R440 Force Wheel, and the Guillemot Race Leader, Jet Leader, Jet Leader 3D and Force Feedback Racing Wheel. Force feedback through the standard path. |
@@ -553,7 +553,7 @@ PadForge binds the driver each of these needs a few seconds after it appears. Se
 | **Xbox 360 Big Button receiver** | 045E:02A0 | Four pads |
 | **Gametrak** | 14B7:0982 | 6 axes, 12 buttons and a hat |
 | **DJI RC (RM330)** | 2CA3:1023 | Sticks and dials. Over USB it reports no buttons. |
-| **Namco USIO** | 0B9A:0910, 0B9A:0900 | Read in its Taiko no Tatsujin layout, two drum kits. The Tekken layout is not offered. |
+| **Namco USIO** | 0B9A:0910, 0B9A:0900 | Two Taiko no Tatsujin drums, or four Tekken arcade sticks. Switch the layout from the board's cards on the Devices page. |
 | **Konami P3IO** | 1CCF:8008 | Two dance pads, DanceDanceRevolution SuperNova 2 and X |
 | **Konami P4IO** | 1CCF:8010 | jubeat and DanceDanceRevolution White, 32 buttons |
 | **CH Products Multi-Function Panel** | 068E:00F0 | 102 buttons |
@@ -615,6 +615,10 @@ The PowerA MOGA in Mode A (Pocket, Pro, Pro Power, Hero Power), the Zeemote JS1 
 
 Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan Warrior and CyberMan, RC transmitters, JVS arcade boards, VRinsight panels, Kettler ergometers, serial I-Force wheels, the Pony Canyon Master Controllers, DJI remotes and Konami's cabinet boards. Add each one from the pairing dialog. See [Pairing a controller](../features/devices.md#pairing-a-controller).
 
+### Over the network
+
+The DJI RC and DJI RC 2, on firmware from before DJI closed port 40007. Add each remote's IPv4 address from the pairing dialog. See [Pairing a controller](../features/devices.md#pairing-a-controller).
+
 ### Through another controller
 
 | Device | Through | More |
@@ -625,7 +629,7 @@ Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan 
 
 ### Keyboard protocol
 
-The ION iCade cabinet (15E4:0132) reads as an arcade stick with eight buttons and a hat. Its letters also reach the focused window. Other pads in iCade mode are not recognized.
+The ION iCade cabinet (15E4:0132) reads as an arcade stick with eight buttons and a hat. A pad in iCade mode reads as a gamepad once you click **Read as iCade Controller** on its keyboard's card. The letters of both still reach the focused window. See [Pads in iCade mode](../features/devices.md#pads-in-icade-mode).
 
 ---
 

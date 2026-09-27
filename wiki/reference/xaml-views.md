@@ -1077,6 +1077,12 @@ Grid (Margin="24,16")
         ├─ Manage Voice Macros Button (ManageVoicePhrases_Click, ShowManageVoicePhrases, #317)
         ├─ Learn Handheld Buttons Button (LearnHandheldButton_Click,
         │   ShowLearnHandheldButton, #343) + HandheldDaemonWarning line
+        ├─ Switch Driver Buttons (DriverBind_Click / DriverRestore_Click,
+        │   ShowDriverBind / ShowDriverRestore, SDL#33 Part 15)
+        ├─ Read as iCade Controller / Read as Keyboard Buttons (ReadAsICade_Click /
+        │   ReadAsKeyboard_Click, ShowReadAsICade / ShowReadAsKeyboard, SDL#33 Part 16)
+        ├─ Read as Tekken Sticks / Read as Taiko Drums Buttons (UsioTekken_Click /
+        │   UsioTaiko_Click, ShowUsioTekken / ShowUsioTaiko, SDL#33 Part 14)
         ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
         ├─ HeadTrackerStatus line (#355, collapsed when empty)
         ├─ Separator
@@ -1096,6 +1102,11 @@ Grid (Margin="24,16")
         │   │   ShowIdleDisconnect, #162)
         │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
         │       QuickCharge_Click, #372)
+        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9)
+        │   ├─ Separator (ShowGunCalibrationDivider)
+        │   ├─ GunCalibrationStatus line
+        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun) + reset
+        │       (GunCalibration)
         ├─ Separator (ShowRawInputDivider)
         └─ Raw Input State section
             ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
@@ -1181,6 +1192,9 @@ Grid (Margin="24,16")
 | `ShowIdleDisconnect` / `IdleDisconnectMinutes` | Idle-disconnect row visibility and its countdown minutes (#162) |
 | `ShowQuickCharge` / `QuickChargeEnabled` | Quick Charge row visibility and toggle (#372). Also true on a Sony record the USB cable rebound to its wired path, which is not a disconnect target and is exactly when the feature fires |
 | `ShowInputModeOrHidingSection` / `ShowRawInputDivider` | The two conditional separators around the Power section |
+| `ShowGunCalibration` / `ShowGunCalibrationDivider` / `GunCalibrationStatus` / `CanCalibrateGun` | Light Gun section visibility, the rule above it, the aim range line and the Calibrate button's enable state |
+| `ShowReadAsICade` / `ShowReadAsKeyboard` | The iCade pair of buttons |
+| `ShowUsioTekken` / `ShowUsioTaiko` | The USIO layout buttons |
 | `HasCapabilityIcons` / `HasRumble` / `HasGyro` / `ShowTouchpadCapability` | Capability chip strip and its three chips |
 | `ShowLearnHandheldButton` / `HandheldDaemonWarning` / `HasHandheldDaemonWarning` | Learn Handheld Buttons button and the vendor-daemon notice (#343) |
 | `ShowRegisterNfcTag` | Register/Manage NFC Tags button visibility (#150) |

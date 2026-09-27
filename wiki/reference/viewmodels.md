@@ -455,6 +455,9 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 | `HidHideStatusText` | `string` | Computed: `Common_Installed` (`"Installed"`) or `Common_NotInstalled` (`"Not Installed"`). On a machine that is neither x64 nor ARM64 (`PlatformSupport.HidHideAvailable` false) it reads `Common_NotAvailableOnArm64` instead. |
 | `HidHideVersion` | `string` | HidHide version. |
 | `HidHideWhitelistPaths` | `ObservableCollection<string>` | Whitelisted application paths. |
+| `ICadePads` | `ObservableCollection<string>` | Pads in iCade mode marked on the Devices page, as `0xVVVV/0xPPPP` pairs (hifihedgehog/SDL#33 Part 16). MainWindow's `SetICadeMode` edits it. |
+| `DjiRemoteHosts` | `ObservableCollection<string>` | DJI remotes added by address in the pairing dialog, as `a.b.c.d:port` keys (hifihedgehog/SDL#33 Part 6). `DjiRemoteHostsChanged` fires on each add or remove, never on load. |
+| `UsioLayout` | `string` | The Namco USIO's layout, `"taiko"` or `"tekken"` (hifihedgehog/SDL#33 Part 14). MainWindow's `SetUsioLayout` sets it. |
 | `SelectedWhitelistPath` | `string` | Selected whitelist path. Refreshes `RemoveWhitelistPathCommand`. |
 
 | Command | CanExecute | Description |
@@ -1060,6 +1063,20 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | `QuickChargeEnabled` | `bool` | `false` | Quick Charge (#372): drop this pad's Bluetooth link when its USB twin comes online. Persisted on UserDevice through the same channel as the hiding toggles. |
 | `ShowQuickCharge` | `bool` | `false` | Whether the Quick Charge checkbox applies. Deliberately wider than `ShowIdleDisconnect`: the USB cable rebinds a Sony record to the USB path (identity keys on the shared MAC serial, so no twin record exists), a path the disconnect predicate rejects, which made the checkbox vanish exactly while the pad was plugged in. Seeded by `ComputeShowQuickCharge`. Notifies `ShowPowerSection` and `ShowRawInputDivider`. |
 | `ShowPowerSection` | `bool` | - | Computed: `ShowIdleDisconnect \|\| ShowQuickCharge`. The Power section draws when either control in it does. |
+
+### Light gun, iCade and USIO rows (hifihedgehog/SDL#33)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `GunCalibration` | `string` | `""` | A GunCon 2's aim range as `UserDevice.GunCalibration` keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun. |
+| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`), online or offline. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
+| `GunConnectedHere` | `bool` | `false` | The gun's live device is this PC's own `SdlDeviceWrapper`. A relayed gun is calibrated on its owner's PC. |
+| `CanCalibrateGun` | `bool` | - | Computed: `GunConnectedHere && IsOnline`. Enables **Calibrate**. |
+| `ShowGunCalibrationDivider` | `bool` | - | Computed: `ShowGunCalibration && (ShowPowerSection \|\| !ShowInputModeOrHidingSection)`, the rule above the Light Gun section. |
+| `GunCalibrationStatus` | `string` | - | Computed: the aim range, formatted with `Devices_GunWindowDefault` or `Devices_GunWindowCalibrated`. |
+| `ShowReadAsICade` | `bool` | `false` | A Bluetooth keyboard with IDs, not the ION iCade cabinet, whose pair `ICadePads` does not list (`ICadePads.CanMark`). |
+| `ShowReadAsKeyboard` | `bool` | `false` | A listed pair's iCade Controller joystick, or its keyboard record while the pad is away. |
+| `ShowUsioTekken` / `ShowUsioTaiko` | `bool` | `false` | A Namco USIO drum or stick joystick, by the names the fork gives each layout. Each offers the other layout. |
 
 | Method | Description |
 |--------|-------------|

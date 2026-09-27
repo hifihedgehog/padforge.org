@@ -591,6 +591,7 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `IsBalanceBoard` | `bool` | Wii Balance Board (#146) |
 | `HasJoyConIr` | `bool` | Right Joy-Con NIR camera surfaced as an "IR Brightness" source (#151). Standalone right Joy-Con (`0x2007`) or a combined gen-1 pair (`0x2008`), gated on raw axis count >= 7 |
 | `HasJoyCon2Mouse` | `bool` | Joy-Con 2 L/R optical mouse surfaced as "Mouse Motion X/Y" sources (#154) |
+| `HasSpinDial` | `bool` | Logitech WingMan Warrior's spin dial, the fork's joystick ball 0, surfaced as the "Mouse Motion X" source (hifihedgehog/SDL#33) |
 | `HasSwitch2Magnetometer` | `bool` | Switch 2 BLE magnetometer stream (#271 item 5). Raw wire units land on the wrapper-local `Switch2MagX/Y/Z` fields, not on `CustomInputState`, so the Remote Link codec's full Block enum stays untouched |
 | `Switch2MagActive` | `bool` | False until the first nonzero magnetometer sample, because a zero triple must not feed the compass |
 | `HasExtraGenericAxes` | `bool` | Raw axes beyond the standard six, surfaced as generic "Axis N" sources (#193) |
@@ -875,7 +876,7 @@ HasGyroAux = SDL_GamepadHasSensor(GameController, SDL_SENSOR_GYRO_L);
 if (HasGyroAux) SDL_SetGamepadSensorEnabled(GameController, SDL_SENSOR_GYRO_L, true);
 ```
 
-Sensors must be explicitly enabled before data can be read. `GetGamepadState()` reads gyro into `state.Gyro`, accel into `state.Accel`, the aux accel into `state.AccelAux`, and the aux gyro into `state.GyroAux`. `GetJoystickState()` reads the same four with `SDL_GetJoystickSensorData()` on a device opened as a joystick only. The fork's `SDL_GetGamepadSensorData` is that call on the gamepad's joystick. The aux streams back the "Motion Accel L" (#199) and "Motion Gyro L" (#252) mapping sources, letting a slot source its IMU feed from the Nunchuk or the left Joy-Con of a pair instead of the body sensor. "Motion Gyro L" is Switch-only: the Nunchuk has no gyro.
+Sensors must be explicitly enabled before data can be read. `GetGamepadState()` reads gyro into `state.Gyro`, accel into `state.Accel`, the aux accel into `state.AccelAux`, and the aux gyro into `state.GyroAux`. `GetJoystickState()` reads the same four with `SDL_GetJoystickSensorData()` on a device opened as a joystick only, and on a gamepad read raw through Force Raw. The fork's `SDL_GetGamepadSensorData` is that call on the gamepad's joystick. The aux streams back the "Motion Accel L" (#199) and "Motion Gyro L" (#252) mapping sources, letting a slot source its IMU feed from the Nunchuk or the left Joy-Con of a pair instead of the body sensor. "Motion Gyro L" is Switch-only: the Nunchuk has no gyro.
 
 ### Motion Frame and the DSU Sign Transform
 

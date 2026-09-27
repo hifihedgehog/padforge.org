@@ -579,7 +579,7 @@ Four devices lose something to WinUSB, so `Plan` never returns them. `OptIns` li
 ### Limits
 
 - Nothing here ran on hardware. The bench had none of the targets.
-- Whether ARM64 Windows carries xusb22.inf and xusb22.sys is unverified. Where it does not, the xusb22 package fails to install and the log says so.
+- ARM64 Windows 11 carries xusb22. The file list of cumulative update KB5124008 for version 24H2 on ARM64 names xusb22.sys 10.0.26100.9278 and an xusb22.inf of 6,304 bytes, the size of the x64 one. No ARM64 PC has run the package.
 - A chatpad or uDraw on a clone receiver stays unread. The clone receivers get xusb22, and the fork's accessory plan names no WinUSB binding for them.
 
 ---

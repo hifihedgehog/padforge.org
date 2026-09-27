@@ -9234,7 +9234,7 @@
 <td><code>JoyCon2MouseDX</code></td>
 <td>float</td>
 <td>0.0</td>
-<td>(v3.6) Joy-Con 2 optical mouse X delta since the previous poll (#154). +X = right. 0 when idle or absent.</td>
+<td>(v3.6) Joy-Con 2 optical mouse X delta since the previous poll (#154), or a WingMan Warrior's spin dial counts (hifihedgehog/SDL#33). +X = right. 0 when idle or absent.</td>
 </tr>
 <tr>
 <td><code>JoyCon2MouseDY</code></td>
@@ -9625,7 +9625,19 @@
 <td><code>IsGunCon2</code></td>
 <td><code>bool</code></td>
 <td>(set at open)</td>
-<td>Namco GunCon 2, <code>0B9A:016A</code>, opened with at least two raw axes (hifihedgehog/SDL#33). The fork posts the raw beam counts on axes 0 and 1. <code>ApplyGunCon2</code> scales X 175..720 and Y 20..240 (beardypig's guncon2 driver defaults) to &minus;1..+1, writes the aim to <code>Axis[0]</code> / <code>Axis[1]</code> so a stick mapping aims with no setup, and writes it to <code>Ir</code> divided by the IR pointer's margin stretch, which the IR read restores. X 10 or less or Y 5 or less is off screen: the stick centers and <code>Ir.Detected</code> clears.</td>
+<td>Namco GunCon 2, <code>0B9A:016A</code>, opened with at least two raw axes (hifihedgehog/SDL#33). The fork posts the raw beam counts on axes 0 and 1. <code>ApplyGunCon2</code> scales them by <code>GunCon2Calibration</code> to &minus;1..+1, writes the aim to <code>Axis[0]</code> / <code>Axis[1]</code> so a stick mapping aims with no setup, and writes it to <code>Ir</code> divided by the IR pointer's margin stretch, which the IR read restores. X 10 or less or Y 5 or less is off screen (<code>GunCon2OnScreen</code>): the stick centers and <code>Ir.Detected</code> clears.</td>
+</tr>
+<tr>
+<td><code>GunCon2Calibration</code></td>
+<td><code>GunCon2Calibration</code></td>
+<td><code>GunCon2Calibration.Default</code></td>
+<td>The beam counts at the picture's edges this gun scales by: X 175..720 and Y 20..240 (beardypig's guncon2 driver defaults) until <code>UserDevice.LoadFromSdlDevice</code> hands it the record's <code>GunCalibration</code>, or the Devices page's calibration screen replaces it. Immutable and swapped with <code>Volatile</code>, so the poll thread reads it without a lock.</td>
+</tr>
+<tr>
+<td><code>HasSpinDial</code></td>
+<td><code>bool</code></td>
+<td>(set at open)</td>
+<td>Logitech WingMan Warrior (<code>SpinDialIdentity</code>, by the serial driver's name) with a joystick ball. <code>ReadSpinDial</code> takes ball 0's motion through <code>SDL_GetJoystickBall</code>, which returns the counts since the last read and clears them, into <code>JoyCon2MouseDX</code> / <code>DY</code> unscaled.</td>
 </tr>
 <tr>
 <td><code>HasJoyCon2Mouse</code></td>
@@ -9863,7 +9875,8 @@
 <p><code>GetJoystickState()</code> reads raw joystick input (no gamepad remapping):
 - <strong>Axes:</strong> SDL signed (&minus;32768..32767) converted to unsigned (0..65535) via <code>- short.MinValue</code>. First <code>MaxAxis</code> go to <code>Axis[]</code>, overflow to <code>Sliders[]</code>.
 - <strong>Hats:</strong> SDL bitmask to centidegrees via <code>HatToCentidegrees</code>.
-- <strong>Buttons:</strong> Uses <code>RawButtonCount</code> (not <code>NumButtons</code>) for full raw coverage.</p>
+- <strong>Buttons:</strong> Uses <code>RawButtonCount</code> (not <code>NumButtons</code>) for full raw coverage.
+- <strong>Sensors:</strong> Every sensor the open enabled, through <code>SDL_GetJoystickSensorData</code>, for a device opened as a joystick only and for a gamepad read raw through Force Raw. The gamepad sensor calls are these calls on the gamepad's own joystick, which is the handle the wrapper holds.</p>
 <h3 id="hid-product-string-fallback">HID Product String Fallback<a class="headerlink" href="#hid-product-string-fallback" title="Permanent link">&para;</a></h3>
 <p>SDL3 may return a raw VID/PID string (e.g., "0x16c0/0x05e1") for unknown devices. <code>IsRawVidPidName()</code> detects this. <code>TryGetHidProductString()</code> queries the HID product string via <code>CreateFile</code> + <code>HidD_GetProductString</code> P/Invoke.</p>
 <h3 id="haptic-open-strategy">Haptic Open Strategy<a class="headerlink" href="#haptic-open-strategy" title="Permanent link">&para;</a></h3>
@@ -14407,6 +14420,13 @@
 <td>Quick Charge (#372): when a Bluetooth-connected pad starts reporting that it charges, PadForge drops the Bluetooth link so the pad only charges</td>
 </tr>
 <tr>
+<td><code>GunCalibration</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>""</code></td>
+<td>A GunCon 2's calibration (hifihedgehog/SDL#33), <code>"minX,maxX,minY,maxY"</code> in beam counts. Empty or unusable text reads as <code>GunCon2Calibration.Default</code>. <code>LoadFromSdlDevice</code> hands it to the gun's wrapper on every connect.</td>
+</tr>
+<tr>
 <td><code>HidHideInstanceIds</code></td>
 <td><code>List&lt;string&gt;</code></td>
 <td><code>[XmlArray] [XmlArrayItem("Id")]</code></td>
@@ -14601,6 +14621,12 @@
 <td><code>bool</code></td>
 <td><code>[XmlIgnore]</code></td>
 <td>Joy-Con 2 (L or R) optical mouse. VID <code>0x057E</code> + exact match against the BLE driver's Joy-Con 2 names (#154). Gates the "Mouse Motion X/Y" sources.</td>
+</tr>
+<tr>
+<td><code>HasSpinDial</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlIgnore]</code></td>
+<td>Logitech WingMan Warrior, by the serial driver's name "Logitech WingMan Warrior" (<code>SpinDialIdentity</code>, hifihedgehog/SDL#33). A hint-named COM port carries no USB IDs, so the name is the identity. Gates "Mouse Motion X" alone, since the dial has one axis.</td>
 </tr>
 <tr>
 <td><code>HasVoicePhrases</code></td>

@@ -6508,6 +6508,12 @@
 <td><code>&lt;QuickChargeEnabled&gt;</code></td>
 <td>(v4.4, #372) Drop the Bluetooth link when the pad reports charging, so it charges without powering the radio. Default false. Fires on the false-to-true charging edge only. A Sony pad carries the same MAC on both transports, so a cable rebinds this one record to the USB wrapper rather than creating a twin: a Bluetooth-pathed record drops through the idle timeout's lane, a wired-rebound record drops the radio by its own MAC serial.</td>
 </tr>
+<tr>
+<td><code>GunCalibration</code></td>
+<td><code>string</code></td>
+<td><code>&lt;GunCalibration&gt;</code></td>
+<td>A GunCon 2's aim range (hifihedgehog/SDL#33), <code>"minX,maxX,minY,maxY"</code> in beam counts, from the Devices page's calibration screen. Empty means X 175..720 and Y 20..240.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="input-hiding">Input Hiding<a class="headerlink" href="#input-hiding" title="Permanent link">&para;</a></h3>
@@ -6663,6 +6669,11 @@
 <td><code>HasJoyCon2Mouse</code></td>
 <td><code>bool</code></td>
 <td><code>VendorId == 0x057E</code> and <code>ProductName</code> is a Switch 2 Joy-Con (L)/(R). Gates the Mouse Motion sources (#154).</td>
+</tr>
+<tr>
+<td><code>HasSpinDial</code></td>
+<td><code>bool</code></td>
+<td><code>ProductName</code> is "Logitech WingMan Warrior", the serial driver's name. Gates "Mouse Motion X" (hifihedgehog/SDL#33).</td>
 </tr>
 <tr>
 <td><code>HasNfcReader</code></td>
@@ -9275,6 +9286,41 @@
 <td><code>[XmlArray][XmlArrayItem("Path")]</code></td>
 <td><code>null</code></td>
 <td>HidHide whitelisted app paths. Null = empty.</td>
+</tr>
+<tr>
+<td><code>SerialControllers</code></td>
+<td><code>SerialControllerEntry[]</code></td>
+<td><code>[XmlArray][XmlArrayItem("Controller")]</code></td>
+<td><code>null</code></td>
+<td>Controllers on COM ports added in the pairing dialog (hifihedgehog/SDL#33), handed to SDL as <code>SDL_JOYSTICK_SERIAL</code>.</td>
+</tr>
+<tr>
+<td><code>WinUsbOptIns</code></td>
+<td><code>string[]</code></td>
+<td><code>[XmlArray][XmlArrayItem("Id")]</code></td>
+<td><code>null</code></td>
+<td>IDs of the devices moved to PadForge's WinUSB driver on request (hifihedgehog/SDL#33 Part 15), so each start can say when Windows put one back.</td>
+</tr>
+<tr>
+<td><code>ICadePads</code></td>
+<td><code>string[]</code></td>
+<td><code>[XmlArray][XmlArrayItem("Pair")]</code></td>
+<td><code>null</code></td>
+<td>Pads in iCade mode marked on the Devices page (hifihedgehog/SDL#33 Part 16), <code>0xVVVV/0xPPPP</code> pairs handed to SDL as <code>SDL_JOYSTICK_ICADE_DEVICES</code>.</td>
+</tr>
+<tr>
+<td><code>DjiRemoteHosts</code></td>
+<td><code>string[]</code></td>
+<td><code>[XmlArray][XmlArrayItem("Host")]</code></td>
+<td><code>null</code></td>
+<td>DJI RC and RC 2 remotes added by address in the pairing dialog (hifihedgehog/SDL#33 Part 6), <code>a.b.c.d:port</code> keys handed to SDL as <code>SDL_JOYSTICK_DJI_REMOTE_TCP_HOSTS</code>.</td>
+</tr>
+<tr>
+<td><code>UsioLayout</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>null</code></td>
+<td>The Namco USIO's layout (hifihedgehog/SDL#33 Part 14): <code>"tekken"</code>, or null for the fork's default, Taiko.</td>
 </tr>
 <tr>
 <td><code>ExtendedConfigs</code></td>

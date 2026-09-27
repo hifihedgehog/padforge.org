@@ -503,6 +503,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `ConsumeInputEnabled` | `bool` | `<ConsumeInputEnabled>` | Suppress mapped inputs via low-level hooks (default: false). Keyboards/mice only. |
 | `IdleDisconnectSeconds` | `int` | `<IdleDisconnectSeconds>` | (v3.6, #162) Bluetooth idle-disconnect timeout in seconds. When the device is Bluetooth-connected and its input stays idle this long, the host radio drops the link so the controller sleeps. `0` disables (default). Over USB there is no radio link to drop. Unlike DS4Windows there is no charging gate: an idle pad on a charger still disconnects, because dropping Bluetooth does not interrupt charging. |
 | `QuickChargeEnabled` | `bool` | `<QuickChargeEnabled>` | (v4.4, #372) Drop the Bluetooth link when the pad reports charging, so it charges without powering the radio. Default false. Fires on the false-to-true charging edge only. A Sony pad carries the same MAC on both transports, so a cable rebinds this one record to the USB wrapper rather than creating a twin: a Bluetooth-pathed record drops through the idle timeout's lane, a wired-rebound record drops the radio by its own MAC serial. |
+| `GunCalibration` | `string` | `<GunCalibration>` | A GunCon 2's aim range (hifihedgehog/SDL#33), `"minX,maxX,minY,maxY"` in beam counts, from the Devices page's calibration screen. Empty means X 175..720 and Y 20..240. |
 
 ### Input Hiding
 
@@ -541,6 +542,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `IsBalanceBoard` | `bool` | `VendorId == 0x057E` and `ProductName` contains "Balance Board". Gates the Balance sources (#146). |
 | `HasJoyConIr` | `bool` | `VendorId == 0x057E` and either `ProductName` is exactly "Nintendo Switch Joy-Con (R)" or `ProdId == 0x2008` (the combined gen-1 pair, whose right half's camera posts on the pair, #275). Gates the IR Brightness source (#151). |
 | `HasJoyCon2Mouse` | `bool` | `VendorId == 0x057E` and `ProductName` is a Switch 2 Joy-Con (L)/(R). Gates the Mouse Motion sources (#154). |
+| `HasSpinDial` | `bool` | `ProductName` is "Logitech WingMan Warrior", the serial driver's name. Gates "Mouse Motion X" (hifihedgehog/SDL#33). |
 | `HasNfcReader` | `bool` | `VendorId == 0x057E` and `ProdId` is 0x2007 (Joy-Con R), 0x2008 (combined pair) or 0x2009 (Pro Controller). Gates the NFC tag sources (#241/#248). |
 | `HasVoicePhrases` | `bool` | `VendorId == 0x054C` and `ProdId` is 0x0CE6 or 0x0DF2 (DualSense / Edge, embedded microphone). Gates the voice phrase sources on the pad (#317). |
 | `IsTablet` | `bool` | `CapType == InputDeviceType.Tablet` |
@@ -1415,6 +1417,11 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `KeepHidHideCloaksBetweenLaunches` | `bool` | `[XmlElement]` | `false` | Leave cloaks asserted across shutdowns so Steam / other launchers still see physicals as hidden when PadForge isn't running. |
 | `FlydigiEnhancedProtocol` | `bool` | `[XmlElement]` | `true` | (#395) The Input Engine card's **Flydigi Enhanced Protocol**: SDL's Flydigi HIDAPI driver. Off leaves Flydigi pads on their XInput view so Flydigi Space Station keeps sight of the pad. The load applies it as an SDL hint, which must be set before `SDL_Init`. |
 | `HidHideWhitelistPaths` | `string[]` | `[XmlArray][XmlArrayItem("Path")]` | `null` | HidHide whitelisted app paths. Null = empty. |
+| `SerialControllers` | `SerialControllerEntry[]` | `[XmlArray][XmlArrayItem("Controller")]` | `null` | Controllers on COM ports added in the pairing dialog (hifihedgehog/SDL#33), handed to SDL as `SDL_JOYSTICK_SERIAL`. |
+| `WinUsbOptIns` | `string[]` | `[XmlArray][XmlArrayItem("Id")]` | `null` | IDs of the devices moved to PadForge's WinUSB driver on request (hifihedgehog/SDL#33 Part 15), so each start can say when Windows put one back. |
+| `ICadePads` | `string[]` | `[XmlArray][XmlArrayItem("Pair")]` | `null` | Pads in iCade mode marked on the Devices page (hifihedgehog/SDL#33 Part 16), `0xVVVV/0xPPPP` pairs handed to SDL as `SDL_JOYSTICK_ICADE_DEVICES`. |
+| `DjiRemoteHosts` | `string[]` | `[XmlArray][XmlArrayItem("Host")]` | `null` | DJI RC and RC 2 remotes added by address in the pairing dialog (hifihedgehog/SDL#33 Part 6), `a.b.c.d:port` keys handed to SDL as `SDL_JOYSTICK_DJI_REMOTE_TCP_HOSTS`. |
+| `UsioLayout` | `string` | `[XmlElement]` | `null` | The Namco USIO's layout (hifihedgehog/SDL#33 Part 14): `"tekken"`, or null for the fork's default, Taiko. |
 | `ExtendedConfigs` | `ExtendedSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot Extended config (Customize toggle, axis/trigger/POV/button counts, HIDMaestro OEM/product overrides) |
 | `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]` | `null` | Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type. Renamed from `PlayStationConfigs` / `PlayStationSlotConfigData` in v4. |
 | `LegacyDeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("PlayStationConfigs")][XmlArrayItem("Config")]` | `null` | Read-only pre-v4 spelling. `MigrateLegacySchema()` moves it into `DeviceSlotConfigs` on load. `ShouldSerializeLegacyDeviceSlotConfigs()` returns false so it never re-serializes. |

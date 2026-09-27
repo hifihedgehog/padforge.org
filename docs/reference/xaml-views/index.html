@@ -8601,58 +8601,69 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>        ├─ Manage Voice Macros Button (ManageVoicePhrases_Click, ShowManageVoicePhrases, #317)
 <a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>        ├─ Learn Handheld Buttons Button (LearnHandheldButton_Click,
 <a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>        │   ShowLearnHandheldButton, #343) + HandheldDaemonWarning line
-<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>        ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
-<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
-<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>        ├─ Separator
-<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>        ├─ VC Assignment section
-<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>        │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
-<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a>        │   └─ Devices_NoSlotsHint line while no slot exists
-<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a>        ├─ Input Mode section (ShowInputModeSection)
-<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
-<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a>        ├─ Input Hiding section (ShowInputHidingSection)
-<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a>        │   ├─ &quot;Hide from Games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click,
-<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a>        │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
-<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>        │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
-<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>        │   └─ &quot;Consume Mapped Inputs (Hooks)&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
-<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a>        ├─ Separator (ShowInputModeOrHidingSection)
-<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>        ├─ Power section (ShowPowerSection)
-<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
-<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>        │   │   ShowIdleDisconnect, #162)
-<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
-<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a>        │       QuickCharge_Click, #372)
-<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a>        ├─ Separator (ShowRawInputDivider)
-<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a>        └─ Raw Input State section
-<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
-<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
-<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
-<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
-<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>            │   and while ShowNamedButtons)
-<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
-<a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
-<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
-<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
-<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
-<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>            ├─ Keyboard layout (keyboard devices only)
-<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
-<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a>            ├─ Mouse preview (mouse devices only)
-<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>            │   └─ Viewbox → MousePreviewControl
-<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a>            ├─ MIDI preview (MIDI input devices)
-<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
-<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
-<a id="__codelineno-11-72" name="__codelineno-11-72" href="#__codelineno-11-72"></a>            │   └─ Horizontal StackPanel of compass indicators
-<a id="__codelineno-11-73" name="__codelineno-11-73" href="#__codelineno-11-73"></a>            │       ├─ 36×36 Ellipse background + center dot
-<a id="__codelineno-11-74" name="__codelineno-11-74" href="#__codelineno-11-74"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
-<a id="__codelineno-11-75" name="__codelineno-11-75" href="#__codelineno-11-75"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
-<a id="__codelineno-11-76" name="__codelineno-11-76" href="#__codelineno-11-76"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
-<a id="__codelineno-11-77" name="__codelineno-11-77" href="#__codelineno-11-77"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
-<a id="__codelineno-11-78" name="__codelineno-11-78" href="#__codelineno-11-78"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
-<a id="__codelineno-11-79" name="__codelineno-11-79" href="#__codelineno-11-79"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
-<a id="__codelineno-11-80" name="__codelineno-11-80" href="#__codelineno-11-80"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
-<a id="__codelineno-11-81" name="__codelineno-11-81" href="#__codelineno-11-81"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
-<a id="__codelineno-11-82" name="__codelineno-11-82" href="#__codelineno-11-82"></a>            │   VR controllers, Logitech G-Keys rows)
-<a id="__codelineno-11-83" name="__codelineno-11-83" href="#__codelineno-11-83"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
-<a id="__codelineno-11-84" name="__codelineno-11-84" href="#__codelineno-11-84"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
-<a id="__codelineno-11-85" name="__codelineno-11-85" href="#__codelineno-11-85"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>        ├─ Switch Driver Buttons (DriverBind_Click / DriverRestore_Click,
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>        │   ShowDriverBind / ShowDriverRestore, SDL#33 Part 15)
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>        ├─ Read as iCade Controller / Read as Keyboard Buttons (ReadAsICade_Click /
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>        │   ReadAsKeyboard_Click, ShowReadAsICade / ShowReadAsKeyboard, SDL#33 Part 16)
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>        ├─ Read as Tekken Sticks / Read as Taiko Drums Buttons (UsioTekken_Click /
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a>        │   UsioTaiko_Click, ShowUsioTekken / ShowUsioTaiko, SDL#33 Part 14)
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a>        ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a>        ├─ Separator
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a>        ├─ VC Assignment section
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a>        │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>        │   └─ Devices_NoSlotsHint line while no slot exists
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>        ├─ Input Mode section (ShowInputModeSection)
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>        ├─ Input Hiding section (ShowInputHidingSection)
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a>        │   ├─ &quot;Hide from Games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click,
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>        │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>        │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
+<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a>        │   └─ &quot;Consume Mapped Inputs (Hooks)&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a>        ├─ Separator (ShowInputModeOrHidingSection)
+<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a>        ├─ Power section (ShowPowerSection)
+<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
+<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>        │   │   ShowIdleDisconnect, #162)
+<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
+<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>        │       QuickCharge_Click, #372)
+<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9)
+<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a>        │   ├─ Separator (ShowGunCalibrationDivider)
+<a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>        │   ├─ GunCalibrationStatus line
+<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun) + reset
+<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a>        │       (GunCalibration)
+<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a>        ├─ Separator (ShowRawInputDivider)
+<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>        └─ Raw Input State section
+<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
+<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
+<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
+<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
+<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>            │   and while ShowNamedButtons)
+<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
+<a id="__codelineno-11-72" name="__codelineno-11-72" href="#__codelineno-11-72"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
+<a id="__codelineno-11-73" name="__codelineno-11-73" href="#__codelineno-11-73"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
+<a id="__codelineno-11-74" name="__codelineno-11-74" href="#__codelineno-11-74"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
+<a id="__codelineno-11-75" name="__codelineno-11-75" href="#__codelineno-11-75"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
+<a id="__codelineno-11-76" name="__codelineno-11-76" href="#__codelineno-11-76"></a>            ├─ Keyboard layout (keyboard devices only)
+<a id="__codelineno-11-77" name="__codelineno-11-77" href="#__codelineno-11-77"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
+<a id="__codelineno-11-78" name="__codelineno-11-78" href="#__codelineno-11-78"></a>            ├─ Mouse preview (mouse devices only)
+<a id="__codelineno-11-79" name="__codelineno-11-79" href="#__codelineno-11-79"></a>            │   └─ Viewbox → MousePreviewControl
+<a id="__codelineno-11-80" name="__codelineno-11-80" href="#__codelineno-11-80"></a>            ├─ MIDI preview (MIDI input devices)
+<a id="__codelineno-11-81" name="__codelineno-11-81" href="#__codelineno-11-81"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
+<a id="__codelineno-11-82" name="__codelineno-11-82" href="#__codelineno-11-82"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
+<a id="__codelineno-11-83" name="__codelineno-11-83" href="#__codelineno-11-83"></a>            │   └─ Horizontal StackPanel of compass indicators
+<a id="__codelineno-11-84" name="__codelineno-11-84" href="#__codelineno-11-84"></a>            │       ├─ 36×36 Ellipse background + center dot
+<a id="__codelineno-11-85" name="__codelineno-11-85" href="#__codelineno-11-85"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
+<a id="__codelineno-11-86" name="__codelineno-11-86" href="#__codelineno-11-86"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
+<a id="__codelineno-11-87" name="__codelineno-11-87" href="#__codelineno-11-87"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
+<a id="__codelineno-11-88" name="__codelineno-11-88" href="#__codelineno-11-88"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
+<a id="__codelineno-11-89" name="__codelineno-11-89" href="#__codelineno-11-89"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
+<a id="__codelineno-11-90" name="__codelineno-11-90" href="#__codelineno-11-90"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+<a id="__codelineno-11-91" name="__codelineno-11-91" href="#__codelineno-11-91"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
+<a id="__codelineno-11-92" name="__codelineno-11-92" href="#__codelineno-11-92"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
+<a id="__codelineno-11-93" name="__codelineno-11-93" href="#__codelineno-11-93"></a>            │   VR controllers, Logitech G-Keys rows)
+<a id="__codelineno-11-94" name="__codelineno-11-94" href="#__codelineno-11-94"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
+<a id="__codelineno-11-95" name="__codelineno-11-95" href="#__codelineno-11-95"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
+<a id="__codelineno-11-96" name="__codelineno-11-96" href="#__codelineno-11-96"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
 </code></pre></div>
 <h3 id="key-bindings_1">Key Bindings<a class="headerlink" href="#key-bindings_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -8838,6 +8849,18 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <tr>
 <td><code>ShowInputModeOrHidingSection</code> / <code>ShowRawInputDivider</code></td>
 <td>The two conditional separators around the Power section</td>
+</tr>
+<tr>
+<td><code>ShowGunCalibration</code> / <code>ShowGunCalibrationDivider</code> / <code>GunCalibrationStatus</code> / <code>CanCalibrateGun</code></td>
+<td>Light Gun section visibility, the rule above it, the aim range line and the Calibrate button's enable state</td>
+</tr>
+<tr>
+<td><code>ShowReadAsICade</code> / <code>ShowReadAsKeyboard</code></td>
+<td>The iCade pair of buttons</td>
+</tr>
+<tr>
+<td><code>ShowUsioTekken</code> / <code>ShowUsioTaiko</code></td>
+<td>The USIO layout buttons</td>
 </tr>
 <tr>
 <td><code>HasCapabilityIcons</code> / <code>HasRumble</code> / <code>HasGyro</code> / <code>ShowTouchpadCapability</code></td>

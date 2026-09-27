@@ -3294,6 +3294,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#light-gun-icade-and-usio-rows-hifihedgehogsdl33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light gun, iCade and USIO rows (hifihedgehog/SDL#33)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#device-class-flags" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6631,6 +6642,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#light-gun-icade-and-usio-rows-hifihedgehogsdl33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light gun, iCade and USIO rows (hifihedgehog/SDL#33)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#device-class-flags" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -9838,6 +9860,21 @@
 <td>Whitelisted application paths.</td>
 </tr>
 <tr>
+<td><code>ICadePads</code></td>
+<td><code>ObservableCollection&lt;string&gt;</code></td>
+<td>Pads in iCade mode marked on the Devices page, as <code>0xVVVV/0xPPPP</code> pairs (hifihedgehog/SDL#33 Part 16). MainWindow's <code>SetICadeMode</code> edits it.</td>
+</tr>
+<tr>
+<td><code>DjiRemoteHosts</code></td>
+<td><code>ObservableCollection&lt;string&gt;</code></td>
+<td>DJI remotes added by address in the pairing dialog, as <code>a.b.c.d:port</code> keys (hifihedgehog/SDL#33 Part 6). <code>DjiRemoteHostsChanged</code> fires on each add or remove, never on load.</td>
+</tr>
+<tr>
+<td><code>UsioLayout</code></td>
+<td><code>string</code></td>
+<td>The Namco USIO's layout, <code>"taiko"</code> or <code>"tekken"</code> (hifihedgehog/SDL#33 Part 14). MainWindow's <code>SetUsioLayout</code> sets it.</td>
+</tr>
+<tr>
 <td><code>SelectedWhitelistPath</code></td>
 <td><code>string</code></td>
 <td>Selected whitelist path. Refreshes <code>RemoveWhitelistPathCommand</code>.</td>
@@ -12069,6 +12106,73 @@
 <td><code>bool</code></td>
 <td>-</td>
 <td>Computed: <code>ShowIdleDisconnect \|\| ShowQuickCharge</code>. The Power section draws when either control in it does.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="light-gun-icade-and-usio-rows-hifihedgehogsdl33">Light gun, iCade and USIO rows (hifihedgehog/SDL#33)<a class="headerlink" href="#light-gun-icade-and-usio-rows-hifihedgehogsdl33" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GunCalibration</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>A GunCon 2's aim range as <code>UserDevice.GunCalibration</code> keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun.</td>
+</tr>
+<tr>
+<td><code>ShowGunCalibration</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>), online or offline. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
+</tr>
+<tr>
+<td><code>GunConnectedHere</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>The gun's live device is this PC's own <code>SdlDeviceWrapper</code>. A relayed gun is calibrated on its owner's PC.</td>
+</tr>
+<tr>
+<td><code>CanCalibrateGun</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: <code>GunConnectedHere &amp;&amp; IsOnline</code>. Enables <strong>Calibrate</strong>.</td>
+</tr>
+<tr>
+<td><code>ShowGunCalibrationDivider</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: <code>ShowGunCalibration &amp;&amp; (ShowPowerSection \|\| !ShowInputModeOrHidingSection)</code>, the rule above the Light Gun section.</td>
+</tr>
+<tr>
+<td><code>GunCalibrationStatus</code></td>
+<td><code>string</code></td>
+<td>-</td>
+<td>Computed: the aim range, formatted with <code>Devices_GunWindowDefault</code> or <code>Devices_GunWindowCalibrated</code>.</td>
+</tr>
+<tr>
+<td><code>ShowReadAsICade</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>A Bluetooth keyboard with IDs, not the ION iCade cabinet, whose pair <code>ICadePads</code> does not list (<code>ICadePads.CanMark</code>).</td>
+</tr>
+<tr>
+<td><code>ShowReadAsKeyboard</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>A listed pair's iCade Controller joystick, or its keyboard record while the pad is away.</td>
+</tr>
+<tr>
+<td><code>ShowUsioTekken</code> / <code>ShowUsioTaiko</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>A Namco USIO drum or stick joystick, by the names the fork gives each layout. Each offers the other layout.</td>
 </tr>
 </tbody>
 </table>

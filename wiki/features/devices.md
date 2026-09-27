@@ -126,6 +126,18 @@ A **Switch to PadForge's Driver** confirmation states the cost before anything m
 
 *Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
+### Pads in iCade mode
+
+A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a button goes down and another when it comes up. The ION iCade cabinet reads as a controller on its own. For any other pad, select its keyboard's card and click **Read as iCade Controller**. The keyboard's card goes offline, and an **iCade Controller** card takes its place with a gamepad layout: A on Back, B on the left shoulder, C on Start, D on the right shoulder, E, F, G and H on the face buttons. **Read as Keyboard**, on either card, turns it back into a keyboard. The letters still reach the program in the foreground, because Windows still sees a keyboard. PadForge reads up to 32 such pads.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+### Namco USIO layout
+
+One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's card and click **Read as Tekken Sticks** to read four arcade sticks instead. **Read as Taiko Drums**, on a stick's card, goes back. The board opens again in the new layout, so its cards leave and the other layout's arrive a moment later.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
 ---
 
 ## Assigning devices to slots
@@ -329,7 +341,7 @@ A drawing tablet is not in this group. Windows HID pen and digitizer devices are
 
 ## Pairing a controller
 
-The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**, and in pre-release builds **Serial Controller (COM Port)**.
+The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**, and in pre-release builds **Serial Controller (COM Port)** and **DJI RC or RC 2 (Network)**.
 
 The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See [Wii Controllers](../devices/wii-controllers.md) for the pairing steps and the per-controller button layouts.
 
@@ -345,7 +357,7 @@ The Serial Controller (COM Port) family adds a controller on a serial port. Wind
 | SpaceTec SpaceOrb 360, SpaceBall Avenger | Six-axis ball with 7 buttons |
 | Magellan, SpaceMouse, Spaceball 5000, CadMan | Six-axis puck with 12 buttons |
 | Gravis Stinger | Gamepad |
-| Logitech WingMan Warrior | Flight stick with a hat. Its spin dial reads nothing yet. |
+| Logitech WingMan Warrior | Flight stick with a hat. Its spin dial reads as **Mouse Motion X**. |
 | Logitech CyberMan | Six-axis controller with a tactile motor |
 | Zhen Hua RC | RC transmitter on the five-byte Zhen Hua protocol, four axes |
 | FlySky i-BUS | The i-BUS output of a FlySky FS-iA6B receiver, 14 channels as axes |
@@ -361,6 +373,8 @@ The Serial Controller (COM Port) family adds a controller on a serial port. Wind
 An RC-N1 family remote on its bottom USB-C port opens without an entry. A BIO2 needs one. PadForge leaves Konami boards closed until the list holds one, so a game on the same PC can use a BIO2 in the meantime. Add the BIO2 with the entry for its cabinet.
 
 Some devices need a step first. Windows may install a serial mouse on a CyberMan's port, so disable that device in Device Manager. A JVS adapter must switch direction on RTS or by itself, and the bus needs 120 ohms across A and B at the PC end if the adapter has none. A FlySky receiver's i-BUS, ground and power pins wire to the cable's RX, ground and +5 V. A Kettler needs only RX, TX and ground.
+
+The DJI RC or RC 2 (Network) family reads a DJI RC or DJI RC 2 over the network. Put the remote and this PC on the same network, type the remote's IPv4 address under **Address**, with the port after a colon when it is not 40007, and click **Add**. **Added Remotes** lists each one with a button that removes it. PadForge reads up to 8 remotes this way. A remote serves its sticks on port 40007 only on firmware from before DJI closed that port, so one on current firmware never answers. The DJI RC also reads over USB with no entry.
 
 *Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
@@ -457,6 +471,16 @@ The trigger is the pad's own charging report, read from SDL's battery state, whi
 A Sony pad reports the same Bluetooth address as its serial number over both links, so PadForge holds one device card for it, and a cable rebinds that card to the USB path. That is why the checkbox stays on the card while the pad is wired, and why the drop can still find the radio link: it is addressed by that serial. A pad that was never paired makes that a lookup that finds nothing.
 
 The checkbox appears for any pad Idle Disconnect can target, plus any device whose serial number parses as a nonzero Bluetooth address. In a diagnostics log every outcome prints a `QUICKCHARGE` line, so a silent log means the charging change never arrived or the checkbox was off.
+
+---
+
+## Light gun
+
+A Namco GunCon 2 gets a **Light Gun** section in the detail pane. The gun times the picture of a 15 kHz CRT, and the readings that meet the picture's edges depend on the CRT, the video mode and the game. The section shows the aim range PadForge reads the gun with, in the gun's own counts. It starts at X 175 to 720 and Y 20 to 240, the range the PC tools for the gun start from.
+
+**Calibrate** turns every monitor white and shows four targets in turn, set in from the corners. Aim the gun at each target on the CRT and pull the trigger. The gun sees only the CRT, so the other monitors show the same targets to no effect. A shot the gun takes off the screen is asked for again, and four shots too close together start over from the first target. Esc, or the gun's A or B button, cancels. The range is saved for that gun and applies at once, and the section's reset button returns it to the starting range. The gun has to be connected to this PC to calibrate. A gun reached through [Remote Link](../guides/remote-link.md) is calibrated on the PC it is plugged into.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---
 

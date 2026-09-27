@@ -1335,6 +1335,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pads-in-icade-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pads in iCade mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namco-usio-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Namco USIO layout
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1691,6 +1713,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-gun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light gun
+      
+    </span>
+  </a>
   
 </li>
       
@@ -4194,6 +4227,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pads-in-icade-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pads in iCade mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namco-usio-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Namco USIO layout
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4550,6 +4605,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-gun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light gun
+      
+    </span>
+  </a>
   
 </li>
       
@@ -5030,6 +5096,12 @@
 </table>
 <p>A <strong>Switch to PadForge's Driver</strong> confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows <strong>Restore the Windows Driver</strong>, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.</p>
 <p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<h3 id="pads-in-icade-mode">Pads in iCade mode<a class="headerlink" href="#pads-in-icade-mode" title="Permanent link">&para;</a></h3>
+<p>A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a button goes down and another when it comes up. The ION iCade cabinet reads as a controller on its own. For any other pad, select its keyboard's card and click <strong>Read as iCade Controller</strong>. The keyboard's card goes offline, and an <strong>iCade Controller</strong> card takes its place with a gamepad layout: A on Back, B on the left shoulder, C on Start, D on the right shoulder, E, F, G and H on the face buttons. <strong>Read as Keyboard</strong>, on either card, turns it back into a keyboard. The letters still reach the program in the foreground, because Windows still sees a keyboard. PadForge reads up to 32 such pads.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<h3 id="namco-usio-layout">Namco USIO layout<a class="headerlink" href="#namco-usio-layout" title="Permanent link">&para;</a></h3>
+<p>One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's card and click <strong>Read as Tekken Sticks</strong> to read four arcade sticks instead. <strong>Read as Taiko Drums</strong>, on a stick's card, goes back. The board opens again in the new layout, so its cards leave and the other layout's arrive a moment later.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <hr />
 <h2 id="assigning-devices-to-slots">Assigning devices to slots<a class="headerlink" href="#assigning-devices-to-slots" title="Permanent link">&para;</a></h2>
 <h3 id="toggle-buttons">Toggle buttons<a class="headerlink" href="#toggle-buttons" title="Permanent link">&para;</a></h3>
@@ -5276,7 +5348,7 @@
 <p>A drawing tablet is not in this group. Windows HID pen and digitizer devices are real HID devices, so they enumerate normally and keep their Input Hiding section.</p>
 <hr />
 <h2 id="pairing-a-controller">Pairing a controller<a class="headerlink" href="#pairing-a-controller" title="Permanent link">&para;</a></h2>
-<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog. A <strong>Controller Family</strong> selector offers <strong>Nintendo Wii</strong>, <strong>Sony DualShock 3</strong>, and <strong>PlayStation Move / Navigation</strong>, and in pre-release builds <strong>Serial Controller (COM Port)</strong>.</p>
+<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog. A <strong>Controller Family</strong> selector offers <strong>Nintendo Wii</strong>, <strong>Sony DualShock 3</strong>, and <strong>PlayStation Move / Navigation</strong>, and in pre-release builds <strong>Serial Controller (COM Port)</strong> and <strong>DJI RC or RC 2 (Network)</strong>.</p>
 <p>The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See <a href="../../devices/wii-controllers/">Wii Controllers</a> for the pairing steps and the per-controller button layouts.</p>
 <p>The DualShock 3 family pairs over USB: connect the controller with a cable, click <strong>Pair</strong>, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See <a href="../../devices/dualshock-3/">DualShock 3</a>.</p>
 <p>The PlayStation Move / Navigation family pairs over USB the same way. PadForge writes this PC into the controller, saves the Move's motion calibration, and registers it. Unplug it and press the PS button to connect over Bluetooth.</p>
@@ -5307,7 +5379,7 @@
 </tr>
 <tr>
 <td>Logitech WingMan Warrior</td>
-<td>Flight stick with a hat. Its spin dial reads nothing yet.</td>
+<td>Flight stick with a hat. Its spin dial reads as <strong>Mouse Motion X</strong>.</td>
 </tr>
 <tr>
 <td>Logitech CyberMan</td>
@@ -5357,6 +5429,7 @@
 </table>
 <p>An RC-N1 family remote on its bottom USB-C port opens without an entry. A BIO2 needs one. PadForge leaves Konami boards closed until the list holds one, so a game on the same PC can use a BIO2 in the meantime. Add the BIO2 with the entry for its cabinet.</p>
 <p>Some devices need a step first. Windows may install a serial mouse on a CyberMan's port, so disable that device in Device Manager. A JVS adapter must switch direction on RTS or by itself, and the bus needs 120 ohms across A and B at the PC end if the adapter has none. A FlySky receiver's i-BUS, ground and power pins wire to the cable's RX, ground and +5 V. A Kettler needs only RX, TX and ground.</p>
+<p>The DJI RC or RC 2 (Network) family reads a DJI RC or DJI RC 2 over the network. Put the remote and this PC on the same network, type the remote's IPv4 address under <strong>Address</strong>, with the port after a colon when it is not 40007, and click <strong>Add</strong>. <strong>Added Remotes</strong> lists each one with a button that removes it. PadForge reads up to 8 remotes this way. A remote serves its sticks on port 40007 only on firmware from before DJI closed that port, so one on current firmware never answers. The DJI RC also reads over USB with no entry.</p>
 <p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <p>Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.</p>
 <hr />
@@ -5481,6 +5554,11 @@
 </table>
 <p>A Sony pad reports the same Bluetooth address as its serial number over both links, so PadForge holds one device card for it, and a cable rebinds that card to the USB path. That is why the checkbox stays on the card while the pad is wired, and why the drop can still find the radio link: it is addressed by that serial. A pad that was never paired makes that a lookup that finds nothing.</p>
 <p>The checkbox appears for any pad Idle Disconnect can target, plus any device whose serial number parses as a nonzero Bluetooth address. In a diagnostics log every outcome prints a <code>QUICKCHARGE</code> line, so a silent log means the charging change never arrived or the checkbox was off.</p>
+<hr />
+<h2 id="light-gun">Light gun<a class="headerlink" href="#light-gun" title="Permanent link">&para;</a></h2>
+<p>A Namco GunCon 2 gets a <strong>Light Gun</strong> section in the detail pane. The gun times the picture of a 15 kHz CRT, and the readings that meet the picture's edges depend on the CRT, the video mode and the game. The section shows the aim range PadForge reads the gun with, in the gun's own counts. It starts at X 175 to 720 and Y 20 to 240, the range the PC tools for the gun start from.</p>
+<p><strong>Calibrate</strong> turns every monitor white and shows four targets in turn, set in from the corners. Aim the gun at each target on the CRT and pull the trigger. The gun sees only the CRT, so the other monitors show the same targets to no effect. A shot the gun takes off the screen is asked for again, and four shots too close together start over from the first target. Esc, or the gun's A or B button, cancels. The range is saved for that gun and applies at once, and the section's reset button returns it to the starting range. The gun has to be connected to this PC to calibrate. A gun reached through <a href="../../guides/remote-link/">Remote Link</a> is calibrated on the PC it is plugged into.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <hr />
 <h2 id="force-raw-joystick-mode">Force Raw Joystick Mode<a class="headerlink" href="#force-raw-joystick-mode" title="Permanent link">&para;</a></h2>
 <p>By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translates raw button and axis indices into a standard layout (A/B/X/Y, LX/LY, LT/RT) via a built-in controller database.</p>
