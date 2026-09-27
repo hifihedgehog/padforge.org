@@ -238,8 +238,15 @@ union = union | flydigi
 # functions and never list them in controller_list.h: GameSir's 8K pads, the
 # 8BitDo Ultimate 3, Stadia, Luna over Bluetooth, the SHIELD v1.04, the Switch
 # Online SNES, N64 and Genesis pads, the Wii Remote pair, ZUIKI and the SInput
-# family. Read the ids each function accepts, following the SDL_IsJoystick*
-# helpers and the driver file's own static helpers it calls.
+# family, and the hifihedgehog/SDL#33 drivers (arcade boards, guns, trains,
+# I-Force, original Xbox, trackers and the rest). Read the ids each function
+# accepts. Some files hold several drivers, and some identify a device in a
+# helper several calls away that reads a table, so every IsSupportedDevice is
+# read, its helpers are followed three calls deep (the driver file's own,
+# the protocol files', and the SDL_IsJoystick* identity helpers), and every
+# static table those name is read too. Each body and table is its
+# own chunk, so a vendor named at the end of one never pairs with a product
+# at the start of the next.
 def _body(text, fname):
     m = re.search(r"\b" + re.escape(fname) + r"\s*\([^;{]*\)\s*\{", text)
     if not m:
@@ -250,25 +257,85 @@ def _body(text, fname):
         i += 1
     return text[m.end():i]
 
+
+def _block(text, start):
+    i, depth = start, 1
+    while depth and i < len(text):
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return text[start:i]
+
+
+_TREE = glob.glob(SDL + r"\*.c") + glob.glob(SDL + r"\hidapi\*.c")
+_HEADERS = glob.glob(SDL + r"\*.h") + glob.glob(SDL + r"\hidapi\*.h")
+# Followed: the protocol files' helpers and SDL_joystick.c's SDL_IsJoystick*
+# identity helpers. Not followed: the rest of SDL_joystick.c and
+# SDL_hidapijoystick.c, whose type classifiers and exclusion lists name
+# devices a driver turns away (0000:0000, the Saitek side panel).
+_PROTO = [p for p in _TREE if p.endswith("_proto.c")]
+_FUNCS, _ARRAYS = {}, {}
+for _p in _PROTO + [SDL + r"\SDL_joystick.c"]:
+    _t = read(_p)
+    _joystick_c = _p.endswith("SDL_joystick.c")
+    # A definition starts at column 0, so a call inside an if never counts.
+    for _m in re.finditer(r"(?m)^[A-Za-z_][^\n;()]*?\b([A-Za-z_]\w*)\s*\([^;{)]*\)\s*\{", _t):
+        if not _joystick_c or _m.group(1).startswith("SDL_IsJoystick"):
+            _FUNCS.setdefault(_m.group(1), _block(_t, _m.end()))
+    if not _joystick_c:
+        for _m in re.finditer(r"\b([A-Za-z_]\w*)\s*\[\s*\w*\s*\]\s*=\s*\{", _t):
+            _ARRAYS.setdefault(_m.group(1), _block(_t, _m.end()))
+# Every hex define in the tree: usb_ids.h and each protocol file's own.
+DEFS = dict(USB_DEFS)
+for _p in _TREE + _HEADERS:
+    for _k, _v in re.findall(r"#define\s+([A-Z_][A-Z0-9_]*)\s+\(?(0[xX][0-9a-fA-F]+)\)?", read(_p)):
+        DEFS.setdefault(_k, int(_v, 16))
+
+
+def _pairs(chunk):
+    out = []
+    vendor = None
+    for tok in re.findall(r"\b[A-Z_][A-Z0-9_]*\b", chunk):
+        # A Bluetooth-assigned ID names the same pad as its USB one.
+        if tok not in DEFS or tok.startswith("BLUETOOTH_"):
+            continue
+        if "VENDOR" in tok:
+            vendor = DEFS[tok]
+        elif "PRODUCT" in tok and vendor is not None:
+            out.append((vendor, DEFS[tok], tok))
+    for v, p in re.findall(r"==\s*(0[xX][0-9a-fA-F]{4})\s*&&\s*[\w>.-]*product\w*\s*==\s*(0[xX][0-9a-fA-F]{4})", chunk, re.I):
+        out.append((int(v, 16), int(p, 16), "literal"))
+    # A table row ending in false is the I-Force table's serial-only model,
+    # which SDL_IForce_FindModel skips for USB.
+    for v, p, rest in re.findall(r"\{\s*(0[xX][0-9a-fA-F]{4})\s*,\s*(0[xX][0-9a-fA-F]{4})\s*,([^{}]*)\}", chunk):
+        if not re.search(r"\bfalse\s*$", rest):
+            out.append((int(v, 16), int(p, 16), "table"))
+    return out
+
+
 DRIVER_IDS = {}
 for _f in sorted(glob.glob(SDL + r"\hidapi\SDL_hidapi_*.c")):
     _src = read(_f)
-    _m = re.search(r"static bool (HIDAPI_Driver\w+_IsSupportedDevice)", _src)
-    if not _m:
-        continue
-    _text = _body(_src, _m.group(1))
-    for _call in set(re.findall(r"\b([A-Za-z_]\w*)\s*\(", _text)):
-        if _call.startswith("SDL_IsJoystick"):
-            _text += _body(JS, "bool " + _call) or _body(JS, _call)
-        elif re.search(r"static\s+\w+\s+" + re.escape(_call) + r"\s*\(", _src):
-            _text += _body(_src, _call)
-    _vendor = None
-    for _tok in re.findall(r"USB_(?:VENDOR|PRODUCT)_\w+", _text):
-        if _tok.startswith("USB_VENDOR_"):
-            _vendor = _tok
-        elif _vendor in USB_DEFS and _tok in USB_DEFS:
-            DRIVER_IDS.setdefault((USB_DEFS[_vendor], USB_DEFS[_tok]),
-                                  (os.path.basename(_f), _tok))
+    for _name in re.findall(r"static bool (HIDAPI_Driver\w+_IsSupportedDevice)", _src):
+        _chunks, _seen, _front = [], {_name}, [_body(_src, _name)]
+        for _depth in range(4):
+            _next = []
+            for _text in _front:
+                _chunks.append(_text)
+                for _call in set(re.findall(r"\b([A-Za-z_]\w*)\s*\(", _text)):
+                    if _call in _seen:
+                        continue
+                    _seen.add(_call)
+                    _b = _body(_src, _call) if re.search(r"(?m)^[A-Za-z_][^\n;()]*?\b" + re.escape(_call) + r"\s*\(", _src) else _FUNCS.get(_call)
+                    if _b:
+                        _next.append(_b)
+                for _arr in set(re.findall(r"\b([a-z_]\w*)\s*\[", _text)):
+                    if _arr in _ARRAYS and _arr not in _seen:
+                        _seen.add(_arr)
+                        _chunks.append(_ARRAYS[_arr])
+            _front = _next
+        for _chunk in _chunks:
+            for _v, _p, _tok in _pairs(_chunk):
+                DRIVER_IDS.setdefault((_v, _p), (os.path.basename(_f), _tok))
 drivers = set(DRIVER_IDS) - union
 union = union | drivers
 
@@ -290,6 +357,8 @@ NATIVE_SOURCES = {
         (0x046D, 0xC62B): "SpaceMouse Pro", (0x046D, 0xC640): "NuLOOQ"},
     r"PadForge.Engine\Common\PadixConverterIdentity.cs": {
         (0x0583, 0xB047): "Buffalo BSGC101", (0x0583, 0xB048): "Buffalo BSGC201"},
+    r"PadForge.App\Services\VendorUsbDriverInstaller.cs": {
+        (0x05C6, 0x9244): "Xbox 360 Wireless Receiver clone, bound to xusb22"},
     r"PadForge.App\Services\Ds3PairingService.cs": {
         (0x054C, 0x03D5): "PlayStation Move, Bluetooth", (0x054C, 0x0C5E): "PlayStation Move ZCM2, USB",
         (0x054C, 0x042F): "PlayStation Navigation controller"},
