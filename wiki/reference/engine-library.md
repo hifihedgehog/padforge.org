@@ -558,6 +558,7 @@ public class CustomInputState
     // 3.6.0 pointer / mouse sources (value-type fields, no per-frame allocation)
     public WiiIrState Ir;           // Wii Remote IR pointer (#146): X, Y in [-1..+1], Detected flag
     public float JoyConIrIntensity; // Right Joy-Con NIR camera average intensity 0..1 (#151)
+    public float RingConStrain;     // Ring-Con flex -1..+1, squeeze positive (hifihedgehog/SDL#33)
     public float JoyCon2MouseDX;    // Joy-Con 2 optical mouse X delta since last poll (#154)
     public float JoyCon2MouseDY;    // Joy-Con 2 optical mouse Y delta since last poll (#154)
 
@@ -613,6 +614,7 @@ public class CustomInputState
 | `BatteryCharging` | bool | false | `true` when the source pad reports charging or fully charged. Drives the lightbar Battery mode |
 | `Ir` | `WiiIrState` | `Detected=false` | (v3.6) Wii Remote IR-camera pointer (#146). `X` / `Y` normalized to the [&minus;1..+1] stick range from the two sensor-bar dots, valid only when `Detected`. Value type, rebuilt each tick. |
 | `JoyConIrIntensity` | float | 0.0 | (v3.6) Right Joy-Con NIR camera average intensity 0..1 (#151). Covered reads bright (high), uncovered dark (low). 0 when the camera is off. Excluded from the idle test. |
+| `RingConStrain` | float | 0.0 | Ring-Con flex, &minus;1..+1 (hifihedgehog/SDL#33): positive while the ring is squeezed, negative while it is pulled, 0 at rest and while no Ring-Con polls. The fork posts the raw strain on the right Joy-Con's joystick axis 7 and its first nonzero reading after polling starts as `SDL.joystick.switch.ringcon_rest`. `SdlDeviceWrapper` subtracts the rest and divides by `RingConFullScale` (0x0800, eight steps of the strain's high byte). A strain or a rest whose high byte is 0 reads 0. Counts as activity in the idle test past `RingConSlop`. |
 | `JoyCon2MouseDX` | float | 0.0 | (v3.6) Joy-Con 2 optical mouse X delta since the previous poll (#154). +X = right. 0 when idle or absent. |
 | `JoyCon2MouseDY` | float | 0.0 | (v3.6) Joy-Con 2 optical mouse Y delta since the previous poll (#154). +Y = toward the user (down). 0 when idle or absent. |
 | `MouseRawDX` | int | 0 | (v4) Unclamped Raw Input mouse X counts since the previous poll (#200). Feeds the mouse-gesture recognizer, which needs the counts before `Axis[0]` clamps them to the stick range. 0 when idle or non-mouse. |
@@ -752,9 +754,11 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `Haptic` | `IntPtr` | `IntPtr.Zero` | SDL haptic handle. Non-zero when haptic FFB available. |
 | `JoystickType` | `SDL_JoystickType` | `UNKNOWN` | SDL joystick type classification |
 | `IsGameController` | `bool` | (computed) | `true` if opened as an SDL Gamepad |
-| `HasIrCamera` | `bool` | (set at open) | Wii Remote IR camera present. Drives the IR Pointer joystick-direct read (#146). |
+| `HasIrCamera` | `bool` | (set at open) | Wii Remote IR camera present: a configuration `WiiRemoteIdentity` names (the bare remote, or the remote with a Nunchuk or Classic Controller) whose raw axis count reaches the four IR axes. Drives the IR Pointer joystick-direct read (#146). A decoded extension (guitar, drums, turntable, TaTaCon, tablets, Shinkansen controller, hifihedgehog/SDL#33) spends axes 6 and up on its own controls and has no camera. |
 | `IsBalanceBoard` | `bool` | (set at open) | Wii Balance Board, told apart from a Wii Remote by its SDL name. Keeps the board out of `HasIrCamera`. Its four corner load cells arrive on the stick axes through the standard decode (#146). |
 | `HasJoyConIr` | `bool` | (set at open) | Right Joy-Con NIR camera, on a standalone right Joy-Con (PID 0x2007) or a combined gen-1 pair (PID 0x2008, #275). Drives the IR Brightness read (#151). |
+| `HasRingCon` | `bool` | (set at open) | `HasJoyConIr` plus an eighth raw axis, the Ring-Con strain the fork adds as axis 7 (hifihedgehog/SDL#33). Drives the `RingConStrain` read, so an `SDL3.dll` without the Ring-Con leaves it false. |
+| `IsGunCon2` | `bool` | (set at open) | Namco GunCon 2, `0B9A:016A`, opened with at least two raw axes (hifihedgehog/SDL#33). The fork posts the raw beam counts on axes 0 and 1. `ApplyGunCon2` scales X 175..720 and Y 20..240 (beardypig's guncon2 driver defaults) to &minus;1..+1, writes the aim to `Axis[0]` / `Axis[1]` so a stick mapping aims with no setup, and writes it to `Ir` divided by the IR pointer's margin stretch, which the IR read restores. X 10 or less or Y 5 or less is off screen: the stick centers and `Ir.Detected` clears. |
 | `HasJoyCon2Mouse` | `bool` | (set at open) | Switch 2 Joy-Con optical mouse. Drives the Mouse Motion read (#154). |
 | `HasSwitch2Magnetometer` | `bool` | (set at open) | Switch 2 BLE magnetometer (#271 item 5). Its samples land on wrapper-local `Switch2MagX/Y/Z`, deliberately not on `CustomInputState`, because the Remote Link block mask is full. The compass fusion consumes them through an App-layer provider. |
 | `HasNfcReader` | `bool` | (set at open) | The hardware can read NFC tags. It says nothing about power: the reader is energized only while NFC is armed and the Switch NFC hint is set. Read via `SDL_GetGamepadNfcTagUid`. |
@@ -1556,7 +1560,7 @@ public struct DeviceInfo
 | `TriggerSlop` | 1024 | Trigger slop above 0 rest. Absorbs worn-pot jitter. |
 | `DeltaSlop` | 1024 | Axis / slider delta slop for the change-detection test. |
 
-Motion sensors (gyro / accel) are deliberately ignored, as DS4Windows ignores them: gyro noise never settles and would defeat the countdown forever. `JoyConIrIntensity` is excluded for the same reason (passive ambient-light scalar, never settles). The Wii IR pointer (`Ir.Detected`, #146), the Joy-Con 2 mouse deltas (`JoyCon2MouseDX/DY`, #154), and the Raw Input mouse counts (`MouseRawDX/DY`, #200) count as activity, so a user aiming or moving only those sources is not disconnected mid-use.
+Motion sensors (gyro / accel) are deliberately ignored, as DS4Windows ignores them: gyro noise never settles and would defeat the countdown forever. `JoyConIrIntensity` is excluded for the same reason (passive ambient-light scalar, never settles). The Wii IR pointer (`Ir.Detected`, #146), the Joy-Con 2 mouse deltas (`JoyCon2MouseDX/DY`, #154), and the Raw Input mouse counts (`MouseRawDX/DY`, #200) count as activity, so a user aiming or moving only those sources is not disconnected mid-use. So does a Ring-Con flex past `RingConSlop` (0.25, two of the eight high-byte steps that read full scale), because a player exercising with the ring alone presses no button for minutes.
 
 ---
 
@@ -2397,9 +2401,11 @@ Data model for a physical input device. Serializable properties (settings-persis
 | `IsTablet` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.Tablet` |
 | `IsConsumerControl` | `bool` | `[XmlIgnore]` | `CapType == InputDeviceType.ConsumerControl` (#168) |
 | `SupportsTouchpadPressure` / `SupportsTouchpadClick` | `bool` | `[XmlIgnore]` | The stored `CapTouchpadPressure` / `CapTouchpadClick`, or when unknown, true for everything but a tablet and a wrapper-less system touchpad |
-| `HasIrCamera` | `bool` | `[XmlIgnore]` | Wii Remote IR camera. Identity-derived from VID `0x057E` + name prefix "Nintendo Wii Remote", correct online or offline (#146). Gates the "IR Pointer X/Y" sources. |
+| `HasIrCamera` | `bool` | `[XmlIgnore]` | Wii Remote IR camera. Identity-derived from VID `0x057E` and the exact SDL names of the three configurations that carry it, "Nintendo Wii Remote", "Nintendo Wii Remote with Nunchuk" and "Nintendo Wii Remote with Classic Controller" (`WiiRemoteIdentity.CarriesIrCamera`), correct online or offline (#146). Gates the "IR Pointer X/Y" sources. |
 | `IsBalanceBoard` | `bool` | `[XmlIgnore]` | Wii Balance Board. VID `0x057E` + name contains "Balance Board" (#146). Gates the corner-load sources. |
 | `HasJoyConIr` | `bool` | `[XmlIgnore]` | Right Joy-Con NIR camera. VID `0x057E` + exact name "Nintendo Switch Joy-Con (R)" (#151), or PID `0x2008` (combined gen-1 pair, whose right half posts the camera, #275). The PID leg exists because SDL names the gen-1 and gen-2 pairs identically. Gates the "IR Brightness" source. |
+| `HasRingCon` | `bool` | `[XmlIgnore]` | Same identity as `HasJoyConIr`, since the fork reads a Ring-Con through the same right Joy-Con (hifihedgehog/SDL#33). Gates the "Ring-Con Squeeze" and "Ring-Con Pull" sources. |
+| `IsGunCon2` | `bool` | `[XmlIgnore]` | VID `0x0B9A` + PID `0x016A` (hifihedgehog/SDL#33), so a relayed gun answers too. The picker then offers the IR pointer sources as "Gun Aim X", "Gun Aim Y" and "Gun Offscreen". |
 | `HasJoyCon2Mouse` | `bool` | `[XmlIgnore]` | Joy-Con 2 (L or R) optical mouse. VID `0x057E` + exact match against the BLE driver's Joy-Con 2 names (#154). Gates the "Mouse Motion X/Y" sources. |
 | `HasVoicePhrases` | `bool` | `[XmlIgnore]` | Voice phrases ride this pad's own surface (#317). VID `0x054C` and PID `0x0CE6` / `0x0DF2` (DualSense / DualSense Edge), the pads with an embedded microphone. Standalone microphone devices are not gated by this: they expose phrases as named raw buttons directly, the PC/SC-reader pattern. |
 | `HasNfcReader` | `bool` | `[XmlIgnore]` | Switch NFC reader (#241). Computed, not stored: VID `0x057E` and PID `0x2007` (right Joy-Con), `0x2008` (combined pair, whose right half carries the MCU), or `0x2009` (Pro Controller). Switch 2 controllers are deliberately excluded, because no reference reads their NFC on PC over any transport. Gates the picker offering the "Any NFC Tag" and per-tag sources. |

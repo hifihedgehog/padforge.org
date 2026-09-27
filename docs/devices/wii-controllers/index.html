@@ -2250,6 +2250,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#guitars-drums-and-other-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guitars, drums and other extensions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#d-pad-mapping" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2398,6 +2409,17 @@
     <span class="md-ellipsis">
       
         Joy-Con IR brightness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ring-con" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ring-Con
       
     </span>
   </a>
@@ -3581,6 +3603,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#guitars-drums-and-other-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guitars, drums and other extensions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#d-pad-mapping" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3736,6 +3769,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ring-con" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ring-Con
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#joy-con-2-optical-mouse" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3833,6 +3877,44 @@
 </tbody>
 </table>
 <p>Attach or detach a Nunchuk while the remote stays connected and PadForge re-identifies the controller without a restart.</p>
+<h3 id="guitars-drums-and-other-extensions">Guitars, drums and other extensions<a class="headerlink" href="#guitars-drums-and-other-extensions" title="Permanent link">&para;</a></h3>
+<p>A Wii Remote also reads these extensions:</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Layout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Guitar Hero guitar</strong></td>
+<td>Green, red, yellow and blue frets on the face buttons, orange on Left Shoulder, the pedal on Right Shoulder, strum on the D-pad's up and down. The stick, whammy and the touch bar are axes, and the remote's accelerometer gives tilt.</td>
+</tr>
+<tr>
+<td><strong>Guitar Hero World Tour and Band Hero drums</strong></td>
+<td>The pads on the face buttons, the bass pedal on Left Shoulder, orange on Right Shoulder. Each pad's hit velocity and the hi-hat pedal are extra axes.</td>
+</tr>
+<tr>
+<td><strong>DJ Hero turntable</strong></td>
+<td>The green, red and blue buttons of either platter on three face buttons, Euphoria on the fourth, and each platter's own buttons as extra buttons. The platter rates are on the right stick, and the crossfader and the effects dial are extra axes.</td>
+</tr>
+<tr>
+<td><strong>Taiko no Tatsujin TaTaCon</strong></td>
+<td>The drum faces on the stick buttons, the rims on the triggers</td>
+</tr>
+<tr>
+<td><strong>uDraw GameTablet, Drawsome tablet</strong></td>
+<td>Pen position and pressure as axes, plus the pen's buttons</td>
+</tr>
+<tr>
+<td><strong>Densha de GO! Shinkansen controller</strong></td>
+<td>The brake and power levers on the triggers, the face buttons and the D-pad</td>
+</tr>
+</tbody>
+</table>
+<p>None of them reads behind an active Motion Plus, and none has the IR pointer.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <h3 id="d-pad-mapping">D-pad mapping<a class="headerlink" href="#d-pad-mapping" title="Permanent link">&para;</a></h3>
 <p>Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.</p>
 <p>The hat turns with the remote's hold. Set <strong>Held As</strong> on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See <a href="#holds">Holds</a>.</p>
@@ -3972,6 +4054,12 @@
 <li>To a stick axis.</li>
 </ul>
 <p><img alt="IR Brightness source in the mapping picker" src="../../images/joycon-ir-source.png" /></p>
+<hr />
+<h2 id="ring-con">Ring-Con<a class="headerlink" href="#ring-con" title="Permanent link">&para;</a></h2>
+<p>A right Joy-Con on the rail of a Ring Fit Adventure Ring-Con reads the ring's flex as two sources, <strong>Ring-Con Squeeze</strong> and <strong>Ring-Con Pull</strong>. Each reads one direction, from nothing at rest to full at a hard squeeze or pull, so a squeeze and a pull map to separate buttons or triggers as they are. To drive one stick axis with both, add both sources to the row and turn on <strong>Invert</strong> for the pull.</p>
+<p>It works on a standalone right Joy-Con and on a combined pair, over Bluetooth. PadForge switches the ring on only while a mapping reads one of its sources, because reading it keeps the Joy-Con's IR and NFC chip powered. The IR camera and the NFC reader share that chip and come first, so while any mapping reads <strong>IR Brightness</strong> or an NFC tag, the ring reads nothing.</p>
+<p>The ring's resting point is its first reading each time it switches on, so hold it at rest for a moment when the Joy-Con connects. Slide the Joy-Con onto the ring before connecting it: a ring attached later is found the next time the Joy-Con connects.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <hr />
 <h2 id="joy-con-2-optical-mouse">Joy-Con 2 optical mouse<a class="headerlink" href="#joy-con-2-optical-mouse" title="Permanent link">&para;</a></h2>
 <p>A Nintendo Switch 2 Joy-Con has an optical mouse sensor on its inner edge, the flat side that clips onto the console. Stand the Joy-Con on that edge and slide it across a surface, and it drives two sources, <strong>Mouse Motion X</strong> and <strong>Mouse Motion Y</strong>. Either half works, left or right, as a standalone Joy-Con 2. A combined Joy-Con 2 pair does not expose the sensor, so split the pair to use it.</p>

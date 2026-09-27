@@ -532,6 +532,103 @@ Steam controller. See [Handheld PC Buttons](../features/handheld-buttons.md).
 
 ---
 
+## Specialty and legacy controllers
+
+*Added after 4.5.3. Pre-release builds have these, and the next release will count them in the total above.*
+
+Windows gives none of these usable input on its own. Some have no Windows driver, some get one that reads nothing, and some speak a protocol only their makers' discontinued software knew. PadForge reads them through its SDL3 build, most with no setup step.
+
+### Plug in over USB
+
+PadForge binds the driver each of these needs a few seconds after it appears. See [Driver Management](../features/driver-management.md#controllers-windows-leaves-without-a-driver).
+
+| Device | Identity | Notes |
+| --- | --- | --- |
+| **Namco GunCon 2** | 0B9A:016A | Needs a CRT with composite sync. The picker names its aim **Gun Aim X** and **Gun Aim Y**. The EMS LCD TopGun shares the ID. |
+| **Taito Densha de GO! Type 2, Shinkansen and Ryojohen controllers** | 0AE4:0004, 0AE4:0005, 0AE4:0007 | Brake on the left trigger, power on the right |
+| **Multi Train Controller, Train Mascon** | 0AE4:0101, 1C06:77A7 | The lever on the left stick, the reverser on the right stick |
+| **I-Force wheels and joysticks** | 14 IDs | Thrustmaster Motor Sport GT, Logitech WingMan Force and WingMan Formula Force, AVB Top Shot Pegasus, Mag Turbo Force and Top Shot Force Feedback Racing Wheel, ACT LABS Force RS, Saitek R440 Force Wheel, and the Guillemot Race Leader, Jet Leader, Jet Leader 3D and Force Feedback Racing Wheel. Force feedback through the standard path. |
+| **Original Xbox controllers** | Class 0x58, and 63 IDs by name | Pads, wheels, dance pads and light guns, through a passive Xbox-to-USB cable |
+| **Capcom Steel Battalion controller** | 0A7B:D000 | 9 axes and 46 buttons. The lamps stay off. |
+| **Xbox 360 Big Button receiver** | 045E:02A0 | Four pads |
+| **Gametrak** | 14B7:0982 | 6 axes, 12 buttons and a hat |
+| **DJI RC (RM330)** | 2CA3:1023 | Sticks and dials. Over USB it reports no buttons. |
+| **Namco USIO** | 0B9A:0910, 0B9A:0900 | Read in its Taiko no Tatsujin layout, two drum kits. The Tekken layout is not offered. |
+| **Konami P3IO** | 1CCF:8008 | Two dance pads, DanceDanceRevolution SuperNova 2 and X |
+| **Konami P4IO** | 1CCF:8010 | jubeat and DanceDanceRevolution White, 32 buttons |
+| **CH Products Multi-Function Panel** | 068E:00F0 | 102 buttons |
+| **Ergodex DX1** | 1603:0002 | 52 buttons |
+| **NaturalPoint TrackIR 2, TrackIR 3** | 131D:0150, 131D:0155 | Three axes. A TrackIR on NaturalPoint's driver stays there. |
+| **Tacx T1904, T1932 trainer head units** | 3561:1904, 3561:1932 | 5 axes and 4 buttons |
+
+### Plug in, Windows reads it and PadForge decodes it
+
+| Device | Identity | Notes |
+| --- | --- | --- |
+| **Logitech Speed Force Wireless (Wii)** | 046D:C29C | Wheel, two pedals, 11 buttons. No force feedback. |
+| **PhoenixRC USB adapter** | 1781:0898 | 8 axes |
+| **Microsoft SideWinder Game Voice** | 045E:003B | 8 buttons |
+| **P5 Glove** | 0D7F:0100 | 5 finger axes, 4 buttons |
+| **Dream Cheeky Roll-Up Drum Kit** | 1941:8021 | 6 pads. A weather station and a missile launcher share the ID and read as the drum kit. |
+| **OCZ Neural Impulse Actuator** | 1234:0000 | 1 axis |
+| **Oculus Rift DK1 head tracker** | 2833:0001 | Yaw, pitch and roll as axes, plus gyro and accelerometer |
+| **Guitar Hero Live dongles** | 12BA:074B, 1430:07BB, 1430:079B | PS3 and Wii U, PS4, and Xbox One. The Xbox One dongle needs Microsoft's GameInput runtime on the PC. |
+| **Rock Band 3 Pro keyboard, Mustang guitar and MIDI Pro Adapter** | 12BA:2330 to 2538 and 1BAD:3330 to 3538, six each | The PS3 and Wii models. A Squier guitar plays through the adapter. The Xbox 360 models read through XInput. |
+| **THQ uDraw GameTablet for PS3** | 20D6:CB17 | Pen, buttons and accelerometer |
+| **Top Shot Elite, Top Shot Fearmaster** | 12BA:04A0, 12BA:04A1 | Light guns for PS3 |
+| **Tony Hawk RIDE and SHRED boards** | 12BA:0400, 1430:0100 | Their accelerometers are not read. A board shows up only while it is switched on. |
+
+### Switch drivers on the Devices page
+
+Moving these to PadForge's driver costs Windows something, so they move only when you ask. See [Switch Driver buttons](../features/devices.md#switch-driver-buttons).
+
+| Device | What PadForge adds |
+| --- | --- |
+| **Xbox 360 chatpad** | Its keys, on a wired pad of revision 1.10 or 1.14 or through Microsoft's wireless receiver |
+| **Xbox 360 uDraw GameTablet** | Pen and buttons, through Microsoft's wireless receiver |
+| **Intel Wireless Series base station** | Its eight gamepads |
+| **Creative Prodikeys PC-MIDI** | The music keys |
+
+### Xbox 360 receivers Windows leaves without a driver
+
+Clone Xbox 360 wireless receivers (045E:0291, 045E:02A9, 05C6:9244) and the Guitar Hero Live Xbox 360 dongle (1430:070B) get Windows' own Xbox 360 driver from PadForge, and then work in every game through XInput, with PadForge running or not.
+
+### Bluetooth LE
+
+PadForge connects to each of these in range that advertises. Pair a Daydream or an Oculus Go controller in Windows Settings first.
+
+| Device | Notes |
+| --- | --- |
+| **Poke Ball Plus** | Press the top button to wake it. Its motion is not read. |
+| **Google Daydream controller** | Touchpad as the left stick, gyro and accelerometer. Hold Home until the light pulses to wake it. |
+| **Samsung Gear VR controller** | Touchpad as the left stick, gyro and accelerometer |
+| **Oculus Go controller** | Touchpad as the left stick, no motion. Hold Oculus and Back until the light blinks to wake it. |
+| **Guitar Hero Live guitar for iOS** | Whammy on the right stick's Y |
+| **Zwift Play, Zwift Click** | Each half of a Play on firmware 1 is its own gamepad. Not the Zwift Ride or the Click v2. |
+| **Thalmic Myo armband** | Five poses as buttons, roll, pitch and yaw as axes, gyro and accelerometer |
+
+### Bluetooth, paired in Windows Settings
+
+The PowerA MOGA in Mode A (Pocket, Pro, Pro Power, Hero Power), the Zeemote JS1 and JS1 H, the Chainpus BGP100 and the 2011 Phonejoy Digital and Analog. Windows may ask for PIN 1234 for a MOGA or a Phonejoy, and 0000 for a Zeemote JS1 H. The Windows Mixed Reality motion controllers and the SteelSeries Nimbus pair the same way. A WMR controller has to pair with the PC, not a headset, and one whose firmware Windows never updated may not start.
+
+### Serial ports
+
+Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan Warrior and CyberMan, RC transmitters, JVS arcade boards, VRinsight panels, Kettler ergometers, serial I-Force wheels, the Pony Canyon Master Controllers, DJI remotes and Konami's cabinet boards. Add each one from the pairing dialog. See [Pairing a controller](../features/devices.md#pairing-a-controller).
+
+### Through another controller
+
+| Device | Through | More |
+| --- | --- | --- |
+| **Guitar Hero guitars, World Tour and Band Hero drums, DJ Hero turntable, Taiko no Tatsujin TaTaCon, uDraw GameTablet, Drawsome tablet, Densha de GO! Shinkansen controller** | A Wii Remote's extension port. Not behind an active Motion Plus. | [Wii Controllers](wii-controllers.md) |
+| **Ring-Con** | A right Joy-Con on its rail | [Ring-Con](wii-controllers.md#ring-con) |
+| **PlayStation Move Sharp Shooter, Racing Wheel** | An original Move's EXT socket, over Bluetooth | [Sharp Shooter and Racing Wheel](ps-move.md#sharp-shooter-and-racing-wheel) |
+
+### Keyboard protocol
+
+The ION iCade cabinet (15E4:0132) reads as an arcade stick with eight buttons and a hat. Its letters also reach the focused window. Other pads in iCade mode are not recognized.
+
+---
+
 ## Beyond gamepads
 
 PadForge reads these as mapping sources too. Each has its own lane rather than being treated

@@ -1952,6 +1952,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#controllers-windows-leaves-without-a-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controllers Windows leaves without a driver
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#status-indicators" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3717,6 +3728,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#controllers-windows-leaves-without-a-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controllers Windows leaves without a driver
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#status-indicators" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4142,6 +4164,16 @@
 <p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch and the HIDMaestro card on the <strong>Settings</strong> page always reads <strong>Installed</strong>.</p>
 <p>HidHide, Windows MIDI Services, and SteamVR do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>.</p>
 <p>Two more drivers install outside <strong>Settings</strong>, and only when something needs them. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a>, <a href="../../devices/ps-move/">PS Move</a> or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named <strong>Full</strong>, the two Valve <strong>Composite</strong> profiles, and <strong>Steam Controller (2026)</strong>) installs usbip-win2, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, <strong>DualSense (PS5): Full</strong>, is one of them. That install needs no prompt, and USB devices disconnect and reconnect once while Windows re-enumerates its USB root hubs.</p>
+<hr />
+<h2 id="controllers-windows-leaves-without-a-driver">Controllers Windows leaves without a driver<a class="headerlink" href="#controllers-windows-leaves-without-a-driver" title="Permanent link">&para;</a></h2>
+<p>Some controllers plug in and sit dead, because Windows has no driver for them or gives them one that reads nothing. Within a few seconds of one appearing, PadForge binds the driver it needs, with no prompt:</p>
+<ul>
+<li><strong>WinUSB</strong>, Windows' own generic USB driver, for the controllers PadForge's controller library reads directly: the Wii U GameCube adapter, the Xbox 360 Big Button receiver, the Gametrak, the DJI RC remote, force-feedback wheels and sticks built on the I-Force chip, Namco's GunCon 2 and USIO, Konami's P3IO and P4IO arcade boards, Densha de GO! and other train controllers, the CH Products Multi-Function Panel, the Ergodex DX1, the TrackIR 2 and 3, the Tacx T1904 and T1932, and original Xbox controllers.</li>
+<li><strong>xusb22</strong>, Windows' own Xbox 360 driver, for clone Xbox 360 wireless receivers (USB IDs 045E:0291, 045E:02A9 and 05C6:9244) and the Guitar Hero Live Xbox 360 dongle (1430:070B). That driver's own list names only Microsoft's receiver, and since Windows 10 version 2004 it can no longer be picked by hand for these. Once bound, they reach every game through XInput, with PadForge running or not.</li>
+</ul>
+<p>PadForge takes a controller only from no driver, or for WinUSB from Windows' generic HID driver, and never from another vendor's driver. A second controller of the same model on another vendor's driver keeps the whole model where it is. Each driver package names the one controller it binds and is signed with the certificate this PC's <a href="../../devices/dualshock-3/">DualShock 3</a> binding uses.</p>
+<p>Four devices lose something to the switch, so they move only when you ask, from their card on the <a href="../devices/#switch-driver-buttons">Devices</a> page.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <hr />
 <h2 id="status-indicators">Status indicators<a class="headerlink" href="#status-indicators" title="Permanent link">&para;</a></h2>
 <p>Each driver card on the Settings page shows an ember flame next to its status text.</p>

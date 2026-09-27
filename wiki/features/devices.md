@@ -12,7 +12,7 @@
 |------|----------|
 | **Left panel** | One card for each detected device |
 | **Right panel** | Detail pane for the selected device. Identity, slot assignment, hiding, live raw input. |
-| **Header** | **Refresh** button, **Pair** button (Wii controllers, DualShock 3, PS Move / Navigation), **Online** count, **Total** count (includes disconnected) |
+| **Header** | **Refresh** button, **Pair** button (Wii controllers, DualShock 3, PS Move / Navigation, and in pre-release builds serial controllers), **Online** count, **Total** count (includes disconnected) |
 
 ---
 
@@ -110,6 +110,21 @@ Once the issue is merged, the mapping ships in the app's built-in controller map
 #### Why use the button over a blank template
 
 The blank Device Mapping issue template makes you type the device identification fields yourself. The in-app button reads them straight from PadForge's live SDL3 enumeration, so the SDL GUID can't be mistyped. Use the button when the device is plugged in.
+
+### Switch Driver buttons
+
+Four devices can give PadForge more when they run on Windows' WinUSB driver, but the switch takes something away from Windows, so PadForge moves them only when you ask. Selecting one shows a button in the detail pane:
+
+| Device | Button | What the switch costs |
+|---|---|---|
+| Xbox 360 wired controller, revisions 1.10 and 1.14 | **Read the Chatpad** | The controller then works only while PadForge runs, and games see it through PadForge's virtual controller. Every plugged-in controller of this model moves with it, and each needs assigning to its slot again. |
+| Microsoft Xbox 360 wireless receiver | **Read Chatpads and uDraw Tablets** | Every controller and headset on the receiver moves with it, works only while PadForge runs, and needs assigning to its slot again. |
+| Intel Wireless Series base station | **Read the Gamepads** | The Intel wireless keyboard on it stops typing in Windows. |
+| Creative Prodikeys | **Read the Music Keys** | The keyboard's media and sleep keys stop working in Windows. Its typing keys keep working. |
+
+A **Switch to PadForge's Driver** confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows **Restore the Windows Driver**, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---
 
@@ -314,13 +329,40 @@ A drawing tablet is not in this group. Windows HID pen and digitizer devices are
 
 ## Pairing a controller
 
-The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers three families: **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**.
+The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**, and in pre-release builds **Serial Controller (COM Port)**.
 
 The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See [Wii Controllers](../devices/wii-controllers.md) for the pairing steps and the per-controller button layouts.
 
 The DualShock 3 family pairs over USB: connect the controller with a cable, click **Pair**, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See [DualShock 3](../devices/dualshock-3.md).
 
 The PlayStation Move / Navigation family pairs over USB the same way. PadForge writes this PC into the controller, saves the Move's motion calibration, and registers it. Unplug it and press the PS button to connect over Bluetooth.
+
+The Serial Controller (COM Port) family adds a controller on a serial port. Windows cannot tell which controller a COM port carries, so pick the **Port** and the **Controller**, then click **Add**. PadForge opens that port from then on, and **Added Controllers** lists each one with a button that removes it. Adding a controller to a port that already has one replaces it. PadForge reads up to 16 serial controllers.
+
+| Controller list entry | What it is |
+|---|---|
+| SpaceTec Spaceball 1003, 2003, 3003, 4000 FLX | Six-axis ball with 12 buttons. The 2003B, 2003C and 3003C take this entry too. |
+| SpaceTec SpaceOrb 360, SpaceBall Avenger | Six-axis ball with 7 buttons |
+| Magellan, SpaceMouse, Spaceball 5000, CadMan | Six-axis puck with 12 buttons |
+| Gravis Stinger | Gamepad |
+| Logitech WingMan Warrior | Flight stick with a hat. Its spin dial reads nothing yet. |
+| Logitech CyberMan | Six-axis controller with a tactile motor |
+| Zhen Hua RC | RC transmitter on the five-byte Zhen Hua protocol, four axes |
+| FlySky i-BUS | The i-BUS output of a FlySky FS-iA6B receiver, 14 channels as axes |
+| JVS I/O | Arcade JVS I/O boards on an RS-485 adapter, an arcade stick for each player, up to four |
+| VRinsight CDU II, MCP Combo I | Flight simulator panels, 70 or 72 buttons |
+| Kettler Ergometer | Kettler ergometers with an RS-232 port: cadence, power, speed, heart rate and target power as axes |
+| I-Force | I-Force wheels and joysticks on a serial port, among them the Boeder Force Feedback Wheel and the Trust Force Feedback Race Master |
+| Pony Canyon Master Controller | Master Controller and Master Controller II train controllers: the lever and the reverser |
+| DJI RC-N1, DJI Mavic Mini, DJI Phantom 3, DJI Phantom 2 | DJI drone remotes on DJI's USB serial driver, which DJI Assistant 2 installs |
+| Konami BIO2 (beatmania IIDX), Konami BIO2 (SOUND VOLTEX) | The BIO2 I/O board of a beatmania IIDX or SOUND VOLTEX cabinet |
+| Konami KFCA (SOUND VOLTEX), Konami PANB (Nostalgia), Konami RVOL (MUSECA), Konami MDXF (DanceDanceRevolution A) | Konami cabinet I/O boards on RS-232 |
+
+An RC-N1 family remote on its bottom USB-C port opens without an entry. A BIO2 needs one. PadForge leaves Konami boards closed until the list holds one, so a game on the same PC can use a BIO2 in the meantime. Add the BIO2 with the entry for its cabinet.
+
+Some devices need a step first. Windows may install a serial mouse on a CyberMan's port, so disable that device in Device Manager. A JVS adapter must switch direction on RTS or by itself, and the bus needs 120 ohms across A and B at the PC end if the adapter has none. A FlySky receiver's i-BUS, ground and power pins wire to the cable's RX, ground and +5 V. A Kettler needs only RX, TX and ground.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.
 

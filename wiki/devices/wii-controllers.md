@@ -39,6 +39,23 @@ PadForge reads all four forms. Each maps as a normal pad on the [Mappings](../fe
 
 Attach or detach a Nunchuk while the remote stays connected and PadForge re-identifies the controller without a restart.
 
+### Guitars, drums and other extensions
+
+A Wii Remote also reads these extensions:
+
+| Extension | Layout |
+|---|---|
+| **Guitar Hero guitar** | Green, red, yellow and blue frets on the face buttons, orange on Left Shoulder, the pedal on Right Shoulder, strum on the D-pad's up and down. The stick, whammy and the touch bar are axes, and the remote's accelerometer gives tilt. |
+| **Guitar Hero World Tour and Band Hero drums** | The pads on the face buttons, the bass pedal on Left Shoulder, orange on Right Shoulder. Each pad's hit velocity and the hi-hat pedal are extra axes. |
+| **DJ Hero turntable** | The green, red and blue buttons of either platter on three face buttons, Euphoria on the fourth, and each platter's own buttons as extra buttons. The platter rates are on the right stick, and the crossfader and the effects dial are extra axes. |
+| **Taiko no Tatsujin TaTaCon** | The drum faces on the stick buttons, the rims on the triggers |
+| **uDraw GameTablet, Drawsome tablet** | Pen position and pressure as axes, plus the pen's buttons |
+| **Densha de GO! Shinkansen controller** | The brake and power levers on the triggers, the face buttons and the D-pad |
+
+None of them reads behind an active Motion Plus, and none has the IR pointer.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
 ### D-pad mapping
 
 Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.
@@ -178,6 +195,18 @@ Map it three ways:
 - To a stick axis.
 
 ![IR Brightness source in the mapping picker](../images/joycon-ir-source.png)
+
+---
+
+## Ring-Con
+
+A right Joy-Con on the rail of a Ring Fit Adventure Ring-Con reads the ring's flex as two sources, **Ring-Con Squeeze** and **Ring-Con Pull**. Each reads one direction, from nothing at rest to full at a hard squeeze or pull, so a squeeze and a pull map to separate buttons or triggers as they are. To drive one stick axis with both, add both sources to the row and turn on **Invert** for the pull.
+
+It works on a standalone right Joy-Con and on a combined pair, over Bluetooth. PadForge switches the ring on only while a mapping reads one of its sources, because reading it keeps the Joy-Con's IR and NFC chip powered. The IR camera and the NFC reader share that chip and come first, so while any mapping reads **IR Brightness** or an NFC tag, the ring reads nothing.
+
+The ring's resting point is its first reading each time it switches on, so hold it at rest for a moment when the Joy-Con connects. Slide the Joy-Con onto the ring before connecting it: a ring attached later is found the next time the Joy-Con connects.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---
 

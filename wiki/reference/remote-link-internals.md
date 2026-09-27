@@ -48,11 +48,12 @@ It holds a `List<LinkPeerConnection>`, so one PC can be linked to many peers at 
 
 ### The source-demand lane (#241)
 
-Demand latches are machine-local. `SourceCoercion` stamps them where the mapping evaluates, so a consumer's NFC binding could never arm the owner's reader on its own. The `SourceDemand` datagram closes that gap. Payload byte 0 is the demand kind, and 1 means NFC reader.
+Demand latches are machine-local. `SourceCoercion` stamps them where the mapping evaluates, so a consumer's NFC binding could never arm the owner's reader on its own. The `SourceDemand` datagram closes that gap. Payload byte 0 is the demand kind: 1 is the NFC reader, 2 the Ring-Con (`DemandKindRingCon`), and 3 the right Joy-Con's IR camera (`DemandKindIr`). An owner that predates a kind ignores it.
 
 - The consumer ships demand (`RemoteLinkOutputRouter.ShipNfcDemand`) for every online reader-capable `peer://` device while its own NFC demand latch is fresh or tag registration is capturing. The router rate-bounds it to one datagram per device per second, since the owner treats each arrival as a fresh stamp.
 - The owner (`InputService.OnRemoteFrameReceived`, on `LinkServer.FrameReceived`) resolves the frame's device id to the shared device and stamps a per-device wall-clock mark. The arming cadence reads that mark exactly like the local latch, inside the same ten-second demand window, so the same teardown and Bluetooth gate apply.
 - There is no off message. A lapsed demand is the off signal, matching the local latch's own expiry contract.
+- The Ring-Con and the camera follow the same pattern (hifihedgehog/SDL#33). While the consumer's own "Ring-Con Squeeze" / "Ring-Con Pull" or "IR Brightness" latch is fresh, `InputService` ships kind 2 (`ShipRingConDemand`) or kind 3 (`ShipIrDemand`) for every online right Joy-Con or combined pair that is a `peer://` device, each on its own one-second clock. The owner stamps per-device marks (`_remoteRingConDemandMs`, `_remoteIrDemandMs`) that arm its Ring-Con and camera hints exactly like a local read. A tag registration capture on the owner still holds its own camera off.
 
 ### Device-list metadata extension
 
@@ -171,6 +172,8 @@ Bits 9–15 are the post-3.5.0 additions, appended strictly after every older bl
 Bit 15 fills the present mask, so post-`Nfc` blocks ride an appended extension rather than a widened mask (widening would move the payload start and break every peer): the `ExtMagic` byte (`0xE6`, unrelated to the device-list tail that shares the value, since the two live in different frames), a u16 extension mask, then the payloads in `BlockExt` order. The read is positional, a "maybe" read, never a required one. The tail exists only when the magic byte is the next thing in the frame, so a peer that predates it never writes one, and a frame that ends before it is complete. It is the same appended-tail compatibility rule the device-list tails use.
 
 The first extension block is `BlockExt.GyroAux` (#252): the gyro triple of a combined pair's left Joy-Con, capability-gated like `Gyro`, `Accel`, and `AccelAux` because a zeroed reading is a still controller, not an absent sensor. Decode fails closed on a non-finite float, resetting the frame to neutral so a hostile NaN never reaches the tuning chain. On the consumer the block feeds the aux gyro sources and `SourceCoercion.GravityProviderAux` on the tuning path, and the `HasGyroAux` capability (the `0xE4` device-list tail) gates discoverability, mirroring a local left Joy-Con.
+
+The second is `BlockExt.RingCon` (hifihedgehog/SDL#33): `RingConStrain` as one float, written after `GyroAux` so a decoder that knows only `GyroAux` reads its block and leaves this one in the tail. Presence comes from the state, as the `JoyConIr` block's does: a strain of exactly 0 is rest or no Ring-Con, the neutral an omitted block decodes to, so only a nonzero strain rides the wire. Decode fails closed on a non-finite float like `GyroAux`, and the consumer's read clamps each direction to 0..1 again.
 
 ---
 

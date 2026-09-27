@@ -1324,6 +1324,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#switch-driver-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switch Driver buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4172,6 +4183,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#switch-driver-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switch Driver buttons
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4826,7 +4848,7 @@
 </tr>
 <tr>
 <td><strong>Header</strong></td>
-<td><strong>Refresh</strong> button, <strong>Pair</strong> button (Wii controllers, DualShock 3, PS Move / Navigation), <strong>Online</strong> count, <strong>Total</strong> count (includes disconnected)</td>
+<td><strong>Refresh</strong> button, <strong>Pair</strong> button (Wii controllers, DualShock 3, PS Move / Navigation, and in pre-release builds serial controllers), <strong>Online</strong> count, <strong>Total</strong> count (includes disconnected)</td>
 </tr>
 </tbody>
 </table>
@@ -4973,6 +4995,41 @@
 <p>Once the issue is merged, the mapping ships in the app's built-in controller mapping database and auto-loads on every PadForge install. Future users with the same hardware get the device recognized without further setup.</p>
 <h4 id="why-use-the-button-over-a-blank-template">Why use the button over a blank template<a class="headerlink" href="#why-use-the-button-over-a-blank-template" title="Permanent link">&para;</a></h4>
 <p>The blank Device Mapping issue template makes you type the device identification fields yourself. The in-app button reads them straight from PadForge's live SDL3 enumeration, so the SDL GUID can't be mistyped. Use the button when the device is plugged in.</p>
+<h3 id="switch-driver-buttons">Switch Driver buttons<a class="headerlink" href="#switch-driver-buttons" title="Permanent link">&para;</a></h3>
+<p>Four devices can give PadForge more when they run on Windows' WinUSB driver, but the switch takes something away from Windows, so PadForge moves them only when you ask. Selecting one shows a button in the detail pane:</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Button</th>
+<th>What the switch costs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xbox 360 wired controller, revisions 1.10 and 1.14</td>
+<td><strong>Read the Chatpad</strong></td>
+<td>The controller then works only while PadForge runs, and games see it through PadForge's virtual controller. Every plugged-in controller of this model moves with it, and each needs assigning to its slot again.</td>
+</tr>
+<tr>
+<td>Microsoft Xbox 360 wireless receiver</td>
+<td><strong>Read Chatpads and uDraw Tablets</strong></td>
+<td>Every controller and headset on the receiver moves with it, works only while PadForge runs, and needs assigning to its slot again.</td>
+</tr>
+<tr>
+<td>Intel Wireless Series base station</td>
+<td><strong>Read the Gamepads</strong></td>
+<td>The Intel wireless keyboard on it stops typing in Windows.</td>
+</tr>
+<tr>
+<td>Creative Prodikeys</td>
+<td><strong>Read the Music Keys</strong></td>
+<td>The keyboard's media and sleep keys stop working in Windows. Its typing keys keep working.</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>Switch to PadForge's Driver</strong> confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows <strong>Restore the Windows Driver</strong>, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <hr />
 <h2 id="assigning-devices-to-slots">Assigning devices to slots<a class="headerlink" href="#assigning-devices-to-slots" title="Permanent link">&para;</a></h2>
 <h3 id="toggle-buttons">Toggle buttons<a class="headerlink" href="#toggle-buttons" title="Permanent link">&para;</a></h3>
@@ -5219,10 +5276,88 @@
 <p>A drawing tablet is not in this group. Windows HID pen and digitizer devices are real HID devices, so they enumerate normally and keep their Input Hiding section.</p>
 <hr />
 <h2 id="pairing-a-controller">Pairing a controller<a class="headerlink" href="#pairing-a-controller" title="Permanent link">&para;</a></h2>
-<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog. A <strong>Controller Family</strong> selector offers three families: <strong>Nintendo Wii</strong>, <strong>Sony DualShock 3</strong>, and <strong>PlayStation Move / Navigation</strong>.</p>
+<p>The header has a <strong>Pair</strong> button next to <strong>Refresh</strong>. It opens the <strong>Pair a Controller</strong> dialog. A <strong>Controller Family</strong> selector offers <strong>Nintendo Wii</strong>, <strong>Sony DualShock 3</strong>, and <strong>PlayStation Move / Navigation</strong>, and in pre-release builds <strong>Serial Controller (COM Port)</strong>.</p>
 <p>The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See <a href="../../devices/wii-controllers/">Wii Controllers</a> for the pairing steps and the per-controller button layouts.</p>
 <p>The DualShock 3 family pairs over USB: connect the controller with a cable, click <strong>Pair</strong>, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See <a href="../../devices/dualshock-3/">DualShock 3</a>.</p>
 <p>The PlayStation Move / Navigation family pairs over USB the same way. PadForge writes this PC into the controller, saves the Move's motion calibration, and registers it. Unplug it and press the PS button to connect over Bluetooth.</p>
+<p>The Serial Controller (COM Port) family adds a controller on a serial port. Windows cannot tell which controller a COM port carries, so pick the <strong>Port</strong> and the <strong>Controller</strong>, then click <strong>Add</strong>. PadForge opens that port from then on, and <strong>Added Controllers</strong> lists each one with a button that removes it. Adding a controller to a port that already has one replaces it. PadForge reads up to 16 serial controllers.</p>
+<table>
+<thead>
+<tr>
+<th>Controller list entry</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SpaceTec Spaceball 1003, 2003, 3003, 4000 FLX</td>
+<td>Six-axis ball with 12 buttons. The 2003B, 2003C and 3003C take this entry too.</td>
+</tr>
+<tr>
+<td>SpaceTec SpaceOrb 360, SpaceBall Avenger</td>
+<td>Six-axis ball with 7 buttons</td>
+</tr>
+<tr>
+<td>Magellan, SpaceMouse, Spaceball 5000, CadMan</td>
+<td>Six-axis puck with 12 buttons</td>
+</tr>
+<tr>
+<td>Gravis Stinger</td>
+<td>Gamepad</td>
+</tr>
+<tr>
+<td>Logitech WingMan Warrior</td>
+<td>Flight stick with a hat. Its spin dial reads nothing yet.</td>
+</tr>
+<tr>
+<td>Logitech CyberMan</td>
+<td>Six-axis controller with a tactile motor</td>
+</tr>
+<tr>
+<td>Zhen Hua RC</td>
+<td>RC transmitter on the five-byte Zhen Hua protocol, four axes</td>
+</tr>
+<tr>
+<td>FlySky i-BUS</td>
+<td>The i-BUS output of a FlySky FS-iA6B receiver, 14 channels as axes</td>
+</tr>
+<tr>
+<td>JVS I/O</td>
+<td>Arcade JVS I/O boards on an RS-485 adapter, an arcade stick for each player, up to four</td>
+</tr>
+<tr>
+<td>VRinsight CDU II, MCP Combo I</td>
+<td>Flight simulator panels, 70 or 72 buttons</td>
+</tr>
+<tr>
+<td>Kettler Ergometer</td>
+<td>Kettler ergometers with an RS-232 port: cadence, power, speed, heart rate and target power as axes</td>
+</tr>
+<tr>
+<td>I-Force</td>
+<td>I-Force wheels and joysticks on a serial port, among them the Boeder Force Feedback Wheel and the Trust Force Feedback Race Master</td>
+</tr>
+<tr>
+<td>Pony Canyon Master Controller</td>
+<td>Master Controller and Master Controller II train controllers: the lever and the reverser</td>
+</tr>
+<tr>
+<td>DJI RC-N1, DJI Mavic Mini, DJI Phantom 3, DJI Phantom 2</td>
+<td>DJI drone remotes on DJI's USB serial driver, which DJI Assistant 2 installs</td>
+</tr>
+<tr>
+<td>Konami BIO2 (beatmania IIDX), Konami BIO2 (SOUND VOLTEX)</td>
+<td>The BIO2 I/O board of a beatmania IIDX or SOUND VOLTEX cabinet</td>
+</tr>
+<tr>
+<td>Konami KFCA (SOUND VOLTEX), Konami PANB (Nostalgia), Konami RVOL (MUSECA), Konami MDXF (DanceDanceRevolution A)</td>
+<td>Konami cabinet I/O boards on RS-232</td>
+</tr>
+</tbody>
+</table>
+<p>An RC-N1 family remote on its bottom USB-C port opens without an entry. A BIO2 needs one. PadForge leaves Konami boards closed until the list holds one, so a game on the same PC can use a BIO2 in the meantime. Add the BIO2 with the entry for its cabinet.</p>
+<p>Some devices need a step first. Windows may install a serial mouse on a CyberMan's port, so disable that device in Device Manager. A JVS adapter must switch direction on RTS or by itself, and the bus needs 120 ohms across A and B at the PC end if the adapter has none. A FlySky receiver's i-BUS, ground and power pins wire to the cable's RX, ground and +5 V. A Kettler needs only RX, TX and ground.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <p>Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.</p>
 <hr />
 <h2 id="input-hiding">Input hiding<a class="headerlink" href="#input-hiding" title="Permanent link">&para;</a></h2>

@@ -56,6 +56,21 @@ Because the wand is held rather than gripped in two hands, Aim Engage is usually
 
 ---
 
+## Sharp Shooter and Racing Wheel
+
+An original Move (ZCM1) connected over Bluetooth reads the two accessories Sony made for its EXT socket. Plug one into the Move and it appears as its own device on the [Devices](../features/devices.md) page for as long as it stays attached, so the Move keeps the same sources with or without it. Assign the accessory to the Move's slot to use both.
+
+| Device | Sources |
+|---|---|
+| **PlayStation Move Racing Wheel** | L1 and R1 on the shoulders, the D-pad, the left and right paddles, L2 and R2 on the triggers, and the throttle as **Axis 6**. Rumble drives the motor in each handle, low frequencies on the left and high on the right. |
+| **PlayStation Move Sharp Shooter** | Reload on the X position, the three weapon positions as **Misc 2**, **Misc 3** and **Misc 4**, and the trigger on the right trigger. The pump-action grip pulls the Move's own trigger, so it reaches only the Move. |
+
+The wheel's face buttons, Start and Select are the Move's own buttons, and so are the Sharp Shooter's Move button, Triangle and Square, so those report on the Move. The PS4-era Move (ZCM2) has no EXT socket, and the socket works only over Bluetooth.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+---
+
 ## Limitations, stated plainly
 
 - PadForge reads the Move's sensors. It does **not** do camera tracking, so there is no positional data, only rotation and acceleration.

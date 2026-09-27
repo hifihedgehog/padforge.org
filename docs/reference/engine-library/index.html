@@ -9065,27 +9065,28 @@
 <a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">    </span><span class="c1">// 3.6.0 pointer / mouse sources (value-type fields, no per-frame allocation)</span>
 <a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">WiiIrState</span><span class="w"> </span><span class="n">Ir</span><span class="p">;</span><span class="w">           </span><span class="c1">// Wii Remote IR pointer (#146): X, Y in [-1..+1], Detected flag</span>
 <a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyConIrIntensity</span><span class="p">;</span><span class="w"> </span><span class="c1">// Right Joy-Con NIR camera average intensity 0..1 (#151)</span>
-<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyCon2MouseDX</span><span class="p">;</span><span class="w">    </span><span class="c1">// Joy-Con 2 optical mouse X delta since last poll (#154)</span>
-<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyCon2MouseDY</span><span class="p">;</span><span class="w">    </span><span class="c1">// Joy-Con 2 optical mouse Y delta since last poll (#154)</span>
-<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="w">    </span><span class="c1">// v4 mouse-gesture source (#200): unclamped Raw Input counts</span>
-<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MouseRawDX</span><span class="p">;</span><span class="w">          </span><span class="c1">// Raw mouse X counts since last poll (before Axis[0] clamp)</span>
-<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MouseRawDY</span><span class="p">;</span><span class="w">          </span><span class="c1">// Raw mouse Y counts since last poll (before Axis[1] clamp)</span>
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">    </span><span class="c1">// v4.1+ capsense and NFC (nullable, allocated only when the capability exists)</span>
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">CapSense</span><span class="p">;</span><span class="w">         </span><span class="c1">// SDL_GetGamepadCapSense channels: 0 left stick top, 1 right stick top, 2 left grip, 3 right grip</span>
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">NfcTag</span><span class="p">;</span><span class="w">           </span><span class="c1">// Switch reader tag buttons (#241). Index 0 = &quot;Any NFC Tag&quot;, index N = registry button N</span>
-<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>
-<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">    </span><span class="c1">// Constructor</span>
-<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">CustomInputState</span><span class="p">();</span>
-<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>
-<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="w">    </span><span class="c1">// Methods</span>
-<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">Clone</span><span class="p">();</span>
-<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CopyInto</span><span class="p">(</span><span class="n">CustomInputState</span><span class="w"> </span><span class="n">dst</span><span class="p">);</span>
-<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ResetForReuse</span><span class="p">();</span>
-<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">GetAxisMask</span><span class="p">(</span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numAxes</span><span class="p">,</span>
-<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a><span class="w">        </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">axisMask</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">actuatorMask</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">actuatorCount</span><span class="p">);</span>
-<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a><span class="p">}</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">RingConStrain</span><span class="p">;</span><span class="w">     </span><span class="c1">// Ring-Con flex -1..+1, squeeze positive (hifihedgehog/SDL#33)</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyCon2MouseDX</span><span class="p">;</span><span class="w">    </span><span class="c1">// Joy-Con 2 optical mouse X delta since last poll (#154)</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyCon2MouseDY</span><span class="p">;</span><span class="w">    </span><span class="c1">// Joy-Con 2 optical mouse Y delta since last poll (#154)</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">    </span><span class="c1">// v4 mouse-gesture source (#200): unclamped Raw Input counts</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MouseRawDX</span><span class="p">;</span><span class="w">          </span><span class="c1">// Raw mouse X counts since last poll (before Axis[0] clamp)</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MouseRawDY</span><span class="p">;</span><span class="w">          </span><span class="c1">// Raw mouse Y counts since last poll (before Axis[1] clamp)</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">    </span><span class="c1">// v4.1+ capsense and NFC (nullable, allocated only when the capability exists)</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">CapSense</span><span class="p">;</span><span class="w">         </span><span class="c1">// SDL_GetGamepadCapSense channels: 0 left stick top, 1 right stick top, 2 left grip, 3 right grip</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span><span class="n">NfcTag</span><span class="p">;</span><span class="w">           </span><span class="c1">// Switch reader tag buttons (#241). Index 0 = &quot;Any NFC Tag&quot;, index N = registry button N</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="w">    </span><span class="c1">// Constructor</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">CustomInputState</span><span class="p">();</span>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a><span class="w">    </span><span class="c1">// Methods</span>
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">CustomInputState</span><span class="w"> </span><span class="nf">Clone</span><span class="p">();</span>
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CopyInto</span><span class="p">(</span><span class="n">CustomInputState</span><span class="w"> </span><span class="n">dst</span><span class="p">);</span>
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ResetForReuse</span><span class="p">();</span>
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">GetAxisMask</span><span class="p">(</span><span class="n">DeviceObjectItem</span><span class="p">[]</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numAxes</span><span class="p">,</span>
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a><span class="w">        </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">axisMask</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">actuatorMask</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">actuatorCount</span><span class="p">);</span>
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="constructor">Constructor<a class="headerlink" href="#constructor" title="Permanent link">&para;</a></h3>
 <table>
@@ -9222,6 +9223,12 @@
 <td>float</td>
 <td>0.0</td>
 <td>(v3.6) Right Joy-Con NIR camera average intensity 0..1 (#151). Covered reads bright (high), uncovered dark (low). 0 when the camera is off. Excluded from the idle test.</td>
+</tr>
+<tr>
+<td><code>RingConStrain</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>Ring-Con flex, &minus;1..+1 (hifihedgehog/SDL#33): positive while the ring is squeezed, negative while it is pulled, 0 at rest and while no Ring-Con polls. The fork posts the raw strain on the right Joy-Con's joystick axis 7 and its first nonzero reading after polling starts as <code>SDL.joystick.switch.ringcon_rest</code>. <code>SdlDeviceWrapper</code> subtracts the rest and divides by <code>RingConFullScale</code> (0x0800, eight steps of the strain's high byte). A strain or a rest whose high byte is 0 reads 0. Counts as activity in the idle test past <code>RingConSlop</code>.</td>
 </tr>
 <tr>
 <td><code>JoyCon2MouseDX</code></td>
@@ -9594,7 +9601,7 @@
 <td><code>HasIrCamera</code></td>
 <td><code>bool</code></td>
 <td>(set at open)</td>
-<td>Wii Remote IR camera present. Drives the IR Pointer joystick-direct read (#146).</td>
+<td>Wii Remote IR camera present: a configuration <code>WiiRemoteIdentity</code> names (the bare remote, or the remote with a Nunchuk or Classic Controller) whose raw axis count reaches the four IR axes. Drives the IR Pointer joystick-direct read (#146). A decoded extension (guitar, drums, turntable, TaTaCon, tablets, Shinkansen controller, hifihedgehog/SDL#33) spends axes 6 and up on its own controls and has no camera.</td>
 </tr>
 <tr>
 <td><code>IsBalanceBoard</code></td>
@@ -9607,6 +9614,18 @@
 <td><code>bool</code></td>
 <td>(set at open)</td>
 <td>Right Joy-Con NIR camera, on a standalone right Joy-Con (PID 0x2007) or a combined gen-1 pair (PID 0x2008, #275). Drives the IR Brightness read (#151).</td>
+</tr>
+<tr>
+<td><code>HasRingCon</code></td>
+<td><code>bool</code></td>
+<td>(set at open)</td>
+<td><code>HasJoyConIr</code> plus an eighth raw axis, the Ring-Con strain the fork adds as axis 7 (hifihedgehog/SDL#33). Drives the <code>RingConStrain</code> read, so an <code>SDL3.dll</code> without the Ring-Con leaves it false.</td>
+</tr>
+<tr>
+<td><code>IsGunCon2</code></td>
+<td><code>bool</code></td>
+<td>(set at open)</td>
+<td>Namco GunCon 2, <code>0B9A:016A</code>, opened with at least two raw axes (hifihedgehog/SDL#33). The fork posts the raw beam counts on axes 0 and 1. <code>ApplyGunCon2</code> scales X 175..720 and Y 20..240 (beardypig's guncon2 driver defaults) to &minus;1..+1, writes the aim to <code>Axis[0]</code> / <code>Axis[1]</code> so a stick mapping aims with no setup, and writes it to <code>Ir</code> divided by the IR pointer's margin stretch, which the IR read restores. X 10 or less or Y 5 or less is off screen: the stick centers and <code>Ir.Detected</code> clears.</td>
 </tr>
 <tr>
 <td><code>HasJoyCon2Mouse</code></td>
@@ -11544,7 +11563,7 @@
 </tr>
 </tbody>
 </table>
-<p>Motion sensors (gyro / accel) are deliberately ignored, as DS4Windows ignores them: gyro noise never settles and would defeat the countdown forever. <code>JoyConIrIntensity</code> is excluded for the same reason (passive ambient-light scalar, never settles). The Wii IR pointer (<code>Ir.Detected</code>, #146), the Joy-Con 2 mouse deltas (<code>JoyCon2MouseDX/DY</code>, #154), and the Raw Input mouse counts (<code>MouseRawDX/DY</code>, #200) count as activity, so a user aiming or moving only those sources is not disconnected mid-use.</p>
+<p>Motion sensors (gyro / accel) are deliberately ignored, as DS4Windows ignores them: gyro noise never settles and would defeat the countdown forever. <code>JoyConIrIntensity</code> is excluded for the same reason (passive ambient-light scalar, never settles). The Wii IR pointer (<code>Ir.Detected</code>, #146), the Joy-Con 2 mouse deltas (<code>JoyCon2MouseDX/DY</code>, #154), and the Raw Input mouse counts (<code>MouseRawDX/DY</code>, #200) count as activity, so a user aiming or moving only those sources is not disconnected mid-use. So does a Ring-Con flex past <code>RingConSlop</code> (0.25, two of the eight high-byte steps that read full scale), because a player exercising with the ring alone presses no button for minutes.</p>
 <hr />
 <h2 id="precisiontouchpadreader">PrecisionTouchpadReader<a class="headerlink" href="#precisiontouchpadreader" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/PrecisionTouchpadReader.cs</code>
@@ -14551,7 +14570,7 @@
 <td><code>HasIrCamera</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlIgnore]</code></td>
-<td>Wii Remote IR camera. Identity-derived from VID <code>0x057E</code> + name prefix "Nintendo Wii Remote", correct online or offline (#146). Gates the "IR Pointer X/Y" sources.</td>
+<td>Wii Remote IR camera. Identity-derived from VID <code>0x057E</code> and the exact SDL names of the three configurations that carry it, "Nintendo Wii Remote", "Nintendo Wii Remote with Nunchuk" and "Nintendo Wii Remote with Classic Controller" (<code>WiiRemoteIdentity.CarriesIrCamera</code>), correct online or offline (#146). Gates the "IR Pointer X/Y" sources.</td>
 </tr>
 <tr>
 <td><code>IsBalanceBoard</code></td>
@@ -14564,6 +14583,18 @@
 <td><code>bool</code></td>
 <td><code>[XmlIgnore]</code></td>
 <td>Right Joy-Con NIR camera. VID <code>0x057E</code> + exact name "Nintendo Switch Joy-Con (R)" (#151), or PID <code>0x2008</code> (combined gen-1 pair, whose right half posts the camera, #275). The PID leg exists because SDL names the gen-1 and gen-2 pairs identically. Gates the "IR Brightness" source.</td>
+</tr>
+<tr>
+<td><code>HasRingCon</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlIgnore]</code></td>
+<td>Same identity as <code>HasJoyConIr</code>, since the fork reads a Ring-Con through the same right Joy-Con (hifihedgehog/SDL#33). Gates the "Ring-Con Squeeze" and "Ring-Con Pull" sources.</td>
+</tr>
+<tr>
+<td><code>IsGunCon2</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlIgnore]</code></td>
+<td>VID <code>0x0B9A</code> + PID <code>0x016A</code> (hifihedgehog/SDL#33), so a relayed gun answers too. The picker then offers the IR pointer sources as "Gun Aim X", "Gun Aim Y" and "Gun Offscreen".</td>
 </tr>
 <tr>
 <td><code>HasJoyCon2Mouse</code></td>

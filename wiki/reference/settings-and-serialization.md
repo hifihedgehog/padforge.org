@@ -537,7 +537,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `IsKeyboard` | `bool` | `CapType == InputDeviceType.Keyboard` |
 | `IsTouchpad` | `bool` | `CapType == InputDeviceType.Touchpad` |
 | `IsConsumerControl` | `bool` | `CapType == InputDeviceType.ConsumerControl` (#168) |
-| `HasIrCamera` | `bool` | `VendorId == 0x057E` and `ProductName` starts with "Nintendo Wii Remote". Gates the IR Pointer sources / Pointer tab (#146). |
+| `HasIrCamera` | `bool` | `VendorId == 0x057E` and `ProductName` is "Nintendo Wii Remote", "Nintendo Wii Remote with Nunchuk" or "Nintendo Wii Remote with Classic Controller" (`WiiRemoteIdentity`). Gates the IR Pointer sources / Pointer tab (#146). |
 | `IsBalanceBoard` | `bool` | `VendorId == 0x057E` and `ProductName` contains "Balance Board". Gates the Balance sources (#146). |
 | `HasJoyConIr` | `bool` | `VendorId == 0x057E` and either `ProductName` is exactly "Nintendo Switch Joy-Con (R)" or `ProdId == 0x2008` (the combined gen-1 pair, whose right half's camera posts on the pair, #275). Gates the IR Brightness source (#151). |
 | `HasJoyCon2Mouse` | `bool` | `VendorId == 0x057E` and `ProductName` is a Switch 2 Joy-Con (L)/(R). Gates the Mouse Motion sources (#154). |

@@ -14,7 +14,7 @@ lists every one PadForge knows by name, all 713 of them, grouped by family.
 | [DualShock 3](dualshock-3.md) | Needs a one-time pairing step over USB before Bluetooth works |
 | [PlayStation Move](ps-move.md) | Same USB pairing step, plus a calibration capture the motion sensors depend on |
 | [SpaceMouse](spacemouse.md) | A 6DoF puck games can't see on their own, with an axis legend worth having open while you map it |
-| [Wii Controllers](wii-controllers.md) | Pairing, extensions, Motion Plus, the IR pointer, and the Joy-Con extras (IR Brightness, the Joy-Con 2 mouse) |
+| [Wii Controllers](wii-controllers.md) | Pairing, extensions, Motion Plus, the IR pointer, and the Joy-Con extras (IR Brightness, the Ring-Con, the Joy-Con 2 mouse) |
 
 Families without a page here (DualSense, DualShock 4, Xbox, Switch Pro,
 Steam Controller, Steam Deck, generic DirectInput) are covered by the

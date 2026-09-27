@@ -396,9 +396,10 @@ For unrecognized devices or Force Raw Joystick Mode, the source picker shows num
 | **Gyro Tilt X**, **Gyro Tilt Y** | The adjustable-range tilt pair. Full deflection at the range set on the Gyro tab's Gyro Tilt card (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode. |
 | **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's own gyro on a combined Joy-Con pair. Offered only when the pair reports the second sensor. |
 | **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's own gyro on a combined Joy-Con pair. On a pair the plain Gyro axes read both halves averaged, so these keep the raw right half reachable. Offered only when the pair reports the second sensor. |
-| **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar |
-| **IR Offscreen** | Fires when a Wii Remote's camera loses sight of the sensor bar. The lightgun reload input. |
+| **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar. On a Namco GunCon 2 the picker lists them as **Gun Aim X** and **Gun Aim Y** (added after 4.5.3, in pre-release builds). |
+| **IR Offscreen** | Fires when a Wii Remote's camera loses sight of the sensor bar. The lightgun reload input. On a GunCon 2 it is **Gun Offscreen**. |
 | **IR Brightness** | Right Joy-Con IR camera. Rises as an object covers or nears the camera window. |
+| **Ring-Con Squeeze**, **Ring-Con Pull** | A Ring-Con on a right Joy-Con's rail, one direction of the ring's flex each, nothing at rest. Added after 4.5.3, in pre-release builds. See [Wii Controllers](../devices/wii-controllers.md#ring-con). |
 | **Balance Total Weight** | Total weight on a Wii Balance Board |
 | **Balance Lean X**, **Balance Lean Y** | Weight shift left / right and forward / back on a Wii Balance Board |
 

@@ -643,8 +643,8 @@ public bool Open(uint instanceId)
 5. **Gamepad layout override:** NumAxes=6, NumButtons=22, NumHats=1. Parse `_mappedRawButtonIndices` and compute `SupportedButtonIndices`
 6. **HID name fallback:** if Name is raw VID/PID (e.g., `"0x16c0/0x05e1"`), query `HidD_GetProductString`
 7. **Check rumble** via `SDL_GetJoystickProperties()` + `SDL_GetBooleanProperty()`. Set `HasRumbleTriggers` (SDL trigger-rumble cap OR the Xbox-impulse VID/PID list)
-8. **Enable sensors:** gyro, accel, the aux accel (`SDL_SENSOR_ACCEL_L`, sets `HasAccelAux`), and the aux gyro (`SDL_SENSOR_GYRO_L`, sets `HasGyroAux`) via `SDL_GamepadHasSensor()` -> `SDL_SetGamepadSensorEnabled(true)` (gamepad only)
-9. **Detect v4 capabilities:** touchpads (`HasTouchpad` / `NumTouchpads` / `TouchpadFingerCounts`), Wii IR camera and Balance Board (`HasIrCamera` / `IsBalanceBoard`, #146), right Joy-Con NIR (`HasJoyConIr`, #151), Joy-Con 2 optical mouse (`HasJoyCon2Mouse`, #154), and extra generic axes (`HasExtraGenericAxes`, #193), keyed off the raw joystick axis count
+8. **Enable sensors:** gyro, accel, the aux accel (`SDL_SENSOR_ACCEL_L`, sets `HasAccelAux`), and the aux gyro (`SDL_SENSOR_GYRO_L`, sets `HasGyroAux`) via `SDL_GamepadHasSensor()` -> `SDL_SetGamepadSensorEnabled(true)`. A device opened as a joystick only probes and enables the same four through `SDL_JoystickHasSensor()` -> `SDL_SetJoystickSensorEnabled(true)`, which is how the Myo, the Rift DK1 and the Windows Mixed Reality controllers deliver motion (hifihedgehog/SDL#33)
+9. **Detect v4 capabilities:** touchpads (`HasTouchpad` / `NumTouchpads` / `TouchpadFingerCounts`), Wii IR camera and Balance Board (`HasIrCamera` / `IsBalanceBoard`, #146, the camera also keyed on the configuration's SDL name through `WiiRemoteIdentity`), right Joy-Con NIR (`HasJoyConIr`, #151), Joy-Con 2 optical mouse (`HasJoyCon2Mouse`, #154), and extra generic axes (`HasExtraGenericAxes`, #193), keyed off the raw joystick axis count
 10. **Open haptic:** `OpenHaptic()` for FFB devices
 11. **Build GUIDs:** `BuildProductGuid()` + `BuildInstanceGuid()`
 
@@ -875,7 +875,7 @@ HasGyroAux = SDL_GamepadHasSensor(GameController, SDL_SENSOR_GYRO_L);
 if (HasGyroAux) SDL_SetGamepadSensorEnabled(GameController, SDL_SENSOR_GYRO_L, true);
 ```
 
-Sensors must be explicitly enabled before data can be read. `GetGamepadState()` reads gyro into `state.Gyro`, accel into `state.Accel`, the aux accel into `state.AccelAux`, and the aux gyro into `state.GyroAux`. The aux streams back the "Motion Accel L" (#199) and "Motion Gyro L" (#252) mapping sources, letting a slot source its IMU feed from the Nunchuk or the left Joy-Con of a pair instead of the body sensor. "Motion Gyro L" is Switch-only: the Nunchuk has no gyro.
+Sensors must be explicitly enabled before data can be read. `GetGamepadState()` reads gyro into `state.Gyro`, accel into `state.Accel`, the aux accel into `state.AccelAux`, and the aux gyro into `state.GyroAux`. `GetJoystickState()` reads the same four with `SDL_GetJoystickSensorData()` on a device opened as a joystick only. The fork's `SDL_GetGamepadSensorData` is that call on the gamepad's joystick. The aux streams back the "Motion Accel L" (#199) and "Motion Gyro L" (#252) mapping sources, letting a slot source its IMU feed from the Nunchuk or the left Joy-Con of a pair instead of the body sensor. "Motion Gyro L" is Switch-only: the Nunchuk has no gyro.
 
 ### Motion Frame and the DSU Sign Transform
 
