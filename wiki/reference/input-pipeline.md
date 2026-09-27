@@ -251,11 +251,12 @@ Post-init:
 1. Calls `LoadEmbeddedGamepadMappings()`. Reads the `gamecontrollerdb_padforge.txt` resource embedded in the single-file exe and applies each non-comment line via `SDL_AddGamepadMapping`. The file-path overload (`SDL_AddGamepadMappingsFromFile`) is unusable when the file ships inside the exe rather than as a loose file next to it. `EmbeddedMappingsLoaded` records the applied count, and the same count goes to the diagnostics log as `MAPPINGS embedded applied=N`
 2. Calls `SDL_EnableScreenSaver()`. SDL_INIT_VIDEO disables the screensaver by default
 3. Calls `SetThreadExecutionState(ES_CONTINUOUS)`. Clears execution-state flags so the PC can sleep
-4. Starts the side-band device services, each of which surfaces its hardware as a virtual joystick to the normal pipeline. Start failures are caught and logged and never fail SDL init. The two `Ds3DirectService` instances, `PsMoveDirectService`, and the provider wiring share one try/catch, so a DS3 start failure also skips the Navigation and Move services. `SpaceMouseService` and `OpenVrConsumerService` each have their own:
+4. Starts the side-band device services. Each one but the vendor USB binder surfaces its hardware as a virtual joystick to the normal pipeline. Start failures are caught and logged and never fail SDL init. The two `Ds3DirectService` instances, `PsMoveDirectService`, and the provider wiring share one try/catch, so a DS3 start failure also skips the Navigation and Move services. `SpaceMouseService`, `VendorUsbBindingService` and `OpenVrConsumerService` each have their own:
    - `Ds3DirectService` (Bluetooth DS3 behind BthPS3, no DsHidMini)
    - A second `Ds3DirectService` with `navigation: true`. The PlayStation Navigation controller is a half sixaxis on the same BthPS3 stack (#277)
    - `PsMoveDirectService`. The Move motion controller's own protocol lane, ZCM1 (49-byte report) and ZCM2 (44-byte) (#277). It also supplies `SdlDeviceWrapper.ExternalPowerInfoProvider` and `ExternalDevicePathProvider` alongside `Ds3DirectService`, because SDL has no power or path channel for virtual joysticks
    - `SpaceMouseService`. 3Dconnexion 6DoF pucks, HID usage 0x08 Multi-axis Controller, invisible to SDL's raw-input backend (#288)
+   - `VendorUsbBindingService`. Binds WinUSB, or xusb22, to the controllers Windows leaves without a driver as each one appears, with a 3 s sweep of the present USB nodes (hifihedgehog/SDL#33). See [Driver Installation Internals](driver-installation-internals.md#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller)
    - `OpenVrConsumerService`. Headset pose and tracked controllers through a background OpenVR client, a 5 s registry-file poll until SteamVR exists and runs, and it never launches SteamVR itself (#287)
 
 **Error handling:** Catches `DllNotFoundException` (SDL3.dll missing) and generic exceptions. Raises `ErrorOccurred` but does not throw. `Start()` checks the return value and aborts on failure.
@@ -264,7 +265,7 @@ Post-init:
 private void ShutdownSdl()
 ```
 
-Returns at once if SDL never initialized. Otherwise stops the side-band services (both `Ds3DirectService` instances, `PsMoveDirectService`, `SpaceMouseService`, `OpenVrConsumerService`), calls `SDL_Quit()`, and clears `_sdlInitialized`. Called only by `Dispose()`.
+Returns at once if SDL never initialized. Otherwise stops the side-band services (both `Ds3DirectService` instances, `PsMoveDirectService`, `SpaceMouseService`, `VendorUsbBindingService`, `OpenVrConsumerService`), calls `SDL_Quit()`, and clears `_sdlInitialized`. Called only by `Dispose()`.
 
 ### Start / Stop
 

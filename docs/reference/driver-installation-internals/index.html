@@ -3026,6 +3026,89 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controllers Windows leaves without a driver (VendorUsbDriverInstaller)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controllers Windows leaves without a driver (VendorUsbDriverInstaller)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bind()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vendorusbbindingservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VendorUsbBindingService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opt-in-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opt-in bindings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#legacy-v2-driver-cleanup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4409,6 +4492,89 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controllers Windows leaves without a driver (VendorUsbDriverInstaller)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controllers Windows leaves without a driver (VendorUsbDriverInstaller)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bind()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vendorusbbindingservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VendorUsbBindingService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opt-in-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opt-in bindings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#legacy-v2-driver-cleanup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4781,22 +4947,25 @@
 
 <h1 id="driver-installation-internals">Driver Installation Internals<a class="headerlink" href="#driver-installation-internals" title="Permanent link">&para;</a></h1>
 <p><em>How PadForge installs, detects, and removes the drivers behind its virtual controllers: HIDMaestro, HidHide, Windows MIDI Services, SteamVR, the DualShock 3 Bluetooth stack, and the legacy v2 leftovers.</em></p>
-<p>PadForge v4 deals with five drivers/services and a legacy v2 cleanup path:</p>
+<p>PadForge v4 deals with six drivers/services and a legacy v2 cleanup path:</p>
 <ol>
 <li><strong>HIDMaestro</strong> is the user-mode UMDF2 driver behind the Xbox, PlayStation, Nintendo, and Extended slot types. It is <strong>not</strong> installed by <code>DriverInstaller</code>. The driver binaries, INF, profiles, and signing tools all ship inside <code>HIDMaestro.Core.dll</code>. <code>HMContext.InstallDriver()</code> (called lazily the first time one of those four slot types activates) registers them with Windows. VR slots ride HIDMaestro too, but through its OpenVR driver, registered with SteamVR by <code>HMVR.EnsureDriverRegistered()</code> rather than by <code>InstallDriver()</code>. MIDI and Keyboard+Mouse slots use no driver of HIDMaestro's at all.</li>
 <li><strong>HidHide</strong> is the kernel-mode driver that hides physical controllers from games. On an x64 machine it is an embedded WiX Burn bootstrapper EXE, installed and removed through <code>msiexec</code>. On an ARM64 machine it is upstream's Microsoft-signed ARM64 driver package, installed and removed by <code>HidHideArm64Installer</code> with upstream's own tool, nefcon.</li>
 <li><strong>Windows MIDI Services</strong> is downloaded on demand from GitHub releases (the installer is ~210 MB, too large to embed) and run with <code>/install /quiet /norestart</code>.</li>
 <li><strong>SteamVR</strong> is installed without the Steam client, by downloading Valve's <code>steamcmd</code> and running the anonymous <code>app_update</code> for app 250820 (issue #49). Uninstall is offered only for the install PadForge itself created.</li>
 <li><strong>The DualShock 3 Bluetooth stack</strong> (BthPS3 + BthPS3PSM) ships as embedded driver packages and is installed from <code>Ds3DriverInstaller</code>, which also binds a docked DS3 to inbox WinUSB so the sixpair reports can be sent.</li>
+<li><strong>Controllers Windows leaves without a driver</strong> get inbox WinUSB, or Windows' own Xbox 360 driver xusb22, from <code>VendorUsbDriverInstaller</code>, each through a one-device package signed on this machine: automatically for most, and only on request for four devices whose switch costs Windows something.</li>
 <li><strong>Legacy v2 driver cleanup</strong> offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.</li>
 </ol>
-<p>Driver-side code lives in five files:</p>
+<p>Driver-side code lives in seven files:</p>
 <ul>
 <li><strong><code>PadForge.App/Common/DriverInstaller.cs</code></strong> (<code>PadForge.Common</code>) handles HidHide, Windows MIDI Services, and Steam-free SteamVR install/uninstall, plus the legacy v2 ViGEmBus and vJoy uninstall paths.</li>
 <li><strong><code>PadForge.App/Common/HidHideArm64Installer.cs</code></strong> (<code>PadForge.Common</code>) installs and removes HidHide on an ARM64 machine, and carries the startup check that stands in for HidHide's watchdog service there.</li>
 <li><strong><code>PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs</code></strong> owns <code>EnsureHMaestroContext()</code>, which calls into the HM SDK to register the HIDMaestro driver with Windows.</li>
 <li><strong><code>PadForge.App/App.xaml.cs</code></strong> owns the launch-time HIDMaestro orphan sweep and the OEM-name orphan recovery, both before any virtual is created.</li>
 <li><strong><code>PadForge.App/Services/Ds3DriverInstaller.cs</code></strong> (<code>PadForge.Services</code>) installs BthPS3 and BthPS3PSM from embedded driver packages, signs and installs the DS3 WinUSB package on the machine that runs it, and arms PSM patching.</li>
+<li><strong><code>PadForge.App/Services/VendorUsbDriverInstaller.cs</code></strong> (<code>PadForge.Services</code>) writes, signs and binds the one-device WinUSB and xusb22 packages, and restores Windows' driver for an opted-in device.</li>
+<li><strong><code>PadForge.App/Common/Input/VendorUsbBindingService.cs</code></strong> (<code>PadForge.Common.Input</code>) sweeps the present USB nodes and binds each controller that needs a driver as it appears.</li>
 </ul>
 <h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4808,6 +4977,7 @@
 <li><a href="#windows-midi-services">Windows MIDI Services</a></li>
 <li><a href="#steamvr-steam-free-install">SteamVR (Steam-free install)</a></li>
 <li><a href="#dualshock-3-bluetooth-stack-ds3driverinstaller">DualShock 3 Bluetooth stack (Ds3DriverInstaller)</a></li>
+<li><a href="#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller">Controllers Windows leaves without a driver (VendorUsbDriverInstaller)</a></li>
 <li><a href="#legacy-v2-driver-cleanup">Legacy v2 driver cleanup (ViGEmBus, vJoy)</a></li>
 <li><a href="#hidhide-runtime-api-hidhidecontroller">HidHide Runtime API (HidHideController)</a></li>
 <li><a href="#uninstall-guards">Uninstall Guards</a></li>
@@ -4836,21 +5006,31 @@
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        WU[&quot;DS3 WinUSB package&lt;br/&gt;signed on this machine&quot;]
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    end
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(231 profiles bundled in the SDK,&lt;br/&gt;133 of them offered in PadForge)&quot;]
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    HH --&gt;|&quot;x64: HidHide_1.5.230_x64.exe&lt;br/&gt;/extract -&gt; msiexec /i HidHide.msi&lt;br/&gt;ARM64: nefconc install, then class filters&quot;| HH_DRV[&quot;HidHide kernel driver&quot;]
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    MS --&gt;|&quot;GitHub /releases -&gt; SDK Runtime EXE for the machine (x64 or arm64) -&gt; /install&quot;| MS_SVC[&quot;Windows MIDI Services&lt;br/&gt;(Win11 24H2+)&quot;]
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    SV --&gt;|&quot;steamcmd.zip -&gt; +app_update 250820&lt;br/&gt;-&gt; HMVR.SetSteamVRPathHint&quot;| SV_DIR[&quot;SteamVR payload&lt;br/&gt;(default C:\SteamVR)&quot;]
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    BT --&gt;|&quot;Devcon.Install of the two INFs&lt;br/&gt;+ Bluetooth-class lower filter&quot;| BT_DRV[&quot;BthPS3 profile driver&lt;br/&gt;+ BthPS3PSM filter&quot;]
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    WU --&gt;|&quot;Inf2Cat + signtool, then&lt;br/&gt;UpdateDriverForPlugAndPlayDevices&quot;| WU_DEV[&quot;Docked DS3 on winusb.sys&quot;]
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    LC -.-&gt;|&quot;msiexec /x ViGEm,&lt;br/&gt;cmd script for vJoy&lt;br/&gt;(pnputil /remove-device, sc, reg, rmdir)&quot;| OLD[&quot;ViGEmBus / vJoy&lt;br/&gt;(only if detected)&quot;]
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    HM -.-&gt; ELEV[&quot;PadForge process&lt;br/&gt;(elevated via app.manifest)&quot;]
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    HH -.-&gt; ELEV
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    MS -.-&gt; ELEV
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    SV -.-&gt; ELEV
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    BT -.-&gt; ELEV
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    WU -.-&gt; ELEV
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    LC -.-&gt; ELEV
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    subgraph Vendor[&quot;VendorUsbDriverInstaller (PadForge.Services)&quot;]
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        direction TB
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        VW[&quot;One-device WinUSB package&lt;br/&gt;signed on this machine&quot;]
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        VX[&quot;One-device xusb22 package&lt;br/&gt;signed on this machine&quot;]
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    end
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(231 profiles bundled in the SDK,&lt;br/&gt;133 of them offered in PadForge)&quot;]
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    HH --&gt;|&quot;x64: HidHide_1.5.230_x64.exe&lt;br/&gt;/extract -&gt; msiexec /i HidHide.msi&lt;br/&gt;ARM64: nefconc install, then class filters&quot;| HH_DRV[&quot;HidHide kernel driver&quot;]
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    MS --&gt;|&quot;GitHub /releases -&gt; SDK Runtime EXE for the machine (x64 or arm64) -&gt; /install&quot;| MS_SVC[&quot;Windows MIDI Services&lt;br/&gt;(Win11 24H2+)&quot;]
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    SV --&gt;|&quot;steamcmd.zip -&gt; +app_update 250820&lt;br/&gt;-&gt; HMVR.SetSteamVRPathHint&quot;| SV_DIR[&quot;SteamVR payload&lt;br/&gt;(default C:\SteamVR)&quot;]
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    BT --&gt;|&quot;Devcon.Install of the two INFs&lt;br/&gt;+ Bluetooth-class lower filter&quot;| BT_DRV[&quot;BthPS3 profile driver&lt;br/&gt;+ BthPS3PSM filter&quot;]
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    WU --&gt;|&quot;Inf2Cat + signtool, then&lt;br/&gt;UpdateDriverForPlugAndPlayDevices&quot;| WU_DEV[&quot;Docked DS3 on winusb.sys&quot;]
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    VW --&gt;|&quot;Inf2Cat + signtool, DiInstallDriver,&lt;br/&gt;then UpdateDriverForPlugAndPlayDevices&quot;| VW_DEV[&quot;Vendor-USB controller on winusb.sys&lt;br/&gt;(SDL reads it through libusb)&quot;]
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    VX --&gt;|&quot;Include xusb22.inf CC_Install,&lt;br/&gt;same signing and forced bind&quot;| VX_DEV[&quot;Clone Xbox 360 receiver on xusb22&quot;]
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    LC -.-&gt;|&quot;msiexec /x ViGEm,&lt;br/&gt;cmd script for vJoy&lt;br/&gt;(pnputil /remove-device, sc, reg, rmdir)&quot;| OLD[&quot;ViGEmBus / vJoy&lt;br/&gt;(only if detected)&quot;]
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    HM -.-&gt; ELEV[&quot;PadForge process&lt;br/&gt;(elevated via app.manifest)&quot;]
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    HH -.-&gt; ELEV
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    MS -.-&gt; ELEV
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    SV -.-&gt; ELEV
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    BT -.-&gt; ELEV
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    WU -.-&gt; ELEV
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    VW -.-&gt; ELEV
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    VX -.-&gt; ELEV
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    LC -.-&gt; ELEV
 </code></pre></div>
 <p><code>app.manifest</code> declares <code>&lt;requestedExecutionLevel level="requireAdministrator" uiAccess="false"/&gt;</code>, so Windows shows the UAC shield on the icon and prompts once when the process starts. Every install/uninstall path runs inside the already-elevated process. There are no further UAC prompts mid-session.</p>
 <p>The OpenXInput shim (<code>xinput1_4.dll</code> under <code>Resources/OpenXInput/x64/</code>, or <code>arm64/</code> for the ARM64 build) is <strong>not</strong> managed by <code>DriverInstaller</code>. It ships embedded inside <code>PadForge.exe</code> as a <code>&lt;Content&gt;</code> item bundled by <code>IncludeNativeLibrariesForSelfExtract</code>. <code>App.xaml.cs</code> calls <code>SetDllDirectory</code> on the single-file extract directory so the loader resolves PadForge's copy ahead of <code>C:\Windows\System32\xinput1_4.dll</code>. Nothing to install or uninstall, the shim is removed when you delete the PadForge folder.</p>
@@ -5213,12 +5393,12 @@
 <td>Finds or creates a <code>CN=PadForge DS3 WinUSB</code> code-signing certificate in <code>LocalMachine\My</code>, ten-year validity, Code Signing EKU. Re-imported with <code>PersistKeySet \| MachineKeySet</code> so <code>signtool</code> can read the private key, then added to <code>My</code>, <code>Root</code>, and <code>TrustedPublisher</code>. Returns the thumbprint.</td>
 </tr>
 <tr>
-<td><code>SignWinUsbPackage(dir, log)</code></td>
-<td>Deletes stale <code>*.cat</code>, runs <code>Inf2Cat.exe /driver:"{dir}"</code> with <code>/os:10_X64</code>, or <code>/os:10_ARM64</code> on an ARM64 machine, then <code>signtool sign /sm /s My /sha1 {thumb} /fd SHA256 "ds3_winusb.cat"</code>. Tools come from <code>HIDMaestro.Internal.DriverBuilder.EnsureExtracted()</code>. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on <code>_signLock</code>.</td>
+<td><code>SignDriverPackage(dir, catalogName, log)</code></td>
+<td>Deletes stale <code>*.cat</code>, runs <code>Inf2Cat.exe /driver:"{dir}"</code> with <code>/os:10_X64</code>, or <code>/os:10_RS3_ARM64</code> on an ARM64 machine (<code>CatalogOs</code>, from <code>RuntimeInformation.OSArchitecture</code>), then <code>signtool sign /sm /s My /sha1 {thumb} /fd SHA256</code> on the named catalog. Inf2Cat has no <code>10_ARM64</code> value: handed one, it prints "Operating systems parameter invalid." and exits -1. 4.5.3 and earlier passed it and never made an ARM64 catalog, and pre-release builds pass <code>10_RS3_ARM64</code>. Tools come from <code>HIDMaestro.Internal.DriverBuilder.EnsureExtracted()</code>. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on <code>_signLock</code>, and shared by the DS3 package and every <code>VendorUsbDriverInstaller</code> package under the one certificate. <code>SignWinUsbPackage(dir, log)</code> is the DS3 call, with <code>ds3_winusb.cat</code>.</td>
 </tr>
 <tr>
-<td><code>IsWinUsbPackageTrusted(out signer)</code></td>
-<td>Builds an <code>X509Chain</code> over the catalog's signer with <code>RevocationMode.NoCheck</code>. Checked after signing as the proof that signing worked.</td>
+<td><code>IsCatalogTrusted(cat, out signer)</code></td>
+<td>Builds an <code>X509Chain</code> over the catalog's signer with <code>RevocationMode.NoCheck</code>. Checked after signing as the proof that signing worked. <code>IsWinUsbPackageTrusted(out signer)</code> is the DS3 call.</td>
 </tr>
 </tbody>
 </table>
@@ -5263,6 +5443,108 @@
 </code></pre></div>
 <p>Copies every manifest resource whose name starts with <code>BthPS3.</code> to <code>%TEMP%\PadForge\BthPS3Drivers\</code>, turning the <code>LogicalName</code> back into a relative path. Cached in a static after the first call, re-extracting only if the directory has since vanished. Nothing deletes it: the packages are re-read on every repair and every WinUSB bind.</p>
 <hr />
+<h2 id="controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller">Controllers Windows leaves without a driver (VendorUsbDriverInstaller)<a class="headerlink" href="#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong> <code>PadForge.App/Services/VendorUsbDriverInstaller.cs</code> (<code>PadForge.Services</code>), <code>PadForge.App/Common/Input/VendorUsbBindingService.cs</code> (<code>PadForge.Common.Input</code>)</p>
+<p>The SDL fork reads many of the controllers of hifihedgehog/SDL#33 through libusb, and libusb reaches a device on Windows only while WinUSB serves it. Windows gives these devices no driver, or its generic HID driver, which reads nothing from them. <code>VendorUsbDriverInstaller</code> binds WinUSB to them the way <code>Ds3DriverInstaller</code> binds a docked DualShock 3, and binds Windows' own Xbox 360 driver, xusb22, to four Xbox 360 devices that xusb22.inf does not name. Once either driver serves a device, SDL opens it at its next device change.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<h3 id="the-packages">The packages<a class="headerlink" href="#the-packages" title="Permanent link">&para;</a></h3>
+<p>Each binding gets its own package, written and signed on this machine when it binds:</p>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>INF and catalog</th>
+<th>Install sections</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WinUSB</td>
+<td><code>padforge_vendorusb.inf</code>, <code>padforge_vendorusb.cat</code></td>
+<td><code>Include = winusb.inf</code> with <code>Needs = WINUSB.NT</code> and <code>WINUSB.NT.Services</code>. <code>[USB_Install.HW]</code> writes <code>DeviceInterfaceGUIDs</code> = <code>{FD826C66-3556-4845-9436-0FE7580DED02}</code>, which marks the node as PadForge's and lets libusb open an interface of a composite device</td>
+<td><code>USBDevice</code></td>
+</tr>
+<tr>
+<td>xusb22</td>
+<td><code>padforge_xusb22.inf</code>, <code>padforge_xusb22.cat</code></td>
+<td><code>Include = xusb22.inf</code> with <code>Needs = CC_Install</code> and <code>CC_Install.Services</code>, the sections xusb22.inf installs every device it names through</td>
+<td><code>XnaComposite</code>, with a <code>[ClassInstall32]</code> for a PC that never installed xusb22.inf</td>
+</tr>
+</tbody>
+</table>
+<p>Each INF names exactly one ID, the node's own: the VID and PID of a device node, plus <code>MI</code> for an interface of a composite device, as libwdi writes one INF per device. A fixed INF naming a whole-device ID would also match the composite parent when Windows lists the device as composite, and <code>usbccgp</code> is never a state the binder takes a node from. Both INFs carry <code>NTamd64</code> and <code>NTarm64</code> models. <code>BuildInf</code> and <code>BuildXusbInf</code> keep only printable ASCII in the device name, dropping quotes and percent signs, and write ASCII with CRLF line ends.</p>
+<h3 id="targets">Targets<a class="headerlink" href="#targets" title="Permanent link">&para;</a></h3>
+<p><code>Plan(UsbNode)</code> returns the binding a node needs, or null:</p>
+<ol>
+<li><strong>xusb22.</strong> A device node with no driver whose ID is in <code>Xusb22Targets</code>: the clone Xbox 360 wireless receivers 045E:0291, 045E:02A9 and 05C6:9244, and the Guitar Hero Live Xbox 360 dongle, 1430:070B.</li>
+<li><strong>Original Xbox, by class.</strong> A node whose compatible IDs include <code>USB\Class_58&amp;SubClass_42</code>, from no driver only. The package names that compatible ID itself, so Windows binds any later XID device to it on its own.</li>
+<li><strong>WinUSB targets.</strong> A node on no driver or <code>HidUsb</code> that matches a row of <code>Targets</code>, the fork's vendor-USB table, by device node, interface number, any interface, or an interface's compatible ID: the Wii U GameCube adapter, the Xbox 360 Big Button receiver, the Gametrak, the DJI RC's interface 1, 14 I-Force wheels and joysticks, the GunCon 2 (never the GunCon 3, 0B9A:0800, which SDL does not read), five train controllers, the Namco USIO, the Konami P3IO and P4IO, the CH Products Multi-Function Panel, the Ergodex DX1's interface 1, the TrackIR 2 and 3, and the Tacx T1904 and T1932.</li>
+<li><strong>Original Xbox, by ID.</strong> A device node on no driver whose VID and PID are among <code>XidIdentities</code>, the 63 rows of the fork's XID table plus the Steel Battalion, 0A7B:D000, for a device Windows lists without the class 0x58 compatible ID.</li>
+</ol>
+<p>A node on any other driver, WinUSB and xusb22 included, is left alone.</p>
+<h3 id="bind">Bind()<a class="headerlink" href="#bind" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Bind</span><span class="p">(</span><span class="n">BindPlan</span><span class="w"> </span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">instanceId</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="n">UsbNode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nodes</span><span class="p">,</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">Action</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="n">CancellationToken</span><span class="w"> </span><span class="n">ct</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+</code></pre></div>
+<ol>
+<li>Refuses the ID when any present node it names sits outside <code>from</code> and is not already on the target driver. <code>from</code> defaults to no driver and <code>HidUsb</code>, or no driver alone for xusb22. <code>UpdateDriverForPlugAndPlayDevices</code> takes every node the ID names, so a second unit of the same model on another vendor's driver would otherwise go with it.</li>
+<li>Writes the INF to <code>StagingDirectory(BindId)</code>, each package in its own folder, because Inf2Cat catalogs every INF it finds in one.</li>
+<li>Signs the package through <code>Ds3DriverInstaller.SignDriverPackage</code> with this machine's certificate, fresh on every bind, and checks the chain with <code>IsCatalogTrusted</code>.</li>
+<li><code>Devcon.Install</code> (DiInstallDriver) stocks the driver store, so a later plug-in with no driver takes the package on its own.</li>
+<li><code>UpdateDriverForPlugAndPlayDevices</code> with <code>INSTALLFLAG_FORCE | INSTALLFLAG_NONINTERACTIVE</code> binds the node now, because driver ranking prefers an inbox driver, <code>HidUsb</code> here, over a package signed on this machine.</li>
+<li>Polls up to 20 times at 250 ms. Done means the node reports the service, <code>WINUSB</code> or <code>xusb22</code>, and an active interface of the driver's GUID sits on it: PadForge's <code>{FD826C66-...}</code> for WinUSB, and for xusb22 the XUSB interface <code>{EC87F1E3-C13B-4100-B5F7-8B84D54260CB}</code> that XInput walks. <code>HasActiveInterface</code> matches an interface path to the node by its instance ID, with <code>#</code> for each backslash.</li>
+</ol>
+<h3 id="vendorusbbindingservice">VendorUsbBindingService<a class="headerlink" href="#vendorusbbindingservice" title="Permanent link">&para;</a></h3>
+<p><code>InputManager.InitializeSdl</code> starts it with the other side-band services, and <code>ShutdownSdl</code> stops it. A background thread named <code>VendorUsbBinder</code> lists the present USB nodes every 3 s in one SetupAPI pass (<code>ListPresentUsbNodes</code>: the USB enumerator, all classes, as libwdi lists devices), plans each one, and binds each planned ID once per sweep. An ID is bound at most once every 30 s, and after three failed binds the session stops trying it. The nodes that need a driver go to the diagnostics log as <code>VendorUSB: needs a driver:</code>, only when that list changes. Nothing here talks to SDL.</p>
+<h3 id="opt-in-bindings">Opt-in bindings<a class="headerlink" href="#opt-in-bindings" title="Permanent link">&para;</a></h3>
+<p>Four devices lose something to WinUSB, so <code>Plan</code> never returns them. <code>OptIns</code> lists them for the Devices page:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Node</th>
+<th>Bound from</th>
+<th>What the switch costs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Xbox360Pad</code></td>
+<td>045E:028E, <code>REV_0110</code> or <code>REV_0114</code></td>
+<td>xusb22</td>
+<td>The pad leaves XInput, DirectInput and Windows.Gaming.Input and gives input only while PadForge runs</td>
+</tr>
+<tr>
+<td><code>Xbox360Receiver</code></td>
+<td>045E:0719, <code>REV_0100</code></td>
+<td>xusb22</td>
+<td>Every controller and headset on the receiver moves with it</td>
+</tr>
+<tr>
+<td><code>IntelBaseStation</code></td>
+<td>8086:C013, interface 0 or the device</td>
+<td>no driver, <code>HidUsb</code></td>
+<td>The base station's keyboard stops typing in Windows</td>
+</tr>
+<tr>
+<td><code>Prodikeys</code></td>
+<td>041E:2801, interface 1</td>
+<td>no driver, <code>HidUsb</code></td>
+<td>The media and sleep keys stop working</td>
+</tr>
+</tbody>
+</table>
+<p><code>DevicesViewModel.RefreshDriverOffer</code> asks <code>QueryOptIn</code> when a device is selected, and sweeps the USB nodes only when <code>IsOptInRow</code> says the row's IDs belong to an opt-in device. The answer is a bind offer when a node sits on a driver its target is bound from, or a restore offer when a node is on WinUSB with PadForge's interface active. A pad on the wireless receiver reports the wireless controller's 045E:02A1, so a row with that ID stands for the receiver. <code>MainWindow.SwitchDriverAsync</code> states the cost in a <code>ConfirmDialog</code>, then calls <code>Bind</code> with the target's <code>From</code> list, or <code>Restore</code>. A bind adds the ID to <code>AppSettingsData.WinUsbOptIns</code>, and a restore removes every ID that names the node.</p>
+<p><code>Restore(instanceId)</code> reads the node's <code>DEVPKEY_Device_DriverInfPath</code> and <code>DEVPKEY_Device_DriverProvider</code>, refuses a package whose provider is not <code>PadForge</code>, and deletes it with <code>Devcon.DeleteDriver</code>. DiUninstallDriver installs the best remaining driver on every device the package served and takes the package out of the driver store. <code>Restore</code> then polls for the node to leave WinUSB.</p>
+<p><code>MainWindow.CheckOptedInDrivers</code> runs 8 s into each start. <code>MovedBack</code> lists the opted-in IDs whose node Windows has put back on the driver it was taken from, from its INF directory or Windows Update, and the status bar names them.</p>
+<h3 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Nothing here ran on hardware. The bench had none of the targets.</li>
+<li>Whether ARM64 Windows carries xusb22.inf and xusb22.sys is unverified. Where it does not, the xusb22 package fails to install and the log says so.</li>
+<li>A chatpad or uDraw on a clone receiver stays unread. The clone receivers get xusb22, and the fork's accessory plan names no WinUSB binding for them.</li>
+</ul>
+<hr />
 <h2 id="legacy-v2-driver-cleanup">Legacy v2 driver cleanup<a class="headerlink" href="#legacy-v2-driver-cleanup" title="Permanent link">&para;</a></h2>
 <p>PadForge v2 used ViGEmBus (Xbox / DS4 virtuals) and vJoy (everything else) as separate drivers. HIDMaestro replaces both. To keep upgrading users from carrying around dead drivers, <code>MainWindow.xaml.cs::MaybeOfferLegacyDriverCleanup()</code> runs once on first launch after the upgrade.</p>
 <h3 id="first-launch-dialog">First-launch dialog<a class="headerlink" href="#first-launch-dialog" title="Permanent link">&para;</a></h3>
@@ -5275,7 +5557,7 @@
 <p>The whole entry point is wrapped in a top-level <code>try/catch</code> that swallows everything because it runs as <code>async void</code> from the dispatcher. An unhandled exception there would surface as a generic "unexpected error" dialog at startup. On detection failure, the flag is <strong>not</strong> flipped, so the next launch retries.</p>
 <h3 id="detection">Detection<a class="headerlink" href="#detection" title="Permanent link">&para;</a></h3>
 <h4 id="isextendedinstalled-vjoy">IsExtendedInstalled() (vJoy)<a class="headerlink" href="#isextendedinstalled-vjoy" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsExtendedInstalled</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsExtendedInstalled</span><span class="p">()</span>
 </code></pre></div>
 <p>Two-path detection:</p>
 <table>
@@ -5300,44 +5582,44 @@
 </tbody>
 </table>
 <h4 id="getvigemversion">GetViGEmVersion()<a class="headerlink" href="#getvigemversion" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetViGEmVersion</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetViGEmVersion</span><span class="p">()</span>
 </code></pre></div>
 <p>Scans Uninstall keys (Registry64 + Registry32) for <code>"ViGEm"</code> in <code>DisplayName</code> (case-insensitive). Returns <code>DisplayVersion</code>, or <code>null</code> if not found.</p>
 <h3 id="uninstallvigembus">UninstallViGEmBus()<a class="headerlink" href="#uninstallvigembus" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UninstallViGEmBus</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UninstallViGEmBus</span><span class="p">()</span>
 </code></pre></div>
 <p>Calls <code>FindUninstallProductCode("ViGEm")</code> to look up the MSI ProductCode GUID. If found, runs <code>msiexec /x {ProductCode} /qb /norestart</code> via <code>RunMsiElevated</code>. No-op if no ProductCode is found.</p>
 <p>Registry-based lookup means PadForge does not have to embed the 6 MB ViGEmBus installer. The MSI is already on the user's machine via Windows Installer cache.</p>
 <h3 id="uninstallvjoy">UninstallVJoy()<a class="headerlink" href="#uninstallvjoy" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UninstallVJoy</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UninstallVJoy</span><span class="p">()</span>
 </code></pre></div>
 <p>Builds a <code>.cmd</code> script at <code>%TEMP%\PadForge_vjoy_uninstall.cmd</code> and runs it via <code>RunElevated("cmd.exe", "/c \"{scriptPath}\"")</code>, deletes the script file with a best-effort <code>try/catch</code> after <code>RunElevated</code> returns (not a <code>finally</code>), then calls <code>CleanExtendedRegistryArtifacts()</code> in-process for the registry mop-up.</p>
 <p>The script is generated dynamically because the OEM <code>.inf</code> names are determined at runtime by <code>FindExtendedOemInfs()</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>flowchart TD
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>    A[FindExtendedOemInfs&lt;br/&gt;detect OEM .inf files] --&gt; B
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>    B[Generate PadForge_vjoy_uninstall.cmd] --&gt; C
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>    C[&quot;RunElevated cmd.exe /c script&lt;br/&gt;(elevation inherited from PadForge)&quot;]
-<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>
-<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>    subgraph CMD[&quot;Batch Script Execution&quot;]
-<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>        direction TB
-<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>        U1[&quot;pnputil /remove-device ROOT\\HIDCLASS\\NNNN /subtree&lt;br/&gt;for NNNN in 0000..0015&quot;] --&gt; U2
-<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>        U2[&quot;timeout /t 2&quot;] --&gt; U3
-<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>        U3[&quot;sc stop vjoy&quot;] --&gt; U4
-<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>        U4[&quot;timeout /t 2&quot;] --&gt; U5
-<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a>        U5[&quot;sc delete vjoy&quot;] --&gt; U6
-<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a>        U6[&quot;reg delete HKLM\\SYSTEM\\{CurrentControlSet,ControlSet001..003}\\Services\\vjoy /f&lt;br/&gt;(belt-and-braces if sc delete returned STOP_PENDING)&quot;] --&gt; U7
-<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a>        U7[&quot;pnputil /delete-driver oemNN.inf /uninstall /force&lt;br/&gt;per stale OEM inf&quot;] --&gt; U8
-<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a>        U8[&quot;rmdir /s /q C:\\Program Files\\vJoy&lt;br/&gt;del System32\\drivers\\vjoy.sys&quot;] --&gt; U9
-<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a>        U9[&quot;powershell one-liner: scan HKLM Uninstall + WOW6432Node Uninstall&lt;br/&gt;for DisplayName -like &#39;*vJoy*&#39; and Remove-Item -Recurse -Force&quot;]
-<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a>    end
-<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a>
-<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a>    C --&gt; CMD
-<a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a>    CMD --&gt; E[Delete .cmd file]
-<a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a>    E --&gt; D[CleanExtendedRegistryArtifacts&lt;br/&gt;C# method, no further elevation needed]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>flowchart TD
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>    A[FindExtendedOemInfs&lt;br/&gt;detect OEM .inf files] --&gt; B
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>    B[Generate PadForge_vjoy_uninstall.cmd] --&gt; C
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>    C[&quot;RunElevated cmd.exe /c script&lt;br/&gt;(elevation inherited from PadForge)&quot;]
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>    subgraph CMD[&quot;Batch Script Execution&quot;]
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>        direction TB
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>        U1[&quot;pnputil /remove-device ROOT\\HIDCLASS\\NNNN /subtree&lt;br/&gt;for NNNN in 0000..0015&quot;] --&gt; U2
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>        U2[&quot;timeout /t 2&quot;] --&gt; U3
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>        U3[&quot;sc stop vjoy&quot;] --&gt; U4
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>        U4[&quot;timeout /t 2&quot;] --&gt; U5
+<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>        U5[&quot;sc delete vjoy&quot;] --&gt; U6
+<a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a>        U6[&quot;reg delete HKLM\\SYSTEM\\{CurrentControlSet,ControlSet001..003}\\Services\\vjoy /f&lt;br/&gt;(belt-and-braces if sc delete returned STOP_PENDING)&quot;] --&gt; U7
+<a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a>        U7[&quot;pnputil /delete-driver oemNN.inf /uninstall /force&lt;br/&gt;per stale OEM inf&quot;] --&gt; U8
+<a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a>        U8[&quot;rmdir /s /q C:\\Program Files\\vJoy&lt;br/&gt;del System32\\drivers\\vjoy.sys&quot;] --&gt; U9
+<a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a>        U9[&quot;powershell one-liner: scan HKLM Uninstall + WOW6432Node Uninstall&lt;br/&gt;for DisplayName -like &#39;*vJoy*&#39; and Remove-Item -Recurse -Force&quot;]
+<a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a>    end
+<a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a>
+<a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a>    C --&gt; CMD
+<a id="__codelineno-27-20" name="__codelineno-27-20" href="#__codelineno-27-20"></a>    CMD --&gt; E[Delete .cmd file]
+<a id="__codelineno-27-21" name="__codelineno-27-21" href="#__codelineno-27-21"></a>    E --&gt; D[CleanExtendedRegistryArtifacts&lt;br/&gt;C# method, no further elevation needed]
 </code></pre></div>
 <p><strong>Step ordering matters</strong>: device nodes are removed before <code>sc stop</code> so the driver can fully unload from the kernel. Stopping the service while devices are still attached leaves it in <code>STOP_PENDING</code>, which is irrecoverable without a reboot.</p>
 <h3 id="cleanextendedregistryartifacts">CleanExtendedRegistryArtifacts()<a class="headerlink" href="#cleanextendedregistryartifacts" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CleanExtendedRegistryArtifacts</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CleanExtendedRegistryArtifacts</span><span class="p">()</span>
 </code></pre></div>
 <p>Removes registry keys that can cause a reinstall of vJoy to hang. Best-effort (<code>throwOnMissingSubKey: false</code>, per-key <code>try/catch</code>).</p>
 <p><strong>HKLM paths deleted:</strong></p>
@@ -5408,11 +5690,11 @@
 </table>
 <p>After the path list, calls <code>CleanExtendedDeviceClassEntries()</code>.</p>
 <h3 id="cleanextendeddeviceclassentries">CleanExtendedDeviceClassEntries()<a class="headerlink" href="#cleanextendeddeviceclassentries" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CleanExtendedDeviceClassEntries</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CleanExtendedDeviceClassEntries</span><span class="p">()</span>
 </code></pre></div>
 <p>Enumerates subkeys under <code>HKLM\SYSTEM\ControlSet001\Control\Class\{781ef630-72b2-11d2-b852-00c04fad5101}</code> (the shared HID device class key) and deletes any whose <code>Class</code> value equals <code>"vjoy"</code> (case-insensitive). Best-effort. Exceptions caught silently.</p>
 <h3 id="findextendedoeminfs">FindExtendedOemInfs()<a class="headerlink" href="#findextendedoeminfs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="nf">FindExtendedOemInfs</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="nf">FindExtendedOemInfs</span><span class="p">()</span>
 </code></pre></div>
 <p>Runs <code>pnputil.exe /enum-drivers</code> (30s timeout, output captured), then walks the output line-by-line tracking the most recent <code>oemNN.inf</code> value and flagging each block that mentions <code>"shaul"</code> or <code>"vjoy"</code> (case-insensitive). The parser keys on the <code>oemNN.inf</code> value with a regex, never on the <code>Published Name</code> label. pnputil localizes that label, and the old label-keyed parse returned nothing on German or Japanese Windows, so legacy drivers went undetected there. Returns matching <code>oem*.inf</code> names. Returns an empty array on any error. Used by <code>UninstallVJoy()</code> to know which <code>pnputil /delete-driver</code> lines to emit.</p>
 <hr />
@@ -5472,32 +5754,32 @@
 <h3 id="buffer-format">Buffer Format<a class="headerlink" href="#buffer-format" title="Permanent link">&para;</a></h3>
 <p>GET/SET list operations use <strong>Multi-SZ</strong> format: null-separated UTF-16 strings with double-null terminator. SET replaces the entire list (not append).</p>
 <h3 id="public-api">Public API<a class="headerlink" href="#public-api" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsAvailable</span><span class="p">()</span><span class="w">                                   </span><span class="c1">// Can open \\.\HidHide</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryProbe</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">win32Error</span><span class="p">)</span><span class="w">                    </span><span class="c1">// The same open, with the Win32 error on failure</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetBlacklist</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Device instance IDs, or NULL when the driver could not be read</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetBlacklist</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ids</span><span class="p">)</span><span class="w">                  </span><span class="c1">// Replace entire blacklist, false when the driver refused</span>
-<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetWhitelist</span><span class="p">()</span><span class="w">                          </span><span class="c1">// DOS device paths, or NULL on a failed read</span>
-<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetWhitelist</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paths</span><span class="p">)</span><span class="w">                </span><span class="c1">// Replace entire whitelist, false when the driver refused</span>
-<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DescribeReach</span><span class="p">(</span><span class="k">params</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">exeNames</span><span class="p">)</span><span class="w">       </span><span class="c1">// Diagnostics snapshot: driver reachable, active flag, whitelist size, per-name listing</span>
-<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetActive</span><span class="p">()</span><span class="w">                                     </span><span class="c1">// Cloaking enabled?</span>
-<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryGetActive</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                   </span><span class="c1">// The same read, false when the IOCTL failed</span>
-<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                          </span><span class="c1">// Enable/disable cloaking</span>
-<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveManagedDevices</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Remove only PadForge&#39;s entries</span>
-<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">AdoptExistingAsManaged</span><span class="p">()</span><span class="w">                         </span><span class="c1">// Seed the managed set from the driver&#39;s list, -1 on a failed read</span>
-<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w">  </span><span class="c1">// Diff-based blacklist sync against the driver&#39;s own list</span>
-<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">,</span>
-<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">added</span><span class="p">,</span>
-<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">removed</span><span class="p">)</span><span class="w">    </span><span class="c1">// The same sync, reporting what changed</span>
-<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MissingFromBlacklist</span><span class="p">(</span><span class="n">IEnumerable</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w"> </span><span class="c1">// Read-back: what the driver does not carry</span>
-<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ClearAll</span><span class="p">()</span><span class="w">                                      </span><span class="c1">// Clear blacklist + disable cloaking</span>
-<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">FindInstanceIdsByVidPid</span><span class="p">(</span><span class="kt">ushort</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="p">)</span><span class="w"> </span><span class="c1">// Enumerate HID-class devices by VID/PID (USB + BLE + BT Classic)</span>
-<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">)</span>
-<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span>
-<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">,</span><span class="w"> </span><span class="n">Func</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keepOut</span><span class="p">,</span>
-<a id="__codelineno-30-23" name="__codelineno-30-23" href="#__codelineno-30-23"></a><span class="w">    </span><span class="n">ICollection</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keptOut</span><span class="p">)</span><span class="w">                            </span><span class="c1">// The expansion with the keep-out set applied</span>
-<a id="__codelineno-30-24" name="__codelineno-30-24" href="#__codelineno-30-24"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsHidMaestroDeviceInstance</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w">           </span><span class="c1">// True if instance (or an ancestor) is a HIDMaestro virtual</span>
-<a id="__codelineno-30-25" name="__codelineno-30-25" href="#__codelineno-30-25"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DevicePathToInstanceId</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w">              </span><span class="c1">// \\?\HID#... -&gt; HID\VID_...\...</span>
-<a id="__codelineno-30-26" name="__codelineno-30-26" href="#__codelineno-30-26"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">ToDosDevicePathPublic</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">)</span><span class="w">        </span><span class="c1">// C:\... -&gt; \Device\HarddiskVolumeN\...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsAvailable</span><span class="p">()</span><span class="w">                                   </span><span class="c1">// Can open \\.\HidHide</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryProbe</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">win32Error</span><span class="p">)</span><span class="w">                    </span><span class="c1">// The same open, with the Win32 error on failure</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetBlacklist</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Device instance IDs, or NULL when the driver could not be read</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetBlacklist</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ids</span><span class="p">)</span><span class="w">                  </span><span class="c1">// Replace entire blacklist, false when the driver refused</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetWhitelist</span><span class="p">()</span><span class="w">                          </span><span class="c1">// DOS device paths, or NULL on a failed read</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SetWhitelist</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paths</span><span class="p">)</span><span class="w">                </span><span class="c1">// Replace entire whitelist, false when the driver refused</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DescribeReach</span><span class="p">(</span><span class="k">params</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">exeNames</span><span class="p">)</span><span class="w">       </span><span class="c1">// Diagnostics snapshot: driver reachable, active flag, whitelist size, per-name listing</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetActive</span><span class="p">()</span><span class="w">                                     </span><span class="c1">// Cloaking enabled?</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">TryGetActive</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                   </span><span class="c1">// The same read, false when the IOCTL failed</span>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetActive</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w">                          </span><span class="c1">// Enable/disable cloaking</span>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveManagedDevices</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Remove only PadForge&#39;s entries</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">AdoptExistingAsManaged</span><span class="p">()</span><span class="w">                         </span><span class="c1">// Seed the managed set from the driver&#39;s list, -1 on a failed read</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w">  </span><span class="c1">// Diff-based blacklist sync against the driver&#39;s own list</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">SyncManagedDevices</span><span class="p">(</span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">,</span>
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">added</span><span class="p">,</span>
+<a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a><span class="w">                               </span><span class="k">out</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">removed</span><span class="p">)</span><span class="w">    </span><span class="c1">// The same sync, reporting what changed</span>
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MissingFromBlacklist</span><span class="p">(</span><span class="n">IEnumerable</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">desiredIds</span><span class="p">)</span><span class="w"> </span><span class="c1">// Read-back: what the driver does not carry</span>
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ClearAll</span><span class="p">()</span><span class="w">                                      </span><span class="c1">// Clear blacklist + disable cloaking</span>
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">FindInstanceIdsByVidPid</span><span class="p">(</span><span class="kt">ushort</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="p">)</span><span class="w"> </span><span class="c1">// Enumerate HID-class devices by VID/PID (USB + BLE + BT Classic)</span>
+<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">)</span>
+<a id="__codelineno-31-21" name="__codelineno-31-21" href="#__codelineno-31-21"></a><span class="k">static</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExpandToBaseContainerAndChildren</span><span class="p">(</span>
+<a id="__codelineno-31-22" name="__codelineno-31-22" href="#__codelineno-31-22"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">hidInstanceId</span><span class="p">,</span><span class="w"> </span><span class="n">Func</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keepOut</span><span class="p">,</span>
+<a id="__codelineno-31-23" name="__codelineno-31-23" href="#__codelineno-31-23"></a><span class="w">    </span><span class="n">ICollection</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keptOut</span><span class="p">)</span><span class="w">                            </span><span class="c1">// The expansion with the keep-out set applied</span>
+<a id="__codelineno-31-24" name="__codelineno-31-24" href="#__codelineno-31-24"></a><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsHidMaestroDeviceInstance</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w">           </span><span class="c1">// True if instance (or an ancestor) is a HIDMaestro virtual</span>
+<a id="__codelineno-31-25" name="__codelineno-31-25" href="#__codelineno-31-25"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DevicePathToInstanceId</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w">              </span><span class="c1">// \\?\HID#... -&gt; HID\VID_...\...</span>
+<a id="__codelineno-31-26" name="__codelineno-31-26" href="#__codelineno-31-26"></a><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">ToDosDevicePathPublic</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">filePath</span><span class="p">)</span><span class="w">        </span><span class="c1">// C:\... -&gt; \Device\HarddiskVolumeN\...</span>
 </code></pre></div>
 <p><code>GetBlacklist</code> and <code>GetWhitelist</code> return <code>null</code> for a failed read and an empty list for a successful read of an empty list. Callers must not conflate the two: every consumer does read-modify-write, so treating a failed read as "the list is empty" writes an empty list back and destroys entries the user set outside PadForge.</p>
 <h3 id="reading-the-drivers-list">Reading the Driver's List<a class="headerlink" href="#reading-the-drivers-list" title="Permanent link">&para;</a></h3>
@@ -5619,7 +5901,7 @@
 <hr />
 <h2 id="elevation-strategy">Elevation Strategy<a class="headerlink" href="#elevation-strategy" title="Permanent link">&para;</a></h2>
 <p>PadForge requires elevation unconditionally. <code>app.manifest</code> declares:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nt">&lt;requestedExecutionLevel</span><span class="w"> </span><span class="na">level=</span><span class="s">&quot;requireAdministrator&quot;</span><span class="w"> </span><span class="na">uiAccess=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nt">&lt;requestedExecutionLevel</span><span class="w"> </span><span class="na">level=</span><span class="s">&quot;requireAdministrator&quot;</span><span class="w"> </span><span class="na">uiAccess=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
 </code></pre></div>
 <p>Windows shows the UAC shield on the icon and prompts once when the process starts. The previous v2 approach of relaunching mid-session via <code>Verb = "runas"</code> (and the conditional auto-elevation tied to vJoy presence) is gone. Every code path that needs admin runs inside the already-elevated process.</p>
 <table>
@@ -5715,13 +5997,17 @@
 <td><code>%TEMP%\PadForge\BthPS3Drivers\</code></td>
 </tr>
 <tr>
+<td>Vendor USB packages</td>
+<td><code>%TEMP%\PadForge\VendorUsb\&lt;ID&gt;\</code>, and <code>&lt;ID&gt;_xusb22\</code> for an xusb22 package</td>
+</tr>
+<tr>
 <td>Legacy vJoy uninstall script</td>
 <td><code>%TEMP%\PadForge_vjoy_uninstall.cmd</code></td>
 </tr>
 </tbody>
 </table>
 <p>The first three are cleaned up after each operation via <code>CleanupTempDir()</code>, and the vJoy script is removed with a direct <code>File.Delete()</code>.</p>
-<p><code>%TEMP%\PadForge\BthPS3Drivers\</code> is the exception: it persists for the process lifetime and beyond, cached in a static inside <code>ExtractDrivers()</code>. The staged INFs are re-read on every filter repair, every WinUSB bind, and every trust check, and the WinUSB catalog is regenerated in place each time.</p>
+<p><code>%TEMP%\PadForge\BthPS3Drivers\</code> is the exception: it persists for the process lifetime and beyond, cached in a static inside <code>ExtractDrivers()</code>. The staged INFs are re-read on every filter repair, every WinUSB bind, and every trust check, and the WinUSB catalog is regenerated in place each time. The vendor USB folders persist too, and each bind rewrites its INF and regenerates its catalog.</p>
 <p>HIDMaestro has no temp directory because PadForge does not unpack any installer for it.</p>
 <hr />
 <h2 id="error-handling-and-rollback">Error Handling and Rollback<a class="headerlink" href="#error-handling-and-rollback" title="Permanent link">&para;</a></h2>

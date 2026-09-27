@@ -2,22 +2,25 @@
 
 *How PadForge installs, detects, and removes the drivers behind its virtual controllers: HIDMaestro, HidHide, Windows MIDI Services, SteamVR, the DualShock 3 Bluetooth stack, and the legacy v2 leftovers.*
 
-PadForge v4 deals with five drivers/services and a legacy v2 cleanup path:
+PadForge v4 deals with six drivers/services and a legacy v2 cleanup path:
 
 1. **HIDMaestro** is the user-mode UMDF2 driver behind the Xbox, PlayStation, Nintendo, and Extended slot types. It is **not** installed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll`. `HMContext.InstallDriver()` (called lazily the first time one of those four slot types activates) registers them with Windows. VR slots ride HIDMaestro too, but through its OpenVR driver, registered with SteamVR by `HMVR.EnsureDriverRegistered()` rather than by `InstallDriver()`. MIDI and Keyboard+Mouse slots use no driver of HIDMaestro's at all.
 2. **HidHide** is the kernel-mode driver that hides physical controllers from games. On an x64 machine it is an embedded WiX Burn bootstrapper EXE, installed and removed through `msiexec`. On an ARM64 machine it is upstream's Microsoft-signed ARM64 driver package, installed and removed by `HidHideArm64Installer` with upstream's own tool, nefcon.
 3. **Windows MIDI Services** is downloaded on demand from GitHub releases (the installer is ~210 MB, too large to embed) and run with `/install /quiet /norestart`.
 4. **SteamVR** is installed without the Steam client, by downloading Valve's `steamcmd` and running the anonymous `app_update` for app 250820 (issue #49). Uninstall is offered only for the install PadForge itself created.
 5. **The DualShock 3 Bluetooth stack** (BthPS3 + BthPS3PSM) ships as embedded driver packages and is installed from `Ds3DriverInstaller`, which also binds a docked DS3 to inbox WinUSB so the sixpair reports can be sent.
-6. **Legacy v2 driver cleanup** offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.
+6. **Controllers Windows leaves without a driver** get inbox WinUSB, or Windows' own Xbox 360 driver xusb22, from `VendorUsbDriverInstaller`, each through a one-device package signed on this machine: automatically for most, and only on request for four devices whose switch costs Windows something.
+7. **Legacy v2 driver cleanup** offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.
 
-Driver-side code lives in five files:
+Driver-side code lives in seven files:
 
 - **`PadForge.App/Common/DriverInstaller.cs`** (`PadForge.Common`) handles HidHide, Windows MIDI Services, and Steam-free SteamVR install/uninstall, plus the legacy v2 ViGEmBus and vJoy uninstall paths.
 - **`PadForge.App/Common/HidHideArm64Installer.cs`** (`PadForge.Common`) installs and removes HidHide on an ARM64 machine, and carries the startup check that stands in for HidHide's watchdog service there.
 - **`PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs`** owns `EnsureHMaestroContext()`, which calls into the HM SDK to register the HIDMaestro driver with Windows.
 - **`PadForge.App/App.xaml.cs`** owns the launch-time HIDMaestro orphan sweep and the OEM-name orphan recovery, both before any virtual is created.
 - **`PadForge.App/Services/Ds3DriverInstaller.cs`** (`PadForge.Services`) installs BthPS3 and BthPS3PSM from embedded driver packages, signs and installs the DS3 WinUSB package on the machine that runs it, and arms PSM patching.
+- **`PadForge.App/Services/VendorUsbDriverInstaller.cs`** (`PadForge.Services`) writes, signs and binds the one-device WinUSB and xusb22 packages, and restores Windows' driver for an opted-in device.
+- **`PadForge.App/Common/Input/VendorUsbBindingService.cs`** (`PadForge.Common.Input`) sweeps the present USB nodes and binds each controller that needs a driver as it appears.
 
 ## Contents
 
@@ -29,6 +32,7 @@ Driver-side code lives in five files:
 - [Windows MIDI Services](#windows-midi-services)
 - [SteamVR (Steam-free install)](#steamvr-steam-free-install)
 - [DualShock 3 Bluetooth stack (Ds3DriverInstaller)](#dualshock-3-bluetooth-stack-ds3driverinstaller)
+- [Controllers Windows leaves without a driver (VendorUsbDriverInstaller)](#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller)
 - [Legacy v2 driver cleanup (ViGEmBus, vJoy)](#legacy-v2-driver-cleanup)
 - [HidHide Runtime API (HidHideController)](#hidhide-runtime-api-hidhidecontroller)
 - [Uninstall Guards](#uninstall-guards)
@@ -60,12 +64,20 @@ graph TD
         WU["DS3 WinUSB package<br/>signed on this machine"]
     end
 
+    subgraph Vendor["VendorUsbDriverInstaller (PadForge.Services)"]
+        direction TB
+        VW["One-device WinUSB package<br/>signed on this machine"]
+        VX["One-device xusb22 package<br/>signed on this machine"]
+    end
+
     HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(231 profiles bundled in the SDK,<br/>133 of them offered in PadForge)"]
     HH -->|"x64: HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi<br/>ARM64: nefconc install, then class filters"| HH_DRV["HidHide kernel driver"]
     MS -->|"GitHub /releases -> SDK Runtime EXE for the machine (x64 or arm64) -> /install"| MS_SVC["Windows MIDI Services<br/>(Win11 24H2+)"]
     SV -->|"steamcmd.zip -> +app_update 250820<br/>-> HMVR.SetSteamVRPathHint"| SV_DIR["SteamVR payload<br/>(default C:\SteamVR)"]
     BT -->|"Devcon.Install of the two INFs<br/>+ Bluetooth-class lower filter"| BT_DRV["BthPS3 profile driver<br/>+ BthPS3PSM filter"]
     WU -->|"Inf2Cat + signtool, then<br/>UpdateDriverForPlugAndPlayDevices"| WU_DEV["Docked DS3 on winusb.sys"]
+    VW -->|"Inf2Cat + signtool, DiInstallDriver,<br/>then UpdateDriverForPlugAndPlayDevices"| VW_DEV["Vendor-USB controller on winusb.sys<br/>(SDL reads it through libusb)"]
+    VX -->|"Include xusb22.inf CC_Install,<br/>same signing and forced bind"| VX_DEV["Clone Xbox 360 receiver on xusb22"]
     LC -.->|"msiexec /x ViGEm,<br/>cmd script for vJoy<br/>(pnputil /remove-device, sc, reg, rmdir)"| OLD["ViGEmBus / vJoy<br/>(only if detected)"]
 
     HM -.-> ELEV["PadForge process<br/>(elevated via app.manifest)"]
@@ -74,6 +86,8 @@ graph TD
     SV -.-> ELEV
     BT -.-> ELEV
     WU -.-> ELEV
+    VW -.-> ELEV
+    VX -.-> ELEV
     LC -.-> ELEV
 ```
 
@@ -452,8 +466,8 @@ PadForge signs the DS3 WinUSB package on the machine that installs it, the same 
 | Member | Behavior |
 |---|---|
 | `EnsureSigningCertificate()` | Finds or creates a `CN=PadForge DS3 WinUSB` code-signing certificate in `LocalMachine\My`, ten-year validity, Code Signing EKU. Re-imported with `PersistKeySet \| MachineKeySet` so `signtool` can read the private key, then added to `My`, `Root`, and `TrustedPublisher`. Returns the thumbprint. |
-| `SignWinUsbPackage(dir, log)` | Deletes stale `*.cat`, runs `Inf2Cat.exe /driver:"{dir}"` with `/os:10_X64`, or `/os:10_ARM64` on an ARM64 machine, then `signtool sign /sm /s My /sha1 {thumb} /fd SHA256 "ds3_winusb.cat"`. Tools come from `HIDMaestro.Internal.DriverBuilder.EnsureExtracted()`. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on `_signLock`. |
-| `IsWinUsbPackageTrusted(out signer)` | Builds an `X509Chain` over the catalog's signer with `RevocationMode.NoCheck`. Checked after signing as the proof that signing worked. |
+| `SignDriverPackage(dir, catalogName, log)` | Deletes stale `*.cat`, runs `Inf2Cat.exe /driver:"{dir}"` with `/os:10_X64`, or `/os:10_RS3_ARM64` on an ARM64 machine (`CatalogOs`, from `RuntimeInformation.OSArchitecture`), then `signtool sign /sm /s My /sha1 {thumb} /fd SHA256` on the named catalog. Inf2Cat has no `10_ARM64` value: handed one, it prints "Operating systems parameter invalid." and exits -1. 4.5.3 and earlier passed it and never made an ARM64 catalog, and pre-release builds pass `10_RS3_ARM64`. Tools come from `HIDMaestro.Internal.DriverBuilder.EnsureExtracted()`. Always regenerates, because a catalog left by an earlier run is validly signed and would still chain while covering a stale INF. Serialized on `_signLock`, and shared by the DS3 package and every `VendorUsbDriverInstaller` package under the one certificate. `SignWinUsbPackage(dir, log)` is the DS3 call, with `ds3_winusb.cat`. |
+| `IsCatalogTrusted(cat, out signer)` | Builds an `X509Chain` over the catalog's signer with `RevocationMode.NoCheck`. Checked after signing as the proof that signing worked. `IsWinUsbPackageTrusted(out signer)` is the DS3 call. |
 
 `RunTool` drains stdout and stderr asynchronously with a 120 s timeout and kills a timed-out child, because a synchronous `ReadToEnd` on one stream deadlocks once the child fills the other stream's pipe buffer, and both tools write warnings to stderr as a matter of course.
 
@@ -494,6 +508,79 @@ internal static string ExtractDrivers()
 ```
 
 Copies every manifest resource whose name starts with `BthPS3.` to `%TEMP%\PadForge\BthPS3Drivers\`, turning the `LogicalName` back into a relative path. Cached in a static after the first call, re-extracting only if the directory has since vanished. Nothing deletes it: the packages are re-read on every repair and every WinUSB bind.
+
+---
+
+## Controllers Windows leaves without a driver (VendorUsbDriverInstaller)
+
+**Files:** `PadForge.App/Services/VendorUsbDriverInstaller.cs` (`PadForge.Services`), `PadForge.App/Common/Input/VendorUsbBindingService.cs` (`PadForge.Common.Input`)
+
+The SDL fork reads many of the controllers of hifihedgehog/SDL#33 through libusb, and libusb reaches a device on Windows only while WinUSB serves it. Windows gives these devices no driver, or its generic HID driver, which reads nothing from them. `VendorUsbDriverInstaller` binds WinUSB to them the way `Ds3DriverInstaller` binds a docked DualShock 3, and binds Windows' own Xbox 360 driver, xusb22, to four Xbox 360 devices that xusb22.inf does not name. Once either driver serves a device, SDL opens it at its next device change.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+### The packages
+
+Each binding gets its own package, written and signed on this machine when it binds:
+
+| Driver | INF and catalog | Install sections | Class |
+|---|---|---|---|
+| WinUSB | `padforge_vendorusb.inf`, `padforge_vendorusb.cat` | `Include = winusb.inf` with `Needs = WINUSB.NT` and `WINUSB.NT.Services`. `[USB_Install.HW]` writes `DeviceInterfaceGUIDs` = `{FD826C66-3556-4845-9436-0FE7580DED02}`, which marks the node as PadForge's and lets libusb open an interface of a composite device | `USBDevice` |
+| xusb22 | `padforge_xusb22.inf`, `padforge_xusb22.cat` | `Include = xusb22.inf` with `Needs = CC_Install` and `CC_Install.Services`, the sections xusb22.inf installs every device it names through | `XnaComposite`, with a `[ClassInstall32]` for a PC that never installed xusb22.inf |
+
+Each INF names exactly one ID, the node's own: the VID and PID of a device node, plus `MI` for an interface of a composite device, as libwdi writes one INF per device. A fixed INF naming a whole-device ID would also match the composite parent when Windows lists the device as composite, and `usbccgp` is never a state the binder takes a node from. Both INFs carry `NTamd64` and `NTarm64` models. `BuildInf` and `BuildXusbInf` keep only printable ASCII in the device name, dropping quotes and percent signs, and write ASCII with CRLF line ends.
+
+### Targets
+
+`Plan(UsbNode)` returns the binding a node needs, or null:
+
+1. **xusb22.** A device node with no driver whose ID is in `Xusb22Targets`: the clone Xbox 360 wireless receivers 045E:0291, 045E:02A9 and 05C6:9244, and the Guitar Hero Live Xbox 360 dongle, 1430:070B.
+2. **Original Xbox, by class.** A node whose compatible IDs include `USB\Class_58&SubClass_42`, from no driver only. The package names that compatible ID itself, so Windows binds any later XID device to it on its own.
+3. **WinUSB targets.** A node on no driver or `HidUsb` that matches a row of `Targets`, the fork's vendor-USB table, by device node, interface number, any interface, or an interface's compatible ID: the Wii U GameCube adapter, the Xbox 360 Big Button receiver, the Gametrak, the DJI RC's interface 1, 14 I-Force wheels and joysticks, the GunCon 2 (never the GunCon 3, 0B9A:0800, which SDL does not read), five train controllers, the Namco USIO, the Konami P3IO and P4IO, the CH Products Multi-Function Panel, the Ergodex DX1's interface 1, the TrackIR 2 and 3, and the Tacx T1904 and T1932.
+4. **Original Xbox, by ID.** A device node on no driver whose VID and PID are among `XidIdentities`, the 63 rows of the fork's XID table plus the Steel Battalion, 0A7B:D000, for a device Windows lists without the class 0x58 compatible ID.
+
+A node on any other driver, WinUSB and xusb22 included, is left alone.
+
+### Bind()
+
+```csharp
+internal static bool Bind(BindPlan plan, string instanceId, IReadOnlyList<UsbNode> nodes,
+    Action<string> log, CancellationToken ct, string[] from = null)
+```
+
+1. Refuses the ID when any present node it names sits outside `from` and is not already on the target driver. `from` defaults to no driver and `HidUsb`, or no driver alone for xusb22. `UpdateDriverForPlugAndPlayDevices` takes every node the ID names, so a second unit of the same model on another vendor's driver would otherwise go with it.
+2. Writes the INF to `StagingDirectory(BindId)`, each package in its own folder, because Inf2Cat catalogs every INF it finds in one.
+3. Signs the package through `Ds3DriverInstaller.SignDriverPackage` with this machine's certificate, fresh on every bind, and checks the chain with `IsCatalogTrusted`.
+4. `Devcon.Install` (DiInstallDriver) stocks the driver store, so a later plug-in with no driver takes the package on its own.
+5. `UpdateDriverForPlugAndPlayDevices` with `INSTALLFLAG_FORCE | INSTALLFLAG_NONINTERACTIVE` binds the node now, because driver ranking prefers an inbox driver, `HidUsb` here, over a package signed on this machine.
+6. Polls up to 20 times at 250 ms. Done means the node reports the service, `WINUSB` or `xusb22`, and an active interface of the driver's GUID sits on it: PadForge's `{FD826C66-...}` for WinUSB, and for xusb22 the XUSB interface `{EC87F1E3-C13B-4100-B5F7-8B84D54260CB}` that XInput walks. `HasActiveInterface` matches an interface path to the node by its instance ID, with `#` for each backslash.
+
+### VendorUsbBindingService
+
+`InputManager.InitializeSdl` starts it with the other side-band services, and `ShutdownSdl` stops it. A background thread named `VendorUsbBinder` lists the present USB nodes every 3 s in one SetupAPI pass (`ListPresentUsbNodes`: the USB enumerator, all classes, as libwdi lists devices), plans each one, and binds each planned ID once per sweep. An ID is bound at most once every 30 s, and after three failed binds the session stops trying it. The nodes that need a driver go to the diagnostics log as `VendorUSB: needs a driver:`, only when that list changes. Nothing here talks to SDL.
+
+### Opt-in bindings
+
+Four devices lose something to WinUSB, so `Plan` never returns them. `OptIns` lists them for the Devices page:
+
+| Kind | Node | Bound from | What the switch costs |
+|---|---|---|---|
+| `Xbox360Pad` | 045E:028E, `REV_0110` or `REV_0114` | xusb22 | The pad leaves XInput, DirectInput and Windows.Gaming.Input and gives input only while PadForge runs |
+| `Xbox360Receiver` | 045E:0719, `REV_0100` | xusb22 | Every controller and headset on the receiver moves with it |
+| `IntelBaseStation` | 8086:C013, interface 0 or the device | no driver, `HidUsb` | The base station's keyboard stops typing in Windows |
+| `Prodikeys` | 041E:2801, interface 1 | no driver, `HidUsb` | The media and sleep keys stop working |
+
+`DevicesViewModel.RefreshDriverOffer` asks `QueryOptIn` when a device is selected, and sweeps the USB nodes only when `IsOptInRow` says the row's IDs belong to an opt-in device. The answer is a bind offer when a node sits on a driver its target is bound from, or a restore offer when a node is on WinUSB with PadForge's interface active. A pad on the wireless receiver reports the wireless controller's 045E:02A1, so a row with that ID stands for the receiver. `MainWindow.SwitchDriverAsync` states the cost in a `ConfirmDialog`, then calls `Bind` with the target's `From` list, or `Restore`. A bind adds the ID to `AppSettingsData.WinUsbOptIns`, and a restore removes every ID that names the node.
+
+`Restore(instanceId)` reads the node's `DEVPKEY_Device_DriverInfPath` and `DEVPKEY_Device_DriverProvider`, refuses a package whose provider is not `PadForge`, and deletes it with `Devcon.DeleteDriver`. DiUninstallDriver installs the best remaining driver on every device the package served and takes the package out of the driver store. `Restore` then polls for the node to leave WinUSB.
+
+`MainWindow.CheckOptedInDrivers` runs 8 s into each start. `MovedBack` lists the opted-in IDs whose node Windows has put back on the driver it was taken from, from its INF directory or Windows Update, and the status bar names them.
+
+### Limits
+
+- Nothing here ran on hardware. The bench had none of the targets.
+- Whether ARM64 Windows carries xusb22.inf and xusb22.sys is unverified. Where it does not, the xusb22 package fails to install and the log says so.
+- A chatpad or uDraw on a clone receiver stays unread. The clone receivers get xusb22, and the fork's accessory plan names no WinUSB binding for them.
 
 ---
 
@@ -827,11 +914,12 @@ Windows shows the UAC shield on the icon and prompts once when the process start
 | MIDI Services | `%TEMP%\PadForge_MidiServices\` |
 | SteamVR (steamcmd staging) | `%TEMP%\PadForge_SteamCmd\` |
 | DS3 driver packages | `%TEMP%\PadForge\BthPS3Drivers\` |
+| Vendor USB packages | `%TEMP%\PadForge\VendorUsb\<ID>\`, and `<ID>_xusb22\` for an xusb22 package |
 | Legacy vJoy uninstall script | `%TEMP%\PadForge_vjoy_uninstall.cmd` |
 
 The first three are cleaned up after each operation via `CleanupTempDir()`, and the vJoy script is removed with a direct `File.Delete()`.
 
-`%TEMP%\PadForge\BthPS3Drivers\` is the exception: it persists for the process lifetime and beyond, cached in a static inside `ExtractDrivers()`. The staged INFs are re-read on every filter repair, every WinUSB bind, and every trust check, and the WinUSB catalog is regenerated in place each time.
+`%TEMP%\PadForge\BthPS3Drivers\` is the exception: it persists for the process lifetime and beyond, cached in a static inside `ExtractDrivers()`. The staged INFs are re-read on every filter repair, every WinUSB bind, and every trust check, and the WinUSB catalog is regenerated in place each time. The vendor USB folders persist too, and each bind rewrites its INF and regenerates its catalog.
 
 HIDMaestro has no temp directory because PadForge does not unpack any installer for it.
 
