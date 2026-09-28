@@ -3083,6 +3083,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#ticktoggle-the-toggle-latch-461" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TickToggle: the Toggle latch (#461)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5380,6 +5391,17 @@
     <span class="md-ellipsis">
       
         UI surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticktoggle-the-toggle-latch-461" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TickToggle: the Toggle latch (#461)
       
     </span>
   </a>
@@ -8052,6 +8074,10 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <td>Delegates to <code>SourceCoercion.EvaluateFor*Target</code>. On a bipolar target, a gyro rate source other than a pitch axis (the gravity-lean pair excluded) feeding <code>LeftThumbAxisX</code> or <code>RightThumbAxisX</code> is then negated (<code>ShouldFlipForAxisFrame</code>). No per-frame state.</td>
 </tr>
 <tr>
+<td><code>Toggle</code></td>
+<td><code>SourceKindRuntime.TickToggle</code> latch over the Direct read of the same source (#461). See <a href="#ticktoggle-the-toggle-latch-461">TickToggle</a> below.</td>
+</tr>
+<tr>
 <td><code>Incremental</code></td>
 <td><code>SourceKindRuntime.TickIncremental</code> accumulator. <code>ParamUp</code>/<code>ParamDown</code> ramp a value between <code>ParamMin</code> and <code>ParamMax</code> at <code>ParamRate</code> of that range per second (0.5 sweeps it in 2 s). <code>ParamSticky</code> holds vs. snaps to <code>ParamMin</code> on release.</td>
 </tr>
@@ -8075,7 +8101,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </table>
 <p><code>EvaluateForBipolarAxisTarget</code> promotes a <code>Direct</code> source by descriptor: <code>"Motion Lean"</code> to <code>MotionLeanX</code>, <code>"Motion Lean L"</code> to <code>MotionLeanAuxX</code>, <code>"Motion Shake"</code> to <code>MotionShake</code>, and <code>"Motion Shake L"</code> to <code>MotionShakeAux</code>. Those inputs reach the lean or shake math with no Kind stamped on the source. A source stamped with another Kind is not promoted, and the button and trigger entry points do not promote.</p>
 <h4 id="tickramped-the-ramped-axis-envelope-111">TickRamped: the ramped axis envelope (#111)<a class="headerlink" href="#tickramped-the-ramped-axis-envelope-111" title="Permanent link">&para;</a></h4>
-<p><code>SourceKindRuntime.TickRamped</code> (<code>PadForge.Engine/Common/Mapping/SourceKindRuntime.cs</code>, lines 277-348) maintains a signed <code>[-1, +1]</code> envelope per source. <code>SourceKindRuntime</code> is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.</p>
+<p><code>SourceKindRuntime.TickRamped</code> (<code>PadForge.Engine/Common/Mapping/SourceKindRuntime.cs</code>, lines 295-366) maintains a signed <code>[-1, +1]</code> envelope per source. <code>SourceKindRuntime</code> is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.</p>
 <p>State lives in <code>_rampedAccum</code>, a <code>Dictionary&lt;(int slot, string target, int srcIdx), double&gt;</code> keyed the same way as the Incremental accumulator (<code>_incrementalAccum</code>). Two Ramped sources on one row keep independent envelopes because <code>srcIdx</code> differs. A second device pass in the same frame replays that frame's value from <code>_rampedReplay</code>, keyed on <code>FrameSeq</code>, instead of ramping again. Each frame:</p>
 <ol>
 <li>Read intent buttons: <code>up = ReadButtonLikeBool(state, src.ParamUp, gripGuid, slotIndex)</code> (positive direction), <code>down = ReadButtonLikeBool(state, src.ParamDown, gripGuid, slotIndex)</code> (negative direction). <code>Button N</code> and <code>POV N Dir</code> read directly, the hat in the held grip (#392). Any other descriptor falls to <code>SourceCoercion.ReadHardwareBoolDescriptor</code>, which reads the plain hardware-bool families (capsense, NFC tag, voice phrase, touchpad contact or click, and <code>IR Brightness</code> at a fixed 50%). Axes, rings, and mouse motion read false, because an analog input is not a sensible up/down trigger.</li>
@@ -8163,6 +8189,37 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p>Every one of those methods swaps in a fresh dictionary instead of clearing in place. The dictionaries are mutated by the 1 kHz poll thread while <code>Clear</code> runs on the UI thread, and clearing a plain <code>Dictionary</code> under a concurrent writer can corrupt its buckets and hang a later lookup in an infinite loop. A poll tick still holding the old reference writes into an orphan that is about to be collected, which is exactly the state the reset wanted dropped.</p>
 <h4 id="ui-surface">UI surface<a class="headerlink" href="#ui-surface" title="Permanent link">&para;</a></h4>
 <p><code>MappingSourceItem.cs</code> (the <code>MappingSourceItem</code> ViewModel) exposes <code>Ramped</code> in the Kind dropdown via <code>KindOptions</code> (label <code>Pad_Mapping_Kind_Ramped</code>). <code>IsRampedKind</code> and <code>UsesUpDownKeys</code> (true for both Incremental and Ramped) gate the Up/Down key pickers. The envelope controls bind to <code>ParamAttackTime</code> (UI slider 0-2 s, clamped 0-5), <code>ParamReleaseTime</code>, <code>ParamReverseMultiplier</code> (1-10), and <code>ParamAutocenter</code>. Because a stateful kind is keyed by <code>(slot, target, srcIdx)</code> and needs a concrete <code>DeviceGuid</code> to avoid being ticked once per assigned device on a multi-device slot, <code>StampDeviceFromParamChoice</code> stamps the source's device from the picked Up/Down input when it has none (#111 audit fix A).</p>
+<h4 id="ticktoggle-the-toggle-latch-461">TickToggle: the Toggle latch (#461)<a class="headerlink" href="#ticktoggle-the-toggle-latch-461" title="Permanent link">&para;</a></h4>
+<p><code>SourceKindRuntime.TickToggle</code> (<code>PadForge.Engine/Common/Mapping/SourceKindRuntime.cs</code>, lines 381-407) latches a source's Direct read. The evaluator reads the source the way Direct does, decides whether it is pressed, and passes that with the level to hold:</p>
+<table>
+<thead>
+<tr>
+<th>Target method</th>
+<th>Press</th>
+<th>Held level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EvaluateForButtonTarget</code></td>
+<td><code>SourceCoercion.EvaluateForButtonTarget</code> with the caller's threshold, the Direct read</td>
+<td>pressed</td>
+</tr>
+<tr>
+<td><code>EvaluateForTriggerTarget</code></td>
+<td><code>SourceCoercion.EvaluateForTriggerTarget</code> at or past <code>TogglePressLevel</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>EvaluateForBipolarAxisTarget</code></td>
+<td><code>EvaluateBipolarKind("Direct", ...)</code>, the whole Direct branch with its descriptor promotions and axis-frame flip, at or past <code>TogglePressLevel</code> in magnitude</td>
+<td><code>+1</code> or <code>-1</code>, the sign of the latching read</td>
+</tr>
+</tbody>
+</table>
+<p><code>TogglePressLevel</code> is <code>SourceCoercion.EffectiveThresholdPercent(src, 50) / 100</code>: the source's own <code>DeadZone</code> when one is set, otherwise half travel.</p>
+<p>State lives in <code>_toggleState</code>, keyed <code>(slot, target, srcIdx)</code> like the accumulators. The latch flips on the rising edge of a press, the rule the macro Toggle (<code>MacroTriggerMode.Toggle</code> in <code>InputManager.Step4b.EvaluateMacros.cs</code>) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and <code>FlippedThisFrame</code> allows one flip per frame. <code>BuildCustomContribsForButton</code> reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (<code>InputManager.Step3.MappingSetEval.cs</code> line 3306). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. <code>Clear</code>, <code>ResetForSlot</code>, and <code>ResetForRow</code> drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.</p>
+<p><code>SourceEvaluator.IsDescriptorKind</code> names Direct and Toggle as the kinds that read their own descriptor. <code>IsUnmappedDirect</code> counts a blank Toggle as a blank position. <code>MappingItem.IsPrimaryDescriptor</code> keeps the Source picker and the Record button on a Toggle row. The save and load paths route a Toggle primary through the descriptor branch with its kind, and the legacy merge keeps an any-device Toggle row as authored, as it does an any-device Direct row (<code>SettingsService.cs</code> line 2045).</p>
 <h3 id="steering-source-kinds">Steering Source Kinds<a class="headerlink" href="#steering-source-kinds" title="Permanent link">&para;</a></h3>
 <p>A bipolar-axis row whose source carries a steering <code>Kind</code> (<code>WindingStick</code>, <code>AngleToAxisX</code>, <code>AngleToAxisY</code>, <code>MotionLeanX</code>, <code>MotionLeanAuxX</code>) is evaluated by <code>SourceKindRuntime</code> instead of read directly. The source reads the whole 2D stick (X from <code>Descriptor</code>, Y from <code>ParamYDescriptor</code>) or, for <code>MotionLeanX</code> / <code>MotionLeanAuxX</code>, gravity from <code>GravityProvider</code>, and projects to the row's virtual-stick channel:</p>
 <ul>

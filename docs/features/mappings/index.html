@@ -4428,8 +4428,8 @@
 </table>
 <p>Two more controls live in the strip beneath the selected row rather than in a column:</p>
 <ul>
-<li><strong>Primary Mode</strong> picks how the primary source is read (Direct, Incremental, Invert On Hold, Ramp). See <a href="#source-kinds">Source kinds</a>.</li>
-<li><strong>Combine</strong> appears once a row has two or more sources, or when <strong>Primary Mode</strong> is anything other than Direct. See <a href="#combine-modes">Combine modes</a>.</li>
+<li><strong>Primary Mode</strong> picks how the primary source is read (Direct, Toggle, Incremental, Invert On Hold, Ramp). See <a href="#source-kinds">Source kinds</a>.</li>
+<li><strong>Combine</strong> appears once a row has two or more sources, or when <strong>Primary Mode</strong> is Incremental, Invert On Hold, or Ramp. See <a href="#combine-modes">Combine modes</a>.</li>
 </ul>
 <blockquote>
 <p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.</p>
@@ -4529,7 +4529,7 @@
 <tbody>
 <tr>
 <td><strong>Mode</strong></td>
-<td>How the source is read. Direct, Incremental, Invert On Hold, or Ramp. The primary source's picker is the <strong>Primary Mode</strong> dropdown in the row's detail strip. Each extra source has its own dropdown at the front of its chip. See <a href="#source-kinds">Source kinds</a>.</td>
+<td>How the source is read. Direct, Toggle, Incremental, Invert On Hold, or Ramp. The primary source's picker is the <strong>Primary Mode</strong> dropdown in the row's detail strip. Each extra source has its own dropdown at the front of its chip. See <a href="#source-kinds">Source kinds</a>.</td>
 </tr>
 <tr>
 <td><strong>Invert</strong></td>
@@ -4575,7 +4575,7 @@
 <p>On a stick-axis row where only the positive direction is mapped from a button-class source, an italic <strong>+ Opposite Direction</strong> link appears in the Source cell. One click adds a mirrored second source with <strong>Invert</strong> on, covering the negative direction. The link disappears once the row has a second source.</p>
 <hr />
 <h2 id="combine-modes">Combine modes<a class="headerlink" href="#combine-modes" title="Permanent link">&para;</a></h2>
-<p>The <strong>Combine</strong> picker appears in the row's detail strip once a row has two or more sources, or when <strong>Primary Mode</strong> is anything other than Direct. A single Direct source has nothing to combine.</p>
+<p>The <strong>Combine</strong> picker appears in the row's detail strip once a row has two or more sources, or when <strong>Primary Mode</strong> is Incremental, Invert On Hold, or Ramp. A single Direct or Toggle source has nothing to combine.</p>
 <table>
 <thead>
 <tr>
@@ -4809,6 +4809,10 @@
 <td>The source descriptor's raw value. The default.</td>
 </tr>
 <tr>
+<td><strong>Toggle</strong></td>
+<td>The source descriptor's value, latched. One press holds the output on and the next press releases it. A button row holds the button, a trigger row holds a full pull, and a stick row holds full deflection toward the side the press pushed. On a button row a trigger or stick input counts as a press past the <strong>Axis-to-Button Deadzone</strong>, as it does for Direct. On a trigger or stick row it counts past half its travel. The toggle releases when its row stops running: its shift layer closes, a layer overrides it, or its device goes offline.</td>
+</tr>
+<tr>
 <td><strong>Incremental</strong></td>
 <td>Ramps an accumulator via Up / Down buttons you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max).</td>
 </tr>
@@ -4822,11 +4826,11 @@
 </tr>
 </tbody>
 </table>
-<p>Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button captures a kind's own inputs in sequence (Up, then Down, or the modifier alone).</p>
+<p>Direct and Toggle sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button records the input itself for Direct and Toggle, and a kind's own inputs in sequence for the others (Up, then Down, or the modifier alone).</p>
 <hr />
 <h2 id="activation-modes">Activation modes<a class="headerlink" href="#activation-modes" title="Permanent link">&para;</a></h2>
-<p>A mapping row has no press patterns. Outside the Incremental, Ramp, and Stick Trim state described above, the output follows its sources every frame, and nothing toggles or repeats. Press-pattern behaviors like toggle and turbo belong to <a href="../../guides/macros/">Macros</a>, through each macro's <strong>Fire</strong> picker: <strong>On Press</strong>, <strong>On Single Press</strong>, <strong>On Release</strong>, <strong>While Held</strong>, <strong>On Long Press</strong>, <strong>On Short Press</strong>, <strong>On Double Press</strong>, <strong>On Triple Press</strong>, <strong>Toggle</strong> (the first press latches the actions on, the next press releases), <strong>Turbo</strong> (the actions repeat at an interval while the trigger is held), <strong>Always</strong>, and <strong>Custom Expression</strong>.</p>
-<p>To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid.</p>
+<p>A mapping row's output follows its sources every frame, apart from the state described above: <strong>Toggle</strong> latches its input, and Incremental, Ramp, and Stick Trim carry a value from frame to frame. Nothing on a row repeats. Other press patterns belong to <a href="../../guides/macros/">Macros</a>, through each macro's <strong>Fire</strong> picker: <strong>On Press</strong>, <strong>On Single Press</strong>, <strong>On Release</strong>, <strong>While Held</strong>, <strong>On Long Press</strong>, <strong>On Short Press</strong>, <strong>On Double Press</strong>, <strong>On Triple Press</strong>, <strong>Toggle</strong> (the first press latches the actions on, the next press releases), <strong>Turbo</strong> (the actions repeat at an interval while the trigger is held), <strong>Always</strong>, and <strong>Custom Expression</strong>.</p>
+<p>To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid. A plain toggle needs no macro: set the row's <strong>Primary Mode</strong> to <strong>Toggle</strong>.</p>
 <hr />
 <h2 id="modifiers">Modifiers<a class="headerlink" href="#modifiers" title="Permanent link">&para;</a></h2>
 <p><img alt="Per-source sensitivity on a mapping row" src="../../images/mapping-sensitivity.png" /></p>

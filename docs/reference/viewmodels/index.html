@@ -15703,10 +15703,16 @@
 <td>Sources beyond the primary.</td>
 </tr>
 <tr>
+<td><code>IsPrimaryDirect</code> / <code>IsPrimaryDescriptor</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed. <code>IsPrimaryDirect</code> is <code>PrimaryKindSource.Kind == "Direct"</code>. <code>IsPrimaryDescriptor</code> is true for Direct and Toggle (<code>SourceEvaluator.IsDescriptorKind</code>), the kinds whose input lives in <code>SourceDescriptor</code>. It gates the Source picker, its device label and the kind card in the row, and the Record button's target (#461).</td>
+</tr>
+<tr>
 <td><code>IsMultiSource</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: <code>ExtraSources.Count &gt; 0 \|\| !IsPrimaryDirect</code>, where <code>IsPrimaryDirect</code> is <code>PrimaryKindSource.Kind == "Direct"</code>. Not the same test as <code>IsTrivialDirect</code>, which additionally requires a primary descriptor, no neg descriptor, no extras, no invert / half / bidirectional, and no custom formula.</td>
+<td>Computed: <code>ExtraSources.Count &gt; 0 \|\| !IsPrimaryDescriptor</code>, so a lone Toggle primary shows no Combine picker. Not the same test as <code>IsTrivialDirect</code>, which requires <code>IsPrimaryDirect</code> and additionally a primary descriptor, no neg descriptor, no extras, no invert / half / bidirectional, and no custom formula.</td>
 </tr>
 <tr>
 <td><code>VariableCount</code></td>
@@ -15904,10 +15910,10 @@
 <td><code>Kind</code></td>
 <td><code>string</code></td>
 <td><code>"Direct"</code></td>
-<td>Source kind: <code>Direct</code>, <code>Incremental</code>, <code>InvertOnHold</code>, <code>Ramped</code>. Notifies the <code>Is*Kind</code> computed flags.</td>
+<td>Source kind: <code>Direct</code>, <code>Toggle</code>, <code>Incremental</code>, <code>InvertOnHold</code>, <code>Ramped</code>. Notifies the <code>Is*Kind</code> computed flags.</td>
 </tr>
 <tr>
-<td><code>IsIncrementalKind</code> / <code>IsInvertOnHoldKind</code> / <code>IsRampedKind</code></td>
+<td><code>IsIncrementalKind</code> / <code>IsInvertOnHoldKind</code> / <code>IsRampedKind</code> / <code>IsToggleKind</code></td>
 <td><code>bool</code></td>
 <td>-</td>
 <td>Computed per-kind flags.</td>

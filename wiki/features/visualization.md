@@ -138,7 +138,7 @@ Turn it on and PadForge draws:
 | Leader lines | A thin line from each chip to the control it labels on the model. |
 | Trigger bars (3D view only) | Two slim bars beside each trigger: the raw input coming in and the output going out. |
 
-A chip flashes when its input is active, so you can see which mapping fires as you press. Click a chip to jump straight to that mapping's row in the [Button and Axis Mappings](mappings.md) grid.
+A chip flashes when its input is active, so you can see which mapping fires as you press. Click a chip to jump straight to that mapping's row in the [Button and Axis Mappings](mappings.md) grid. Hover a chip to read its wiring in a strip along the bottom of the view: each input's device and name, marked Inv., Half, or Toggle when the source is inverted, reads half its axis, or has **Primary Mode** set to Toggle.
 
 The overlay hides itself while you rotate or pan the 3D model, then reappears when you let go. Mouse-wheel zoom keeps it visible and moves the chips with the model. Chips whose control projects off the edge of the view (or behind the camera) drop out until you bring it back into frame.
 

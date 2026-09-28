@@ -2049,7 +2049,8 @@ A row's primary source stays on `SourceDescriptor`. Additional sources live in `
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ExtraSources` | `ObservableCollection<MappingSourceItem>` | empty | Sources beyond the primary. |
-| `IsMultiSource` | `bool` | - | Computed: `ExtraSources.Count > 0 \|\| !IsPrimaryDirect`, where `IsPrimaryDirect` is `PrimaryKindSource.Kind == "Direct"`. Not the same test as `IsTrivialDirect`, which additionally requires a primary descriptor, no neg descriptor, no extras, no invert / half / bidirectional, and no custom formula. |
+| `IsPrimaryDirect` / `IsPrimaryDescriptor` | `bool` | - | Computed. `IsPrimaryDirect` is `PrimaryKindSource.Kind == "Direct"`. `IsPrimaryDescriptor` is true for Direct and Toggle (`SourceEvaluator.IsDescriptorKind`), the kinds whose input lives in `SourceDescriptor`. It gates the Source picker, its device label and the kind card in the row, and the Record button's target (#461). |
+| `IsMultiSource` | `bool` | - | Computed: `ExtraSources.Count > 0 \|\| !IsPrimaryDescriptor`, so a lone Toggle primary shows no Combine picker. Not the same test as `IsTrivialDirect`, which requires `IsPrimaryDirect` and additionally a primary descriptor, no neg descriptor, no extras, no invert / half / bidirectional, and no custom formula. |
 | `VariableCount` | `int` | - | Computed: `PositionalSourceCount`, the number of letters a Custom formula may reference. Drives the formula chip palette's visibility. It can run smaller than the primary plus `ExtraSources.Count`: the positional walk skips the bipolar Neg pair and any `InvertOnHold` modifier source. |
 | `CombineMode` | `string` | `""` | Per-row combine mode. Empty = per-target-type default (MaxAbs for axes, OR for buttons). Named modes: `MaxAbs`, `Sum`, `Average`, `OR`, `AND`, `XOR`, `StickTrim`, `Custom`. On a Motion target the getter reads `MaxAbs` for any stored mode other than empty, `MaxAbs`, `Sum`, `Average`, or `Custom`. |
 | `CombineExpression` | `string` | `""` | Custom formula, only meaningful when `CombineMode == "Custom"`. |
@@ -2112,8 +2113,8 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `Kind` | `string` | `"Direct"` | Source kind: `Direct`, `Incremental`, `InvertOnHold`, `Ramped`. Notifies the `Is*Kind` computed flags. |
-| `IsIncrementalKind` / `IsInvertOnHoldKind` / `IsRampedKind` | `bool` | - | Computed per-kind flags. |
+| `Kind` | `string` | `"Direct"` | Source kind: `Direct`, `Toggle`, `Incremental`, `InvertOnHold`, `Ramped`. Notifies the `Is*Kind` computed flags. |
+| `IsIncrementalKind` / `IsInvertOnHoldKind` / `IsRampedKind` / `IsToggleKind` | `bool` | - | Computed per-kind flags. |
 | `UsesUpDownKeys` | `bool` | - | Computed: Incremental or Ramped (authored via an Up/Down key pair). |
 | `IsKindDescriptorless` | `bool` | - | Computed: kinds where the main Descriptor/flags are unused (Incremental, InvertOnHold, Ramped). |
 | `HasAnyBoundFeed` | `bool` | - | Computed: whether any input feeds this source, per kind. Mirrors the engine's SourceEvaluator dispatch. |

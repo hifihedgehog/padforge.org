@@ -1237,7 +1237,7 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 
 | Member | Type | Default | Description |
 |---|---|---|---|
-| `Kind` | `string` | `"Direct"` | `"Direct"`, `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. |
+| `Kind` | `string` | `"Direct"` | `"Direct"`, `"Toggle"` (the Direct read latched by each press, #461), `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. |
 | `DeviceGuid` | `string` | `""` | Physical device instance GUID. Empty = first available device on the VC. |
 | `Descriptor` | `string` | `""` | Input descriptor (`"Button N"`, `"Axis N"`, `"IHAxis N"`, `"POV N Dir"`, `"Slider N"`, `"Gyro Pitch"`, `"Gamepad ButtonA"`, ...). Abstract `"Gamepad ..."` descriptors (#9, v4.1) fold to their canonical per-device form at evaluation via `SourceCoercion.CanonicalDescriptor`. For InvertOnHold, the inner source's input. Ignored for Incremental. |
 | `Invert` | `bool` | `false` | Flip per-source value sign before combine. |

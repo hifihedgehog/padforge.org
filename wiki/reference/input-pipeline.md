@@ -1489,6 +1489,7 @@ Two gates run before the `Kind` switch. A blank `Direct` source reads nothing (`
 | Kind | Evaluation |
 |---|---|
 | `Direct` | Delegates to `SourceCoercion.EvaluateFor*Target`. On a bipolar target, a gyro rate source other than a pitch axis (the gravity-lean pair excluded) feeding `LeftThumbAxisX` or `RightThumbAxisX` is then negated (`ShouldFlipForAxisFrame`). No per-frame state. |
+| `Toggle` | `SourceKindRuntime.TickToggle` latch over the Direct read of the same source (#461). See [TickToggle](#ticktoggle-the-toggle-latch-461) below. |
 | `Incremental` | `SourceKindRuntime.TickIncremental` accumulator. `ParamUp`/`ParamDown` ramp a value between `ParamMin` and `ParamMax` at `ParamRate` of that range per second (0.5 sweeps it in 2 s). `ParamSticky` holds vs. snaps to `ParamMin` on release. |
 | `InvertOnHold` | A row modifier in Step 3, not a contribution. `IsRowModifierSource` keeps it out of the combine and the multi-source count, and `IsInvertOnHoldActive` flips the row's combined value while the `ParamModifier` input is held: negated on bipolar rows, `1 - v` on trigger rows. Button rows ignore it. `SourceEvaluator`'s own branch (`CloneAsDirect` with `Invert` XOR'd against the modifier) is not reached from the Step 3 row loops. Stateless. |
 | `WindingStick`, `AngleToAxisX`, `AngleToAxisY`, `MotionLeanX`, `MotionLeanAuxX` | Steering kinds: read a whole 2D stick (or gravity) and project to one channel. `MotionLeanAuxX` is the same lean math over the aux (Nunchuk / left Joy-Con) gravity (#199). See [Steering Source Kinds](#steering-source-kinds) below and [Steering](../guides/steering.md). |
@@ -1499,7 +1500,7 @@ Two gates run before the `Kind` switch. A blank `Direct` source reads nothing (`
 
 #### TickRamped: the ramped axis envelope (#111)
 
-`SourceKindRuntime.TickRamped` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 277-348) maintains a signed `[-1, +1]` envelope per source. `SourceKindRuntime` is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.
+`SourceKindRuntime.TickRamped` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 295-366) maintains a signed `[-1, +1]` envelope per source. `SourceKindRuntime` is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.
 
 State lives in `_rampedAccum`, a `Dictionary<(int slot, string target, int srcIdx), double>` keyed the same way as the Incremental accumulator (`_incrementalAccum`). Two Ramped sources on one row keep independent envelopes because `srcIdx` differs. A second device pass in the same frame replays that frame's value from `_rampedReplay`, keyed on `FrameSeq`, instead of ramping again. Each frame:
 
@@ -1543,6 +1544,22 @@ Every one of those methods swaps in a fresh dictionary instead of clearing in pl
 #### UI surface
 
 `MappingSourceItem.cs` (the `MappingSourceItem` ViewModel) exposes `Ramped` in the Kind dropdown via `KindOptions` (label `Pad_Mapping_Kind_Ramped`). `IsRampedKind` and `UsesUpDownKeys` (true for both Incremental and Ramped) gate the Up/Down key pickers. The envelope controls bind to `ParamAttackTime` (UI slider 0-2 s, clamped 0-5), `ParamReleaseTime`, `ParamReverseMultiplier` (1-10), and `ParamAutocenter`. Because a stateful kind is keyed by `(slot, target, srcIdx)` and needs a concrete `DeviceGuid` to avoid being ticked once per assigned device on a multi-device slot, `StampDeviceFromParamChoice` stamps the source's device from the picked Up/Down input when it has none (#111 audit fix A).
+
+#### TickToggle: the Toggle latch (#461)
+
+`SourceKindRuntime.TickToggle` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 381-407) latches a source's Direct read. The evaluator reads the source the way Direct does, decides whether it is pressed, and passes that with the level to hold:
+
+| Target method | Press | Held level |
+|---|---|---|
+| `EvaluateForButtonTarget` | `SourceCoercion.EvaluateForButtonTarget` with the caller's threshold, the Direct read | pressed |
+| `EvaluateForTriggerTarget` | `SourceCoercion.EvaluateForTriggerTarget` at or past `TogglePressLevel` | `1` |
+| `EvaluateForBipolarAxisTarget` | `EvaluateBipolarKind("Direct", ...)`, the whole Direct branch with its descriptor promotions and axis-frame flip, at or past `TogglePressLevel` in magnitude | `+1` or `-1`, the sign of the latching read |
+
+`TogglePressLevel` is `SourceCoercion.EffectiveThresholdPercent(src, 50) / 100`: the source's own `DeadZone` when one is set, otherwise half travel.
+
+State lives in `_toggleState`, keyed `(slot, target, srcIdx)` like the accumulators. The latch flips on the rising edge of a press, the rule the macro Toggle (`MacroTriggerMode.Toggle` in `InputManager.Step4b.EvaluateMacros.cs`) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and `FlippedThisFrame` allows one flip per frame. `BuildCustomContribsForButton` reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (`InputManager.Step3.MappingSetEval.cs` line 3306). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. `Clear`, `ResetForSlot`, and `ResetForRow` drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.
+
+`SourceEvaluator.IsDescriptorKind` names Direct and Toggle as the kinds that read their own descriptor. `IsUnmappedDirect` counts a blank Toggle as a blank position. `MappingItem.IsPrimaryDescriptor` keeps the Source picker and the Record button on a Toggle row. The save and load paths route a Toggle primary through the descriptor branch with its kind, and the legacy merge keeps an any-device Toggle row as authored, as it does an any-device Direct row (`SettingsService.cs` line 2045).
 
 ### Steering Source Kinds
 

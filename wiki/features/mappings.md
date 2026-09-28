@@ -20,8 +20,8 @@
 
 Two more controls live in the strip beneath the selected row rather than in a column:
 
-- **Primary Mode** picks how the primary source is read (Direct, Incremental, Invert On Hold, Ramp). See [Source kinds](#source-kinds).
-- **Combine** appears once a row has two or more sources, or when **Primary Mode** is anything other than Direct. See [Combine modes](#combine-modes).
+- **Primary Mode** picks how the primary source is read (Direct, Toggle, Incremental, Invert On Hold, Ramp). See [Source kinds](#source-kinds).
+- **Combine** appears once a row has two or more sources, or when **Primary Mode** is Incremental, Invert On Hold, or Ramp. See [Combine modes](#combine-modes).
 
 > **Tip:** The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.
 
@@ -119,7 +119,7 @@ Each source carries its own settings:
 
 | Option | What it does |
 |--------|--------------|
-| **Mode** | How the source is read. Direct, Incremental, Invert On Hold, or Ramp. The primary source's picker is the **Primary Mode** dropdown in the row's detail strip. Each extra source has its own dropdown at the front of its chip. See [Source kinds](#source-kinds). |
+| **Mode** | How the source is read. Direct, Toggle, Incremental, Invert On Hold, or Ramp. The primary source's picker is the **Primary Mode** dropdown in the row's detail strip. Each extra source has its own dropdown at the front of its chip. See [Source kinds](#source-kinds). |
 | **Invert** | Flips the source's value sign before the combine step. On a half-axis read of a centered axis it instead selects which half is read. See **Flip Output**. |
 | **Half** | Treats a bipolar axis source as half-range (one side of center only). |
 | **Bidirectional** | Half-axis only. Fires the axis-to-button gate when the input moves past the deadzone in either direction from center. Renamed from "Either" in 3.2. |
@@ -144,7 +144,7 @@ On a stick-axis row where only the positive direction is mapped from a button-cl
 
 ## Combine modes
 
-The **Combine** picker appears in the row's detail strip once a row has two or more sources, or when **Primary Mode** is anything other than Direct. A single Direct source has nothing to combine.
+The **Combine** picker appears in the row's detail strip once a row has two or more sources, or when **Primary Mode** is Incremental, Invert On Hold, or Ramp. A single Direct or Toggle source has nothing to combine.
 
 | Mode | What it does |
 |------|--------------|
@@ -252,19 +252,20 @@ The **Primary Mode** dropdown in the row's detail strip picks how PadForge evalu
 | Kind | What it reads |
 |------|---------------|
 | **Direct** | The source descriptor's raw value. The default. |
+| **Toggle** | The source descriptor's value, latched. One press holds the output on and the next press releases it. A button row holds the button, a trigger row holds a full pull, and a stick row holds full deflection toward the side the press pushed. On a button row a trigger or stick input counts as a press past the **Axis-to-Button Deadzone**, as it does for Direct. On a trigger or stick row it counts past half its travel. The toggle releases when its row stops running: its shift layer closes, a layer overrides it, or its device goes offline. |
 | **Incremental** | Ramps an accumulator via Up / Down buttons you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max). |
 | **Invert On Hold** | A row modifier. While the modifier button you pick is held, the row's combined output flips: a stick axis changes sign and a trigger reads as its opposite. Button rows ignore it. It adds no value of its own, so **Primary Mode** offers it only once the row has another source to flip. |
 | **Ramp** | A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the **Attack** time. Releasing eases back to center over the **Release** time when **Autocenter** is on, or holds the last position when it is off. **Reverse** scales how fast it returns when you press the opposite key. Stick-axis and trigger targets. On a trigger the Up key drives the pull and the Down key reads as released. Button targets get nothing from a Ramp source. |
 
-Direct sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row **Record** button captures a kind's own inputs in sequence (Up, then Down, or the modifier alone).
+Direct and Toggle sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row **Record** button records the input itself for Direct and Toggle, and a kind's own inputs in sequence for the others (Up, then Down, or the modifier alone).
 
 ---
 
 ## Activation modes
 
-A mapping row has no press patterns. Outside the Incremental, Ramp, and Stick Trim state described above, the output follows its sources every frame, and nothing toggles or repeats. Press-pattern behaviors like toggle and turbo belong to [Macros](../guides/macros.md), through each macro's **Fire** picker: **On Press**, **On Single Press**, **On Release**, **While Held**, **On Long Press**, **On Short Press**, **On Double Press**, **On Triple Press**, **Toggle** (the first press latches the actions on, the next press releases), **Turbo** (the actions repeat at an interval while the trigger is held), **Always**, and **Custom Expression**.
+A mapping row's output follows its sources every frame, apart from the state described above: **Toggle** latches its input, and Incremental, Ramp, and Stick Trim carry a value from frame to frame. Nothing on a row repeats. Other press patterns belong to [Macros](../guides/macros.md), through each macro's **Fire** picker: **On Press**, **On Single Press**, **On Release**, **While Held**, **On Long Press**, **On Short Press**, **On Double Press**, **On Triple Press**, **Toggle** (the first press latches the actions on, the next press releases), **Turbo** (the actions repeat at an interval while the trigger is held), **Always**, and **Custom Expression**.
 
-To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid.
+To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid. A plain toggle needs no macro: set the row's **Primary Mode** to **Toggle**.
 
 ---
 
