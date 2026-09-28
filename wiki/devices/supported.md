@@ -613,7 +613,7 @@ The PowerA MOGA in Mode A (Pocket, Pro, Pro Power, Hero Power), the Zeemote JS1 
 
 ### Serial ports
 
-Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan Warrior and CyberMan, RC transmitters, JVS arcade boards, VRinsight panels, Kettler ergometers, serial I-Force wheels, the Pony Canyon Master Controllers, DJI remotes and Konami's cabinet boards. Add each one from the pairing dialog. See [Pairing a controller](../features/devices.md#pairing-a-controller).
+Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan Warrior and CyberMan, RC transmitters, JVS arcade boards, VRinsight panels, Kettler ergometers, serial I-Force wheels with their force feedback, the Pony Canyon Master Controllers, DJI remotes and Konami's cabinet boards. Add each one from the pairing dialog. See [Pairing a controller](../features/devices.md#pairing-a-controller).
 
 ### Over the network
 

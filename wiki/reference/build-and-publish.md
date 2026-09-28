@@ -212,7 +212,7 @@ The reader is C++, so `SDL3.dll` imports `msvcp140.dll` on both architectures, a
 
 Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build, which gets its own `libvosk.dll` from a `Content` item. An ARM64 publish without that file is refused by `RequireBundledNatives`.
 
-Drivers follow the machine. HIDMaestro 1.9.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_ARM64` on an ARM64 machine, and the Windows MIDI Services download picks the `-arm64` installer there.
+Drivers follow the machine. HIDMaestro 1.9.2 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and the Windows MIDI Services download picks the `-arm64` installer there. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
 
 ## Project Configuration Details
 

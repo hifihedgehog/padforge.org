@@ -364,7 +364,7 @@ The Serial Controller (COM Port) family adds a controller on a serial port. Wind
 | JVS I/O | Arcade JVS I/O boards on an RS-485 adapter, an arcade stick for each player, up to four |
 | VRinsight CDU II, MCP Combo I | Flight simulator panels, 70 or 72 buttons |
 | Kettler Ergometer | Kettler ergometers with an RS-232 port: cadence, power, speed, heart rate and target power as axes |
-| I-Force | I-Force wheels and joysticks on a serial port, among them the Boeder Force Feedback Wheel and the Trust Force Feedback Race Master |
+| I-Force | I-Force wheels and joysticks on a serial port, among them the Boeder Force Feedback Wheel and the Trust Force Feedback Race Master. Force feedback works as on the USB models once the device reports its effects. |
 | Pony Canyon Master Controller | Master Controller and Master Controller II train controllers: the lever and the reverser |
 | DJI RC-N1, DJI Mavic Mini, DJI Phantom 3, DJI Phantom 2 | DJI drone remotes on DJI's USB serial driver, which DJI Assistant 2 installs |
 | Konami BIO2 (beatmania IIDX), Konami BIO2 (SOUND VOLTEX) | The BIO2 I/O board of a beatmania IIDX or SOUND VOLTEX cabinet |
