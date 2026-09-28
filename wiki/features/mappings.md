@@ -157,7 +157,7 @@ The **Combine** picker appears in the row's detail strip once a row has two or m
 | **Custom** | Build your own with the [formula editor](#custom-formula-editor) |
 | **Stick Trim** | The last source trims the held trigger level up or down. Trigger rows only. See [Stick Trim](#stick-trim) |
 
-For axis rows, **Strongest** is the auto-mapping default. For button and D-pad rows, **Either** is the default. The Motion Gyro and Motion Accelerometer rows offer only Strongest, Combined, Average, and Custom.
+For axis rows, including the touchpad finger X and Y rows, **Strongest** is the default. For button and D-pad rows, including **Touchpad Click** and the finger **Touch** rows, **Either** is the default. The reset button beside the picker puts a row back on its default. The Motion Gyro and Motion Accelerometer rows offer only Strongest, Combined, Average, and Custom.
 
 A collapsed row with two or more sources shows the current mode as a small chip next to the source list. Select the row and the **Combine** picker is in the detail strip below.
 
