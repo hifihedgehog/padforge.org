@@ -23,7 +23,7 @@ Most keyboards are read by asking them over the channel their own configurator u
 | Keyboard | Needs |
 |---|---|
 | Razer Huntsman analog models and the Tartarus Pro | Razer Synapse running. Without it they send no depth, and the row reads nothing until Synapse starts. |
-| Keychron and Lemokey HE boards | Nothing extra. The [AnalogSense firmware](https://analogsense.org/firmware/) reports every key at once and reads faster, and stock firmware works too. |
+| Keychron and Lemokey HE boards | Nothing extra. Stock firmware works on every board, the 8K boards included. On the others the [AnalogSense firmware](https://analogsense.org/firmware/) reports every key at once and reads faster. |
 | NuPhy HE boards and the MADLIONS Nano 68, MAD 68 and Fire 68 lines | Nothing extra. PadForge turns on the keyboard's depth reports the way NuPhy's own configurator does for its Performance page, and turns them off again when it stops reading. |
 | MCHOSE Mix 87 III | Nothing extra. Its depth reports need a flag in the keyboard's saved settings. PadForge sets it when it starts reading and clears it when it stops, which rewrites the keyboard's settings memory twice per session. |
 | MCHOSE Jet 75 and other keyboards that send depth on their own | Press a key. PadForge listens without sending anything, and the row appears at the first depth report. |
@@ -55,7 +55,7 @@ Every key the keyboard can report is listed under its row in the input picker, n
 | **Key 1** to **Key 3** | The three keys of the SayoDevice O3C |
 | **Key Position 0** to **Key Position 255** | Keys a keyboard reports only by where they sit, with no key map to name them |
 
-Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the ASUS ROG Azoth 96 HE, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, and libhmk keys with no standard key behind them. Their keys join the picker as you press them, and **Record** is the quick way to map them: press the key past half travel.
+Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, libhmk keys with no standard key behind them, and the Fn key of the ASUS ROG Azoth 96 HE. Their keys join the picker as you press them, and **Record** is the quick way to map them: press the key past half travel.
 
 A key reads 0 at rest and full at the bottom of its travel. What that means depends on the target:
 
@@ -212,6 +212,7 @@ Keyboards that send the 0xA0 depth event without being asked, the MCHOSE Jet 75 
 - A Razer keyboard or keypad reports depth only while Razer Synapse runs. The 8KHz Huntsmans report through the same interface as the V3 Pro, going by Razer's own web configurator, and no public capture yet shows one reporting a pressed key.
 - Most keyboards share their configurator's channel. Close the configurator while PadForge reads them.
 - The Logitech PRO X TKL RAPID reports only the key pressed furthest, so it reads one key at a time.
+- The ASUS ROG Azoth 96 HE reports one key at a time too: the first key pressed past 0.10 mm, until it comes back up.
 - Keys are named for their US legend, whatever layout Windows uses. A key remapped in the keyboard's own software keeps its factory name on some keyboards and takes its new one on others, the way each reference reads it.
 
 ---

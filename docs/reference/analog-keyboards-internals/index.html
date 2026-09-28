@@ -3274,6 +3274,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#retry-and-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry and reconnect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#data-files" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3561,6 +3572,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#retry-and-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry and reconnect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#data-files" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3655,10 +3677,10 @@
 <ol>
 <li><strong>Sweep.</strong> Every 3 s while <strong>Read Analog Keyboards</strong> is on, a worker enumerates every HID top-level collection and reads its metadata with no traffic to the device: <code>HIDD_ATTRIBUTES</code>, <code>HIDP_CAPS</code>, the declared report IDs of each type through <code>HidP_InitializeReportForID</code>, the input value caps, the product, manufacturer and serial strings, the container ID, and the devnode's SetupAPI manufacturer, friendly name and description. Collections of one physical device (same VID, PID and container ID) are linked as siblings.</li>
 <li><strong>Candidates.</strong> Each route's <code>Matches</code> looks at the metadata alone. The collections with at least one matching route become candidates, carrying their matching routes in registry order.</li>
-<li><strong>Open.</strong> The device tries each candidate route in turn: open the collection the route's way, create its session, run <code>Start</code>. The first <code>Start</code> that returns true wins. A route never writes to a collection its <code>Matches</code> did not accept.</li>
+<li><strong>Open.</strong> The device tries each candidate route in turn: open the collection the route's way, create its session, run <code>Start</code>. The first <code>Start</code> that returns true wins. A route never writes to a collection its <code>Matches</code> did not accept. A collection a route opened before, or proved its own before a later step failed, is reopened by that route alone while it stays plugged in, as each reference reconnects to a keyboard it claimed. A timed retry runs only the routes that asked for it.</li>
 <li><strong>Register.</strong> The poll thread gives the winner a device row. A route with <code>RegisterOnFirstReport</code> waits in the queue, listened to, until its first pass produces a key set.</li>
 <li><strong>Read.</strong> A reader thread runs <code>Pass</code> back to back. After each <code>Ok</code> pass it copies the key set to the live state under a lock and notes any key the row's list lacks, so the picker offers it. The poll thread copies the live state into <code>CustomInputState.AnalogKeys</code> each cycle.</li>
-<li><strong>Retire.</strong> When the collection disappears, the reader fails, the user removes the row or the switch goes off, the row is disposed on the thread pool: the reader finishes its pass, the session's <code>Stop</code> puts the keyboard back, and the handle closes. A reader that does not finish within the route's stop budget has its I/O canceled.</li>
+<li><strong>Retire.</strong> When the collection disappears, the reader fails, the user removes the row or the switch goes off, the row is disposed on the thread pool: the reader finishes its pass, the session's <code>Stop</code> puts the keyboard back, and the handle closes. A reader that does not finish within the route's stop budget has its I/O canceled. No new session opens that keyboard until the stop ends, so a new <code>Start</code> never reads a state the old <code>Stop</code> is about to change. At shutdown the app waits for an open in flight and for every stop.</li>
 </ol>
 <h3 id="open-results">Open results<a class="headerlink" href="#open-results" title="Permanent link">&para;</a></h3>
 <table>
@@ -3677,22 +3699,22 @@
 </tr>
 <tr>
 <td>Busy</td>
-<td>The collection would not open (another program holds it).</td>
+<td>The collection would not open (another program holds it), and no route that retries on a timer could try again.</td>
 <td>60 s</td>
 </tr>
 <tr>
 <td>RetryLater</td>
-<td>Every <code>Start</code> failed, and a route asks for a timed retry (<code>StartRetryMs</code>) whose session did not set <code>NoStartRetry</code>.</td>
-<td>the route's delay</td>
+<td>A handshake or an open failed on a route with a timed retry (<code>StartRetryMs</code>), and its session did not set <code>NoStartRetry</code>. A probe-once route retries only a keyboard it opened or recognized before.</td>
+<td>the shortest of those delays, for those routes only</td>
 </tr>
 <tr>
 <td>NotSupported</td>
-<td>Every matching route talked to the keyboard and none recognized it.</td>
+<td>Every matching route talked to the keyboard and none recognized it, or a route's reconnect tries ran out.</td>
 <td>when it is plugged in again</td>
 </tr>
 </tbody>
 </table>
-<p>A row whose reader gave up while the collection is still present also waits 60 s, so a keyboard that stops answering is not reopened every sweep.</p>
+<p>A row whose reader stopped while the collection is still present reopens after its route's <code>ReconnectMs</code>, through that route alone, or after 60 s when the route sets none. Reopens and timed retries run from the candidate the sweep found, so a timer shorter than the 3 s sweep does not enumerate every HID device again. A retry that fails like the last one is not logged again.</p>
 <hr />
 <h2 id="the-route">The route<a class="headerlink" href="#the-route" title="Permanent link">&para;</a></h2>
 <p><code>AnalogKeyboardRoute</code> is a descriptor, not a class to inherit:</p>
@@ -3734,11 +3756,23 @@
 </tr>
 <tr>
 <td><code>StopTimeoutMs</code></td>
-<td>How long a stop waits for the session's teardown (default 1500 ms). The MCHOSE Mix 87 gets 25 s.</td>
+<td>How long a stop waits for the session's teardown (default 1500 ms). The MCHOSE Mix 87 gets 25 s, the NuPhy and MADLIONS A0 routes 9 s, the MAD 68 Pro R 4.5 s.</td>
 </tr>
 <tr>
 <td><code>StartRetryMs</code></td>
-<td>Retry a failed handshake on a timer, the reference's reconnect cadence.</td>
+<td>Retry a failed handshake or open on a timer: the wait the reference's worker takes after an attempt that ran no session.</td>
+</tr>
+<tr>
+<td><code>ProbeOnce</code></td>
+<td>For a reference that probes a keyboard once and afterward reopens only the keyboards it claimed: a new keyboard gets one handshake per plug-in.</td>
+</tr>
+<tr>
+<td><code>ReconnectMs</code></td>
+<td>Reopen after a session that ran ends: the wait the reference takes after a session. 0 for the default minute.</td>
+</tr>
+<tr>
+<td><code>ReconnectTries</code></td>
+<td>Failed reopens in a row before the keyboard is left alone, for a reference that gives up (KeyAxis's six).</td>
 </tr>
 <tr>
 <td><code>InputBuffers</code></td>
@@ -3766,6 +3800,10 @@
 <li><code>Stop(io)</code> undoes what <code>Start</code> changed, while the handle is still open.</li>
 <li><code>ModelName</code>, <code>KeyOrder</code>: the exact model and key list once <code>Start</code> knows them.</li>
 <li><code>MissLimit</code>: unanswered passes in a row before the row is given up.</li>
+<li><code>NoStartRetry</code>: set by a <code>Start</code> whose failure the reference does not retry until the device changes, such as a proof that the keyboard is not the route's.</li>
+<li><code>Recognized</code>: set by a <code>Start</code> that proved the keyboard the route's before a later step failed. No later route hears the keyboard, and this route keeps its claim and retries (the IROK NA87 route sets it once the identity names the NA87 or the AJAZZ, so KeyAxis never arms that board).</li>
+<li><code>IsBound(code)</code>: whether a mapping reads the key. The mapping engine stamps each key it reads on the row's state, and the Addressed routes poll those keys at the top rate, as HallJoy polls the keys bound to its gamepad.</li>
+<li><code>isHeld(AnalogKeyCodes.AnyKey)</code> answers whether any keyboard key is down, HallJoy's sweep over every virtual key before the MAD 68 Pro R rebaseline.</li>
 </ul>
 <table>
 <thead>
@@ -3830,7 +3868,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>AnalogKeyInputState</code> holds up to 64 keys below <code>CodeCount</code> (<code>0x700</code>). Depth runs from just above 0 to 1.</p>
+<p><code>AnalogKeyInputState</code> holds up to 64 keys below <code>CodeCount</code> (<code>0x700</code>). Depth runs from just above 0 to 1. A full state trades its shallowest key for a deeper one, so on a route that reads the whole matrix a pressed key is never hidden behind keys that read a little above rest.</p>
 <hr />
 <h2 id="the-routes-in-order">The routes, in order<a class="headerlink" href="#the-routes-in-order" title="Permanent link">&para;</a></h2>
 <p>A keyboard can match several routes on metadata, so order matters: the first route is HallJoy's first native route, and the last is the listener that takes only what nothing else claims. The order follows HallJoy's <code>native_analog_backends.def</code>, then the families HallJoy does not cover, then the Soup and AnalogSense families.</p>
@@ -3890,7 +3928,7 @@
 <tr>
 <td><code>halljoy-addressed-generic</code></td>
 <td>Other keyboards that answer the Addressed probe</td>
-<td>FF60:0061 with report ID 9 both ways and 64-byte reports, never Keychron, Lemokey or MADLIONS</td>
+<td>FF60:0061 with report ID 9 both ways and 64-byte reports, never Keychron, Lemokey or MADLIONS, and on AULA's vendor ID only with an IPI model's UUID from <code>82 01</code></td>
 <td>Same, after a <code>94 02</code> probe</td>
 <td>HallJoy, narrowed</td>
 </tr>
@@ -4003,8 +4041,8 @@
 <td><code>halljoy-rog-azoth-96-he</code></td>
 <td>ASUS ROG Azoth 96 HE</td>
 <td>0B05:1C10 control plus the FFC0:0001 event collection</td>
-<td><code>51 61</code> travel notifications</td>
-<td>HallJoy's firmware reconnaissance</td>
+<td><code>51 61</code> written to the interrupt OUT endpoint and renewed every 30 s, one key's travel at a time</td>
+<td>HallJoy's firmware reconnaissance, ASUS Gear Link, the M901 firmware</td>
 </tr>
 <tr>
 <td><code>logitech-pro-x-tkl-rapid</code></td>
@@ -4052,8 +4090,8 @@
 <td><code>soup-keychron</code></td>
 <td>41 Keychron and 2 Lemokey HE boards</td>
 <td>FF60:0061 and the catalog</td>
-<td><code>A9 01</code>, then <code>A9 31</code> on AnalogSense firmware or <code>A9 30 row col</code></td>
-<td>Soup, HallJoy</td>
+<td><code>A9 01</code>, then <code>A9 31</code> on AnalogSense firmware or <code>A9 30 row col</code> by analog matrix version</td>
+<td>Soup, HallJoy, Keychron's firmware and Launcher</td>
 </tr>
 <tr>
 <td><code>soup-madlions</code></td>
@@ -4080,11 +4118,174 @@
 </table>
 <hr />
 <h2 id="notes-by-family">Notes by family<a class="headerlink" href="#notes-by-family" title="Permanent link">&para;</a></h2>
-<p><strong>Razer.</strong> Report 11 carries up to 15 entries of Razer's firmware key ID (IBM key-position numbering) and a big-endian travel. Razer's Synapse Web divides by the model's <code>eventDataSize</code>: 65535, or 45864 on the Low-profile Tenkeyless 8KHz (0x02E6). The key table is Synapse Web's <code>fwID</code> table. Soup's table swapped Scroll Lock and Pause and read the ANSI backslash position as 0x2A, and Razer's own table and Abbytech's reader agree on 0x7D Scroll Lock, 0x7E Pause, 0x1D backslash and 0x2A the ISO hash key. The 8KHz models share the V3 Pro's interface-1 descriptor byte for byte in OpenRazer's dumps. Every Razer route reads only while Synapse runs.</p>
+<p><strong>Razer.</strong> Report 11 carries up to 15 entries of Razer's firmware key ID (IBM key-position numbering) and a big-endian travel. Razer's Synapse Web divides by the model's <code>eventDataSize</code>: 65535, or 45864 on the Low-profile Tenkeyless 8KHz (0x02E6). The key table is Synapse Web's <code>fwID</code> table. Soup's table swapped Scroll Lock and Pause and read the ANSI backslash position as 0x2A, and Razer's own table and Abbytech's reader agree on 0x7D Scroll Lock, 0x7E Pause, 0x1D backslash and 0x2A the ISO hash key. The usbhid-dump descriptors posted in OpenRazer's issue tracker for 0x02CF, 0x02D0 and 0x02E6 match the V3 Pro's interface 1 byte for byte. The one public capture of an 8KHz model under Synapse shows report 11 frames with no key down. Every Razer route reads only while Synapse runs.</p>
 <p><strong>DrunkDeer.</strong> Start asks the five known PIDs for their model with <code>04 A0 02</code>. A 64-byte answer <code>04 A0 02 00</code> names the model by bytes 5 to 7, and a model is taken only from its own PID. Each model reads through its own map from DrunkDeer's Antler layouts. An answer chunk must be 64 bytes, start <code>04 B7</code>, carry a chunk number below 3 that the frame has not seen, and the grid assembles in chunk order. A bad frame is a miss, not the end of the session.</p>
-<p><strong>Keychron and Lemokey.</strong> The catalog is HallJoy's 39 identities with Keychron's own matrices, the K6 HE ISO and JIS from paysdelest's Soup fork, and Soup's Lemokey tables. <code>A9 01</code> must answer with at least three bytes. On AnalogSense firmware <code>A9 31</code> answers <code>slots / 30 + 1</code> times, 30 travel bytes each, and on stock firmware <code>A9 30 row col</code> answers one key with the travel at byte 6 (analog matrix version 4 and later) or byte 3. Travel under 5 is rest and 235 the bottom.</p>
-<p><strong>Wooting.</strong> The 60HE v2 and 80HE+ report their split Space halves and two Fn keys at matrix positions of their own. The route publishes them under <code>0x480</code> to <code>0x483</code> as well as Space and Fn, matched under the gamepad-mode mask because the mode changes the product ID's low nibble and not the matrix.</p>
-<p><strong>State that must be undone.</strong> The routes that change a keyboard's state and undo it in <code>Stop</code>: AULA MINI 60 (<code>0x67</code> after <code>0x66</code>), MADLIONS MAD 68 Pro R (a closing <code>A9</code>), W669 (<code>21 03</code>), IROK NA87 (unsubscribe), RongYuan stream (<code>1B 00</code>), KeyAxis (<code>18 03</code>), NuPhy HE (each changed mode's debugMode bit restored), MADLIONS A0 (the bit cleared), MCHOSE Mix 87 (the flash flag cleared, with a 25 s stop budget). The ROG Azoth 96 HE's <code>51 61</code> has no known disable, so its session sends nothing at stop, as HallJoy's research does. Each also undoes a failed <code>Start</code> that had already written, including a write that timed out and may still have landed.</p>
+<p><strong>Keychron and Lemokey.</strong> The catalog is HallJoy's 39 identities with Keychron's own matrices, the K6 HE ISO and JIS from paysdelest's Soup fork, and Soup's Lemokey tables. <code>A9 01</code> must answer with at least three bytes: the analog matrix version at byte 2, feature bits at byte 4. On AnalogSense firmware <code>A9 31</code> answers <code>slots / 30 + 1</code> times, 30 travel bytes each. On stock firmware <code>A9 30 row col</code> answers one key, laid out by version, as Keychron's firmware writes it:</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Where it ships</th>
+<th>Travel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>The Q1 HE ANSI's first releases</td>
+<td>Byte 2, 0 to 40, read over 40 when not 0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Early Q1, Q2, Q3, Q4, Q5, K2 and P1 releases</td>
+<td>Byte 3, 0 to 240</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The K2 HE ISO's first release</td>
+<td>Byte 6 after the row and column echo</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Every current release but the 8K boards'</td>
+<td>Byte 6 after the echo</td>
+</tr>
+<tr>
+<td>5</td>
+<td>The 8K boards</td>
+<td>A little-endian u16 at bytes 5 and 6 after the echo</td>
+</tr>
+</tbody>
+</table>
+<p>Versions 2 to 4 read travel under 5 as rest and the full press less 5 as the bottom: 235 of 240, and 169 of 174 on the K3 HE, whose firmware puts the full travel at 29 units where the others put it at 40. Version 5 reads in the unit <code>A9 10</code> names at byte 8 (0.01 or 0.001 mm) over the axis maximum <code>A9 50</code> reports when the version answer's feature bit 0 is set, else over the 3.35 mm Keychron's Launcher defines for the 8K boards. From version 3 on an answer counts only when it echoes the key's row and column, as the Launcher checks. The layouts come from Keychron's QMK source, the Launcher's readers, and the A9 handler of every stock image the Launcher offers for these boards.</p>
+<p><strong>Wooting.</strong> The 60HE v2 and 80HE+ report their split Space halves and two Fn keys at matrix positions of their own. The route publishes them under <code>0x480</code> to <code>0x483</code> as well as Space and Fn, matched under the gamepad-mode mask because the mode changes the product ID's low nibble and not the matrix. When both Space halves are down, Space reads the deeper one, as HallJoy's plugin host merges them.</p>
+<p><strong>MADLIONS on VIA.</strong> HallJoy's fixes to Soup's reader: one answer per request after stale reports are dropped, an answer under 27 bytes or a failed write zeroes that group and ends the pass, the keys collected before it are published, and eight failures in a row of one group end the session. Travel is clamped to 350.</p>
+<p><strong>Readers beside PadForge.</strong> The DrunkDeer, Keychron and MADLIONS pollers take Soup's named mutexes (<code>DrunkDeerMtx</code>, <code>KeychronMtx</code>, <code>MadlionsMtx</code>) around each pass, as Soup and HallJoy's plugin do, so a second reader polling the same keyboard does not read PadForge's answers or feed PadForge its own. A pass that cannot take its mutex within 100 ms is a quiet pass. PadForge runs elevated, so it creates each mutex open to every user at low integrity, or a Soup reader that is not elevated could not open it.</p>
+<p><strong>Key names.</strong> Where a route reads the keyboard's own key assignments, a key remapped in the vendor's software publishes the key it now types: the AULA MINI 60, HERO and RM routes, the Addressed routes, the IROK NA87, the JingTai and Slice75 routes, and the RongYuan snapshot and stream routes. The SparkLink, SayoDevice O3C and libhmk routes read the keyboard's own keymap as well. HallJoy reads the same assignments whenever its automatic layout remaps, its default. A key assigned nothing PadForge can name is not published.</p>
+<p><strong>libhmk.</strong> An answer names only its command, so after a request times out the next exchange first waits for that late answer, up to hmkconf's 4 s command timeout, before it sends. The timed-out pass releases its keys at once.</p>
+<p><strong>ROG Azoth 96 HE.</strong> The control collection declares no report ID, and the M901 firmware runs commands only from its interrupt OUT endpoint, which <code>WriteFile</code> reaches. A <code>HidD_SetOutputReport</code> control transfer returns success and does nothing. The enable is a lease of 60 that runs out in about a minute, with no command that ends it, so the session sends it again every 30 s, as ASUS Gear Link does. The firmware tracks one key at a time, the first past 0.10 mm, streams it while held and closes it with one travel of 0. Each event replaces the key set, and half a second without an event releases the key. Keys are named through the firmware's own table from IBM key position to HID usage. Fn has no usage and publishes by position.</p>
+<p><strong>State that must be undone.</strong> The routes that change a keyboard's state and undo it in <code>Stop</code>: AULA MINI 60 (<code>0x67</code> after <code>0x66</code>), MADLIONS MAD 68 Pro R (a closing <code>A9</code>, with a 4.5 s stop budget), W669 (<code>21 03</code>), IROK NA87 (unsubscribe), RongYuan stream (<code>1B 00</code>), KeyAxis (<code>18 03</code>), NuPhy HE (each changed mode's debugMode bit restored), MADLIONS A0 (the bit cleared, as AnalogKeys clears it on every exit so a run killed mid-stream is undone by the next), MCHOSE Mix 87 (the flash flag cleared, with a 25 s stop budget). The NuPhy and MADLIONS A0 restores retry a failed write rather than stop at it, within a 9 s budget. The ROG Azoth 96 HE's <code>51 61</code> has no disable, so its session sends nothing at stop and the lease runs out within a minute. Each also undoes a failed <code>Start</code> that had already written, including a write that timed out and may still have landed.</p>
+<hr />
+<h2 id="retry-and-reconnect">Retry and reconnect<a class="headerlink" href="#retry-and-reconnect" title="Permanent link">&para;</a></h2>
+<p>Each route's timers are the waits its reference's worker takes. A probe-once route admits a keyboard it never opened with one handshake per plug-in.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Retry</th>
+<th>Reconnect</th>
+<th>Probe once</th>
+<th>From</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ATTACK SHARK, AULA MINI 60</td>
+<td>3 s</td>
+<td>3 s</td>
+<td>no</td>
+<td>HallJoy's supervisors</td>
+</tr>
+<tr>
+<td>MADLIONS MAD 68 Pro R, ATK Hex80</td>
+<td>250 ms</td>
+<td>250 ms</td>
+<td>yes</td>
+<td>reopened only once claimed</td>
+</tr>
+<tr>
+<td>AULA HERO</td>
+<td>1 s</td>
+<td>1 s</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Addressed IPI and probe</td>
+<td>5 s</td>
+<td>500 ms</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>AULA SparkPlayJoy RM</td>
+<td>100 ms</td>
+<td>100 ms</td>
+<td>no</td>
+<td>a proof refused on its content waits for replug</td>
+</tr>
+<tr>
+<td>IROK NA87</td>
+<td>1 s</td>
+<td>200 ms</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>KeyAxis</td>
+<td>150 ms</td>
+<td>150 ms</td>
+<td>yes</td>
+<td>six tries, then left alone</td>
+</tr>
+<tr>
+<td>AULA W669</td>
+<td>1 s</td>
+<td>200 ms</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>JingTai V1, Slice75, RongYuan snapshot and stream, Neo65, SteelSeries Apex</td>
+<td>1 s</td>
+<td>1 s</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>MCHOSE Mix 87</td>
+<td>5 s</td>
+<td>5 s</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>SparkLink, SayoDevice</td>
+<td>2 s</td>
+<td>2 s</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>Centerpiece Pro, libhmk, Soup polled families</td>
+<td>1 s</td>
+<td>1 s</td>
+<td>no</td>
+<td>the Soup plugin host's rediscovery</td>
+</tr>
+<tr>
+<td>Wooting, Razer, Logitech RAPID</td>
+<td>none</td>
+<td>1 s</td>
+<td>no</td>
+<td>they only listen</td>
+</tr>
+<tr>
+<td>NuPhy HE, MADLIONS A0</td>
+<td>5 s</td>
+<td>1 minute</td>
+<td>no</td>
+<td>every open writes the keyboard's settings</td>
+</tr>
+<tr>
+<td>ROG Azoth 96 HE, A0 listener</td>
+<td>none</td>
+<td>1 minute</td>
+<td>no</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="data-files">Data files<a class="headerlink" href="#data-files" title="Permanent link">&para;</a></h2>
 <p>Every table is generated from its reference and checked against a second extraction. None is hand-typed.</p>
@@ -4139,13 +4340,13 @@
 </tr>
 <tr>
 <td><code>others.json</code></td>
-<td>Centerpiece Pro and libhmk tables</td>
-<td>LeiterConsulting's Soup fork, libhmk, TinyUSB</td>
+<td>Centerpiece Pro, libhmk, Logitech RAPID and Azoth 96 HE tables</td>
+<td>LeiterConsulting's Soup fork, libhmk, TinyUSB, Sainan's notes, the M901 firmware's key table</td>
 </tr>
 <tr>
 <td><code>keychron.json</code></td>
-<td>43 Keychron and Lemokey boards</td>
-<td>HallJoy <code>keychron_layout_identities.h</code> and its reviewed catalog matrices</td>
+<td>43 Keychron and Lemokey boards, the K3 HE's full press, the 8K boards' travel</td>
+<td>HallJoy <code>keychron_layout_identities.h</code> and its reviewed catalog matrices, Keychron's firmware and Launcher definitions</td>
 </tr>
 <tr>
 <td><code>drunkdeer.json</code></td>

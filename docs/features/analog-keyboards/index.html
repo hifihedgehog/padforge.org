@@ -3714,7 +3714,7 @@
 </tr>
 <tr>
 <td>Keychron and Lemokey HE boards</td>
-<td>Nothing extra. The <a href="https://analogsense.org/firmware/">AnalogSense firmware</a> reports every key at once and reads faster, and stock firmware works too.</td>
+<td>Nothing extra. Stock firmware works on every board, the 8K boards included. On the others the <a href="https://analogsense.org/firmware/">AnalogSense firmware</a> reports every key at once and reads faster.</td>
 </tr>
 <tr>
 <td>NuPhy HE boards and the MADLIONS Nano 68, MAD 68 and Fire 68 lines</td>
@@ -3787,7 +3787,7 @@
 </tr>
 </tbody>
 </table>
-<p>Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the ASUS ROG Azoth 96 HE, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, and libhmk keys with no standard key behind them. Their keys join the picker as you press them, and <strong>Record</strong> is the quick way to map them: press the key past half travel.</p>
+<p>Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, libhmk keys with no standard key behind them, and the Fn key of the ASUS ROG Azoth 96 HE. Their keys join the picker as you press them, and <strong>Record</strong> is the quick way to map them: press the key past half travel.</p>
 <p>A key reads 0 at rest and full at the bottom of its travel. What that means depends on the target:</p>
 <table>
 <thead>
@@ -4253,6 +4253,7 @@
 <li>A Razer keyboard or keypad reports depth only while Razer Synapse runs. The 8KHz Huntsmans report through the same interface as the V3 Pro, going by Razer's own web configurator, and no public capture yet shows one reporting a pressed key.</li>
 <li>Most keyboards share their configurator's channel. Close the configurator while PadForge reads them.</li>
 <li>The Logitech PRO X TKL RAPID reports only the key pressed furthest, so it reads one key at a time.</li>
+<li>The ASUS ROG Azoth 96 HE reports one key at a time too: the first key pressed past 0.10 mm, until it comes back up.</li>
 <li>Keys are named for their US legend, whatever layout Windows uses. A key remapped in the keyboard's own software keeps its factory name on some keyboards and takes its new one on others, the way each reference reads it.</li>
 </ul>
 <hr />
