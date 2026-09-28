@@ -454,8 +454,9 @@ Some assigned devices show named buttons instead of numbered descriptors. They a
 
 - **Consumer Control keys.** A media keyboard's consumer collection shows its keys by name (Play/Pause, Mute, Volume Up, Next Track, and the rest). Map one to a virtual button. A usage outside the known set reads as "Consumer 0xNNNN".
 - **NFC tags.** An NFC reader shows **Any NFC Tag** plus one entry per registered tag. A tap fires the source as a momentary press. Register and name tags on the [Devices](devices.md) page. See [NFC Tags](nfc-tags.md).
+- **Analog keyboard keys.** An analog keyboard's row lists every key it can report, named for its US legend. A key reads 0 at rest and full at the bottom of its travel, so it drives a trigger or a stick axis by depth, and a button at the row's **Axis-to-Button Deadzone**. See [Analog Keyboards](analog-keyboards.md).
 
-Both also work as [Macros](../guides/macros.md) Input Device triggers.
+All three also work as [Macros](../guides/macros.md) Input Device triggers.
 
 ---
 

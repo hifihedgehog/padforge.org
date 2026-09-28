@@ -68,6 +68,7 @@ An Assigned Devices trigger does not have to name a specific device. Entries pic
 | Button | Pressed buttons go into the combo. LB + A means both held. |
 | Axis | Fires when the stick or trigger crosses the threshold. Each **Assigned Devices** axis entry has its own **Invert**, **Half**, **Bidirectional**, and **Deadzone** options, the same set the merge-mapping editor uses on axis-to-button sources. **Half** by itself picks one side of center (Invert flips which side). **Half** plus **Bidirectional** fires past the deadzone on either side. This lets you bind separate macros to left-stick-left and left-stick-right, or one macro to "deflected past N percent in any direction". |
 | D-pad / POV hat | Fires when the hat matches the recorded direction. The match is a 45-degree sector centered on that direction, so an 8-way D-pad's diagonal does not count as Up. |
+| Analog keyboard key | Fires when the key is pressed past its entry's **Deadzone**, 50% unless you set it. Each key entry has its own, so two macros on one key can be a soft press and a full press. See [Analog Keyboards](../features/analog-keyboards.md). |
 
 A mixed example: LB + Right Stick X (Positive) + D-pad Up. All three must hold for the macro to fire.
 
@@ -222,7 +223,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 | **Mouse** | Mouse Move, Mouse Button Press, Mouse Button Release, Toggle Mouse Button, Mouse Scroll, Mouse Wheel Tick, Nudge Cursor, Recenter Mouse, Fix Mouse Position, Limit Mouse Region, Move Mouse to Position |
 | **Timing & Flow** | Delay, Combo Break, Cycle Tap List |
 | **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration |
-| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness |
+| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color |
 | **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
 | **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
 | **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay |
@@ -473,6 +474,12 @@ Two hold modes:
 - **Sticky (Hold).** Hold the color at full brightness until a **Clear Lightbar Override** action or a fresh override replaces it. Good for armed / disarmed markers.
 
 It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.
+
+### Set Chroma Color
+
+Paints every Razer Chroma device one color for the action's **Duration**, then hands the lighting back to Razer Synapse. It needs Synapse running, and it works whether or not the [Razer Chroma lightbar mirror](../features/lightbar-mirrors.md#razer-chroma) is on. While a macro paints, its color wins over the mirror's.
+
+To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.
 
 ### Clear Lightbar Override
 

@@ -1050,6 +1050,8 @@
       
         
       
+        
+      
     
     
     
@@ -1702,6 +1704,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2140,6 +2170,17 @@
     <span class="md-ellipsis">
       
         Read Logitech G-Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-analog-keyboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read Analog Keyboards
       
     </span>
   </a>
@@ -2789,6 +2830,8 @@
       
         
           
+        
+      
         
       
         
@@ -3672,6 +3715,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4021,6 +4092,17 @@
     <span class="md-ellipsis">
       
         Read Logitech G-Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-analog-keyboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read Analog Keyboards
       
     </span>
   </a>
@@ -4494,6 +4576,9 @@
 <p>Reads the G-keys and extra mouse buttons on Logitech gaming gear through the vendor's G-key SDK, and presents them as their own device row. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</p>
 <p>The SDK ships with <strong>Logitech Gaming Software 8.55 or later</strong>, not with G HUB. The status line under the checkbox says which step is missing: no SDK on the machine, a registered SDK whose file is gone, an SDK that was found and would not load, a library that loaded but is not the G-key SDK, or an SDK that refused to start because Logitech Gaming Software is not running. Once it connects, the line counts key events.</p>
 <p>In Logitech Gaming Software, make PadForge the <strong>persistent profile</strong>. This is done in Logitech's software, not in PadForge, and it has nothing to do with PadForge's own <a href="../../guides/profiles/">profiles</a>. Without it the keys only reach PadForge while its window is in front.</p>
+<h3 id="read-analog-keyboards">Read Analog Keyboards<a class="headerlink" href="#read-analog-keyboards" title="Permanent link">&para;</a></h3>
+<p>Reads how far every key is pressed on analog and Hall effect keyboards, and gives each supported keyboard its own device row. It is off by default. See <a href="../analog-keyboards/">Analog Keyboards</a> for the keyboards it reads.</p>
+<p>Most keyboards are read over the channel their own configurator uses, so close the configurator while this is on. Razer keyboards report only while Razer Synapse runs. The status line under the checkbox names the keyboards being read, says when none was found, and says when a Razer keyboard is waiting for Synapse.</p>
 <h3 id="polling-interval">Polling Interval<a class="headerlink" href="#polling-interval" title="Permanent link">&para;</a></h3>
 <p>How often the engine reads input, in milliseconds. Default: <strong>1 ms</strong> (~1000 Hz).</p>
 <table>

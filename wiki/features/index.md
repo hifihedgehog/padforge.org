@@ -62,6 +62,7 @@ when that device has the matching hardware.
 | [Handheld PC Buttons](handheld-buttons.md) | Rear paddles and menu keys on a handheld gaming PC, learned by pressing them, plus the machine's own gyroscope |
 | [MIDI Input](midi-input.md) | MIDI devices on the Devices page: notes, knobs, and pitch bend as mapping sources |
 | [Logitech G-Keys](logitech-g-keys.md) | The G-keys and extra mouse buttons on Logitech gaming gear as mapping sources |
+| [Analog Keyboards](analog-keyboards.md) | How far every key is pressed on analog and Hall effect keyboards, as mapping sources |
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [VR Controller Input](vr-controller-input.md) | The headset's pose and both hand controllers read as mapping sources through OpenXR |

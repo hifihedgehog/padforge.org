@@ -1507,6 +1507,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#set-chroma-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Chroma Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#clear-lightbar-override" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2025,6 +2036,8 @@
       
         
           
+        
+      
         
       
         
@@ -2736,6 +2749,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -3250,6 +3291,8 @@
       
         
           
+        
+      
         
       
         
@@ -4133,6 +4176,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4935,6 +5006,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#set-chroma-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Chroma Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#clear-lightbar-override" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5401,6 +5483,10 @@
 <td>D-pad / POV hat</td>
 <td>Fires when the hat matches the recorded direction. The match is a 45-degree sector centered on that direction, so an 8-way D-pad's diagonal does not count as Up.</td>
 </tr>
+<tr>
+<td>Analog keyboard key</td>
+<td>Fires when the key is pressed past its entry's <strong>Deadzone</strong>, 50% unless you set it. Each key entry has its own, so two macros on one key can be a soft press and a full press. See <a href="../../features/analog-keyboards/">Analog Keyboards</a>.</td>
+</tr>
 </tbody>
 </table>
 <p>A mixed example: LB + Right Stick X (Positive) + D-pad Up. All three must hold for the macro to fire.</p>
@@ -5644,7 +5730,7 @@
 </tr>
 <tr>
 <td><strong>Lightbar &amp; LEDs</strong></td>
-<td>Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness</td>
+<td>Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color</td>
 </tr>
 <tr>
 <td><strong>Sound &amp; Volume</strong></td>
@@ -5875,6 +5961,9 @@
 <li><strong>Sticky (Hold).</strong> Hold the color at full brightness until a <strong>Clear Lightbar Override</strong> action or a fresh override replaces it. Good for armed / disarmed markers.</li>
 </ul>
 <p>It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.</p>
+<h3 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h3>
+<p>Paints every Razer Chroma device one color for the action's <strong>Duration</strong>, then hands the lighting back to Razer Synapse. It needs Synapse running, and it works whether or not the <a href="../../features/lightbar-mirrors/#razer-chroma">Razer Chroma lightbar mirror</a> is on. While a macro paints, its color wins over the mirror's.</p>
+<p>To hold the color for as long as the trigger is held, use <strong>While Held</strong> with <strong>Until Release</strong> and a long <strong>Duration</strong>. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.</p>
 <h3 id="clear-lightbar-override">Clear Lightbar Override<a class="headerlink" href="#clear-lightbar-override" title="Permanent link">&para;</a></h3>
 <p>Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.</p>
 <h3 id="set-lightbar-mode">Set Lightbar Mode<a class="headerlink" href="#set-lightbar-mode" title="Permanent link">&para;</a></h3>

@@ -54,6 +54,8 @@ Registers PadForge as a Chroma app with the REST server Razer Synapse runs on th
 
 The footer under the row reads: *Requires Razer Synapse with Chroma Connect. Works with any physical controller: the color comes from the virtual pad the game paints.*
 
+A macro's **Set Chroma Color** action paints the same devices on its own, with or without this mirror, and its color wins while it runs. See [Macros](../guides/macros.md#set-chroma-color).
+
 ---
 
 ## Logitech LIGHTSYNC

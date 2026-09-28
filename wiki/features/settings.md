@@ -119,6 +119,12 @@ The SDK ships with **Logitech Gaming Software 8.55 or later**, not with G HUB. T
 
 In Logitech Gaming Software, make PadForge the **persistent profile**. This is done in Logitech's software, not in PadForge, and it has nothing to do with PadForge's own [profiles](../guides/profiles.md). Without it the keys only reach PadForge while its window is in front.
 
+### Read Analog Keyboards
+
+Reads how far every key is pressed on analog and Hall effect keyboards, and gives each supported keyboard its own device row. It is off by default. See [Analog Keyboards](analog-keyboards.md) for the keyboards it reads.
+
+Most keyboards are read over the channel their own configurator uses, so close the configurator while this is on. Razer keyboards report only while Razer Synapse runs. The status line under the checkbox names the keyboards being read, says when none was found, and says when a Razer keyboard is waiting for Synapse.
+
 ### Polling Interval
 
 How often the engine reads input, in milliseconds. Default: **1 ms** (~1000 Hz).

@@ -1050,6 +1050,8 @@
       
         
       
+        
+      
     
     
     
@@ -1533,6 +1535,17 @@
     <span class="md-ellipsis">
       
         MIDI devices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analog-keyboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analog keyboards
       
     </span>
   </a>
@@ -2530,6 +2543,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -3044,6 +3085,8 @@
       
         
           
+        
+      
         
       
         
@@ -3927,6 +3970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4425,6 +4496,17 @@
     <span class="md-ellipsis">
       
         MIDI devices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analog-keyboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analog keyboards
       
     </span>
   </a>
@@ -4965,7 +5047,7 @@
 <tbody>
 <tr>
 <td><strong>Type</strong></td>
-<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, or plain Device for anything unclassified.</td>
+<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Analog Keyboard, or plain Device for anything unclassified.</td>
 </tr>
 <tr>
 <td><strong>VID:PID</strong></td>
@@ -5284,6 +5366,10 @@
 <h2 id="midi-devices">MIDI devices<a class="headerlink" href="#midi-devices" title="Permanent link">&para;</a></h2>
 <p>A connected MIDI keyboard, pad controller, or control surface shows up here as its own device card. Select it and the detail pane shows a live preview: a piano that lights the notes you play and vertical sliders that follow the knobs and faders. Its notes, Control Change knobs, pitch bend, and encoder dials map like any button or axis.</p>
 <p>MIDI input needs Windows 11 24H2 (build 26100) or later, the same Windows MIDI Services the MIDI virtual controller uses. See <a href="../midi-input/">MIDI Input</a> for the full list of what maps.</p>
+<hr />
+<h2 id="analog-keyboards">Analog keyboards<a class="headerlink" href="#analog-keyboards" title="Permanent link">&para;</a></h2>
+<p>With <strong>Read Analog Keyboards</strong> on in <a href="../settings/">Settings</a>, each supported analog or Hall effect keyboard gets a card of its own, typed <strong>Analog Keyboard</strong>, beside its normal keyboard card. Select it and a <strong>Key Depth</strong> panel replaces the axes and button grid. Each key you press joins the panel with a bar and a percentage for how far down it is. Every key maps as a button, a trigger or one side of a stick axis. See <a href="../analog-keyboards/">Analog Keyboards</a>.</p>
+<p>The card reads a vendor interface beside the keyboard, so it has no Input Mode or Input Hiding sections.</p>
 <hr />
 <h2 id="consumer-control-devices">Consumer Control devices<a class="headerlink" href="#consumer-control-devices" title="Permanent link">&para;</a></h2>
 <p>Media keys show up here as their own device card, typed <strong>Consumer Control</strong>. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.</p>

@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Analog Keyboard, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging or plugged in at full charge. |
@@ -288,6 +288,14 @@ A third and fourth source live elsewhere: [Web Controller](../guides/web-control
 A connected MIDI keyboard, pad controller, or control surface shows up here as its own device card. Select it and the detail pane shows a live preview: a piano that lights the notes you play and vertical sliders that follow the knobs and faders. Its notes, Control Change knobs, pitch bend, and encoder dials map like any button or axis.
 
 MIDI input needs Windows 11 24H2 (build 26100) or later, the same Windows MIDI Services the MIDI virtual controller uses. See [MIDI Input](midi-input.md) for the full list of what maps.
+
+---
+
+## Analog keyboards
+
+With **Read Analog Keyboards** on in [Settings](settings.md), each supported analog or Hall effect keyboard gets a card of its own, typed **Analog Keyboard**, beside its normal keyboard card. Select it and a **Key Depth** panel replaces the axes and button grid. Each key you press joins the panel with a bar and a percentage for how far down it is. Every key maps as a button, a trigger or one side of a stick axis. See [Analog Keyboards](analog-keyboards.md).
+
+The card reads a vendor interface beside the keyboard, so it has no Input Mode or Input Hiding sections.
 
 ---
 

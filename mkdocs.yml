@@ -108,6 +108,7 @@ nav:
       - Handheld PC Buttons: features/handheld-buttons.md
       - MIDI Input: features/midi-input.md
       - Logitech G-Keys: features/logitech-g-keys.md
+      - Analog Keyboards: features/analog-keyboards.md
       - Virtual VR Controllers: features/vr-controllers.md
       - Headset Head Tracking: features/headset-motion.md
       - Head Tracking: features/head-tracking.md
@@ -154,6 +155,7 @@ nav:
       - Wheel Force Feedback Internals: reference/wheel-ffb-internals.md
       - MIDI Input Internals: reference/midi-input-internals.md
       - Logitech G-Keys Internals: reference/logitech-g-keys-internals.md
+      - Analog Keyboards Internals: reference/analog-keyboards-internals.md
       - Wii Controllers Internals: reference/wii-controllers-internals.md
       - Handheld PC Buttons Internals: reference/handheld-buttons-internals.md
       - 2D Overlay System: reference/2d-overlay-system.md
