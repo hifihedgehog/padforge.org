@@ -301,7 +301,7 @@ The card reads a vendor interface beside the keyboard, so it has no Input Mode o
 
 ## Bliss-Box ports
 
-With **Read Bliss-Box Adapters** on in [Settings](settings.md), each Bliss-Box port's card carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller on an adapter with firmware 3.0 or later, and **Read Arrows One by One** for a PlayStation digital pad or dance mat on a 3.x adapter. The port's buttons take the names of the controller plugged in, and a DualShock 2 adds a **DualShock 2 Pressure** panel. See [Bliss-Box Adapters](bliss-box.md).
+With **Read Bliss-Box Adapters** on in [Settings](settings.md), each Bliss-Box port has a card, and its detail pane carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller on an adapter with firmware 3.0 or later, and **Read Arrows One by One** for a PlayStation digital pad or dance mat on a 3.x adapter. In the mapping picker the port's buttons take the names of the controller plugged in, and a DualShock 2 adds a **DualShock 2 Pressure** panel to the detail pane. See [Bliss-Box Adapters](bliss-box.md).
 
 ---
 

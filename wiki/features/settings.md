@@ -127,7 +127,7 @@ Most keyboards are read over the channel their own configurator uses, so close t
 
 ### Read Bliss-Box Adapters
 
-Talks to Bliss-Box adapters through their API. Each port's row names the controller plugged into it, reads a DualShock 2's pressure, rumbles through the adapter's own motor commands, and offers the Dreamcast screen, Controller Pak and player number actions. It is off by default. See [Bliss-Box Adapters](bliss-box.md).
+Talks to Bliss-Box adapters through their API, so PadForge knows the controller in each port, reads a DualShock 2's pressure, rumbles through the adapter's own motor commands, and offers the Dreamcast screen, Controller Pak and player number actions in the port's detail pane on the Devices page. It is off by default. See [Bliss-Box Adapters](bliss-box.md).
 
 Close the Bliss-Box API Tool and DeviceBuddy while this is on, since they talk to the adapter over the same channel. While it is on, each port reads in the adapter's own layout instead of through SDL's gamepad mapping, so map a port again after turning it on or off. The status line under the checkbox names each port and the controller in it.
 

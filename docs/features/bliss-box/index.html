@@ -1805,15 +1805,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-ports-row" class="md-nav__link">
+  <a href="#the-port-on-the-devices-page" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The port's row
+        The port on the Devices page
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The port&#39;s row">
+    <nav class="md-nav" aria-label="The port on the Devices page">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3582,15 +3582,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-ports-row" class="md-nav__link">
+  <a href="#the-port-on-the-devices-page" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The port's row
+        The port on the Devices page
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The port&#39;s row">
+    <nav class="md-nav" aria-label="The port on the Devices page">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3739,8 +3739,8 @@
 <p>SDL, the library PadForge reads controllers through, knows the adapter as a "4Play Adapter" gamepad with one fixed button layout. That layout fits one kind of controller. While the switch is on, PadForge reads each port in the adapter's own layout instead, which follows whatever is plugged in, and the port's row shows as a <strong>Joystick</strong>. The same button then has a different number, so a mapping made with the switch off points at the wrong buttons with it on, and the reverse.</p>
 </div>
 <hr />
-<h2 id="the-ports-row">The port's row<a class="headerlink" href="#the-ports-row" title="Permanent link">&para;</a></h2>
-<p>Each port's row on the <a href="../devices/">Devices</a> page carries a line with its player number, the controller in it and the adapter's firmware:</p>
+<h2 id="the-port-on-the-devices-page">The port on the Devices page<a class="headerlink" href="#the-port-on-the-devices-page" title="Permanent link">&para;</a></h2>
+<p>Select a port's card on the <a href="../devices/">Devices</a> page, and its detail pane carries a line with its player number, the controller in it and the adapter's firmware:</p>
 <p><em>Bliss-Box port 1 · DualShock 2 · firmware 4.86</em></p>
 <p>Under the line are the port's actions. Each one appears only when it applies:</p>
 <table>
@@ -3770,10 +3770,10 @@
 </tbody>
 </table>
 <h3 id="button-names">Button names<a class="headerlink" href="#button-names" title="Permanent link">&para;</a></h3>
-<p>The port's buttons and sticks take the names of the controller plugged in: <strong>Cross</strong>, <strong>Circle</strong>, <strong>L2</strong> and <strong>Left Stick X</strong> on a DualShock 2, <strong>A</strong>, <strong>Z Trigger</strong>, <strong>C-Up</strong> and <strong>Stick X</strong> on an N64 controller. Plug in another controller and the names follow it.</p>
+<p>In the mapping picker, the port's buttons and sticks take the names of the controller plugged in: <strong>Cross</strong>, <strong>Circle</strong>, <strong>L2</strong> and <strong>Left Stick X</strong> on a DualShock 2, <strong>A</strong>, <strong>Z Trigger</strong>, <strong>C-Up</strong> and <strong>Stick X</strong> on an N64 controller. Plug in another controller and the names follow it.</p>
 <p>The names come from two sources, one per firmware generation: RetroArch's Bliss-Box autoconfig files, written for firmware 3.24, on a 3.x adapter, and DeviceBuddy's controller layouts on a 4.x GPA. They follow the adapter's default button map. If you remapped buttons in the API Tool or chose one of the GPA's alternate maps, the names stay on the default positions, since the adapter does not say which map is active.</p>
 <p>Analog triggers follow the firmware itself. A GameCube controller's, a Dreamcast pad's and a Saturn 3D Control Pad's triggers arrive as <strong>Left Trigger</strong> and <strong>Right Trigger</strong> on either generation, 0 when released, and a trigger mapping treats them as a gamepad's: it does not engage at rest.</p>
-<p>A controller that neither source lays out keeps numbered names (<strong>Button 3</strong>, <strong>Axis 1</strong>), and so does every controller on a 2.x adapter.</p>
+<p>A controller that neither source lays out keeps numbered names (<strong>Button 3</strong>, <strong>Axis 1</strong>), and so does every controller on a 2.x adapter. A DualShock 2's pressure axes carry names on every firmware, so on a 2.x adapter its other axes show the joystick's own names (<strong>X Axis</strong>, <strong>Y Axis</strong>) instead of numbers.</p>
 <table>
 <thead>
 <tr>
@@ -3796,7 +3796,7 @@
 <h2 id="dualshock-2-pressure">DualShock 2 pressure<a class="headerlink" href="#dualshock-2-pressure" title="Permanent link">&para;</a></h2>
 <p>A DualShock 2's twelve pressure-sensitive buttons (the four D-pad directions, the four face buttons, L1, R1, L2 and R2) arrive as twelve extra axes named for their buttons: <strong>Cross Pressure</strong>, <strong>D-Pad Up Pressure</strong>, <strong>R2 Pressure</strong> and so on. Each reads 0 at rest and full at the bottom of the press.</p>
 <p>Put one on a trigger and the press depth is the trigger pull. Put one on a button and it presses once the depth passes the row's <strong>Axis-to-Button Deadzone</strong>, so a light touch and a full press can do different things. The buttons themselves still work as ordinary buttons.</p>
-<p>Select the port's row and a <strong>DualShock 2 Pressure</strong> panel shows each button's depth as a bar and a percentage.</p>
+<p>Select the port's card and a <strong>DualShock 2 Pressure</strong> panel in its detail pane shows each button's depth as a bar and a percentage.</p>
 <p>PadForge asks for the pressures every 50 ms, DeviceBuddy's own rate, and only while a DualShock 2 is in the port. Each request costs the adapter one of its own controller reads.</p>
 <hr />
 <h2 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h2>
@@ -3820,11 +3820,12 @@
 </tbody>
 </table>
 <p>Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. <strong>Fold Trigger Rumble into Main Motors</strong> on the Pad page folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.</p>
-<p>A running motor is told again every 100 ms, as the API Tool does to hold rumble on. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.</p>
+<p>A running motor is told again every 100 ms, as the API Tool does to hold rumble on. On a GPA a new level goes out at once. On a 3.x adapter, where each command costs a controller read, both motors are sent their levels together at most once every 100 ms, so a game that changes its rumble every frame never holds the controller's input still, and a change can take up to 100 ms to arrive. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.</p>
+<p>The motors change hands on the input engine's next cycle after you turn the switch on or off. Turned on, SDL's rumble stops and the adapter takes the game's current level. Turned off, each port sends its last stop, and SDL then takes the level over.</p>
 <hr />
 <h2 id="dance-mats-and-the-arrows">Dance mats and the arrows<a class="headerlink" href="#dance-mats-and-the-arrows" title="Permanent link">&para;</a></h2>
-<p>A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own: <strong>Up Arrow</strong>, <strong>Down Arrow</strong>, <strong>Left Arrow</strong> and <strong>Right Arrow</strong> on the port's row. Map those, not the hat. A 3.x adapter keeps sending them until another controller is plugged in, and a GPA keeps them on as a setting, through power cycles. Only controllers with a D-pad get them, and on a GPA the Genesis 3-button pad, the FM Towns pad and the PC-FX pad do not.</p>
-<p>On a 3.x adapter, tick <strong>Read Arrows One by One</strong> on a PlayStation dance mat's row and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips one of its own controller reads for each.</p>
+<p>A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, which the mapping picker lists as <strong>Up Arrow</strong>, <strong>Down Arrow</strong>, <strong>Left Arrow</strong> and <strong>Right Arrow</strong>. Map those, not the hat. A 3.x adapter keeps sending them until another controller is plugged in, and a GPA keeps them on as a setting, through power cycles. A GPA sends none for the Genesis 3-button pad, the FM Towns pad and the PC-FX pad, and PadForge names them only for a controller whose layout has a D-pad.</p>
+<p>On a 3.x adapter, select a PlayStation dance mat's card and tick <strong>Read Arrows One by One</strong>, and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips most of its own reads of the pad while they do. Once opposite directions have been pressed and the adapter sends the arrows itself, PadForge stops asking, until another controller is plugged in.</p>
 <hr />
 <h2 id="dreamcast-screen">Dreamcast screen<a class="headerlink" href="#dreamcast-screen" title="Permanent link">&para;</a></h2>
 <p><strong>Dreamcast Screen…</strong> chooses what the VMU in a Dreamcast pad shows. The dialog previews the picture as the VMU draws it.</p>
@@ -3878,7 +3879,7 @@
 <p>If the adapter refuses its own picture back, PadForge leaves the player number alone. If the adapter still answers as the old player a moment after the change, the change did not take. Either way the port keeps its number and its choices, and the status line says the adapter kept its player number.</p>
 <hr />
 <h2 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h2>
-<p><strong>Show Dreamcast Screen</strong>, in the <strong>Lightbar &amp; LEDs</strong> group, plays one to eight pictures on the VMU of every Dreamcast pad in a Bliss-Box port that feeds the macro's slot. Add pictures with <strong>Add Picture…</strong>, click one to remove it, and set the <strong>Frame Time</strong> (a second at least) and the <strong>Repeat Count</strong>. Each picture shows for its frame time from the moment the VMU has it, so a show runs a little longer than the frame time multiplied by the number of pictures and the repeat count. A picture the port has not taken within five seconds counts as shown, so a port that refuses pictures cannot hold a show forever. When the pictures finish, each port goes back to its own screen setting. See <a href="../../guides/macros/#show-dreamcast-screen">Macros</a>.</p>
+<p><strong>Show Dreamcast Screen</strong>, in the <strong>Lightbar &amp; LEDs</strong> group, plays one to eight pictures on the VMU of every Dreamcast pad in a Bliss-Box port that feeds the macro's slot. Add pictures with <strong>Add Picture…</strong>, click one to remove it, and set the <strong>Frame Time</strong> (a second at least) and the <strong>Repeat Count</strong>. Each picture shows for its frame time from the moment the VMU has it, so a show runs a little longer than the frame time multiplied by the number of pictures and the repeat count. A picture the port has not taken within five seconds counts its time from when its turn began, so a port that refuses pictures cannot hold a show forever. When the pictures finish, each port goes back to its own screen setting. See <a href="../../guides/macros/#show-dreamcast-screen">Macros</a>.</p>
 <hr />
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3889,7 +3890,8 @@
 <li>The adapter's picture memory is rated for 100,000 writes. A clock or play time rewrites its last digit once a minute, which reaches that rating after about ten weeks of display around the clock, and a looping macro show at a picture a second reaches it in about a day.</li>
 <li>The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose <strong>The Adapter's Picture</strong> to put the adapter's own back.</li>
 <li>On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's. PadForge stops it right after each write and gives a running rumble its strength back, so a jump pack may give a short buzz when the picture changes.</li>
-<li>The Saturn racing controller and mission stick report as a Saturn 3D Control Pad, so their unused axes carry the 3D pad's trigger names.</li>
+<li>The Saturn racing controller and mission stick report as a Saturn 3D Control Pad. The mission stick's throttle arrives as <strong>Right Trigger</strong>, and an axis a controller does not send stays at its midpoint, which reads as a half-pressed trigger: <strong>Left Trigger</strong> on the mission stick, both triggers on the racing controller.</li>
+<li>For up to half a second after a GameCube, Dreamcast or Saturn 3D pad leaves its port, its triggers read as half pressed, until the adapter reports the port empty.</li>
 <li>PadForge keeps a copy of the adapter's own picture from the first time it replaces it, and Reset to Defaults keeps that copy. A picture sent to the adapter from DeviceBuddy or the API Tool after that is replaced without a copy.</li>
 <li>The adapter's own settings, its modes, button mapper, turbo, hotkey and stick range, stay with the API Tool and DeviceBuddy.</li>
 </ul>
@@ -3897,7 +3899,7 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../settings/">Settings</a>: the Input Engine card and its Read Bliss-Box Adapters switch.</li>
-<li><a href="../devices/">Devices</a>: the port's row and its actions.</li>
+<li><a href="../devices/">Devices</a>: the port's card, its detail pane and its actions.</li>
 <li><a href="../mappings/">Button and Axis Mappings</a>: deadzones and the Axis-to-Button Deadzone that a pressure button presses past.</li>
 <li><a href="../../guides/macros/">Macros</a>: the Show Dreamcast Screen action.</li>
 <li><a href="../../reference/bliss-box-internals/">Bliss-Box Internals</a>: every report and rule, for whoever has to change the code.</li>
