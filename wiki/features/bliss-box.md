@@ -17,7 +17,7 @@ The line under the checkbox names each port and what is in it, for example *Read
 Close the Bliss-Box API Tool and DeviceBuddy while the switch is on, since they talk to the adapter over the same channel.
 
 !!! warning "Map the ports again after turning the switch on or off"
-    SDL, the library PadForge reads controllers through, knows the adapter as a "4Play Adapter" gamepad with one fixed button layout. That layout fits one kind of controller. While the switch is on, PadForge reads each port in the adapter's own layout instead, which follows whatever is plugged in, and the port's row shows as a **Joystick**. The same button then has a different number, so a mapping made with the switch off points at the wrong buttons with it on, and the reverse.
+    SDL, the library PadForge reads controllers through, knows the adapter as a "4Play Adapter" gamepad with one fixed button layout. That layout fits one kind of controller. While the switch is on, PadForge reads each port in the adapter's own layout instead, which follows whatever is plugged in, and the port shows as a **Joystick** on the Devices page. The same button then has a different number, so a mapping made with the switch off points at the wrong buttons with it on, and the reverse.
 
 ---
 
@@ -61,7 +61,7 @@ Put one on a trigger and the press depth is the trigger pull. Put one on a butto
 
 Select the port's card and a **DualShock 2 Pressure** panel in its detail pane shows each button's depth as a bar and a percentage.
 
-PadForge asks for the pressures every 50 ms, DeviceBuddy's own rate, and only while a DualShock 2 is in the port. Each request costs the adapter one of its own controller reads.
+PadForge asks for the pressures every 50 ms, DeviceBuddy's own rate, and only while a DualShock 2 is in the port. On firmware 3.0 and a GPA the request costs the adapter none of its own controller reads.
 
 ---
 
@@ -76,7 +76,7 @@ A port's rumble goes through the adapter's own motor commands, for the controlle
 
 Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. **Fold Trigger Rumble into Main Motors** on the Pad page folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.
 
-A running motor is told again every 100 ms, as the API Tool does to hold rumble on. On a GPA a new level goes out at once. On a 3.x adapter, where each command costs a controller read, both motors are sent their levels together at most once every 100 ms, so a game that changes its rumble every frame never holds the controller's input still, and a change can take up to 100 ms to arrive. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.
+On a GPA a running motor is told again every 100 ms, as the API Tool does to hold rumble on, and a new level goes out at once. On a 3.x adapter, where each command costs a controller read, both motors are sent their levels together at most once every 100 ms, each time with the strongest level the game asked for since the last, so a game that changes its rumble every frame never holds the controller's input still and a short hit between two sends is still felt. A change can take up to 100 ms to arrive there, and a steady level is sent again once a second. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.
 
 The motors change hands on the input engine's next cycle after you turn the switch on or off. Turned on, SDL's rumble stops and the adapter takes the game's current level. Turned off, each port sends its last stop, and SDL then takes the level over.
 
@@ -84,7 +84,7 @@ The motors change hands on the input engine's next cycle after you turn the swit
 
 ## Dance mats and the arrows
 
-A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, which the mapping picker lists as **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow**. Map those, not the hat. A 3.x adapter keeps sending them until another controller is plugged in, and a GPA keeps them on as a setting, through power cycles. A GPA sends none for the Genesis 3-button pad, the FM Towns pad and the PC-FX pad, and PadForge names them only for a controller whose layout has a D-pad.
+A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, which the mapping picker lists as **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow**. Map those, not the hat. A 3.x adapter keeps sending them until it looks for another controller, and a GPA until it powers off, or from power-up when its stored setting for them is on. A GPA never turns them on for the Genesis 3-button pad or the FM Towns pad, and the PC-FX pad's own buttons share their bits, so PadForge names them for none of the three, and only for a controller whose layout has a D-pad.
 
 On a 3.x adapter, select a PlayStation dance mat's card and tick **Read Arrows One by One**, and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips most of its own reads of the pad while they do. Once opposite directions have been pressed and the adapter sends the arrows itself, PadForge stops asking, until another controller is plugged in.
 
@@ -138,6 +138,7 @@ If the adapter refuses its own picture back, PadForge leaves the player number a
 - Light guns read their trigger and buttons. Aiming needs a CRT television, and the Bliss-Box compatibility list pairs the Zapper with MiSTer.
 - The adapter gives an empty port and an Atari joystick the same type code, so an empty port can show as an Atari joystick.
 - VMU saves cannot be read: Dreamcast accessories do not answer the adapter's native channel. PlayStation and GameCube memory cards plug into the console, not the controller cable, so the adapter never sees them.
+- Storing a new picture holds the controller's input still while the adapter writes it, up to about two thirds of a second when every byte changes. A clock or play time pauses the pad briefly once a minute, and a macro show at each picture.
 - The adapter's picture memory is rated for 100,000 writes. A clock or play time rewrites its last digit once a minute, which reaches that rating after about ten weeks of display around the clock, and a looping macro show at a picture a second reaches it in about a day.
 - The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose **The Adapter's Picture** to put the adapter's own back.
 - On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's. PadForge stops it right after each write and gives a running rumble its strength back, so a jump pack may give a short buzz when the picture changes.
