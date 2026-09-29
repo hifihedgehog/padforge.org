@@ -74,7 +74,7 @@ A port's rumble goes through the adapter's own motor commands, for the controlle
 | DualShock, DualShock 2, neGcon, JogCon | Two. The game's low-frequency motor drives the large one and the high-frequency motor the small one, each at its own strength. |
 | GameCube controller, Dreamcast pad, N64 controller, Dreamcast fishing rod | One, at the stronger of the game's two levels. |
 
-Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect.
+Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. **Fold Trigger Rumble into Main Motors** on the Pad page folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.
 
 A running motor is told again every 100 ms, as the API Tool does to hold rumble on. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.
 
@@ -82,7 +82,7 @@ A running motor is told again every 100 ms, as the API Tool does to hold rumble 
 
 ## Dance mats and the arrows
 
-A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, and keeps doing so until another controller is plugged in: **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow** on the port's row. Map those, not the hat. The NES Zapper gets none, and on a GPA neither do the Genesis 3-button pad, the FM Towns pad and the PC-FX pad.
+A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own: **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow** on the port's row. Map those, not the hat. A 3.x adapter keeps sending them until another controller is plugged in, and a GPA keeps them on as a setting, through power cycles. Only controllers with a D-pad get them, and on a GPA the Genesis 3-button pad, the FM Towns pad and the PC-FX pad do not.
 
 On a 3.x adapter, tick **Read Arrows One by One** on a PlayStation dance mat's row and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips one of its own controller reads for each.
 
@@ -104,7 +104,7 @@ On a 3.x adapter, tick **Read Arrows One by One** on a PlayStation dance mat's r
 
 Pictures come from a BMP or PNG, a VMU Animator `.lcd` file (its first frame) or a Dreamcast `.vms` save's icon. They are cut to the VMU's 48 by 32 black and white pixels.
 
-The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once.
+The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once. The VMU keeps the adapter's picture until that save has reached the disk.
 
 ---
 
@@ -138,7 +138,8 @@ If the adapter refuses its own picture back, PadForge leaves the player number a
 - VMU saves cannot be read: Dreamcast accessories do not answer the adapter's native channel. PlayStation and GameCube memory cards plug into the console, not the controller cable, so the adapter never sees them.
 - The adapter's picture memory is rated for 100,000 writes. A clock or play time rewrites its last digit once a minute, which reaches that rating after about ten weeks of display around the clock, and a looping macro show at a picture a second reaches it in about a day.
 - The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose **The Adapter's Picture** to put the adapter's own back.
-- On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's, so a jump pack may buzz briefly when the picture changes. A jump pack already rumbling can run at full power until PadForge's next motor command, at most 100 ms later.
+- On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's. PadForge stops it right after each write and gives a running rumble its strength back, so a jump pack may give a short buzz when the picture changes.
+- The Saturn racing controller and mission stick report as a Saturn 3D Control Pad, so their unused axes carry the 3D pad's trigger names.
 - PadForge keeps a copy of the adapter's own picture from the first time it replaces it, and Reset to Defaults keeps that copy. A picture sent to the adapter from DeviceBuddy or the API Tool after that is replaced without a copy.
 - The adapter's own settings, its modes, button mapper, turbo, hotkey and stick range, stay with the API Tool and DeviceBuddy.
 

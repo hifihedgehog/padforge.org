@@ -3819,11 +3819,11 @@
 </tr>
 </tbody>
 </table>
-<p>Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect.</p>
+<p>Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. <strong>Fold Trigger Rumble into Main Motors</strong> on the Pad page folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.</p>
 <p>A running motor is told again every 100 ms, as the API Tool does to hold rumble on. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.</p>
 <hr />
 <h2 id="dance-mats-and-the-arrows">Dance mats and the arrows<a class="headerlink" href="#dance-mats-and-the-arrows" title="Permanent link">&para;</a></h2>
-<p>A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, and keeps doing so until another controller is plugged in: <strong>Up Arrow</strong>, <strong>Down Arrow</strong>, <strong>Left Arrow</strong> and <strong>Right Arrow</strong> on the port's row. Map those, not the hat. The NES Zapper gets none, and on a GPA neither do the Genesis 3-button pad, the FM Towns pad and the PC-FX pad.</p>
+<p>A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own: <strong>Up Arrow</strong>, <strong>Down Arrow</strong>, <strong>Left Arrow</strong> and <strong>Right Arrow</strong> on the port's row. Map those, not the hat. A 3.x adapter keeps sending them until another controller is plugged in, and a GPA keeps them on as a setting, through power cycles. Only controllers with a D-pad get them, and on a GPA the Genesis 3-button pad, the FM Towns pad and the PC-FX pad do not.</p>
 <p>On a 3.x adapter, tick <strong>Read Arrows One by One</strong> on a PlayStation dance mat's row and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips one of its own controller reads for each.</p>
 <hr />
 <h2 id="dreamcast-screen">Dreamcast screen<a class="headerlink" href="#dreamcast-screen" title="Permanent link">&para;</a></h2>
@@ -3867,7 +3867,7 @@
 </tbody>
 </table>
 <p>Pictures come from a BMP or PNG, a VMU Animator <code>.lcd</code> file (its first frame) or a Dreamcast <code>.vms</code> save's icon. They are cut to the VMU's 48 by 32 black and white pixels.</p>
-<p>The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once.</p>
+<p>The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once. The VMU keeps the adapter's picture until that save has reached the disk.</p>
 <hr />
 <h2 id="n64-controller-pak">N64 Controller Pak<a class="headerlink" href="#n64-controller-pak" title="Permanent link">&para;</a></h2>
 <p><strong>Back Up Controller Pak…</strong> saves the whole pak in the port's N64 controller to a 32 KB <code>.mpk</code> file, the format N64 emulators read. <strong>Restore Controller Pak…</strong> writes such a file back, replacing every save on the pak, after you confirm. The status line shows the progress.</p>
@@ -3888,7 +3888,8 @@
 <li>VMU saves cannot be read: Dreamcast accessories do not answer the adapter's native channel. PlayStation and GameCube memory cards plug into the console, not the controller cable, so the adapter never sees them.</li>
 <li>The adapter's picture memory is rated for 100,000 writes. A clock or play time rewrites its last digit once a minute, which reaches that rating after about ten weeks of display around the clock, and a looping macro show at a picture a second reaches it in about a day.</li>
 <li>The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose <strong>The Adapter's Picture</strong> to put the adapter's own back.</li>
-<li>On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's, so a jump pack may buzz briefly when the picture changes. A jump pack already rumbling can run at full power until PadForge's next motor command, at most 100 ms later.</li>
+<li>On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's. PadForge stops it right after each write and gives a running rumble its strength back, so a jump pack may give a short buzz when the picture changes.</li>
+<li>The Saturn racing controller and mission stick report as a Saturn 3D Control Pad, so their unused axes carry the 3D pad's trigger names.</li>
 <li>PadForge keeps a copy of the adapter's own picture from the first time it replaces it, and Reset to Defaults keeps that copy. A picture sent to the adapter from DeviceBuddy or the API Tool after that is replaced without a copy.</li>
 <li>The adapter's own settings, its modes, button mapper, turbo, hotkey and stick range, stay with the API Tool and DeviceBuddy.</li>
 </ul>
