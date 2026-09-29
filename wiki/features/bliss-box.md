@@ -42,6 +42,8 @@ The port's buttons and sticks take the names of the controller plugged in: **Cro
 
 The names come from two sources, one per firmware generation: RetroArch's Bliss-Box autoconfig files, written for firmware 3.24, on a 3.x adapter, and DeviceBuddy's controller layouts on a 4.x GPA. They follow the adapter's default button map. If you remapped buttons in the API Tool or chose one of the GPA's alternate maps, the names stay on the default positions, since the adapter does not say which map is active.
 
+Analog triggers follow the firmware itself. A GameCube controller's, a Dreamcast pad's and a Saturn 3D Control Pad's triggers arrive as **Left Trigger** and **Right Trigger** on either generation, 0 when released, and a trigger mapping treats them as a gamepad's: it does not engage at rest.
+
 A controller that neither source lays out keeps numbered names (**Button 3**, **Axis 1**), and so does every controller on a 2.x adapter.
 
 | Adapter | Controllers with named buttons |
@@ -65,19 +67,24 @@ PadForge asks for the pressures every 50 ms, DeviceBuddy's own rate, and only wh
 
 ## Rumble
 
-A port's rumble goes through the adapter's own motor commands: the game's low-frequency motor drives the controller's large motor and the high-frequency motor drives the small one, each at its own strength. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect.
+A port's rumble goes through the adapter's own motor commands, for the controllers Bliss-Box's API Tool rumbles:
 
-A running motor is told again every 100 ms, as the API Tool does to hold rumble on. When the game stops the motors, when you unassign the controller, and when PadForge stops, both motors are told to stop.
+| Controller | Motors |
+|---|---|
+| DualShock, DualShock 2, neGcon, JogCon | Two. The game's low-frequency motor drives the large one and the high-frequency motor the small one, each at its own strength. |
+| GameCube controller, Dreamcast pad, N64 controller, Dreamcast fishing rod | One, at the stronger of the game's two levels. |
+
+Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect.
+
+A running motor is told again every 100 ms, as the API Tool does to hold rumble on. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.
 
 ---
 
 ## Dance mats and the arrows
 
-A 3.x adapter reads a PlayStation pad's D-pad as a hat, and a hat cannot point left and right at once. A dance mat needs exactly that.
+A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, and keeps doing so until another controller is plugged in: **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow** on the port's row. Map those, not the hat. The NES Zapper gets none, and on a GPA neither do the Genesis 3-button pad, the FM Towns pad and the PC-FX pad.
 
-Tick **Read Arrows One by One** on the port's row and PadForge asks the pad for its four directions itself, through the adapter's native channel, and delivers them as four buttons: **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow**. Map those, not the hat. The adapter skips one of its own controller reads for each request, and the requests run about every 16 ms.
-
-A 4.x GPA sets those four arrow buttons itself when opposite directions are pressed together, and every port's row lists them.
+On a 3.x adapter, tick **Read Arrows One by One** on a PlayStation dance mat's row and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips one of its own controller reads for each.
 
 ---
 
@@ -92,12 +99,12 @@ A 4.x GPA sets those four arrow buttons itself when opposite directions are pres
 | **Profile Number** | The active profile's place in the profile list. The Default profile is 0. |
 | **Profile Picture** | The active profile's own picture, or its name when it has none. Each profile keeps its own. |
 | **Clock** | The time of day, rewritten once a minute. |
-| **Play Time** | The hours and minutes since the pad was plugged in, rewritten once a minute. |
+| **Play Time** | The hours and minutes since PadForge found the pad, rewritten once a minute. A pad out of its port for more than ten seconds starts again from zero. |
 | **Chosen Picture** | A picture you choose. |
 
 Pictures come from a BMP or PNG, a VMU Animator `.lcd` file (its first frame) or a Dreamcast `.vms` save's icon. They are cut to the VMU's 48 by 32 black and white pixels.
 
-The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one.
+The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once.
 
 ---
 
@@ -113,11 +120,13 @@ Every block carries a checksum. A backup reads a block up to three times before 
 
 **Player Number…** sets the port's player number, 1 to 4. The adapter stores it and reconnects as that player, which Windows sees as a new device, so assign and map the port again once it comes back. If PadForge had put a picture on the port's VMU, it puts the adapter's own back first, and the returning port starts with the adapter's picture and none of the old port's choices.
 
+If the adapter refuses its own picture back, PadForge leaves the player number alone. If the adapter still answers as the old player a moment after the change, the change did not take. Either way the port keeps its number and its choices, and the status line says the adapter kept its player number.
+
 ---
 
 ## Macros
 
-**Show Dreamcast Screen**, in the **Lightbar & LEDs** group, plays one to eight pictures on the VMU of every Dreamcast pad in a Bliss-Box port that feeds the macro's slot. Add pictures with **Add Picture…**, click one to remove it, and set the **Frame Time** (a second at least) and the **Repeat Count**. Each picture shows for its frame time from the moment the VMU has it, so a show runs a little longer than the frame time multiplied by the number of pictures, and never skips one. When the pictures finish, each port goes back to its own screen setting. See [Macros](../guides/macros.md#show-dreamcast-screen).
+**Show Dreamcast Screen**, in the **Lightbar & LEDs** group, plays one to eight pictures on the VMU of every Dreamcast pad in a Bliss-Box port that feeds the macro's slot. Add pictures with **Add Picture…**, click one to remove it, and set the **Frame Time** (a second at least) and the **Repeat Count**. Each picture shows for its frame time from the moment the VMU has it, so a show runs a little longer than the frame time multiplied by the number of pictures and the repeat count. A picture the port has not taken within five seconds counts as shown, so a port that refuses pictures cannot hold a show forever. When the pictures finish, each port goes back to its own screen setting. See [Macros](../guides/macros.md#show-dreamcast-screen).
 
 ---
 
@@ -129,6 +138,7 @@ Every block carries a checksum. A backup reads a block up to three times before 
 - VMU saves cannot be read: Dreamcast accessories do not answer the adapter's native channel. PlayStation and GameCube memory cards plug into the console, not the controller cable, so the adapter never sees them.
 - The adapter's picture memory is rated for 100,000 writes. A clock or play time rewrites its last digit once a minute, which reaches that rating after about ten weeks of display around the clock, and a looping macro show at a picture a second reaches it in about a day.
 - The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose **The Adapter's Picture** to put the adapter's own back.
+- On a GPA, every picture write also starts the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's, so a jump pack may buzz briefly when the picture changes. A jump pack already rumbling can run at full power until PadForge's next motor command, at most 100 ms later.
 - PadForge keeps a copy of the adapter's own picture from the first time it replaces it, and Reset to Defaults keeps that copy. A picture sent to the adapter from DeviceBuddy or the API Tool after that is replaced without a copy.
 - The adapter's own settings, its modes, button mapper, turbo, hotkey and stick range, stay with the API Tool and DeviceBuddy.
 
