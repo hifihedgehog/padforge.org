@@ -47,6 +47,7 @@ Nothing here is required reading for using the app.
 | [MIDI Input Internals](midi-input-internals.md) | MIDI parsing and routing |
 | [Logitech G-Keys Internals](logitech-g-keys-internals.md) | Loading the vendor library, the callback, and the 32-bit key word |
 | [Analog Keyboards Internals](analog-keyboards-internals.md) | Routes, sessions and the HID channel behind analog keyboard rows, and every supported family's protocol |
+| [Bliss-Box Internals](bliss-box-internals.md) | The API sidecar beside each port's SDL row, every report, the native channel and the Controller Pak |
 | [Handheld PC Buttons Internals](handheld-buttons-internals.md) | The three delivery paths a hidden button can arrive on, and the learners |
 | [Wii Controllers Internals](wii-controllers-internals.md) | Extensions, Motion Plus, IR camera |
 | [2D Overlay System](2d-overlay-system.md) | The overlay renderer |

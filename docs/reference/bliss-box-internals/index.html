@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://padforge.org/docs/reference/updates-internals/">
+        <link rel="canonical" href="https://padforge.org/docs/reference/bliss-box-internals/">
       
       
-        <link rel="prev" href="../driver-installation-internals/">
+        <link rel="prev" href="../analog-keyboards-internals/">
       
       
-        <link rel="next" href="../dsu-motion-server/">
+        <link rel="next" href="../wii-controllers-internals/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Updates Internals - PadForge Documentation</title>
+        <title>Bliss-Box Internals - PadForge Documentation</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#updates-internals" class="md-skip">
+        <a href="#bliss-box-internals" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Updates Internals
+              Bliss-Box Internals
             
           </span>
         </div>
@@ -2684,37 +2684,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Updates Internals
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
         
   
   
@@ -2730,192 +2703,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#build-identity" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Build identity
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Channels
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Channels">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#a-release-replaced-under-its-own-version" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        A release replaced under its own version
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#picking-and-proving-the-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Picking and proving the file
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-staging-folder" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The staging folder
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installing
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Installing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#this-copys-side" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        This copy's side
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-helpers-side" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The helper's side
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installing-at-the-next-launch" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installing at the next launch
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-card" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The card
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cleanup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cleanup
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#couplings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Couplings
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#limits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Limits
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-pages" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related pages
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -3401,10 +3188,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../bliss-box-internals/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -3420,6 +3234,237 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The shape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The shape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raw-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw reading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-channel-and-the-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The channel and the worker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reports
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-cadence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The cadence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-native-channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The native channel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pressure-and-arrows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pressure and arrows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-dreamcast-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Dreamcast screen
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Dreamcast screen">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-eeprom-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The EEPROM guard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#saved-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saved state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-controller-pak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Controller Pak
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3599,33 +3644,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-identity" class="md-nav__link">
+  <a href="#the-shape" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Build identity
+        The shape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The shape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raw-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raw reading
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Channels
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Channels">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#a-release-replaced-under-its-own-version" class="md-nav__link">
+  <a href="#the-channel-and-the-worker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        A release replaced under its own version
+        The channel and the worker
       
     </span>
   </a>
@@ -3638,44 +3683,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#picking-and-proving-the-file" class="md-nav__link">
+  <a href="#reports" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Picking and proving the file
+        Reports
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-staging-folder" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The staging folder
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installing
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Installing">
+    <nav class="md-nav" aria-label="Reports">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#this-copys-side" class="md-nav__link">
+  <a href="#the-cadence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        This copy's side
+        The cadence
       
     </span>
   </a>
@@ -3683,10 +3706,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-helpers-side" class="md-nav__link">
+  <a href="#the-native-channel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The helper's side
+        The native channel
       
     </span>
   </a>
@@ -3699,10 +3722,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installing-at-the-next-launch" class="md-nav__link">
+  <a href="#input" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installing at the next launch
+        Input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pressure-and-arrows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pressure and arrows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble
       
     </span>
   </a>
@@ -3710,10 +3772,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-card" class="md-nav__link">
+  <a href="#the-dreamcast-screen" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The card
+        The Dreamcast screen
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Dreamcast screen">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-eeprom-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The EEPROM guard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#saved-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saved state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-controller-pak" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Controller Pak
       
     </span>
   </a>
@@ -3721,43 +3844,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cleanup" class="md-nav__link">
+  <a href="#tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cleanup
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#couplings" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Couplings
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#limits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Limits
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-pages" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related pages
+        Tests
       
     </span>
   </a>
@@ -3781,9 +3871,10 @@
 
 
 
-<h1 id="updates-internals">Updates Internals<a class="headerlink" href="#updates-internals" title="Permanent link">&para;</a></h1>
-<p><em>How PadForge finds a newer build, proves the download, and replaces its own running exe.</em></p>
-<p>For the user-facing side see <a href="../../features/updates/">Updates</a>.</p>
+<h1 id="bliss-box-internals">Bliss-Box Internals<a class="headerlink" href="#bliss-box-internals" title="Permanent link">&para;</a></h1>
+<p><em>How PadForge pairs an API sidecar with each Bliss-Box port's SDL row, and every report it sends and reads.</em></p>
+<p>For the user-facing side see <a href="../../features/bliss-box/">Bliss-Box Adapters</a>.</p>
+<p>The engine side lives in <code>PadForge.Engine/Common/BlissBox/</code>:</p>
 <table>
 <thead>
 <tr>
@@ -3793,232 +3884,235 @@
 </thead>
 <tbody>
 <tr>
-<td><code>PadForge.App/Services/UpdateService.cs</code></td>
-<td>The check, the download and its checksum, the record of an install waiting for the next launch, the handover to the helper, the swap, the lease, and the cleanup.</td>
+<td><code>BlissBoxProtocol.cs</code></td>
+<td>Report IDs, command builders, the native-channel chunking, and the parsers for reports 17, 21, 22 and 24.</td>
 </tr>
 <tr>
-<td><code>PadForge.App/Services/UpdateController.cs</code></td>
-<td>The Updates card: the timer, Check Now, Install and Restart, the background download, and every status line. UI thread only.</td>
+<td><code>BlissBoxControllers.cs</code></td>
+<td>Type codes and names, per-type button and axis names for firmware 3.x and 4.x, the DualShock 2 pressure order, and what each type can do.</td>
 </tr>
 <tr>
-<td><code>PadForge.App/App.xaml.cs</code></td>
-<td><code>OnStartup</code>: helper mode, the lease check, the single-instance lock, and the waiting install. The helper's two dialogs.</td>
+<td><code>BlissBoxScreen.cs</code></td>
+<td>The VMU picture codec and the <code>.lcd</code> and <code>.vms</code> importers.</td>
 </tr>
 <tr>
-<td><code>PadForge.App/PadForge.App.csproj</code></td>
-<td><code>StampBuildIdentity</code>, which writes the build's commit count and hash into the assembly.</td>
+<td><code>BlissBoxControllerPak.cs</code></td>
+<td>Controller Pak frames, the address checksum and the data CRC.</td>
 </tr>
 <tr>
-<td><code>.github/workflows/build.yml</code></td>
-<td>The rolling dev release the pre-release channel reads.</td>
+<td><code>BlissBoxPsx.cs</code></td>
+<td>The PlayStation pad poll and its decoder.</td>
+</tr>
+<tr>
+<td><code>BlissBoxSession.cs</code></td>
+<td>One port's state machine: polls, motors, the VMU picture, the native channel and the jobs.</td>
+</tr>
+<tr>
+<td><code>BlissBoxApi.cs</code></td>
+<td>The switch as the engine sees it, and the hook that names a port's objects.</td>
 </tr>
 </tbody>
 </table>
+<p>The app side: <code>PadForge.App/Common/Input/BlissBoxPort.cs</code> (the HID channel and the worker thread), <code>BlissBoxRuntime.cs</code> (the ports, their pairing with SDL rows, the state merge, the object names), <code>InputManager.BlissBox.cs</code> (Step 1's phase 1l), <code>PadForge.App/Services/DreamcastScreenService.cs</code> (the VMU screens and the ports' saved choices), <code>InputService.BlissBox.cs</code> (status lines and the Devices page row), <code>MainWindow.BlissBox.cs</code> (the row actions), and the two dialogs <code>BlissBoxPlayerDialog</code> and <code>DreamcastScreenDialog</code>.</p>
 <hr />
-<h2 id="build-identity">Build identity<a class="headerlink" href="#build-identity" title="Permanent link">&para;</a></h2>
-<p><code>StampBuildIdentity</code> runs before <code>CoreCompile</code> and writes <code>PadForgeBuildIdentity.g.cs</code> into the intermediate folder with three <code>AssemblyMetadata</code> attributes:</p>
+<h2 id="the-shape">The shape<a class="headerlink" href="#the-shape" title="Permanent link">&para;</a></h2>
+<p>SDL reads each port's joystick, as it reads any USB joystick. A port is one USB device per player, vendor <code>0x16D0</code>, product <code>0x0D03</code> plus the player number, so <code>0x0D04</code> to <code>0x0D07</code>. The bootloaders (<code>0x0A5F</code>, <code>0x04FB</code>), the 1.x firmware (<code>0x0A60</code>) and the "4-Play Fix" IDs (<code>0x0A61</code> to <code>0x0A64</code>) never match, so nothing talks to an adapter mid-update.</p>
+<p>With <strong>Read Bliss-Box Adapters</strong> on, a <code>BlissBoxPort</code> opens a second handle on the same HID collection, beside the SDL row, and owns what the joystick report cannot carry. This is the Padix converter's shape (#440): SDL for input, PadForge's own writes for the rest.</p>
+<h3 id="raw-reading">Raw reading<a class="headerlink" href="#raw-reading" title="Permanent link">&para;</a></h3>
+<p>The SDL fork carries SDL_GameControllerDB's mapping for all four IDs, "4Play Adapter", so SDL would open a port as a gamepad. That mapping describes one layout, while the adapter's report follows whatever controller is plugged in. While the switch is on:</p>
+<ul>
+<li><code>SdlDeviceWrapper.OpensAsGamepad</code> skips <code>SDL_OpenGamepad</code> for a port (<code>BlissBoxApi.ReadsRaw</code>), so the row reads the joystick surface.</li>
+<li><code>SdlDeviceWrapper.InputDeviceTypeFor</code> types the row a Joystick, although <code>SDL_GetJoystickType</code> still says gamepad for a mapped device. The gamepad auto-map and the trigger rest rule for axes 2 and 5 then leave it alone.</li>
+<li>Phase 1l reopens any port row open the other way: every cycle while the switch is on, since a row can open between the switch and the phase, and once more after it goes off. The reopen is Phase 1's replug rebind: a fresh <code>SdlDeviceWrapper</code> for the same SDL instance, <code>UserDevice.LoadFromSdlDevice</code>, which disposes the old wrapper, and the new wrapper in <code>_openedSdlInstanceIds</code>. SDL counts the opens of one joystick and one haptic device, so the device stays open across the swap.</li>
+</ul>
+<h3 id="the-channel-and-the-worker">The channel and the worker<a class="headerlink" href="#the-channel-and-the-worker" title="Permanent link">&para;</a></h3>
+<p><code>AnalogKeyboardHidChannel.OpenShared</code> opens the collection shared for read and write, as hidapi opens it for the API Tool, and falls back to no access rights, which still carries feature reports. The input queue is held to two buffers, since nothing reads it. Feature reports are padded to the collection's feature report length.</p>
+<p>One worker thread per port runs <code>BlissBoxSession.Step</code> back to back and sleeps for the time <code>Step</code> returns, woken early when another thread sets a motor level or queues a job. That serializes every control transfer, as BBAPI.cs's <code>CT_IO</code> flag does. The worker opens the channel once a second while it will not open, closes and reopens it after three failed info reads in a row, and on its way out stops both motors, ends every queued job as closed and closes the handle. Closing the channel forgets everything read from the adapter and ends the jobs still queued, since they were asked of the controller that was in the port before.</p>
+<p><code>BlissBoxRuntime.Sync</code> pairs ports with rows on the poll thread by HID path and instance GUID, opens a port for a new row, and retires a port whose row left, disposing it on the thread pool so a transfer in flight never holds up the poll thread. A port that opens hands its motors over from SDL: any SDL effect stops, and the row's motor cache starts from rest.</p>
+<hr />
+<h2 id="reports">Reports<a class="headerlink" href="#reports" title="Permanent link">&para;</a></h2>
+<p>A feature report read comes back with the device's first byte where the report ID went, so every parser reads from byte 0. A read that carries a player byte is thrown away when that byte is not the port's player plus 3, the check BBAPI.cs makes on every read.</p>
 <table>
 <thead>
 <tr>
-<th>Key</th>
-<th>Value</th>
+<th>Report</th>
+<th>Direction</th>
+<th>Layout</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>PadForgeBuildNumber</code></td>
-<td><code>git rev-list --count HEAD</code>, the commit count</td>
+<td>17</td>
+<td>get</td>
+<td>type, flags (bit 0 set while the port searches for a controller), firmware major, player + 3, firmware minor</td>
 </tr>
 <tr>
-<td><code>PadForgeCommit</code></td>
-<td><code>git rev-parse --short=7 HEAD</code></td>
+<td>18</td>
+<td>set</td>
+<td>the command report: 18, command, 0, 0, up to five parameters, 9 bytes</td>
 </tr>
 <tr>
-<td><code>PadForgeCommitSha</code></td>
-<td><code>git rev-parse HEAD</code>, all 40 characters</td>
+<td>20</td>
+<td>set</td>
+<td>20, <code>0x24</code>, 0, 0, the 192-byte picture in wire order, one spare byte, 197 bytes</td>
+</tr>
+<tr>
+<td>21</td>
+<td>get</td>
+<td>player + 3, then twelve pressure bytes</td>
+</tr>
+<tr>
+<td>22</td>
+<td>get</td>
+<td>player + 3, use, size, then the controller's answer</td>
+</tr>
+<tr>
+<td>24</td>
+<td>get</td>
+<td>player + 3, then the stored picture in wire order</td>
 </tr>
 </tbody>
 </table>
-<p>It stamps nothing unless git answers, the repository's top level is the solution folder, the clone is not shallow, and <code>HEAD</code> holds <code>PadForge.App/PadForge.App.csproj</code>. A shallow clone would report a wrong count, and a checkout nested in another repository would report that repository's. The target empties the three properties before it reads git, so <code>/p:PadForgeBuildNumber=...</code> on the command line changes nothing. To make a build that counts as newer for a test, commit locally, publish, and reset back.</p>
-<p><code>BuildIdentity</code> reads the attributes. <code>Display</code> is <code>4.5.3 (r3682@176208e)</code>, or the version alone for a build with no count. The version comes from <code>SharedVersion.cs</code>, and releases compare its first three parts, since the fourth is always 0 and never appears in a tag.</p>
-<hr />
-<h2 id="channels">Channels<a class="headerlink" href="#channels" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Channel</th>
-<th>Endpoint</th>
-<th>Newer means</th>
+<th>Command on report 18</th>
+<th>Parameters</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Releases</td>
-<td><code>repos/hifihedgehog/PadForge/releases/latest</code></td>
-<td>A higher version than this build's. GitHub never answers this endpoint with a pre-release.</td>
+<td>4, large motor</td>
+<td>type, strength, loop: <code>0, 0, 0</code> stops it, <code>1, strength, 0xFF</code> runs it</td>
 </tr>
 <tr>
-<td>Pre-releases</td>
-<td><code>repos/hifihedgehog/PadForge/releases/tags/latest-v{major}-dev</code></td>
-<td>A higher commit count, parsed from the title <code>PadForge r{count}@{hash}</code>.</td>
+<td>5, small motor</td>
+<td>the same</td>
+</tr>
+<tr>
+<td>8, player</td>
+<td>player + 3, then 1, which resets the port so it returns under the new product ID</td>
+</tr>
+<tr>
+<td><code>0x25</code>, native channel</td>
+<td>a header, then five-byte chunks</td>
 </tr>
 </tbody>
 </table>
-<p><code>build.yml</code> republishes the dev release for each push to the dev branch, unless a newer commit is already published, with exactly that title and the assets <code>PadForge.zip</code> and, when the ARM64 build succeeded, <code>PadForge-arm64.zip</code>. A comment there says the updater depends on all three.</p>
-<p><code>IsNewerDevBuild</code> counts a published build as newer when this build has no count, when its count is higher, or when the count is the same and the commit differs, which is a rewritten history. The check and the launch-time install both ask it, so they never disagree.</p>
-<p>With <strong>Include Pre-Releases</strong> on, <code>CheckAsync</code> reads the dev feed first and then <code>releases/latest</code> as well, because the feed is one per major version and a copy on the old major's feed would never hear of the next major. A newer release is offered when the dev feed has nothing newer, or when its major version is higher than this build's. The card says up to date only when both reads found nothing newer: a release read that failed, was rate limited, or found no build for this PC is reported instead. After a rate-limited answer, nothing more is asked.</p>
-<h3 id="a-release-replaced-under-its-own-version">A release replaced under its own version<a class="headerlink" href="#a-release-replaced-under-its-own-version" title="Permanent link">&para;</a></h3>
-<p>A release is sometimes pulled and published again, fixed, under the same version, as 4.5.2 was. A build of the first one would compare equal and never hear of the fix. So when the release channel finds this build's own version, Include Pre-Releases is off, and this build carries a full commit hash, <code>LookUpReplacementAsync</code> resolves the release tag to its commit, following up to four annotated tag objects, and reads that commit's history, 100 commits deep (<code>HistoryDepth</code>). <code>PlaceInHistory</code> then places this build:</p>
-<ul>
-<li>first in the list: the release is this build, so it is up to date</li>
-<li>further down: the release descends from this build, so it is newer and is offered as <em>4.5.3 (1a2b3c4)</em></li>
-<li>absent: this build is ahead, on another line, or more than 100 commits behind, and nothing is offered</li>
-</ul>
-<p>Only public data leaves the machine. The tag and the commit came from GitHub, and this build's own commit is looked for locally, never sent. Before offering, the check reads <code>releases/latest</code> a second time and requires the same release id, the same tag, and the same asset name, digest and URL for this machine (<code>SameRelease</code>), so a release replaced while the requests ran is judged at the next check rather than paired with the wrong commit.</p>
-<hr />
-<h2 id="picking-and-proving-the-file">Picking and proving the file<a class="headerlink" href="#picking-and-proving-the-file" title="Permanent link">&para;</a></h2>
-<p><code>SelectAsset</code> takes the asset for the machine, not the process: <code>-win-arm64.zip</code> or <code>PadForge-arm64.zip</code> on an ARM64 machine, <code>-win-x64.zip</code> or <code>PadForge.zip</code> elsewhere. An x64 copy running under emulation on ARM64 therefore moves to the native build, the same rule the MIDI Services installer follows.</p>
-<p>An asset is offered only with a GitHub <code>digest</code> of the form <code>sha256:&lt;64 hex&gt;</code> and a download URL that is HTTPS on <code>github.com</code> under <code>/hifihedgehog/PadForge/releases/download/</code>. GitHub computes the digest on upload and serves it over the same API the check reads.</p>
-<p><code>DownloadAsync</code> streams the zip into the offer's staging folder and hashes it as the bytes arrive (<code>CopyAndHashAsync</code>). Every read has its own 60-second deadline (<code>DownloadStallTimeout</code>), because <code>HttpClient</code>'s own timeout stops counting once the headers arrive on a streamed body. A mismatch throws <code>UpdateVerificationException</code> and the folder is deleted. <code>ExtractExe</code> then takes the zip's root <code>PadForge.exe</code> only, hashing it as it is written, and the zip is deleted.</p>
-<p>The API client times out after 15 seconds and the download client after 30 seconds for the response headers. Both send <code>PadForge/{version}</code> as the User-Agent, which GitHub requires, and that version is the only data PadForge sends.</p>
-<p>GitHub allows 60 unauthenticated API requests an hour per address. <code>IsRateLimited</code> reads a 429, or a 403 carrying <code>Retry-After</code>, <code>x-ratelimit-remaining: 0</code>, or a body naming the secondary rate limit, as a rate limit. Any other 403 is a failure.</p>
-<hr />
-<h2 id="the-staging-folder">The staging folder<a class="headerlink" href="#the-staging-folder" title="Permanent link">&para;</a></h2>
-<p>Everything lives under <code>%TEMP%\PadForge_Update</code>, never beside <code>PadForge.exe</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>%TEMP%\PadForge_Update\
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    &lt;install key&gt;\                 one per installed copy
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        target.txt                 the exe this folder belongs to
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        pending.json               an install waiting for the next launch
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        v4.5.4-1a2b3c4d5e6f\       a release download: version and 12 hex of its SHA-256
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>            PadForge.exe
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        r3700-1a2b3c4d5e6f\        a dev download: commit count and 12 hex
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            PadForge.exe
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        recovery-&lt;attempt&gt;\        the previous exe, kept by the last install
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            PadForge.exe
-</code></pre></div>
-<p>The install key is the first 16 hex characters of the SHA-256 of the installed exe's full path, taken in upper case, so two portable copies never install, delete or reuse each other's files.</p>
-<hr />
-<h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
-<p>Windows will not overwrite an exe while it runs. PadForge follows two references here: DS4Windows hands the swap to a helper that waits for the app to close, and OpenTabletDriver's elevated path runs its own binary with an update verb. The downloaded exe runs from the staging folder as the helper. OpenTabletDriver's other approach, moving the running files aside, only works on the same volume and would leave a file beside <code>PadForge.exe</code>, so PadForge does not use it.</p>
-<h3 id="this-copys-side">This copy's side<a class="headerlink" href="#this-copys-side" title="Permanent link">&para;</a></h3>
-<p><code>StartHelper</code> creates two named events for the attempt, <code>Local\PadForge_Update_&lt;attempt&gt;_Ready</code> and <code>_Commit</code>. It hashes the staged exe through a handle that denies writes and deletion, compares the result with the hash recorded when the file was written, and starts the helper while that handle is still open:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>PadForge.exe --apply-update &lt;installed exe&gt; &lt;this PID&gt; --handshake &lt;attempt&gt; &lt;SHA-256&gt; &lt;commit or -&gt; [original arguments]
-</code></pre></div>
-<p>The commit is the one the offer named, a dev build's or a replaced release's, or <code>-</code> when it named none. The original arguments come from <code>App.StartupArgs</code>, without any <code>--updated</code> marker a previous update left.</p>
-<p>The helper has 60 seconds (<code>HelperReadyTimeout</code>) to set Ready. If it does not, exits first, or the operation is canceled, it is killed and waited for up to ten seconds, and unless the operation was canceled, the card says why. A helper that will not stop is reported as <code>HelperFailure.NotStopped</code>. Once Ready is set, <code>UpdateController</code> sets Commit on the UI thread and exits through the app's normal shutdown. The channel switch also runs on that thread, so a change to Include Pre-Releases lands either before the commit, which it then stops, or after it, when PadForge is already on its way out.</p>
-<h3 id="the-helpers-side">The helper's side<a class="headerlink" href="#the-helpers-side" title="Permanent link">&para;</a></h3>
-<p><code>App.OnStartup</code> calls <code>TryRunApplyMode</code> before anything else, because the old copy still holds the single-instance lock while it closes. When the first argument is <code>--apply-update</code>, the process is the helper and never goes on to start PadForge from the staging folder.</p>
-<ol>
-<li><strong>Right build.</strong> When the offer named a commit, the helper compares it with its own stamped commit, which must be at least as long and start with it. Anything else exits with code 3 (<code>WrongBuildExitCode</code>), and the old copy reports that the download is a different build from the one the update names. This catches a tag moved before its file was replaced, or a dev title published before its zip.</li>
-<li><strong>Lease.</strong> It creates the named mutex <code>Global\PadForge_UpdateLease_&lt;install key&gt;</code> exclusively. Global, so a launch in another session sees it too. A second helper for the same exe finds it taken and stops before it reports ready, and an ordinary launch of that exe (<code>IsUpdateInProgress</code> in <code>OnStartup</code>) leaves quietly while the lease exists.</li>
-<li><strong>Handshake.</strong> It sets Ready and waits for Commit for as long as the old copy runs. The old copy exiting without a commit means install nothing.</li>
-<li><strong>Wait for the old copy.</strong> Every two minutes (<code>OldCopyNoticeInterval</code>) it asks whether to keep waiting, in a small window that answers itself once the old copy exits. Cancel skips the update, and PadForge still starts again once the old copy has closed.</li>
-<li><strong>Swap.</strong> <code>Swap</code> copies the installed exe into <code>recovery-&lt;attempt&gt;</code> and checks it against its hash, then copies itself over the installed exe and checks that against the payload hash. If the second step fails, the old exe goes back and is checked again. Each step makes up to 60 attempts, 500 ms apart, while antivirus or the loader holds a file, and no retry writes over the only good copy.</li>
-<li><strong>Restart.</strong> On success it starts the installed exe with <code>--updated</code> in front of the original arguments, and the new copy's status bar says it was updated. A failure to start names the recovery folder. A failed swap that restored the old exe restarts it and reports the error. A swap that could not restore it names the folder that holds the copy, and starts nothing.</li>
-</ol>
-<p>The helper runs before settings load and before any window exists, so its two dialogs follow the Windows display language rather than PadForge's own.</p>
-<p>A dev build from before the handshake (<code>c935af76</code>, the feature's first commit) starts the helper without <code>--handshake</code> and exits at once, so for it the helper treats its own start as the commit.</p>
-<hr />
-<h2 id="installing-at-the-next-launch">Installing at the next launch<a class="headerlink" href="#installing-at-the-next-launch" title="Permanent link">&para;</a></h2>
-<p>With <strong>Install Updates Automatically</strong> on, a check that finds a newer build downloads it and writes <code>pending.json</code>: the offer, the channel it was staged for, the installed exe it replaces, the staged exe and its hash, and <code>Attempted</code>. A replaced release also records this build's full commit, because it is newer only while this copy is still that exact commit. The record is written to a <code>.tmp</code> file and moved over, so a crash never leaves half a record.</p>
-<p><code>TryStartPendingInstall</code> runs in <code>OnStartup</code> after the single-instance lock and before the engine, the drivers or any window start. <code>DecidePending</code> settles it:</p>
+<h3 id="the-cadence">The cadence<a class="headerlink" href="#the-cadence" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Record</th>
-<th>Action</th>
+<th>Work</th>
+<th>When</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Not newer than this build</td>
-<td>Deleted quietly. That attempt worked, and only deleting the record failed.</td>
+<td>Report 17</td>
+<td>every 500 ms</td>
 </tr>
 <tr>
-<td>Newer, and <code>Attempted</code> set</td>
-<td>Deleted, and reported once: the last attempt never finished.</td>
+<td>Report 21</td>
+<td>every 50 ms, only while a DualShock 2 is in the port</td>
 </tr>
 <tr>
-<td>Settings file unreadable</td>
-<td>Left for the next launch.</td>
+<td>A running motor</td>
+<td>again every 100 ms, and at once when its level changes</td>
 </tr>
 <tr>
-<td>Either automatic switch now off, or the other channel</td>
-<td>Deleted.</td>
+<td>The VMU picture</td>
+<td>only when it differs from the one the adapter holds, at most once a second</td>
 </tr>
 <tr>
-<td>For another exe, or its staged exe gone</td>
-<td>Deleted.</td>
+<td>The native arrow poll</td>
+<td>every 16 ms, only for a PlayStation digital pad on a 3.x adapter with the port's choice on</td>
 </tr>
 <tr>
-<td>Otherwise</td>
-<td><code>Attempted</code> is written, then the helper starts and is committed at once.</td>
+<td>A queued job</td>
+<td>on the next step, holding the channel until it ends</td>
 </tr>
 </tbody>
 </table>
-<p>Setting <code>Attempted</code> before the helper starts is what keeps a broken download from restarting PadForge in a loop. <code>ReadUpdatePreferences</code> reads the three switches straight from <code>PadForge.xml</code> because the settings service has not loaded yet. A missing element takes the default: checking on, installing off, releases only.</p>
+<p>Nothing polls faster than DeviceBuddy (report 17 every 500 ms, report 21 every 50 ms), because BBAPI.cs warns that the adapter skips a controller poll for each control transfer.</p>
+<h3 id="the-native-channel">The native channel<a class="headerlink" href="#the-native-channel" title="Permanent link">&para;</a></h3>
+<p>A message to the controller is a header, <code>18, 0x25, 0, size high, size low, use, first byte, second byte, 0</code>, then five-byte chunks, <code>18, 0x25, position, five bytes, 0</code>, the last marked with position <code>0xFF</code>. The generations place that last chunk differently, so <code>NativeReports</code> takes the firmware generation from report 17:</p>
+<ul>
+<li>The 3.0 firmware places a <code>0xFF</code> chunk at the previous chunk's position plus five, from RAM it never resets between messages (<code>0x0967</code> to <code>0x0983</code>), and copies five bytes. A message whose data fits one chunk goes positioned and then closed by an empty <code>0xFF</code> chunk, as BBAPI.cs sends it.</li>
+<li>GPA 4.86 places a <code>0xFF</code> chunk that follows the header at position 2, and one that follows a positioned chunk at that position plus five, and copies the size minus that position (<code>0x2D47</code> to <code>0x2DAF</code>). After a positioned chunk at 2, a message of 3 to 6 bytes makes that count negative, and the copy runs over the adapter's RAM, the player byte at <code>0x0698</code> included. So a message whose data fits one chunk goes as a lone <code>0xFF</code> chunk, as DeviceBuddy sends it.</li>
+</ul>
+<p>A longer message ends with its last data in a <code>0xFF</code> chunk after the positioned ones, which both read alike. BBAPI.cs's count drops the last one to three bytes of messages of 28 to 30 bytes and every 25 bytes after, and adds a chunk for some other lengths, which a GPA reads as a negative count. The count here is exact.</p>
+<p>The reply is report 22, read up to 20 times 20 ms apart, as BBAPI.cs's <code>getData</code> does. A matching player byte with use 0 means the controller gave no answer. The 2.0 firmware frames the channel another way, three message bytes in the header and no use byte (<code>0x0832</code> to <code>0x0862</code>), so PadForge uses it on 3.0 and later only, which is where the API Tool's memory manager runs too (memManager.cs: "3.0 is required for this feature!").</p>
 <hr />
-<h2 id="the-card">The card<a class="headerlink" href="#the-card" title="Permanent link">&para;</a></h2>
-<p><code>UpdateController</code> runs one operation at a time: a check, which also stages what it finds while Install Updates Automatically is on, a background staging, or an install. What an operation writes to the card after an await lands only while it is still the running operation and its offer is still the offer. An automatic check asked for while busy runs once idle.</p>
-<p>The first timer tick comes 20 seconds after launch and later ticks every 12 hours. The shape, a check at start plus a timer, follows HandheldCompanion's UpdateManager at a slower cadence, since GitHub's unauthenticated allowance is 60 requests an hour per address.</p>
-<p>The first tick also asks for the cleanup, since a copy that has run 20 seconds from this exe shows the exe works. The cleanup waits until no operation runs, and every download that starts after it waits for it to finish.</p>
+<h2 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h2>
+<h3 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h3>
+<p><code>SdlDeviceWrapper.GetDeviceObjects</code> asks <code>BlissBoxApi.DeviceObjectsProvider</code> for a raw-opened port's list, so every place that fills <code>DeviceObjects</code> stays in step. <code>BlissBoxRuntime.NameObjects</code> renames the joystick's objects for the controller report 17 names, names buttons 20 to 23 as the four arrows, appending any the joystick lacks, and appends the twelve pressure axes for a DualShock 2. The names are invariant English strings that <code>MappingDisplayResolver.LocalizeObjectName</code> translates, and <code>UseRawNumberedNaming</code> lets a port that names its objects show them.</p>
+<p>The tables in <code>BlissBoxControllers</code> come from RetroArch's Bliss-Box 4-Play autoconfig files, stamped firmware 3.24, for 3.x, and from DeviceBuddy's controller layouts for 4.x. A layout's bit N is button N, its stream bytes 3 to 10 are axes 0 to 7 (X, Y, Z, Rx, Ry, Rz, slider, dial), and byte 11 is the hat. The sources agree on the PlayStation, Nintendo 64, Saturn, TurboGrafx-16, 3DO and Wii Classic, and differ on the NES's A and B, the SNES's X and Y, the Genesis's C and Z, the Dreamcast's and GameCube's shoulders and the Jaguar's A and C, which is why each generation keeps its own. A 2.x adapter gets no names.</p>
+<p>Type codes come from the API Tool's <code>controllerType[]</code>, the command-line tool's <code>getType</code> and DeviceBuddy's <code>BlissBox_lookUpName</code>, with the compatibility list naming the abbreviated ones. Types 0 and 255 are both "None / Atari" in the API Tool, 255 being what an unflashed type byte reads.</p>
+<h3 id="pressure-and-arrows">Pressure and arrows<a class="headerlink" href="#pressure-and-arrows" title="Permanent link">&para;</a></h3>
+<p><code>BlissBoxRuntime.Merge</code> runs in Step 2 right after SDL's read, ahead of the idle detector and every later consumer. It writes each pressure byte times 257 into the axis at <code>max(8, declared axes) + i</code>, where the declared axes are the joystick's own count, and sets buttons 20 to 23 from the native poll. The state is a fresh pooled one each read, so a port that stops publishing leaves them at rest.</p>
+<p>The pressure order is the DualShock 2's own, which psx-spx gives and every firmware copies into report 21 unchanged: Right, Left, Up, Down, Triangle, Circle, Cross, Square, L1, R1, L2, R2. The 2.0 firmware stores the pad's reply in order (<code>0x21F7</code> to <code>0x2204</code>) and copies the pressures across (<code>0x2313</code> to <code>0x231C</code>), and 3.0 does the same (<code>0x2646</code> to <code>0x2651</code>). The API Tool's branch for 2.x reads the face buttons from other bytes, which the firmware does not bear out.</p>
+<p>The pressure axes rest at 0 and travel one way, so the #443 rule treats them as a trigger: an axis activator on one engages past its threshold in that one direction instead of reading -1 at rest (<code>BlissBoxRuntime.IsPressureAxis</code>, used by <code>InputManager.AxisRestsAtZero</code>).</p>
+<p>The native poll sends a PlayStation pad <code>0x01, 0x42, 0, 0, 0</code> and searches the answer for <code>0x41, 0x5A</code>. The next byte is active low, with Up in bit 4, Right in bit 5, Down in bit 6 and Left in bit 7, the psx-spx order Linux's <code>psxpad-spi</code> reads. The 3.0 firmware's D-pad table drops opposite directions, which is what the poll exists to get around. GPA 4.86 sets the four arrow buttons itself (firmware <code>0x34A1</code> to <code>0x34B9</code>).</p>
+<hr />
+<h2 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h2>
+<p><code>BlissBoxApi.OwnsRumble</code> is true for a port while the switch is on. Then:</p>
+<ul>
+<li><code>SdlDeviceWrapper.HasRumble</code> is true whatever SDL found, since the adapter's commands drive the motors and the controller in the port can change without a reopen. With the switch off it is SDL's answer again.</li>
+<li><code>SdlDeviceWrapper.SetRumble</code> refuses the port, because SDL's DirectInput path averages both motors into one sine effect.</li>
+<li>Every other site that routes the Padix converter's motors routes a port's too: Step 2's sole-writer write and its unassign stop, <code>StopAllForceFeedback</code>, the relayed rumble in <code>InputService</code>, and the Identify pulse train.</li>
+</ul>
+<p><code>BlissBoxSession.Strength</code> maps PadForge's 0 to 65535 onto the strength byte as <code>(level + 255) &gt;&gt; 8</code>, clamped to 1 to 255, with 0 for off. Type 1 reads a strength of 0 as full, so a small level rounds up rather than down to it. The large motor (command 4) takes the low-frequency level and the small motor (command 5) the high-frequency one.</p>
+<p>The session keeps the wanted levels, and the worker is woken only when they change. A write the adapter refuses is tried again 100 ms later, not on every step. When the channel drops and reopens, both motors are told their level again, a stop included, since the adapter may have kept the last one. The quiesce that runs on a crash or an abnormal exit waits up to 250 ms for every port to send its stop.</p>
+<p>The switch hands the motors over at once rather than on Step 1's next pass: switched on, an effect SDL started on a port stops, and switched off, every open port stops its motors before SDL takes the game's next level. The hand-off in Step 1 takes a row's output gate only when it is free, as Step 2 does, and tries again next pass otherwise. Identify on a port in no slot writes its pulses without recording them in the row's motor snapshot, because a recorded pulse made Step 2 send the row's final zero on the next poll.</p>
+<hr />
+<h2 id="the-dreamcast-screen">The Dreamcast screen<a class="headerlink" href="#the-dreamcast-screen" title="Permanent link">&para;</a></h2>
+<h3 id="the-picture">The picture<a class="headerlink" href="#the-picture" title="Permanent link">&para;</a></h3>
+<p>PadForge keeps a picture in image order: 48 by 32 pixels, rows top to bottom, 6 bytes a row, the leftmost pixel in a byte's high bit, 1 for dark. The adapter takes it rotated 180 degrees, since the VMU sits upside down in the pad: byte <code>k</code> of the image, bit-reversed, is byte <code>191 - k</code> on the wire (dLCD.cs <code>writeToLCD</code>, and DeviceBuddy draws report 24's pixel <code>(x, y)</code> at <code>(47 - x, 31 - y)</code>). The transform is its own inverse.</p>
+<p>A VMU Animator <code>.lcd</code> file has a 16-byte header and 4 bytes of frame information, then one byte per pixel with <code>0x08</code> for dark. A <code>.vms</code> file keeps the offset of its 32 by 32 icon as a 32-bit little-endian value at byte 16, which is centered with 8 blank pixels either side. Other images are drawn on a white field, scaled down to fit, and cut at half luminance. Text is drawn with Segoe UI Bold, aliased, as large as fits.</p>
+<h3 id="the-eeprom-guard">The EEPROM guard<a class="headerlink" href="#the-eeprom-guard" title="Permanent link">&para;</a></h3>
+<p>GPA 4.86 runs avr-libc's <code>eeprom_update_byte</code> over EEPROM <code>0x00A0</code> to <code>0x015F</code> for report 20, and the 3.0 firmware writes the same range for command <code>0x24</code>, so every picture lands in EEPROM, rated at 100,000 writes. The session writes a picture only when it differs from the one it last read or wrote, and never sooner than 1000 ms after the last write. A clock or play timer changes its digits once a minute.</p>
+<h3 id="the-modes">The modes<a class="headerlink" href="#the-modes" title="Permanent link">&para;</a></h3>
+<p><code>DreamcastScreenService.Tick</code> runs on the UI thread from the dashboard timer, whether or not PadForge has focus, at most four times a second. For each port with a Dreamcast pad (types 15 and 16) it waits until the adapter's stored picture has been read, then composes the picture for the port's mode, a macro show taking the screen while it plays. Before the first picture that differs from the adapter's own, it keeps that picture, in wire order, in the port's settings. Adapter mode writes it back and forgets it once the adapter holds it again.</p>
+<p>A Show Dreamcast Screen action queues a show from the poll thread, up to 16 waiting, and the next tick starts it on every Dreamcast pad in a port whose device is assigned to the macro's slot. A show with no port open is dropped. Each frame lasts its frame time, at least 1000 ms, from the moment the adapter holds it (<code>DreamcastShow</code>), so the EEPROM guard's second between writes never drops a frame. A frame that has not arrived after 5 s counts from when it became current, so a port that refuses writes cannot hold a show forever. The tick wakes a port's worker when the picture it wants changes.</p>
+<h3 id="saved-state">Saved state<a class="headerlink" href="#saved-state" title="Permanent link">&para;</a></h3>
+<p><code>AppSettings.BlissBoxEnabled</code>, <code>AppSettings.BlissBoxPorts</code> (one <code>Port</code> per device: <code>Device</code>, <code>ScreenMode</code>, <code>Picture</code>, <code>NativeArrows</code>, <code>AdapterPicture</code>, dropped when every value is its default) and <code>AppSettings.DefaultProfileDreamcastPicture</code>. Reset to Defaults keeps each port's <code>AdapterPicture</code> (<code>BlissBoxPortData.KeepAdapterPictures</code>), the only copy of a picture PadForge replaced. A player change writes that picture back before it sends the command and drops the port's entry, since the port returns as a new device. Exporting the Default profile carries its picture, which lives in the settings file rather than on its snapshot. A named profile keeps its picture in <code>ProfileData.DreamcastPicture</code>, which no state save copies over. The macro action saves <code>DreamcastFrames</code> (base64 pictures joined by commas, eight at most), <code>DreamcastFrameMs</code> and <code>DreamcastRepeat</code>. <code>DreamcastScreenMode</code> is saved by name.</p>
+<hr />
+<h2 id="the-controller-pak">The Controller Pak<a class="headerlink" href="#the-controller-pak" title="Permanent link">&para;</a></h2>
+<p>Every transfer rides the native channel as the Joybus command the pak takes. The frames and checksums are the API Tool's (memManager.cs <code>memManagerLoadData</code>, <code>getN64Data</code>, <code>writeToPort</code>, <code>getCrc5</code>, <code>getCrc8</code>), and the checksums give the same values as libdragon's <code>joybus_accessory_calculate_addr_checksum</code> and <code>joybus_accessory_calculate_data_crc</code>.</p>
 <table>
 <thead>
 <tr>
-<th>Setting change</th>
-<th>Effect</th>
+<th>Command</th>
+<th>Message</th>
+<th>Answer</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Include Pre-Releases</td>
-<td>Cancels the running operation, clears the offer, deletes the pending record, and checks again if the automatic check is on.</td>
+<td>Status</td>
+<td><code>0x00</code></td>
+<td>two identity bytes and a status byte, whose low two bits are 1 (present) or 3 (present and changed) when a pak is in</td>
 </tr>
 <tr>
-<td>Install Updates Automatically off</td>
-<td>Deletes the pending record, so nothing installs at the next launch.</td>
+<td>Read</td>
+<td><code>0x02</code>, address field</td>
+<td>32 data bytes, then their CRC-8</td>
 </tr>
 <tr>
-<td>Install Updates Automatically on, with an offer</td>
-<td>Stages the offer now.</td>
-</tr>
-<tr>
-<td>Check for Updates Automatically off</td>
-<td>Drops a queued check and deletes the pending record.</td>
+<td>Write</td>
+<td><code>0x03</code>, address field, 32 bytes</td>
+<td>the CRC-8 the pak computed over what it stored</td>
 </tr>
 </tbody>
 </table>
-<p>A check that comes back up to date, or finds no build for this PC, deletes the pending record too, so a pulled release never installs behind the card.</p>
-<p>Every line is worded when it is shown, so the card follows a language change. The reasons for a stalled download and for an installer that failed are translated. Any other reason, an HTTP status, a note from the check such as <code>unexpected release data</code>, or an error from Windows or the network, is shown as it came.</p>
+<p>The address field is the block's byte address, <code>block × 32</code>, with a CRC-5 of the 11-bit block number in its low five bits (generator <code>0x15</code>). The data CRC is a CRC-8 with generator <code>0x85</code>. A CRC that comes back inverted means no pak answered. Block 0 reading <code>0x80</code> with CRC <code>0xB8</code> is a Rumble Pak, the API Tool's "Looks like a rumble pack!" test.</p>
+<p>A backup checks the firmware, the controller, the status and block 0, then reads 1024 blocks, each up to three times. A block that never answers fails as no reply, and one whose CRC keeps failing as a bad block. A restore writes each block until the pak confirms it, and gives up once more than 16 writes have failed, the API Tool's limit, reporting no reply when the write that reached the limit drew no answer. Both stop before their next message to the controller when the port closes. A job queued once the port is closing ends at once, and one still queued when the channel drops ends as closed. <code>BlissBoxSession.Busy</code> holds the Devices page's player and pak buttons while a job is queued or running.</p>
+<p>A player change is sent without checking its result, as BBAPI.cs does: both firmwares reset from inside the command's handler, before the transfer completes (3.0 detaches USB at <code>0x08EB</code>, GPA 4.86 jumps to its reset at <code>0x2CE2</code>), so Windows can report the write as failed although it took.</p>
 <hr />
-<h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
-<p><code>CleanupStagingAsync</code> never runs from inside the staging folder, nor while a helper holds the lease. It deletes what the feature's first dev builds left at the top level (a shared <code>pending.json</code> and <code>r…</code> or <code>v…</code> folders), then deletes every subfolder of this copy's folder except the download the pending record names, recovery copies included. A record it cannot read, because antivirus or a backup holds it, leaves the folder alone. A record that reads but does not parse was not written by PadForge and is deleted. Other copies' folders are never touched: their exe may sit on a drive that is not plugged in, and their recovery copy may be the only good one. A locked folder is tried again, up to ten passes three seconds apart.</p>
-<hr />
-<h2 id="couplings">Couplings<a class="headerlink" href="#couplings" title="Permanent link">&para;</a></h2>
-<p>Renaming any of these breaks updating for every installed copy:</p>
-<ul>
-<li>Release tags <code>vX.Y.Z</code> with no suffix. <code>ParseTag</code> refuses anything like <code>-rc1</code> rather than guess.</li>
-<li>Release assets <code>PadForge-vX.Y.Z-win-x64.zip</code> and <code>PadForge-vX.Y.Z-win-arm64.zip</code>, each with <code>PadForge.exe</code> at the root.</li>
-<li>The dev release's tag <code>latest-v{major}-dev</code>, its title <code>PadForge r{count}@{hash}</code>, and its assets <code>PadForge.zip</code> and <code>PadForge-arm64.zip</code>.</li>
-<li>A GitHub <code>digest</code> on every asset. An asset without one is never offered.</li>
-</ul>
-<hr />
-<h2 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h2>
-<ul>
-<li>A helper from a dev build before the handshake still installs when the copy that started it crashes before stopping it.</li>
-<li>A release rebuilt from the same commit under the same version is not offered.</li>
-<li>The replaced-release lookup reads 100 commits. A build further behind than that is not offered the replacement.</li>
-<li>Nothing has run on ARM64 hardware.</li>
-</ul>
-<p>Tests: <code>UpdateServiceTests</code>, <code>UpdateControllerTests</code> and <code>UpdateStatusCultureTests</code> in <code>PadForge.Tests</code>.</p>
-<hr />
-<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../../features/updates/">Updates</a></li>
-<li><a href="../settings-and-serialization/">Settings and Serialization</a>: the three switches in <code>PadForge.xml</code>.</li>
-<li><a href="../build-and-publish/">Build and Publish</a>: how releases are built.</li>
-<li><a href="../services-layer/">Services Layer</a></li>
-</ul>
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p><code>BlissBoxProtocolTests</code> builds every report byte for byte, runs every parser against the references' layouts, checks the picture codec against the API Tool's "BLISS BOX" example, the checksums against libdragon's values, and the native chunking under both firmware rules. <code>BlissBoxSessionTests</code> drives a session against a scripted adapter with an N64 controller and a pak behind its native channel: the poll cadence, the motor writer's timing, the EEPROM guard, the native arrow poll, and the Controller Pak backup and restore with their failure paths. <code>BlissBoxAppTests</code> covers the names per controller and their translations, the object list and the state merge, the rumble routing, the raw open, the settings, the screen service's pictures and the macro action.</p>
+<p>No test runs against an adapter. PadForge's reading of every report is unverified on hardware.</p>
 <hr />
 <p><em>Last updated for PadForge 4.5.3.</em></p>
 
@@ -4058,7 +4152,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../driver-installation-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Driver Installation Internals">
+          <a href="../analog-keyboards-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Analog Keyboards Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4068,20 +4162,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Driver Installation Internals
+                Analog Keyboards Internals
               </div>
             </div>
           </a>
         
         
           
-          <a href="../dsu-motion-server/" class="md-footer__link md-footer__link--next" aria-label="Next: DSU Motion Server">
+          <a href="../wii-controllers-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Wii Controllers Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                DSU Motion Server
+                Wii Controllers Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

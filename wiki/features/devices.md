@@ -299,6 +299,12 @@ The card reads a vendor interface beside the keyboard, so it has no Input Mode o
 
 ---
 
+## Bliss-Box ports
+
+With **Read Bliss-Box Adapters** on in [Settings](settings.md), each Bliss-Box port's card carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller, and **Read Arrows One by One** for a PlayStation pad on a 3.x adapter. The port's buttons take the names of the controller plugged in, and a DualShock 2 adds a **DualShock 2 Pressure** panel. See [Bliss-Box Adapters](bliss-box.md).
+
+---
+
 ## Consumer Control devices
 
 Media keys show up here as their own device card, typed **Consumer Control**. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.

@@ -63,6 +63,7 @@ when that device has the matching hardware.
 | [MIDI Input](midi-input.md) | MIDI devices on the Devices page: notes, knobs, and pitch bend as mapping sources |
 | [Logitech G-Keys](logitech-g-keys.md) | The G-keys and extra mouse buttons on Logitech gaming gear as mapping sources |
 | [Analog Keyboards](analog-keyboards.md) | How far every key is pressed on analog and Hall effect keyboards, as mapping sources |
+| [Bliss-Box Adapters](bliss-box.md) | Retro controllers in Bliss-Box ports: their button names, DualShock 2 pressure, rumble, the Dreamcast screen and N64 Controller Pak saves |
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [VR Controller Input](vr-controller-input.md) | The headset's pose and both hand controllers read as mapping sources through OpenXR |

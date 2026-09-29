@@ -223,7 +223,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 | **Mouse** | Mouse Move, Mouse Button Press, Mouse Button Release, Toggle Mouse Button, Mouse Scroll, Mouse Wheel Tick, Nudge Cursor, Recenter Mouse, Fix Mouse Position, Limit Mouse Region, Move Mouse to Position |
 | **Timing & Flow** | Delay, Combo Break, Cycle Tap List |
 | **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration |
-| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color |
+| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Show Dreamcast Screen || **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color |
 | **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
 | **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
 | **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay |
@@ -480,6 +480,18 @@ It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the 
 Paints every Razer Chroma device one color for the action's **Duration**, then hands the lighting back to Razer Synapse. It needs Synapse running, and it works whether or not the [Razer Chroma lightbar mirror](../features/lightbar-mirrors.md#razer-chroma) is on. While a macro paints, its color wins over the mirror's.
 
 To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.
+
+### Show Dreamcast Screen
+
+Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port whose controller is assigned to the macro's slot, then returns each port to its own screen setting. The action fires once and the macro moves on while the pictures play.
+
+| Field | Meaning |
+|---|---|
+| **Pictures** | Up to eight, added with **Add Picture…** from a BMP or PNG, a VMU Animator `.lcd` file or a Dreamcast `.vms` icon. Click a picture to remove it. |
+| **Frame Time** | How long each picture shows, in ms, counted from when the VMU has it. A second at least, since the adapter keeps every picture it is sent in its memory. |
+| **Repeat Count** | How many times the set plays. |
+
+It needs **Read Bliss-Box Adapters** on. See [Bliss-Box Adapters](../features/bliss-box.md#dreamcast-screen).
 
 ### Clear Lightbar Override
 
