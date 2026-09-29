@@ -46,7 +46,7 @@ Analog triggers follow the firmware itself. A GameCube controller's, a Dreamcast
 
 A controller that neither source lays out keeps numbered names (**Button 3**, **Axis 1**), and so does every controller on a 2.x adapter. A DualShock 2's pressure axes carry names on every firmware, so on a 2.x adapter its other axes show the joystick's own names (**X Axis**, **Y Axis**) instead of numbers.
 
-| Adapter | Controllers with named buttons |
+| Adapter | Controllers with named inputs |
 |---|---|
 | 3.x | Atari joystick, ColecoVision, Dreamcast, GameCube, Genesis 3-button and 6-button, Nintendo 64, Neo Geo, NES, PlayStation digital pad, DualShock, DualShock 2, Saturn pad and 3D Control Pad, SNES, TurboGrafx-16, 3DO, Wii Classic Controller |
 | 4.x (GPA) | All of the 3.x list except the ColecoVision, plus the Atari 5200, Atari paddles, Master System paddle, Arkanoid, Bally Astrocade, Gemini paddles, Pippin, CD-i, Dreamcast ASCII pad, PC gameport joystick, Jaguar, Wii Nunchuk, TurboGrafx-16 6-button pad, PlayStation flight stick, PlayStation pad, FM Towns pad, Virtual Boy and XE-1 AP |
@@ -104,7 +104,7 @@ On a 3.x adapter, select a PlayStation dance mat's card and tick **Read Arrows O
 | **Play Time** | The hours and minutes since PadForge found the pad, rewritten once a minute. A pad out of its port for more than ten seconds starts again from zero. |
 | **Chosen Picture** | A picture you choose. |
 
-Pictures come from a BMP or PNG, a VMU Animator `.lcd` file (its first frame) or a Dreamcast `.vms` save's icon. They are cut to the VMU's 48 by 32 black and white pixels.
+Pictures come from a BMP or PNG, a VMU Animator `.lcd` file (its first frame) or a Dreamcast icon file (ICONDATA_VMS, a `.vms` that holds only an icon). A game save's `.vms` does not import. They are cut to the VMU's 48 by 32 black and white pixels.
 
 The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once. The VMU keeps the adapter's picture until that save has reached the disk.
 

@@ -481,6 +481,8 @@ Paints every Razer Chroma device one color for the action's **Duration**, then h
 
 To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.
 
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
 ### Show Dreamcast Screen
 
 Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port whose controller is assigned to the macro's slot, then returns each port to its own screen setting. The action fires once and the macro moves on while the pictures play.
@@ -492,6 +494,8 @@ Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port
 | **Repeat Count** | How many times the set plays. |
 
 It needs **Read Bliss-Box Adapters** on. See [Bliss-Box Adapters](../features/bliss-box.md#dreamcast-screen).
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ### Clear Lightbar Override
 

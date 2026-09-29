@@ -3778,7 +3778,7 @@
 <thead>
 <tr>
 <th>Adapter</th>
-<th>Controllers with named buttons</th>
+<th>Controllers with named inputs</th>
 </tr>
 </thead>
 <tbody>
@@ -3867,7 +3867,7 @@
 </tr>
 </tbody>
 </table>
-<p>Pictures come from a BMP or PNG, a VMU Animator <code>.lcd</code> file (its first frame) or a Dreamcast <code>.vms</code> save's icon. They are cut to the VMU's 48 by 32 black and white pixels.</p>
+<p>Pictures come from a BMP or PNG, a VMU Animator <code>.lcd</code> file (its first frame) or a Dreamcast icon file (ICONDATA_VMS, a <code>.vms</code> that holds only an icon). A game save's <code>.vms</code> does not import. They are cut to the VMU's 48 by 32 black and white pixels.</p>
 <p>The adapter keeps its picture in its own memory and rewrites it each time a new one arrives, and that memory wears with writes. So PadForge writes a picture only when it differs from the one the adapter holds, and never sooner than a second after the last one. Before it first replaces the adapter's own picture, PadForge keeps a copy and saves it to the settings file at once. The VMU keeps the adapter's picture until that save has reached the disk.</p>
 <hr />
 <h2 id="n64-controller-pak">N64 Controller Pak<a class="headerlink" href="#n64-controller-pak" title="Permanent link">&para;</a></h2>
