@@ -1017,7 +1017,9 @@ Virtual input device for a browser-connected gamepad. Implements `ISdlInputDevic
 |----------|-------|-------------|
 | `WebVendorId` | `0xBEEF` | Distinctive VID to avoid HIDMaestro filter false positives |
 | `WebProductId` | `0xCA7E` | Distinctive PID |
-| `WebProductGuidBase` | `{BEBC0000-0000-0000-0000-CAFEFACE0001}` | Base ProductGuid. The instance `ProductGuid` is this MD5-mixed with the layout key (`"xbox360"`, `"ds4"`, `"switchpro"`, `"touchpad"`, and the other web layouts), so different layouts read as different products. |
+| `WebProductGuidBase` | `{BEBC0000-0000-0000-0000-CAFEFACE0001}` | Base ProductGuid. The instance `ProductGuid` is this MD5-mixed with the layout key (`"xbox360"`, `"ds4"`, `"switchpro"`, `"touchpad"`, `"menus"`, and the other web layouts), so different layouts read as different products. |
+| `MenusLayoutKey` | `"menus"` | The Web Menus layout (#471). A device built with it is a menu surface. |
+| `MaxHeldMenuCells` | `32` | The most tiles one Web Menus phone can hold at once. A press beyond it is dropped. |
 
 ### Capabilities
 
@@ -1031,13 +1033,15 @@ Virtual input device for a browser-connected gamepad. Implements `ISdlInputDevic
 | HasGyro | `false` until `EnableMotionCaps()` flips it on the first motion message (#296), then `true` |
 | HasAccel | Flips together with `HasGyro` |
 
+A Web Menus surface (#471, `IsMenuSurface`) reports 0 axes, 0 buttons and 0 hats, empty `SupportedAxisIndices` and `SupportedButtonIndices`, no device objects, `InputDeviceType.WebMenus`, and `HasRumble` false. Its input is tile presses (below).
+
 ### Constructor
 
 ```csharp
 public WebControllerDevice(string clientId, string displayName, bool isTouchpad = false, string layoutKey = "xbox360")
 ```
 
-Creates a web controller. `clientId` is a unique browser localStorage identifier. `InstanceGuid` derived from client ID via MD5. `SdlInstanceId` comes from `SyntheticInstanceId.From(clientId)` (FNV-1a in the reserved `0x80000000` band, stable across sessions). Stick axes init to center (32767), trigger axes to 0. `isTouchpad` reports the device as a touchpad. `layoutKey` (`"xbox360"` / `"ds4"` / `"touchpad"`) is MD5-mixed into `ProductGuid` so different layouts read as different products.
+Creates a web controller. `clientId` is a unique browser localStorage identifier. `InstanceGuid` derived from client ID via MD5. `SdlInstanceId` comes from `SyntheticInstanceId.From(clientId)` (FNV-1a in the reserved `0x80000000` band, stable across sessions). Stick axes init to center (32767), trigger axes to 0, except on a touchpad or Web Menus client, which has no axes. `isTouchpad` reports the device as a touchpad. `layoutKey` (`"xbox360"` / `"ds4"` / `"touchpad"`) is MD5-mixed into `ProductGuid` so different layouts read as different products.
 
 ### Events
 
@@ -1047,6 +1051,8 @@ Creates a web controller. `clientId` is a unique browser localStorage identifier
 | `CapabilitiesChanged` | `Action` | Fired when a capability flips after connect: motion on the first motion message, a touch surface on the first touch message, or the client reporting no rumble. The connect-time `UserDevice` snapshot needs the re-sync. |
 | `LedChanged` | `Action<byte, byte, byte>` | Lightbar color for the browser to draw (#296), change-detected in `SetLed`. |
 | `PlayerIndexChanged` | `Action<int>` | 1-based player number for the browser's player pips (#296), change-detected in `SetPlayerNumber`. `ResendIdentity` re-emits both after a reconnect. |
+| `MenusFeedChanged` | `Action<string>` | A Web Menus snapshot to send (#471), raised by `SetMenusFeed` only when the JSON changed. |
+| `ProfileRequested` | `Action<string>` | A Web Menus phone asked for a profile id (#471), raised by `RequestProfile`. |
 
 ### State Update Methods
 
@@ -1060,7 +1066,18 @@ Creates a web controller. `clientId` is a unique browser localStorage identifier
 | `NeutralizeAll` | `void NeutralizeAll()` | Releases every button, returns the axes to rest, and centers the hat (#402). The server calls it when a forwarded pad's session expires. |
 | `UpdateTouchpadFinger` | `void UpdateTouchpadFinger(int finger, float x, float y, bool down)` | Single-pad two-finger virtual touchpad from phone clients. Contact IDs are synthesized on rising / falling edges. Copy-on-write under the state lock. |
 | `UpdateMotion` | `void UpdateMotion(float gx, float gy, float gz, float ax, float ay, float az)` | Gyro rates + accelerometer from the phone's DeviceMotionEvent (#296). Copy-on-write. Rates go stale (zero) after 500 ms without a sample, the accelerometer keeps its last value. `EnableMotionCaps()` flips `HasGyro` / `HasAccel` on the first message and notifies once. |
-| `SetConnected` | `void SetConnected(bool connected)` | Sets connection state (volatile write). |
+| `SetConnected` | `void SetConnected(bool connected)` | Sets connection state (volatile write). A disconnect also releases every held Web Menus tile, and so does `NeutralizeAll`. |
+
+### Web Menus methods (#471)
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `SetMenuCell` | `void SetMenuCell(int slot, int menuId, int cell, bool down)` | A tile pressed or released, from the socket thread. Menu surfaces only, slot and cell 0–63, at most `MaxHeldMenuCells` held. Each new press takes a number from one counter shared by every phone, and a repeated down on a held tile is the same press. The engine validates the press against the slot's menus before anything fires. |
+| `ReadMenuPresses` | `void ReadMenuPresses(long nowMs, int minPulseMs, List<(int Slot, int MenuId, int Cell, long Seq)> into)` | Adds every held tile with its press number, and every released one until `minPulseMs` after its press, so a tap between two polls still fires once. A released tile past that is forgotten. |
+| `ReleaseAllMenuCells` | `void ReleaseAllMenuCells()` | Lets go of every tile. |
+| `SetMenusFeed` | `void SetMenusFeed(string json)` | Stores the page's snapshot and raises `MenusFeedChanged` when it differs from the last one. |
+| `ResendMenusFeed` | `void ResendMenusFeed()` | Forgets the stored snapshot, so the next build sends a whole one. The builder on the UI timer stays the only sender, so a snapshot cannot overtake a newer one. |
+| `RequestProfile` | `void RequestProfile(string profileId)` | Menu surfaces only, ids up to 128 characters. Raises `ProfileRequested`. |
 
 ---
 
@@ -1204,6 +1221,8 @@ Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE
 | `Tablet` | 35 | A Windows pen or drawing tablet. Barrel buttons, eraser, inversion and in-range as named buttons. The contact rides the touchpad lane, so the row carries no axes |
 | `VrController` | 36 | One VR motion controller read through an OpenXR runtime (#403). Ten axes, six pose in the head row's order plus thumbstick, trigger and grip, and four buttons. Left and right are separate rows |
 | `LogitechGKeys` | 37 | The G-keys on a Logitech keyboard and a Logitech mouse's buttons 6 through 20, read through the G-key SDK (#454). 102 buttons, no axes |
+| `AnalogKeyboard` | 38 | An analog (Hall-effect) keyboard (#468). Every key's press depth rides `CustomInputState.AnalogKeys`, not the numbered arrays |
+| `WebMenus` | 39 | A phone on the web controller's Web Menus layout (#471). No axes or buttons. A tap fires a menu cell directly |
 
 ### AnswersAnyDeviceSources
 
@@ -1213,9 +1232,11 @@ Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE
 public static bool AnswersAnyDeviceSources(int capType)
 ```
 
-It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController` and `LogitechGKeys`.
+It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController`, `LogitechGKeys`, `AnalogKeyboard` and `WebMenus`.
 
-Those rows publish their own vocabulary through the numbered Axis and Button arrays, so a mapping whose `DeviceGuid` is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.
+Those rows publish their own vocabulary through the numbered Axis and Button arrays, or leave the arrays at zero, so a mapping whose `DeviceGuid` is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.
+
+One exception rides on top (#471). A menu cell source (`Menu {id} Item {k}`) asks the menu runtime which cells fired and never reads the pass device's arrays. So on a slot where no online device answers the wildcard, the slot's Web Menus phone reads its "(Any Device)" menu cell sources. A row read on every pass reads the cell on the phone's own pass. A row read once per frame (a multi-source row, a stick trim, a row modifier) reads it as the phone whichever pass claims the row, since another device that answers nothing can come first. The device-free macro trigger path and its Consume Trigger Buttons set read one under the phone's identity. A slot with a controller on it reads the cell on the controller's pass, as before phones existed.
 
 ---
 
@@ -3179,6 +3200,7 @@ All fields are `[XmlAttribute]` except `Items`:
 | `SensitivityPercent` | `100` | In-Menu Sensitivity percent (Steam `sensitivity`, translator v26): scales the hover vector before selection, so a higher value reaches the ring or crosses the engage deadzone with less deflection. 100 = identity. Absent in older files = 100. |
 | `Enabled` | `true` | Per-menu switch. |
 | `LayerHoldsOpen` | `false` | (4.5.0, #413) Stay-open mode. When `LayerMask` names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover. Empty or `"Base"` cannot hold a menu open, so those fall back to ordinary surface engagement. |
+| `ShowOnWebController` | `false` | (#471) Offer this Touch Grid menu to Web Menus phones on the slot, one page per menu. Ignored on a radial menu. Carried by `Clone`. |
 | `Items` | empty list | `[XmlElement("Item")]` list of `MenuItemDefinition`. |
 
 `Clone()` deep-copies, item list included. Every clone site (profile apply, slot copy, editor round-trips) must use it so item lists never alias.
@@ -3195,7 +3217,7 @@ One cell of a menu, declared in the same file. All eight properties are `[XmlAtt
 | `XboxButtons` | Direct virtual-controller binding: Xbox button bitmask (`Gamepad.*` constants), 0 = none. |
 | `ExtendedButton` | Direct binding for Extended slots: 1-based raw button number in the slot's custom layout, 0 = none. Extended output is raw HID up to 128 buttons, where an Xbox mask has no meaning. |
 | `MacroName` | (4.4.0, #390) Macro cell: the name of a saved macro on the same slot, triggered while the cell fires. The cell is an additional trigger source, so the macro's own trigger mode keeps its semantics. A While Held macro runs while a Click cell is held, and the one-shot fire types present their commit pulse as one clean edge. A name the slot no longer declares is an inert no-op, the #377 stale-mask convention. Renames retag through the macro name-change hook. Schema append-only, absent in older files = empty. |
-| `Icon` | (4.4.0, #390) Cell icon reference in one of three forms, resolved by the App-side `MenuIconResolver` in this order: a `pficon://Package/entry` icon-pack reference, a loose image file path (exe-relative preferred), or a bare Steam binding-icon file name (the binding string's third comma field, `"ghost_050_menu_0030.png"`) resolved against the local Steam client's `tenfoot\resource\images\library\controller\binding_icons`. The overlay falls back to the text label when nothing resolves. `IsValidIconName` gates only the Workshop translator's carry, which stores bare `*.png` names of at most 128 characters with no separators or drive colons and only letters, digits, `_`, `-`, and `.`. |
+| `Icon` | (4.4.0, #390) Cell icon reference in one of four forms. An emoji (#471) is the character itself, one text element under `StringInfo` (`MenuIconResolver.IsGlyph`), and draws as text. The three picture forms resolve through the App-side `MenuIconResolver` in this order: a `pficon://Package/entry` icon-pack reference, a loose image file path (exe-relative preferred), or a bare Steam binding-icon file name (the binding string's third comma field, `"ghost_050_menu_0030.png"`) resolved against the local Steam client's `tenfoot\resource\images\library\controller\binding_icons`. The overlay falls back to the text label when nothing resolves. `IsValidIconName` gates only the Workshop translator's carry, which stores bare `*.png` names of at most 128 characters with no separators or drive colons and only letters, digits, `_`, `-`, and `.`. |
 | `IconScalePercent` | (4.5.0, #413) Icon size as percent of the menu's normal icon box, default 100. The editor and the overlay clamp it to 25..200, and clearing the icon resets it to 100. Absent in older files = 100. |
 
 Bindings come in two shapes. Imported Workshop menus leave the direct-binding fields at 0 and deliver through mapping rows / macros keyed on the item's fired descriptor (`Menu {id} Item {k}`). Hand-authored items may instead carry ONE direct binding that the menu runtime fires itself, so authoring a simple item never requires a hidden row.

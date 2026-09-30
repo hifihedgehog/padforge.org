@@ -285,7 +285,8 @@ ends when:
 
 - the script sends `deactivate`,
 - you switch profiles yourself, by the status-bar switcher, the **Load** button on
-  this page (loading **Default** reverts), or a controller shortcut,
+  this page (loading **Default** reverts), a controller shortcut, or a
+  [Web Menus](web-controller.md#profiles-from-the-phone) phone,
 - you uncheck **Allow External Control by Launchers and Scripts**,
 - the engine stops, or PadForge restarts.
 
@@ -345,7 +346,7 @@ elevated scripts and Task Scheduler jobs.
 
 ## Switch flyout
 
-A small flyout slides up from the taskbar when a controller shortcut switches the profile.
+A small flyout slides up from the taskbar when a controller shortcut or a [Web Menus](web-controller.md#profiles-from-the-phone) phone switches the profile.
 
 | Stage | What shows |
 |---|---|

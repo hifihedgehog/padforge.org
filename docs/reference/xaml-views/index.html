@@ -3912,6 +3912,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#iconpicker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IconPicker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#remotelinkpairdialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6330,6 +6341,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#iconpicker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IconPicker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#remotelinkpairdialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -8535,46 +8557,50 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>        └─ StackPanel
 <a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>            ├─ Menu Name TextBox (UpdateSourceTrigger=PropertyChanged) + Enabled CheckBox
 <a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>            ├─ Style ComboBox (KindOptions → KindIndex: Radial Ring / Touch Grid)
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>            ├─ Layer ComboBox (LayerChoices → LayerMask) + Reset (ResetLayerCommand)
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>            ├─ Layer-hold CheckBox (LayerHoldsOpen, visible on ShowLayerHold, #413)
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>            ├─ Host Input ComboBox (HostOptions → SelectedHost, label HostInputLabel)
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>            │   + Record button (MenuHostRecordCommand from the TabItem DataContext,
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>            │     glyph = HostRecordIcon) + Reset (ResetHostCommand)
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>            ├─ Host Input caption (HostInputCaption, always shown: the Steer With
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>            │   caption while the layer hold keeps the menu open, else Menu_HostInput_Caption)
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>            ├─ Custom X / Custom Y steer-axis rows (visible on IsCustomHost,
-<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>            │   ResetCustomXCommand / ResetCustomYCommand)
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>            ├─ Click Input row (visible on IsCustomHost, ResetClickCommand)
-<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>            ├─ Pad Half ComboBox (HostHalfOptions → HostHalfIndex,
-<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>            │   visible on HostIsTouchpad)
-<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>            ├─ Fire Mode ComboBox (FireOptions → FireTypeIndex) + Reset
-<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>            ├─ Cells NumberBox (1-20 → CellCount)
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>            │   + Center Cell CheckBox (HasCenter, radial only) + Reset
-<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>            ├─ Engage Deadzone Slider + NumberBox (1-95 → EngageDeadzonePercent) + Reset
-<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>            ├─ Menu Overlay geometry card (CardBorder, header + ResetGeometryCommand)
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>            │   ├─ Show Labels CheckBox (ShowLabels)
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>            │   ├─ Screen Position NumberBox pair (0-100 → PosXPercent / PosYPercent)
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>            │   ├─ Size NumberBox (10-400 → ScalePercent) + &quot;%&quot;
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>            │   └─ Opacity NumberBox (5-100 → OpacityPercent) + &quot;%&quot;
-<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>            ├─ Cell Bindings ItemsControl (Cells)
-<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>            │   └─ per cell: Header + icon indicator (IconImage, or the E8B9
-<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>            │       picture glyph on ShowIconGlyph) + icon size slider
-<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>            │       (IconScalePercent 25-200, visible on HasIcon) + Label TextBox (LostFocus)
-<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>            │       + Binding ComboBox (BindingKindOptions → BindingKind)
-<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>            │       + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
-<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>            │       OR button picker (ButtonOptions → SelectedButtonFlag,
-<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>            │          visible on ShowButtonPicker)
-<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>            │       OR macro picker (MacroOptions → SelectedMacroName,
-<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>            │          visible on ShowMacroPicker, #390)
-<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>            │       + Choose Icon button (EB9F, MenuCellChooseIcon_Click, #390)
-<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>            │       + Reset (ResetCellCommand)
-<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>            └─ Icon Packages card (CardBorder, EB9F glyph, #390)
-<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>                ├─ Pad_Menus_IconPackages_Header + description
-<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>                ├─ Add (IconPackageAdd_Click) / Create (IconPackageCreate_Click) /
-<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>                │   Remove (IconPackageRemove_Click) buttons
-<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>                ├─ IconPackagesEmptyText (Pad_Menus_IconPackages_Empty)
-<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>                └─ IconPackagesList ListBox (MaxHeight 170, EmberSelectListItem,
-<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>                    per row: EB9F glyph + Name + Path)
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>            ├─ Show on Web Controller CheckBox (ShowOnWebController, visible on
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>            │   ShowWebControllerRow: a Touch Grid, or the flag set, #471)
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>            │   + SettingResetButton
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>            ├─ Layer ComboBox (LayerChoices → LayerMask) + Reset (ResetLayerCommand)
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>            ├─ Layer-hold CheckBox (LayerHoldsOpen, visible on ShowLayerHold, #413)
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>            ├─ Host Input ComboBox (HostOptions → SelectedHost, label HostInputLabel)
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>            │   + Record button (MenuHostRecordCommand from the TabItem DataContext,
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>            │     glyph = HostRecordIcon) + Reset (ResetHostCommand)
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>            ├─ Host Input caption (HostInputCaption, always shown: the Steer With
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>            │   caption while the layer hold keeps the menu open, else Menu_HostInput_Caption)
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>            ├─ Custom X / Custom Y steer-axis rows (visible on IsCustomHost,
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>            │   ResetCustomXCommand / ResetCustomYCommand)
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>            ├─ Click Input row (visible on IsCustomHost, ResetClickCommand)
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>            ├─ Pad Half ComboBox (HostHalfOptions → HostHalfIndex,
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>            │   visible on HostIsTouchpad)
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>            ├─ Fire Mode ComboBox (FireOptions → FireTypeIndex) + Reset
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>            ├─ Cells NumberBox (1-20 → CellCount)
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>            │   + Center Cell CheckBox (HasCenter, radial only) + Reset
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>            ├─ Engage Deadzone Slider + NumberBox (1-95 → EngageDeadzonePercent) + Reset
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>            ├─ Menu Overlay geometry card (CardBorder, header + ResetGeometryCommand)
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>            │   ├─ Show Labels CheckBox (ShowLabels)
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>            │   ├─ Screen Position NumberBox pair (0-100 → PosXPercent / PosYPercent)
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>            │   ├─ Size NumberBox (10-400 → ScalePercent) + &quot;%&quot;
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>            │   └─ Opacity NumberBox (5-100 → OpacityPercent) + &quot;%&quot;
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>            ├─ Cell Bindings ItemsControl (Cells)
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>            │   └─ per cell: Header + icon indicator (IconImage, the emoji itself
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>            │       on IsGlyphIcon, or the E8B9 picture glyph on ShowIconGlyph) + icon size slider
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>            │       (IconScalePercent 25-200, visible on HasIcon) + Label TextBox (LostFocus)
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>            │       + Binding ComboBox (BindingKindOptions → BindingKind)
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>            │       + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>            │       OR button picker (ButtonOptions → SelectedButtonFlag,
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>            │          visible on ShowButtonPicker)
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>            │       OR macro picker (MacroOptions → SelectedMacroName,
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>            │          visible on ShowMacroPicker, #390)
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>            │       + Choose Icon button (EB9F, MenuCellChooseIcon_Click, #390: opens
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>            │         IconPicker through IconPickerHost.Open, #471)
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>            │       + Reset (ResetCellCommand)
+<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>            └─ Icon Packages card (CardBorder, EB9F glyph, #390)
+<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>                ├─ Pad_Menus_IconPackages_Header + description
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>                ├─ Add (IconPackageAdd_Click) / Create (IconPackageCreate_Click) /
+<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>                │   Remove (IconPackageRemove_Click) buttons
+<a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>                ├─ IconPackagesEmptyText (Pad_Menus_IconPackages_Empty)
+<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>                └─ IconPackagesList ListBox (MaxHeight 170, EmberSelectListItem,
+<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>                    per row: EB9F glyph + Name + Path)
 </code></pre></div>
 <p>Every setting row carries the canonical Reset button, and the host row carries Record too (the Aim Engage cluster shape). The record button binds <code>MenuHostRecordCommand</code> on the PadViewModel through the TabItem's DataContext because the editor panel's own DataContext is the selected <code>MenuEditorItem</code>.</p>
 <p>The four cell pickers each use <code>ComboBoxWidthBehavior.SizeToItems</code> with a per-column <code>WidthGroup</code> (<code>MenuCellKindCombos</code>, <code>MenuCellKeyCombos</code>, <code>MenuCellButtonCombos</code>, <code>MenuCellMacroCombos</code>), so rows stay in column across selections and long locales do not clip.</p>
@@ -10125,10 +10151,10 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p>HSV color picker <code>UserControl</code>. A 200x200 saturation/value square over a hue base layer, plus a hue strip. Feeds the lightbar and RGB color rows. The hue base layer is rebuilt from code-behind on hue change.</p>
 <h3 id="shiftactivatordialog">ShiftActivatorDialog<a class="headerlink" href="#shiftactivatordialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>ShiftActivatorDialog.xaml</code>, <code>ShiftActivatorDialog.xaml.cs</code></p>
-<p>Shift-layer editor (<code>Pad_Shift_DialogTitle</code>, 600x760). Records the activator combo and configures the layer, including RGB color rows cloned from the Lighting tab's chrome.</p>
+<p>Shift-layer editor (<code>Pad_Shift_DialogTitle</code>, 600x760). Records the activator combo and configures the layer, including RGB color rows cloned from the Lighting tab's chrome. The square icon button left of the name box shows the layer's icon, a picture (<code>IconPickerImage</code>, 22x22) when the reference resolves and the glyph (<code>IconPickerGlyph</code>) otherwise, both through <code>MenuIconResolver.ResolveLayerIcon</code>. It opens the shared <a href="#iconpicker">IconPicker</a> (#471) with <strong>Reset to Default (⇧)</strong> as its clear button. The emoji catalog (<code>EmojiCatalog</code>, <code>EmojiCategory</code>) stays in this file and the picker reads it.</p>
 <h3 id="shiftlayerflyout">ShiftLayerFlyout<a class="headerlink" href="#shiftlayerflyout" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>ShiftLayerFlyout.xaml</code>, <code>ShiftLayerFlyout.xaml.cs</code></p>
-<p>Win11 volume-OSD-style flyout that reuses <code>ProfileSwitchOverlay</code>'s pixel-measured chrome (bg <code>#2D2E2E</code>, border <code>#141516</code>, corner radius 8, layered shadow border plus content border so ClearType survives). Stays visible while a shift layer is engaged on the currently-viewed slot, slides out when the slot returns to Base.</p>
+<p>Win11 volume-OSD-style flyout that reuses <code>ProfileSwitchOverlay</code>'s pixel-measured chrome (bg <code>#2D2E2E</code>, border <code>#141516</code>, corner radius 8, layered shadow border plus content border so ClearType survives). Stays visible while a shift layer is engaged on the currently-viewed slot, slides out when the slot returns to Base. <code>ShowLayer</code> draws the layer's icon through <code>MenuIconResolver.ResolveLayerIcon</code>: a picture reference that resolves fills <code>StatusImage</code> (20x20, uniform, in the glyph's spot, #471), anything else shows as text in <code>StatusIcon</code>, and an empty or unresolvable picture reference shows ⇧.</p>
 <h3 id="touchpadgesturerecorderdialog">TouchpadGestureRecorderDialog<a class="headerlink" href="#touchpadgesturerecorderdialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>TouchpadGestureRecorderDialog.xaml</code>, <code>TouchpadGestureRecorderDialog.xaml.cs</code></p>
 <p>Touchpad gesture recorder (#88). <code>FluentWindow</code> (640x660) that captures a stroke and saves it as a named gesture template. Inherits theme from <code>Application.Resources</code> (no local <code>ThemesDictionary</code>) so it tracks the user's light/dark choice.</p>
@@ -10139,6 +10165,14 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p><strong>Files:</strong> <code>MenuOverlayWindow.xaml</code>, <code>MenuOverlayWindow.xaml.cs</code></p>
 <p>On-screen radial / touch menu HUD (#9). A click-through, never-activated <code>Window</code> (<code>WindowStyle="None"</code>, <code>AllowsTransparency</code>, <code>Topmost</code>, <code>ShowInTaskbar="False"</code>, <code>ShowActivated="False"</code>, <code>SizeToContent="WidthAndHeight"</code>) following the ShiftLayerFlyout precedent: <code>WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT</code> applied on Loaded, plus a <code>WndProc</code> hook answering <code>WM_MOUSEACTIVATE</code> with <code>MA_NOACTIVATE</code>, so it never steals focus from the game and never eats a click.</p>
 <p>Owned by <code>InputService</code>, which pulls <code>InputManager.ActiveMenuOverlay</code> on the ~30 Hz UI timer (created lazily on first engage, hidden when no menu is engaged or the Dashboard's <code>EnableMenuOverlay</code> is off) and calls <code>UpdateFromSnapshot</code>. Content is built in code on a bare <code>Canvas</code>: annular wedge <code>Path</code> geometries for radial rings (a single slot renders as the full donut), rounded <code>Rectangle</code> cells for grids. Geometry rebuilds only when the menu identity or its <code>GeometrySig</code> (kind, cell count, center, labels, scale, position, opacity, name, item labels) changes. The per-tick work is the hover restyle: the hovered cell fills with <code>SystemAccentColorPrimaryBrush</code> when resolvable, ember orange otherwise. <code>MaxRenderCells</code> (64) caps the visual build. A hand-hacked config past that still hovers and commits, the window just refuses to build an unbounded visual. The window is centered at the menu's <code>PosXPercent</code> / <code>PosYPercent</code> on the primary work area (50/50 = centered), clamped fully on screen. Theme-aware through dark / light brush pairs re-applied on every rebuild.</p>
+<h3 id="iconpicker">IconPicker<a class="headerlink" href="#iconpicker" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong> <code>IconPicker.xaml</code>, <code>IconPicker.xaml.cs</code></p>
+<p>The shared icon picker (#471), a <code>UserControl</code> shown in a <code>Popup</code> below the button that opened it (<code>PlacementMode.Bottom</code>, <code>StaysOpen="False"</code>, so a click elsewhere closes it). Menu cell rows and the shift-layer dialog both open it through <code>IconPickerHost.Open(anchor, currentIcon, clearLabel, apply, showPackage)</code>. Two tabs, both drawing every choice as itself:</p>
+<ul>
+<li><strong>Emoji</strong> (<code>IconPicker_Emoji</code>): a category bar, whose tooltips and accessible names are the localized <code>Emoji_Category_*</code> strings through <code>EmojiCategory.DisplayName</code>, and a grid over <code>ShiftActivatorDialog.EmojiCatalog</code>.</li>
+<li><strong>Images</strong> (<code>IconPicker_Images</code>): every registered icon package's entries as 40x40 image buttons with their file names as accessible names, grouped by package (<code>IconGroup</code> / <code>IconChoice</code>) under a trimmed header, <code>IconPicker_NoPackages</code> when no package is registered, and <strong>Browse Files…</strong> at its foot. Thumbnails decode at 80 pixels from one read of each archive (<code>IconPackageManager.ReadIcons</code>), are kept apart from the resolver's full-size images, and are dropped when the registry changes.</li>
+</ul>
+<p>The choice the caller holds now wears the active tab's ember (<code>IsCurrent</code>), and the picker opens on its tab and its emoji category. The clear button at the bottom takes the caller's label: <strong>No Icon</strong> for a cell, <strong>Reset to Default (⇧)</strong> for a layer. On open, keyboard focus goes to the open tab, since WPF moves none into a popup. Tab cycles inside the picker, and Escape closes it. A pick raises <code>IconChosen</code> (an empty string clears) and closes the popup, and a pick or Escape returns focus to the button that opened it. <strong>Browse Files…</strong> closes it and runs <code>IconPickerHost.BrowseFromDisk</code>, which offers images the resolver draws (PNG, JPEG, GIF, BMP) and <code>.pficons</code> packages: an image file stores through <code>IconPickerHost.StoredImagePath</code>, exe-relative under the app folder and <code>.\name</code> for a file directly beside the exe, a <code>.pficons</code> file is registered, a one-entry package is chosen at once, and a package with several entries reopens the picker on that package's pictures.</p>
 <h3 id="remotelinkpairdialog">RemoteLinkPairDialog<a class="headerlink" href="#remotelinkpairdialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>RemoteLinkPairDialog.xaml</code>, <code>RemoteLinkPairDialog.xaml.cs</code></p>
 <p>Remote Link consent screen (#138). <code>FluentWindow</code> (460 wide) that shows the short authentication string (<code>SasText</code>, compared out of band against the peer screen), the peer <code>IdentityText</code>, a consent-warning <code>InfoBar</code>, and a <code>GamepadOnlyCheck</code> checkbox. Pair accepts. Reject, or closing the window, declines.</p>

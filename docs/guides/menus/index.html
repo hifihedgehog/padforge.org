@@ -1056,6 +1056,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#on-a-phone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On a phone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#menus-and-shift-layers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3722,6 +3733,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#on-a-phone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On a phone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#menus-and-shift-layers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3872,13 +3894,18 @@
 <p>A menu imported from the Steam Workshop can carry richer cell behavior (key combos, layer switches, macros). Those arrive wired through the profile's mapping rows and macros automatically, so the cell fires whatever the config authored even though the cell row here shows no direct binding.</p>
 <hr />
 <h2 id="cell-icons">Cell icons<a class="headerlink" href="#cell-icons" title="Permanent link">&para;</a></h2>
-<p>Each cell row carries an icon button (tooltip: <strong>Choose this cell's icon: an entry from an icon package or an image file.</strong>). It opens a <strong>Pick an Icon</strong> list of every icon in every added icon package, each listed as the image name followed by its package name. Pick one and the cell shows it. <strong>(No Icon)</strong> at the top clears an icon that is set. With no packages added and no icon set, the button goes straight to a file browser.</p>
-<p>The browser accepts:</p>
+<p>Each cell row carries an icon button (tooltip: <strong>Choose this cell's icon: an emoji, an entry from an icon package, or an image file.</strong>). It opens a picker under the button, and every choice in it is drawn as itself.</p>
 <ul>
-<li>A loose image file: <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.bmp</code>, or <code>.gif</code>. A file kept under PadForge's own folder is stored by relative path, so the pair travels together.</li>
-<li>A <code>.pficons</code> package. Picking one adds it to the list below and offers its icons. A package with a single image binds it right away.</li>
+<li><strong>Emoji</strong> lists the emoji by category, the same catalog the <a href="../shift-layers/">shift layer</a> dialog uses.</li>
+<li><strong>Images</strong> shows the pictures in every added icon package, grouped by package. <strong>Browse Files…</strong> at its foot opens a file browser.</li>
 </ul>
-<p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. <strong>Icon Size</strong> next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
+<p><strong>No Icon</strong> at the bottom of the picker clears the icon. The icon the cell holds now is marked, and the picker opens on its tab and its emoji category. A pick closes the picker, and so does a click anywhere else or Escape. Tab moves through the picker. The cell row shows the icon the cell carries.</p>
+<p>The file browser accepts:</p>
+<ul>
+<li>A loose image file: <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.bmp</code>, or <code>.gif</code>. A file kept under PadForge's own folder is stored by relative path, so the pair travels together. One directly beside <code>PadForge.exe</code> is stored as <code>.\name.png</code>.</li>
+<li>A <code>.pficons</code> package. Picking one adds it to the list below. A package with a single image binds it right away, and one with several opens the picker again on that package's pictures.</li>
+</ul>
+<p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. An emoji fills the same box. WPF, which draws the overlay, has no color emoji, so on the PC an emoji draws in one color, the label's, and takes the hover color with the label. The phone's <a href="../web-controller/#web-menus">Web Menus</a> page draws it in color. <strong>Icon Size</strong> next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
 <h3 id="icon-packages">Icon packages<a class="headerlink" href="#icon-packages" title="Permanent link">&para;</a></h3>
 <p><img alt="The Icon Packages block on the Menus tab" src="../../images/menu-icon-packs.png" /></p>
 <p>An icon package is one zip file of images with the <code>.pficons</code> extension. PadForge reads straight from the file and never unpacks it. Keep packages next to <code>PadForge.exe</code> to stay portable.</p>
@@ -3913,6 +3940,11 @@
 <p>Per-menu appearance controls: <strong>Show Labels</strong>, <strong>Screen Position</strong> (X and Y percent, default centered), <strong>Size</strong> (10–400%), and <strong>Opacity</strong> (5–100%, default 90).</p>
 <p>The overlay itself is optional. The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Menu Overlay</strong> toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.</p>
 <hr />
+<h2 id="on-a-phone">On a phone<a class="headerlink" href="#on-a-phone" title="Permanent link">&para;</a></h2>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>A Touch Grid menu can also appear on a phone. Turn on <strong>Show on Web Controller</strong> (tooltip: <strong>Shows this menu as a page of the web controller's Web Menus layout, where a tap on a tile fires its cell.</strong>) and the menu becomes a page of tiles on every phone that runs the web controller's <a href="../web-controller/#web-menus">Web Menus</a> layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.</p>
+<p>The checkbox appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be cleared, and its reset turns it off. The menu's <strong>Layer</strong> and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.</p>
+<hr />
 <h2 id="menus-and-shift-layers">Menus and shift layers<a class="headerlink" href="#menus-and-shift-layers" title="Permanent link">&para;</a></h2>
 <p>Each menu carries a <strong>Layer</strong> picker naming the <a href="../shift-layers/">shift layer</a> that permits it. <strong>Any Layer</strong> is the default and the menu is always available. <strong>Base</strong> also allows the menu under other active layers. A named layer permits the menu only while that layer is the active one.</p>
 <p><strong>Layer Holds the Menu Open</strong> changes how the menu opens. Normally a menu opens when you touch its surface or deflect its stick past the engage deadzone. With this on, the named layer opens it: the menu appears the moment the layer goes active and stays up for as long as it is held, and a <strong>Steer With</strong> picker chooses the physical input that moves the highlight while it is open. That input is read from the controllers assigned to the slot, and what each cell fires still comes from the cell's own binding. <strong>Any Layer</strong> and <strong>Base</strong> keep normal surface opening, so the toggle only does something on a named layer.</p>
@@ -3931,6 +3963,7 @@
 <li><a href="../macros/">Macros</a>: a cell can name a macro directly, and any cell can trigger one as a source.</li>
 <li><a href="../profiles/">Profiles</a>: exported profiles carry the icon packages their menus use.</li>
 <li><a href="../../features/touchpad/">Touchpad</a>: the other things a touchpad surface can do.</li>
+<li><a href="../web-controller/#web-menus">Web Controller</a>: the phone page that shows marked Touch Grid menus as tiles.</li>
 <li><a href="../../features/dashboard/">Dashboard</a>: the Menu Overlay toggle.</li>
 </ul>
 <hr />

@@ -24,7 +24,7 @@ Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchp
 
 A row of chips sits above the card list: **ALL**, **GAMEPAD**, **JOYSTICK**, **WHEEL**, **KEYBOARD**, **MOUSE**, **OTHER**. Each chip carries a live count of the cards in that group, offline cards included. Click one to show only that type. Click **ALL** to clear the filter. The active chip lights up in ember orange.
 
-GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, and anything unclassified.
+GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, Web Menus phones, and anything unclassified.
 
 <!-- SCREENSHOT: devices-facet-chips -->
 ![Type filter chips above the device list, each with a live count](../images/devices-facet-chips.png)
@@ -91,7 +91,7 @@ A row of capability icons sits at the bottom of the card, with a rumble, gyro, o
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
+Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -336,6 +336,14 @@ The deep how-to (registering, naming, and mapping tags) lives on [NFC Tags](nfc-
 ## Microphones
 
 Every active Windows microphone, the one in a wired DualSense included, shows up as a device card typed **Microphone**. The detail pane has a **Manage Voice Macros** button and a **Voice Macros** list in place of the numbered-button grid: **Any Phrase** plus one row per registered phrase, each lighting as its phrase fires. A DualSense on Bluetooth carries the same button and list on its own card. See [Voice Macros](voice-macros.md).
+
+---
+
+## Web Menus phones
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+A phone that opens the web controller's [Web Menus](../guides/web-controller.md#web-menus) layout shows up as a device card typed **Web Menus**, named **Web Menus 1**, then 2 for a second phone. It has no axes, buttons, or hats, so it adds nothing of its own to a slot's mappings. What it carries is taps: assign it to a slot and its tiles fire that slot's Touch Grid [menus](../guides/menus.md#on-a-phone). Remote Link does not offer it to a paired PC.
 
 ---
 

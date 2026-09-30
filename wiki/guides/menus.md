@@ -76,14 +76,19 @@ A menu imported from the Steam Workshop can carry richer cell behavior (key comb
 
 ## Cell icons
 
-Each cell row carries an icon button (tooltip: **Choose this cell's icon: an entry from an icon package or an image file.**). It opens a **Pick an Icon** list of every icon in every added icon package, each listed as the image name followed by its package name. Pick one and the cell shows it. **(No Icon)** at the top clears an icon that is set. With no packages added and no icon set, the button goes straight to a file browser.
+Each cell row carries an icon button (tooltip: **Choose this cell's icon: an emoji, an entry from an icon package, or an image file.**). It opens a picker under the button, and every choice in it is drawn as itself.
 
-The browser accepts:
+- **Emoji** lists the emoji by category, the same catalog the [shift layer](shift-layers.md) dialog uses.
+- **Images** shows the pictures in every added icon package, grouped by package. **Browse Files…** at its foot opens a file browser.
 
-- A loose image file: `.png`, `.jpg`, `.jpeg`, `.bmp`, or `.gif`. A file kept under PadForge's own folder is stored by relative path, so the pair travels together.
-- A `.pficons` package. Picking one adds it to the list below and offers its icons. A package with a single image binds it right away.
+**No Icon** at the bottom of the picker clears the icon. The icon the cell holds now is marked, and the picker opens on its tab and its emoji category. A pick closes the picker, and so does a click anywhere else or Escape. Tab moves through the picker. The cell row shows the icon the cell carries.
 
-On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. **Icon Size** next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With **Show Labels** on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.
+The file browser accepts:
+
+- A loose image file: `.png`, `.jpg`, `.jpeg`, `.bmp`, or `.gif`. A file kept under PadForge's own folder is stored by relative path, so the pair travels together. One directly beside `PadForge.exe` is stored as `.\name.png`.
+- A `.pficons` package. Picking one adds it to the list below. A package with a single image binds it right away, and one with several opens the picker again on that package's pictures.
+
+On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. An emoji fills the same box. WPF, which draws the overlay, has no color emoji, so on the PC an emoji draws in one color, the label's, and takes the hover color with the label. The phone's [Web Menus](web-controller.md#web-menus) page draws it in color. **Icon Size** next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With **Show Labels** on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.
 
 ### Icon packages
 
@@ -115,6 +120,16 @@ The overlay itself is optional. The [Dashboard](../features/dashboard.md)'s **Ov
 
 ---
 
+## On a phone
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+A Touch Grid menu can also appear on a phone. Turn on **Show on Web Controller** (tooltip: **Shows this menu as a page of the web controller's Web Menus layout, where a tap on a tile fires its cell.**) and the menu becomes a page of tiles on every phone that runs the web controller's [Web Menus](web-controller.md#web-menus) layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.
+
+The checkbox appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be cleared, and its reset turns it off. The menu's **Layer** and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.
+
+---
+
 ## Menus and shift layers
 
 Each menu carries a **Layer** picker naming the [shift layer](shift-layers.md) that permits it. **Any Layer** is the default and the menu is always available. **Base** also allows the menu under other active layers. A named layer permits the menu only while that layer is the active one.
@@ -143,6 +158,7 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 - [Macros](macros.md): a cell can name a macro directly, and any cell can trigger one as a source.
 - [Profiles](profiles.md): exported profiles carry the icon packages their menus use.
 - [Touchpad](../features/touchpad.md): the other things a touchpad surface can do.
+- [Web Controller](web-controller.md#web-menus): the phone page that shows marked Touch Grid menus as tiles.
 - [Dashboard](../features/dashboard.md): the Menu Overlay toggle.
 
 ---

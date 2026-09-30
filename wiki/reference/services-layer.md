@@ -2,7 +2,7 @@
 
 *Five ViewModel-bridge services carry engine state to the WPF UI and back, with a bench of smaller workers beside them.*
 
-Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds thirty-one more residents:
+Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and get full sections on this page: `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, and `ForegroundMonitorService`. They run on the WPF dispatcher thread unless noted otherwise. `PadForge.App/Services/` holds thirty-five more residents:
 
 | Resident | Role |
 |----------|------|
@@ -13,6 +13,7 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `WebCustomLayoutStore` | The browser-built custom pad layouts (#296), machine-scoped. Holds one validated JSON array that rides `AppSettingsData` in PadForge.xml, deliberately not `ProfileData` |
 | `WebControllerBindingPool` | Reference-counted leases on the HTTPS binding `WebControllerTls` makes per port. The first lease creates the binding, and releasing the last one removes it off the calling thread |
 | `WebControllerListener` | `IWebControllerListener` and its `HttpListener` implementation, the seam `WebControllerServer` listens through |
+| `WebMenusService` | Builds each Web Menus phone's snapshot on the UI timer and serves its icons by token (#471). [Below](#web-menus-471) |
 | `QrCode` | Byte-mode QR generator ported from the Nayuki reference, used only to render the web controller's URL on the Dashboard card |
 | `VoiceMacroService` | Voice macro recognition (#317). One session per microphone, no shared mic and no voice pseudo-device. Started and shut down by the engine's Step 1 device sweep, not by `InputService.Start()` |
 | `VoskVoiceEngine` | The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes, and for the rest of the run when libvosk will not load, which leaves the cache alone. libvosk reports a model it cannot read by returning null. The store reads the native handle, so such a model is deleted and unpacked again and is never published as ready |
@@ -38,6 +39,8 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `RemoteAssignmentService` | Applies a paired Remote Link peer's authenticated slot-assignment requests on the UI dispatcher, refused unless that peer's trust entry allows remote assignments. Detail on [Remote Link Internals](remote-link-internals.md) |
 | `UpdateService` | In-app updates (#457): the release check, the download and its SHA-256 check, the record of an install waiting for the next launch, the handover to the helper that swaps the exe, and the cleanup. Detail on [Updates Internals](updates-internals.md) |
 | `UpdateController` | The Settings > Updates card (#457): the check timer, Check Now, Install and Restart, the background download, and every status line. UI thread only. Detail on [Updates Internals](updates-internals.md) |
+| `DreamcastScreenService` | What each Bliss-Box port's Dreamcast screen shows (#469), with the per-port choices `BlissBoxPortData` keeps in the settings file. Detail on [Bliss-Box Internals](bliss-box-internals.md) |
+| `VendorUsbDriverInstaller` | Binds the inbox WinUSB driver to the controllers the SDL fork reads through libusb (hifihedgehog/SDL#33), one package per device node on the DualShock 3 template. Detail on [Driver Installation Internals](driver-installation-internals.md) |
 
 > **Engine-side subsystems (3.4).** Two more runtime subsystems sit alongside these services. `AudioPassthroughService` drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through `InputService` and documented on their own pages: [Controller Audio Internals](controller-audio-internals.md) and [Remote Link Internals](remote-link-internals.md).
 
@@ -584,7 +587,7 @@ Axis detection: 25% threshold, 3-cycle hold confirmation (same as RecorderServic
 #### `StartWebServerIfEnabled()` (private)
 
 1. Checks `Dashboard.EnableWebController` and engine existence. Returns early if a server is already running.
-2. Creates `WebControllerServer`, subscribes to `StatusChanged`, `DeviceConnected`, `DeviceDisconnected`.
+2. Creates `WebControllerServer`, subscribes to `StatusChanged`, `DeviceConnected`, `DeviceDisconnected`, and `ProfileSwitchRequested` (#471).
 3. Device connect/disconnect calls `_inputManager.RegisterExternalDevice()` / `UnregisterExternalDevice()`.
 4. Validates port (1024-65535, default 8080). Hands the server the access code with `SetPlainAccessCode` before the start, and builds `PlainHttpOptions(port, localOnly)` when **Also Serve Plain HTTP** is on.
 5. Calls `Start(port, plain)` on a `Task.Run`, not on the UI thread. `WebControllerTls.EnsureHttpsBinding` spawns `netsh` up to four times (show, delete, add, show), each capped at five seconds, and this method is reached straight from the checkbox's `PropertyChanged` handler. The firewall rule's own two spawns already run on the thread pool. It then hops back to the dispatcher, and if the start failed or the user has since toggled off or changed the port, it disposes the launching instance and clears `IsWebControllerRunning`.
@@ -600,6 +603,18 @@ The accept loop rules on every request before dispatching it, reading only the r
 The plain port's firewall rule, "PadForge Web Controller (HTTP)", names the port rather than the executable, because http.sys receives the traffic in the kernel and a program rule would never match. `ApplyPlainFirewallRule` opens it for a served LAN address and removes it for This PC Only, on a failed or absent plain address, and at `Stop`. Requests run one at a time off the caller's thread, and one superseded before its turn is skipped, so the newest lands last. A removal runs once per process when nothing was opened, which also clears a rule left by a process that ended while serving.
 
 `/api/info` returns `{"secureUrl": ...}`: the main HTTPS address, or null while the main address is plain HTTP or the peer is this PC. A gamepad layout opened over plain HTTP reads it to turn its **Motion needs HTTPS** note into a link to the same page on the secure address.
+
+#### Web Menus (#471)
+
+A socket opened with `type=menus` registers a menu surface, a `WebControllerDevice` with layout key `"menus"` named `Web Menus N`. Another page whose layout query names `menus` gets the default layout instead. The server wires the device's `MenusFeedChanged` to a text send through the session's send gate and its `ProfileRequested` to `ProfileSwitchRequested`, unwires both at teardown, and calls `ResendMenusFeed` once the session is connected, which makes the next build send the snapshot whole. `ProcessMessage` takes two messages from the page, both only while the session accepts input. `{"type":"cell","slot","menu","cell","down"}` calls `SetMenuCell`, and `{"type":"profile","id"}` calls `RequestProfile`. A menu surface ignores `input`, `motion` and `touchpad` messages.
+
+A Web Menus session answers the #402 ping as a forwarded pad does (`UsesInputDeadline`): the page echoes `{"type":"hb","n"}` while it is visible and its socket keeps up, an expiry after three seconds without a timely echo neutralizes the device and lets go of every tile, and the fresh echo that ends a lapse brings `{"type":"resync"}`, on which the page resends the tiles still under a finger. `SendTextAsync` awaits without capturing the context, so a snapshot send begun on the UI thread never waits behind the dispatcher while it holds the send gate, which would delay the ping past its round-trip limit.
+
+`WebMenusService.Tick` runs on the UI timer while the server exists, at most every 100 ms, ungated by the app's focus since the phone is the point while a game holds it. Under the UserDevices lock it collects every online menu surface. It builds every snapshot with `BuildFeed`, publishes the icon tokens they name, and only then hands each to `SetMenusFeed`, which sends only a changed one, so a snapshot on the wire always finds its pictures served. A snapshot carries the PC's active profile and the profile list (Default is the list's `__default__` entry), the slots the phone is assigned to, and one page per menu that passes the engine's own gates, `InputManager.IsWebMenuFireable` and `IsMenuLayerOpen`, so the page never offers a tile the engine refuses. A page carries the slot, the menu id and name, the cell count clamped to 64, whether labels show, and one entry per bound cell, the last item on an index winning as the overlay binds them: the index, the label, an emoji glyph or a picture URL, and `on` when the cell's macro is a Toggle (its latch, whatever set it).
+
+Pictures go by token. `/api/menuicon?t=<token>` serves an icon only when the current snapshot named that token, the first eight bytes of the reference's SHA-256 in hex. `MenuIconResolver.TryReadIconBytes` reads the bytes (a package entry, a loose file up to 16 MB, or Steam art) outside a lock, and only PNG, JPEG, GIF, or BMP by their leading bytes is served, with `Cache-Control: no-cache`. A picture is cached per reference under a lock, unless a registry change landed during its read, the cache clears on every registry change, and each build drops pictures no current snapshot names. Anything else is a 404. A phone can load the icons its page shows and nothing else from the PC, and the page never sees a path.
+
+`InputService.RequestProfileFromWebMenus` checks the id against the profile list, then sets `PendingProfileSwitchIsManual` and `PendingProfileSwitchId` (null for `__default__`), the path a controller shortcut takes, so the switch records a manual override and raises the switch flyout. Requests go through `_pendingWebMenusProfile`: the newest one wins, and a burst takes one dispatcher call. `IsShareableDevice` keeps menu surfaces off Remote Link, since a tap fires the menus of the PC the phone is connected to.
 
 #### `StopWebServer()` (private)
 

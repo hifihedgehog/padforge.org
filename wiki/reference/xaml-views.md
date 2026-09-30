@@ -942,6 +942,9 @@ Grid (3 columns)
         └─ StackPanel
             ├─ Menu Name TextBox (UpdateSourceTrigger=PropertyChanged) + Enabled CheckBox
             ├─ Style ComboBox (KindOptions → KindIndex: Radial Ring / Touch Grid)
+            ├─ Show on Web Controller CheckBox (ShowOnWebController, visible on
+            │   ShowWebControllerRow: a Touch Grid, or the flag set, #471)
+            │   + SettingResetButton
             ├─ Layer ComboBox (LayerChoices → LayerMask) + Reset (ResetLayerCommand)
             ├─ Layer-hold CheckBox (LayerHoldsOpen, visible on ShowLayerHold, #413)
             ├─ Host Input ComboBox (HostOptions → SelectedHost, label HostInputLabel)
@@ -964,8 +967,8 @@ Grid (3 columns)
             │   ├─ Size NumberBox (10-400 → ScalePercent) + "%"
             │   └─ Opacity NumberBox (5-100 → OpacityPercent) + "%"
             ├─ Cell Bindings ItemsControl (Cells)
-            │   └─ per cell: Header + icon indicator (IconImage, or the E8B9
-            │       picture glyph on ShowIconGlyph) + icon size slider
+            │   └─ per cell: Header + icon indicator (IconImage, the emoji itself
+            │       on IsGlyphIcon, or the E8B9 picture glyph on ShowIconGlyph) + icon size slider
             │       (IconScalePercent 25-200, visible on HasIcon) + Label TextBox (LostFocus)
             │       + Binding ComboBox (BindingKindOptions → BindingKind)
             │       + key picker (KeyOptions → SelectedKeyVk, visible on ShowKeyPicker)
@@ -973,7 +976,8 @@ Grid (3 columns)
             │          visible on ShowButtonPicker)
             │       OR macro picker (MacroOptions → SelectedMacroName,
             │          visible on ShowMacroPicker, #390)
-            │       + Choose Icon button (EB9F, MenuCellChooseIcon_Click, #390)
+            │       + Choose Icon button (EB9F, MenuCellChooseIcon_Click, #390: opens
+            │         IconPicker through IconPickerHost.Open, #471)
             │       + Reset (ResetCellCommand)
             └─ Icon Packages card (CardBorder, EB9F glyph, #390)
                 ├─ Pad_Menus_IconPackages_Header + description
@@ -1875,13 +1879,13 @@ HSV color picker `UserControl`. A 200x200 saturation/value square over a hue bas
 
 **Files:** `ShiftActivatorDialog.xaml`, `ShiftActivatorDialog.xaml.cs`
 
-Shift-layer editor (`Pad_Shift_DialogTitle`, 600x760). Records the activator combo and configures the layer, including RGB color rows cloned from the Lighting tab's chrome.
+Shift-layer editor (`Pad_Shift_DialogTitle`, 600x760). Records the activator combo and configures the layer, including RGB color rows cloned from the Lighting tab's chrome. The square icon button left of the name box shows the layer's icon, a picture (`IconPickerImage`, 22x22) when the reference resolves and the glyph (`IconPickerGlyph`) otherwise, both through `MenuIconResolver.ResolveLayerIcon`. It opens the shared [IconPicker](#iconpicker) (#471) with **Reset to Default (⇧)** as its clear button. The emoji catalog (`EmojiCatalog`, `EmojiCategory`) stays in this file and the picker reads it.
 
 ### ShiftLayerFlyout
 
 **Files:** `ShiftLayerFlyout.xaml`, `ShiftLayerFlyout.xaml.cs`
 
-Win11 volume-OSD-style flyout that reuses `ProfileSwitchOverlay`'s pixel-measured chrome (bg `#2D2E2E`, border `#141516`, corner radius 8, layered shadow border plus content border so ClearType survives). Stays visible while a shift layer is engaged on the currently-viewed slot, slides out when the slot returns to Base.
+Win11 volume-OSD-style flyout that reuses `ProfileSwitchOverlay`'s pixel-measured chrome (bg `#2D2E2E`, border `#141516`, corner radius 8, layered shadow border plus content border so ClearType survives). Stays visible while a shift layer is engaged on the currently-viewed slot, slides out when the slot returns to Base. `ShowLayer` draws the layer's icon through `MenuIconResolver.ResolveLayerIcon`: a picture reference that resolves fills `StatusImage` (20x20, uniform, in the glyph's spot, #471), anything else shows as text in `StatusIcon`, and an empty or unresolvable picture reference shows ⇧.
 
 ### TouchpadGestureRecorderDialog
 
@@ -1902,6 +1906,17 @@ Transparent, topmost `Window` that mirrors the touchpad surface with live finger
 On-screen radial / touch menu HUD (#9). A click-through, never-activated `Window` (`WindowStyle="None"`, `AllowsTransparency`, `Topmost`, `ShowInTaskbar="False"`, `ShowActivated="False"`, `SizeToContent="WidthAndHeight"`) following the ShiftLayerFlyout precedent: `WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT` applied on Loaded, plus a `WndProc` hook answering `WM_MOUSEACTIVATE` with `MA_NOACTIVATE`, so it never steals focus from the game and never eats a click.
 
 Owned by `InputService`, which pulls `InputManager.ActiveMenuOverlay` on the ~30 Hz UI timer (created lazily on first engage, hidden when no menu is engaged or the Dashboard's `EnableMenuOverlay` is off) and calls `UpdateFromSnapshot`. Content is built in code on a bare `Canvas`: annular wedge `Path` geometries for radial rings (a single slot renders as the full donut), rounded `Rectangle` cells for grids. Geometry rebuilds only when the menu identity or its `GeometrySig` (kind, cell count, center, labels, scale, position, opacity, name, item labels) changes. The per-tick work is the hover restyle: the hovered cell fills with `SystemAccentColorPrimaryBrush` when resolvable, ember orange otherwise. `MaxRenderCells` (64) caps the visual build. A hand-hacked config past that still hovers and commits, the window just refuses to build an unbounded visual. The window is centered at the menu's `PosXPercent` / `PosYPercent` on the primary work area (50/50 = centered), clamped fully on screen. Theme-aware through dark / light brush pairs re-applied on every rebuild.
+
+### IconPicker
+
+**Files:** `IconPicker.xaml`, `IconPicker.xaml.cs`
+
+The shared icon picker (#471), a `UserControl` shown in a `Popup` below the button that opened it (`PlacementMode.Bottom`, `StaysOpen="False"`, so a click elsewhere closes it). Menu cell rows and the shift-layer dialog both open it through `IconPickerHost.Open(anchor, currentIcon, clearLabel, apply, showPackage)`. Two tabs, both drawing every choice as itself:
+
+- **Emoji** (`IconPicker_Emoji`): a category bar, whose tooltips and accessible names are the localized `Emoji_Category_*` strings through `EmojiCategory.DisplayName`, and a grid over `ShiftActivatorDialog.EmojiCatalog`.
+- **Images** (`IconPicker_Images`): every registered icon package's entries as 40x40 image buttons with their file names as accessible names, grouped by package (`IconGroup` / `IconChoice`) under a trimmed header, `IconPicker_NoPackages` when no package is registered, and **Browse Files…** at its foot. Thumbnails decode at 80 pixels from one read of each archive (`IconPackageManager.ReadIcons`), are kept apart from the resolver's full-size images, and are dropped when the registry changes.
+
+The choice the caller holds now wears the active tab's ember (`IsCurrent`), and the picker opens on its tab and its emoji category. The clear button at the bottom takes the caller's label: **No Icon** for a cell, **Reset to Default (⇧)** for a layer. On open, keyboard focus goes to the open tab, since WPF moves none into a popup. Tab cycles inside the picker, and Escape closes it. A pick raises `IconChosen` (an empty string clears) and closes the popup, and a pick or Escape returns focus to the button that opened it. **Browse Files…** closes it and runs `IconPickerHost.BrowseFromDisk`, which offers images the resolver draws (PNG, JPEG, GIF, BMP) and `.pficons` packages: an image file stores through `IconPickerHost.StoredImagePath`, exe-relative under the app folder and `.\name` for a file directly beside the exe, a `.pficons` file is registered, a one-entry package is chosen at once, and a package with several entries reopens the picker on that package's pictures.
 
 ### RemoteLinkPairDialog
 

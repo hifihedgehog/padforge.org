@@ -215,6 +215,7 @@ PadForge.App/
     WebControllerTls.cs               # HTTPS lane for the web controller (#296): motion sensors need a secure context
     WebControllerAccess.cs            # The plain HTTP address's access code: generation, cookie, admission, DPAPI storage
     WebCustomLayoutStore.cs           # Browser-built custom pad layouts (#296), machine-scoped on AppSettingsData
+    WebMenusService.cs                # Web Menus snapshots per phone on the UI timer, icons served by token (#471)
     QrCode.cs                         # Byte-mode QR generator (Nayuki port) for the web-controller card's URL
     UpdateService.cs                  # In-app updates (#457): checks GitHub, downloads and verifies the build for this machine, replaces the running exe. Also holds BuildIdentity
     UpdateController.cs               # Runs the Settings > Updates card (#457): automatic checks, Check Now, background download, Install and Restart
@@ -260,6 +261,7 @@ PadForge.App/
     MousePreviewControl.xaml(.cs)     # Read-only mouse graphic for Devices page detail pane
     VRPreviewView.xaml(.cs)           # VR slot preview: left and right hand controller art with live input regions (#49)
     MenuOverlayWindow.xaml(.cs)       # Click-through radial / touch menu HUD, pulled from ActiveMenuOverlay on the ~30 Hz UI timer (#9)
+    IconPicker.xaml(.cs)              # Shared emoji and image picker for menu cells and shift layers, in a Popup (#471)
     CopyFromDialog.xaml(.cs)          # Copy mappings + every assigned device's tuning from another slot
     ProfileDialog.xaml(.cs)           # Save new profile (name + exe list)
     RemoteLinkPairDialog.xaml(.cs)    # First-contact pairing approval: short authentication string + fingerprint (#138)
@@ -375,6 +377,10 @@ PadForge.App/
     js/nipplejs.min.js                # Virtual joystick library for analog sticks
     custom.html                       # Browser-side custom pad builder (#296)
     js/custom_client.js               # Builder client, persists layouts via /api/custom-layouts (#296)
+    gamepad.html                      # Browser Gamepad: forwards a controller paired to the phone (#402, #415)
+    js/gamepad_client.js              # Its client: Gamepad API reads, the ping echo, resync (#402)
+    js/fullscreen.js                  # Fullscreen toggle where the browser offers element fullscreen (#402)
+    menus.html                        # Web Menus: a slot's Touch Grid menus as tiles, with the profile picker (#471)
 
   Themes/
     Generic.xaml                      # Custom control default styles (RangeSlider)
@@ -601,6 +607,7 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - `VoiceMacroService.cs` / `VoskVoiceEngine.cs`. Voice macro recognition (#317), one session per microphone. Vosk is the shipped engine, behind the same session surface SAPI uses
 - `WebControllerTls.cs` / `WebCustomLayoutStore.cs` / `QrCode.cs`. The web controller's HTTPS lane, its browser-built custom pad layouts, and the QR generator for the pairing card (#296)
 - `WebControllerAccess.cs`. The access code that guards the web controller's optional plain HTTP address, its cookie, and its encrypted storage
+- `WebMenusService.cs`. The Web Menus page's content (#471): one snapshot per phone, built on the UI timer from the engine's own menu gates, and the token table `/api/menuicon` serves icons from
 
 **Engine**
 

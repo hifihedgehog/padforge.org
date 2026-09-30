@@ -3172,6 +3172,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#web-menus-methods-471" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Menus methods (#471)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6562,6 +6573,17 @@
     <span class="md-ellipsis">
       
         State Update Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web-menus-methods-471" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Menus methods (#471)
       
     </span>
   </a>
@@ -10384,7 +10406,17 @@
 <tr>
 <td><code>WebProductGuidBase</code></td>
 <td><code>{BEBC0000-0000-0000-0000-CAFEFACE0001}</code></td>
-<td>Base ProductGuid. The instance <code>ProductGuid</code> is this MD5-mixed with the layout key (<code>"xbox360"</code>, <code>"ds4"</code>, <code>"switchpro"</code>, <code>"touchpad"</code>, and the other web layouts), so different layouts read as different products.</td>
+<td>Base ProductGuid. The instance <code>ProductGuid</code> is this MD5-mixed with the layout key (<code>"xbox360"</code>, <code>"ds4"</code>, <code>"switchpro"</code>, <code>"touchpad"</code>, <code>"menus"</code>, and the other web layouts), so different layouts read as different products.</td>
+</tr>
+<tr>
+<td><code>MenusLayoutKey</code></td>
+<td><code>"menus"</code></td>
+<td>The Web Menus layout (#471). A device built with it is a menu surface.</td>
+</tr>
+<tr>
+<td><code>MaxHeldMenuCells</code></td>
+<td><code>32</code></td>
+<td>The most tiles one Web Menus phone can hold at once. A press beyond it is dropped.</td>
 </tr>
 </tbody>
 </table>
@@ -10427,10 +10459,11 @@
 </tr>
 </tbody>
 </table>
+<p>A Web Menus surface (#471, <code>IsMenuSurface</code>) reports 0 axes, 0 buttons and 0 hats, empty <code>SupportedAxisIndices</code> and <code>SupportedButtonIndices</code>, no device objects, <code>InputDeviceType.WebMenus</code>, and <code>HasRumble</code> false. Its input is tile presses (below).</p>
 <h3 id="constructor_1">Constructor<a class="headerlink" href="#constructor_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">public</span><span class="w"> </span><span class="nf">WebControllerDevice</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">clientId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">displayName</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isTouchpad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">layoutKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;xbox360&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Creates a web controller. <code>clientId</code> is a unique browser localStorage identifier. <code>InstanceGuid</code> derived from client ID via MD5. <code>SdlInstanceId</code> comes from <code>SyntheticInstanceId.From(clientId)</code> (FNV-1a in the reserved <code>0x80000000</code> band, stable across sessions). Stick axes init to center (32767), trigger axes to 0. <code>isTouchpad</code> reports the device as a touchpad. <code>layoutKey</code> (<code>"xbox360"</code> / <code>"ds4"</code> / <code>"touchpad"</code>) is MD5-mixed into <code>ProductGuid</code> so different layouts read as different products.</p>
+<p>Creates a web controller. <code>clientId</code> is a unique browser localStorage identifier. <code>InstanceGuid</code> derived from client ID via MD5. <code>SdlInstanceId</code> comes from <code>SyntheticInstanceId.From(clientId)</code> (FNV-1a in the reserved <code>0x80000000</code> band, stable across sessions). Stick axes init to center (32767), trigger axes to 0, except on a touchpad or Web Menus client, which has no axes. <code>isTouchpad</code> reports the device as a touchpad. <code>layoutKey</code> (<code>"xbox360"</code> / <code>"ds4"</code> / <code>"touchpad"</code>) is MD5-mixed into <code>ProductGuid</code> so different layouts read as different products.</p>
 <h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -10460,6 +10493,16 @@
 <td><code>PlayerIndexChanged</code></td>
 <td><code>Action&lt;int&gt;</code></td>
 <td>1-based player number for the browser's player pips (#296), change-detected in <code>SetPlayerNumber</code>. <code>ResendIdentity</code> re-emits both after a reconnect.</td>
+</tr>
+<tr>
+<td><code>MenusFeedChanged</code></td>
+<td><code>Action&lt;string&gt;</code></td>
+<td>A Web Menus snapshot to send (#471), raised by <code>SetMenusFeed</code> only when the JSON changed.</td>
+</tr>
+<tr>
+<td><code>ProfileRequested</code></td>
+<td><code>Action&lt;string&gt;</code></td>
+<td>A Web Menus phone asked for a profile id (#471), raised by <code>RequestProfile</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -10516,7 +10559,49 @@
 <tr>
 <td><code>SetConnected</code></td>
 <td><code>void SetConnected(bool connected)</code></td>
-<td>Sets connection state (volatile write).</td>
+<td>Sets connection state (volatile write). A disconnect also releases every held Web Menus tile, and so does <code>NeutralizeAll</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="web-menus-methods-471">Web Menus methods (#471)<a class="headerlink" href="#web-menus-methods-471" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetMenuCell</code></td>
+<td><code>void SetMenuCell(int slot, int menuId, int cell, bool down)</code></td>
+<td>A tile pressed or released, from the socket thread. Menu surfaces only, slot and cell 0–63, at most <code>MaxHeldMenuCells</code> held. Each new press takes a number from one counter shared by every phone, and a repeated down on a held tile is the same press. The engine validates the press against the slot's menus before anything fires.</td>
+</tr>
+<tr>
+<td><code>ReadMenuPresses</code></td>
+<td><code>void ReadMenuPresses(long nowMs, int minPulseMs, List&lt;(int Slot, int MenuId, int Cell, long Seq)&gt; into)</code></td>
+<td>Adds every held tile with its press number, and every released one until <code>minPulseMs</code> after its press, so a tap between two polls still fires once. A released tile past that is forgotten.</td>
+</tr>
+<tr>
+<td><code>ReleaseAllMenuCells</code></td>
+<td><code>void ReleaseAllMenuCells()</code></td>
+<td>Lets go of every tile.</td>
+</tr>
+<tr>
+<td><code>SetMenusFeed</code></td>
+<td><code>void SetMenusFeed(string json)</code></td>
+<td>Stores the page's snapshot and raises <code>MenusFeedChanged</code> when it differs from the last one.</td>
+</tr>
+<tr>
+<td><code>ResendMenusFeed</code></td>
+<td><code>void ResendMenusFeed()</code></td>
+<td>Forgets the stored snapshot, so the next build sends a whole one. The builder on the UI timer stays the only sender, so a snapshot cannot overtake a newer one.</td>
+</tr>
+<tr>
+<td><code>RequestProfile</code></td>
+<td><code>void RequestProfile(string profileId)</code></td>
+<td>Menu surfaces only, ids up to 128 characters. Raises <code>ProfileRequested</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -10868,14 +10953,25 @@
 <td>37</td>
 <td>The G-keys on a Logitech keyboard and a Logitech mouse's buttons 6 through 20, read through the G-key SDK (#454). 102 buttons, no axes</td>
 </tr>
+<tr>
+<td><code>AnalogKeyboard</code></td>
+<td>38</td>
+<td>An analog (Hall-effect) keyboard (#468). Every key's press depth rides <code>CustomInputState.AnalogKeys</code>, not the numbered arrays</td>
+</tr>
+<tr>
+<td><code>WebMenus</code></td>
+<td>39</td>
+<td>A phone on the web controller's Web Menus layout (#471). No axes or buttons. A tap fires a menu cell directly</td>
+</tr>
 </tbody>
 </table>
 <h3 id="answersanydevicesources">AnswersAnyDeviceSources<a class="headerlink" href="#answersanydevicesources" title="Permanent link">&para;</a></h3>
 <p><code>InputDeviceType</code> carries one predicate beside its constants:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">AnswersAnyDeviceSources</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">capType</span><span class="p">)</span>
 </code></pre></div>
-<p>It returns <strong>false</strong> for <code>HeadTracker</code>, <code>Nfc</code>, <code>Microphone</code>, <code>HandheldButtons</code>, <code>ConsumerControl</code>, <code>Tablet</code>, <code>VrController</code> and <code>LogitechGKeys</code>.</p>
-<p>Those rows publish their own vocabulary through the numbered Axis and Button arrays, so a mapping whose <code>DeviceGuid</code> is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.</p>
+<p>It returns <strong>false</strong> for <code>HeadTracker</code>, <code>Nfc</code>, <code>Microphone</code>, <code>HandheldButtons</code>, <code>ConsumerControl</code>, <code>Tablet</code>, <code>VrController</code>, <code>LogitechGKeys</code>, <code>AnalogKeyboard</code> and <code>WebMenus</code>.</p>
+<p>Those rows publish their own vocabulary through the numbered Axis and Button arrays, or leave the arrays at zero, so a mapping whose <code>DeviceGuid</code> is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.</p>
+<p>One exception rides on top (#471). A menu cell source (<code>Menu {id} Item {k}</code>) asks the menu runtime which cells fired and never reads the pass device's arrays. So on a slot where no online device answers the wildcard, the slot's Web Menus phone reads its "(Any Device)" menu cell sources. A row read on every pass reads the cell on the phone's own pass. A row read once per frame (a multi-source row, a stick trim, a row modifier) reads it as the phone whichever pass claims the row, since another device that answers nothing can come first. The device-free macro trigger path and its Consume Trigger Buttons set read one under the phone's identity. A slot with a controller on it reads the cell on the controller's pass, as before phones existed.</p>
 <hr />
 <h3 id="maptype">MapType<a class="headerlink" href="#maptype" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">public</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">MapType</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kt">int</span>
@@ -16424,6 +16520,11 @@
 <td>(4.5.0, #413) Stay-open mode. When <code>LayerMask</code> names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover. Empty or <code>"Base"</code> cannot hold a menu open, so those fall back to ordinary surface engagement.</td>
 </tr>
 <tr>
+<td><code>ShowOnWebController</code></td>
+<td><code>false</code></td>
+<td>(#471) Offer this Touch Grid menu to Web Menus phones on the slot, one page per menu. Ignored on a radial menu. Carried by <code>Clone</code>.</td>
+</tr>
+<tr>
 <td><code>Items</code></td>
 <td>empty list</td>
 <td><code>[XmlElement("Item")]</code> list of <code>MenuItemDefinition</code>.</td>
@@ -16467,7 +16568,7 @@
 </tr>
 <tr>
 <td><code>Icon</code></td>
-<td>(4.4.0, #390) Cell icon reference in one of three forms, resolved by the App-side <code>MenuIconResolver</code> in this order: a <code>pficon://Package/entry</code> icon-pack reference, a loose image file path (exe-relative preferred), or a bare Steam binding-icon file name (the binding string's third comma field, <code>"ghost_050_menu_0030.png"</code>) resolved against the local Steam client's <code>tenfoot\resource\images\library\controller\binding_icons</code>. The overlay falls back to the text label when nothing resolves. <code>IsValidIconName</code> gates only the Workshop translator's carry, which stores bare <code>*.png</code> names of at most 128 characters with no separators or drive colons and only letters, digits, <code>_</code>, <code>-</code>, and <code>.</code>.</td>
+<td>(4.4.0, #390) Cell icon reference in one of four forms. An emoji (#471) is the character itself, one text element under <code>StringInfo</code> (<code>MenuIconResolver.IsGlyph</code>), and draws as text. The three picture forms resolve through the App-side <code>MenuIconResolver</code> in this order: a <code>pficon://Package/entry</code> icon-pack reference, a loose image file path (exe-relative preferred), or a bare Steam binding-icon file name (the binding string's third comma field, <code>"ghost_050_menu_0030.png"</code>) resolved against the local Steam client's <code>tenfoot\resource\images\library\controller\binding_icons</code>. The overlay falls back to the text label when nothing resolves. <code>IsValidIconName</code> gates only the Workshop translator's carry, which stores bare <code>*.png</code> names of at most 128 characters with no separators or drive colons and only letters, digits, <code>_</code>, <code>-</code>, and <code>.</code>.</td>
 </tr>
 <tr>
 <td><code>IconScalePercent</code></td>

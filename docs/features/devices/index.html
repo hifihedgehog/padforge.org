@@ -1599,6 +1599,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#web-menus-phones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Menus phones
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#machine-and-tracker-rows" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4629,6 +4640,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#web-menus-phones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Menus phones
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#machine-and-tracker-rows" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5087,7 +5109,7 @@
 <p>Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchpads, All Consumer Controls) sort to the bottom. Within each group, cards sort alphabetically by name, then by Vendor ID, then by Product ID.</p>
 <h3 id="type-filter-chips">Type filter chips<a class="headerlink" href="#type-filter-chips" title="Permanent link">&para;</a></h3>
 <p>A row of chips sits above the card list: <strong>ALL</strong>, <strong>GAMEPAD</strong>, <strong>JOYSTICK</strong>, <strong>WHEEL</strong>, <strong>KEYBOARD</strong>, <strong>MOUSE</strong>, <strong>OTHER</strong>. Each chip carries a live count of the cards in that group, offline cards included. Click one to show only that type. Click <strong>ALL</strong> to clear the filter. The active chip lights up in ember orange.</p>
-<p>GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, and anything unclassified.</p>
+<p>GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, Web Menus phones, and anything unclassified.</p>
 <!-- SCREENSHOT: devices-facet-chips -->
 <p><img alt="Type filter chips above the device list, each with a live count" src="../../images/devices-facet-chips.png" /></p>
 <h3 id="card-layout">Card layout<a class="headerlink" href="#card-layout" title="Permanent link">&para;</a></h3>
@@ -5210,7 +5232,7 @@
 </table>
 <p>A row of capability icons sits at the bottom of the card, with a rumble, gyro, or touchpad mark for each of those the device has. Click the rumble mark to vibrate the device and identify it.</p>
 <h3 id="submit-device-mapping-button">Submit Device Mapping button<a class="headerlink" href="#submit-device-mapping-button" title="Permanent link">&para;</a></h3>
-<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
+<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
 <p>Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:</p>
 <ul>
 <li>Device name</li>
@@ -5472,6 +5494,10 @@
 <hr />
 <h2 id="microphones">Microphones<a class="headerlink" href="#microphones" title="Permanent link">&para;</a></h2>
 <p>Every active Windows microphone, the one in a wired DualSense included, shows up as a device card typed <strong>Microphone</strong>. The detail pane has a <strong>Manage Voice Macros</strong> button and a <strong>Voice Macros</strong> list in place of the numbered-button grid: <strong>Any Phrase</strong> plus one row per registered phrase, each lighting as its phrase fires. A DualSense on Bluetooth carries the same button and list on its own card. See <a href="../voice-macros/">Voice Macros</a>.</p>
+<hr />
+<h2 id="web-menus-phones">Web Menus phones<a class="headerlink" href="#web-menus-phones" title="Permanent link">&para;</a></h2>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>A phone that opens the web controller's <a href="../../guides/web-controller/#web-menus">Web Menus</a> layout shows up as a device card typed <strong>Web Menus</strong>, named <strong>Web Menus 1</strong>, then 2 for a second phone. It has no axes, buttons, or hats, so it adds nothing of its own to a slot's mappings. What it carries is taps: assign it to a slot and its tiles fire that slot's Touch Grid <a href="../../guides/menus/#on-a-phone">menus</a>. Remote Link does not offer it to a paired PC.</p>
 <hr />
 <h2 id="machine-and-tracker-rows">Machine and tracker rows<a class="headerlink" href="#machine-and-tracker-rows" title="Permanent link">&para;</a></h2>
 <p>Six rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers <strong>Submit Device Mapping</strong>.</p>

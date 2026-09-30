@@ -17510,6 +17510,21 @@
 <td>Computed: <code>Kind == MenuKind.Radial</code>. Gates the Center Cell checkbox.</td>
 </tr>
 <tr>
+<td><code>IsGrid</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>Kind == MenuKind.Grid</code> (#471). Raised with <code>IsRadial</code> when <code>KindIndex</code> changes.</td>
+</tr>
+<tr>
+<td><code>ShowWebControllerRow</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>IsGrid || ShowOnWebController</code> (#471). Shows the Show on Web Controller row on a Touch Grid, and on any menu while the flag is set, so a menu switched to Radial Ring can still clear it, the layer-hold row's rule.</td>
+</tr>
+<tr>
+<td><code>ShowOnWebController</code></td>
+<td><code>bool</code></td>
+<td>(#471) Offer this Touch Grid menu to Web Menus phones on the slot. Write-through to the definition, reset to off through <code>ResetSettingCommand</code>.</td>
+</tr>
+<tr>
 <td><code>KindOptions</code></td>
 <td><code>IReadOnlyList&lt;MenuIntOption&gt;</code></td>
 <td>Style combo items (<code>Menu_Style_*</code> resx). Instance accessor over a static backing field on purpose: WPF <code>{Binding}</code> resolves against the DataContext instance and never finds static properties.</td>
@@ -17740,9 +17755,9 @@
 <td>Cell label. Setting it materializes the item entry, clearing it drops an otherwise-empty entry.</td>
 </tr>
 <tr>
-<td><code>HasIcon</code> / <code>IconName</code> / <code>IconImage</code> / <code>ShowIconGlyph</code></td>
-<td><code>bool</code> / <code>string</code> / <code>ImageSource</code> / <code>bool</code></td>
-<td>Cell icon: the stored reference, the resolved image, and the glyph fallback used when the reference resolves to no image. Written through the internal <code>SetIcon(string)</code>, which the view-layer picker calls. An empty reference clears the icon and prunes an otherwise-empty item.</td>
+<td><code>HasIcon</code> / <code>IconName</code> / <code>IconImage</code> / <code>ShowIconGlyph</code> / <code>IsGlyphIcon</code></td>
+<td><code>bool</code> / <code>string</code> / <code>ImageSource</code> / <code>bool</code> / <code>bool</code></td>
+<td>Cell icon: the stored reference, the resolved image, the picture-glyph fallback used when a picture reference resolves to nothing, and (#471) whether the icon is an emoji, which the row shows as itself and never resolves as an image. Written through the internal <code>SetIcon(string)</code>, which the shared icon picker calls. An empty reference clears the icon and prunes an otherwise-empty item.</td>
 </tr>
 <tr>
 <td><code>IconScalePercent</code></td>

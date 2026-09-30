@@ -44,7 +44,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Mode** | Hold, Toggle, Latch, Cycle, Sticky (One-Shot), or No Button. See the table below. |
 | **Only While in Layer** | The layer the slot must be on for the activator's input to count. **Any Layer** (default) means the input always counts. The list holds Base and every layer on the slot. Hidden for **No Button**. See [Per-layer activators](#per-layer-activators). |
 | **Layer Color** | Full color picker. Tints the tab and the flyout. Reset to clear. |
-| Emoji icon | Not a labeled field. The square button to the left of the **Layer Name** box shows the layer's emoji and opens a picker when clicked. The emoji appears on the flyout when the layer engages. Defaults to ⇧. |
+| Icon | Not a labeled field. The square button to the left of the **Layer Name** box shows the layer's icon and opens a picker when clicked (tooltip: **Pick an emoji or an image to show on the flyout when this layer is engaged.**). **Emoji** lists the emoji by category. **Images** shows the pictures in every added [icon package](menus.md#icon-packages), and its **Browse Files…** takes an image file or a `.pficons` package. **Reset to Default (⇧)** puts the default back. The icon appears on the flyout when the layer engages. Defaults to ⇧. |
 | **Delay** | Milliseconds the activator must stay held before the layer reacts. For **Hold**, a debounce. For **Toggle**, **Latch**, and **Sticky**, a long-press threshold: the layer flips once when the hold crosses this time, and a shorter tap does nothing. `0` reacts instantly. |
 | **Auto-Cancel After Inactivity** | **Toggle** mode only. While the layer is toggled on, it switches itself off after this many milliseconds with none of the layer's own mapped inputs active. The timer starts when the layer engages and restarts on every layer input. `0` keeps the layer on until you toggle it off yourself. |
 | **Fire on Release** | Waits until the button is let go before the activator fires. With a **Delay** set, the press must last that long for the release to count. Appears only for **Toggle**, **Latch**, **Cycle**, and **Sticky (One-Shot)**. Hold reacts on both edges by nature and No Button has no input, so neither shows it. |
@@ -135,9 +135,9 @@ Right-click a tab for per-layer operations:
 
 ## The engaged-layer flyout
 
-When a shift layer engages, a Windows-11-style flyout appears at the bottom of the screen showing the layer's emoji icon and name. It stays on screen for as long as the layer is engaged. When the slot returns to Base, the flyout shows the Base tab's name and icon once and slides away 2 seconds later.
+When a shift layer engages, a Windows-11-style flyout appears at the bottom of the screen showing the layer's icon and name. A picture icon draws scaled into the icon's spot on the flyout line, 20 pixels square. One that can no longer be found (a removed package, a moved file) shows ⇧ instead. It stays on screen for as long as the layer is engaged. When the slot returns to Base, the flyout shows the Base tab's name and icon once and slides away 2 seconds later.
 
-The flyout scans every slot, starting with the pad you are viewing. Engage a layer from any slot's activator and the flyout shows. Pick a different emoji and color per layer so multi-slot rigs read at a glance.
+The flyout scans every slot, starting with the pad you are viewing. Engage a layer from any slot's activator and the flyout shows. Pick a different icon and color per layer so multi-slot rigs read at a glance.
 
 The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Shift Layer Flyout** toggle, on by default. Turn it off and layers still engage, just without the announcement.
 
@@ -195,7 +195,7 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 - The activator input can be on a different device than the slot it shifts. Bind a foot-pedal button to shift your wheel slot.
 - Two-layer setups are the most common. Reach for Cycle when one button should step through several layouts (menu → combat → vehicle in a sim shooter).
-- The flyout is read at a glance, so pick a per-layer emoji that's distinct (🔧 vs ⚔ vs 🚗).
+- The flyout is read at a glance, so pick a per-layer icon that's distinct (🔧 vs ⚔ vs 🚗, or three pictures from an icon package).
 - Sticky mode is the right pick for one-tap moves you don't want to hold (Cancel on the next menu input, single emote after a kill).
 - Cross-device chords cut accidental engagement. A wheel bumper plus a shifter button is hard to hit by accident in normal driving.
 

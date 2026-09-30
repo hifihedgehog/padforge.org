@@ -26,15 +26,16 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 
 ### 3. Pick a layout
 
-PadForge has thirteen built-in cards: ten gamepad layouts, **Browser Gamepad**, **Touchpad**, and **Build Your Own**. Each saved custom layout adds its own card.
+PadForge has fourteen built-in cards: ten gamepad layouts, **Browser Gamepad**, **Touchpad**, **Web Menus**, and **Build Your Own**. Each saved custom layout adds its own card.
 
 - The touchscreen gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
 - Layouts with a touchpad add a drag surface on the controller art, with its own click pill beside it.
 - Touchpad is a multi-touch surface that drives the DS4 touchpad on whichever PlayStation slot it is assigned to.
+- Web Menus shows a slot's Touch Grid menus as tiles. See [Web Menus](#web-menus).
 
 ### 4. Assign the controller to a slot
 
-1. The browser controller shows up on the [Devices](../features/devices.md) page named for the layout you picked: **Xbox 360 Web Controller 1**, **DualShock 4 Web Controller 1**, or **Web Touchpad 1** (each layout numbers its own devices starting at 1).
+1. The browser controller shows up on the [Devices](../features/devices.md) page named for the layout you picked: **Xbox 360 Web Controller 1**, **DualShock 4 Web Controller 1**, **Web Touchpad 1**, or **Web Menus 1** (each layout numbers its own devices starting at 1).
 2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller.
 3. Done. Start playing.
 
@@ -82,6 +83,7 @@ The touchscreen gamepad layouts draw the same 2D controller art the desktop app 
 | **Steam Controller** | Dual trackpads and paddles |
 | **Browser Gamepad** | Forwards a controller detected by the browser |
 | **Touchpad** | Multi-touch surface only |
+| **Web Menus** | A slot's Touch Grid menus as tiles |
 | **Build Your Own** | Drag widgets onto a blank pad |
 
 Switch layouts at any time by going back to the landing page.
@@ -169,6 +171,49 @@ The browser samples the pad on its animation clock, typically about 60 times a s
 ### Fullscreen
 
 Where the browser allows a page to go fullscreen, which Android Chrome does, each page has a fullscreen button in its header or its top-left corner. Tap it to hide the browser's own bars, tap again or swipe down to leave. iPhone Safari does not offer element fullscreen, so the button does not appear there.
+
+## Web Menus
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+Pick **Web Menus** on the landing page and the phone shows a slot's [Touch Grid menus](menus.md) as pages of tiles. Tap a tile and its cell fires on the PC: the key, controller button, or macro the cell carries, and every mapping row, macro trigger, or shift layer that reads the cell. A phone propped beside the keyboard becomes a panel of your own commands for the game on the screen.
+
+### Set it up
+
+1. Open **Web Menus** on the phone. It shows up on the [Devices](../features/devices.md) page as **Web Menus 1**.
+2. Assign it to the slot whose menus you want, the same way as any controller. Until then the page says **Not on a slot**. The phone has no buttons or sticks of its own, so assigning it beside the slot's controller adds nothing but its tiles.
+3. On that slot's **Menus** tab, turn on **Show on Web Controller** for each Touch Grid menu the phone should show. The checkbox appears on Touch Grid menus only. Until one is on, the page says **No menus to show**.
+
+Each marked menu is one page, and a tab strip across the top switches between them. A phone assigned to several slots shows the pages of every slot, and each tab then names its slot.
+
+### What a tap does
+
+A tile stays pressed for as long as the finger rests on it. A quick tap still holds it for a tenth of a second, so the PC sees it. The cell then fires the way the PC overlay fires it, and a macro cell's own trigger mode decides the rest: a **While Held** macro runs while the tile is held, and a **Toggle** macro flips on each tap.
+
+A tile held through a profile switch stops firing until it is tapped again, so the new profile never inherits a press. If the phone sleeps or drops off Wi-Fi with a finger on a tile, PadForge lets go of the tile three seconds after the page stops answering, the check the [Browser Gamepad](#browser-gamepad-a-controller-paired-to-the-phone) page uses.
+
+A tile whose cell names a **Toggle** macro lights while that macro is on, whether the tile turned it on or the macro's own trigger did.
+
+The PC's menu overlay stays hidden for phone taps. A tap presses a cell without hovering it, so nothing appears over the game.
+
+### Which menus show
+
+A menu appears on the phone when all of these hold:
+
+- It is a Touch Grid menu with **Show on Web Controller** on, and it is enabled.
+- Its device scope is any device, or this phone.
+- Its **Layer** is **Any Layer** or **Base**, or it names the shift layer that is active right now. The pages follow the layer as it changes.
+
+A tile shows its cell's icon and, when the menu's **Show Labels** is on, its label. An emoji icon draws in color on the phone. Icon package entries and image files draw as pictures, fetched by an opaque token, so the page never learns a file's path. The grid takes the overlay's shape: 4 cells make 2 × 2, 12 make 4 × 3.
+
+### Profiles from the phone
+
+The top of the page names the PC's active profile. Tap it for the profile list, and pick a profile to switch the PC to it. That is a manual switch, the same one a [controller shortcut](profiles.md#controller-shortcuts) makes, and the switch flyout shows it the same way.
+
+### Limits
+
+- Remote Link does not offer a Web Menus phone to a paired PC in this version, since its taps fire the menus of the PC it connects to.
+- Banner images, per-tile colors, and a hand-set row and column count are not part of the page. It keeps PadForge's tile style and the overlay's grid shape.
 
 ## Phone motion
 
