@@ -182,7 +182,8 @@ The second is `BlockExt.RingCon` (hifihedgehog/SDL#33): `RingConStrain` as one f
 The consumer runs the full config-applied output pipeline for a `peer://` device. The final hardware write fails (the handle is zero), so each write chokepoint hands its config-baked payload to `RemoteLinkOutputRouter` instead:
 
 - `ShipSonyEffect` (in `PlayStationEffectWriter`) strips the report id and encodes the DualSense or DualShock 4 effect body.
-- `ShipVibration` (Step 2) encodes the full `Vibration` (motors, impulse triggers, directional and condition force).
+- `ShipVibration` (Step 2) encodes the full `Vibration` (motors, impulse triggers, directional and condition force). For a device without trigger motors, the consumer's **Fold Trigger Rumble into Main Motors** goes into the motors first, since the owner replays the frame with a neutral setting.
+- `ShipIdentify` (in `InputService.IdentifyDevice`) sends Identify's pulses for a peer row in no slot as vibration frames, past the record `ShipVibration` dedups against. Step 2 sends such a row a stop whenever that record shows a level.
 - `ShipWheel` (Step 2) encodes a semantic wheel frame (force, condition, periodic, range, auto-center, RPM-LED mask).
 - `ShipHapticTone` (in `HapticToneService`) encodes the HD haptic tone (#147): one (dominant frequency Hz, amplitude 0..1) pair per rumble tick, slot volume already applied.
 - `ShipPlayerIndex` encodes the consumer's winning 1-based player number (the smallest displayed number across the slots the pad feeds) for a shared Nintendo pad (`0x057E`), DS3 (`0x054C`/`0x0268`), or PS Move (`0x054C`/`0x03D5`, whose owner-side lane routes the number into the sphere's default color, #277). #191. A DualSense or DualShock 4 peer carries its player LED in the Sony effect body, so it never ships this kind.

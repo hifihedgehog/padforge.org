@@ -8878,7 +8878,7 @@
 <tr>
 <td><code>IdentifyDevice</code></td>
 <td><code>void IdentifyDevice(Guid instanceGuid)</code></td>
-<td>Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the <code>SendTestRumble</code> lane, an unmapped one gets the direct train</td>
+<td>Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the <code>SendTestRumble</code> lane, an unmapped one gets the direct train, which goes through Remote Link's relay for a peer's row (<code>RemoteLinkOutputRouter.ShipIdentify</code>)</td>
 </tr>
 <tr>
 <td><code>TestBatteryNotification</code></td>

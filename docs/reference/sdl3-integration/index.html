@@ -7175,8 +7175,7 @@
 <a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">StopRumble</span><span class="p">()</span><span class="w">  </span><span class="c1">// SetRumble(0, 0, 0)</span>
 </code></pre></div>
 <h3 id="duration-strategy-uintmaxvalue">Duration Strategy: <code>uint.MaxValue</code><a class="headerlink" href="#duration-strategy-uintmaxvalue" title="Permanent link">&para;</a></h3>
-<p><code>SetRumble()</code> uses <code>uint.MaxValue</code> (~4,294,967,295 ms, ~49 days) as the default duration, making rumble effectively indefinite. The caller stops it by calling <code>StopRumble()</code> or <code>SetRumble(newL, newR)</code>.</p>
-<p>Why not refresh each frame? <code>SDL_RumbleJoystick</code> restarts the motor on every call, even with identical values. On some hardware, this creates perceptible stutter. <code>uint.MaxValue</code> avoids this.</p>
+<p><code>SetRumble()</code> passes <code>uint.MaxValue</code> as the default duration, and SDL caps it at 0xFFFF ms, about 65.5 s (<code>SDL_MAX_RUMBLE_DURATION_MS</code>, the Linux kernel's limit, which SDL applies on every platform). SDL's update loop stops the motors when that time runs out. A call that repeats the level SDL holds restarts the time without reaching the driver, but PadForge calls only when a level changes, so a level held unchanged for longer than 65.5 s stops. The caller stops it sooner with <code>StopRumble()</code> or <code>SetRumble(newL, newR)</code>.</p>
 <h3 id="change-detection">Change Detection<a class="headerlink" href="#change-detection" title="Permanent link">&para;</a></h3>
 <p><code>ForceFeedbackState</code> tracks last motor values sent. <code>SetRumble()</code> is only called when values change:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>Frame 1: combinedL=30000, combinedR=20000 -&gt; SetRumble(30000, 20000) -- sent
@@ -7184,7 +7183,7 @@
 <a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>Frame 3: combinedL=30000, combinedR=0     -&gt; SetRumble(30000, 0)    -- sent (highFreq changed)
 <a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>Frame 4: combinedL=0,     combinedR=0     -&gt; StopRumble()           -- sent (both zero)
 </code></pre></div>
-<p>This eliminates hardware restart gaps from calling <code>SDL_RumbleJoystick</code> every frame with unchanged values.</p>
+<p>SDL skips a repeated level before the driver as well (<code>SDL_RumbleJoystick</code>'s duplicate check), so the check saves the call and SDL's joystick lock, not a motor restart.</p>
 <h3 id="rumble-capability-detection">Rumble Capability Detection<a class="headerlink" href="#rumble-capability-detection" title="Permanent link">&para;</a></h3>
 <p>Detected during <code>Open()</code> via SDL3's properties system (replaces SDL2's <code>SDL_JoystickHasRumble()</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">uint</span><span class="w"> </span><span class="n">props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SDL_GetJoystickProperties</span><span class="p">(</span><span class="n">Joystick</span><span class="p">);</span>

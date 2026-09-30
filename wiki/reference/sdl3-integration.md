@@ -1074,9 +1074,7 @@ public bool StopRumble()  // SetRumble(0, 0, 0)
 
 ### Duration Strategy: `uint.MaxValue`
 
-`SetRumble()` uses `uint.MaxValue` (~4,294,967,295 ms, ~49 days) as the default duration, making rumble effectively indefinite. The caller stops it by calling `StopRumble()` or `SetRumble(newL, newR)`.
-
-Why not refresh each frame? `SDL_RumbleJoystick` restarts the motor on every call, even with identical values. On some hardware, this creates perceptible stutter. `uint.MaxValue` avoids this.
+`SetRumble()` passes `uint.MaxValue` as the default duration, and SDL caps it at 0xFFFF ms, about 65.5 s (`SDL_MAX_RUMBLE_DURATION_MS`, the Linux kernel's limit, which SDL applies on every platform). SDL's update loop stops the motors when that time runs out. A call that repeats the level SDL holds restarts the time without reaching the driver, but PadForge calls only when a level changes, so a level held unchanged for longer than 65.5 s stops. The caller stops it sooner with `StopRumble()` or `SetRumble(newL, newR)`.
 
 ### Change Detection
 
@@ -1089,7 +1087,7 @@ Frame 3: combinedL=30000, combinedR=0     -> SetRumble(30000, 0)    -- sent (hig
 Frame 4: combinedL=0,     combinedR=0     -> StopRumble()           -- sent (both zero)
 ```
 
-This eliminates hardware restart gaps from calling `SDL_RumbleJoystick` every frame with unchanged values.
+SDL skips a repeated level before the driver as well (`SDL_RumbleJoystick`'s duplicate check), so the check saves the call and SDL's joystick lock, not a motor restart.
 
 ### Rumble Capability Detection
 

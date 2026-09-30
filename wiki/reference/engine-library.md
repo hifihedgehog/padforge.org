@@ -733,7 +733,7 @@ public interface ISdlInputDevice : IDisposable
 | `GetCurrentState` | `CustomInputState GetCurrentState(bool forceRaw = false)` | Reads input state. `forceRaw=true` bypasses gamepad remapping. |
 | `GetDeviceObjects` | `DeviceObjectItem[] GetDeviceObjects()` | Returns metadata for each axis, hat, and button. Button count uses `Math.Max(NumButtons, RawButtonCount)`. |
 | `GetInputDeviceType` | `int GetInputDeviceType()` | Returns an `InputDeviceType` constant. |
-| `SetRumble` | `bool SetRumble(ushort low, ushort high, uint durationMs)` | Sends rumble. Default duration `uint.MaxValue` (~49 days). |
+| `SetRumble` | `bool SetRumble(ushort low, ushort high, uint durationMs)` | Sends rumble. Default duration `uint.MaxValue`, which SDL caps at 0xFFFF ms (about 65.5 s). |
 | `StopRumble` | `bool StopRumble()` | Stops all rumble (`SetRumble(0, 0, 0)`). |
 
 ---
@@ -1239,7 +1239,7 @@ public enum MapType : int
 **File:** `PadForge.Engine/Common/ForceFeedbackState.cs`
 **Namespace:** `PadForge.Engine`
 
-Per-device force feedback (rumble) state with change detection. Only sends to hardware when motor values differ. Uses `uint.MaxValue` duration (~49 days) to mimic XInput's "set and forget" model.
+Per-device force feedback (rumble) state with change detection. Only sends to hardware when motor values differ. Uses a `uint.MaxValue` duration to mimic XInput's "set and forget" model. SDL caps every duration at 0xFFFF ms, about 65.5 s, so a level held unchanged for longer than that stops.
 
 ### Public Properties
 

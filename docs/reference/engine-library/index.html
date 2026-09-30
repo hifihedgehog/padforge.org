@@ -9662,7 +9662,7 @@
 <tr>
 <td><code>SetRumble</code></td>
 <td><code>bool SetRumble(ushort low, ushort high, uint durationMs)</code></td>
-<td>Sends rumble. Default duration <code>uint.MaxValue</code> (~49 days).</td>
+<td>Sends rumble. Default duration <code>uint.MaxValue</code>, which SDL caps at 0xFFFF ms (about 65.5 s).</td>
 </tr>
 <tr>
 <td><code>StopRumble</code></td>
@@ -10891,7 +10891,7 @@
 <h2 id="forcefeedbackstate">ForceFeedbackState<a class="headerlink" href="#forcefeedbackstate" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/ForceFeedbackState.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine</code></p>
-<p>Per-device force feedback (rumble) state with change detection. Only sends to hardware when motor values differ. Uses <code>uint.MaxValue</code> duration (~49 days) to mimic XInput's "set and forget" model.</p>
+<p>Per-device force feedback (rumble) state with change detection. Only sends to hardware when motor values differ. Uses a <code>uint.MaxValue</code> duration to mimic XInput's "set and forget" model. SDL caps every duration at 0xFFFF ms, about 65.5 s, so a level held unchanged for longer than that stops.</p>
 <h3 id="public-properties">Public Properties<a class="headerlink" href="#public-properties" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
