@@ -1457,9 +1457,9 @@ PadForge needs no code change for the extension swap. `SdlDeviceWrapper.BuildIns
 
 #### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_WII`
 
-Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:802`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:54`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
+Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:864`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:54`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
 
-`InputManager.RescanWiiControllers()` (`InputManager.cs:1327`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes, and only when a Wii pairing landed (`dialog.PairedWii`, `MainWindow.xaml.cs:905-906`), because the rescan drops every connected Wii Remote.
+`InputManager.RescanWiiControllers()` (`InputManager.cs:1391`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes, and only when a Wii pairing landed (`dialog.PairedWii`, `MainWindow.xaml.cs:905-906`), because the rescan drops every connected Wii Remote.
 
 ### Build Instructions
 

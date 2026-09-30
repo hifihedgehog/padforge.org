@@ -142,7 +142,7 @@ public partial class InputManager : IDisposable
 | `_pollingThread` | `Thread` | Background thread running PollingLoop (AboveNormal priority, IsBackground=true) |
 | `_mouseInjectorThread` | `Thread` | Background thread running `MouseInjectorLoop` (AboveNormal priority, IsBackground=true) |
 | `_running` | `volatile bool` | Loop control flag. Set false by `Stop()` to terminate |
-| `_runGeneration` | `int` | Run stamp. `Start()` and `Stop()` each increment it, and a mouse-injector loop whose stamp is stale exits |
+| `_runGeneration` | `int` | Run stamp. `Start()` and `Stop()` each increment it, and a polling or mouse-injector loop whose stamp is stale exits. `Start()` increments it under `_runHandoffLock`, which orders a retiring loop's latch release against the next run |
 | `SuspendWhenBackground` / `HostIsForeground` | `public volatile bool` | Focus-suspend inputs, written by the UI tick. `SuspendWhenBackground` is true when "Continue Polling When Window Loses Focus" is unchecked. `HostIsForeground` defaults to true |
 | `_focusSuspended` | `bool` | True while focus suspend holds the loop |
 | `_idle` | `volatile bool` | When true, skips Steps 3–6 and sleeps at ~20 Hz. Step 2 still runs for Devices page preview. |
@@ -246,7 +246,7 @@ Key hints (not exhaustive):
 - `SDL_HINT_JOYSTICK_KONAMI_ACIO`. Written with the serial list: "1" only while it names one of Konami's ACIO boards (either BIO2 cabinet, KFCA, PANB, RVOL or MDXF, `SerialControllers.AcioHintValue`), "0" otherwise. The fork opens a BIO2's COM port by its IDs, and with no cabinet named it resets the board's bus, shows no joystick and keeps the port from a game. With the hint off it runs no ACIO protocol and leaves the port closed
 - `SDL_HINT_JOYSTICK_ICADE_DEVICES`. The pads in iCade mode marked with **Read as iCade Controller** on the Devices page, as comma-separated `0xVVVV/0xPPPP` pairs (`ICadePads.HintValue`, at most 32, vendor 0 refused, the fork's parser rules). `InputManager.ApplyICadePads` writes it under the joystick lock on each change, and the fork's iCade driver decodes a listed keyboard at once
 - `SDL_HINT_JOYSTICK_DJI_REMOTE_TCP_HOSTS`. The DJI RC and RC 2 remotes added by address in the pairing dialog, as comma-separated `a.b.c.d:port` keys (`DjiRemoteHosts.HintValue`, at most 8). `InputManager.ApplyDjiRemoteHosts` writes it under the joystick lock on each add or remove, and the fork's network driver connects and disconnects to match
-- `SDL_HINT_JOYSTICK_HIDAPI_USIO_LAYOUT`. The Namco USIO's layout, `taiko` (the fork's default) or `tekken`, chosen from the board's cards on the Devices page. The board reads it when it opens, so `InputManager.ApplyUsioLayout` with `reopen` turns `SDL_HINT_JOYSTICK_HIDAPI_USIO` off and on 200 ms apart, the way the fork names for opening a connected board again
+- `SDL_HINT_JOYSTICK_HIDAPI_USIO_LAYOUT`. The Namco USIO's layout, `taiko` (the fork's default) or `tekken`, chosen from the board's cards on the Devices page. The board reads it when it opens, so `InputManager.ApplyUsioLayout` with `reopen` asks the poll thread to turn `SDL_HINT_JOYSTICK_HIDAPI_USIO` off before one of its SDL updates and on before the next (`AdvanceUsioReopen`, below), the way the fork names for opening a connected board again. `InitializeSdl` sets the layout before `SDL_Init` and ends a reopen left over from the last engine, turning the driver back on if that reopen had turned it off
 - `SDL_HINT_VIDEO_ALLOW_SCREENSAVER = "1"`. Do not block screensaver
 - **Never** set `SDL_HINT_JOYSTICK_RAWINPUT`. Conflicts with XInput enumeration and hides Xbox controllers
 
@@ -299,7 +299,7 @@ public void Stop()
 4. Calls `SoundMacroService.StopAll()`, which releases the macro-sound WASAPI clients, then `AudioPassthroughService.Shutdown()`
 5. Calls `WiiSpeakerService.Shutdown()` and `HapticToneService.Shutdown()`. Both streams die with the engine, not with a profile apply, because their suppression latch clears only in `EnsureStarted` at engine start
 6. Calls `RumbleAudioService.SilenceAll()` then `StopAll()`. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside `SoundMacroService.StopAll`, which also runs on every profile apply and would otherwise silence the shakers on every profile switch
-7. Increments `_runGeneration`. A mouse-injector loop that outlives its join exits on the stale stamp. `PollingLoop` receives its stamp but tests only `_running`
+7. Increments `_runGeneration`. A polling or mouse-injector loop that outlives its join exits on the stale stamp at its next check. The polling loop's `finally` still runs then, and releases the macro latches only while no newer run has started (`ReleaseLatchesOnExit`): a later stamp is `Start()`'s, whose loop owns the latch sets and releases what this run left before its first frame (`ReleaseInheritedLatches`), and a release here raced it and sent ups for the keys it held. A retired iteration still finishes the steps it was in beside the new run
 8. Joins the polling thread with a 3-second timeout. A timeout is logged and teardown continues
 9. Signals `MouseWorkSignal` to unpark an idle injector, then joins the mouse-injector thread with a 1-second timeout
 10. Stops `RawInputListener`
@@ -325,6 +325,10 @@ Background thread entry point. Sets `timeBeginPeriod(1)` for the loop duration (
 **Per-cycle execution order:**
 
 ```
+AdvanceUsioReopen()           -- a pending Namco USIO layout change: the driver hint off before
+  |                              one update and on before the next, so SDL closes the board and
+  |                              opens it in the new layout
+  v
 SDL_UpdateJoysticks()         -- pump SDL event queue
   |
   v
@@ -390,7 +394,7 @@ Each iteration first checks the idle gate (`BeginIdlePoll()`) and then focus sus
 
 **Poll-frame gate:**
 
-`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 667) is called once per active cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 1908). The idle branch does not call it. It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
+`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 667) is called once per active cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 2086). The idle branch does not call it. It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
 
 **3-Tier Polling Sleep Strategy:**
 
@@ -458,7 +462,7 @@ The engine half of the "Continue Polling When Window Loses Focus" setting. When 
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 18521), `MoveSlot(int, int)` (line 18554), and `MoveSlotToGroupTail(int)` (line 18601). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 18570), `MoveSlot(int, int)` (line 18554), and `MoveSlotToGroupTail(int)` (line 18601). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
@@ -479,9 +483,9 @@ Same-profile cycles collapse to a pure pointer rotation across `_virtualControll
 private void UpdateMotionSnapshots()
 ```
 
-Called after Step 2 (`InputManager.cs` line 1937). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into `Ds5StatusBytes` (#433).
+Called after Step 2 (`InputManager.cs` line 2115). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into `Ds5StatusBytes` (#433).
 
-**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. `ReconcileMappedMotion` (`InputManager.cs` line 3656) tries the target's rows in order (the engaged layer's row, then the Base row, then any other row naming the target) and keeps the first whose combined sample has motion. Inside a row, `ReconcileMotionRow` reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's `CombineMode`: largest magnitude by default, or Sum, Average, or a Custom expression:
+**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. `ReconcileMappedMotion` (`InputManager.cs` line 3834) tries the target's rows in order (the engaged layer's row, then the Base row, then any other row naming the target) and keeps the first whose combined sample has motion. Inside a row, `ReconcileMotionRow` reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's `CombineMode`: largest magnitude by default, or Sum, Average, or a Custom expression:
 
 ```csharp
 var gyro = _motionHasGyroRow[padIndex]
@@ -1580,7 +1584,7 @@ The steering math is original C# written from the geometry described in JoyShock
 
 Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2158 and 2163), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
 
-The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 14093), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
+The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 14142), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
 
 `ReadShakeEnvelope` (line 2188) applies the per-source sensitivity and clamps to `[0, 1]`. The envelope is unsigned by nature, so `HalfAxis` and `Invert` have nothing to point at and are not applied. Per target class:
 

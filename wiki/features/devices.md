@@ -134,7 +134,7 @@ A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a bu
 
 ### Namco USIO layout
 
-One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's card and click **Read as Tekken Sticks** to read four arcade sticks instead. **Read as Taiko Drums**, on a stick's card, goes back. The board opens again in the new layout, so its cards leave and the other layout's arrive a moment later.
+One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's card and click **Read as Tekken Sticks** to read four arcade sticks instead. **Read as Taiko Drums**, on a stick's card, goes back. The board opens again in the new layout, so its cards leave and the other layout's arrive a moment later. While the engine is stopped, or paused in the background, the change waits and takes effect when it runs again.
 
 *Added after 4.5.3. Pre-release builds have it, and the next release will.*
 

@@ -106,7 +106,7 @@ The device turns `ButtonChanged` into `_chordDown[button]` plus a pulse.
 
 ## Path two: vendor HID reports
 
-`VendorHidRuntime.Enumerate` walks every present HID interface and keeps the ones whose top-level usage page is `0xFF00` or higher with a nonzero input report length. The probe opens with no access rights, so a collection another program holds exclusively is still listed and named. Verdicts are cached per interface path until the path disappears. The collection key is `VID:PID:PAGE:USAGE`, stable across reboots and between two machines of one model, unlike the interface path.
+`VendorHidRuntime.Enumerate` walks every present HID interface and keeps the ones whose top-level usage page is `0xFF00` or higher with a nonzero input report length. The probe opens with no access rights, so a collection another program holds exclusively is still listed and named. Verdicts are cached per interface path until the path disappears, a "not a vendor collection" among them (`VendorHidRuntime.Lookup`). A probe that could not open the collection, read its caps or read its attributes is not cached, and the next sweep tries again: cached, a collection caught while Windows was still starting it went unread until it was unplugged. The collection key is `VID:PID:PAGE:USAGE`, stable across reboots and between two machines of one model, unlike the interface path.
 
 `VendorHidReader` opens `GENERIC_READ` with both share flags and reads overlapped on its own thread (`PadForge.VendorHid`), the headset reader's shape: bounded 100 ms waits, `CancelIoEx` on teardown, a 2 s join, and a leaked handle rather than a free under a stuck native call.
 

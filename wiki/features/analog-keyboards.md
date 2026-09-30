@@ -55,7 +55,7 @@ Every key the keyboard can report is listed under its row in the input picker, n
 | **Key 1** to **Key 3** | The three keys of the SayoDevice O3C |
 | **Key Position 0** to **Key Position 255** | Keys a keyboard reports only by where they sit, with no key map to name them |
 
-Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, libhmk keys with no standard key behind them, and the Fn key of the ASUS ROG Azoth 96 HE. Their keys join the picker as you press them, and **Record** is the quick way to map them: press the key past half travel.
+Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, libhmk keys with no standard key behind them, and the Fn key of the ASUS ROG Azoth 96 HE. Their keys join the picker as you press them, and **Record** is the quick way to map them: press the key past half travel. A keyboard shared over Remote Link lists the same keys on the other PC, the ones it has joined since included.
 
 A key reads 0 at rest and full at the bottom of its travel. What that means depends on the target:
 

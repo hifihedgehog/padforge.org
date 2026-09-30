@@ -6564,7 +6564,7 @@
 <tr>
 <td><code>_runGeneration</code></td>
 <td><code>int</code></td>
-<td>Run stamp. <code>Start()</code> and <code>Stop()</code> each increment it, and a mouse-injector loop whose stamp is stale exits</td>
+<td>Run stamp. <code>Start()</code> and <code>Stop()</code> each increment it, and a polling or mouse-injector loop whose stamp is stale exits. <code>Start()</code> increments it under <code>_runHandoffLock</code>, which orders a retiring loop's latch release against the next run</td>
 </tr>
 <tr>
 <td><code>SuspendWhenBackground</code> / <code>HostIsForeground</code></td>
@@ -6876,7 +6876,7 @@
 - <code>SDL_HINT_JOYSTICK_KONAMI_ACIO</code>. Written with the serial list: "1" only while it names one of Konami's ACIO boards (either BIO2 cabinet, KFCA, PANB, RVOL or MDXF, <code>SerialControllers.AcioHintValue</code>), "0" otherwise. The fork opens a BIO2's COM port by its IDs, and with no cabinet named it resets the board's bus, shows no joystick and keeps the port from a game. With the hint off it runs no ACIO protocol and leaves the port closed
 - <code>SDL_HINT_JOYSTICK_ICADE_DEVICES</code>. The pads in iCade mode marked with <strong>Read as iCade Controller</strong> on the Devices page, as comma-separated <code>0xVVVV/0xPPPP</code> pairs (<code>ICadePads.HintValue</code>, at most 32, vendor 0 refused, the fork's parser rules). <code>InputManager.ApplyICadePads</code> writes it under the joystick lock on each change, and the fork's iCade driver decodes a listed keyboard at once
 - <code>SDL_HINT_JOYSTICK_DJI_REMOTE_TCP_HOSTS</code>. The DJI RC and RC 2 remotes added by address in the pairing dialog, as comma-separated <code>a.b.c.d:port</code> keys (<code>DjiRemoteHosts.HintValue</code>, at most 8). <code>InputManager.ApplyDjiRemoteHosts</code> writes it under the joystick lock on each add or remove, and the fork's network driver connects and disconnects to match
-- <code>SDL_HINT_JOYSTICK_HIDAPI_USIO_LAYOUT</code>. The Namco USIO's layout, <code>taiko</code> (the fork's default) or <code>tekken</code>, chosen from the board's cards on the Devices page. The board reads it when it opens, so <code>InputManager.ApplyUsioLayout</code> with <code>reopen</code> turns <code>SDL_HINT_JOYSTICK_HIDAPI_USIO</code> off and on 200 ms apart, the way the fork names for opening a connected board again
+- <code>SDL_HINT_JOYSTICK_HIDAPI_USIO_LAYOUT</code>. The Namco USIO's layout, <code>taiko</code> (the fork's default) or <code>tekken</code>, chosen from the board's cards on the Devices page. The board reads it when it opens, so <code>InputManager.ApplyUsioLayout</code> with <code>reopen</code> asks the poll thread to turn <code>SDL_HINT_JOYSTICK_HIDAPI_USIO</code> off before one of its SDL updates and on before the next (<code>AdvanceUsioReopen</code>, below), the way the fork names for opening a connected board again. <code>InitializeSdl</code> sets the layout before <code>SDL_Init</code> and ends a reopen left over from the last engine, turning the driver back on if that reopen had turned it off
 - <code>SDL_HINT_VIDEO_ALLOW_SCREENSAVER = "1"</code>. Do not block screensaver
 - <strong>Never</strong> set <code>SDL_HINT_JOYSTICK_RAWINPUT</code>. Conflicts with XInput enumeration and hides Xbox controllers</p>
 <p>Post-init:
@@ -6919,7 +6919,7 @@
 <li>Calls <code>SoundMacroService.StopAll()</code>, which releases the macro-sound WASAPI clients, then <code>AudioPassthroughService.Shutdown()</code></li>
 <li>Calls <code>WiiSpeakerService.Shutdown()</code> and <code>HapticToneService.Shutdown()</code>. Both streams die with the engine, not with a profile apply, because their suppression latch clears only in <code>EnsureStarted</code> at engine start</li>
 <li>Calls <code>RumbleAudioService.SilenceAll()</code> then <code>StopAll()</code>. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside <code>SoundMacroService.StopAll</code>, which also runs on every profile apply and would otherwise silence the shakers on every profile switch</li>
-<li>Increments <code>_runGeneration</code>. A mouse-injector loop that outlives its join exits on the stale stamp. <code>PollingLoop</code> receives its stamp but tests only <code>_running</code></li>
+<li>Increments <code>_runGeneration</code>. A polling or mouse-injector loop that outlives its join exits on the stale stamp at its next check. The polling loop's <code>finally</code> still runs then, and releases the macro latches only while no newer run has started (<code>ReleaseLatchesOnExit</code>): a later stamp is <code>Start()</code>'s, whose loop owns the latch sets and releases what this run left before its first frame (<code>ReleaseInheritedLatches</code>), and a release here raced it and sent ups for the keys it held. A retired iteration still finishes the steps it was in beside the new run</li>
 <li>Joins the polling thread with a 3-second timeout. A timeout is logged and teardown continues</li>
 <li>Signals <code>MouseWorkSignal</code> to unpark an idle injector, then joins the mouse-injector thread with a 1-second timeout</li>
 <li>Stops <code>RawInputListener</code></li>
@@ -6938,69 +6938,73 @@
 </code></pre></div>
 <p>Background thread entry point. Sets <code>timeBeginPeriod(1)</code> for the loop duration (restored via <code>timeEndPeriod(1)</code> in <code>finally</code>).</p>
 <p><strong>Per-cycle execution order:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>SDL_UpdateJoysticks()         -- pump SDL event queue
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  |
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  v
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>SourceCoercion.BeginPollFrame() -- advance the evaluator poll-frame gate once
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>  |
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  v (every 2 seconds, or first cycle)
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>Step 1: UpdateDevices()       -- enumerate, open/close devices
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>  |
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  v
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>FlydigiReprobeTick()          -- ask SDL to re-probe an unclaimed Flydigi vendor interface while
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  |                              Flydigi Enhanced Protocol is on (#395)
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  v
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>Step 2: UpdateInputStates()   -- read axes/buttons/POV from SDL, apply FFB
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  |
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  v
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>RemoteLinkPollTick?.Invoke()  -- fold this poll&#39;s fresh snapshots into the #138 per-device delta accumulators
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>  |
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>  v
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>UpdateGyroEngageStates()      -- settle per-slot gyro engage bits
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>UpdateTriggerRouteEngageStates() -- settle per-slot trigger-route engage bits
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>UpdateHapticMirrorEngageStates() -- settle each (slot, device) haptic-mirror engage cell (#185)
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>  |
-<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>  v
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>UpdateMotionSnapshots()       -- capture gyro/accel for Step 5 and DSU, plus the per-slot battery scan
-<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>BroadcastDsuMotion()          -- send to Cemuhook clients via UDP
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>AdvanceUsioReopen()           -- a pending Namco USIO layout change: the driver hint off before
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  |                              one update and on before the next, so SDL closes the board and
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  |                              opens it in the new layout
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  v
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>SDL_UpdateJoysticks()         -- pump SDL event queue
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  |
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  v
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>SourceCoercion.BeginPollFrame() -- advance the evaluator poll-frame gate once
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  |
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  v (every 2 seconds, or first cycle)
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>Step 1: UpdateDevices()       -- enumerate, open/close devices
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  |
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  v
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>FlydigiReprobeTick()          -- ask SDL to re-probe an unclaimed Flydigi vendor interface while
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  |                              Flydigi Enhanced Protocol is on (#395)
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  v
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>Step 2: UpdateInputStates()   -- read axes/buttons/POV from SDL, apply FFB
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>  |
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>  v
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>RemoteLinkPollTick?.Invoke()  -- fold this poll&#39;s fresh snapshots into the #138 per-device delta accumulators
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>  |
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>  v
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>UpdateGyroEngageStates()      -- settle per-slot gyro engage bits
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>UpdateTriggerRouteEngageStates() -- settle per-slot trigger-route engage bits
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>UpdateHapticMirrorEngageStates() -- settle each (slot, device) haptic-mirror engage cell (#185)
 <a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>  |
 <a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>  v
-<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>Step 3: UpdateOutputStates()  -- map CustomInputState to Gamepad via the slot&#39;s MappingSet rows
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>                                 (PadSetting fields when the set is empty)
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>UpdateMotionSnapshots()       -- capture gyro/accel for Step 5 and DSU, plus the per-slot battery scan
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>BroadcastDsuMotion()          -- send to Cemuhook clients via UDP
 <a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>  |
 <a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>  v
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>Step 4: CombineOutputStates() -- merge multiple devices per slot
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>  |
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>  v
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>Step 4b: EvaluateMacros()     -- trigger/action state machine, inject into Gamepad
-<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>  |
-<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>  v
-<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>Step 5: UpdateVirtualDevices()-- create/destroy VCs, submit reports
-<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>  |
-<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>  v
-<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>Step 6: RetrieveOutputStates()-- copy combined output for UI consumption
-<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>  |
-<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>  v
-<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>UpdateDs3PlayerNumber()       -- rate-limited player-LED refresh for the bridged Bluetooth DS3 (#191)
-<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>  |
-<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>  v
-<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>UpdateMovePlayerNumber()      -- same 500 ms cadence for the bridged PS Move sphere&#39;s player color (#277)
-<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>  |
-<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>  v
-<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
-<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>  |                              slot destroyed this tick publishes zeros the same tick
-<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>  v
-<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
-<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>  |                              for the Sensa HD haptics worker (#374)
-<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>  v
-<a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>Frequency measurement (~1/second)
-<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>  |
-<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>  v
-<a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a>Drift-compensated hybrid sleep/spin-wait
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>Step 3: UpdateOutputStates()  -- map CustomInputState to Gamepad via the slot&#39;s MappingSet rows
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>                                 (PadSetting fields when the set is empty)
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>  |
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>  v
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>Step 4: CombineOutputStates() -- merge multiple devices per slot
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>  |
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>  v
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>Step 4b: EvaluateMacros()     -- trigger/action state machine, inject into Gamepad
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>  |
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>  v
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>Step 5: UpdateVirtualDevices()-- create/destroy VCs, submit reports
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>  |
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>  v
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>Step 6: RetrieveOutputStates()-- copy combined output for UI consumption
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>  |
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>  v
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>UpdateDs3PlayerNumber()       -- rate-limited player-LED refresh for the bridged Bluetooth DS3 (#191)
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>  |
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>  v
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>UpdateMovePlayerNumber()      -- same 500 ms cadence for the bridged PS Move sphere&#39;s player color (#277)
+<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>  |
+<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>  v
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
+<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>  |                              slot destroyed this tick publishes zeros the same tick
+<a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>  v
+<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
+<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>  |                              for the Sensa HD haptics worker (#374)
+<a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a>  v
+<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>Frequency measurement (~1/second)
+<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>  |
+<a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>  v
+<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>Drift-compensated hybrid sleep/spin-wait
 </code></pre></div>
 <p>Each iteration first checks the idle gate (<code>BeginIdlePoll()</code>) and then focus suspend (<code>ApplyFocusSuspension()</code>), both described below. Step 2 through Step 5 run inside <code>EnterMenuPublication()</code>, the <code>MenuPublicationSync</code> gate, so a radial or touch menu never observes a half-written frame. After <code>UpdateSensaLane()</code> a stall watchdog writes a <code>STALL</code> line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a <code>HEARTBEAT</code> line every 10 s.</p>
 <p><strong>Poll-frame gate:</strong></p>
-<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 667) is called once per active cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 1908). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
+<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 667) is called once per active cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 2086). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
 <p><strong>3-Tier Polling Sleep Strategy:</strong></p>
 <p>The polling loop uses a tiered sleep strategy, falling through to the next tier if the preferred timer is unavailable:</p>
 <table>
@@ -7069,7 +7073,7 @@
 <p><strong>Sleep guard:</strong> Every 5 seconds of active polling, calls <code>SetThreadExecutionState(ES_CONTINUOUS)</code> to clear execution-state flags SDL may re-assert, so the PC can still sleep.</p>
 <h3 id="slot-reorder">Slot Reorder<a class="headerlink" href="#slot-reorder" title="Permanent link">&para;</a></h3>
 <p>Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in <code>InputManager</code> swaps <code>SlotControllerTypes[]</code>, <code>VibrationStates[]</code>, or the <code>Combined*States</code> arrays between pad indices, and there is no <code>SwapSlots</code> / <code>SwapSlotData</code> method on <code>InputManager</code>.</p>
-<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 18521), <code>MoveSlot(int, int)</code> (line 18554), and <code>MoveSlotToGroupTail(int)</code> (line 18601). <code>SwapSlots</code> and <code>MoveSlot</code> mutate <code>SettingsManager.SlotOrders</code> for the new visual order, then route through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point. <code>MoveSlotToGroupTail</code> changes only the group order (see below):</p>
+<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 18570), <code>MoveSlot(int, int)</code> (line 18554), and <code>MoveSlotToGroupTail(int)</code> (line 18601). <code>SwapSlots</code> and <code>MoveSlot</code> mutate <code>SettingsManager.SlotOrders</code> for the new visual order, then route through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point. <code>MoveSlotToGroupTail</code> changes only the group order (see below):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RerouteVirtualControllersForReorder</span><span class="p">(</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">groupType</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">oldOrder</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newOrder</span><span class="p">)</span>
 </code></pre></div>
@@ -7083,8 +7087,8 @@
 <h3 id="motion-snapshots">Motion Snapshots<a class="headerlink" href="#motion-snapshots" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateMotionSnapshots</span><span class="p">()</span>
 </code></pre></div>
-<p>Called after Step 2 (<code>InputManager.cs</code> line 1937). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into <code>Ds5StatusBytes</code> (#433).</p>
-<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ReconcileMappedMotion</code> (<code>InputManager.cs</code> line 3656) tries the target's rows in order (the engaged layer's row, then the Base row, then any other row naming the target) and keeps the first whose combined sample has motion. Inside a row, <code>ReconcileMotionRow</code> reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's <code>CombineMode</code>: largest magnitude by default, or Sum, Average, or a Custom expression:</p>
+<p>Called after Step 2 (<code>InputManager.cs</code> line 2115). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into <code>Ds5StatusBytes</code> (#433).</p>
+<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ReconcileMappedMotion</code> (<code>InputManager.cs</code> line 3834) tries the target's rows in order (the engaged layer's row, then the Base row, then any other row naming the target) and keeps the first whose combined sample has motion. Inside a row, <code>ReconcileMotionRow</code> reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's <code>CombineMode</code>: largest magnitude by default, or Sum, Average, or a Custom expression:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">gyro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_motionHasGyroRow</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="o">?</span><span class="w"> </span><span class="n">ReconcileMappedMotion</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionGyroTarget</span><span class="p">,</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">        </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">timestampUs</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -8360,7 +8364,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p>The steering math is original C# written from the geometry described in JoyShockMapper (<code>src/JoyShock.cpp</code>, <code>src/main.cpp</code>). No GPL code is incorporated.</p>
 <h3 id="motion-shake">Motion Shake<a class="headerlink" href="#motion-shake" title="Permanent link">&para;</a></h3>
 <p>Two descriptors read an accelerometer shake as a source (#364): <code>"Motion Shake"</code> on the body sensor and <code>"Motion Shake L"</code> on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on <code>SourceCoercion</code> (<code>SourceCoercion.cs</code> lines 2158 and 2163), with <code>IsMotionShakeDescriptor</code> / <code>IsMotionShakeAuxDescriptor</code> as the predicates.</p>
-<p>The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (<code>InputService.UpdateShakeState</code>, <code>InputService.cs</code> line 14093), and handed to the engine through <code>SourceCoercion.ShakeEnvelopeProvider</code> / <code>ShakeEnvelopeProviderAux</code>. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (<code>InputCommon</code> <code>Force.cpp</code>, <code>Shake::Shake</code>), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.</p>
+<p>The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (<code>InputService.UpdateShakeState</code>, <code>InputService.cs</code> line 14142), and handed to the engine through <code>SourceCoercion.ShakeEnvelopeProvider</code> / <code>ShakeEnvelopeProviderAux</code>. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (<code>InputCommon</code> <code>Force.cpp</code>, <code>Shake::Shake</code>), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.</p>
 <p><code>ReadShakeEnvelope</code> (line 2188) applies the per-source sensitivity and clamps to <code>[0, 1]</code>. The envelope is unsigned by nature, so <code>HalfAxis</code> and <code>Invert</code> have nothing to point at and are not applied. Per target class:</p>
 <table>
 <thead>
