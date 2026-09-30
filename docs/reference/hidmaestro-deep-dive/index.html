@@ -3831,7 +3831,7 @@
 <tr>
 <td>v1.3.22 (HM#38)</td>
 <td>Input worker survives foreign stop signals, the structural fix for the frozen-output bug</td>
-<td><code>App.xaml.cs:399</code> (the startup orphan sweep's ordering barrier)</td>
+<td><code>App.xaml.cs:412</code> (the startup orphan sweep's ordering barrier)</td>
 </tr>
 <tr>
 <td>v1.4.0 (HM#39)</td>
@@ -3841,7 +3841,7 @@
 <tr>
 <td>v1.4.1 (HM#41)</td>
 <td>Ring-side audio truncation fixed</td>
-<td><code>AudioPassthroughService.cs:2522</code></td>
+<td><code>AudioPassthroughService.cs:2523</code></td>
 </tr>
 <tr>
 <td>v1.4.3 (HM#42)</td>
@@ -3851,7 +3851,7 @@
 <tr>
 <td>v1.5.1 (HM#48)</td>
 <td>Second DS5 Edge paddle/Fn pair</td>
-<td><code>HMaestroVirtualController.cs:1706</code></td>
+<td><code>HMaestroVirtualController.cs:1707</code></td>
 </tr>
 <tr>
 <td>v1.6.0 (HM#32)</td>
@@ -3866,7 +3866,7 @@
 <tr>
 <td>v1.7.1 (HM#58)</td>
 <td>The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and <code>SubmitRawExtendedReport</code> is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing</td>
-<td><code>HMaestroVirtualController.cs:561</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:281</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
+<td><code>HMaestroVirtualController.cs:562</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:299</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
 </tr>
 <tr>
 <td>v1.7.2 (HM#59)</td>
@@ -3876,7 +3876,7 @@
 <tr>
 <td>v1.7.3</td>
 <td>A version resource (company, product, description) on each native binary</td>
-<td><code>PadForge.App.csproj:262</code></td>
+<td><code>PadForge.App.csproj:280</code></td>
 </tr>
 <tr>
 <td>v1.8.0 (HM#60)</td>
@@ -3886,12 +3886,12 @@
 <tr>
 <td>v1.8.1 (HM#61)</td>
 <td>The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full"</td>
-<td><code>PadForge.App.csproj:252</code>, <code>InputManager.Step5.VirtualDevices.cs:2351</code></td>
+<td><code>PadForge.App.csproj:270</code>, <code>InputManager.Step5.VirtualDevices.cs:2348</code></td>
 </tr>
 <tr>
 <td>v1.9.0</td>
 <td>An ARM64 driver payload embedded beside the x64 one, and the USB/IP transport pinned to usbip-win2 0.9.7.5, the last release with an ARM64 build</td>
-<td><code>PadForge.App.csproj:248</code></td>
+<td><code>PadForge.App.csproj:268</code></td>
 </tr>
 <tr>
 <td>v1.9.1 (HM#63, HM#62)</td>
@@ -4004,7 +4004,7 @@
 <li><strong><code>XboxImpulseHidWriter</code> XUSB interface enumeration</strong>, in <code>PadForge.App/Common/Input/XboxImpulseHidWriter.cs</code>. When PadForge writes rumble + impulse-trigger reports directly to a physical Xbox One+ pad, it enumerates the XUSB interface class (<code>XUSB_INTERFACE_CLASS_GUID</code> + <code>DIGCF_PRESENT | DIGCF_DEVICEINTERFACE</code>) in SetupAPI order, skips any interface whose path contains <code>hidmaestro</code> (case-insensitive, the same fast path OpenXInput uses), and takes the Nth survivor where N is the slot parsed from SDL's <code>XInput#N</code> device path.</li>
 <li><strong><code>HidHideController</code></strong> also classifies HM devices through a hardware-ID PnP walk (<code>IsHidMaestroDevice</code>), so the HidHide cloak whitelist treatment is consistent with the joystick-enumeration filters.</li>
 </ol>
-<p>Step 1's <code>UpdateDevices</code> carries a fourth, narrower check of its own: the <strong>self-readback guard</strong> (<code>InputManager.Step1.UpdateDevices.cs:160</code>). It is a backstop, not a replacement for the fork filter. A driver upgrade recreates the virtual devnodes with fresh instance paths and can slip past both the fork enumeration filter and the cloak, and when it does, SDL's Switch driver fights the virtual Switch Pro's protocol responder, cyclically resetting its inputs and interleaving rumble. The guard suppresses a wrapper when any of three markers hits:</p>
+<p>Step 1's <code>UpdateDevices</code> carries a fourth, narrower check of its own: the <strong>self-readback guard</strong> (<code>InputManager.Step1.UpdateDevices.cs:144</code>). It is a backstop, not a replacement for the fork filter. A driver upgrade recreates the virtual devnodes with fresh instance paths and can slip past both the fork enumeration filter and the cloak, and when it does, SDL's Switch driver fights the virtual Switch Pro's protocol responder, cyclically resetting its inputs and interleaving rumble. The guard suppresses a wrapper when any of three markers hits:</p>
 <ul>
 <li>The serial starts with <code>HM-CTL-</code>.</li>
 <li>The device path contains <code>HIDMAESTRO</code>.</li>
@@ -4099,7 +4099,7 @@
 <p>Two raw submit paths exist on <code>HMController</code>, and which one a frame takes decides which report id it leaves on.</p>
 <p><code>SubmitRawReport</code> takes data bytes. The driver prepends a report id, and the id it prepends is the descriptor's first input report id. That is the right answer for every Sony USB profile, whose descriptor leads with Report 0x01. It is the wrong answer for Valve's 2026 Steam Controller (<code>steam-controller-2</code>): that pad carries its lizard-mode mouse (report 0x40) and keyboard (0x41) on the same interface as its controller state (0x42), and the mouse comes first. PadForge's packer builds the full 54-byte on-wire frame with 0x42 at byte 0. Treated as data, the frame shifted one byte and went out re-headed as 0x40, so byte 1, the rolling sequence number, landed on the mouse's relative X at 250 Hz and creating the virtual controller sent the cursor tearing sideways until the slot was deleted (owner report, 2026-08-28).</p>
 <p>HM v1.7.1 (HM#58) fixed it on the driver side. A profile that declares an <code>extendedReport.reportId</code> and is <code>alwaysArmed</code> now emits a raw frame verbatim through the same extended path <code>SubmitState</code> uses. The driver infers the caller's convention from length: a frame the size of the declared input report already carries its id, one byte shorter is the data-only form and gets the id prepended. <code>SubmitRawExtendedReport</code> is the explicit form: the frame goes out verbatim whatever the profile declares.</p>
-<p>PadForge calls the explicit one. <code>HMaestroVirtualController.SubmitRawReport</code> (<code>HMaestroVirtualController.cs:561</code>) forwards to <code>SubmitRawExtendedReport</code> when <code>_extendedFrameCarriesItsOwnId</code> is set, and to <code>SubmitRawReport</code> otherwise. The flag is computed once in the constructor (<code>:284</code>): <code>ExtendedReport != null &amp;&amp; ExtendedReport.AlwaysArmed &amp;&amp; ExtendedReport.ReportIdByte != 0</code>. Saying it outright means the pairing cannot flip the day a packer size or a declared size moves by one, which HM's length inference would let happen in silence.</p>
+<p>PadForge calls the explicit one. <code>HMaestroVirtualController.SubmitRawReport</code> (<code>HMaestroVirtualController.cs:562</code>) forwards to <code>SubmitRawExtendedReport</code> when <code>_extendedFrameCarriesItsOwnId</code> is set, and to <code>SubmitRawReport</code> otherwise. The flag is computed once in the constructor (<code>:284</code>): <code>ExtendedReport != null &amp;&amp; ExtendedReport.AlwaysArmed &amp;&amp; ExtendedReport.ReportIdByte != 0</code>. Saying it outright means the pairing cannot flip the day a packer size or a declared size moves by one, which HM's length inference would let happen in silence.</p>
 <p>What stays on the PadForge side is a tripwire, never a gate. <code>HMaestroProfileCatalog.LeadsWithAPointingReport</code> (<code>HMaestroProfileCatalog.cs:339</code>) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. <code>PadForge.Tests/PointingReportProfileGuardTests.cs</code> uses it two ways: <code>PackerFramesCarryTheirOwnReportId</code> asserts every Valve packer's frame size equals its profile's <code>InputReportSize</code>, and <code>APointingLedPackerProfileTakesTheVerbatimPath</code> asserts that any pointing-led profile with a packer declares the always-armed report id that puts it on the verbatim path. Commit <code>581264e9</code> had dropped such profiles from the pickers and refused to build them on the Extended creation path. Commit <code>662e174a</code> reversed that the same day: withdrawing a working profile over a driver defect was not a call to make on the owner's behalf. Since 4.4.0 the 2026 Steam Controller is in the picker, <code>WithheldProfileIds</code> is empty, and no creation path refuses a profile.</p>
 <p>HM#58 also corrected the 2026 profile's rear-button pairing to SDL's. PadForge's packer already had it right (R4 on bit 7, R5 on bit 8, L4 and L5 on 17 and 18), so the packer did not change. The profile now names all four (<code>RightPaddle</code>, <code>RightPaddle2</code>, <code>LeftPaddle</code>, <code>LeftPaddle2</code>).</p>
 <hr />
