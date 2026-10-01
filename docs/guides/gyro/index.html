@@ -866,6 +866,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pitch-and-roll-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitch and Roll Simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#motion-passthrough" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3881,6 +3892,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pitch-and-roll-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitch and Roll Simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#motion-passthrough" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4310,6 +4332,7 @@
 <h2 id="when-the-tab-shows">When the tab shows<a class="headerlink" href="#when-the-tab-shows" title="Permanent link">&para;</a></h2>
 <p>The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, a handheld PC's own motion sensor, and a Sony headset's head motion all qualify. In pre-release builds a device with no gamepad mapping qualifies too, among them the Myo armband, the Rift DK1 and the Windows Mixed Reality motion controllers. Pads with no motion sensor never see the tab.</p>
 <p>On a device with an accelerometer and no gyroscope, such as a Wii Remote without Motion Plus, the tab shows only the cards that read the accelerometer: Grip, Motion Steering, and Gyro Tilt. The five rate cards (Motion Passthrough, Calibration, Sensitivity, Response Shaping, Engage) stay hidden. Before 4.4.0 the whole tab was gated on a gyroscope, so those three cards were unreachable on such a remote.</p>
+<p>In pre-release builds a DualShock 3 also gets the <a href="#pitch-and-roll-simulation">Pitch and Roll Simulation</a> card, because its gyro senses one axis.</p>
 <hr />
 <h2 id="grip">Grip<a class="headerlink" href="#grip" title="Permanent link">&para;</a></h2>
 <!-- SCREENSHOT: pad-gyro-grip -->
@@ -4360,12 +4383,25 @@
 <p>Held As is per pad per slot like the rest of the tab, and it rotates the body sensor only. A Nunchuk or a standalone left Joy-Con is a separate body in the other hand and keeps its own frame. On a combined Joy-Con pair, the fused Gyro Pitch / Yaw / Roll rows rotate both halves together, while the Left Joy-Con rows keep the left half's frame.</p>
 <p>The row's reset button (<strong>Reset Grip</strong>) returns Held As to Pointing.</p>
 <hr />
+<h2 id="pitch-and-roll-simulation">Pitch and Roll Simulation<a class="headerlink" href="#pitch-and-roll-simulation" title="Permanent link">&para;</a></h2>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>A DualShock 3 has one gyro axis. It senses turning the pad left and right, and reads zero for tilting it up and down or rolling it. On a DualShock 3 the tab shows a <strong>Pitch and Roll Simulation</strong> card, and its <strong>Simulate Pitch and Roll</strong> checkbox fills those two axes with rates worked out from the accelerometer. Yaw stays the gyro's own reading. The simulated axes reach the mapping rows, gyro to mouse, the motion the virtual controller reports, the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a>, and this tab's live readout. Gyro Tilt and calibration keep reading the sensor, and a <a href="../remote-link/">Remote Link</a> peer receives the raw sensor and turns the option on for its own copy of the pad. It is off by default and, like the rest of the tab, set per pad per slot. No other controller shows the card.</p>
+<p>The rate is the one an accelerometer can see. Gravity points the same way in the world, so as the pad turns, the direction the accelerometer reads turns the other way, and the rate is how fast it moves. That has limits a real gyro doesn't:</p>
+<ul>
+<li>A rotation about any level axis reads in full. Rolled to one side, a pitch reads less, cos² of the roll angle: 75% at 30°. Tilted back, a roll reads less the same way.</li>
+<li>Turning the pad around the vertical never shows on pitch or roll. Turning it in its own plane while it is tilted back shows partly as roll.</li>
+<li>The accelerometer can't tell a push from a tilt. A shove up or down reads as no motion while it lasts. A turn made during a shove shorter than a quarter second arrives just after it, and a longer shove starts the estimate over. Moving the pad sideways or forward without turning it reads as a brief pitch or roll.</li>
+<li>The accelerometer counts in steps of half a degree. A pad lying still flickers one step now and then, which reads as up to 5°/s for a moment at the default smoothing.</li>
+</ul>
+<p><strong>Simulation Smoothing</strong> sets how long the accelerometer is averaged before the rates are worked out, 20 to 250 ms, default 100 ms. Longer is steadier and slower to follow the pad. Shorter follows faster and shows more of those steps. The <a href="#response-shaping">Response Shaping</a> card's deadzone and smoothing apply on top, and they reach the virtual controller only with <a href="#motion-passthrough">Apply Gyro Tuning to Motion Passthrough</a> on.</p>
+<p>In the Upright and Wii Wheel holds the yaw lane reads a pad axis that points up. The DualShock 3 has no gyro on that axis and the simulation can't see rotation about it, so turning the pad left and right in those holds reads nothing. The pad's own gyro axis faces you there and reads as roll. Use Pointing or Sideways, Face Up for yaw aim.</p>
+<hr />
 <h2 id="motion-passthrough">Motion Passthrough<a class="headerlink" href="#motion-passthrough" title="Permanent link">&para;</a></h2>
 <p>The Motion Passthrough card carries one checkbox: <strong>Apply Gyro Tuning to Motion Passthrough</strong>.</p>
 <p>Off by default. The virtual controller hands the game a clean, calibrated sensor reading: bias is subtracted, no other filtering. Same goes for the DSU motion server, so a Cemu / Dolphin / Yuzu / Ryujinx client sees the raw sensor too. Off is the right default when the game has its own gyro tuning.</p>
 <p>Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The <a href="#engage-gates">engage gates</a> come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.</p>
 <p>The virtual controllers that carry motion to the game are PlayStation slots (DualShock 4, DualSense), Nintendo slots (Switch Pro since 4.1.0, and Switch 2 Pro), and Extended slots on the Valve profiles (Steam Deck and both Steam Controllers). Xbox, MIDI, Keyboard + Mouse, and every other Extended profile have no motion channel.</p>
-<p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice.</p>
+<p>Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice. On a DualShock 3, <a href="#pitch-and-roll-simulation">Pitch and Roll Simulation</a> applies either way as well.</p>
 <p><strong>Leave it off for emulators.</strong> An emulator integrates the gyro rate into an orientation. With the box checked, the tab's default tuning runs the tightening and smoothing thresholds and then a 3°/s deadzone on that rate before it leaves. A rate that reads zero below 3°/s and three degrees short above it accumulates orientation error the emulator cannot see, so steering drifts after a tilt and breaks on a sharp turn. The live readouts on this tab show the calibrated rate, not the tuned passthrough, so the distortion is invisible there as well. If motion in an emulator drifts or turns the wrong way, this box is the first thing to check.</p>
 <hr />
 <h2 id="motion-steering">Motion Steering<a class="headerlink" href="#motion-steering" title="Permanent link">&para;</a></h2>
@@ -4384,9 +4420,11 @@
 <li>PadForge samples for about 1.5 seconds. The averaged reading becomes the device bias.</li>
 <li>The bias is subtracted from every raw sample going forward.</li>
 </ol>
-<p>The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g. Both readouts are in the held frame set by <a href="#grip">Grip</a>, the same values the mapping rows and the virtual controller get.</p>
+<p>The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g. Both readouts are in the held frame set by <a href="#grip">Grip</a>, the same values the mapping rows and the virtual controller get. With Pitch and Roll Simulation on, the gyroscope line's pitch and roll are the simulated rates, which calibration does not change.</p>
 <p>On a combined Joy-Con pair, the left half's gyro keeps its own bias. <strong>Calibrate Gyro</strong> samples both halves in the same pass, and a profile calibrated before 4.1.0 gets an automatic aux-only pass on connect that measures the left sensor without touching the stored primary bias.</p>
 <p><strong>Reset Calibration</strong> clears the bias (both halves on a pair) and the timestamp. The next polling cycle re-runs the auto-calibration.</p>
+<p><strong>A DualShock 3 needs the button.</strong> <em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> Its yaw part reads against a nominal center on PadForge's own DualShock 3 path, on DsHidMini before 3.15.0, and on later DsHidMini for a Bluetooth pad it has never seen over USB. Units rest far enough off that center to read up to 157°/s while still. The automatic pass at connect leaves an offset that large alone: a stuck part reads steady too, and a pad just picked up looks the same as one at rest. Put the pad down and press <strong>Calibrate Gyro</strong>, and the yaw takes the offset. Give the pad half a minute after it connects first: one pad on record moved its center by about 12°/s over its first 20 seconds. On those paths a part resting against either end of its range stays refused, since one direction can't register at all. DsHidMini 3.15.0 and later zero the word before PadForge reads it for a pad they have seen over USB, so there a dead part can't be told from an offset. A press made while the automatic pass is running waits for it and then runs.</p>
+<p>A calibration now belongs to the pad it measured. PadForge tells DualShock 3s apart by their Bluetooth address, read from the pad on PadForge's own connection and from DsHidMini's device node. A DualShock 3 ignores a calibration taken before its yaw direction changed or taken on another pad, including one a paste or a profile carried over, and measures again: the automatic pass takes a small offset, and a large one waits for the button. A calibration also records what served the pad, because PadForge's own connection, DsHidMini before 3.15.0, and DsHidMini 3.15.0 or later each center the yaw differently, so moving between them or updating DsHidMini means measuring again. A pad whose address PadForge can't read takes only an offset under 8.6°/s, the bound every other controller has. On PadForge's own connection every DualShock 3 is one device, and a slot holds one calibration for it, so after swapping pads there, press <strong>Calibrate Gyro</strong> again. Any other controller ignores a carried bias too large for its own gyro.</p>
 <hr />
 <h2 id="sensitivity">Sensitivity<a class="headerlink" href="#sensitivity" title="Permanent link">&para;</a></h2>
 <p>Top-level scaling, axis inversion, and the reference frame the gyro is interpreted in. Every gyro mapping on this device inherits these values.</p>
@@ -4756,6 +4794,10 @@
 <tr>
 <td>Reset Grip</td>
 <td>Held As back to Pointing</td>
+</tr>
+<tr>
+<td>Reset Pitch and Roll Simulation</td>
+<td>Simulate Pitch and Roll, Simulation Smoothing (DualShock 3)</td>
 </tr>
 <tr>
 <td>Reset Motion Passthrough</td>

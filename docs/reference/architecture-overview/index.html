@@ -5413,7 +5413,7 @@
 <p>The engine thread reads <code>SettingsManager</code> without referencing the WPF-dependent <code>SettingsService</code>.</p>
 <hr />
 <h2 id="inputmanager-partial-class-split">InputManager Partial Class Split<a class="headerlink" href="#inputmanager-partial-class-split" title="Permanent link">&para;</a></h2>
-<p><code>InputManager</code> is a <code>partial class</code> split across 16 files for <strong>pipeline stage isolation</strong>. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).</p>
+<p><code>InputManager</code> is a <code>partial class</code> split across 18 files for <strong>pipeline stage isolation</strong>. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).</p>
 <table>
 <thead>
 <tr>
@@ -5437,6 +5437,11 @@
 <td><code>InputManager.Step1.UpdateDevices.cs</code></td>
 <td>Step 1</td>
 <td>SDL device enumeration, open/close, HIDMaestro filtering, <code>UserDevices</code>/<code>UserSettings</code> collection classes</td>
+</tr>
+<tr>
+<td><code>InputManager.BlissBox.cs</code></td>
+<td>Step 1</td>
+<td>Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on</td>
 </tr>
 <tr>
 <td><code>InputManager.Step1.UsbipVhciGuard.cs</code></td>
@@ -5487,6 +5492,11 @@
 <td><code>InputManager.GyroTilt.cs</code></td>
 <td>Steps 2–3 helper</td>
 <td>Gyro Tilt, the degree-ranged hold mode beside the usual rate mode: Step 2 updates the gravity estimate per (device, slot), Step 3 reads it</td>
+</tr>
+<tr>
+<td><code>InputManager.GyroSimulation.cs</code></td>
+<td>Steps 2–3 helper</td>
+<td>Pitch and Roll Simulation for a DualShock 3 (#474): Step 2 updates the accelerometer rate estimate per (device, slot), Step 3 reads it</td>
 </tr>
 <tr>
 <td><code>InputManager.MenuPublication.cs</code></td>

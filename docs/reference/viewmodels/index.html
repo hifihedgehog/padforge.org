@@ -3700,6 +3700,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pitch-and-roll-simulation-474" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitch and Roll Simulation (#474)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#gyro-tilt-envelope-292" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7097,6 +7108,17 @@
     <span class="md-ellipsis">
       
         Motion Space and Grip (#392)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pitch-and-roll-simulation-474" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitch and Roll Simulation (#474)
       
     </span>
   </a>
@@ -14572,6 +14594,36 @@
 </table>
 <p><strong>Reset commands:</strong> <code>ResetGyroSpaceCommand</code> (back to <code>"Local"</code>), <code>ResetMotionGripCommand</code> (back to <code>"Pointing"</code>).</p>
 <p>Changing the grip re-references the motion state of the one device the page is editing: its gravity estimate, shake envelope, and lean and tilt neutrals are in the old frame. MainWindow's <code>MotionGrip</code> <code>PropertyChanged</code> handler gates that on <code>InputService.ShouldRecenterOnGripChange</code>, which is <code>!IsLoadingPadSetting</code>. A grip write arriving through a <code>PadSetting</code> load is a mirror of stored state, not a change of hold, so a device selection or a profile switch must not drop every device's estimate on the slot. The recenter itself is <code>InputService.RecenterMotionForSelectedDevice</code>. The Gyro Recenter macro's pad-wide drop is a separate path (<code>InputManager.GyroRecenterApply</code>).</p>
+<h3 id="pitch-and-roll-simulation-474">Pitch and Roll Simulation (#474)<a class="headerlink" href="#pitch-and-roll-simulation-474" title="Permanent link">&para;</a></h3>
+<p>Per (slot, device). The card shows only for a DualShock 3 with both sensors.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GyroSimulation</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>-</td>
+<td>Fills pitch and roll from the accelerometer.</td>
+</tr>
+<tr>
+<td><code>GyroSimulationSmoothingMs</code></td>
+<td><code>double</code></td>
+<td><code>100</code></td>
+<td>20 to 250</td>
+<td>The smoothing time constant. The setter clamps, and a value that isn't a number becomes 100.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reset commands:</strong> <code>ResetGyroSimulationCommand</code> (off), <code>ResetGyroSimulationSmoothingCommand</code> (back to 100), <code>ResetGyroSimulationCardCommand</code> (both).</p>
 <h3 id="gyro-tilt-envelope-292">Gyro Tilt Envelope (#292)<a class="headerlink" href="#gyro-tilt-envelope-292" title="Permanent link">&para;</a></h3>
 <p>Per-(slot, device) lens over the "Gyro Tilt X/Y" sources, the same shape as Flick Stick below. The save pipeline stamps these onto every tilt source (<code>ApplyGyroTiltParamsToRow</code>, the Motion Steering push pattern) and persists them in the PadSetting extended-mapping bag under <code>GyroTilt*</code> keys.</p>
 <table>

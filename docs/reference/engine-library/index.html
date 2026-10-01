@@ -3926,6 +3926,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pitch-and-roll-simulation-474" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitch and Roll Simulation (#474)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#gyro-tuning-v33" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7326,6 +7337,17 @@
     <span class="md-ellipsis">
       
         Motion Grip (#392)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pitch-and-roll-simulation-474" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitch and Roll Simulation (#474)
       
     </span>
   </a>
@@ -13080,6 +13102,39 @@
 </tr>
 </tbody>
 </table>
+<h3 id="pitch-and-roll-simulation-474">Pitch and Roll Simulation (#474)<a class="headerlink" href="#pitch-and-roll-simulation-474" title="Permanent link">&para;</a></h3>
+<p>A DualShock 3's gyro senses yaw only. With <code>GyroSimulation</code> on, the pitch and roll a gyro read returns come from the accelerometer.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Signature</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SimulatedGyro.MissingAxes</code></td>
+<td><code>static Axes MissingAxes(ushort vendorId, ushort productId, bool hasGyro, bool hasAccel)</code></td>
+<td><code>Axes.Pitch</code> and <code>Axes.Roll</code> for a DualShock 3 (054C:0268) with both sensors, <code>Axes.None</code> for every other device. Gates the card, the runtime, and the slot summary's <code>SIM</code> token.</td>
+</tr>
+<tr>
+<td><code>AccelRateEstimator.Update</code></td>
+<td><code>void Update(Vector3 acceleration, float deltaSeconds, float smoothingSeconds)</code></td>
+<td>The rotation rate the accelerometer can see, in SDL's sensor frame: normalize(S₂ × S₁) · angle / Δt between consecutive smoothed gravity directions (GamepadMotionHelpers <code>GamepadMotion.hpp:962-970</code>). The smoothing advances on every poll with the poll's own time. A sample more than 0.25 g from the pad's resting length reads zero and holds the smoothing, and more than 0.25 s of that, net of the time back inside, starts the estimate over.</td>
+</tr>
+<tr>
+<td><code>SourceCoercion.SimulatedGyroProvider</code></td>
+<td><code>static Func&lt;string, int, SimulatedGyroSample?&gt;</code></td>
+<td>The App's per-(device, slot) estimate, <code>InputManager.ReadGyroSimulation</code>. <code>ReadCalibratedGyroRate</code> asks it after the grip picks the source axis, for the body sensor only, and returns its rate without the stored bias.</td>
+</tr>
+<tr>
+<td><code>SourceCoercion.ApplySimulatedGyro</code></td>
+<td><code>static void ApplySimulatedGyro(string deviceGuid, int slotIndex, ref float pitch, ref float yaw, ref float roll)</code></td>
+<td>The same substitution for the Gyro tab's readout, before its grip call.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="gyro-tuning-v33">Gyro Tuning (v3.3)<a class="headerlink" href="#gyro-tuning-v33" title="Permanent link">&para;</a></h3>
 <p>Per device, per slot, so each binding config carries its own gyro feel and its own bias calibration.</p>
 <table>
@@ -13253,6 +13308,27 @@
 <td><code>[XmlElement]</code></td>
 <td><code>"0"</code></td>
 <td>"1" anchors yaw to the Switch 2 magnetometer (#271)</td>
+</tr>
+<tr>
+<td><code>GyroSimulation</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"0"</code></td>
+<td>"1" fills a DualShock 3's pitch and roll from the accelerometer (#474)</td>
+</tr>
+<tr>
+<td><code>GyroSimulationSmoothingMs</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"100"</code></td>
+<td>The simulation's smoothing time constant, 20 to 250 ms</td>
+</tr>
+<tr>
+<td><code>GyroCalibratedDevice</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>""</code></td>
+<td>Whom the stored bias belongs to (#474): the device row's instance GUID, or on a DualShock 3 whose address PadForge can read, the pad as <code>address/source</code>, where the source is <code>direct</code> for PadForge's own connection or <code>node:</code> and the driver release for a pad served through DsHidMini. A DualShock 3 subtracts a stored bias only when this matches. Other devices ignore the field and subtract any finite bias within 0.15 rad/s per axis</td>
 </tr>
 <tr>
 <td><code>MagBiasX</code> / <code>MagBiasY</code> / <code>MagBiasZ</code> / <code>MagFieldNorm</code></td>

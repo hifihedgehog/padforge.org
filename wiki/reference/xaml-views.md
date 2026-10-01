@@ -885,19 +885,20 @@ All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Graye
 
 ### Gyro Tab (Tab 8). Detailed
 
-The tab opens on the E7AD page header (`Pad_Gyro_Header` + `Pad_Gyro_Subtitle`), then nine `CardBorder` cards in this order:
+The tab opens on the E7AD page header (`Pad_Gyro_Header` + `Pad_Gyro_Subtitle`), then ten `CardBorder` cards in this order:
 
 | Order | Card | x:Name | Glyph | Shown when |
 |-------|------|--------|-------|-----------|
 | 1 | Grip (#392) | (unnamed) | `E815` | always |
-| 2 | Motion Passthrough | `GyroPassthroughCard` | `E72A` | gyro rate |
-| 3 | Motion Steering (#94) | (unnamed) | inline `Path` | always |
-| 4 | Tilt | (unnamed) | `E99A` | always |
-| 5 | Calibration | `GyroCalibrationCard` | `F272` | gyro rate |
-| 6 | Sensitivity | `GyroSensitivityCard` | `E9E9` | gyro rate |
-| 7 | Compass Yaw (#271) | `CompassYawCard` | `E707` | Switch 2 magnetometer |
-| 8 | Response | `GyroResponseCard` | `F1CB` | gyro rate |
-| 9 | Engage (#120) | `GyroEngageCard` | `E7E8` | gyro rate |
+| 2 | Pitch and Roll Simulation (#474) | `GyroSimulationCard` | `E7AD` | DualShock 3 with gyro and accelerometer |
+| 3 | Motion Passthrough | `GyroPassthroughCard` | `E72A` | gyro rate |
+| 4 | Motion Steering (#94) | (unnamed) | inline `Path` | always |
+| 5 | Tilt | (unnamed) | `E99A` | always |
+| 6 | Calibration | `GyroCalibrationCard` | `F272` | gyro rate |
+| 7 | Sensitivity | `GyroSensitivityCard` | `E9E9` | gyro rate |
+| 8 | Compass Yaw (#271) | `CompassYawCard` | `E707` | Switch 2 magnetometer |
+| 9 | Response | `GyroResponseCard` | `F1CB` | gyro rate |
+| 10 | Engage (#120) | `GyroEngageCard` | `E7E8` | gyro rate |
 
 The tab raises for any motion sensor, so an accelerometer-only remote reaches Grip, Tilt, and Motion Steering. `SyncTabVisibility()` keeps two flags apart for that: `hasGyro` is `ud.HasGyro || ud.HasAccel` and drives `TabGyro.Visibility`, while `hasGyroRate` is `ud.HasGyro` alone and collapses the five rate cards named above. Before #392 the tab itself was gyro-gated, so an accelerometer-only Wii Remote never saw Tilt.
 

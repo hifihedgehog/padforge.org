@@ -1697,6 +1697,17 @@ Both store the canonical English identifier, not the localized label, so `PadFor
 
 Changing the grip re-references the motion state of the one device the page is editing: its gravity estimate, shake envelope, and lean and tilt neutrals are in the old frame. MainWindow's `MotionGrip` `PropertyChanged` handler gates that on `InputService.ShouldRecenterOnGripChange`, which is `!IsLoadingPadSetting`. A grip write arriving through a `PadSetting` load is a mirror of stored state, not a change of hold, so a device selection or a profile switch must not drop every device's estimate on the slot. The recenter itself is `InputService.RecenterMotionForSelectedDevice`. The Gyro Recenter macro's pad-wide drop is a separate path (`InputManager.GyroRecenterApply`).
 
+### Pitch and Roll Simulation (#474)
+
+Per (slot, device). The card shows only for a DualShock 3 with both sensors.
+
+| Property | Type | Default | Values | Description |
+|----------|------|---------|--------|-------------|
+| `GyroSimulation` | `bool` | `false` | - | Fills pitch and roll from the accelerometer. |
+| `GyroSimulationSmoothingMs` | `double` | `100` | 20 to 250 | The smoothing time constant. The setter clamps, and a value that isn't a number becomes 100. |
+
+**Reset commands:** `ResetGyroSimulationCommand` (off), `ResetGyroSimulationSmoothingCommand` (back to 100), `ResetGyroSimulationCardCommand` (both).
+
 ### Gyro Tilt Envelope (#292)
 
 Per-(slot, device) lens over the "Gyro Tilt X/Y" sources, the same shape as Flick Stick below. The save pipeline stamps these onto every tilt source (`ApplyGyroTiltParamsToRow`, the Motion Steering push pattern) and persists them in the PadSetting extended-mapping bag under `GyroTilt*` keys.

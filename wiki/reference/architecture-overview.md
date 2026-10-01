@@ -766,13 +766,14 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## InputManager Partial Class Split
 
-`InputManager` is a `partial class` split across 16 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
+`InputManager` is a `partial class` split across 18 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
 
 | File | Stage | Responsibility |
 |---|---|---|
 | `InputManager.cs` | Core | Fields, constants, `Start()`/`Stop()`, `PollingLoop(int generation)`, `IDisposable`, motion snapshots, DSU broadcast |
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): per-(slot, device, menu) hover-commit contexts ticked in Step 2, fired items read by Step 3 rows / activators / macro triggers, direct bindings delivered in Step 4b |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
+| `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
 | `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Composite-persona self-readback guard: walks a Sony-VID device's PnP ancestry for the `ROOT\HIDMAESTRO_UDE` stamp so PadForge never ingests its own USB persona |
 | `InputManager.Step2.UpdateInputStates.cs` | Step 2 | Read `CustomInputState` per device, apply FFB from `VibrationStates[]` + audio bass |
 | `InputManager.Step3.MappingSetEval.cs` | Step 3 | Evaluate the per-VC MappingSet (rows, sources, combine modes, shift layers) into OutputState |
@@ -783,6 +784,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.Step5.VirtualDevices.cs` | Step 5 | Create/destroy `IVirtualController` (HM lifecycle on thread pool, see [HIDMaestro Deep Dive](hidmaestro-deep-dive.md)), submit `CombinedOutputStates[]` via `HMController.SubmitState` / `SubmitRawReport` (HM) or per-VC paths (VR / MIDI / KBM), XInput slot detection |
 | `InputManager.Step6.RetrieveOutputStates.cs` | Step 6 | Copy `CombinedOutputStates[]` → `RetrievedOutputStates[]` for UI |
 | `InputManager.GyroTilt.cs` | Steps 2–3 helper | Gyro Tilt, the degree-ranged hold mode beside the usual rate mode: Step 2 updates the gravity estimate per (device, slot), Step 3 reads it |
+| `InputManager.GyroSimulation.cs` | Steps 2–3 helper | Pitch and Roll Simulation for a DualShock 3 (#474): Step 2 updates the accelerometer rate estimate per (device, slot), Step 3 reads it |
 | `InputManager.MenuPublication.cs` | Steps 2-5 | The publication scope Steps 2 through 5 run inside, so a menu cannot observe a half-written frame |
 | `InputManager.SteeringAngleRumble.cs` | Steps 6, 2 helper | Steering Angle Rumble: Step 6 publishes each Xbox / PlayStation slot's combined frame, and the next Step 2 force-feedback pass turns the chosen virtual stick axis into rumble |
 | `InputManager.Tablets.cs` | Step 1 helper | Windows pen and drawing tablet rows, and their capture state |

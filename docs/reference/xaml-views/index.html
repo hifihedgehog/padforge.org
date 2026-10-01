@@ -8431,7 +8431,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
 <h3 id="gyro-tab-tab-8-detailed">Gyro Tab (Tab 8). Detailed<a class="headerlink" href="#gyro-tab-tab-8-detailed" title="Permanent link">&para;</a></h3>
-<p>The tab opens on the E7AD page header (<code>Pad_Gyro_Header</code> + <code>Pad_Gyro_Subtitle</code>), then nine <code>CardBorder</code> cards in this order:</p>
+<p>The tab opens on the E7AD page header (<code>Pad_Gyro_Header</code> + <code>Pad_Gyro_Subtitle</code>), then ten <code>CardBorder</code> cards in this order:</p>
 <table>
 <thead>
 <tr>
@@ -8452,55 +8452,62 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td>2</td>
+<td>Pitch and Roll Simulation (#474)</td>
+<td><code>GyroSimulationCard</code></td>
+<td><code>E7AD</code></td>
+<td>DualShock 3 with gyro and accelerometer</td>
+</tr>
+<tr>
+<td>3</td>
 <td>Motion Passthrough</td>
 <td><code>GyroPassthroughCard</code></td>
 <td><code>E72A</code></td>
 <td>gyro rate</td>
 </tr>
 <tr>
-<td>3</td>
+<td>4</td>
 <td>Motion Steering (#94)</td>
 <td>(unnamed)</td>
 <td>inline <code>Path</code></td>
 <td>always</td>
 </tr>
 <tr>
-<td>4</td>
+<td>5</td>
 <td>Tilt</td>
 <td>(unnamed)</td>
 <td><code>E99A</code></td>
 <td>always</td>
 </tr>
 <tr>
-<td>5</td>
+<td>6</td>
 <td>Calibration</td>
 <td><code>GyroCalibrationCard</code></td>
 <td><code>F272</code></td>
 <td>gyro rate</td>
 </tr>
 <tr>
-<td>6</td>
+<td>7</td>
 <td>Sensitivity</td>
 <td><code>GyroSensitivityCard</code></td>
 <td><code>E9E9</code></td>
 <td>gyro rate</td>
 </tr>
 <tr>
-<td>7</td>
+<td>8</td>
 <td>Compass Yaw (#271)</td>
 <td><code>CompassYawCard</code></td>
 <td><code>E707</code></td>
 <td>Switch 2 magnetometer</td>
 </tr>
 <tr>
-<td>8</td>
+<td>9</td>
 <td>Response</td>
 <td><code>GyroResponseCard</code></td>
 <td><code>F1CB</code></td>
 <td>gyro rate</td>
 </tr>
 <tr>
-<td>9</td>
+<td>10</td>
 <td>Engage (#120)</td>
 <td><code>GyroEngageCard</code></td>
 <td><code>E7E8</code></td>

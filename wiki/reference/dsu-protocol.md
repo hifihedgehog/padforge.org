@@ -46,7 +46,7 @@ Accel and gyro must be in the same coordinate frame. `AccelX` and `GyroPitch` re
 
 The sign transform lives in `BuildPadDataPacket`, not in `MotionSnapshot`. The snapshot carries no protocol frame of its own, so the HID report packers read `InputManager.MotionSnapshots` in the same frame and apply their own conventions. Only the DSU packet path applies the negations, and only DSU clients see the flipped signs.
 
-One transform does reach the snapshot before either consumer: the Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together, in both states of the passthrough tuning toggle. `CaptureMotionSnapshot`, which `UpdateMotionSnapshots` reaches for every source it reads, calls `SourceCoercion.ApplyMotionGrip` on the body accelerometer, and `GetPassthroughGyro` applies the same rotation inside its calibrated read.
+Two things reach the snapshot before either consumer, in both states of the passthrough tuning toggle. The Gyro tab's Grip setting rotates gyro, accelerometer, and gravity together: `CaptureMotionSnapshot`, which `UpdateMotionSnapshots` reaches for every source it reads, calls `SourceCoercion.ApplyMotionGrip` on the body accelerometer, and `GetPassthroughGyro` applies the same rotation inside its calibrated read. On a DualShock 3 with Pitch and Roll Simulation on (#474), that calibrated read returns the accelerometer-derived rate for pitch and roll, before the rotation.
 
 ---
 

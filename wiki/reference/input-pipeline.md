@@ -74,13 +74,14 @@ graph TD
     style S6 fill:#e8f5e9
 ```
 
-The pipeline is a `partial class InputManager` split across sixteen files:
+The pipeline is a `partial class InputManager` split across eighteen files:
 
 | File | Step | Purpose |
 |---|---|---|
 | `InputManager.cs` | Main | Fields, Start/Stop, PollingLoop, trigger-route settle, motion snapshots, DSU broadcast |
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): `MenuContexts` keyed (slot, device, menu), ticked in Step 2, fired items read by Step 3 rows and activators, direct bindings delivered in Step 4b. Web Menus phone presses (#471) are marked in Step 2 beside the contexts |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | Device enumeration and lifecycle |
+| `InputManager.BlissBox.cs` | Step 1 | Phase 1l (#469): one API sidecar per online Bliss-Box row while Read Bliss-Box Adapters is on. A change of the switch brings the pass forward to the next poll cycle, and motor hand-offs a busy output gate deferred are retried every cycle |
 | `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Composite-persona self-readback guard: walks the device path's PnP ancestry for HIDMaestro's stamped usbip-vhci host-controller hardware id (or, as a fallback, the `usbip2_ude` service), because a persona carries no other marker |
 | `InputManager.Step2.UpdateInputStates.cs` | Step 2 | Input state reading and force feedback |
 | `InputManager.Step3.UpdateOutputStates.cs` | Step 3 | Mapping engine (input -> Gamepad) |
@@ -91,6 +92,7 @@ The pipeline is a `partial class InputManager` split across sixteen files:
 | `InputManager.Step5.VirtualDevices.cs` | Step 5 | Virtual controller output |
 | `InputManager.Step6.RetrieveOutputStates.cs` | Step 6 | Copy output for UI display |
 | `InputManager.GyroTilt.cs` | Steps 2–3 | Gyro Tilt gravity estimate per (device, slot): Step 2 updates it after each device read, and Step 3 reads it through `SourceCoercion.GyroTiltGravityProvider` |
+| `InputManager.GyroSimulation.cs` | Steps 2–3 | Pitch and Roll Simulation for a DualShock 3 (#474): Step 2 updates the accelerometer rate estimate per (device, slot) after each device read, and Step 3 reads it through `SourceCoercion.SimulatedGyroProvider` |
 | `InputManager.MenuPublication.cs` | Steps 2–5 | `MenuPublicationSync` gate. Each poll frame holds it from Step 2 through Step 5, and UI menu edits take it too, so an edit never lands mid-frame. It must be taken before the device and settings locks |
 | `InputManager.SteeringAngleRumble.cs` | Steps 6, 2 | Steering Angle Rumble: Step 6 publishes each Xbox / PlayStation slot's combined frame, and the next Step 2 force-feedback pass turns the chosen axis into rumble |
 | `InputManager.Tablets.cs` | Step 1 | Pen tablets: `Start()` starts the reader and `Stop()` stops it, Step 1 adds and removes tablet devices, and `TabletCaptureChanged` reports capture changes |
@@ -394,7 +396,7 @@ Each iteration first checks the idle gate (`BeginIdlePoll()`) and then focus sus
 
 **Poll-frame gate:**
 
-`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 667) is called once per active cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 2086). The idle branch does not call it. It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
+`SourceCoercion.BeginPollFrame()` (`SourceCoercion.cs` line 698) is called once per active cycle, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 2086). The idle branch does not call it. It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.
 
 **3-Tier Polling Sleep Strategy:**
 
@@ -462,7 +464,7 @@ The engine half of the "Continue Polling When Window Loses Focus" setting. When 
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 18585), `MoveSlot(int, int)` (line 18618), and `MoveSlotToGroupTail(int)` (line 18665). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 18645), `MoveSlot(int, int)` (line 18618), and `MoveSlotToGroupTail(int)` (line 18665). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
@@ -501,7 +503,7 @@ The two sub-channels can land on different devices. A 250 ms row-presence gate c
 
 **Delivery.** `BroadcastDsuMotion` sends `DsuMotionSnapshots` right after the snapshot pass (below). Step 5 delivers `MotionSnapshots[padIndex]` through `SubmitRawHidState`'s IMU channel on Nintendo and Extended raw-surface slots, through `ValveReportPackers` and `SubmitRawReport` on Extended slots with a Valve profile, through the `SonyReportPackers` raw report on PlayStation slots with a USB Sony profile, and through the extended `SubmitGamepadState` overload on the other PlayStation profiles. An Extended layout with more than 32 buttons or more than one hat goes through `ExtendedReportPacker` and carries no motion. `HasMotion = false` submits zeroes.
 
-**No sign transform, one grip rotation.** The native SDL sensor frame is preserved apart from the (device, slot) grip. Accel is a raw scaled read, then rotated for the grip. Gyro goes through `GetPassthroughGyro`, whose calibrated read subtracts the (device, slot) bias and applies the same rotation. The Gyro tab's discretionary tuning runs on top only when Apply Gyro Tuning to Motion Passthrough is checked, which it is not by default:
+**No sign transform, one grip rotation.** The native SDL sensor frame is preserved apart from the (device, slot) grip. Accel is a raw scaled read, then rotated for the grip. Gyro goes through `GetPassthroughGyro`, whose calibrated read subtracts the (device, slot) bias and applies the same rotation. On a DualShock 3 with Pitch and Roll Simulation on (#474), that read returns the accelerometer-derived rate for pitch and roll instead, before the rotation and without the bias. The Gyro tab's discretionary tuning runs on top only when Apply Gyro Tuning to Motion Passthrough is checked, which it is not by default:
 
 ```csharp
 // Accel. MsToG = 1/9.80665, no negation:
@@ -520,7 +522,7 @@ SourceCoercion.GetPassthroughGyro(s, guid, padIndex,
 gx = tunedPitch * RadToDeg;   gy = tunedYaw * RadToDeg;   gz = tunedRoll * RadToDeg;
 ```
 
-**Grip rotation (#392).** `SourceCoercion.RotateForGrip` (`SourceCoercion.cs` line 3802) turns a body-frame vector into the frame the game expects for the hold the user picked on the Gyro tab. The driver delivers every controller in the frame of its natural hold, a Wii Remote aimed at the screen, +X right, +Y out of the face, +Z toward the player. Three other holds have tables, all proper rotations, so the same one serves gyro, accelerometer, and the gravity estimate alike:
+**Grip rotation (#392).** `SourceCoercion.RotateForGrip` (`SourceCoercion.cs` line 3833) turns a body-frame vector into the frame the game expects for the hold the user picked on the Gyro tab. The driver delivers every controller in the frame of its natural hold, a Wii Remote aimed at the screen, +X right, +Y out of the face, +Z toward the player. Three other holds have tables, all proper rotations, so the same one serves gyro, accelerometer, and the gravity estimate alike:
 
 | Grip | Hold | `(x, y, z)` becomes |
 |---|---|---|
@@ -605,7 +607,7 @@ private const uint ES_CONTINUOUS = 0x80000000;
 
 **File:** `InputManager.Step1.UpdateDevices.cs`
 
-Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires `DevicesUpdated` on changes. It returns at once when SDL is not initialized. Otherwise it runs these phases in order (`InputManager.Step1.UpdateDevices.cs` lines 115-562):
+Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires `DevicesUpdated` on changes. It returns at once when SDL is not initialized. Otherwise it runs these phases in order (`InputManager.Step1.UpdateDevices.cs` lines 115-564):
 
 | Phase | Source |
 |---|---|
@@ -701,7 +703,7 @@ Same pattern as keyboards using `SdlMouseWrapper`, with one extra skip: a mouse 
 
 **Enumerate Consumer Controls** via `EnumerateConsumerControls()`
 
-Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` lines 247 and 253). `EnumerateConsumerControls` (lines 1352-1390) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
+Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` lines 249 and 253). `EnumerateConsumerControls` (lines 1352-1390) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
 
 `FindOnlineDeviceByHandle` (line 3721) resolves a Raw Input handle back to its `UserDevice` by testing `RawInputHandle` on each raw-input wrapper kind. `ConsumerControlWrapper` was missing from that list, so `PruneOrphanedHandles` found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising `DevicesUpdated` and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.
 
@@ -1031,7 +1033,7 @@ bool idle = ud.CapType == InputDeviceType.Gamepad
 
 ### Quick Charge
 
-`UpdateIdleDisconnect` also carries Quick Charge (#372, discussion #367): plug a Bluetooth pad into a charger and its radio link drops, so the pad charges instead of holding a wireless connection. `CheckQuickCharge` (`InputManager.Step2.UpdateInputStates.cs` line 533) runs before the idle countdown and independent of it, so a device with `IdleDisconnectSeconds` at 0 still gets Quick Charge.
+`UpdateIdleDisconnect` also carries Quick Charge (#372, discussion #367): plug a Bluetooth pad into a charger and its radio link drops, so the pad charges instead of holding a wireless connection. `CheckQuickCharge` (`InputManager.Step2.UpdateInputStates.cs` line 538) runs before the idle countdown and independent of it, so a device with `IdleDisconnectSeconds` at 0 still gets Quick Charge.
 
 The trigger is the pad's own charging report, not a scan for a USB twin. The wrapper reads `SDL_GetGamepadPowerInfo` every 5 s (CHARGING or CHARGED counts as charging) on the same record the checkbox lives on, so a wall charger fires exactly like a PC port.
 
@@ -1428,7 +1430,7 @@ private static void MapDPadFromPovSingle(CustomInputState state, string descript
 
 When individual D-pad directions (`DPadUp`, `DPadDown`, `DPadLeft`, `DPadRight`) are set, they take priority. Otherwise, the combined `DPad` descriptor reads a single POV hat and sets all 4 direction flags, supporting 8-way diagonals.
 
-**The hat turns with the grip (#392).** Every POV read in Step 3 goes through `SourceCoercion.GripPov(deviceGuid, slotIndex, centidegrees)` (`SourceCoercion.cs` line 3845) before the direction match: `MapToButtonPressedSingle` (line 1337), `MapDPadFromPovSingle` (line 1413), `MapToTriggerSingle` (line 1507), and `GetRawValue` (line 1736). The `MappingSet` evaluator does the same through `SourceCoercion`, `SourceEvaluator`, and `SourceKindRuntime`, and Step 4b's macro POV triggers read the rotated value too. The D-pad is a vector in the same body frame as the sensors, so the hold that turns the gyro turns the hat. With the top edge to the left (`Sideways` and `WiiWheel` alike) the pad's physical Right points up in the world, so the reading is `((centidegrees - 9000) mod 36000)`: physical 9000 reads as 0 (Up), 0 as 27000 (Left), 18000 as 9000 (Right), 27000 as 18000 (Down). That is Dolphin's sideways D-pad table (`WiimoteEmu.cpp`, `dpad_sideways_bitmasks`), and the angle arithmetic carries the diagonals for free. `Upright` keeps the pad's Up pointing up and passes through, as does a centered (negative) reading.
+**The hat turns with the grip (#392).** Every POV read in Step 3 goes through `SourceCoercion.GripPov(deviceGuid, slotIndex, centidegrees)` (`SourceCoercion.cs` line 3876) before the direction match: `MapToButtonPressedSingle` (line 1337), `MapDPadFromPovSingle` (line 1413), `MapToTriggerSingle` (line 1507), and `GetRawValue` (line 1736). The `MappingSet` evaluator does the same through `SourceCoercion`, `SourceEvaluator`, and `SourceKindRuntime`, and Step 4b's macro POV triggers read the rotated value too. The D-pad is a vector in the same body frame as the sensors, so the hold that turns the gyro turns the hat. With the top edge to the left (`Sideways` and `WiiWheel` alike) the pad's physical Right points up in the world, so the reading is `((centidegrees - 9000) mod 36000)`: physical 9000 reads as 0 (Up), 0 as 27000 (Left), 18000 as 9000 (Right), 27000 as 18000 (Down). That is Dolphin's sideways D-pad table (`WiimoteEmu.cpp`, `dpad_sideways_bitmasks`), and the angle arithmetic carries the diagonals for free. `Upright` keeps the pad's Up pointing up and passes through, as does a centered (negative) reading.
 
 ### Trigger Mapping
 
@@ -1582,9 +1584,9 @@ The steering math is original C# written from the geometry described in JoyShock
 
 ### Motion Shake
 
-Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2158 and 2163), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
+Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2189 and 2163), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
 
-The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 14157), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
+The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 14213), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
 
 `ReadShakeEnvelope` (line 2188) applies the per-source sensitivity and clamps to `[0, 1]`. The envelope is unsigned by nature, so `HalfAxis` and `Invert` have nothing to point at and are not applied. Per target class:
 
@@ -1795,7 +1797,7 @@ The 3.6.0 device work added four `SourceType` values to `SourceCoercion.SourceTy
 | `JoyConIr` (#151) | `"IR Brightness"` | `CustomInputState.JoyConIrIntensity` (per device) | unipolar `[0, 1]` |
 | `JoyCon2Mouse` (#154) | `"Mouse Motion X"` / `"Mouse Motion Y"` | `CustomInputState.JoyCon2MouseDX` / `DY` (per device), also a WingMan Warrior's spin dial | bipolar `[-1, +1]` windowed velocity (16,000 counts/s = full scale, #331) |
 
-`ClassifyDescriptor` (`SourceCoercion.cs` lines 1212-1307) matches these prefixes in order after the `Mouse Position ` check: `Mouse Motion ` → `JoyCon2Mouse`, `Mouse Gesture ` → `MouseGesture`, `IR Pointer ` → `IrPointer`, exact `IR Offscreen` → `IrOffscreen`, exact `IR Brightness` → `JoyConIr`, `Balance ` → `BalanceBoard`, then `Midi `. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. `IrPointer` is read through its own tuned, slot-scoped reader `ReadTunedIrPointer` (sensor-bar offset and smoothing are per-(device, slot) Pointer-tab settings), the same pattern as `ReadTunedMouseCursor` and `ReadTunedGyroRate`.
+`ClassifyDescriptor` (`SourceCoercion.cs` lines 1243-1338) matches these prefixes in order after the `Mouse Position ` check: `Mouse Motion ` → `JoyCon2Mouse`, `Mouse Gesture ` → `MouseGesture`, `IR Pointer ` → `IrPointer`, exact `IR Offscreen` → `IrOffscreen`, exact `IR Brightness` → `JoyConIr`, `Balance ` → `BalanceBoard`, then `Midi `. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. `IrPointer` is read through its own tuned, slot-scoped reader `ReadTunedIrPointer` (sensor-bar offset and smoothing are per-(device, slot) Pointer-tab settings), the same pattern as `ReadTunedMouseCursor` and `ReadTunedGyroRate`.
 
 ---
 
@@ -2253,8 +2255,8 @@ Copy uses only the serialize half. Paste and Duplicate run the full roundtrip an
 
 | Path | Site | Flow |
 |---|---|---|
-| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8228) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
-| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8287) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
+| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8241) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
+| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8300) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
 | Duplicate | `DuplicateMacroCommand` (`PadViewModel.cs` ~5581) | `BuildMacroDataForMacro` -> `LoadMacroFromData` -> set `PadIndex` + copy name |
 
 `LoadMacroFromData` rebinds only the display side to the destination: button naming (`ButtonStyle`), the custom-button width, and the raw profile id. Trigger and action button values travel verbatim, so an Xbox-slot macro copied into an Extended slot keeps its Xbox bitmask and reads as inert until it is re-bound.

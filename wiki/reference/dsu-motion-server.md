@@ -67,7 +67,7 @@ Whether those controls reach the broadcast depends on one switch. The Gyro tab's
 
 The accelerometer stream skips the tuning chain. Sensitivity, deadzone, smoothing, curve, and both gates are gyro-only, so the broadcast carries the scaled accelerometer reading.
 
-Two things still reach it. **Grip** rotates the body gyro, the body accelerometer, and gravity together in both states of the passthrough toggle, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. And the Motion Accelerometer row's own **Invert** checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.
+Three things still reach it. **Grip** rotates the body gyro, the body accelerometer, and gravity together in both states of the passthrough toggle, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. On a DualShock 3, [Pitch and Roll Simulation](../guides/gyro.md#pitch-and-roll-simulation) fills the gyro's pitch and roll from the accelerometer in both states as well. And the Motion Accelerometer row's own **Invert** checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.
 
 ### The Mappings grid picks the source device
 

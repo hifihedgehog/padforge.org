@@ -2044,6 +2044,17 @@ The rotation itself lives in `SourceCoercion` (`PadForge.Engine/Common/Mapping/S
 | `ApplyMotionGrip` | `static void ApplyMotionGrip(string deviceGuid, int slotIndex, ref float x, ref float y, ref float z)` | Rotates a body-sensor triple in place by the (device, slot) grip. The App's snapshot builder and the Gyro tab's live readout call this for the accelerometer copy. The gyro copy already flows through the calibrated read. |
 | `ReadGravity` | `internal static (float gx, float gy, float gz) ReadGravity(string deviceGuid, int slotIndex, bool aux)` | The gravity estimate every Player Space, World Space, lean, and tilt read consumes, rotated by the grip for the body sensor. The aux sensor (Nunchuk, left Joy-Con) is a separate body in the other hand and keeps its own frame. The no-data sentinel `(0, 0, -1)` returns unrotated, so a sideways grip does not invent a different resting default before the first real sample. |
 
+### Pitch and Roll Simulation (#474)
+
+A DualShock 3's gyro senses yaw only. With `GyroSimulation` on, the pitch and roll a gyro read returns come from the accelerometer.
+
+| Member | Signature | Behavior |
+|--------|-----------|----------|
+| `SimulatedGyro.MissingAxes` | `static Axes MissingAxes(ushort vendorId, ushort productId, bool hasGyro, bool hasAccel)` | `Axes.Pitch` and `Axes.Roll` for a DualShock 3 (054C:0268) with both sensors, `Axes.None` for every other device. Gates the card, the runtime, and the slot summary's `SIM` token. |
+| `AccelRateEstimator.Update` | `void Update(Vector3 acceleration, float deltaSeconds, float smoothingSeconds)` | The rotation rate the accelerometer can see, in SDL's sensor frame: normalize(S₂ × S₁) · angle / Δt between consecutive smoothed gravity directions (GamepadMotionHelpers `GamepadMotion.hpp:962-970`). The smoothing advances on every poll with the poll's own time. A sample more than 0.25 g from the pad's resting length reads zero and holds the smoothing, and more than 0.25 s of that, net of the time back inside, starts the estimate over. |
+| `SourceCoercion.SimulatedGyroProvider` | `static Func<string, int, SimulatedGyroSample?>` | The App's per-(device, slot) estimate, `InputManager.ReadGyroSimulation`. `ReadCalibratedGyroRate` asks it after the grip picks the source axis, for the body sensor only, and returns its rate without the stored bias. |
+| `SourceCoercion.ApplySimulatedGyro` | `static void ApplySimulatedGyro(string deviceGuid, int slotIndex, ref float pitch, ref float yaw, ref float roll)` | The same substitution for the Gyro tab's readout, before its grip call. |
+
 ### Gyro Tuning (v3.3)
 
 Per device, per slot, so each binding config carries its own gyro feel and its own bias calibration.
@@ -2073,6 +2084,9 @@ Per device, per slot, so each binding config carries its own gyro feel and its o
 | `GyroAuxBiasPitch` / `GyroAuxBiasYaw` / `GyroAuxBiasRoll` | `string` | `[XmlElement]` | `"0"` | Aux gyro bias (#252) |
 | `GyroCalibratedAtUtc` | `string` | `[XmlElement]` | `""` | ISO-8601 time of the last calibration. Empty = uncalibrated, and `InputService` calibrates on first sight |
 | `GyroCompassYaw` | `string` | `[XmlElement]` | `"0"` | "1" anchors yaw to the Switch 2 magnetometer (#271) |
+| `GyroSimulation` | `string` | `[XmlElement]` | `"0"` | "1" fills a DualShock 3's pitch and roll from the accelerometer (#474) |
+| `GyroSimulationSmoothingMs` | `string` | `[XmlElement]` | `"100"` | The simulation's smoothing time constant, 20 to 250 ms |
+| `GyroCalibratedDevice` | `string` | `[XmlElement]` | `""` | Whom the stored bias belongs to (#474): the device row's instance GUID, or on a DualShock 3 whose address PadForge can read, the pad as `address/source`, where the source is `direct` for PadForge's own connection or `node:` and the driver release for a pad served through DsHidMini. A DualShock 3 subtracts a stored bias only when this matches. Other devices ignore the field and subtract any finite bias within 0.15 rad/s per axis |
 | `MagBiasX` / `MagBiasY` / `MagBiasZ` / `MagFieldNorm` | `string` | `[XmlElement]` | `"0"` | Magnetometer hard-iron bias and field magnitude from the figure-8 calibration. A zero norm keeps the compass off |
 
 ### Touchpad, Motion, and Gesture Settings

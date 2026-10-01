@@ -48,7 +48,7 @@ The controller carries the same identity over USB and Bluetooth. A mapping you s
 | **Bluetooth** | Connects after the one-time pairing above. Press **PS** to wake it. |
 | **Buttons and sticks** | The full pad maps like any other gamepad on the [Mappings](../features/mappings.md) tab. |
 | **Pressure buttons** | Ten buttons report analog pressure, each as its own source. They appear as **Axis 6** through **Axis 15**. The legend is [below](#pressure-sensitive-buttons). |
-| **Motion** | The gyro and accelerometer drive gyro aiming and the motion server. The DS3's gyro senses turning left and right only. |
+| **Motion** | The gyro and accelerometer drive gyro aiming and the motion server. The DS3's gyro senses turning left and right only, and in pre-release builds PadForge can fill pitch and roll from the accelerometer. |
 | **Rumble** | Both motors, over USB and Bluetooth. |
 | **Player light** | Lights the controller's number, 1 through 4. |
 | **Battery** | The charge level shows on the device card, wired or wireless. |
@@ -57,7 +57,15 @@ The controller carries the same identity over USB and Bluetooth. A mapping you s
 
 ## Motion
 
-The DualShock 3's built-in motion sensors flow through the same pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. The DS3's gyro senses one axis of rotation, turning the pad left and right, so gyro aiming responds to that turn and not to tilting the pad up and down or rolling it. The accelerometer reads all three axes. See [Gyro](../guides/gyro.md) for calibration, sensitivity, and the engage controls. The motion also broadcasts to the [DSU Motion Server](../reference/dsu-motion-server.md) for emulators.
+The DualShock 3's built-in motion sensors flow through the same pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. The DS3's gyro senses one axis of rotation, turning the pad left and right. The accelerometer reads all three axes. See [Gyro](../guides/gyro.md) for calibration, sensitivity, and the engage controls. The motion also broadcasts to the [DSU Motion Server](../reference/dsu-motion-server.md) for emulators.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.* Turn on [Pitch and Roll Simulation](../guides/gyro.md#pitch-and-roll-simulation) on the Gyro tab to fill tilting and rolling from the accelerometer, the idea behind the DS3 gyro simulation in the DS4Windows forks. The guide lists what an accelerometer can and can't see.
+
+**Calibrate the yaw by hand.** *Changed after 4.5.3. Pre-release builds have it, and the next release will.* Many pads rest far enough off center to read a steady turn while still. Put the pad down, give it half a minute after it connects, and press **Calibrate Gyro** on the Gyro tab. The automatic pass at connect won't take an offset that large on this pad ([why](../guides/gyro.md#calibration)). A calibration from an earlier version no longer counts, so calibrate again after updating. Calibrate again too after swapping to another DualShock 3, after moving between PadForge's own connection and DsHidMini, and after updating DsHidMini.
+
+**Yaw direction.** *Changed after 4.5.3. Pre-release builds have it, and the next release will.* PadForge reads a genuine DualShock 3's yaw the same way over USB, over Bluetooth, and through DsHidMini 3.15.0 or later: turning the pad left reads positive, as on other controllers. Through DsHidMini before 3.15.0 a genuine pad still reads backwards until DsHidMini is updated. If you checked **Invert Yaw (X)** on 4.5.3 or earlier to correct a genuine pad on PadForge's own USB or Bluetooth connection, uncheck it. Through DsHidMini, leave it checked until DsHidMini is 3.15.0 or later, then uncheck it.
+
+Some third-party pads turn the sensor the other way. If turning left moves the aim right, check **Invert Yaw (X)** on the Gyro tab. It flips PadForge's own gyro aim in Local space, and it reaches the virtual controller and the DSU server only with **Apply Gyro Tuning to Motion Passthrough** on. In Player or World space with Pitch and Roll Simulation on, yaw and roll combine before the invert, so on such a pad use Local space.
 
 <!-- SCREENSHOT: pad-ds3-gyro -->
 ![The Gyro tab for a DualShock 3 with reference frame and sensitivity controls](../images/pad-ds3-gyro.png)
