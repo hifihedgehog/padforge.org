@@ -163,6 +163,8 @@ Selected when `ResolveAssetFolders` returns `DS3`, which is any profile id start
 
 The fronts of L2 and R2 sit behind L1 and R1 in a front view, so they are drawn the way the DS4 art draws its triggers: a cap of the bumper's width rising behind it, labeled, with the base in front of its lower part. `DS3_L2.png` and `DS3_L2-Active.png` share one rect, because `_add_trigger_base_entries` pairs a trigger's rest and press art by position, and the press art covers only what shows above the body. `DS3_Face_Button.png` serves all four face buttons and `DS3_AnalogStick.png` / `DS3_AnalogStick_Click.png` both sticks. There is no touchpad entry.
 
+`WorkshopControllerPreview` draws this layout for Steam configs tagged `controller_ps3`, and the browse dialog's filter chip names that tag DualShock 3. The tag is in wide use: a query on 2026-10-01 counted 8,566 configs for GTA V, 8,795 for Dark Souls III and 1,708 for Skyrim Special Edition. Before, those configs drew the Xbox One S body and the chip read "Ps3".
+
 ### DualSenseLayout
 
 ```csharp
