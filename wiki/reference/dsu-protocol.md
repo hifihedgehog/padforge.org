@@ -232,9 +232,10 @@ Called from the InputManager polling thread at ~1000 Hz. Primary data path. Whil
 
 ### Snapshot Source
 
-`InputManager.UpdateMotionSnapshots()` fills two arrays each poll cycle: `MotionSnapshots[padIndex]` for the virtual controller's own motion report, and `DsuMotionSnapshots[padIndex]` for slots 0–3. `BroadcastDsuMotion()` runs immediately after it and fans `DsuMotionSnapshots` out to `BroadcastMotion()`, with `connected` taken from `IsSlotActive(padIndex)`: the slot is created, enabled, and holds an online assigned device. The slot's motion rows decide what DSU carries:
+`InputManager.UpdateMotionSnapshots()` fills two arrays each poll cycle: `MotionSnapshots[padIndex]` for the virtual controller's own motion report, and `DsuMotionSnapshots[padIndex]` for slots 0–3. `BroadcastDsuMotion()` runs after Step 4b and the motion stage (`ApplyMotionRows`) and fans `DsuMotionSnapshots` out to `BroadcastMotion()`, with `connected` taken from `IsSlotActive(padIndex)`: the slot is created, enabled, and holds an online assigned device. The slot's motion rows decide what DSU carries:
 
 - **Motion rows**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its `motionCapableProfile` argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. `SettingsService.EnsureMotionRowsForAllSlots` sets that argument from `NintendoPreviewMap.IsValve(ProfileId)` on an Extended slot. When either row exists, DSU gets the same reconciled result as `MotionSnapshots`, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (`MaxAbs` by default, or `Sum`, `Average`, or `Custom`), after each source's own calibration, grip, and optional tuning.
+- **Motion Pitch, Yaw and Roll rows** (#475): while one of them holds an input on a slot that carries motion, `UpdateMotionSnapshots` publishes nothing for the slot and `ApplyMotionRows` publishes the composed frame to both arrays, so DSU gets the same frame as `MotionSnapshots` with no fallback to every assigned sensor. See [Input Pipeline](input-pipeline.md#motion-pitch-yaw-and-roll).
 - **No motion rows**: every other slot type (Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots), and a motion-capable slot whose rows were removed, still broadcasts. `ReconcileAssignedMotion` reads every enabled, online device assigned to the slot and combines their readings axis by axis with the default `MaxAbs` combine. A device without the primary sensor contributes its aux sensor instead. `MotionSnapshots` stays empty for such a slot, so the virtual controller's own report carries no motion.
 - **Row source**: the row's source descriptor picks the sensor stream. `Motion Gyro` and `Motion Accel` read the body IMU. The aux variants `Motion Gyro L` (#252) and `Motion Accel L` (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".
 
@@ -601,7 +602,7 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 - [Architecture Overview](architecture-overview.md): DSU receive thread, threading model
 - [Services Layer](services-layer.md): `InputService` manages `DsuMotionServer` lifecycle (start/stop/port)
-- [Input Pipeline](input-pipeline.md): `UpdateMotionSnapshots()` and `BroadcastDsuMotion()` called after Step 2
+- [Input Pipeline](input-pipeline.md): `UpdateMotionSnapshots()` called after Step 2, and `ApplyMotionRows()` and `BroadcastDsuMotion()` after Step 4b
 - [Engine Library](engine-library.md): `SdlDeviceWrapper` gyro/accel sensor reading (`MotionSnapshot` itself lives in `PadForge.App/Services`, documented above)
 - [SDL3 Integration](sdl3-integration.md): `SDL_GetGamepadSensorData` for gyro and accelerometer
 - [Build and Publish](build-and-publish.md): `DsuDiag` diagnostic tool in `tools/`

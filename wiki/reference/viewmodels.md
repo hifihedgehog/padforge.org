@@ -1372,11 +1372,13 @@ The slot's `MappingSet` (multi-source rows, shift layers and their activators, p
 
 ### Slot-Level Picker Lists and Mapping Picker Filter (#322, discussion #302)
 
-Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.
+Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. `ApplyMappingPickerFilter` filters all three lists, and `RebuildPickerDeviceFilterEntries` builds the popup from the device groups of all three, so a device the Motion rows alone offer still has a checkbox. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `SlotAvailableInputs` | `ObservableCollection<InputChoice>` | Slot-level cross-device choice list, so the Gyro tab's Aim Engage picker and any other slot-wide picker binds without proxy-walking `Mappings`. Populated by `InputService.PopulateAvailableInputs`. |
+| `SlotAvailableInputs` | `ObservableCollection<InputChoice>` | Slot-level cross-device choice list, so the Gyro tab's Aim Engage picker and any other slot-wide picker binds without proxy-walking `Mappings`. Populated by `InputService.PopulateAvailableInputs`. Every choice except the four bundled motion sources (#475). |
+| `SlotMotionGyroInputs` | `ObservableCollection<InputChoice>` | (#475) The Motion Gyro row's choices: `Motion Gyro` and `Motion Gyro L` per device, the one kind that row reads. |
+| `SlotMotionAccelInputs` | `ObservableCollection<InputChoice>` | (#475) The Motion Accelerometer row's choices: `Motion Accel` and `Motion Accel L` per device. |
 | `SlotAvailableInputsView` | `ICollectionView` | Grouped view over the list, keyed on `InputChoice.DeviceLabel` for the picker's GroupStyle header. |
 | `SlotMacroTriggerChoices` | `ObservableCollection<InputChoice>` | The subset of `SlotAvailableInputs` that converts to a `MacroItem.TriggerInputEntry` (raw buttons, POV directions, gamepad-layout axes, touchpad click, touchpad gestures), for the macro trigger dropdown (#177). |
 | `SlotMacroTriggerChoicesView` | `ICollectionView` | Grouped view over the macro-trigger list, same `DeviceLabel` grouping. |
@@ -1989,7 +1991,8 @@ Single mapping row linking a physical input to an output target in the Pad page 
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `AvailableInputs` | `ObservableCollection<InputChoice>` | Source dropdown choices, spanning every device assigned to the slot. Populated by InputService once per VC slot, not per device-dropdown change. Since #322 every row on a slot points at the ONE shared list (`UseSharedAvailableInputs`), so a keyboard-and-mouse tab switch no longer rebuilds a private copy and a grouped view per row. |
+| `AvailableInputs` | `ObservableCollection<InputChoice>` | Source dropdown choices, spanning every device assigned to the slot. Populated by InputService once per VC slot, not per device-dropdown change. Since #322 every row on a slot points at a shared list (`UseSharedAvailableInputs`), so a keyboard-and-mouse tab switch no longer rebuilds a private copy and a grouped view per row. Since #475 the Motion Gyro and Motion Accelerometer rows point at the slot's motion lists and every other row at `SlotAvailableInputs` (`InputService.PickerListForRow`). |
+| `ParamInputs` / `ParamInputsView` | `ObservableCollection<InputChoice>` / `ICollectionView` | (#475) The full list for the modifier and Up / Down pickers and `MappingSourceItem.ResolveParamChoice`. It differs from `AvailableInputs` only on the Motion rows, where an Invert On Hold modifier still needs a button. Set by `UseSharedParamInputs`, which collapses back to `AvailableInputs` when the two are the same list. |
 | `AvailableInputsView` | `ICollectionView` | The grouped view the XAML ComboBox binds to. `GroupDescriptions` carries one `PropertyGroupDescription` on `InputChoice.DeviceLabel`, so the picker renders one dropdown with device-name headers. The default view is one object per collection, so on the shared list every row lands on the same view and the grouping is configured once. |
 | `SelectedInput` | `InputChoice` | Selected dropdown input. Updates `SourceDescriptor`. Empty sentinel triggers `ClearCommand`. Suppression flag prevents re-entrancy, and is held across the shared-list rebuild (`BeginSharedListRebuild` / `EndSharedListRebuild`) so a live ComboBox cannot write its own selection back through the TwoWay binding. |
 
@@ -2095,6 +2098,27 @@ Trigger-only combine mode that lets a "winding" stick axis trim a trigger output
 
 **Reset commands:** `ResetTrimDeadzoneCommand`, `ResetTrimRateCommand`, `ResetTrimResetOnReleaseCommand`.
 
+### Motion Pitch, Yaw and Roll (#475)
+
+File: `MappingItem.MotionRows.cs`. The three rows that turn stick, trigger, button and key input into the virtual controller's motion.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `IsMotionAxisRow` | `bool` | - | Computed: the target is `MotionPitch`, `MotionYaw` or `MotionRoll`. Shows the motion panel. |
+| `CanUseMotionAngle` | `bool` | - | Computed: pitch or roll. Yaw has no Angle response, so the Motion Mode dropdown hides on it. |
+| `MotionResponse` | `string` | `""` | `""` for Speed, `"Angle"` for Angle. Any other value stores as `""`. |
+| `IsMotionAngle` | `bool` | - | Computed: `CanUseMotionAngle` and `MotionResponse == "Angle"`. |
+| `ShowMotionSpeedSettings` / `ShowMotionAngleSettings` | `bool` | - | Computed: which half of the panel shows. Raised with `MotionResponse`. |
+| `MotionSpeed` | `int` | `360` | Top Speed, degrees per second. Clamped 1 to 1600. |
+| `MotionMinSpeed` | `int` | `0` | Start Speed, degrees per second. Clamped 0 to 1600. |
+| `MotionAngle` | `int` | `85` | Lean Angle, degrees. Clamped 1 to 90. |
+| `MotionDeadzone` | `int` | `20` | Motion Deadzone, percent. Clamped 0 to 90. |
+| `MotionResponseOptions` | `IReadOnlyList<CombineModeOption>` | - | Speed and Angle with their descriptions, culture-cached like the combine modes. |
+| `PresetCarriesNoMotion` | `bool` (init) | `false` | Set by the grid builder on all five Motion rows of the DualShock 3 and Switch 2 Pro presets (`HMaestroProfileCatalog.ReportCarriesNoMotion`). |
+| `MotionRowNote` / `ShowMotionRowNote` | `string` / `bool` | `null` / `false` | The note under the row. On a Motion Gyro or Motion Accelerometer row, a source whose descriptor is not a `Motion ` one: `Pad_Mapping_MotionRowUnreadNote`. On any other row, a bundled motion source: `Pad_Mapping_MotionSourceElsewhereNote`. Otherwise, on a preset without motion, `Pad_Mapping_MotionPresetNote` on the Motion rows. InvertOnHold modifiers are skipped. Raised when the primary or an extra source changes. |
+
+The five settings reset through `ResetSettingCommand` with their property names. The grid builder adds the three rows after Motion Gyro and Motion Accelerometer on the PlayStation, Nintendo and Valve grids (`PadViewModel.AddMotionRows`), each with `NegSettingName` `<Target>Neg` and all five out of Map All. **Clear All** resets the five settings.
+
 ### InputChoice
 
 **File:** `MappingItem.cs`
@@ -2110,7 +2134,7 @@ Input choice in the source dropdown.
 
 ### MappingCategory (enum)
 
-Values: `Buttons`, `DPad`, `Triggers`, `LeftStick`, `RightStick`, `Touchpad`, `Motion`. `Motion` covers the bundled motion-passthrough rows (`MotionGyro` / `MotionAccel` targets), auto-created on Sony-class slots for every assigned gyro or accel-capable device and rendered as one combined Motion row when both sub-channels come from the same source. `Touchpad` rows are the one category `IsRecordable` excludes.
+Values: `Buttons`, `DPad`, `Triggers`, `LeftStick`, `RightStick`, `Touchpad`, `Motion`. `Motion` covers the bundled motion-passthrough rows (`MotionGyro` / `MotionAccel` targets) and the Motion Pitch, Yaw and Roll rows (#475). The passthrough rows are auto-created on Sony-class slots for every assigned gyro or accel-capable device and rendered as one combined Motion row when both sub-channels come from the same source. `Touchpad` rows are the one category `IsRecordable` excludes.
 
 ---
 

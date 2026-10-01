@@ -3981,6 +3981,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#motion-pitch-yaw-and-roll-475" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Pitch, Yaw and Roll (#475)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#inputchoice" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7389,6 +7400,17 @@
     <span class="md-ellipsis">
       
         Stick Trim (#155)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#motion-pitch-yaw-and-roll-475" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Pitch, Yaw and Roll (#475)
       
     </span>
   </a>
@@ -13318,7 +13340,7 @@
 </table>
 <p>The slot's <code>MappingSet</code> (multi-source rows, shift layers and their activators, plus the menus, SOCD, Bass Shakers, and Keep Controller Awake configs) is not a <code>PadViewModel</code> property. It lives in <code>SettingsManager.SlotMappingSets[PadIndex]</code>, and the view model reads it through a private accessor. See <a href="../../features/mappings/">Button and Axis Mappings</a> and <a href="../../guides/shift-layers/">Shift Layers</a>.</p>
 <h3 id="slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302">Slot-Level Picker Lists and Mapping Picker Filter (#322, discussion #302)<a class="headerlink" href="#slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302" title="Permanent link">&para;</a></h3>
-<p>Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.</p>
+<p>Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. <code>ApplyMappingPickerFilter</code> filters all three lists, and <code>RebuildPickerDeviceFilterEntries</code> builds the popup from the device groups of all three, so a device the Motion rows alone offer still has a checkbox. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.</p>
 <table>
 <thead>
 <tr>
@@ -13331,7 +13353,17 @@
 <tr>
 <td><code>SlotAvailableInputs</code></td>
 <td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
-<td>Slot-level cross-device choice list, so the Gyro tab's Aim Engage picker and any other slot-wide picker binds without proxy-walking <code>Mappings</code>. Populated by <code>InputService.PopulateAvailableInputs</code>.</td>
+<td>Slot-level cross-device choice list, so the Gyro tab's Aim Engage picker and any other slot-wide picker binds without proxy-walking <code>Mappings</code>. Populated by <code>InputService.PopulateAvailableInputs</code>. Every choice except the four bundled motion sources (#475).</td>
+</tr>
+<tr>
+<td><code>SlotMotionGyroInputs</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
+<td>(#475) The Motion Gyro row's choices: <code>Motion Gyro</code> and <code>Motion Gyro L</code> per device, the one kind that row reads.</td>
+</tr>
+<tr>
+<td><code>SlotMotionAccelInputs</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
+<td>(#475) The Motion Accelerometer row's choices: <code>Motion Accel</code> and <code>Motion Accel L</code> per device.</td>
 </tr>
 <tr>
 <td><code>SlotAvailableInputsView</code></td>
@@ -15620,7 +15652,12 @@
 <tr>
 <td><code>AvailableInputs</code></td>
 <td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
-<td>Source dropdown choices, spanning every device assigned to the slot. Populated by InputService once per VC slot, not per device-dropdown change. Since #322 every row on a slot points at the ONE shared list (<code>UseSharedAvailableInputs</code>), so a keyboard-and-mouse tab switch no longer rebuilds a private copy and a grouped view per row.</td>
+<td>Source dropdown choices, spanning every device assigned to the slot. Populated by InputService once per VC slot, not per device-dropdown change. Since #322 every row on a slot points at a shared list (<code>UseSharedAvailableInputs</code>), so a keyboard-and-mouse tab switch no longer rebuilds a private copy and a grouped view per row. Since #475 the Motion Gyro and Motion Accelerometer rows point at the slot's motion lists and every other row at <code>SlotAvailableInputs</code> (<code>InputService.PickerListForRow</code>).</td>
+</tr>
+<tr>
+<td><code>ParamInputs</code> / <code>ParamInputsView</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code> / <code>ICollectionView</code></td>
+<td>(#475) The full list for the modifier and Up / Down pickers and <code>MappingSourceItem.ResolveParamChoice</code>. It differs from <code>AvailableInputs</code> only on the Motion rows, where an Invert On Hold modifier still needs a button. Set by <code>UseSharedParamInputs</code>, which collapses back to <code>AvailableInputs</code> when the two are the same list.</td>
 </tr>
 <tr>
 <td><code>AvailableInputsView</code></td>
@@ -16027,6 +16064,93 @@
 </tbody>
 </table>
 <p><strong>Reset commands:</strong> <code>ResetTrimDeadzoneCommand</code>, <code>ResetTrimRateCommand</code>, <code>ResetTrimResetOnReleaseCommand</code>.</p>
+<h3 id="motion-pitch-yaw-and-roll-475">Motion Pitch, Yaw and Roll (#475)<a class="headerlink" href="#motion-pitch-yaw-and-roll-475" title="Permanent link">&para;</a></h3>
+<p>File: <code>MappingItem.MotionRows.cs</code>. The three rows that turn stick, trigger, button and key input into the virtual controller's motion.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IsMotionAxisRow</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: the target is <code>MotionPitch</code>, <code>MotionYaw</code> or <code>MotionRoll</code>. Shows the motion panel.</td>
+</tr>
+<tr>
+<td><code>CanUseMotionAngle</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: pitch or roll. Yaw has no Angle response, so the Motion Mode dropdown hides on it.</td>
+</tr>
+<tr>
+<td><code>MotionResponse</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td><code>""</code> for Speed, <code>"Angle"</code> for Angle. Any other value stores as <code>""</code>.</td>
+</tr>
+<tr>
+<td><code>IsMotionAngle</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: <code>CanUseMotionAngle</code> and <code>MotionResponse == "Angle"</code>.</td>
+</tr>
+<tr>
+<td><code>ShowMotionSpeedSettings</code> / <code>ShowMotionAngleSettings</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed: which half of the panel shows. Raised with <code>MotionResponse</code>.</td>
+</tr>
+<tr>
+<td><code>MotionSpeed</code></td>
+<td><code>int</code></td>
+<td><code>360</code></td>
+<td>Top Speed, degrees per second. Clamped 1 to 1600.</td>
+</tr>
+<tr>
+<td><code>MotionMinSpeed</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>Start Speed, degrees per second. Clamped 0 to 1600.</td>
+</tr>
+<tr>
+<td><code>MotionAngle</code></td>
+<td><code>int</code></td>
+<td><code>85</code></td>
+<td>Lean Angle, degrees. Clamped 1 to 90.</td>
+</tr>
+<tr>
+<td><code>MotionDeadzone</code></td>
+<td><code>int</code></td>
+<td><code>20</code></td>
+<td>Motion Deadzone, percent. Clamped 0 to 90.</td>
+</tr>
+<tr>
+<td><code>MotionResponseOptions</code></td>
+<td><code>IReadOnlyList&lt;CombineModeOption&gt;</code></td>
+<td>-</td>
+<td>Speed and Angle with their descriptions, culture-cached like the combine modes.</td>
+</tr>
+<tr>
+<td><code>PresetCarriesNoMotion</code></td>
+<td><code>bool</code> (init)</td>
+<td><code>false</code></td>
+<td>Set by the grid builder on all five Motion rows of the DualShock 3 and Switch 2 Pro presets (<code>HMaestroProfileCatalog.ReportCarriesNoMotion</code>).</td>
+</tr>
+<tr>
+<td><code>MotionRowNote</code> / <code>ShowMotionRowNote</code></td>
+<td><code>string</code> / <code>bool</code></td>
+<td><code>null</code> / <code>false</code></td>
+<td>The note under the row. On a Motion Gyro or Motion Accelerometer row, a source whose descriptor is not a <code>Motion</code> one: <code>Pad_Mapping_MotionRowUnreadNote</code>. On any other row, a bundled motion source: <code>Pad_Mapping_MotionSourceElsewhereNote</code>. Otherwise, on a preset without motion, <code>Pad_Mapping_MotionPresetNote</code> on the Motion rows. InvertOnHold modifiers are skipped. Raised when the primary or an extra source changes.</td>
+</tr>
+</tbody>
+</table>
+<p>The five settings reset through <code>ResetSettingCommand</code> with their property names. The grid builder adds the three rows after Motion Gyro and Motion Accelerometer on the PlayStation, Nintendo and Valve grids (<code>PadViewModel.AddMotionRows</code>), each with <code>NegSettingName</code> <code>&lt;Target&gt;Neg</code> and all five out of Map All. <strong>Clear All</strong> resets the five settings.</p>
 <h3 id="inputchoice">InputChoice<a class="headerlink" href="#inputchoice" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>MappingItem.cs</code></p>
 <p>Input choice in the source dropdown.</p>
@@ -16062,7 +16186,7 @@
 </tbody>
 </table>
 <h3 id="mappingcategory-enum">MappingCategory (enum)<a class="headerlink" href="#mappingcategory-enum" title="Permanent link">&para;</a></h3>
-<p>Values: <code>Buttons</code>, <code>DPad</code>, <code>Triggers</code>, <code>LeftStick</code>, <code>RightStick</code>, <code>Touchpad</code>, <code>Motion</code>. <code>Motion</code> covers the bundled motion-passthrough rows (<code>MotionGyro</code> / <code>MotionAccel</code> targets), auto-created on Sony-class slots for every assigned gyro or accel-capable device and rendered as one combined Motion row when both sub-channels come from the same source. <code>Touchpad</code> rows are the one category <code>IsRecordable</code> excludes.</p>
+<p>Values: <code>Buttons</code>, <code>DPad</code>, <code>Triggers</code>, <code>LeftStick</code>, <code>RightStick</code>, <code>Touchpad</code>, <code>Motion</code>. <code>Motion</code> covers the bundled motion-passthrough rows (<code>MotionGyro</code> / <code>MotionAccel</code> targets) and the Motion Pitch, Yaw and Roll rows (#475). The passthrough rows are auto-created on Sony-class slots for every assigned gyro or accel-capable device and rendered as one combined Motion row when both sub-channels come from the same source. <code>Touchpad</code> rows are the one category <code>IsRecordable</code> excludes.</p>
 <hr />
 <h2 id="mappingsourceitem">MappingSourceItem<a class="headerlink" href="#mappingsourceitem" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>MappingSourceItem.cs</code></p>

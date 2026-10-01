@@ -4363,6 +4363,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#motion-rows-475" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion rows (#475)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cancelrecording-public" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7449,6 +7460,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#motion-rows-475" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion rows (#475)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cancelrecording-public" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -8588,7 +8610,7 @@
 <p>Rebuilds each PadViewModel's <code>MappedDevices</code> from <code>UserSettings.FindByPadIndex()</code>. Handles multi-device slots, auto-selects first device, refreshes sidebar and dashboard.</p>
 <h3 id="per-device-settings-swap">Per-Device Settings Swap<a class="headerlink" href="#per-device-settings-swap" title="Permanent link">&para;</a></h3>
 <h4 id="populateavailableinputspadviewmodel-padvm-userdevice-ud-private"><code>PopulateAvailableInputs(PadViewModel padVm, UserDevice ud)</code> (private)<a class="headerlink" href="#populateavailableinputspadviewmodel-padvm-userdevice-ud-private" title="Permanent link">&para;</a></h4>
-<p>Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract <code>Gamepad *</code> family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from <code>MappingDisplayResolver.BuildInputChoices</code>, which prefers the live wrapper's sparse <code>SupportedButtonIndices</code> / <code>SupportedAxisIndices</code> so a device that populates only specific slots does not surface phantom "Button N" or "Axis N" rows, falls back to the positions <code>UserDevice</code> recorded when the device was last online (<code>CapButtonIndices</code> / <code>CapAxisIndices</code>, discussion #344), and reaches the dense <code>Math.Max(CapButtonCount, RawButtonCount)</code> / <code>CapAxeCount</code> range only for a device never seen online. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds <code>padVm.SlotAvailableInputs</code> (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.</p>
+<p>Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract <code>Gamepad *</code> family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from <code>MappingDisplayResolver.BuildInputChoices</code>, which prefers the live wrapper's sparse <code>SupportedButtonIndices</code> / <code>SupportedAxisIndices</code> so a device that populates only specific slots does not surface phantom "Button N" or "Axis N" rows, falls back to the positions <code>UserDevice</code> recorded when the device was last online (<code>CapButtonIndices</code> / <code>CapAxisIndices</code>, discussion #344), and reaches the dense <code>Math.Max(CapButtonCount, RawButtonCount)</code> / <code>CapAxeCount</code> range only for a device never seen online. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The flat list splits three ways through <code>PickerListForChoice</code> (#475): the bundled gyro sources (<code>Motion Gyro</code>, <code>Motion Gyro L</code>) go to <code>padVm.SlotMotionGyroInputs</code>, the bundled accelerometer sources to <code>padVm.SlotMotionAccelInputs</code>, and every other choice to <code>padVm.SlotAvailableInputs</code> (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage). Each row's source pickers bind the list <code>PickerListForRow</code> names for its target, and its modifier and Up / Down pickers bind <code>SlotAvailableInputs</code> through <code>UseSharedParamInputs</code>. The macro trigger dropdown filters the whole flat list.</p>
 <h4 id="refreshmappingdropdowns-public"><code>RefreshMappingDropdowns()</code> (public)<a class="headerlink" href="#refreshmappingdropdowns-public" title="Permanent link">&para;</a></h4>
 <p>Called when <code>ForceRawJoystickMode</code> is toggled on a device. Rebuilds the input source dropdown and mapping descriptors for all pad slots using that device, reflecting the change in available raw vs. gamepad inputs.</p>
 <h4 id="onselecteddevicechangedobject-sender-padviewmodelmappeddeviceinfo-newdevice-private"><code>OnSelectedDeviceChanged(object sender, PadViewModel.MappedDeviceInfo newDevice)</code> (private)<a class="headerlink" href="#onselecteddevicechangedobject-sender-padviewmodelmappeddeviceinfo-newdevice-private" title="Permanent link">&para;</a></h4>
@@ -9814,20 +9836,21 @@
 <a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>PollTick:
 <a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>  1. Check timeout (10 seconds)
 <a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>  2. Read current state (clone)
-<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>  3. Wait-for-release phase (if neutralizeBaseline)
-<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>  4. Touchpad click, then voice phrases   -&gt; CompleteRecordingWithDescriptor
-<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>  5. Check buttons (instant detection)
-<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>  6. Check POV hats (instant detection)
-<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>  7. Touchpad gestures                    -&gt; CompleteRecordingWithDescriptor
-<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>  8. MIDI notes / CC / pitch bend         -&gt; CompleteRecordingWithDescriptor
-<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>  9. Check axes (3-cycle hold confirmation)
-<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>       |
-<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>       v   [on detection]
-<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>CompleteRecording:
-<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>  1. Build descriptor string (&quot;Button 0&quot;, &quot;Axis 1&quot;, &quot;POV 0 Up&quot;)
-<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>  2. Auto-detect inversion based on movement direction + target type
-<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>  3. Call mapping.LoadDescriptor(descriptor)
-<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>  4. Raise RecordingCompleted event
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>  3. Motion Gyro / Motion Accelerometer row: DetectMotion only -&gt; CompleteRecordingWithDescriptor
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>  4. Wait-for-release phase (if neutralizeBaseline)
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>  5. Touchpad click, then voice phrases   -&gt; CompleteRecordingWithDescriptor
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>  6. Check buttons (instant detection)
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>  7. Check POV hats (instant detection)
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>  8. Touchpad gestures                    -&gt; CompleteRecordingWithDescriptor
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>  9. MIDI notes / CC / pitch bend         -&gt; CompleteRecordingWithDescriptor
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>  10. Check axes (3-cycle hold confirmation)
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>       |
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>       v   [on detection]
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>CompleteRecording:
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>  1. Build descriptor string (&quot;Button 0&quot;, &quot;Axis 1&quot;, &quot;POV 0 Up&quot;)
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>  2. Auto-detect inversion based on movement direction + target type
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>  3. Call mapping.LoadDescriptor(descriptor)
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>  4. Raise RecordingCompleted event
 </code></pre></div>
 <p>Two private completion paths exist. <code>CompleteRecording(MapType type, int index, string povDirection, bool axisPositive = false, Guid winningDevice = default)</code> builds a descriptor from a numbered input. <code>CompleteRecordingWithDescriptor(string descriptor, Guid winningDevice = default)</code> takes an already-shaped descriptor and is how the touchpad-click, voice-phrase, touchpad-gesture and MIDI families finish. Param recordings (Up / Down / Modifier) are gated to the button and POV families, so the MIDI and axis blocks are skipped for them.</p>
 <h4 id="startrecordingmappingitem-int-padindex-guid-deviceguid-bool-neutralizebaseline-bool-negrecording-public"><code>StartRecording(MappingItem, int padIndex, Guid deviceGuid, bool neutralizeBaseline, bool negRecording)</code> (public)<a class="headerlink" href="#startrecordingmappingitem-int-padindex-guid-deviceguid-bool-neutralizebaseline-bool-negrecording-public" title="Permanent link">&para;</a></h4>
@@ -9835,6 +9858,10 @@
 - <code>neutralizeBaseline</code>: waits for all buttons/POVs to return to neutral before detecting (for auto-prompt follow-ups).
 - <code>negRecording</code>: records the negative direction of a bidirectional axis.
 - <code>deviceGuid</code> is accepted but not forwarded to the shared <code>StartRecordingInternal</code>. The recorder listens to every device assigned to the slot, and the first to fire wins.</p>
+<h4 id="motion-rows-475">Motion rows (#475)<a class="headerlink" href="#motion-rows-475" title="Permanent link">&para;</a></h4>
+<p><code>StartRecordingInternal</code> sets <code>_motionKind</code> from the target, 1 for <code>MotionGyro</code> and 2 for <code>MotionAccel</code>, unless a param field is being recorded, because a modifier is a button. With a motion kind and no active device carrying that sensor (<code>HasGyro</code> / <code>HasGyroAux</code>, <code>HasAccel</code> / <code>HasAccelAux</code>), recording does not start: the status bar shows <code>Status_NoMotionSensorToRecord_Format</code> and <code>RecordingTimedOut</code> fires. Otherwise the prompt is <code>Status_RecordingMotionPrompt_Format</code>, and each tick runs <code>DetectMotion</code> and nothing else for each device.</p>
+<p>A gyro records once its rate magnitude reaches 1.5 rad/s (<code>MotionRecordGyroRadPerSec</code>, about 86°/s). An accelerometer records once its vector moves half a g from the baseline (<code>MotionRecordAccelMs2</code>). The aux sensor wins when it moved more, recording <code>Motion Gyro L</code> or <code>Motion Accel L</code>. An accelerometer whose baseline has no reading, under half a g, takes its first reading as the baseline instead of counting it as a shake (<code>AccelReferenceMissing</code>): a device that had just connected, or a Nunchuk plugged in mid-recording.</p>
+<p>The Motion Pitch, Yaw and Roll rows record like stick axis rows: <code>IsButtonLikeRecordingTarget</code> is false for them, and <code>ShouldAutoInvert</code> gives them the stick-axis rule.</p>
 <h4 id="cancelrecording-public"><code>CancelRecording()</code> (public)<a class="headerlink" href="#cancelrecording-public" title="Permanent link">&para;</a></h4>
 <p>Stops the timer, clears all recording state, sets <code>IsRecording = false</code>.</p>
 <h3 id="detection-algorithm">Detection Algorithm<a class="headerlink" href="#detection-algorithm" title="Permanent link">&para;</a></h3>
@@ -9876,6 +9903,10 @@
 <tr>
 <td>Named stick axes (<code>LeftThumbAxisX/Y</code>, <code>RightThumbAxisX/Y</code>)</td>
 <td><code>negRecording ? axisPositive : !axisPositive</code></td>
+</tr>
+<tr>
+<td><code>MotionPitch</code>, <code>MotionYaw</code>, <code>MotionRoll</code> (#475)</td>
+<td>Same rule as the stick axes</td>
 </tr>
 <tr>
 <td><code>RawAxis*</code> on a row that has a negative direction</td>
@@ -9925,6 +9956,16 @@
 <td><code>AxisHoldCycles</code></td>
 <td>3</td>
 <td>Cycles axis must be held</td>
+</tr>
+<tr>
+<td><code>MotionRecordGyroRadPerSec</code></td>
+<td>1.5</td>
+<td>Gyro rate magnitude that records a Motion Gyro row (#475)</td>
+</tr>
+<tr>
+<td><code>MotionRecordAccelMs2</code></td>
+<td>0.5 × 9.80665</td>
+<td>Accelerometer change from the baseline that records a Motion Accelerometer row (#475)</td>
 </tr>
 <tr>
 <td><code>MidiCcThreshold</code></td>

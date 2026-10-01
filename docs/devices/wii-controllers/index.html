@@ -4041,7 +4041,7 @@
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See <a href="../../guides/gyro/">Gyro</a> for calibration, sensitivity, and the engage controls.</p>
-<p>A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong>. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently.</p>
+<p>A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong>. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. Pre-release builds after 4.5.3 offer <strong>Nunchuk Accelerometer</strong> only on the <strong>Motion Accelerometer</strong> row, the one row that reads it.</p>
 <p>The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.</p>
 <h3 id="holds">Holds<a class="headerlink" href="#holds" title="Permanent link">&para;</a></h3>
 <p>The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The <strong>Grip</strong> card on the <a href="../../guides/gyro/#grip">Gyro</a> tab, row <strong>Held As</strong>, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
@@ -4136,11 +4136,11 @@
 </tr>
 <tr>
 <td><strong>Left Joy-Con Motion Gyro</strong></td>
-<td>The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's.</td>
+<td>The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. Pre-release builds after 4.5.3 offer it only on the <strong>Motion Gyro</strong> row.</td>
 </tr>
 <tr>
 <td><strong>Left Joy-Con Accelerometer</strong></td>
-<td>The left half's full accelerometer stream to the virtual controller's motion accelerometer output.</td>
+<td>The left half's full accelerometer stream to the virtual controller's motion accelerometer output. Pre-release builds after 4.5.3 offer it only on the <strong>Motion Accelerometer</strong> row.</td>
 </tr>
 <tr>
 <td><strong>Left Joy-Con Lean</strong></td>

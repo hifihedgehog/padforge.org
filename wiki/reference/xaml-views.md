@@ -717,7 +717,7 @@ Grid (4 rows, x:Name="MappingDataGrid" at Row 3)
 - Row style: transparent background, retemplated with a #175 "rowfire" ember underline drawn at the cells' bottom edge. A plain row with no options collapses to a 26px mono compact line and expands to the full editor on click or selection.
 
 **Source Column ComboBox:**
-- `ItemsSource="{Binding AvailableInputsView}"`. Grouped `ICollectionView` over the row's `AvailableInputs` (per-device groups via `ComboBox.GroupStyle`).
+- `ItemsSource="{Binding AvailableInputsView}"`. Grouped `ICollectionView` over the row's `AvailableInputs` (per-device groups via `ComboBox.GroupStyle`). On the Motion Gyro and Motion Accelerometer rows that is the slot's list for the row's sensor (#475). The modifier and Up / Down pickers, in the row's detail strip and on extra-source chips, bind `DataContext.ParamInputsView`, the slot's full list.
 - `SelectedItem="{Binding SelectedInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"`.
 - `DisplayMemberPath="DisplayName"`.
 
@@ -729,8 +729,14 @@ Grid (4 rows, x:Name="MappingDataGrid" at Row 3)
 - `Do Not Inherit` CheckBox. `NoInherit` binding, shown while the active layer inherits (`IsActiveLayerInheriting`).
 - Gyro sensitivity slider (0.1-10). `GyroSensitivity` binding, shown for gyro sources (`IsGyroSource`).
 
+**Motion row panel (#475):**
+In the row's detail strip, above the Combine row:
+
+- A caution-colored note (`MotionRowNote`, shown while `ShowMotionRowNote`) on any row.
+- On the Motion Pitch, Yaw and Roll rows (`IsMotionAxisRow`): the **Motion Mode** ComboBox over `MotionResponseOptions` (shown while `CanUseMotionAngle`), then **Top Speed** and **Start Speed** (`ShowMotionSpeedSettings`) or **Lean Angle** (`ShowMotionAngleSettings`), then **Motion Deadzone**. Each setting is a slider, a number box, a unit and a `SettingResetButton`, laid out like the Ramp panel.
+
 **Picker Filter (#322):**
-One search box and one device-visibility popup filter the slot's shared choice view, so every picker on the tab reflects them when opened. Ctrl+F focuses the box through `MappingsTabRoot_PreviewKeyDown` on the tab root.
+One search box and one device-visibility popup filter the slot's choice views, the shared list and the two Motion lists (#475), so every picker on the tab reflects them when opened. Ctrl+F focuses the box through `MappingsTabRoot_PreviewKeyDown` on the tab root.
 
 - `MappingInputSearch` is find-as-you-type and session-only, never persisted. Its setter calls `ApplyMappingPickerFilter()`.
 - The search also **filters the grid rows** as well as the dropdown contents: `RowMatchesSearch` matches a row's target label or its selected source's display name. Rows are outputs, so the device-visibility set never hides them. Only typed text does.

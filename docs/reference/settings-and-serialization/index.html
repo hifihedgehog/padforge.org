@@ -8316,7 +8316,7 @@
 <td><code>Target</code></td>
 <td><code>[XmlAttribute]</code></td>
 <td><code>string</code></td>
-<td>Output target name (e.g. <code>"ButtonA"</code>, <code>"LeftThumbAxisX"</code>, <code>"LeftTrigger"</code>, <code>"DPadUp"</code>). Must match a <code>PadSetting</code> mapping field.</td>
+<td>Output target name (e.g. <code>"ButtonA"</code>, <code>"LeftThumbAxisX"</code>, <code>"LeftTrigger"</code>, <code>"DPadUp"</code>). Must match a <code>PadSetting</code> mapping field, or name one of the slot-scoped motion targets: <code>"MotionGyro"</code> / <code>"MotionAccel"</code> (passthrough) or <code>"MotionPitch"</code> / <code>"MotionYaw"</code> / <code>"MotionRoll"</code> (#475).</td>
 </tr>
 <tr>
 <td><code>LayerMask</code></td>
@@ -8367,6 +8367,36 @@
 <td>(#155) Stick-trim: when true, releasing the gate resets the stored level to 100%. When false, the level persists across releases until trimmed again.</td>
 </tr>
 <tr>
+<td><code>MotionResponse</code></td>
+<td><code>[XmlAttribute]</code></td>
+<td><code>string</code> (<code>""</code>)</td>
+<td>(#475) Motion Pitch / Yaw / Roll: <code>""</code> is Speed, a turn that stops where it is on release. <code>"Angle"</code> leans and levels on release, pitch and roll only. Yaw reads any value as Speed. A string so the vocabulary can grow append-only.</td>
+</tr>
+<tr>
+<td><code>MotionSpeed</code></td>
+<td><code>[XmlAttribute]</code></td>
+<td><code>int</code> (360)</td>
+<td>(#475) Speed: degrees per second at full deflection. The editor keeps it 1 to 1600, and the model clamps to 1600.</td>
+</tr>
+<tr>
+<td><code>MotionMinSpeed</code></td>
+<td><code>[XmlAttribute]</code></td>
+<td><code>int</code> (0)</td>
+<td>(#475) Speed: degrees per second just past the deadzone. The model clamps it to <code>MotionSpeed</code>.</td>
+</tr>
+<tr>
+<td><code>MotionAngle</code></td>
+<td><code>[XmlAttribute]</code></td>
+<td><code>int</code> (85)</td>
+<td>(#475) Angle: lean at full deflection, degrees, 1 to 90.</td>
+</tr>
+<tr>
+<td><code>MotionDeadzone</code></td>
+<td><code>[XmlAttribute]</code></td>
+<td><code>int</code> (20)</td>
+<td>(#475) Percent of full deflection read as rest, 0 to 90.</td>
+</tr>
+<tr>
 <td><code>Sources</code></td>
 <td><code>[XmlElement("Source")]</code></td>
 <td><code>List&lt;MappingSource&gt;</code></td>
@@ -8374,6 +8404,8 @@
 </tr>
 </tbody>
 </table>
+<p>Every row writes the <code>Trim*</code> and <code>Motion*</code> attributes, whatever its target, and the engine reads them only on the targets that use them. A file saved before #475 has no <code>Motion*</code> attributes, and its rows read the defaults.</p>
+<p><code>MappingRow.CopySettingsTo(MappingRow target)</code> copies every setting but the row's identity: the combine mode and formula, <code>NoInherit</code>, the <code>Trim*</code> fields and the <code>Motion*</code> fields. The target, the layer, the sources and <code>SuppressBipolarPair</code> stay with the caller, because each lane sets them its own way. Every lane that copies a row to a row goes through it: <code>InputService.CloneMappingSetDeep</code>, <code>ExtractAllRowsForSlot</code> / <code>ApplySlotMappingSetFromRows</code> (Copy and Paste), <code>ReplaceSlotMappingSet</code> (Copy From), <code>ExtractDeviceScopedRowsForSlot</code> / <code>ApplyMultiSourceRowsToCurrentDevice</code> (a device's copy and paste), and <code>PadPage.CloneLayerRow</code>. The grid's load and save and <strong>Clear All</strong> move the settings between rows and <code>MappingItem</code> instead. <code>MotionRowsCarryTests</code> holds every lane to every persisted attribute by reflection.</p>
 <h3 id="mappingsource">MappingSource<a class="headerlink" href="#mappingsource" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.Engine/Data/MappingSource.cs</code></p>
 <p>Every field is an <code>[XmlAttribute]</code> (no child elements). Kind-specific fields are read only when the matching <code>Kind</code> is set, but persist across kind changes so flipping back-and-forth keeps the user's settings.</p>

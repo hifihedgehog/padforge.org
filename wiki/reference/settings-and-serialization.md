@@ -1218,7 +1218,7 @@ Last-engaged-wins resolves conflicts between simultaneously-active activators (t
 
 | Member | XML | Type | Description |
 |---|---|---|---|
-| `Target` | `[XmlAttribute]` | `string` | Output target name (e.g. `"ButtonA"`, `"LeftThumbAxisX"`, `"LeftTrigger"`, `"DPadUp"`). Must match a `PadSetting` mapping field. |
+| `Target` | `[XmlAttribute]` | `string` | Output target name (e.g. `"ButtonA"`, `"LeftThumbAxisX"`, `"LeftTrigger"`, `"DPadUp"`). Must match a `PadSetting` mapping field, or name one of the slot-scoped motion targets: `"MotionGyro"` / `"MotionAccel"` (passthrough) or `"MotionPitch"` / `"MotionYaw"` / `"MotionRoll"` (#475). |
 | `LayerMask` | `[XmlAttribute]` | `string` | Layer this row belongs to. `"Base"` (default) is always live. Non-Base values (`"Shift"`, `"Shift1"`, etc.) only fire when their layer is active. |
 | `CombineMode` | `[XmlAttribute]` | `string` | How sources merge. `""` = per-target-type default (`MaxAbs` for axes, `OR` for buttons). Named: `"MaxAbs"`, `"Sum"`, `"Average"`, `"OR"`, `"AND"`, `"XOR"`, `"Custom"`, `"StickTrim"` (#155). The UI labels the first seven as Strongest / Combined / Average / Either / Both / Only one / Custom. `"StickTrim"` reads the `Trim*` fields below. |
 | `CombineExpression` | `[XmlAttribute]` | `string` | Custom-mode formula. Variables `a..z` bind to the first 26 sources. `s[i]` indexes the source list. Only meaningful when `CombineMode == "Custom"`. |
@@ -1227,7 +1227,16 @@ Last-engaged-wins resolves conflicts between simultaneously-active activators (t
 | `TrimDeadzone` | `[XmlAttribute]` | `int` (25) | (#155) Stick-trim: deflection below this percentage of the trim axis's range is ignored, so wobble never nudges the held level. Only read when `CombineMode == "StickTrim"`. |
 | `TrimRate` | `[XmlAttribute]` | `int` (100) | (#155) Stick-trim: full-deflection adjustment speed, percent of the range per second. 100 sweeps the whole range in one second. |
 | `TrimResetOnRelease` | `[XmlAttribute]` | `bool` (true) | (#155) Stick-trim: when true, releasing the gate resets the stored level to 100%. When false, the level persists across releases until trimmed again. |
+| `MotionResponse` | `[XmlAttribute]` | `string` (`""`) | (#475) Motion Pitch / Yaw / Roll: `""` is Speed, a turn that stops where it is on release. `"Angle"` leans and levels on release, pitch and roll only. Yaw reads any value as Speed. A string so the vocabulary can grow append-only. |
+| `MotionSpeed` | `[XmlAttribute]` | `int` (360) | (#475) Speed: degrees per second at full deflection. The editor keeps it 1 to 1600, and the model clamps to 1600. |
+| `MotionMinSpeed` | `[XmlAttribute]` | `int` (0) | (#475) Speed: degrees per second just past the deadzone. The model clamps it to `MotionSpeed`. |
+| `MotionAngle` | `[XmlAttribute]` | `int` (85) | (#475) Angle: lean at full deflection, degrees, 1 to 90. |
+| `MotionDeadzone` | `[XmlAttribute]` | `int` (20) | (#475) Percent of full deflection read as rest, 0 to 90. |
 | `Sources` | `[XmlElement("Source")]` | `List<MappingSource>` | Physical inputs feeding this row. Letter-tagged a, b, c, ... in order. |
+
+Every row writes the `Trim*` and `Motion*` attributes, whatever its target, and the engine reads them only on the targets that use them. A file saved before #475 has no `Motion*` attributes, and its rows read the defaults.
+
+`MappingRow.CopySettingsTo(MappingRow target)` copies every setting but the row's identity: the combine mode and formula, `NoInherit`, the `Trim*` fields and the `Motion*` fields. The target, the layer, the sources and `SuppressBipolarPair` stay with the caller, because each lane sets them its own way. Every lane that copies a row to a row goes through it: `InputService.CloneMappingSetDeep`, `ExtractAllRowsForSlot` / `ApplySlotMappingSetFromRows` (Copy and Paste), `ReplaceSlotMappingSet` (Copy From), `ExtractDeviceScopedRowsForSlot` / `ApplyMultiSourceRowsToCurrentDevice` (a device's copy and paste), and `PadPage.CloneLayerRow`. The grid's load and save and **Clear All** move the settings between rows and `MappingItem` instead. `MotionRowsCarryTests` holds every lane to every persisted attribute by reflection.
 
 ### MappingSource
 

@@ -2639,6 +2639,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#motion-pitch-yaw-and-roll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Pitch, Yaw and Roll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#idisposable" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5009,6 +5020,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#motion-pitch-yaw-and-roll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Pitch, Yaw and Roll
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#idisposable" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6331,59 +6353,61 @@
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        S3[Step 3: UpdateOutputStates&lt;br/&gt;MappingSet rows, PadSetting fallback&lt;br/&gt;Deadzones + curves]
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        S4[Step 4: CombineOutputStates&lt;br/&gt;Multi-device merge&lt;br/&gt;OR/MAX/magnitude rules]
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        S4b[Step 4b: EvaluateMacros&lt;br/&gt;Trigger state machine&lt;br/&gt;Button/axis/volume/mouse]
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        S5[Step 5: UpdateVirtualDevices&lt;br/&gt;HIDMaestro lifecycle on thread pool&lt;br/&gt;Per-slot create/destroy/reorder&lt;br/&gt;Inactivity timeout + bubble-down cascade]
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        S6[Step 6: RetrieveOutputStates&lt;br/&gt;Copy for UI display]
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        DS3[UpdateDs3PlayerNumber&lt;br/&gt;#191 bridged-DS3 player LED]
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        MOVE[UpdateMovePlayerNumber&lt;br/&gt;#277 PS Move sphere player LED]
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        RA[UpdateRumbleAudioLane&lt;br/&gt;#236 rumble-to-audio publish]
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        SN[UpdateSensaLane&lt;br/&gt;#374 Sensa HD amplitude publish]
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        SDL --&gt; BPF
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        BPF --&gt;|every 2s or first cycle| S1
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        BPF --&gt;|skip if not due| FLY
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        S1 --&gt; FLY
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        FLY --&gt; S2
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        S2 --&gt; RL
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        RL --&gt; ENG
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        ENG --&gt; MS
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        MS --&gt; DSU
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        DSU --&gt; S3
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        MR[ApplyMotionRows&lt;br/&gt;Motion Pitch / Yaw / Roll #475]
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        S5[Step 5: UpdateVirtualDevices&lt;br/&gt;HIDMaestro lifecycle on thread pool&lt;br/&gt;Per-slot create/destroy/reorder&lt;br/&gt;Inactivity timeout + bubble-down cascade]
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        S6[Step 6: RetrieveOutputStates&lt;br/&gt;Copy for UI display]
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        DS3[UpdateDs3PlayerNumber&lt;br/&gt;#191 bridged-DS3 player LED]
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        MOVE[UpdateMovePlayerNumber&lt;br/&gt;#277 PS Move sphere player LED]
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        RA[UpdateRumbleAudioLane&lt;br/&gt;#236 rumble-to-audio publish]
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        SN[UpdateSensaLane&lt;br/&gt;#374 Sensa HD amplitude publish]
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        SDL --&gt; BPF
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        BPF --&gt;|every 2s or first cycle| S1
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        BPF --&gt;|skip if not due| FLY
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        S1 --&gt; FLY
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        FLY --&gt; S2
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        S2 --&gt; RL
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        RL --&gt; ENG
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        ENG --&gt; MS
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        MS --&gt; S3
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        S3 --&gt; S4
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        S4 --&gt; S4b
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        S4b --&gt; S5
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        S5 --&gt; S6
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        S6 --&gt; DS3
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        DS3 --&gt; MOVE
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        MOVE --&gt; RA
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        RA --&gt; SN
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        SN --&gt; WAIT
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        WAIT --&gt;|next cycle| SDL
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    end
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    subgraph &quot;UI Thread (30Hz)&quot;
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        UI_READ[Read RetrievedOutputStates]
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    end
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        VIB[OutputReceived / OutputDecoded&lt;br/&gt;VR HapticReceived&lt;br/&gt;write VibrationStates]
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    end
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    S6 -.-&gt;|struct copy| UI_READ
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    UI_WRITE -.-&gt;|atomic scalars, SlotCustomLayouts struct copy| S5
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    VIB -.-&gt;|motor values| S2
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    style S1 fill:#e1f5fe
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    style S2 fill:#e1f5fe
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    style S3 fill:#f3e5f5
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    style S4 fill:#f3e5f5
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    style S4b fill:#fff3e0
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    style S5 fill:#e8f5e9
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    style S6 fill:#e8f5e9
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        S4b --&gt; MR
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        MR --&gt; DSU
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        DSU --&gt; S5
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        S5 --&gt; S6
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        S6 --&gt; DS3
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        DS3 --&gt; MOVE
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        MOVE --&gt; RA
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        RA --&gt; SN
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        SN --&gt; WAIT
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WAIT --&gt;|next cycle| SDL
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    end
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    subgraph &quot;UI Thread (30Hz)&quot;
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        UI_READ[Read RetrievedOutputStates]
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    end
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>        VIB[OutputReceived / OutputDecoded&lt;br/&gt;VR HapticReceived&lt;br/&gt;write VibrationStates]
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    end
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    S6 -.-&gt;|struct copy| UI_READ
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    UI_WRITE -.-&gt;|atomic scalars, SlotCustomLayouts struct copy| S5
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    VIB -.-&gt;|motor values| S2
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    style S1 fill:#e1f5fe
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    style S2 fill:#e1f5fe
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    style S3 fill:#f3e5f5
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    style S4 fill:#f3e5f5
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    style S4b fill:#fff3e0
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    style S5 fill:#e8f5e9
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    style S6 fill:#e8f5e9
 </code></pre></div>
-<p>The pipeline is a <code>partial class InputManager</code> split across eighteen files:</p>
+<p>The pipeline is a <code>partial class InputManager</code> split across nineteen files:</p>
 <table>
 <thead>
 <tr>
@@ -6467,6 +6491,11 @@
 <td><code>InputManager.GyroSimulation.cs</code></td>
 <td>Steps 2–3</td>
 <td>Pitch and Roll Simulation for a DualShock 3 (#474): Step 2 updates the accelerometer rate estimate per (device, slot) after each device read, and Step 3 reads it through <code>SourceCoercion.SimulatedGyroProvider</code></td>
+</tr>
+<tr>
+<td><code>InputManager.MotionRows.cs</code></td>
+<td>Steps 3–4b</td>
+<td>The Motion Pitch, Yaw and Roll rows (#475): Step 3 evaluates them per device pass, Step 4 combines the pass's values, and <code>ApplyMotionRows</code> steps each slot's <code>MotionRowsModel</code> after Step 4b and composes it onto the motion snapshot. See <a href="#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a></td>
 </tr>
 <tr>
 <td><code>InputManager.MenuPublication.cs</code></td>
@@ -6744,9 +6773,16 @@
 <tr>
 <td><code>MotionSnapshots</code></td>
 <td><code>MotionSnapshot[MaxPads]</code></td>
-<td>Engine (after Step 2)</td>
+<td>Engine (after Step 2, or after Step 4b on a slot the Motion Pitch, Yaw and Roll rows drive)</td>
 <td>Step 5, UI</td>
-<td>Per-slot gyro and accel reconciled from the slot's motion mapping rows, grip applied, sent with the virtual controller's report. The DSU broadcast reads the internal <code>DsuMotionSnapshots</code> (four slots), which combines every assigned sensor when a slot has no motion rows.</td>
+<td>Per-slot gyro and accel reconciled from the slot's motion mapping rows, grip applied, sent with the virtual controller's report. On a slot the Motion Pitch, Yaw and Roll rows drive, the motion stage composes their model onto it. The DSU broadcast reads the internal <code>DsuMotionSnapshots</code> (four slots), which combines every assigned sensor when a slot has no motion rows.</td>
+</tr>
+<tr>
+<td><code>CombinedMotionRows</code></td>
+<td><code>MotionRowValues[MaxPads]</code></td>
+<td>Step 4 (engine)</td>
+<td>Motion stage, UI</td>
+<td>The slot's Motion Pitch, Yaw and Roll values for the current pass, -1 to +1, combined across its devices (#475)</td>
 </tr>
 <tr>
 <td><code>MacroSnapshots</code></td>
@@ -6788,7 +6824,7 @@
 <td><code>DsuMotionServer</code></td>
 <td>InputService</td>
 <td>Engine</td>
-<td>DSU motion server. When set, broadcasts motion data after Step 2.</td>
+<td>DSU motion server. When set, broadcasts motion data after Step 4b and the motion stage.</td>
 </tr>
 <tr>
 <td><code>AudioBassDetector</code></td>
@@ -6976,45 +7012,48 @@
 <a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>  |
 <a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>  v
 <a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>UpdateMotionSnapshots()       -- capture gyro/accel for Step 5 and DSU, plus the per-slot battery scan
-<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>BroadcastDsuMotion()          -- send to Cemuhook clients via UDP
-<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>  |
-<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>  v
-<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>Step 3: UpdateOutputStates()  -- map CustomInputState to Gamepad via the slot&#39;s MappingSet rows
-<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>                                 (PadSetting fields when the set is empty)
-<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>  |
-<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>  v
-<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>Step 4: CombineOutputStates() -- merge multiple devices per slot
-<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>  |
-<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>  v
-<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>Step 4b: EvaluateMacros()     -- trigger/action state machine, inject into Gamepad
-<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>  |
-<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>  v
-<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>Step 5: UpdateVirtualDevices()-- create/destroy VCs, submit reports
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>  |
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>  v
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>Step 3: UpdateOutputStates()  -- map CustomInputState to Gamepad via the slot&#39;s MappingSet rows
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>                                 (PadSetting fields when the set is empty)
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>  |
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>  v
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>Step 4: CombineOutputStates() -- merge multiple devices per slot
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>  |
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>  v
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>Step 4b: EvaluateMacros()     -- trigger/action state machine, inject into Gamepad
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>  |
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>  v
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>ApplyMotionRows()             -- step the Motion Pitch / Yaw / Roll model (#475), compose, publish
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>BroadcastDsuMotion()          -- send to Cemuhook clients via UDP
 <a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>  |
 <a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>  v
-<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>Step 6: RetrieveOutputStates()-- copy combined output for UI consumption
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>Step 5: UpdateVirtualDevices()-- create/destroy VCs, submit reports
 <a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>  |
 <a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>  v
-<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>UpdateDs3PlayerNumber()       -- rate-limited player-LED refresh for the bridged Bluetooth DS3 (#191)
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>Step 6: RetrieveOutputStates()-- copy combined output for UI consumption
 <a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>  |
 <a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>  v
-<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>UpdateMovePlayerNumber()      -- same 500 ms cadence for the bridged PS Move sphere&#39;s player color (#277)
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>UpdateDs3PlayerNumber()       -- rate-limited player-LED refresh for the bridged Bluetooth DS3 (#191)
 <a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>  |
 <a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>  v
-<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
-<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>  |                              slot destroyed this tick publishes zeros the same tick
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>UpdateMovePlayerNumber()      -- same 500 ms cadence for the bridged PS Move sphere&#39;s player color (#277)
+<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>  |
 <a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>  v
-<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
-<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>  |                              for the Sensa HD haptics worker (#374)
+<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
+<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>  |                              slot destroyed this tick publishes zeros the same tick
 <a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a>  v
-<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>Frequency measurement (~1/second)
-<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>  |
+<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
+<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>  |                              for the Sensa HD haptics worker (#374)
 <a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>  v
-<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>Drift-compensated hybrid sleep/spin-wait
+<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>Frequency measurement (~1/second)
+<a id="__codelineno-10-64" name="__codelineno-10-64" href="#__codelineno-10-64"></a>  |
+<a id="__codelineno-10-65" name="__codelineno-10-65" href="#__codelineno-10-65"></a>  v
+<a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a>Drift-compensated hybrid sleep/spin-wait
 </code></pre></div>
 <p>Each iteration first checks the idle gate (<code>BeginIdlePoll()</code>) and then focus suspend (<code>ApplyFocusSuspension()</code>), both described below. Step 2 through Step 5 run inside <code>EnterMenuPublication()</code>, the <code>MenuPublicationSync</code> gate, so a radial or touch menu never observes a half-written frame. After <code>UpdateSensaLane()</code> a stall watchdog writes a <code>STALL</code> line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a <code>HEARTBEAT</code> line every 10 s.</p>
 <p><strong>Poll-frame gate:</strong></p>
-<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 698) is called once per active cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 2086). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
+<p><code>SourceCoercion.BeginPollFrame()</code> (<code>SourceCoercion.cs</code> line 705) is called once per active cycle, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 2086). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only.</p>
 <p><strong>3-Tier Polling Sleep Strategy:</strong></p>
 <p>The polling loop uses a tiered sleep strategy, falling through to the next tier if the preferred timer is unavailable:</p>
 <table>
@@ -7079,11 +7118,11 @@
 - Reports <code>CurrentFrequency = 0</code>
 - Sets <code>firstCycle = true</code> and resets the drift state on every idle iteration, so the first active cycle enumerates at once and does not burst</p>
 <p><strong>Focus suspend:</strong></p>
-<p>The engine half of the "Continue Polling When Window Loses Focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
+<p>The engine half of the "Continue Polling When Window Loses Focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>, which also clears <code>CombinedMotionRows</code> and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
 <p><strong>Sleep guard:</strong> Every 5 seconds of active polling, calls <code>SetThreadExecutionState(ES_CONTINUOUS)</code> to clear execution-state flags SDL may re-assert, so the PC can still sleep.</p>
 <h3 id="slot-reorder">Slot Reorder<a class="headerlink" href="#slot-reorder" title="Permanent link">&para;</a></h3>
 <p>Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in <code>InputManager</code> swaps <code>SlotControllerTypes[]</code>, <code>VibrationStates[]</code>, or the <code>Combined*States</code> arrays between pad indices, and there is no <code>SwapSlots</code> / <code>SwapSlotData</code> method on <code>InputManager</code>.</p>
-<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 18645), <code>MoveSlot(int, int)</code> (line 18618), and <code>MoveSlotToGroupTail(int)</code> (line 18665). <code>SwapSlots</code> and <code>MoveSlot</code> mutate <code>SettingsManager.SlotOrders</code> for the new visual order, then route through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point. <code>MoveSlotToGroupTail</code> changes only the group order (see below):</p>
+<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 18688), <code>MoveSlot(int, int)</code> (line 18721), and <code>MoveSlotToGroupTail(int)</code> (line 18768). <code>SwapSlots</code> and <code>MoveSlot</code> mutate <code>SettingsManager.SlotOrders</code> for the new visual order, then route through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point. <code>MoveSlotToGroupTail</code> changes only the group order (see below):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RerouteVirtualControllersForReorder</span><span class="p">(</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">groupType</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">oldOrder</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newOrder</span><span class="p">)</span>
 </code></pre></div>
@@ -7098,7 +7137,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateMotionSnapshots</span><span class="p">()</span>
 </code></pre></div>
 <p>Called after Step 2 (<code>InputManager.cs</code> line 2115). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into <code>Ds5StatusBytes</code> (#433).</p>
-<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ReconcileMappedMotion</code> (<code>InputManager.cs</code> line 3834) tries the target's rows in order (the engaged layer's row, then the Base row, then any other row naming the target) and keeps the first whose combined sample has motion. Inside a row, <code>ReconcileMotionRow</code> reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's <code>CombineMode</code>: largest magnitude by default, or Sum, Average, or a Custom expression:</p>
+<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. <code>ReconcileMappedMotion</code> (<code>InputManager.cs</code> line 3864) tries the target's rows in order (the engaged layer's row, then the Base row, then any other row naming the target) and keeps the first whose combined sample has motion. Inside a row, <code>ReconcileMotionRow</code> reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's <code>CombineMode</code>: largest magnitude by default, or Sum, Average, or a Custom expression:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">gyro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_motionHasGyroRow</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="o">?</span><span class="w"> </span><span class="n">ReconcileMappedMotion</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionGyroTarget</span><span class="p">,</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">        </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">timestampUs</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -7107,8 +7146,8 @@
 <a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">        </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">timestampUs</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
 <a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="kt">var</span><span class="w"> </span><span class="n">mapped</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JoinMotionChannels</span><span class="p">(</span><span class="n">gyro</span><span class="p">,</span><span class="w"> </span><span class="n">accel</span><span class="p">,</span><span class="w"> </span><span class="n">timestampUs</span><span class="p">);</span>
 </code></pre></div>
-<p>The two sub-channels can land on different devices. A 250 ms row-presence gate caches, per channel, whether the slot's <code>MappingSet</code> has a gyro row and an accel row, so a channel without a row skips its per-tick walk (a new set reference or a changed row count re-scans immediately). Motion rows exist only on motion-capable slot families: <code>MappingSetMigrator.EnsureMotionRows</code> (<code>MappingSetMigrator.cs</code> line 692) backfills them on load and on device assignment for <strong>PlayStation and Nintendo</strong> slots (the virtual Switch Pro gained a real IMU surface in HIDMaestro v1.3.18) and for Extended slots on a Valve profile. Other slot types have no motion rows, so <code>MotionSnapshots</code> gets <code>HasMotion = false</code>. DSU keeps a separate <code>DsuMotionSnapshots</code> array: while the DSU server runs, a slot in DSU range (0 to 3) with neither motion row takes the largest-magnitude value per axis across every enabled, online device assigned to it, reading a device's aux sensor only when it has no primary one. The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A <code>"Motion Accel L"</code> source reads the aux (Nunchuk / left Joy-Con) accelerometer via <code>s.AccelAux</code> instead of the body IMU (#199 follow-up). A <code>"Motion Gyro L"</code> source does the same for the gyro channel (#252): <code>MappingSetMigrator.IsMotionGyroAuxDescriptor</code> flips a <code>gyroAux</code> flag, the read comes from <code>s.GyroAux</code>, and the flag is passed through to <code>GetPassthroughGyro</code> so the aux IMU keeps its own bias, gravity, and smoothing state.</p>
-<p><strong>Delivery.</strong> <code>BroadcastDsuMotion</code> sends <code>DsuMotionSnapshots</code> right after the snapshot pass (below). Step 5 delivers <code>MotionSnapshots[padIndex]</code> through <code>SubmitRawHidState</code>'s IMU channel on Nintendo and Extended raw-surface slots, through <code>ValveReportPackers</code> and <code>SubmitRawReport</code> on Extended slots with a Valve profile, through the <code>SonyReportPackers</code> raw report on PlayStation slots with a USB Sony profile, and through the extended <code>SubmitGamepadState</code> overload on the other PlayStation profiles. An Extended layout with more than 32 buttons or more than one hat goes through <code>ExtendedReportPacker</code> and carries no motion. <code>HasMotion = false</code> submits zeroes.</p>
+<p>The two sub-channels can land on different devices. A 250 ms row-presence gate caches, per channel, whether the slot's <code>MappingSet</code> has a gyro row and an accel row, so a channel without a row skips its per-tick walk (a new set reference or a changed row count re-scans immediately). Motion rows exist only on motion-capable slot families: <code>MappingSetMigrator.EnsureMotionRows</code> (<code>MappingSetMigrator.cs</code> line 720) backfills them on load and on device assignment for <strong>PlayStation and Nintendo</strong> slots (the virtual Switch Pro gained a real IMU surface in HIDMaestro v1.3.18) and for Extended slots on a Valve profile. Other slot types have no motion rows, so <code>MotionSnapshots</code> gets <code>HasMotion = false</code>. DSU keeps a separate <code>DsuMotionSnapshots</code> array: while the DSU server runs, a slot in DSU range (0 to 3) with neither motion row takes the largest-magnitude value per axis across every enabled, online device assigned to it, reading a device's aux sensor only when it has no primary one. The same gate decides whether the Motion Pitch, Yaw and Roll rows drive the slot. When they do, the pass hands the snapshot to the motion stage instead of publishing it, and DSU gets the composed frame with no fallback to every assigned sensor (see <a href="#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a>). The pre-v3.2.3 "first online device with sensors" walk is retired: the source now follows the mapping rows, and the per-tick walk hands off cleanly as devices come and go. A <code>"Motion Accel L"</code> source reads the aux (Nunchuk / left Joy-Con) accelerometer via <code>s.AccelAux</code> instead of the body IMU (#199 follow-up). A <code>"Motion Gyro L"</code> source does the same for the gyro channel (#252): <code>MappingSetMigrator.IsMotionGyroAuxDescriptor</code> flips a <code>gyroAux</code> flag, the read comes from <code>s.GyroAux</code>, and the flag is passed through to <code>GetPassthroughGyro</code> so the aux IMU keeps its own bias, gravity, and smoothing state.</p>
+<p><strong>Delivery.</strong> <code>BroadcastDsuMotion</code> sends <code>DsuMotionSnapshots</code> after Step 4b and the motion stage (below). Step 5 delivers <code>MotionSnapshots[padIndex]</code> through <code>SubmitRawHidState</code>'s IMU channel on Nintendo and Extended raw-surface slots, through <code>ValveReportPackers</code> and <code>SubmitRawReport</code> on Extended slots with a Valve profile, through the <code>SonyReportPackers</code> raw report on PlayStation slots with a USB Sony profile, and through the extended <code>SubmitGamepadState</code> overload on the other PlayStation profiles. An Extended layout with more than 32 buttons or more than one hat goes through <code>ExtendedReportPacker</code> and carries no motion. <code>HasMotion = false</code> submits zeroes.</p>
 <p><strong>No sign transform, one grip rotation.</strong> The native SDL sensor frame is preserved apart from the (device, slot) grip. Accel is a raw scaled read, then rotated for the grip. Gyro goes through <code>GetPassthroughGyro</code>, whose calibrated read subtracts the (device, slot) bias and applies the same rotation. On a DualShock 3 with Pitch and Roll Simulation on (#474), that read returns the accelerometer-derived rate for pitch and roll instead, before the rotation and without the bias. The Gyro tab's discretionary tuning runs on top only when Apply Gyro Tuning to Motion Passthrough is checked, which it is not by default:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// Accel. MsToG = 1/9.80665, no negation:</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">   </span><span class="n">ay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span><span class="w">   </span><span class="n">az</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MsToG</span><span class="p">;</span>
@@ -7125,7 +7164,7 @@
 <a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">tunedPitch</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">tunedYaw</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">tunedRoll</span><span class="p">,</span><span class="w"> </span><span class="n">gyroAux</span><span class="p">);</span>
 <a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">gx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tunedPitch</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span><span class="w">   </span><span class="n">gy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tunedYaw</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span><span class="w">   </span><span class="n">gz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tunedRoll</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RadToDeg</span><span class="p">;</span>
 </code></pre></div>
-<p><strong>Grip rotation (#392).</strong> <code>SourceCoercion.RotateForGrip</code> (<code>SourceCoercion.cs</code> line 3833) turns a body-frame vector into the frame the game expects for the hold the user picked on the Gyro tab. The driver delivers every controller in the frame of its natural hold, a Wii Remote aimed at the screen, +X right, +Y out of the face, +Z toward the player. Three other holds have tables, all proper rotations, so the same one serves gyro, accelerometer, and the gravity estimate alike:</p>
+<p><strong>Grip rotation (#392).</strong> <code>SourceCoercion.RotateForGrip</code> (<code>SourceCoercion.cs</code> line 3853) turns a body-frame vector into the frame the game expects for the hold the user picked on the Gyro tab. The driver delivers every controller in the frame of its natural hold, a Wii Remote aimed at the screen, +X right, +Y out of the face, +Z toward the player. Three other holds have tables, all proper rotations, so the same one serves gyro, accelerometer, and the gravity estimate alike:</p>
 <table>
 <thead>
 <tr>
@@ -7158,6 +7197,18 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BroadcastDsuMotion</span><span class="p">()</span>
 </code></pre></div>
 <p>Iterates the four DSU slots (<code>DsuMotionServer.MaxSlots</code>) and calls <code>DsuServer.BroadcastMotion(padIndex, DsuMotionSnapshots[padIndex], IsSlotActive(padIndex))</code>. While focus suspend is engaged it stamps each snapshot with the current time first. The DSU server may be null (no-op).</p>
+<h3 id="motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll<a class="headerlink" href="#motion-pitch-yaw-and-roll" title="Permanent link">&para;</a></h3>
+<p><code>InputManager.MotionRows.cs</code> and <code>MotionRowsModel</code> (<code>PadForge.Engine/Common/MotionRowsModel.cs</code>). The three rows (#475) turn stick, trigger, button and key input into the virtual controller's motion.</p>
+<ul>
+<li><strong>Gate.</strong> The snapshot pass's 250 ms row gate also records whether any row on any layer names <code>MotionPitch</code>, <code>MotionYaw</code> or <code>MotionRoll</code> and holds an input other than an <code>InvertOnHold</code> modifier (<code>HasSourcedMotionAxisRow</code>). On a slot that carries motion (<code>SlotCarriesMotion</code>: PlayStation, Nintendo, or Extended on the raw surface with a Valve profile) such a row sets <code>_motionRowsActive[slot]</code>. The pass then keeps the slot's snapshot as the stage's base in <code>_motionRowsBase</code>, with whether its gyro and accelerometer channels are live, and publishes nothing for the slot.</li>
+<li><strong>Step 3.</strong> While the stage is active, every device pass evaluates the three rows through <code>TryEvaluateMappingSetBipolarAxis</code>, the stick-axis evaluator (<code>TargetIsBipolarAxis</code> includes the three targets), into <code>UserSetting.MotionRowsOutputState</code>: three values from -1 to +1, stamped with the pass's <code>_stickTrimFrameSeq</code>. The gamepad row loop skips the three targets. A value past 10% records output for the row's layer through <code>StampLayerActivity</code>, at the mark the gamepad stick rows use, so a <code>Toggle</code> layer's auto-cancel counts a turning Motion row. On these targets alone, <code>SourceEvaluator.EvaluateForBipolarAxisTarget</code> reads a Direct or Toggle source that rests at zero one way: the trigger lane's 0 to 1 pull, signed by Invert. <code>SourceCoercion.SourceRestsAtZeroProvider</code> answers which sources rest at zero, wired by <code>InputService.Start</code> to <code>InputManager.SourceRestsAtZero</code>, the #443 activator test (a gamepad trigger, a slider, an analog key, a VR trigger or grip, a Bliss-Box pressure axis). A source the user set to Half keeps its own read.</li>
+<li><strong>Step 4.</strong> <code>CombineMotionRows</code> takes the largest magnitude per axis across the slot's devices, the stick-axis rule, and only from values stamped with the current pass, so a device that stopped answering stops turning the slot. The result lands in <code>CombinedMotionRows[slot]</code>, which the Mappings grid's value column reads.</li>
+<li><strong>Motion stage.</strong> <code>ApplyMotionRows</code> runs after Step 4b, so a Gyro Recenter lands in the same poll. Per slot it takes the posted requests, steps the slot's <code>MotionRowsModel</code> with the active row's settings (<code>MotionAxis</code>, through <code>FindActiveRowForTarget</code>), composes the model onto the base (<code>Compose</code>), and publishes to <code>MotionSnapshots</code> and <code>DsuMotionSnapshots</code>. Combined values stamped with an earlier pass read as zero. A slot with no online device publishes the base, which carries no motion, and restarts the model's clock, so the pose waits for the device's return. A slot whose stage turned off resets its model.</li>
+</ul>
+<p>The model holds one orientation per slot, body to world in SDL's sensor frame: <code>q = speed · pitch(θ) · roll(φ)</code>. A Speed row turns <code>speed</code> as a local rotation, the way GamepadMotionHelpers integrates a real gyro (<code>GamepadMotion.hpp</code> <code>Motion::Update</code>). An Angle row sets the lean θ or φ through Dolphin's <code>ApproachAngleWithAccel</code> (<code>Dynamics.cpp</code>) at Dolphin's Tilt acceleration, (7 × 2π)² / 2π rad/s², capped at 1600°/s. A frame steps in slices of at most 5 ms, Dolphin's 200 Hz update, because the approach's overshoot guard holds only at that size. The reported gyro is the mean body rotation of the frame's slices, so it integrates back to the orientation. A frame gap over 250 ms restarts the clock without turning.</p>
+<p>Directions follow the stick frame a row value carries, where positive is down on a Y axis and right on an X axis. Speed: up raises the nose (positive pitch), and right turns right and rolls the right side down (negative yaw and roll). Angle: up tips the nose down, as Dolphin's Tilt Forward does, and right lowers the right side. Yaw has no Angle response.</p>
+<p><code>Compose</code> follows Dolphin's emulated Wii Remote with a bound IMU (<code>WiimoteEmu.cpp</code> <code>GetAngularVelocity</code>, <code>GetAcceleration</code>): the model's rate adds to the real gyro when the slot's Motion Gyro channel is live, and the real accelerometer turns by the lean only. With no live accelerometer, the snapshot reports gravity turned by the whole orientation. <code>HasMotion</code> is true whenever the stage runs.</p>
+<p>Other threads post requests with <code>Interlocked.Or</code> on <code>s_motionRowsRequests</code>, and the stage takes them at the slot's next pass. <code>RequestMotionRowsLevel</code> comes from the Gyro Recenter action and returns the Speed rotation to level without reporting the jump as rotation. <code>RequestMotionRowsReset</code> comes from <code>ClearSourceKindRuntime</code> on a profile switch, <code>ResetSourceKindRuntimeForSlot</code> on a paste or a deleted or uncreated slot, <code>ReplaceSlotMappingSet</code> on Copy From, and slot compaction. <code>NeutralizeCombinedOutputs</code> posts a clock restart, so a resumed poll does not turn through the pause.</p>
 <h3 id="idisposable">IDisposable<a class="headerlink" href="#idisposable" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Dispose</span><span class="p">()</span>
 </code></pre></div>
@@ -7420,7 +7471,7 @@
 <p><strong>Phase 1c: Enumerate mice</strong> via <code>EnumerateMice(mice)</code></p>
 <p>Same pattern as keyboards using <code>SdlMouseWrapper</code>, with one extra skip: a mouse whose device path already belongs to an online row (one the touchpad phase redirected to handle zero) is not reopened.</p>
 <p><strong>Enumerate Consumer Controls</strong> via <code>EnumerateConsumerControls()</code></p>
-<p>Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in <code>_cachedConsumerControls</code> and consumed in <code>UpdateDevices</code> (<code>InputManager.Step1.UpdateDevices.cs</code> lines 249 and 253). <code>EnumerateConsumerControls</code> (lines 1352-1390) mirrors <code>EnumerateKeyboards</code>: for each new handle not in <code>_openedConsumerHandles</code>, it opens a <code>ConsumerControlWrapper</code>, runs <code>FindOrCreateUserDevice</code>, calls <code>ud.LoadFromConsumerDevice(wrapper)</code>, and marks the device online. <code>DetectDisconnectedHandles(_openedConsumerHandles, ...)</code> marks removed collections offline.</p>
+<p>Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in <code>_cachedConsumerControls</code> and consumed in <code>UpdateDevices</code> (<code>InputManager.Step1.UpdateDevices.cs</code> lines 249 and 255). <code>EnumerateConsumerControls</code> (lines 1356-1394) mirrors <code>EnumerateKeyboards</code>: for each new handle not in <code>_openedConsumerHandles</code>, it opens a <code>ConsumerControlWrapper</code>, runs <code>FindOrCreateUserDevice</code>, calls <code>ud.LoadFromConsumerDevice(wrapper)</code>, and marks the device online. <code>DetectDisconnectedHandles(_openedConsumerHandles, ...)</code> marks removed collections offline.</p>
 <p><code>FindOnlineDeviceByHandle</code> (line 3721) resolves a Raw Input handle back to its <code>UserDevice</code> by testing <code>RawInputHandle</code> on each raw-input wrapper kind. <code>ConsumerControlWrapper</code> was missing from that list, so <code>PruneOrphanedHandles</code> found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising <code>DevicesUpdated</code> and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.</p>
 <p><strong>Tablet phase</strong> via <code>UpdateTabletDevices(ref changed)</code> (<code>InputManager.Tablets.cs</code>)</p>
 <p><code>WindowsTabletReader</code> runs its own reader thread and skips HIDMaestro instances. This pass mirrors each attached tablet into a row through <code>FindOrCreateUserDevice(device.InstanceGuid)</code>, <code>LoadFromExternalDevice</code>, and <code>IsOnline = true</code>, and marks a vanished tablet offline and neutralizes its mapped outputs.</p>
@@ -7969,7 +8020,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <li>
 <p><strong>For each UserSetting:</strong>
    a. Find online device by <code>us.InstanceGuid</code> via <code>FindOnlineDeviceByInstanceGuid</code>
-   b. If device not found: set <code>us.OutputState</code> and <code>us.RawMappedState</code> to <code>default</code> (zero), continue
+   b. If device not found: set <code>us.OutputState</code>, <code>us.RawMappedState</code> and <code>us.MotionRowsOutputState</code> to <code>default</code> (zero), continue
    c. If device found but offline or <code>InputState == null</code>: <strong>keep last valid OutputState</strong> (no zero), continue
    d. Get <code>PadSetting</code> via <code>us.GetPadSetting()</code>: tuning, plus the legacy descriptors used when the <code>MappingSet</code> has no rows. A null <code>PadSetting</code> skips the device
    e. Map to gamepad. A slot whose <code>MappingSet</code> has rows takes <code>us.OutputState = MapInputToGamepadFromMappingSet(ud.InputState, ms, us.InstanceGuidString, ps, slotIndex, out rawMapped)</code>. Otherwise <code>us.OutputState = MapInputToGamepad(ud.InputState, ps, us.InstanceGuidString, slotIndex, out rawMapped)</code>
@@ -7982,7 +8033,8 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <li>Vr: <code>us.VrRawOutputState = MapInputToVrRaw(ud.InputState, ps, ms, deviceGuid, slot)</code></li>
 <li>Touchpad (every slot where <code>SlotCarriesTouchpad(slot)</code>: PlayStation, and Valve frames on the raw surface): <code>us.TouchpadOutputState = MapInputToTouchpad(ud.InputState, ps, us.TouchpadOutputState, ms, deviceGuid, slot)</code></li>
 </ul>
-<p>All five carry the <code>MappingSet</code> context so their per-target evaluators resolve rows shift-layer aware (#221, see <a href="#shift-layer-activators-and-the-cycle-cursor">Shift Layer Activators</a>).</p>
+<p>All five carry the <code>MappingSet</code> context so their per-target evaluators resolve rows shift-layer aware (#221, see <a href="#shift-layer-activators-and-the-cycle-cursor">Shift Layer Activators</a>).
+   h. <strong>Motion Pitch, Yaw and Roll (#475):</strong> while <code>_motionRowsActive[slot]</code>, <code>us.MotionRowsOutputState = EvaluateMotionRows(ud.InputState, ms, deviceGuidStr, slot)</code>. See <a href="#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a></p>
 </li>
 </ol>
 <h3 id="mapinputtogamepad">MapInputToGamepad<a class="headerlink" href="#mapinputtogamepad" title="Permanent link">&para;</a></h3>
@@ -8137,7 +8189,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">deviceGuid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slotIndex</span><span class="p">)</span>
 </code></pre></div>
 <p>When individual D-pad directions (<code>DPadUp</code>, <code>DPadDown</code>, <code>DPadLeft</code>, <code>DPadRight</code>) are set, they take priority. Otherwise, the combined <code>DPad</code> descriptor reads a single POV hat and sets all 4 direction flags, supporting 8-way diagonals.</p>
-<p><strong>The hat turns with the grip (#392).</strong> Every POV read in Step 3 goes through <code>SourceCoercion.GripPov(deviceGuid, slotIndex, centidegrees)</code> (<code>SourceCoercion.cs</code> line 3876) before the direction match: <code>MapToButtonPressedSingle</code> (line 1337), <code>MapDPadFromPovSingle</code> (line 1413), <code>MapToTriggerSingle</code> (line 1507), and <code>GetRawValue</code> (line 1736). The <code>MappingSet</code> evaluator does the same through <code>SourceCoercion</code>, <code>SourceEvaluator</code>, and <code>SourceKindRuntime</code>, and Step 4b's macro POV triggers read the rotated value too. The D-pad is a vector in the same body frame as the sensors, so the hold that turns the gyro turns the hat. With the top edge to the left (<code>Sideways</code> and <code>WiiWheel</code> alike) the pad's physical Right points up in the world, so the reading is <code>((centidegrees - 9000) mod 36000)</code>: physical 9000 reads as 0 (Up), 0 as 27000 (Left), 18000 as 9000 (Right), 27000 as 18000 (Down). That is Dolphin's sideways D-pad table (<code>WiimoteEmu.cpp</code>, <code>dpad_sideways_bitmasks</code>), and the angle arithmetic carries the diagonals for free. <code>Upright</code> keeps the pad's Up pointing up and passes through, as does a centered (negative) reading.</p>
+<p><strong>The hat turns with the grip (#392).</strong> Every POV read in Step 3 goes through <code>SourceCoercion.GripPov(deviceGuid, slotIndex, centidegrees)</code> (<code>SourceCoercion.cs</code> line 3896) before the direction match: <code>MapToButtonPressedSingle</code> (<code>InputManager.Step3.UpdateOutputStates.cs</code> line 1343), <code>MapDPadFromPovSingle</code> (line 1419), <code>MapToTriggerSingle</code> (line 1513), and <code>GetRawValue</code> (line 1742). The <code>MappingSet</code> evaluator does the same through <code>SourceCoercion</code>, <code>SourceEvaluator</code>, and <code>SourceKindRuntime</code>, and Step 4b's macro POV triggers read the rotated value too. The D-pad is a vector in the same body frame as the sensors, so the hold that turns the gyro turns the hat. With the top edge to the left (<code>Sideways</code> and <code>WiiWheel</code> alike) the pad's physical Right points up in the world, so the reading is <code>((centidegrees - 9000) mod 36000)</code>: physical 9000 reads as 0 (Up), 0 as 27000 (Left), 18000 as 9000 (Right), 27000 as 18000 (Down). That is Dolphin's sideways D-pad table (<code>WiimoteEmu.cpp</code>, <code>dpad_sideways_bitmasks</code>), and the angle arithmetic carries the diagonals for free. <code>Upright</code> keeps the pad's Up pointing up and passes through, as does a centered (negative) reading.</p>
 <h3 id="trigger-mapping">Trigger Mapping<a class="headerlink" href="#trigger-mapping" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="nf">MapToTrigger</span><span class="p">(</span><span class="n">CustomInputState</span><span class="w"> </span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">descriptor</span><span class="p">,</span>
 <a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">deviceGuid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slotIndex</span><span class="p">)</span>
@@ -8361,8 +8413,8 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tbody>
 </table>
 <p><code>TogglePressLevel</code> is <code>SourceCoercion.EffectiveThresholdPercent(src, 50) / 100</code>: the source's own <code>DeadZone</code> when one is set, otherwise half travel.</p>
-<p>State lives in <code>_toggleState</code>, keyed <code>(slot, target, srcIdx)</code> like the accumulators. The latch flips on the rising edge of a press, the rule the macro Toggle (<code>MacroTriggerMode.Toggle</code> in <code>InputManager.Step4b.EvaluateMacros.cs</code>) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and <code>FlippedThisFrame</code> allows one flip per frame. <code>BuildCustomContribsForButton</code> reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (<code>InputManager.Step3.MappingSetEval.cs</code> line 3538). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. <code>Clear</code>, <code>ResetForSlot</code>, and <code>ResetForRow</code> drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.</p>
-<p><code>SourceEvaluator.IsDescriptorKind</code> names Direct and Toggle as the kinds that read their own descriptor. <code>IsUnmappedDirect</code> counts a blank Toggle as a blank position. <code>MappingItem.IsPrimaryDescriptor</code> keeps the Source picker and the Record button on a Toggle row. The save and load paths route a Toggle primary through the descriptor branch with its kind, and the legacy merge keeps an any-device Toggle row as authored, as it does an any-device Direct row (<code>SettingsService.cs</code> line 2055).</p>
+<p>State lives in <code>_toggleState</code>, keyed <code>(slot, target, srcIdx)</code> like the accumulators. The latch flips on the rising edge of a press, the rule the macro Toggle (<code>MacroTriggerMode.Toggle</code> in <code>InputManager.Step4b.EvaluateMacros.cs</code>) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and <code>FlippedThisFrame</code> allows one flip per frame. <code>BuildCustomContribsForButton</code> reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (<code>InputManager.Step3.MappingSetEval.cs</code> line 3820). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. <code>Clear</code>, <code>ResetForSlot</code>, and <code>ResetForRow</code> drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.</p>
+<p><code>SourceEvaluator.IsDescriptorKind</code> names Direct and Toggle as the kinds that read their own descriptor. <code>IsUnmappedDirect</code> counts a blank Toggle as a blank position. <code>MappingItem.IsPrimaryDescriptor</code> keeps the Source picker and the Record button on a Toggle row. The save and load paths route a Toggle primary through the descriptor branch with its kind, and the legacy merge keeps an any-device Toggle row as authored, as it does an any-device Direct row (<code>SettingsService.cs</code> line 2060).</p>
 <h3 id="steering-source-kinds">Steering Source Kinds<a class="headerlink" href="#steering-source-kinds" title="Permanent link">&para;</a></h3>
 <p>A bipolar-axis row whose source carries a steering <code>Kind</code> (<code>WindingStick</code>, <code>AngleToAxisX</code>, <code>AngleToAxisY</code>, <code>MotionLeanX</code>, <code>MotionLeanAuxX</code>) is evaluated by <code>SourceKindRuntime</code> instead of read directly. The source reads the whole 2D stick (X from <code>Descriptor</code>, Y from <code>ParamYDescriptor</code>) or, for <code>MotionLeanX</code> / <code>MotionLeanAuxX</code>, gravity from <code>GravityProvider</code>, and projects to the row's virtual-stick channel:</p>
 <ul>
@@ -8373,8 +8425,8 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p>Each tick also updates a per-row at-lock state machine (Enter/Exit edges + saturation magnitude). After the bipolar writes, <code>InputManager.Step3.SteeringLockFeedback</code> reads those edges and fires the opt-in feedback channels (rumble, impulse, lightbar, adaptive-trigger resistance). See <a href="../../guides/steering/">Steering</a>.</p>
 <p>The steering math is original C# written from the geometry described in JoyShockMapper (<code>src/JoyShock.cpp</code>, <code>src/main.cpp</code>). No GPL code is incorporated.</p>
 <h3 id="motion-shake">Motion Shake<a class="headerlink" href="#motion-shake" title="Permanent link">&para;</a></h3>
-<p>Two descriptors read an accelerometer shake as a source (#364): <code>"Motion Shake"</code> on the body sensor and <code>"Motion Shake L"</code> on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on <code>SourceCoercion</code> (<code>SourceCoercion.cs</code> lines 2189 and 2163), with <code>IsMotionShakeDescriptor</code> / <code>IsMotionShakeAuxDescriptor</code> as the predicates.</p>
-<p>The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (<code>InputService.UpdateShakeState</code>, <code>InputService.cs</code> line 14213), and handed to the engine through <code>SourceCoercion.ShakeEnvelopeProvider</code> / <code>ShakeEnvelopeProviderAux</code>. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (<code>InputCommon</code> <code>Force.cpp</code>, <code>Shake::Shake</code>), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.</p>
+<p>Two descriptors read an accelerometer shake as a source (#364): <code>"Motion Shake"</code> on the body sensor and <code>"Motion Shake L"</code> on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on <code>SourceCoercion</code> (<code>SourceCoercion.cs</code> lines 2209 and 2214), with <code>IsMotionShakeDescriptor</code> / <code>IsMotionShakeAuxDescriptor</code> as the predicates.</p>
+<p>The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (<code>InputService.UpdateShakeState</code>, <code>InputService.cs</code> line 14252), and handed to the engine through <code>SourceCoercion.ShakeEnvelopeProvider</code> / <code>ShakeEnvelopeProviderAux</code>. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (<code>InputCommon</code> <code>Force.cpp</code>, <code>Shake::Shake</code>), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.</p>
 <p><code>ReadShakeEnvelope</code> (line 2188) applies the per-source sensitivity and clamps to <code>[0, 1]</code>. The envelope is unsigned by nature, so <code>HalfAxis</code> and <code>Invert</code> have nothing to point at and are not applied. Per target class:</p>
 <table>
 <thead>
@@ -8517,7 +8569,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a><span class="w">    </span><span class="n">CustomControllerLayout</span><span class="w"> </span><span class="n">cfg</span><span class="p">,</span>
 <a id="__codelineno-67-4" name="__codelineno-67-4" href="#__codelineno-67-4"></a><span class="w">    </span><span class="n">MappingSet</span><span class="w"> </span><span class="n">mappingSet</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">thisDeviceGuid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slotIndex</span><span class="p">)</span>
 </code></pre></div>
-<p><code>InputManager.Step3.UpdateOutputStates.cs</code> line 2301. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned <code>raw</code> (the per-setting <code>us.RawHidScratch</code>), starting with <code>raw.Clear()</code> so POVs begin centered. The caller republishes into <code>us.RawHidOutputState</code> only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (<code>ps.GetRawMapping("RawAxis0")</code>, etc.) instead of fixed gamepad field names. Sizes its axis, button, and POV arrays from <code>CustomControllerLayout</code>, capped at 8 axes, 128 buttons, and 4 POVs (<code>EnsureRawShape</code>). The trailing <code>mappingSet</code> / <code>thisDeviceGuid</code> / <code>slotIndex</code> arguments hand the v3.2 <code>MappingSet</code> evaluator the context it needs to resolve multi-source rows that target Extended channels.</p>
+<p><code>InputManager.Step3.UpdateOutputStates.cs</code> line 2307. Serves both Extended raw-surface slots and Nintendo slots (which ride the same raw-HID data path with a fixed catalog profile). Writes into the caller-owned <code>raw</code> (the per-setting <code>us.RawHidScratch</code>), starting with <code>raw.Clear()</code> so POVs begin centered. The caller republishes into <code>us.RawHidOutputState</code> only on content change, keeping the published arrays immutable after publish. Uses dictionary-based mappings (<code>ps.GetRawMapping("RawAxis0")</code>, etc.) instead of fixed gamepad field names. Sizes its axis, button, and POV arrays from <code>CustomControllerLayout</code>, capped at 8 axes, 128 buttons, and 4 POVs (<code>EnsureRawShape</code>). The trailing <code>mappingSet</code> / <code>thisDeviceGuid</code> / <code>slotIndex</code> arguments hand the v3.2 <code>MappingSet</code> evaluator the context it needs to resolve multi-source rows that target Extended channels.</p>
 <ul>
 <li><strong>Axes</strong>: <code>MappingSet</code> row first (<code>TryEvaluateMappingSetRawTrigger</code> for trigger slots, <code>TryEvaluateMappingSetBipolarAxis</code> for the rest), then the legacy <code>RawAxis{i}</code> / <code>RawAxis{i}Neg</code> pair through <code>MapToRawTriggerAxis</code> (trigger slots, which rest at <code>short.MinValue</code>) or <code>MapToThumbAxisWithNeg</code>. No <code>NegateAxis</code>: <code>SubmitGamepadState</code> flips stick Y on the gamepad path, and the raw submit paths (<code>SubmitRawHidState</code>, <code>ExtendedReportPacker</code>) do not.</li>
 <li><strong>Buttons</strong>: <code>TryEvaluateMappingSetButton</code> first, then the legacy <code>RawBtn{i}</code> descriptor through <code>MapToButtonPressed</code>, set via <code>raw.SetButton(i, true)</code>. Buttons in the layout's <code>TriggerClickButtonMask</code> (ZL/ZR on the Switch Pro) default to a 0% threshold, so any nonzero trigger value presses them. An explicit per-row threshold still applies.</li>
@@ -8682,7 +8734,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 </tbody>
 </table>
-<p><code>ClassifyDescriptor</code> (<code>SourceCoercion.cs</code> lines 1243-1338) matches these prefixes in order after the <code>Mouse Position</code> check: <code>Mouse Motion</code> → <code>JoyCon2Mouse</code>, <code>Mouse Gesture</code> → <code>MouseGesture</code>, <code>IR Pointer</code> → <code>IrPointer</code>, exact <code>IR Offscreen</code> → <code>IrOffscreen</code>, exact <code>IR Brightness</code> → <code>JoyConIr</code>, <code>Balance</code> → <code>BalanceBoard</code>, then <code>Midi</code>. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. <code>IrPointer</code> is read through its own tuned, slot-scoped reader <code>ReadTunedIrPointer</code> (sensor-bar offset and smoothing are per-(device, slot) Pointer-tab settings), the same pattern as <code>ReadTunedMouseCursor</code> and <code>ReadTunedGyroRate</code>.</p>
+<p><code>ClassifyDescriptor</code> (<code>SourceCoercion.cs</code> lines 1263-1358) matches these prefixes in order after the <code>Mouse Position</code> check: <code>Mouse Motion</code> → <code>JoyCon2Mouse</code>, <code>Mouse Gesture</code> → <code>MouseGesture</code>, <code>IR Pointer</code> → <code>IrPointer</code>, exact <code>IR Offscreen</code> → <code>IrOffscreen</code>, exact <code>IR Brightness</code> → <code>JoyConIr</code>, <code>Balance</code> → <code>BalanceBoard</code>, then <code>Midi</code>. IR Pointer, IR Brightness, and Mouse Motion read per device, so two remotes or two Joy-Cons on one slot keep separate pointers / deltas. <code>IrPointer</code> is read through its own tuned, slot-scoped reader <code>ReadTunedIrPointer</code> (sensor-bar offset and smoothing are per-(device, slot) Pointer-tab settings), the same pattern as <code>ReadTunedMouseCursor</code> and <code>ReadTunedGyroRate</code>.</p>
 <hr />
 <h2 id="shift-layer-activators-and-the-cycle-cursor">Shift Layer Activators and the Cycle Cursor<a class="headerlink" href="#shift-layer-activators-and-the-cycle-cursor" title="Permanent link">&para;</a></h2>
 <p><em>How a slot's <code>MappingSet</code> decides which shift layer is active each frame, and how the #119 Cycle cursor walks a queue of layers.</em></p>
@@ -8822,7 +8874,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 </tbody>
 </table>
-<p><strong>Host-layer conditions (<code>HostLayerMask</code>).</strong> An activator with a non-empty <code>HostLayerMask</code> engages only from that layer, which is what makes a Steam-style action-set graph expressible in the activator machinery itself: the same physical button carries a different activator per engaged layer. <code>UpdateActivatorState</code> (<code>InputManager.Step3.MappingSetEval.cs</code> line 1602) samples the gate on the raw rising edge, through <code>HostGateSatisfied</code> (line 1958), and latches the verdict for the whole press in <code>rt.HostGateOpen[actIdx]</code>, cleared on the release. The latch matters both ways. A press that opens the gate stays open even though its own firing changes the layer, which <code>Hold</code> would otherwise oscillate on at tick rate. A press that finds the gate closed stays closed even if that layer becomes the host mid-hold, so entering a layer never conscripts an already-held button. A closed press also writes <code>false</code> into <code>WasDown</code>, which keeps the postpone suppression from consuming it, so the button's own mapping rows on the engaged layer fire instead. <code>Cycle</code>'s Previous button gets the same treatment through <code>HostGatePrevOpen</code> / <code>HostGatePrevRawWasDown</code> (lines 1828-1836). <code>HostGateSatisfied</code> compares the host mask against the same engaged layer <code>ResolveActiveLayerMask</code> would return: <code>CustomLayer</code> when non-empty, otherwise the <code>LayerMask</code> of the activator at the tail of <code>Stack</code>, otherwise <code>"Base"</code>. A mask the slot no longer declares can never match, so the activator goes inert, and a same-named layer re-add revives it.</p>
+<p><strong>Host-layer conditions (<code>HostLayerMask</code>).</strong> An activator with a non-empty <code>HostLayerMask</code> engages only from that layer, which is what makes a Steam-style action-set graph expressible in the activator machinery itself: the same physical button carries a different activator per engaged layer. <code>UpdateActivatorState</code> (<code>InputManager.Step3.MappingSetEval.cs</code> line 1606) samples the gate on the raw rising edge, through <code>HostGateSatisfied</code> (line 1958), and latches the verdict for the whole press in <code>rt.HostGateOpen[actIdx]</code>, cleared on the release. The latch matters both ways. A press that opens the gate stays open even though its own firing changes the layer, which <code>Hold</code> would otherwise oscillate on at tick rate. A press that finds the gate closed stays closed even if that layer becomes the host mid-hold, so entering a layer never conscripts an already-held button. A closed press also writes <code>false</code> into <code>WasDown</code>, which keeps the postpone suppression from consuming it, so the button's own mapping rows on the engaged layer fire instead. <code>Cycle</code>'s Previous button gets the same treatment through <code>HostGatePrevOpen</code> / <code>HostGatePrevRawWasDown</code> (lines 1828-1836). <code>HostGateSatisfied</code> compares the host mask against the same engaged layer <code>ResolveActiveLayerMask</code> would return: <code>CustomLayer</code> when non-empty, otherwise the <code>LayerMask</code> of the activator at the tail of <code>Stack</code>, otherwise <code>"Base"</code>. A mask the slot no longer declares can never match, so the activator goes inert, and a same-named layer re-add revives it.</p>
 <p><strong>Overlay vs replace (<code>InheritUnmapped</code>).</strong> When a non-Base layer is active, the default (<code>false</code>) is REPLACE: only rows on that layer fire and every target the layer does not map outputs zero/false. Setting <code>InheritUnmapped = true</code> switches to overlay-with-fallthrough, so Base rows fall through for any target the active layer does not cover. In <code>ApplyMappingSetToGamepad</code>, "cover" means a matching-mask row that has at least one source or carries an explicit <code>MappingRow.NoInherit</code> flag. These covered targets are collected into a <code>shiftCoveredTargets</code> set each frame, and a Base row whose target is in that set is skipped. A matching-mask row with zero sources and <code>NoInherit = false</code> is transparent, so an author can write an "intentionally inherit" row without source data.</p>
 <h3 id="per-slot-runtime-state-shiftruntime">Per-slot runtime state (<code>ShiftRuntime</code>)<a class="headerlink" href="#per-slot-runtime-state-shiftruntime" title="Permanent link">&para;</a></h3>
 <p>The activator latch state does not live on the DTO. <code>InputManager.Step3.MappingSetEval.cs</code> holds a <code>private static readonly ShiftRuntime[] _shiftRuntime = new ShiftRuntime[MaxPads]</code>, one <code>ShiftRuntime</code> per VC slot, allocated lazily and sized to the activator count via <code>EnsureSize</code>.</p>
@@ -8896,7 +8948,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </tr>
 <tr>
 <td><code>LayerOutputTicks</code></td>
-<td>Per-layer last-output ticks (<code>ConcurrentDictionary&lt;string, long&gt;</code>). <code>StampLayerActivity</code> writes it from the gamepad row write sites (a button pressed, an axis past 10%, a trigger past 5%), and the <code>Toggle</code> auto-cancel reads it</td>
+<td>Per-layer last-output ticks (<code>ConcurrentDictionary&lt;string, long&gt;</code>). <code>StampLayerActivity</code> writes it from the gamepad row write sites (a button pressed, an axis past 10%, a trigger past 5%) and from the Motion Pitch, Yaw and Roll rows past 10% (#475), and the <code>Toggle</code> auto-cancel reads it</td>
 </tr>
 <tr>
 <td><code>Version</code></td>
@@ -9046,7 +9098,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <h3 id="algorithm_3">Algorithm<a class="headerlink" href="#algorithm_3" title="Permanent link">&para;</a></h3>
 <p>For each of the 16 slots (a slot with no created VC is skipped before the lookup, and its combined state is left untouched):</p>
 <ol>
-<li>Find all UserSettings mapped to this slot via <code>FindByPadIndex(padIndex, _padIndexBuffer)</code></li>
+<li>Find all UserSettings mapped to this slot via <code>FindByPadIndex(padIndex, _padIndexBuffer)</code>. While the slot's motion stage is active, <code>CombineMotionRows(padIndex, slotCount)</code> combines the Motion Pitch, Yaw and Roll values (#475), and <code>CombinedMotionRows[padIndex]</code> clears otherwise</li>
 <li>Determine slot type flags: <code>isExtended</code> (an Extended or Nintendo slot on the raw-HID surface), <code>isMidi</code>, <code>isKbm</code>, <code>isVr</code>, <code>isDs4</code> (PlayStation), and <code>isTouch</code> (<code>isDs4 || SlotCarriesTouchpad(padIndex)</code>)</li>
 <li><strong>0 devices</strong>: clear all applicable state arrays for this slot</li>
 <li><strong>1 device</strong>: direct copy, no merge (optimization for the common case). Gamepad, KBM, VR, and touchpad states are struct-assigned. The Extended raw state and the MIDI state go through <code>CopyRawInto</code> / <code>CopyMidiInto</code>, so the slot owns its arrays and never aliases the device's published state</li>
@@ -9387,12 +9439,12 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tbody>
 <tr>
 <td>Copy</td>
-<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8241)</td>
+<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8257)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>SerializeMacrosToClipboard</code> -&gt; <code>Clipboard.SetText</code></td>
 </tr>
 <tr>
 <td>Paste</td>
-<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8300)</td>
+<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8316)</td>
 <td><code>TryParseMacroClipboard</code> -&gt; per-<code>MacroData</code> <code>LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)</code> -&gt; set <code>PadIndex</code> -&gt; clear <code>LayerMask</code> unless <code>DestinationDeclaresLayer</code> -&gt; add</td>
 </tr>
 <tr>
@@ -9448,7 +9500,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p><code>Guid.Empty</code> short-circuits to <code>null</code>. Both raw-trigger checks route every device lookup through this guard: <code>CheckRawButtonTrigger</code> uses it on each <code>MacroItem.GetTriggerInputEntries()</code> entry (the multi-device path) and on the legacy <code>TriggerDeviceGuid</code> single-device fallback, and <code>CheckRawPovTrigger</code> does the same for POV entries. Without it, a macro copied (via the codec above) into a slot that does not hold its trigger device would still fire from that foreign device on another slot's controller (#112).</p>
 <h3 id="switch-layer">Switch Layer<a class="headerlink" href="#switch-layer" title="Permanent link">&para;</a></h3>
 <p><code>MacroActionType.SwitchLayer</code> (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: <code>ExecuteSequentialAction</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code>, case at line 3048) for standard slots and <code>ExecuteSequentialActionRaw</code> (case at line 5553) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with <code>CurrentActionIndex</code> frozen. Both cases call <code>AdvanceAction(macro)</code>, so the action is one-shot per fire.</p>
-<p>The work happens in <code>ApplyMacroLayerSwitch(slotIndex, mask)</code> (<code>InputManager.Step3.MappingSetEval.cs</code> line 1192), which lives with the shift runtime rather than with the macro engine. The slot is always the macro's own <code>PadIndex</code>, the #254 per-layer macro scope identity:</p>
+<p>The work happens in <code>ApplyMacroLayerSwitch(slotIndex, mask)</code> (<code>InputManager.Step3.MappingSetEval.cs</code> line 1196), which lives with the shift runtime rather than with the macro engine. The slot is always the macro's own <code>PadIndex</code>, the #254 per-layer macro scope identity:</p>
 <ul>
 <li><strong>The mask is validated inside the operation.</strong> A mask no <code>ShiftActivator</code> on the slot's <code>MappingSet</code> declares is a no-op, so an action left behind by a layer rename or delete goes inert instead of engaging a rowless layer.</li>
 <li><strong>A declared mask</strong> is written to <code>rt.CustomLayer</code> under <code>rt.SyncRoot</code> with a version bump, the Latch (<code>Custom</code>) activator's own discipline. The layer stays engaged until another switch, a Latch or Cycle transition, or a profile switch.</li>
@@ -9862,7 +9914,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tr>
 <td><strong>Engine</strong> (<code>PadForge.InputManager</code>, AboveNormal)</td>
 <td>6-step pipeline at ~1000 Hz</td>
-<td>All <code>Combined*States</code>, <code>Retrieved*States</code>, <code>MotionSnapshots</code>, device InputState, VCs, and <code>VibrationStates</code> zeroing on VC teardown plus PID re-evaluation (<code>TickFfb</code>)</td>
+<td>All <code>Combined*States</code>, <code>Retrieved*States</code>, <code>CombinedMotionRows</code>, <code>MotionSnapshots</code>, device InputState, VCs, and <code>VibrationStates</code> zeroing on VC teardown plus PID re-evaluation (<code>TickFfb</code>)</td>
 <td><code>MacroSnapshots</code>, <code>SlotControllerTypes</code>, <code>VibrationStates</code>, <code>IsIdle</code>, <code>PollingIntervalMs</code></td>
 </tr>
 <tr>
@@ -9924,25 +9976,28 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-93-26" name="__codelineno-93-26" href="#__codelineno-93-26"></a>    v  [Step 4b: EvaluateMacros]
 <a id="__codelineno-93-27" name="__codelineno-93-27" href="#__codelineno-93-27"></a>    |     Trigger state machine, inject button/axis/volume/mouse actions (in-place modification)
 <a id="__codelineno-93-28" name="__codelineno-93-28" href="#__codelineno-93-28"></a>    |
-<a id="__codelineno-93-29" name="__codelineno-93-29" href="#__codelineno-93-29"></a>    v  [Step 5: UpdateVirtualDevices]
-<a id="__codelineno-93-30" name="__codelineno-93-30" href="#__codelineno-93-30"></a>    |     Create/destroy VCs, submit reports
+<a id="__codelineno-93-29" name="__codelineno-93-29" href="#__codelineno-93-29"></a>    v  [Motion stage: ApplyMotionRows]
+<a id="__codelineno-93-30" name="__codelineno-93-30" href="#__codelineno-93-30"></a>    |     The Motion Pitch / Yaw / Roll model composed onto MotionSnapshots and DsuMotionSnapshots (#475)
 <a id="__codelineno-93-31" name="__codelineno-93-31" href="#__codelineno-93-31"></a>    |
-<a id="__codelineno-93-32" name="__codelineno-93-32" href="#__codelineno-93-32"></a>    +--&gt; HMaestroVirtualController: SubmitGamepadState / SubmitRawHidState / SubmitRawReport
-<a id="__codelineno-93-33" name="__codelineno-93-33" href="#__codelineno-93-33"></a>    |        -&gt; HIDMaestro Xbox / PlayStation / Nintendo / Extended (XInput / DirectInput / raw HID)
-<a id="__codelineno-93-34" name="__codelineno-93-34" href="#__codelineno-93-34"></a>    +--&gt; MidiVirtualController.SubmitMidiRawState  -&gt; Windows MIDI Services endpoint
-<a id="__codelineno-93-35" name="__codelineno-93-35" href="#__codelineno-93-35"></a>    +--&gt; KeyboardMouseVirtualController.SubmitKbmState  -&gt; Win32 SendInput (keyboard + mouse)
-<a id="__codelineno-93-36" name="__codelineno-93-36" href="#__codelineno-93-36"></a>    +--&gt; HMaestroVRController.SubmitVrState  -&gt; HIDMaestro OpenVR driver (SteamVR hands)
-<a id="__codelineno-93-37" name="__codelineno-93-37" href="#__codelineno-93-37"></a>    |
-<a id="__codelineno-93-38" name="__codelineno-93-38" href="#__codelineno-93-38"></a>    v  [Step 6: RetrieveOutputStates]
-<a id="__codelineno-93-39" name="__codelineno-93-39" href="#__codelineno-93-39"></a>RetrievedOutputStates[slot]  -&gt;  UI Display (dashboard gauges, axis bars, button indicators)
-<a id="__codelineno-93-40" name="__codelineno-93-40" href="#__codelineno-93-40"></a>
-<a id="__codelineno-93-41" name="__codelineno-93-41" href="#__codelineno-93-41"></a>    &lt;--- Feedback path (game -&gt; controller -&gt; PadForge -&gt; physical device) ---&gt;
-<a id="__codelineno-93-42" name="__codelineno-93-42" href="#__codelineno-93-42"></a>Game writes output (XInputSetState, HID output report, PID FFB)  -&gt;  HMController.OutputReceived / OutputDecoded  -&gt;  VibrationStates[slot]
-<a id="__codelineno-93-43" name="__codelineno-93-43" href="#__codelineno-93-43"></a>    -&gt;  Step 2: ApplyForceFeedback()  -&gt;  per-pad-family output:
-<a id="__codelineno-93-44" name="__codelineno-93-44" href="#__codelineno-93-44"></a>            - Sony (DS4/DualSense): UserEffectsDispatcher (sole writer, SDL skipped)
-<a id="__codelineno-93-45" name="__codelineno-93-45" href="#__codelineno-93-45"></a>            - Xbox One+ (One/Elite/Series): XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
-<a id="__codelineno-93-46" name="__codelineno-93-46" href="#__codelineno-93-46"></a>            - Logitech / Fanatec / Thrustmaster wheels, Fanatec pedals, Padix converters: vendor raw HID writers (SDL skipped)
-<a id="__codelineno-93-47" name="__codelineno-93-47" href="#__codelineno-93-47"></a>            - Everything else: SDL_RumbleJoystick / SDL haptic effects
+<a id="__codelineno-93-32" name="__codelineno-93-32" href="#__codelineno-93-32"></a>    v  [Step 5: UpdateVirtualDevices]
+<a id="__codelineno-93-33" name="__codelineno-93-33" href="#__codelineno-93-33"></a>    |     Create/destroy VCs, submit reports
+<a id="__codelineno-93-34" name="__codelineno-93-34" href="#__codelineno-93-34"></a>    |
+<a id="__codelineno-93-35" name="__codelineno-93-35" href="#__codelineno-93-35"></a>    +--&gt; HMaestroVirtualController: SubmitGamepadState / SubmitRawHidState / SubmitRawReport
+<a id="__codelineno-93-36" name="__codelineno-93-36" href="#__codelineno-93-36"></a>    |        -&gt; HIDMaestro Xbox / PlayStation / Nintendo / Extended (XInput / DirectInput / raw HID)
+<a id="__codelineno-93-37" name="__codelineno-93-37" href="#__codelineno-93-37"></a>    +--&gt; MidiVirtualController.SubmitMidiRawState  -&gt; Windows MIDI Services endpoint
+<a id="__codelineno-93-38" name="__codelineno-93-38" href="#__codelineno-93-38"></a>    +--&gt; KeyboardMouseVirtualController.SubmitKbmState  -&gt; Win32 SendInput (keyboard + mouse)
+<a id="__codelineno-93-39" name="__codelineno-93-39" href="#__codelineno-93-39"></a>    +--&gt; HMaestroVRController.SubmitVrState  -&gt; HIDMaestro OpenVR driver (SteamVR hands)
+<a id="__codelineno-93-40" name="__codelineno-93-40" href="#__codelineno-93-40"></a>    |
+<a id="__codelineno-93-41" name="__codelineno-93-41" href="#__codelineno-93-41"></a>    v  [Step 6: RetrieveOutputStates]
+<a id="__codelineno-93-42" name="__codelineno-93-42" href="#__codelineno-93-42"></a>RetrievedOutputStates[slot]  -&gt;  UI Display (dashboard gauges, axis bars, button indicators)
+<a id="__codelineno-93-43" name="__codelineno-93-43" href="#__codelineno-93-43"></a>
+<a id="__codelineno-93-44" name="__codelineno-93-44" href="#__codelineno-93-44"></a>    &lt;--- Feedback path (game -&gt; controller -&gt; PadForge -&gt; physical device) ---&gt;
+<a id="__codelineno-93-45" name="__codelineno-93-45" href="#__codelineno-93-45"></a>Game writes output (XInputSetState, HID output report, PID FFB)  -&gt;  HMController.OutputReceived / OutputDecoded  -&gt;  VibrationStates[slot]
+<a id="__codelineno-93-46" name="__codelineno-93-46" href="#__codelineno-93-46"></a>    -&gt;  Step 2: ApplyForceFeedback()  -&gt;  per-pad-family output:
+<a id="__codelineno-93-47" name="__codelineno-93-47" href="#__codelineno-93-47"></a>            - Sony (DS4/DualSense): UserEffectsDispatcher (sole writer, SDL skipped)
+<a id="__codelineno-93-48" name="__codelineno-93-48" href="#__codelineno-93-48"></a>            - Xbox One+ (One/Elite/Series): XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
+<a id="__codelineno-93-49" name="__codelineno-93-49" href="#__codelineno-93-49"></a>            - Logitech / Fanatec / Thrustmaster wheels, Fanatec pedals, Padix converters: vendor raw HID writers (SDL skipped)
+<a id="__codelineno-93-50" name="__codelineno-93-50" href="#__codelineno-93-50"></a>            - Everything else: SDL_RumbleJoystick / SDL haptic effects
 </code></pre></div>
 <hr />
 <h2 id="key-types-reference">Key Types Reference<a class="headerlink" href="#key-types-reference" title="Permanent link">&para;</a></h2>

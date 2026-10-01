@@ -81,7 +81,7 @@ HIDMaestro-backed. Two presets: **Nintendo Switch Pro Controller** (the default)
 
 The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. The Switch 2 Pro preset carries 21, adding C, GL, and GR among others, on its own wire order. Neither has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on either. The slot deploys the preset as-is.
 
-On the Switch Pro preset, map a motion source on the slot and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. The Switch 2 Pro preset carries neither: its input report has no motion data, and HIDMaestro decodes no rumble for it. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
+On the Switch Pro preset, map a motion source on the slot, or a stick on the [Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll) rows, and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. The Switch 2 Pro preset carries neither: its input report has no motion data, and HIDMaestro decodes no rumble for it. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
 
 ![Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below](../images/pad-nintendo-configbar.png)
 
@@ -120,7 +120,7 @@ The mapping grid uses Valve's names. Buttons are A, B, X, Y, L1, R1, L3, Steam, 
 | D-Pad | POV hat | POV hat, which the pad reports from the left trackpad's four click zones | Four discrete buttons |
 | Right stick | Real stick | The right trackpad, ridden as a stick | Real stick |
 
-Every profile carries Left Stick X / Y, Right Stick X / Y, Left Trigger, Right Trigger, both trackpads as Left Pad X, Left Pad Y, Left Pad Touch, Right Pad X, Right Pad Y, Right Pad Touch, and the Motion Gyro and Motion Accelerometer rows. The virtual pad carries one finger per trackpad, so the left pad follows the slot's first touch finger and the right pad the second.
+Every profile carries Left Stick X / Y, Right Stick X / Y, Left Trigger, Right Trigger, both trackpads as Left Pad X, Left Pad Y, Left Pad Touch, Right Pad X, Right Pad Y, Right Pad Touch, the Motion Gyro and Motion Accelerometer rows, and the Motion Pitch, Motion Yaw, and Motion Roll rows. The virtual pad carries one finger per trackpad, so the left pad follows the slot's first touch finger and the right pad the second.
 
 Assign a Steam Deck, a Steam Controller, or any other gamepad and the slot auto-maps it: the face buttons, bumpers, sticks, triggers, View / Menu, Steam, and Quick Access from the pad's buttons, the rear buttons from SDL's four paddle positions (the two grips on the 2015 wire), the D-Pad from the device's hat, each trackpad from the device's matching touchpad (a one-pad device lands on the left pad), the pad clicks from the click buttons the device advertises, and gyro and accelerometer from the device's sensors.
 
@@ -164,6 +164,7 @@ The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Control
 | PlayStation PC port with PS button prompts | **PlayStation** |
 | Streaming gyro/motion to Cemu, Yuzu, or another emulator | **PlayStation** + DSU |
 | Emulator or game that reads a Switch Pro Controller, with native gyro | **Nintendo** |
+| Gyro from a stick or buttons ([Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll), pre-release builds) | **PlayStation** or **Nintendo** |
 | Flight sim, racing sim, or space sim | **Extended** |
 | HOTAS, racing wheel, or custom button box | **Extended** |
 | Game with keyboard+mouse only | **Keyboard+Mouse** |

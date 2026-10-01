@@ -1717,6 +1717,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#motion-pitch-yaw-and-roll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Pitch, Yaw and Roll
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Motion Pitch, Yaw and Roll">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turn-a-stick-into-motion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn a stick into motion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#copy-paste-copy-from" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4387,6 +4415,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#motion-pitch-yaw-and-roll" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion Pitch, Yaw and Roll
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Motion Pitch, Yaw and Roll">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turn-a-stick-into-motion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn a stick into motion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#copy-paste-copy-from" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4554,7 +4610,7 @@
 <blockquote>
 <p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.</p>
 </blockquote>
-<p>Rows group by category, in this order: <strong>Buttons</strong> (face, shoulder, system, stick clicks), <strong>D-Pad</strong> (four directions), <strong>Triggers</strong> (left and right), <strong>Left Stick / Right Stick</strong> (X and Y axes). PlayStation slots add the touchpad rows, a <strong>Touchpad Click</strong> row, and the <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> rows. Nintendo and Extended slots arrange their own row sets. See <a href="#nintendo-virtual-controllers">Nintendo virtual controllers</a> and <a href="#custom-directinput-mappings">Custom DirectInput mappings</a>.</p>
+<p>Rows group by category, in this order: <strong>Buttons</strong> (face, shoulder, system, stick clicks), <strong>D-Pad</strong> (four directions), <strong>Triggers</strong> (left and right), <strong>Left Stick / Right Stick</strong> (X and Y axes). PlayStation slots add the touchpad rows, a <strong>Touchpad Click</strong> row, and five motion rows: <strong>Motion Gyro</strong>, <strong>Motion Accelerometer</strong>, <strong>Motion Pitch</strong>, <strong>Motion Yaw</strong>, and <strong>Motion Roll</strong>. Nintendo and Extended slots arrange their own row sets. See <a href="#nintendo-virtual-controllers">Nintendo virtual controllers</a> and <a href="#custom-directinput-mappings">Custom DirectInput mappings</a>.</p>
 <hr />
 <h2 id="three-ways-to-bind">Three ways to bind<a class="headerlink" href="#three-ways-to-bind" title="Permanent link">&para;</a></h2>
 <h3 id="1-record">1. Record<a class="headerlink" href="#1-record" title="Permanent link">&para;</a></h3>
@@ -4567,6 +4623,7 @@
 </ol>
 <p>PadForge detects buttons (first press), axes (movement past a threshold), D-pad / POV directions, and mouse axes.</p>
 <p>On a stick axis row, a button or D-pad press records one direction, and PadForge then asks for the opposite one. Moving an analog axis covers both directions at once.</p>
+<p>On the <strong>Motion Gyro</strong> row, recording waits for a controller on the slot to turn, and on the <strong>Motion Accelerometer</strong> row for one to tilt or shake. It records that controller's sensor, or its left Joy-Con or Nunchuk when that part moved more. A press or a stick push records nothing there. When no controller on the slot has the sensor, recording does not start and the status bar says so.</p>
 <blockquote>
 <p><strong>Tip:</strong> Move only the input you want. Wiggling a stick while pressing a button can catch the stick instead. Push sticks firmly and pull triggers far enough to cross the detection threshold.</p>
 </blockquote>
@@ -4616,6 +4673,7 @@
 <li>Repeat until done. Click <strong>Stop</strong> to stop early.</li>
 </ol>
 <p>Rows that already have a source are still in the sequence. Pressing an input overwrites the existing source. Letting a row's 10-second recording window run out skips it and keeps its source.</p>
+<p>Map All skips the five motion rows. Controllers with a motion sensor fill Motion Gyro and Motion Accelerometer on their own, and <a href="#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> are a choice made row by row.</p>
 <p>On PlayStation virtual controllers, <strong>Touchpad Click</strong> is appended to the recording sequence after the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.</p>
 <blockquote>
 <p><strong>Tip:</strong> Start with Map All to assign everything in one pass, then fine-tune individual rows.</p>
@@ -5326,7 +5384,57 @@
 </tr>
 </tbody>
 </table>
+<p>In pre-release builds after 4.5.3, <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong>, with their Left Joy-Con and Nunchuk forms, appear only in the Motion Gyro and Motion Accelerometer rows' pickers, and those two rows list nothing else. Each row reads only the sensor its name says. A saved row that holds something else shows a note: a stick or a button on a Motion row reads nothing, and a Motion source on any other row reads nothing. The modifier and the Up and Down key pickers keep the full list. To drive motion from a stick or a button, use the <a href="#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows.</p>
 <p>Auto-mapping fills the <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> rows for pads that report a sensor, on PlayStation and Nintendo slots and on Extended slots running a Valve profile. A motion row you empty switches that channel off, and auto-mapping leaves it empty even when another device arrives. Pick <strong>Motion Gyro</strong> or <strong>Motion Accelerometer</strong> in the row's source dropdown to turn it back on. A slot saved before its first device arrived still gets its motion rows when the device comes. Copy, Paste, and Copy From carry a switched-off motion row, or one marked <strong>Do Not Inherit</strong>, as it is, but drop one whose inputs all belonged to devices the target slot lacks, so auto-mapping fills it there. See <a href="../../guides/gyro/">Gyro</a> for calibration and tuning, and <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for broadcasting the feed to emulators.</p>
+<hr />
+<h2 id="motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll<a class="headerlink" href="#motion-pitch-yaw-and-roll" title="Permanent link">&para;</a></h2>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>These three rows give the virtual controller motion from any input: a stick, a trigger, a button, a key. Push the stick and the game sees the controller turn or lean. reWASD calls the same idea a Virtual Gyroscope. The rows sit under Motion Gyro and Motion Accelerometer on every slot that carries motion to the game: PlayStation, Nintendo, and Extended on a Valve profile.</p>
+<p>A row reads its sources the way a stick axis row does. A stick axis drives it both ways. A button drives one direction, and <strong>+ Opposite Direction</strong> adds the other. A trigger, a slider, or an analog key reads one way: released is no motion, a full pull is full deflection, and <strong>Invert</strong> turns it the other way. A stick row reads a trigger across its whole travel, so a released trigger sits at full deflection there, and on a Motion row that would turn the controller with nothing touched.</p>
+<p><strong>Motion Mode</strong> sets what deflection does:</p>
+<ul>
+<li><strong>Speed</strong>, the default. Deflection sets how fast the controller turns, and letting go stops it where it is. <strong>Top Speed</strong> is the turn at full deflection, 360°/s unless you change it, up to 1600°/s. <strong>Start Speed</strong> is the turn just past the deadzone, 0 unless you change it.</li>
+<li><strong>Angle</strong>. Deflection sets how far the controller leans, and letting go levels it. <strong>Lean Angle</strong> is the lean at full deflection, 85° unless you change it, up to 90°. The lean eases in and out the way Dolphin's Tilt does instead of snapping. Motion Yaw has no Angle, because gravity carries no heading, so the dropdown shows on Motion Pitch and Motion Roll only.</li>
+</ul>
+<p><strong>Motion Deadzone</strong> reads deflection below its percentage as rest, 20% unless you change it, so stick drift never turns the controller. Past it, the rest of the travel covers the whole range: Start Speed to Top Speed, or level to Lean Angle. Each setting has a reset button.</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>Speed</th>
+<th>Angle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Motion Pitch</strong></td>
+<td>Up raises the far edge, the way a camera looks up</td>
+<td>Up tips the far edge down, like Dolphin's Tilt Forward</td>
+</tr>
+<tr>
+<td><strong>Motion Yaw</strong></td>
+<td>Right turns the controller right</td>
+<td>No Angle</td>
+</tr>
+<tr>
+<td><strong>Motion Roll</strong></td>
+<td>Right rolls the right side down</td>
+<td>Right leans the right side down</td>
+</tr>
+</tbody>
+</table>
+<p>With a controller's own motion on the slot, the rows add to it. A turn adds its rate to the real gyro, so gyro aim keeps working while a stick turns. The accelerometer keeps reading the real controller, leaned by an Angle row and nothing else. With no real accelerometer on the slot, the virtual controller reports gravity turned by the whole simulated pose, so a game that reads gravity sees the tilt and a game that reads rates sees the turn.</p>
+<p>Once one of the three rows has a stick, trigger, button, or key on it, the virtual controller sends motion all the time, as a real one does. At rest it reads as a controller lying level and still.</p>
+<p>The <a href="../../guides/macros/#gyro-recenter">Gyro Recenter</a> macro action levels a Speed turn. A held lean stays, because the stick still holds it. A profile switch, Paste, Copy From, or a deleted slot starts the pose over. When the controller driving a turn disconnects, the turn stops, and with no controller left on the slot the motion stream pauses with the pose kept for its return.</p>
+<p>The <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> sends the motion the virtual controller reports, stick turns included. Cemu and eden slowly subtract a held turn slower than about 20°/s as gyro drift, whether they read the virtual controller or the DSU server, so set <strong>Start Speed</strong> above that for slow held turns there.</p>
+<p>The <strong>DualShock 3</strong> and <strong>Switch 2 Pro</strong> presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4.</p>
+<h3 id="turn-a-stick-into-motion">Turn a stick into motion<a class="headerlink" href="#turn-a-stick-into-motion" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open the slot's <strong>Mappings</strong> tab. On the <strong>Motion Pitch</strong> row, click <strong>Record</strong> and push the stick up, or pick its Y axis in the source dropdown.</li>
+<li>On <strong>Motion Yaw</strong> to turn, or <strong>Motion Roll</strong> to lean sideways, record the stick pushed right, or pick its X axis.</li>
+<li>In each row's details, pick <strong>Speed</strong> or <strong>Angle</strong> under <strong>Motion Mode</strong>.</li>
+<li>If the <strong>Motion Gyro</strong> row holds stick sources from an earlier attempt, remove them. That row reads only a controller's own gyro, and its note says so.</li>
+</ol>
 <hr />
 <h2 id="copy-paste-copy-from">Copy, Paste, Copy From<a class="headerlink" href="#copy-paste-copy-from" title="Permanent link">&para;</a></h2>
 <p>The toolbar above the mapping grid has bulk operations. <strong>Clear All</strong> sits apart at the far end in warning colors.</p>
@@ -5356,11 +5464,11 @@
 </tr>
 <tr>
 <td><strong>Clear All</strong></td>
-<td>Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, <strong>Acceleration</strong>, every <strong>Sensitivity</strong>, <strong>Do Not Inherit</strong>, <strong>Primary Mode</strong> back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, and Stick Trim settings all reset. A cleared row hands nothing to the next mapping.</td>
+<td>Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, <strong>Acceleration</strong>, every <strong>Sensitivity</strong>, <strong>Do Not Inherit</strong>, <strong>Primary Mode</strong> back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, Stick Trim settings, and the Motion Pitch, Yaw and Roll settings all reset. A cleared row hands nothing to the next mapping.</td>
 </tr>
 </tbody>
 </table>
-<p>Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, and the custom formula all copy together. Each source moves to the same controller on the target slot, or to another unit of the same model there. A source whose model the target slot lacks is dropped, except in a Custom row, which keeps its letter as a neutral input.</p>
+<p>Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, the custom formula, and the Motion Pitch, Yaw and Roll settings all copy together. Each source moves to the same controller on the target slot, or to another unit of the same model there. A source whose model the target slot lacks is dropped, except in a Custom row, which keeps its letter as a neutral input.</p>
 <p>The per-device payload covers every assigned device on the source slot, whichever device was selected at the time of Copy. Target-side devices that don't match any source entry are left alone.</p>
 <p>Some things travel with conditions. The full row table (every source on every layer), shift layers, menus, and SOCD pairs cross only between slots that share a layout: Xbox and PlayStation share one, Nintendo and Extended share another. Across layouts, bindings translate by position instead (see below), and Copy From also leaves Bass Shakers and Keep Awake alone. A Bass Shakers setup names an audio output by its Windows endpoint ID, so pasted on another PC it stays selected but plays nothing until you pick an output that exists there (it never falls back to the default output on its own). A macro whose shift-layer scope the target slot does not declare arrives unscoped rather than gated on a layer the target cannot show.</p>
 <p>There is no per-row copy. To move a whole layer's table between layers or slots, use the layer pill's right-click <strong>Copy Layer Rows</strong> and <strong>Paste Rows into Layer</strong> (see <a href="#shift-layers">Shift layers</a>).</p>
@@ -5400,7 +5508,7 @@
 <li><strong>L</strong> and <strong>R</strong>, then <strong>Minus</strong> and <strong>Plus</strong> where Back and Start sit, <strong>Home</strong> where Guide sits, and <strong>Capture</strong>. The Switch 2 Pro profile adds <strong>C</strong> after Capture, and <strong>GL</strong> / <strong>GR</strong> after the stick clicks.</li>
 <li>Stick clicks, the four D-pad directions, and <strong>ZL</strong> / <strong>ZR</strong> in the trigger rows' position. ZL and ZR are digital buttons on this controller, not analog triggers.</li>
 <li>Left and right stick axes with the same labels the other gamepad grids use.</li>
-<li><strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> passthrough rows at the tail, same as the PlayStation grid.</li>
+<li><strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> passthrough rows at the tail, then <strong>Motion Pitch</strong>, <strong>Motion Yaw</strong>, and <strong>Motion Roll</strong>, same as the PlayStation grid.</li>
 </ul>
 <p>Copy, Paste, and Copy From translate to and from Nintendo through the standard mapping. See <a href="../controller-slots/#nintendo">Controller Slots</a> for what the slot deploys as.</p>
 <hr />
@@ -5467,6 +5575,7 @@
 <li><strong>A centered axis mapped to two buttons fires both at rest.</strong> Turn on <strong>Half</strong> on both sources, <strong>Invert</strong> on one direction, set deadzone to 50%. See <a href="#mapping-a-centered-axis-to-two-buttons">Mapping a centered axis to two buttons</a>.</li>
 <li><strong>Two sources on the same row fight each other.</strong> Switch the row to <strong>Either</strong> (buttons) or <strong>Strongest</strong> (axes), or pick <strong>Custom</strong> and write a rule that resolves the conflict.</li>
 <li><strong>Opposite directions register together and the game rejects the input.</strong> Add the pair to the <a href="#socd-cleaning">SOCD card</a> and pick a rule.</li>
+<li><strong>A stick on the Motion Gyro row moves nothing.</strong> That row reads only a controller's own gyro. Bind the stick to <a href="#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> and remove it from the Motion Gyro row.</li>
 <li><strong>A custom formula's status line starts with ✗.</strong> The message names the problem and the position of the bad token. Common causes: a stray operator, a missing close paren, <code>=</code> used for equality instead of <code>==</code>.</li>
 </ul>
 <hr />

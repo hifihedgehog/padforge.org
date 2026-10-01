@@ -561,6 +561,8 @@ Per slot, volatile (resets on profile switch and app restart). Lets a macro hold
 
 Zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Imported Steam configs use it for their camera-reset bindings.
 
+In pre-release builds it also levels the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows built with **Speed**. A lean an **Angle** row holds stays, because the stick still holds it.
+
 ### Cycle Pointer Modes / Set Pointer Mode
 
 Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the **Pointer** tab (see [Wii Controllers](../devices/wii-controllers.md)).

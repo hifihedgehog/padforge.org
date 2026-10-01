@@ -72,7 +72,7 @@ graph TB
 |-----------|----------|
 | `PadForge.Engine` | Output state types, device wrappers, force-feedback types, common interfaces, `PrecisionTouchpadReader` |
 | `PadForge.Engine.Data` | XML-persisted data models (PadSetting, UserSetting, UserDevice, MappingSet, etc.) |
-| `PadForge.Engine.Common` | `InputHookManager` (LL hook host), (v3.6) `ConsumerUsageTable`, `IdleInputDetector`, `GlobalHotkeyParser`, `LfeOutputState` (#234), `RelativeVelocityWindow`, `ShiftCycleStepper`, (v4.4) `HeadPose` (#355 head-tracking wire decode), `MachineIdentity` (#343 SMBIOS identity), `VendorReportLearner` (+ `VendorButtonDefinition` / `VendorButtonCandidate` / `VendorButtonKind`, #343), `HandheldChords` (`HandheldChordDefinition`, `ChordDecision`, `HandheldChordEngine`, #343), (v4.5) `OpenXrHeadPose` (#403 headset pose into the Head Tracker convention) |
+| `PadForge.Engine.Common` | `InputHookManager` (LL hook host), (v3.6) `ConsumerUsageTable`, `IdleInputDetector`, `GlobalHotkeyParser`, `LfeOutputState` (#234), `RelativeVelocityWindow`, `ShiftCycleStepper`, (v4.4) `HeadPose` (#355 head-tracking wire decode), `MachineIdentity` (#343 SMBIOS identity), `VendorReportLearner` (+ `VendorButtonDefinition` / `VendorButtonCandidate` / `VendorButtonKind`, #343), `HandheldChords` (`HandheldChordDefinition`, `ChordDecision`, `HandheldChordEngine`, #343), (v4.5) `OpenXrHeadPose` (#403 headset pose into the Head Tracker convention), (pre-release) `MotionRowsModel` + `MotionRowValues` (#475) |
 | `PadForge.Engine.Common.Mapping` | (v3.2) Multi-source mapping helpers: `CombineHelper`, `SourceEvaluator`, `SourceCoercion`, `SourceKindRuntime`, `TargetKind`, `MappingExpression` |
 | `PadForge.Engine.Haptics` | (v3.6) HD haptic tone path (#147): `HapticToneEncoder` (per-family wire bytes), `HapticToneReducer` (PCM to tone), `WiiSpeakerAdpcm` (Yamaha 4-bit ADPCM, off the live path). (v4.4) `TritonPcmEncoder` (Steam Controller 2026 PCM stream reports, #381) |
 | `PadForge.Engine.Touchpad` | (v3.3) Touchpad gesture pipeline: `GestureRecognizer` (Tier 1/2/3 detector), `ShapeRecognizer` (canonical $Q point-cloud matcher), `ShapeTemplate`, `AngularMarginRecognizer`, `InBoxShapeTemplates`, `TouchpadCustomGesture`, `TouchpadGestureContext`, `TouchpadGestureSettings`, `TouchpadSettingsEntry`, `TouchpadGestureAutoArm`, (v4.1) `SwipeHapticsEvaluator` (swipe-haptic distance detents, #219) |
@@ -120,6 +120,7 @@ graph TB
 - [HeadPose](#headpose) (HeadPose.cs)
 - [MachineIdentity](#machineidentity) (MachineIdentity.cs)
 - [VendorReportLearner](#vendorreportlearner) (VendorReportLearner.cs)
+- [MotionRowsModel](#motionrowsmodel) (MotionRowsModel.cs)
 - [HapticToneEncoder](#haptictoneencoder) (Haptics/HapticToneEncoder.cs)
 - [TritonPcmEncoder](#tritonpcmencoder) (Haptics/TritonPcmEncoder.cs)
 - [HapticToneReducer](#haptictonereducer) (Haptics/HapticToneReducer.cs)
@@ -1786,6 +1787,39 @@ Chord-delivered hidden buttons take the other path, `HandheldChords` (`HandheldC
 
 ---
 
+## MotionRowsModel
+
+**File:** `PadForge.Engine/Common/MotionRowsModel.cs`
+**Namespace:** `PadForge.Engine.Common`
+
+(Pre-release, #475) The orientation the Motion Pitch, Yaw and Roll rows drive, which the virtual controller's gyro and accelerometer are read from. No Windows calls. The engine's motion stage keeps one per slot on the polling thread. See [Input Pipeline](input-pipeline.md#motion-pitch-yaw-and-roll).
+
+| Constant | Value | Meaning |
+|----------|-------|---------|
+| `LeanAcceleration` | 7 × 7 × 2π, about 307.9 rad/s² | Dolphin's Tilt acceleration, (7 × 2π)² / 2π |
+| `MaxRateDps` | `1600` | The fastest the lean moves, and the top of the Speed range |
+| `SliceSeconds` | `0.005` | Longest model step, Dolphin's 200 Hz update |
+| `MaxFrameMicroseconds` | `250_000` | A longer frame interval restarts the clock without turning |
+
+| Member | Signature | Description |
+|--------|-----------|-------------|
+| `Axis` | `struct` | One row's reading: `Value` (-1 to +1, positive down on a Y axis and right on an X axis), `Angle`, `SpeedDps`, `MinSpeedDps`, `AngleDeg`, `Deadzone` (a fraction of full deflection) |
+| `Orientation` | `Quaternion` | Body to world, the Speed rotation times `Lean` |
+| `Lean` | `Quaternion` | The Angle lean alone |
+| `GyroDps` | `Vector3` | The last frame's body rate in degrees per second, the mean of its slices |
+| `Step` | `void Step(in Axis pitch, in Axis yaw, in Axis roll, long timestampUs)` | Advances one frame |
+| `Level` | `void Level()` | Returns the Speed rotation to level without reporting it as rotation. A held lean stays |
+| `RestartClock` | `void RestartClock()` | The next frame starts the clock instead of integrating the gap |
+| `Reset` | `void Reset()` | Back to rest |
+| `Shape` | `static float Shape(float value, float deadzone)` | The deadzone with the range past it rescaled. A non-finite value reads 0 |
+| `LeanOf` | `static Quaternion LeanOf(float pitch, float roll)` | Pitch about X, then roll about Z inside it |
+| `BodyRotation` | `static Vector3 BodyRotation(Quaternion from, Quaternion to)` | The body-frame rotation vector between two orientations, radians, on the shorter arc |
+| `ToBody` | `static Vector3 ToBody(Quaternion orientation, Vector3 world)` | A world vector in the body frame |
+
+`Step` clamps its settings: the speeds to 0 to 1600°/s with the Start Speed no higher than the Top Speed, the lean to 0 to 90°, and the deadzone to 0 to 0.9. A non-finite setting reads as 0. `MotionRowValues`, in the same file, carries one device's three row values for one Step 3 pass and the pass (`Frame`) that computed them.
+
+---
+
 ## HapticToneEncoder
 
 **File:** `PadForge.Engine/Haptics/HapticToneEncoder.cs`
@@ -2348,6 +2382,7 @@ Links a physical device to a virtual controller slot and mapping. One per device
 | `VrRawOutputState` | `VrRawState` | `[XmlIgnore]` | Mapped VR hand-pair output for VR slots (#49). Merged in Step 4, submitted in Step 5. |
 | `RawHidScratch` / `MidiRawScratch` | `RawHidState` / `MidiRawState` | `[XmlIgnore]` | Poll-thread-owned scratch the Extended and MIDI mappers build into. A fresh copy is published to the matching `*OutputState` only on content change, because published arrays are read cross-thread and must stay immutable after publish. |
 | `TouchpadOutputState` | `TouchpadState` | `[XmlIgnore]` | PlayStation touchpad output for this device. Written by the background thread (Step 3), read by Step 4. |
+| `MotionRowsOutputState` | `MotionRowValues` | `[XmlIgnore]` | (#475) This device's Motion Pitch, Yaw and Roll values for the Step 3 pass stamped in its `Frame`. Read by Step 4, which drops a value from an earlier pass. |
 | `_cachedPadSetting` | `PadSetting` | `[XmlIgnore]` (internal) | Cached PadSetting reference set by SettingsManager. |
 
 ### Methods

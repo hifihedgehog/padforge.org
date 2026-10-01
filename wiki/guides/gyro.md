@@ -78,6 +78,8 @@ Check the box to route the rest of the Gyro tab's tuning through the motion the 
 
 The virtual controllers that carry motion to the game are PlayStation slots (DualShock 4, DualSense), Nintendo slots (Switch Pro since 4.1.0, and Switch 2 Pro), and Extended slots on the Valve profiles (Steam Deck and both Steam Controllers). Xbox, MIDI, Keyboard + Mouse, and every other Extended profile have no motion channel.
 
+On those slots a controller with no motion sensor can send motion too. The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows on the Mappings tab turn a stick, a trigger, or buttons into the virtual controller's motion.
+
 Calibration drift correction always applies, regardless of the toggle. The toggle only gates the discretionary tuning. The Grip rotation applies either way too, because a hold is a fact about the frame, not a tuning choice. On a DualShock 3, [Pitch and Roll Simulation](#pitch-and-roll-simulation) applies either way as well.
 
 **Leave it off for emulators.** An emulator integrates the gyro rate into an orientation. With the box checked, the tab's default tuning runs the tightening and smoothing thresholds and then a 3°/s deadzone on that rate before it leaves. A rate that reads zero below 3°/s and three degrees short above it accumulates orientation error the emulator cannot see, so steering drifts after a tilt and breaks on a sharp turn. The live readouts on this tab show the calibrated rate, not the tuned passthrough, so the distortion is invisible there as well. If motion in an emulator drifts or turns the wrong way, this box is the first thing to check.
@@ -300,7 +302,7 @@ Toggle state resets to off on a profile switch or app restart. It isn't saved be
 Two actions in the [macro editor](macros.md) drive gyro directly.
 
 - **Set Gyro Engaged** sets the slot's engage state, with a Toggle / On / Off mode. It OR-combines with the Aim Engage button at the evaluator, so either source can engage and both must release to disengage. Details on [Set Gyro Engaged](macros.md#set-gyro-engaged).
-- **Gyro Recenter** (new in 4.1.0) zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Details on [Gyro Recenter](macros.md#gyro-recenter).
+- **Gyro Recenter** (new in 4.1.0) zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, the gravity estimate re-seeds from the controller's current pose, and in pre-release builds the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows built levels. Details on [Gyro Recenter](macros.md#gyro-recenter).
 
 ---
 
@@ -340,6 +342,8 @@ Steam's separate "Joystick Camera" is a stick-group mode in its schema, not a gy
 All three capture your resting grip as the neutral when the controller connects, and the **Gyro Recenter** [macro action](macros.md) re-zeroes it mid-session. A change of [Held As](#grip) re-zeroes it as well. Gyro Tilt also uses the saved gyro bias. See [Calibration](#calibration) for the existing Calibrate Gyro command.
 
 **Held yaw is not possible.** Gravity points down: it moves when you pitch or roll the controller, and it does not move at all when you turn the controller flat around the vertical axis. So the tilt inputs hold pitch and roll, never yaw. Holding a yaw rotation would need the gyro's rate integrated into an angle, which drifts without something to correct it, and no shipped mode does that today. To turn a camera with gyro, use rate mode.
+
+The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows run the other way, from a stick or buttons to the virtual controller's motion, with the same two choices: **Speed** is rate and **Angle** is tilt. Yaw is Speed only there, for the same reason.
 
 ---
 

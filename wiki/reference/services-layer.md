@@ -488,7 +488,7 @@ Rebuilds each PadViewModel's `MappedDevices` from `UserSettings.FindByPadIndex()
 
 #### `PopulateAvailableInputs(PadViewModel padVm, UserDevice ud)` (private)
 
-Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract `Gamepad *` family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from `MappingDisplayResolver.BuildInputChoices`, which prefers the live wrapper's sparse `SupportedButtonIndices` / `SupportedAxisIndices` so a device that populates only specific slots does not surface phantom "Button N" or "Axis N" rows, falls back to the positions `UserDevice` recorded when the device was last online (`CapButtonIndices` / `CapAxisIndices`, discussion #344), and reaches the dense `Math.Max(CapButtonCount, RawButtonCount)` / `CapAxeCount` range only for a device never seen online. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The same flat list feeds `padVm.SlotAvailableInputs` (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage) and the macro trigger dropdown.
+Builds the input source dropdown for a pad slot. The list is cross-device and flat, ordered primary-device-first so the picker's group headers come out in slot-display order, and it always leads with the "(Any device)" group carrying the device-agnostic descriptors (the abstract `Gamepad *` family, gyro, the touchpad families) on the empty DeviceGuid. Per-device entries come from `MappingDisplayResolver.BuildInputChoices`, which prefers the live wrapper's sparse `SupportedButtonIndices` / `SupportedAxisIndices` so a device that populates only specific slots does not surface phantom "Button N" or "Axis N" rows, falls back to the positions `UserDevice` recorded when the device was last online (`CapButtonIndices` / `CapAxisIndices`, discussion #344), and reaches the dense `Math.Max(CapButtonCount, RawButtonCount)` / `CapAxeCount` range only for a device never seen online. Menu-item sources (#9 B-17) and enabled custom touchpad gestures are appended per device. The flat list splits three ways through `PickerListForChoice` (#475): the bundled gyro sources (`Motion Gyro`, `Motion Gyro L`) go to `padVm.SlotMotionGyroInputs`, the bundled accelerometer sources to `padVm.SlotMotionAccelInputs`, and every other choice to `padVm.SlotAvailableInputs` (the Gyro tab's Aim Engage picker, trigger-route activators, mirror engage, mouse-gesture engage). Each row's source pickers bind the list `PickerListForRow` names for its target, and its modifier and Up / Down pickers bind `SlotAvailableInputs` through `UseSharedParamInputs`. The macro trigger dropdown filters the whole flat list.
 
 #### `RefreshMappingDropdowns()` (public)
 
@@ -1292,13 +1292,14 @@ Start 30Hz DispatcherTimer (PollTick)
 PollTick:
   1. Check timeout (10 seconds)
   2. Read current state (clone)
-  3. Wait-for-release phase (if neutralizeBaseline)
-  4. Touchpad click, then voice phrases   -> CompleteRecordingWithDescriptor
-  5. Check buttons (instant detection)
-  6. Check POV hats (instant detection)
-  7. Touchpad gestures                    -> CompleteRecordingWithDescriptor
-  8. MIDI notes / CC / pitch bend         -> CompleteRecordingWithDescriptor
-  9. Check axes (3-cycle hold confirmation)
+  3. Motion Gyro / Motion Accelerometer row: DetectMotion only -> CompleteRecordingWithDescriptor
+  4. Wait-for-release phase (if neutralizeBaseline)
+  5. Touchpad click, then voice phrases   -> CompleteRecordingWithDescriptor
+  6. Check buttons (instant detection)
+  7. Check POV hats (instant detection)
+  8. Touchpad gestures                    -> CompleteRecordingWithDescriptor
+  9. MIDI notes / CC / pitch bend         -> CompleteRecordingWithDescriptor
+  10. Check axes (3-cycle hold confirmation)
        |
        v   [on detection]
 CompleteRecording:
@@ -1317,6 +1318,14 @@ Cancels any existing recording, captures baseline `CustomInputState`, sets `mapp
 - `negRecording`: records the negative direction of a bidirectional axis.
 - `deviceGuid` is accepted but not forwarded to the shared `StartRecordingInternal`. The recorder listens to every device assigned to the slot, and the first to fire wins.
 
+#### Motion rows (#475)
+
+`StartRecordingInternal` sets `_motionKind` from the target, 1 for `MotionGyro` and 2 for `MotionAccel`, unless a param field is being recorded, because a modifier is a button. With a motion kind and no active device carrying that sensor (`HasGyro` / `HasGyroAux`, `HasAccel` / `HasAccelAux`), recording does not start: the status bar shows `Status_NoMotionSensorToRecord_Format` and `RecordingTimedOut` fires. Otherwise the prompt is `Status_RecordingMotionPrompt_Format`, and each tick runs `DetectMotion` and nothing else for each device.
+
+A gyro records once its rate magnitude reaches 1.5 rad/s (`MotionRecordGyroRadPerSec`, about 86°/s). An accelerometer records once its vector moves half a g from the baseline (`MotionRecordAccelMs2`). The aux sensor wins when it moved more, recording `Motion Gyro L` or `Motion Accel L`. An accelerometer whose baseline has no reading, under half a g, takes its first reading as the baseline instead of counting it as a shake (`AccelReferenceMissing`): a device that had just connected, or a Nunchuk plugged in mid-recording.
+
+The Motion Pitch, Yaw and Roll rows record like stick axis rows: `IsButtonLikeRecordingTarget` is false for them, and `ShouldAutoInvert` gives them the stick-axis rule.
+
 #### `CancelRecording()` (public)
 
 Stops the timer, clears all recording state, sets `IsRecording = false`.
@@ -1334,6 +1343,7 @@ Stops the timer, clears all recording state, sets `IsRecording = false`.
 | Target | Result |
 |--------|--------|
 | Named stick axes (`LeftThumbAxisX/Y`, `RightThumbAxisX/Y`) | `negRecording ? axisPositive : !axisPositive` |
+| `MotionPitch`, `MotionYaw`, `MotionRoll` (#475) | Same rule as the stick axes |
 | `RawAxis*` on a row that has a negative direction | Same rule as the stick axes |
 | KBM axes (`KbmMouse*`, `KbmScroll*`) | Never inverts. The screen convention is already correct |
 | `LeftTrigger` / `RightTrigger` | Inverts when the axis value decreased |
@@ -1349,6 +1359,8 @@ KBM is checked before the triggers, so a KBM row never falls through to the trig
 | `TimeoutSeconds` | 10 | Recording auto-cancels after this |
 | `AxisThreshold` | 16384 | ~25% of full range |
 | `AxisHoldCycles` | 3 | Cycles axis must be held |
+| `MotionRecordGyroRadPerSec` | 1.5 | Gyro rate magnitude that records a Motion Gyro row (#475) |
+| `MotionRecordAccelMs2` | 0.5 × 9.80665 | Accelerometer change from the baseline that records a Motion Accelerometer row (#475) |
 | `MidiCcThreshold` | 10 | Minimum CC delta before a MIDI CC counts |
 | `MidiPitchThreshold` | 6000 | Minimum pitch-bend delta |
 | `MidiRelativeBand` | 16 | Band around center that reads a CC as relative |

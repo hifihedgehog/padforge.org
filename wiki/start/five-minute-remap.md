@@ -15,7 +15,7 @@ open its configuration, then open the **Mappings** tab. One table drives
 the whole slot: each row is one output the game sees. Rows run in order:
 buttons, D-Pad, triggers, left stick, right stick. PlayStation slots add
 touchpad and motion rows at the end, and Nintendo slots add the motion
-pair.
+rows.
 
 ![Button and axis mapping grid with source, value, and record columns](../images/pad-mappings.png)
 

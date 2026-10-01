@@ -871,7 +871,7 @@ Per-device state is held in `PtpDeviceState` keyed by `RAWINPUTHEADER.hDevice`. 
 
 ### 6. DSU Receive Thread
 
-`DsuMotionServer` runs a dedicated background thread named `PadForge.DsuServer` on a blocking `Socket.ReceiveFrom` loop, handling DSU client subscriptions (Cemu, Dolphin). Motion data is broadcast by the engine thread after Step 2 (no separate send thread). DSU protocol is limited to 4 slots. Slots 4–15 skip broadcast.
+`DsuMotionServer` runs a dedicated background thread named `PadForge.DsuServer` on a blocking `Socket.ReceiveFrom` loop, handling DSU client subscriptions (Cemu, Dolphin). Motion data is broadcast by the engine thread after Step 4b and the motion stage (no separate send thread). DSU protocol is limited to 4 slots. Slots 4–15 skip broadcast.
 
 ### 7. Input Hook Thread (InputHookManager, on demand)
 

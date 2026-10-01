@@ -3738,6 +3738,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#motionrowsmodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MotionRowsModel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#haptictoneencoder" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7156,6 +7167,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#motionrowsmodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MotionRowsModel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#haptictoneencoder" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -8548,7 +8570,7 @@
 </tr>
 <tr>
 <td><code>PadForge.Engine.Common</code></td>
-<td><code>InputHookManager</code> (LL hook host), (v3.6) <code>ConsumerUsageTable</code>, <code>IdleInputDetector</code>, <code>GlobalHotkeyParser</code>, <code>LfeOutputState</code> (#234), <code>RelativeVelocityWindow</code>, <code>ShiftCycleStepper</code>, (v4.4) <code>HeadPose</code> (#355 head-tracking wire decode), <code>MachineIdentity</code> (#343 SMBIOS identity), <code>VendorReportLearner</code> (+ <code>VendorButtonDefinition</code> / <code>VendorButtonCandidate</code> / <code>VendorButtonKind</code>, #343), <code>HandheldChords</code> (<code>HandheldChordDefinition</code>, <code>ChordDecision</code>, <code>HandheldChordEngine</code>, #343), (v4.5) <code>OpenXrHeadPose</code> (#403 headset pose into the Head Tracker convention)</td>
+<td><code>InputHookManager</code> (LL hook host), (v3.6) <code>ConsumerUsageTable</code>, <code>IdleInputDetector</code>, <code>GlobalHotkeyParser</code>, <code>LfeOutputState</code> (#234), <code>RelativeVelocityWindow</code>, <code>ShiftCycleStepper</code>, (v4.4) <code>HeadPose</code> (#355 head-tracking wire decode), <code>MachineIdentity</code> (#343 SMBIOS identity), <code>VendorReportLearner</code> (+ <code>VendorButtonDefinition</code> / <code>VendorButtonCandidate</code> / <code>VendorButtonKind</code>, #343), <code>HandheldChords</code> (<code>HandheldChordDefinition</code>, <code>ChordDecision</code>, <code>HandheldChordEngine</code>, #343), (v4.5) <code>OpenXrHeadPose</code> (#403 headset pose into the Head Tracker convention), (pre-release) <code>MotionRowsModel</code> + <code>MotionRowValues</code> (#475)</td>
 </tr>
 <tr>
 <td><code>PadForge.Engine.Common.Mapping</code></td>
@@ -8627,6 +8649,7 @@
 <li><a href="#headpose">HeadPose</a> (HeadPose.cs)</li>
 <li><a href="#machineidentity">MachineIdentity</a> (MachineIdentity.cs)</li>
 <li><a href="#vendorreportlearner">VendorReportLearner</a> (VendorReportLearner.cs)</li>
+<li><a href="#motionrowsmodel">MotionRowsModel</a> (MotionRowsModel.cs)</li>
 <li><a href="#haptictoneencoder">HapticToneEncoder</a> (Haptics/HapticToneEncoder.cs)</li>
 <li><a href="#tritonpcmencoder">TritonPcmEncoder</a> (Haptics/TritonPcmEncoder.cs)</li>
 <li><a href="#haptictonereducer">HapticToneReducer</a> (Haptics/HapticToneReducer.cs)</li>
@@ -12173,6 +12196,114 @@
 </table>
 <p>Chord-delivered hidden buttons take the other path, <code>HandheldChords</code> (<code>HandheldChordDefinition</code>, <code>ChordDecision</code>, <code>HandheldChordEngine</code>) in the same namespace, where the firmware types a key combination instead of writing a vendor report.</p>
 <hr />
+<h2 id="motionrowsmodel">MotionRowsModel<a class="headerlink" href="#motionrowsmodel" title="Permanent link">&para;</a></h2>
+<p><strong>File:</strong> <code>PadForge.Engine/Common/MotionRowsModel.cs</code>
+<strong>Namespace:</strong> <code>PadForge.Engine.Common</code></p>
+<p>(Pre-release, #475) The orientation the Motion Pitch, Yaw and Roll rows drive, which the virtual controller's gyro and accelerometer are read from. No Windows calls. The engine's motion stage keeps one per slot on the polling thread. See <a href="../input-pipeline/#motion-pitch-yaw-and-roll">Input Pipeline</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LeanAcceleration</code></td>
+<td>7 × 7 × 2π, about 307.9 rad/s²</td>
+<td>Dolphin's Tilt acceleration, (7 × 2π)² / 2π</td>
+</tr>
+<tr>
+<td><code>MaxRateDps</code></td>
+<td><code>1600</code></td>
+<td>The fastest the lean moves, and the top of the Speed range</td>
+</tr>
+<tr>
+<td><code>SliceSeconds</code></td>
+<td><code>0.005</code></td>
+<td>Longest model step, Dolphin's 200 Hz update</td>
+</tr>
+<tr>
+<td><code>MaxFrameMicroseconds</code></td>
+<td><code>250_000</code></td>
+<td>A longer frame interval restarts the clock without turning</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Axis</code></td>
+<td><code>struct</code></td>
+<td>One row's reading: <code>Value</code> (-1 to +1, positive down on a Y axis and right on an X axis), <code>Angle</code>, <code>SpeedDps</code>, <code>MinSpeedDps</code>, <code>AngleDeg</code>, <code>Deadzone</code> (a fraction of full deflection)</td>
+</tr>
+<tr>
+<td><code>Orientation</code></td>
+<td><code>Quaternion</code></td>
+<td>Body to world, the Speed rotation times <code>Lean</code></td>
+</tr>
+<tr>
+<td><code>Lean</code></td>
+<td><code>Quaternion</code></td>
+<td>The Angle lean alone</td>
+</tr>
+<tr>
+<td><code>GyroDps</code></td>
+<td><code>Vector3</code></td>
+<td>The last frame's body rate in degrees per second, the mean of its slices</td>
+</tr>
+<tr>
+<td><code>Step</code></td>
+<td><code>void Step(in Axis pitch, in Axis yaw, in Axis roll, long timestampUs)</code></td>
+<td>Advances one frame</td>
+</tr>
+<tr>
+<td><code>Level</code></td>
+<td><code>void Level()</code></td>
+<td>Returns the Speed rotation to level without reporting it as rotation. A held lean stays</td>
+</tr>
+<tr>
+<td><code>RestartClock</code></td>
+<td><code>void RestartClock()</code></td>
+<td>The next frame starts the clock instead of integrating the gap</td>
+</tr>
+<tr>
+<td><code>Reset</code></td>
+<td><code>void Reset()</code></td>
+<td>Back to rest</td>
+</tr>
+<tr>
+<td><code>Shape</code></td>
+<td><code>static float Shape(float value, float deadzone)</code></td>
+<td>The deadzone with the range past it rescaled. A non-finite value reads 0</td>
+</tr>
+<tr>
+<td><code>LeanOf</code></td>
+<td><code>static Quaternion LeanOf(float pitch, float roll)</code></td>
+<td>Pitch about X, then roll about Z inside it</td>
+</tr>
+<tr>
+<td><code>BodyRotation</code></td>
+<td><code>static Vector3 BodyRotation(Quaternion from, Quaternion to)</code></td>
+<td>The body-frame rotation vector between two orientations, radians, on the shorter arc</td>
+</tr>
+<tr>
+<td><code>ToBody</code></td>
+<td><code>static Vector3 ToBody(Quaternion orientation, Vector3 world)</code></td>
+<td>A world vector in the body frame</td>
+</tr>
+</tbody>
+</table>
+<p><code>Step</code> clamps its settings: the speeds to 0 to 1600°/s with the Start Speed no higher than the Top Speed, the lean to 0 to 90°, and the deadzone to 0 to 0.9. A non-finite setting reads as 0. <code>MotionRowValues</code>, in the same file, carries one device's three row values for one Step 3 pass and the pass (<code>Frame</code>) that computed them.</p>
+<hr />
 <h2 id="haptictoneencoder">HapticToneEncoder<a class="headerlink" href="#haptictoneencoder" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Haptics/HapticToneEncoder.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Haptics</code></p>
@@ -14381,6 +14512,12 @@
 <td><code>TouchpadState</code></td>
 <td><code>[XmlIgnore]</code></td>
 <td>PlayStation touchpad output for this device. Written by the background thread (Step 3), read by Step 4.</td>
+</tr>
+<tr>
+<td><code>MotionRowsOutputState</code></td>
+<td><code>MotionRowValues</code></td>
+<td><code>[XmlIgnore]</code></td>
+<td>(#475) This device's Motion Pitch, Yaw and Roll values for the Step 3 pass stamped in its <code>Frame</code>. Read by Step 4, which drops a value from an earlier pass.</td>
 </tr>
 <tr>
 <td><code>_cachedPadSetting</code></td>

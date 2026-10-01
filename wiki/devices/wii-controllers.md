@@ -68,7 +68,7 @@ The hat turns with the remote's hold. Set **Held As** on the Gyro tab to one of 
 
 The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See [Gyro](../guides/gyro.md) for calibration, sensitivity, and the engage controls.
 
-A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake**. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently.
+A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake**. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. Pre-release builds after 4.5.3 offer **Nunchuk Accelerometer** only on the **Motion Accelerometer** row, the one row that reads it.
 
 The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.
 
@@ -161,8 +161,8 @@ A combined Joy-Con pair carries a full motion sensor in each half. On a pair the
 |---|---|
 | **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's rotation rate, raw, one row per axis. Bind them to mouse or stick axes like the plain gyro axes. |
 | **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's rotation rate, raw, which is what the plain rows read before fusion. |
-| **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. |
-| **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. |
+| **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. Pre-release builds after 4.5.3 offer it only on the **Motion Gyro** row. |
+| **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. Pre-release builds after 4.5.3 offer it only on the **Motion Accelerometer** row. |
 | **Left Joy-Con Lean** | The left half's tilt, for motion steering or any axis row. |
 | **Left Joy-Con Shake** | How hard the left half is shaken, whatever its tilt, for shake-to-press bindings. |
 

@@ -2520,6 +2520,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#a-stick-on-the-motion-gyro-row-does-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Stick on the Motion Gyro Row Does Nothing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#web-controller-not-connecting" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4286,6 +4297,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#a-stick-on-the-motion-gyro-row-does-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Stick on the Motion Gyro Row Does Nothing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#web-controller-not-connecting" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4950,10 +4972,19 @@
 <li>Enable <strong>"Enable DSU Motion Server (CemuHook Motion Provider Protocol)"</strong> on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Listening on :26760".</li>
 <li>Match the port (default 26760) between PadForge and the emulator. "Port 26760 in use" means another app (BetterJoy, DS4Windows) is on that port.</li>
 <li>Use <code>127.0.0.1</code> as the server address. PadForge binds to loopback only.</li>
-<li>Confirm the controller has motion sensors on the <a href="../features/devices/">Devices</a> page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion.</li>
+<li>Confirm the controller has motion sensors on the <a href="../features/devices/">Devices</a> page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion. A controller without motion sensors feeds it through the <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows.</li>
 <li>DSU protocol supports slots 1-4 only. Assign the motion device to one of those slots.</li>
 <li>The DSU server binds to loopback only, so no firewall rule is involved. An emulator on another machine cannot reach it at all.</li>
 <li>In the emulator's motion settings, add a DSU server at <code>127.0.0.1</code> with the matching port and select the correct slot.</li>
+</ol>
+<hr />
+<h2 id="a-stick-on-the-motion-gyro-row-does-nothing">A Stick on the Motion Gyro Row Does Nothing<a class="headerlink" href="#a-stick-on-the-motion-gyro-row-does-nothing" title="Permanent link">&para;</a></h2>
+<p><strong>Sticks or buttons on the Motion Gyro or Motion Accelerometer row never move the game's motion.</strong></p>
+<ol>
+<li>Those two rows read only a controller's own motion sensor. A note under the row names the problem when it holds anything else.</li>
+<li>Bind the stick to the <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows instead: Motion Pitch from the stick's Y axis, Motion Yaw or Motion Roll from its X axis.</li>
+<li>Remove the stick and button sources from the Motion Gyro row.</li>
+<li>The rows need a slot that carries motion: PlayStation, Nintendo, or Extended on a Valve profile. On the DualShock 3 and Switch 2 Pro presets only the DSU server receives the motion.</li>
 </ol>
 <hr />
 <h2 id="web-controller-not-connecting">Web Controller Not Connecting<a class="headerlink" href="#web-controller-not-connecting" title="Permanent link">&para;</a></h2>
