@@ -271,6 +271,7 @@ PadForge.App/
     ControllerModelBase.cs            # Abstract base for 3D models (OBJ loading, part animation)
     ControllerModelXbox360.cs         # Xbox 360 3D model parts and animation bindings
     ControllerModelXboxSeries.cs      # Xbox Series 3D model, real Share button, replaces the Xbox One stand-in for Series profiles
+    ControllerModelDS3.cs             # DualShock 3 mesh, one appearance
     ControllerModelDS4.cs             # DualShock 4 3D model parts and animation bindings
     ControllerModelDualSense.cs       # DualSense 3D model
     ControllerModelDualSenseEdge.cs   # DualSense Edge: DualSense body against the DualSenseEdge asset folder
@@ -511,6 +512,7 @@ tools/
   overlay_positions.py          # 2D controller overlay coordinate generator
   gen_mouse_art.py / gen_2d_colorways.py / gen_dualsense_edge_art.py / gen_switchpro_s2_art.py
   steam_controller_2015_mesh.py / steam_controller_2026_mesh.py  # Valve STEP to per-part OBJs
+  dualshock3_mesh.py / dualshock3_art.py  # DualShock 3 mesh split and its drawn 2D set
   steam_controller_2026_pads.py / steam_deck_stick_well.py       # Mesh fix-ups on those sets
 ```
 

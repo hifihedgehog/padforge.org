@@ -5554,6 +5554,11 @@
 <td>32 OBJ files each, 34 for Starfield</td>
 </tr>
 <tr>
+<td><code>3DModels/DS3/</code></td>
+<td>none, flat</td>
+<td>20 OBJ files</td>
+</tr>
+<tr>
 <td><code>3DModels/DS4/</code></td>
 <td>2 (JetBlack, MagmaRed)</td>
 <td>37 OBJ files each</td>
@@ -5590,7 +5595,7 @@
 </tr>
 </tbody>
 </table>
-<p>The two Steam Controller sets are meshed from Valve's own STEP releases by <code>tools/steam_controller_2015_mesh.py</code> and <code>tools/steam_controller_2026_mesh.py</code>. Two follow-up scripts fix up what the conversion left wrong: <code>steam_controller_2026_pads.py</code> gives each 2026 trackpad only its own surface, and <code>steam_deck_stick_well.py</code> opens the Deck's capped stick wells.</p>
+<p>The two Steam Controller sets are meshed from Valve's own STEP releases by <code>tools/steam_controller_2015_mesh.py</code> and <code>tools/steam_controller_2026_mesh.py</code>. Two follow-up scripts fix up what the conversion left wrong: <code>steam_controller_2026_pads.py</code> gives each 2026 trackpad only its own surface, and <code>steam_deck_stick_well.py</code> opens the Deck's capped stick wells. The DualShock 3 set is a model bought on CGTrader, split by <code>tools/dualshock3_mesh.py</code>.</p>
 <p>There is no Xbox One mesh set and no <code>ControllerModelXboxOne</code> class. The Series mesh serves Xbox One, Elite, and Adaptive, and the Switch 2 Pro mesh serves both Switch generations. <code>ControllerModelView</code> passes a <code>wantExtraControls</code> flag so a borrowing profile gets inert meshes for controls it does not have.</p>
 <h3 id="packed-art-embedpackedart-target">Packed Art (EmbedPackedArt target)<a class="headerlink" href="#packed-art-embedpackedart-target" title="Permanent link">&para;</a></h3>
 <p>Meshes, transparent atlases and the speech model are too big to ship raw and
@@ -5769,8 +5774,8 @@ Carbon set whole and bring only their own shell texture.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="cm">&lt;!-- 2D controller model assets (Gamepad-Asset-Pack by AL2009man, MIT license) --&gt;</span>
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
-<p>PNG overlay images for the 2D controller schematic view. Thirteen families: <code>DS4/</code>, <code>DualSense/</code>, <code>DUALSENSEEDGE/</code>, <code>MOUSE/</code>, <code>STEAMCONTROLLER/</code>, <code>STEAMCONTROLLER2/</code>, <code>STEAMDECK/</code>, <code>SWITCH2PRO/</code>, <code>SWITCHPRO/</code>, <code>VRCONTROLLER/</code>, <code>XBOX360/</code>, <code>XBOXONE/</code>, <code>XBOXSERIES/</code>. Uses <code>Resource</code> (not <code>EmbeddedResource</code>) so they load as WPF pack URIs (<code>pack://application:,,,/2DModels/...</code>).</p>
-<p>The matching overlay layouts live in <code>Models2D/ControllerOverlayLayout.cs</code> as eleven static classes: <code>Xbox360Layout</code>, <code>DS4Layout</code>, <code>DualSenseLayout</code>, <code>DualSenseEdgeLayout</code>, <code>XboxOneSLayout</code>, <code>XboxSeriesXLayout</code>, <code>SwitchProLayout</code>, <code>Switch2ProLayout</code>, <code>SteamDeckLayout</code>, <code>SteamControllerLayout</code>, <code>SteamController2Layout</code>.</p>
+<p>PNG overlay images for the 2D controller schematic view. Fourteen families: <code>DS3/</code>, <code>DS4/</code>, <code>DualSense/</code>, <code>DUALSENSEEDGE/</code>, <code>MOUSE/</code>, <code>STEAMCONTROLLER/</code>, <code>STEAMCONTROLLER2/</code>, <code>STEAMDECK/</code>, <code>SWITCH2PRO/</code>, <code>SWITCHPRO/</code>, <code>VRCONTROLLER/</code>, <code>XBOX360/</code>, <code>XBOXONE/</code>, <code>XBOXSERIES/</code>. Uses <code>Resource</code> (not <code>EmbeddedResource</code>) so they load as WPF pack URIs (<code>pack://application:,,,/2DModels/...</code>).</p>
+<p>The matching overlay layouts live in <code>Models2D/ControllerOverlayLayout.cs</code> as twelve static classes: <code>Xbox360Layout</code>, <code>DualShock3Layout</code>, <code>DS4Layout</code>, <code>DualSenseLayout</code>, <code>DualSenseEdgeLayout</code>, <code>XboxOneSLayout</code>, <code>XboxSeriesXLayout</code>, <code>SwitchProLayout</code>, <code>Switch2ProLayout</code>, <code>SteamDeckLayout</code>, <code>SteamControllerLayout</code>, <code>SteamController2Layout</code>.</p>
 <h3 id="other-resources">Other Resources<a class="headerlink" href="#other-resources" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge.ico&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\PadForge-logo.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
@@ -6071,6 +6076,10 @@ Carbon set whole and bring only their own shell texture.</p>
 <td>Cuts the disc capping each Steam Deck stick well and drops a dark socket behind it, so the stick has an opening under it</td>
 </tr>
 <tr>
+<td><code>dualshock3_mesh.py</code></td>
+<td>Splits the bought DualShock 3 model into per-part OBJs and its atlas. Each stick is cut at the dome's edge, the bezel collar stays with the body, and the run prints the stick pivots and trigger hinges</td>
+</tr>
+<tr>
 <td><code>probe_macro_list.ps1</code></td>
 <td>Dumps control type, class, and name of everything on the Macros tab, so the capture harness's macro-presence gate can match on what UI Automation really exposes</td>
 </tr>
@@ -6097,6 +6106,10 @@ Carbon set whole and bring only their own shell texture.</p>
 <tr>
 <td><code>gen_mouse_art.py</code></td>
 <td>Renders the vendored mouse SVG into the layers the KBM preview composites</td>
+</tr>
+<tr>
+<td><code>dualshock3_art.py</code></td>
+<td>Draws the DualShock 3 2D set in the DualShock 4 art's style from a measured front photograph, since the asset pack has none. <code>overlay_positions.py</code> imports it and writes <code>DualShock3Layout</code> from the rects it returns</td>
 </tr>
 </tbody>
 </table>

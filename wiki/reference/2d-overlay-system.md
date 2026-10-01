@@ -146,6 +146,23 @@ public static class DS4Layout
 
 DS4 reuses `DS4_Face_Button.png` for all four face buttons at different positions, `DS4_OptionsShare_Button.png` for Back and Start, and `DS4_AnalogStick_Click.png` for both stick clicks. `LeftTriggerBase` / `RightTriggerBase` (`DS4_L2.png` / `DS4_R2.png`) hold the rest-state trigger artwork behind the active fill. The touchpad surface is mapped twice: once as a `Button` (TouchpadClick hit rect, 482x289 at 492,148) and once as a dedicated `Touchpad` element (471x200 finger-positioning region at 496,230). Both touchpad rows have an empty `ImageFile`. The click visual comes from `DS4_Touchpad_Click.png` (see Touchpad Click Highlight below).
 
+### DualShock3Layout
+
+```csharp
+public static class DualShock3Layout
+{
+    public const int BaseWidth = 1466;
+    public const int BaseHeight = 925;
+    public const string BasePath = "2DModels/DS3/DS3_base.png";
+    public const double StickMaxTravel = 25;
+    public static readonly OverlayElement[] Overlays;  // 21 elements
+}
+```
+
+Selected when `ResolveAssetFolders` returns `DS3`, which is any profile id starting `dualshock-3`. The asset pack has no DualShock 3, so `tools/dualshock3_art.py` draws one in the DS4 set's flat style, with the DS4 art's colors, cyan press ring and PS logo. Its shapes come from a front photograph of the controller (GameStop product 10069638), measured once: the outline is the photo's silhouette traced to a 130-point half polygon and mirrored, and the discs, stick bezels, buttons and the two cross-shaped recesses are fitted primitives. The photo is not in the repository. The tool returns every element's rect by construction, the way the 2026 Steam Controller flow does, and `overlay_positions.py` writes the layout from it.
+
+The fronts of L2 and R2 sit behind L1 and R1 in a front view, so they are drawn the way the DS4 art draws its triggers: a cap of the bumper's width rising behind it, labeled, with the base in front of its lower part. `DS3_L2.png` and `DS3_L2-Active.png` share one rect, because `_add_trigger_base_entries` pairs a trigger's rest and press art by position, and the press art covers only what shows above the body. `DS3_Face_Button.png` serves all four face buttons and `DS3_AnalogStick.png` / `DS3_AnalogStick_Click.png` both sticks. There is no touchpad entry.
+
 ### DualSenseLayout
 
 ```csharp
@@ -373,6 +390,16 @@ PadForge.App/2DModels/
     DS4_Lightbar_Front.png, DS4_Lightbar_Rear.png  (lightbar preview, #175)
     DS4_V2_base_GlacierWhite/Gold/MagmaRed/MidnightBlue.png  (colorway bases)
     DS4_V2_Left/RightAnalogStick_GlacierWhite/Gold.png       (colorway rest art)
+  DS3/  (17 images, drawn by tools/dualshock3_art.py)
+    DS3_base.png                          (1466x925, base controller image)
+    DS3_Face_Button.png                   (single image for all 4 face buttons)
+    DS3_D-PAD_Up/Down/Left/Right.png
+    DS3_L1-Active.png, DS3_R1-Active.png
+    DS3_L2.png, DS3_R2.png                (trigger base)
+    DS3_L2-Active.png, DS3_R2-Active.png  (trigger fill)
+    DS3_Select_Button.png, DS3_Start_Button.png, DS3_Home_Button.png
+    DS3_AnalogStick.png                   (shared for both stick caps)
+    DS3_AnalogStick_Click.png             (shared for both stick clicks)
   SWITCHPRO/  (18 images)
     NSwitchPro_base.png                   (1485x1079, base controller image)
     NSwitchPro_FaceButton.png             (single image for all 4 face buttons)
@@ -531,10 +558,11 @@ public void Unbind()
 private void EnsureModel()
 ```
 
-Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)` and dispatches `BuildCanvas()` against one of eleven layout classes:
+Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)` and dispatches `BuildCanvas()` against one of twelve layout classes:
 
 | Resolved folder | Layout class | Profile family |
 |-----------------|--------------|----------------|
+| `DS3` | `DualShock3Layout` | DualShock 3 |
 | `DS4` | `DS4Layout` | DualShock 4 |
 | `DualSense` | `DualSenseLayout` | DualSense |
 | `DUALSENSEEDGE` | `DualSenseEdgeLayout` | DualSense Edge |
@@ -1172,13 +1200,13 @@ pip install svgpathtools lxml opencv-python numpy pymupdf
 
 ### Process
 
-1. **Parse SVG**. Reads labeled elements from each controller's SVG theme file via lxml. `main()` runs eleven pipelines: `process_xbox360`, `process_ds4`, `process_dualsense`, `process_dualsense_edge`, `process_xbox_one_s`, `process_xbox_series`, `process_switchpro`, `process_switch2pro`, `process_steamdeck`, `process_steamcontroller`, `process_steamcontroller2`. The last has no pack SVG to read. It renders the outline pass of Valve's reference drawing, fills it in the pack's flat style, and cuts each control out of the labeled regions. The two DualSense pipelines share `_process_dualsense_family`, the Xbox One S and Series pair shares `_process_xbox_modern`, and the two Switch pipelines share `_process_switchpro_family`. Each family pair differs only by a margin (the widened base) and a flag for the extra controls. Computes cumulative SVG transforms (translate, scale, matrix) for pixel-space bounding boxes.
+1. **Parse SVG**. Reads labeled elements from each controller's SVG theme file via lxml. `main()` runs twelve pipelines: `process_xbox360`, `process_dualshock3`, `process_ds4`, `process_dualsense`, `process_dualsense_edge`, `process_xbox_one_s`, `process_xbox_series`, `process_switchpro`, `process_switch2pro`, `process_steamdeck`, `process_steamcontroller`, `process_steamcontroller2`. The last has no pack SVG to read. It renders the outline pass of Valve's reference drawing, fills it in the pack's flat style, and cuts each control out of the labeled regions. `process_dualshock3` has none either: it loads `tools/dualshock3_art.py`, which draws the DualShock 3 from a measured photograph and returns every rect by construction. The two DualSense pipelines share `_process_dualsense_family`, the Xbox One S and Series pair shares `_process_xbox_modern`, and the two Switch pipelines share `_process_switchpro_family`. Each family pair differs only by a margin (the widened base) and a flag for the extra controls. Computes cumulative SVG transforms (translate, scale, matrix) for pixel-space bounding boxes.
 2. **Center and fit overlays**. Loads each PNG overlay and centers it on the SVG bounding box center. `fit_overlay_to_bbox` scales the overlay to the box where needed, `stretch_overlay_to_bbox` fills it.
 3. **Alpha-channel refinement**. `refine_with_composite` runs OpenCV template matching (`cv2.matchTemplate`, `TM_CCOEFF_NORMED`) against the composite overlay image, then a `refine_via_base_template` pass aligns small buttons and bumpers against the base body PNG. (`refine_via_alpha_diff` is defined for blob-based alignment but is not currently wired into any pipeline.)
 4. **Inject trigger bases**. `_add_trigger_base_entries` adds a `TriggerBase` row for each active-press trigger whose filename carries an `_Active` or `-Active` suffix, inheriting its final position and size. The Switch Pro and Switch 2 Pro pipelines append their `ZL_Rest` / `ZR_Rest` rows themselves inside `_process_switchpro_family` at template-diff rects, since the ZL/ZR press art has no suffix. The three Valve pipelines are excluded: the Steam Deck and 2015 base renders already draw the triggers at rest, and the Steam packs ship no rest-state trigger PNG.
 5. **Reorder for hit-test precedence**. Trigger and TriggerBase rows are stable-moved to the front of every layout. The view resolves an overlap to the last-added overlay, and every trigger bbox runs tens of pixels down behind its bumper, so triggers emitted after bumpers stole the shared band. Visual stacking is unaffected because Z-indices are explicit in the view.
 6. **Trace hit zones**. `_hit_polygons` thresholds each overlay's alpha above 25, dilates it (kernel at least 7 px, or 6% of the smaller dimension) so thin strokes keep a grab margin, runs `cv2.findContours` + `approxPolyDP`, and emits normalized polygon groups. Results are memoized per file.
-7. **Generate C#**. Outputs `ControllerOverlayLayout.cs` with layout constants, overlay element arrays, hit paths, and stick travel values for all eleven layout classes.
+7. **Generate C#**. Outputs `ControllerOverlayLayout.cs` with layout constants, overlay element arrays, hit paths, and stick travel values for all twelve layout classes.
 
 ### Key Functions
 
@@ -1197,6 +1225,7 @@ def refine_via_alpha_diff(base_path, composite_path, ...) # Alpha-diff refinemen
 def _add_trigger_base_entries(results) -> list           # Inject TriggerBase rows
 def _hit_polygons(overlay_path) -> str                   # Trace the alpha into hit polygons
 def process_xbox360() -> dict                            # Xbox 360 pipeline
+def process_dualshock3() -> dict                         # DualShock 3, drawn by tools/dualshock3_art.py
 def process_ds4() -> dict                                # DS4 pipeline
 def _process_dualsense_family(folder, margin, edge)      # Shared DualSense / Edge
 def process_dualsense() -> dict                          # DualSense pipeline

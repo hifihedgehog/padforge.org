@@ -32,13 +32,14 @@ The schematic stays the default for Extended because a profile there can be a wh
 
 ## 3D model
 
-The active model swaps with the assigned profile. Nine meshes cover the Xbox, PlayStation, and Nintendo slots and the Valve profiles on Extended slots:
+The active model swaps with the assigned profile. Ten meshes cover the Xbox, PlayStation, and Nintendo slots and the Valve profiles on Extended slots:
 
 | Mesh | Profiles it serves |
 |---|---|
 | Xbox 360 | `xbox-360*`, plus the arcade-stick / dance-pad / wheel siblings |
 | Xbox Series | `xbox-series-*`, and also Xbox One, Elite, and Adaptive |
-| DualShock 4 | `dualshock*` |
+| DualShock 3 | `dualshock-3` |
+| DualShock 4 | every other `dualshock*` |
 | DualSense | `dualsense*` |
 | DualSense Edge | `dualsense-edge*` |
 | Switch 2 Pro | `switch2-pro*`, and also the original `switch-pro` |
@@ -46,7 +47,7 @@ The active model swaps with the assigned profile. Nine meshes cover the Xbox, Pl
 | Steam Controller (2015) | `steam-controller`, `steam-controller-composite` |
 | Steam Controller (2026) | `steam-controller-2` |
 
-The Steam Deck body is Handheld Companion's per-part model. The two Steam Controller bodies are meshed from Valve's own CAD: the 2015 pad from the STEP file in Valve's 2016 design release, the 2026 pad from the STEP file in Valve's SteamController hardware repository. Both are meshed at the exact surface, so the edges are true molded edges rather than a decimated scan.
+The Steam Deck body is Handheld Companion's per-part model. The two Steam Controller bodies are meshed from Valve's own CAD: the 2015 pad from the STEP file in Valve's 2016 design release, the 2026 pad from the STEP file in Valve's SteamController hardware repository. Both are meshed at the exact surface, so the edges are true molded edges rather than a decimated scan. The DualShock 3 body is a model bought on CGTrader and split into the same parts as the others. Its 2D set is drawn in the DualShock 4 art's style from a front photograph of the controller, since the asset pack has no DualShock 3.
 
 Two meshes are shared by profiles that do not all carry every control. The Series mesh serves the whole Xbox One / Elite / Series / Adaptive family, and only `xbox-series-*` profiles get a live Share button. The Switch 2 Pro mesh serves both Switch generations, and the S2-only parts (C button, GL / GR, the four player LEDs) render on an original Pro Controller as inert meshes. Borrowed-but-absent controls draw either way, but they are wired into the hover, click-to-record, and highlight maps only for the profile that actually has them, so nothing maps or flashes wrong.
 
@@ -58,7 +59,7 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 
 A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and is saved with the slot, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
 
-The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2). The Xbox 360, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two. Both views read the same stored choice, and a view with no art for it draws its default colorway.
+The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2). The Xbox 360, DualShock 3, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two. Both views read the same stored choice, and a view with no art for it draws its default colorway.
 
 ### Camera controls
 

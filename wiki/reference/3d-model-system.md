@@ -1,6 +1,6 @@
 # 3D Model System
 
-Renders interactive Xbox, PlayStation, Nintendo, and Valve controller models from Wavefront OBJ meshes using [HelixToolkit.WPF](https://github.com/helix-toolkit/helix-toolkit). The loader, view, and animation code are adapted from [Handheld Companion](https://github.com/Valkirie/HandheldCompanion) (CC BY-NC-SA 4.0), as are the Xbox 360 and Steam Deck meshes. Both Steam Controller bodies are meshed from Valve's own published CAD. The Xbox Series, DS4, DualSense, Edge, and Switch 2 Pro families run on purchased hado CGTrader meshes split per-part, with per-colorway texture atlases.
+Renders interactive Xbox, PlayStation, Nintendo, and Valve controller models from Wavefront OBJ meshes using [HelixToolkit.WPF](https://github.com/helix-toolkit/helix-toolkit). The loader, view, and animation code are adapted from [Handheld Companion](https://github.com/Valkirie/HandheldCompanion) (CC BY-NC-SA 4.0), as are the Xbox 360 and Steam Deck meshes. Both Steam Controller bodies are meshed from Valve's own published CAD. The Xbox Series, DS4, DualSense, Edge, and Switch 2 Pro families run on purchased hado CGTrader meshes split per-part, with per-colorway texture atlases. The DualShock 3 runs on a purchased 3doverstock CGTrader mesh split the same way, with one atlas.
 
 Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not associated with or endorsed by Valve.
 
@@ -16,6 +16,7 @@ ControllerModelBase (abstract)
     +-- ControllerModelXbox360        (HC mesh, flat plastic colors)
     +-- ControllerModelXboxSeries     (Series mesh, 21 colorways, also serves
     |                                  Xbox One / Elite / Adaptive profiles)
+    +-- ControllerModelDS3            (DualShock 3 mesh, one appearance)
     +-- ControllerModelDS4            (DualShock 4 mesh, 2 colorways)
     +-- ControllerModelDualSense      (DualSense mesh, 10 colorways)
     |     |
@@ -65,7 +66,7 @@ public abstract class ControllerModelBase : IDisposable
 | Field | Type | Description |
 |-------|------|-------------|
 | `model3DGroup` | `Model3DGroup` | Root scene group containing all child meshes. Assigned to `ModelVisual3D.Content`. |
-| `ModelName` | `string` | Embedded-resource folder. `"XBOX360"`, `"Switch2Pro"`, `"SteamDeck"`, `"SteamController"`, or `"SteamController2"` for the single-appearance families, `"{family}.{appearance}"` for the rest (`"DS4.JetBlack"`, `"DualSense.White"`, `"DualSenseEdge.Edge"`, `"XboxSeries.Carbon"`). The eight custom-shell Xbox colorways load everything except their `Shell.jpg` from `XboxSeries.Carbon` (see [Custom-shell skins](#custom-shell-skins)). |
+| `ModelName` | `string` | Embedded-resource folder. `"XBOX360"`, `"DS3"`, `"Switch2Pro"`, `"SteamDeck"`, `"SteamController"`, or `"SteamController2"` for the single-appearance families, `"{family}.{appearance}"` for the rest (`"DS4.JetBlack"`, `"DualSense.White"`, `"DualSenseEdge.Edge"`, `"XboxSeries.Carbon"`). The eight custom-shell Xbox colorways load everything except their `Shell.jpg` from `XboxSeries.Carbon` (see [Custom-shell skins](#custom-shell-skins)). |
 | `ModelFamily` | `string` | Everything before the first `.` in `ModelName`, or `ModelName` when there is no dot. The identity `EnsureModel()` compares against, so a colorway swap does not read as a family swap. |
 | `Touchpad` | `Model3DGroup` | First touch surface, or null on models without one. DS4 points it at `Screen.obj`, DualSense at `Touchpad.obj`, every Valve model at `LeftPadTouch.obj`. |
 | `TouchpadRight` | `Model3DGroup` | The second touch surface, on a pad that has two. Null on a one-pad model, where both fingers ride `Touchpad`. Every Valve model sets it, and the split matches the frame packers: finger 0 is the left pad, finger 1 the right. |
@@ -83,7 +84,7 @@ public abstract class ControllerModelBase : IDisposable
 | `TouchpadZTopInsetFrac` | `0.12` | Top inset. |
 | `TouchpadZBottomInsetFrac` | `0.12` | Bottom inset. |
 
-The defaults match the DS4 `Screen.obj`. DualSense overrides all three and `ModelScale`. Switch 2 Pro overrides `ModelScale` only. Every Valve model sets all three insets to zero, because its pad meshes are the measured touch face with no bezel left to crop, and each overrides `ModelScale`.
+The defaults match the DS4 `Screen.obj`. DualSense overrides all three and `ModelScale`. Switch 2 Pro and DualShock 3 override `ModelScale` only. Every Valve model sets all three insets to zero, because its pad meshes are the measured touch face with no bezel left to crop, and each overrides `ModelScale`.
 
 `ModelScale` brings a model's authoring size to the framing the fixed camera expects, against the Xbox 360 mesh at 151.45 mm across:
 
@@ -224,7 +225,7 @@ protected void PaintTarget(string padSettingName, Material material)
 protected virtual void DrawAccentHighlights()
 ```
 
-Creates accent-colored `DiffuseMaterial` for all children. Reads the `SystemAccentColorPrimary` resource (a WPF-UI theme `Color`) and wraps it in a `SolidColorBrush`. Falls back to `#FF6B2C` ember orange. The brush stays solid because `GradientHighlight()` lerps its `Color`. `AccentButtonBackground` became an ember gradient in #175, so the highlight now derives from the accent `Color` instead. The Xbox 360, DS4, Xbox Series, DualSense, and Switch 2 Pro constructors call it.
+Creates accent-colored `DiffuseMaterial` for all children. Reads the `SystemAccentColorPrimary` resource (a WPF-UI theme `Color`) and wraps it in a `SolidColorBrush`. Falls back to `#FF6B2C` ember orange. The brush stays solid because `GradientHighlight()` lerps its `Color`. `AccentButtonBackground` became an ember gradient in #175, so the highlight now derives from the accent `Color` instead. The Xbox 360, DualShock 3, DS4, Xbox Series, DualSense, and Switch 2 Pro constructors call it.
 
 `EnsureHighlightMaterials()` is the backstop `Create` runs on every model. It gives each `ClickMap` group, each `ButtonMap` group, both stick rings, and every scene child the accent material when it has none, and keeps any highlight a model set by hand. The three Valve models call neither method themselves, so their glow comes from here.
 
@@ -334,6 +335,49 @@ Face button overlays (`B1Button`–`B4Button`) use transparent variants (`Alpha 
 5. White parts: `MainBody`, `LeftMotor`, `RightMotor`, `LeftShoulderBottom`, `RightShoulderBottom`.
 6. Remaining parts default to black.
 7. `DrawAccentHighlights()` called last.
+
+---
+
+## ControllerModelDS3
+
+**File:** `PadForge.App/Models3D/ControllerModelDS3.cs`
+
+```csharp
+public class ControllerModelDS3 : ControllerModelBase
+public ControllerModelDS3()
+```
+
+Calls `base("DS3")`. One appearance, so no colorway picker. The mesh is "Sony PlayStation Dualshock 3 wireless controller" by 3doverstock, bought on CGTrader and split into the standard part files by `tools/dualshock3_mesh.py`. `HMaestroProfileCatalog.ResolveAssetFolders` sends `dualshock-3` here before its generic `dualshock` match, which gives every other DualShock the DS4.
+
+`B1.obj` through `B4.obj` follow the PlayStation positions the DS4 and DualSense use: cross, at the bottom, is `B1` and `"ButtonA"`. SELECT is `Back.obj` and the PS button is `Special.obj`. The pad has no touchpad and no light bar, and the folder ships no motor dummies, since nothing reads `LeftMotor` or `RightMotor`.
+
+### How the converter splits it
+
+The source is one OBJ in centimeters, 16 loose pieces with a normal on every corner. The shell has both sticks welded into it. Every other piece is matched to its part file by centroid, and the run stops on a piece it cannot match one to one.
+
+Each stick's dome sits in a groove whose outer wall, the collar, is the faceplate hole. The collar stays with the body. Without it each stick meets the shell at exactly one ring of 26 vertices, and the run stops if the cut is anything else. The convex cap top down to the rim's widest point, 3.7 mm behind the apex of a 9.7 mm cap, is the ring. The rim's underside, the stem and the dome are the click, which reaches 0.00 mm into the cap, so the cap top stays dark when the button lights (see [Stick anatomy](#stick-anatomy)).
+
+The map into PadForge's frame is (10x, -10y, -10z), a half turn about X that keeps the winding, centered on the model's own bounds.
+
+### Materials
+
+`Body.jpg` is the model's own 4096 px diffuse at 2048 px. It carries every printed mark (SONY, SELECT and START, the colored symbols, the d-pad arrows, the L and R lettering and the panel seams), so every part reads from it and there is no decal set. The diffuse has its lighting baked in, and the preview's rig draws a face-on texel at about two thirds of its value, so the converter lifts it by a 0.75 gamma. Against the GameStop product photo of the controller, the faceplate went from 13 of 255 to 24 where the photo reads 30.
+
+The shell's back faces are `#101112`. The mesh is a single skin, and a deflected stick's dome opens a gap onto its inside, where the atlas on the back faces drew a bright crescent. Nothing restores the body's materials, because it is never a hover, press or flash target, so the dark back material holds.
+
+### Rotation Points
+
+| Parameter | Value |
+|-----------|-------|
+| `JoystickRotationPointCenterLeftMillimeter` | `(-23.129, -5.622, -11.074)` |
+| `JoystickRotationPointCenterRightMillimeter` | `(23.129, -5.614, -11.074)` |
+| `JoystickMaxAngleDeg` | `19.0` |
+| `ShoulderTriggerRotationPointCenterLeftMillimeter` | `(-45.991, 7.838, 37.676)` |
+| `ShoulderTriggerRotationPointCenterRightMillimeter` | `(45.991, 7.838, 37.676)` |
+| `TriggerMaxAngleDeg` | `16.0` |
+| `ModelScale` | `165.7 / 160.0` (160.0 mm body width) |
+
+The converter prints every value. The dome is a sphere to 0.1 mm, the shape that lets a stick turn in place and keep filling the faceplate hole, so its center is the pivot, 26.9 mm behind the cap's apex. The cap first touches the faceplate at 20.9 degrees with both axes at full deflection and at 30 with one. The trigger hinge sits at the Xbox One model's fraction of the trigger's own bounds. At the full 16 degree pull, three vertices on each trigger's lower back edge sink 0.88 mm into the grip's lip under it, out of sight, against 1.45 mm on the DS4. L1 stays more than 7 mm away at any angle.
 
 ---
 
@@ -685,6 +729,7 @@ How far the click reaches into the cap is the mesh's answer, not a preference, a
 | DualSense | 0.00 mm, stops at the ring's back | stays dark |
 | Xbox Series | 0.13 mm | stays dark |
 | Switch 2 Pro | 0.00 mm | stays dark |
+| DualShock 3 | 0.00 mm | stays dark |
 
 Measure before deciding. The Deck shipped both ways wrong first: stem alone, which glowed the face and no collar, then base alone, which lit everything but the cap top and read as half a stick.
 
@@ -900,6 +945,19 @@ PadForge.App/3DModels/
     GL.obj, GR.obj                           (grip buttons, Switch 2 only)
     LED1.obj .. LED4.obj                     (player-indicator LEDs)
     Switch2Pro_Diffuse.jpg                   (baked base color x AO atlas)
+  DS3/             (20 meshes + 1 texture)
+    MainBody.obj                             (body shell, bezel collars included)
+    Joystick-Left-Ring.obj                   (left stick cap top)
+    Joystick-Right-Ring.obj                  (right stick cap top)
+    LeftStickClick.obj, RightStickClick.obj  (rim underside, stem + dome)
+    Shoulder-Left-Trigger.obj                (L2)
+    Shoulder-Right-Trigger.obj               (R2)
+    L1.obj, R1.obj                           (bumpers)
+    B1.obj, B2.obj, B3.obj, B4.obj           (cross, circle, square, triangle)
+    DPadUp.obj, DPadDown.obj,                (D-pad keys)
+      DPadLeft.obj, DPadRight.obj
+    Back.obj, Start.obj, Special.obj         (SELECT, START, PS)
+    Body.jpg                                 (the model's diffuse, 2048 px)
   SteamController/ (33 meshes, no textures)
     MainBody.obj                             (body shell)
     LeftPadTouch.obj, RightPadTouch.obj      (trackpad center discs)

@@ -473,6 +473,7 @@ The Sony and Xbox families are split one folder per colorway. The counts below a
 |-----------|-----------|----------|
 | `3DModels/XBOX360/` | none, flat | 31 OBJ files (Xbox 360 controller parts) |
 | `3DModels/XboxSeries/` | 21 (Carbon, Starfield, Robot, Sonic, and so on) | 32 OBJ files each, 34 for Starfield |
+| `3DModels/DS3/` | none, flat | 20 OBJ files |
 | `3DModels/DS4/` | 2 (JetBlack, MagmaRed) | 37 OBJ files each |
 | `3DModels/DualSense/` | 10 (White, Midnight, SpiderMan2, and so on) | 32 OBJ files each, Touchpad split for click-mapping |
 | `3DModels/DualSenseEdge/` | 1 (Edge) | 40 OBJ files |
@@ -481,7 +482,7 @@ The Sony and Xbox families are split one folder per colorway. The counts below a
 | `3DModels/SteamController/` | none, flat | 33 OBJ files (2015 Steam Controller) |
 | `3DModels/SteamController2/` | none, flat | 29 OBJ files (2026 Steam Controller) |
 
-The two Steam Controller sets are meshed from Valve's own STEP releases by `tools/steam_controller_2015_mesh.py` and `tools/steam_controller_2026_mesh.py`. Two follow-up scripts fix up what the conversion left wrong: `steam_controller_2026_pads.py` gives each 2026 trackpad only its own surface, and `steam_deck_stick_well.py` opens the Deck's capped stick wells.
+The two Steam Controller sets are meshed from Valve's own STEP releases by `tools/steam_controller_2015_mesh.py` and `tools/steam_controller_2026_mesh.py`. Two follow-up scripts fix up what the conversion left wrong: `steam_controller_2026_pads.py` gives each 2026 trackpad only its own surface, and `steam_deck_stick_well.py` opens the Deck's capped stick wells. The DualShock 3 set is a model bought on CGTrader, split by `tools/dualshock3_mesh.py`.
 
 There is no Xbox One mesh set and no `ControllerModelXboxOne` class. The Series mesh serves Xbox One, Elite, and Adaptive, and the Switch 2 Pro mesh serves both Switch generations. `ControllerModelView` passes a `wantExtraControls` flag so a borrowing profile gets inert meshes for controls it does not have.
 
@@ -588,9 +589,9 @@ The csproj carries `PublicResXFileCodeGenerator` metadata on `Strings.resx`, but
 <Resource Include="2DModels\**\*.png" />
 ```
 
-PNG overlay images for the 2D controller schematic view. Thirteen families: `DS4/`, `DualSense/`, `DUALSENSEEDGE/`, `MOUSE/`, `STEAMCONTROLLER/`, `STEAMCONTROLLER2/`, `STEAMDECK/`, `SWITCH2PRO/`, `SWITCHPRO/`, `VRCONTROLLER/`, `XBOX360/`, `XBOXONE/`, `XBOXSERIES/`. Uses `Resource` (not `EmbeddedResource`) so they load as WPF pack URIs (`pack://application:,,,/2DModels/...`).
+PNG overlay images for the 2D controller schematic view. Fourteen families: `DS3/`, `DS4/`, `DualSense/`, `DUALSENSEEDGE/`, `MOUSE/`, `STEAMCONTROLLER/`, `STEAMCONTROLLER2/`, `STEAMDECK/`, `SWITCH2PRO/`, `SWITCHPRO/`, `VRCONTROLLER/`, `XBOX360/`, `XBOXONE/`, `XBOXSERIES/`. Uses `Resource` (not `EmbeddedResource`) so they load as WPF pack URIs (`pack://application:,,,/2DModels/...`).
 
-The matching overlay layouts live in `Models2D/ControllerOverlayLayout.cs` as eleven static classes: `Xbox360Layout`, `DS4Layout`, `DualSenseLayout`, `DualSenseEdgeLayout`, `XboxOneSLayout`, `XboxSeriesXLayout`, `SwitchProLayout`, `Switch2ProLayout`, `SteamDeckLayout`, `SteamControllerLayout`, `SteamController2Layout`.
+The matching overlay layouts live in `Models2D/ControllerOverlayLayout.cs` as twelve static classes: `Xbox360Layout`, `DualShock3Layout`, `DS4Layout`, `DualSenseLayout`, `DualSenseEdgeLayout`, `XboxOneSLayout`, `XboxSeriesXLayout`, `SwitchProLayout`, `Switch2ProLayout`, `SteamDeckLayout`, `SteamControllerLayout`, `SteamController2Layout`.
 
 ### Other Resources
 
@@ -799,6 +800,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `steam_controller_2026_mesh.py` | Converts Valve's 2026 Steam Controller STEP into per-part OBJs. Valve shipped one merged solid, so the parts are found in the geometry |
 | `steam_controller_2026_pads.py` | Splits the 2026 trackpad meshes into connected components and keeps only each pad's own surface, so hovering a trackpad stops lighting a rear paddle |
 | `steam_deck_stick_well.py` | Cuts the disc capping each Steam Deck stick well and drops a dark socket behind it, so the stick has an opening under it |
+| `dualshock3_mesh.py` | Splits the bought DualShock 3 model into per-part OBJs and its atlas. Each stick is cut at the dome's edge, the bezel collar stays with the body, and the run prints the stick pivots and trigger hinges |
 | `probe_macro_list.ps1` | Dumps control type, class, and name of everything on the Macros tab, so the capture harness's macro-presence gate can match on what UI Automation really exposes |
 | `verify_site_carousel.ps1` | Opens the padforge.org page (the local repository copy by default) in a visible browser and screenshots the finish carousel twice, 11 seconds apart by default, to prove it advances. Headless cannot answer this, because the carousel pauses on `document.hidden` |
 | `overlay_positions.py` | Generates 2D overlay positions from labeled Gamepad-Asset-Pack SVGs. Positions are generated, never placed by eye |
@@ -806,6 +808,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `gen_dualsense_edge_art.py` | Extends the DualSense 2D set into `2DModels/DUALSENSEEDGE`, adding the four extra controls as floating tiles |
 | `gen_switchpro_s2_art.py` | Extends the Switch Pro 2D set into `2DModels/SWITCH2PRO`, adding the C button and the GL/GR grip buttons. Runs before `overlay_positions.py`, which reads the base it writes |
 | `gen_mouse_art.py` | Renders the vendored mouse SVG into the layers the KBM preview composites |
+| `dualshock3_art.py` | Draws the DualShock 3 2D set in the DualShock 4 art's style from a measured front photograph, since the asset pack has none. `overlay_positions.py` imports it and writes `DualShock3Layout` from the rects it returns |
 
 ## Troubleshooting Build Issues
 
