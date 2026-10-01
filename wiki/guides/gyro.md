@@ -162,6 +162,8 @@ The **Space** dropdown picks how raw gyro motion is mapped to camera input.
 
 Local stays as the default so existing configs feel identical.
 
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* In 4.5.3 and earlier, Player and World space turned the camera the opposite way to Local. They now turn it the same way. If you checked **Invert Yaw (X)** to correct that, uncheck it.
+
 ---
 
 ## Compass
