@@ -1317,6 +1317,7 @@ Cancels any existing recording, captures baseline `CustomInputState`, sets `mapp
 - `neutralizeBaseline`: waits for all buttons/POVs to return to neutral before detecting (for auto-prompt follow-ups).
 - `negRecording`: records the negative direction of a bidirectional axis.
 - `deviceGuid` is accepted but not forwarded to the shared `StartRecordingInternal`. The recorder listens to every device assigned to the slot, and the first to fire wins.
+- Each public starter hands its param target to `StartRecordingInternal`: `None`, or the Up, Down or Modifier field for `StartRecordingExtraSourceParam`. `StartRecordingInternal` sets it after canceling the previous recording, because `CancelRecording` clears it. A starter that set it first lost it whenever another row was still recording, and the Ramp, Incremental or Invert On Hold key landed in the source's own descriptor.
 
 #### Motion rows (#475)
 
