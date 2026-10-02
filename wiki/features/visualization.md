@@ -38,7 +38,7 @@ The active model swaps with the assigned profile. Ten meshes cover the Xbox, Pla
 |---|---|
 | Xbox 360 | `xbox-360*`, plus the arcade-stick / dance-pad / wheel siblings |
 | Xbox Series | `xbox-series-*`, and also Xbox One, Elite, and Adaptive |
-| DualShock 3 | `dualshock-3` |
+| DualShock 3 | `dualshock-3` and `dualshock-3-full` |
 | DualShock 4 | every other `dualshock*` |
 | DualSense | `dualsense*` |
 | DualSense Edge | `dualsense-edge*` |

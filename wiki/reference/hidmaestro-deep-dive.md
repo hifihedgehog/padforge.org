@@ -15,7 +15,7 @@ HIDMaestro (HM) is a UMDF2 (User-Mode Driver Framework 2) virtual HID minidriver
 - A pre-recorded HID report descriptor (input + output + feature reports)
 - Optional FFB PID descriptor pages
 
-PadForge ships with HM 1.9.0 (`HIDMaestro.Core.dll`, FileVersion 1.9.0.0), which embeds 231 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 133 of the 231 carry a captured HID descriptor, and PadForge's pickers offer those 133 (22 Xbox, 13 PlayStation, 2 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (`HMProfile.IsDeployable`). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.
+PadForge 4.5.3 ships HM 1.9.0, and pre-release builds after it ship HM 1.10.0 (`HIDMaestro.Core.dll`, FileVersion 1.10.0.0), which embeds 232 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 134 of the 232 carry a captured HID descriptor, and PadForge's pickers offer those 134 (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (`HMProfile.IsDeployable`). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.
 
 The interim milestones a successor should know, each one PadForge's own call sites still cite by version:
 
@@ -27,17 +27,18 @@ The interim milestones a successor should know, each one PadForge's own call sit
 | v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:1493`, `HMaestroVirtualController.cs:87` |
 | v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:2523` |
 | v1.4.3 (HM#42) | The usbip-vhci node HM owns is stamped, so the persona guard can identify it | `InputManager.Step1.UsbipVhciGuard.cs:18` |
-| v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1707` |
+| v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1768` |
 | v1.6.0 (HM#32) | Native OpenVR driver behind `HMVRController` | `HMaestroVRController.cs:9` |
 | v1.7.0 (HM#56) | Per-instance usbip serials and the three Valve composite persona profiles (`steam-deck-composite`, `steam-controller-composite`, `steam-controller-2`). They were withheld from the pickers until their art landed. `WithheldProfileIds` is empty in 4.5.3 | `HMaestroProfileCatalog.cs:297` (`WithheldProfileIds`), `ValveReportPackers.cs` |
 | v1.7.1 (HM#58) | The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and `SubmitRawExtendedReport` is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing | `HMaestroVirtualController.cs:562` (`SubmitRawReport`), `PadForge.App.csproj:299`. See [Raw frames](#raw-frames-submitrawreport-versus-submitrawextendedreport) |
 | v1.7.2 (HM#59) | One Windows.Gaming.Input gamepad per Xbox 360 virtual instead of two | No PadForge code. Commit `6e9a9780` bumps the DLL. See [One WGI gamepad](#one-wgi-gamepad-per-xbox-360-virtual-hm59) |
 | v1.7.3 | A version resource (company, product, description) on each native binary | `PadForge.App.csproj:280` |
 | v1.8.0 (HM#60) | Durable identity: the device paths, the container id, and a composite persona's USB serial derive from an identity key PadForge passes per slot, so a pad comes back at the same paths after a restart, a reboot, or a driver upgrade (#395) | `HMaestroVirtualController.cs:160` (the identity key), `:321` (`CreateController(_profile, _identityKey)`) |
-| v1.8.1 (HM#61) | The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full" | `PadForge.App.csproj:270`, `InputManager.Step5.VirtualDevices.cs:2348` |
+| v1.8.1 (HM#61) | The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full" | `PadForge.App.csproj:270`, `InputManager.Step5.VirtualDevices.cs:2354` |
 | v1.9.0 | An ARM64 driver payload embedded beside the x64 one, and the USB/IP transport pinned to usbip-win2 0.9.7.5, the last release with an ARM64 build | `PadForge.App.csproj:268` |
 | v1.9.1 (HM#63, HM#62) | The ARM64 driver catalog asked of Inf2Cat with `10_RS3_ARM64`, which it accepts, where 1.9.0's `10_ARM64` stopped the ARM64 install. The Steam Controller (2026) persona answers with the firmware build Steam's own updater names, so Steam stops offering it an update | No PadForge code. Commit `3da34fa7` takes it inside 1.9.2 |
 | v1.9.2 | The USB/IP transport moved to usbip-win2 0.9.8.1, with the fix for the attach work item that blocked driver unload, and a client that speaks the 0.9.7.x, 0.9.8.0 and 0.9.8.1 request formats | `PadForge.App.csproj:248` |
+| v1.10.0 (HM#64) | `dualshock-3-full`, the DualShock 3 (SIXAXIS): Full: the pad in the form Sony's sixaxis driver and DsHidMini's SXS mode present, with analog L2 and R2 and ten `HMGamepadState` pressure fields (discussion #476). Also the Bluetooth DualShock 4's report 0x11 at SDL's offsets, an identity motion calibration for the DualSense and DualShock 4 profiles, Bluetooth L2 and R2 bits that follow the trigger byte, Valve personas that repeat a raw consumer's own frame, and composite stream state read from the audio traffic when SET_INTERFACE never arrives | `HMaestroVirtualController.cs:832` (`WritePressure`), `InputManager.PressureRows.cs`. See [Button pressure](input-pipeline.md#button-pressure) |
 
 ### One driver, seven categories
 
@@ -64,7 +65,7 @@ The relevant assembly is `HIDMaestro.Core` (bundled at `PadForge.App/Resources/H
 ```csharp
 // HMContext: process-wide entry point. One instance.
 var context = new HMContext();
-context.LoadDefaultProfiles();    // load HM's 231 embedded profile JSONs (133 carry a descriptor)
+context.LoadDefaultProfiles();    // load HM's 232 embedded profile JSONs (134 carry a descriptor)
 context.InstallDriver();          // register HM with Windows (idempotent)
 
 // HMProfile: handle to a profile (Xbox 360 wired, DualSense Edge, etc.).

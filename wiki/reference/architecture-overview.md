@@ -46,7 +46,7 @@ graph TB
     subgraph "External Systems"
         SDL3[SDL3.dll<br/>Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
         OXI[OpenXInput<br/>xinput1_4 shim]
-        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 231 profiles, PadForge offers the 133 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
+        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 232 profiles, PadForge offers the 134 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
         HH[HidHide Driver]
         WMS[Windows MIDI Services]
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
@@ -666,7 +666,7 @@ Virtual Xbox, PlayStation, Nintendo, Extended, and VR controllers all come from 
 | Advantage | Detail |
 |---|---|
 | One driver, two roles | HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side |
-| 231 profiles in HIDMaestro's catalog | HIDMaestro ships 231 profiles for the long tail of DirectInput devices, and PadForge offers the 133 that carry a captured HID descriptor (22 Xbox, 13 PlayStation, 2 Nintendo, 96 Extended), plus a profile builder for custom HID descriptors. vJoy was generic-only |
+| 232 profiles in HIDMaestro's catalog | HIDMaestro ships 232 profiles for the long tail of DirectInput devices, and PadForge offers the 134 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), plus a profile builder for custom HID descriptors. vJoy was generic-only |
 | DualSense native | A real virtual DualSense (lightbar, adaptive triggers, mic LED, touchpad). ViGEmBus only emulated Xbox 360 and DS4 |
 | Per-controller `OutputReceived` | One callback per virtual device delivers full game output (rumble, lightbar, AT, FFB). Feeds Sony's `UserEffectsDispatcher` and the FFB decoder |
 | One marker to filter | Every HM device carries `HIDMAESTRO` in its path or hardware IDs (a composite persona on its emulated host controller), so one classifier filters them from SDL enumeration. v2's two drivers needed two filters and produced N² phantom controllers at edge cases |

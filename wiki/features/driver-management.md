@@ -10,7 +10,7 @@
 
 | Component | Status | What it does |
 |---|---|---|
-| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 231 device profiles, and PadForge offers the 133 with a captured HID descriptor. |
+| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 232 device profiles, and PadForge offers the 134 with a captured HID descriptor. |
 | **Keyboard+Mouse** | Built in. No driver. | Maps controller inputs to keyboard and mouse presses. |
 | **HidHide** | Optional. Install when games show double input. | Hides physical controllers from games so they only see the virtual ones. |
 | **Windows MIDI Services** | Optional. Install for MIDI input or the MIDI controller type. | Virtual MIDI endpoints for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Needs Windows 11 24H2 (build 26100) or later. |
@@ -87,7 +87,7 @@ The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Sw
 
 ### The profiles PadForge offers cover
 
-HIDMaestro ships 231 device profiles. PadForge's pickers offer the 133 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. They cover:
+HIDMaestro ships 232 device profiles. PadForge's pickers offer the 134 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. They cover:
 
 - Xbox 360, Xbox One, Xbox Series, Elite, Adaptive
 - DualShock 3, DualShock 4, DualSense, DualSense Edge

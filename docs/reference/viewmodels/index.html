@@ -19073,7 +19073,7 @@
 </tr>
 </tbody>
 </table>
-<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.9.2 ships 231 profiles in 32 vendor folders, and PadForge's pickers offer the 133 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
+<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.0 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
 <h3 id="extendedslotconfigdata">ExtendedSlotConfigData<a class="headerlink" href="#extendedslotconfigdata" title="Permanent link">&para;</a></h3>
 <p>Serializable DTO for persisting in PadForge.xml. All properties have <code>[XmlAttribute]</code>.</p>
 <table>

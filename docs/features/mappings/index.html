@@ -1745,6 +1745,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#button-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button pressure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#copy-paste-copy-from" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4443,6 +4454,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#button-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button pressure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#copy-paste-copy-from" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4610,7 +4632,7 @@
 <blockquote>
 <p><strong>Tip:</strong> The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.</p>
 </blockquote>
-<p>Rows group by category, in this order: <strong>Buttons</strong> (face, shoulder, system, stick clicks), <strong>D-Pad</strong> (four directions), <strong>Triggers</strong> (left and right), <strong>Left Stick / Right Stick</strong> (X and Y axes). PlayStation slots add the touchpad rows, a <strong>Touchpad Click</strong> row, and five motion rows: <strong>Motion Gyro</strong>, <strong>Motion Accelerometer</strong>, <strong>Motion Pitch</strong>, <strong>Motion Yaw</strong>, and <strong>Motion Roll</strong>. Nintendo and Extended slots arrange their own row sets. See <a href="#nintendo-virtual-controllers">Nintendo virtual controllers</a> and <a href="#custom-directinput-mappings">Custom DirectInput mappings</a>.</p>
+<p>Rows group by category, in this order: <strong>Buttons</strong> (face, shoulder, system, stick clicks), <strong>D-Pad</strong> (four directions), <strong>Triggers</strong> (left and right), <strong>Left Stick / Right Stick</strong> (X and Y axes). PlayStation slots add the touchpad rows, a <strong>Touchpad Click</strong> row, and five motion rows: <strong>Motion Gyro</strong>, <strong>Motion Accelerometer</strong>, <strong>Motion Pitch</strong>, <strong>Motion Yaw</strong>, and <strong>Motion Roll</strong>. The <strong>DualShock 3 (SIXAXIS): Full</strong> preset adds ten <a href="#button-pressure">button pressure</a> rows after the triggers. Nintendo and Extended slots arrange their own row sets. See <a href="#nintendo-virtual-controllers">Nintendo virtual controllers</a> and <a href="#custom-directinput-mappings">Custom DirectInput mappings</a>.</p>
 <hr />
 <h2 id="three-ways-to-bind">Three ways to bind<a class="headerlink" href="#three-ways-to-bind" title="Permanent link">&para;</a></h2>
 <h3 id="1-record">1. Record<a class="headerlink" href="#1-record" title="Permanent link">&para;</a></h3>
@@ -5427,7 +5449,7 @@
 <p>Once one of the three rows has a stick, trigger, button, or key on it, the virtual controller sends motion all the time, as a real one does. At rest it reads as a controller lying level and still.</p>
 <p>The <a href="../../guides/macros/#gyro-recenter">Gyro Recenter</a> macro action levels a Speed turn. A held lean stays, because the stick still holds it. A profile switch, Paste, Copy From, or a deleted slot starts the pose over. When the controller driving a turn disconnects, the turn stops, and with no controller left on the slot the motion stream pauses with the pose kept for its return.</p>
 <p>The <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> sends the motion the virtual controller reports, stick turns included. Cemu and eden slowly subtract a held turn slower than about 20°/s as gyro drift, whether they read the virtual controller or the DSU server, so set <strong>Start Speed</strong> above that for slow held turns there.</p>
-<p>The <strong>DualShock 3</strong> and <strong>Switch 2 Pro</strong> presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4.</p>
+<p>The <strong>DualShock 3 (SIXAXIS)</strong> and <strong>Switch 2 Pro</strong> presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4. The <strong>DualShock 3 (SIXAXIS): Full</strong> preset carries the accelerometer and the yaw gyro, the one gyro axis a DualShock 3 has.</p>
 <h3 id="turn-a-stick-into-motion">Turn a stick into motion<a class="headerlink" href="#turn-a-stick-into-motion" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Open the slot's <strong>Mappings</strong> tab. On the <strong>Motion Pitch</strong> row, click <strong>Record</strong> and push the stick up, or pick its Y axis in the source dropdown.</li>
@@ -5435,6 +5457,19 @@
 <li>In each row's details, pick <strong>Speed</strong> or <strong>Angle</strong> under <strong>Motion Mode</strong>.</li>
 <li>If the <strong>Motion Gyro</strong> row holds stick sources from an earlier attempt, remove them. That row reads only a controller's own gyro, and its note says so.</li>
 </ol>
+<hr />
+<h2 id="button-pressure">Button pressure<a class="headerlink" href="#button-pressure" title="Permanent link">&para;</a></h2>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>A DualShock 3 measures how hard ten of its buttons are pressed. The <strong>DualShock 3 (SIXAXIS): Full</strong> preset on a PlayStation slot sends that pressure the way the pad reports it to Sony's sixaxis driver and DsHidMini's SXS mode, the form PCSX2 reads pressure from through its SDL input source and RPCS3 through its DualShock 3 handler. The preset comes with HIDMaestro 1.10.0. Its grid adds ten rows after <strong>L2</strong> and <strong>R2</strong>: <strong>✕ Pressure</strong>, <strong>○ Pressure</strong>, <strong>◻ Pressure</strong>, <strong>△ Pressure</strong>, <strong>L1 Pressure</strong>, <strong>R1 Pressure</strong>, and one for each D-pad direction. L2 and R2 need no pressure rows, because the L2 and R2 rows are their pressure.</p>
+<p>A pressure row reads its source the way the L2 row does: released is no pressure, a full press is full pressure. The button's own row still decides whether the button is pressed, and its pressure goes out only while it is. A turbo, a macro that consumes the press, SOCD cleaning, or a shift layer that releases the button releases its pressure with it. A pressed button whose pressure row is empty, or reads nothing, goes out fully pressed, so a key, a macro, or a pad without pressure sensors presses it all the way.</p>
+<p>Auto-mapping fills the ten rows for a DualShock 3 that PadForge reads itself, over USB or Bluetooth, and for one read through Sony's sixaxis driver or DsHidMini's SXS mode. Each reports the pressures on axes 6 to 15 in SDL's order. Picking the preset on a slot that already holds one fills them as well. A row you clear stays clear until you pick the preset again.</p>
+<p>Other pads take a minute by hand. Click <strong>Record</strong> on a pressure row and press the button. A pressure row's recording takes an analog input, the button's pressure axis rather than its digital press:</p>
+<ul>
+<li><strong>A DualShock 2 on a Bliss-Box.</strong> With <strong>Read Bliss-Box Adapters</strong> on, the port lists the pad's twelve pressures, <strong>Cross Pressure</strong> among them. Record the ten rows, and for analog L2 and R2, pick <strong>L2 Pressure</strong> and <strong>R2 Pressure</strong> on the L2 and R2 rows.</li>
+<li><strong>A DualShock 3 in DsHidMini's SDF mode.</strong> It reports its pressures in a different order, so auto-mapping leaves the rows empty. Recording finds the right axis.</li>
+<li><strong>An analog keyboard.</strong> Put the key on the button's row and on its pressure row, and the key's depth becomes the press.</li>
+</ul>
+<p>In PCSX2, enable the <strong>SDL Input Source</strong> and use <strong>Automatic Mapping</strong> on the virtual DualShock 3. PCSX2 binds the pressure axes for a PS3 controller with 16 axes and 11 buttons, which is what the preset presents. Neither PCSX2 nor RPCS3 has been run against the preset yet. The plain <strong>DualShock 3 (SIXAXIS)</strong> preset carries no pressure.</p>
 <hr />
 <h2 id="copy-paste-copy-from">Copy, Paste, Copy From<a class="headerlink" href="#copy-paste-copy-from" title="Permanent link">&para;</a></h2>
 <p>The toolbar above the mapping grid has bulk operations. <strong>Clear All</strong> sits apart at the far end in warning colors.</p>
