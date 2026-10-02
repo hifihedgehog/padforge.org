@@ -9782,6 +9782,21 @@
 <td><code>static void FillEmptyAutoMappingsForSlot(int padIndex, VirtualControllerType outputType, string profileId)</code></td>
 <td>Fills in the auto-map rows a slot is missing. Snapshots the slot under <code>UserSettings.SyncRoot</code> and resolves devices outside it, because <code>FindDeviceByInstanceGuid</code> takes <code>UserDevices</code> and the reverse order is an ABBA deadlock with the disconnect and migration paths</td>
 </tr>
+<tr>
+<td><code>FillEmptyPressureMappingsForSlot</code></td>
+<td><code>static bool FillEmptyPressureMappingsForSlot(int padIndex, string profileId)</code></td>
+<td>Fills only the ten button pressure fields of every device on the slot, for a live change to a preset whose report carries pressure. Returns whether it filled one, so the caller merges the slot's set only then</td>
+</tr>
+<tr>
+<td><code>AutoMapIdentifiedPort</code></td>
+<td><code>static bool AutoMapIdentifiedPort(UserDevice ud, BlissBoxGamepadMap map, Func&lt;int, (VirtualControllerType, string, ExtendedSlotConfig)&gt; slotShape)</code></td>
+<td>Gives a Bliss-Box port's identified controller its default mapping on every slot the port is assigned to that binds nothing from it yet: no mapping on its <code>PadSetting</code> and no source of its own in the slot's set. An empty <code>PadSetting</code> keeps its tuning (<code>MergeEmptyFrom</code>). Returns whether a slot was mapped</td>
+</tr>
+<tr>
+<td><code>PortHasUnboundSlot</code></td>
+<td><code>static bool PortHasUnboundSlot(UserDevice ud)</code></td>
+<td>True when the port is assigned to a slot <code>AutoMapIdentifiedPort</code> would map, asked before the grids' pending edits are flushed</td>
+</tr>
 </tbody>
 </table>
 <p><code>SlotDeletionInfo</code> is a <code>public readonly record struct (VirtualControllerType Type, int OldGroupPosition)</code> declared beside the service.</p>

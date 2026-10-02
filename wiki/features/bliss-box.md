@@ -1,10 +1,10 @@
 # Bliss-Box Adapters
 
-*Retro controllers in Bliss-Box ports, named for what is plugged in, with DualShock 2 pressure, rumble, the Dreamcast VMU screen and N64 Controller Pak saves.*
+*Retro controllers in Bliss-Box ports, named and mapped for what is plugged in, with DualShock 2 pressure, rumble, the Dreamcast VMU screen and N64 Controller Pak saves.*
 
 *Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
-A Bliss-Box adapter (the 4-Play, Gamer-Pro and Gamer-Pro jr., and the Advanced models, the GPA) plugs retro controllers into USB. Each port is its own USB joystick, one per player. PadForge reads that joystick like any other, and with **Read Bliss-Box Adapters** on it also talks to each port through the adapter's own API: it learns which controller is plugged in and names its buttons, reads a DualShock 2's pressure-sensitive buttons, drives rumble with the adapter's motor commands, shows pictures on a Dreamcast pad's VMU, and backs up and restores an N64 Controller Pak.
+A Bliss-Box adapter (the 4-Play, Gamer-Pro and Gamer-Pro jr., and the Advanced models, the GPA) plugs retro controllers into USB. Each port is its own USB joystick, one per player. PadForge reads that joystick like any other, and with **Read Bliss-Box Adapters** on it also talks to each port through the adapter's own API: it learns which controller is plugged in, names its buttons and maps them the way SDL maps that console's pad, reads a DualShock 2's pressure-sensitive buttons, drives rumble with the adapter's motor commands, shows pictures on a Dreamcast pad's VMU, and backs up and restores an N64 Controller Pak.
 
 ---
 
@@ -17,7 +17,7 @@ The line under the checkbox names each port and what is in it, for example *Read
 Close the Bliss-Box API Tool and DeviceBuddy while the switch is on, since they talk to the adapter over the same channel.
 
 !!! warning "Map the ports again after turning the switch on or off"
-    SDL, the library PadForge reads controllers through, knows the adapter as a "4Play Adapter" gamepad with one fixed button layout. That layout fits one kind of controller. While the switch is on, PadForge reads each port in the adapter's own layout instead, which follows whatever is plugged in, and the port shows as a **Joystick** on the Devices page. The same button then has a different number, so a mapping made with the switch off points at the wrong buttons with it on, and the reverse.
+    SDL, the library PadForge reads controllers through, knows the adapter as a "4Play Adapter" gamepad with one fixed button layout. That layout fits one kind of controller. While the switch is on, PadForge reads each port in the adapter's own layout instead, which follows whatever is plugged in, and the port shows as a **Joystick** on the Devices page. The same button then has a different number, so a mapping made with the switch off points at the wrong buttons with it on, and the reverse. Unassign the port from its slot and assign it again to get the default mapping for the way it is read now.
 
 ---
 
@@ -44,12 +44,47 @@ The names come from two sources, one per firmware generation: RetroArch's Bliss-
 
 Analog triggers follow the firmware itself. A GameCube controller's, a Dreamcast pad's and a Saturn 3D Control Pad's triggers arrive as **Left Trigger** and **Right Trigger** on either generation, 0 when released, and a trigger mapping treats them as a gamepad's: it does not engage at rest.
 
+On a GPA a PlayStation pad has one more button. Hold Select and Start for about two seconds, the adapter's hotkey hold, and the adapter sends a button of its own in place of both. PadForge names it **Guide**, SDL's name for the button that opens a system menu, the PS button on a DualShock 3. A 3.x adapter has no such button.
+
 A controller that neither source lays out keeps numbered names (**Button 3**, **Axis 1**), and so does every controller on a 2.x adapter. A DualShock 2's pressure axes carry names on every firmware, so on a 2.x adapter its other axes show the joystick's own names (**X Axis**, **Y Axis**) instead of numbers.
 
 | Adapter | Controllers with named inputs |
 |---|---|
 | 3.x | Atari joystick, ColecoVision, Dreamcast, GameCube, Genesis 3-button and 6-button, Nintendo 64, Neo Geo, NES, PlayStation digital pad, DualShock, DualShock 2, Saturn pad and 3D Control Pad, SNES, TurboGrafx-16, 3DO, Wii Classic Controller |
 | 4.x (GPA) | All of the 3.x list except the ColecoVision, plus the Atari 5200, Atari paddles, Master System paddle, Arkanoid, Bally Astrocade, Gemini paddles, Pippin, CD-i, Dreamcast ASCII pad, PC gameport joystick, Jaguar, Wii Nunchuk, TurboGrafx-16 6-button pad, PlayStation flight stick, PlayStation pad, FM Towns pad, Virtual Boy and XE-1 AP |
+
+---
+
+## Default mapping
+
+With the switch on, assigning a port to a slot maps the controller in it the way SDL, the library PadForge reads controllers through, maps that console's pad. A DualShock 2 maps as SDL maps a DualShock 3: Cross presses the virtual controller's bottom face button (A on an Xbox slot, Cross on a PlayStation slot), Circle the right one, Square the left and Triangle the top. L2 and R2 pull the triggers, and Select, Start and the GPA's Guide button press Back, Start and Guide.
+
+Each controller follows SDL's own mapping for its console's pad where SDL has one: its PS3 driver for the PlayStation pads, its mappings for Nintendo's Switch Online NES, SNES, N64 and Genesis controllers, its GameCube adapter mapping, and its Wii driver for the Classic Controller and the Nunchuk. SDL maps a pad without a diamond of four face buttons by its letters, so an NES or N64 controller's A is the bottom button wherever it sits. The pads SDL has no mapping for follow RetroArch's Bliss-Box autoconfig files.
+
+| Controller | Bottom | Right | Left | Top | Also |
+|---|---|---|---|---|---|
+| PlayStation pads | Cross | Circle | Square | Triangle | L2 and R2 are the triggers and Select is Back. On a GPA, the Select and Start button is Guide |
+| SNES | B | A | Y | X | L and R are the shoulder buttons |
+| NES | A | B | | | |
+| Nintendo 64 | A | B | C-Down | C-Left | C-Up is Back, C-Right is Misc 2 and Z is the left trigger |
+| Genesis | A | B | X | Y | C is the right shoulder, Z the left and Mode the right trigger |
+| GameCube | A | X | B | Y | Z is the right shoulder, L and R are the triggers and the C-stick is the right stick |
+| Wii Classic Controller | B | A | Y | X | ZL and ZR are the triggers, minus is Back and plus is Start. On a GPA, Home is Guide |
+| Wii Nunchuk | | | | | C is the left shoulder and Z the left trigger |
+| Dreamcast | A | B | X | Y | L and R are the triggers |
+| Saturn | A | B | X | Y | Z is the left shoulder and C the right, L and R are the triggers |
+| Neo Geo | A | B | C | D | |
+| TurboGrafx-16 | II | I | | | Run is Start |
+| 3DO | B | C | A | | X is Back and P is Start |
+| Jaguar | B | C | A | | |
+| Atari joystick | Fire | | | | |
+| ColecoVision | Right fire | Left fire | | | |
+
+Sticks and the D-pad land on the virtual controller's sticks and D-pad, and Start on Start, wherever a controller has them. A controller with named buttons that no source places gets no default mapping: the Atari 5200 controller, the paddle and dial controllers, the Bally Astrocade controller, the Pippin, CD-i and FM Towns pads, the PC gameport joystick, the Virtual Boy and the XE-1 AP. Neither does a controller without named buttons, which includes every controller on a 2.x adapter. On a GPA the Neo Geo pad's four buttons stay unmapped, since DeviceBuddy leaves them unlabeled.
+
+The N64 follows SDL's mapping exactly. Its C buttons do not form a right stick, and C-Right lands on Misc 2, which only the Switch 2 Pro's C button takes. Bind them yourself if a game wants them elsewhere.
+
+A port assigned while it is empty is mapped as soon as the adapter reports a controller in it, on every slot that has nothing from the port yet. A slot that already has mappings from the port keeps them when you plug in a different kind of controller. To map the new one fresh, unassign the port from the slot and assign it again.
 
 ---
 
@@ -62,6 +97,8 @@ Put one on a trigger and the press depth is the trigger pull. Put one on a butto
 Select the port's card and a **DualShock 2 Pressure** panel in its detail pane shows each button's depth as a bar and a percentage.
 
 PadForge asks for the pressures every 50 ms, DeviceBuddy's own rate, and only while a DualShock 2 is in the port. On firmware 3.0 and a GPA the request costs the adapter none of its own controller reads.
+
+On a PlayStation slot running the **DualShock 3 (SIXAXIS): Full** preset, the default mapping puts ten of them on the slot's [pressure rows](mappings.md#button-pressure), all but L2 and R2, whose pressure is the trigger pull. The default L2 and R2 rows read the L2 and R2 buttons, which arrive with every report. For an analog pull, pick **L2 Pressure** and **R2 Pressure** on those rows instead.
 
 ---
 

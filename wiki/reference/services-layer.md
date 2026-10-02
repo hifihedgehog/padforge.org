@@ -1247,6 +1247,9 @@ Sets default hiding for newly assigned devices. Gamepads: auto-enables HidHide (
 | `DeleteSlot` | `SlotDeletionInfo DeleteSlot(int slotIndex)` | Deletes a slot, unassigns devices, returns deleted type + pre-removal group position |
 | `SetSlotEnabled` | `void SetSlotEnabled(int slotIndex, bool enabled)` | Enables/disables a slot |
 | `FillEmptyAutoMappingsForSlot` | `static void FillEmptyAutoMappingsForSlot(int padIndex, VirtualControllerType outputType, string profileId)` | Fills in the auto-map rows a slot is missing. Snapshots the slot under `UserSettings.SyncRoot` and resolves devices outside it, because `FindDeviceByInstanceGuid` takes `UserDevices` and the reverse order is an ABBA deadlock with the disconnect and migration paths |
+| `FillEmptyPressureMappingsForSlot` | `static bool FillEmptyPressureMappingsForSlot(int padIndex, string profileId)` | Fills only the ten button pressure fields of every device on the slot, for a live change to a preset whose report carries pressure. Returns whether it filled one, so the caller merges the slot's set only then |
+| `AutoMapIdentifiedPort` | `static bool AutoMapIdentifiedPort(UserDevice ud, BlissBoxGamepadMap map, Func<int, (VirtualControllerType, string, ExtendedSlotConfig)> slotShape)` | Gives a Bliss-Box port's identified controller its default mapping on every slot the port is assigned to that binds nothing from it yet: no mapping on its `PadSetting` and no source of its own in the slot's set. An empty `PadSetting` keeps its tuning (`MergeEmptyFrom`). Returns whether a slot was mapped |
+| `PortHasUnboundSlot` | `static bool PortHasUnboundSlot(UserDevice ud)` | True when the port is assigned to a slot `AutoMapIdentifiedPort` would map, asked before the grids' pending edits are flushed |
 
 `SlotDeletionInfo` is a `public readonly record struct (VirtualControllerType Type, int OldGroupPosition)` declared beside the service.
 

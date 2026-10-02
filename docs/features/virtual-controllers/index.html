@@ -6434,7 +6434,7 @@
 <p>When a recognized gamepad is assigned to a MIDI slot, PadForge auto-maps:
 - <strong>6 axes</strong> to CC slots 0–5 (LX, LY, LT, RX, RY, RT -&gt; <code>MidiCC0</code>–<code>MidiCC5</code>)
 - <strong>11 buttons</strong> to Note slots 0–10 (A, B, X, Y, LB, RB, Back, Start, LS, RS, Guide -&gt; <code>MidiNote0</code>–<code>MidiNote10</code>)</p>
-<p>Same gamepad detection as the HM-backed slots (<code>CapType == InputDeviceType.Gamepad</code>). Non-gamepad devices get no auto-mapping.</p>
+<p>Same gamepad detection as the HM-backed slots (<code>CapType == InputDeviceType.Gamepad</code>), plus a Bliss-Box port read raw, whose controller's placement stands in for SDL's layout. Other devices get no auto-mapping.</p>
 <h3 id="properties_1">Properties<a class="headerlink" href="#properties_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

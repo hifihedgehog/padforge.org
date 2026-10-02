@@ -3362,6 +3362,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#the-default-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The default mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3755,6 +3766,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#the-default-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The default mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3923,7 +3945,7 @@
 <p>The SDL fork carries SDL_GameControllerDB's mapping for all four IDs, "4Play Adapter", so SDL would open a port as a gamepad. That mapping describes one layout, while the adapter's report follows whatever controller is plugged in. While the switch is on:</p>
 <ul>
 <li><code>SdlDeviceWrapper.OpensAsGamepad</code> skips <code>SDL_OpenGamepad</code> for a port (<code>BlissBoxApi.ReadsRaw</code>), so the row reads the joystick surface.</li>
-<li><code>SdlDeviceWrapper.InputDeviceTypeFor</code> types the row a Joystick, although <code>SDL_GetJoystickType</code> still says gamepad for a mapped device. The gamepad auto-map and the trigger rest rule for axes 2 and 5 then leave it alone.</li>
+<li><code>SdlDeviceWrapper.InputDeviceTypeFor</code> types the row a Joystick, although <code>SDL_GetJoystickType</code> still says gamepad for a mapped device. The trigger rest rule for axes 2 and 5 then leaves it alone, and the default mapping reads it through its controller's placement rather than SDL's gamepad layout (see <a href="#the-default-mapping">The default mapping</a>).</li>
 <li>Phase 1l reopens any port row open the other way: every Step 1 pass while the switch is on, since a row can open between the switch and the phase, and once more after it goes off. The reopen is Phase 1's replug rebind: a fresh <code>SdlDeviceWrapper</code> for the same SDL instance, <code>UserDevice.LoadFromSdlDevice</code>, which disposes the old wrapper, and the new wrapper in <code>_openedSdlInstanceIds</code>. SDL counts the opens of one joystick, so the device stays open across the swap.</li>
 </ul>
 <h3 id="the-channel-and-the-worker">The channel and the worker<a class="headerlink" href="#the-channel-and-the-worker" title="Permanent link">&para;</a></h3>
@@ -4051,6 +4073,7 @@
 <h2 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h2>
 <h3 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h3>
 <p><code>SdlDeviceWrapper.GetDeviceObjects</code> asks <code>BlissBoxApi.DeviceObjectsProvider</code> for a raw-opened port's list, so every place that fills <code>DeviceObjects</code> stays in step. <code>BlissBoxRuntime.NameObjects</code> renames the joystick's objects for the controller report 17 names, names the four arrow buttons where the firmware sends them (see <a href="#pressure-and-arrows">Pressure and arrows</a>) unless the controller's layout names those buttons itself, and appends the twelve pressure axes for a DualShock 2. Arrow buttons the joystick does not declare are appended only for a 3.x PlayStation digital pad, whose arrows PadForge's native poll fills. Both firmwares declare 24 buttons, so on a real adapter nothing is appended. The names are invariant English strings that <code>MappingDisplayResolver.LocalizeObjectName</code> translates. <code>BlissBoxRuntime.NamesObjects</code>, which <code>UseRawNumberedNaming</code> asks, is true for a controller a source lays out and for a DualShock 2, whose pressure axes carry names on every firmware. Any other controller keeps numbered names, as a raw joystick does. The names, the merge and the rest rule follow the row's shape, not the switch: they apply while the row is read raw, until Step 1 reopens it.</p>
+<p>One button no source labels takes a name anyway. GPA 4.86 arms its hotkey routine once Start is held past its timer (<code>0x32C8</code> to <code>0x3340</code>, two seconds in the API document's words), and with Select held too it drops both and sends button 18 alone (<code>0x33FA</code> to <code>0x3405</code>). A port setting skips those routines (<code>0x06AC</code>, <code>0x3613</code> to <code>0x362A</code>). The routine reads the first button byte whatever the controller, so a GPA sends button 18 for any pad with buttons on bits 4 and 5, but DeviceBuddy draws it only on its PlayStation layout (<code>playstation.layout</code> <code>BTN_HOME</code>, unlabeled). The GPA's PlayStation layouts alone name it, <strong>Guide</strong>, the name <code>GamepadObjectNames</code> gives SDL's guide button, and the default mapping puts it there. The 3.0 image shows no such swap.</p>
 <p>The tables in <code>BlissBoxControllers</code> come from RetroArch's Bliss-Box 4-Play autoconfig files, stamped firmware 3.24, for 3.x, and from DeviceBuddy's controller layouts for 4.x. A layout's bit N is button N, its stream bytes 3 to 10 are axes 0 to 7 (X, Y, Z, Rx, Ry, Rz, slider, dial), and byte 11 is the hat. The sources agree on the PlayStation, Nintendo 64, Saturn, TurboGrafx-16, 3DO and Wii Classic, and differ on the NES's A and B, the SNES's X and Y, the Genesis's C and Z, the Dreamcast's and GameCube's shoulders and the Jaguar's A and C, which is why each generation keeps its own. A 2.x adapter gets no layout, so its controllers keep numbered names, except a DualShock 2, whose named pressure axes leave its other objects with the joystick's own names (<code>X Axis</code>, <code>Button 3</code>).</p>
 <p>Analog triggers follow the firmware instead. Both generations copy the GameCube's, the Dreamcast pad's and the Saturn 3D pad's triggers into Z and Rz as they come from the pad, 0 released: 3.0 at <code>0x1042</code> (GameCube), <code>0x283B</code> (Dreamcast) and <code>0x19A4</code> to <code>0x19DC</code> (Saturn), GPA 4.86 at <code>0x0F72</code>, <code>0x0DEA</code> and <code>0x1A73</code>. The 3.0 image Bliss-Box distributes reports itself as 3.34 and leaves the Slider and Dial at their center (<code>0x311B</code>), where RetroArch's GameCube file puts the shoulders with unsigned binds RetroArch ignores. DeviceBuddy's Dreamcast layout leaves the triggers undrawn, beside the digital L and R the GPA sets past <code>0xC8</code> (<code>0x0DB2</code>).</p>
 <p>Type codes come from the API Tool's <code>controllerType[]</code>, the command-line tool's <code>getType</code> and DeviceBuddy's <code>BlissBox_lookUpName</code>, with the compatibility list naming the abbreviated ones. Types 0 and 255 are both "None / Atari" in the API Tool, 255 being what an unflashed type byte reads. The generations number two controllers differently, so <code>BlissBoxControllers.Name</code> takes the firmware's major version. GPA 4.86 types an Atari driving controller 12 in its DE-9 driver (<code>0x2436</code>) and returns 66 from the same driver (<code>0x22D7</code>), which DeviceBuddy calls drivingcontroller and TOWNS. The 3.0 firmware returns 66 for a Wii extension (<code>0x23A9</code> to <code>0x23BB</code>), which the API Tool calls WII_DRUM, and the API Tool calls 12 PSX_WHEEL. The 2.0 firmware sends a PlayStation pad's ID as its type (<code>0x219B</code> to <code>0x21B1</code>), where the newer ones turn the neGcon's <code>0x23</code> into 51 and the JogCon's <code>0xE3</code> into 127 (3.0 <code>0x253A</code> to <code>0x2546</code>, GPA <code>0x0A18</code> to <code>0x0A2B</code>), since <code>0x23</code> is their Dreamcast Twin Stick (<code>0x2824</code>, <code>0x0E91</code>). <code>BlissBoxProtocol.ParseInfo</code> makes the same two changes for firmware before 3. Every other PlayStation ID passes through on all three, so a PlayStation mouse (<code>0x12</code>) reads as type 18, which the tools and PadForge name the GameCube wheel. The one exception is on a GPA, which retypes a PlayStation pad that shows Left held in its first polls as 75, the PlayStation guitar, and drops that Left (<code>0x09DE</code> to <code>0x09DF</code>, <code>0x0AAE</code> to <code>0x0AC4</code>). A DualShock plugged in with Left held reads that way, with no layout and no motors, until the adapter finds it again. A type no source names shows as its number, in the user's language.</p>
@@ -4067,6 +4090,39 @@
 <p>Only a controller whose layout names a D-pad gets the arrow names. One without a D-pad cannot press opposite directions, and the keypads of the Jaguar and the Atari 5200 sit on buttons 10 to 13 on 3.0 (<code>0x2099</code>, <code>0x1BDA</code>). A controller with a D-pad that no source lays out keeps numbered names, and the firmware's arrows arrive on those numbered buttons.</p>
 <p>The native poll gets the arrows from the first step, before any latch. It sends a PlayStation pad <code>0x01, 0x42, 0, 0, 0</code> and searches the answer for <code>0x41, 0x5A</code>. The next byte is active low, with Up in bit 4, Right in bit 5, Down in bit 6 and Left in bit 7, the psx-spx order Linux's <code>psxpad-spi</code> reads. The merge adds them to buttons 10 to 13, where the 3.0 firmware's own arrows land.</p>
 <p>Each request costs the adapter polls of its own (see <a href="#the-cadence">The cadence</a>), so the poll stops once the adapter's own arrows show on buttons 10 to 13 of the port's report, which for a PlayStation digital pad only the latch sets. The merge reads those buttons before it adds the poll's (<code>BlissBoxRuntime.ArrowsSent</code>). <code>BlissBoxSession.ArrowsLatched</code> clears when report 17 shows another controller or a search, or when the channel drops. If the firmware kept its latch through that, the merge sees its arrows again and sets the flag again.</p>
+<h3 id="the-default-mapping">The default mapping<a class="headerlink" href="#the-default-mapping" title="Permanent link">&para;</a></h3>
+<p>A port read raw is a joystick, which <code>SettingsManager.CreateDefaultPadSetting</code> does not map on its own. <code>BlissBoxControllers.GamepadMap</code> places the controller's inputs in SDL's gamepad layout instead, and the default mapping reads the port through that placement the way it reads an SDL gamepad. The placement keys each role by the name the controller's layout gives the input, so an input lands by what it is on either generation, whichever index each sends it on. The SNES's X is the top button on both, at button 3 on 3.x and button 2 on a GPA.</p>
+<p>The roles come from SDL's own mapping for the console's pad first:</p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PlayStation pads</td>
+<td>SDL's PS3 driver (<code>SDL_hidapi_ps3.c</code>), with Cross the south button per the Sony face style in <code>SDL_gamepad.c</code>. The GPA's button 18 is the guide</td>
+</tr>
+<tr>
+<td>SNES, NES, N64, Genesis</td>
+<td>SDL's mappings for Nintendo's Switch Online pads in <code>SDL_gamepad.c</code>, with each pad's buttons on the Pro Controller's bits per Linux's <code>hid-nintendo.c</code>. SDL reads the NES, N64 and Genesis pads by their letters (<code>SDL_hidapi_switch.c</code> <code>AlwaysUsesLabels</code>), the SNES by position</td>
+</tr>
+<tr>
+<td>GameCube</td>
+<td>SDL's GameCube adapter mapping over <code>SDL_hidapi_gamecube.c</code>'s button order, by position: A south, X east, B west, Y north</td>
+</tr>
+<tr>
+<td>Wii Classic Controller, Nunchuk</td>
+<td>SDL's Wii driver (<code>SDL_hidapi_wii.c</code> <code>GAMEPAD_BUTTON_DEFS</code> and <code>HandleNunchuckButtonData</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The pads SDL ships no mapping for (the Dreamcast pads, the Saturn pads, Neo Geo, TurboGrafx-16 and its 6-button pad, 3DO, Jaguar, Atari joystick and ColecoVision) take the roles RetroArch's Bliss-Box 4-Play files give them, read onto SDL's layout through RetroArch's own SDL3 table (<code>input_autodetect_builtin.c</code> <code>SDL3_DEFAULT_BINDS</code>: RetroPad B is SDL's south button, A east, Y west and X north). The Saturn's C and Z land on the shoulders, where SDL's Genesis mapping puts the same buttons. Every other controller has no placement and no default mapping.</p>
+<p>Two more rules sit inside <code>GamepadMap</code>. An input named as an analog trigger takes its role before a digital button that shares it, so the Dreamcast pad and the Saturn 3D Control Pad drive the triggers from their axes, and the Dreamcast ASCII pad and the Saturn pad from their L and R buttons. A DualShock 2's pressure axes are listed in the button pressure targets' order (<code>BlissBoxGamepadMap.PressureAxes</code>), which the Full preset's ten pressure rows take. L2 and R2 keep their buttons on the triggers, since their pressures arrive with report 21 every 50 ms and the buttons with every report.</p>
+<p><code>BlissBoxRuntime.GamepadMapFor</code> hands a row the placement for the controller its port has identified (<code>BlissBoxSession.LiveInfo</code>). A searching port has none, and neither does a Remote Link peer's copy, which finds no port on its own PC. <code>CreateDefaultPadSetting</code> runs its gamepad branch for a row with a placement and resolves each standardized position through it: <code>Btn</code> and <code>Ax</code> for the standard layout, <code>Extra</code> for the positions past it, <code>DPad</code> for the hat. A port input binds only while the port's object list carries it, the rule the gamepad branch keeps for an SDL gamepad. The positions past the standard layout (Misc 1, the paddles, the touchpad click) bind nothing on a port, whose raw buttons there are arrows, keypad keys or nothing, except Misc 2, where the N64's C-Right lands. Force Raw Joystick Mode turns the default mapping off, as it does for a gamepad.</p>
+<p>A port assigned while it searched got an empty mapping. When a port identifies a controller, <code>InputService.OnBlissBoxPortChanged</code> asks <code>DeviceService.PortHasUnboundSlot</code> whether the port is assigned to a slot where it binds nothing yet: no mapping on its <code>PadSetting</code> and no source of its own in the slot's set. Only then does it flush the grids' pending edits, as an assignment does, and <code>DeviceService.AutoMapIdentifiedPort</code> gives each such slot the mapping assignment would have built. An empty <code>PadSetting</code> keeps its tuning (<code>MergeEmptyFrom</code>, the fill-empty merge). The assignment refresh (<code>RefreshAfterDeviceAssignmentChange</code>) then merges the sets and reloads the grids. A slot that binds anything from the port keeps it when another controller is plugged in, since nothing records whether a mapping is still the default.</p>
 <hr />
 <h2 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h2>
 <p><code>BlissBoxApi.OwnsRumble</code> is true for a port while the switch is on. Then:</p>
@@ -4159,7 +4215,7 @@
 <p>A player change does not trust the write's result: both firmwares reset from inside the command's handler, before the transfer completes (3.0 detaches USB at <code>0x08EB</code>, GPA 4.86 jumps to its reset at <code>0x2CE2</code>), so Windows can report the write as failed although it took. BBAPI.cs sends it without checking. PadForge reads report 17 afterward instead, up to three times 100 ms apart: an adapter that reset answers nothing on the old handle, and one that still answers as the port's player never got the command, so the job fails as <code>PlayerUnchanged</code>. The three reads keep one failed read on a port that kept its number from passing for the reset. The job fails the same way, without sending the command, when the adapter refuses its own picture back, and a port that is closing, or starts closing while the picture waits out the EEPROM guard, sends neither.</p>
 <hr />
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
-<p><code>BlissBoxProtocolTests</code> builds every report byte for byte, runs every parser against the references' layouts, checks the picture codec against the API Tool's "BLISS BOX" example, the checksums against libdragon's values, and the native chunking under models of both firmware listings. <code>BlissBoxSessionTests</code> drives a session against a scripted adapter that answers as either generation does, with an N64 controller and a pak behind its native channel, a not-ready first read after each message, the 3.x echo of an unanswered read, the reset a player change causes, and GPA 4.86's Dreamcast motor routines (the shared strength, each command's loop and the one timer): the poll cadence, the motor model and writer's timing, the 3.x pacing with its peak and its refresh, a write in flight, the EEPROM guard, the native arrow poll, the player change, and the Controller Pak backup and restore with their failure paths. <code>BlissBoxAppTests</code> covers the names per controller and their translations, the object list and the state merge, the rumble routing, the raw open, the settings, the screen service's pictures and the macro action.</p>
+<p><code>BlissBoxProtocolTests</code> builds every report byte for byte, runs every parser against the references' layouts, checks the picture codec against the API Tool's "BLISS BOX" example, the checksums against libdragon's values, and the native chunking under models of both firmware listings. <code>BlissBoxSessionTests</code> drives a session against a scripted adapter that answers as either generation does, with an N64 controller and a pak behind its native channel, a not-ready first read after each message, the 3.x echo of an unanswered read, the reset a player change causes, and GPA 4.86's Dreamcast motor routines (the shared strength, each command's loop and the one timer): the poll cadence, the motor model and writer's timing, the 3.x pacing with its peak and its refresh, a write in flight, the EEPROM guard, the native arrow poll, the player change, and the Controller Pak backup and restore with their failure paths. <code>BlissBoxAppTests</code> covers the names per controller and their translations, the object list and the state merge, the rumble routing, the raw open, the settings, the screen service's pictures and the macro action. <code>BlissBoxAutoMapTests</code> checks every placement on both generations against SDL's and RetroArch's mappings, the default mapping it gives on Xbox, PlayStation, Nintendo, Extended, Valve, MIDI and VR slots, the positions a port must leave unbound, the DualShock 2's pressure rows, and the fill after a late identification.</p>
 <p>No test runs against an adapter. PadForge's reading of every report is unverified on hardware.</p>
 <hr />
 <p><em>Last updated for PadForge 4.5.3.</em></p>

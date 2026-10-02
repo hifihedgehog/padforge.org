@@ -1027,7 +1027,7 @@ public int GetInputDeviceType()
 | `SDL_JOYSTICK_TYPE_THROTTLE` | `Flight` |
 | Unknown / other | `Joystick` |
 
-The `Gamepad` type triggers auto-mapping via `SettingsManager.CreateDefaultPadSetting()` with the standardized SDL3 gamepad layout.
+The `Gamepad` type triggers auto-mapping via `SettingsManager.CreateDefaultPadSetting()` with the standardized SDL3 gamepad layout. A Bliss-Box port read raw is typed a `Joystick`, and its controller's placement in that layout takes the gamepad's place (see [Bliss-Box Internals](bliss-box-internals.md#the-default-mapping)).
 
 ---
 

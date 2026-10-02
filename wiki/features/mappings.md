@@ -103,7 +103,7 @@ Assigning a second physical device to the same slot extends existing rows with n
 
 Auto-mapping never overwrites a row you edited by hand. It only adds the new device's default source, and it skips a row that already reads that device or holds an **(Any Device)** source.
 
-Unrecognized devices (generic joysticks, flight sticks, raw-mode devices) do not get auto-mapping. Use Map All, recording, or the source dropdown to set them up.
+Unrecognized devices (generic joysticks, flight sticks, raw-mode devices) do not get auto-mapping. Use Map All, recording, or the source dropdown to set them up. A Bliss-Box port read with **Read Bliss-Box Adapters** on is a joystick too, but the controller in it maps the way SDL maps that console's pad (see [Bliss-Box Adapters](bliss-box.md#default-mapping)).
 
 ---
 
@@ -533,11 +533,10 @@ A DualShock 3 measures how hard ten of its buttons are pressed. The **DualShock 
 
 A pressure row reads its source the way the L2 row does: released is no pressure, a full press is full pressure. The button's own row still decides whether the button is pressed, and its pressure goes out only while it is. A turbo, a macro that consumes the press, SOCD cleaning, or a shift layer that releases the button releases its pressure with it. A pressed button whose pressure row is empty, or reads nothing, goes out fully pressed, so a key, a macro, or a pad without pressure sensors presses it all the way.
 
-Auto-mapping fills the ten rows for a DualShock 3 that PadForge reads itself, over USB or Bluetooth, and for one read through Sony's sixaxis driver or DsHidMini's SXS mode. Each reports the pressures on axes 6 to 15 in SDL's order. Picking the preset on a slot that already holds one fills them as well. A row you clear stays clear until you pick the preset again.
+Auto-mapping fills the ten rows for a DualShock 3 that PadForge reads itself, over USB or Bluetooth, and for one read through Sony's sixaxis driver or DsHidMini's SXS mode. Each reports the pressures on axes 6 to 15 in SDL's order. It fills them for a DualShock 2 in a Bliss-Box port too, with **Read Bliss-Box Adapters** on, from the twelve pressures the port lists (**Cross Pressure** among them). For an analog L2 and R2 on that pad, pick **L2 Pressure** and **R2 Pressure** on the L2 and R2 rows. Picking the preset on a slot that already holds one of these pads fills the rows as well. A row you clear stays clear until you pick the preset again.
 
 Other pads take a minute by hand. Click **Record** on a pressure row and press the button. A pressure row's recording takes an analog input, the button's pressure axis rather than its digital press:
 
-- **A DualShock 2 on a Bliss-Box.** With **Read Bliss-Box Adapters** on, the port lists the pad's twelve pressures, **Cross Pressure** among them. Record the ten rows, and for analog L2 and R2, pick **L2 Pressure** and **R2 Pressure** on the L2 and R2 rows.
 - **A DualShock 3 in DsHidMini's SDF mode.** It reports its pressures in a different order, so auto-mapping leaves the rows empty. Recording finds the right axis.
 - **An analog keyboard.** Put the key on the button's row and on its pressure row, and the key's depth becomes the press.
 

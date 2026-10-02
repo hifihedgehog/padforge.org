@@ -7147,7 +7147,7 @@
 </tr>
 </tbody>
 </table>
-<p>The <code>Gamepad</code> type triggers auto-mapping via <code>SettingsManager.CreateDefaultPadSetting()</code> with the standardized SDL3 gamepad layout.</p>
+<p>The <code>Gamepad</code> type triggers auto-mapping via <code>SettingsManager.CreateDefaultPadSetting()</code> with the standardized SDL3 gamepad layout. A Bliss-Box port read raw is typed a <code>Joystick</code>, and its controller's placement in that layout takes the gamepad's place (see <a href="../bliss-box-internals/#the-default-mapping">Bliss-Box Internals</a>).</p>
 <hr />
 <h2 id="hid-product-string-fallback">HID Product String Fallback<a class="headerlink" href="#hid-product-string-fallback" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/SdlDeviceWrapper.cs</code>
