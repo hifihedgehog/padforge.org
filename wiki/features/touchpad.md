@@ -24,7 +24,7 @@ Turning the checkbox off returns the pen to Windows. Stopping PadForge follows *
 | Stick movement from a swipe | Enable Stick / D-Pad Output on the Touchpad tab. Map Touchpad Stick X and Y to the desired stick axes. Each contact sets a new center. |
 | Fixed contact zones | Map the Touchpad 1 Finger 1 Touch (North Quadrant), (South Quadrant), (East Quadrant), and (West Quadrant) sources to D-pad directions or other buttons. |
 | Pressure as a trigger | Map Touchpad 1 Finger 1 Pressure to the trigger. Pressure returns to zero on lift. This source appears only if the tablet reports pressure. |
-| Virtual controller touchpad | On a PlayStation virtual controller, the default mapping carries the tablet's position and contact. Other layouts with touchpad targets can use explicit X, Y, and contact mappings. Pen contact does not automatically press the virtual touchpad click button. |
+| Virtual controller touchpad | On a PlayStation virtual controller, the default mapping carries the tablet's position and contact. In pre-release builds a DualShock 3 preset is the exception: it has no touchpad, so the tablet maps to nothing there. Other layouts with touchpad targets can use explicit X, Y, and contact mappings. Pen contact does not automatically press the virtual touchpad click button. |
 | Absolute cursor positioning | Map Touchpad 1 Pointer X and Y to Mouse X and Y. This places the cursor at the corresponding screen position. |
 
 Pen barrel buttons, eraser contact, inverted-pen state, and in-range state have named mapping sources when present in the descriptor. These states do nothing until mapped. Pressure and a direction source can be mapped at the same time, such as pressure to Right Trigger and swipe movement to Left Stick.

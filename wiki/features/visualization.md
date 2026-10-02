@@ -154,7 +154,7 @@ PlayStation slots (DualShock 4, DualSense) and Extended slots on a Valve profile
 | 3D model | Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the slot's combined touchpad output. |
 | 2D overlay | Finger dots drawn on a flat representation of the touchpad area. Same data as the 3D view. |
 
-The touchpad surface is a click target for mapping. Click anywhere on the touchpad in either view to start recording a Touchpad Click mapping. During Map All on PlayStation outputs, Touchpad Click comes after the buttons and axes and finishes the sequence. Map All skips the motion rows.
+The touchpad surface is a click target for mapping. Click anywhere on the touchpad in either view to start recording a Touchpad Click mapping. During Map All on PlayStation outputs, Touchpad Click comes after the buttons and axes and finishes the sequence. A DualShock 3 has no touchpad, so in pre-release builds its sequence ends with the axes. Map All skips the motion rows.
 
 On a PlayStation slot the spheres and dots follow the Touchpad mapping rows (**Touchpad 1 Finger 1 X** through **Touchpad 1 Finger 2 Touch**). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.
 

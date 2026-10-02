@@ -12857,7 +12857,7 @@
 <li>Reseeds <code>ExtendedConfig</code> from the profile (<code>SyncExtendedConfigFromProfile</code>): <code>ThumbstickCount</code> and <code>TriggerCount</code> from <code>HMProfile.StickCount</code> / <code>TriggerCount</code>, <code>PovCount</code> from <code>HasHat</code>, <code>ButtonCount</code> from <code>HMProfile.ButtonCount</code>, or on a Nintendo lettered profile from its own lettered count. That lettered count is authoritative rather than a <code>Min</code> against the SDK-reported one: taking a <code>Min</code> let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from <code>NintendoPreviewMap</code> instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces <code>ExtendedConfig.Customize</code> on.</li>
 <li>Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (<code>SyncMacroButtonStyle</code>), and re-gates the Bass Shakers tab.</li>
 </ol>
-<p>Xbox and PlayStation slots have fixed layouts, so they skip the reseed and only rebuild mappings. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs), so a profile change within the category still has to rebuild the row list.</p>
+<p>Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (<code>SyncMacroButtonStyle</code>), and a live switch to the DualShock 3 (SIXAXIS): Full first fills its pressure rows (<code>DeviceService.FillEmptyPressureMappingsForSlot</code>). Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: <code>MacroButtonNames.DeriveStyle</code> returns <code>DualShock3</code> for a PlayStation slot on either DualShock 3 preset (<code>HMaestroProfileCatalog.IsDualShock3</code>).</p>
 <h3 id="extended-configuration">Extended Configuration<a class="headerlink" href="#extended-configuration" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -17485,7 +17485,7 @@
 <p><strong>MacroAxisTarget:</strong> <code>None</code>, <code>LeftStickX</code>, <code>LeftStickY</code>, <code>RightStickX</code>, <code>RightStickY</code>, <code>LeftTrigger</code>, <code>RightTrigger</code></p>
 <p><strong>MacroAxisDirection:</strong> <code>Any</code>, <code>Positive</code>, <code>Negative</code></p>
 <p><strong>MacroAxisSource:</strong> <code>OutputController</code>, <code>InputDevice</code></p>
-<p><strong>MacroButtonStyle:</strong> <code>Xbox360</code>, <code>DualShock4</code>, <code>Numbered</code></p>
+<p><strong>MacroButtonStyle:</strong> <code>Xbox360</code>, <code>DualShock4</code>, <code>Numbered</code>, <code>DualShock3</code> (the DualShock 4 lettering with Select and Start on Back and Start, and no Touchpad button)</p>
 <hr />
 <h3 id="gamepadbuttonoption">GamepadButtonOption<a class="headerlink" href="#gamepadbuttonoption" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>MacroItem.cs</code></p>
@@ -17601,7 +17601,7 @@
 <tr>
 <td><code>ButtonStyle</code></td>
 <td><code>MacroButtonStyle</code></td>
-<td>Button lettering, derived from the slot's output type. Same derivation the macro editor uses.</td>
+<td>Button lettering, derived from the slot's output type and, on a PlayStation slot, its preset. Same derivation the macro editor uses.</td>
 </tr>
 <tr>
 <td><code>RawButtonCount</code></td>

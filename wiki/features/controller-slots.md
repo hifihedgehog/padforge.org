@@ -71,7 +71,7 @@ The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons, plus Share on the Xbox S
 
 ### PlayStation
 
-HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
+HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. In pre-release builds the two DualShock 3 presets have 11 buttons, Select and Start where the others have Share and Options, and no touchpad, as on the real pad. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
 
 For PCSX2 and RPCS3, pick **DualShock 3 (SIXAXIS): Full** (pre-release builds after 4.5.3). It presents a DualShock 3 the way Sony's sixaxis driver and DsHidMini's SXS mode do, with analog L2 and R2, the accelerometer and yaw gyro, and pressure on ten buttons, which its grid's [button pressure](mappings.md#button-pressure) rows set.
 

@@ -233,7 +233,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 
 Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.
 
-- Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names.
+- Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names. In pre-release builds a PlayStation slot on a DualShock 3 preset names Select and Start, and has no Touchpad button.
 - Select more than one button to fire them together.
 
 ### Key Press / Key Release

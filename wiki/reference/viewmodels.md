@@ -1223,7 +1223,7 @@ The `ProfileId` setter, in order. Steps 1 and 2 run on a live re-target only: th
 3. Reseeds `ExtendedConfig` from the profile (`SyncExtendedConfigFromProfile`): `ThumbstickCount` and `TriggerCount` from `HMProfile.StickCount` / `TriggerCount`, `PovCount` from `HasHat`, `ButtonCount` from `HMProfile.ButtonCount`, or on a Nintendo lettered profile from its own lettered count. That lettered count is authoritative rather than a `Min` against the SDK-reported one: taking a `Min` let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from `NintendoPreviewMap` instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces `ExtendedConfig.Customize` on.
 4. Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (`SyncMacroButtonStyle`), and re-gates the Bass Shakers tab.
 
-Xbox and PlayStation slots have fixed layouts, so they skip the reseed and only rebuild mappings. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs), so a profile change within the category still has to rebuild the row list.
+Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (`SyncMacroButtonStyle`), and a live switch to the DualShock 3 (SIXAXIS): Full first fills its pressure rows (`DeviceService.FillEmptyPressureMappingsForSlot`). Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: `MacroButtonNames.DeriveStyle` returns `DualShock3` for a PlayStation slot on either DualShock 3 preset (`HMaestroProfileCatalog.IsDualShock3`).
 
 ### Extended Configuration
 
@@ -2525,7 +2525,7 @@ The editor's type picker is grouped, not a flat list of these members. See `Macr
 
 **MacroAxisSource:** `OutputController`, `InputDevice`
 
-**MacroButtonStyle:** `Xbox360`, `DualShock4`, `Numbered`
+**MacroButtonStyle:** `Xbox360`, `DualShock4`, `Numbered`, `DualShock3` (the DualShock 4 lettering with Select and Start on Back and Start, and no Touchpad button)
 
 ---
 
@@ -2582,7 +2582,7 @@ Set on every row by `PadViewModel.ApplyMenuButtonStyle`. The five providers and 
 
 | Member | Type | Description |
 |--------|------|-------------|
-| `ButtonStyle` | `MacroButtonStyle` | Button lettering, derived from the slot's output type. Same derivation the macro editor uses. |
+| `ButtonStyle` | `MacroButtonStyle` | Button lettering, derived from the slot's output type and, on a PlayStation slot, its preset. Same derivation the macro editor uses. |
 | `RawButtonCount` | `int` | Raw button count for Extended and Nintendo slots, from `ExtendedConfig.ButtonCount`. Defaults to 11. |
 | `RawProfileId` | `string` | The slot's HIDMaestro profile slug, so lettered wires label their buttons correctly. |
 | `SupportsControllerButtons` | `bool` | Xbox, PlayStation, Nintendo, and Extended only. A MIDI or Keyboard+Mouse output cannot press a controller button, so its cells omit the choice rather than offering it with a warning. |

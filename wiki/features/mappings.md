@@ -25,7 +25,7 @@ Two more controls live in the strip beneath the selected row rather than in a co
 
 > **Tip:** The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.
 
-Rows group by category, in this order: **Buttons** (face, shoulder, system, stick clicks), **D-Pad** (four directions), **Triggers** (left and right), **Left Stick / Right Stick** (X and Y axes). PlayStation slots add the touchpad rows, a **Touchpad Click** row, and five motion rows: **Motion Gyro**, **Motion Accelerometer**, **Motion Pitch**, **Motion Yaw**, and **Motion Roll**. The **DualShock 3 (SIXAXIS): Full** preset adds ten [button pressure](#button-pressure) rows after the triggers. Nintendo and Extended slots arrange their own row sets. See [Nintendo virtual controllers](#nintendo-virtual-controllers) and [Custom DirectInput mappings](#custom-directinput-mappings).
+Rows group by category, in this order: **Buttons** (face, shoulder, system, stick clicks), **D-Pad** (four directions), **Triggers** (left and right), **Left Stick / Right Stick** (X and Y axes). PlayStation slots add the touchpad rows, a **Touchpad Click** row, and five motion rows: **Motion Gyro**, **Motion Accelerometer**, **Motion Pitch**, **Motion Yaw**, and **Motion Roll**. In pre-release builds the two DualShock 3 presets leave out the touchpad rows, since the pad has no touchpad, and name the system buttons **Select** and **Start** where the other PlayStation presets say **Share** and **Options**. The **DualShock 3 (SIXAXIS): Full** preset adds ten [button pressure](#button-pressure) rows after the triggers. Nintendo and Extended slots arrange their own row sets. See [Nintendo virtual controllers](#nintendo-virtual-controllers) and [Custom DirectInput mappings](#custom-directinput-mappings).
 
 ---
 
@@ -84,7 +84,7 @@ Rows that already have a source are still in the sequence. Pressing an input ove
 
 Map All skips the five motion rows. Controllers with a motion sensor fill Motion Gyro and Motion Accelerometer on their own, and [Motion Pitch, Yaw and Roll](#motion-pitch-yaw-and-roll) are a choice made row by row.
 
-On PlayStation virtual controllers, **Touchpad Click** is appended to the recording sequence after the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.
+On PlayStation virtual controllers, **Touchpad Click** is appended to the recording sequence after the stick axes. In pre-release builds a DualShock 3 preset has no Touchpad Click row, so its sequence ends with the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.
 
 > **Tip:** Start with Map All to assign everything in one pass, then fine-tune individual rows.
 
@@ -373,7 +373,7 @@ The **Simultaneous Opposite Cardinal Directions (SOCD)** card lives on the slot-
 | **First Wins** | The earlier press keeps winning until it is released. |
 
 - Build the pair list with **Add Pair**. Each pair is tracked on its own, and each has a remove button.
-- Xbox and PlayStation slots pick each pair from the 15 named buttons: the four face buttons, shoulders, Back / Start / Guide (Share / Options / PS on PlayStation), stick clicks, and the four D-pad directions.
+- Xbox and PlayStation slots pick each pair from the 15 named buttons: the four face buttons, shoulders, Back / Start / Guide (Share / Options / PS on PlayStation, and in pre-release builds Select / Start / PS on a DualShock 3 preset), stick clicks, and the four D-pad directions.
 - Nintendo slots, and Extended slots on a Valve profile, pick from the same lettered buttons the mapping grid shows. Other Extended slots type raw button indices, 0–127. Index 0 is Button 1 in the mapping grid.
 - The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.
 - The card's Reset All turns the mode off and removes every pair.
@@ -533,7 +533,7 @@ A DualShock 3 measures how hard ten of its buttons are pressed. The **DualShock 
 
 A pressure row reads its source the way the L2 row does: released is no pressure, a full press is full pressure. The button's own row still decides whether the button is pressed, and its pressure goes out only while it is. A turbo, a macro that consumes the press, SOCD cleaning, or a shift layer that releases the button releases its pressure with it. A pressed button whose pressure row is empty, or reads nothing, goes out fully pressed, so a key, a macro, or a pad without pressure sensors presses it all the way.
 
-Auto-mapping fills the ten rows for a DualShock 3 that PadForge reads itself, over USB or Bluetooth, and for one read through Sony's sixaxis driver or DsHidMini's SXS mode. Each reports the pressures on axes 6 to 15 in SDL's order. It fills them for a DualShock 2 in a Bliss-Box port too, with **Read Bliss-Box Adapters** on, from the twelve pressures the port lists (**Cross Pressure** among them). For an analog L2 and R2 on that pad, pick **L2 Pressure** and **R2 Pressure** on the L2 and R2 rows. Picking the preset on a slot that already holds one of these pads fills the rows as well. A row you clear stays clear until you pick the preset again.
+Auto-mapping fills the ten rows for a DualShock 3 that PadForge reads itself, over USB or Bluetooth, and for one read through Sony's sixaxis driver or DsHidMini's SXS mode. Each reports the pressures on axes 6 to 15 in SDL's order. A pad that is not connected maps the same from the entry PadForge keeps for it, so assigning one before it connects fills the rows too. It fills them for a DualShock 2 in a Bliss-Box port too, with **Read Bliss-Box Adapters** on, from the twelve pressures the port lists (**Cross Pressure** among them). For an analog L2 and R2 on that pad, pick **L2 Pressure** and **R2 Pressure** on the L2 and R2 rows. Picking the preset on a slot that already holds one of these pads fills the rows as well. A row you clear stays clear until you pick the preset again.
 
 Other pads take a minute by hand. Click **Record** on a pressure row and press the button. A pressure row's recording takes an analog input, the button's pressure axis rather than its digital press:
 
