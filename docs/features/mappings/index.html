@@ -5336,7 +5336,8 @@
 <hr />
 <h2 id="gamepad-sources">Gamepad sources<a class="headerlink" href="#gamepad-sources" title="Permanent link">&para;</a></h2>
 <p><img alt="The source picker listing a gamepad's inputs" src="../../images/gamepad-source-picker.png" /></p>
-<p>Each recognized gamepad's part of the source dropdown carries <strong>Gamepad</strong> entries beside its device-specific ones. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") rather than a device's raw button or axis number. Picked from the <strong>(Any Device)</strong> group, it pins to no physical pad: the row reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework. Build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.</p>
+<p>The <strong>(Any Device)</strong> group at the top of the source dropdown carries the <strong>Gamepad</strong> entries. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") rather than a device's raw button or axis number, and it pins to no physical pad: the row reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework. Build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.</p>
+<p><em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> A controller's own part of the dropdown lists the same inputs under its own names (<strong>A</strong>, <strong>Left Stick X</strong>) and no longer repeats them as Gamepad entries, so hiding <strong>(Any Device)</strong> with the funnel button hides all twenty-five. A Gamepad entry picked under a controller in an earlier build shows as that controller's own input and reads the same one.</p>
 <table>
 <thead>
 <tr>
@@ -5380,7 +5381,7 @@
 </tbody>
 </table>
 <p>Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (<strong>Gyro Pitch</strong>, <strong>Touchpad 1 Finger 1 X</strong>), so they have no Gamepad-prefixed twin.</p>
-<p>Four more entries sit beside the twenty-five on a recognized gamepad, because each reads a whole stick rather than one input:</p>
+<p>Four more entries read a whole stick rather than one input. They appear in <strong>(Any Device)</strong> and under each recognized gamepad, where they read that controller's sticks:</p>
 <table>
 <thead>
 <tr>

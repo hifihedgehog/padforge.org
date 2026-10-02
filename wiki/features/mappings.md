@@ -439,7 +439,9 @@ Touchpad entries also ride the raw list on pads with a touchpad:
 
 ![The source picker listing a gamepad's inputs](../images/gamepad-source-picker.png)
 
-Each recognized gamepad's part of the source dropdown carries **Gamepad** entries beside its device-specific ones. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") rather than a device's raw button or axis number. Picked from the **(Any Device)** group, it pins to no physical pad: the row reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework. Build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.
+The **(Any Device)** group at the top of the source dropdown carries the **Gamepad** entries. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") rather than a device's raw button or axis number, and it pins to no physical pad: the row reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework. Build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.
+
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* A controller's own part of the dropdown lists the same inputs under its own names (**A**, **Left Stick X**) and no longer repeats them as Gamepad entries, so hiding **(Any Device)** with the funnel button hides all twenty-five. A Gamepad entry picked under a controller in an earlier build shows as that controller's own input and reads the same one.
 
 | Group | Sources |
 |---|---|
@@ -454,7 +456,7 @@ Each recognized gamepad's part of the source dropdown carries **Gamepad** entrie
 
 Twenty-five sources in all. Gyro and touchpad inputs already resolve per device under their own names (**Gyro Pitch**, **Touchpad 1 Finger 1 X**), so they have no Gamepad-prefixed twin.
 
-Four more entries sit beside the twenty-five on a recognized gamepad, because each reads a whole stick rather than one input:
+Four more entries read a whole stick rather than one input. They appear in **(Any Device)** and under each recognized gamepad, where they read that controller's sticks:
 
 | Source | What it reads |
 |---|---|
