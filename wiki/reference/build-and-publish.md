@@ -70,7 +70,7 @@ PadForge.sln
                               generation (see Development Scripts)
 ```
 
-Line endings are repo-enforced. `.gitattributes` opens with a `* text=auto` rule, so a text file committed from a CRLF working tree is still stored with LF. A CRLF copy of one file once turned a 167-line change into a 12,000-line diff. Two narrower rules set the checkout: the driver INFs under `PadForge.App/Resources` check out with CRLF, because a signed catalog hashes the exact bytes of each INF it covers, and `*.sh` scripts check out with LF, because bash reads a carriage return as part of each command.
+Line endings are repo-enforced. `.gitattributes` opens with a `* text=auto` rule, so a text file committed from a CRLF working tree is still stored with LF. A CRLF copy of one file once turned a 167-line change into a 12,000-line diff. Narrower rules set the exceptions. The BthPS3 and BthPS3PSM INFs are stored and checked out byte for byte (`-text`), because a signed catalog hashes the exact bytes of each INF it covers and two of upstream's signed INFs mix CRLF lines with one bare LF. Converting them in either direction makes the catalog reject them, and `BthPs3DriverUpgradeTests` pins the SHA-256 of every bundled BthPS3 file so such a checkout fails the suite. The DualShock 3 WinUSB INF is signed on the machine that installs it and checks out with CRLF. `*.sh` scripts check out with LF, because bash reads a carriage return as part of each command.
 
 ## Prerequisites
 
@@ -212,7 +212,7 @@ The reader is C++, so `SDL3.dll` imports `msvcp140.dll` on both architectures, a
 
 Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build, which gets its own `libvosk.dll` from a `Content` item. An ARM64 publish without that file is refused by `RequireBundledNatives`.
 
-Drivers follow the machine. HIDMaestro 1.10.0 and BthPS3 3.0.0 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and the Windows MIDI Services download picks the `-arm64` installer there. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
+Drivers follow the machine. HIDMaestro 1.10.0 and BthPS3 3.2.0 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and the Windows MIDI Services download picks the `-arm64` installer there. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
 
 ## Project Configuration Details
 
@@ -449,7 +449,7 @@ PadForge v2's vJoy and ViGEmBus installers are no longer bundled. v4 detects eit
 </EmbeddedResource>
 ```
 
-Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. `Ds3DriverInstaller.ExtractDrivers()` walks every manifest resource whose name starts with `BthPS3.`, strips that prefix, and drops the files under `%TEMP%\PadForge\BthPS3Drivers\` before running `pnputil`. The explicit `LogicalName` preserves the subdirectory layout inside the manifest name. The two 3.0.0 INFs that carry a binary, `BthPS3.inf` and `BthPS3PSM.inf`, each name both architectures, `[SourceDisksFiles.amd64]` and `[SourceDisksFiles.arm64]`, and Windows installs the binary that matches the machine, so both builds of PadForge embed both.
+Microsoft-signed BthPS3 + BthPS3PSM drivers (nefarius release) and the DS3 WinUSB INF, embedded so the single-file app can install them at DualShock 3 pairing time with no MSI and no external installer. `Ds3DriverInstaller.ExtractDrivers()` walks every manifest resource whose name starts with `BthPS3.`, strips that prefix, and drops the files under `%TEMP%\PadForge\BthPS3Drivers\` before running `pnputil`. The explicit `LogicalName` preserves the subdirectory layout inside the manifest name. The two 3.2.0 INFs that carry a binary, `BthPS3.inf` and `BthPS3PSM.inf`, each name both architectures, `[SourceDisksFiles.amd64]` and `[SourceDisksFiles.arm64]`, and Windows installs the binary that matches the machine, so both builds of PadForge embed both.
 
 | Directory | Contents |
 |-----------|----------|
