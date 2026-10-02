@@ -1621,7 +1621,7 @@ For each shoulder trigger present, `CreateTriggerBars()` builds a steel track ho
 
 ### Detail strip and tooltips
 
-`BuildAnnotationDetailContent()` builds a fan-in wiring diagram shared by the chip tooltip and the bottom-docked hover strip: every source feeding the row stacks on the left (each tagged with its device name and class glyph), one arrow points into the ember output name on the right. A source's name carries the Inv., Half, or Inv. Half prefix of its flags, and the Toggle label ahead of those when its kind is Toggle (#461). It caps at `AnnotationDetailMaxRows` rows with a locale-neutral `+N` tail. Long names wrap, never truncate.
+`BuildAnnotationDetailContent()` builds a fan-in wiring diagram shared by the chip tooltip and the bottom-docked hover strip: every source feeding the row stacks on the left (each tagged with its device name and class glyph), one arrow points into the ember output name on the right. A source's name carries the Inv., Half, or Inv. Half prefix of its flags, and the Toggle or Rapid Trigger label ahead of those when its kind is Toggle (#461) or Rapid Trigger (#482). It caps at `AnnotationDetailMaxRows` rows with a locale-neutral `+N` tail. Long names wrap, never truncate.
 
 ### Re-projection cadence
 

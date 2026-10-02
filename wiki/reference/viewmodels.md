@@ -2018,7 +2018,7 @@ Single mapping row linking a physical input to an output target in the Pad page 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `MappingDeadZone` | `int` | `50` | Axis activation threshold, clamped 1–100%. Input below this percentage is ignored for this mapping row. `0` is disallowed because it used to read as "unset" and silently reverted to 50. |
-| `IsDeadZoneApplicable` | `bool` | - | Computed: true for axis-based mappings where a per-mapping deadzone is meaningful. |
+| `IsDeadZoneApplicable` | `bool` | - | Computed: true for axis-based mappings where a per-mapping deadzone is meaningful, and on a gamepad trigger row whose primary is in Rapid Trigger, where it is the actuation point (#482). |
 
 | Command | Description |
 |---------|-------------|
@@ -2063,7 +2063,8 @@ A row's primary source stays on `SourceDescriptor`. Additional sources live in `
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ExtraSources` | `ObservableCollection<MappingSourceItem>` | empty | Sources beyond the primary. |
-| `IsPrimaryDirect` / `IsPrimaryDescriptor` | `bool` | - | Computed. `IsPrimaryDirect` is `PrimaryKindSource.Kind == "Direct"`. `IsPrimaryDescriptor` is true for Direct and Toggle (`SourceEvaluator.IsDescriptorKind`), the kinds whose input lives in `SourceDescriptor`. It gates the Source picker, its device label and the kind card in the row, and the Record button's target (#461). |
+| `IsPrimaryDirect` / `IsPrimaryDescriptor` | `bool` | - | Computed. `IsPrimaryDirect` is `PrimaryKindSource.Kind == "Direct"`. `IsPrimaryDescriptor` is true for Direct, Toggle and Rapid Trigger (`SourceEvaluator.IsDescriptorKind`), the kinds whose input lives in `SourceDescriptor`. It gates the Source picker, its device label and the kind card in the row, and the Record button's target (#461, #482). |
+| `IsGamepadTriggerTarget` / `IsRapidTriggerTarget` / `IsRapidTriggerOffered` | `bool` | - | Computed (#482). `IsGamepadTriggerTarget` is the `LeftTrigger` and `RightTrigger` rows, narrower than `IsTriggerTarget`. `IsRapidTriggerTarget` adds the button-class rows (`IsTargetDiscrete`) apart from the touchpad X/Y rows (`IsTouchpadAxisTarget`), which read every source as a position. `IsRapidTriggerOffered` also needs the primary's input to have press depth (`SourceCoercion.IsRapidTriggerSource`) or to be empty. `PrimaryKindOptions` lists Rapid Trigger only while it holds, and `EnforcePrimaryKindGate`, run from the `SourceDescriptor` setter and `EndLoadRow`, sets a Rapid Trigger primary back to Direct when it stops holding. |
 | `IsMultiSource` | `bool` | - | Computed: `ExtraSources.Count > 0 \|\| !IsPrimaryDescriptor`, so a lone Toggle primary shows no Combine picker. Not the same test as `IsTrivialDirect`, which requires `IsPrimaryDirect` and additionally a primary descriptor, no neg descriptor, no extras, no invert / half / bidirectional, and no custom formula. |
 | `VariableCount` | `int` | - | Computed: `PositionalSourceCount`, the number of letters a Custom formula may reference. Drives the formula chip palette's visibility. It can run smaller than the primary plus `ExtraSources.Count`: the positional walk skips the bipolar Neg pair and any `InvertOnHold` modifier source. |
 | `CombineMode` | `string` | `""` | Per-row combine mode. Empty = per-target-type default (MaxAbs for axes, OR for buttons). Named modes: `MaxAbs`, `Sum`, `Average`, `OR`, `AND`, `XOR`, `StickTrim`, `Custom`. On a Motion target the getter reads `MaxAbs` for any stored mode other than empty, `MaxAbs`, `Sum`, `Average`, or `Custom`. |
@@ -2148,13 +2149,14 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `Kind` | `string` | `"Direct"` | Source kind: `Direct`, `Toggle`, `Incremental`, `InvertOnHold`, `Ramped`. Notifies the `Is*Kind` computed flags. |
-| `IsIncrementalKind` / `IsInvertOnHoldKind` / `IsRampedKind` / `IsToggleKind` | `bool` | - | Computed per-kind flags. |
+| `Kind` | `string` | `"Direct"` | Source kind: `Direct`, `Toggle`, `RapidTrigger`, `Incremental`, `InvertOnHold`, `Ramped`. Notifies the `Is*Kind` computed flags. |
+| `IsIncrementalKind` / `IsInvertOnHoldKind` / `IsRampedKind` / `IsToggleKind` / `IsRapidTriggerKind` | `bool` | - | Computed per-kind flags. |
+| `DescriptorKind` | `string` (internal) | - | Computed: the kind a row's primary saves as, `Toggle` or `RapidTrigger` when set, else `Direct`. Every path that rebuilds a primary into a source reads it. |
 | `UsesUpDownKeys` | `bool` | - | Computed: Incremental or Ramped (authored via an Up/Down key pair). |
 | `IsKindDescriptorless` | `bool` | - | Computed: kinds where the main Descriptor/flags are unused (Incremental, InvertOnHold, Ramped). |
 | `HasAnyBoundFeed` | `bool` | - | Computed: whether any input feeds this source, per kind. Mirrors the engine's SourceEvaluator dispatch. |
 
-`KindOptions` (static) is the culture-cached list of `KindChoice { Value, Name }` for the Kind dropdown, keeping backend identifiers out of the UI.
+`KindOptions` (static) is the culture-cached list of `KindChoice { Value, Name }` for the Kind dropdown, keeping backend identifiers out of the UI. `KindChoices`, the extra-source chip's instance list, drops Rapid Trigger while `IsRapidTriggerOffered` is false: the source's input has no press depth, or its row cannot take the mode (`ParentTargetTakesRapidTrigger`, #482). Picking an input without depth sets a Rapid Trigger source back to Direct, and `EnforceRapidTriggerGate` does the same when the parent row pushes a target that cannot take it.
 
 ### Source
 
@@ -2180,14 +2182,16 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 | `IsHalfAxisApplicable` | `bool` | - | Computed: Half applies to continuous-range sources (Axis, Slider, Touchpad X/Y/Pressure, Gyro, Mouse Motion). |
 | `Bidirectional` | `bool` | `false` | With `HalfAxis`, fires on absolute deflection past the deadzone (either side of center). |
 | `DeadZone` | `int` | `50` | Per-source axis-to-button threshold. Clamped 1–100 (0 is disallowed because it read as "unset"). |
-| `IsDeadZoneApplicable` | `bool` | - | Computed: the source is an axis/slider (or an engine-owned continuous family) AND the parent target is a discrete output. |
-| `ParentTargetIsDiscrete` | `bool` | `false` | Set by the parent `MappingItem` so `IsDeadZoneApplicable` knows the target class. |
+| `IsDeadZoneApplicable` | `bool` | - | Computed: the source is an axis/slider (or an engine-owned continuous family) AND the parent target is a discrete output, or a gamepad trigger row with this source in Rapid Trigger (#482). |
+| `ParentTargetIsDiscrete` / `ParentTargetIsTrigger` | `bool` | `false` | Set by the parent `MappingItem` so `IsDeadZoneApplicable` knows the target class. `ParentTargetIsTrigger` is `MappingItem.IsGamepadTriggerTarget`. |
+| `ParentTargetTakesRapidTrigger` | `bool` | `false` | Set by the parent `MappingItem` from `IsRapidTriggerTarget`, so an extra source offers Rapid Trigger on exactly the rows whose primary does (#482). |
 
 ### Kind parameters
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ParamUp` / `ParamDown` | `string` | `""` | Up / Down key descriptors for Incremental and Ramped. |
+| `ParamRapidTriggerDistance` | `int` | `10` | Rapid Trigger distance in percent of full travel, clamped 1 to 50 (#482). The Distance row in the detail strip and on the extra-source chip, each with a reset button. `LoadPrimaryKind(null)` and the row's Clear reset it. |
 | `ParamRate` | `double` | `0.5` | Incremental step rate. |
 | `ParamSticky` | `bool` | `true` | Incremental sticky hold. |
 | `ParamMin` / `ParamMax` | `double` | `0` / `1` | Incremental output bounds. |

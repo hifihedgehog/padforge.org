@@ -699,7 +699,7 @@ Restores a profile, in this order:
 
 The single switch funnel. Returns immediately when `profileId` already equals `SettingsManager.ActiveProfileId`. Saves outgoing state via `SaveActiveProfileState()`, sets `ActiveProfileId` before `ApplyProfile` so the topology label updates the right profile, applies the target profile (or `_defaultProfileSnapshot` when `profileId` is null), then runs `ResetRuntimeStateForProfileSwitch()`.
 
-`ResetRuntimeStateForProfileSwitch()` is the one owner of the accumulators a switch must not carry: source-kind runtime (Incremental cruise, ramp throttle, Toggle latches), shift-toggle latches, gyro engage stickies, trigger-route engage, and gesture contexts. It exists as one method because the set had drifted three ways, with the manual lanes running none of it while the foreground-monitor lane doing the same switch ran all five.
+`ResetRuntimeStateForProfileSwitch()` is the one owner of the accumulators a switch must not carry: source-kind runtime (Incremental cruise, ramp throttle, Toggle latches, Rapid Trigger zones), shift-toggle latches, gyro engage stickies, trigger-route engage, and gesture contexts. It exists as one method because the set had drifted three ways, with the manual lanes running none of it while the foreground-monitor lane doing the same switch ran all five.
 
 #### `OnAutoProfileSwitchRequired(string profileId)` (private)
 

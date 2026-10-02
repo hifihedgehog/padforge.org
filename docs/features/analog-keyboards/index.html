@@ -1828,6 +1828,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#rapid-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rapid Trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#two-characters-from-one-keyboard" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3645,6 +3656,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#rapid-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rapid Trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#two-characters-from-one-keyboard" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3859,7 +3881,7 @@
 <tbody>
 <tr>
 <td><strong>Button</strong></td>
-<td>Presses once the key passes the row's <strong>Axis-to-Button Deadzone</strong>. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom.</td>
+<td>Presses once the key passes the row's <strong>Axis-to-Button Deadzone</strong>. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. With <strong>Primary Mode</strong> set to <a href="#rapid-trigger">Rapid Trigger</a>, a short lift releases and a short push presses again.</td>
 </tr>
 <tr>
 <td><strong>Trigger</strong></td>
@@ -3875,6 +3897,8 @@
 <h3 id="soft-press-and-full-press">Soft press and full press<a class="headerlink" href="#soft-press-and-full-press" title="Permanent link">&para;</a></h3>
 <p>Two rows can read the same key at two deadzones. A row at 30% fires on a soft press, and a row at 90% fires only on a full press, so one key carries two actions.</p>
 <p>For an action that fires on the soft press and lets go at the full press, put both depths on one row as two sources, 30% and 90%, and set the row's <strong>Combine</strong> to <strong>Only One</strong>. The row fires while exactly one of them is past its deadzone, which is the band between the two depths.</p>
+<h3 id="rapid-trigger">Rapid Trigger<a class="headerlink" href="#rapid-trigger" title="Permanent link">&para;</a></h3>
+<p>Set a button row's <strong>Primary Mode</strong> to <strong>Rapid Trigger</strong> and the key releases as soon as it lifts by more than the row's <strong>Distance</strong>, then presses again as soon as it goes back down by more than that, without rising past the actuation point in between. Analog keyboards such as Wooting's do this in their firmware. In PadForge the row's deadzone stays the actuation point, and <strong>Distance</strong> defaults to 10 percent of the key's travel. A trigger row takes the mode too, so a key or a gamepad trigger can fire a controller game's trigger the same way. See <a href="../mappings/#rapid-trigger">Rapid Trigger</a>.</p>
 <h3 id="two-characters-from-one-keyboard">Two characters from one keyboard<a class="headerlink" href="#two-characters-from-one-keyboard" title="Permanent link">&para;</a></h3>
 <p>A keyboard assigns to any number of slots, like any device, so one keyboard can drive two controllers for split-screen games. To switch which character the keys move, give each slot a <a href="../../guides/shift-layers/">shift layer</a> with a <strong>Toggle</strong> activator on the same key. On one slot the keys live on the base layer and the shift layer is empty, with <strong>Inherit Unmapped Targets from Base</strong> left off so the empty layer silences them. On the other slot it is the reverse. One press moves the keyboard from one character to the other.</p>
 <hr />

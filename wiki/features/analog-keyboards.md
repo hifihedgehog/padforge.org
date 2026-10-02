@@ -61,7 +61,7 @@ A key reads 0 at rest and full at the bottom of its travel. What that means depe
 
 | Target | What the key does |
 |---|---|
-| **Button** | Presses once the key passes the row's **Axis-to-Button Deadzone**. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. |
+| **Button** | Presses once the key passes the row's **Axis-to-Button Deadzone**. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. With **Primary Mode** set to [Rapid Trigger](#rapid-trigger), a short lift releases and a short push presses again. |
 | **Trigger** | The depth is the pull, so a half-pressed key is a half-pulled trigger. |
 | **Stick axis** | The depth pushes the stick toward one side. **Invert** pushes it the other way, so two keys drive one axis the way two buttons do. |
 
@@ -72,6 +72,10 @@ An analog key is never read through the **(Any Device)** group. Pick it under th
 Two rows can read the same key at two deadzones. A row at 30% fires on a soft press, and a row at 90% fires only on a full press, so one key carries two actions.
 
 For an action that fires on the soft press and lets go at the full press, put both depths on one row as two sources, 30% and 90%, and set the row's **Combine** to **Only One**. The row fires while exactly one of them is past its deadzone, which is the band between the two depths.
+
+### Rapid Trigger
+
+Set a button row's **Primary Mode** to **Rapid Trigger** and the key releases as soon as it lifts by more than the row's **Distance**, then presses again as soon as it goes back down by more than that, without rising past the actuation point in between. Analog keyboards such as Wooting's do this in their firmware. In PadForge the row's deadzone stays the actuation point, and **Distance** defaults to 10 percent of the key's travel. A trigger row takes the mode too, so a key or a gamepad trigger can fire a controller game's trigger the same way. See [Rapid Trigger](mappings.md#rapid-trigger).
 
 ### Two characters from one keyboard
 

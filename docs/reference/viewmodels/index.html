@@ -15748,7 +15748,7 @@
 <td><code>IsDeadZoneApplicable</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: true for axis-based mappings where a per-mapping deadzone is meaningful.</td>
+<td>Computed: true for axis-based mappings where a per-mapping deadzone is meaningful, and on a gamepad trigger row whose primary is in Rapid Trigger, where it is the actuation point (#482).</td>
 </tr>
 </tbody>
 </table>
@@ -15915,7 +15915,13 @@
 <td><code>IsPrimaryDirect</code> / <code>IsPrimaryDescriptor</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed. <code>IsPrimaryDirect</code> is <code>PrimaryKindSource.Kind == "Direct"</code>. <code>IsPrimaryDescriptor</code> is true for Direct and Toggle (<code>SourceEvaluator.IsDescriptorKind</code>), the kinds whose input lives in <code>SourceDescriptor</code>. It gates the Source picker, its device label and the kind card in the row, and the Record button's target (#461).</td>
+<td>Computed. <code>IsPrimaryDirect</code> is <code>PrimaryKindSource.Kind == "Direct"</code>. <code>IsPrimaryDescriptor</code> is true for Direct, Toggle and Rapid Trigger (<code>SourceEvaluator.IsDescriptorKind</code>), the kinds whose input lives in <code>SourceDescriptor</code>. It gates the Source picker, its device label and the kind card in the row, and the Record button's target (#461, #482).</td>
+</tr>
+<tr>
+<td><code>IsGamepadTriggerTarget</code> / <code>IsRapidTriggerTarget</code> / <code>IsRapidTriggerOffered</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed (#482). <code>IsGamepadTriggerTarget</code> is the <code>LeftTrigger</code> and <code>RightTrigger</code> rows, narrower than <code>IsTriggerTarget</code>. <code>IsRapidTriggerTarget</code> adds the button-class rows (<code>IsTargetDiscrete</code>) apart from the touchpad X/Y rows (<code>IsTouchpadAxisTarget</code>), which read every source as a position. <code>IsRapidTriggerOffered</code> also needs the primary's input to have press depth (<code>SourceCoercion.IsRapidTriggerSource</code>) or to be empty. <code>PrimaryKindOptions</code> lists Rapid Trigger only while it holds, and <code>EnforcePrimaryKindGate</code>, run from the <code>SourceDescriptor</code> setter and <code>EndLoadRow</code>, sets a Rapid Trigger primary back to Direct when it stops holding.</td>
 </tr>
 <tr>
 <td><code>IsMultiSource</code></td>
@@ -16206,13 +16212,19 @@
 <td><code>Kind</code></td>
 <td><code>string</code></td>
 <td><code>"Direct"</code></td>
-<td>Source kind: <code>Direct</code>, <code>Toggle</code>, <code>Incremental</code>, <code>InvertOnHold</code>, <code>Ramped</code>. Notifies the <code>Is*Kind</code> computed flags.</td>
+<td>Source kind: <code>Direct</code>, <code>Toggle</code>, <code>RapidTrigger</code>, <code>Incremental</code>, <code>InvertOnHold</code>, <code>Ramped</code>. Notifies the <code>Is*Kind</code> computed flags.</td>
 </tr>
 <tr>
-<td><code>IsIncrementalKind</code> / <code>IsInvertOnHoldKind</code> / <code>IsRampedKind</code> / <code>IsToggleKind</code></td>
+<td><code>IsIncrementalKind</code> / <code>IsInvertOnHoldKind</code> / <code>IsRampedKind</code> / <code>IsToggleKind</code> / <code>IsRapidTriggerKind</code></td>
 <td><code>bool</code></td>
 <td>-</td>
 <td>Computed per-kind flags.</td>
+</tr>
+<tr>
+<td><code>DescriptorKind</code></td>
+<td><code>string</code> (internal)</td>
+<td>-</td>
+<td>Computed: the kind a row's primary saves as, <code>Toggle</code> or <code>RapidTrigger</code> when set, else <code>Direct</code>. Every path that rebuilds a primary into a source reads it.</td>
 </tr>
 <tr>
 <td><code>UsesUpDownKeys</code></td>
@@ -16234,7 +16246,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>KindOptions</code> (static) is the culture-cached list of <code>KindChoice { Value, Name }</code> for the Kind dropdown, keeping backend identifiers out of the UI.</p>
+<p><code>KindOptions</code> (static) is the culture-cached list of <code>KindChoice { Value, Name }</code> for the Kind dropdown, keeping backend identifiers out of the UI. <code>KindChoices</code>, the extra-source chip's instance list, drops Rapid Trigger while <code>IsRapidTriggerOffered</code> is false: the source's input has no press depth, or its row cannot take the mode (<code>ParentTargetTakesRapidTrigger</code>, #482). Picking an input without depth sets a Rapid Trigger source back to Direct, and <code>EnforceRapidTriggerGate</code> does the same when the parent row pushes a target that cannot take it.</p>
 <h3 id="source">Source<a class="headerlink" href="#source" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -16353,13 +16365,19 @@
 <td><code>IsDeadZoneApplicable</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: the source is an axis/slider (or an engine-owned continuous family) AND the parent target is a discrete output.</td>
+<td>Computed: the source is an axis/slider (or an engine-owned continuous family) AND the parent target is a discrete output, or a gamepad trigger row with this source in Rapid Trigger (#482).</td>
 </tr>
 <tr>
-<td><code>ParentTargetIsDiscrete</code></td>
+<td><code>ParentTargetIsDiscrete</code> / <code>ParentTargetIsTrigger</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>Set by the parent <code>MappingItem</code> so <code>IsDeadZoneApplicable</code> knows the target class.</td>
+<td>Set by the parent <code>MappingItem</code> so <code>IsDeadZoneApplicable</code> knows the target class. <code>ParentTargetIsTrigger</code> is <code>MappingItem.IsGamepadTriggerTarget</code>.</td>
+</tr>
+<tr>
+<td><code>ParentTargetTakesRapidTrigger</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Set by the parent <code>MappingItem</code> from <code>IsRapidTriggerTarget</code>, so an extra source offers Rapid Trigger on exactly the rows whose primary does (#482).</td>
 </tr>
 </tbody>
 </table>
@@ -16379,6 +16397,12 @@
 <td><code>string</code></td>
 <td><code>""</code></td>
 <td>Up / Down key descriptors for Incremental and Ramped.</td>
+</tr>
+<tr>
+<td><code>ParamRapidTriggerDistance</code></td>
+<td><code>int</code></td>
+<td><code>10</code></td>
+<td>Rapid Trigger distance in percent of full travel, clamped 1 to 50 (#482). The Distance row in the detail strip and on the extra-source chip, each with a reset button. <code>LoadPrimaryKind(null)</code> and the row's Clear reset it.</td>
 </tr>
 <tr>
 <td><code>ParamRate</code></td>

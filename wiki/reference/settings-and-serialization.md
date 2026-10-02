@@ -1246,7 +1246,7 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 
 | Member | Type | Default | Description |
 |---|---|---|---|
-| `Kind` | `string` | `"Direct"` | `"Direct"`, `"Toggle"` (the Direct read latched by each press, #461), `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. |
+| `Kind` | `string` | `"Direct"` | `"Direct"`, `"Toggle"` (the Direct read latched by each press, #461), `"RapidTrigger"` (the Direct read released and pressed again by travel past the deadzone, #482), `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. |
 | `DeviceGuid` | `string` | `""` | Physical device instance GUID. Empty = first available device on the VC. |
 | `Descriptor` | `string` | `""` | Input descriptor (`"Button N"`, `"Axis N"`, `"IHAxis N"`, `"POV N Dir"`, `"Slider N"`, `"Gyro Pitch"`, `"Gamepad ButtonA"`, ...). Abstract `"Gamepad ..."` descriptors (#9, v4.1) fold to their canonical per-device form at evaluation via `SourceCoercion.CanonicalDescriptor`. For InvertOnHold, the inner source's input. Ignored for Incremental. |
 | `Invert` | `bool` | `false` | Flip per-source value sign before combine. |
@@ -1265,6 +1265,7 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 | `ParamReleaseTime` | `double` | `0.30` | Ramped kind: seconds to travel ±1 back to 0 after release. 0 = instant. |
 | `ParamAutocenter` | `bool` | `true` | Ramped kind: releasing both keys ramps back toward zero (vs holding the last value). Gates the reverse speed-up. |
 | `ParamReverseMultiplier` | `double` | `4.0` | Ramped kind: toward-zero step multiplier while the opposite key is held and the axis is still on the original side. `1.0` disables the speed-up. |
+| `ParamRapidTriggerDistance` | `int` | `10` | RapidTrigger kind (#482): percent of full travel the input must rise to release, or push back down to press again, while past `DeadZone`. Read through `EffectiveRapidTriggerDistance`: 1 to 50, a stored value below 1 reading as 10. |
 | `MouseCursorSensitivity` | `double` | `1.0` | (#107) Per-source multiplier on the normalized cursor offset. Only affects descriptors starting with `"Mouse Position "`. |
 | `IrPointerSensitivity` | `double` | `1.0` | (#146) Per-source multiplier on the normalized IR pointer offset. Only affects descriptors starting with `"IR Pointer "`. |
 | `ParamYDescriptor` | `string` | `""` | Steering kinds: companion Y-axis descriptor (`Descriptor` reads the stick's X axis). |
