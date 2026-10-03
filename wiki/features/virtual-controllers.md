@@ -1076,7 +1076,7 @@ Note that mouse movement and scroll do NOT go through `SendInput` here. Those ro
 
 **Struct alignment (x64):** `INPUT` uses `LayoutKind.Sequential` with an inner `Explicit` union at `FieldOffset(0)`. On x64, `ULONG_PTR` fields need 8-byte alignment, so the union starts at offset 8. A flat `Explicit` layout with hardcoded offsets would break across architectures.
 
-**Key scan codes:** `SendKeyboard` sets both `wVk` and `wScan` (via `MapVirtualKeyW`). Some games using DirectInput raw input require the scan code.
+**Key scan codes:** `SendKeyboard` sets both `wVk` and `wScan` (via `MapVirtualKeyW`). Some games using DirectInput raw input require the scan code. *Changed after 4.5.3.* `KeyEvent` builds them through `InputHookManager.OutputKey`, so Numpad Enter's index 0x88 goes out as VK_RETURN with Enter's scan code and the extended flag. Every event carries `InputHookManager.OutputTag`, which the hooks and the Raw Input reader pass by.
 
 **Individual calls:** Each `SendInput` submits exactly 1 event. Batching key down + up would give identical timestamps, breaking some applications.
 

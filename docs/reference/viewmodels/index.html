@@ -12294,7 +12294,7 @@
 <td><code>ShowGunCalibration</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>) or, after 4.5.3, a Wii Remote with an IR camera (<code>UserDevice.HasIrCamera</code>, #485), online or offline. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
+<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>) or, after 4.5.3, a Wii Remote with an IR camera (<code>UserDevice.HasIrCamera</code>, #485), online or offline. After 4.5.3 a Remote Link peer's row has none, the rule the other owner-only controls follow (#248): <code>ComputeShowGunCalibration</code>, which the row fill calls. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
 </tr>
 <tr>
 <td><code>GunIsWiiRemote</code></td>

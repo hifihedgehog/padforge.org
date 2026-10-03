@@ -1069,7 +1069,7 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `GunCalibration` | `string` | `""` | A GunCon 2's or a Wii Remote's aim range as `UserDevice.GunCalibration` keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun or remote. |
-| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`) or, after 4.5.3, a Wii Remote with an IR camera (`UserDevice.HasIrCamera`, #485), online or offline. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
+| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`) or, after 4.5.3, a Wii Remote with an IR camera (`UserDevice.HasIrCamera`, #485), online or offline. After 4.5.3 a Remote Link peer's row has none, the rule the other owner-only controls follow (#248): `ComputeShowGunCalibration`, which the row fill calls. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
 | `GunIsWiiRemote` | `bool` | `false` | *Added after 4.5.3.* The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies `GunCalibrationStatus` and `GunCalibrateTooltip`. |
 | `GunConnectedHere` | `bool` | `false` | The gun's or remote's live device is this PC's own `SdlDeviceWrapper`. A relayed one is calibrated on its owner's PC. |
 | `CanCalibrateGun` | `bool` | - | Computed: `GunConnectedHere && IsOnline`. Enables **Calibrate**. |

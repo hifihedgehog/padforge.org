@@ -446,7 +446,7 @@ PadForge.Engine/
     TouchpadGestureSettings.cs  # (v3.3) Per-(slot, device, padIdx) toggles + thresholds (every feature off by default)
     TouchpadSettingsEntry.cs    # (v3.3) Serialization wrapper that pairs TouchpadGestureSettings with its (DeviceGuid, TouchpadIndex) key inside PadSetting
     SwipeHapticsEvaluator.cs    # (v4.1) Per-(slot, device, pad) finger-travel accumulator emitting a swipe-haptic tick per travel detent (#219)
-    TouchpadGestureAutoArm.cs   # Arms a gesture session without an explicit activation input
+    TouchpadGestureAutoArm.cs   # Turns on the gesture families an imported profile's mappings read
 
   Mouse/                        # Mouse-gesture recognition (#200)
     MouseGestureRecognizer.cs   # Per-tick recognizer over the accumulated mouse path
@@ -772,7 +772,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 | File | Stage | Responsibility |
 |---|---|---|
-| `InputManager.cs` | Core | Fields, constants, `Start()`/`Stop()`, `PollingLoop(int generation)`, `IDisposable`, motion snapshots, DSU broadcast |
+| `InputManager.cs` | Core | Fields, constants, `Start()`/`Stop()`, `PollingLoop(int generation, int pollRun)`, `IDisposable`, motion snapshots, DSU broadcast |
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): per-(slot, device, menu) hover-commit contexts ticked in Step 2, fired items read by Step 3 rows / activators / macro triggers, direct bindings delivered in Step 4b |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
 | `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
@@ -802,7 +802,7 @@ Eleven documented execution contexts. Some run whenever the engine runs, the res
 ### 1. Engine Thread (InputManager, 1000 Hz)
 
 ```csharp
-_pollingThread = new Thread(() => PollingLoop(generation))
+_pollingThread = new Thread(() => PollingLoop(generation, pollRun))
 {
     Name = "PadForge.InputManager",
     IsBackground = true,

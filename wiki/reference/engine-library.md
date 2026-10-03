@@ -900,7 +900,7 @@ Wraps a keyboard device for unified input via `ISdlInputDevice`. State read from
 |--------|-----------|-------------|
 | `Open` | `bool Open(RawInputListener.DeviceInfo deviceInfo)` | Opens from Raw Input enumeration. Builds GUID from device path. Path hash is used as the pseudo SDL instance ID. |
 | `GetCurrentState` | `CustomInputState GetCurrentState(bool forceRaw)` | Reads from `RawInputListener.GetKeyboardState`, merges hooked state via `InputHookManager.MergeHookedKeyState` (suppressed keys bypass Raw Input). |
-| `GetDeviceObjects` | `DeviceObjectItem[]` | 256 button items with `ObjectGuid.Key` GUIDs. Names from `SDL.VirtualKeyName`. |
+| `GetDeviceObjects` | `DeviceObjectItem[]` | 256 button items with `ObjectGuid.Key` GUIDs, one per index in `SupportedButtonIndices`. Names from `SDL.VirtualKeyName`. Built by `KeyObjects`, which a keyboard shared over Remote Link uses too. |
 | `GetInputDeviceType` | `int` | `InputDeviceType.Keyboard` (19). |
 | `SetRumble` / `StopRumble` | | Always `false`. |
 
@@ -941,7 +941,7 @@ Wraps a mouse device for unified input via `ISdlInputDevice`. State read from Ra
 | `Open` | `bool Open(RawInputListener.DeviceInfo deviceInfo)` | Opens from Raw Input enumeration. |
 | `UpdateHandle` | `void UpdateHandle(IntPtr newHandle)` | Swaps in a new Raw Input handle when the same physical mouse re-enumerates (after PTP registration, say). |
 | `GetCurrentState` | `CustomInputState GetCurrentState(bool forceRaw)` | Reads deltas via `ConsumeMouseDelta`, scroll via `ConsumeMouseScroll`, buttons via `GetMouseButtons` + `MergeHookedMouseState`. The deltas feed a `RelativeVelocityWindow` (25 ms, #331): X and Y = `AxisCenter + countsPerSecond * MotionScale / 1000`, scroll = `AxisCenter + windowSum * ScrollScale`, each clamped to 0–65535. The unwindowed per-poll deltas go to `MouseRawDX` / `MouseRawDY`. |
-| `GetDeviceObjects` | `DeviceObjectItem[]` | 3 `RelativeAxis` (X, Y, Scroll) + 5 `PushButton` (L, M, R, X1, X2). |
+| `GetDeviceObjects` | `DeviceObjectItem[]` | 3 `RelativeAxis` (X, Y, Scroll) + 5 `PushButton` (L, M, R, X1, X2). Built by `MouseObjects`, which a mouse shared over Remote Link uses too. |
 | `GetInputDeviceType` | `int` | `InputDeviceType.Mouse` (18). |
 
 ---
@@ -1448,6 +1448,8 @@ public struct ConditionAxisData
 
 Manages `WH_KEYBOARD_LL` and `WH_MOUSE_LL` low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343). *Changed after 4.5.3.* The keyboard hook decides through `ConsumeKey`, which numbers the event with `RawInputListener.KeyIndex` from its `vkCode`, `scanCode` and `LLKHF_EXTENDED`. Numpad Enter reaches the hook as VK_RETURN with `LLKHF_EXTENDED` and a mapping names it 0x88, so the hook used to miss a consumed Numpad Enter and swallow Numpad Enter with a consumed Enter (#486).
 
+*Changed after 4.5.3.* Every key and mouse event PadForge sends through `SendInput` as output, from the Keyboard + Mouse virtual controller and the macro emitters, carries `OutputTag`, 0x50464F55 ("PFOU"), in `dwExtraInfo`. Absolute cursor positioning uses `SetCursorPos`, outside this `SendInput` tagging path. `HandleKeyboardEvent` and `HandleMouseButton`, the hooks' whole decision split from the callbacks, pass a tagged event before anything counts it as physical: no physical-key tracking, hotkeys, chords or consumption. Consuming a key used to swallow PadForge's own output of that key. A `ReplayTag` event is a physical key replayed, and it still takes consumption.
+
 ```csharp
 public class InputHookManager : IDisposable
 {
@@ -1467,10 +1469,12 @@ public class InputHookManager : IDisposable
     // Handheld chords (#343)
     static HandheldChordEngine ChordEngine { get; set; }
     static readonly IntPtr ReplayTag;              // 0x50464843, "PFHC"
+    static readonly IntPtr OutputTag;              // 0x50464F55, "PFOU"
     static event Action ChordWorkPending;
-    static void InjectReplay(int code, bool down);
+    static void InjectReplay(int code, bool down, int ident = 0);
     static void InjectWinMask();
     static bool IsExtendedKey(int vk);
+    static (ushort Vk, bool Extended) OutputKey(int index);
 }
 ```
 
@@ -1487,12 +1491,13 @@ public class InputHookManager : IDisposable
 | `UnregisterGlobalHotkey` / `ClearGlobalHotkeys` | `void UnregisterGlobalHotkey(int id)` / `void ClearGlobalHotkeys()` | Removes one registration, or all of them on engine teardown. |
 | `MergeHookedKeyState` | `static void MergeHookedKeyState(bool[] dest, int count)` | Merges suppressed-key state into dest (hook state is authoritative). Called by `SdlKeyboardWrapper`. |
 | `MergeHookedMouseState` | `static void MergeHookedMouseState(bool[] dest, int count)` | Same for mouse buttons. Called by `SdlMouseWrapper`. |
-| `InjectReplay` / `InjectWinMask` | `static void InjectReplay(int code, bool down)` / `static void InjectWinMask()` | `SendInput` a key or mouse button stamped with `ReplayTag` in `dwExtraInfo`, so the hook passes it through without feeding it back to the chord engine. `InjectWinMask` taps VK 0xFF so releasing a swallowed chord's Win key does not open Start. Call from a worker, never inside a hook callback. |
+| `InjectReplay` / `InjectWinMask` | `static void InjectReplay(int code, bool down, int ident = 0)` / `static void InjectWinMask()` | `SendInput` a key or mouse button stamped with `ReplayTag` in `dwExtraInfo`, so the hook skips the chord engine for it and sends it down the normal consumption path, where a mapped key is still swallowed. `InjectWinMask` taps VK 0xFF so releasing a swallowed chord's Win key does not open Start. Called from the hook callback for a replay an event ends, which must land before that event goes on, and from the replay worker for the timed ones. *Changed after 4.5.3.* `ident` is the physical key the hook saw, its scan code with 0x100 for `LLKHF_EXTENDED` (`ReplayIdentity`), and `ReplayKey` builds `wScan` and `KEYEVENTF_EXTENDEDKEY` from it. Numpad Enter and Enter share VK_RETURN, so a held Numpad Enter used to replay as Enter. |
+| `OutputKey` | `static (ushort Vk, bool Extended) OutputKey(int index)` | *Added after 4.5.3.* The key an authored output index sends: the index as its own VK with the extended-key table, except Numpad Enter's 0x88, which goes out as VK_RETURN with the extended flag. The Keyboard + Mouse virtual controller and the macro key emitter both send through it. |
 
 ### Hook Callbacks
 
-- **Keyboard:** Intercepts `WM_KEYDOWN/UP`, `WM_SYSKEYDOWN/UP`. Tracks physical key state and checks the global hotkeys first, then offers the key to the chord engine, which can swallow it. Returns `(IntPtr)1` to suppress, `CallNextHookEx` to pass through. Captures state into `_hookedKeyState[]` before suppressing (LL hook runs before `WM_INPUT`).
-- **Mouse:** Intercepts button messages (`WM_[LR/M/X]BUTTONDOWN/UP`). Converts via `MouseMessageToButtonId()`. Offers the button to the chord engine when one is set, then captures suppressed buttons into `_hookedMouseState[]`.
+- **Keyboard:** Intercepts `WM_KEYDOWN/UP`, `WM_SYSKEYDOWN/UP` and hands each to `HandleKeyboardEvent`, which passes an `OutputTag` event at once. Tracks physical key state and checks the global hotkeys first, then offers the key to the chord engine, which can swallow it. Returns `(IntPtr)1` to suppress, `CallNextHookEx` to pass through. Captures state into `_hookedKeyState[]` before suppressing (LL hook runs before `WM_INPUT`).
+- **Mouse:** Intercepts button messages (`WM_[LR/M/X]BUTTONDOWN/UP`). Converts via `MouseMessageToButtonId()` and hands each to `HandleMouseButton`, which passes an `OutputTag` event at once. Offers the button to the chord engine when one is set, then captures suppressed buttons into `_hookedMouseState[]`.
 - Events injected by other software (`LLKHF_INJECTED` / `LLMHF_INJECTED`) and PadForge's own `ReplayTag` events skip the chord engine.
 
 ### Button ID Mapping
@@ -1572,10 +1577,10 @@ public struct DeviceInfo
 
 ### Input Processing
 
-- **Keyboard** (`RIM_TYPEKEYBOARD`): Reads `RAWKEYBOARD.VKey` and stores each key at `RawInputListener.KeyIndex`: a modifier reported neutral at its left or right code (Shift by scan code 0x2A or 0x36, Ctrl and Alt by `RI_KEY_E0`), Numpad Enter (VK_RETURN with `RI_KEY_E0`) at `NumpadEnterKey`, 0x88, apart from Enter, and every other key at its own code. *Changed after 4.5.3.* The low-level hook numbers what it swallows through the same table (#486). Per-device state in `ConcurrentDictionary<IntPtr, bool[]>`.
-- **Mouse** (`RIM_TYPEMOUSE`): Accumulates `lLastX`/`lLastY` deltas. Tracks buttons via `usButtonFlags`. Scroll via `RI_MOUSE_WHEEL`.
+- **Keyboard** (`RIM_TYPEKEYBOARD`): Reads `RAWKEYBOARD.VKey` and stores each key at `RawInputListener.KeyIndex`: a modifier reported neutral at its left or right code (Shift by scan code 0x2A or 0x36, Ctrl and Alt by `RI_KEY_E0`), Numpad Enter (VK_RETURN with `RI_KEY_E0`) at `NumpadEnterKey`, 0x88, apart from Enter, and every other key at its own code. *Changed after 4.5.3.* The low-level hook numbers what it swallows through the same table (#486). Per-device state in `ConcurrentDictionary<IntPtr, bool[]>`. *Changed after 4.5.3.* A record that is no key changes nothing: PadForge's own output (`ExtraInformation` equal to `InputHookManager.OutputTagValue`), an overrun (`MakeCode` 0xFF), and a record with no VKey (0xFF), half of an escaped sequence such as the fake Shift around PrintScreen. The make code loses its break bit before `KeyIndex`, since the On-Screen Keyboard can set it. RawInputDemo's keyboard handler does both (`RawInputDeviceKeyboard.cpp` lines 228-244). The iCade driver still sees every record first.
+- **Mouse** (`RIM_TYPEMOUSE`): Accumulates `lLastX`/`lLastY` deltas. Tracks buttons via `usButtonFlags`. Scroll via `RI_MOUSE_WHEEL`. *Changed after 4.5.3.* A record whose `ulExtraInformation` is `OutputTagValue` is PadForge's own output and changes nothing (`ApplyMouseRecord`). Raw Input reports a `SendInput` event's `dwExtraInfo` there, with device handle 0.
 - **Scroll:** `usButtonData` is a signed `short`. Accumulated per-device, consumed by `ConsumeMouseScroll`.
-- **Absolute-mode skip:** when `RAWMOUSE.usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set, `lLastX`/`lLastY` are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader drops the delta for absolute events and still records the same report's buttons and wheel. Matches the policy SDL3 and XInput use for the same situation.
+- **Absolute-mode skip:** when `RAWMOUSE.usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set, `lLastX`/`lLastY` are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader drops the delta for absolute events and still records the same report's buttons and wheel.
 - **Consumer Control** (`RIM_TYPEHID`, #168): each report carries the full set of held usages, read with `HidP_GetUsages`, so the device's slot array is rebuilt from every report rather than edited.
 
 ---
@@ -2802,7 +2807,7 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 
 ### VirtualKeyName Array
 
-`string[256]` array of human-readable Windows VK code names. Built by `BuildVirtualKeyNames()`. Covers standard keys, modifiers, F1–F24, numpad, OEM keys. Used by `SdlKeyboardWrapper.GetDeviceObjects()` for button naming.
+`string[256]` array of human-readable Windows VK code names. Built by `BuildVirtualKeyNames()`. Covers standard keys, modifiers, F1–F24, numpad, OEM keys, and, after 4.5.3, "Numpad Enter" at 0x88, the keyboard state's own index for it. Used by `SdlKeyboardWrapper.GetDeviceObjects()` for button naming.
 
 ### Core Function Categories
 

@@ -5077,7 +5077,7 @@
 <a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a>    TouchpadGestureSettings.cs  # (v3.3) Per-(slot, device, padIdx) toggles + thresholds (every feature off by default)
 <a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a>    TouchpadSettingsEntry.cs    # (v3.3) Serialization wrapper that pairs TouchpadGestureSettings with its (DeviceGuid, TouchpadIndex) key inside PadSetting
 <a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a>    SwipeHapticsEvaluator.cs    # (v4.1) Per-(slot, device, pad) finger-travel accumulator emitting a swipe-haptic tick per travel detent (#219)
-<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>    TouchpadGestureAutoArm.cs   # Arms a gesture session without an explicit activation input
+<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>    TouchpadGestureAutoArm.cs   # Turns on the gesture families an imported profile&#39;s mappings read
 <a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>
 <a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>  Mouse/                        # Mouse-gesture recognition (#200)
 <a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>    MouseGestureRecognizer.cs   # Per-tick recognizer over the accumulated mouse path
@@ -5428,7 +5428,7 @@
 <tr>
 <td><code>InputManager.cs</code></td>
 <td>Core</td>
-<td>Fields, constants, <code>Start()</code>/<code>Stop()</code>, <code>PollingLoop(int generation)</code>, <code>IDisposable</code>, motion snapshots, DSU broadcast</td>
+<td>Fields, constants, <code>Start()</code>/<code>Stop()</code>, <code>PollingLoop(int generation, int pollRun)</code>, <code>IDisposable</code>, motion snapshots, DSU broadcast</td>
 </tr>
 <tr>
 <td><code>InputManager.MenuRuntime.cs</code></td>
@@ -5522,7 +5522,7 @@
 <h2 id="threading-model">Threading Model<a class="headerlink" href="#threading-model" title="Permanent link">&para;</a></h2>
 <p>Eleven documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (<code>OpenVrConsumer</code> for #287, <code>SpaceMouseMonitor</code> / <code>SpaceMouseRead</code> for #288, <code>PsMoveDirectRead</code> / <code>PsMoveDirectWrite</code> for #277, <code>VoiceMacro</code> for #317, <code>PadForge.HeadTrackerUdp</code> for #355), each publishing through the same <code>ISdlInputDevice</code> or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: <code>HeadTrackingRuntime</code> is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (<code>AppSettingsData.HeadTrackingEnabled</code>, <code>AppSettingsData.HeadTrackingFreeTrack</code>) and a nullable per-profile opinion (<code>ProfileData.EnableHeadTracking</code>, <code>ProfileData.EnableHeadTrackingFreeTrack</code>), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.</p>
 <h3 id="1-engine-thread-inputmanager-1000-hz">1. Engine Thread (InputManager, 1000 Hz)<a class="headerlink" href="#1-engine-thread-inputmanager-1000-hz" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">_pollingThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">PollingLoop</span><span class="p">(</span><span class="n">generation</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">_pollingThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">PollingLoop</span><span class="p">(</span><span class="n">generation</span><span class="p">,</span><span class="w"> </span><span class="n">pollRun</span><span class="p">))</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PadForge.InputManager&quot;</span><span class="p">,</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="n">IsBackground</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>

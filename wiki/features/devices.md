@@ -428,6 +428,10 @@ Suppresses only the specific keys or mouse buttons [mapped](mappings.md) to a vi
 
 *Changed after 4.5.3. Pre-release builds have it, and the next release will.* A mapped Numpad Enter is consumed like any other key. Earlier builds let it through to other programs, and consuming the main Enter key swallowed Numpad Enter as well.
 
+Windows' low-level hooks do not say which keyboard or mouse sent an event. Consuming a key consumes it on every keyboard connected to this PC, and a consumed key reads as pressed on every keyboard's row, whichever keyboard pressed it. Mouse buttons work the same way across mice.
+
+*Changed after 4.5.3.* Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.
+
 ### Which to use
 
 | Situation | Method |
@@ -511,6 +515,8 @@ A Namco GunCon 2 gets a **Light Gun** section in the detail pane. The gun times 
 A Wii Remote with its IR camera gets the same section, and its line says whether the remote is calibrated to the screen. **Calibrate** shows the same white screens and targets. From where you play, point the remote at each target and press **B**. A press while the remote can't see the sensor bar is asked for again, and Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. A calibrated remote ignores the Pointer tab's **Sensor Bar Position** and **Vertical Offset**, because the calibration measured where the bar sits. The reset button returns the remote to its default range. [Wii Controllers](../devices/wii-controllers.md#light-gun) covers a light-gun setup.
 
 *Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* A gun or remote reached through [Remote Link](../guides/remote-link.md) has no Light Gun section here, because it is calibrated on the PC it is plugged into. The calibration screen closes if the gun disconnects or reconnects partway through, including a Wii Remote reconnecting when an extension is plugged in. A GunCon 2's aim takes no **Sensor Bar Position** or **Vertical Offset** either, which a Copy From of a Wii Remote's settings would otherwise carry onto the gun.
 
 ---
 
