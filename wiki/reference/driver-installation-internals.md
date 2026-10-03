@@ -430,7 +430,7 @@ An `internal static` class that installs the Nefarius BthPS3 profile driver and 
 public static bool EnsureInstalled(Action<string> log)
 ```
 
-Called from `Ds3PairingService`. Idempotent: when `BthPS3` is already a real service it reconciles the consumer registry values, repairs the PSM filter if its control device is missing, and re-arms patching. It also upgrades an older install in place: when the bundled `BthPS3.inf` carries a newer `DriverVer` than the installed `BthPS3.sys` (the bundle is 3.2.0.2107), `UpgradeInstalledDriversIfOlder` re-runs the three INFs, cycles the radio, and rewrites the consumer values.
+Called from `Ds3PairingService`. Idempotent: when `BthPS3` is already a real service it reconciles the consumer registry values, repairs the PSM filter if its control device is missing, and re-arms patching. It also upgrades an older install in place: when the bundled `BthPS3.inf` carries a newer `DriverVer` than the installed `BthPS3.sys` (the bundle is 3.2.1.2117), `UpgradeInstalledDriversIfOlder` re-runs the three INFs, cycles the radio, and rewrites the consumer values.
 
 The "already installed" probe is `IsServiceInstalled`, which requires `ImagePath` under `SYSTEM\CurrentControlSet\Services\{name}`, not merely that the key exists. Any write under `Services\BthPS3\Parameters` creates the parent on the way down, so a settings write against a driver that was not installed yet left a key that looked installed to a null check and permanently blocked the install. `HasOrphanedBthPs3Key()` detects that exact damaged shape (key present, `ImagePath` absent) and deletes it before installing.
 

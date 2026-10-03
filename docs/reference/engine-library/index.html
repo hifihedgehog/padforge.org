@@ -13459,7 +13459,7 @@
 <td><code>string</code></td>
 <td><code>[XmlElement]</code></td>
 <td><code>""</code></td>
-<td>Whom the stored bias belongs to (#474): the device row's instance GUID, or on a DualShock 3 whose address PadForge can read, the pad as <code>address/source</code>, where the source is <code>direct</code> for PadForge's own connection or <code>node:</code> and the driver release for a pad served through DsHidMini. A DualShock 3 subtracts a stored bias only when this matches. Other devices ignore the field and subtract any finite bias within 0.15 rad/s per axis</td>
+<td>Whom the stored bias belongs to (#474): the device row's instance GUID, or on a DualShock 3 whose address PadForge knows, the pad as <code>address/source</code>, where the source is <code>direct</code> for PadForge's own connection or <code>node:</code> and the driver release for a pad served through DsHidMini, with <code>/cal</code> when DsHidMini holds the pad's EEPROM calibration and zeroes the yaw against it (its node's calibration source, read again a second after a Bluetooth connection starts, when DsHidMini writes it). A DualShock 3 shared over Remote Link carries its owner's identity. A DualShock 3 subtracts a stored bias only when this matches. Other devices ignore the field and subtract any finite bias within 0.15 rad/s per axis</td>
 </tr>
 <tr>
 <td><code>MagBiasX</code> / <code>MagBiasY</code> / <code>MagBiasZ</code> / <code>MagFieldNorm</code></td>

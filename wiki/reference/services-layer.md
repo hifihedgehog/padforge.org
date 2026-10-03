@@ -1326,9 +1326,13 @@ Cancels any existing recording, captures baseline `CustomInputState`, sets `mapp
 
 `StartRecordingInternal` sets `_motionKind` from the target, 1 for `MotionGyro` and 2 for `MotionAccel`, unless a param field is being recorded, because a modifier is a button. With a motion kind and no active device carrying that sensor (`HasGyro` / `HasGyroAux`, `HasAccel` / `HasAccelAux`), recording does not start: the status bar shows `Status_NoMotionSensorToRecord_Format` and `RecordingTimedOut` fires. Otherwise the prompt is `Status_RecordingMotionPrompt_Format`, and each tick runs `DetectMotion` and nothing else for each device.
 
-A gyro records once its rate magnitude reaches 1.5 rad/s (`MotionRecordGyroRadPerSec`, about 86°/s). An accelerometer records once its vector moves half a g from the baseline (`MotionRecordAccelMs2`). The aux sensor wins when it moved more, recording `Motion Gyro L` or `Motion Accel L`. An accelerometer whose baseline has no reading, under half a g, takes its first reading as the baseline instead of counting it as a shake (`AccelReferenceMissing`): a device that had just connected, or a Nunchuk plugged in mid-recording.
+A gyro records once its rate moves 1.5 rad/s (`MotionRecordGyroRadPerSec`, about 86°/s) from the reading at the start, the accelerometer's rule, so a pad that rests off zero records only when it turns: a DualShock 3's yaw rests near 2.7 rad/s on PadForge's own path. An accelerometer records once its vector moves half a g from the baseline (`MotionRecordAccelMs2`). The aux sensor wins when it moved more, recording `Motion Gyro L` or `Motion Accel L`. An accelerometer whose baseline has no reading, under half a g, takes its first reading as the baseline instead of counting it as a shake (`AccelReferenceMissing`): a device that had just connected, or a Nunchuk plugged in mid-recording.
 
 The Motion Pitch, Yaw and Roll rows record like stick axis rows: `IsButtonLikeRecordingTarget` is false for them, and `ShouldAutoInvert` gives them the stick-axis rule.
+
+#### Halves
+
+A centered axis recorded for a press is stored as the half the user pushed, the `H` prefix (`RecordsAHalf`): on a button-like row, and on a trigger, a one-way Extended axis or one of the ten button pressure rows whose source is a Toggle or Rapid Trigger, which reads the pull as pressed past a threshold. A Direct source there keeps the full axis, and so does any axis that rests at zero (`InputManager.AxisRestsAtZero`: a gamepad trigger, a slider, a VR trigger or grip). A mouse's positive direction keeps the full axis and its negative direction takes the half (#200). Without the half, a stick at rest sits on the press threshold's center line and reads pressed with nothing touched.
 
 #### `CancelRecording()` (public)
 

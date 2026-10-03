@@ -1242,7 +1242,7 @@ Every row writes the `Trim*` and `Motion*` attributes, whatever its target, and 
 
 **File:** `PadForge.Engine/Data/MappingSource.cs`
 
-Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are read only when the matching `Kind` is set, but persist across kind changes so flipping back-and-forth keeps the user's settings.
+Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are read only when the matching `Kind` is set, but persist across kind changes so flipping back-and-forth keeps the user's settings. Every `double` field refuses a value that is not finite (NaN or infinity) and keeps the one it had, on load and from the grid alike, so a hand-edited or damaged file cannot carry one into the engine. The view models' number setters refuse NaN the same way (`FiniteObservableObject`).
 
 | Member | Type | Default | Description |
 |---|---|---|---|

@@ -50,8 +50,8 @@ A controller that neither source lays out keeps numbered names (**Button 3**, **
 
 | Adapter | Controllers with named inputs |
 |---|---|
-| 3.x | Atari joystick, ColecoVision, Dreamcast, GameCube, Genesis 3-button and 6-button, Nintendo 64, Neo Geo, NES, PlayStation digital pad, DualShock, DualShock 2, Saturn pad and 3D Control Pad, SNES, TurboGrafx-16, 3DO, Wii Classic Controller |
-| 4.x (GPA) | All of the 3.x list except the ColecoVision, plus the Atari 5200, Atari paddles, Master System paddle, Arkanoid, Bally Astrocade, Gemini paddles, Pippin, CD-i, Dreamcast ASCII pad, PC gameport joystick, Jaguar, Wii Nunchuk, TurboGrafx-16 6-button pad, PlayStation flight stick, PlayStation pad, FM Towns pad, Virtual Boy and XE-1 AP |
+| 3.x | Atari joystick, ColecoVision, Dreamcast, GameCube, Genesis 3-button and 6-button, Jaguar, Nintendo 64, Neo Geo, NES, PlayStation digital pad, DualShock, DualShock 2, Saturn pad and 3D Control Pad, SNES, TurboGrafx-16, 3DO, Wii Classic Controller |
+| 4.x (GPA) | All of the 3.x list except the ColecoVision, plus the Atari 5200, Atari paddles, Master System paddle, Arkanoid, Bally Astrocade, Gemini paddles, Pippin, CD-i, Dreamcast ASCII pad, PC gameport joystick, Wii Nunchuk, TurboGrafx-16 6-button pad, PlayStation flight stick, PlayStation pad, FM Towns pad, Virtual Boy and XE-1 AP |
 
 ---
 
@@ -76,7 +76,7 @@ Each controller follows SDL's own mapping for its console's pad where SDL has on
 | Neo Geo | A | B | C | D | |
 | TurboGrafx-16 | II | I | | | Run is Start |
 | 3DO | B | C | A | | X is Back and P is Start |
-| Jaguar | B | C | A | | |
+| Jaguar | B | C | A | | Option is Back and Pause is Start |
 | Atari joystick | Fire | | | | |
 | ColecoVision | Right fire | Left fire | | | |
 
@@ -84,7 +84,9 @@ Sticks and the D-pad land on the virtual controller's sticks and D-pad, and Star
 
 The N64 follows SDL's mapping exactly. Its C buttons do not form a right stick, and C-Right lands on Misc 2, which only the Switch 2 Pro's C button takes. Bind them yourself if a game wants them elsewhere.
 
-A port assigned while it is empty is mapped as soon as the adapter reports a controller in it, on every slot that has nothing from the port yet. A slot that already has mappings from the port keeps them when you plug in a different kind of controller. To map the new one fresh, unassign the port from the slot and assign it again.
+A port assigned while it is empty or unplugged gets its default mapping once PadForge can place its controls: with the switch on, when the adapter reports a controller in the port, and with the switch off, when the port connects. Until then the slot shows nothing from the port. A row you set, record or clear in the meantime keeps what you gave it, and the rest fill in. **Clear All**, **Paste** and **Copy From...** on the slot, and turning on **Force Raw Joystick Mode** for the port, cancel the pending mapping. A change to the **DualShock 3 (SIXAXIS): Full** preset while the port's DualShock 2 is unplugged fills its pressure rows the same way once it is back.
+
+A slot mapped with a controller in the port keeps that mapping when you plug in a different kind of controller. To map the new one fresh, unassign the port from the slot and assign it again.
 
 ---
 
@@ -121,7 +123,7 @@ The motors change hands on the input engine's next cycle after you turn the swit
 
 ## Dance mats and the arrows
 
-A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, which the mapping picker lists as **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow**. Map those, not the hat. A 3.x adapter keeps sending them until it starts a new search after a controller its own search found. A controller already plugged in when the adapter powered up is found another way, so the arrows it turned on keep coming for the next controller too, until that one is unplugged. While such an adapter searches an empty port, it reports all four arrows held, and PadForge clears them once it reads that the adapter is searching, within half a second unless the port is storing a picture. A GPA keeps sending them until it powers off, until a ColecoVision controller, Super Action Controller or ColecoVision wheel is plugged in, until it reads an Atari port as a Trak-Ball, or until its settings go back to their defaults. It sends them from power-up when its stored setting for them is on. A GPA never turns them on for the Genesis 3-button pad or the FM Towns pad, and the PC-FX pad's own buttons share their bits, so PadForge names them for none of the three, and only for a controller whose layout has a D-pad.
+A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, which the mapping picker lists as **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow**. Map those, not the hat. A 3.x adapter keeps sending them until it starts a new search after a controller its own search found. A controller already plugged in when the adapter powered up is found another way, so the arrows it turned on keep coming for the next controller too, until that one is unplugged. While such an adapter searches an empty port, it reports all four arrows held, and PadForge clears them once it reads that the adapter is searching, within half a second unless the port is storing a picture. A GPA keeps sending them until it powers off, until a ColecoVision controller, Super Action Controller or ColecoVision wheel is plugged in, until it reads an Atari port as a Trak-Ball, or until its settings go back to their defaults. It sends them from power-up when its stored setting for them is on. A GPA never turns them on for the Genesis 3-button pad or the FM Towns pad, and the PC-FX pad's own buttons share their bits, so PadForge names them for none of the three, and only for a controller whose layout has a D-pad. On a 3.x adapter the Jaguar's keypad sits on those four buttons, so there they keep the keypad's names.
 
 On a 3.x adapter, select a PlayStation dance mat's card and tick **Read Arrows One by One**, and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips most of its own reads of the pad while they do. Once opposite directions have been pressed and the adapter sends the arrows itself, PadForge stops asking, until another controller is plugged in.
 

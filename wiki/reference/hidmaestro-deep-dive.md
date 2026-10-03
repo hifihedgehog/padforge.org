@@ -21,13 +21,13 @@ The interim milestones a successor should know, each one PadForge's own call sit
 
 | HM version | What landed | Where PadForge depends on it |
 |---|---|---|
-| v1.3.18 (HM#33) | Virtual Switch Pro profile and the IMU submission channel | `HMaestroVirtualController.cs:72` and `:1055` |
+| v1.3.18 (HM#33) | Virtual Switch Pro profile and the IMU submission channel | `HMaestroVirtualController.cs:72` and `:1117` |
 | v1.3.21 (HM#37) | Switch Pro Bluetooth descriptor corrected to the real pad's wire shape | The Nintendo category's BT report shape |
 | v1.3.22 (HM#38) | Input worker survives foreign stop signals, the structural fix for the frozen-output bug | `App.xaml.cs:412` (the startup orphan sweep's ordering barrier) |
-| v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:1493`, `HMaestroVirtualController.cs:87` |
+| v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:1494`, `HMaestroVirtualController.cs:87` |
 | v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:2523` |
 | v1.4.3 (HM#42) | The usbip-vhci node HM owns is stamped, so the persona guard can identify it | `InputManager.Step1.UsbipVhciGuard.cs:18` |
-| v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1768` |
+| v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1788-1789` |
 | v1.6.0 (HM#32) | Native OpenVR driver behind `HMVRController` | `HMaestroVRController.cs:9` |
 | v1.7.0 (HM#56) | Per-instance usbip serials and the three Valve composite persona profiles (`steam-deck-composite`, `steam-controller-composite`, `steam-controller-2`). They were withheld from the pickers until their art landed. `WithheldProfileIds` is empty in 4.5.3 | `HMaestroProfileCatalog.cs:297` (`WithheldProfileIds`), `ValveReportPackers.cs` |
 | v1.7.1 (HM#58) | The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and `SubmitRawExtendedReport` is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing | `HMaestroVirtualController.cs:562` (`SubmitRawReport`), `PadForge.App.csproj:299`. See [Raw frames](#raw-frames-submitrawreport-versus-submitrawextendedreport) |
