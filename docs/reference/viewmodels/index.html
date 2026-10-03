@@ -12294,13 +12294,13 @@
 <td><code>ShowGunCalibration</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>) or, after 4.5.3, a Wii Remote with an IR camera (<code>UserDevice.HasIrCamera</code>, #485), online or offline. After 4.5.3 a Remote Link peer's row has none, the rule the other owner-only controls follow (#248): <code>ComputeShowGunCalibration</code>, which the row fill calls. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
+<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>) or a Wii Remote with an IR camera (<code>UserDevice.HasIrCamera</code>, #485), online or offline. A Remote Link peer's row has none, the rule the other owner-only controls follow (#248): <code>ComputeShowGunCalibration</code>, which the row fill calls. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
 </tr>
 <tr>
 <td><code>GunIsWiiRemote</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td><em>Added after 4.5.3.</em> The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies <code>GunCalibrationStatus</code> and <code>GunCalibrateTooltip</code>.</td>
+<td>The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies <code>GunCalibrationStatus</code> and <code>GunCalibrateTooltip</code>.</td>
 </tr>
 <tr>
 <td><code>GunConnectedHere</code></td>
@@ -12330,7 +12330,7 @@
 <td><code>GunCalibrateTooltip</code></td>
 <td><code>string</code></td>
 <td>-</td>
-<td><em>Added after 4.5.3.</em> Computed: what <strong>Calibrate</strong> does for this gun, <code>Devices_WiiCalibrateTooltip</code> for a Wii Remote, else <code>Devices_GunCalibrateTooltip</code>.</td>
+<td>Computed: what <strong>Calibrate</strong> does for this gun, <code>Devices_WiiCalibrateTooltip</code> for a Wii Remote, else <code>Devices_GunCalibrateTooltip</code>.</td>
 </tr>
 <tr>
 <td><code>ShowReadAsICade</code></td>
@@ -12869,7 +12869,7 @@
 <li>Reseeds <code>ExtendedConfig</code> from the profile (<code>SyncExtendedConfigFromProfile</code>): <code>ThumbstickCount</code> and <code>TriggerCount</code> from <code>HMProfile.StickCount</code> / <code>TriggerCount</code>, <code>PovCount</code> from <code>HasHat</code>, <code>ButtonCount</code> from <code>HMProfile.ButtonCount</code>, or on a Nintendo lettered profile from its own lettered count. That lettered count is authoritative rather than a <code>Min</code> against the SDK-reported one: taking a <code>Min</code> let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from <code>NintendoPreviewMap</code> instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces <code>ExtendedConfig.Customize</code> on.</li>
 <li>Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (<code>SyncMacroButtonStyle</code>), and re-gates the Bass Shakers tab.</li>
 </ol>
-<p>Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (<code>SyncMacroButtonStyle</code>), and a live preset change first fills, from the slot's pads, what the new preset's default maps and the outgoing one's does not (<code>DeviceService.FillEmptyPresetMappingsForSlot</code>): the Full preset's pressure rows, and the touchpad, Mic Mute and Edge rows a DualShock 3 preset withheld. A field the outgoing default mapped and the user cleared on that wire stays cleared. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: <code>MacroButtonNames.DeriveStyle</code> returns <code>DualShock3</code> for a PlayStation slot on either DualShock 3 preset (<code>HMaestroProfileCatalog.IsDualShock3</code>).</p>
+<p>Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (<code>SyncMacroButtonStyle</code>). On a PlayStation slot, a live preset change first fills, from the slot's pads, what the new preset's default maps and the outgoing one's does not (<code>DeviceService.FillEmptyPresetMappingsForSlot</code>): the Full preset's pressure rows, and the touchpad, Mic Mute and Edge rows a DualShock 3 preset withheld. A field the outgoing default mapped and the user cleared on that wire stays cleared. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: <code>MacroButtonNames.DeriveStyle</code> returns <code>DualShock3</code> for a PlayStation slot on either DualShock 3 preset (<code>HMaestroProfileCatalog.IsDualShock3</code>).</p>
 <h3 id="extended-configuration">Extended Configuration<a class="headerlink" href="#extended-configuration" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -14663,7 +14663,7 @@
 <td><code>double</code></td>
 <td><code>100</code></td>
 <td>20 to 250</td>
-<td>The smoothing time constant. The setter clamps, and a value that isn't a number becomes 100.</td>
+<td>The smoothing time constant. The setter clamps, and a value that is not finite (NaN or infinity) becomes 100.</td>
 </tr>
 </tbody>
 </table>
@@ -15669,7 +15669,7 @@
 <tr>
 <td><code>ParamInputs</code> / <code>ParamInputsView</code></td>
 <td><code>ObservableCollection&lt;InputChoice&gt;</code> / <code>ICollectionView</code></td>
-<td>(#475) The full list for the modifier and Up / Down pickers and <code>MappingSourceItem.ResolveParamChoice</code>. It differs from <code>AvailableInputs</code> only on the Motion rows, where an Invert On Hold modifier still needs a button. Set by <code>UseSharedParamInputs</code>, which collapses back to <code>AvailableInputs</code> when the two are the same list.</td>
+<td>(#475) The slot's list, <code>SlotAvailableInputs</code>, for the modifier and Up / Down pickers and <code>MappingSourceItem.ResolveParamChoice</code>. It differs from <code>AvailableInputs</code> only on the Motion Gyro and Motion Accelerometer rows, where an Invert On Hold modifier still needs a button. Set by <code>UseSharedParamInputs</code>, which collapses back to <code>AvailableInputs</code> when the two are the same list.</td>
 </tr>
 <tr>
 <td><code>AvailableInputsView</code></td>
@@ -16158,13 +16158,13 @@
 <td><code>PresetCarriesNoMotion</code></td>
 <td><code>bool</code> (init)</td>
 <td><code>false</code></td>
-<td>Set by the grid builder on all five Motion rows of the DualShock 3 and Switch 2 Pro presets (<code>HMaestroProfileCatalog.ReportCarriesNoMotion</code>).</td>
+<td>Set by the grid builder on all five Motion rows of the DualShock 3 (SIXAXIS), Switch 2 Pro and plain Steam Deck presets (<code>HMaestroProfileCatalog.ReportCarriesNoMotion</code>).</td>
 </tr>
 <tr>
 <td><code>MotionRowNote</code> / <code>ShowMotionRowNote</code></td>
 <td><code>string</code> / <code>bool</code></td>
 <td><code>null</code> / <code>false</code></td>
-<td>The note under the row. On a Motion Gyro or Motion Accelerometer row, a source whose descriptor is not a <code>Motion</code> one: <code>Pad_Mapping_MotionRowUnreadNote</code>. On any other row, a bundled motion source: <code>Pad_Mapping_MotionSourceElsewhereNote</code>. Otherwise, on a preset without motion, <code>Pad_Mapping_MotionPresetNote</code> on the Motion rows. InvertOnHold modifiers are skipped. Raised when the primary or an extra source changes.</td>
+<td>The note under the row. On a Motion Gyro or Motion Accelerometer row, a source whose descriptor is not a <code>Motion</code> one: <code>Pad_Mapping_MotionRowUnreadNote</code>. On any other row, a bundled motion source: <code>Pad_Mapping_MotionSourceElsewhereNote</code>. Otherwise, on a preset without motion, <code>Pad_Mapping_MotionPresetNote</code> on the Motion rows, and on the DualShock 3 (SIXAXIS): Full, whose report carries no pitch or roll rate (<code>PresetCarriesNoPitchRollRate</code>), <code>Pad_Mapping_MotionPitchRollRateNote</code> on Motion Pitch and Motion Roll in Speed mode. InvertOnHold modifiers are skipped. Raised when the primary, an extra source or <code>MotionResponse</code> changes.</td>
 </tr>
 </tbody>
 </table>
@@ -19109,7 +19109,7 @@
 </tr>
 </tbody>
 </table>
-<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
+<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>824b4224</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
 <h3 id="extendedslotconfigdata">ExtendedSlotConfigData<a class="headerlink" href="#extendedslotconfigdata" title="Permanent link">&para;</a></h3>
 <p>Serializable DTO for persisting in PadForge.xml. All properties have <code>[XmlAttribute]</code>.</p>
 <table>
@@ -20295,7 +20295,7 @@
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> bound to <code>PadViewModel</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

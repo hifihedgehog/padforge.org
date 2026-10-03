@@ -4972,7 +4972,7 @@
 <li>Enable <strong>"Enable DSU Motion Server (CemuHook Motion Provider Protocol)"</strong> on the <a href="../features/dashboard/">Dashboard</a>: Status should show "Listening on :26760".</li>
 <li>Match the port (default 26760) between PadForge and the emulator. "Port 26760 in use" means another app (BetterJoy, DS4Windows) is on that port.</li>
 <li>Use <code>127.0.0.1</code> as the server address. PadForge binds to loopback only.</li>
-<li>Confirm the controller has motion sensors on the <a href="../features/devices/">Devices</a> page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion. A controller without motion sensors feeds it through the <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows.</li>
+<li>Confirm the controller has motion sensors on the <a href="../features/devices/">Devices</a> page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion. A controller without motion sensors feeds it through the <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows, which only PlayStation, Nintendo and Valve Extended slots carry.</li>
 <li>DSU protocol supports slots 1-4 only. Assign the motion device to one of those slots.</li>
 <li>The DSU server binds to loopback only, so no firewall rule is involved. An emulator on another machine cannot reach it at all.</li>
 <li>In the emulator's motion settings, add a DSU server at <code>127.0.0.1</code> with the matching port and select the correct slot.</li>
@@ -4984,7 +4984,7 @@
 <li>Those two rows read only a controller's own motion sensor. A note under the row names the problem when it holds anything else.</li>
 <li>Bind the stick to the <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows instead: Motion Pitch from the stick's Y axis, Motion Yaw or Motion Roll from its X axis.</li>
 <li>Remove the stick and button sources from the Motion Gyro row.</li>
-<li>The rows need a slot that carries motion: PlayStation, Nintendo, or Extended on a Valve profile. On the DualShock 3 and Switch 2 Pro presets only the DSU server receives the motion.</li>
+<li>The rows need a slot that carries motion: PlayStation, Nintendo, or Extended on a Valve profile. On the DualShock 3 (SIXAXIS), Switch 2 Pro and plain Steam Deck presets only the DSU server receives the motion.</li>
 </ol>
 <hr />
 <h2 id="web-controller-not-connecting">Web Controller Not Connecting<a class="headerlink" href="#web-controller-not-connecting" title="Permanent link">&para;</a></h2>
@@ -5244,7 +5244,7 @@
 <ol>
 <li>The IR pointer needs a <strong>sensor bar or any IR light source</strong> in view of the remote's camera. It reads the two sensor-bar dots. Until the remote first sees both, it reports centered.</li>
 <li>A powered USB sensor bar or a pair of IR emitters both drive it. The bar only needs to emit IR, it carries no data.</li>
-<li>Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead (changed after 4.5.3, in pre-release builds).</li>
+<li>Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead.</li>
 <li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.</li>
 <li>A right Joy-Con's <strong>IR Brightness</strong> source is different. It reports a single cover/proximity value, not an X/Y pointer.</li>
 </ol>
@@ -5616,7 +5616,7 @@
 <li><a href="../devices/wii-controllers/">Wii Controllers</a>: Holds, emulator setup, and the Motion Plus limitation</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

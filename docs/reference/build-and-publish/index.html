@@ -3866,10 +3866,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#automatic-releases-push-to-v4-dev-only" class="md-nav__link">
+  <a href="#automatic-releases-push-to-v5-dev-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Automatic Releases (push to v4-dev only)
+        Automatic Releases (push to v5-dev only)
       
     </span>
   </a>
@@ -4617,10 +4617,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#automatic-releases-push-to-v4-dev-only" class="md-nav__link">
+  <a href="#automatic-releases-push-to-v5-dev-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Automatic Releases (push to v4-dev only)
+        Automatic Releases (push to v5-dev only)
       
     </span>
   </a>
@@ -5812,12 +5812,12 @@ Carbon set whole and bring only their own shell texture.</p>
 <h3 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">on</span><span class="p">:</span>
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v5-dev</span><span class="p p-Indicator">]</span>
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v4-dev</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">v5-dev</span><span class="p p-Indicator">]</span>
 <a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
 </code></pre></div>
-<p>Runs on every push/PR to <code>v4-dev</code> and on manual trigger.</p>
+<p>Runs on every push/PR to <code>v5-dev</code> and on manual trigger.</p>
 <h3 id="build-job-one-per-architecture">Build job (one per architecture)<a class="headerlink" href="#build-job-one-per-architecture" title="Permanent link">&para;</a></h3>
 <p>A matrix runs <code>win-x64</code> and <code>win-arm64</code> side by side on <code>windows-latest</code>. Nearly all of a build is the art pack and each architecture packs its own, so two publishes in one job would double the wall clock. <code>fail-fast</code> is off: a broken ARM64 build shows red on the run and does not cancel the x64 build the dev feed depends on. x64 keeps every name it has always had, and ARM64 adds <code>-arm64</code>.</p>
 <ol>
@@ -5835,13 +5835,13 @@ Carbon set whole and bring only their own shell texture.</p>
 <li><strong>Release rolling dev archive</strong>. Uploads the zips to the active archive part with <code>--clobber</code>, rolling to a new part first when the active one is full</li>
 </ol>
 <h3 id="latest-job-push-only">Latest job (push only)<a class="headerlink" href="#latest-job-push-only" title="Permanent link">&para;</a></h3>
-<p><code>latest</code> rewrites <code>latest-v4-dev</code>. It runs only after a successful <code>archive</code> job, on <code>ubuntu-latest</code>, in a concurrency group per branch: one run publishes, one waits, and a third that arrives replaces the waiting one.</p>
+<p><code>latest</code> rewrites <code>latest-v5-dev</code>. It runs only after a successful <code>archive</code> job, on <code>ubuntu-latest</code>, in a concurrency group per branch: one run publishes, one waits, and a third that arrives replaces the waiting one.</p>
 <ol>
 <li><strong>Decide whether this commit should be published</strong>. Builds do not finish in push order, so the job asks the branch as it is now. A commit that a force-push left out of the branch's history is skipped, and so is a commit older than the one already published. An API error fails the job and leaves the published release untouched</li>
 <li><strong>Fetch this build from the archive</strong>. Downloads the zips the archive job uploaded and renames them <code>PadForge.zip</code> and <code>PadForge-arm64.zip</code>, so nothing is compressed twice</li>
-<li><strong>Stage, then swap</strong>. Deletes staging drafts that dead runs left, creates the new release as a draft titled <code>PadForge r{N}@{SHA}</code> with its zips attached, and checks that every file uploaded. Only then does it delete the old release, move the <code>latest-v4-dev</code> tag to this commit, and publish the draft under that tag. It reads the release back and fails if the files or the commit differ</li>
+<li><strong>Stage, then swap</strong>. Deletes staging drafts that dead runs left, creates the new release as a draft titled <code>PadForge r{N}@{SHA}</code> with its zips attached, and checks that every file uploaded. Only then does it delete the old release, move the <code>latest-v5-dev</code> tag to this commit, and publish the draft under that tag. It reads the release back and fails if the files or the commit differ</li>
 </ol>
-<h3 id="automatic-releases-push-to-v4-dev-only">Automatic Releases (push to v4-dev only)<a class="headerlink" href="#automatic-releases-push-to-v4-dev-only" title="Permanent link">&para;</a></h3>
+<h3 id="automatic-releases-push-to-v5-dev-only">Automatic Releases (push to v5-dev only)<a class="headerlink" href="#automatic-releases-push-to-v5-dev-only" title="Permanent link">&para;</a></h3>
 <p>On push (not PR), the workflow maintains two GitHub releases keyed off the branch ref name:</p>
 <table>
 <thead>
@@ -5852,18 +5852,18 @@ Carbon set whole and bring only their own shell texture.</p>
 </thead>
 <tbody>
 <tr>
-<td><strong><code>archive-v4-dev</code></strong></td>
+<td><strong><code>archive-v5-dev</code></strong></td>
 <td>Accumulates every build as <code>PadForge_r{N}@{SHA}.zip</code> and <code>PadForge_r{N}@{SHA}-arm64.zip</code>. Uploads with <code>--clobber</code>. Preserves the tag across builds. Rolls to a new part when full (see below).</td>
 </tr>
 <tr>
-<td><strong><code>latest-v4-dev</code></strong></td>
+<td><strong><code>latest-v5-dev</code></strong></td>
 <td>Replaced when a push's build is newer than the published one. Titled <code>PadForge r{N}@{SHA}</code>, with <code>PadForge.zip</code> (x64) and <code>PadForge-arm64.zip</code> from that build. The "always current" download link. The replacement is built as a draft and swapped in only once it holds every file, so a failed upload never leaves the link without a download.</td>
 </tr>
 </tbody>
 </table>
-<p>Both are pre-releases. The notes of <code>latest-v4-dev</code> link to the archive part that holds its build and to the run's log, and the first archive part's notes link to <code>latest-v4-dev</code>.</p>
+<p>Both are pre-releases. The notes of <code>latest-v5-dev</code> link to the archive part that holds its build and to the run's log, and the first archive part's notes link to <code>latest-v5-dev</code>.</p>
 <p>The in-app updater's pre-release channel reads <code>latest-v{major}-dev</code>: it takes the build number from the title <code>PadForge r{N}@{SHA}</code> and picks <code>PadForge.zip</code> or <code>PadForge-arm64.zip</code> by name. A comment in <code>build.yml</code> says so. Renaming the tag, the title format, or either zip breaks that channel for every installed copy. See <a href="../updates-internals/#couplings">Updates Internals</a>.</p>
-<p><strong>Rolling archive parts.</strong> GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 990 assets, creates the next numbered part (<code>archive-v4-dev-2</code>, <code>archive-v4-dev-3</code>, and so on) targeting the current commit. The count is read without a lock, so runs that overlap all see the same number, and 990 leaves room for five of them at once. Each new part's notes link back to the previous part.</p>
+<p><strong>Rolling archive parts.</strong> GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 990 assets, creates the next numbered part (<code>archive-v5-dev-2</code>, <code>archive-v5-dev-3</code>, and so on) targeting the current commit. The count is read without a lock, so runs that overlap all see the same number, and 990 leaves room for five of them at once. Each new part's notes link back to the previous part.</p>
 <h3 id="artifact-naming">Artifact Naming<a class="headerlink" href="#artifact-naming" title="Permanent link">&para;</a></h3>
 <p>Format: <code>PadForge_r{COMMIT_COUNT}@{7-char COMMIT_SHA}</code> (e.g., <code>PadForge_r342@f35bb36</code>), with <code>-arm64</code> appended for the ARM64 build</p>
 <h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
@@ -5911,7 +5911,7 @@ Carbon set whole and bring only their own shell texture.</p>
 <a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="nb">cd</span><span class="w"> </span>../../win-arm64/publish
 <a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>zip<span class="w"> </span>-r<span class="w"> </span>PadForge-vX.Y.Z-win-arm64.zip<span class="w"> </span>.
 </code></pre></div>
-<p>Each publish directory holds one file, so the 4.5.3 assets are <code>PadForge-v4.5.3-win-x64.zip</code> and <code>PadForge-v4.5.3-win-arm64.zip</code>, each containing <code>PadForge.exe</code> and nothing else. Only the x64 exe can be run on an x64 bench.</p>
+<p>Each publish directory holds one file, so the 5.0.0 assets are <code>PadForge-v5.0.0-win-x64.zip</code> and <code>PadForge-v5.0.0-win-arm64.zip</code>, each containing <code>PadForge.exe</code> and nothing else. Only the x64 exe can be run on an x64 bench.</p>
 <p>The in-app updater finds a release by these names: a <code>vX.Y.Z</code> tag with no suffix, zips ending in <code>-win-x64.zip</code> and <code>-win-arm64.zip</code>, and <code>PadForge.exe</code> at the root of each zip. It offers an asset only when GitHub reports a SHA-256 <code>digest</code> for it. See <a href="../updates-internals/#couplings">Updates Internals</a>.</p>
 <h3 id="6-create-github-release">6. Create GitHub Release<a class="headerlink" href="#6-create-github-release" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;PadForge vX.Y.Z&quot;</span><span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;Release notes here&quot;</span>
@@ -6178,7 +6178,7 @@ Carbon set whole and bring only their own shell texture.</p>
 <li><a href="../updates-internals/">Updates Internals</a>: the build identity stamp and the release names the in-app updater reads</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

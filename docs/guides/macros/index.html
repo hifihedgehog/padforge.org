@@ -5835,7 +5835,7 @@
 <h3 id="button-press-button-release">Button Press / Button Release<a class="headerlink" href="#button-press-button-release" title="Permanent link">&para;</a></h3>
 <p>Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.</p>
 <ul>
-<li>Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names. In pre-release builds a PlayStation slot on a DualShock 3 preset names Select and Start, and has no Touchpad button.</li>
+<li>Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names. A PlayStation slot on a DualShock 3 preset names Select and Start, and has no Touchpad button.</li>
 <li>Select more than one button to fire them together.</li>
 </ul>
 <h3 id="key-press-key-release">Key Press / Key Release<a class="headerlink" href="#key-press-key-release" title="Permanent link">&para;</a></h3>
@@ -6044,9 +6044,10 @@
 </ul>
 <p>It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.</p>
 <h3 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h3>
-<p>Paints every Razer Chroma device one color for the action's <strong>Duration</strong>, then hands the lighting back to Razer Synapse. It needs Synapse running, and it works whether or not the <a href="../../features/lightbar-mirrors/#razer-chroma">Razer Chroma lightbar mirror</a> is on. While a macro paints, its color wins over the mirror's.</p>
+<!-- SCREENSHOT: macro-set-chroma-color -->
+<p><img alt="The Set Chroma Color action editor with its Duration and color" src="../../images/macro-set-chroma-color.png" /></p>
+<p>Paints every Razer Chroma device one color for the action's <strong>Duration</strong>. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the <a href="../../features/lightbar-mirrors/#razer-chroma">Razer Chroma lightbar mirror</a> is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.</p>
 <p>To hold the color for as long as the trigger is held, use <strong>While Held</strong> with <strong>Until Release</strong> and a long <strong>Duration</strong>. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.</p>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <h3 id="show-dreamcast-screen">Show Dreamcast Screen<a class="headerlink" href="#show-dreamcast-screen" title="Permanent link">&para;</a></h3>
 <p>Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port whose controller is assigned to the macro's slot, then returns each port to its own screen setting. The action fires once and the macro moves on while the pictures play.</p>
 <table>
@@ -6072,7 +6073,6 @@
 </tbody>
 </table>
 <p>It needs <strong>Read Bliss-Box Adapters</strong> on. See <a href="../../features/bliss-box/#dreamcast-screen">Bliss-Box Adapters</a>.</p>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <h3 id="clear-lightbar-override">Clear Lightbar Override<a class="headerlink" href="#clear-lightbar-override" title="Permanent link">&para;</a></h3>
 <p>Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.</p>
 <h3 id="set-lightbar-mode">Set Lightbar Mode<a class="headerlink" href="#set-lightbar-mode" title="Permanent link">&para;</a></h3>
@@ -6130,7 +6130,7 @@
 <p>Per slot, volatile (resets on profile switch and app restart). Lets a macro hold gyro on for one trigger pull then release it without rebinding the engage button. Combines with the Aim Engage button via OR. Either source can engage. Both must release to disengage.</p>
 <h3 id="gyro-recenter">Gyro Recenter<a class="headerlink" href="#gyro-recenter" title="Permanent link">&para;</a></h3>
 <p>Zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Imported Steam configs use it for their camera-reset bindings.</p>
-<p>In pre-release builds it also levels the turn the <a href="../../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows built with <strong>Speed</strong>. A lean an <strong>Angle</strong> row holds stays, because the stick still holds it.</p>
+<p>It also levels the turn the <a href="../../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a> rows built with <strong>Speed</strong>. A lean an <strong>Angle</strong> row holds stays, because the stick still holds it.</p>
 <h3 id="cycle-pointer-modes-set-pointer-mode">Cycle Pointer Modes / Set Pointer Mode<a class="headerlink" href="#cycle-pointer-modes-set-pointer-mode" title="Permanent link">&para;</a></h3>
 <p>Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the <strong>Pointer</strong> tab (see <a href="../../devices/wii-controllers/">Wii Controllers</a>).</p>
 <ul>
@@ -6404,7 +6404,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: fixes for macros that do not fire.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

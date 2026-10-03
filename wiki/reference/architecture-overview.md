@@ -365,7 +365,7 @@ PadForge.App/
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.9.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.10.1, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer (x64 build only)
     HidHideArm64/                     # HidHide_ARM64.zip (the Microsoft-signed ARM64 driver) + nefconc.exe, embedded in both builds for ARM64 machines
 
@@ -768,7 +768,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## InputManager Partial Class Split
 
-`InputManager` is a `partial class` split across 18 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
+`InputManager` is a `partial class` split across 20 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
 
 | File | Stage | Responsibility |
 |---|---|---|
@@ -790,6 +790,8 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.MenuPublication.cs` | Steps 2-5 | The publication scope Steps 2 through 5 run inside, so a menu cannot observe a half-written frame |
 | `InputManager.SteeringAngleRumble.cs` | Steps 6, 2 helper | Steering Angle Rumble: Step 6 publishes each Xbox / PlayStation slot's combined frame, and the next Step 2 force-feedback pass turns the chosen virtual stick axis into rumble |
 | `InputManager.Tablets.cs` | Step 1 helper | Windows pen and drawing tablet rows, and their capture state |
+| `InputManager.MotionRows.cs` | Steps 3–4 and the motion stage | The Motion Pitch, Yaw and Roll rows (#475): Step 3 reads them per device, Step 4 combines them, and `ApplyMotionRows` composes the slot's motion after the macro pass for Step 5 and DSU |
+| `InputManager.PressureRows.cs` | Steps 3–5 | The button pressure rows (discussion #476): Step 3 reads them per device, Step 4 keeps the harder press per button, and Step 5 hands them to the DualShock 3 (SIXAXIS): Full virtual controller |
 
 `SettingsManager` is also a partial class. Its collection types are declared alongside the Step 1 code that populates them.
 
@@ -1249,4 +1251,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

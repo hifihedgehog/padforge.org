@@ -3795,8 +3795,8 @@
 
 <h1 id="menus">Menus<a class="headerlink" href="#menus" title="Permanent link">&para;</a></h1>
 <p><em>Turn a stick, a touchpad, or any two recorded axes into an on-screen ring or grid of commands.</em></p>
-<!-- SCREENSHOT: pad-menus (capture post-deploy: Menus tab with a radial menu selected, cell bindings visible) -->
-
+<!-- SCREENSHOT: pad-menus -->
+<p><img alt="The Menus tab with the Combat Wheel menu selected and its cell bindings below" src="../../images/pad-menus.png" /></p>
 <p>A menu puts a set of commands on an input surface. Engage the surface and a ring or grid appears on screen. Point at a cell and it highlights. Depending on the fire mode, the cell's binding fires on click, on release, or the whole time it is hovered. It is the same idea as Steam Input's radial and touch menus, and configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> bring theirs along.</p>
 <p>Each slot has its own menu list. Open a slot, switch to the <strong>Menus</strong> tab, and click <strong>Add</strong>. <strong>Remove</strong> and <strong>Duplicate</strong> manage the list.</p>
 <hr />
@@ -3885,8 +3885,7 @@
 <p><strong>Controller Button</strong> speaks the slot's own lettering: Xbox letters on an Xbox slot, DualShock symbols on a PlayStation slot, Nintendo letters on a Nintendo slot, and the custom layout's numbered buttons on an Extended slot. Keyboard + Mouse, MIDI, and VR slots have no controller buttons to press, so the choice is not offered there, and a button binding left behind by a slot-type switch shows as <strong>Controller Button (not on this slot type)</strong>.</p>
 <h3 id="macro-cells">Macro cells<a class="headerlink" href="#macro-cells" title="Permanent link">&para;</a></h3>
 <p><strong>Macro</strong> fires one of the slot's <a href="../macros/">macros</a> by name. The choice appears once the slot has at least one macro, and picking it preselects the first one.</p>
-<!-- pending capture: ![A menu cell bound to a macro](../images/menu-macro-cell.png) -->
-
+<p><img alt="A menu cell bound to a macro" src="../../images/menu-macro-cell.png" /></p>
 <p>The cell is an extra trigger for the macro rather than a copy of it, so the macro's own fire mode decides what happens: a <strong>While Held</strong> macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. The macro's <strong>Layer</strong> scope and the rest of its settings apply unchanged. A macro with no trigger of its own can be driven entirely from cells.</p>
 <p>Renaming the macro updates every cell that names it. A cell whose macro no longer exists shows as <strong><code>&lt;name&gt;</code> (no such macro)</strong> in the picker and does nothing until you pick another. Macro names on a slot are not unique. When two share a name, the cell fires the first.</p>
 <h3 id="cells-as-sources">Cells as sources<a class="headerlink" href="#cells-as-sources" title="Permanent link">&para;</a></h3>
@@ -3895,6 +3894,8 @@
 <hr />
 <h2 id="cell-icons">Cell icons<a class="headerlink" href="#cell-icons" title="Permanent link">&para;</a></h2>
 <p>Each cell row carries an icon button (tooltip: <strong>Choose this cell's icon: an emoji, an entry from an icon package, or an image file.</strong>). It opens a picker under the button, and every choice in it is drawn as itself.</p>
+<!-- SCREENSHOT: icon-picker -->
+<p><img alt="The icon picker on its Emoji tab. Menu cells and shift layers open the same picker." src="../../images/icon-picker.png" /></p>
 <ul>
 <li><strong>Emoji</strong> lists the emoji by category, the same catalog the <a href="../shift-layers/">shift layer</a> dialog uses.</li>
 <li><strong>Images</strong> shows the pictures in every added icon package, grouped by package. <strong>Browse Files…</strong> at its foot opens a file browser.</li>
@@ -3905,7 +3906,7 @@
 <li>A loose image file: <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, <code>.bmp</code>, or <code>.gif</code>. A file kept under PadForge's own folder is stored by relative path, so the pair travels together. One directly beside <code>PadForge.exe</code> is stored as <code>.\name.png</code>.</li>
 <li>A <code>.pficons</code> package. Picking one adds it to the list below. A package with a single image binds it right away, and one with several opens the picker again on that package's pictures.</li>
 </ul>
-<p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. An emoji fills the same box. WPF, which draws the overlay, has no color emoji, so on the PC an emoji draws in one color, the label's, and takes the hover color with the label. The phone's <a href="../web-controller/#web-menus">Web Menus</a> page draws it in color. <strong>Icon Size</strong> next to the icon button scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors without resizing the menu. The row appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
+<p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. An emoji fills the same box. WPF, which draws the overlay, has no color emoji, so on the PC an emoji draws in one color, the label's, and takes the hover color with the label. The phone's <a href="../web-controller/#web-menus">Web Menus</a> page draws it in color. The <strong>Icon Size</strong> slider beside the cell's small icon preview scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors. On a Touch Grid with labels shown, an icon above about 120% makes every row of the grid taller to fit it. The slider appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
 <h3 id="icon-packages">Icon packages<a class="headerlink" href="#icon-packages" title="Permanent link">&para;</a></h3>
 <p><img alt="The Icon Packages block on the Menus tab" src="../../images/menu-icon-packs.png" /></p>
 <p>An icon package is one zip file of images with the <code>.pficons</code> extension. PadForge reads straight from the file and never unpacks it. Keep packages next to <code>PadForge.exe</code> to stay portable.</p>
@@ -3941,7 +3942,6 @@
 <p>The overlay itself is optional. The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Menu Overlay</strong> toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.</p>
 <hr />
 <h2 id="on-a-phone">On a phone<a class="headerlink" href="#on-a-phone" title="Permanent link">&para;</a></h2>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <p>A Touch Grid menu can also appear on a phone. Turn on <strong>Show on Web Controller</strong> (tooltip: <strong>Shows this menu as a page of the web controller's Web Menus layout, where a tap on a tile fires its cell.</strong>) and the menu becomes a page of tiles on every phone that runs the web controller's <a href="../web-controller/#web-menus">Web Menus</a> layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.</p>
 <p>The checkbox appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be cleared, and its reset turns it off. The menu's <strong>Layer</strong> and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.</p>
 <hr />
@@ -3967,7 +3967,7 @@
 <li><a href="../../features/dashboard/">Dashboard</a>: the Menu Overlay toggle.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

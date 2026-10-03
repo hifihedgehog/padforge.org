@@ -32,16 +32,14 @@ Two more drivers install outside **Settings**, and only when something needs the
 
 ## Controllers Windows leaves without a driver
 
-Some controllers plug in and sit dead, because Windows has no driver for them or gives them one that reads nothing. Within a few seconds of one appearing, PadForge binds the driver it needs, with no prompt:
+Some controllers plug in and sit dead, because Windows has no driver for them or gives them one that reads nothing. While the engine runs, PadForge binds the driver a controller needs within a few seconds of it appearing, with no prompt:
 
 - **WinUSB**, Windows' own generic USB driver, for the controllers PadForge's controller library reads directly: the Wii U GameCube adapter, the Xbox 360 Big Button receiver, the Gametrak, the DJI RC remote, force-feedback wheels and sticks built on the I-Force chip, Namco's GunCon 2 and USIO, Konami's P3IO and P4IO arcade boards, Densha de GO! and other train controllers, the CH Products Multi-Function Panel, the Ergodex DX1, the TrackIR 2 and 3, the Tacx T1904 and T1932, and original Xbox controllers.
-- **xusb22**, Windows' own Xbox 360 driver, for clone Xbox 360 wireless receivers (USB IDs 045E:0291, 045E:02A9 and 05C6:9244) and the Guitar Hero Live Xbox 360 dongle (1430:070B). That driver's own list names only Microsoft's receiver, and since Windows 10 version 2004 it can no longer be picked by hand for these. Once bound, they reach every game through XInput, with PadForge running or not.
+- **xusb22**, Windows' own Xbox 360 driver, for clone Xbox 360 wireless receivers (USB IDs 045E:0291, 045E:02A9 and 05C6:9244) and the Guitar Hero Live Xbox 360 dongle (1430:070B). By ID, that driver's own list names only Microsoft's receiver, wired controller and Play and Charge cable, and since Windows 10 version 2004 it can no longer be picked by hand for these. Once bound, they reach every game through XInput, with PadForge running or not.
 
-PadForge takes a controller only from no driver, or for WinUSB from Windows' generic HID driver, and never from another vendor's driver. A second controller of the same model on another vendor's driver keeps the whole model where it is. Each driver package names the one controller it binds and is signed with the certificate this PC's [DualShock 3](../devices/dualshock-3.md) binding uses.
+On its own, PadForge takes a controller only from no driver, or for WinUSB from Windows' generic HID driver, and never from another vendor's driver. A second controller of the same model on another vendor's driver keeps the whole model where it is. Each driver package names one ID, the controller's own or, for original Xbox controllers, their USB device class, and is signed with the certificate this PC's [DualShock 3](../devices/dualshock-3.md) binding uses.
 
 Four devices lose something to the switch, so they move only when you ask, from their card on the [Devices](devices.md#switch-driver-buttons) page.
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---
 
@@ -320,4 +318,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

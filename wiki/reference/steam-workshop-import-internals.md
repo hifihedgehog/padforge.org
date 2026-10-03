@@ -433,7 +433,7 @@ Two imported values do not fold. `WorkshopGyroRatchetDescriptors` has no `PadSet
 | `Gamepad Paddle2` | `Button 13` | `Gamepad Paddle3` | `Button 14` |
 | `Gamepad Paddle4` | `Button 15` | | |
 
-Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing `Gyro ...` / `Touchpad ...` descriptors, which already resolve per device. The family does not rename them. The picker offers the family only in the leading **(Any Device)** group (empty guid) on every slot, rendered through `Mapping_Gamepad_Format` ("Gamepad {0}") with the shared `DevObj_*` member labels. A concrete device's group lists the same reads under the device's own names, so `MappingDisplayResolver.BuildInputChoices` emits no member of the family. A source stored with a concrete guid and a family descriptor, an older pick under a controller, selects that device's own entry for the same read through `MappingDisplayResolver.FindChoiceOnDevice`: in the mapping rows, the single-input pickers and the shift-activator dialog. The match never leaves the stored device, so a picker that writes the entry back keeps an equivalent binding.
+Paddles follow SDL's physical naming (Paddle1 = right paddle 1, Paddle2 = left paddle 1, Paddle3 = right paddle 2, Paddle4 = left paddle 2). Gyro and touchpad members deliberately stay on the existing `Gyro ...` / `Touchpad ...` descriptors, which already resolve per device. The family does not rename them. The picker offers the family only in the leading **(Any Device)** group (empty guid) on every slot, rendered through `Mapping_Gamepad_Format` ("Gamepad {0}") with the shared `DevObj_*` member labels. A concrete device's group lists the same reads under the device's own names, so `MappingDisplayResolver.BuildInputChoices` emits no member of the family. A source stored with a concrete guid and a family descriptor, an older pick under a controller, selects that device's own entry for the same read. The single-input pickers and the shift-activator dialog find it through `MappingDisplayResolver.FindChoiceOnDevice`, and the mapping rows through `MappingDisplayResolver.PinnedAliasCanonical`, the rule `FindChoiceOnDevice` wraps. The match never leaves the stored device, so a picker that writes the entry back keeps an equivalent binding.
 
 **Empty-DeviceGuid contract.** `MappingSource.DeviceGuid` defaults to `""`, documented as "first available device on the VC," resolved per frame in Step 3. The Workshop translator emits every source with an empty guid. Two seams enforce the contract off the happy path:
 
@@ -493,4 +493,4 @@ All dispatch in the gamepad-state and Extended raw-state switches of `InputManag
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

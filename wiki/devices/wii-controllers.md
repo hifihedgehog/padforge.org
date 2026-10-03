@@ -49,12 +49,10 @@ A Wii Remote also reads these extensions:
 | **Guitar Hero World Tour and Band Hero drums** | The pads on the face buttons, the bass pedal on Left Shoulder, orange on Right Shoulder. Each pad's hit velocity and the hi-hat pedal are extra axes. |
 | **DJ Hero turntable** | The green, red and blue buttons of either platter on three face buttons, Euphoria on the fourth, and each platter's own buttons as extra buttons. The platter rates are on the right stick, and the crossfader and the effects dial are extra axes. |
 | **Taiko no Tatsujin TaTaCon** | The drum faces on the stick buttons, the rims on the triggers |
-| **uDraw GameTablet, Drawsome tablet** | Pen position and pressure as axes, plus the pen's buttons |
+| **uDraw GameTablet, Drawsome tablet** | Pen position and pressure as axes, and a button that reads the pen in range. The uDraw adds the pen's two buttons. |
 | **Densha de GO! Shinkansen controller** | The brake and power levers on the triggers, the face buttons and the D-pad |
 
 None of them reads behind an active Motion Plus, and none has the IR pointer.
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ### D-pad mapping
 
@@ -68,7 +66,7 @@ The hat turns with the remote's hold. Set **Held As** on the Gyro tab to one of 
 
 The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See [Gyro](../guides/gyro.md) for calibration, sensitivity, and the engage controls.
 
-A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake**. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. Pre-release builds after 4.5.3 offer **Nunchuk Accelerometer** only on the **Motion Accelerometer** row, the one row that reads it.
+A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake**. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. **Nunchuk Accelerometer** is offered only on the **Motion Accelerometer** row, the one row that reads it.
 
 The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.
 
@@ -101,9 +99,9 @@ The Wii Remote's IR camera can drive an on-screen pointer. Point the remote at t
 
 Map **IR Pointer X** and **IR Pointer Y** to the right stick to aim, or to mouse motion to point the cursor at the screen.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote reads center until it first sees the bar after it connects, after a profile switch, or after its slot's mappings are replaced.
+When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote reads center until it first sees the bar after it connects, after a profile switch, or after its slot's mappings are replaced.
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.* The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. It keeps reading while the bar is out of view, so a remote turned over out of sight is read the right way up when it finds the bar again. With a Classic Controller attached the driver reports no accelerometer, so PadForge takes the remote as upright each time it finds the bar, and the correction is right only when the remote finds the bar less than a quarter turn from upright.
+The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. It keeps reading while the bar is out of view, so a remote turned over out of sight is read the right way up when it finds the bar again. With a Classic Controller attached the driver reports no accelerometer, so PadForge takes the remote as upright each time it finds the bar, and the correction is right only when the remote finds the bar less than a quarter turn from upright.
 
 **IR Offscreen** reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button.
 
@@ -139,9 +137,10 @@ A remote calibrated as a light gun ignores **Sensor Bar Position** and **Vertica
 
 ### Light gun
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the [Devices](../features/devices.md#light-gun) page, and in its **Light Gun** section click **Calibrate**. Four targets appear in turn. From where you play, point the remote at each one and press **B**. Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The section's reset button returns the remote to its default range.
+
+<!-- SCREENSHOT: devices-light-gun -->
+![The Light Gun section of a Wii Remote's row on the Devices page](../images/devices-light-gun.png)
 
 For a light-gun game that aims with a stick:
 
@@ -180,8 +179,8 @@ A combined Joy-Con pair carries a full motion sensor in each half. On a pair the
 |---|---|
 | **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's rotation rate, raw, one row per axis. Bind them to mouse or stick axes like the plain gyro axes. |
 | **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's rotation rate, raw, which is what the plain rows read before fusion. |
-| **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. Pre-release builds after 4.5.3 offer it only on the **Motion Gyro** row. |
-| **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. Pre-release builds after 4.5.3 offer it only on the **Motion Accelerometer** row. |
+| **Left Joy-Con Motion Gyro** | The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. It is offered only on the **Motion Gyro** row. |
+| **Left Joy-Con Accelerometer** | The left half's full accelerometer stream to the virtual controller's motion accelerometer output. It is offered only on the **Motion Accelerometer** row. |
 | **Left Joy-Con Lean** | The left half's tilt, for motion steering or any axis row. |
 | **Left Joy-Con Shake** | How hard the left half is shaken, whatever its tilt, for shake-to-press bindings. |
 
@@ -225,8 +224,6 @@ It works on a standalone right Joy-Con and on a combined pair, over Bluetooth. P
 
 The ring's resting point is its first reading each time it switches on, so hold it at rest for a moment when the Joy-Con connects. Slide the Joy-Con onto the ring before connecting it: a ring attached later is found the next time the Joy-Con connects.
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 ---
 
 ## Joy-Con 2 optical mouse
@@ -261,4 +258,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

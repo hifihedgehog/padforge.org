@@ -71,4 +71,4 @@ when that device has the matching hardware.
 | [Head Tracking (OpenTrack)](head-tracking.md) | A head pose from OpenTrack or FreeTrack as six mappable axes |
 | [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md) | A slot's lightbar color sent on to Razer Chroma and Logitech LIGHTSYNC gear, and its rumble to Razer Sensa HD haptics |
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

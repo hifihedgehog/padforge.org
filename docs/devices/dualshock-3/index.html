@@ -3731,6 +3731,8 @@
 <p>The controller carries the same identity over USB and Bluetooth. A mapping you set on the cable still applies after you go wireless, and the other way around. Switching transports keeps the slot assignment.</p>
 <hr />
 <h2 id="what-works">What works<a class="headerlink" href="#what-works" title="Permanent link">&para;</a></h2>
+<!-- SCREENSHOT: pad-playstation-ds3 -->
+<p><img alt="A PlayStation slot on the DualShock 3 (SIXAXIS) preset, with the DualShock 3 model in the Preview tab" src="../../images/pad-playstation-ds3.png" /></p>
 <table>
 <thead>
 <tr>
@@ -3757,7 +3759,7 @@
 </tr>
 <tr>
 <td><strong>Motion</strong></td>
-<td>The gyro and accelerometer drive gyro aiming and the motion server. The DS3's gyro senses turning left and right only, and in pre-release builds PadForge can fill pitch and roll from the accelerometer.</td>
+<td>The gyro and accelerometer drive gyro aiming and the motion server. The DS3's gyro senses turning left and right only, and PadForge can fill pitch and roll from the accelerometer.</td>
 </tr>
 <tr>
 <td><strong>Rumble</strong></td>
@@ -3776,9 +3778,9 @@
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>The DualShock 3's built-in motion sensors flow through the same pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. The DS3's gyro senses one axis of rotation, turning the pad left and right. The accelerometer reads all three axes. See <a href="../../guides/gyro/">Gyro</a> for calibration, sensitivity, and the engage controls. The motion also broadcasts to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for emulators.</p>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em> Turn on <a href="../../guides/gyro/#pitch-and-roll-simulation">Pitch and Roll Simulation</a> on the Gyro tab to fill tilting and rolling from the accelerometer, the idea behind the DS3 gyro simulation in the DS4Windows forks. The guide lists what an accelerometer can and can't see.</p>
-<p><strong>Calibrate the yaw by hand.</strong> <em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> Many pads rest far enough off center to read a steady turn while still. Put the pad down, give it half a minute after it connects, and press <strong>Calibrate Gyro</strong> on the Gyro tab. The automatic pass at connect won't take an offset that large on this pad (<a href="../../guides/gyro/#calibration">why</a>). A calibration from an earlier version no longer counts, so calibrate again after updating. Calibrate again too after swapping to another DualShock 3, after moving between PadForge's own connection and DsHidMini, after updating DsHidMini, and after a Bluetooth pad's first USB connection under DsHidMini, which hands DsHidMini the pad's calibration.</p>
-<p><strong>Yaw direction.</strong> <em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> PadForge reads a genuine DualShock 3's yaw the same way over USB, over Bluetooth, and through DsHidMini 3.15.0 or later: turning the pad left reads positive, as on other controllers. Through DsHidMini before 3.15.0 a genuine pad still reads backwards until DsHidMini is updated. If you checked <strong>Invert Yaw (X)</strong> on 4.5.3 or earlier to correct a genuine pad on PadForge's own USB or Bluetooth connection, uncheck it. Through DsHidMini, leave it checked until DsHidMini is 3.15.0 or later, then uncheck it.</p>
+<p>Turn on <a href="../../guides/gyro/#pitch-and-roll-simulation">Pitch and Roll Simulation</a> on the Gyro tab to fill tilting and rolling from the accelerometer, the idea behind the DS3 gyro simulation in the DS4Windows forks. The guide lists what an accelerometer can and can't see.</p>
+<p><strong>Calibrate the yaw by hand.</strong> Many pads rest far enough off center to read a steady turn while still. Put the pad down, give it half a minute after it connects, and press <strong>Calibrate Gyro</strong> on the Gyro tab. The automatic pass at connect won't take an offset that large on this pad (<a href="../../guides/gyro/#calibration">why</a>). A calibration from an earlier version no longer counts, so calibrate again after updating. Calibrate again too after swapping to another DualShock 3, after moving between PadForge's own connection and DsHidMini, after updating DsHidMini, and after a Bluetooth pad's first USB connection under DsHidMini, which hands DsHidMini the pad's calibration.</p>
+<p><strong>Yaw direction.</strong> PadForge reads a genuine DualShock 3's yaw the same way over USB, over Bluetooth, and through DsHidMini 3.15.0 or later: turning the pad left reads positive, as on other controllers. Through DsHidMini before 3.15.0 a genuine pad still reads backwards until DsHidMini is updated. If you checked <strong>Invert Yaw (X)</strong> on 4.5.3 or earlier to correct a genuine pad on PadForge's own USB or Bluetooth connection, uncheck it. Through DsHidMini, leave it checked until DsHidMini is 3.15.0 or later, then uncheck it.</p>
 <p>Some third-party pads turn the sensor the other way. If turning left moves the aim right, check <strong>Invert Yaw (X)</strong> on the Gyro tab. It flips PadForge's own gyro aim in Local space, and it reaches the virtual controller and the DSU server only with <strong>Apply Gyro Tuning to Motion Passthrough</strong> on. In Player or World space with Pitch and Roll Simulation on, yaw and roll combine before the invert, so on such a pad use Local space.</p>
 <!-- SCREENSHOT: pad-ds3-gyro -->
 <p><img alt="The Gyro tab for a DualShock 3 with reference frame and sensitivity controls" src="../../images/pad-ds3-gyro.png" /></p>
@@ -3843,7 +3845,7 @@
 <h2 id="coexisting-with-other-bluetooth-devices">Coexisting with other Bluetooth devices<a class="headerlink" href="#coexisting-with-other-bluetooth-devices" title="Permanent link">&para;</a></h2>
 <p>The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3 or a PlayStation Move family controller. PadForge arms it when one of them is paired, and also when Windows still has a record of one that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen one of these controllers it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.</p>
 <p>One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.</p>
-<p><em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> When PadForge starts and finds a PlayStation Bluetooth driver older than the one it carries, it updates it, as long as no controller is connected through that driver at that moment. The update restarts Bluetooth once, so your other Bluetooth devices drop for a few seconds and reconnect. With one connected, the update waits for the next start or pairing. With DsHidMini installed, PadForge leaves the driver to DsHidMini's own setup. The driver PadForge carries, BthPS3 3.2.1, fixes a Windows crash (a blue screen) when a DualShock 3 disconnects over Bluetooth, which versions 2.12.0 to 3.2.0 could cause.</p>
+<p>When PadForge starts and finds a PlayStation Bluetooth driver older than the one it carries, it updates it, as long as no controller is connected through that driver at that moment. The update restarts Bluetooth once, so your other Bluetooth devices drop for a few seconds and reconnect. With one connected, the update waits for the next start or pairing. With DsHidMini installed, PadForge leaves the driver to DsHidMini's own setup. The driver PadForge carries, BthPS3 3.2.1, fixes a Windows crash (a blue screen) when a DualShock 3 disconnects over Bluetooth, which versions 2.12.0 to 3.2.0 could cause.</p>
 <hr />
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3868,7 +3870,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

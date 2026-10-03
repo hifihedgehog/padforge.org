@@ -4420,13 +4420,12 @@
 <h3 id="fullscreen">Fullscreen<a class="headerlink" href="#fullscreen" title="Permanent link">&para;</a></h3>
 <p>Where the browser allows a page to go fullscreen, which Android Chrome does, each page has a fullscreen button in its header or its top-left corner. Tap it to hide the browser's own bars, tap again or swipe down to leave. iPhone Safari does not offer element fullscreen, so the button does not appear there.</p>
 <h2 id="web-menus">Web Menus<a class="headerlink" href="#web-menus" title="Permanent link">&para;</a></h2>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <p>Pick <strong>Web Menus</strong> on the landing page and the phone shows a slot's <a href="../menus/">Touch Grid menus</a> as pages of tiles. Tap a tile and its cell fires on the PC: the key, controller button, or macro the cell carries, and every mapping row, macro trigger, or shift layer that reads the cell. A phone propped beside the keyboard becomes a panel of your own commands for the game on the screen.</p>
 <h3 id="set-it-up">Set it up<a class="headerlink" href="#set-it-up" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Open <strong>Web Menus</strong> on the phone. It shows up on the <a href="../../features/devices/">Devices</a> page as <strong>Web Menus 1</strong>.</li>
 <li>Assign it to the slot whose menus you want, the same way as any controller. Until then the page says <strong>Not on a slot</strong>. The phone has no buttons or sticks of its own, so assigning it beside the slot's controller adds nothing but its tiles.</li>
-<li>On that slot's <strong>Menus</strong> tab, turn on <strong>Show on Web Controller</strong> for each Touch Grid menu the phone should show. The checkbox appears on Touch Grid menus only. Until one is on, the page says <strong>No menus to show</strong>.</li>
+<li>On that slot's <strong>Menus</strong> tab, turn on <strong>Show on Web Controller</strong> for each Touch Grid menu the phone should show. The checkbox appears on Touch Grid menus, and on a Radial Ring menu only while it is still on from the menu's time as a Touch Grid, so it can be turned off. Until one is on, the page says <strong>No menus to show</strong>.</li>
 </ol>
 <p>Each marked menu is one page, and a tab strip across the top switches between them. A phone assigned to several slots shows the pages of every slot, and each tab then names its slot.</p>
 <h3 id="what-a-tap-does">What a tap does<a class="headerlink" href="#what-a-tap-does" title="Permanent link">&para;</a></h3>
@@ -4457,9 +4456,10 @@
 <p>Opened over plain HTTP on a touch device, a gamepad layout shows <strong>Motion needs HTTPS</strong> in that corner instead. When PadForge also serves HTTPS, the note reads <strong>Motion: open over HTTPS</strong>, and tapping it opens the same layout on the secure address.</p>
 <p>A <strong>QR code</strong> on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.</p>
 <h2 id="plain-http-address">Plain HTTP address<a class="headerlink" href="#plain-http-address" title="Permanent link">&para;</a></h2>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <p>Some browsers refuse PadForge's self-signed certificate outright, and a tunnel or reverse proxy that reaches the PC from outside brings a certificate of its own. For both, the Web Controller card can serve a second address over plain HTTP, on its own port, beside the main one. The main address does not change.</p>
 <p>Check <strong>Also Serve Plain HTTP</strong> on the <a href="../../features/dashboard/">Dashboard</a>. The plain address uses port <code>8081</code> unless you pick another, and it cannot share the main address's port.</p>
+<!-- SCREENSHOT: dashboard-web-plain -->
+<p><img alt="The Plain HTTP Address section of the Web Controller card" src="../../images/dashboard-web-plain.png" /></p>
 <h3 id="the-access-code">The access code<a class="headerlink" href="#the-access-code" title="Permanent link">&para;</a></h3>
 <p>Every request to the plain address needs the card's <strong>Access Code</strong>, ten letters and digits. The address the card shows carries it, as in <code>http://192.168.1.100:8081/?code=7KQ2M9XH4P</code>, and so does the QR code beside it. The first page trades the code for a browser cookie that lasts until the browser closes, so the pages and the connection after it need nothing more. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.</p>
 <p><strong>New Code</strong> replaces the code and disconnects everyone on the plain address. Their pages stop working until they open the address with the new code. The main address and its clients are not affected, and the main address asks for no code.</p>
@@ -4469,7 +4469,7 @@
 <h3 id="what-plain-http-gives-up">What plain HTTP gives up<a class="headerlink" href="#what-plain-http-gives-up" title="Permanent link">&para;</a></h3>
 <p>Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows <strong>Motion needs HTTPS</strong>. Through a tunnel or proxy that serves HTTPS the page is secure again, and motion works.</p>
 <p>Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.</p>
-<p>The <a href="#browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad</a> page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies gets past the first page and no further.</p>
+<p>The <a href="#browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad</a> page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies loads the first page and nothing after it.</p>
 <h2 id="touch-controls">Touch controls<a class="headerlink" href="#touch-controls" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -4573,7 +4573,7 @@
 <li><a href="../../features/visualization/">3D and 2D Visualization</a>: the same controller art powers both the web controller and the desktop 2D view.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

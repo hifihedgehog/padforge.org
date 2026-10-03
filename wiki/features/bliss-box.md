@@ -2,8 +2,6 @@
 
 *Retro controllers in Bliss-Box ports, named and mapped for what is plugged in, with DualShock 2 pressure, rumble, the Dreamcast VMU screen and N64 Controller Pak saves.*
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 A Bliss-Box adapter (the 4-Play, Gamer-Pro and Gamer-Pro jr., and the Advanced models, the GPA) plugs retro controllers into USB. Each port is its own USB joystick, one per player. PadForge reads that joystick like any other, and with **Read Bliss-Box Adapters** on it also talks to each port through the adapter's own API: it learns which controller is plugged in, names its buttons and maps them the way SDL maps that console's pad, reads a DualShock 2's pressure-sensitive buttons, drives rumble with the adapter's motor commands, shows pictures on a Dreamcast pad's VMU, and backs up and restores an N64 Controller Pak.
 
 ---
@@ -40,7 +38,7 @@ Under the line are the port's actions. Each one appears only when it applies:
 
 In the mapping picker, the port's buttons and sticks take the names of the controller plugged in: **Cross**, **Circle**, **L2** and **Left Stick X** on a DualShock 2, **A**, **Z Trigger**, **C-Up** and **Stick X** on an N64 controller. Plug in another controller and the names follow it.
 
-The names come from two sources, one per firmware generation: RetroArch's Bliss-Box autoconfig files, written for firmware 3.24, on a 3.x adapter, and DeviceBuddy's controller layouts on a 4.x GPA. They follow the adapter's default button map. If you remapped buttons in the API Tool or chose one of the GPA's alternate maps, the names stay on the default positions, since the adapter does not say which map is active.
+The names come from two sources, one per firmware generation: RetroArch's Bliss-Box autoconfig files, written for firmware 3.24, on a 3.x adapter, and DeviceBuddy's controller layouts on a 4.x GPA. The Jaguar takes DeviceBuddy's layout on both, since the 3.0 firmware numbers its buttons that way. They follow the adapter's default button map. If you remapped buttons in the API Tool or chose one of the GPA's alternate maps, the names stay on the default positions, since the adapter does not say which map is active.
 
 Analog triggers follow the firmware itself. A GameCube controller's, a Dreamcast pad's and a Saturn 3D Control Pad's triggers arrive as **Left Trigger** and **Right Trigger** on either generation, 0 when released, and a trigger mapping treats them as a gamepad's: it does not engage at rest.
 
@@ -80,15 +78,15 @@ Each controller follows SDL's own mapping for its console's pad where SDL has on
 | Atari joystick | Fire | | | | |
 | ColecoVision | Right fire | Left fire | | | |
 
-Sticks and the D-pad land on the virtual controller's sticks and D-pad, and Start on Start, wherever a controller has them. A controller with named buttons that no source places gets no default mapping: the Atari 5200 controller, the paddle and dial controllers, the Bally Astrocade controller, the Pippin, CD-i and FM Towns pads, the PC gameport joystick, the Virtual Boy and the XE-1 AP. Neither does a controller without named buttons, which includes every controller on a 2.x adapter. On a GPA the Neo Geo pad's four buttons stay unmapped, since DeviceBuddy leaves them unlabeled.
+Sticks and the D-pad land on the virtual controller's sticks and D-pad, and Start on Start, wherever a controller has them. A controller with named inputs that no source places gets no default mapping: the Atari 5200 controller, the paddle and dial controllers, the Bally Astrocade controller, the Pippin, CD-i and FM Towns pads, the PC gameport joystick, the Virtual Boy and the XE-1 AP. Neither does a controller without named inputs, which includes every controller on a 2.x adapter. On a GPA the Neo Geo pad's four buttons stay unmapped, since DeviceBuddy leaves them unlabeled.
 
-The N64 follows SDL's mapping exactly. Its C buttons do not form a right stick, and C-Right lands on Misc 2, which only the Switch 2 Pro's C button takes. Bind them yourself if a game wants them elsewhere.
+The N64 follows SDL's mapping exactly. Its C buttons do not form a right stick, and C-Right lands on Misc 2, which only the Switch 2 Pro's C button and the 18th button of a numbered Extended layout take. Bind them yourself if a game wants them elsewhere.
 
-A port assigned while it is empty or unplugged gets its default mapping once PadForge can place its controls: with the switch on, when the adapter reports a controller in the port, and with the switch off, when the port connects. Until then the slot shows nothing from the port. A row you set, record or clear in the meantime keeps what you gave it, and the rest fill in. **Clear All**, **Paste** and **Copy From...** on the slot, and turning on **Force Raw Joystick Mode** for the port, cancel the pending mapping. A change to the **DualShock 3 (SIXAXIS): Full** preset while the port's DualShock 2 is unplugged fills its pressure rows the same way once it is back.
+A port assigned while it is empty, unplugged or holding a controller with no default mapping gets its default mapping once PadForge can place its controls: with the switch on, when the adapter reports a controller that has a default mapping, and with the switch off, when the port connects. Until then the slot shows nothing from the port. A row you set, record or clear in the meantime keeps what you gave it, and the rest fill in. **Clear All** on the Base layer, **Paste** and **Copy From...** on the slot, and turning on **Force Raw Joystick Mode (Bypass Gamepad Remapping)** for the port cancel the pending mapping. A change to the **DualShock 3 (SIXAXIS): Full** preset while the port's DualShock 2 is unplugged fills its pressure rows the same way once it is back.
 
 A slot mapped with a controller in the port keeps that mapping when you plug in a different kind of controller. To map the new one fresh, unassign the port from the slot and assign it again.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* With the switch on, the [(Any Device)](mappings.md) Gamepad entries read a port through the same placement: **Gamepad A** reads the controller's A wherever its report puts it, and a button or stick the controller lacks reads nothing. A port with no controller identified, or a controller with no default mapping, answers none of them. With the switch off they read the port through SDL's "4Play Adapter" mapping, as they read any gamepad.
+With the switch on, the [(Any Device)](mappings.md) Gamepad entries read a port through the same placement: **Gamepad A** reads the button the default mapping puts on the virtual controller's bottom face button, wherever the report carries it: Cross on a DualShock 2, B on an SNES pad. A button or stick the controller lacks reads nothing. A port with no controller identified, or a controller with no default mapping, answers none of them. With the switch off they read the port through SDL's "4Play Adapter" mapping, as they read any gamepad.
 
 ---
 
@@ -113,7 +111,7 @@ A port's rumble goes through the adapter's own motor commands, for the controlle
 | Controller | Motors |
 |---|---|
 | DualShock, DualShock 2 | Two. The game's low-frequency motor drives the large one and the high-frequency motor the small one, each at its own strength. |
-| GameCube controller, Dreamcast pad, N64 controller, Dreamcast fishing rod | One, at the stronger of the game's two levels. |
+| GameCube controller, Dreamcast controller, N64 controller, Dreamcast fishing rod | One, at the stronger of the game's two levels. The Dreamcast ASCII pad is sent nothing. |
 
 Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. That includes the neGcon, which has no motor, and the JogCon, whose force feedback the adapter does not drive. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. **Fold Trigger Rumble into Main Motors** on the Pad page folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.
 
@@ -155,7 +153,7 @@ The adapter keeps its picture in its own memory and rewrites it each time a new 
 
 **Back Up Controller Pak…** saves the whole pak in the port's N64 controller to a 32 KB `.mpk` file, the format N64 emulators read. **Restore Controller Pak…** writes such a file back, replacing every save on the pak, after you confirm. The status line shows the progress.
 
-Every block carries a checksum. A backup reads a block up to three times before it stops, and a restore gives up once more than 16 writes are rejected, the API Tool's limit. A Rumble Pak holds no saves and is refused. Controller Pak transfers need adapter firmware 3.0 or later. While a backup, a restore or a player change runs on a port, the port's buttons wait until it ends, and after a player change they stay off until the port comes back as a new device.
+Every block carries a checksum. A backup reads a block up to three times before it stops, and a restore gives up once more than 16 writes are rejected, the API Tool's limit. A Rumble Pak holds no saves and is refused. Controller Pak transfers need adapter firmware 3.0 or later. While a backup, a restore or a player change runs on a port, the port's actions on the Devices page stay disabled until it ends, and after a player change they stay disabled until the port comes back as a new device.
 
 ---
 
@@ -200,4 +198,4 @@ If the adapter refuses its own picture back, PadForge leaves the player number a
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

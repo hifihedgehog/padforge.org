@@ -128,7 +128,7 @@ The three stages, in fixed order:
 - **`ParametricEqStage`**, one `BiQuadFilter` per band per channel. Bands at or above `EqBand.MaxFrequencyHz(rate)` (0.45 of the sample rate) are clamped there, a 0 dB peak or shelf is skipped as the identity, and `Reset()` rebuilds the filters because `BiQuadFilter` exposes no history reset. `EqResponse` recomputes the same RBJ coefficients for the curve so the drawn response is the applied one without reading NAudio's private fields.
 - **`LimiterStage`**, feed-forward peak limiter with no lookahead (1 ms attack, 80 ms release). Because there is no lookahead, the ceiling is additionally a hard clamp, and that clamp is the guarantee the tests pin.
 
-The crossfeed history and the limiter envelope flush to zero when they go non-finite, as they do below the denormal range. One NaN sample, from a NaN preamp for one, otherwise latched them, and `Configure` keeps them for an unchanged crossfeed level, so the audio stayed silent or the limiter rode its gain after the cause was corrected.
+The crossfeed history and the limiter envelope flush to zero when they go non-finite, as they already do below 1e-20, before they can reach the denormal range. One NaN sample, from a NaN preamp for one, otherwise latched them, and `Configure` keeps them for an unchanged crossfeed level, so the audio stayed silent or the limiter rode its gain after the cause was corrected.
 
 Configuration arrives through `AudioPassthroughService.DspConfigProvider`, a `(slot, deviceGuid)` callback `InputService` wires to the per-device `DeviceSlotConfig` (nine `Audio*` attributes: crossfeed level, custom cutoff and feed, EQ on, bands, preamp, limiter on, ceiling, and `AudioOutputPath` for the stereo-route test). Phase 3c of `ReconcileOnWorker` pushes it into each sink's chain outside the service lock, since `Configure` builds filter arrays. `MirrorChain.Reset()` runs in the unlocked phase 3 rebuild so a transport flip or a stall rebuild does not ring the old stream's tail into the new one.
 
@@ -223,4 +223,4 @@ On the owner side `InputService` hands each received frame to `HapticToneService
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

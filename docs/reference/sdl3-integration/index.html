@@ -7407,7 +7407,7 @@
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
 <h2 id="sdl3-fork">SDL3 Fork<a class="headerlink" href="#sdl3-fork" title="Permanent link">&para;</a></h2>
-<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 4.5.3 ships the fork's Release build at commit <code>5df5eff539</code> (2026-09-21) for both architectures, the same build 4.5.2 shipped. The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
+<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>b12239c8c7</code> (2026-09-27) for both architectures. 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
 <h3 id="why-a-fork">Why a Fork<a class="headerlink" href="#why-a-fork" title="Permanent link">&para;</a></h3>
 <p>The branch began with six commits spanning four logical features. v4 consumes substantially more fork work on top. The original four are listed first, the v4 additions in the next subsection.</p>
 <table>
@@ -7662,7 +7662,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: HIDMaestro filtering in Step 1 to avoid re-opening virtual controllers</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

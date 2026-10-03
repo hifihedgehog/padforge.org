@@ -11,18 +11,18 @@ The Gyro tab appears when the slot's assigned physical device exposes a gyroscop
 
 ## When the tab shows
 
-The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, a handheld PC's own motion sensor, and a Sony headset's head motion all qualify. In pre-release builds a device with no gamepad mapping qualifies too, among them the Myo armband, the Rift DK1 and the Windows Mixed Reality motion controllers. Pads with no motion sensor never see the tab.
+The tab is visible when the selected mapped device reports a motion sensor of either kind. DualSense, DualShock 4, Joy-Con, Switch Pro, Switch 2 Pro, Steam Controller, Steam Deck, the Wii Remote, a handheld PC's own motion sensor, and a Sony headset's head motion all qualify. A device with no gamepad mapping qualifies too, among them the Myo armband, the Rift DK1 and the Windows Mixed Reality motion controllers. Pads with no motion sensor never see the tab.
 
 On a device with an accelerometer and no gyroscope, such as a Wii Remote without Motion Plus, the tab shows only the cards that read the accelerometer: Grip, Motion Steering, and Gyro Tilt. The five rate cards (Motion Passthrough, Calibration, Sensitivity, Response Shaping, Engage) stay hidden. Before 4.4.0 the whole tab was gated on a gyroscope, so those three cards were unreachable on such a remote.
 
-In pre-release builds a DualShock 3 also gets the [Pitch and Roll Simulation](#pitch-and-roll-simulation) card, because its gyro senses one axis.
+A DualShock 3 also gets the [Pitch and Roll Simulation](#pitch-and-roll-simulation) card, because its gyro senses one axis.
 
 ---
 
 ## Grip
 
 <!-- SCREENSHOT: pad-gyro-grip -->
-<!-- pending capture: ![The Grip card with the Held As dropdown](../images/pad-gyro-grip.png) -->
+![The Grip card with the Held As dropdown](../images/pad-gyro-grip.png)
 
 The first card on the tab is **Grip**. Its one row, **Held As**, tells PadForge how the controller sits in your hands. The driver delivers every controller's motion in the frame of its natural hold, which for a Wii Remote is aimed at the screen. Hold the remote sideways and every axis a game reads is a quarter turn off. Held As rotates the gyro, the accelerometer, and the gravity estimate together into the frame of the hold, for the mapping rows, for the motion the virtual controller reports, and for the [DSU Motion Server](../reference/dsu-motion-server.md) feed.
 
@@ -50,8 +50,6 @@ The row's reset button (**Reset Grip**) returns Held As to Pointing.
 ---
 
 ## Pitch and Roll Simulation
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 A DualShock 3 has one gyro axis. It senses turning the pad left and right, and reads zero for tilting it up and down or rolling it. On a DualShock 3 the tab shows a **Pitch and Roll Simulation** card, and its **Simulate Pitch and Roll** checkbox fills those two axes with rates worked out from the accelerometer. Yaw stays the gyro's own reading. The simulated axes reach the mapping rows, gyro to mouse, the motion the virtual controller reports, the [DSU Motion Server](../reference/dsu-motion-server.md), and this tab's live readout. Gyro Tilt and calibration keep reading the sensor, and a [Remote Link](remote-link.md) peer receives the raw sensor and turns the option on for its own copy of the pad. It is off by default and, like the rest of the tab, set per pad per slot. No other controller shows the card.
 
@@ -111,13 +109,13 @@ Zero the at-rest reading so gyro mappings don't drift the mouse or stick while y
 3. PadForge samples for about 1.5 seconds. The averaged reading becomes the device bias.
 4. The bias is subtracted from every raw sample going forward.
 
-The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g. Both readouts are in the held frame set by [Grip](#grip), the same values the mapping rows and the virtual controller get. With Pitch and Roll Simulation on, the gyroscope line's pitch and roll are the simulated rates, which calibration does not change.
+The timestamp beside the buttons shows the last successful calibration. Two live readouts sit below the buttons. The gyroscope line shows the current Pitch, Yaw, and Roll rate in degrees per second so you can confirm the rest-state floor. The accelerometer line shows the X, Y, and Z reading in g. Both readouts are in the held frame set by [Grip](#grip), the same values the mapping rows and the virtual controller get. With Pitch and Roll Simulation on, the gyroscope line shows the simulated rates for the pad's own pitch and roll, which calibration does not change. In the Upright and Wii Wheel holds they read as pitch and yaw, and the line's roll is the gyro.
 
 On a combined Joy-Con pair, the left half's gyro keeps its own bias. **Calibrate Gyro** samples both halves in the same pass, and a profile calibrated before 4.1.0 gets an automatic aux-only pass on connect that measures the left sensor without touching the stored primary bias.
 
 **Reset Calibration** clears the bias (both halves on a pair) and the timestamp. The next polling cycle re-runs the auto-calibration.
 
-**A DualShock 3 needs the button.** *Changed after 4.5.3. Pre-release builds have it, and the next release will.* Its yaw part reads against a nominal center on PadForge's own DualShock 3 path, on DsHidMini before 3.15.0, and on later DsHidMini for a Bluetooth pad it has never seen over USB. Units rest far enough off that center to read up to 157°/s while still. The automatic pass at connect leaves an offset that large alone: a stuck part reads steady too, and a pad just picked up looks the same as one at rest. Put the pad down and press **Calibrate Gyro**, and the yaw takes the offset. Give the pad half a minute after it connects first: one pad on record moved its center by about 12°/s over its first 20 seconds. On those paths a part resting against either end of its range stays refused, since one direction can't register at all. DsHidMini 3.15.0 and later zero the word before PadForge reads it for a pad they have seen over USB, so there a dead part can't be told from an offset. A press made while the automatic pass is running waits for it and then runs.
+**A DualShock 3 needs the button.** Its yaw part reads against a nominal center on PadForge's own DualShock 3 path, on DsHidMini before 3.15.0, and on later DsHidMini for a Bluetooth pad it has never seen over USB. Units rest far enough off that center to read up to 157°/s while still. The automatic pass at connect leaves an offset that large alone: a stuck part reads steady too, and a pad just picked up looks the same as one at rest. Put the pad down and press **Calibrate Gyro**, and the yaw takes the offset. Give the pad half a minute after it connects first: one pad on record moved its center by about 12°/s over its first 20 seconds. On those paths a part resting against either end of its range stays refused, since one direction can't register at all. DsHidMini 3.15.0 and later zero the word before PadForge reads it for a pad they have seen over USB, so there a dead part can't be told from an offset. A press made while the automatic pass is running waits for it and then runs.
 
 A calibration now belongs to the pad it measured. PadForge tells DualShock 3s apart by their Bluetooth address, read from the pad on PadForge's own connection and from DsHidMini's device node. A DualShock 3 ignores a calibration taken before its yaw direction changed or taken on another pad, including one a paste or a profile carried over, and measures again: the automatic pass takes a small offset, and a large one waits for the button. A calibration also records what served the pad, and under DsHidMini whether DsHidMini held the pad's own calibration, because PadForge's own connection, DsHidMini before 3.15.0, and DsHidMini 3.15.0 or later with and without that calibration each center the yaw differently. Moving between them, updating DsHidMini, or connecting a Bluetooth pad over USB once, which hands DsHidMini its calibration, means measuring again. A pad whose address PadForge can't read takes only an offset under 8.6°/s, the bound every other controller has. A DualShock 3 shared over [Remote Link](remote-link.md) carries its owner's identity, so the receiving PC calibrates it as the owner would, when the sharing PC runs a version that sends it. On PadForge's own connection every DualShock 3 is one device, and a slot holds one calibration for it, so after swapping pads there, press **Calibrate Gyro** again. Any other controller ignores a carried bias too large for its own gyro.
 
@@ -164,7 +162,7 @@ The **Space** dropdown picks how raw gyro motion is mapped to camera input.
 
 Local stays as the default so existing configs feel identical.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* In 4.5.3 and earlier, Player and World space turned the camera the opposite way to Local. They now turn it the same way. If you checked **Invert Yaw (X)** to correct that, uncheck it.
+In 4.5.3 and earlier, Player and World space turned the camera the opposite way to Local. They now turn it the same way. If you checked **Invert Yaw (X)** to correct that, uncheck it.
 
 ---
 
@@ -302,7 +300,7 @@ Toggle state resets to off on a profile switch or app restart. It isn't saved be
 Two actions in the [macro editor](macros.md) drive gyro directly.
 
 - **Set Gyro Engaged** sets the slot's engage state, with a Toggle / On / Off mode. It OR-combines with the Aim Engage button at the evaluator, so either source can engage and both must release to disengage. Details on [Set Gyro Engaged](macros.md#set-gyro-engaged).
-- **Gyro Recenter** (new in 4.1.0) zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, the gravity estimate re-seeds from the controller's current pose, and in pre-release builds the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows built levels. Details on [Gyro Recenter](macros.md#gyro-recenter).
+- **Gyro Recenter** (new in 4.1.0) zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, the gravity estimate re-seeds from the controller's current pose, and the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows built levels. Details on [Gyro Recenter](macros.md#gyro-recenter).
 
 ---
 
@@ -476,4 +474,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

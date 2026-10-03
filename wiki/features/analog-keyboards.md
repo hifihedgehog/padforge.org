@@ -2,9 +2,7 @@
 
 *How far every key is pressed, on analog and Hall effect keyboards, as a device row you can map to any controller.*
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
-An analog keyboard measures how far each key travels, where an ordinary keyboard knows only whether a key is down. PadForge reads that depth straight from the keyboard and gives the keyboard its own row on the [Devices](devices.md) page, beside its normal keyboard row. Every key becomes a source you can put on a button, a trigger, or a stick axis of any [slot](controller-slots.md), including an Extended controller with dozens of axes.
+An analog keyboard measures how far each key travels, where an ordinary keyboard knows only whether a key is down. PadForge reads that depth straight from the keyboard and gives the keyboard its own row on the [Devices](devices.md) page, beside its normal keyboard row. Every key becomes a source you can put on a button, a trigger, or a stick axis of any [slot](controller-slots.md), including an Extended controller with up to 8 axes and 128 buttons.
 
 Your typing is untouched. The normal keyboard row and Windows keep receiving the keys as usual. PadForge reads the depth alongside them.
 
@@ -14,19 +12,23 @@ Your typing is untouched. The normal keyboard row and Windows keep receiving the
 
 Open **Settings**, find the **Input Engine** card, and tick **Read Analog Keyboards**. It is off by default.
 
+<!-- SCREENSHOT: settings-input-engine -->
+![The Input Engine card in Settings, with Read Analog Keyboards and Read Bliss-Box Adapters](../images/settings-input-engine.png)
+
 With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. The line under the checkbox names the keyboards being read, says when none was found, and says when a Razer keyboard is waiting for Razer Synapse.
 
-Most keyboards are read by asking them over the channel their own configurator uses. Close that configurator, whether an app or a browser tab, while the switch is on. Both asking the same questions confuses the keyboard and the configurator alike, and some keyboards let only one program hold the channel.
+Most keyboards are read by asking them over the channel their own configurator uses. Close that configurator, whether an app or a browser tab, while the switch is on. Both asking the same questions confuses the keyboard and the configurator alike, and on some keyboards PadForge holds the channel alone, so the configurator cannot open it while PadForge reads.
 
 ### What you need
 
 | Keyboard | Needs |
 |---|---|
 | Razer Huntsman analog models and the Tartarus Pro | Razer Synapse running. Without it they send no depth, and the row reads nothing until Synapse starts. |
-| Keychron and Lemokey HE boards | Nothing extra. Stock firmware works on every board, the 8K boards included. On the others the [AnalogSense firmware](https://analogsense.org/firmware/) reports every key at once and reads faster. |
-| NuPhy HE boards and the MADLIONS Nano 68, MAD 68 and Fire 68 lines | Nothing extra. PadForge turns on the keyboard's depth reports the way NuPhy's own configurator does for its Performance page, and turns them off again when it stops reading. |
-| MCHOSE Mix 87 III | Nothing extra. Its depth reports need a flag in the keyboard's saved settings. PadForge sets it when it starts reading and clears it when it stops, which rewrites the keyboard's settings memory twice per session. |
+| Keychron and Lemokey HE boards | Nothing extra. Stock firmware works on every board, the 8K boards included. On the Keychron Q1 HE and K2 HE, the Q3 HE and Q5 HE in ANSI, and the Lemokey P1 HE in ANSI, the [AnalogSense firmware](https://analogsense.org/firmware/) reports every key at once and reads faster. |
+| NuPhy HE boards, the MADLIONS Nano 68 and Fire 68 lines, and the MADLIONS MAD 68 R, MAD 68 Pro and MAD 68 Pro R | Nothing extra. PadForge turns on the keyboard's depth reports when it starts reading and turns them off again when it stops. On a NuPhy board it does this the way NuPhy's own configurator does for its Performance page. |
+| MCHOSE Mix 87 III | Stock firmware 1.22. Its depth reports need a flag in the keyboard's saved settings. PadForge sets it when it starts reading and clears it when it stops, which rewrites the keyboard's settings memory twice per session. If reading stops while the keyboard stays plugged in, turn **Read Analog Keyboards** off and on again to resume. |
 | MCHOSE Jet 75 and other keyboards that send depth on their own | Press a key. PadForge listens without sending anything, and the row appears at the first depth report. |
+| ASUS ROG Azoth 96 HE | A USB cable. PadForge does not read it through its wireless receiver or over Bluetooth. |
 | Everything else | Nothing extra. |
 
 ---
@@ -35,13 +37,16 @@ Most keyboards are read by asking them over the channel their own configurator u
 
 Select the row on the [Devices](devices.md) page and a **Key Depth** panel replaces the usual axes and button grid. Each key you press joins the panel in keyboard order, with a bar and a percentage for how far down it is. Until a key moves, the panel says *Press a key to see how far down it goes.*
 
-The row has no Hide from Games, Consume Input or Input Mode settings. It reads a vendor interface beside the keyboard, and hiding that interface would hide it from the keyboard's own software too, which a Razer keyboard needs before it reports any depth.
+<!-- SCREENSHOT: devices-analog-keyboard -->
+![An analog keyboard's row selected on the Devices page](../images/devices-analog-keyboard.png)
+
+The row has no Hide from Games, Consume Mapped Inputs (Hooks) or Input Mode settings. It reads a vendor interface beside the keyboard, and hiding that interface would hide it from the keyboard's own software too, which a Razer keyboard needs before it reports any depth.
 
 ---
 
 ## Mapping keys
 
-Every key the keyboard can report is listed under its row in the input picker, named for the key's US legend: **W**, **Space**, **Left Shift**. Keys with no US legend have names of their own:
+Every key the keyboard can report is listed under its row in the input picker, named for the key's US legend: **W**, **Spacebar**, **Left Shift**. Keys with no US legend have names of their own:
 
 | Name | Key |
 |---|---|
@@ -51,11 +56,11 @@ Every key the keyboard can report is listed under its row in the input picker, n
 | **Hangul** and **Hanja** | The Korean keys |
 | **Numpad =** | The keypad equals key |
 | **Extra Key 1** to **Extra Key 6** | Vendor keys: the Keychron lighting and Cortana keys, a second Fn key, and similar |
-| **Left Space**, **Right Space**, **Center Fn**, **Right Fn** | The halves of a split space bar and the two Fn keys on a Wooting 60HE v2 or 80HE+, in addition to their Space and Fn |
+| **Left Space**, **Right Space**, **Center Fn**, **Right Fn** | The halves of a split space bar and the two Fn keys on a Wooting 60HE v2 or 80HE+, in addition to their Spacebar and Fn |
 | **Key 1** to **Key 3** | The three keys of the SayoDevice O3C |
 | **Key Position 0** to **Key Position 255** | Keys a keyboard reports only by where they sit, with no key map to name them |
 
-Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, libhmk keys with no standard key behind them, and the Fn key of the ASUS ROG Azoth 96 HE. Their keys join the picker as you press them, and **Record** is the quick way to map them: press the key past half travel. A keyboard shared over Remote Link lists the same keys on the other PC, the ones it has joined since included.
+Some keyboards identify keys only by position: the Redragon M68, E-YOOSO HZ-68 and Redragon K712, the Logitech PRO X TKL RAPID, MADLIONS boards without a recorded key table, libhmk keys with no standard key behind them, and the Fn key of the ASUS ROG Azoth 96 HE. On the Redragon, E-YOOSO and MADLIONS boards, and for the Azoth's Fn key, a key joins the picker the first time you press it. The Logitech lists its 256 keys from the start, A and D by name and the rest by position, and a libhmk keyboard lists every key in its keymap. **Record** is the quick way to map a key by position: press it past half travel. A keyboard shared over Remote Link lists the same keys on the other PC, the ones it has joined since included.
 
 A key reads 0 at rest and full at the bottom of its travel. What that means depends on the target:
 
@@ -91,7 +96,7 @@ Analog keys appear in a macro's **Add from List** dropdown under the keyboard, a
 
 ### Set Chroma Color
 
-**Set Chroma Color**, in the **Lightbar & LEDs** group, paints every Razer Chroma device one color while the action runs, then hands the lighting back to Razer Synapse. It needs Synapse running, and it works whether or not the [Razer Chroma lightbar mirror](lightbar-mirrors.md#razer-chroma) is on. While a macro paints, its color wins over the mirror's.
+**Set Chroma Color**, in the **Lightbar & LEDs** group, paints every Razer Chroma device one color while the action runs. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the [Razer Chroma lightbar mirror](lightbar-mirrors.md#razer-chroma) is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.
 
 To hold a color for as long as the key is held, set the macro to **While Held** with **Until Release** and give the action a long **Duration**. When two macros paint at once, the one lower in the list wins. Put a full-press macro below its soft-press twin and the keys turn the full-press color at the bottom of the press and back to the soft-press color on the way up.
 
@@ -231,4 +236,4 @@ Keyboards that send the 0xA0 depth event without being asked, the MCHOSE Jet 75 
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

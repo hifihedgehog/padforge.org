@@ -4047,7 +4047,7 @@
 </tr>
 <tr>
 <td><strong>uDraw GameTablet, Drawsome tablet</strong></td>
-<td>Pen position and pressure as axes, plus the pen's buttons</td>
+<td>Pen position and pressure as axes, and a button that reads the pen in range. The uDraw adds the pen's two buttons.</td>
 </tr>
 <tr>
 <td><strong>Densha de GO! Shinkansen controller</strong></td>
@@ -4056,14 +4056,13 @@
 </tbody>
 </table>
 <p>None of them reads behind an active Motion Plus, and none has the IR pointer.</p>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <h3 id="d-pad-mapping">D-pad mapping<a class="headerlink" href="#d-pad-mapping" title="Permanent link">&para;</a></h3>
 <p>Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.</p>
 <p>The hat turns with the remote's hold. Set <strong>Held As</strong> on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See <a href="#holds">Holds</a>.</p>
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's accelerometer and the Wii Motion Plus gyro flow through the same sensor pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. See <a href="../../guides/gyro/">Gyro</a> for calibration, sensitivity, and the engage controls.</p>
-<p>A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong>. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. Pre-release builds after 4.5.3 offer <strong>Nunchuk Accelerometer</strong> only on the <strong>Motion Accelerometer</strong> row, the one row that reads it.</p>
+<p>A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong>. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. <strong>Nunchuk Accelerometer</strong> is offered only on the <strong>Motion Accelerometer</strong> row, the one row that reads it.</p>
 <p>The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.</p>
 <h3 id="holds">Holds<a class="headerlink" href="#holds" title="Permanent link">&para;</a></h3>
 <p>The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The <strong>Grip</strong> card on the <a href="../../guides/gyro/#grip">Gyro</a> tab, row <strong>Held As</strong>, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
@@ -4102,8 +4101,8 @@
 <h2 id="ir-pointer">IR pointer<a class="headerlink" href="#ir-pointer" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's IR camera can drive an on-screen pointer. Point the remote at the screen and the camera tracks the sensor bar. Three mapping sources appear in the picker for a Wii Remote: <strong>IR Pointer X</strong>, <strong>IR Pointer Y</strong>, and <strong>IR Offscreen</strong>. They only show up when the assigned device is a Wii Remote.</p>
 <p>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> to the right stick to aim, or to mouse motion to point the cursor at the screen.</p>
-<p><em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote reads center until it first sees the bar after it connects, after a profile switch, or after its slot's mappings are replaced.</p>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em> The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. It keeps reading while the bar is out of view, so a remote turned over out of sight is read the right way up when it finds the bar again. With a Classic Controller attached the driver reports no accelerometer, so PadForge takes the remote as upright each time it finds the bar, and the correction is right only when the remote finds the bar less than a quarter turn from upright.</p>
+<p>When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote reads center until it first sees the bar after it connects, after a profile switch, or after its slot's mappings are replaced.</p>
+<p>The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. It keeps reading while the bar is out of view, so a remote turned over out of sight is read the right way up when it finds the bar again. With a Classic Controller attached the driver reports no accelerometer, so PadForge takes the remote as upright each time it finds the bar, and the correction is right only when the remote finds the bar less than a quarter turn from upright.</p>
 <p><strong>IR Offscreen</strong> reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button.</p>
 <p>A <strong>Pointer</strong> tab appears when the assigned device has an IR camera. It holds two cards.</p>
 <h3 id="pointer-mode">Pointer Mode<a class="headerlink" href="#pointer-mode" title="Permanent link">&para;</a></h3>
@@ -4128,8 +4127,9 @@
 <p>A remote calibrated as a light gun ignores <strong>Sensor Bar Position</strong> and <strong>Vertical Offset</strong>, because the calibration measured where the bar sits.</p>
 <p><img alt="The Pointer tab with sensor-bar position, vertical offset, smoothing, and per-source sensitivity" src="../../images/pad-pointer.png" /></p>
 <h3 id="light-gun">Light gun<a class="headerlink" href="#light-gun" title="Permanent link">&para;</a></h3>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <p>Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the <a href="../../features/devices/#light-gun">Devices</a> page, and in its <strong>Light Gun</strong> section click <strong>Calibrate</strong>. Four targets appear in turn. From where you play, point the remote at each one and press <strong>B</strong>. Esc or <strong>Home</strong> cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The section's reset button returns the remote to its default range.</p>
+<!-- SCREENSHOT: devices-light-gun -->
+<p><img alt="The Light Gun section of a Wii Remote's row on the Devices page" src="../../images/devices-light-gun.png" /></p>
 <p>For a light-gun game that aims with a stick:</p>
 <ul>
 <li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> onto one stick of whichever virtual controller the game or emulator reads.</li>
@@ -4171,11 +4171,11 @@
 </tr>
 <tr>
 <td><strong>Left Joy-Con Motion Gyro</strong></td>
-<td>The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. Pre-release builds after 4.5.3 offer it only on the <strong>Motion Gyro</strong> row.</td>
+<td>The left half's full gyro stream to the virtual controller's motion gyro output, in place of the right half's. It is offered only on the <strong>Motion Gyro</strong> row.</td>
 </tr>
 <tr>
 <td><strong>Left Joy-Con Accelerometer</strong></td>
-<td>The left half's full accelerometer stream to the virtual controller's motion accelerometer output. Pre-release builds after 4.5.3 offer it only on the <strong>Motion Accelerometer</strong> row.</td>
+<td>The left half's full accelerometer stream to the virtual controller's motion accelerometer output. It is offered only on the <strong>Motion Accelerometer</strong> row.</td>
 </tr>
 <tr>
 <td><strong>Left Joy-Con Lean</strong></td>
@@ -4214,7 +4214,6 @@
 <p>A right Joy-Con on the rail of a Ring Fit Adventure Ring-Con reads the ring's flex as two sources, <strong>Ring-Con Squeeze</strong> and <strong>Ring-Con Pull</strong>. Each reads one direction, from nothing at rest to full at a hard squeeze or pull, so a squeeze and a pull map to separate buttons or triggers as they are. To drive one stick axis with both, add both sources to the row and turn on <strong>Invert</strong> for the pull.</p>
 <p>It works on a standalone right Joy-Con and on a combined pair, over Bluetooth. PadForge switches the ring on only while a mapping reads one of its sources, because reading it keeps the Joy-Con's IR and NFC chip powered. The IR camera and the NFC reader share that chip and come first, so while any mapping reads <strong>IR Brightness</strong> or an NFC tag, the ring reads nothing.</p>
 <p>The ring's resting point is its first reading each time it switches on, so hold it at rest for a moment when the Joy-Con connects. Slide the Joy-Con onto the ring before connecting it: a ring attached later is found the next time the Joy-Con connects.</p>
-<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
 <hr />
 <h2 id="joy-con-2-optical-mouse">Joy-Con 2 optical mouse<a class="headerlink" href="#joy-con-2-optical-mouse" title="Permanent link">&para;</a></h2>
 <p>A Nintendo Switch 2 Joy-Con has an optical mouse sensor on its inner edge, the flat side that clips onto the console. Stand the Joy-Con on that edge and slide it across a surface, and it drives two sources, <strong>Mouse Motion X</strong> and <strong>Mouse Motion Y</strong>. Either half works, left or right, as a standalone Joy-Con 2. A combined Joy-Con 2 pair does not expose the sensor, so split the pair to use it.</p>
@@ -4241,7 +4240,7 @@
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

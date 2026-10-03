@@ -100,7 +100,7 @@ Two flags on the registry drive the hooks: `FeatureEnabled` (the Settings toggle
 
 Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. `HandheldChordRuntime`'s worker handles only timed work, ticking every 10 ms while `HasPendingWork` (hold expiry, capture idle). Every injected event carries `ReplayTag` = `0x50464843` ("PFHC") in `dwExtraInfo`, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying `LLKHF_INJECTED` or `LLMHF_INJECTED` bypass the engine too.
 
-*Changed after 4.5.3.* A held key replays as the physical key the hook saw. The engine keeps each held event's identity, its scan code with 0x100 for `LLKHF_EXTENDED` (`InputHookManager.ReplayIdentity`, AutoHotkey's form in `hook.cpp` lines 196-214), every queued replay carries it, and `InjectReplay` types that scan code with that flag. Numpad Enter and Enter share VK_RETURN, and a held Numpad Enter used to replay as Enter. A mouse replay and the Win mask carry none.
+A held key replays as the physical key the hook saw. The engine keeps each held event's identity, its scan code with 0x100 for `LLKHF_EXTENDED` (`InputHookManager.ReplayIdentity`, AutoHotkey's form in `hook.cpp` lines 196-214), every queued replay carries it, and `InjectReplay` types that scan code with that flag. Numpad Enter and Enter share VK_RETURN, and a held Numpad Enter used to replay as Enter. A mouse replay and the Win mask carry none.
 
 The device turns `ButtonChanged` into `_chordDown[button]` plus a pulse.
 
@@ -240,4 +240,4 @@ The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

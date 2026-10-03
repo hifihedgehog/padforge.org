@@ -4016,7 +4016,7 @@
 </tbody>
 </table>
 <p>Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. <code>HandheldChordRuntime</code>'s worker handles only timed work, ticking every 10 ms while <code>HasPendingWork</code> (hold expiry, capture idle). Every injected event carries <code>ReplayTag</code> = <code>0x50464843</code> ("PFHC") in <code>dwExtraInfo</code>, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying <code>LLKHF_INJECTED</code> or <code>LLMHF_INJECTED</code> bypass the engine too.</p>
-<p><em>Changed after 4.5.3.</em> A held key replays as the physical key the hook saw. The engine keeps each held event's identity, its scan code with 0x100 for <code>LLKHF_EXTENDED</code> (<code>InputHookManager.ReplayIdentity</code>, AutoHotkey's form in <code>hook.cpp</code> lines 196-214), every queued replay carries it, and <code>InjectReplay</code> types that scan code with that flag. Numpad Enter and Enter share VK_RETURN, and a held Numpad Enter used to replay as Enter. A mouse replay and the Win mask carry none.</p>
+<p>A held key replays as the physical key the hook saw. The engine keeps each held event's identity, its scan code with 0x100 for <code>LLKHF_EXTENDED</code> (<code>InputHookManager.ReplayIdentity</code>, AutoHotkey's form in <code>hook.cpp</code> lines 196-214), every queued replay carries it, and <code>InjectReplay</code> types that scan code with that flag. Numpad Enter and Enter share VK_RETURN, and a held Numpad Enter used to replay as Enter. A mouse replay and the Win mask carry none.</p>
 <p>The device turns <code>ButtonChanged</code> into <code>_chordDown[button]</code> plus a pulse.</p>
 <hr />
 <h2 id="path-two-vendor-hid-reports">Path two: vendor HID reports<a class="headerlink" href="#path-two-vendor-hid-reports" title="Permanent link">&para;</a></h2>
@@ -4236,7 +4236,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a> for <code>AppSettingsData</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

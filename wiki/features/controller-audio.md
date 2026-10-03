@@ -53,7 +53,7 @@ The mirror captures a Windows **output endpoint**, not a single program. To send
 Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads show three extra control groups in the Sound Output card. A resonant actuator buzzing along with background music is more intrusive than a small speaker playing it, so the first two let you rein it in.
 
 <!-- SCREENSHOT: pad-audio-haptic-controls -->
-<!-- image pending recapture: ![Play mirrored audio and High tones controls on the Audio tab](../images/pad-audio-haptic-controls.png) -->
+![Play mirrored audio and High tones controls on the Audio tab](../images/pad-audio-haptic-controls.png)
 
 ### Play Mirrored Audio
 

@@ -377,7 +377,7 @@ The shell's back faces are `#101112`. The mesh is a single skin, and a deflected
 | `TriggerMaxAngleDeg` | `16.0` |
 | `ModelScale` | `165.7 / 160.0` (160.0 mm body width) |
 
-The converter prints every value. The dome is a sphere to 0.1 mm, the shape that lets a stick turn in place and keep filling the faceplate hole, so its center is the pivot, 26.9 mm behind the cap's apex. The cap first touches the faceplate at 20.9 degrees with both axes at full deflection and at 30 with one. The trigger hinge sits at the Xbox One model's fraction of the trigger's own bounds. At the full 16 degree pull, three vertices on each trigger's lower back edge sink 0.88 mm into the grip's lip under it, out of sight, against 1.45 mm on the DS4. L1 stays more than 7 mm away at any angle.
+The converter prints the four rotation points and the body width. `JoystickMaxAngleDeg` and `TriggerMaxAngleDeg` are set in the model class. The dome is a sphere to 0.1 mm, the shape that lets a stick turn in place and keep filling the faceplate hole, so its center is the pivot, 26.9 mm behind the cap's apex. The cap first touches the faceplate at 20.9 degrees with both axes at full deflection and at 30 with one. The trigger hinge sits at the Xbox One model's fraction of the trigger's own bounds. At the full 16 degree pull, three vertices on each trigger's lower back edge sink 0.88 mm into the grip's lip under it, out of sight, against 1.45 mm on the DS4. L1 stays more than 7 mm away at any angle.
 
 ---
 
@@ -1729,4 +1729,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

@@ -213,7 +213,7 @@ The Range section sets how far you push a stick to reach full output. It has a b
 
 ### Calibrate Boundary (recommended)
 
-![Boundary calibration button with a circularity readout and the measured edge drawn on the stick preview](../images/pad-sticks-boundary-calibration.png)
+![The Range section of the Sticks tab, with Calibrate Boundary and the four range sliders](../images/pad-sticks-boundary-calibration.png)
 
 No stick reaches a perfect circle. The corners fall short, and worn sticks lose reach unevenly. Boundary calibration measures the exact edge your stick can physically reach, then rescales every position so your full motion maps onto a clean circle. Nothing gets clipped, at any angle.
 
@@ -431,4 +431,4 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

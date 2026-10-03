@@ -1360,7 +1360,7 @@ The SDL instance ID is removed from `_openedSdlInstanceIds` by the caller, enabl
 
 ## SDL3 Fork
 
-PadForge ships a custom SDL3 fork at [hifihedgehog/SDL](https://github.com/hifihedgehog/SDL) on branch `feat/hidmaestro-filter`. The built binaries land at `PadForge.App/Resources/SDL3/x64/SDL3.dll` and `PadForge.App/Resources/SDL3/arm64/SDL3.dll`. PadForge 4.5.3 ships the fork's Release build at commit `5df5eff539` (2026-09-21) for both architectures, the same build 4.5.2 shipped. The branch rebases onto `libsdl-org/SDL` mainline, so the fork commits below carry the hashes of the current branch.
+PadForge ships a custom SDL3 fork at [hifihedgehog/SDL](https://github.com/hifihedgehog/SDL) on branch `feat/hidmaestro-filter`. The built binaries land at `PadForge.App/Resources/SDL3/x64/SDL3.dll` and `PadForge.App/Resources/SDL3/arm64/SDL3.dll`. PadForge 5.0.0 ships the fork's Release build at commit `b12239c8c7` (2026-09-27) for both architectures. 4.5.2 and 4.5.3 shipped `5df5eff539` (2026-09-21). The branch rebases onto `libsdl-org/SDL` mainline, so the fork commits below carry the hashes of the current branch.
 
 ### Why a Fork
 
@@ -1493,4 +1493,4 @@ Whichever architecture you build, check the libusb name inside the DLL before bu
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

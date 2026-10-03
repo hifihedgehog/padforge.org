@@ -71,9 +71,9 @@ The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons, plus Share on the Xbox S
 
 ### PlayStation
 
-HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. In pre-release builds the two DualShock 3 presets have 11 buttons, Select and Start where the others have Share and Options, and no touchpad, as on the real pad. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
+HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. The two DualShock 3 presets have 11 buttons, Select and Start where the others have Share and Options, and no touchpad, as on the real pad. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
 
-For PCSX2 and RPCS3, pick **DualShock 3 (SIXAXIS): Full** (pre-release builds after 4.5.3). It presents a DualShock 3 the way Sony's sixaxis driver and DsHidMini's SXS mode do, with analog L2 and R2, the accelerometer and yaw gyro, and pressure on ten buttons, which its grid's [button pressure](mappings.md#button-pressure) rows set. A game's rumble comes back through it to your controller. The plain **DualShock 3 (SIXAXIS)** preset passes game rumble back too (pre-release builds after 4.5.3).
+For PCSX2 and RPCS3, pick **DualShock 3 (SIXAXIS): Full**. It presents a DualShock 3 the way Sony's sixaxis driver and DsHidMini's SXS mode do, with analog L2 and R2, the accelerometer and yaw gyro, and pressure on ten buttons, which its grid's [button pressure](mappings.md#button-pressure) rows set. A game's rumble comes back through it to your controller. The plain **DualShock 3 (SIXAXIS)** preset passes game rumble back too.
 
 ![PlayStation slot: the preset picker selects DualShock 4, DualShock 3, DualSense, or DualSense Edge, with the controller view below](../images/pad-playstation-configbar.png)
 
@@ -132,7 +132,7 @@ Switching one Valve profile to another moves every binding to the same control o
 
 No driver. Always available. Sends keyboard and mouse input to Windows instead of emulating a gamepad. Map buttons to keys, sticks to mouse movement, triggers to scroll. Good for older PC games without controller support, accessibility setups where a gamepad is easier to hold than a keyboard, and desktop or non-game use. An interactive keyboard-and-mouse preview lights up in real time as you press buttons.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* Numpad Enter has its own row, apart from Enter, and its own entry in the SOCD key lists. The preview keyboard drew the key, but no row existed for a click on it to record into.
+Numpad Enter has its own row, apart from Enter, and its own entry in the SOCD key lists. The preview keyboard drew the key, but no row existed for a click on it to record into.
 
 The Output tab carries a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
 
@@ -168,7 +168,7 @@ The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Control
 | PlayStation PC port with PS button prompts | **PlayStation** |
 | Streaming gyro/motion to Cemu, Yuzu, or another emulator | **PlayStation** + DSU |
 | Emulator or game that reads a Switch Pro Controller, with native gyro | **Nintendo** |
-| Gyro from a stick or buttons ([Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll), pre-release builds) | **PlayStation** or **Nintendo** |
+| Gyro from a stick or buttons ([Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll)) | **PlayStation** or **Nintendo** |
 | Flight sim, racing sim, or space sim | **Extended** |
 | HOTAS, racing wheel, or custom button box | **Extended** |
 | Game with keyboard+mouse only | **Keyboard+Mouse** |
@@ -357,4 +357,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

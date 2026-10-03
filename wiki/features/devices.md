@@ -12,7 +12,7 @@
 |------|----------|
 | **Left panel** | One card for each detected device |
 | **Right panel** | Detail pane for the selected device. Identity, slot assignment, hiding, live raw input. |
-| **Header** | **Refresh** button, **Pair** button (Wii controllers, DualShock 3, PS Move / Navigation, and in pre-release builds serial controllers), **Online** count, **Total** count (includes disconnected) |
+| **Header** | **Refresh** button, **Pair** button (Wii controllers, DualShock 3, PS Move / Navigation, serial controllers and DJI remotes), **Online** count, **Total** count (includes disconnected) |
 
 ---
 
@@ -24,7 +24,7 @@ Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchp
 
 A row of chips sits above the card list: **ALL**, **GAMEPAD**, **JOYSTICK**, **WHEEL**, **KEYBOARD**, **MOUSE**, **OTHER**. Each chip carries a live count of the cards in that group, offline cards included. Click one to show only that type. Click **ALL** to clear the filter. The active chip lights up in ember orange.
 
-GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, Web Menus phones, and anything unclassified.
+GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, analog keyboard cards, Web Menus phones, and anything unclassified.
 
 <!-- SCREENSHOT: devices-facet-chips -->
 ![Type filter chips above the device list, each with a live count](../images/devices-facet-chips.png)
@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Analog Keyboard, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Analog Keyboard, Web Menus, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging or plugged in at full charge. |
@@ -124,19 +124,13 @@ Four devices can give PadForge more when they run on Windows' WinUSB driver, but
 
 A **Switch to PadForge's Driver** confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows **Restore the Windows Driver**, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 ### Pads in iCade mode
 
-A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a button goes down and another when it comes up. The ION iCade cabinet reads as a controller on its own. For any other pad, select its keyboard's card and click **Read as iCade Controller**. The keyboard's card goes offline, and an **iCade Controller** card takes its place with a gamepad layout: A on Back, B on the left shoulder, C on Start, D on the right shoulder, E, F, G and H on the face buttons. **Read as Keyboard**, on either card, turns it back into a keyboard. The letters still reach the program in the foreground, because Windows still sees a keyboard. PadForge reads up to 32 such pads.
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a button goes down and another when it comes up. The ION iCade cabinet reads as a controller on its own. For any other pad, select its keyboard's card and click **Read as iCade Controller**. The keyboard's card goes offline, and an **iCade Controller** card takes its place with a gamepad layout: A on Back, B on the left shoulder, C on Start, D on the right shoulder, E, F, G and H on the face buttons. **Read as Keyboard**, on either card, turns it back into a keyboard. The letters still reach the program in the foreground, because Windows still sees a keyboard. PadForge keeps up to 32 keyboard IDs in iCade mode and reads up to eight iCade devices at a time, the ION iCade cabinet included.
 
 ### Namco USIO layout
 
 One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's card and click **Read as Tekken Sticks** to read four arcade sticks instead. **Read as Taiko Drums**, on a stick's card, goes back. The board opens again in the new layout, so its cards leave and the other layout's arrive a moment later. While the engine is stopped, or paused in the background, the change waits and takes effect when it runs again.
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---
 
@@ -297,15 +291,11 @@ With **Read Analog Keyboards** on in [Settings](settings.md), each supported ana
 
 The card reads a vendor interface beside the keyboard, so it has no Input Mode or Input Hiding sections.
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 ---
 
 ## Bliss-Box ports
 
 With **Read Bliss-Box Adapters** on in [Settings](settings.md), a Bliss-Box port's detail pane carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller on an adapter with firmware 3.0 or later, and **Read Arrows One by One** for a PlayStation digital pad or dance mat on a 3.x adapter. In the mapping picker the port's buttons take the names of the controller plugged in, assigning the port maps that controller the way SDL maps its console's pad, and a DualShock 2 adds a **DualShock 2 Pressure** panel to the detail pane. See [Bliss-Box Adapters](bliss-box.md).
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---
 
@@ -341,8 +331,6 @@ Every active Windows microphone, the one in a wired DualSense included, shows up
 
 ## Web Menus phones
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 A phone that opens the web controller's [Web Menus](../guides/web-controller.md#web-menus) layout shows up as a device card typed **Web Menus**, named **Web Menus 1**, then 2 for a second phone. It has no axes, buttons, or hats, so it adds nothing of its own to a slot's mappings. What it carries is taps: assign it to a slot and its tiles fire that slot's Touch Grid [menus](../guides/menus.md#on-a-phone). Remote Link does not offer it to a paired PC.
 
 ---
@@ -367,7 +355,7 @@ A drawing tablet is not in this group. Windows HID pen and digitizer devices are
 
 ## Pairing a controller
 
-The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, and **PlayStation Move / Navigation**, and in pre-release builds **Serial Controller (COM Port)** and **DJI RC or RC 2 (Network)**.
+The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, **PlayStation Move / Navigation**, **Serial Controller (COM Port)** and **DJI RC or RC 2 (Network)**.
 
 The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See [Wii Controllers](../devices/wii-controllers.md) for the pairing steps and the per-controller button layouts.
 
@@ -376,6 +364,9 @@ The DualShock 3 family pairs over USB: connect the controller with a cable, clic
 The PlayStation Move / Navigation family pairs over USB the same way. PadForge writes this PC into the controller, saves the Move's motion calibration, and registers it. Unplug it and press the PS button to connect over Bluetooth.
 
 The Serial Controller (COM Port) family adds a controller on a serial port. Windows cannot tell which controller a COM port carries, so pick the **Port** and the **Controller**, then click **Add**. PadForge opens that port from then on, and **Added Controllers** lists each one with a button that removes it. Adding a controller to a port that already has one replaces it. PadForge reads up to 16 serial controllers.
+
+<!-- SCREENSHOT: serial-pair -->
+![The Pair a Controller dialog set to Serial Controller (COM Port)](../images/serial-pair.png)
 
 | Controller list entry | What it is |
 |---|---|
@@ -402,7 +393,8 @@ Some devices need a step first. Windows may install a serial mouse on a CyberMan
 
 The DJI RC or RC 2 (Network) family reads a DJI RC or DJI RC 2 over the network. Put the remote and this PC on the same network, type the remote's IPv4 address under **Address**, with the port after a colon when it is not 40007, and click **Add**. **Added Remotes** lists each one with a button that removes it. PadForge reads up to 8 remotes this way. A remote serves its sticks on port 40007 only on firmware from before DJI closed that port, so one on current firmware never answers. The DJI RC also reads over USB with no entry.
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+<!-- SCREENSHOT: dji-pair -->
+![The Pair a Controller dialog set to DJI RC or RC 2 (Network)](../images/dji-pair.png)
 
 Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.
 
@@ -426,11 +418,11 @@ You can whitelist more apps in [Settings](settings.md) so they can still see hid
 
 Suppresses only the specific keys or mouse buttons [mapped](mappings.md) to a virtual controller output. Unmapped keys still type. The cursor still moves. No driver needed. Windows low-level input hooks handle it. The toggle only shows for keyboards and mice.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* A mapped Numpad Enter is consumed like any other key. Earlier builds let it through to other programs, and consuming the main Enter key swallowed Numpad Enter as well.
+A mapped Numpad Enter is consumed like any other key. Earlier builds let it through to other programs, and consuming the main Enter key swallowed Numpad Enter as well.
 
 Windows' low-level hooks do not say which keyboard or mouse sent an event. Consuming a key consumes it on every keyboard connected to this PC, and a consumed key reads as pressed on every keyboard's row, whichever keyboard pressed it. Mouse buttons work the same way across mice.
 
-*Changed after 4.5.3.* Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.
+Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.
 
 ### Which to use
 
@@ -514,9 +506,7 @@ A Namco GunCon 2 gets a **Light Gun** section in the detail pane. The gun times 
 
 A Wii Remote with its IR camera gets the same section, and its line says whether the remote is calibrated to the screen. **Calibrate** shows the same white screens and targets. From where you play, point the remote at each target and press **B**. A press while the remote can't see the sensor bar is asked for again, and Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. A calibrated remote ignores the Pointer tab's **Sensor Bar Position** and **Vertical Offset**, because the calibration measured where the bar sits. The reset button returns the remote to its default range. [Wii Controllers](../devices/wii-controllers.md#light-gun) covers a light-gun setup.
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* A gun or remote reached through [Remote Link](../guides/remote-link.md) has no Light Gun section here, because it is calibrated on the PC it is plugged into. The calibration screen closes if the gun disconnects or reconnects partway through, including a Wii Remote reconnecting when an extension is plugged in. A GunCon 2's aim takes no **Sensor Bar Position** or **Vertical Offset** either, which a Copy From of a Wii Remote's settings would otherwise carry onto the gun.
+A gun or remote reached through [Remote Link](../guides/remote-link.md) has no Light Gun section here, because it is calibrated on the PC it is plugged into. The calibration screen closes if the gun disconnects or reconnects partway through, including a Wii Remote reconnecting when an extension is plugged in. A GunCon 2's aim takes no **Sensor Bar Position** or **Vertical Offset** either, which a Copy From of a Wii Remote's settings would otherwise carry onto the gun.
 
 ---
 
@@ -675,4 +665,4 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

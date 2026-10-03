@@ -1069,13 +1069,13 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `GunCalibration` | `string` | `""` | A GunCon 2's or a Wii Remote's aim range as `UserDevice.GunCalibration` keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun or remote. |
-| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`) or, after 4.5.3, a Wii Remote with an IR camera (`UserDevice.HasIrCamera`, #485), online or offline. After 4.5.3 a Remote Link peer's row has none, the rule the other owner-only controls follow (#248): `ComputeShowGunCalibration`, which the row fill calls. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
-| `GunIsWiiRemote` | `bool` | `false` | *Added after 4.5.3.* The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies `GunCalibrationStatus` and `GunCalibrateTooltip`. |
+| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`) or a Wii Remote with an IR camera (`UserDevice.HasIrCamera`, #485), online or offline. A Remote Link peer's row has none, the rule the other owner-only controls follow (#248): `ComputeShowGunCalibration`, which the row fill calls. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
+| `GunIsWiiRemote` | `bool` | `false` | The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies `GunCalibrationStatus` and `GunCalibrateTooltip`. |
 | `GunConnectedHere` | `bool` | `false` | The gun's or remote's live device is this PC's own `SdlDeviceWrapper`. A relayed one is calibrated on its owner's PC. |
 | `CanCalibrateGun` | `bool` | - | Computed: `GunConnectedHere && IsOnline`. Enables **Calibrate**. |
 | `ShowGunCalibrationDivider` | `bool` | - | Computed: `ShowGunCalibration && (ShowPowerSection \|\| !ShowInputModeOrHidingSection)`, the rule above the Light Gun section. |
 | `GunCalibrationStatus` | `string` | - | Computed: the aim range, formatted with `Devices_GunWindowDefault` or `Devices_GunWindowCalibrated`. A Wii Remote's line says only whether a window is stored (`Devices_WiiAimCalibrated` or `Devices_WiiAimDefault`), since its pointer counts mean nothing to a reader. |
-| `GunCalibrateTooltip` | `string` | - | *Added after 4.5.3.* Computed: what **Calibrate** does for this gun, `Devices_WiiCalibrateTooltip` for a Wii Remote, else `Devices_GunCalibrateTooltip`. |
+| `GunCalibrateTooltip` | `string` | - | Computed: what **Calibrate** does for this gun, `Devices_WiiCalibrateTooltip` for a Wii Remote, else `Devices_GunCalibrateTooltip`. |
 | `ShowReadAsICade` | `bool` | `false` | A Bluetooth keyboard with IDs, not the ION iCade cabinet, whose pair `ICadePads` does not list (`ICadePads.CanMark`). |
 | `ShowReadAsKeyboard` | `bool` | `false` | A listed pair's iCade Controller joystick, or its keyboard record while the pad is away. |
 | `ShowUsioTekken` / `ShowUsioTaiko` | `bool` | `false` | A Namco USIO drum or stick joystick, by the names the fork gives each layout. Each offers the other layout. |
@@ -1225,7 +1225,7 @@ The `ProfileId` setter, in order. Steps 1 and 2 run on a live re-target only: th
 3. Reseeds `ExtendedConfig` from the profile (`SyncExtendedConfigFromProfile`): `ThumbstickCount` and `TriggerCount` from `HMProfile.StickCount` / `TriggerCount`, `PovCount` from `HasHat`, `ButtonCount` from `HMProfile.ButtonCount`, or on a Nintendo lettered profile from its own lettered count. That lettered count is authoritative rather than a `Min` against the SDK-reported one: taking a `Min` let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from `NintendoPreviewMap` instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces `ExtendedConfig.Customize` on.
 4. Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (`SyncMacroButtonStyle`), and re-gates the Bass Shakers tab.
 
-Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (`SyncMacroButtonStyle`), and a live preset change first fills, from the slot's pads, what the new preset's default maps and the outgoing one's does not (`DeviceService.FillEmptyPresetMappingsForSlot`): the Full preset's pressure rows, and the touchpad, Mic Mute and Edge rows a DualShock 3 preset withheld. A field the outgoing default mapped and the user cleared on that wire stays cleared. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: `MacroButtonNames.DeriveStyle` returns `DualShock3` for a PlayStation slot on either DualShock 3 preset (`HMaestroProfileCatalog.IsDualShock3`).
+Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (`SyncMacroButtonStyle`). On a PlayStation slot, a live preset change first fills, from the slot's pads, what the new preset's default maps and the outgoing one's does not (`DeviceService.FillEmptyPresetMappingsForSlot`): the Full preset's pressure rows, and the touchpad, Mic Mute and Edge rows a DualShock 3 preset withheld. A field the outgoing default mapped and the user cleared on that wire stays cleared. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: `MacroButtonNames.DeriveStyle` returns `DualShock3` for a PlayStation slot on either DualShock 3 preset (`HMaestroProfileCatalog.IsDualShock3`).
 
 ### Extended Configuration
 
@@ -1708,7 +1708,7 @@ Per (slot, device). The card shows only for a DualShock 3 with both sensors.
 | Property | Type | Default | Values | Description |
 |----------|------|---------|--------|-------------|
 | `GyroSimulation` | `bool` | `false` | - | Fills pitch and roll from the accelerometer. |
-| `GyroSimulationSmoothingMs` | `double` | `100` | 20 to 250 | The smoothing time constant. The setter clamps, and a value that isn't a number becomes 100. |
+| `GyroSimulationSmoothingMs` | `double` | `100` | 20 to 250 | The smoothing time constant. The setter clamps, and a value that is not finite (NaN or infinity) becomes 100. |
 
 **Reset commands:** `ResetGyroSimulationCommand` (off), `ResetGyroSimulationSmoothingCommand` (back to 100), `ResetGyroSimulationCardCommand` (both).
 
@@ -1994,7 +1994,7 @@ Single mapping row linking a physical input to an output target in the Pad page 
 | Property | Type | Description |
 |----------|------|-------------|
 | `AvailableInputs` | `ObservableCollection<InputChoice>` | Source dropdown choices, spanning every device assigned to the slot. Populated by InputService once per VC slot, not per device-dropdown change. Since #322 every row on a slot points at a shared list (`UseSharedAvailableInputs`), so a keyboard-and-mouse tab switch no longer rebuilds a private copy and a grouped view per row. Since #475 the Motion Gyro and Motion Accelerometer rows point at the slot's motion lists and every other row at `SlotAvailableInputs` (`InputService.PickerListForRow`). |
-| `ParamInputs` / `ParamInputsView` | `ObservableCollection<InputChoice>` / `ICollectionView` | (#475) The full list for the modifier and Up / Down pickers and `MappingSourceItem.ResolveParamChoice`. It differs from `AvailableInputs` only on the Motion rows, where an Invert On Hold modifier still needs a button. Set by `UseSharedParamInputs`, which collapses back to `AvailableInputs` when the two are the same list. |
+| `ParamInputs` / `ParamInputsView` | `ObservableCollection<InputChoice>` / `ICollectionView` | (#475) The slot's list, `SlotAvailableInputs`, for the modifier and Up / Down pickers and `MappingSourceItem.ResolveParamChoice`. It differs from `AvailableInputs` only on the Motion Gyro and Motion Accelerometer rows, where an Invert On Hold modifier still needs a button. Set by `UseSharedParamInputs`, which collapses back to `AvailableInputs` when the two are the same list. |
 | `AvailableInputsView` | `ICollectionView` | The grouped view the XAML ComboBox binds to. `GroupDescriptions` carries one `PropertyGroupDescription` on `InputChoice.DeviceLabel`, so the picker renders one dropdown with device-name headers. The default view is one object per collection, so on the shared list every row lands on the same view and the grouping is configured once. |
 | `SelectedInput` | `InputChoice` | Selected dropdown input. Updates `SourceDescriptor`. Empty sentinel triggers `ClearCommand`. Suppression flag prevents re-entrancy, and is held across the shared-list rebuild (`BeginSharedListRebuild` / `EndSharedListRebuild`) so a live ComboBox cannot write its own selection back through the TwoWay binding. |
 
@@ -2117,8 +2117,8 @@ File: `MappingItem.MotionRows.cs`. The three rows that turn stick, trigger, butt
 | `MotionAngle` | `int` | `85` | Lean Angle, degrees. Clamped 1 to 90. |
 | `MotionDeadzone` | `int` | `20` | Motion Deadzone, percent. Clamped 0 to 90. |
 | `MotionResponseOptions` | `IReadOnlyList<CombineModeOption>` | - | Speed and Angle with their descriptions, culture-cached like the combine modes. |
-| `PresetCarriesNoMotion` | `bool` (init) | `false` | Set by the grid builder on all five Motion rows of the DualShock 3 and Switch 2 Pro presets (`HMaestroProfileCatalog.ReportCarriesNoMotion`). |
-| `MotionRowNote` / `ShowMotionRowNote` | `string` / `bool` | `null` / `false` | The note under the row. On a Motion Gyro or Motion Accelerometer row, a source whose descriptor is not a `Motion ` one: `Pad_Mapping_MotionRowUnreadNote`. On any other row, a bundled motion source: `Pad_Mapping_MotionSourceElsewhereNote`. Otherwise, on a preset without motion, `Pad_Mapping_MotionPresetNote` on the Motion rows. InvertOnHold modifiers are skipped. Raised when the primary or an extra source changes. |
+| `PresetCarriesNoMotion` | `bool` (init) | `false` | Set by the grid builder on all five Motion rows of the DualShock 3 (SIXAXIS), Switch 2 Pro and plain Steam Deck presets (`HMaestroProfileCatalog.ReportCarriesNoMotion`). |
+| `MotionRowNote` / `ShowMotionRowNote` | `string` / `bool` | `null` / `false` | The note under the row. On a Motion Gyro or Motion Accelerometer row, a source whose descriptor is not a `Motion ` one: `Pad_Mapping_MotionRowUnreadNote`. On any other row, a bundled motion source: `Pad_Mapping_MotionSourceElsewhereNote`. Otherwise, on a preset without motion, `Pad_Mapping_MotionPresetNote` on the Motion rows, and on the DualShock 3 (SIXAXIS): Full, whose report carries no pitch or roll rate (`PresetCarriesNoPitchRollRate`), `Pad_Mapping_MotionPitchRollRateNote` on Motion Pitch and Motion Roll in Speed mode. InvertOnHold modifiers are skipped. Raised when the primary, an extra source or `MotionResponse` changes. |
 
 The five settings reset through `ResetSettingCommand` with their property names. The grid builder adds the three rows after Motion Gyro and Motion Accelerometer on the PlayStation, Nintendo and Valve grids (`PadViewModel.AddMotionRows`), each with `NegSettingName` `<Target>Neg` and all five out of Map All. **Clear All** resets the five settings.
 
@@ -3032,7 +3032,7 @@ Per-slot Extended-controller configuration. Drives stick/trigger/POV/button coun
 | `ComputeAxisLayout(out int[], out int[], out int[])` | Computes interleaved axis indices per group. |
 | `ResetToDefaults()` | Resets every field to its fresh-install default in place. Never replaces the instance (MainWindow's autosave hook binds to this object's `PropertyChanged`). Triggers drop to `0` first so the stick default isn't clamped away by the shared-axis budget. |
 
-The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `d57a725`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
+The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
 
 ### ExtendedSlotConfigData
 
@@ -3411,4 +3411,4 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

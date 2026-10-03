@@ -233,7 +233,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 
 Press or release a virtual controller button. Button Press has a duration in milliseconds and auto-releases.
 
-- Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names. In pre-release builds a PlayStation slot on a DualShock 3 preset names Select and Start, and has no Touchpad button.
+- Names follow the slot's output type: Xbox labels, PlayStation labels, or numbered buttons on an Extended slot. Nintendo slots, and Extended slots on a Switch Pro family, Steam Deck, or Steam Controller profile, use that pad's own button names. A PlayStation slot on a DualShock 3 preset names Select and Start, and has no Touchpad button.
 - Select more than one button to fire them together.
 
 ### Key Press / Key Release
@@ -477,11 +477,12 @@ It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the 
 
 ### Set Chroma Color
 
-Paints every Razer Chroma device one color for the action's **Duration**, then hands the lighting back to Razer Synapse. It needs Synapse running, and it works whether or not the [Razer Chroma lightbar mirror](../features/lightbar-mirrors.md#razer-chroma) is on. While a macro paints, its color wins over the mirror's.
+<!-- SCREENSHOT: macro-set-chroma-color -->
+![The Set Chroma Color action editor with its Duration and color](../images/macro-set-chroma-color.png)
+
+Paints every Razer Chroma device one color for the action's **Duration**. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the [Razer Chroma lightbar mirror](../features/lightbar-mirrors.md#razer-chroma) is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.
 
 To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ### Show Dreamcast Screen
 
@@ -494,8 +495,6 @@ Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port
 | **Repeat Count** | How many times the set plays. |
 
 It needs **Read Bliss-Box Adapters** on. See [Bliss-Box Adapters](../features/bliss-box.md#dreamcast-screen).
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ### Clear Lightbar Override
 
@@ -561,7 +560,7 @@ Per slot, volatile (resets on profile switch and app restart). Lets a macro hold
 
 Zeroes the pad's accumulated gyro aim references on press. Smoothing history clears, the Motion Lean neutral re-captures, and the gravity estimate re-seeds from the controller's current pose. Imported Steam configs use it for their camera-reset bindings.
 
-In pre-release builds it also levels the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows built with **Speed**. A lean an **Angle** row holds stays, because the stick still holds it.
+It also levels the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows built with **Speed**. A lean an **Angle** row holds stays, because the stick still holds it.
 
 ### Cycle Pointer Modes / Set Pointer Mode
 
@@ -775,4 +774,4 @@ An Extended slot carries up to 128 buttons, set in its **Buttons** field with **
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

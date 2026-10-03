@@ -78,7 +78,7 @@ A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, st
 - Several motion devices on one slot stack as sources on the same row. The row's **Combine** setting merges their readings axis by axis: **Strongest** by default, or **Combined**, **Average**, or **Custom**.
 - The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.
 - On a Joy-Con pair, the source picker also offers **Left Joy-Con Motion Gyro** and **Left Joy-Con Accelerometer** to stream the left half's sensors instead of the pair's primary stream. A Wii Remote with a Nunchuk attached offers **Nunchuk Accelerometer** the same way.
-- The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows add motion from a stick or buttons. While one of them has an input, DSU sends the frame the virtual controller reports: the real sensors from the two rows above plus the simulated turn and lean, or the simulated motion alone on a slot with no sensors. Pre-release builds have them.
+- The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows add motion from a stick or buttons. While one of them has an input, DSU sends the frame the virtual controller reports: the real sensors from the two rows above plus the simulated turn and lean, or the simulated motion alone on a slot with no sensors.
 
 The Dashboard switch is the global on / off. There is no per-slot DSU enable toggle. Slots 1–4 broadcast when DSU is on. Slots 5–16 are above the protocol cap and never broadcast.
 
@@ -178,4 +178,4 @@ If a direction reads backward on your controller, say which one on the [issue tr
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

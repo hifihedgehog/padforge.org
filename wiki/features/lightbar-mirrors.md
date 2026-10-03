@@ -139,4 +139,4 @@ A profile has no opinion until you give it one. Profiles saved before PadForge 4
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

@@ -9,14 +9,59 @@ script does not reproduce, among them the Flydigi USB identities, the
 Other SDL drivers table, the Devices PadForge's own code claims table, the
 MOZA two-generation note, the Handheld PCs section, the Specialty and
 legacy controllers section (hifihedgehog/SDL#33's devices, by how each one
-connects), the Beyond gamepads rows and the intro's Flydigi, driver and
-PadForge clauses. A blind run drops about 130 lines of them, 97 of them the SDL#33 section. Diff the result against
-the committed page and put the hand-authored parts back before committing.
+connects) and the Beyond gamepads rows. A blind run drops about 130 lines of
+them, 97 of them the SDL#33 section. Diff the result against the committed
+page and put the hand-authored parts back before committing. Importing this
+file writes nothing, so a merge can take md()'s generated sections alone.
 _specs_block.html has no hand-authored content and can be taken as written.
 """
 import io, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from emit_supported import fam, mapped, CAT, N, FAM_ORDER, lines, SITE
+
+# The count of HIDMaestro profiles PadForge's pickers offer: the ones that
+# carry a captured HID descriptor (HMaestroProfileCatalog keeps only
+# IsDeployable profiles). Checked by hand against the bundled DLL.
+OFFERED_PROFILES = 134
+
+WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+         6: "six", 7: "seven", 8: "eight", 9: "nine"}
+
+
+def word(n):
+    return WORDS.get(n, str(n))
+
+
+# The headline both pages carry. Every number comes from emit_supported, so
+# a fork rebase regenerates it instead of leaving a hand-edited count behind.
+HN = dict(N)
+HN.update(
+    union_fmt="{:,}".format(N["union"]),
+    claimed=N["drivers"] + N["windows"],
+    mapped_all=N["mapped"],
+    offered=OFFERED_PROFILES,
+    ow=word(N["overlap_wheels"]),
+    og=word(N["overlap_gamecube"]),
+)
+# The headline says every arcade stick sits in the gamepad list and nothing
+# else does. A rebase that changes either needs the sentence rewritten.
+if N["overlap_arcade"] != N["arcade"]:
+    raise SystemExit("not every arcade stick is in the gamepad list now: reword HEADLINE")
+if N["mapped_padforge"] != 1:
+    raise SystemExit("PadForge's own mapping file no longer holds one row: reword HEADLINE")
+HEADLINE = (
+    "PadForge recognizes **{union_fmt}** devices by their USB identity: {pads} gamepads in SDL's "
+    "controller list, {community} more pads that the community SDL_GameControllerDB maps, "
+    "{flydigi} Flydigi pads, {claimed} pads and specialty devices that SDL's dedicated drivers "
+    "claim, {wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} "
+    "arcade sticks, {gamecube} GameCube adapters, and {native} devices PadForge's own code "
+    "claims. The arcade sticks, {ow} wheels and {og} adapters also sit in the gamepad list, so "
+    "the total is smaller than the sum. Behind those sit **{mapped_all}** named gamepad "
+    "mappings: {mapped_sdl} from SDL's Windows database, {mapped_community} more from the "
+    "community database, and PadForge's own DualShock 3 entry. For virtual controllers, "
+    "HIDMaestro ships {profiles} device profiles, and PadForge offers the {offered} that carry "
+    "a captured HID descriptor."
+)
 
 Q = '"'
 
@@ -53,7 +98,7 @@ def md_escape(n):
     GameCube followed by HuiJia="HuiJia" USB="USB" box="box" and the rest of
     the name vanished from the built page. Backslash-escape the braces; the
     HTML emitter below needs none of this, because braces are literal there."""
-    return n.replace("{", "\{").replace("}", "\}")
+    return n.replace("{", "\\{").replace("}", "\\}")
 
 
 def vendor_table(names):
@@ -79,10 +124,7 @@ def md():
         "",
         "*Every controller, wheel, stick and adapter PadForge knows by name, in one place.*",
         "",
-        "PadForge recognizes **{union}** devices by their USB identity: {pads} gamepads, "
-        "{wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} arcade "
-        "sticks and {gamecube} GameCube adapters. Behind those sit **{mapped}** shipped gamepad "
-        "mappings and {profiles} device profiles.".format(**N),
+        HEADLINE.format(**HN),
         "",
         '!!! tip "Not on this list?"',
         "    It very likely still works. Anything Windows enumerates as an input device can be read",
@@ -218,12 +260,15 @@ def html():
     h = ['        <section class="spec-block" id="hardware">\n',
          '            <h2 class="display-s spec-h reveal">Devices, by name</h2>\n',
          '            <p class="reveal" data-d="1" style="max-width:74ch; margin-bottom:2rem">'
-         'PadForge recognizes <b>{union}</b> devices by their USB identity: {pads} gamepads, '
+         'PadForge recognizes <b>{union_fmt}</b> devices by their USB identity: {pads} gamepads in '
+         'SDL\'s controller list, {community} more pads the community SDL_GameControllerDB maps, '
+         '{flydigi} Flydigi pads, {claimed} pads and specialty devices SDL\'s dedicated drivers claim, '
          '{wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} arcade '
-         'sticks and {gamecube} GameCube adapters, with <b>{mapped}</b> shipped gamepad mappings '
-         'and {profiles} device profiles behind them. Anything not named here still works as a generic '
-         'input device, so this is where the names, the correct layout and the extra capabilities '
-         'come from rather than the limit of what PadForge reads.</p>\n'.format(**N),
+         'sticks, {gamecube} GameCube adapters and {native} devices PadForge\'s own code claims, with '
+         '<b>{mapped_all}</b> named gamepad mappings and {profiles} device profiles behind them. '
+         'Anything not named here still works as a generic input device, so this is where the '
+         'names, the correct layout and the extra capabilities come from rather than the limit of '
+         'what PadForge reads.</p>\n'.format(**HN),
          '            <dl class="spec-list reveal" data-d="1">\n']
     for f in FAM_ORDER:
         if fam.get(f):
@@ -252,8 +297,9 @@ def html():
     return ''.join(h)
 
 
-io.open(os.path.join(SITE, 'wiki', 'devices', 'supported.md'), 'w',
-        encoding='utf-8', newline='\r\n').write(md())
-io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '_specs_block.html'), 'w',
-        encoding='utf-8', newline='\r\n').write(html())
-print('wrote wiki/devices/supported.md and _specs_block.html')
+if __name__ == "__main__":
+    io.open(os.path.join(SITE, 'wiki', 'devices', 'supported.md'), 'w',
+            encoding='utf-8', newline='\r\n').write(md())
+    io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '_specs_block.html'), 'w',
+            encoding='utf-8', newline='\r\n').write(html())
+    print('wrote wiki/devices/supported.md and _specs_block.html')

@@ -174,15 +174,13 @@ Where the browser allows a page to go fullscreen, which Android Chrome does, eac
 
 ## Web Menus
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 Pick **Web Menus** on the landing page and the phone shows a slot's [Touch Grid menus](menus.md) as pages of tiles. Tap a tile and its cell fires on the PC: the key, controller button, or macro the cell carries, and every mapping row, macro trigger, or shift layer that reads the cell. A phone propped beside the keyboard becomes a panel of your own commands for the game on the screen.
 
 ### Set it up
 
 1. Open **Web Menus** on the phone. It shows up on the [Devices](../features/devices.md) page as **Web Menus 1**.
 2. Assign it to the slot whose menus you want, the same way as any controller. Until then the page says **Not on a slot**. The phone has no buttons or sticks of its own, so assigning it beside the slot's controller adds nothing but its tiles.
-3. On that slot's **Menus** tab, turn on **Show on Web Controller** for each Touch Grid menu the phone should show. The checkbox appears on Touch Grid menus only. Until one is on, the page says **No menus to show**.
+3. On that slot's **Menus** tab, turn on **Show on Web Controller** for each Touch Grid menu the phone should show. The checkbox appears on Touch Grid menus, and on a Radial Ring menu only while it is still on from the menu's time as a Touch Grid, so it can be turned off. Until one is on, the page says **No menus to show**.
 
 Each marked menu is one page, and a tab strip across the top switches between them. A phone assigned to several slots shows the pages of every slot, and each tab then names its slot.
 
@@ -231,11 +229,12 @@ A **QR code** on the Dashboard's Web Controller card gets the phone to the right
 
 ## Plain HTTP address
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 Some browsers refuse PadForge's self-signed certificate outright, and a tunnel or reverse proxy that reaches the PC from outside brings a certificate of its own. For both, the Web Controller card can serve a second address over plain HTTP, on its own port, beside the main one. The main address does not change.
 
 Check **Also Serve Plain HTTP** on the [Dashboard](../features/dashboard.md). The plain address uses port `8081` unless you pick another, and it cannot share the main address's port.
+
+<!-- SCREENSHOT: dashboard-web-plain -->
+![The Plain HTTP Address section of the Web Controller card](../images/dashboard-web-plain.png)
 
 ### The access code
 
@@ -255,7 +254,7 @@ Browsers expose the motion sensors only over HTTPS, so a layout opened on the pl
 
 Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.
 
-The [Browser Gamepad](#browser-gamepad-a-controller-paired-to-the-phone) page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies gets past the first page and no further.
+The [Browser Gamepad](#browser-gamepad-a-controller-paired-to-the-phone) page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies loads the first page and nothing after it.
 
 ## Touch controls
 
@@ -320,4 +319,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

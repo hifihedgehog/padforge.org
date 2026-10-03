@@ -2,9 +2,13 @@
 
 Sources, all read at run time so a rebase regenerates rather than rots:
   controller_list.h   every pad SDL knows by USB identity, with its family
-  SDL_gamepad_db.h    every pad with a shipped mapping, by name
+  SDL_gamepad_db.h    every pad with a shipped mapping, by name, the
+                      community SDL_GameControllerDB rows its include
+                      brings in counted too
   SDL_joystick.c      the wheel, flight stick, throttle, arcade and
                       GameCube adapter tables
+  windows/            the serial driver's automatic rules and the iCade
+                      driver's cabinet, which open a device by its ID
 
 Prints the counts and the per-family and per-category name lists as JSON.
 emit_pages.py turns the same data into the two pages. Run this one to see
@@ -18,6 +22,12 @@ SITE = r"C:\Users\sonic\OneDrive\Documents\GitHub\padforge.org"
 read = lambda p: io.open(p, encoding="utf-8", errors="replace").read()
 CL = read(SDL + r"\controller_list.h")
 DB = read(SDL + r"\SDL_gamepad_db.h")
+# The fork compiles the community SDL_GameControllerDB rows into the
+# DirectInput block through an include, so read them in its place: they
+# are shipped mappings like any other, and every one names a USB pad that
+# no other table here lists (the header's own count of what it kept).
+COMMUNITY = read(SDL + r"\SDL_gamepad_db_community.h")
+DB = DB.replace('#include "SDL_gamepad_db_community.h"', COMMUNITY)
 JS = read(SDL + r"\SDL_joystick.c")
 
 
@@ -150,25 +160,46 @@ for line in CL.splitlines():
 # things this build carries, which it does not.
 WIN_GUARDS = ("SDL_JOYSTICK_PRIVATE", "SDL_JOYSTICK_XINPUT",
               "SDL_JOYSTICK_WGI", "SDL_JOYSTICK_DINPUT")
-mapped = set()
-_guards = []
-for line in DB.splitlines():
-    _s = line.strip()
-    if _s.startswith("#ifdef ") or _s.startswith("#if "):
-        _guards.append(_s.replace("#ifdef", "").replace("#if", "").strip())
-        continue
-    if _s.startswith("#endif"):
-        if _guards:
-            _guards.pop()
-        continue
-    if not _guards or not any(w in _guards[-1] for w in WIN_GUARDS):
-        continue
-    m = re.match(r'\s*"([0-9a-fA-F]{32}),([^,]+),', line)
-    if m:
-        n = m.group(2).strip()
-        for one in expand(display(n)):
-            if one != "*":
-                mapped.add(one)
+
+
+def _mapped_names(text):
+    names = set()
+    guards = []
+    for line in text.splitlines():
+        s = line.strip()
+        if s.startswith("#ifdef ") or s.startswith("#if "):
+            guards.append(s.replace("#ifdef", "").replace("#if", "").strip())
+            continue
+        if s.startswith("#endif"):
+            if guards:
+                guards.pop()
+            continue
+        if not guards or not any(w in guards[-1] for w in WIN_GUARDS):
+            continue
+        m = re.match(r'\s*"([0-9a-fA-F]{32}),([^,]+),', line)
+        if m:
+            for one in expand(display(m.group(2).strip())):
+                if one != "*":
+                    names.add(one)
+    return names
+
+
+# Every name with a shipped mapping, and the part SDL's own rows name.
+mapped = _mapped_names(DB)
+mapped_sdl = _mapped_names(DB.replace(COMMUNITY, ""))
+mapped_community = mapped - mapped_sdl
+# PadForge's own embedded file, which it adds through SDL_AddGamepadMapping
+# at startup: one row, the DualShock 3 under DsHidMini. Its name stays whole:
+# display() trims the "(DsHidMini SDF and SXS)" that tells it apart from the
+# community database's plain DualShock 3, a different device identity.
+mapped_padforge = set()
+for _l in read(r"C:\Users\sonic\OneDrive\Documents\GitHub\PadForge\PadForge.App"
+               r"\gamecontrollerdb_padforge.txt").splitlines():
+    _m = re.match(r'\s*([0-9a-fA-F]{32}),([^,]+),', _l)
+    if _m:
+        mapped_padforge.add(_m.group(2).strip())
+mapped_padforge -= mapped
+mapped = mapped | mapped_padforge
 
 # ── SDL_joystick.c category tables ──────────────────────────────────────────
 def table(name):
@@ -373,6 +404,26 @@ for _rel, _ids in NATIVE_SOURCES.items():
 native = set(NATIVE) - union
 union = union | native
 
+# The community rows: each GUID carries the pad's vendor and product, little
+# endian at bytes 4 and 8, the form SDL_CreateJoystickGUID writes.
+def _guid_id(g):
+    g = g.lower()
+    return int(g[10:12] + g[8:10], 16), int(g[18:20] + g[16:18], 16)
+community = {_guid_id(_g) for _g in re.findall(r'^\s*"([0-9a-fA-F]{32}),', COMMUNITY, re.M)} - union
+union = union | community
+
+# The fork's Windows serial driver opens some ports by the USB device behind
+# them (serial_auto_rules: the DJI RC-N1 family's protocol port, the Konami
+# BIO2), and its iCade driver reads the ION iCade cabinet by its ID.
+_WIN = SDL + r"\windows"
+_rules = re.search(r"serial_auto_rules\[\]\s*=\s*\{(.*?)\n\};", read(_WIN + r"\SDL_serialjoystick.c"), re.S).group(1)
+WINDOWS_IDS = {(int(_v, 16), int(_p, 16)) for _v, _p in re.findall(r'VID_([0-9A-Fa-f]{4})&PID_([0-9A-Fa-f]{4})', _rules)}
+_icade = read(_WIN + r"\SDL_icade_proto.h")
+WINDOWS_IDS.add((int(re.search(r"#define\s+SDL_ICADE_VENDOR\s+(0[xX][0-9a-fA-F]+)", _icade).group(1), 16),
+                 int(re.search(r"#define\s+SDL_ICADE_PRODUCT\s+(0[xX][0-9a-fA-F]+)", _icade).group(1), 16)))
+windows = WINDOWS_IDS - union
+union = union | windows
+
 # The profile count comes from the HIDMaestro.Core.dll PadForge ships: every
 # embedded HIDMaestro.Profiles.<vendor>\<name>.json is one profile, and
 # HMContext.LoadDefaultProfiles loads all of them. Counting the manifest
@@ -389,6 +440,16 @@ N = {
     "flydigi": len(flydigi),
     "drivers": len(drivers),
     "native": len(native),
+    "community": len(community),
+    "windows": len(windows),
+    "mapped_sdl": len(mapped_sdl),
+    "mapped_community": len(mapped_community),
+    "mapped_padforge": len(mapped_padforge),
+    # The categories that also sit in the gamepad list, so the sum of the
+    # categories exceeds the total by exactly these.
+    "overlap_wheels": len(ids("initial_wheel_devices") & cl_ids),
+    "overlap_arcade": len(ids("initial_arcadestick_devices") & cl_ids),
+    "overlap_gamecube": len(ids("initial_gamecube_devices") & cl_ids),
     "wheels": len(ids("initial_wheel_devices")),
     "sticks": len(ids("initial_flightstick_devices")),
     "throttles": len(ids("initial_throttle_devices")),

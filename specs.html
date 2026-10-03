@@ -65,7 +65,7 @@
                 </div>
                 <div class="spec-row">
                     <dt>Multi-source mapping</dt>
-                    <dd>Pedals, wheel, and HOTAS throttle. One virtual stick. One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes, Stick Trim, plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Invert On Hold, or Ramp. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</dd>
+                    <dd>Pedals, wheel, and HOTAS throttle. One virtual stick. One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes, Stick Trim, plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Ramp, Toggle, Rapid Trigger, or Invert On Hold. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</dd>
                 </div>
                 <div class="spec-row">
                     <dt>Shift layers</dt>
@@ -319,6 +319,34 @@
                     <dt>In-app updates</dt>
                     <dd>Settings checks GitHub for new versions 20 seconds after launch and every 12 hours, downloads the build for your processor, checks it against the SHA-256 GitHub publishes, and replaces PadForge.exe in place. Install with one click or at the next launch, and opt in to the latest dev build if you want fixes first.</dd>
                 </div>
+                <div class="spec-row">
+                    <dt>Analog keyboards</dt>
+                    <dd>Hall effect and analog keyboards report how far each key is pressed, as their own device row: more than 370 models from 101 brands, Wooting, Razer, Keychron and NuPhy among them. Each key is a source at its depth for a trigger, a stick axis or a button. Windows keeps receiving your typing as usual.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Rapid Trigger and Toggle</dt>
+                    <dd>Rapid Trigger presses and releases on movement instead of at one fixed point, on any input with depth: analog keys, triggers, sticks, MIDI controls. Toggle latches a button: one press holds it, the next releases it.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Bliss-Box adapters</dt>
+                    <dd>Each port of a Bliss-Box adapter names the console controller in it and maps it the way SDL maps that console's pad. DualShock 2 pressure, rumble, pictures on a Dreamcast VMU, and N64 Controller Pak backup and restore.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Motion from a stick</dt>
+                    <dd>Motion Pitch, Yaw and Roll rows give a PlayStation, Nintendo or Valve virtual controller motion from any input. Speed turns it while the stick is held. Angle leans it and levels it on release.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Wii Remote light gun</dt>
+                    <dd>Calibrate a Wii Remote to your screen, four targets and a press of B each, and the crosshair lands where it points, corrected for twist. A Namco GunCon 2 calibrates the same way.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Plain HTTP and Web Menus</dt>
+                    <dd>A second web controller address over plain HTTP, behind a ten-character access code, for browsers that refuse the certificate and for tunnels. Web Menus puts a slot's Touch Grid menus on the phone as tiles.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Controllers Windows cannot read</dt>
+                    <dd>Bluetooth LE pads, the iCade, serial I-Force wheels with force feedback, DJI RC remotes, clone Xbox 360 receivers, the Ring-Con, light guns, train controllers and arcade I/O boards, plus 289 pads from the community SDL_GameControllerDB.</dd>
+                </div>
             </dl>
         </section>
 
@@ -400,7 +428,6 @@
         </div>
         <div class="footer-note">
             <span>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" style="color:var(--text-muted)">CC BY-NC-SA 4.0</a></span>
-            <span>PadForge™ is a trademark of hifihedgehog. U.S. trademark application pending.</span>
             <span>Powered by HIDMaestro</span>
         </div>
     </div>

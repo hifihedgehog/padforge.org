@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **758** devices by their USB identity: 605 gamepads in SDL's controller list, 4 Flydigi pads and 22 other pads that SDL's dedicated drivers claim, 75 racing wheels, 20 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 23 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **250** shipped gamepad mappings (249 from SDL's Windows database plus PadForge's own DualShock 3 entry). For virtual controllers, HIDMaestro ships 232 device profiles, and PadForge offers the 134 that carry a captured HID descriptor.
+PadForge recognizes **1,108** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **464** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 232 device profiles, and PadForge offers the 134 that carry a captured HID descriptor.
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -24,7 +24,7 @@ family gets that family's layout and works everywhere that family does.
 | --- | --- |
 | **Mad Catz** | Mad Catz Beat Pad, Mad Catz Brawlstick for Xbox 360, Mad Catz Call Of Duty, Mad Catz Fightpad, Mad Catz FightStick SoulCaliber, Mad Catz FightStick TE2, Mad Catz FightStick TES+, Mad Catz FPS Pro, Mad Catz Gamepad2, Mad Catz JOYTECH NEO SE Advanced GamePad, Mad Catz MicroCon Gamepad, Mad Catz MicroCon GamePad Pro, Mad Catz MLG FightStick TE, Mad Catz MvC2 TE, Mad Catz Precision Bass Guitar, Mad Catz SFxT Fightstick Pro, Mad Catz Street Fighter IV FightPad, Mad Catz Street Fighter IV FightStick SE, Mad Catz Street Fighter IV SE Fighting Stick, Mad Catz Wired Xbox 360 Controller, Mad Catz Wired Xbox 360 Controller (SFIV), Mad Catz Wireless Precision Bass Guitar, Mad Catz Wireless Rock Band Guitar, Mad Catz Xbox 360 Controller, Mad Catz Xbox controller - MW2, MadCatz GamePad, Street Fighter IV Arcade Stick TE - Chun Li, Street Fighter IV FightPad, Street Fighter IV FightStick TE |
 | **HORI** | Hori Co. DOA4 FightStick, Hori Fighting Commander ONE, Hori Fighting Edge, Hori Fighting Stick EX2, Hori Fighting Stick EX2B, Hori Fighting Stick VX, Hori Fighting Stick VX Alt, Hori Fighting Stick α, Hori GEM Xbox controller, Hori PAD A, Hori PadEX Turbo, Hori Real Arcade Pro 4, Hori Real Arcade Pro V Kai 360, Hori Real Arcade Pro VX, Hori Real Arcade Pro VX-SA, Hori Real Arcade Pro. EX, Hori Real Arcade Pro.EX, Hori Real Arcade Pro.EX Premium VLX, Hori Real Arcade Pro.VX SA, HORI Slime Controller, Hori SOULCALIBUR V Stick, Hori XBOX 360 EX 2 with Turbo |
-| **PDP** | Afterglow Gamepad 1, Afterglow Gamepad 3, PDP Afterglow AX.1, PDP AFTERGLOW AX.1, PDP Battlefield 4 Controller, PDP EA Soccer Controller, PDP INJUSTICE FightPad, PDP INJUSTICE FightStick, PDP MK X Fight Stick, PDP Versus Fighting Pad, PDP Xbox 360 Afterglow, PDP Xbox 360 Controller, PDP Xbox 360 Marvel Controller, PDP Xbox 360 Rock Candy, Rock Candy Gamepad for Xbox 360 |
+| **PDP** | Afterglow Gamepad 1, Afterglow Gamepad 3, PDP AFTERGLOW AX.1, PDP Afterglow AX.1, PDP Battlefield 4 Controller, PDP EA Soccer Controller, PDP INJUSTICE FightPad, PDP INJUSTICE FightStick, PDP MK X Fight Stick, PDP Versus Fighting Pad, PDP Xbox 360 Afterglow, PDP Xbox 360 Controller, PDP Xbox 360 Marvel Controller, PDP Xbox 360 Rock Candy, Rock Candy Gamepad for Xbox 360 |
 | **Rock Band** | Rock Band 2 Wireless Guitar, Rock Band Keyboard (Mustang), Rock Band MIDI Pro Adapter (Keyboard), Rock Band MIDI Pro Adapter (Mustang Guitar), Rock Band MIDI Pro Adapter (Squire Guitar), Rock Band Pro Guitar (Mustang), Rock Band Pro Guitar (Squire), Rock Band Wireless Bass Guitar |
 | **Razer** | Razer Atrox Arcade Stick, Razer Onza, Razer Onza Classic Edition, Razer Onza TE, Razer Onza Tournament Edition, Razer Sabertooth |
 | **Guitar Hero** | Guitar Hero 5 Guitar, Guitar Hero Live Guitar, Guitar Hero Wireless Drum Kit, Guitar Hero Wireless Guitar, Guitar Hero World Tour Kiosk |
@@ -134,8 +134,8 @@ family gets that family's layout and works everywhere that family does.
 | **Mad Catz** | Mad Catz FightPad Pro PS4, Mad Catz FightStick TE 2 PS4, Mad Catz FightStick TE 2+ PS4, Mad Catz FightStick TE S+ PS4 |
 | **PDP** | Victrix Pro FS, Victrix Pro FS PS4/PS5 (PS4 mode), Victrix Pro FS V2 w/ Touchpad for PS4 |
 | **Armor** | Armor 3 or Level Up Cobra, Armor Armor 3 Pad PS4 |
-| **Sony** | Sony PS4 Controller, Sony PS4 Slim Controller |
 | **Astro** | Astro C40, Astro C40 in Xbox 360 mode |
+| **Sony** | Sony PS4 Controller, Sony PS4 Slim Controller |
 | **Brook** | Brook Mars Controller |
 | **EMIO** | EMIO PS4 Elite Controller |
 | **Game:Pad** | Game:Pad 4 |
@@ -206,9 +206,9 @@ Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Apex
 
 The four rear paddles map as Right Paddle 1 and 2 and Left Paddle 1 and 2. The Vader series C and Z buttons and the Apex 5 and Apex 6 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Apex 6, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.
 
-### Other SDL drivers (22 USB identities)
+### Other SDL drivers (23 USB identities)
 
-These pads are claimed by SDL's dedicated drivers by USB identity, not through its controller list, the way the Flydigi driver works. The names are the ones SDL gives them.
+These pads are claimed by SDL's dedicated drivers by USB identity, not through its controller list, the way the Flydigi driver works. The names follow SDL's driver code and its USB ID list. SDL gives the 8BitDo Ultimate 3 and the two EVOTOP DirectInput identities no name of its own, so they show the pad's USB product name.
 
 | Identity | Device | SDL driver |
 | --- | --- | --- |
@@ -221,6 +221,7 @@ These pads are claimed by SDL's dedicated drivers by USB identity, not through i
 | **057E:2017** | Nintendo SNES Controller (Switch Online) | Switch |
 | **057E:2019** | Nintendo N64 Controller (Switch Online) | Switch |
 | **057E:201E** | Nintendo SEGA Genesis Controller (Switch Online) | Switch |
+| **057E:200E** | Nintendo Switch Joy-Con charging grip, with its Joy-Cons over USB | Switch |
 | **057E:0306** | Wii Remote | Wii |
 | **057E:0330** | Wii Remote Plus | Wii |
 | **33DD:0006** | ZUIKI MASCON PRO | ZUIKI |
@@ -245,98 +246,173 @@ SDL's Wii driver recognizes a Wii U Pro Controller by the extension it reports, 
 | **Steam** | Steam Virtual Gamepad |
 | **Streaming** | Streaming mobile touch virtual controls |
 
-### With a shipped mapping (250)
+### With a shipped mapping (464)
 
 Pads carrying a mapping in the database, so their buttons and axes land in the right places
-the moment they are plugged in. SDL's database holds 249 names in its Windows section, and
-PadForge adds one of its own for the DualShock 3 under DsHidMini.
+the moment they are plugged in. SDL's database holds 249 names in its Windows section, the
+community SDL_GameControllerDB that PadForge's SDL3 build adds holds 214 more, and PadForge
+adds one of its own for the DualShock 3 under DsHidMini.
 
 | Vendor | Devices |
 | --- | --- |
-| **8BitDo** | 8BitDo 64 Bluetooth Controller, 8BitDo FC30 Pro, 8BitDo M30 Gamepad, 8BitDo Micro gamepad, 8BitDo N30 Pro 2, 8BitDo NES30 Gamepad, 8BitDo NES30 Pro, 8BitDo Pro 2, 8BitDo SF30 Pro, 8BitDo SFC30 Gamepad, 8BitDo SN30 Gamepad, 8BitDo SN30 Pro, 8BitDo SN30 Pro+, 8BitDo SNES30 Gamepad, 8BitDo Ultimate 2C Wireless, 8BitDo Ultimate Wired Controller, 8BitDo Ultimate Wireless Controller, 8BitDo Zero 2, 8BitDo Zero Gamepad |
+| **8BitDo** | 8BitDo 64 Bluetooth Controller, 8BitDo Adapter 2, 8BitDo Dogbone, 8BitDo F30, 8BitDo F30 Arcade Joystick, 8BitDo F30 Arcade Stick, 8BitDo FC30 Pro, 8BitDo GameCube, 8BitDo Lite 2, 8BitDo Lite SE, 8BitDo M30, 8BitDo M30 Gamepad, 8BitDo Micro gamepad, 8BitDo N30, 8BitDo N30 Pro 2, 8BitDo N64, 8BitDo NEOGEO, 8BitDo NES30, 8BitDo NES30 Gamepad, 8BitDo NES30 Pro, 8BitDo P30, 8BitDo Pro 2, 8BitDo Receiver, 8BitDo S30, 8BitDo SF30, 8BitDo SF30 Pro, 8BitDo SFC30, 8BitDo SFC30 Gamepad, 8BitDo SN30, 8BitDo SN30 Gamepad, 8BitDo SN30 Pro, 8BitDo SN30 Pro+, 8BitDo SNES30 Gamepad, 8BitDo Ultimate, 8BitDo Ultimate 2C, 8BitDo Ultimate 2C Wireless, 8BitDo Ultimate C, 8BitDo Ultimate Wired Controller, 8BitDo Ultimate Wireless Controller, 8BitDo Xbox One SN30 Pro, 8BitDo Zero 2, 8BitDo Zero Gamepad |
 | **HORI** | HORI Fighting Commander, Hori Fighting Commander 4 (PS3), Hori Fighting Commander 4 (PS4), Hori Fighting Stick Mini 3, HORI Fighting Stick mini 4 (PS3), HORI Fighting Stick mini 4 (PS4), Hori Pad 3, Hori Pad 3 Turbo, Hori Pad A, Hori Pokken Tournament DX Pro Pad, Horipad, HORIPAD 4 (PS3), HORIPAD 4 (PS4), HORIPAD mini4, REAL ARCADE PRO.3, Real Arcade Pro.4, REAL ARCADE PRO.4 VLX, REAL ARCADE Pro.V3, Real Arcade Pro.V4 |
 | **Mad Catz** | Mad Catz C.T.R.L.R, Mad Catz FightPad PRO (PS3), Mad Catz FightPad PRO (PS4), Mad Catz FightStick TE S+ (PS3), Mad Catz FightStick TE S+ (PS4), Mad Catz FightStick TE2+ PS3, Mad Catz FightStick TE2+ PS4, Mad Catz Micro C.T.R.L.R, Mad Catz TE2 PS3 Fightstick, Mad Catz TE2 PS4 Fightstick, Madcatz Arcade Fightstick TE S PS3, Madcatz Arcade Fightstick TE S+ PS3, MadCatz SFIV FightStick PS3 |
-| **Saitek** | Saitek Cyborg, Saitek Cyborg V.1 Game pad, Saitek Dual Analog Pad, Saitek P2500 Force Rumble Pad, Saitek P2900, Saitek P480 Rumble Pad, Saitek P990, Saitek P990 Dual Analog Pad, Saitek PS1000, Saitek PS2700, Saitek Rumble Pad |
-| **Logitech** | Logitech ChillStream, Logitech Cordless Precision, Logitech Cordless Wingman, Logitech Dual Action, Logitech F510 Gamepad, Logitech F710 Gamepad, Logitech Precision Gamepad |
-| **Qanba** | QanBa Arcade JoyStick 1008, QanBa Arcade JoyStick 4018, Qanba Dragon Arcade Joystick, QanBa Joystick Plus, QanBa Joystick Q4RAF, Qanba Obsidian Arcade Joystick (PS3), Qanba Obsidian Arcade Joystick (PS4) |
-| **Razer** | Razer Atrox Arcade Stick, Razer Hydra, Razer Panthera (PS3), Razer Panthera (PS4), Razer Raiju Mobile, Razer Raion Fightpad for PS4, Razer Serval |
-| **Mayflash** | Mayflash Arcade Stick, Mayflash N64 Controller Adapter, Mayflash USB Adapter for original Sega Saturn controller, Mayflash Wii Classic Controller, Mayflash WiiU Pro Game Controller Adapter (DInput) |
+| **Saitek** | Saitek Cyborg, Saitek Cyborg V.1 Game pad, Saitek Dual Analog Pad, Saitek P220, Saitek P2500 Force Rumble Pad, Saitek P2600, Saitek P2900, Saitek P480 Rumble Pad, Saitek P990, Saitek P990 Dual Analog Pad, Saitek PS1000, Saitek PS2700, Saitek Rumble Pad |
+| **Raphnet** | Raphnet 3DO Adapter, Raphnet Dreamcast Adapter, Raphnet GameCube Adapter, Raphnet GC and N64 Adapter, Raphnet Jaguar Adapter, Raphnet N64 Adapter, Raphnet NES Adapter, Raphnet PlayStation Adapter, Raphnet Saturn, Raphnet SNES Adapter, Raphnet Vectrex Adapter, Raphnet Wii Classic Adapter |
+| **Logitech** | Logitech ChillStream, Logitech Cordless Precision, Logitech Cordless Wingman, Logitech Dual Action, Logitech F510 Gamepad, Logitech F710 Gamepad, Logitech Precision Gamepad, Logitech WingMan, Logitech WingMan Action Pad, Logitech WingMan RumblePad |
+| **Mayflash** | Mayflash Arcade Stick, Mayflash F101, Mayflash F300 Elite Arcade Joystick, Mayflash Magic NS, Mayflash N64 Adapter, Mayflash N64 Controller Adapter, Mayflash USB Adapter for original Sega Saturn controller, Mayflash Wii Classic Controller, Mayflash WiiU Pro Game Controller Adapter (DInput) |
+| **Qanba** | Qanba 2, Qanba 2P, QanBa Arcade JoyStick 1008, QanBa Arcade JoyStick 4018, Qanba Dragon Arcade Joystick, QanBa Joystick Plus, QanBa Joystick Q4RAF, Qanba Obsidian Arcade Joystick (PS3), Qanba Obsidian Arcade Joystick (PS4) |
+| **Sanwa** | Sanwa 4Button, Sanwa Easy Grip, Sanwa Micro Grip P3, Sanwa Micro Grip Pro, Sanwa Online Grip, Sanwa PlayOnline Mobile, Sanwa PlayStation Adapter, Sanwa Smart Grip II, Sanwa Virtua Grip |
+| **GameSir** | GameSir, GameSir G3w, GameSir G4, GameSir G7 Pro, GameSir T4 Kaleid, GameSir T4 Pro, GameSir Tegenaria Lite, GameSir X5 Lite |
+| **Razer** | Razer Atrox Arcade Stick, Razer Huntsman V3 Pro, Razer Hydra, Razer Panthera (PS3), Razer Panthera (PS4), Razer Raiju Mobile, Razer Raion Fightpad for PS4, Razer Serval |
+| **PowerA** | PowerA Fusion Nintendo Switch Arcade Stick, PowerA Fusion Pro Nintendo Switch Controller, PowerA OPS v1 Wireless Controller, PowerA OPS v3 Pro Wireless Controller, PowerA Pro Ex, PowerA PS3 Controller, PowerA Wired GameCube Controller |
+| **Elecom** | Elecom DUX60 MMO, Elecom Gamepad, Elecom PlayStation Adapter, Elecom U1012, Elecom U3912T, Elecom U4113S |
+| **Hyperkin** | Hyperkin Admiral N64 Controller, Hyperkin N64 Adapter, Hyperkin RetroN Sq, Hyperkin Scout, Hyperkin Scout Premium SNES Controller, Hyperkin Trooper 2 |
+| **Sony** | Sony DualShock 2, Sony DualShock 3, Sony DualShock 3 (DsHidMini SDF and SXS), Sony PlayStation Adapter, Sony PlayStation Portable, Sony PlayStation Vita |
+| **InterAct** | InterAct ActionPad, InterAct AxisPad, InterAct Hammerhead, InterAct Hammerhead FX, InterAct ProPad |
+| **SteelSeries** | SteelSeries, SteelSeries Free, SteelSeries Nimbus Cloud, SteelSeries Stratus Duo, SteelSeries Stratus XL |
 | **Thrustmaster** | Thrustmaster Dual Analog 4, Thrustmaster Dual Trigger 3-in-1, ThrustMaster eSwap PRO Controller, Thrustmaster Firestorm Dual Power, Thrustmaster Firestorm Dual Power 3 |
 | **Betop** | Betop 2126F, Betop BFM Gamepad, Betop Controller, Betop Gamepad |
+| **Dual** | Dual Box WII, Dual Plus PlayStation Adapter, Dual Power 3, Dual USB Vibration Joystick |
 | **Genius** | Genius, Genius Maxfire Blaze 3, Genius Maxfire Grandias 12, Genius MaxFire Grandias 12V |
 | **PDP** | Afterglow PS3 Controller, PDP Versus Fighting Pad, Rock Candy PS3 Controller, Victrix Pro Fight Stick for PS4 |
-| **PowerA** | PowerA OPS v1 Wireless Controller, PowerA OPS v3 Pro Wireless Controller, PowerA Pro Ex, PowerA Wired GameCube Controller |
+| **Sega** | Sega Genesis Mini 3B Controller, Sega Mega Drive Mini 6B Controller, Sega Multi Controller, Sega Saturn Controller |
+| **Trust** | Trust 850F, Trust Gamepad, Trust Predator GM1200, Trust Sight Fighter |
+| **USB** | USB 4-Axis 12-Button Gamepad, USB Controller, USB Gamepad, USB Vibration Joystick (BM) |
+| **Firestorm** | Firestorm, Firestorm 2, Firestorm D3 |
+| **GameStop** | GameStop, GameStop Gamepad, GameStop PS4 Fun Controller |
 | **Gioteck** | Gioteck, Gioteck PS3 Controller, Gioteck VX2 Controller |
+| **Microsoft** | Microsoft Dual Strike, Microsoft SideWinder, Microsoft SideWinder Plug and Play |
+| **Rockfire** | Rockfire CosmoVoyager, Rockfire MaxFire G08XU, Rockfire Space Ranger |
 | **ROG** | ROG Chakram, ROG Chakram Core, ROG Chakram X |
-| **SteelSeries** | SteelSeries, SteelSeries Stratus Duo, SteelSeries Stratus XL |
-| **USB** | USB 4-Axis 12-Button Gamepad, USB Gamepad, USB Vibration Joystick (BM) |
+| **Anbernic** | Anbernic Game Pad, Anbernic RG P01 |
 | **Defender** | Defender Game Racer X7, Defender Joystick Cobra R4 |
-| **Dual** | Dual Box WII, Dual USB Vibration Joystick |
+| **EMS** | EMS Production PS2 Adapter, EMS TrioLinker Plus II |
 | **EXEQ** | EXEQ, EXEQ RF USB Gamepad 8206 |
+| **Flydigi** | Flydigi Apex, Flydigi Vader 2 |
 | **Game** | Game Controller for PC, Game VIB Joystick |
-| **GameSir** | GameSir, GameSir T4 Pro |
-| **GameStop** | GameStop Gamepad, GameStop PS4 Fun Controller |
+| **Gravis** | Gravis Destroyer Tilt, Gravis Eliminator Pro |
+| **iBuffalo** | iBuffalo AC02 Arcade Joystick, iBuffalo SNES Controller |
 | **iBUFFALO** | iBUFFALO BSGP1204 Series, iBUFFALO BSGP1204P Series |
+| **iDroidCon** | iDroidCon, iDroidCon Controller |
+| **Ipega** | Ipega PG-9023, Ipega PG9087 |
 | **MOGA** | MOGA XP5-A Plus, MOGA XP5-X Plus |
+| **NACON** | NACON GC-400ES, Nacon GC101 1.03 |
+| **NES** | NES Adapter, NES Controller |
 | **Nintendo** | Nintendo GameCube Controller, Nintendo Retrolink USB Super SNES Classic Controller |
+| **Nintendo Switch** | Nintendo Switch, Nintendo Switch Pro Controller |
 | **Pro** | Pro Elite PS3 Controller, Pro Ex mini PS3 Controller |
 | **PS** | PS Controller, PS to USB convert cable |
 | **PS3** | PS3 Controller, PS3 RF pad |
+| **Retro** | Retro Bit Sega Genesis Adapter, Retro Fighters D6 |
+| **Retrolink** | Retrolink Sega Saturn Classic Controller, Retrolink SNES Controller |
 | **RetroUSB.com** | RetroUSB.com RetroPad, RetroUSB.com Super RetroPort |
 | **Revolution** | Revolution Pro Controller, Revolution Pro Controller 3 |
+| **Super** | Super Famicom Controller, Super Racer |
+| **Taito** | Taito Egret II Mini Control Panel, Taito Egret II Mini Controller |
+| **TigerGame** | TigerGame PlayStation Adapter, TigerGame PS/PS2 Game Controller Adapter |
+| **Tomee** | Tomee NES Adapter, Tomee SNES Adapter |
+| **Xiaomi** | Xiaomi Black Shark (L), Xiaomi XMGP01YM |
+| **3** | 3 In 1 Conversion Box |
 | **3DRUDDER** | 3DRUDDER |
+| **4Play** | 4Play Adapter |
 | **Acme** | Acme GA-02 |
+| **Acrux** | Acrux |
 | **Acteck** | Acteck AGJ-3200 |
+| **ADT1** | ADT1 |
 | **Airflo** | Airflo PS3 Controller |
+| **Alienware** | Alienware Dual Compatible PlayStation Controller |
 | **Amazon** | Amazon Luna Controller |
+| **Aquaplus** | Aquaplus Piece |
+| **Arcade** | Arcade |
+| **ASCII** | ASCII Seamic Controller |
+| **Astro** | Astro City Mini |
 | **ASUS** | ASUS ROG Kunai 3 Gamepad |
+| **Atari** | Atari CX Controller |
+| **AtGames** | AtGames Legends Gamer Pro |
+| **Backbone** | Backbone One |
 | **Batarang** | Batarang |
 | **Battalife** | Battalife Joystick |
 | **Battlefield** | Battlefield 4 PS3 Controller |
 | **BDA** | BDA PS4 Fightpad |
+| **Belkin** | Belkin Nostromo N40 |
 | **Bigben** | Bigben PS3 Controller |
 | **BrutalLegendTest** | BrutalLegendTest |
 | **BUFFALO** | BUFFALO BSGP1601 Series |
+| **Capcom** | Capcom Home Arcade Controller |
 | **Cideko** | Cideko AK08b |
+| **Competition** | Competition Pro |
+| **Cthulhu** | Cthulhu |
 | **Cyber** | Cyber Gadget GameCube Controller |
 | **Cyborg** | Cyborg V.3 Rumble Pad |
+| **DA** | DA Leader |
+| **Datel** | Datel Arcade Joystick |
 | **EA** | EA SPORTS PS3 Controller |
-| **Elecom** | Elecom Gamepad |
+| **Easy** | Easy Grip |
+| **Eliminator** | Eliminator AfterShock |
+| **ESM** | ESM 9110 |
+| **Essential** | Essential |
+| **FC30** | FC30 Pro |
+| **FC801** | FC801 |
 | **FF-GP1** | FF-GP1 |
 | **FIGHTING** | FIGHTING STICK V3 |
 | **Gamecube** | Gamecube Controller |
-| **Gamepad** | Gamepad Pro USB |
+| **GameCube** | GameCube Controller |
 | **GAMEPAD** | GAMEPAD 3 TURBO |
+| **Gamepad** | Gamepad Pro USB |
 | **Gamesir-G5** | Gamesir-G5 |
 | **GameSir-T3** | GameSir-T3 2.02 |
+| **Gametel** | Gametel GT004 01 |
+| **Gamo2** | Gamo2 Divaller |
 | **GGE909** | GGE909 Recoil Pad |
 | **Google** | Google Stadia Controller |
+| **GT2a** | GT2a |
 | **Hama** | Hama Scorpad |
 | **Hatsune** | Hatsune Miku Sho Controller |
+| **Havit** | Havit HV G60 |
 | **HitBox** | HitBox Edition Cthulhu+ |
 | **HJD-X** | HJD-X |
 | **HRAP2** | HRAP2 on PS/SS/N64 Joypad to USB BOX |
 | **HuiJia** | HuiJia SNES Controller |
-| **iBuffalo** | iBuffalo SNES Controller |
+| **HyperX** | HyperX Clutch |
+| **iGUGU** | iGUGU Gamecore |
 | **Impact** | Impact Black |
 | **INJUSTICE** | INJUSTICE FightStick PS3 Controller |
 | **IPEGA** | IPEGA |
-| **Ipega** | Ipega PG-9023 |
 | **JC-P301U** | JC-P301U |
 | **JC-U3613M** | JC-U3613M (DInput) |
 | **JC-W01U** | JC-W01U |
+| **Joypad** | Joypad Alpha Shock |
+| **Joytech** | Joytech JS-112 |
+| **JPD** | JPD FFB |
+| **JYS** | JYS Adapter |
+| **KADE** | KADE |
+| **Keio** | Keio |
+| **KidzPlay** | KidzPlay Adventure PlayStation Controller |
 | **King** | King PS3 Controller |
+| **Leadership** | Leadership |
+| **Logic3** | Logic3 |
+| **M64** | M64 Pro Controller |
+| **Macally** | Macally |
 | **MADCATZ** | MADCATZ SFV Arcade FightStick Alpha PS4 |
 | **Matricom** | Matricom |
+| **MaxJoypad** | MaxJoypad Virtual Controller |
+| **Mega** | Mega Drive Controller |
+| **Miller** | Miller Lite Cantroller |
 | **MLG** | MLG Gamepad PS3 Controller |
+| **Mobapad** | Mobapad Chitu HD |
 | **Monect** | Monect Virtual Controller |
 | **MP-8866** | MP-8866 Super Dual Box |
-| **NACON** | NACON GC-400ES |
+| **MUSIA** | MUSIA PlayStation 2 Input Display |
+| **N64** | N64 Adaptoid |
+| **Nebular** | Nebular |
+| **NeoGeo** | NeoGeo X Arcade Stick |
 | **NEXT** | NEXT SNES Controller |
 | **NGDS** | NGDS |
-| **Nintendo Switch** | Nintendo Switch Pro Controller |
 | **Nostromo** | Nostromo N45 |
 | **NVIDIA** | NVIDIA Virtual Gamepad |
+| **Nyko** | Nyko Playpad |
 | **NYKO** | NYKO AIRFLO EX |
 | **Oklick** | Oklick W-2 |
 | **Onlive** | Onlive Wireless Controller |
@@ -346,49 +422,72 @@ PadForge adds one of its own for the DualShock 3 under DsHidMini.
 | **OUYA** | OUYA Game Controller |
 | **P4** | P4 Wired Gamepad |
 | **Piranha** | Piranha xtreme |
+| **PlaySega** | PlaySega |
 | **PS1** | PS1 Controller |
 | **PS2** | PS2 Controller |
 | **PS360+** | PS360+ v1.66 |
 | **PS4** | PS4 Controller |
 | **PS5** | PS5 Controller |
+| **PSX** | PSX |
 | **QANBA** | QANBA DRONE ARCADE JOYSTICK |
-| **Retro** | Retro Fighters D6 |
-| **Retrolink** | Retrolink SNES Controller |
+| **R1** | R1 Mobile Controller |
+| **RadioShack** | RadioShack |
+| **Ramox** | Ramox FPS Controller |
+| **Retrode** | Retrode Adapter |
+| **RetroUSB** | RetroUSB N64 RetroPort |
+| **Revenger** | Revenger |
+| **Rumble** | Rumble Force |
 | **run'n'drive** | run'n'drive |
 | **RX** | RX Gamepad |
+| **Samsung** | Samsung EIGP20 |
+| **Satechi** | Satechi Controller |
 | **Saturn_Adapter_2.0** | Saturn_Adapter_2.0 |
+| **Score** | Score A |
+| **Scuf** | Scuf PS4 Controller |
+| **SFX** | SFX |
+| **Shogun** | Shogun Bros Chameleon X1 |
 | **SL-6555-SBK** | SL-6555-SBK |
 | **SL-6566** | SL-6566 |
-| **Sony** | Sony DualShock 3 (DsHidMini SDF and SXS) |
-| **Speedlink** | Speedlink Torid |
-| **SpeedLink** | SpeedLink Strike FX |
+| **SNES** | SNES Controller |
 | **SPEEDLINK** | SPEEDLINK STRIKE Gamepad |
+| **SpeedLink** | SpeedLink Strike FX |
+| **Speedlink** | Speedlink Torid |
 | **SplitFish** | SplitFish Game Controller |
 | **Steam** | Steam Virtual Gamepad |
 | **STK-7024X** | STK-7024X |
 | **SVEN** | SVEN X-PAD |
 | **SZMY-POWER** | SZMY-POWER PC Gamepad |
 | **T** | T Mini Wireless |
+| **TE** | TE Kitty |
 | **Team** | Team 5 |
 | **Techmobility** | Techmobility X6-38V |
-| **TigerGame** | TigerGame PS/PS2 Game Controller Adapter |
+| **Technology** | Technology Innovation PS2 Adapter |
+| **Tencent** | Tencent Xianyou Gamepad |
+| **THEC64** | THEC64 Joystick |
+| **THEGamepad** | THEGamepad |
+| **ThundeRobot** | ThundeRobot G30 |
 | **Tournament** | Tournament PS3 Controller |
-| **Trust** | Trust Gamepad |
+| **Tronsmart** | Tronsmart |
+| **TWCS** | TWCS Throttle |
+| **Twin** | Twin Shock |
 | **TwinShock** | TwinShock PS2 |
+| **Uniplay** | Uniplay U6 |
 | **uRage** | uRage Gamepad |
+| **V5** | V5 Game Pad |
 | **Venom** | Venom Arcade Joystick |
 | **Void** | Void Gaming Void GENESIS |
 | **Xeox** | Xeox |
 | **XEOX** | XEOX Gamepad SL-6556-BK |
 | **XiaoMi** | XiaoMi Game Controller |
 | **Xin-Mo** | Xin-Mo Dual Arcade |
+| **Xterminator** | Xterminator Digital Gamepad |
 | **ZD-T** | ZD-T Android |
 | **ZENAIM** | ZENAIM ARCADE CONTROLLER |
 | **ZEROPLUS** | ZEROPLUS P4 Wired Gamepad |
 
 ---
 
-## Racing wheels (58)
+## Racing wheels (67)
 
 **Driven in the wheel's own protocol**, with rotation range, autocenter and the LED strip on
 the wheels that have them: the Logitech, Thrustmaster and Fanatec models. Everything else is
@@ -397,17 +496,21 @@ recognized as a wheel and takes force feedback through the standard path. See
 
 | Vendor | Devices |
 | --- | --- |
-| **Logitech** | Logitech Driving Force GT, Logitech Driving Force Pro, Logitech G25, Logitech G27, Logitech G29, Logitech G920, Logitech G923, Logitech G923 for Playstation 4 and PC, Logitech generic wheel, Logitech Momo Force, Logitech Momo Racing, Logitech PRO Racing Wheel, Logitech PRO Racing Wheel for Xbox |
+| **Logitech** | Logitech Driving Force GT, Logitech Driving Force Pro, Logitech G25, Logitech G27, Logitech G29, Logitech G920, Logitech G923, Logitech G923 for Playstation 4 and PC, Logitech generic wheel, Logitech Momo Force, Logitech Momo Racing, Logitech PRO Racing Wheel, Logitech PRO Racing Wheel for Xbox, Logitech Speed Force Wireless, Logitech WingMan Formula Force |
 | **Fanatec** | Fanatec ClubSport Wheel Base V1, Fanatec ClubSport Wheel Base V2, Fanatec ClubSport Wheel Base V2.5, Fanatec CSL Elite, Fanatec CSL Elite Wheel Base+, Fanatec Forza Motorsport, Fanatec generic wheel / CSL DD / GT DD Pro, Fanatec Podium Wheel Base DD1, Fanatec Podium Wheel Base DD2, Fanatec Porsche Wheel |
-| **Thrustmaster** | Thrustmaster T150, Thrustmaster T248, Thrustmaster T300RS, Thrustmaster T500RS, Thrustmaster TMX, Thrustmaster TS-XW, Thrustmaster TX, Thrustmaster Wheel FFB |
+| **Thrustmaster** | Thrustmaster Motor Sport GT, Thrustmaster T150, Thrustmaster T248, Thrustmaster T300RS, Thrustmaster T500RS, Thrustmaster TMX, Thrustmaster TS-XW, Thrustmaster TX, Thrustmaster Wheel FFB |
 | **Padix** | Padix Force Feedback Wheel, Padix TW6 Wheel, Padix USB Wheel, Padix USB Wireless 2.4GHz Wheel, Padix USB Wireless 2.4GHz Wheelpad, Padix Vibration USB Wheel |
 | **MOZA** | Moza R12, Moza R16/R21, Moza R3, Moza R5, Moza R9 |
 | **Asetek SimSports** | Asetek SimSports Forte, Asetek SimSports Invicta, Asetek SimSports La Prima, Asetek SimSports Tony Kannan |
 | **Simucube** | Simucube 1, Simucube 2 Pro, Simucube 2 Sport, Simucube 2 Ultimate |
+| **AVB** | AVB Mag Turbo Force, AVB Top Shot Force Feedback Racing Wheel |
 | **Cammus** | Cammus C12, Cammus C5 |
+| **Guillemot** | Guillemot Force Feedback Racing Wheel, Guillemot Race Leader Force Feedback |
+| **ACT** | ACT LABS Force RS |
 | **DragonRise** | DragonRise Wired Wheel |
 | **Generic** | Generic FFBoard OpenFFBoard universal forcefeedback wheel |
 | **PXN** | PXN VD6 |
+| **Saitek** | Saitek R440 Force Wheel |
 | **Simagic** | Simagic |
 | **VRS** | VRS DirectForce Pro |
 | **Xbox 360** | Xbox 360 Wireless Racing Wheel |
@@ -424,17 +527,19 @@ feed a slot alongside the wheel.
 
 ## Flight controls
 
-### Sticks (19)
+### Sticks (23)
 
 | Vendor | Devices |
 | --- | --- |
 | **Padix** | Padix MetalStrike ForceFeedback, Padix MetalStrike Pro, Padix QF-688uv Windstorm Pro, Padix QF-707u Bazooka, Padix USB joystick with viewfinder, Padix USB vibration joystick with viewfinder, Padix USB Wireless 2.4GHZ, Padix USB Wireless 2.4GHz, Padix Wireless MetalStrike |
+| **Guillemot** | Guillemot Jet Leader 3D, Guillemot Jet Leader Force Feedback |
+| **Logitech** | Logitech Extreme 3D, Logitech WingMan Force |
 | **Thrustmaster** | HOTAS Warthog Joystick, ThrustMaster T.16000M Joystick |
 | **VIRPIL Controls** | VIRPIL Controls L-VPC Stick MT-50CM3, VIRPIL Controls R-VPC Stick MT-50CM3 |
-| **Logitech** | Logitech Extreme 3D |
+| **VKB** | Gunfighter Mk.III 'Space Combat Edition', VKB Gladiator NXT Evo |
+| **AVB** | AVB Top Shot Pegasus |
 | **Saitek** | Saitek Pro Flight X-56 Rhino Stick |
 | **Turtle Beach** | Turtle Beach VelocityOne |
-| **VKB** | Gunfighter Mk.III 'Space Combat Edition', VKB Gladiator NXT Evo |
 | **Yawman** | Yawman Arrow |
 
 ### Throttles (4)
@@ -482,9 +587,9 @@ controller together, so a button on the throttle chords with a button on the sti
 
 ---
 
-## Devices PadForge's own code claims (23 USB identities)
+## Devices PadForge's own code claims (24 USB identities)
 
-SDL lists none of these. PadForge recognizes each one itself and drives the part SDL cannot. The 3Dconnexion models above were sold under Logitech's vendor ID. PadForge also reads every device on 3Dconnexion's own vendor ID, 256F, that reports the multi-axis controller usage, so current SpaceMouse models need no entry here.
+SDL lists none of these. PadForge recognizes each one itself and drives the part SDL cannot. The 3Dconnexion models below were sold under Logitech's vendor ID. PadForge also reads every device on 3Dconnexion's own vendor ID, 256F, that reports the multi-axis controller usage, so current SpaceMouse models need no entry here.
 
 | Identity | Device | What PadForge adds |
 | --- | --- | --- |
@@ -499,6 +604,7 @@ SDL lists none of these. PadForge recognizes each one itself and drives the part
 | **054C:042F** | PlayStation Navigation controller | Pairing and input |
 | **0583:B047** | Buffalo BSGC101 (one PlayStation port) | Rumble on the PS1 or PS2 pad behind the converter |
 | **0583:B048** | Buffalo BSGC201 (two PlayStation ports) | Rumble on the PS1 or PS2 pads behind the converter |
+| **05C6:9244** | Xbox 360 wireless receiver, a clone | Windows' own Xbox 360 driver, which PadForge binds |
 | **046D:C603** | SpaceMouse Plus XT | All six axes, see [SpaceMouse](spacemouse.md) |
 | **046D:C605** | CadMan | All six axes, see [SpaceMouse](spacemouse.md) |
 | **046D:C606** | SpaceMouse Classic | All six axes, see [SpaceMouse](spacemouse.md) |
@@ -534,9 +640,7 @@ Steam controller. See [Handheld PC Buttons](../features/handheld-buttons.md).
 
 ## Specialty and legacy controllers
 
-*Added after 4.5.3. Pre-release builds have these, and the next release will count them in the total above.*
-
-Windows gives none of these usable input on its own. Some have no Windows driver, some get one that reads nothing, and some speak a protocol only their makers' discontinued software knew. PadForge reads them through its SDL3 build, most with no setup step.
+Windows gives none of these usable input on its own. Some have no Windows driver, some get one that reads nothing, and some speak a protocol only their makers' discontinued software knew. PadForge reads them through its SDL3 build, most with no setup step. The PlayStation Move accessories are the exception: PadForge's own Move reader decodes them.
 
 ### Plug in over USB
 
@@ -548,7 +652,7 @@ PadForge binds the driver each of these needs a few seconds after it appears. Se
 | **Taito Densha de GO! Type 2, Shinkansen and Ryojohen controllers** | 0AE4:0004, 0AE4:0005, 0AE4:0007 | Brake on the left trigger, power on the right |
 | **Multi Train Controller, Train Mascon** | 0AE4:0101, 1C06:77A7 | The lever on the left stick, the reverser on the right stick |
 | **I-Force wheels and joysticks** | 14 IDs | Thrustmaster Motor Sport GT, Logitech WingMan Force and WingMan Formula Force, AVB Top Shot Pegasus, Mag Turbo Force and Top Shot Force Feedback Racing Wheel, ACT LABS Force RS, Saitek R440 Force Wheel, and the Guillemot Race Leader, Jet Leader, Jet Leader 3D and Force Feedback Racing Wheel. Force feedback through the standard path. |
-| **Original Xbox controllers** | Class 0x58, and 63 IDs by name | Pads, wheels, dance pads and light guns, through a passive Xbox-to-USB cable. The pressure of A, B, X, Y, White and Black fills the [button pressure](../features/mappings.md#button-pressure) rows. |
+| **Original Xbox controllers** | Class 0x58, and 63 IDs by name | Pads, wheels, dance pads and light guns, through a passive Xbox-to-USB cable. On a controller with one of the 63 listed IDs, the pressure of A, B, X, Y, White and Black fills the [button pressure](../features/mappings.md#button-pressure) rows. Any other original Xbox controller reports the same pressures, and you record them into those rows yourself. |
 | **Capcom Steel Battalion controller** | 0A7B:D000 | 9 axes and 46 buttons. The lamps stay off. |
 | **Xbox 360 Big Button receiver** | 045E:02A0 | Four pads |
 | **Gametrak** | 14B7:0982 | 6 axes, 12 buttons and a hat |
@@ -576,11 +680,11 @@ PadForge binds the driver each of these needs a few seconds after it appears. Se
 | **Rock Band 3 Pro keyboard, Mustang guitar and MIDI Pro Adapter** | 12BA:2330 to 2538 and 1BAD:3330 to 3538, six each | The PS3 and Wii models. A Squier guitar plays through the adapter. The Xbox 360 models read through XInput. |
 | **THQ uDraw GameTablet for PS3** | 20D6:CB17 | Pen, buttons and accelerometer |
 | **Top Shot Elite, Top Shot Fearmaster** | 12BA:04A0, 12BA:04A1 | Light guns for PS3 |
-| **Tony Hawk RIDE and SHRED boards** | 12BA:0400, 1430:0100 | Their accelerometers are not read. A board shows up only while it is switched on. |
+| **Tony Hawk RIDE and SHRED boards** | 12BA:0400, 1430:0100 | PadForge reads one axis each from the nose and tail accelerometers. The board's encrypted accelerometer data is not read. A board shows up only while it is switched on. |
 
 ### Switch drivers on the Devices page
 
-Moving these to PadForge's driver costs Windows something, so they move only when you ask. See [Switch Driver buttons](../features/devices.md#switch-driver-buttons).
+Moving these to PadForge's driver costs Windows something, so they move only when you ask. Each device gets its own button on the Devices page, such as **Read the Chatpad**, and a dialog states the cost before **Switch Driver** confirms the move. See [driver switching](../features/devices.md#switch-driver-buttons).
 
 | Device | What PadForge adds |
 | --- | --- |
@@ -613,7 +717,7 @@ The PowerA MOGA in Mode A (Pocket, Pro, Pro Power, Hero Power), the Zeemote JS1 
 
 ### Serial ports
 
-Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan Warrior and CyberMan, RC transmitters, JVS arcade boards, VRinsight panels, Kettler ergometers, serial I-Force wheels with their force feedback, the Pony Canyon Master Controllers, DJI remotes and Konami's cabinet boards. Add each one from the pairing dialog. See [Pairing a controller](../features/devices.md#pairing-a-controller).
+Spaceballs, SpaceOrbs, Magellan pucks, the Gravis Stinger, the Logitech WingMan Warrior and CyberMan, RC transmitters, JVS arcade boards, VRinsight panels, Kettler ergometers, serial I-Force wheels with their force feedback, the Pony Canyon Master Controllers, DJI remotes and Konami's cabinet boards. Add each one from the pairing dialog. A DJI RC-N1 family remote on its bottom USB-C port needs no entry: PadForge opens its protocol port on its own once DJI's VCOM driver serves it. See [Pairing a controller](../features/devices.md#pairing-a-controller).
 
 ### Over the network
 
@@ -671,4 +775,4 @@ as a generic joystick.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

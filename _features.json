@@ -154,5 +154,33 @@
   {
     "t": "In-app updates",
     "d": "Settings checks GitHub for new versions 20 seconds after launch and every 12 hours, downloads the build for your processor, checks it against the SHA-256 GitHub publishes, and replaces PadForge.exe in place. Install with one click or at the next launch, and opt in to the latest dev build if you want fixes first."
+  },
+  {
+    "t": "Analog keyboards",
+    "d": "Hall effect and analog keyboards report how far each key is pressed, as their own device row: more than 370 models from 101 brands, Wooting, Razer, Keychron and NuPhy among them. Each key is a source at its depth for a trigger, a stick axis or a button. Windows keeps receiving your typing as usual."
+  },
+  {
+    "t": "Rapid Trigger and Toggle",
+    "d": "Rapid Trigger presses and releases on movement instead of at one fixed point, on any input with depth: analog keys, triggers, sticks, MIDI controls. Toggle latches a button: one press holds it, the next releases it."
+  },
+  {
+    "t": "Bliss-Box adapters",
+    "d": "Each port of a Bliss-Box adapter names the console controller in it and maps it the way SDL maps that console's pad. DualShock 2 pressure, rumble, pictures on a Dreamcast VMU, and N64 Controller Pak backup and restore."
+  },
+  {
+    "t": "Motion from a stick",
+    "d": "Motion Pitch, Yaw and Roll rows give a PlayStation, Nintendo or Valve virtual controller motion from any input. Speed turns it while the stick is held. Angle leans it and levels it on release."
+  },
+  {
+    "t": "Wii Remote light gun",
+    "d": "Calibrate a Wii Remote to your screen, four targets and a press of B each, and the crosshair lands where it points, corrected for twist. A Namco GunCon 2 calibrates the same way."
+  },
+  {
+    "t": "Plain HTTP and Web Menus",
+    "d": "A second web controller address over plain HTTP, behind a ten-character access code, for browsers that refuse the certificate and for tunnels. Web Menus puts a slot's Touch Grid menus on the phone as tiles."
+  },
+  {
+    "t": "Controllers Windows cannot read",
+    "d": "Bluetooth LE pads, the iCade, serial I-Force wheels with force feedback, DJI RC remotes, clone Xbox 360 receivers, the Ring-Con, light guns, train controllers and arcade I/O boards, plus 289 pads from the community SDL_GameControllerDB."
   }
 ]

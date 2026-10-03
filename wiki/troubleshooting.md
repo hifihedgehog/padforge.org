@@ -273,7 +273,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. Enable **"Enable DSU Motion Server (CemuHook Motion Provider Protocol)"** on the [Dashboard](features/dashboard.md): Status should show "Listening on :26760".
 2. Match the port (default 26760) between PadForge and the emulator. "Port 26760 in use" means another app (BetterJoy, DS4Windows) is on that port.
 3. Use `127.0.0.1` as the server address. PadForge binds to loopback only.
-4. Confirm the controller has motion sensors on the [Devices](features/devices.md) page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion. A controller without motion sensors feeds it through the [Motion Pitch, Yaw and Roll](features/mappings.md#motion-pitch-yaw-and-roll) rows.
+4. Confirm the controller has motion sensors on the [Devices](features/devices.md) page. Any controller PadForge reads gyroscope or accelerometer data from feeds the DSU server: DualSense, DualShock 4, DualShock 3, Switch Pro, Switch 2 Pro, Joy-Cons, and the Wii Remote all report motion. A controller without motion sensors feeds it through the [Motion Pitch, Yaw and Roll](features/mappings.md#motion-pitch-yaw-and-roll) rows, which only PlayStation, Nintendo and Valve Extended slots carry.
 5. DSU protocol supports slots 1-4 only. Assign the motion device to one of those slots.
 6. The DSU server binds to loopback only, so no firewall rule is involved. An emulator on another machine cannot reach it at all.
 7. In the emulator's motion settings, add a DSU server at `127.0.0.1` with the matching port and select the correct slot.
@@ -287,7 +287,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 1. Those two rows read only a controller's own motion sensor. A note under the row names the problem when it holds anything else.
 2. Bind the stick to the [Motion Pitch, Yaw and Roll](features/mappings.md#motion-pitch-yaw-and-roll) rows instead: Motion Pitch from the stick's Y axis, Motion Yaw or Motion Roll from its X axis.
 3. Remove the stick and button sources from the Motion Gyro row.
-4. The rows need a slot that carries motion: PlayStation, Nintendo, or Extended on a Valve profile. On the DualShock 3 and Switch 2 Pro presets only the DSU server receives the motion.
+4. The rows need a slot that carries motion: PlayStation, Nintendo, or Extended on a Valve profile. On the DualShock 3 (SIXAXIS), Switch 2 Pro and plain Steam Deck presets only the DSU server receives the motion.
 
 ---
 
@@ -604,7 +604,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 1. The IR pointer needs a **sensor bar or any IR light source** in view of the remote's camera. It reads the two sensor-bar dots. Until the remote first sees both, it reports centered.
 2. A powered USB sensor bar or a pair of IR emitters both drive it. The bar only needs to emit IR, it carries no data.
-3. Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead (changed after 4.5.3, in pre-release builds).
+3. Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead.
 4. Map **IR Pointer X** and **IR Pointer Y** to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.
 5. A right Joy-Con's **IR Brightness** source is different. It reports a single cover/proximity value, not an X/Y pointer.
 
@@ -823,4 +823,4 @@ Both land in the folder PadForge runs from, and the card shows the path.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

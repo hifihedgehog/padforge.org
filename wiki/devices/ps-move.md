@@ -12,6 +12,9 @@ Both connect over Bluetooth through the same bundled PlayStation Bluetooth drive
 
 ## Pairing
 
+<!-- SCREENSHOT: move-pair -->
+![The Pair a Controller dialog set to PlayStation Move / Navigation](../images/move-pair.png)
+
 1. Open the [Devices](../features/devices.md) page and click **Pair**.
 2. Set **Controller Family** to **PlayStation Move / Navigation**.
 3. Connect the controller with a USB cable and click **Pair**. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.
@@ -65,9 +68,7 @@ An original Move (ZCM1) connected over Bluetooth reads the two accessories Sony 
 | **PlayStation Move Racing Wheel** | L1 and R1 on the shoulders, the D-pad, the left and right paddles, L2 and R2 on the triggers, and the throttle as **Axis 6**. Rumble drives the motor in each handle, low frequencies on the left and high on the right. |
 | **PlayStation Move Sharp Shooter** | Reload on the X position, the three weapon positions as **Misc 2**, **Misc 3** and **Misc 4**, and the trigger on the right trigger. The pump-action grip pulls the Move's own trigger, so it reaches only the Move. |
 
-The wheel's face buttons, Start and Select are the Move's own buttons, and so are the Sharp Shooter's Move button, Triangle and Square, so those report on the Move. The PS4-era Move (ZCM2) has no EXT socket, and the socket works only over Bluetooth.
-
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+The wheel's face buttons, Start and Select, and the Sharp Shooter's Move button, Triangle and Square, arrive in the Move's own report, so those report on the Move. The PS4-era Move (ZCM2) has no EXT socket, and the socket works only over Bluetooth.
 
 ---
 
@@ -88,4 +89,4 @@ The wheel's face buttons, Start and Select are the Move's own buttons, and so ar
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

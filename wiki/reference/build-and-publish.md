@@ -617,13 +617,13 @@ Workflow: `.github/workflows/build.yml`
 ```yaml
 on:
   push:
-    branches: [v4-dev]
+    branches: [v5-dev]
   pull_request:
-    branches: [v4-dev]
+    branches: [v5-dev]
   workflow_dispatch:
 ```
 
-Runs on every push/PR to `v4-dev` and on manual trigger.
+Runs on every push/PR to `v5-dev` and on manual trigger.
 
 ### Build job (one per architecture)
 
@@ -645,26 +645,26 @@ A matrix runs `win-x64` and `win-arm64` side by side on `windows-latest`. Nearly
 
 ### Latest job (push only)
 
-`latest` rewrites `latest-v4-dev`. It runs only after a successful `archive` job, on `ubuntu-latest`, in a concurrency group per branch: one run publishes, one waits, and a third that arrives replaces the waiting one.
+`latest` rewrites `latest-v5-dev`. It runs only after a successful `archive` job, on `ubuntu-latest`, in a concurrency group per branch: one run publishes, one waits, and a third that arrives replaces the waiting one.
 
 1. **Decide whether this commit should be published**. Builds do not finish in push order, so the job asks the branch as it is now. A commit that a force-push left out of the branch's history is skipped, and so is a commit older than the one already published. An API error fails the job and leaves the published release untouched
 2. **Fetch this build from the archive**. Downloads the zips the archive job uploaded and renames them `PadForge.zip` and `PadForge-arm64.zip`, so nothing is compressed twice
-3. **Stage, then swap**. Deletes staging drafts that dead runs left, creates the new release as a draft titled `PadForge r{N}@{SHA}` with its zips attached, and checks that every file uploaded. Only then does it delete the old release, move the `latest-v4-dev` tag to this commit, and publish the draft under that tag. It reads the release back and fails if the files or the commit differ
+3. **Stage, then swap**. Deletes staging drafts that dead runs left, creates the new release as a draft titled `PadForge r{N}@{SHA}` with its zips attached, and checks that every file uploaded. Only then does it delete the old release, move the `latest-v5-dev` tag to this commit, and publish the draft under that tag. It reads the release back and fails if the files or the commit differ
 
-### Automatic Releases (push to v4-dev only)
+### Automatic Releases (push to v5-dev only)
 
 On push (not PR), the workflow maintains two GitHub releases keyed off the branch ref name:
 
 | Release | Behavior |
 |---------|----------|
-| **`archive-v4-dev`** | Accumulates every build as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. Uploads with `--clobber`. Preserves the tag across builds. Rolls to a new part when full (see below). |
-| **`latest-v4-dev`** | Replaced when a push's build is newer than the published one. Titled `PadForge r{N}@{SHA}`, with `PadForge.zip` (x64) and `PadForge-arm64.zip` from that build. The "always current" download link. The replacement is built as a draft and swapped in only once it holds every file, so a failed upload never leaves the link without a download. |
+| **`archive-v5-dev`** | Accumulates every build as `PadForge_r{N}@{SHA}.zip` and `PadForge_r{N}@{SHA}-arm64.zip`. Uploads with `--clobber`. Preserves the tag across builds. Rolls to a new part when full (see below). |
+| **`latest-v5-dev`** | Replaced when a push's build is newer than the published one. Titled `PadForge r{N}@{SHA}`, with `PadForge.zip` (x64) and `PadForge-arm64.zip` from that build. The "always current" download link. The replacement is built as a draft and swapped in only once it holds every file, so a failed upload never leaves the link without a download. |
 
-Both are pre-releases. The notes of `latest-v4-dev` link to the archive part that holds its build and to the run's log, and the first archive part's notes link to `latest-v4-dev`.
+Both are pre-releases. The notes of `latest-v5-dev` link to the archive part that holds its build and to the run's log, and the first archive part's notes link to `latest-v5-dev`.
 
 The in-app updater's pre-release channel reads `latest-v{major}-dev`: it takes the build number from the title `PadForge r{N}@{SHA}` and picks `PadForge.zip` or `PadForge-arm64.zip` by name. A comment in `build.yml` says so. Renaming the tag, the title format, or either zip breaks that channel for every installed copy. See [Updates Internals](updates-internals.md#couplings).
 
-**Rolling archive parts.** GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 990 assets, creates the next numbered part (`archive-v4-dev-2`, `archive-v4-dev-3`, and so on) targeting the current commit. The count is read without a lock, so runs that overlap all see the same number, and 990 leaves room for five of them at once. Each new part's notes link back to the previous part.
+**Rolling archive parts.** GitHub caps a release at 1000 assets. A push adds up to two assets, so the workflow watches the active archive and, once it reaches 990 assets, creates the next numbered part (`archive-v5-dev-2`, `archive-v5-dev-3`, and so on) targeting the current commit. The count is read without a lock, so runs that overlap all see the same number, and 990 leaves room for five of them at once. Each new part's notes link back to the previous part.
 
 ### Artifact Naming
 
@@ -747,7 +747,7 @@ cd ../../win-arm64/publish
 zip -r PadForge-vX.Y.Z-win-arm64.zip .
 ```
 
-Each publish directory holds one file, so the 4.5.3 assets are `PadForge-v4.5.3-win-x64.zip` and `PadForge-v4.5.3-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
+Each publish directory holds one file, so the 5.0.0 assets are `PadForge-v5.0.0-win-x64.zip` and `PadForge-v5.0.0-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
 
 The in-app updater finds a release by these names: a `vX.Y.Z` tag with no suffix, zips ending in `-win-x64.zip` and `-win-arm64.zip`, and `PadForge.exe` at the root of each zip. It offers an asset only when GitHub reports a SHA-256 `digest` for it. See [Updates Internals](updates-internals.md#couplings).
 
@@ -838,4 +838,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

@@ -6632,7 +6632,7 @@
 <td><code>GunCalibration</code></td>
 <td><code>string</code></td>
 <td><code>&lt;GunCalibration&gt;</code></td>
-<td>A GunCon 2's aim range (hifihedgehog/SDL#33), <code>"minX,maxX,minY,maxY"</code> in beam counts, from the Devices page's calibration screen. Empty means X 175..720 and Y 20..240. <em>Added after 4.5.3.</em> A Wii Remote's light-gun window (#485) in the same form, in pointer counts (aim times 512 across and 384 down). Empty means the remote's default aim range.</td>
+<td>A GunCon 2's aim range (hifihedgehog/SDL#33), <code>"minX,maxX,minY,maxY"</code> in beam counts, from the Devices page's calibration screen. Empty means X 175..720 and Y 20..240. A Wii Remote's light-gun window (#485) in the same form, in pointer counts (aim times 512 across and 384 down). Empty means the remote's default aim range.</td>
 </tr>
 </tbody>
 </table>
@@ -7019,6 +7019,7 @@
 <li><strong>Button mappings</strong> (17): ButtonA, ButtonB, ButtonX, ButtonY, LeftShoulder, RightShoulder, ButtonBack, ButtonStart, ButtonGuide, LeftThumbButton, RightThumbButton, then the appended extras in order: ButtonShare (Xbox Series Share), ButtonMute (DualSense mic mute), LeftPaddle, RightPaddle, LeftFunction, RightFunction (DualSense Edge rear paddles and front Fn buttons).</li>
 <li><strong>D-Pad</strong> (5): DPad, DPadUp, DPadDown, DPadLeft, DPadRight</li>
 <li><strong>Triggers</strong> (8): LeftTrigger, RightTrigger, LeftTriggerDeadZone, RightTriggerDeadZone, LeftTriggerAntiDeadZone, RightTriggerAntiDeadZone, LeftTriggerMaxRange, RightTriggerMaxRange</li>
+<li><strong>Button pressure</strong> (10, #476): PressureButtonA, PressureButtonB, PressureButtonX, PressureButtonY, PressureLeftShoulder, PressureRightShoulder, PressureDPadUp, PressureDPadDown, PressureDPadLeft, PressureDPadRight</li>
 <li><strong>Thumbstick axes</strong> (8): LeftThumbAxisX, LeftThumbAxisY, RightThumbAxisX, RightThumbAxisY, LeftThumbAxisXNeg, LeftThumbAxisYNeg, RightThumbAxisXNeg, RightThumbAxisYNeg</li>
 <li><strong>Touchpad</strong> (7): TouchpadX1, TouchpadY1, TouchpadX2, TouchpadY2, TouchpadContact1, TouchpadContact2, TouchpadClick</li>
 <li><strong>Deadzones and curves</strong> (36): LeftThumbDeadZoneX/Y, RightThumbDeadZoneX/Y, LeftThumbDeadZoneShape, RightThumbDeadZoneShape, LeftThumbAntiDeadZone, RightThumbAntiDeadZone, LeftThumbAntiDeadZoneX/Y, RightThumbAntiDeadZoneX/Y, LeftThumbLinear, RightThumbLinear, LeftThumbSensitivity, RightThumbSensitivity (the per-stick output multipliers, without which two PadSettings differing only in stick sensitivity hash identically), all 6 sensitivity curves, all 8 max range properties, all 4 center offset properties, LeftThumbBoundaryMap, RightThumbBoundaryMap (the stick boundary-calibration pair, #174)</li>
@@ -8043,7 +8044,7 @@
 <p>Each entry carries a <code>DeviceGuid</code> key and a <code>MouseGestureSettings</code> payload (Enabled, GestureButtons, CustomEngageButton, CustomEngageDeviceGuid, FlickThresholdCounts, CooldownMs), serialized into the <code>MGS:</code> checksum block. <code>GestureButtons</code> is a bitmask over the raw mouse-button indices (bit 0 Left through bit 4 X2) plus bit 5, the Custom activation (v4.1, discussion #216): <code>CustomEngageButton</code> + <code>CustomEngageDeviceGuid</code> name a recorded cross-device input (a keyboard key, a gamepad button, or an axis past the button threshold, the same pair shape as <code>GyroAimEngageButton</code>) that arms the gesture session while held instead of a mouse button. An empty <code>CustomEngageButton</code> keeps the Custom session inert even with bit 5 set. The empty-descriptor pass-through convention of the engage family does not apply here. <strong>Excluded from <code>CopyablePropertyNames</code>:</strong> deep-copied separately in <code>CopyFrom()</code> via <code>DeepCopyMouseGestureSettings</code>, and round-tripped through clipboard JSON under <code>__MouseGestureSettings</code>.</p>
 <h3 id="copyablepropertynames">CopyablePropertyNames<a class="headerlink" href="#copyablepropertynames" title="Permanent link">&para;</a></h3>
 <p>Static array defining which properties participate in <code>CopyFrom()</code>, <code>ToJson()</code>, and <code>FromJson()</code>. Includes all user-facing configuration. Excludes identity and metadata.</p>
-<p><strong>Complete list (190 properties):</strong></p>
+<p><strong>Complete list (200 properties):</strong></p>
 <table>
 <thead>
 <tr>
@@ -8063,6 +8064,10 @@
 <tr>
 <td><strong>Triggers</strong> (8)</td>
 <td><code>LeftTrigger</code>, <code>RightTrigger</code>, <code>LeftTriggerDeadZone</code>, <code>RightTriggerDeadZone</code>, <code>LeftTriggerAntiDeadZone</code>, <code>RightTriggerAntiDeadZone</code>, <code>LeftTriggerMaxRange</code>, <code>RightTriggerMaxRange</code></td>
+</tr>
+<tr>
+<td><strong>Button pressure</strong> (10, #476)</td>
+<td><code>PressureButtonA</code>, <code>PressureButtonB</code>, <code>PressureButtonX</code>, <code>PressureButtonY</code>, <code>PressureLeftShoulder</code>, <code>PressureRightShoulder</code>, <code>PressureDPadUp</code>, <code>PressureDPadDown</code>, <code>PressureDPadLeft</code>, <code>PressureDPadRight</code></td>
 </tr>
 <tr>
 <td><strong>Stick axes</strong> (8)</td>
@@ -11830,7 +11835,7 @@
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Per-slot <code>VirtualControllerType</code> and Extended/MIDI config serialization</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

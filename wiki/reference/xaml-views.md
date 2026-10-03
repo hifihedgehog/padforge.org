@@ -928,7 +928,7 @@ Two per-source sensitivity rows render inside the mapping source editor, each ga
 
 ### Pointer Tab (Tab 13). IR Camera Tuning (#146)
 
-Wii Remote IR camera tuning. `TabPointer` (Tag 13) is `Visibility="Collapsed"` by default and shown by `SyncTabVisibility()` only when the selected mapped device is an IR-capable Wii Remote (`hasIrPointer`). Two cards: Pointer Mode (`PointerMode`: Mouse, FPS Mouse, 4:3 Border, or 16:9 Border, plus `PointerFpsSpeed`) and Pointer Tuning (sensor-bar position `IrSensorBarPos` as Centered / Above / Below, `IrSensorBarCompPercent` compensation, `IrSmoothingPercent` smoothing), each row with a reset. *Changed after 4.5.3.* The tab's subtitle (`Pad_Pointer_Subtitle`) sends the player to the Devices page to calibrate the remote as a light gun and says that a calibrated remote ignores the sensor-bar position and offset (#485).
+Wii Remote IR camera tuning. `TabPointer` (Tag 13) is `Visibility="Collapsed"` by default and shown by `SyncTabVisibility()` only when the selected mapped device is an IR-capable Wii Remote (`hasIrPointer`). Two cards: Pointer Mode (`PointerMode`: Mouse, FPS Mouse, 4:3 Border, or 16:9 Border, plus `PointerFpsSpeed`) and Pointer Tuning (sensor-bar position `IrSensorBarPos` as Centered / Above / Below, `IrSensorBarCompPercent` compensation, `IrSmoothingPercent` smoothing), each row with a reset. The tab's subtitle (`Pad_Pointer_Subtitle`) sends the player to the Devices page to calibrate the remote as a light gun and says that a calibrated remote ignores the sensor-bar position and offset (#485).
 
 ### Menus Tab (Tab 15). Detailed
 
@@ -1087,13 +1087,18 @@ Grid (Margin="24,16")
         ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag, #150)
         ├─ Manage Voice Macros Button (ManageVoicePhrases_Click, ShowManageVoicePhrases, #317)
         ├─ Learn Handheld Buttons Button (LearnHandheldButton_Click,
-        │   ShowLearnHandheldButton, #343) + HandheldDaemonWarning line
+        │   ShowLearnHandheldButton, #343)
         ├─ Switch Driver Buttons (DriverBind_Click / DriverRestore_Click,
         │   ShowDriverBind / ShowDriverRestore, SDL#33 Part 15)
         ├─ Read as iCade Controller / Read as Keyboard Buttons (ReadAsICade_Click /
         │   ReadAsKeyboard_Click, ShowReadAsICade / ShowReadAsKeyboard, SDL#33 Part 16)
         ├─ Read as Tekken Sticks / Read as Taiko Drums Buttons (UsioTekken_Click /
         │   UsioTaiko_Click, ShowUsioTekken / ShowUsioTaiko, SDL#33 Part 14)
+        ├─ Bliss-Box line and actions (BlissBoxLine, BlissBoxPlayer_Click /
+        │   DreamcastScreen_Click / PakBackup_Click / PakRestore_Click, Read Arrows
+        │   One by One CheckBox with NativeArrows_Click, shown on ShowBlissBoxPlayer /
+        │   ShowDreamcastScreen / ShowControllerPak / ShowNativeArrows, #469)
+        ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
         ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
         ├─ HeadTrackerStatus line (#355, collapsed when empty)
         ├─ Separator
@@ -1204,7 +1209,7 @@ Grid (Margin="24,16")
 | `ShowIdleDisconnect` / `IdleDisconnectMinutes` | Idle-disconnect row visibility and its countdown minutes (#162) |
 | `ShowQuickCharge` / `QuickChargeEnabled` | Quick Charge row visibility and toggle (#372). Also true on a Sony record the USB cable rebound to its wired path, which is not a disconnect target and is exactly when the feature fires |
 | `ShowInputModeOrHidingSection` / `ShowRawInputDivider` | The two conditional separators around the Power section |
-| `ShowGunCalibration` / `ShowGunCalibrationDivider` / `GunCalibrationStatus` / `CanCalibrateGun` / `GunCalibrateTooltip` | Light Gun section visibility, the rule above it, the aim range line, the Calibrate button's enable state, and its tooltip by kind of gun |
+| `ShowGunCalibration` / `ShowGunCalibrationDivider` / `GunCalibrationStatus` / `CanCalibrateGun` / `GunCalibrateTooltip` | Light Gun section visibility, the rule above it, the status line (a GunCon 2's aim range, or whether a Wii Remote is calibrated), the Calibrate button's enable state, and its tooltip by kind of gun |
 | `ShowReadAsICade` / `ShowReadAsKeyboard` | The iCade pair of buttons |
 | `ShowUsioTekken` / `ShowUsioTaiko` | The USIO layout buttons |
 | `HasCapabilityIcons` / `HasRumble` / `HasGyro` / `ShowTouchpadCapability` | Capability chip strip and its three chips |
@@ -1893,7 +1898,7 @@ Shift-layer editor (`Pad_Shift_DialogTitle`, 600x760). Records the activator com
 
 **Files:** `ShiftLayerFlyout.xaml`, `ShiftLayerFlyout.xaml.cs`
 
-Win11 volume-OSD-style flyout that reuses `ProfileSwitchOverlay`'s pixel-measured chrome (bg `#2D2E2E`, border `#141516`, corner radius 8, layered shadow border plus content border so ClearType survives). Stays visible while a shift layer is engaged on the currently-viewed slot, slides out when the slot returns to Base. `ShowLayer` draws the layer's icon through `MenuIconResolver.ResolveLayerIcon`: a picture reference that resolves fills `StatusImage` (20x20, uniform, in the glyph's spot, #471), anything else shows as text in `StatusIcon`, and an empty or unresolvable picture reference shows ⇧.
+Win11 volume-OSD-style flyout that reuses `ProfileSwitchOverlay`'s pixel-measured chrome (bg `#2D2E2E`, border `#141516`, corner radius 8, layered shadow border plus content border so ClearType survives). Stays visible while a shift layer is engaged on the currently-viewed slot, slides out when the slot returns to Base. `ShowLayer` draws the layer's icon through `MenuIconResolver.ResolveLayerIcon`: a picture reference that resolves fills `StatusImage` (20x20, uniform, in the glyph's spot, #471), a single glyph such as an emoji shows as text in `StatusIcon`, and anything else, an empty reference included, shows ⇧.
 
 ### TouchpadGestureRecorderDialog
 
@@ -2308,4 +2313,4 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

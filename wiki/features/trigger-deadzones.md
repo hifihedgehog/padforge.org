@@ -233,12 +233,7 @@ Three settings appear once Stick Trim is picked:
 Stick Trim shows only on trigger outputs.
 
 <!-- SCREENSHOT: pad-stick-trim -->
-<!-- image pending recapture: ![Stick Trim](../images/pad-stick-trim.png)
-     The pad-stick-trim.png on disk is a stale capture: it shows a Left Stick X
-     row with Combine set to Strongest and no trim settings strip. Do not
-     restore the reference until the capture shows a trigger output with
-     Combine set to Stick Trim and the Trim Deadzone / Trim Speed /
-     Reset on Release controls. -->
+![A Left Trigger row with Combine set to Stick Trim, and its Trim Deadzone, Trim Speed and Reset on Release controls](../images/pad-stick-trim.png)
 
 ---
 

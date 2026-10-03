@@ -70,7 +70,7 @@
                 <img src="assets/softpedia-excellent-editors-review-award.png" alt="Softpedia Editor's Pick">
                 <span><b>Editor's Pick.</b> Rated 5/5.</span>
             </div>
-            <div class="trust-item"><span><b>231</b> device profiles</span></div>
+            <div class="trust-item"><span><b>232</b> device profiles</span></div>
             <div class="trust-item"><span><b>Source available.</b> No telemetry.</span></div>
             <div class="trust-item"><span>Powered by <a href="https://hidmaestro.org" target="_blank" rel="noopener"><b>HIDMaestro</b></a></span></div>
         </div>
@@ -107,7 +107,7 @@
                 <div class="mf" style="--mf: var(--ember)"><b>Your phone as a controller</b><span>A browser on the Wi-Fi, sixteen of them at once, nothing to install. A pad paired to the phone, or a handheld's own controls, forwarded too</span></div>
                 <div class="mf" style="--mf: var(--brand-ps)"><b>Remote Link across PCs</b><span>A controller on one machine, driving a game on another</span></div>
                 <div class="mf" style="--mf: var(--brand-xbox)"><b>Audio through the controller</b><span>Speaker output, bass shakers, and rumble driven from the game's sound</span></div>
-                <div class="mf" style="--mf: var(--telemetry)"><b>231 device profiles</b><span>Wheels, pedals, HOTAS, flight sticks, arcade sticks and gamepads</span></div>
+                <div class="mf" style="--mf: var(--telemetry)"><b>232 device profiles</b><span>Wheels, pedals, HOTAS, flight sticks, arcade sticks and gamepads</span></div>
                 <div class="mf" style="--mf: var(--brand-nin)"><b>Shift layers and SOCD</b><span>One physical button carrying four jobs, cleanly</span></div>
                 <div class="mf" style="--mf: var(--brand-steam)"><b>Per-app profiles</b><span>Switched automatically when the game takes focus</span></div>
                 <div class="mf" style="--mf: var(--ember)"><b>Your voice as a button</b><span>Registered phrases fire macros, recognized offline</span></div>
@@ -268,8 +268,8 @@
     <div class="container">
         <div class="stat-grid">
             <div class="stat reveal"><div class="stat-n">16</div><div class="stat-l">Virtual controllers at once</div></div>
-            <div class="stat reveal" data-d="1"><div class="stat-n">758</div><div class="stat-l">Devices known by USB identity</div></div>
-            <div class="stat reveal" data-d="2"><div class="stat-n">231</div><div class="stat-l">Device profiles</div></div>
+            <div class="stat reveal" data-d="1"><div class="stat-n">1,108</div><div class="stat-l">Devices known by USB identity</div></div>
+            <div class="stat reveal" data-d="2"><div class="stat-n">232</div><div class="stat-l">Device profiles</div></div>
             <div class="stat reveal" data-d="3"><div class="stat-n">1000<em>Hz</em></div><div class="stat-l">Polling, sub-ms jitter</div></div>
             <div class="stat reveal" data-d="4"><div class="stat-n">$0</div><div class="stat-l">Forever, no paywall</div></div>
         </div>
@@ -306,6 +306,14 @@
                 <summary>Charging over USB drops the Bluetooth link</summary>
                 <div class="detail-body">A Bluetooth pad you plug in to charge keeps its radio link up, and the radio keeps drawing from the battery you are trying to fill. Tick <b>Disconnect Bluetooth When Plugged In over USB</b> on the device and PadForge drops that link the moment the pad reports it is charging, so the cable does the work. Any USB power source counts, a wall charger included. Turn the radio back on with the cable still in and PadForge leaves it alone until the next unplug. It covers any pad that reports its radio address as its serial. That takes in the DualSense, DualShock 4, DualShock 3, Switch 2, and Joy-Con pairs.</div>
             </details>
+            <details class="detail">
+                <summary>Retro controllers through a Bliss-Box</summary>
+                <div class="detail-body">Turn on <b>Read Bliss-Box Adapters</b> and each port of a Bliss-Box adapter names the console controller in it and maps it the way SDL maps that console's pad. A DualShock 2's pressure-sensitive buttons read as analog, rumble reaches the pads with motors, a Dreamcast pad's VMU shows your pictures, and an N64 Controller Pak backs up and restores.</div>
+            </details>
+            <details class="detail">
+                <summary>Controllers Windows cannot read on its own</summary>
+                <div class="detail-body">Bluetooth LE pads, the iCade, serial I-Force wheels with their force feedback, DJI RC remotes, clone Xbox 360 receivers, the Ring-Con, light guns, train controllers and arcade I/O boards: PadForge's SDL3 build reads them, and binds the driver most of them need on its own. 289 more pads get a named layout from the community SDL_GameControllerDB.</div>
+            </details>
         </div>
     </div>
 </section>
@@ -326,7 +334,7 @@
                 <div class="details reveal" data-d="3">
                     <details class="detail">
                         <summary>One row, many devices</summary>
-                        <div class="detail-body">One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes, Stick Trim, plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Invert On Hold, or Ramp. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</div>
+                        <div class="detail-body">One mapping row can read from any number of physical inputs across any number of physical devices. Six combine modes, Stick Trim, plus a drag-and-drop custom formula editor. Cross-device chords so a button on the wheel and a button on the shifter trigger one virtual press. A per-row Primary Mode picks how that source behaves: Direct, Incremental, Ramp, Toggle, Rapid Trigger, or Invert On Hold. Ramp turns an Up key and a Down key into a smooth stick axis, with its own attack, release, and autocenter timing.</div>
                     </details>
                     <details class="detail">
                         <summary>Turbo that follows how hard you press</summary>
@@ -363,6 +371,14 @@
                     <details class="detail">
                         <summary>SOCD cleaning and mouse gestures</summary>
                         <div class="detail-body">Press left and right together and something has to give. The Keyboard&nbsp;+&nbsp;Mouse controller cleans those opposing pairs across every key you map, and any slot can clean opposing virtual buttons the same way: last-wins (Snap Tap), first-wins, or neutral. Separately, hold any mouse button and flick the cursor: up, down, left, right, or a plain click while held, five gestures off one button, each firing its own action.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Analog keyboards, key by key</summary>
+                        <div class="detail-body">Turn on <b>Read Analog Keyboards</b> in Settings and a Hall effect or analog keyboard joins the Devices page as its own row, with how far each key is pressed: more than 370 models from 101 brands, Wooting, Razer, Keychron and NuPhy among them. Each key is a source at its depth, for a trigger, a stick axis or a button, and two macros on one key make a soft press and a full press. Windows keeps receiving your typing as usual, and a Set Chroma Color macro paints every Razer Chroma device while it runs.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Rapid Trigger and Toggle</summary>
+                        <div class="detail-body">Rapid Trigger presses and releases on movement instead of at one fixed point: lift a little and it lets go, push a little and it presses again. It works on any input with depth, analog keys, triggers, sticks, MIDI controls and the Ring-Con among them. Toggle latches any button: one press holds the output on, the next releases it.</div>
                     </details>
                 </div>
             </div>
@@ -508,6 +524,14 @@
                         <div class="detail-body">The built-in DSU / Cemuhook server broadcasts gyroscope and accelerometer on UDP port 26760 so emulators can use real motion for Splatoon, Wii titles, 3DS games, and anything else that asks for it. Every motion source PadForge reads feeds it: DualSense, DualShock 4, Switch Pro, Joy-Con, 2026 Steam Controller, DualShock 3 sixaxis, and Wii Motion Plus.</div>
                     </details>
                     <details class="detail">
+                        <summary>Motion from a stick, a trigger or a key</summary>
+                        <div class="detail-body">Motion Pitch, Yaw and Roll rows give a PlayStation, Nintendo or Valve virtual controller motion from any input. Speed turns it for as long as the stick is held. Angle, on pitch and roll, leans it as far as the stick is pushed and levels it when you let go.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>A Wii Remote as a light gun</summary>
+                        <div class="detail-body">Calibrate a Wii Remote to your screen from its Light Gun section on the Devices page: four targets, a press of B on each. The crosshair lands where the remote points, corrected for twist, and holds through a moment out of the sensor bar's sight. A Namco GunCon 2 calibrates the same way.</div>
+                    </details>
+                    <details class="detail">
                         <summary>A touchpad that is more than a touchpad</summary>
                         <div class="detail-body">Map a finger to mouse X/Y with per-axis sensitivity, invert, and a Trackpad pointer response that moves the cursor the way a laptop touchpad does. Anchor a virtual analog stick where your finger lands. Drop a wedge-thresholded D-pad on top. Pressure-sensitive pads expose per-finger pressure as sources, and swipe haptics tick the pad as a finger travels.</div>
                     </details>
@@ -579,6 +603,14 @@
             <details class="detail">
                 <summary>Build a layout that fits your hands</summary>
                 <div class="detail-body">The custom builder starts from a blank pad and lets you place sticks, buttons, triggers, D-pads and touch surfaces anywhere on it, then save it. Layouts are stored with your settings, so the phone loads yours the next time it connects.</div>
+            </details>
+            <details class="detail">
+                <summary>Plain HTTP, behind an access code</summary>
+                <div class="detail-body">Some browsers refuse a self-signed certificate, and a tunnel brings its own. <b>Also Serve Plain HTTP</b> adds a second address for both, on its own port and guarded by a ten-character access code that its link and QR code carry. <b>This PC Only</b> keeps it to a tunnel running on the same PC.</div>
+            </details>
+            <details class="detail">
+                <summary>Your menus on the phone</summary>
+                <div class="detail-body">Web Menus shows a slot's Touch Grid menus on a phone as pages of tiles, with emoji and picture icons. A tap fires the cell the way the overlay would, and the overlay stays out of the way on the PC.</div>
             </details>
             <details class="detail">
                 <summary>Share controllers across your PCs</summary>
@@ -682,6 +714,12 @@
             <figure class="reveal"><img class="zoom" src="assets/screenshot-pad-extended-steam-controller.jpg" alt="An Extended slot set to the Steam Controller (2026) persona, with the 2026 Steam Controller body in the 3D preview" loading="lazy"><figcaption><b>Steam Controller</b>Both generations, meshed from Valve's CAD.</figcaption></figure>
             <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-dashboard-head-tracking.jpg" alt="The Head Tracking section on the Dashboard" loading="lazy"><figcaption><b>Head tracking</b>OpenTrack, FreeTrack and OpenXR, as six axes.</figcaption></figure>
             <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-pad-gyro-grip.jpg" alt="The Grip control in the Pad page's motion section" loading="lazy"><figcaption><b>Grip</b>Four ways to hold a Wii Remote.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-devices-analog-keyboard.jpg" alt="An analog keyboard's row on the Devices page" loading="lazy"><figcaption><b>Analog keyboards</b>Every key, with its depth.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-mapping-rapid-trigger.jpg" alt="A trigger row in Rapid Trigger mode, with its Distance slider" loading="lazy"><figcaption><b>Rapid Trigger</b>Presses on movement, not at a fixed point.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-mapping-motion-rows.jpg" alt="The Motion Roll row open in the mapping grid" loading="lazy"><figcaption><b>Motion rows</b>Turn or lean the pad from a stick.</figcaption></figure>
+            <figure class="reveal"><img class="zoom" src="assets/screenshot-devices-light-gun.jpg" alt="The Light Gun section of a Wii Remote on the Devices page" loading="lazy"><figcaption><b>Light gun</b>Aim where the Wii Remote points.</figcaption></figure>
+            <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-dashboard-web-plain.jpg" alt="The Plain HTTP Address section of the Web Controller card" loading="lazy"><figcaption><b>Plain HTTP</b>A second address, behind a code.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-playstation-ds3.jpg" alt="A PlayStation slot on the DualShock 3 preset, with the DualShock 3 model" loading="lazy"><figcaption><b>DualShock 3</b>Its own model, and its pressure.</figcaption></figure>
         </div>
     </div>
 </section>
@@ -731,7 +769,7 @@
             <details class="detail"><summary>Will this get me banned?</summary><div class="detail-body">PadForge presents a normal HID device through a signed driver, the same way a physical controller does. It does not inject into games or read their memory. Kernel anti-cheat vendors still make their own rules about virtual input devices, and competitive titles change those rules without notice. Use your judgment in games with aggressive anti-cheat.</div></details>
             <details class="detail"><summary>Do I need HidHide?</summary><div class="detail-body">Most games do. Without it a game sees your physical controller and the virtual one at the same time and takes both, which usually shows up as doubled or fighting input. HidHide cloaks the physical device so only the virtual one reaches the game. PadForge offers to install it for you, and you can cloak per device rather than all at once.</div></details>
             <details class="detail"><summary>Does it work outside Steam?</summary><div class="detail-body">Yes. PadForge creates a real device at the driver level, so any game sees it, launcher or not. That is the difference from Steam Input, which only applies inside Steam.</div></details>
-            <details class="detail"><summary>What controllers are supported?</summary><div class="detail-body">PadForge recognizes 758 devices by their USB identity: Xbox, PlayStation, Nintendo, Steam, 8BitDo, Flydigi, GameSir and other pads, plus racing wheels and pedals, flight sticks, throttles, arcade sticks and GameCube adapters. Anything else Windows enumerates as an input device can usually be read, including keyboards, mice, MIDI devices, touchpads, drawing tablets and 3D mice. The <a href="/docs/devices/supported/">supported devices list</a> names every one.</div></details>
+            <details class="detail"><summary>What controllers are supported?</summary><div class="detail-body">PadForge recognizes 1,108 devices by their USB identity: Xbox, PlayStation, Nintendo, Steam, 8BitDo, Flydigi, GameSir and other pads, plus racing wheels and pedals, flight sticks, throttles, arcade sticks, GameCube adapters and controllers Windows cannot read on its own, from light guns to arcade I/O boards. Analog keyboards report how far each key is pressed, and a Bliss-Box adapter names the retro controller in each port. Anything else Windows enumerates as an input device can usually be read, including keyboards, mice, MIDI devices, touchpads, drawing tablets and 3D mice. The <a href="/docs/devices/supported/">supported devices list</a> names every one.</div></details>
             <details class="detail"><summary>Can I use my phone?</summary><div class="detail-body">Yes. PadForge serves a web controller on your local network. Open the address in any phone browser, pick a layout, and it becomes a virtual pad with real rumble through the Vibration API. Up to sixteen at once, no app install.</div></details>
         </div>
     </div>

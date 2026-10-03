@@ -15,7 +15,7 @@ HIDMaestro (HM) is a UMDF2 (User-Mode Driver Framework 2) virtual HID minidriver
 - A pre-recorded HID report descriptor (input + output + feature reports)
 - Optional FFB PID descriptor pages
 
-PadForge 4.5.3 ships HM 1.9.0, and pre-release builds after it ship HM 1.10.1 (`HIDMaestro.Core.dll`, FileVersion 1.10.1.0), which embeds 232 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 134 of the 232 carry a captured HID descriptor, and PadForge's pickers offer those 134 (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (`HMProfile.IsDeployable`). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.
+PadForge 5.0.0 ships HM 1.10.1 (`HIDMaestro.Core.dll`, FileVersion 1.10.1.0), which embeds 232 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 134 of the 232 carry a captured HID descriptor, and PadForge's pickers offer those 134 (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (`HMProfile.IsDeployable`). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.
 
 The interim milestones a successor should know, each one PadForge's own call sites still cite by version:
 
@@ -29,7 +29,7 @@ The interim milestones a successor should know, each one PadForge's own call sit
 | v1.4.3 (HM#42) | The usbip-vhci node HM owns is stamped, so the persona guard can identify it | `InputManager.Step1.UsbipVhciGuard.cs:18` |
 | v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1789-1790` |
 | v1.6.0 (HM#32) | Native OpenVR driver behind `HMVRController` | `HMaestroVRController.cs:9` |
-| v1.7.0 (HM#56) | Per-instance usbip serials and the three Valve composite persona profiles (`steam-deck-composite`, `steam-controller-composite`, `steam-controller-2`). They were withheld from the pickers until their art landed. `WithheldProfileIds` is empty in 4.5.3 | `HMaestroProfileCatalog.cs:297` (`WithheldProfileIds`), `ValveReportPackers.cs` |
+| v1.7.0 (HM#56) | Per-instance usbip serials and the three Valve composite persona profiles (`steam-deck-composite`, `steam-controller-composite`, `steam-controller-2`). They were withheld from the pickers until their art landed. `WithheldProfileIds` is empty in 5.0.0 | `HMaestroProfileCatalog.cs:297` (`WithheldProfileIds`), `ValveReportPackers.cs` |
 | v1.7.1 (HM#58) | The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and `SubmitRawExtendedReport` is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing | `HMaestroVirtualController.cs:562` (`SubmitRawReport`), `PadForge.App.csproj:299`. See [Raw frames](#raw-frames-submitrawreport-versus-submitrawextendedreport) |
 | v1.7.2 (HM#59) | One Windows.Gaming.Input gamepad per Xbox 360 virtual instead of two | No PadForge code. Commit `6e9a9780` bumps the DLL. See [One WGI gamepad](#one-wgi-gamepad-per-xbox-360-virtual-hm59) |
 | v1.7.3 | A version resource (company, product, description) on each native binary | `PadForge.App.csproj:280` |
@@ -318,4 +318,4 @@ The legacy v2 driver cleanup dialog (offered on the first launch that detects Vi
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

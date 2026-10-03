@@ -25,7 +25,7 @@ Two more controls live in the strip beneath the selected row rather than in a co
 
 > **Tip:** The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.
 
-Rows group by category, in this order: **Buttons** (face, shoulder, system, stick clicks), **D-Pad** (four directions), **Triggers** (left and right), **Left Stick / Right Stick** (X and Y axes). PlayStation slots add the touchpad rows, a **Touchpad Click** row, and five motion rows: **Motion Gyro**, **Motion Accelerometer**, **Motion Pitch**, **Motion Yaw**, and **Motion Roll**. In pre-release builds the two DualShock 3 presets leave out the touchpad rows, since the pad has no touchpad, and name the system buttons **Select** and **Start** where the other PlayStation presets say **Share** and **Options**. The **DualShock 3 (SIXAXIS): Full** preset adds ten [button pressure](#button-pressure) rows after the triggers. Nintendo and Extended slots arrange their own row sets. See [Nintendo virtual controllers](#nintendo-virtual-controllers) and [Custom DirectInput mappings](#custom-directinput-mappings).
+Rows group by category, in this order: **Buttons** (face, shoulder, system, stick clicks), **D-Pad** (four directions), **Triggers** (left and right), **Left Stick / Right Stick** (X and Y axes). PlayStation slots add the touchpad rows, a **Touchpad Click** row, and five motion rows: **Motion Gyro**, **Motion Accelerometer**, **Motion Pitch**, **Motion Yaw**, and **Motion Roll**. The two DualShock 3 presets leave out the touchpad rows, since the pad has no touchpad, and name the system buttons **Select** and **Start** where the other PlayStation presets say **Share** and **Options**. The **DualShock 3 (SIXAXIS): Full** preset adds ten [button pressure](#button-pressure) rows after the triggers. Nintendo and Extended slots arrange their own row sets. See [Nintendo virtual controllers](#nintendo-virtual-controllers) and [Custom DirectInput mappings](#custom-directinput-mappings).
 
 ---
 
@@ -84,7 +84,7 @@ Rows that already have a source are still in the sequence. Pressing an input ove
 
 Map All skips the five motion rows. Controllers with a motion sensor fill Motion Gyro and Motion Accelerometer on their own, and [Motion Pitch, Yaw and Roll](#motion-pitch-yaw-and-roll) are a choice made row by row.
 
-On PlayStation virtual controllers, **Touchpad Click** is appended to the recording sequence after the stick axes. In pre-release builds a DualShock 3 preset has no Touchpad Click row, so its sequence ends with the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.
+On PlayStation virtual controllers, **Touchpad Click** is appended to the recording sequence after the stick axes. A DualShock 3 preset has no Touchpad Click row, so its sequence ends with the stick axes. The 2D and 3D controller views render the touchpad as a clickable surface. Clicking it (mouse or touch) records the same Touchpad Click assignment.
 
 > **Tip:** Start with Map All to assign everything in one pass, then fine-tune individual rows.
 
@@ -103,7 +103,7 @@ Assigning a second physical device to the same slot extends existing rows with n
 
 Auto-mapping never overwrites a row you edited by hand. It only adds the new device's default source, and it skips a row that already reads that device or holds an **(Any Device)** source.
 
-Unrecognized devices (generic joysticks, flight sticks, raw-mode devices) do not get auto-mapping. Use Map All, recording, or the source dropdown to set them up. A Bliss-Box port read with **Read Bliss-Box Adapters** on is a joystick too, but the controller in it maps the way SDL maps that console's pad (see [Bliss-Box Adapters](bliss-box.md#default-mapping)).
+Unrecognized devices (generic joysticks, flight sticks, raw-mode devices) do not get auto-mapping. Use Map All, recording, or the source dropdown to set them up. A Bliss-Box port read with **Read Bliss-Box Adapters** on is a joystick too, but the controller in it maps the way SDL maps that console's pad, or the way RetroArch's Bliss-Box files map it when SDL has no mapping (see [Bliss-Box Adapters](bliss-box.md#default-mapping)).
 
 ---
 
@@ -256,19 +256,20 @@ The **Primary Mode** dropdown in the row's detail strip picks how PadForge evalu
 | Kind | What it reads |
 |------|---------------|
 | **Direct** | The source descriptor's raw value. The default. |
-| **Toggle** | *Added after 4.5.3. Pre-release builds have it, and the next release will.* The source descriptor's value, latched. One press holds the output on and the next press releases it. A button row holds the button, a trigger row holds a full pull, and a stick row holds full deflection toward the side the press pushed. On a button row a trigger or stick input counts as a press past the **Axis-to-Button Deadzone**, as it does for Direct. On a trigger or stick row it counts past half its travel. The toggle releases when its row stops running: its shift layer closes, a layer overrides it, or its device goes offline. |
-| **Rapid Trigger** | *Added after 4.5.3. Pre-release builds have it, and the next release will.* The source descriptor's value, released and pressed again by short moves past the **Axis-to-Button Deadzone**. See [Rapid Trigger](#rapid-trigger). |
+| **Toggle** | The source descriptor's value, latched. One press holds the output on and the next press releases it. A button row holds the button, a trigger row holds a full pull, and a stick row holds full deflection toward the side the press pushed. On a button row a trigger or stick input counts as a press past the **Axis-to-Button Deadzone**, as it does for Direct. On a trigger row a trigger counts past half its pull, and on a stick row a stick counts past half its push from center. A trigger on a stick row rests at full deflection, so Toggle cannot stay on there: the row turns on near the end of the pull and off again on the release. The toggle releases when its row stops running: its shift layer closes, a layer overrides it, or its device goes offline. |
+| **Rapid Trigger** | The source descriptor's value, released and pressed again by short moves past the **Axis-to-Button Deadzone**. See [Rapid Trigger](#rapid-trigger). |
 | **Incremental** | Ramps an accumulator via Up / Down buttons you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max). |
-| **Invert On Hold** | A row modifier. While the modifier button you pick is held, the row's combined output flips: a stick axis changes sign and a trigger reads as its opposite. Button rows ignore it. An **(Any Device)** modifier counts from any device on the slot that has that input, and one picked from a device that is not connected counts as released. It adds no value of its own, so **Primary Mode** offers it only once the row has another source to flip. |
+| **Invert On Hold** | A row modifier. While the modifier button you pick is held, the row's combined output flips: a stick axis changes sign and a trigger reads as its opposite. Button rows ignore it. An **(Any Device)** modifier counts from any device on the slot that has that input. On a row whose only other source is also **(Any Device)**, it flips only the input of the controller it is pressed on. A modifier picked from a device that is not connected counts as released. It adds no value of its own, so **Primary Mode** offers it only once the row has another source to flip. |
 | **Ramp** | A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the **Attack** time. Releasing eases back to center over the **Release** time when **Autocenter** is on, or holds the last position when it is off. **Reverse** scales how fast it returns when you press the opposite key. Stick-axis and trigger targets. On a trigger the Up key drives the pull and the Down key reads as released. Button targets get nothing from a Ramp source. |
 
 Direct, Toggle and Rapid Trigger sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row **Record** button records the input itself for Direct, Toggle and Rapid Trigger, and a kind's own inputs in sequence for the others (Up, then Down, or the modifier alone).
 
 ### Rapid Trigger
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 Rapid Trigger, the analog keyboard feature, presses and releases on movement instead of at one fixed point. Past the row's **Axis-to-Button Deadzone**, the actuation point, the output presses. From there, lifting the input by more than the **Distance** releases it, and pushing it back down by more than the **Distance** presses it again, with no need to come back past the deadzone first. Lifting it back past the deadzone releases it and starts over.
+
+<!-- SCREENSHOT: mapping-rapid-trigger -->
+![A Right Trigger row in Rapid Trigger mode, with its Distance slider](../images/mapping-rapid-trigger.png)
 
 - **Distance** sits in the row's detail strip when **Primary Mode** is Rapid Trigger, and on an extra source's chip when that source's mode is. It runs from 1 to 50 percent of full travel, 10 by default. A release counts from the deepest point since the press, and the next press from the shallowest point since the release.
 - It is offered for inputs with press depth: analog keys, gamepad triggers and sticks, other axes and sliders, MIDI control changes and pitch bend, touchpad pressure, and the Ring-Con squeeze and pull. Picking an input without depth, such as a button, sets the source back to Direct.
@@ -388,7 +389,7 @@ The **Simultaneous Opposite Cardinal Directions (SOCD)** card lives on the slot-
 | **First Wins** | The earlier press keeps winning until it is released. |
 
 - Build the pair list with **Add Pair**. Each pair is tracked on its own, and each has a remove button.
-- Xbox and PlayStation slots pick each pair from the 15 named buttons: the four face buttons, shoulders, Back / Start / Guide (Share / Options / PS on PlayStation, and in pre-release builds Select / Start / PS on a DualShock 3 preset), stick clicks, and the four D-pad directions.
+- Xbox and PlayStation slots pick each pair from the 15 named buttons: the four face buttons, shoulders, Back / Start / Guide (Share / Options / PS on PlayStation, Select / Start / PS on a DualShock 3 preset), stick clicks, and the four D-pad directions.
 - Nintendo slots, and Extended slots on a Valve profile, pick from the same lettered buttons the mapping grid shows. Other Extended slots type raw button indices, 0–127. Index 0 is Button 1 in the mapping grid.
 - The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.
 - The card's Reset All turns the mode off and removes every pair.
@@ -409,17 +410,17 @@ For unrecognized devices or Force Raw Joystick Mode, the source picker shows num
 | **Slider 0**, **Slider 1** | Slider axes (flight sticks, throttles) |
 | **Mouse Speed X**, **Mouse Speed Y** | Mouse movement speed (velocity) axes |
 | **Mouse Position X**, **Mouse Position Y** | Absolute desktop cursor position. Screen center reads 0, and offset from center normalizes to the stick range. Primary monitor only. |
-| **Mouse Motion X**, **Mouse Motion Y** | Optical mouse motion on a Switch 2 Joy-Con. Map it to sticks, buttons, or scroll. Mouse Motion X can drive horizontal scroll. A Logitech WingMan Warrior's spin dial turns **Mouse Motion X** at the scale a mouse would (added after 4.5.3, in pre-release builds). |
+| **Mouse Motion X**, **Mouse Motion Y** | Optical mouse motion on a Switch 2 Joy-Con. Map it to sticks, buttons, or scroll. Mouse Motion X can drive horizontal scroll. A Logitech WingMan Warrior's spin dial turns **Mouse Motion X** at the scale a mouse would. |
 | **Gyro Pitch**, **Gyro Yaw**, **Gyro Roll** | Calibrated gyro rate axes on devices with motion |
 | **Gyro Horizontal (Yaw + Roll)** | Blended horizontal-turn axis that combines yaw and roll, so aiming works the same whether the pad is held flat or upright |
 | **Gyro Lean X**, **Gyro Lean Y** | Sustained tilt from gravity. 90° of tilt from the resting grip reads full scale, the value holds while the tilt holds, and the per-source Sensitivity dial scales it. Gyro Recenter re-zeroes the grip. |
 | **Gyro Tilt X**, **Gyro Tilt Y** | The adjustable-range tilt pair. Full deflection at the range set on the Gyro tab's Gyro Tilt card (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode. |
 | **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's own gyro on a combined Joy-Con pair. Offered only when the pair reports the second sensor. |
 | **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's own gyro on a combined Joy-Con pair. On a pair the plain Gyro axes read both halves averaged, so these keep the raw right half reachable. Offered only when the pair reports the second sensor. |
-| **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar. While the camera can't see the bar they hold their last reading, where 4.5.3 read center (changed after 4.5.3, in pre-release builds). On a Namco GunCon 2 the picker lists them as **Gun Aim X** and **Gun Aim Y** (added after 4.5.3, in pre-release builds), and they hold the same way while the gun points off the screen. |
+| **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar. While the camera can't see the bar they hold their last reading, where 4.5.3 and earlier read center. On a Namco GunCon 2 the picker lists them as **Gun Aim X** and **Gun Aim Y**, and they hold the same way while the gun points off the screen. |
 | **IR Offscreen** | Fires when a Wii Remote's camera loses sight of the sensor bar. The lightgun reload input. On a GunCon 2 it is **Gun Offscreen**. |
 | **IR Brightness** | Right Joy-Con IR camera. Rises as an object covers or nears the camera window. |
-| **Ring-Con Squeeze**, **Ring-Con Pull** | A Ring-Con on a right Joy-Con's rail, one direction of the ring's flex each, nothing at rest. Added after 4.5.3, in pre-release builds. See [Wii Controllers](../devices/wii-controllers.md#ring-con). |
+| **Ring-Con Squeeze**, **Ring-Con Pull** | A Ring-Con on a right Joy-Con's rail, one direction of the ring's flex each, nothing at rest. See [Wii Controllers](../devices/wii-controllers.md#ring-con). |
 | **Balance Total Weight** | Total weight on a Wii Balance Board |
 | **Balance Lean X**, **Balance Lean Y** | Weight shift left / right and forward / back on a Wii Balance Board |
 
@@ -441,7 +442,7 @@ Touchpad entries also ride the raw list on pads with a touchpad:
 
 The **(Any Device)** group at the top of the source dropdown carries the **Gamepad** entries. A Gamepad source names the input by its standard-layout role ("Gamepad A", "Gamepad Left Stick X") rather than a device's raw button or axis number, and it pins to no physical pad: the row reads that role from whichever controller the slot evaluates, so the mapping survives a device swap with no rework. Build a layout once, and it works the same on an Xbox pad, a DualSense, or a Switch Pro.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* A controller's own part of the dropdown lists the same inputs under its own names (**A**, **Left Stick X**) and no longer repeats them as Gamepad entries, so hiding **(Any Device)** with the funnel button hides all twenty-five. A Gamepad entry picked under a controller in an earlier build shows as that controller's own input and reads the same one, on the row and in the Up, Down and modifier pickers alike.
+A controller's own part of the dropdown lists the same inputs under its own names (**A**, **Left Stick X**) and no longer repeats them as Gamepad entries, so hiding **(Any Device)** with the funnel button hides all twenty-five. A Gamepad entry picked under a controller in an earlier build shows as that controller's own input and reads the same one, on the row and in the Up, Down and modifier pickers alike.
 
 | Group | Sources |
 |---|---|
@@ -463,11 +464,11 @@ Four more entries read a whole stick rather than one input. They appear in **(An
 | **Flick Stick (Right Stick)**, **Flick Stick (Left Stick)** | The stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See [flick stick](stick-deadzones.md#flick-stick). |
 | **Gamepad Left Stick Ring**, **Gamepad Right Stick Ring** | The stick pair's deflection magnitude, clamped to 0–1. On a button target the source's deadzone is the ring radius (the usual 50% for a ring picked in the grid, which offers no Axis-to-Button Deadzone control for it), and **Invert** selects the inner ring instead of the outer one. |
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* Under a controller the rings drop the Gamepad prefix and read **Left Stick Ring** and **Right Stick Ring**, since they are that controller's own inputs.
+Under a controller the rings drop the Gamepad prefix and read **Left Stick Ring** and **Right Stick Ring**, since they are that controller's own inputs.
 
 The source dropdown leads with an **(Any Device)** group. It carries everything above plus four capacitive-touch reads that appear nowhere else: **Gamepad Left Stick Touch**, **Gamepad Right Stick Touch**, **Gamepad Left Grip Touch**, and **Gamepad Right Grip Touch**, which report a finger resting on a stick top or a grip handle on pads that sense it. The group also carries **Gyro Pitch / Yaw / Roll / Horizontal**, the tilt pairs **Gyro Lean X / Y** and **Gyro Tilt X / Y**, and the touchpad surfaces. A source picked there stores no device, so it reads whichever controller the slot evaluates. It reads a stick or trigger only from a device that has one, so a keyboard or touchpad on the slot leaves it at rest. A mouse's wheel sits on the axis a gamepad's Left Trigger uses and never answers that trigger. The wheel still reads through its own **Mouse Scroll** source. Rows that carry their own inputs through the numbered axes and buttons never answer it: a head tracker, an NFC reader, a microphone, handheld hidden buttons, a media remote, a pen tablet, a VR controller, and the Logitech G-keys are always picked by name. Imported rows use this group, and their sources read **(Any Device)** under the picker until you pick an input from a specific device.
 
-*Changed after 4.5.3. Pre-release builds have it, and the next release will.* The **Gamepad** entries read only a controller in SDL's gamepad layout, since SDL gives the gamepad roles to gamepads alone. A keyboard, a mouse, a touchpad, a joystick SDL has no mapping for, and any pad in **Force Raw Joystick Mode** answer none of them, so Tab no longer presses **Gamepad Right Stick Button** and a left click no longer presses **Gamepad A**. A [Bliss-Box](bliss-box.md) port read with **Read Bliss-Box Adapters** on answers them through the controller identified in it.
+The **Gamepad** entries read only a controller in SDL's gamepad layout, since SDL gives the gamepad roles to gamepads alone. A keyboard, a mouse, a touchpad, a joystick SDL has no mapping for, and any pad in **Force Raw Joystick Mode** answer none of them, so Tab no longer presses **Gamepad Right Stick Button** and a left click no longer presses **Gamepad A**. A [Bliss-Box](bliss-box.md) port read with **Read Bliss-Box Adapters** on answers them through the controller identified in it.
 
 Profiles imported from the [Steam Workshop](../guides/steam-workshop-import.md) are built entirely from these device-portable sources, which is what lets one community config drive any recognized controller you assign. Imported mouse acceleration lands on the per-source **Acceleration** slider.
 
@@ -481,7 +482,7 @@ Some assigned devices show named buttons instead of numbered descriptors. They a
 - **NFC tags.** An NFC reader shows **Any NFC Tag** plus one entry per registered tag. A tap fires the source as a momentary press. Register and name tags on the [Devices](devices.md) page. See [NFC Tags](nfc-tags.md).
 - **Analog keyboard keys.** An analog keyboard's row lists every key it can report, named for its US legend. A key reads 0 at rest and full at the bottom of its travel, so it drives a trigger or a stick axis by depth, and a button at the row's **Axis-to-Button Deadzone**. See [Analog Keyboards](analog-keyboards.md).
 
-All three also work as [Macros](../guides/macros.md) Input Device triggers.
+All three also work as **Assigned Devices** triggers in [Macros](../guides/macros.md).
 
 ---
 
@@ -500,7 +501,7 @@ Pads with a motion sensor add whole-sensor, tilt, and shake sources to the picke
 | **Motion Shake** | How far the accelerometer's magnitude leaves its resting level, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis or a trigger the read is unsigned and **Invert** does nothing. On a button it fires once the envelope passes the row's **Axis-to-Button Deadzone**, 50% of full scale (about 1 g) unless you change it. Offered on any device with an accelerometer. |
 | **Nunchuk Shake** / **Left Joy-Con Shake** | The aux sensor's shake: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Shake** on other devices. |
 
-In pre-release builds after 4.5.3, **Motion Gyro** and **Motion Accelerometer**, with their Left Joy-Con and Nunchuk forms, appear only in the Motion Gyro and Motion Accelerometer rows' pickers, and those two rows list nothing else. Each row reads only the sensor its name says. A saved row that holds something else shows a note: a stick or a button on a Motion row reads nothing, and a Motion source on any other row reads nothing. The modifier and the Up and Down key pickers keep the full list. To drive motion from a stick or a button, use the [Motion Pitch, Yaw and Roll](#motion-pitch-yaw-and-roll) rows.
+**Motion Gyro** and **Motion Accelerometer**, with their Left Joy-Con and Nunchuk forms, appear only in the Motion Gyro and Motion Accelerometer rows' pickers, and those two rows list nothing else. Each row reads only the sensor its name says. A stick or a button saved on the Motion Gyro or Motion Accelerometer row reads nothing, and the row shows a note. So does a Motion source saved on any other row. The modifier and the Up and Down key pickers keep the full list. To drive motion from a stick or a button, use the [Motion Pitch, Yaw and Roll](#motion-pitch-yaw-and-roll) rows.
 
 Auto-mapping fills the **Motion Gyro** and **Motion Accelerometer** rows for pads that report a sensor, on PlayStation and Nintendo slots and on Extended slots running a Valve profile. A motion row you empty switches that channel off, and auto-mapping leaves it empty even when another device arrives. Pick **Motion Gyro** or **Motion Accelerometer** in the row's source dropdown to turn it back on. A slot saved before its first device arrived still gets its motion rows when the device comes. Copy, Paste, and Copy From carry a switched-off motion row, or one marked **Do Not Inherit**, as it is, but drop one whose inputs all belonged to devices the target slot lacks, so auto-mapping fills it there. See [Gyro](../guides/gyro.md) for calibration and tuning, and [DSU Motion Server](../reference/dsu-motion-server.md) for broadcasting the feed to emulators.
 
@@ -508,9 +509,10 @@ Auto-mapping fills the **Motion Gyro** and **Motion Accelerometer** rows for pad
 
 ## Motion Pitch, Yaw and Roll
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
 These three rows give the virtual controller motion from any input: a stick, a trigger, a button, a key. Push the stick and the game sees the controller turn or lean. reWASD calls the same idea a Virtual Gyroscope. The rows sit under Motion Gyro and Motion Accelerometer on every slot that carries motion to the game: PlayStation, Nintendo, and Extended on a Valve profile.
+
+<!-- SCREENSHOT: mapping-motion-rows -->
+![The Motion Roll row open in the mapping grid of a PlayStation slot](../images/mapping-motion-rows.png)
 
 A row reads its sources the way a stick axis row does. A stick axis drives it both ways. A button drives one direction, and **+ Opposite Direction** adds the other. A trigger, a slider, or an analog key reads one way: released is no motion, a full pull is full deflection, and **Invert** turns it the other way. A stick row reads a trigger across its whole travel, so a released trigger sits at full deflection there, and on a Motion row that would turn the controller with nothing touched.
 
@@ -535,22 +537,20 @@ The [Gyro Recenter](../guides/macros.md#gyro-recenter) macro action levels a Spe
 
 The [DSU Motion Server](../reference/dsu-motion-server.md) sends the motion the virtual controller reports, stick turns included. Cemu and eden slowly subtract a held turn slower than about 20°/s as gyro drift, whether they read the virtual controller or the DSU server, so set **Start Speed** above that for slow held turns there.
 
-The **DualShock 3 (SIXAXIS)**, **Switch 2 Pro** and plain **Steam Deck** presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4. The **DualShock 3 (SIXAXIS): Full** preset carries the accelerometer and the yaw gyro, the one gyro axis a DualShock 3 has. Its Motion Pitch and Roll rows in Speed mode carry a note too: they reach the game only as tilt, and only while no accelerometer feeds the Motion Accelerometer row.
+The **DualShock 3 (SIXAXIS)**, **Nintendo Switch 2 Pro Controller** and **Steam Deck Controller** presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4. The **DualShock 3 (SIXAXIS): Full** preset carries the accelerometer and the yaw gyro, the one gyro axis a DualShock 3 has. Its Motion Pitch and Roll rows in Speed mode carry a note too: they reach the game only as tilt, and only while no accelerometer feeds the Motion Accelerometer row.
 
 ### Turn a stick into motion
 
 1. Open the slot's **Mappings** tab. On the **Motion Pitch** row, click **Record** and push the stick up, or pick its Y axis in the source dropdown.
 2. On **Motion Yaw** to turn, or **Motion Roll** to lean sideways, record the stick pushed right, or pick its X axis.
-3. In each row's details, pick **Speed** or **Angle** under **Motion Mode**.
+3. On **Motion Pitch** or **Motion Roll**, pick **Speed** or **Angle** under **Motion Mode** in the row's details. **Motion Yaw** always turns at a speed.
 4. If the **Motion Gyro** row holds stick sources from an earlier attempt, remove them. That row reads only a controller's own gyro, and its note says so.
 
 ---
 
 ## Button pressure
 
-*Added after 4.5.3. Pre-release builds have it, and the next release will.*
-
-A DualShock 3 measures how hard ten of its buttons are pressed. The **DualShock 3 (SIXAXIS): Full** preset on a PlayStation slot sends that pressure the way the pad reports it to Sony's sixaxis driver and DsHidMini's SXS mode, the form PCSX2 reads pressure from through its SDL input source and RPCS3 through its DualShock 3 handler. The preset comes with HIDMaestro 1.10.0. Its grid adds ten rows after **L2** and **R2**: **✕ Pressure**, **○ Pressure**, **◻ Pressure**, **△ Pressure**, **L1 Pressure**, **R1 Pressure**, and one for each D-pad direction. L2 and R2 need no pressure rows, because the L2 and R2 rows are their pressure.
+A DualShock 3 measures how hard twelve of its buttons are pressed: the four face buttons, the four D-pad directions, L1, R1, L2 and R2. The **DualShock 3 (SIXAXIS): Full** preset on a PlayStation slot sends that pressure the way the pad reports it to Sony's sixaxis driver and DsHidMini's SXS mode, the form PCSX2 reads pressure from through its SDL input source and RPCS3 through its DualShock 3 handler. HIDMaestro added the preset in version 1.10.0, and PadForge 5.0.0 ships HIDMaestro 1.10.1. Its grid adds ten rows after **L2** and **R2**: **✕ Pressure**, **○ Pressure**, **◻ Pressure**, **△ Pressure**, **L1 Pressure**, **R1 Pressure**, and one for each D-pad direction. L2 and R2 need no pressure rows, because the L2 and R2 rows are their pressure.
 
 A pressure row reads its source the way the L2 row does: released is no pressure, a full press is full pressure. The button's own row still decides whether the button is pressed, and its pressure goes out only while it is. A turbo, a macro that consumes the press, SOCD cleaning, or a shift layer that releases the button releases its pressure with it. A pressed button whose pressure row is empty, or reads nothing, goes out fully pressed, so a key, a macro, or a pad without pressure sensors presses it all the way. Any press past released goes out as at least the lightest pressure, 1 of 255, so a very light press never turns into a full one.
 
@@ -558,7 +558,7 @@ Auto-mapping fills the ten rows for a DualShock 3 that PadForge reads itself, ov
 
 Other pads take a minute by hand. Click **Record** on a pressure row and press the button. A pressure row's recording takes an analog input, the button's pressure axis rather than its digital press:
 
-- **A DualShock 3 in DsHidMini's SDF mode.** It reports its pressures in a different order, so auto-mapping leaves the rows empty. Recording finds the right axis.
+- **A DualShock 3 in DsHidMini's SDF mode.** It reports its pressures in a different order, so auto-mapping leaves the rows empty. SDL reads this mode through DirectInput, which passes at most two of its ten pressure axes, so switch the pad to SXS mode to map all ten.
 - **An analog keyboard.** Put the key on the button's row and on its pressure row, and the key's depth becomes the press.
 
 In PCSX2, enable the **SDL Input Source** and use **Automatic Mapping** on the virtual DualShock 3. PCSX2 binds the pressure axes for a PS3 controller with 16 axes and 11 buttons, which is what the preset presents. Neither PCSX2 nor RPCS3 has been run against the preset yet. The plain **DualShock 3 (SIXAXIS)** preset carries no pressure.
@@ -683,4 +683,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*
