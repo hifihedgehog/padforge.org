@@ -76,4 +76,4 @@ does.</p>
 PadForge is free, and its source is available under CC BY-NC-SA 4.0. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

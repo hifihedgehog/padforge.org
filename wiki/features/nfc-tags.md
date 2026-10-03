@@ -52,7 +52,7 @@ Limitations, stated plainly:
 4. Type a name for the tag.
 5. Click **Register**.
 
-The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. In that case its status line reads "Tap a tag on your Switch controller…".
+The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. When PadForge has no PC/SC connection, which is the case while the Windows Smart Card service is off, its status line reads "Tap a tag on your Switch controller…". Otherwise it reads "(waiting)".
 
 The dialog lists your registered tags. Each row shows its name and UID with a **Remove** button. Tap another tag to add more.
 
@@ -72,7 +72,7 @@ With the NFC reader selected, the Devices page lists your named tags, plus an **
 
 1. Add the device that reads the tag (the PC/SC reader or the Switch controller) as an input device on the same [slot](controller-slots.md) as the mapping or macro.
 2. Pick that device in the mapping row's source picker or in the macro trigger.
-3. Pick **Any NFC Tag** or a specific named tag. A named tag shows as **NFC Tag:** followed by its name.
+3. Pick **Any NFC Tag** or a specific named tag. On a Switch controller, a named tag shows as **NFC Tag:** followed by its name. On a PC/SC reader, it shows as the name alone.
 
 Tags work as ordinary mapping-row sources, so a tap can press a virtual button directly. In a [macro](../guides/macros.md) trigger, the tap runs the action sequence instead.
 
@@ -87,4 +87,4 @@ Bindings follow the tag itself, not its name. Rename a tag and its bindings stay
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

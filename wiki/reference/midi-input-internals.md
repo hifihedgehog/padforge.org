@@ -49,7 +49,7 @@ It exposes zero gamepad surface: no axes, buttons, hats, or device objects. The 
 | Control Change (0xB) | An absolute 0-127 value | `SetCc(cc, value)` |
 | Pitch Bend (0xE) | A 14-bit (MIDI 1.0) or 32-bit (MIDI 2.0) centered axis, both stored as 0-65535 | `SetPitchBend(scaled)` |
 
-On the MIDI 1.0 path velocity decides on versus off (a Note On with velocity 0 is a Note Off), and velocity is never stored as a value. The MIDI 2.0 path is different. A Note On there writes `SetNote(note, true)` regardless of velocity, because a MIDI 2.0 Note On with velocity 0 is a valid note-on, so on the 2.0 branch only a Note Off (0x8) releases the note. Reads are channel-merged (omni). The channel nibble is never inspected, so a note or CC means the same thing on any channel. Channel pressure, polyphonic aftertouch, and program change have no case and are dropped.
+On the MIDI 1.0 path velocity decides on versus off (a Note On with velocity 0 is a Note Off), and velocity is never stored as a value. The MIDI 2.0 path is different. A Note On there writes `SetNote(note, true)` regardless of velocity, because a MIDI 2.0 Note On with velocity 0 is a valid note-on, so on the 2.0 branch a note releases only on a Note Off (0x8) or on one of the channel-mode CCs below. Reads are channel-merged (omni). The channel nibble is never inspected, so a note or CC means the same thing on any channel. Channel pressure, polyphonic aftertouch, and program change have no case and are dropped.
 
 The channel-mode CCs get extra handling in the CC path, after their value is written:
 
@@ -57,7 +57,7 @@ The channel-mode CCs get extra handling in the CC path, after their value is wri
 - **Omni Off/On and Mono/Poly (CCs 124–127)** clear the note lanes too, since each carries All Notes Off semantics per MIDI 1.0. CC 122 (Local Control) clears nothing.
 - **Reset All Controllers (CC 121)** applies the RP-015 reset to the lanes this state models: pitch bend recenters, the mod wheel (CC 1) and pedals (CCs 64–67) drop to 0, expression (CC 11) returns to 127, and the RPN and NRPN selectors (CCs 98–101) return to null. Each reset lane's encoder pulse machine is cleared in both directions, so queued detent pulses stop with the reset. Bank, volume, pan, and sound lanes stay put, per RP-015. Without this, a keyboard panic (121 plus 123) released mapped notes but left a mapped Pitch Bend axis frozen off-center.
 
-A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (`RelativeCenter` 0x40, 0x41 is one step up, 0x3F is one step down). A delta within `RelativeMax` (16) of center queues that many up pulses on lane `2*cc`, or down pulses on `2*cc+1`. Values outside that band read as an absolute fader and never pulse. The two's-complement and signed-bit encoder styles read as absolute jumps. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. `MidiInputState` holds the note, CC, and encoder up and down arrays plus a single pitch-bend value, with a `Clone`, and is null on `CustomInputState` for non-MIDI devices.
+A Control Change also drives the relative-encoder reader. Only the binary-offset style is decoded (`RelativeCenter` 0x40, 0x41 is one step up, 0x3F is one step down). A delta within `RelativeMax` (16) of center queues that many up pulses on lane `2*cc`, or down pulses on `2*cc+1`. Values outside that band read as an absolute fader and never pulse. Two's-complement encoders (0x01 up, 0x7F down) read as absolute jumps. A signed-bit encoder is misread: values with the sign bit set (0x41 and up) fall inside the band and queue pulses on the up lane whatever their direction, and values without it (0x01 and up) read as an absolute fader. The pulse machine presses each detent for 24 ms then gaps 12 ms, caps the backlog at four pending pulses (so a fast spin drops detents rather than lagging), and tops out near 28 detents per second. `MidiInputState` holds the note, CC, and encoder up and down arrays plus a single pitch-bend value, with a `Clone`, and is null on `CustomInputState` for non-MIDI devices.
 
 ---
 
@@ -102,4 +102,4 @@ A vanished endpoint is marked offline, disposed, and has its mapped outputs neut
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

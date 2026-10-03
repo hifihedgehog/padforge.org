@@ -8,9 +8,9 @@ The Force Feedback tab is **per pad per slot**. Every physical pad mapped to the
 
 See [Impulse Triggers](impulse-triggers.md) for trigger-motor effects.
 
-The tab appears on every slot type, including Keyboard+Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, flight, or first-person controller). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard+Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.
+The tab appears on every slot type, including Keyboard + Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, flight, or first-person controller). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard + Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.
 
-To send the same rumble stream to speakers or a tactile transducer instead of motors, see [Bass Shakers](#bass-shakers) below. That tab lives at the slot level and has its own settings.
+To also play the game's rumble through speakers or a tactile transducer, see [Bass Shakers](#bass-shakers) below. The controller's motors keep running. That tab lives at the slot level and has its own settings.
 
 ---
 
@@ -36,7 +36,7 @@ Games never talk to your physical controller directly.
 3. **Your settings** apply: gain, per-motor strength, motor swap.
 4. **PadForge** forwards the adjusted rumble to your physical controller.
 
-This runs at PadForge's polling rate (hundreds of times per second), so feedback feels instant.
+PadForge applies this on every polling cycle, 1,000 times a second at the default polling rate. DualSense and DualShock 4 pads take it in their combined effect update, about 30 times a second.
 
 The same slot rumble can also drive a Razer Sensa HD device from the Dashboard. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
 
@@ -73,7 +73,7 @@ Negative axis movement drives the left, low-frequency rumble channel. Positive m
 
 The cue follows the final mapped output, including curves, inversion, layers, macros, and the combination of assigned sources. Each physical device keeps its own settings. Overall Gain, motor strength, Swap Left and Right Motors, and trigger routing apply afterward. Game rumble and the steering cue combine by taking the stronger value on each motor.
 
-This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers and devices reporting native constant-force support keep their existing feedback. Raw HID, keyboard/mouse, MIDI, and VR outputs do not supply these four virtual stick axes. Physical motor placement depends on the device.
+This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers and devices reporting native constant-force support keep their existing feedback. Extended, Nintendo, Keyboard + Mouse, MIDI, and VR outputs get no steering cue. It reads the stick axes of an Xbox or PlayStation virtual controller only. Physical motor placement depends on the device.
 
 The [steering-lock pulse](../guides/steering.md#at-lock-feedback) remains a separate option for a brief cue at full lock. Ordinary wheel-axis mappings can use Steering Angle Rumble without enabling Winding, Angle to Axis, or Motion Lean.
 
@@ -151,7 +151,7 @@ When a slot uses **Extended** output, force feedback flows through the DirectInp
 
 - Games send DirectInput effects (constant force, sine, ramp, sawtooth, condition effects) to the Extended virtual controller.
 - PadForge turns those effects into rumble or haptic output on your physical controller.
-- All settings (Overall Gain, per-motor strength, Swap Motors) apply normally.
+- Overall Gain applies to every effect. Left Motor, Right Motor, and Swap Left and Right Motors apply when an effect reaches the pad as rumble. Directional and condition forces on a wheel or force feedback stick use Overall Gain alone.
 
 The Extended virtual controller advertises DirectInput force feedback by default. Toggle **Force Feedback** off on the Extended config bar (with **Customize** on) and DirectInput games see a plain joystick with no force feedback instead.
 
@@ -171,9 +171,9 @@ PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Bu
 
 ## Constant Force
 
-A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. Its angle sets direction: Y at +1 points forward, X at +1 points right.
+A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. The dot marks the side the force comes from: Y at +1 (dot below center) pushes forward, and X at +1 (dot right of center) pushes left.
 
-**Override-with-resume rule.** While the toggle is on, PadForge keeps applying the configured force as long as no game or program is sending non-zero force to that device/slot pair. The moment a game sends any non-zero rumble or force feedback effect, the game's force takes over. The moment the game returns to silence, the constant force resumes. Macro rumble counts as game force here, so a macro pulse takes over the same way, and the constant force resumes once the pulse ends.
+**Override-with-resume rule.** While the toggle is on, PadForge keeps applying the configured force as long as no game or program is sending non-zero force to that device/slot pair. The moment a game sends non-zero motor rumble or a force feedback effect, the game's force takes over. Rumble aimed only at the trigger motors leaves the constant force running. The moment the game returns to silence, the constant force resumes. Macro rumble counts as game force here, so a macro pulse takes over the same way, and the constant force resumes once the pulse ends.
 
 ### Routing
 
@@ -183,7 +183,7 @@ A per-device override that drives a continuous force on the assigned physical de
 
 **Persistence.** Saved per device, per slot. Survives PadForge restarts.
 
-**Why it's there.** Centered originally for issue #29: a real wheel mapped to a virtual Xbox controller for a game that does not speak DirectInput, where the wheel needs a centering pull the game itself cannot send. Set X and Y to point at the wheel's resting position and the wheel returns to center between corrections.
+**Why it's there.** Issue #29 asked for it: a real wheel mapped to a virtual Xbox controller for a game that does not speak DirectInput. The force does not change with the wheel's position, so it pulls the wheel one way and never returns it to center. For a centering pull on a wheel that supports it, use **Auto Centering Strength** on the Wheel tab.
 
 The Motor Activity meter reflects the constant force when it is the active source. What you see on the meter is what the device receives.
 
@@ -257,7 +257,7 @@ See [Impulse Triggers](impulse-triggers.md) for game-driven impulse passthrough,
 
 Every slider has its own reset button. Reset All restores everything in its section.
 
-- **Rumble Reset All**: Gain 100%, both motors 100%, Swap Motors off, Fold Trigger Rumble off. This top button also clears the Steering Angle Rumble, Constant Force, and Audio Rumble sections below it.
+- **Rumble Reset All**: Gain 100%, both motors 100%, Swap Left and Right Motors off, Fold Trigger Rumble into Main Motors off. This top button also clears the Steering Angle Rumble, Constant Force, and Audio Rumble sections below it.
 - **Constant Force Reset All**: Toggle off, X = 0, Y = 0.
 - **Audio Rumble Reset All**: Disabled, sensitivity 4.0, cutoff 80 Hz, both motors 100%.
 - **Trigger Routing Reset All**: every trigger back to Source None (off), Mode Duplicate, Scale 100%, activator cleared, Activator Mode Hold.
@@ -271,7 +271,7 @@ Every slider has its own reset button. Reset All restores everything in its sect
 
 The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
-Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the **Force Feedback** toggle with **Customize** on, or a catalog profile that ships with it) and the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes directly. Other Extended slots, Keyboard+Mouse, and MIDI hide it.
+Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the **Force Feedback** toggle with **Customize** on, or a catalog profile that ships with it) and the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes directly. Other Extended slots, Keyboard + Mouse, MIDI, and VR hide it.
 
 ### Turning it on
 
@@ -350,4 +350,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

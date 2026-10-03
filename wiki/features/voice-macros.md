@@ -58,10 +58,10 @@ Every DualSense and Microphone row's details pane carries a **Voice Macros** sec
 
 ## Limitations, stated plainly
 
-- The recognition model is English (en-US). Phrases in other languages may work phonetically but are not supported.
+- The recognition model is English (en-US). Vosk drops any phrase word missing from that model's vocabulary, so a phrase in another language, or one built on a word the model does not know, never fires its own button while Vosk is listening.
 - A recognition is a single 175 ms press. Holding a note does not hold the button.
 - The DualShock 4 is not supported. Its microphone is a headset-jack passthrough, not a controller mic.
 - On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.
-- The first enable unpacks the model from inside PadForge, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.
+- The first time voice macros are on with a phrase registered, PadForge unpacks the model from inside itself, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.
 
-*Last updated for PadForge 4.5.2.*
+*Last updated for PadForge 5.0.0.*

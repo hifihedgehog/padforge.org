@@ -3954,7 +3954,7 @@
 </tr>
 </tbody>
 </table>
-<p>Because the layouts match, <code>PackHand</code> casts (<code>(HMVRButton)hand.Buttons</code>) instead of translating. <strong>If you add a bit, add it at the same index on both sides or the cast silently misroutes every button above it.</strong></p>
+<p>Because the layouts match, <code>PackHand</code> casts (<code>(HMVRButton)hand.Buttons</code>) instead of translating. <strong>All eight bits of the <code>byte</code> are taken, so a new button also means widening <code>VrHandRaw.Buttons</code> and the <code>byte</code> that <code>EvalVrButtons</code> builds. Add it at the same index on both sides, or the cast silently misroutes every button above it.</strong></p>
 <p>The mapping-target keys are ordered to match those bits, left hand then right:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>VrLSystem VrLA VrLATouch VrLB VrLBTouch VrLTriggerClick VrLGripClick VrLStickClick
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>VrRSystem VrRA VrRATouch VrRB VrRBTouch VrRTriggerClick VrRGripClick VrRStickClick
@@ -3983,14 +3983,14 @@
 <hr />
 <h2 id="haptics-return-on-the-vibration-lane">Haptics return on the Vibration lane<a class="headerlink" href="#haptics-return-on-the-vibration-lane" title="Permanent link">&para;</a></h2>
 <p>The return path is an event, not a poll. <code>HMVRController.HapticReceived</code> fires with <code>(hand, amplitude, durationSeconds)</code> and <code>OnHapticReceived</code> fans it into the slot's <code>Vibration</code> entry, the same lane ordinary game rumble rides, so whatever physical device drives the slot buzzes with no VR-specific plumbing downstream.</p>
-<p>Left hand drives <code>LeftMotorSpeed</code>, right drives <code>RightMotorSpeed</code>. Amplitude clamps to <code>0..1</code> and scales to <code>ushort</code>. Duration has a floor of <code>MinPulseMs</code> (50 ms), because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.</p>
-<p>Overlapping pulses on one hand keep the <strong>later</strong> end tick rather than restarting the timer, so a rapid burst holds the motor for the union of its pulses instead of chopping.</p>
+<p>Left hand drives <code>LeftMotorSpeed</code>, right drives <code>RightMotorSpeed</code>. Amplitude clamps to <code>0..1</code> and scales to <code>ushort</code>. Duration has a floor of <code>MinPulseMs</code> (50 ms), because OpenVR apps send micro-pulses, often 0 to 5 ms long, at high repeat rates, and a pulse that short would expire before the rumble path forwarded it.</p>
+<p>Overlapping pulses on one hand keep the <strong>later</strong> end tick, so a shorter pulse cannot cut a longer one short, and a rapid burst holds the motor for the union of its pulses instead of chopping. Each pulse re-arms the one-shot timer for the earliest pending deadline.</p>
 <h3 id="the-lock-is-load-bearing">The lock is load-bearing<a class="headerlink" href="#the-lock-is-load-bearing" title="Permanent link">&para;</a></h3>
-<p><code>OnHapticReceived</code> re-checks <code>_connected</code> <strong>inside</strong> <code>_hapticLock</code>, and the comment there is worth preserving:</p>
+<p><code>OnHapticReceived</code> checks <code>_connected</code> only <strong>inside</strong> <code>_hapticLock</code>, and the comment there is worth preserving:</p>
 <blockquote>
 <p>Disconnect flips <code>_connected</code> and only then takes this lock to zero the lanes and dispose the timer, so a check outside it can pass, block here, and resume after teardown.</p>
 </blockquote>
-<p>Without the inner re-check, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and <code>ScheduleExpiryLocked</code> builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.</p>
+<p>Without that check inside the lock, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and <code>ScheduleExpiryLocked</code> builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.</p>
 <hr />
 <h2 id="availability-and-install">Availability and install<a class="headerlink" href="#availability-and-install" title="Permanent link">&para;</a></h2>
 <p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code> for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe reads up to three registry keys and checks up to four install paths on disk, and the sidebar rail rebuild queries once per slot. <code>ResetAvailability()</code> drops the cache so the gates lift right after an install instead of waiting out the TTL.</p>
@@ -4000,13 +4000,13 @@
 <ul>
 <li><code>SteamVrInstallDir</code> is <code>C:\SteamVR</code>, the default only. The card accepts any full path.</li>
 <li>A drive root on its own is refused, because uninstall would then be aimed at an entire drive.</li>
-<li><code>GetOwnedSteamVrDir()</code> resolves what PadForge considers its own copy, and <code>HMVR.SetSteamVRPathHint</code> is both how the driver finds the runtime and how a hand-placed install becomes discoverable.</li>
+<li><code>GetOwnedSteamVrDir()</code> resolves what PadForge considers its own copy. <code>HMVR.SetSteamVRPathHint</code> writes <code>HKLM\SOFTWARE\HIDMaestro\SteamVRPath</code>, which HIDMaestro's <code>FindSteamVR</code> checks first and which <code>GetOwnedSteamVrDir()</code> reads as PadForge's ownership marker. Pointing the install location at a hand-placed copy makes it discoverable and also puts it under the card's <strong>Uninstall</strong>, which deletes that folder.</li>
 <li>Uninstall refuses while <code>vrserver</code> is running.</li>
 </ul>
 <hr />
 <h2 id="the-other-direction-consuming-real-vr-devices-287">The other direction: consuming real VR devices (#287)<a class="headerlink" href="#the-other-direction-consuming-real-vr-devices-287" title="Permanent link">&para;</a></h2>
 <p><em>New in 4.3.0. This is the input lane, and it shares no code with everything above.</em></p>
-<p><code>OpenVrConsumerService</code> (<code>PadForge.App/Common/Input/OpenVrConsumerService.cs</code>, <code>public sealed class</code>) turns the headset and every tracked VR controller into ordinary PadForge devices. <code>InitializeSdl</code> constructs it and calls <code>Start()</code>, wrapped in its own try/catch so a failure never takes the rest of input initialization down. It logs into the SDL diagnostics ring with a <code>VRCONSUME</code> prefix.</p>
+<p><code>OpenVrConsumerService</code> (<code>PadForge.App/Common/Input/OpenVrConsumerService.cs</code>, <code>public sealed class</code>) turns the headset and every tracked VR controller into ordinary PadForge devices. <code>InitializeSdl</code> constructs it and calls <code>Start()</code>, wrapped in its own try/catch so a failure never takes the rest of input initialization down. It logs into the SDL diagnostics ring, where each line starts <code>VR VRCONSUME</code> because <code>InitializeSdl</code> prefixes the service's own <code>VRCONSUME</code> tag with <code>VR</code>.</p>
 <h3 id="one-background-client-that-never-launches-steamvr">One background client that never launches SteamVR<a class="headerlink" href="#one-background-client-that-never-launches-steamvr" title="Permanent link">&para;</a></h3>
 <p>The service runs a single background thread (<code>OpenVrConsumer</code>, <code>IsBackground = true</code>) polling at about 90 Hz (<code>Thread.Sleep(11)</code>). It initializes OpenVR as <code>VRApplication_Background</code>, which by contract does not start SteamVR and instead returns <code>VRInitError_Init_NoServerForBackgroundApp</code> while the server is down. That error is the quiet retry signal, logged once rather than once per 5-second retry pass.</p>
 <p>The native <code>openvr_api.dll</code> is <strong>not shipped</strong>. It comes from the user's own SteamVR runtime, found through OpenVR's own path registry at <code>%LOCALAPPDATA%\openvr\openvrpaths.vrpath</code> (with <code>VR_PATHREG_OVERRIDE</code> honored first, as the reference does). <code>DiscoverRuntimeDll</code> file-checks the result, so a registry entry pointing at a deleted install reads as absent rather than as a load failure. A <code>NativeLibrary.SetDllImportResolver</code> hook redirects the vendored binding's <code>openvr_api</code> module name to that path. The binding itself is Valve's own C# file, vendored at <code>PadForge.App/ThirdParty/OpenVR/openvr_api.cs</code>.</p>
@@ -4067,7 +4067,7 @@
 <hr />
 <h2 id="things-that-will-bite-you">Things that will bite you<a class="headerlink" href="#things-that-will-bite-you" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Adding a button</strong> means touching the bit table, the key array order, and HIDMaestro's <code>HMVRButton</code> together. The cast hides a mismatch until runtime.</li>
+<li><strong>Adding a button</strong> means widening <code>VrHandRaw.Buttons</code> past <code>byte</code> and touching the bit table, the key array order, and HIDMaestro's <code>HMVRButton</code> together. The cast hides a mismatch until runtime.</li>
 <li><strong>A second Y flip</strong> anywhere in the VR lane cancels the one in <code>PackHand</code>.</li>
 <li><strong>SteamVR's own Test Controller is not a diagnostic.</strong> Switching it from left to right often shows nothing until you switch back and forth again. Trust the app's Preview tab or the game.</li>
 <li><strong>There is no per-slot VR configuration.</strong> The driver ships one identity, so there is no VR equivalent of the PlayStation or Extended profile pickers.</li>
@@ -4082,7 +4082,7 @@
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

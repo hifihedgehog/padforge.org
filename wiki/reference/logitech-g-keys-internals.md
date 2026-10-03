@@ -32,13 +32,13 @@ The SDK passes one 32-bit word by value. `LogitechGkeyLib.h` declares it as C bi
 
 That totals 32, so PadForge reads the word whole and masks it rather than describing it to the marshaler, which has no bitfield of its own.
 
-**Logitech's own C# sample gets this wrong and must not be copied.** Its `Doc\C#Instructions.pdf` declares the word as a `ushort`, half the width the header defines, so its `reserved2` shift of 16 can only ever yield zero. It also reads `mouse` as `(complete >> 11) & 15` where the field is one bit wide, folding three reserved bits into the answer, which can read a keyboard event as a mouse event. The header is what the DLL was compiled against, so the header wins. [Mumble](https://github.com/mumble-voip/mumble)'s `GKey.cpp` never reads the word: it initializes without a callback and polls, so the header is the only source for this layout.
+**Logitech's own C# sample gets this wrong and must not be copied.** Its `Doc\C#Instructions.pdf` declares the word as a `ushort`, half the width the header defines, so its `reserved2` shift of 16 can only ever yield zero. It also reads `mouse` as `(complete >> 11) & 15` where the field is one bit wide, folding three reserved bits into the answer. With any of those bits set, the sample's own `mouse == 1` test reads a mouse event as a keyboard event. The header is what the DLL was compiled against, so the header wins. [Mumble](https://github.com/mumble-voip/mumble)'s `GKey.cpp` never reads the word: it initializes without a callback and polls, so the header is the only source for this layout.
 
 ---
 
 ## Finding the library
 
-`LogitechGKeyCatalog` builds a candidate list and tries each in order: the SDK's registered CLSID, whose `ServerBinary` value is the DLL path, then the default install path. That is the order Mumble's `GKey.cpp` uses.
+`LogitechGKeyCatalog` builds the candidate list in order: the path under the SDK's registered CLSID (the default value of its `ServerBinary` key, read from both registry views), then the default install paths, x64 build first. That is the order Mumble's `GKey.cpp` uses.
 
 **Existing and loading are different questions.** An earlier cut returned the first path that existed, which strands an x86 registration on an x64 host: the file is there, and it will never load. The catalog hands back candidates and the source tries each until one loads, which is again what Mumble does.
 
@@ -48,7 +48,7 @@ The source has five failure states: no SDK, a registered path whose file is gone
 
 ## Callback, not polling
 
-The SDK offers both. PadForge registers the callback, because the row would otherwise have to make 102 cross-DLL calls per cycle, across the SDK's two query exports, to find one press. The callback runs on the SDK's own thread, as its header states, so the handler does nothing but take a short lock and set a flag. Nothing blocking may run on Logitech's dispatch path.
+The SDK offers both. PadForge registers the callback because polling misses a tap that starts and ends inside one poll, which is Logitech's own guidance, and because polling would cost up to 102 cross-DLL calls per cycle across the SDK's two query exports. The callback runs on the SDK's own thread, as its header states, so the handler only counts the event and, under a short lock, records the key state and its pulse deadline. Nothing blocking may run on Logitech's dispatch path.
 
 ### The pulse
 
@@ -91,7 +91,7 @@ Names come from the SDK where it supplies one. A keyboard name gets the M-state 
 
 Synthetic identity follows the handheld row's convention: VID `0x4C47` ("LG") and PID `0x474B` ("GK").
 
-The row attaches whether or not the SDK starts, so the Devices list can carry the reason. A row that vanishes tells the user nothing about why.
+The row attaches whether or not the SDK starts, because the status line on the Settings **Input Engine** card reads the row's state to name the reason. A row that vanishes leaves that line empty and tells the user nothing about why.
 
 Buttons are written every poll, pressed or not, so a released key produces its falling edge.
 
@@ -101,7 +101,7 @@ Buttons are written every poll, pressed or not, so a released key produces its f
 
 No Logitech hardware or software is on the bench, so the library loading and calling back is unverified. The wire format is grounded in the SDK header, and the library search and teardown in Mumble's implementation.
 
-Test coverage is uneven. The decode, the button map and the pulse have real behavioral tests. The resync has only a wiring assertion that reads this file and checks the call is present, because the path needs a live source in the `Running` state and the test seam cannot supply one.
+Test coverage is uneven. The decode, the button map and the pulse have real behavioral tests. The resync has only a wiring assertion that reads `LogitechGKeysDevice.cs` and checks the call is present, because the path needs a live source in the `Running` state and the test seam cannot supply one.
 
 ---
 
@@ -114,4 +114,4 @@ Test coverage is uneven. The decode, the button map and the pulse have real beha
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

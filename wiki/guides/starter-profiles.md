@@ -37,10 +37,10 @@ On a controller with two touchpads the right pad wins. On a controller
 with none, the stick simply does all the work.
 
 Which stick backs the touchpad up depends on the profile. Point and
-Click and Isometric RPG put the cursor on the **left** stick and keep the
-right one for the camera, because in those games the pointer and the view
-are two different jobs for two different thumbs. Everything else uses the
-right stick.
+Click and Isometric RPG put the cursor on the **left** stick. Isometric
+RPG keeps the right stick for the camera, because there the pointer and
+the view are two different jobs for two different thumbs. Point and Click
+leaves the right stick unbound. Everything else uses the right stick.
 
 ---
 
@@ -108,9 +108,14 @@ since hardware macros are prohibited outright.
 
 Hold **Back** and the shoulders save and load state, the triggers
 fast-forward and rewind, the D-pad's left and right step the state slot,
-Y opens the menu, and Start exits the content. They send RetroArch's own
-default keyboard hotkeys, so they work against a stock install with no
-remapping. That mirrors how RetroArch's hotkey modifier works.
+Y opens the menu, and Start quits RetroArch after a second press to
+confirm. They send RetroArch's own default keyboard hotkeys, so a stock
+install needs no remapping. That mirrors how RetroArch's hotkey modifier
+works. Rewind also needs RetroArch's Rewind Support setting, which is
+off by default.
+
+The hotkeys come from a second, Keyboard + Mouse virtual controller in
+the same profile, so assign your controller to both of its slots.
 
 Back is the modifier and nothing else. A shift-layer activator eats its
 own input, so while Back is held the pad's own Back output is suppressed
@@ -134,11 +139,11 @@ softened near center and keeps full authority at the rim. Click the right
 stick for a Precision mode that softens it much further, and click again
 to leave.
 
-One thing it deliberately does not do. Elite ships two gamepad presets
-that differ on a single axis: right-stick X is yaw in one and lateral
-thrust in the other. Both use the same physical output, so which one you
-get is decided inside Elite's own binding file, and no controller profile
-can reach it. Pick the preset you want in-game.
+One thing it deliberately does not do. Several of Elite's gamepad presets
+come in two versions that differ on a single axis: right-stick X is yaw
+in one and lateral thrust in the other. Both use the same physical
+output, so which one you get is decided inside Elite's own binding file,
+and no controller profile can reach it. Pick the preset you want in-game.
 
 ### Media Remote sends the real media keys
 
@@ -178,8 +183,8 @@ It is two buttons on purpose. A layer that opens on a single button takes
 that button over completely, so putting the gesture on Start alone would
 cost you Start outright. A pair costs nothing: each button keeps its own
 binding, and only the two together mean anything else. Guide works here
-because PadForge hides the physical controller from Windows, so the press
-reaches PadForge instead of opening Game Bar.
+because PadForge hides an assigned controller from Windows when HidHide
+is installed, so the press reaches PadForge instead of opening Game Bar.
 
 On Media Remote this is why Stop is a quick tap of Guide rather than a
 plain press. Holding Guide is the start of the silence gesture, so a press
@@ -216,4 +221,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

@@ -3770,7 +3770,7 @@
 
 
 <h1 id="wheel-force-feedback-internals">Wheel Force Feedback Internals<a class="headerlink" href="#wheel-force-feedback-internals" title="Permanent link">&para;</a></h1>
-<p><em>How a game's force feedback reaches a real wheel: the HID PID decode chain, the three clean-room vendor writers, the host-sampled and software paths in <code>ForceFeedbackState</code>, and the RPM-LED telemetry system.</em></p>
+<p><em>How a game's force feedback reaches a real wheel: the HID PID decode chain, the three vendor writers, the host-sampled and software paths in <code>ForceFeedbackState</code>, and the RPM-LED telemetry system.</em></p>
 <p>This is the developer-side companion to <a href="../../features/wheel/">Wheel</a> (the user guide). See <a href="../../features/force-feedback/">Force Feedback</a> for the rumble and generic-haptic side.</p>
 <hr />
 <h2 id="two-pipelines-one-set-of-writers">Two pipelines, one set of writers<a class="headerlink" href="#two-pipelines-one-set-of-writers" title="Permanent link">&para;</a></h2>
@@ -3799,7 +3799,7 @@
 <tbody>
 <tr>
 <td><code>PadForge.App/Common/Input/HMaestroVirtualController.cs</code></td>
-<td>Forwards HM HID-output and XInput packets into the decoder.</td>
+<td>Forwards HM HID-output and HID-feature packets into the decoder, and writes XInput motor bytes straight to the slot's <code>VibrationStates</code> entry.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/HMaestroFfbDecoder.cs</code></td>
@@ -3839,16 +3839,18 @@
 <h2 id="decode-chain">Decode chain<a class="headerlink" href="#decode-chain" title="Permanent link">&para;</a></h2>
 <p><code>HMaestroVirtualController</code> holds an <code>HMaestroFfbDecoder</code>, constructed when the controller's HID descriptor carries the PID force-feedback block (the gate is descriptor presence, not VID, so catalog profiles keep their identity). The HM output callback routes by packet source: a HID-output report goes to <code>_ffbDecoder.OnHidOutput</code> then immediately <code>Apply</code>, a HID feature report (the Create-New-Effect path) goes to <code>OnHidFeature</code>, and an XInput packet writes the scalar motor bytes directly and zeroes the trigger motors, since the XUSB wire carries none. A per-tick <code>TickFfb</code> calls <code>ApplyIfDue</code> so duration-bounded effects expire even without new packets.</p>
 <p><code>HMaestroFfbDecoder.OnHidOutput</code> dispatches per report ID: Set Effect (0x11), Set Condition (0x13, the bit-packed per-axis condition coefficients for spring, damper, inertia, and friction), Set Periodic (0x14), Set Constant (0x15), Set Ramp (0x16), Effect Operation (0x1A, start and stop), Block Free (0x1B), Device Control (0x1C), and Device Gain (0x1D). It also handles the pre-allocation flow where the OS writes parameters before the SetFeature allocates the real effect block. <code>ParseFfbScales</code> walks the report descriptor once at construction to normalize hand-authored descriptors (the SideWinder ranges) into canonical units.</p>
-<p><code>Apply(Vibration vib)</code> finds the dominant effect, writes its type, signed magnitude, direction, period, and gain, splits the polar direction into left and right motor scalars so rumble-only devices still feel directional force, and copies the spring, damper, inertia, and friction coefficients into the vibration's condition axes.</p>
+<p><code>Apply(Vibration vib)</code> finds the dominant effect (the largest magnitude after its own effect gain), writes that effect's type, signed magnitude, direction, and period along with the device gain, splits the polar direction into left and right motor scalars so rumble-only devices still feel directional force, and copies the spring, damper, inertia, and friction coefficients into the vibration's condition axes.</p>
 <p>The <code>Vibration</code> carrier lives in <code>PadForge.Engine/Common/ForceFeedbackState.cs</code> with scalar motor fields, directional fields (<code>EffectType</code>, <code>SignedMagnitude</code>, <code>Direction</code>, <code>Period</code>, <code>DeviceGain</code>), and condition fields.</p>
 <hr />
 <h2 id="aggregation-and-dispatch">Aggregation and dispatch<a class="headerlink" href="#aggregation-and-dispatch" title="Permanent link">&para;</a></h2>
 <p><code>ApplyForceFeedback(UserDevice ud)</code> in Step 2 combines every slot the device is mapped to (motors max-combined, the first slot with directional or condition data becomes the directional source) into <code>_combinedVibration</code>, then dispatches by device identity:</p>
 <ul>
 <li>Sony pads (DualSense, DualShock 4) return early. They are written by <code>UserEffectsDispatcher</code> and <code>PlayStationEffectWriter</code>.</li>
+<li>A Remote Link device (a <code>peer://</code> path) ships through <code>RemoteLinkOutputRouter</code> instead of writing locally. A vendor wheel ships a semantic wheel frame, and every other device ships the combined <code>Vibration</code>.</li>
 <li>Xbox One and later take the <code>XboxImpulseHidWriter</code> path.</li>
 <li>Padix PSX/USB converters take the <code>PadixConverterRawHidWriter</code> path.</li>
-<li>Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by <code>IsLogitechWheel</code> / <code>IsFanatecWheel</code> / <code>IsThrustmasterWheel</code> / <code>IsFanatecPedal</code>) take the vendor-writer block.</li>
+<li>Bliss-Box adapter ports take the <code>BlissBoxRuntime.SetRumble</code> path while <strong>Read Bliss-Box Adapters</strong> is on.</li>
+<li>Logitech, Fanatec, and Thrustmaster wheels and Fanatec pedals (gated by <code>IsLogitechWheel</code> / <code>IsFanatecWheel</code> / <code>IsThrustmasterWheel</code> / <code>IsFanatecPedal</code>) take the vendor-writer block.</li>
 <li>Everything else falls to <code>ForceFeedbackState.SetDeviceForces</code> (the SDL path).</li>
 </ul>
 <p>Per-frame force is throttled by a change-detection struct cached in <code>_appliedWheelFfb</code>, because re-sending an unchanged force every poll is a blocking HID write that halves the poll rate with a wheel attached.</p>
@@ -3872,7 +3874,7 @@
 <li><code>IsGenericWheelSpringCapable(hasHaptic, hapticFeatures, inputDeviceType)</code> is the one predicate deciding whether a device may hold that spring: haptic present, <code>SDL_HAPTIC_SPRING</code> in the feature mask, and <code>InputDeviceType.Driving</code> (which <code>SdlDeviceWrapper</code> derives from <code>SDL_JOYSTICK_TYPE_WHEEL</code>). The Wheel tab's <code>hasGenericWheel</code> gate calls the same predicate, so the tab and the spring cannot disagree.</li>
 </ul>
 <p>The old clause was <code>NumHapticAxes &lt;= 1</code>. That hid the tab for a wheelbase-plus-pedals composite reporting two haptic axes despite a working spring, which is the Moza shape (#282). Axis count is a shape detail, not an identity, so device type replaced it.</p>
-<p>The spring is built as <code>SDL_HAPTIC_CARTESIAN</code> with <code>dir0 = 1</code>, not <code>STEERING_AXIS</code>. SDL encodes <code>STEERING_AXIS</code> as a DirectInput Cartesian effect with a <strong>zero</strong> direction vector, and Moza is the vendor Linux had to special-case for exactly that on condition effects (<code>HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION</code> discards the caller's direction and forces <code>0x4000</code>). Constant and periodic effects keep their real direction and stay on <code>STEERING_AXIS</code>.</p>
+<p>The spring is built as <code>SDL_HAPTIC_CARTESIAN</code> with <code>dir0 = 1</code>, not <code>STEERING_AXIS</code>. SDL encodes <code>STEERING_AXIS</code> as a DirectInput Cartesian effect with a <strong>zero</strong> direction vector, and Moza is the vendor Linux had to special-case for exactly that on condition effects (<code>HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION</code> discards the caller's direction and forces <code>0x4000</code>). Constant and periodic effects keep their real direction: <code>STEERING_AXIS</code> on a device that reports one haptic axis, <code>SDL_HAPTIC_POLAR</code> on one that reports two or more.</p>
 <hr />
 <h2 id="wheel-tab-settings">Wheel-tab settings<a class="headerlink" href="#wheel-tab-settings" title="Permanent link">&para;</a></h2>
 <p><code>PadSetting.RotationRange</code> (default 900), <code>AutoCenterStrength</code> (default 0), and <code>WheelRpmLeds</code> (default 0) all participate in the settings checksum. The <code>PadViewModel</code> bridges them through <code>InputService</code>. In <code>ApplyForceFeedback</code>, range and auto-center are one-shot, re-sent only when the cached <code>_appliedWheelSettings</code> changes, with each writer clamping range to its own hardware maximum.</p>
@@ -3945,7 +3947,7 @@
 </tr>
 <tr>
 <td><code>CodemastersUdpTelemetrySource</code></td>
-<td>F1, DiRT, GRID</td>
+<td>F1 23 and F1 24, DiRT, GRID</td>
 <td>UDP</td>
 </tr>
 <tr>
@@ -3969,7 +3971,7 @@
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: relaying a shared wheel's force feedback.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

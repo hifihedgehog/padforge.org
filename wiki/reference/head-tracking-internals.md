@@ -30,7 +30,7 @@ The user-facing page is [Head Tracking](../features/head-tracking.md). This one 
 | Axes | Six `AbsoluteAxis` objects at `InputIndex` 0 to 5, named Head Yaw, Head Pitch, Head Roll, Head X, Head Y, Head Z, GUIDs X, Y, Z, Rx, Ry, Rz |
 | Buttons, hats, rumble, gyro, touchpad | None |
 
-The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and the Devices page draws neither the Input Hiding nor the Input Mode section. `CreateDefaultPadSetting` auto-maps only gamepad capability types, so the row starts unmapped by design.
+The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and the Devices page draws neither the Input Hiding nor the Input Mode section. `CreateDefaultPadSetting` auto-maps only gamepads, Bliss-Box ports with a placed controller, and touchpads or tablets on a PlayStation output, so the row starts unmapped by design.
 
 ---
 
@@ -68,7 +68,7 @@ OpenTrack's "UDP over network" output (`proto-udp/ftnoir_protocol_ftn.cpp`) send
 | Units | Translation in centimeters, rotation in degrees |
 | Signs | Positive yaw moves OpenTrack's mouse output right, positive pitch moves it up (`proto-mouse` invert table) |
 | Short datagram | Dropped |
-| Long datagram | First 48 bytes read, the rest ignored, as OpenTrack's own UDP tracker does |
+| Long datagram | Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with `MessageSize` and is dropped. |
 | NaN or infinity in any field | The whole datagram is dropped (`tracker-udp` rule) |
 
 The socket is IPv4 UDP bound to `IPAddress.Any` on the port, with `ExclusiveAddressUse` so a second listener on the same port (OpenTrack's own UDP tracker) surfaces as a bind failure instead of stealing half the datagrams, and `SIO_UDP_CONNRESET` cleared so an ICMP port-unreachable does not throw out of the next receive (the DSU server's rule). The receive thread is `PadForge.HeadTrackerUdp`, a 256-byte buffer, and after ten consecutive socket errors it sleeps 50 ms between retries. A bind failure sets `UdpBindFailed`.
@@ -98,7 +98,7 @@ The peer is recorded as `address:port` of the last sender, and a change of peer 
 | 20 | Roll, float radians | `roll × 180/π` |
 | 24, 28, 32 | X, Y, Z, float millimeters | `/ 10` |
 
-Non-finite floats reject the read. The heap is polled from `GetCurrentState`, on the poll thread, and only a `DataID` change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. The heap is never copied without the mutex. A mutex the reader could not open means it copies nothing, which is what the reference client's `FTGetData` does: its copy sits inside the wait test. A torn pose is worse than a stale one, and the silence timeout already reports a writer that stops. The wait itself is zero rather than the reference's 16 ms, because the read happens inline on the input polling thread. Sixteen milliseconds is a game frame's budget, not a poll tick's, and waiting on another process's writer stalled the whole poll loop. A contested tick reports no new pose and the last one stands. A mapping that fails to open sets `FreeTrackFailed`.
+Non-finite floats reject the read. The heap is polled from `GetCurrentState`, on the poll thread, and only a `DataID` change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. The heap is never copied without the mutex. A mutex the reader could not open means it copies nothing, which is what the reference client's `FTGetData` does: its copy sits inside the wait test. A torn pose is worse than a stale one, and the silence timeout already reports a writer that stops. OpenTrack's own writer never takes `FT_Mutext`. It stores each field with an interlocked write (`proto-ft/ftnoir_protocol_ft.cpp`), so the mutex orders this read only against other clients that take it, such as a game's `FTGetData`, and cannot stop a torn pose from OpenTrack. The wait itself is zero rather than the reference's 16 ms, because the read happens inline on the input polling thread. Sixteen milliseconds is a game frame's budget, not a poll tick's, and waiting on another process's hold of the mutex stalled the whole poll loop. A contested tick reports no new pose and the last one stands. A mapping that fails to open sets `FreeTrackFailed`.
 
 UDP and FreeTrack carry the same pose from the same tracker, so interleaving those two is harmless.
 
@@ -133,7 +133,7 @@ Each axis's range comes from `HeadTrackingRuntime.GetAxisRange` on every poll: t
 
 ## Silence
 
-`SilenceMs` = 1000. `GetCurrentState` compares the last pose's tick against now. Older than that, or no pose ever, and the axes read center and `Source` drops to `None` with a `StatusVersion` bump. The row stays attached, so mappings can be made before the tracker starts. A tracker that stops (OpenTrack closed, the camera lost the face) therefore recenters the stick within a second.
+`SilenceMs` = 1000. `GetCurrentState` compares the last pose's tick against now. Older than that, or no pose ever, and the axes read center and `Source` drops to `None` with a `StatusVersion` bump. The row stays attached, so mappings can be made before the tracker starts. A tracker that stops (OpenTrack closed, the camera lost the face) therefore recenters the stick one second after its last pose.
 
 ---
 
@@ -189,13 +189,13 @@ Real UDP and uniquely named shared-memory fixtures verify all four input combina
 
 ## Tests
 
-`HeadTrackerTests` pins the UDP layout and order, the NaN and infinity drop, the short and long datagram rules, the FreeTrack offsets and sign inversions, `ToAxis` at rest, the ends, the clamp, and a bad range, the stick-orientation vertical axes, a UDP pose landing on the axes with its peer named, the one-second silence recenter, the FreeTrack baseline-then-DataID rule, an online row at rest before any pose, six named axes at indices 0 to 5, and the type ordinal pinned past `SystemMotion`.
+The tests in `HeadTrackerTests.cs` pin the UDP layout and order, the NaN and infinity drop, the short and long datagram rules, the FreeTrack offsets and sign inversions, `ToAxis` at rest, the ends, the clamp, and a bad range, the stick-orientation vertical axes, a UDP pose landing on the axes with its peer named, the one-second silence recenter, the FreeTrack baseline-then-DataID rule, an online row at rest before any pose, six named axes at indices 0 to 5, and the type ordinal pinned past `SystemMotion`.
 
 ---
 
 ## Evidence status
 
-Confirmed by reading and by the replay tests: the datagram layout, the heap offsets, the sign inversions of OpenTrack's FreeTrack writer, and the scaling. Not yet run against a live OpenTrack. Roll and the three translations pass through with the sign the tracker sends, and whether that matches a user's expectation on real hardware is unconfirmed. Sharing of the `FT_SharedMem` mapping between an elevated PadForge and a medium-integrity OpenTrack is reasoned from the reference client, not tested.
+Confirmed by reading and by the replay tests: the datagram layout, the heap offsets, the sign inversions of OpenTrack's FreeTrack writer, and the scaling. Not yet run against a live OpenTrack. Roll, X and Z pass through with the sign the tracker sends, and Y is flipped into stick orientation on the assumption that the tracker's positive Y is up. Whether those signs match a user's expectation on real hardware is unconfirmed. Sharing of the `FT_SharedMem` mapping between an elevated PadForge and a medium-integrity OpenTrack is reasoned from the reference client, not tested.
 
 ---
 
@@ -207,4 +207,4 @@ Confirmed by reading and by the replay tests: the datagram layout, the heap offs
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

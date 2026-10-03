@@ -13,7 +13,7 @@ The Lighting tab appears for these devices:
 
 - DualShock 4, DualSense, and DualSense Edge, for full lightbar control
 - A PlayStation Move controller, whose sphere is driven as its lightbar
-- Xbox One and later pads, for the Guide button LED only
+- Microsoft Xbox One, Elite, and Series pads, for the Guide button LED only
 - A 2015 Steam Controller, for the Home button LED only
 - A Switch Pro Controller or right Joy-Con (alone, in a pair, or in the charging grip), for the HOME button LED only
 
@@ -26,7 +26,7 @@ On a Sony pad it controls:
 - The player-indicator LEDs below the DualSense touchpad
 - The mute LED above the DualSense microphone
 
-On an Xbox, Steam Controller, or Switch pad the tab shows only the Guide button LED card. The lightbar controls stay hidden.
+On a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME LED, the tab shows only the Guide button LED card. The lightbar controls stay hidden.
 
 The tab is per pad per slot. Pick a different physical device in the assigned-devices dropdown and the tab re-binds to that device's config. Two Sony pads on the same slot can carry different modes, palettes, and overlay variants. Macro lightbar actions stay slot-level. They fan out across every Sony pad on the slot, each rendering with its own per-device settings.
 
@@ -34,7 +34,7 @@ The tab is per pad per slot. Pick a different physical device in the assigned-de
 
 A [web controller](../guides/web-controller.md) showing the DualShock 4 or DualSense layout gets this tab too, and it behaves the same: the phone draws the pad's own lightbar in whatever color and mode you pick, animations included. The DualSense layout also carries its player indicator row.
 
-Game writes always win at packet level. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar.
+On a virtual DualSense, game writes always win at packet level. A virtual DualShock 4 does not forward the game's lightbar writes to the physical pad, so the settings on this tab stay in charge there. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar.
 
 ---
 
@@ -44,7 +44,7 @@ A single dropdown selects the active base mode. Fourteen entries. Player Number 
 
 | Mode | What it does |
 |---|---|
-| Player Number (Default) | The lightbar idles showing the virtual controller's player identity. The Sony player color is 1 blue, 2 red, 3 green, 4 pink, with matching pips on a DualSense. A game that writes lighting takes over, and its last color stays for the session. |
+| Player Number (Default) | The lightbar idles showing the virtual controller's player identity. The Sony player color is 1 blue, 2 red, 3 green, 4 pink, with matching pips on a DualSense. A game that writes lighting through a virtual DualSense takes over. A DualSense keeps the game's last color until 15 seconds pass with no output from the game, and then the player color returns. A DualShock 4 shows the game's color only within 1.5 seconds of each game write. |
 | Off | Paints the lightbar fully dark whenever no game is driving it. A deliberate hard-off with no idle color, and a game's color goes dark again once the game stops writing it. The Input Reactive overlay can still flash on the black base. |
 | Static Color | Solid color from the configured RGB. |
 | Breathing (Single Color Fades) | One color fades in and out at the configured period. |
@@ -76,7 +76,7 @@ A second dropdown sits under the base picker. The overlay is independent of the 
 
 The flash blends the overlay color over the base. At full flash the overlay color is solid. The flash then fades to nothing over the configured Hold plus Decay window, and the base mode shows through again.
 
-Macro lightbar overrides still beat the overlay. Game-driven writes still win at packet level.
+Macro lightbar overrides still beat the overlay. On a virtual DualSense, game-driven writes still win at packet level.
 
 PadForge watches for button presses on the slot's combined output, including the DualSense touchpad click. Any button on any device mapped to the slot fires a pulse.
 
@@ -146,7 +146,7 @@ Slider 1.0–20.0. Default 4.0. Multiplies the captured system-audio peak before
 
 Visible only for the three Audio Bands modes. Three bordered cards side-by-side: **Quiet Color**, **Medium Color**, **Loud Color**. Each card has a color picker, hex input, R/G/B sliders, and per-channel reset buttons.
 
-Above the cards are the **Low-to-Mid Boundary** and **Mid-to-High Boundary** thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a **Crossfade Width** slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value.
+Above the cards are the **Low-to-Mid Boundary** and **Mid-to-High Boundary** thresholds, set as a percent of the peak range. Defaults are 33% and 66%. Each threshold has a reset button. For the Crossfade mode, a **Crossfade Width** slider sets the half-width of the blend zone at each threshold (0–50%, default 5%). A peak within that percent on either side of a threshold blends between the two colors, so the full blend zone spans twice the set value. PadForge caps the half-width at half the narrowest band, 16.5% with the default 33% and 66% boundaries, so a larger setting blends no wider than the cap.
 
 ---
 
@@ -172,7 +172,7 @@ Each dropdown on this card has a one-click reset button. Player Pattern resets t
 
 The DS4 lightbar sits above the touchpad as a single LED strip. The same RGB PadForge writes is the color of the touchpad-area light.
 
-DS4 supports all fourteen base modes (Player Number, Off, Static, Breathing, Rainbow, Color Cycle, the three Audio Pulse variants, the three Audio Bands variants, Battery, Strobe) and the Input Reactive overlay. In Player Number mode the DS4 lightbar idles on the player color. PadForge builds the DS4 lightbar the same way it builds the DualSense lightbar.
+DS4 supports all fourteen base modes (Player Number, Off, Static, Breathing, Rainbow, Color Cycle, the three Audio Pulse variants, the three Audio Bands variants, Battery, Strobe) and the Input Reactive overlay. In Player Number mode the DS4 lightbar idles on the player color. PadForge computes the DS4 lightbar colors with the same mode code it uses for the DualSense. The DS4 packet always carries the lightbar, so a game's color shows on a DS4 only within 1.5 seconds of each game write, and then the configured mode or the player color returns.
 
 The DualSense-only fields (player-indicator row, mute LED, adaptive triggers) are dropped when the assigned device is a DS4. Those controls stay hidden on the tab.
 
@@ -180,7 +180,7 @@ The DualSense-only fields (player-indicator row, mute LED, adaptive triggers) ar
 
 ## Guide Button LED
 
-The Lighting tab shows this card instead of the lightbar controls when the assigned device is an Xbox One or later pad, a 2015 Steam Controller, or a Switch pad with a HOME button LED: a Pro Controller, a right Joy-Con, a combined Joy-Con pair, or the charging grip. It sets the brightness of the glowing Guide or Home button.
+The Lighting tab shows this card instead of the lightbar controls when the assigned device is a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME button LED: a Pro Controller, a right Joy-Con, a combined Joy-Con pair, or the charging grip. It sets the brightness of the glowing Guide or Home button.
 
 <!-- SCREENSHOT: pad-lighting-guide-led -->
 ![Guide button LED card with mode dropdown and brightness slider](../images/pad-lighting-guide-led.png)
@@ -198,7 +198,7 @@ Connection rules differ by family:
 
 - Xbox controllers accept Guide LED commands over USB only. The setting has no effect on a Bluetooth connection.
 - Switch Pro Controllers and right Joy-Cons (alone, paired, or in the charging grip) accept it on any connection, with genuinely variable brightness. A left Joy-Con has no HOME LED, so a left Joy-Con alone in the charging grip gets the card but the write does nothing.
-- Every 2015 Steam Controller in the session shares one brightness. The others set it per device.
+- Every 2015 Steam Controller in the session shares one brightness, and so do all USB Xbox pads on the PC, where the last value configured wins. Switch pads set it per device.
 
 Guide and Home LED brightness also reaches a pad shared from another PC over Remote Link. The Xbox USB-only limit still applies at that pad's own PC.
 
@@ -206,7 +206,7 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ## Mirroring the game's color to other RGB gear
 
-The color a game writes to a virtual PlayStation controller can also light Razer Chroma and Logitech LIGHTSYNC devices, and the game's rumble can drive Razer Sensa HD haptics. Both are Dashboard toggles, off by default, and they read the virtual pad the game paints rather than anything on this tab. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
+The color a game writes to a virtual DualShock 4 or DualSense can also light Razer Chroma and Logitech LIGHTSYNC devices, and the game's rumble can drive Razer Sensa HD haptics. All three are Dashboard toggles, off by default, and they read the virtual pad the game paints rather than anything on this tab. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
 
 ---
 
@@ -228,4 +228,4 @@ The color a game writes to a virtual PlayStation controller can also light Razer
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

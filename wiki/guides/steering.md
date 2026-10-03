@@ -12,7 +12,7 @@ Every mode is off by default. With the mode set to **Off**, the stick is a norma
 
 Rotating the stick winds a virtual wheel. Turn clockwise and the wheel turns right. **Wind Range** is the total lock-to-lock travel. The default 900 is 2.5 turns from one lock to the other, so full lock lands at 450 degrees (1.25 turns) each way from center. The accumulator tracks total angular travel, not the stick's current position, so you can keep winding past lock and then unwind back through the overshoot.
 
-Below full deflection the wind leaks back toward center at **Unwind Rate** degrees per second (default 1800), scaled by how far you've released, so a partial release bleeds slowly and a full release snaps back. **Wind Power** (default 1) curves the output: above 1 makes the approach to lock gentler, below 1 sharper.
+Below full deflection the wind leaks back toward center at **Unwind Rate** degrees per second (default 1800), scaled by how far you've released, so a partial release bleeds slowly and a full release snaps back. **Wind Power** (default 1) curves the output: above 1 softens the response near center and steepens it toward lock, below 1 does the opposite.
 
 | Setting | Default | Range |
 | --- | --- | --- |
@@ -63,17 +63,17 @@ When a steering source saturates at full lock, PadForge can make the wheel feel 
 | --- | --- | --- |
 | **Rumble Pulse on Lock** | Grip-motor pulse on lock entry | Any pad with rumble |
 | **Trigger Vibration on Lock** | The same pulse on the trigger actuators | Xbox One and later impulse triggers, DualSense adaptive triggers |
-| **Lightbar Pulse on Lock** | Lightbar flashes a color on lock entry | DualSense / DualShock 4 |
+| **Lightbar Pulse on Lock** | Lightbar flashes a color on lock entry | DualSense / DualShock 4 / PS Move |
 | **Trigger Resistance Near Lock** | DualSense trigger resistance ramps up as the wheel approaches lock, so you feel it coming | DualSense |
 
 **Trigger Resistance Near Lock** only engages on triggers you haven't already configured on the Adaptive Triggers tab, so it never overrides your own trigger effects.
 
-**Pulse Length** sets how long the rumble and trigger pulses last. The lightbar pulse has its own timing: it jumps to the chosen color on lock entry, holds at full strength for **Hold**, then fades back out over **Decay**.
+**Pulse Length** sets how long the rumble and trigger pulses last. The lightbar pulse has its own timing: it jumps to the chosen color on lock entry, holds at full strength for **Hold Time**, then fades back out over **Decay**.
 
 | Setting | Default | Range |
 | --- | --- | --- |
 | Pulse Length | 80 ms | 0–2000 |
-| Hold | 80 ms | 0–2000 |
+| Hold Time | 80 ms | 0–2000 |
 | Decay | 250 ms | 0–5000 |
 
 The **Color** dropdown picks where the lightbar color comes from:
@@ -96,4 +96,4 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

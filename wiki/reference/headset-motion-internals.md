@@ -30,18 +30,23 @@ internal const string Marker            = "#AndroidHeadTracker#";
 
 Confirmed working on the WH-1000XM5 family. Any headset presenting the same collection is a candidate, whatever its name, which is the point of probing by capability.
 
-**Note what the probe does NOT do: it applies no transport filter.** Nothing in `SonyHeadsetHid` checks for Bluetooth. These headsets happen to expose the tracker over Bluetooth and that is where the feature was validated, but the code would open the collection over any transport that presented it. Do not write "Bluetooth only" into the docs as though the code enforced it. The two repairs below are Bluetooth-specific because they act on a paired device's address, and a candidate whose address does not resolve still qualifies as a tracker with that lane simply unavailable to it.
+**Note what the probe does NOT do: it applies no transport filter.** Nothing in `SonyHeadsetHid` checks for Bluetooth. These headsets happen to expose the tracker over Bluetooth and that is where the feature was validated, but the code would open the collection over any transport that presented it. Do not write "Bluetooth only" into the docs as though the code enforced it. The two repairs below are Bluetooth-specific: the rebind matches only a node under a BTHENUM parent, and the HID-service re-request acts on a paired device's address. A candidate whose address does not resolve still qualifies as a tracker, with the re-request unavailable to it.
 
-The remaining usages the probe cares about:
+The other usages the setup and parse code read or write:
 
 | Constant | Usage | Meaning |
 |---|---|---|
 | `ReportInterval` | `0x030E` | Sampling interval, written during setup |
 | `ReportingAllEvents` | `0x0841` | Reporting-state selector |
 | `PowerFull` | `0x0851` | Power-state selector |
+| `TransportAcl` | `0xF800` | Optional v2 ACL transport selector, written during setup when the descriptor exposes it |
 | `Rotation` | `0x0544` | Orientation rotation vector |
 | `AngularVelocity` | `0x0545` | Gyroscope, rad/s, vector form |
+| `AngularVelocityVector` | `0x0456` | Gyroscope, vector form |
+| `AngularVelocityX` to `AngularVelocityZ` | `0x0457` to `0x0459` | Gyroscope, one axis each |
 | `AccelerationVector` | `0x0452` | Accelerometer, vector form |
+| `AccelerationX` to `AccelerationZ` | `0x0453` to `0x0455` | Accelerometer, one axis each |
+| `ResetCounter` | `0x0546` | Classified by the parse, never read |
 
 Some Sensor stacks omit constant fields from value caps, which the probe accounts for rather than treating as a missing feature.
 
@@ -98,9 +103,9 @@ The DSU motion server does its own flip separately, in `DsuMotionServer`, and th
 
 ## What the user sees
 
-The headset appears on the **Devices** page as its own device, and carries a headphone glyph in the slot's device roster on the **Pad** page (`DeviceTypeGlyph.For`, one call site in `InputService`).
+The headset appears on the **Devices** page as its own device, and carries a headphone glyph in the device roster on its slot's page (`PadPage`, through `DeviceTypeGlyph.For`, one call site in `InputService`).
 
-Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation, which is why it is worth pairing with Aim Engage: head tracking that is always live is disorienting in most games.
+Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its contribution is motion: a rotation rate, plus acceleration when the descriptor exposes an accelerometer. That is why it is worth setting an **Aim Engage Button**, since head tracking that is always live is disorienting in most games.
 
 The picker label is **Gyro Horizontal (Yaw + Roll)**, verbatim from `Strings.resx`. Not "Gyro Horizontal".
 
@@ -123,4 +128,4 @@ The picker label is **Gyro Horizontal (Yaw + Roll)**, verbatim from `Strings.res
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

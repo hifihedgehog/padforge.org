@@ -4,11 +4,11 @@
 
 ![The VR slot preview showing both hand controllers, their sticks, triggers and grips](../images/pad-vr-preview.png)
 
-PadForge can present a pair of VR motion controllers to SteamVR. Add a **VR** slot and SteamVR sees a left hand and a right hand, exactly as it would with real hardware. What moves those hands is up to you: a gamepad, a flight stick, a keyboard, a phone over Wi-Fi, or any other source PadForge can read.
+PadForge can present a pair of VR motion controllers to SteamVR. Add a **VR** slot, assign a device to it, and SteamVR sees a left hand and a right hand. What moves those hands is up to you: a gamepad, a flight stick, a keyboard, a phone over Wi-Fi, or any other source PadForge can read.
 
 One slot serves **both** hands. There is no separate left slot and right slot to keep in sync.
 
-This page is the direction where PadForge *presents* hands to SteamVR. For the opposite direction, reading a real headset and its controllers *into* PadForge as mappable devices, see [VR Controller Input](vr-controller-input.md). That path uses OpenXR and does not need SteamVR.
+This page is the direction where PadForge *presents* hands to SteamVR. For the opposite direction, reading a real headset and its controllers *into* PadForge as mappable devices, see [VR Controller Input](vr-controller-input.md). That path uses OpenXR and does not need SteamVR. PadForge also reads the headset and controllers through a background OpenVR client whenever SteamVR is running with a headset attached.
 
 ---
 
@@ -20,10 +20,10 @@ You do not need a Steam account, the Steam client, or a headset plugged in to in
 
 Two details worth knowing before you start it:
 
-- **Choose where it goes.** The card has an install-location field with a **Browse** button. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
+- **Choose where it goes.** The card has an **Install Location** field with a **Browse...** button, shown until SteamVR is installed. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
 - **It is several gigabytes.** The download runs for a few minutes on a fast connection and considerably longer on a slow one.
 
-An existing SteamVR is found automatically when it came from Steam, or when it sits at `C:\SteamVR`, and the card then reports it as installed. A hand-placed install somewhere else is not discovered, so point the install location at it or let PadForge fetch its own copy.
+An existing SteamVR is found automatically when it came from Steam, or when it sits at `C:\SteamVR`, and the card then reports it as installed. A hand-placed install somewhere else is not discovered. Point the install location at it and click **Install** to register it, or let PadForge fetch its own copy. A registered folder counts as PadForge's own, so the card's **Uninstall** deletes it.
 
 ---
 
@@ -64,7 +64,7 @@ Triggers and grips are genuinely analog. In the preview they fill from the botto
 
 ## Haptics
 
-When a VR game buzzes a hand, that pulse does not stop at the virtual controller. PadForge fans it back out to whatever physical device is driving the slot, riding the same lane ordinary game rumble uses. A DualSense driving the right hand rumbles when the right hand is buzzed.
+When a VR game buzzes a hand, that pulse does not stop at the virtual controller. PadForge fans it back out to whatever physical device is driving the slot, riding the same lane ordinary game rumble uses. Every device assigned to the slot feels it: a left-hand pulse drives the left motor and a right-hand pulse the right motor, whichever hand that device's mappings move.
 
 ---
 
@@ -95,4 +95,4 @@ Stated plainly, because they will shape whether this is useful to you:
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

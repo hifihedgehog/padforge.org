@@ -3832,7 +3832,7 @@
 <ul>
 <li>PadForge connects directly to Steam, and only when you act: searching for a game, opening a game's config list, opening one config, or clicking the update check. Never at startup, never in the background.</li>
 <li>The servers contacted are all Steam's own: <code>store.steampowered.com</code> (game search), <code>api.steampowered.com</code> (Steam's server directory and the update check), the Steam connection servers that directory names (config lists and their details, over an anonymous session), <code>steamcommunity.com</code> (creator names), <code>cdn.steamusercontent.com</code> (the config files), <code>cdn.cloudflare.steamstatic.com</code> (game artwork), and Steam's avatar servers, such as <code>avatars.fastly.steamstatic.com</code> (creator avatars). Steam's own data names the config-file and avatar hosts.</li>
-<li>PadForge sends your search text, the game and the configs you open, and, for the update check, the ids of the configs you imported. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the MAC addresses of the physical network adapters, and the boot disk serial. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.</li>
+<li>PadForge sends your search text, the ids of the games, configs and creators involved (for the update check, the ids of the configs you imported), and its own version number. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the MAC addresses of the physical network adapters, and the boot disk serial. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.</li>
 </ul>
 <p>The card carries three more controls:</p>
 <table>
@@ -3866,8 +3866,8 @@
 <h3 id="find-the-game">Find the game<a class="headerlink" href="#find-the-game" title="Permanent link">&para;</a></h3>
 <p>Type at least two characters into <strong>Search Games</strong>. The search runs half a second after you stop typing and shows the top matches with their cover art and a config count per game. Click a game (or press Enter for the first match) to open its config list.</p>
 <h3 id="read-the-config-cards">Read the config cards<a class="headerlink" href="#read-the-config-cards" title="Permanent link">&para;</a></h3>
-<p>The game's configs list ranked by rating. A filter row above the list carries an <strong>All</strong> chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.</p>
-<p><strong>Sorted By</strong> re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. <strong>Search These Configs</strong> asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.4 seconds after you stop typing, or on Enter. Escape clears it.</p>
+<p>The game's configs list ranked by rating. A filter row above the list carries an <strong>All</strong> chip plus one chip per controller type found in the first 30 configs Steam returns (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.</p>
+<p><strong>Sorted By</strong> re-orders the list by Rating, Trending, Newest, Subscribers, or Most Votes. Steam returns every order in descending rank, so <strong>Ascending</strong> reverses only the configs already loaded, not the game's whole list. <strong>Search These Configs</strong> asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.42 seconds after you stop typing, or on Enter. Escape clears it.</p>
 <p>Each card shows:</p>
 <table>
 <thead>
@@ -3887,7 +3887,7 @@
 </tr>
 <tr>
 <td>Subscriber count</td>
-<td>How many Steam users subscribed to the config ("12k subscribers"). This is the popularity count.</td>
+<td>How many Steam users subscribed to the config ("12k subscribers"), shown only when Steam reports at least one. This is the popularity count.</td>
 </tr>
 <tr>
 <td>Controller chips</td>
@@ -4073,7 +4073,7 @@
 </tr>
 <tr>
 <td>Response curve settings</td>
-<td>Partial where one drops, named: output_curve always, and deadzone_shape unless the output is a thumb pair or a stick-hosted mouse (trackpad and gyro mouse rows evaluate per axis, with no pair read). A rotated group also withholds its curve exponent and anti-deadzone. Every other curve, range, and sensitivity setting carries onto its rows.</td>
+<td>Partial where one drops, named: output_curve always, and deadzone_shape unless the output is a thumb pair or a stick-hosted mouse (trackpad and gyro mouse rows evaluate per axis, with no pair read). On trackpad and gyro hosts the deadzone radii apply per axis rather than radially, which is also Partial and named. A rotated group also withholds its curve exponent, anti-deadzone, and acceleration. Every other curve, range, and sensitivity setting carries onto its rows.</td>
 </tr>
 <tr>
 <td>Unknown key names</td>
@@ -4102,7 +4102,7 @@
 <li><a href="../../features/devices/">Devices</a>: assign your controller to the imported pads, and cloak it from games.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

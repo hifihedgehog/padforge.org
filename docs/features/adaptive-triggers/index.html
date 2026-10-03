@@ -3826,7 +3826,7 @@
 <p>A dual-thumb slider from 0 to 255. 0 is fully released. 255 is fully pressed. Start sets where the effect begins. End sets where it stops.</p>
 <p>Some modes use only the start thumb. Feedback uses start. Vibration uses start. The preview shows which thumb is active.</p>
 <h3 id="strength">Strength<a class="headerlink" href="#strength" title="Permanent link">&para;</a></h3>
-<p>A 0 to 255 slider for how hard the effect pushes back, or how strong the buzz is on the vibration modes. Default is 200 (firm but not maxed). Setting strength to 0 gives no effect in any mode, and the preview goes blank.</p>
+<p>A 0 to 255 slider for how hard the effect pushes back, or how strong the buzz is on the vibration modes. Default is 200 (firm but not maxed). Setting strength to 0 blanks the preview. Multiple-Position Feedback, Slope Feedback, and Multiple-Position Vibration then send Off. Feedback, Weapon, and Vibration send their effect with a zero force byte.</p>
 <h3 id="frequency-hz">Frequency (Hz)<a class="headerlink" href="#frequency-hz" title="Permanent link">&para;</a></h3>
 <p>A 0 to 255 slider. Vibration and Multiple-Position Vibration use it to set the buzz rate. The byte reaches the trigger firmware as written. Default is 10. PadForge's own impulse-trigger translation buzzes at 15.</p>
 <p>Setting frequency to 0 in a vibration mode gives no buzz, and the preview hides the wave.</p>
@@ -3855,10 +3855,13 @@ had itself commanded did nothing. Since 4.5.0 PadForge copies the eight
 bytes at payload offsets 40 through 47 from the physical pad into the
 virtual report, so the game reads the real state of the triggers under
 your finger.</p>
-<p>This needs a physical DualSense or DualSense Edge on the slot. The bytes
-come from the bundled SDL fork, which publishes them as a joystick
-property. SDL upstream parses nothing from that range. Without the fork
-build the property is absent and the virtual report is unchanged.</p>
+<p>This needs a physical DualSense or DualSense Edge on the slot and a USB
+DualSense preset on the virtual pad: DualSense (PS5), DualSense Edge
+(PS5), or their Full forms. The Bluetooth DualSense presets do not carry
+the bytes. The bytes come from the bundled SDL fork, which publishes them
+as a joystick property. SDL upstream parses nothing from that range.
+Without the fork build the property is absent and the virtual report is
+unchanged.</p>
 <hr />
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3877,7 +3880,7 @@ build the property is absent and the virtual report is unchanged.</p>
 <li><a href="../mappings/">Button and Axis Mappings</a>: the trigger axis source picker.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

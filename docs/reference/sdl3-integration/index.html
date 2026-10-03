@@ -7407,7 +7407,7 @@
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
 <h2 id="sdl3-fork">SDL3 Fork<a class="headerlink" href="#sdl3-fork" title="Permanent link">&para;</a></h2>
-<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>b12239c8c7</code> (2026-09-27) for both architectures. 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
+<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>756e0f2fb1</code> (2026-10-03) for both architectures. 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
 <h3 id="why-a-fork">Why a Fork<a class="headerlink" href="#why-a-fork" title="Permanent link">&para;</a></h3>
 <p>The branch began with six commits spanning four logical features. v4 consumes substantially more fork work on top. The original four are listed first, the v4 additions in the next subsection.</p>
 <table>
@@ -7517,6 +7517,11 @@
 <td><code>SDL_XINPUT_PADDLES</code> (fork commits <code>49cbac4a41</code>, <code>167f8ca9bc</code>, <code>11bf187ca5</code>, <code>4763baf830</code>, <code>a1416320e2</code>, <code>5df5eff539</code>, the last for <code>SDL#32</code>)</td>
 <td>Adds an Elite controller's four paddles to its XInput joystick as raw buttons 12-15 (<code>paddle1</code>-<code>paddle4</code>), over Bluetooth and, where the Windows GameInput files belong to a version family the fork has read, over USB and the Xbox Wireless Adapter. Builds for x64 and ARM64</td>
 <td>Gamepad positions 12-15 (Right/Left Paddle 1 and 2)</td>
+</tr>
+<tr>
+<td><code>SDL#36</code> (fork commit <code>756e0f2fb1</code>)</td>
+<td>A Wii Remote with a Classic Controller registers the remote's accelerometer, and the Motion Plus gyro when one is present. Enabling a sensor is what powers the IR camera, and the driver registered none for that configuration, so its four IR axes never moved</td>
+<td><code>SdlDeviceWrapper</code>, which enables every sensor a joystick registers. <code>ReadIrPointer</code> and the light gun (#485) then read the camera with a Classic Controller attached</td>
 </tr>
 </tbody>
 </table>

@@ -4,7 +4,7 @@
 
 ![Wheel tab with rotation range, auto centering, and RPM LED controls](../images/pad-wheel.png)
 
-The Wheel tab appears when the slot has a supported Logitech, Fanatec, or Thrustmaster wheel assigned as a physical device. It is **per pad per slot**, like the other tuning tabs. Pick a different wheel in the assigned-devices dropdown and the tab rebinds to that wheel.
+The Wheel tab appears when the device selected in the slot's assigned-devices dropdown is a supported Logitech, Fanatec, or Thrustmaster wheel. It is **per pad per slot**, like the other tuning tabs. Pick a different wheel in the assigned-devices dropdown and the tab rebinds to that wheel.
 
 For a wheel PadForge does not recognize by model, force feedback still runs through the [Force Feedback](force-feedback.md) pipeline. The Wheel tab appears when that wheel advertises a centering spring and PadForge reads it as a driving device, including wheelbase-and-pedals composites that report more than one force-feedback axis. Then it shows the auto centering row alone. The rotation-range and RPM-LED rows stay hidden, since those need the vendor's own commands. A generic wheel without that centering spring gets no Wheel tab at all.
 
@@ -36,13 +36,13 @@ The rotation-range and RPM-LED rows are hidden for wheels PadForge drives throug
 
 ### Auto Centering
 
-Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge re-sends with each force update, because Fanatec bases expose no firmware auto centering.
+Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge re-sends with each constant-force update, because Fanatec bases expose no firmware auto centering.
 
 ### RPM shift LEDs
 
 When RPM shift LEDs are on and a supported racing game is running, PadForge reads the game's telemetry and lights the wheel's rev LEDs in step with engine RPM. The LED count follows the wheel: 5 on Logitech, 9 on Fanatec, 15 on Thrustmaster.
 
-Telemetry comes from the game, so the LEDs only light for titles PadForge can read: Assetto Corsa and Competizione, the Codemasters F1, DiRT, and GRID games, Forza, iRacing, Automobilista 1 and 2, Project CARS 2 and 3, rFactor 1 and 2, Le Mans Ultimate, RaceRoom, the SCS trucks (Euro Truck Simulator 2, American Truck Simulator), BeamNG.drive, and Live for Speed. Other games leave the LEDs dark.
+Telemetry comes from the game, so the LEDs only light for titles PadForge can read: Assetto Corsa and Competizione, the Codemasters F1 23, F1 24, DiRT, and GRID games, Forza, iRacing, Automobilista 1 and 2, Project CARS 2 and 3, rFactor 1 and 2, Le Mans Ultimate, RaceRoom, the SCS trucks (Euro Truck Simulator 2, American Truck Simulator), BeamNG.drive, and Live for Speed. Other games leave the LEDs dark.
 
 ---
 
@@ -96,7 +96,7 @@ Moza wheelbases (R3, R5, R9, R12, R16/R21, both generations) speak the standard 
 
 ### Centering and Constant Force pick one seat on the generic path
 
-On a wheel driven through the generic path, both are idle behaviors: each applies its force only while the game is not sending force feedback of its own. A generic wheel has one force-feedback effect slot, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. Game force outranks both and hands the slot back the moment it goes quiet. Logitech, Fanatec, and Thrustmaster wheels keep centering as a separate firmware or software spring, so Constant Force and auto centering can run together there. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.
+On a wheel driven through the generic path, both are idle behaviors: each applies its force only while the game is not sending force feedback of its own. PadForge drives a generic wheel through a single haptic effect, so whichever you enable owns it, and enabling Constant Force means the centering spring will not also run. A game's force-feedback effects outrank both and hand the effect back the moment they stop. Game rumble displaces Constant Force but not the centering spring, which takes precedence over rumble on a generic wheel. Logitech, Fanatec, and Thrustmaster wheels keep centering as a separate firmware or software spring, so Constant Force and auto centering can run together there. If you want the wheel to pull toward center in games without force feedback, Auto Centering is the tool. If you want a fixed lean, Constant Force is.
 
 ---
 
@@ -142,4 +142,4 @@ A supported wheel plugged into another PC and shared over [Remote Link](../guide
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

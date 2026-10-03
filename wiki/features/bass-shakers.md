@@ -7,9 +7,9 @@ shakers and subwoofers.*
 <!-- SCREENSHOT: pad-bass-shakers -->
 ![The Bass Shakers tab with the Rumble to Audio card and its four voices](../images/pad-bass-shakers.png)
 
-The tab is per slot. It works with Xbox, DualShock 4 / DualSense, and
-Nintendo Switch Pro virtual controllers, plus Extended virtual controllers
-with force feedback, such as racing wheels. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
+The tab is per slot. It works with Xbox, DualShock 3, DualShock 4, DualSense,
+and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers
+with force feedback, such as racing wheels, and the Steam Deck Controller (Composite) profile. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
 ---
 
@@ -19,7 +19,7 @@ with force feedback, such as racing wheels. Game feedback and Test Rumble play t
 | --- | --- |
 | **Route Rumble to an Audio Output** | Plays the game rumble and force feedback this virtual controller receives as low-frequency tones on the selected audio output. Turning it off keeps every setting. |
 | **Output Device** | The playback device that receives the rumble tones. System Default follows the Windows default playback device. If the selected device disappears, audio stays off until it returns. |
-| **Channel Mode** | **Mono (All Channels)** plays every voice on all speaker channels. **Controller Stereo** splits them like the controller: low motor and left trigger on the left channel, high motor and right trigger on the right. |
+| **Channel Mode** | **Mono (All Channels)** plays every voice on both channels of the stereo stream. **Controller Stereo** splits them like the controller: low motor and left trigger on the left channel, high motor and right trigger on the right. |
 | **Master Gain** | Overall loudness applied after each voice's own gain. Keep headroom so the four voices do not clip when they play together. |
 
 A status line under the Output Device picker reads "Audio output is not running." while
@@ -39,7 +39,7 @@ Four feedback channels each get their own row: **Low Motor**,
 | Enable | Plays this feedback channel as a tone. Gain and frequency stay set while it is off. |
 | Frequency | Tone frequency for this channel, 20–120 Hz. |
 | Gain | Loudness of this channel before master gain. |
-| Level meter | Live bar showing what this channel is playing right now. |
+| Level meter | Live bar showing the game feedback this channel receives, before its gain and Master Gain. **Test** and **Frequency Sweep** do not move it. |
 | **Test** | Plays this channel's tone for 1.5 seconds at its set gain. |
 
 Default frequencies: 40 Hz low motor, 80 Hz high motor, 60 Hz on both
@@ -77,4 +77,4 @@ toggle as you set it, since the enable row has its own reset.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

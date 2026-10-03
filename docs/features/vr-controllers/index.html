@@ -3606,19 +3606,19 @@
 <h1 id="virtual-vr-controllers">Virtual VR Controllers<a class="headerlink" href="#virtual-vr-controllers" title="Permanent link">&para;</a></h1>
 <p><em>One slot drives a full SteamVR left and right hand pair. Any controller, keyboard, or motion source can move them, and their haptics come back to the device you are actually holding.</em></p>
 <p><img alt="The VR slot preview showing both hand controllers, their sticks, triggers and grips" src="../../images/pad-vr-preview.png" /></p>
-<p>PadForge can present a pair of VR motion controllers to SteamVR. Add a <strong>VR</strong> slot and SteamVR sees a left hand and a right hand, exactly as it would with real hardware. What moves those hands is up to you: a gamepad, a flight stick, a keyboard, a phone over Wi-Fi, or any other source PadForge can read.</p>
+<p>PadForge can present a pair of VR motion controllers to SteamVR. Add a <strong>VR</strong> slot, assign a device to it, and SteamVR sees a left hand and a right hand. What moves those hands is up to you: a gamepad, a flight stick, a keyboard, a phone over Wi-Fi, or any other source PadForge can read.</p>
 <p>One slot serves <strong>both</strong> hands. There is no separate left slot and right slot to keep in sync.</p>
-<p>This page is the direction where PadForge <em>presents</em> hands to SteamVR. For the opposite direction, reading a real headset and its controllers <em>into</em> PadForge as mappable devices, see <a href="../vr-controller-input/">VR Controller Input</a>. That path uses OpenXR and does not need SteamVR.</p>
+<p>This page is the direction where PadForge <em>presents</em> hands to SteamVR. For the opposite direction, reading a real headset and its controllers <em>into</em> PadForge as mappable devices, see <a href="../vr-controller-input/">VR Controller Input</a>. That path uses OpenXR and does not need SteamVR. PadForge also reads the headset and controllers through a background OpenVR client whenever SteamVR is running with a headset attached.</p>
 <hr />
 <h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
 <p>VR slots require <strong>SteamVR</strong>. The Add Controller popup disables the VR tile without it and the tooltip reads <em>VR (requires SteamVR)</em>.</p>
 <p>You do not need a Steam account, the Steam client, or a headset plugged in to install the runtime. PadForge can fetch it for you: open <strong>Settings</strong>, find the <strong>SteamVR</strong> card, and use <strong>Install</strong>. The card describes itself as <em>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</em></p>
 <p>Two details worth knowing before you start it:</p>
 <ul>
-<li><strong>Choose where it goes.</strong> The card has an install-location field with a <strong>Browse</strong> button. It defaults to <code>C:\SteamVR</code> and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.</li>
+<li><strong>Choose where it goes.</strong> The card has an <strong>Install Location</strong> field with a <strong>Browse...</strong> button, shown until SteamVR is installed. It defaults to <code>C:\SteamVR</code> and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.</li>
 <li><strong>It is several gigabytes.</strong> The download runs for a few minutes on a fast connection and considerably longer on a slow one.</li>
 </ul>
-<p>An existing SteamVR is found automatically when it came from Steam, or when it sits at <code>C:\SteamVR</code>, and the card then reports it as installed. A hand-placed install somewhere else is not discovered, so point the install location at it or let PadForge fetch its own copy.</p>
+<p>An existing SteamVR is found automatically when it came from Steam, or when it sits at <code>C:\SteamVR</code>, and the card then reports it as installed. A hand-placed install somewhere else is not discovered. Point the install location at it and click <strong>Install</strong> to register it, or let PadForge fetch its own copy. A registered folder counts as PadForge's own, so the card's <strong>Uninstall</strong> deletes it.</p>
 <hr />
 <h2 id="creating-a-vr-slot">Creating a VR slot<a class="headerlink" href="#creating-a-vr-slot" title="Permanent link">&para;</a></h2>
 <p><img alt="The VR slot's config bar" src="../../images/pad-vr-configbar.png" /></p>
@@ -3692,7 +3692,7 @@
 <p>Triggers and grips are genuinely analog. In the preview they fill from the bottom like a gauge rather than switching on and off, which is the quickest way to see whether a source is giving you a real analog value or just a button.</p>
 <hr />
 <h2 id="haptics">Haptics<a class="headerlink" href="#haptics" title="Permanent link">&para;</a></h2>
-<p>When a VR game buzzes a hand, that pulse does not stop at the virtual controller. PadForge fans it back out to whatever physical device is driving the slot, riding the same lane ordinary game rumble uses. A DualSense driving the right hand rumbles when the right hand is buzzed.</p>
+<p>When a VR game buzzes a hand, that pulse does not stop at the virtual controller. PadForge fans it back out to whatever physical device is driving the slot, riding the same lane ordinary game rumble uses. Every device assigned to the slot feels it: a left-hand pulse drives the left motor and a right-hand pulse the right motor, whichever hand that device's mappings move.</p>
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>PadForge does not fabricate positional tracking. The driver anchors both hands about half a meter ahead of the headset, one to each side, so they follow wherever you look rather than being tracked in the room. What this feature gives you is the <strong>controls</strong>: buttons, sticks, triggers and grips that SteamVR reads as a genuine controller pair.</p>
@@ -3715,7 +3715,7 @@
 <li><a href="../../reference/vr-controllers-internals/">Virtual VR Controllers: Internals</a> for the state struct, the bit layout and the haptic return path</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

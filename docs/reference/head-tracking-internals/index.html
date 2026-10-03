@@ -3824,7 +3824,7 @@
 </tr>
 </tbody>
 </table>
-<p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page draws neither the Input Hiding nor the Input Mode section. <code>CreateDefaultPadSetting</code> auto-maps only gamepad capability types, so the row starts unmapped by design.</p>
+<p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page draws neither the Input Hiding nor the Input Mode section. <code>CreateDefaultPadSetting</code> auto-maps only gamepads, Bliss-Box ports with a placed controller, and touchpads or tablets on a PlayStation output, so the row starts unmapped by design.</p>
 <hr />
 <h2 id="lifecycle-phase-1i">Lifecycle: Phase 1i<a class="headerlink" href="#lifecycle-phase-1i" title="Permanent link">&para;</a></h2>
 <p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after five volatile field reads and takes no lock. Otherwise it retires the runtime row when every input is off, the user removed it or either VR controller row from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in <a href="../openxr-input-internals/">OpenXR Input Internals</a>. Stored assignments and mappings survive retirement.</p>
@@ -3924,7 +3924,7 @@
 </tr>
 <tr>
 <td>Long datagram</td>
-<td>First 48 bytes read, the rest ignored, as OpenTrack's own UDP tracker does</td>
+<td>Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with <code>MessageSize</code> and is dropped.</td>
 </tr>
 <tr>
 <td>NaN or infinity in any field</td>
@@ -4000,7 +4000,7 @@
 </tr>
 </tbody>
 </table>
-<p>Non-finite floats reject the read. The heap is polled from <code>GetCurrentState</code>, on the poll thread, and only a <code>DataID</code> change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. The heap is never copied without the mutex. A mutex the reader could not open means it copies nothing, which is what the reference client's <code>FTGetData</code> does: its copy sits inside the wait test. A torn pose is worse than a stale one, and the silence timeout already reports a writer that stops. The wait itself is zero rather than the reference's 16 ms, because the read happens inline on the input polling thread. Sixteen milliseconds is a game frame's budget, not a poll tick's, and waiting on another process's writer stalled the whole poll loop. A contested tick reports no new pose and the last one stands. A mapping that fails to open sets <code>FreeTrackFailed</code>.</p>
+<p>Non-finite floats reject the read. The heap is polled from <code>GetCurrentState</code>, on the poll thread, and only a <code>DataID</code> change is a pose. The first read is a baseline: the heap keeps the last pose of a previous run, and a stale mapping must not move the axes. The heap is never copied without the mutex. A mutex the reader could not open means it copies nothing, which is what the reference client's <code>FTGetData</code> does: its copy sits inside the wait test. A torn pose is worse than a stale one, and the silence timeout already reports a writer that stops. OpenTrack's own writer never takes <code>FT_Mutext</code>. It stores each field with an interlocked write (<code>proto-ft/ftnoir_protocol_ft.cpp</code>), so the mutex orders this read only against other clients that take it, such as a game's <code>FTGetData</code>, and cannot stop a torn pose from OpenTrack. The wait itself is zero rather than the reference's 16 ms, because the read happens inline on the input polling thread. Sixteen milliseconds is a game frame's budget, not a poll tick's, and waiting on another process's hold of the mutex stalled the whole poll loop. A contested tick reports no new pose and the last one stands. A mapping that fails to open sets <code>FreeTrackFailed</code>.</p>
 <p>UDP and FreeTrack carry the same pose from the same tracker, so interleaving those two is harmless.</p>
 <hr />
 <h2 id="scaling-into-axes">Scaling into axes<a class="headerlink" href="#scaling-into-axes" title="Permanent link">&para;</a></h2>
@@ -4055,7 +4055,7 @@
 <p>Each axis's range comes from <code>HeadTrackingRuntime.GetAxisRange</code> on every poll: the axis's own pinned range when one is set, the shared rotation or translation range otherwise. A range edit applies without reopening the row.</p>
 <hr />
 <h2 id="silence">Silence<a class="headerlink" href="#silence" title="Permanent link">&para;</a></h2>
-<p><code>SilenceMs</code> = 1000. <code>GetCurrentState</code> compares the last pose's tick against now. Older than that, or no pose ever, and the axes read center and <code>Source</code> drops to <code>None</code> with a <code>StatusVersion</code> bump. The row stays attached, so mappings can be made before the tracker starts. A tracker that stops (OpenTrack closed, the camera lost the face) therefore recenters the stick within a second.</p>
+<p><code>SilenceMs</code> = 1000. <code>GetCurrentState</code> compares the last pose's tick against now. Older than that, or no pose ever, and the axes read center and <code>Source</code> drops to <code>None</code> with a <code>StatusVersion</code> bump. The row stays attached, so mappings can be made before the tracker starts. A tracker that stops (OpenTrack closed, the camera lost the face) therefore recenters the stick one second after its last pose.</p>
 <hr />
 <h2 id="the-status-line">The status line<a class="headerlink" href="#the-status-line" title="Permanent link">&para;</a></h2>
 <p><code>InputService.BuildHeadTrackerStatus</code> turns the device into text, verbatim from <code>Strings.resx</code>:</p>
@@ -4149,10 +4149,10 @@
 </table>
 <hr />
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
-<p><code>HeadTrackerTests</code> pins the UDP layout and order, the NaN and infinity drop, the short and long datagram rules, the FreeTrack offsets and sign inversions, <code>ToAxis</code> at rest, the ends, the clamp, and a bad range, the stick-orientation vertical axes, a UDP pose landing on the axes with its peer named, the one-second silence recenter, the FreeTrack baseline-then-DataID rule, an online row at rest before any pose, six named axes at indices 0 to 5, and the type ordinal pinned past <code>SystemMotion</code>.</p>
+<p>The tests in <code>HeadTrackerTests.cs</code> pin the UDP layout and order, the NaN and infinity drop, the short and long datagram rules, the FreeTrack offsets and sign inversions, <code>ToAxis</code> at rest, the ends, the clamp, and a bad range, the stick-orientation vertical axes, a UDP pose landing on the axes with its peer named, the one-second silence recenter, the FreeTrack baseline-then-DataID rule, an online row at rest before any pose, six named axes at indices 0 to 5, and the type ordinal pinned past <code>SystemMotion</code>.</p>
 <hr />
 <h2 id="evidence-status">Evidence status<a class="headerlink" href="#evidence-status" title="Permanent link">&para;</a></h2>
-<p>Confirmed by reading and by the replay tests: the datagram layout, the heap offsets, the sign inversions of OpenTrack's FreeTrack writer, and the scaling. Not yet run against a live OpenTrack. Roll and the three translations pass through with the sign the tracker sends, and whether that matches a user's expectation on real hardware is unconfirmed. Sharing of the <code>FT_SharedMem</code> mapping between an elevated PadForge and a medium-integrity OpenTrack is reasoned from the reference client, not tested.</p>
+<p>Confirmed by reading and by the replay tests: the datagram layout, the heap offsets, the sign inversions of OpenTrack's FreeTrack writer, and the scaling. Not yet run against a live OpenTrack. Roll, X and Z pass through with the sign the tracker sends, and Y is flipped into stick orientation on the assumption that the tracker's positive Y is up. Whether those signs match a user's expectation on real hardware is unconfirmed. Sharing of the <code>FT_SharedMem</code> mapping between an elevated PadForge and a medium-integrity OpenTrack is reasoned from the reference client, not tested.</p>
 <hr />
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4161,7 +4161,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a> for where Phase 1i sits</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

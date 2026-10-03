@@ -51,7 +51,7 @@ The line is empty while the feature is off.
 
 Every one of the 102 is listed even on a keyboard with six G-keys, because the SDK has no way to report how many a given device has. Finding the right entry is what the **Record** button is for: press it, press the key, and it binds.
 
-While the SDK is not running, the row retires and rebuilds every five seconds to retry it, so it can blink out of the Devices list between attempts.
+While the SDK is not running, PadForge retires the row and opens a fresh one every five seconds to retry it. Both happen in the same pass, so the row stays in the Devices list.
 
 The layout is fixed rather than derived from the attached hardware, so a saved mapping keeps pointing at the same key when you plug in a different Logitech keyboard.
 
@@ -77,9 +77,9 @@ G HUB is not Logitech Gaming Software. The G-key SDK ships with Logitech Gaming 
 
 - [Settings](settings.md): the Input Engine card.
 - [Devices](devices.md): the Logitech G-Keys row.
-- [Lightbar Mirrors](lightbar-mirrors.md): the other Logitech integration, LIGHTSYNC lighting.
+- [Lightbar Mirrors](lightbar-mirrors.md): LIGHTSYNC lighting, the other Logitech SDK PadForge loads.
 - [Logitech G-Keys Internals](../reference/logitech-g-keys-internals.md): the event word, the library search, and the lifecycle, for whoever has to change the code.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

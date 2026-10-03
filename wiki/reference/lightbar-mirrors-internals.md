@@ -20,7 +20,7 @@ The user-facing page is [Lightbar Mirrors and Sensa Haptics](../features/lightba
 
 ## The feed
 
-No parser lives in the mirrors. Every Sony HIDMaestro profile declares a `lightbar` rgb24 field in its output report, and the codec decodes it with the per-transport offsets the profile carries. The `OutputDecoded` handler in `HMaestroVirtualController` reads that field and a family validity bit:
+No parser lives in the mirrors. Every DualShock 4 and DualSense HIDMaestro profile declares a `lightbar` rgb24 field in its output report, and the codec decodes it with the per-transport offsets the profile carries. The DualShock 3 profiles declare none, so a DualShock 3 slot feeds neither mirror. The `OutputDecoded` handler in `HMaestroVirtualController` reads that field and a family validity bit:
 
 | Preset | Discriminator | Valid when |
 |---|---|---|
@@ -33,7 +33,7 @@ A valid write calls `ChromaLightbarService.Publish(r, g, b)` and `LightsyncLight
 
 ## Ownership and persistence
 
-`InputService.StartChromaIfEnabled` and `StartLightsyncIfEnabled` run at engine start beside `StartExternalControlIfEnabled`, and again from the Dashboard `PropertyChanged` handler when the toggle flips. Each returns without starting when the toggle is off or `_inputManager` is null, and returns when a service is already live. The matching `Stop*Service` calls run at engine stop and on toggle-off. Each start writes a `CHROMA start?` or `LIGHTSYNC start?` diag line naming the toggle, engine, and live-instance state.
+`InputService.StartChromaIfEnabled` and `StartLightsyncIfEnabled` run at engine start beside `StartExternalControlIfEnabled`, and again from the Dashboard `PropertyChanged` handler when the toggle flips. `StartLightsyncIfEnabled` returns without starting when its toggle is off or `_inputManager` is null, and returns when a service is already live. `StartChromaIfEnabled` also starts once a Set Chroma Color macro action has run (`ChromaLightbarService.MacroColorRequested`), even with the toggle off, and on a live service it only updates `MirrorEnabled`. `EnsureChromaForMacros` calls it from the first such action. The matching `Stop*Service` calls run at engine stop and on toggle-off, except that turning the Chroma toggle off while macro colors are in use sets `MirrorEnabled` to false and keeps the service running. Each start writes a `CHROMA start?` or `LIGHTSYNC start?` diag line naming the toggle, engine, and live-instance state, and the Chroma line also names the macro state.
 
 The service raises `StateChanged` on its worker. The owner marshals through `_dispatcher.BeginInvoke` and maps the enum onto the resx strings:
 
@@ -45,6 +45,8 @@ The service raises `StateChanged` on its worker. The owner marshals through `_di
 | `LightsyncServiceState.Connected` | `Dashboard_LightsyncConnected` |
 | `LightsyncServiceState.WaitingForGHub` | `Dashboard_LightsyncWaiting` |
 | `LightsyncServiceState.Stopped` | `Common_Stopped` |
+
+While the Chroma toggle is off and the service runs only for macro colors, the owner shows `Common_Stopped` for every Chroma state.
 
 Persistence has three legs per toggle:
 
@@ -94,7 +96,7 @@ The REST server answers HTTP 200 with a `result` integer even when it rejects an
 | `1167` (`ResultDeviceNotConnected`) | Accepted. No device sits behind that category. A mirror addressing all six categories counts it as fine. |
 | Any other value, an unparsable body, or a non-success status | Rejected |
 
-A rejection in one category does not stop the remaining categories. `SendStaticAsync` returns true only when every category accepted, and only then does the loop advance `lastSent`. A rejected color is retried on the next poll instead of being held until the game writes a new one. The first rejection of a push is logged once per distinct `category result=code` pair (`_lastRejectLogged`), cleared when a push is accepted in full.
+A rejection in one category does not stop the remaining categories. `SendStaticAsync` returns true only when every category accepted, and only then does the loop advance `lastSent`. A rejected color is retried on the next poll instead of being held until the game writes a new one. The first rejection of a push (`category result=code`, `category result=unparsable`, or `category http=status`) is logged when it differs from the last one logged (`_lastRejectLogged`), so a category that keeps failing the same way costs one line. The record clears when a push is accepted in full.
 
 ### Timing and retry
 
@@ -111,10 +113,10 @@ A rejection in one category does not stop the remaining categories. `SendStaticA
 
 | Line | When |
 |---|---|
-| `CHROMA start? enabled=... engine=... live=...` | Every start attempt |
+| `CHROMA start? enabled=... macros=... engine=... live=...` | Every start attempt |
 | `CHROMA state=...` | Every state transition from a live worker |
 | `CHROMA superseded worker dropped state=...` | A report an orphan would have made |
-| `CHROMA effect rejected: {category ...}, retrying on the next poll` | First rejection per distinct category and code |
+| `CHROMA effect rejected: {category ...}, retrying on the next poll` | A push's first rejection, when it differs from the last one logged |
 
 ---
 
@@ -122,7 +124,7 @@ A rejection in one category does not stop the remaining categories. `SendStaticA
 
 ### The shim
 
-The official SDK ships games `LogitechLedEnginesWrapper.dll`. Its entire loader, proven by PE import and string-table inspection of the committed binaries in the cloned references, is: read the default value of `HKLM\SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary`, `LoadLibraryW` the LED engine G HUB or LGS registered there, and `GetProcAddress` the undecorated cdecl `LogiLed*` names. `LogiLedEngineNative` does the same from managed code, so PadForge redistributes nothing of Logitech's. The lighting functions are the family the shim resolves by identical name with no translation.
+The official SDK ships games `LogitechLedEnginesWrapper.dll`. Its loader, proven by PE import and string-table inspection of the committed binaries in the cloned references, reads the default value of `HKLM\SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary`, calls `LoadLibraryW` on the LED engine G HUB or LGS registered there, and resolves the undecorated cdecl `LogiLed*` names with `GetProcAddress`. The newer 31-export wrapper also imports `GetFileVersionInfoSizeW`, `GetFileVersionInfoW`, and `VerQueryValueW`, so it reads the engine's version information as well. The older 13-export wrapper does not. `LogiLedEngineNative` does the same from managed code, so PadForge redistributes nothing of Logitech's. The lighting functions are the family the shim resolves by identical name with no translation.
 
 Two cautions for anyone re-verifying: the registry path is the wrapper's only embedded wide string, so a byte-level grep for the ASCII form false-negatives. And the key is read from HKLM's 64-bit view, the same view Aurora and Artemis read.
 
@@ -148,7 +150,7 @@ Two cautions for anyone re-verifying: the registry path is the wrapper's only em
 | `LogiLedSaveCurrentLighting` | no | `byte ()` | Absent counts as success. |
 | `LogiLedRestoreLighting` | no | `byte ()` | Absent is skipped. |
 
-Every delegate is `[UnmanagedFunctionPointer(CallingConvention.Cdecl)]`. The official header's manglings carry `YA` in both bitnesses, so cdecl on x64 and x86 alike. Returns are one-byte C++ `bool`, marshaled as `byte` and compared `!= 0`. Both C# reference wrappers declare a four-byte `BOOL` there and carry that width mismatch silently. `Unload` nulls every delegate before `FreeLibrary`, so a stray call lands on a null check instead of a freed code page.
+Every delegate is `[UnmanagedFunctionPointer(CallingConvention.Cdecl)]`. The official header's manglings carry `YA` in both bitnesses, so cdecl on x64 and x86 alike. Returns are one-byte C++ `bool`, marshaled as `byte` and compared `!= 0`. Aurora (`[return: MarshalAs(UnmanagedType.Bool)]`) and sidewinder94/Logitech-LED (a plain `bool` import) declare a four-byte `BOOL` there and carry that width mismatch silently. `Unload` nulls every delegate before `FreeLibrary`, so a stray call lands on a null check instead of a freed code page.
 
 ### Percent scaling
 
@@ -204,7 +206,7 @@ Two static fields make that safe. `s_generation` increments on every `Start`, an
 | Contract | Chroma | LIGHTSYNC |
 |---|---|---|
 | Worker | `Task.Run(LoopAsync)` | `Task.Run(LoopAsync)` |
-| Publisher | The HM `OutputDecoded` callback, one volatile write | Same callback, one volatile write |
+| Publisher | The HM `OutputDecoded` callback, one volatile write, plus Set Chroma Color actions through `AssertMacroColor`, whose color takes priority over the mirror's | The HM `OutputDecoded` callback, one volatile write |
 | Native or network calls | All on the worker, through one `HttpClient` | All on the worker. Every reference serializes SDK calls, and the Rust binding wraps the whole API in a process mutex. |
 | `StateChanged` | Raised on the worker, gated by `Superseded`. The owner marshals. | Same. |
 | `Stop` | Cancel, wait 3000 ms, orphan on expiry | Cancel, wait `stopWaitMs`, orphan on expiry |
@@ -220,10 +222,10 @@ Neither service was run against Razer or Logitech software by the maintainer. Th
 
 | Test file | What it drives |
 |---|---|
-| `ChromaLightbarTests.cs` | An in-process `HttpListener` fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, the teardown DELETE, and an orphaned worker's dropped reports. `FeedAndSiblingContracts` counts the persistence legs against the web-controller sibling. |
+| `ChromaLightbarTests.cs` | An in-process `HttpListener` fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, the teardown DELETE, and an orphaned worker's dropped reports. `FeedAndSiblingContracts` pins the feed in source (the `lightbar` field, both validity bits, the `Publish` call) and checks each persistence leg, the autosave allowlist entry, and the Dashboard bindings by source text. |
 | `LightsyncLightbarTests.cs` | A scripted `ILogiLedNative` fake. Pins init order, percent conversion, change-only plus liveness sends, no-software retry without an engine load, refused-init unload, fail-streak re-init and recovery, both orphan teardown sites, and the orphan-wait deadline. |
 | `ProfileServiceToggleTests.cs` | The nullable profile legs for all four service toggles, and `LightbarMirrors_OneSection_OneGlyph_TwoRows` for the Dashboard shape. |
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

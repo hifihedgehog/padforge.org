@@ -9,7 +9,7 @@
 
 ## When the tab shows
 
-The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (Wireless Adapter and Bluetooth). Any other pad that reports trigger-rumble capability surfaces the tab too. Pick any of those in the Pad page's source picker and the tab appears.
+The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S wired, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (wired, Wireless Adapter, and Bluetooth). Any other pad that reports trigger-rumble capability surfaces the tab too. Pick any of those in the Pad page's source picker and the tab appears.
 
 DualSense and DualSense Edge do not surface this tab. Their trigger motors are written through DualSense's own effects channel, the **Vibration** mode on the [Adaptive Triggers](adaptive-triggers.md) tab, not Microsoft's impulse-trigger protocol. The same Xbox impulse data that a game sends gets routed there automatically, so a DualSense playing Forza still buzzes both triggers.
 
@@ -118,7 +118,7 @@ Every slider has its own reset button. Each card has a Reset All button.
 | No trigger rumble at all | Check the assigned device is an Xbox One / Elite / Series pad or a DualSense. Xbox 360 and most third-party pads have no trigger motors. |
 | Trigger pulses feel reversed | Turn on **Swap Left and Right Trigger Motors**. |
 | Audio-driven trigger rumble silent | Confirm audio plays through your default output device. Check the Level meter. Raise sensitivity if it barely moves. |
-| Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox One, Elite, or Series type, not a Virtual Xbox 360, and that the game actually writes impulse trigger data (the Trigger Motor Activity bars move, or the DualSense's Adaptive Triggers tab shows Vibration taking over). An Xbox One+ pad in the same slot is not required. |
+| Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox One, Elite, or Series type, not a Virtual Xbox 360, and that the game actually writes impulse trigger data. An Xbox One+ pad in the same slot is not required. When one is there, its Trigger Motor Activity bars show whether the data arrives. |
 | Trigger rumble too aggressive on audio | Lower the per-trigger scale or drop the bass cutoff. |
 
 ---
@@ -133,4 +133,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

@@ -40,17 +40,17 @@ Cursor and scroll speed on a [Keyboard + Mouse](controller-slots.md) slot does n
 
 A profile can carry its own rate. The New Profile and Edit Profile dialogs have a **Polling Rate** dropdown with six entries: **Default (Global Setting)**, 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms), and 62.5 Hz (16 ms). Pick anything but Default and that rate applies whenever the profile is active. See [Profiles](../guides/profiles.md).
 
-The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override under the slider: Overridden while profile “Name” is active: 4 ms. Deactivate the profile and the global value returns.
+The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override under the Polling Interval box: Overridden while profile “Name” is active: 4 ms. Deactivate the profile and the global value returns.
 
 ---
 
 ## Stick resolution
 
-A stick sends a value between two extremes. PadForge treats that value as a 16-bit number, which means 65,536 possible positions from one edge to the other. That resolution is held through the whole read, so nothing is thrown away before the game sees it.
+A stick sends a value between two extremes. PadForge treats that value as a 16-bit number, which means 65,536 possible positions from one edge to the other. That resolution is held through the whole read, and the default processing moves a value by at most one step.
 
 Most consumer sticks report far less real detail than that. Typical thumbstick hardware produces 10 to 12 usable bits, so 16-bit output preserves every step the stick can actually make.
 
-At default settings the value that reaches the game is within one step of what the stick sent. That gap sits well below the noise a physical stick produces on its own, so in practice the output is bit-for-bit the raw reading. It matters most for flight sticks and HOTAS, where a tiny deflection drives a long-throw control surface, and for racing wheels, where smooth sub-degree steering reaches the sim without visible stepping.
+At default settings the value that reaches the game is within one step of what the stick sent, a gap well below the noise a physical stick produces on its own. That precision matters most for flight sticks and HOTAS, where a tiny deflection drives a long-throw control surface, and for racing wheels, where smooth sub-degree steering reaches the sim without visible stepping. Only the Axial shape passes the reading through bit-for-bit.
 
 You can set any deadzone or range value by raw digit (0 to 32768) on the Sticks tab for hardware-level precision. See [Stick Deadzones](stick-deadzones.md).
 
@@ -82,9 +82,11 @@ The default profile is Xbox Series X|S Controller (Bluetooth), which declares 10
 | Range | 65,536 positions | 1,024 positions | 65,536 positions |
 | Effective bits | 16 | 10 | 16 |
 
+These are the depths the descriptors declare, which Windows.Gaming.Input, DirectInput, and raw HID readers see. XInput carries each trigger as one byte, so an XInput game gets 256 trigger positions on every Xbox profile.
+
 ### PlayStation slots
 
-A PlayStation slot emits the DualShock 3, DualShock 4, or DualSense format, depending on the profile you pick. All three formats set sticks at 8-bit (256 steps), and DualShock 4 and DualSense set triggers at 8-bit as well. The DualShock 3 layout declares no analog trigger axes, so L2 and R2 ride its report as buttons.
+A PlayStation slot emits the DualShock 3, DualShock 4, or DualSense format, depending on the profile you pick. All three formats set sticks at 8-bit (256 steps), and DualShock 4, DualSense, and the DualShock 3 (SIXAXIS): Full preset set triggers at 8-bit as well. The plain DualShock 3 (SIXAXIS) preset declares no analog trigger axes, so L2 and R2 ride its report as buttons.
 
 | Property | Sticks | Triggers |
 |----------|--------|----------|
@@ -97,13 +99,13 @@ The 8-bit ceiling is the DualShock and DualSense formats themselves, so no PlayS
 
 A Nintendo slot has two presets: Nintendo Switch Pro Controller and Nintendo Switch 2 Pro Controller. Switch Pro is the default. Each ships that controller's own report descriptor, so stick depth differs between them.
 
-On Switch Pro the report games read declares 16-bit stick axes, more than the 12-bit values a physical Pro Controller packs into its own full-mode reports, so nothing PadForge sends is squeezed. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.
+On Switch Pro the report DirectInput reads declares 16-bit stick axes, but HIDMaestro first packs each axis into the 12-bit value a physical Pro Controller sends, from 0x200 to 0xE00 around a 0x800 center, and scales it back up. Each stick axis carries about 3,073 positions, whether a game reads that report or the Pro Controller's own full-mode report. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.
 
 ZL and ZR are digital buttons on both presets, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
 
 | Preset | Sticks | Triggers |
 |----------|--------|----------|
-| Switch Pro | 65,536 positions (16-bit) | 2 states (pressed or released) |
+| Switch Pro | about 3,073 positions (12-bit packing) | 2 states (pressed or released) |
 | Switch 2 Pro | 4,096 positions (12-bit) | 2 states (pressed or released) |
 
 Switch Pro reports its D-Pad as a POV hat with full 8-way output. See [POV hats](#pov-hats). Switch 2 Pro reports four separate direction buttons instead, which is what the real pad does, so it has no hat.
@@ -130,10 +132,10 @@ The Switch 2 Pro preset has no hat. Its D-Pad is four buttons on the wire.
 
 ## Output throughput
 
-Each virtual controller sends one full state update per read. Every button, axis, and hat travels in a single report, so the cost per frame is fixed. It does not grow with how many axes or buttons the slot has.
+Each virtual controller sends one full state report on every read where something changed. Every button, axis, and hat travels in that single report, so the report count does not grow with how many axes or buttons the slot has.
 
-There is no per-axis or per-button overhead. At 1000 Hz that is one report per controller per millisecond. Adding more slots scales the work in a straight line.
+Xbox, Nintendo, and Extended slots skip a report identical to the last one and resend it every 16 ms as a keepalive, so an idle controller reports about 62 times a second. PlayStation slots and the Steam Controller and Steam Deck Controller (Composite) presets submit on every read, one report per controller per millisecond at 1000 Hz. The Switch Pro preset's driver streams one report every 15 ms, the real pad's cadence. Adding more slots scales the work in a straight line.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

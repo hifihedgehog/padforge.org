@@ -1,6 +1,6 @@
 # Wheel Force Feedback Internals
 
-*How a game's force feedback reaches a real wheel: the HID PID decode chain, the three clean-room vendor writers, the host-sampled and software paths in `ForceFeedbackState`, and the RPM-LED telemetry system.*
+*How a game's force feedback reaches a real wheel: the HID PID decode chain, the three vendor writers, the host-sampled and software paths in `ForceFeedbackState`, and the RPM-LED telemetry system.*
 
 This is the developer-side companion to [Wheel](../features/wheel.md) (the user guide). See [Force Feedback](../features/force-feedback.md) for the rumble and generic-haptic side.
 
@@ -29,7 +29,7 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 
 | File | Role |
 |---|---|
-| `PadForge.App/Common/Input/HMaestroVirtualController.cs` | Forwards HM HID-output and XInput packets into the decoder. |
+| `PadForge.App/Common/Input/HMaestroVirtualController.cs` | Forwards HM HID-output and HID-feature packets into the decoder, and writes XInput motor bytes straight to the slot's `VibrationStates` entry. |
 | `PadForge.App/Common/Input/HMaestroFfbDecoder.cs` | Parses HID PID reports into a `Vibration`. |
 | `PadForge.App/Common/Input/InputManager.Step2.UpdateInputStates.cs` | `ApplyForceFeedback` aggregates per slot and dispatches to a vendor writer. |
 | `PadForge.App/Common/Input/LogitechRawHidWriter.cs` | Logitech native HID. Original C#, wire protocol checked against `new-lg4ff`, read as documentation. |
@@ -47,7 +47,7 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 
 `HMaestroFfbDecoder.OnHidOutput` dispatches per report ID: Set Effect (0x11), Set Condition (0x13, the bit-packed per-axis condition coefficients for spring, damper, inertia, and friction), Set Periodic (0x14), Set Constant (0x15), Set Ramp (0x16), Effect Operation (0x1A, start and stop), Block Free (0x1B), Device Control (0x1C), and Device Gain (0x1D). It also handles the pre-allocation flow where the OS writes parameters before the SetFeature allocates the real effect block. `ParseFfbScales` walks the report descriptor once at construction to normalize hand-authored descriptors (the SideWinder ranges) into canonical units.
 
-`Apply(Vibration vib)` finds the dominant effect, writes its type, signed magnitude, direction, period, and gain, splits the polar direction into left and right motor scalars so rumble-only devices still feel directional force, and copies the spring, damper, inertia, and friction coefficients into the vibration's condition axes.
+`Apply(Vibration vib)` finds the dominant effect (the largest magnitude after its own effect gain), writes that effect's type, signed magnitude, direction, and period along with the device gain, splits the polar direction into left and right motor scalars so rumble-only devices still feel directional force, and copies the spring, damper, inertia, and friction coefficients into the vibration's condition axes.
 
 The `Vibration` carrier lives in `PadForge.Engine/Common/ForceFeedbackState.cs` with scalar motor fields, directional fields (`EffectType`, `SignedMagnitude`, `Direction`, `Period`, `DeviceGain`), and condition fields.
 
@@ -58,9 +58,11 @@ The `Vibration` carrier lives in `PadForge.Engine/Common/ForceFeedbackState.cs` 
 `ApplyForceFeedback(UserDevice ud)` in Step 2 combines every slot the device is mapped to (motors max-combined, the first slot with directional or condition data becomes the directional source) into `_combinedVibration`, then dispatches by device identity:
 
 - Sony pads (DualSense, DualShock 4) return early. They are written by `UserEffectsDispatcher` and `PlayStationEffectWriter`.
+- A Remote Link device (a `peer://` path) ships through `RemoteLinkOutputRouter` instead of writing locally. A vendor wheel ships a semantic wheel frame, and every other device ships the combined `Vibration`.
 - Xbox One and later take the `XboxImpulseHidWriter` path.
 - Padix PSX/USB converters take the `PadixConverterRawHidWriter` path.
-- Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by `IsLogitechWheel` / `IsFanatecWheel` / `IsThrustmasterWheel` / `IsFanatecPedal`) take the vendor-writer block.
+- Bliss-Box adapter ports take the `BlissBoxRuntime.SetRumble` path while **Read Bliss-Box Adapters** is on.
+- Logitech, Fanatec, and Thrustmaster wheels and Fanatec pedals (gated by `IsLogitechWheel` / `IsFanatecWheel` / `IsThrustmasterWheel` / `IsFanatecPedal`) take the vendor-writer block.
 - Everything else falls to `ForceFeedbackState.SetDeviceForces` (the SDL path).
 
 Per-frame force is throttled by a change-detection struct cached in `_appliedWheelFfb`, because re-sending an unchanged force every poll is a blocking HID write that halves the poll rate with a wheel attached.
@@ -97,7 +99,7 @@ All three are `internal static class`, frame a vendor-shaped command padded to t
 
 The old clause was `NumHapticAxes <= 1`. That hid the tab for a wheelbase-plus-pedals composite reporting two haptic axes despite a working spring, which is the Moza shape (#282). Axis count is a shape detail, not an identity, so device type replaced it.
 
-The spring is built as `SDL_HAPTIC_CARTESIAN` with `dir0 = 1`, not `STEERING_AXIS`. SDL encodes `STEERING_AXIS` as a DirectInput Cartesian effect with a **zero** direction vector, and Moza is the vendor Linux had to special-case for exactly that on condition effects (`HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION` discards the caller's direction and forces `0x4000`). Constant and periodic effects keep their real direction and stay on `STEERING_AXIS`.
+The spring is built as `SDL_HAPTIC_CARTESIAN` with `dir0 = 1`, not `STEERING_AXIS`. SDL encodes `STEERING_AXIS` as a DirectInput Cartesian effect with a **zero** direction vector, and Moza is the vendor Linux had to special-case for exactly that on condition effects (`HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION` discards the caller's direction and forces `0x4000`). Constant and periodic effects keep their real direction: `STEERING_AXIS` on a device that reports one haptic axis, `SDL_HAPTIC_POLAR` on one that reports two or more.
 
 ---
 
@@ -144,7 +146,7 @@ Each per-game source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnap
 | `ScsTruckTelemetrySource` | Euro Truck Simulator 2 and American Truck Simulator | shared memory |
 | `MadnessTelemetrySource` | Automobilista 2 and Project CARS 2 and 3 | shared memory |
 | `RFactor1TelemetrySource` | rFactor 1 and Automobilista 1 | shared memory |
-| `CodemastersUdpTelemetrySource` | F1, DiRT, GRID | UDP |
+| `CodemastersUdpTelemetrySource` | F1 23 and F1 24, DiRT, GRID | UDP |
 | `OutGaugeTelemetrySource` | BeamNG and Live for Speed | UDP |
 
 The telemetry readers are original. Where a game's memory layout came from a published SDK or community header, only field offsets and wire facts were used, with no source carried across.
@@ -167,4 +169,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

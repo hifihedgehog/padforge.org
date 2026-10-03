@@ -21,7 +21,7 @@ The device rows are `PadForge.App/Common/Input/HeadTrackerDevice.cs` and `OpenXr
 
 ## No Khronos loader
 
-A runtime DLL exports exactly one entry point, `xrNegotiateLoaderRuntimeInterface`, which hands back `xrGetInstanceProcAddr`. Everything else is a function pointer obtained from that. PadForge performs that handshake itself, about a hundred lines, instead of linking the loader. Two reasons, both structural:
+A runtime DLL must export `xrNegotiateLoaderRuntimeInterface`, which hands back `xrGetInstanceProcAddr`. Everything else is a function pointer obtained from that. PadForge performs that handshake itself, about a hundred lines, instead of linking the loader. Two reasons, both structural:
 
 **Runtime selection.** PadForge runs elevated. The Khronos loader deliberately ignores `XR_RUNTIME_JSON` in a high-integrity process (`OpenXR-SDK`, `src/common/platform_utils.hpp`, `PlatformUtilsGetSecureEnv`). Choosing the manifest ourselves makes the runtime choice per-process by construction, with nothing configured globally and nothing to put back afterward. That is what the **OpenXR Runtime** dropdown sets, and it is why picking one never disturbs the machine's active runtime.
 
@@ -36,7 +36,7 @@ A runtime DLL exports exactly one entry point, `xrNegotiateLoaderRuntimeInterfac
 - The `ActiveRuntime` value is the machine's default manifest path.
 - The `AvailableRuntimes` subkey lists every registered manifest.
 
-Each manifest is a JSON file naming the runtime's library. The catalog parses them and marks the one matching `ActiveRuntime` as the default, which is what *System Default* selects. Nothing here writes: the machine's active runtime belongs to whatever set it.
+Each manifest is a JSON file naming the runtime's library. The catalog parses them and marks the one matching `ActiveRuntime` as the default. *System Default* uses that runtime, or the first other registered runtime whose library is on disk when the default's library is missing. Nothing here writes: the machine's active runtime belongs to whatever set it.
 
 ---
 
@@ -44,7 +44,7 @@ Each manifest is a JSON file naming the runtime's library. The catalog parses th
 
 `OpenXrSession.TryCreate` takes a manifest path and walks the whole setup. Two extensions matter.
 
-**`XR_MND_headless` is required.** It is what lets a session run with no graphics binding and no swapchain, so PadForge can read poses without a window, a compositor surface, or a game being open. A runtime that does not offer it is refused, and the status line says *This runtime cannot supply a background session*. SteamVR's OpenXR runtime carries it, which is why the whole path is testable without a headset.
+**`XR_MND_headless` is required.** It is what lets a session run with no graphics binding and no swapchain, so PadForge can read poses without a window, a compositor surface, or a game being open. A runtime that does not offer it is refused, and the status line says *This runtime cannot supply a background session*. SteamVR's OpenXR runtime carries it, so negotiation, instance creation and the extension check run without a headset. The session itself needs one, and without a headset the runtime refuses it.
 
 **`XR_KHR_win32_convert_performance_counter_time` is requested when present.** `XrTime` is nanoseconds on a clock the runtime picks, not a clock the caller knows. Pose requests carry a timestamp, so PadForge has to express "now" in the runtime's terms. When the extension is there, the conversion is exact. Without it the value is derived from the performance counter, which is an approximation whose error grows with uptime.
 
@@ -58,7 +58,7 @@ Each manifest is a JSON file naming the runtime's library. The catalog parses th
 - `/interaction_profiles/valve/index_controller`
 - `/interaction_profiles/khr/simple_controller`
 
-The runtime picks whichever matches the attached hardware and reports how many profiles it accepted. Suggesting all three rather than detecting hardware is the OpenXR way round: the runtime knows what is attached and the application does not.
+The runtime accepts the suggestions it can serve and binds whichever profile matches the attached hardware. PadForge counts the accepted suggestions and logs the number. Suggesting all three rather than detecting hardware is the OpenXR way round: the runtime knows what is attached and the application does not.
 
 `Read` fills an `OpenXrHandState` per hand: the pose, the thumbstick as a vector2, the trigger and squeeze as floats, and four booleans.
 
@@ -92,7 +92,7 @@ The ranges are applied in the shared state fill, so every source that feeds thes
 
 ## Threading
 
-`OpenXrHeadPoseSource` owns a thread that creates the session, pumps events, and publishes poses. `Stop` joins it. The publish side is a lock around the latest sample. The read side is the poll thread's device sweep.
+`OpenXrHeadPoseSource` owns a thread that creates the session, pumps events, and publishes poses. `Stop` joins it. The publish side is a lock around the latest sample. The read side is each row's `GetCurrentState`, called from the poll thread's input-state step (`InputManager.Step2.UpdateInputStates.cs`).
 
 ---
 
@@ -100,7 +100,7 @@ The ranges are applied in the shared state fill, so every source that feeds thes
 
 Coexistence with VDXR while another OpenXR client is running has not been exercised on real hardware.
 
-Test coverage is uneven and worth stating plainly. The device rows, the head-pose math, the row status text and the runtime picker have ordinary tests that run on every suite. The negotiation and manifest parsing are covered only by `OpenXrRuntimeProbeTests`, which is gated behind `PADFORGE_OPENXR_PROBE=1` and skips on a normal run, because it would otherwise start a runtime on the build machine. The action layer's thumbstick read is asserted by grepping `OpenXrActions.cs` for the assignment, not by exercising it.
+Test coverage is uneven and worth stating plainly. The device rows, the head-pose math, the row status text and the runtime picker have ordinary tests that run on every suite. The negotiation and manifest parsing are covered only by `OpenXrRuntimeProbeTests`, which is gated behind `PADFORGE_OPENXR_PROBE=1`. Without it, each test returns early and reports a pass, because running it would start a runtime on the build machine. The action layer's thumbstick read is asserted by grepping `OpenXrActions.cs` for the assignment, not by exercising it.
 
 ---
 
@@ -113,4 +113,4 @@ Test coverage is uneven and worth stating plainly. The device rows, the head-pos
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

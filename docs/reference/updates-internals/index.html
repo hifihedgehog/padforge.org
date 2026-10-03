@@ -3907,7 +3907,7 @@
 <p>The commit is the one the offer named, a dev build's or a replaced release's, or <code>-</code> when it named none. The original arguments come from <code>App.StartupArgs</code>, without any <code>--updated</code> marker a previous update left.</p>
 <p>The helper has 60 seconds (<code>HelperReadyTimeout</code>) to set Ready. If it does not, exits first, or the operation is canceled, it is killed and waited for up to ten seconds, and unless the operation was canceled, the card says why. A helper that will not stop is reported as <code>HelperFailure.NotStopped</code>. Once Ready is set, <code>UpdateController</code> sets Commit on the UI thread and exits through the app's normal shutdown. The channel switch also runs on that thread, so a change to Include Pre-Releases lands either before the commit, which it then stops, or after it, when PadForge is already on its way out.</p>
 <h3 id="the-helpers-side">The helper's side<a class="headerlink" href="#the-helpers-side" title="Permanent link">&para;</a></h3>
-<p><code>App.OnStartup</code> calls <code>TryRunApplyMode</code> before anything else, because the old copy still holds the single-instance lock while it closes. When the first argument is <code>--apply-update</code>, the process is the helper and never goes on to start PadForge from the staging folder.</p>
+<p><code>App.OnStartup</code> calls <code>TryRunApplyMode</code> before the lease check and the single-instance lock, because the old copy still holds that lock while it closes. When the first argument is <code>--apply-update</code>, the process is the helper and never goes on to start PadForge from the staging folder.</p>
 <ol>
 <li><strong>Right build.</strong> When the offer named a commit, the helper compares it with its own stamped commit, which must be at least as long and start with it. Anything else exits with code 3 (<code>WrongBuildExitCode</code>), and the old copy reports that the download is a different build from the one the update names. This catches a tag moved before its file was replaced, or a dev title published before its zip.</li>
 <li><strong>Lease.</strong> It creates the named mutex <code>Global\PadForge_UpdateLease_&lt;install key&gt;</code> exclusively. Global, so a launch in another session sees it too. A second helper for the same exe finds it taken and stops before it reports ready, and an ordinary launch of that exe (<code>IsUpdateInProgress</code> in <code>OnStartup</code>) leaves quietly while the lease exists.</li>
@@ -4020,7 +4020,7 @@
 <li><a href="../services-layer/">Services Layer</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

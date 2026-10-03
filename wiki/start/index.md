@@ -12,7 +12,8 @@ remapped controller, and none of them need prior knowledge.*
    the slot should look like to games (Xbox, PlayStation, Nintendo,
    Extended, Keyboard + Mouse, MIDI, or VR), then select your device on the
    Devices page and click that slot's pill under **Virtual Controller
-   Assignment**. The default mapping is already playable.
+   Assignment**. If the device is a recognized gamepad, the default
+   mapping is already playable.
 
 Two walkthroughs carry you through both ends of that list:
 
@@ -26,4 +27,4 @@ single task from start to finish.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

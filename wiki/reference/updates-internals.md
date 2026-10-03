@@ -108,7 +108,7 @@ The helper has 60 seconds (`HelperReadyTimeout`) to set Ready. If it does not, e
 
 ### The helper's side
 
-`App.OnStartup` calls `TryRunApplyMode` before anything else, because the old copy still holds the single-instance lock while it closes. When the first argument is `--apply-update`, the process is the helper and never goes on to start PadForge from the staging folder.
+`App.OnStartup` calls `TryRunApplyMode` before the lease check and the single-instance lock, because the old copy still holds that lock while it closes. When the first argument is `--apply-update`, the process is the helper and never goes on to start PadForge from the staging folder.
 
 1. **Right build.** When the offer named a commit, the helper compares it with its own stamped commit, which must be at least as long and start with it. Anything else exits with code 3 (`WrongBuildExitCode`), and the old copy reports that the download is a different build from the one the update names. This catches a tag moved before its file was replaced, or a dev title published before its zip.
 2. **Lease.** It creates the named mutex `Global\PadForge_UpdateLease_<install key>` exclusively. Global, so a launch in another session sees it too. A second helper for the same exe finds it taken and stops before it reports ready, and an ordinary launch of that exe (`IsUpdateInProgress` in `OnStartup`) leaves quietly while the lease exists.
@@ -200,4 +200,4 @@ Tests: `UpdateServiceTests`, `UpdateControllerTests` and `UpdateStatusCultureTes
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

@@ -3920,7 +3920,7 @@
 </table>
 <hr />
 <h2 id="the-feed">The feed<a class="headerlink" href="#the-feed" title="Permanent link">&para;</a></h2>
-<p>No parser lives in the mirrors. Every Sony HIDMaestro profile declares a <code>lightbar</code> rgb24 field in its output report, and the codec decodes it with the per-transport offsets the profile carries. The <code>OutputDecoded</code> handler in <code>HMaestroVirtualController</code> reads that field and a family validity bit:</p>
+<p>No parser lives in the mirrors. Every DualShock 4 and DualSense HIDMaestro profile declares a <code>lightbar</code> rgb24 field in its output report, and the codec decodes it with the per-transport offsets the profile carries. The DualShock 3 profiles declare none, so a DualShock 3 slot feeds neither mirror. The <code>OutputDecoded</code> handler in <code>HMaestroVirtualController</code> reads that field and a family validity bit:</p>
 <table>
 <thead>
 <tr>
@@ -3945,7 +3945,7 @@
 <p>A valid write calls <code>ChromaLightbarService.Publish(r, g, b)</code> and <code>LightsyncLightbarService.Publish(r, g, b)</code> back to back. Each <code>Publish</code> is one <code>Volatile.Write</code> of a packed <code>0x00RRGGBB</code> int into a static field (<code>s_publishedRgb</code>), initialized to <code>-1</code> for "no game write yet". The field is static so the callback needs no service reference and a disabled mirror costs one write per decode. Multiple live Sony slots resolve last-writer-wins. The worker polls the field, so the callback never blocks on I/O.</p>
 <hr />
 <h2 id="ownership-and-persistence">Ownership and persistence<a class="headerlink" href="#ownership-and-persistence" title="Permanent link">&para;</a></h2>
-<p><code>InputService.StartChromaIfEnabled</code> and <code>StartLightsyncIfEnabled</code> run at engine start beside <code>StartExternalControlIfEnabled</code>, and again from the Dashboard <code>PropertyChanged</code> handler when the toggle flips. Each returns without starting when the toggle is off or <code>_inputManager</code> is null, and returns when a service is already live. The matching <code>Stop*Service</code> calls run at engine stop and on toggle-off. Each start writes a <code>CHROMA start?</code> or <code>LIGHTSYNC start?</code> diag line naming the toggle, engine, and live-instance state.</p>
+<p><code>InputService.StartChromaIfEnabled</code> and <code>StartLightsyncIfEnabled</code> run at engine start beside <code>StartExternalControlIfEnabled</code>, and again from the Dashboard <code>PropertyChanged</code> handler when the toggle flips. <code>StartLightsyncIfEnabled</code> returns without starting when its toggle is off or <code>_inputManager</code> is null, and returns when a service is already live. <code>StartChromaIfEnabled</code> also starts once a Set Chroma Color macro action has run (<code>ChromaLightbarService.MacroColorRequested</code>), even with the toggle off, and on a live service it only updates <code>MirrorEnabled</code>. <code>EnsureChromaForMacros</code> calls it from the first such action. The matching <code>Stop*Service</code> calls run at engine stop and on toggle-off, except that turning the Chroma toggle off while macro colors are in use sets <code>MirrorEnabled</code> to false and keeps the service running. Each start writes a <code>CHROMA start?</code> or <code>LIGHTSYNC start?</code> diag line naming the toggle, engine, and live-instance state, and the Chroma line also names the macro state.</p>
 <p>The service raises <code>StateChanged</code> on its worker. The owner marshals through <code>_dispatcher.BeginInvoke</code> and maps the enum onto the resx strings:</p>
 <table>
 <thead>
@@ -3981,6 +3981,7 @@
 </tr>
 </tbody>
 </table>
+<p>While the Chroma toggle is off and the service runs only for macro colors, the owner shows <code>Common_Stopped</code> for every Chroma state.</p>
 <p>Persistence has three legs per toggle:</p>
 <table>
 <thead>
@@ -4080,7 +4081,7 @@
 </tr>
 </tbody>
 </table>
-<p>A rejection in one category does not stop the remaining categories. <code>SendStaticAsync</code> returns true only when every category accepted, and only then does the loop advance <code>lastSent</code>. A rejected color is retried on the next poll instead of being held until the game writes a new one. The first rejection of a push is logged once per distinct <code>category result=code</code> pair (<code>_lastRejectLogged</code>), cleared when a push is accepted in full.</p>
+<p>A rejection in one category does not stop the remaining categories. <code>SendStaticAsync</code> returns true only when every category accepted, and only then does the loop advance <code>lastSent</code>. A rejected color is retried on the next poll instead of being held until the game writes a new one. The first rejection of a push (<code>category result=code</code>, <code>category result=unparsable</code>, or <code>category http=status</code>) is logged when it differs from the last one logged (<code>_lastRejectLogged</code>), so a category that keeps failing the same way costs one line. The record clears when a push is accepted in full.</p>
 <h3 id="timing-and-retry">Timing and retry<a class="headerlink" href="#timing-and-retry" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4124,7 +4125,7 @@
 </thead>
 <tbody>
 <tr>
-<td><code>CHROMA start? enabled=... engine=... live=...</code></td>
+<td><code>CHROMA start? enabled=... macros=... engine=... live=...</code></td>
 <td>Every start attempt</td>
 </tr>
 <tr>
@@ -4137,14 +4138,14 @@
 </tr>
 <tr>
 <td><code>CHROMA effect rejected: {category ...}, retrying on the next poll</code></td>
-<td>First rejection per distinct category and code</td>
+<td>A push's first rejection, when it differs from the last one logged</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="logitech-lightsync">Logitech LIGHTSYNC<a class="headerlink" href="#logitech-lightsync" title="Permanent link">&para;</a></h2>
 <h3 id="the-shim">The shim<a class="headerlink" href="#the-shim" title="Permanent link">&para;</a></h3>
-<p>The official SDK ships games <code>LogitechLedEnginesWrapper.dll</code>. Its entire loader, proven by PE import and string-table inspection of the committed binaries in the cloned references, is: read the default value of <code>HKLM\SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary</code>, <code>LoadLibraryW</code> the LED engine G HUB or LGS registered there, and <code>GetProcAddress</code> the undecorated cdecl <code>LogiLed*</code> names. <code>LogiLedEngineNative</code> does the same from managed code, so PadForge redistributes nothing of Logitech's. The lighting functions are the family the shim resolves by identical name with no translation.</p>
+<p>The official SDK ships games <code>LogitechLedEnginesWrapper.dll</code>. Its loader, proven by PE import and string-table inspection of the committed binaries in the cloned references, reads the default value of <code>HKLM\SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary</code>, calls <code>LoadLibraryW</code> on the LED engine G HUB or LGS registered there, and resolves the undecorated cdecl <code>LogiLed*</code> names with <code>GetProcAddress</code>. The newer 31-export wrapper also imports <code>GetFileVersionInfoSizeW</code>, <code>GetFileVersionInfoW</code>, and <code>VerQueryValueW</code>, so it reads the engine's version information as well. The older 13-export wrapper does not. <code>LogiLedEngineNative</code> does the same from managed code, so PadForge redistributes nothing of Logitech's. The lighting functions are the family the shim resolves by identical name with no translation.</p>
 <p>Two cautions for anyone re-verifying: the registry path is the wrapper's only embedded wide string, so a byte-level grep for the ASCII form false-negatives. And the key is read from HKLM's 64-bit view, the same view Aurora and Artemis read.</p>
 <h3 id="tryload"><code>TryLoad</code><a class="headerlink" href="#tryload" title="Permanent link">&para;</a></h3>
 <table>
@@ -4232,7 +4233,7 @@
 </tr>
 </tbody>
 </table>
-<p>Every delegate is <code>[UnmanagedFunctionPointer(CallingConvention.Cdecl)]</code>. The official header's manglings carry <code>YA</code> in both bitnesses, so cdecl on x64 and x86 alike. Returns are one-byte C++ <code>bool</code>, marshaled as <code>byte</code> and compared <code>!= 0</code>. Both C# reference wrappers declare a four-byte <code>BOOL</code> there and carry that width mismatch silently. <code>Unload</code> nulls every delegate before <code>FreeLibrary</code>, so a stray call lands on a null check instead of a freed code page.</p>
+<p>Every delegate is <code>[UnmanagedFunctionPointer(CallingConvention.Cdecl)]</code>. The official header's manglings carry <code>YA</code> in both bitnesses, so cdecl on x64 and x86 alike. Returns are one-byte C++ <code>bool</code>, marshaled as <code>byte</code> and compared <code>!= 0</code>. Aurora (<code>[return: MarshalAs(UnmanagedType.Bool)]</code>) and sidewinder94/Logitech-LED (a plain <code>bool</code> import) declare a four-byte <code>BOOL</code> there and carry that width mismatch silently. <code>Unload</code> nulls every delegate before <code>FreeLibrary</code>, so a stray call lands on a null check instead of a freed code page.</p>
 <h3 id="percent-scaling">Percent scaling<a class="headerlink" href="#percent-scaling" title="Permanent link">&para;</a></h3>
 <p>The engine takes whole percent. <code>ToPercent</code> rounds, never truncates:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">ToPercent</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span>
@@ -4357,8 +4358,8 @@
 </tr>
 <tr>
 <td>Publisher</td>
+<td>The HM <code>OutputDecoded</code> callback, one volatile write, plus Set Chroma Color actions through <code>AssertMacroColor</code>, whose color takes priority over the mirror's</td>
 <td>The HM <code>OutputDecoded</code> callback, one volatile write</td>
-<td>Same callback, one volatile write</td>
 </tr>
 <tr>
 <td>Native or network calls</td>
@@ -4405,7 +4406,7 @@
 <tbody>
 <tr>
 <td><code>ChromaLightbarTests.cs</code></td>
-<td>An in-process <code>HttpListener</code> fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, the teardown DELETE, and an orphaned worker's dropped reports. <code>FeedAndSiblingContracts</code> counts the persistence legs against the web-controller sibling.</td>
+<td>An in-process <code>HttpListener</code> fake Chroma server. Pins the init body field for field, six category PUTs with exact JSON and BGR integers, change-only sending, heartbeat cadence, refused and slow init on the retry path, a rejected PUT retried on the next poll, the teardown DELETE, and an orphaned worker's dropped reports. <code>FeedAndSiblingContracts</code> pins the feed in source (the <code>lightbar</code> field, both validity bits, the <code>Publish</code> call) and checks each persistence leg, the autosave allowlist entry, and the Dashboard bindings by source text.</td>
 </tr>
 <tr>
 <td><code>LightsyncLightbarTests.cs</code></td>
@@ -4418,7 +4419,7 @@
 </tbody>
 </table>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

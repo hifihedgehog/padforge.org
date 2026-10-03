@@ -122,7 +122,7 @@ Press and release the trigger to watch both stages move together.
 
 ## Setting values
 
-Every slider has 0.1% precision. Each row has two input fields:
+Every slider has 0.1% precision. Each value has a percentage field and a digit field, so the Range row carries one pair for each handle:
 
 | Field | What it accepts |
 |---|---|
@@ -212,7 +212,7 @@ Every trigger gets its own range slider, anti-deadzone, sensitivity curve, and l
 
 ## Stick-assisted analog trigger
 
-Some pads have no analog triggers. This turns a button into a variable trigger you steer with a stick, for feathered throttle and brake. The controls live on the [Button and Axis Mappings](mappings.md) tab, not this one, but the result is an analog trigger.
+Some pads have no analog triggers. This turns a button into a variable trigger you steer with a stick, for feathered throttle and brake. The controls live on the **Mappings** tab (see [Button and Axis Mappings](mappings.md)), not this one, but the result is an analog trigger.
 
 Set it up on a trigger output:
 
@@ -249,4 +249,4 @@ Stick Trim shows only on trigger outputs.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

@@ -67,7 +67,7 @@ Some modes use only the start thumb. Feedback uses start. Vibration uses start. 
 
 ### Strength
 
-A 0 to 255 slider for how hard the effect pushes back, or how strong the buzz is on the vibration modes. Default is 200 (firm but not maxed). Setting strength to 0 gives no effect in any mode, and the preview goes blank.
+A 0 to 255 slider for how hard the effect pushes back, or how strong the buzz is on the vibration modes. Default is 200 (firm but not maxed). Setting strength to 0 blanks the preview. Multiple-Position Feedback, Slope Feedback, and Multiple-Position Vibration then send Off. Feedback, Weapon, and Vibration send their effect with a zero force byte.
 
 ### Frequency (Hz)
 
@@ -109,10 +109,13 @@ bytes at payload offsets 40 through 47 from the physical pad into the
 virtual report, so the game reads the real state of the triggers under
 your finger.
 
-This needs a physical DualSense or DualSense Edge on the slot. The bytes
-come from the bundled SDL fork, which publishes them as a joystick
-property. SDL upstream parses nothing from that range. Without the fork
-build the property is absent and the virtual report is unchanged.
+This needs a physical DualSense or DualSense Edge on the slot and a USB
+DualSense preset on the virtual pad: DualSense (PS5), DualSense Edge
+(PS5), or their Full forms. The Bluetooth DualSense presets do not carry
+the bytes. The bytes come from the bundled SDL fork, which publishes them
+as a joystick property. SDL upstream parses nothing from that range.
+Without the fork build the property is absent and the virtual report is
+unchanged.
 
 ---
 
@@ -135,4 +138,4 @@ build the property is absent and the virtual report is unchanged.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

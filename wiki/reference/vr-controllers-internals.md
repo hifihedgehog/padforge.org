@@ -46,7 +46,7 @@ Everything is a value field on purpose. A struct assign copies the whole thing, 
 | 6 | 64 | Grip click |
 | 7 | 128 | Stick click |
 
-Because the layouts match, `PackHand` casts (`(HMVRButton)hand.Buttons`) instead of translating. **If you add a bit, add it at the same index on both sides or the cast silently misroutes every button above it.**
+Because the layouts match, `PackHand` casts (`(HMVRButton)hand.Buttons`) instead of translating. **All eight bits of the `byte` are taken, so a new button also means widening `VrHandRaw.Buttons` and the `byte` that `EvalVrButtons` builds. Add it at the same index on both sides, or the cast silently misroutes every button above it.**
 
 The mapping-target keys are ordered to match those bits, left hand then right:
 
@@ -97,17 +97,17 @@ Stated plainly because it shapes what the feature is for: this gives games the *
 
 The return path is an event, not a poll. `HMVRController.HapticReceived` fires with `(hand, amplitude, durationSeconds)` and `OnHapticReceived` fans it into the slot's `Vibration` entry, the same lane ordinary game rumble rides, so whatever physical device drives the slot buzzes with no VR-specific plumbing downstream.
 
-Left hand drives `LeftMotorSpeed`, right drives `RightMotorSpeed`. Amplitude clamps to `0..1` and scales to `ushort`. Duration has a floor of `MinPulseMs` (50 ms), because a pulse shorter than one poll would otherwise be set and cleared without ever reaching the device.
+Left hand drives `LeftMotorSpeed`, right drives `RightMotorSpeed`. Amplitude clamps to `0..1` and scales to `ushort`. Duration has a floor of `MinPulseMs` (50 ms), because OpenVR apps send micro-pulses, often 0 to 5 ms long, at high repeat rates, and a pulse that short would expire before the rumble path forwarded it.
 
-Overlapping pulses on one hand keep the **later** end tick rather than restarting the timer, so a rapid burst holds the motor for the union of its pulses instead of chopping.
+Overlapping pulses on one hand keep the **later** end tick, so a shorter pulse cannot cut a longer one short, and a rapid burst holds the motor for the union of its pulses instead of chopping. Each pulse re-arms the one-shot timer for the earliest pending deadline.
 
 ### The lock is load-bearing
 
-`OnHapticReceived` re-checks `_connected` **inside** `_hapticLock`, and the comment there is worth preserving:
+`OnHapticReceived` checks `_connected` only **inside** `_hapticLock`, and the comment there is worth preserving:
 
 > Disconnect flips `_connected` and only then takes this lock to zero the lanes and dispose the timer, so a check outside it can pass, block here, and resume after teardown.
 
-Without the inner re-check, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and `ScheduleExpiryLocked` builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.
+Without that check inside the lock, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and `ScheduleExpiryLocked` builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.
 
 ---
 
@@ -123,7 +123,7 @@ Install lives in `DriverInstaller`:
 
 - `SteamVrInstallDir` is `C:\SteamVR`, the default only. The card accepts any full path.
 - A drive root on its own is refused, because uninstall would then be aimed at an entire drive.
-- `GetOwnedSteamVrDir()` resolves what PadForge considers its own copy, and `HMVR.SetSteamVRPathHint` is both how the driver finds the runtime and how a hand-placed install becomes discoverable.
+- `GetOwnedSteamVrDir()` resolves what PadForge considers its own copy. `HMVR.SetSteamVRPathHint` writes `HKLM\SOFTWARE\HIDMaestro\SteamVRPath`, which HIDMaestro's `FindSteamVR` checks first and which `GetOwnedSteamVrDir()` reads as PadForge's ownership marker. Pointing the install location at a hand-placed copy makes it discoverable and also puts it under the card's **Uninstall**, which deletes that folder.
 - Uninstall refuses while `vrserver` is running.
 
 ---
@@ -132,7 +132,7 @@ Install lives in `DriverInstaller`:
 
 *New in 4.3.0. This is the input lane, and it shares no code with everything above.*
 
-`OpenVrConsumerService` (`PadForge.App/Common/Input/OpenVrConsumerService.cs`, `public sealed class`) turns the headset and every tracked VR controller into ordinary PadForge devices. `InitializeSdl` constructs it and calls `Start()`, wrapped in its own try/catch so a failure never takes the rest of input initialization down. It logs into the SDL diagnostics ring with a `VRCONSUME` prefix.
+`OpenVrConsumerService` (`PadForge.App/Common/Input/OpenVrConsumerService.cs`, `public sealed class`) turns the headset and every tracked VR controller into ordinary PadForge devices. `InitializeSdl` constructs it and calls `Start()`, wrapped in its own try/catch so a failure never takes the rest of input initialization down. It logs into the SDL diagnostics ring, where each line starts `VR VRCONSUME` because `InitializeSdl` prefixes the service's own `VRCONSUME` tag with `VR`.
 
 ### One background client that never launches SteamVR
 
@@ -195,7 +195,7 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ## Things that will bite you
 
-- **Adding a button** means touching the bit table, the key array order, and HIDMaestro's `HMVRButton` together. The cast hides a mismatch until runtime.
+- **Adding a button** means widening `VrHandRaw.Buttons` past `byte` and touching the bit table, the key array order, and HIDMaestro's `HMVRButton` together. The cast hides a mismatch until runtime.
 - **A second Y flip** anywhere in the VR lane cancels the one in `PackHand`.
 - **SteamVR's own Test Controller is not a diagnostic.** Switching it from left to right often shows nothing until you switch back and forth again. Trust the app's Preview tab or the game.
 - **There is no per-slot VR configuration.** The driver ships one identity, so there is no VR equivalent of the PlayStation or Extended profile pickers.
@@ -212,4 +212,4 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

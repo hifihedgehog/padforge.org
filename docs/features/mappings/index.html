@@ -5052,7 +5052,7 @@
 </tr>
 <tr>
 <td><strong>Incremental</strong></td>
-<td>Ramps an accumulator via Up / Down buttons you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max).</td>
+<td>Ramps an accumulator via the Up / Down inputs you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max).</td>
 </tr>
 <tr>
 <td><strong>Invert On Hold</strong></td>
@@ -5064,7 +5064,7 @@
 </tr>
 </tbody>
 </table>
-<p>Direct, Toggle and Rapid Trigger sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. The per-row <strong>Record</strong> button records the input itself for Direct, Toggle and Rapid Trigger, and a kind's own inputs in sequence for the others (Up, then Down, or the modifier alone).</p>
+<p>Direct, Toggle and Rapid Trigger sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. An Up or Down key can be any button-like input, a touchpad gesture, a mouse gesture or a menu cell included. A gesture holds the key for as long as it stays fired. A tap or swipe stays fired for the touchpad's <strong>Cooldown</strong> (100 ms unless you change it), so each one moves the value one step. A long press or a radial zone stays fired while your finger stays and for the Cooldown after you lift, and a touch spot only while your finger stays. A stick, a trigger, a slider or a motion axis picked as a key reads nothing. The per-row <strong>Record</strong> button records the input itself for Direct, Toggle and Rapid Trigger, and a kind's own inputs in sequence for the others (Up, then Down, or the modifier alone).</p>
 <h3 id="rapid-trigger">Rapid Trigger<a class="headerlink" href="#rapid-trigger" title="Permanent link">&para;</a></h3>
 <p>Rapid Trigger, the analog keyboard feature, presses and releases on movement instead of at one fixed point. Past the row's <strong>Axis-to-Button Deadzone</strong>, the actuation point, the output presses. From there, lifting the input by more than the <strong>Distance</strong> releases it, and pushing it back down by more than the <strong>Distance</strong> presses it again, with no need to come back past the deadzone first. Lifting it back past the deadzone releases it and starts over.</p>
 <!-- SCREENSHOT: mapping-rapid-trigger -->

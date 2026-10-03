@@ -86,12 +86,12 @@ With **Check for Updates Automatically** off, the updater contacts nothing until
 | *Could not check for updates: HTTP 503* | GitHub could not be reached or answered with an error. The reason follows the colon. |
 | *GitHub is limiting requests from this network. Try again later.* | See [What PadForge sends](#what-padforge-sends). |
 | *The newest version has no build for this PC's processor yet.* | The newer version has no zip for your processor, which happens when a dev build's ARM64 job fails. |
-| *The download did not match the checksum GitHub published for it, so PadForge did not install it.* | The file was damaged on the way. Check again to download it fresh. |
+| *The download did not match the checksum GitHub published for it, so PadForge did not install it.* | The download was damaged, or the downloaded copy changed on disk before it ran. Click **Install and Restart** to download it again. |
 | *PadForge could not install the update: The download stopped responding.* | No data arrived for 60 seconds, or GitHub did not answer within 30 seconds. |
 | *PadForge could not install the update: The installer did not report that it started.* | The downloaded copy did not answer within 60 seconds and was stopped. PadForge keeps running as it was. |
 | *PadForge could not install the update: The installer closed as it started (exit code …).* | The downloaded copy exited before it reported in. PadForge keeps running as it was. |
-| *PadForge could not install the update: The installer did not stop when PadForge tried to end it.* | PadForge tried to stop a downloaded copy that did not report in, and could not confirm it stopped. |
-| *PadForge could not install the update: The download is a different build from the one this update names.* | The file on GitHub changed after the check. Check again. |
+| *PadForge could not install the update: The installer did not stop when PadForge tried to end it.* | PadForge tried to stop the downloaded copy, which had not reported in or was no longer wanted, and could not confirm it stopped. |
+| *PadForge could not install the update: The download is a different build from the one this update names.* | The release on GitHub named one build while its file held another, which happens while a release is being replaced. Check again later. |
 | *PadForge was updated, but the new version could not start: …* | The install worked and the new version did not start. The message names the folder that holds a copy of the old one. |
 | *PadForge could not restart: …* | The update did not install or was skipped, and the previous version, still in place, did not start again. Start PadForge yourself. |
 | *The update failed, and PadForge could not put the previous version back. A copy of it is in this folder: …* | Copy `PadForge.exe` from that folder over the installed one. |
@@ -107,4 +107,4 @@ With **Check for Updates Automatically** off, the updater contacts nothing until
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

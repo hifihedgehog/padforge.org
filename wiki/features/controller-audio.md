@@ -26,7 +26,7 @@ Inside the tab, the mirror controls appear for any device with a reachable speak
 - **DualShock 4:** Bluetooth, or the Sony USB wireless adapter. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
 - **Wii Remote:** mirrors into its built-in speaker at the same low rate as its macro sounds.
 - **Haptic-tone pads:** mirror the captured audio as a tracking haptic tone, the same reduction a macro sound gets. Expect a pitch-following buzz, not the source audio.
-- **Steam Controller 2026 over USB or the dongle:** mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Everything above the cutoff you set is filtered out.
+- **Steam Controller 2026 over USB or the dongle:** mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Content above the cutoff you set falls off at 24 dB per octave.
 
 Macro sounds do not depend on the mirror toggle. They play on whatever the slot's assigned devices can produce, whenever a macro fires.
 
@@ -149,7 +149,7 @@ Headphones hand each ear one channel and nothing of the other, which never happe
 | bs2b default | 700 Hz at 4.5 dB |
 | Custom | Your own Cutoff (300 to 2000 Hz) and Feed (1.0 to 15.0 dB) on two sliders |
 
-Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how much of the opposite channel arrives below the cutoff. The ranges are libbs2b's own.
+Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how far below the direct sound the opposite channel arrives under the cutoff, so a higher feed crossfeeds less. The ranges are libbs2b's own.
 
 Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack unless it has switched to the speaker. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing.
 
@@ -161,15 +161,15 @@ For a correction matched to a specific pair of headphones, use AutoEq:
 
 1. Open [autoeq.app](https://autoeq.app) and choose your headphone model.
 2. Pick **Custom Parametric Eq** and download it. You get a `.txt`.
-3. Back in PadForge, click **Import from File** and pick that `.txt`.
+3. Back in PadForge, turn on **Parametric EQ**, click **Import from File**, and pick that `.txt`.
 
-The import replaces the bands, sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip), and turns the EQ on. A status line under the buttons says what it did, naming the band count, the preamp, and the file. **Import from Clipboard** does the same for a profile that arrived as text, from the AutoEq repo or a forum post.
+The import replaces the bands and sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip). A status line under the buttons says what it did, naming the band count, the preamp, and the file. **Import from Clipboard** does the same for a profile that arrived as text, from the AutoEq repo or a forum post.
 
 Do not use AutoEq's Graphic Eq download. It carries no filter lines and cannot be imported. If you pick it, the status line says so and your current EQ is left alone, which is also what happens for anything else unreadable.
 
 ### Limiter
 
-On by default, with a Ceiling slider. The chain sits upstream of the pad's audio encoder, so a band boosted by a few dB without a limiter clips the encoder, and encoder clipping sounds far worse than the boost sounds better. Leave it on whenever any band is above 0 dB.
+On by default, with a Ceiling slider. The chain feeds the Bluetooth encoder or the USB audio output directly, so a band boosted by a few dB without a limiter clips there, and that clipping sounds far worse than the boost sounds better. Leave it on whenever any band is above 0 dB.
 
 ---
 
@@ -211,7 +211,7 @@ A `.pfsounds` package travels with a shared profile. A macro that plays a packag
 | Test | Plays a short test tone on the selected device only, so you can check one pad without firing the others on the slot. On a haptic-tone pad it plays as a brief vibrating tone. On a Sony pad it plays only while the pad already has audio running: the mirror on, a sound macro on the slot, or a virtual controller with audio. |
 | Stop All Sounds | Stops every macro sound playing on the slot. The mirror keeps running. |
 
-Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a **Reset All** button that clears the whole card for the selected device at once.
+Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a **Reset All** button that clears the whole card for the selected device at once and returns the slot-wide Master Volume to 100%.
 
 ---
 
@@ -242,4 +242,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

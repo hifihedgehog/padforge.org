@@ -2,7 +2,7 @@
 
 *A head pose from OpenTrack, from anything that speaks its output formats, or from a VR headset, as six axes you can map like a stick.*
 
-[OpenTrack](https://github.com/opentrack/opentrack) turns a webcam, an IR clip, a phone, or an eye tracker into a head pose: three rotations and three translations. On Windows its outputs are FreeTrack, TrackIR emulation, mouse movement, UDP, and a few sim-specific bridges. None of them is a gamepad. PadForge reads two of those outputs and turns the pose into a device row with six axes, so head yaw can drive a virtual controller's right stick while both thumbs stay on the face buttons.
+[OpenTrack](https://github.com/opentrack/opentrack) turns a webcam, an IR clip, a phone, or an eye tracker into a head pose: three rotations and three translations. On Windows its outputs include FreeTrack, TrackIR emulation, mouse movement, UDP, a vJoy virtual joystick, and a few sim-specific bridges. None of them is an XInput gamepad. PadForge reads two of those outputs and turns the pose into a device row with six axes, so head yaw can drive a virtual controller's right stick while both thumbs stay on the face buttons.
 
 A VR headset is the third source. PadForge talks to an OpenXR runtime directly and reads the headset pose into the same six axes, so a headset drives the same mappings an OpenTrack webcam would.
 
@@ -10,7 +10,7 @@ A VR headset is the third source. PadForge talks to an OpenXR runtime directly a
 
 ## Turning it on
 
-Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and enable **UDP Tracking Input**, **FreeTrack 2.0 Shared Memory Input**, **OpenXR Headset Input**, or any combination. The three run together.
+Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and turn on **Enable UDP Tracking Input**, **Enable FreeTrack 2.0 Shared Memory Input**, **Enable OpenXR Headset Input**, or any combination. The three run together.
 
 <!-- SCREENSHOT: dashboard-head-tracking -->
 ![Dashboard, Head Tracking section with its toggles, port, ranges, and status line](../images/dashboard-head-tracking.png)
@@ -40,7 +40,7 @@ This is for an axis whose comfortable travel does not match the rest. Neck rotat
 
 A Head Tracker row appears on the [Devices](devices.md) page, typed Head Tracker, with six axes. Its name says which backends are feeding it, so with UDP or FreeTrack on it reads **Head Tracker (OpenTrack)**, and with only the headset input on it reads **Head Tracker (OpenXR)**:
 
-| Axis | Raw view | What it reads | Full deflection |
+| Axis | Index | What it reads | Full deflection |
 | --- | --- | --- | --- |
 | Head Yaw | Axis 0 | turning left and right | Rotation Range |
 | Head Pitch | Axis 1 | nodding up and down | Rotation Range |
@@ -49,12 +49,12 @@ A Head Tracker row appears on the [Devices](devices.md) page, typed Head Tracker
 | Head Y | Axis 4 | rising and ducking | Translation Range |
 | Head Z | Axis 5 | leaning in and back | Translation Range |
 
-Every axis rests at center. Yaw right and X right read high, like a stick pushed right. The vertical axes are stored the way a stick reports them, up at the low end, so mapping Head Pitch onto a stick's Y axis needs no inversion. Roll and the translations pass through with the sign OpenTrack sends.
+Every axis rests at center. Yaw right and X right read high, like a stick pushed right. The vertical axes are stored the way a stick reports them, up at the low end, so mapping Head Pitch onto a stick's Y axis needs no inversion. Roll and Head Z pass through with the sign OpenTrack sends.
 
 <!-- SCREENSHOT: devices-head-tracking -->
 ![Devices page, Head Tracker row selected, with the status line and six axes](../images/devices-head-tracking.png)
 
-The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map covers gamepads only, so each axis is bound by hand.
+The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map does not cover head trackers, so each axis is bound by hand.
 
 With every input off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.
 
@@ -68,7 +68,7 @@ Two outputs work, and both can be on at once.
 
 **UDP over network.** In OpenTrack's Output list choose *UDP over network*, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under **UDP Port** in PadForge (default 4242). Click Start. The status line changes from *Waiting for a tracker on UDP port 4242.* to *Receiving over UDP from 127.0.0.1:port.*, where the port is the one OpenTrack sent from.
 
-**freetrack 2.0 Enhanced.** If a game already reads FreeTrack from OpenTrack, keep that output and enable **FreeTrack 2.0 Shared Memory Input** in PadForge. You can leave UDP input off. PadForge reads the same `FT_SharedMem` block the game does, so both see the pose. The status line says *Receiving from FreeTrack shared memory.* PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.
+**freetrack 2.0 Enhanced.** If a game already reads FreeTrack from OpenTrack, keep that output and turn on **Enable FreeTrack 2.0 Shared Memory Input** in PadForge. You can leave UDP input off. PadForge reads the same `FT_SharedMem` block the game does, so both see the pose. The status line says *Receiving from FreeTrack shared memory.* PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.
 
 Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named **PadForge Head Tracking** for the port when UDP input opens.
 
@@ -78,7 +78,7 @@ When OpenTrack stops, or the camera loses the face, the axes return to center af
 
 ## Setting up an OpenXR headset
 
-Enable **OpenXR Headset Input** and leave **OpenXR Runtime** on *System Default*, which uses whichever runtime Windows has registered as the active one. The dropdown lists each registered runtime whose library is still on disk, so you can read from one while another stays the system default. Picking a runtime here never changes the system default. A runtime whose manifest survives an uninstall is not offered, but one you had already chosen stays listed so the setting does not silently move.
+Turn on **Enable OpenXR Headset Input** and leave **OpenXR Runtime** on *System Default*, which uses the runtime registered as the machine's active one. If that runtime's library is missing, PadForge uses the first other registered runtime whose library is on disk. The dropdown lists each registered runtime whose library is still on disk, so you can read from one while another stays the system default. Picking a runtime here never changes the system default. A runtime whose manifest survives an uninstall is not offered, but one you had already chosen stays listed so the setting does not silently move.
 
 PadForge asks the runtime for a session that runs without drawing anything, so no game has to be open. It submits no frames, though a given runtime may still show its own status window. A runtime that cannot supply one reports *This runtime cannot supply a background session*, and the headset input stays off while the other two inputs carry on.
 
@@ -86,10 +86,10 @@ The status line reports each stage:
 
 | Status | Meaning |
 | --- | --- |
-| *Starting the OpenXR session* | Negotiating with the runtime. |
+| *Starting the OpenXR session* | Negotiating with the runtime. The line also stays after the runtime ends the session, because PadForge does not reconnect on its own. Turn the input off and on again to start a new session. |
 | *Waiting for [runtime] to report a tracked pose* | The session is up and the headset has not been tracked yet. Put it on, or move it into view of its sensors. |
 | *Reading [runtime]* | The pose is live and the six axes are moving. |
-| *No OpenXR runtime is installed* | Nothing is registered. Install a runtime, or use one of the other two inputs. |
+| *No OpenXR runtime is installed* | No runtime is registered, or the chosen runtime's library is missing, does not load, or refuses the loader handshake. Install or repair a runtime, or use one of the other two inputs. |
 | *The OpenXR runtime reports no headset* | The runtime started and has no headset attached. |
 | *This runtime cannot supply a background session* | The runtime refused the headless session PadForge needs. |
 | *The OpenXR session failed. See the diagnostics log.* | Something else went wrong. Turn on diagnostics in Settings for the detail. |
@@ -100,7 +100,7 @@ The status line reports each stage:
 
 ## Mapping it
 
-On the Pad page, pick **Head Yaw** as the source of the right stick's X axis and set a deadzone on that mapping for the angle you want ignored. Deadzone, curve, and inversion are the ordinary per-mapping controls, the same ones a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.
+On the Pad page, pick **Head Yaw** as the source of the right stick's X axis, then set the right stick's **Deadzone** on the **Sticks** tab for the angle you want ignored. A mapping row's own deadzone slider applies only to button targets. The stick's **Deadzone** and **Sensitivity Curves** and the row's **Invert** box are the same controls a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.
 
 The six axes bind anywhere an axis does. An Any Device source never reads them, so pick the tracker by name. Assigning the tracker preserves existing Any Device rows. It does not append named gamepad defaults to those rows. If an earlier version already added an unwanted extra source, remove that extra once while retaining the Any Device source.
 
@@ -110,7 +110,7 @@ The six axes bind anywhere an axis does. An Any Device source never reads them, 
 
 TrackIR's NPClient interface is a DLL the game loads by game ID, not a stream anything can subscribe to. Games that only speak TrackIR keep using OpenTrack's own output for that.
 
-Two listeners cannot share one UDP port. If OpenTrack's own *UDP* tracker input is set to the same port, the status line says *UDP port 4242 is in use by another program.*, and one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.
+Two listeners cannot share one UDP port. If OpenTrack's own *UDP over network* tracker input binds the port first, the status line says *UDP port 4242 is in use by another program.* If PadForge binds it first, OpenTrack's tracker reports the error instead. Either way, one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.
 
 Nothing here has run against a live OpenTrack yet. The wire formats come from OpenTrack's source, and the decoders are pinned by replay tests, but the sign of roll and of the three translations on real hardware is unconfirmed.
 
@@ -127,4 +127,4 @@ Nothing here has run against a live OpenTrack yet. The wire formats come from Op
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

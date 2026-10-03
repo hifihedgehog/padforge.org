@@ -1360,7 +1360,7 @@ The SDL instance ID is removed from `_openedSdlInstanceIds` by the caller, enabl
 
 ## SDL3 Fork
 
-PadForge ships a custom SDL3 fork at [hifihedgehog/SDL](https://github.com/hifihedgehog/SDL) on branch `feat/hidmaestro-filter`. The built binaries land at `PadForge.App/Resources/SDL3/x64/SDL3.dll` and `PadForge.App/Resources/SDL3/arm64/SDL3.dll`. PadForge 5.0.0 ships the fork's Release build at commit `b12239c8c7` (2026-09-27) for both architectures. 4.5.2 and 4.5.3 shipped `5df5eff539` (2026-09-21). The branch rebases onto `libsdl-org/SDL` mainline, so the fork commits below carry the hashes of the current branch.
+PadForge ships a custom SDL3 fork at [hifihedgehog/SDL](https://github.com/hifihedgehog/SDL) on branch `feat/hidmaestro-filter`. The built binaries land at `PadForge.App/Resources/SDL3/x64/SDL3.dll` and `PadForge.App/Resources/SDL3/arm64/SDL3.dll`. PadForge 5.0.0 ships the fork's Release build at commit `756e0f2fb1` (2026-10-03) for both architectures. 4.5.2 and 4.5.3 shipped `5df5eff539` (2026-09-21). The branch rebases onto `libsdl-org/SDL` mainline, so the fork commits below carry the hashes of the current branch.
 
 ### Why a Fork
 
@@ -1393,6 +1393,7 @@ The hints in `InitializeSdl` and the axis readers in `SdlDeviceWrapper` depend o
 | `SDL#27` (fork commit `c2794e11cb`) | Five second-generation MOZA wheelbase IDs in `initial_wheel_devices` (`SDL_joystick.c:614-618`: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed `SDL_JOYSTICK_TYPE_WHEEL` like the first-generation IDs at `:609-613` | `SdlDeviceWrapper` wheel typing, the Wheel tab (#282) |
 | Fork commit `067c3b9661` | The DualSense's trigger feedback bytes (payload 40..47 of the full report) published as the joystick property `SDL.joystick.hidapi.ps5.status_bytes` | `DualSenseStatusBytes.Read`, which fills the same bytes in the virtual DualSense's report (#433) |
 | `SDL_XINPUT_PADDLES` (fork commits `49cbac4a41`, `167f8ca9bc`, `11bf187ca5`, `4763baf830`, `a1416320e2`, `5df5eff539`, the last for `SDL#32`) | Adds an Elite controller's four paddles to its XInput joystick as raw buttons 12-15 (`paddle1`-`paddle4`), over Bluetooth and, where the Windows GameInput files belong to a version family the fork has read, over USB and the Xbox Wireless Adapter. Builds for x64 and ARM64 | Gamepad positions 12-15 (Right/Left Paddle 1 and 2) |
+| `SDL#36` (fork commit `756e0f2fb1`) | A Wii Remote with a Classic Controller registers the remote's accelerometer, and the Motion Plus gyro when one is present. Enabling a sensor is what powers the IR camera, and the driver registered none for that configuration, so its four IR axes never moved | `SdlDeviceWrapper`, which enables every sensor a joystick registers. `ReadIrPointer` and the light gun (#485) then read the camera with a Classic Controller attached |
 
 The three Wii Bluetooth fixes (`SDL#2` / `SDL#3` / `SDL#4`) are covered in the [Wii Controllers](#wii-controllers-hidapi_wii) subsection below.
 

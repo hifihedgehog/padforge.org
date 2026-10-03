@@ -3957,7 +3957,7 @@
 <li><strong>DualShock 4:</strong> Bluetooth, or the Sony USB wireless adapter. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.</li>
 <li><strong>Wii Remote:</strong> mirrors into its built-in speaker at the same low rate as its macro sounds.</li>
 <li><strong>Haptic-tone pads:</strong> mirror the captured audio as a tracking haptic tone, the same reduction a macro sound gets. Expect a pitch-following buzz, not the source audio.</li>
-<li><strong>Steam Controller 2026 over USB or the dongle:</strong> mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Everything above the cutoff you set is filtered out.</li>
+<li><strong>Steam Controller 2026 over USB or the dongle:</strong> mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Content above the cutoff you set falls off at 24 dB per octave.</li>
 </ul>
 <p>Macro sounds do not depend on the mirror toggle. They play on whatever the slot's assigned devices can produce, whenever a macro fires.</p>
 <hr />
@@ -4129,7 +4129,7 @@
 </tr>
 </tbody>
 </table>
-<p>Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how much of the opposite channel arrives below the cutoff. The ranges are libbs2b's own.</p>
+<p>Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how far below the direct sound the opposite channel arrives under the cutoff, so a higher feed crossfeeds less. The ranges are libbs2b's own.</p>
 <p>Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack unless it has switched to the speaker. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing.</p>
 <h3 id="parametric-eq">Parametric EQ<a class="headerlink" href="#parametric-eq" title="Permanent link">&para;</a></h3>
 <p>Turn on <strong>Parametric EQ</strong> and a graphic EQ appears: a log-frequency curve from 20 Hz to 20 kHz with the summed response drawn across it and one handle per band. Drag a handle to move its frequency, and its gain on Peak and shelf bands. Roll the wheel over a handle to widen or narrow it (Q). Under the curve, each band has a row with an on switch, a type picker, and Freq (Hz), Gain (dB), and Q boxes you can type into. Band types are Peak, Low Shelf, High Shelf, High Pass, Low Pass, and Notch. <strong>Add Band</strong> appends a 1 kHz peak, <strong>Clear</strong> removes them all, and the <strong>Preamp</strong> row sets the overall level before the bands.</p>
@@ -4137,12 +4137,12 @@
 <ol>
 <li>Open <a href="https://autoeq.app">autoeq.app</a> and choose your headphone model.</li>
 <li>Pick <strong>Custom Parametric Eq</strong> and download it. You get a <code>.txt</code>.</li>
-<li>Back in PadForge, click <strong>Import from File</strong> and pick that <code>.txt</code>.</li>
+<li>Back in PadForge, turn on <strong>Parametric EQ</strong>, click <strong>Import from File</strong>, and pick that <code>.txt</code>.</li>
 </ol>
-<p>The import replaces the bands, sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip), and turns the EQ on. A status line under the buttons says what it did, naming the band count, the preamp, and the file. <strong>Import from Clipboard</strong> does the same for a profile that arrived as text, from the AutoEq repo or a forum post.</p>
+<p>The import replaces the bands and sets the preamp AutoEq ships (a negative value so the profile's boosts do not clip). A status line under the buttons says what it did, naming the band count, the preamp, and the file. <strong>Import from Clipboard</strong> does the same for a profile that arrived as text, from the AutoEq repo or a forum post.</p>
 <p>Do not use AutoEq's Graphic Eq download. It carries no filter lines and cannot be imported. If you pick it, the status line says so and your current EQ is left alone, which is also what happens for anything else unreadable.</p>
 <h3 id="limiter">Limiter<a class="headerlink" href="#limiter" title="Permanent link">&para;</a></h3>
-<p>On by default, with a Ceiling slider. The chain sits upstream of the pad's audio encoder, so a band boosted by a few dB without a limiter clips the encoder, and encoder clipping sounds far worse than the boost sounds better. Leave it on whenever any band is above 0 dB.</p>
+<p>On by default, with a Ceiling slider. The chain feeds the Bluetooth encoder or the USB audio output directly, so a band boosted by a few dB without a limiter clips there, and that clipping sounds far worse than the boost sounds better. Leave it on whenever any band is above 0 dB.</p>
 <hr />
 <h2 id="macro-sounds">Macro sounds<a class="headerlink" href="#macro-sounds" title="Permanent link">&para;</a></h2>
 <p>A <a href="../../guides/macros/">macro</a> <strong>Play Sound</strong> action fans out to every sound sink the slot's assigned devices provide. A Sony pad or Wii Remote plays it through the speaker. A haptic-tone pad plays it as a vibrating tone. If the slot has no sound-capable device, the sound falls back to the PC's default output.</p>
@@ -4181,7 +4181,7 @@
 </tr>
 </tbody>
 </table>
-<p>Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a <strong>Reset All</strong> button that clears the whole card for the selected device at once.</p>
+<p>Every setting row has its own reset button that returns just that setting to its default. The Sound Output card header carries a <strong>Reset All</strong> button that clears the whole card for the selected device at once and returns the slot-wide Master Volume to 100%.</p>
 <hr />
 <h2 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4208,7 +4208,7 @@
 <li><a href="../../reference/steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>: the actuator stream protocol.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

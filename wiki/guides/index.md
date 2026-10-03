@@ -2,7 +2,7 @@
 
 Each guide walks one task from start to finish. Pick the thing you want to
 do. Every page assumes nothing beyond an installed PadForge and a connected
-device.
+device, except Remote Link, which needs PadForge on both PCs.
 
 | Guide | What you end up with |
 | --- | --- |
@@ -19,4 +19,4 @@ device.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

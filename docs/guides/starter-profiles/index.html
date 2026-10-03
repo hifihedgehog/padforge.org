@@ -3844,10 +3844,10 @@ version to pick.</p>
 <p>On a controller with two touchpads the right pad wins. On a controller
 with none, the stick simply does all the work.</p>
 <p>Which stick backs the touchpad up depends on the profile. Point and
-Click and Isometric RPG put the cursor on the <strong>left</strong> stick and keep the
-right one for the camera, because in those games the pointer and the view
-are two different jobs for two different thumbs. Everything else uses the
-right stick.</p>
+Click and Isometric RPG put the cursor on the <strong>left</strong> stick. Isometric
+RPG keeps the right stick for the camera, because there the pointer and
+the view are two different jobs for two different thumbs. Point and Click
+leaves the right stick unbound. Everything else uses the right stick.</p>
 <hr />
 <h2 id="the-profiles">The profiles<a class="headerlink" href="#the-profiles" title="Permanent link">&para;</a></h2>
 <h3 id="keyboard-and-mouse">Keyboard and mouse<a class="headerlink" href="#keyboard-and-mouse" title="Permanent link">&para;</a></h3>
@@ -3952,9 +3952,13 @@ since hardware macros are prohibited outright.</p>
 <h3 id="emulation-puts-the-hotkeys-on-back">Emulation puts the hotkeys on Back<a class="headerlink" href="#emulation-puts-the-hotkeys-on-back" title="Permanent link">&para;</a></h3>
 <p>Hold <strong>Back</strong> and the shoulders save and load state, the triggers
 fast-forward and rewind, the D-pad's left and right step the state slot,
-Y opens the menu, and Start exits the content. They send RetroArch's own
-default keyboard hotkeys, so they work against a stock install with no
-remapping. That mirrors how RetroArch's hotkey modifier works.</p>
+Y opens the menu, and Start quits RetroArch after a second press to
+confirm. They send RetroArch's own default keyboard hotkeys, so a stock
+install needs no remapping. That mirrors how RetroArch's hotkey modifier
+works. Rewind also needs RetroArch's Rewind Support setting, which is
+off by default.</p>
+<p>The hotkeys come from a second, Keyboard + Mouse virtual controller in
+the same profile, so assign your controller to both of its slots.</p>
 <p>Back is the modifier and nothing else. A shift-layer activator eats its
 own input, so while Back is held the pad's own Back output is suppressed
 and the emulator never sees a stray press.</p>
@@ -3972,11 +3976,11 @@ happens in the first tenth of stick travel, so every flight axis is
 softened near center and keeps full authority at the rim. Click the right
 stick for a Precision mode that softens it much further, and click again
 to leave.</p>
-<p>One thing it deliberately does not do. Elite ships two gamepad presets
-that differ on a single axis: right-stick X is yaw in one and lateral
-thrust in the other. Both use the same physical output, so which one you
-get is decided inside Elite's own binding file, and no controller profile
-can reach it. Pick the preset you want in-game.</p>
+<p>One thing it deliberately does not do. Several of Elite's gamepad presets
+come in two versions that differ on a single axis: right-stick X is yaw
+in one and lateral thrust in the other. Both use the same physical
+output, so which one you get is decided inside Elite's own binding file,
+and no controller profile can reach it. Pick the preset you want in-game.</p>
 <h3 id="media-remote-sends-the-real-media-keys">Media Remote sends the real media keys<a class="headerlink" href="#media-remote-sends-the-real-media-keys" title="Permanent link">&para;</a></h3>
 <p>Play/Pause, Stop, Mute, Volume Up and Down, Next and Previous Track, and
 browser Back are the actual system keys, so they work in whatever is
@@ -4005,8 +4009,8 @@ into whatever now has focus.</p>
 that button over completely, so putting the gesture on Start alone would
 cost you Start outright. A pair costs nothing: each button keeps its own
 binding, and only the two together mean anything else. Guide works here
-because PadForge hides the physical controller from Windows, so the press
-reaches PadForge instead of opening Game Bar.</p>
+because PadForge hides an assigned controller from Windows when HidHide
+is installed, so the press reaches PadForge instead of opening Game Bar.</p>
 <p>On Media Remote this is why Stop is a quick tap of Guide rather than a
 plain press. Holding Guide is the start of the silence gesture, so a press
 that turns into a hold no longer stops playback.</p>
@@ -4038,7 +4042,7 @@ and taking one back is the thing this design exists to avoid.</p>
 <li><a href="../shift-layers/">Shift Layers</a> explains the mechanism the Hotbar and
   Emulation profiles are built on.</li>
 </ul>
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

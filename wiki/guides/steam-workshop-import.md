@@ -21,7 +21,7 @@ What the toggle allows, exactly:
 
 - PadForge connects directly to Steam, and only when you act: searching for a game, opening a game's config list, opening one config, or clicking the update check. Never at startup, never in the background.
 - The servers contacted are all Steam's own: `store.steampowered.com` (game search), `api.steampowered.com` (Steam's server directory and the update check), the Steam connection servers that directory names (config lists and their details, over an anonymous session), `steamcommunity.com` (creator names), `cdn.steamusercontent.com` (the config files), `cdn.cloudflare.steamstatic.com` (game artwork), and Steam's avatar servers, such as `avatars.fastly.steamstatic.com` (creator avatars). Steam's own data names the config-file and avatar hosts.
-- PadForge sends your search text, the game and the configs you open, and, for the update check, the ids of the configs you imported. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the MAC addresses of the physical network adapters, and the boot disk serial. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.
+- PadForge sends your search text, the ids of the games, configs and creators involved (for the update check, the ids of the configs you imported), and its own version number. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the MAC addresses of the physical network adapters, and the boot disk serial. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.
 
 The card carries three more controls:
 
@@ -49,9 +49,9 @@ Type at least two characters into **Search Games**. The search runs half a secon
 
 ### Read the config cards
 
-The game's configs list ranked by rating. A filter row above the list carries an **All** chip plus one chip per controller type found in the results (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.
+The game's configs list ranked by rating. A filter row above the list carries an **All** chip plus one chip per controller type found in the first 30 configs Steam returns (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.
 
-**Sorted By** re-orders the list: Rating, Trending, Newest, Subscribers, or Most Votes, ascending or descending. **Search These Configs** asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.4 seconds after you stop typing, or on Enter. Escape clears it.
+**Sorted By** re-orders the list by Rating, Trending, Newest, Subscribers, or Most Votes. Steam returns every order in descending rank, so **Ascending** reverses only the configs already loaded, not the game's whole list. **Search These Configs** asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.42 seconds after you stop typing, or on Enter. Escape clears it.
 
 Each card shows:
 
@@ -59,7 +59,7 @@ Each card shows:
 |---|---|
 | Title and creator | The config's Workshop title, the creator's Steam name and avatar, and when it was last updated ("by Kaz · updated 3 mo ago"). |
 | Vote bar | The share of positive votes, as a filled bar plus a percentage and the total vote count. A full bar means everyone who voted, voted up. It is a quality signal, not a popularity count. |
-| Subscriber count | How many Steam users subscribed to the config ("12k subscribers"). This is the popularity count. |
+| Subscriber count | How many Steam users subscribed to the config ("12k subscribers"), shown only when Steam reports at least one. This is the popularity count. |
 | Controller chips | Which controller the config was built for. Steam Deck chips render in a colder color. |
 | **LEGACY** badge | A pre-2017 config with no downloadable file. Only shown when **Show Legacy Workshop Configs** is on. |
 
@@ -187,7 +187,7 @@ Steam Input has a few features PadForge does not reproduce, and a few it reprodu
 | Menu cell icons | Render when your local Steam client has the icon art. An unrecognized icon reference is named per cell and the cell keeps its text label. App-provided icons (Steam-internal) fall back to text silently. |
 | Menus hosted on a surface with no direction read | Skipped, with the host named. Sticks, touchpads, the D-pad, the face diamond, and the gyro all host menus, so only a hand-edited config lands here. |
 | Flick stick on a surface with no analog pair | Skipped, with the host named. Sticks and touchpads both carry flick stick. |
-| Response curve settings | Partial where one drops, named: output_curve always, and deadzone_shape unless the output is a thumb pair or a stick-hosted mouse (trackpad and gyro mouse rows evaluate per axis, with no pair read). A rotated group also withholds its curve exponent and anti-deadzone. Every other curve, range, and sensitivity setting carries onto its rows. |
+| Response curve settings | Partial where one drops, named: output_curve always, and deadzone_shape unless the output is a thumb pair or a stick-hosted mouse (trackpad and gyro mouse rows evaluate per axis, with no pair read). On trackpad and gyro hosts the deadzone radii apply per axis rather than radially, which is also Partial and named. A rotated group also withholds its curve exponent, anti-deadzone, and acceleration. Every other curve, range, and sensitivity setting carries onto its rows. |
 | Unknown key names | Skipped, named per key. |
 
 Features that skipped in older PadForge versions and translate whole now: double-press activators, long presses on keys (down at the threshold, up on release, matching Steam), turbo on any target including trigger pulls, haptic feedback (a rumble pulse per activation), directional swipes, flick stick on touchpads, and the F13–F24 keys. Re-import a config to pick them up.
@@ -215,4 +215,4 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

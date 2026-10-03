@@ -3636,7 +3636,7 @@
 <li>Type a name for the tag.</li>
 <li>Click <strong>Register</strong>.</li>
 </ol>
-<p>The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. In that case its status line reads "Tap a tag on your Switch controller…".</p>
+<p>The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. When PadForge has no PC/SC connection, which is the case while the Windows Smart Card service is off, its status line reads "Tap a tag on your Switch controller…". Otherwise it reads "(waiting)".</p>
 <p>The dialog lists your registered tags. Each row shows its name and UID with a <strong>Remove</strong> button. Tap another tag to add more.</p>
 <p>Tags are keyed by UID, not by reader. They carry over when you swap readers, from a reader to a controller, and across restarts.</p>
 <hr />
@@ -3648,7 +3648,7 @@
 <ol>
 <li>Add the device that reads the tag (the PC/SC reader or the Switch controller) as an input device on the same <a href="../controller-slots/">slot</a> as the mapping or macro.</li>
 <li>Pick that device in the mapping row's source picker or in the macro trigger.</li>
-<li>Pick <strong>Any NFC Tag</strong> or a specific named tag. A named tag shows as <strong>NFC Tag:</strong> followed by its name.</li>
+<li>Pick <strong>Any NFC Tag</strong> or a specific named tag. On a Switch controller, a named tag shows as <strong>NFC Tag:</strong> followed by its name. On a PC/SC reader, it shows as the name alone.</li>
 </ol>
 <p>Tags work as ordinary mapping-row sources, so a tap can press a virtual button directly. In a <a href="../../guides/macros/">macro</a> trigger, the tap runs the action sequence instead.</p>
 <p>Bindings follow the tag itself, not its name. Rename a tag and its bindings stay put.</p>
@@ -3659,7 +3659,7 @@
 <li><a href="../../guides/macros/">Macros</a>: bind a tag tap to an action sequence.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

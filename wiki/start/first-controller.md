@@ -11,8 +11,9 @@ You need PadForge installed and running. If it is not,
 ## 1. Create the virtual controller
 
 On the [Dashboard](../features/dashboard.md), click the **Add Controller**
-card at the bottom of the controller list. The same popup opens from the
-**Add Controller** card in the sidebar's controller section.
+card in the **Virtual Controllers** section. It follows the last controller
+card, and on a fresh install it is the only card there. The same popup opens
+from the **Add Controller** card in the sidebar's controller section.
 
 Pick **Xbox**. Almost every PC game with controller support reads
 Xbox-style input natively, so it is what to pick when you do not know what
@@ -78,4 +79,4 @@ see double input, you do not need it.
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

@@ -3650,8 +3650,8 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">internal</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Marker</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#AndroidHeadTracker#&quot;</span><span class="p">;</span>
 </code></pre></div>
 <p>Confirmed working on the WH-1000XM5 family. Any headset presenting the same collection is a candidate, whatever its name, which is the point of probing by capability.</p>
-<p><strong>Note what the probe does NOT do: it applies no transport filter.</strong> Nothing in <code>SonyHeadsetHid</code> checks for Bluetooth. These headsets happen to expose the tracker over Bluetooth and that is where the feature was validated, but the code would open the collection over any transport that presented it. Do not write "Bluetooth only" into the docs as though the code enforced it. The two repairs below are Bluetooth-specific because they act on a paired device's address, and a candidate whose address does not resolve still qualifies as a tracker with that lane simply unavailable to it.</p>
-<p>The remaining usages the probe cares about:</p>
+<p><strong>Note what the probe does NOT do: it applies no transport filter.</strong> Nothing in <code>SonyHeadsetHid</code> checks for Bluetooth. These headsets happen to expose the tracker over Bluetooth and that is where the feature was validated, but the code would open the collection over any transport that presented it. Do not write "Bluetooth only" into the docs as though the code enforced it. The two repairs below are Bluetooth-specific: the rebind matches only a node under a BTHENUM parent, and the HID-service re-request acts on a paired device's address. A candidate whose address does not resolve still qualifies as a tracker, with the re-request unavailable to it.</p>
+<p>The other usages the setup and parse code read or write:</p>
 <table>
 <thead>
 <tr>
@@ -3677,6 +3677,11 @@
 <td>Power-state selector</td>
 </tr>
 <tr>
+<td><code>TransportAcl</code></td>
+<td><code>0xF800</code></td>
+<td>Optional v2 ACL transport selector, written during setup when the descriptor exposes it</td>
+</tr>
+<tr>
 <td><code>Rotation</code></td>
 <td><code>0x0544</code></td>
 <td>Orientation rotation vector</td>
@@ -3687,9 +3692,29 @@
 <td>Gyroscope, rad/s, vector form</td>
 </tr>
 <tr>
+<td><code>AngularVelocityVector</code></td>
+<td><code>0x0456</code></td>
+<td>Gyroscope, vector form</td>
+</tr>
+<tr>
+<td><code>AngularVelocityX</code> to <code>AngularVelocityZ</code></td>
+<td><code>0x0457</code> to <code>0x0459</code></td>
+<td>Gyroscope, one axis each</td>
+</tr>
+<tr>
 <td><code>AccelerationVector</code></td>
 <td><code>0x0452</code></td>
 <td>Accelerometer, vector form</td>
+</tr>
+<tr>
+<td><code>AccelerationX</code> to <code>AccelerationZ</code></td>
+<td><code>0x0453</code> to <code>0x0455</code></td>
+<td>Accelerometer, one axis each</td>
+</tr>
+<tr>
+<td><code>ResetCounter</code></td>
+<td><code>0x0546</code></td>
+<td>Classified by the parse, never read</td>
 </tr>
 </tbody>
 </table>
@@ -3724,8 +3749,8 @@
 <p>The DSU motion server does its own flip separately, in <code>DsuMotionServer</code>, and that stays there. <code>MotionSnapshot</code> remains in the SDL native frame.</p>
 <hr />
 <h2 id="what-the-user-sees">What the user sees<a class="headerlink" href="#what-the-user-sees" title="Permanent link">&para;</a></h2>
-<p>The headset appears on the <strong>Devices</strong> page as its own device, and carries a headphone glyph in the slot's device roster on the <strong>Pad</strong> page (<code>DeviceTypeGlyph.For</code>, one call site in <code>InputService</code>).</p>
-<p>Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation, which is why it is worth pairing with Aim Engage: head tracking that is always live is disorienting in most games.</p>
+<p>The headset appears on the <strong>Devices</strong> page as its own device, and carries a headphone glyph in the device roster on its slot's page (<code>PadPage</code>, through <code>DeviceTypeGlyph.For</code>, one call site in <code>InputService</code>).</p>
+<p>Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its contribution is motion: a rotation rate, plus acceleration when the descriptor exposes an accelerometer. That is why it is worth setting an <strong>Aim Engage Button</strong>, since head tracking that is always live is disorienting in most games.</p>
 <p>The picker label is <strong>Gyro Horizontal (Yaw + Roll)</strong>, verbatim from <code>Strings.resx</code>. Not "Gyro Horizontal".</p>
 <hr />
 <h2 id="limitations-stated-as-facts">Limitations, stated as facts<a class="headerlink" href="#limitations-stated-as-facts" title="Permanent link">&para;</a></h2>
@@ -3743,7 +3768,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a> for where external devices register</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.0.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 

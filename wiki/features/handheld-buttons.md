@@ -2,7 +2,7 @@
 
 *The rear paddles, menu keys, and wheels a handheld gaming PC hides from every game. Press each one once to learn it, then map it like any other button.*
 
-Handheld gaming PCs (Legion Go, ROG Ally, GPD Win, OneXPlayer, AYANEO, AYN, Zotac Zone, MSI Claw) and gaming laptops carry buttons the operating system never presents as part of a controller. The firmware delivers them one of three ways: as a keyboard combination typed by an embedded keyboard (Ctrl+Win+F17, Win+D, F21 through F24), as bits and codes inside a vendor-defined HID report on the same USB device as the gamepad, or as a vendor WMI event (a Legion laptop's Vantage key). A game sees a keystroke at best, and the vendor's own tool is the only thing that can remap them.
+Handheld gaming PCs (Legion Go, ROG Ally, GPD Win, OneXPlayer, AYANEO, AYN, Zotac Zone, MSI Claw) and gaming laptops carry buttons the operating system never presents as part of a controller. The firmware delivers them one of three ways: as a keyboard combination typed by an embedded keyboard (Ctrl+Win+F17, Win+D, F21 through F24), as bits and codes inside a vendor-defined HID report on the same USB device as the gamepad, or as a vendor WMI event (a Legion laptop's Vantage key). A game sees a keystroke at best, and remapping them takes the vendor's tool or a utility written for that handheld.
 
 PadForge learns them on your machine. There is no table of models inside the app and no release needed for a handheld that ships tomorrow.
 
@@ -34,7 +34,7 @@ Select the **Hidden Buttons** row and click **Learn / Manage Hidden Buttons**. T
 2. *Press the hidden button now, then let go…* You have three seconds. A tap or a hold both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.
 3. *One moment…* PadForge listens a second longer for a key that reports late or only on release.
 
-Whatever the press changed is shown under **Source:** as the key combination the firmware typed (*Keys: Ctrl + Win + F17*), the report field that flipped (*report 04, byte 20, bit 0x80*), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one thing, a list appears and you pick the field. Give the button a name and click **Register**.
+Whatever the press changed is shown under **Source:** as the key combination the firmware typed (*Keys: Ctrl + Win + F17*), the report field that flipped (*report 04, byte 20, bit 0x80*), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one report field or system event, a list appears and you pick one. Give the button a name and click **Register**.
 
 If nothing changed, the dialog says so and counts what it watched: *Watched 3 vendor reports and 10 event classes. During the press: 0 reports, 0 events.* Press again, inside the highlighted window.
 
@@ -93,4 +93,4 @@ The **Motion** row feeds the same gyro pipeline every controller uses: gyro aim,
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

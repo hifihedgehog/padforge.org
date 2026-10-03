@@ -44,7 +44,7 @@ The pattern mirrors Lenovo Legion Toolkit's `LenovoLegionToolkit.WPF/CLI/IpcServ
 
 No Everyone, no anonymous. `ExternalControlTests.ThePipeGrantsAuthenticatedUsers` pins the SID and the right.
 
-`Start` runs `AcceptLoop` on a task. Each iteration creates a fresh server stream, waits for one connection, reads one line, runs the executor, writes one line, and disposes the stream. One command per connection. A bad connection never kills the loop. `Stop` cancels the token, connects a throwaway client (200 ms connect timeout) to nudge a server parked in `WaitForConnectionAsync` (it does not observe the token until a connection arrives), and waits up to 2 s for the loop.
+`Start` runs `AcceptLoop` on a task. Each iteration creates a fresh server stream, waits for one connection, reads one line, runs the executor, writes one line, and disposes the stream. One command per connection. A bad connection never kills the loop. `Stop` cancels the token, which ends a pending `WaitForConnectionAsync`. It then connects a throwaway client (200 ms connect timeout) as a second nudge and waits up to 2 s for the loop.
 
 Requests and replies are UTF-8. `ReadLineAsync` collects bytes until `\n`, drops `\r`, stops at 1024 bytes, decodes the line as UTF-8, and trims it, so a profile name with non-ASCII characters matches by name. Splitting on those two bytes is safe because UTF-8 never uses them inside a multi-byte character. `WriteLineAsync` appends `\n`, encodes UTF-8, and flushes. `ExternalControlTests.TheRequestReadIsCapped` pins the cap.
 
@@ -138,4 +138,4 @@ Because the exe is elevated, this form prompts UAC when called from a normal pro
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

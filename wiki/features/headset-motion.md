@@ -14,7 +14,7 @@ Discovery is by capability, not by a hardcoded model list. PadForge looks for a 
 
 Pair the headphones to Windows as you normally would. When PadForge recognizes the tracker, it appears on the **Devices** page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.
 
-Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its whole contribution is rotation.
+Because it is motion-only, it reports no buttons, no sticks, and no triggers. It contributes rotation, plus acceleration when its descriptor exposes an accelerometer.
 
 ---
 
@@ -39,7 +39,7 @@ Worth knowing, because it explains the behavior you will see:
 
 - **Rotation is the signal.** On the XM5 the raw gyro channel streams zeros while the rotation vector carries the real motion. PadForge synthesizes an angular rate from consecutive rotation samples, so mappings receive an ordinary gyro rate and need no headset-specific handling.
 - **Accelerometer is advertised only when the descriptor exposes it.** Some firmware reports orientation without it.
-- **The frame is remapped once, at ingest.** The tracker's axes are swapped and signed into the same frame SDL uses for controllers, so a headset and a gamepad both drive a mapping the same way.
+- **The frame is remapped once, at ingest.** The tracker's axes are swapped and signed into the frame SDL uses for controllers. The map comes from the open-source sony-head-tracker project. Whether a headset then drives a mapping exactly as a gamepad does is not yet confirmed on hardware.
 - **The headset drops the tracker channel on its own.** The XM5 closes the sensor channel after a minute or two while staying connected for audio, and Windows removes the HID node with it. PadForge re-requests the Bluetooth HID service for that headset and the tracker comes back. Nothing to click.
 
 ---
@@ -61,4 +61,4 @@ Worth knowing, because it explains the behavior you will see:
 
 ---
 
-*Last updated for PadForge 4.5.0.*
+*Last updated for PadForge 5.0.0.*

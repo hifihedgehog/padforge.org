@@ -2,7 +2,7 @@
 
 *Your VR motion controllers as two ordinary device rows. Their pose, sticks, triggers, grips and buttons map like any gamepad's.*
 
-When [OpenXR Headset Input](head-tracking.md) is on, PadForge reads the hand controllers from the same runtime and presents each one as its own device row. Waving a Touch controller can drive a stick, its trigger can drive a trigger, and its buttons bind like any other buttons.
+When [Enable OpenXR Headset Input](head-tracking.md) is on, PadForge reads the hand controllers from the same runtime and presents each one as its own device row. Waving a Touch controller can drive a stick, its trigger can drive a trigger, and its buttons bind like any other buttons.
 
 This page is about reading real VR controllers *into* PadForge. For the opposite direction, presenting a virtual left and right hand *to* SteamVR, see [Virtual VR Controllers](vr-controllers.md).
 
@@ -10,7 +10,7 @@ This page is about reading real VR controllers *into* PadForge. For the opposite
 
 ## Turning it on
 
-There is no separate switch. Enable **OpenXR Headset Input** on the [Dashboard](dashboard.md)'s Head Tracking section and both controller rows appear. They are there whether or not a runtime ever answers, so mappings can be made before a headset is plugged in. A row that never goes live simply holds its axes at rest.
+There is no separate switch. Turn on **Enable OpenXR Headset Input** in the Head Tracking section of the [Dashboard](dashboard.md), and both controller rows appear. They are there whether or not a runtime ever answers, so mappings can be made before a headset is plugged in. A row that never goes live simply holds its axes at rest.
 
 Two rows show up on the [Devices](devices.md) page, typed **VR Controller**:
 
@@ -38,7 +38,7 @@ Ten axes and four buttons.
 | Trigger | Axis 8 | the index trigger, resting at zero |
 | Grip | Axis 9 | the squeeze, resting at zero |
 
-| Button | Raw view |
+| Button | Index |
 | --- | --- |
 | Thumbstick Click | Button 0 |
 | Primary Button | Button 1 |
@@ -57,17 +57,17 @@ PadForge suggests bindings for three interaction profiles and the runtime picks 
 
 - Oculus Touch controllers
 - Valve Index controllers
-- The Khronos simple controller, the fallback profile every conformant runtime supports
+- The Khronos simple controller, a generic fallback profile that Khronos strongly encourages runtimes to support, though conformance does not require it
 
-A controller the runtime maps to the simple profile reports far fewer controls, because that profile defines only a pose and two buttons. There is no stick, no trigger and no grip in it, so those axes stay at rest and Primary and Menu are the only buttons that move.
+A controller the runtime maps to the simple profile reports far fewer controls, because that profile has only two buttons beside its grip and aim poses. There is no stick, no trigger and no grip in it, so those axes stay at rest and Primary and Menu are the only buttons that move.
 
 ---
 
 ## Mapping it
 
-The rows bind anywhere a gamepad does. An **Any Device** source never reads them, so pick the controller by name. That is deliberate: these rows speak their own vocabulary, and an Any Device row asking for "Button 1" should not suddenly answer from a headset controller.
+The rows bind anywhere a gamepad does. An **(Any Device)** source never reads them, so pick the controller by name. That is deliberate: these rows speak their own vocabulary, and an Any Device row asking for "Button 1" should not suddenly answer from a headset controller.
 
-Auto-map covers gamepads only, so each control is bound by hand.
+Auto-map does not cover VR controller rows, so each control is bound by hand.
 
 ---
 
@@ -75,7 +75,7 @@ Auto-map covers gamepads only, so each control is bound by hand.
 
 A controller that loses tracking returns its six pose axes to rest. Its stick, trigger, grip and buttons rest whenever the runtime stops reporting them, which includes a controller that has gone to sleep. If samples stop arriving altogether, every axis rests and every button releases after one second, so a stick is never left held. A controller set down where the runtime still tracks it keeps reporting, and its pose axes follow it.
 
-The row stays online while **OpenXR Headset Input** is on, so mappings can be made before you pick the controller back up.
+The row stays online while **Enable OpenXR Headset Input** is on, so mappings can be made before you pick the controller back up.
 
 ---
 
@@ -88,4 +88,4 @@ The row stays online while **OpenXR Headset Input** is on, so mappings can be ma
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

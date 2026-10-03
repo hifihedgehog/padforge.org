@@ -18,7 +18,7 @@ The user-facing page is [Lightbar Mirrors and Sensa Haptics](../features/lightba
 
 ## Why the engine layer
 
-Razer's game-facing surface (the WYVRN SDK) plays only pre-authored named clips and carries no amplitude channel. One layer down is public: the Interhaptics Core SDK, whose parametric API takes an amplitude at runtime. The shipping Unity integration, `WyvrnOfficial/Interhaptics_Unity_CoreSDK`, carries the proven call order, and every native call here mirrors it function for function. The Unity reference makes every call from one thread, and so does this worker.
+Razer's game-facing surface (the WYVRN SDK) plays only pre-authored named clips and carries no amplitude channel. One layer down is public: the Interhaptics Core SDK, whose parametric API takes an amplitude at runtime. The shipping Unity integration, `WyvrnOfficial/Interhaptics_Unity_CoreSDK`, carries the proven call order, and the bring-up and per-tick calls here mirror it function for function. Teardown differs: Unity's quit path cleans the providers, clears the active and inactive events, then quits, while this worker calls `StopAllEvents`, `ProviderClean`, and `Quit`. The Unity reference makes every call from one thread, and so does this worker.
 
 The two DLLs are vendored from that repository's `Runtime/Plugins/x64`, the same pair every Unity title embedding the SDK redistributes. They ship unmodified inside the executable under the Wyvrn EULA (see the README's third-party section). The csproj includes them as `Content` with `Link` so they land beside the executable, conditioned on the files existing, and the service P/Invokes them lazily so a missing pair degrades to a diag line.
 
@@ -88,7 +88,7 @@ The provider is retried every `retryMs` (default 30000) while it is down. The se
 long lastProviderTry = Environment.TickCount64 - _retryMs;
 ```
 
-The original code seeded `long.MinValue`. `TickCount64 - long.MinValue` overflows negative, the `>= _retryMs` test never passed, and the retry block silently never entered while the worker looked healthy in its tick loop. A live stack dump found it after log lines only bracketed the hang. `ProviderInitAttempts` counts every attempt so the cadence is a tested fact: `SensaHapticsTests.Service_ArmsPublisherAndDegradesWithoutRuntime` asserts it is at least one.
+The original code seeded `long.MinValue`. `TickCount64 - long.MinValue` overflows negative, the `>= _retryMs` test never passed, and the retry block silently never entered while the worker looked healthy in its tick loop. A live stack dump found it after log lines only bracketed the hang. `ProviderInitAttempts` counts every attempt, so the first attempt is a tested fact: `SensaHapticsTests.Service_ArmsPublisherAndDegradesWithoutRuntime` asserts it is at least one. No test times the 30-second interval.
 
 `BeforeProviderInit` is an internal static hook that runs on the worker immediately before `ProviderInit`, so a test can hold a worker inside the bring-up window.
 
@@ -148,7 +148,7 @@ For every slot up to `MaxPads` it takes the slot's inbound rumble pack (`GetInbo
 | 32-47 | Left trigger motor |
 | 48-63 | Right trigger motor |
 
-`PackToAmplitude` returns the loudest voice divided by 65535. The lane keeps the maximum across slots and calls `PublishAmplitude`, which clamps to 0..1 and stores the float bits with one volatile write. `SensaHapticsTests.PackToAmplitude_TakesTheLoudestVoice` and `PublishAmplitude_Clamps` pin both.
+`PackToAmplitude` returns the loudest voice divided by 65535. The lane keeps the maximum across slots and calls `PublishAmplitude`, which clamps to 0..1 and stores the float bits with one volatile write. `SensaHapticsTests.PackToAmplitude_TakesTheLoudestVoice` pins the first. `PublishAmplitude_Clamps` only shows that publishing out-of-range values does not throw, since nothing outside the worker reads the stored bits.
 
 The worker reads the bits every `tickMs` (default 16) and calls `SetEventIntensity` only on change. Intensity is the whole translation: one effect, one target, one amplitude. There is no stereo targeting and no pitch mapping.
 
@@ -194,9 +194,9 @@ Persistence follows the lightbar mirrors leg for leg: `AppSettings.EnableSensaHa
 |---|---|
 | `RealEngine_FullLifecycle` | `Init`, effect creation, targeting, intensity, compute, and `Quit` against the shipped `HAR.dll` |
 | `RealEngine_SurvivesReinit` | `Init` after `Quit`, the engine-restart path |
-| `Provider_DegradesCleanlyWithoutSynapse` | `ProviderInit` returns false with no runtime, no exception |
+| `Provider_DegradesCleanlyWithoutSynapse` | The provider calls do not throw, with or without Synapse. When `ProviderInit` succeeds, `ProviderClean` returns true |
 | `PackToAmplitude_TakesTheLoudestVoice` | The four-voice max |
-| `PublishAmplitude_Clamps` | The 0..1 clamp |
+| `PublishAmplitude_Clamps` | Publishing out-of-range values does not throw. No assertion reads the stored value |
 | `Service_ArmsPublisherAndDegradesWithoutRuntime` | Publisher armed while running, a state reported before `Stopped` (`WaitingForRuntime` on a bench without Synapse), at least one provider attempt |
 | `Service_ReportsUnsupportedAndStartsNoWorkerWhereTheEngineCannotLoad` | The ARM64 branch: `Unsupported` raised once on the caller's thread, no worker |
 | `Service_NextWorkerWaitsForAStragglingPredecessor` | The predecessor-join rule |
@@ -207,4 +207,4 @@ Live rendering on Sensa hardware was not verified by the maintainer.
 
 ---
 
-*Last updated for PadForge 4.5.3.*
+*Last updated for PadForge 5.0.0.*

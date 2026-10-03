@@ -3563,7 +3563,7 @@
 <p><em>Use a MIDI keyboard or pad controller as a mapping source. Notes, knobs, pitch bend, and encoders bind like buttons and axes.</em></p>
 <p><img alt="A MIDI device on the Devices page with the live note and CC preview" src="../../images/midi-input.png" /></p>
 <p>PadForge reads MIDI input devices the way it reads gamepads. A connected MIDI keyboard, pad controller, or control surface shows up on the <a href="../devices/">Devices</a> page as an input device, and its notes and controls become sources you can map to any <a href="../controller-slots/">slot</a>. A piano key can press A. A knob can drive a trigger. A fader can move a stick axis.</p>
-<p>This is the input direction. For the other direction, where PadForge appears to a DAW as a MIDI instrument it can play, see the <strong>MIDI</strong> virtual controller type under <a href="../controller-slots/">Controller Slots</a>.</p>
+<p>This is the input direction. For the other direction, where PadForge sends notes and Control Change messages to a DAW or synth as a MIDI controller, see the <strong>MIDI</strong> virtual controller type under <a href="../controller-slots/">Controller Slots</a>.</p>
 <hr />
 <h2 id="what-you-can-map">What you can map<a class="headerlink" href="#what-you-can-map" title="Permanent link">&para;</a></h2>
 <p>PadForge turns four kinds of MIDI message into mappable sources.</p>
@@ -3588,7 +3588,7 @@
 </tr>
 <tr>
 <td>Pitch bend</td>
-<td>A centered 14-bit axis</td>
+<td>A centered axis (14-bit from MIDI 1.0 gear, 32-bit from MIDI 2.0 gear)</td>
 <td>A stick axis that springs back to center</td>
 </tr>
 <tr>
@@ -3600,11 +3600,11 @@
 </table>
 <p>Notes are on/off. A note is on while it is held, and its velocity does not pass through as an analog value. A Control Change can act as an axis, a one-direction trigger, or a button past a threshold, picked the same way as any other axis source in <a href="../mappings/">Button and Axis Mappings</a>.</p>
 <p>The whole MIDI namespace is always available: all 128 notes, all 128 CC numbers, and pitch bend. There is nothing to configure on the device first. A message means the same thing on any MIDI channel, so a note played on channel 1 and the same note on channel 10 map to one source.</p>
-<p><strong>Not mapped:</strong> channel pressure, polyphonic aftertouch, and program change. Endless-encoder support covers the binary-offset style (sometimes labeled "Relative 2"). Other encoder styles read as absolute jumps. Fast encoder spins are capped at about 28 steps per second.</p>
+<p><strong>Not mapped:</strong> channel pressure, polyphonic aftertouch, and program change. Endless-encoder support covers the binary-offset style (sometimes labeled "Relative 2"). Two's-complement encoders read as absolute jumps. A signed-bit encoder is misread: one direction fires the up button and the other reads as absolute jumps. Fast encoder spins are capped at about 28 steps per second.</p>
 <hr />
 <h2 id="live-preview">Live preview<a class="headerlink" href="#live-preview" title="Permanent link">&para;</a></h2>
 <p>Select a MIDI device on the <a href="../devices/">Devices</a> page and PadForge shows a live preview: a piano that lights the notes you play and vertical sliders that follow the CC knobs and faders. Use it to find which CC number a knob sends before you map it.</p>
-<p>Turn an endless encoder and its CC bar flashes: green for a clockwise detent, orange for counter-clockwise. No flash means the encoder is in a relative mode PadForge does not decode (see <a href="#what-you-can-map">What you can map</a>).</p>
+<p>Turn an endless encoder and its CC bar flashes: green for a clockwise detent, orange for counter-clockwise. No flash, or a green flash in one direction only, means the encoder is in a relative mode PadForge does not decode (see <a href="#what-you-can-map">What you can map</a>).</p>
 <hr />
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <ol>
@@ -3627,7 +3627,7 @@
 <li><a href="../../guides/shift-layers/">Shift Layers</a>: a MIDI button can hold a whole second mapping table.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 4.5.3.</em></p>
+<p><em>Last updated for PadForge 5.0.0.</em></p>
 
 
 
