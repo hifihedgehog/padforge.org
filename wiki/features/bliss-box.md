@@ -88,6 +88,8 @@ A port assigned while it is empty or unplugged gets its default mapping once Pad
 
 A slot mapped with a controller in the port keeps that mapping when you plug in a different kind of controller. To map the new one fresh, unassign the port from the slot and assign it again.
 
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* With the switch on, the [(Any Device)](mappings.md) Gamepad entries read a port through the same placement: **Gamepad A** reads the controller's A wherever its report puts it, and a button or stick the controller lacks reads nothing. A port with no controller identified, or a controller with no default mapping, answers none of them. With the switch off they read the port through SDL's "4Play Adapter" mapping, as they read any gamepad.
+
 ---
 
 ## DualShock 2 pressure

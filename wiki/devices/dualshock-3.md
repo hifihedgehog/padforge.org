@@ -105,6 +105,8 @@ The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3 or
 
 One exception: with another DualShock 3 driver such as DsHidMini installed, the Bluetooth driver stays armed all the time. That setup's controllers can only connect while it is, so PadForge leaves it on.
 
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* When PadForge starts and finds a PlayStation Bluetooth driver older than the one it carries, it updates it, as long as no controller is connected through that driver at that moment. The update restarts Bluetooth once, so your other Bluetooth devices drop for a few seconds and reconnect. With one connected, the update waits for the next start or pairing. With DsHidMini installed, PadForge leaves the driver to DsHidMini's own setup. The driver PadForge carries, BthPS3 3.2.1, fixes a Windows crash (a blue screen) when a DualShock 3 disconnects over Bluetooth, which versions 2.12.0 to 3.2.0 could cause.
+
 ---
 
 ## Requirements
