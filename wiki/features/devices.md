@@ -426,6 +426,8 @@ You can whitelist more apps in [Settings](settings.md) so they can still see hid
 
 Suppresses only the specific keys or mouse buttons [mapped](mappings.md) to a virtual controller output. Unmapped keys still type. The cursor still moves. No driver needed. Windows low-level input hooks handle it. The toggle only shows for keyboards and mice.
 
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* A mapped Numpad Enter is consumed like any other key. Earlier builds let it through to other programs, and consuming the main Enter key swallowed Numpad Enter as well.
+
 ### Which to use
 
 | Situation | Method |

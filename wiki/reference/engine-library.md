@@ -1446,7 +1446,7 @@ public struct ConditionAxisData
 **File:** `PadForge.Engine/Common/InputHookManager.cs`
 **Namespace:** `PadForge.Engine.Common`
 
-Manages `WH_KEYBOARD_LL` and `WH_MOUSE_LL` low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343).
+Manages `WH_KEYBOARD_LL` and `WH_MOUSE_LL` low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343). *Changed after 4.5.3.* The keyboard hook decides through `ConsumeKey`, which numbers the event with `RawInputListener.KeyIndex` from its `vkCode`, `scanCode` and `LLKHF_EXTENDED`. Numpad Enter reaches the hook as VK_RETURN with `LLKHF_EXTENDED` and a mapping names it 0x88, so the hook used to miss a consumed Numpad Enter and swallow Numpad Enter with a consumed Enter (#486).
 
 ```csharp
 public class InputHookManager : IDisposable
@@ -1480,7 +1480,7 @@ public class InputHookManager : IDisposable
 |--------|-----------|-------------|
 | `Start` | `void Start()` | Creates background thread with `GetMessage` loop, installs both hooks. Blocks until installed (5s timeout). |
 | `Stop` | `void Stop()` | Posts `WM_QUIT` to hook thread, joins (2s timeout), clears state. |
-| `SetSuppressedKeys` | `void SetSuppressedKeys(HashSet<int> vkCodes)` | Updates VK codes to suppress. Clears state for removed keys. Volatile reference swap. |
+| `SetSuppressedKeys` | `void SetSuppressedKeys(HashSet<int> vkCodes)` | Updates the keys to suppress, as keyboard state indices (`RawInputListener.KeyIndex`), the numbers a keyboard mapping's `Button N` carries. Clears state for removed keys. Volatile reference swap. |
 | `SetSuppressedMouseButtons` | `void SetSuppressedMouseButtons(HashSet<int> buttons)` | Updates mouse button IDs to suppress (0=L, 1=M, 2=R, 3=X1, 4=X2). Clears state for removed buttons. Volatile reference swap. |
 | `HasAnySuppression` | `bool` (property) | `true` if any keys or mouse buttons suppressed. |
 | `RegisterGlobalHotkey` | `int RegisterGlobalHotkey(int[] vkCodes, Action callback)` | Registers a combo from `GlobalHotkeyParser.Parse`. The callback fires once on the rising edge when every key is held, with modifiers matching either side. Never suppresses the keystroke. Returns the id `UnregisterGlobalHotkey` takes. |
@@ -1572,7 +1572,7 @@ public struct DeviceInfo
 
 ### Input Processing
 
-- **Keyboard** (`RIM_TYPEKEYBOARD`): Reads `RAWKEYBOARD.VKey`, handles `RI_KEY_E0` extended keys (right Ctrl/Alt/Shift, NumLock, Insert, Home, etc.). Per-device state in `ConcurrentDictionary<IntPtr, bool[]>`.
+- **Keyboard** (`RIM_TYPEKEYBOARD`): Reads `RAWKEYBOARD.VKey` and stores each key at `RawInputListener.KeyIndex`: a modifier reported neutral at its left or right code (Shift by scan code 0x2A or 0x36, Ctrl and Alt by `RI_KEY_E0`), Numpad Enter (VK_RETURN with `RI_KEY_E0`) at `NumpadEnterKey`, 0x88, apart from Enter, and every other key at its own code. *Changed after 4.5.3.* The low-level hook numbers what it swallows through the same table (#486). Per-device state in `ConcurrentDictionary<IntPtr, bool[]>`.
 - **Mouse** (`RIM_TYPEMOUSE`): Accumulates `lLastX`/`lLastY` deltas. Tracks buttons via `usButtonFlags`. Scroll via `RI_MOUSE_WHEEL`.
 - **Scroll:** `usButtonData` is a signed `short`. Accumulated per-device, consumed by `ConsumeMouseScroll`.
 - **Absolute-mode skip:** when `RAWMOUSE.usFlags` has `MOUSE_MOVE_ABSOLUTE` (bit 0) set, `lLastX`/`lLastY` are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader drops the delta for absolute events and still records the same report's buttons and wheel. Matches the policy SDL3 and XInput use for the same situation.

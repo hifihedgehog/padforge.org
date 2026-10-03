@@ -11479,7 +11479,7 @@
 <h2 id="inputhookmanager">InputHookManager<a class="headerlink" href="#inputhookmanager" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/InputHookManager.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Common</code></p>
-<p>Manages <code>WH_KEYBOARD_LL</code> and <code>WH_MOUSE_LL</code> low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343).</p>
+<p>Manages <code>WH_KEYBOARD_LL</code> and <code>WH_MOUSE_LL</code> low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343). <em>Changed after 4.5.3.</em> The keyboard hook decides through <code>ConsumeKey</code>, which numbers the event with <code>RawInputListener.KeyIndex</code> from its <code>vkCode</code>, <code>scanCode</code> and <code>LLKHF_EXTENDED</code>. Numpad Enter reaches the hook as VK_RETURN with <code>LLKHF_EXTENDED</code> and a mapping names it 0x88, so the hook used to miss a consumed Numpad Enter and swallow Numpad Enter with a consumed Enter (#486).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">InputHookManager</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
 <a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="p">{</span>
 <a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">Start</span><span class="p">();</span>
@@ -11527,7 +11527,7 @@
 <tr>
 <td><code>SetSuppressedKeys</code></td>
 <td><code>void SetSuppressedKeys(HashSet&lt;int&gt; vkCodes)</code></td>
-<td>Updates VK codes to suppress. Clears state for removed keys. Volatile reference swap.</td>
+<td>Updates the keys to suppress, as keyboard state indices (<code>RawInputListener.KeyIndex</code>), the numbers a keyboard mapping's <code>Button N</code> carries. Clears state for removed keys. Volatile reference swap.</td>
 </tr>
 <tr>
 <td><code>SetSuppressedMouseButtons</code></td>
@@ -11791,7 +11791,7 @@
 </table>
 <h3 id="input-processing">Input Processing<a class="headerlink" href="#input-processing" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Keyboard</strong> (<code>RIM_TYPEKEYBOARD</code>): Reads <code>RAWKEYBOARD.VKey</code>, handles <code>RI_KEY_E0</code> extended keys (right Ctrl/Alt/Shift, NumLock, Insert, Home, etc.). Per-device state in <code>ConcurrentDictionary&lt;IntPtr, bool[]&gt;</code>.</li>
+<li><strong>Keyboard</strong> (<code>RIM_TYPEKEYBOARD</code>): Reads <code>RAWKEYBOARD.VKey</code> and stores each key at <code>RawInputListener.KeyIndex</code>: a modifier reported neutral at its left or right code (Shift by scan code 0x2A or 0x36, Ctrl and Alt by <code>RI_KEY_E0</code>), Numpad Enter (VK_RETURN with <code>RI_KEY_E0</code>) at <code>NumpadEnterKey</code>, 0x88, apart from Enter, and every other key at its own code. <em>Changed after 4.5.3.</em> The low-level hook numbers what it swallows through the same table (#486). Per-device state in <code>ConcurrentDictionary&lt;IntPtr, bool[]&gt;</code>.</li>
 <li><strong>Mouse</strong> (<code>RIM_TYPEMOUSE</code>): Accumulates <code>lLastX</code>/<code>lLastY</code> deltas. Tracks buttons via <code>usButtonFlags</code>. Scroll via <code>RI_MOUSE_WHEEL</code>.</li>
 <li><strong>Scroll:</strong> <code>usButtonData</code> is a signed <code>short</code>. Accumulated per-device, consumed by <code>ConsumeMouseScroll</code>.</li>
 <li><strong>Absolute-mode skip:</strong> when <code>RAWMOUSE.usFlags</code> has <code>MOUSE_MOVE_ABSOLUTE</code> (bit 0) set, <code>lLastX</code>/<code>lLastY</code> are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader drops the delta for absolute events and still records the same report's buttons and wheel. Matches the policy SDL3 and XInput use for the same situation.</li>
