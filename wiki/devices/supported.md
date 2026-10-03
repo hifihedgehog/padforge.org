@@ -548,7 +548,7 @@ PadForge binds the driver each of these needs a few seconds after it appears. Se
 | **Taito Densha de GO! Type 2, Shinkansen and Ryojohen controllers** | 0AE4:0004, 0AE4:0005, 0AE4:0007 | Brake on the left trigger, power on the right |
 | **Multi Train Controller, Train Mascon** | 0AE4:0101, 1C06:77A7 | The lever on the left stick, the reverser on the right stick |
 | **I-Force wheels and joysticks** | 14 IDs | Thrustmaster Motor Sport GT, Logitech WingMan Force and WingMan Formula Force, AVB Top Shot Pegasus, Mag Turbo Force and Top Shot Force Feedback Racing Wheel, ACT LABS Force RS, Saitek R440 Force Wheel, and the Guillemot Race Leader, Jet Leader, Jet Leader 3D and Force Feedback Racing Wheel. Force feedback through the standard path. |
-| **Original Xbox controllers** | Class 0x58, and 63 IDs by name | Pads, wheels, dance pads and light guns, through a passive Xbox-to-USB cable |
+| **Original Xbox controllers** | Class 0x58, and 63 IDs by name | Pads, wheels, dance pads and light guns, through a passive Xbox-to-USB cable. The pressure of A, B, X, Y, White and Black fills the [button pressure](../features/mappings.md#button-pressure) rows. |
 | **Capcom Steel Battalion controller** | 0A7B:D000 | 9 axes and 46 buttons. The lamps stay off. |
 | **Xbox 360 Big Button receiver** | 045E:02A0 | Four pads |
 | **Gametrak** | 14B7:0982 | 6 axes, 12 buttons and a hat |
