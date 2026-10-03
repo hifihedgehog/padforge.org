@@ -6,6 +6,7 @@ site_description: >-
 repo_url: https://github.com/hifihedgehog/PadForge
 repo_name: hifihedgehog/PadForge
 edit_uri: ""
+copyright: "PadForge™ is a trademark of hifihedgehog. U.S. trademark application pending."
 
 docs_dir: wiki
 site_dir: docs
